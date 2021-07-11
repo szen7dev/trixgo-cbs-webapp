@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  @font-face {
+    font-family: "SanFranciscoDisplay";
+    src: url("../assets/fonts/SanFranciscoDisplay-Regular.ttf");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  body {
+    font-family: SanFranciscoDisplay, sans-serif;
+  }
+
+  /**
+   * *RESET
+   */
+
+  ::-webkit-scrollbar {
+    @apply w-4;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary-light border-4 border-solid border-primary-light bg-clip-padding rounded-full;
+  }
+
+  #navigation {
+    transition: ease-in-out all 0.3s;
+  }
+
+  #navigation span {
+    opacity: 0;
+    position: absolute;
+    transition: ease-in-out all 0.1s;
+  }
+
+  #navigation:hover {
+    width: 14rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    /*shadow-2xl*/
+  }
+
+  #navigation:hover span {
+    opacity: 1;
+  }
+
+  .page-sidebar-height {
+    height: calc(100vh - 64px);
+    overflow-y: overlay;
+    @apply overflow-x-hidden;
+  }
+
+  .chat-body-height {
+    height: calc(100vh - 202px);
+    overflow-y: overlay;
+    @apply overflow-x-hidden;
+  }
+
+  .content-sidebar-height {
+    height: calc(100vh - 181px);
+    @apply overflow-hidden;
+  }
+
+  .content-sidebar-height:hover {
+    overflow-y: overlay;
+  }
+
+  .message-divider {
+    max-width: 100%;
+    @apply w-full relative mb-12;
+  }
+
+  .message-divider::before {
+    content: attr(data-label);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    @apply block absolute -top-2 tracking-wide text-xs rounded bg-secondary-light left-1/2 py-0.5 px-2;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Buttons */
+  .medium-button {
+    @apply text-xs font-medium leading-6 text-center uppercase transition rounded shadow hover:shadow-lg focus:outline-none px-6 py-2;
+  }
+
+  .disabled-button {
+    @apply text-secondary-gray bg-secondary-light cursor-not-allowed;
+  }
+
+  .primary-button {
+    @apply text-primary-light bg-primary hover:bg-secondary;
+  }
+
+  /* Forms */
+  .form-input {
+    @apply appearance-none block w-full bg-secondary-light text-accent-gray border border-secondary-light rounded outline-none py-3 pl-11 pr-5;
+  }
+
+  .form-input.input-error {
+    @apply border-negative text-negative;
+  }
+
+  .form-input.input-error::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    @apply text-negative opacity-100;
+  }
+
+  .form-input.input-error:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    @apply text-negative;
+  }
+
+  .form-input.input-error::-ms-input-placeholder {
+    /* Microsoft Edge */
+    @apply text-negative;
+  }
+
+  /* Symbols */
+  .message-symbol {
+    height: 28px;
+    width: 28px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
+    background-position: 0px -1247px;
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+
+  .video-symbol {
+    height: 28px;
+    width: 28px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
+    background-position: 0px -1566px;
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+
+  .live-stream-symbol {
+    height: 28px;
+    width: 28px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
+    background-position: 0px -493px;
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+}

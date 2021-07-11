@@ -1,0 +1,9 @@
+{
+  "target": "The goal of TrixGo is to help businesses build a solid 4.0 management system, thereby rapidly developing",
+  "title": "Sign In",
+  "description": "Welcome to TrixGo. Sign in to start working",
+  "emailPlaceholder": "Email",
+  "passwordPlaceholder": "Password",
+  "forgotPassword": "Forgot password?",
+  "submitButton": "Sign in"
+}

@@ -1,0 +1,157 @@
+{
+  "name": "cbs-web-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "build:css": "postcss src/styles/index.css -o src/styles/output.css",
+    "watch:css": "postcss src/styles/index.css -o src/styles/output.css",
+    "start": "npm run watch:css && react-scripts start",
+    "build": "npm run build:css && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "pre-commit": "lint-staged",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.2.0",
+    "@reduxjs/toolkit": "^1.5.1",
+    "axios": "^0.21.1",
+    "classnames": "^2.3.1",
+    "formik": "^2.2.9",
+    "i18next": "^20.3.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.10.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-query": "^3.16.0",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^4.0.3",
+    "react-toastify": "^7.0.4",
+    "socket.io-client": "^2.2.0",
+    "source-map-explorer": "^2.5.2",
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.1.9",
+    "@types/jest": "^26.0.23",
+    "@types/lodash": "^4.14.169",
+    "@types/node": "^15.3.1",
+    "@types/react": "^17.0.6",
+    "@types/react-dom": "^17.0.5",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "autoprefixer": "^10.2.5",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "postcss": "^8.2.15",
+    "postcss-cli": "^8.3.1",
+    "prettier": "^2.3.0",
+    "tailwindcss": "^2.1.2",
+    "typescript": "^4.2.4"
+  },
+  "resolutions": {
+    "babel-loader": "8.1.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "no-console": "warn",
+      "import/first": "error",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 1,
+          "maxEOF": 0,
+          "maxBOF": 0
+        }
+      ]
+    },
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react-hooks/recommended",
+      "prettier"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "*.ts",
+          "*.tsx"
+        ],
+        "parserOptions": {
+          "ecmaVersion": 11,
+          "ecmaFeatures": {
+            "jsx": true
+          },
+          "project": [
+            "./tsconfig.json"
+          ]
+        }
+      },
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "root": true,
+    "plugins": [
+      "react",
+      "@typescript-eslint"
+    ],
+    "settings": {
+      "react": {
+        "pragma": "React",
+        "version": "detect"
+      }
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css": [
+      "prettier --write"
+    ]
+  }
+}
