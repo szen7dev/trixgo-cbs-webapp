@@ -12,6 +12,15 @@ import SettingsIcon from "assets/icons/Settings";
 
 export const NavLinks: NavLink[] = [
   {
+    id: "nav-link-settings",
+    label: "Datahub",
+    url: "/datahub",
+    pathname: "datahub",
+    icon: (
+      <SettingsIcon pathname="settings" className="float-left h-6 w-6 mr-6" />
+    ),
+  },
+  {
     id: "nav-link-home",
     label: "Home",
     url: "/dashboard",
@@ -97,5 +106,5 @@ export const NavLinks: NavLink[] = [
     icon: (
       <SettingsIcon pathname="settings" className="float-left h-6 w-6 mr-6" />
     ),
-  },
+  }
 ];

@@ -196,6 +196,12 @@ const Routes: FC = () => {
                 </MainLayout>
               </Route>
 
+              <Route path="/datahub">
+                <MainLayout>
+                  <h2>New content</h2>
+                </MainLayout>
+              </Route>
+
               <Route path="/example">
                 <ExampleLayout>
                   <Switch>
