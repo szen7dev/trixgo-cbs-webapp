@@ -15,3 +15,8 @@ export type NavLink = {
   pathname: string;
   icon: ReactNode;
 };
+
+export type TaskManagementNavLink = {
+  title: string;
+  navLink: NavLink[];
+};

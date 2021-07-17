@@ -17,6 +17,7 @@ import ChatProvider from "services/providers/Chat";
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import ExampleLayout from "views/layouts/Example";
+import TaskManagementLayout from "views/layouts/TaskManagementLayout";
 
 // Main Pages
 import SignInPage from "views/pages/main/SignIn";
@@ -162,12 +163,12 @@ const Routes: FC = () => {
               </Route>
 
               <Route path="/tasks">
-                <MainLayout>
+                <TaskManagementLayout>
                   <Switch>
                     <ProtectedRoute exact path="/tasks" component={TasksPage} />
                     <Route path="/tasks/*" component={ErrorPage} />
                   </Switch>
-                </MainLayout>
+                </TaskManagementLayout>
               </Route>
 
               <Route path="/applications">
