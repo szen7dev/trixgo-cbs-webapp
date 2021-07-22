@@ -5,7 +5,7 @@ import { ChatState, ChatActions } from "typings/chat";
 export const initialState: ChatState = {
   socket: null,
   conversations: [],
-  messagesChat: [],
+  currentConversation: null,
 };
 
 const ChatContext = createContext<{

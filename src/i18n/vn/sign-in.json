@@ -4,6 +4,6 @@
   "description": "Chào mừng đến với TrixGo. Đăng nhập để bắt đầu làm việc",
   "emailPlaceholder": "Email",
   "passwordPlaceholder": "Mật khẩu",
-  "forgotPassword": "Quên mật khẩu?",
+  "register": "Đăng ký một tài khoản mới",
   "submitButton": "Đăng nhập"
 }

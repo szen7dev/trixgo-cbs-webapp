@@ -1,17 +1,45 @@
+import { APIResponse } from "./apis/response";
+
 export type User = {
   _id: string;
-  image: string;
+  avatar: string;
   email: string;
-  userName: string;
   firstName: string;
   lastName: string;
 };
 
 export type AuthState = {
-  isAuthenticated: boolean;
-  token: string | null;
-  user: User | null;
   isLoading: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+  user: User | null;
+  hasAuthenticated: boolean;
+  friendContacts: User[];
+};
+
+export type RegisterPayload = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+};
+
+export type RegisterResponse = APIResponse & {
+  result: {
+    verification: string;
+  };
+};
+
+export type VerifyEmailPayload = {
+  verification: string;
+};
+
+export type verifyEmailResponse = APIResponse & {
+  result: {
+    user: User;
+    accessToken: string;
+    refreshToken: string;
+  };
 };
 
 export type SignInPayload = {
@@ -19,15 +47,28 @@ export type SignInPayload = {
   password: string;
 };
 
-export type CallSignInAPI = {
-  type: "REQUEST_SIGN_IN";
+export type SignInResponse = APIResponse & {
+  result: {
+    user: User;
+    accessToken: string;
+    refreshToken: string;
+  };
+};
+
+export type RequestAPI = {
+  type: "REQUEST_API";
+};
+
+export type RequestAPIComplete = {
+  type: "REQUEST_API_COMPLETE";
 };
 
 export type SetAuth = {
   type: "SIGN_IN_SUCCESS";
   payload: {
     user: User;
-    token: string;
+    accessToken: string;
+    refreshToken: string;
   };
 };
 
@@ -39,4 +80,15 @@ export type RemoveAuth = {
   type: "SIGN_OUT";
 };
 
-export type AuthActions = CallSignInAPI | SignInError | SetAuth | RemoveAuth;
+export type SetFriendContacts = {
+  type: "SET_FRIEND_CONTACTS";
+  payload: User[];
+};
+
+export type AuthActions =
+  | RequestAPI
+  | RequestAPIComplete
+  | SignInError
+  | SetAuth
+  | RemoveAuth
+  | SetFriendContacts;

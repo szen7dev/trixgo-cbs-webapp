@@ -34,3 +34,15 @@ export const rawSetTheme = (state: ThemeState): void => {
 
   localStorage.setItem("color-theme", theme);
 };
+
+export const getWindowDimensions = (): {
+  width: number;
+  height: number;
+} => {
+  const { innerWidth: width, innerHeight: height } = window;
+
+  return {
+    width,
+    height,
+  };
+};

@@ -35,14 +35,15 @@ const SignInPage: FC = () => {
       .email("* Please enter valid email address")
       .required("* Email required!"),
     password: string()
-      .min(8, "* Password must be at least 8 characters")
+      .min(7, "* Password must be at least 8 characters")
+      .max(25, "* Password too large (25 characters max)")
       .required("* Password required!"),
   });
 
   return (
     <>
       {isLoading && <Loader className="border-primary" />}
-      <div className="grid grid-cols-2 bg-primary-light rounded-lg shadow-2xl">
+      <div className="grid grid-cols-2 w-[1000px] bg-primary-light rounded-lg shadow-2xl">
         <div className="relative bg-authentication-img bg-cover bg-no-repeat w-[500px] h-[650px]">
           <img src={WhiteLogoImage} alt="Logo" className="mt-7" />
 
@@ -50,6 +51,7 @@ const SignInPage: FC = () => {
             {t("signIn:target")}
           </p>
         </div>
+
         <div className="flex flex-col py-8 pr-8 pl-16">
           <div className="flex justify-end">
             {_map(LOCALES, (locale, idx: number) => (
@@ -182,10 +184,10 @@ const SignInPage: FC = () => {
 
                     <div className="flex justify-between items-center mt-14">
                       <a
-                        href="/authentication/forgot-password"
+                        href="/authentication/register"
                         className="font-semibold text-base text-primary hover:text-secondary hover:underline"
                       >
-                        {t("signIn:forgotPassword")}
+                        {t("signIn:register")}
                       </a>
                       <button
                         type="submit"

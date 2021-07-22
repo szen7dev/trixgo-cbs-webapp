@@ -3,10 +3,12 @@ import { Dispatch, createContext } from "react";
 import { AuthState, AuthActions } from "typings/auth";
 
 export const initialState: AuthState = {
-  isAuthenticated: false,
-  token: null,
-  user: null,
   isLoading: false,
+  accessToken: null,
+  refreshToken: null,
+  user: null,
+  hasAuthenticated: false,
+  friendContacts: [],
 };
 
 const AuthContext = createContext<{

@@ -27,6 +27,10 @@
     @apply bg-secondary-light border-4 border-solid border-primary-light bg-clip-padding rounded-full;
   }
 
+  .Toastify__toast--success {
+    background: #10b981 !important;
+  }
+
   #navigation {
     transition: ease-in-out all 0.3s;
   }
@@ -82,13 +86,17 @@
     transform: translateX(-50%);
     @apply block absolute -top-2 tracking-wide text-xs rounded bg-secondary-light left-1/2 py-0.5 px-2;
   }
+
+  .welcome-chatting-height {
+    height: calc(100vh - 30px);
+  }
 }
 
 /* Custom component styles */
 @layer components {
   /* Buttons */
   .medium-button {
-    @apply text-xs font-medium leading-6 text-center uppercase transition rounded shadow hover:shadow-lg focus:outline-none px-6 py-2;
+    @apply text-xs font-semibold leading-6 tracking-wider text-center uppercase transition rounded shadow hover:shadow-lg focus:outline-none px-6 py-2;
   }
 
   .disabled-button {
@@ -97,6 +105,10 @@
 
   .primary-button {
     @apply text-primary-light bg-primary hover:bg-secondary;
+  }
+
+  .cancel-button {
+    @apply bg-secondary-light;
   }
 
   /* Forms */
@@ -121,6 +133,42 @@
   .form-input.input-error::-ms-input-placeholder {
     /* Microsoft Edge */
     @apply text-negative;
+  }
+
+  /* Checkbox */
+  .round-checkbox {
+    @apply relative;
+  }
+
+  .round-checkbox label {
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    left: 0;
+    top: 0;
+    @apply bg-primary-light border border-solid border-secondary-light cursor-pointer absolute;
+  }
+
+  .round-checkbox label:after {
+    content: "";
+    width: 11px;
+    height: 6px;
+    left: 5px;
+    top: 7px;
+    transform: rotate(-45deg);
+    @apply border-2 border-solid border-primary-light border-t-0 border-r-0 opacity-0 absolute;
+  }
+
+  .round-checkbox input[type="checkbox"] {
+    @apply invisible;
+  }
+
+  .round-checkbox input[type="checkbox"]:checked + label {
+    @apply bg-primary border-primary;
+  }
+
+  .round-checkbox input[type="checkbox"]:checked + label:after {
+    @apply opacity-100;
   }
 
   /* Symbols */

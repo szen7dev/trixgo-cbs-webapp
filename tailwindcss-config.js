@@ -23,21 +23,16 @@ module.exports = {
       "secondary-light": "#e2e8f0",
       "accent-light": "#f4f4f5",
     },
-    minWidth: {
-      "[250px]": "250px",
-    },
-    maxWidth: {
-      "[169px]": "169px",
-      "[250px]": "250px",
-      "[380px]": "380px",
-      "[75%]": "75%",
-    },
     extend: {
+      inset: {
+        "[55%]": "55%",
+      },
       width: {
         "[34px]": "34px",
         "[52px]": "52px",
         "[74px]": "74px",
         "[500px]": "500px",
+        "[1000px]": "1000px",
         fill: "-webkit-fill-available",
       },
       height: {
@@ -46,6 +41,23 @@ module.exports = {
         "[52px]": "52px",
         "[650px]": "650px",
         max: "max-content",
+      },
+      minWidth: {
+        "[5px]": "5px",
+        "[250px]": "250px",
+      },
+      maxWidth: {
+        "[100px]": "100px",
+        "[169px]": "169px",
+        "[250px]": "250px",
+        "[380px]": "380px",
+        "[75%]": "75%",
+      },
+      minHeight: {
+        "[54px]": "54px",
+      },
+      maxHeight: {
+        "[98px]": "98px",
       },
       backgroundImage: {
         authentication: "url('../assets/images/background-authentication.png')",
