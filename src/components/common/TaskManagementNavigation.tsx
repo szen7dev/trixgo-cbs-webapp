@@ -13,7 +13,7 @@ const TaskManagementNavigation: FC = () => {
   const page = pathname.split("/")[1];
 
   return (
-    <div className="task-management-navigation fixed w-56 left-0 top-16 bottom-0 overflow-hidden w-56 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-white">
+    <div className="task-management-navigation fixed w-56 left-0 top-16 bottom-0 overflow-hidden w-56 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="task-management-navigation-container overflow-auto w-56 transition-all duration-500 ease-out">
         {_map(TaskManagementNavLinks, (item, index) => (
           <div
