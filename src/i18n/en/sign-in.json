@@ -4,6 +4,6 @@
   "description": "Welcome to TrixGo. Sign in to start working",
   "emailPlaceholder": "Email",
   "passwordPlaceholder": "Password",
-  "forgotPassword": "Forgot password?",
+  "register": "Register an new account",
   "submitButton": "Sign in"
 }

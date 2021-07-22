@@ -15,36 +15,7 @@ API.interceptors.response.use(
     return response;
   },
   function (error) {
-    // Do something with response error
-    let messageError = "";
-
-    if (error.response) {
-      switch (error.response.status) {
-        case 400:
-          messageError =
-            "Invalid data, please recheck your information and try again!";
-          break;
-        case 401:
-          messageError =
-            "This resource is for authenticated user only. Please login to your account!";
-          break;
-        case 403:
-          messageError = "Access Denied!";
-          break;
-        case 500:
-          messageError =
-            "Sorry, there were some technical issue on our side. Please try again later.";
-          break;
-        default:
-          messageError = "Something went wrong!";
-          break;
-      }
-    }
-
-    return Promise.reject({
-      ...error.response,
-      statusText: messageError,
-    });
+    return error.response;
   }
 );
 

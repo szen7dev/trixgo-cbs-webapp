@@ -17,7 +17,6 @@ export type ModalState = {
   isModalOpen: boolean;
   modalContent: ReactNode;
 };
-export type ModalActionType = "OPEN_MODAL" | "CLOSE_MODAL";
 export type OpenModal = {
   type: "OPEN_MODAL";
   payload: ReactNode;

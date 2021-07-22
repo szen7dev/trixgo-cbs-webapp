@@ -2,6 +2,8 @@ import { FC, Fragment } from "react";
 
 import { Menu, Transition } from "@headlessui/react";
 
+import { useAuth } from "services/hooks/useAuth";
+
 import ChevronDownIcon from "assets/icons/ChevronDown";
 import InformationCircleIcon from "assets/icons/InformationCircle";
 import CogIcon from "assets/icons/Cog";
@@ -10,18 +12,20 @@ import MoonIcon from "assets/icons/Moon";
 import LogoutIcon from "assets/icons/Logout";
 
 const UserMenu: FC = () => {
+  const { user, signOut } = useAuth();
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div className="flex items-center justify-center">
         <Menu.Button className="flex justify-center items-center group focus:outline-none">
           <img
-            src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
+            src={user?.avatar}
             alt="User Avatar"
             className="w-8 h-8 rounded-full"
           />
           <div className="flex items-center truncate">
             <span className="truncate ml-2 text-sm font-medium group-hover:text-dark">
-              Hi, NALee
+              {`Hi, ${user?.firstName} ${user?.lastName}`}
             </span>
 
             <ChevronDownIcon className="w-3 h-3 ml-1.5 text-secondary-gray" />
@@ -43,7 +47,7 @@ const UserMenu: FC = () => {
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-3">
               <div className="relative">
                 <img
-                  src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
+                  src={user?.avatar}
                   alt="User Avatar"
                   className="w-14 h-14 rounded-full"
                 />
@@ -51,7 +55,9 @@ const UserMenu: FC = () => {
 
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
-                  <span className="font-bold">Lê Trung Hiếu</span>
+                  <span className="font-bold">
+                    {user?.firstName} {user?.lastName}
+                  </span>
                   <span className="font-normal text-sm leading-4">
                     Xem công việc của bạn
                   </span>
@@ -130,7 +136,7 @@ const UserMenu: FC = () => {
             </div>
           </Menu.Item>
 
-          <Menu.Item>
+          <Menu.Item onClick={() => signOut()}>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
               <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
                 <LogoutIcon className="w-5 h-5 text-primary-gray" />

@@ -10,32 +10,44 @@ type Props = {
 
 const reducer = (state: AuthState, action: AuthActions): AuthState => {
   switch (action.type) {
-    case "REQUEST_SIGN_IN":
+    case "REQUEST_API":
       return {
         ...state,
         isLoading: true,
       };
+    case "REQUEST_API_COMPLETE":
+      return {
+        ...state,
+        isLoading: false,
+      };
     case "SIGN_IN_SUCCESS":
       return {
         ...state,
-        isAuthenticated: true,
+        hasAuthenticated: true,
         user: action.payload.user,
-        token: action.payload.token,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
         isLoading: false,
       };
     case "SIGN_IN_ERROR":
       return {
         ...state,
-        isAuthenticated: false,
+        hasAuthenticated: false,
         isLoading: false,
       };
     case "SIGN_OUT":
       return {
         ...state,
-        isAuthenticated: false,
+        hasAuthenticated: false,
         user: null,
-        token: null,
+        accessToken: null,
+        refreshToken: null,
         isLoading: false,
+      };
+    case "SET_FRIEND_CONTACTS":
+      return {
+        ...state,
+        friendContacts: action.payload,
       };
     default:
       return state;

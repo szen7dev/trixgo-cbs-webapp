@@ -7,7 +7,7 @@ const MainSearchDialog: FC = () => {
   return (
     <div className="w-full max-h-full overflow-auto rounded shadow-lg">
       {/* Search form */}
-      <form className="border-b border-secondary-gray">
+      <form className="border-b border-solid border-secondary-gray">
         <div className="relative">
           <input
             id="main-dialog-search"

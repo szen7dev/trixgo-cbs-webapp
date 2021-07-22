@@ -1,0 +1,11 @@
+{
+  "target": "The goal of TrixGo is to help businesses build a solid 4.0 management system, thereby rapidly developing",
+  "title": "Register",
+  "description": "Register your new account to start using TrixGo",
+  "emailPlaceholder": "Email",
+  "firstNamePlaceholder": "First name",
+  "lastNamePlaceholder": "Last name",
+  "passwordPlaceholder": "Password",
+  "signIn": "Already have an account? Sign-in",
+  "submitButton": "Register"
+}
