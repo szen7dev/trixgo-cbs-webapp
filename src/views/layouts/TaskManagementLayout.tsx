@@ -24,7 +24,7 @@ const TaskManagementLayout: FC<Props> = ({ children }) => {
   };
   return (
     <section
-      className={cn("task-management-layout relative bg-white min-h-screen", {
+      className={cn("task-management-layout relative bg-primary-light", {
         active: isLeftMenuCollapse,
         "active-right": isRightSideBarCollapse,
       })}
@@ -41,7 +41,7 @@ const TaskManagementLayout: FC<Props> = ({ children }) => {
       <TaskManagementNavigation />
 
       {/* Content area */}
-      <main className="task-management-main-content transition-all duration-500 ease-out pl-56 pr-12">
+      <main className="task-management-main-content transition-all duration-500 ease-out pl-56 overflow-auto">
         {children}
       </main>
 

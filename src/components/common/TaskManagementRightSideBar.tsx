@@ -6,6 +6,7 @@ import icon4 from "assets/images/RightSideBarIcon/icons8-name-48.png";
 import icon5 from "assets/images/RightSideBarIcon/icons8-available-updates-50.png";
 import icon6 from "assets/images/RightSideBarIcon/icons8-rocket-24.png";
 import chatIcon from "assets/images/RightSideBarIcon/icons8-edit-chat-history-48.png";
+import avatar from "assets/images/avatar.jpg";
 
 const TaskManagementRightSideBar: FC = () => {
   return (
@@ -57,35 +58,19 @@ const TaskManagementRightSideBar: FC = () => {
       <div className="absolute left-0 bottom-16 w-full">
         <div className="text-center">
           <button className="relative mb-4">
-            <img
-              className="w-9 h-9 rounded-full"
-              src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
-              alt="Avartar"
-            />
+            <img className="w-9 h-9 rounded-full" src={avatar} alt="Avartar" />
             <span className="tm-right-sidebar-chat-item-online border border-accent-light w-2 h-2 absolute bottom-0 right-1 rounded-full"></span>
           </button>
           <button className="relative mb-4">
-            <img
-              className="w-9 h-9 rounded-full"
-              src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
-              alt="Avartar"
-            />
+            <img className="w-9 h-9 rounded-full" src={avatar} alt="Avartar" />
             <span className="tm-right-sidebar-chat-item-online border border-accent-light w-2 h-2 absolute bottom-0 right-1 rounded-full"></span>
           </button>
           <button className="relative mb-4">
-            <img
-              className="w-9 h-9 rounded-full"
-              src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
-              alt="Avartar"
-            />
+            <img className="w-9 h-9 rounded-full" src={avatar} alt="Avartar" />
             <span className="tm-right-sidebar-chat-item-online border border-accent-light w-2 h-2 absolute bottom-0 right-1 rounded-full"></span>
           </button>
           <button className="relative mb-4">
-            <img
-              className="w-9 h-9 rounded-full"
-              src="https://s120-ava-talk.zadn.vn/0/3/a/a/3/120/5969a751f836b7a12687ae71350086d8.jpg"
-              alt="Avartar"
-            />
+            <img className="w-9 h-9 rounded-full" src={avatar} alt="Avartar" />
             <span className="tm-right-sidebar-chat-item-online border border-accent-light w-2 h-2 absolute bottom-0 right-1 rounded-full"></span>
           </button>
         </div>

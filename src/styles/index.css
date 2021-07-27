@@ -271,6 +271,49 @@
 .task-management-layout.active-right .tm-right-sidebar {
   right: -3rem;
 }
+.text-15px {
+  font-size: 15px;
+}
+.task-management-main-content {
+  width: calc(100% - 3rem);
+  height: calc(100vh - 4rem);
+}
 .task-management-layout.active-right .task-management-main-content {
-  padding-right: 0;
+  width: 100%;
+}
+.color-red {
+  color: #E74C3C;
+}
+.filter-red {
+  filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg) brightness(94%) contrast(92%);
+}
+.task-management-tab {
+  background: #D8D8D8;
+}
+.tpf-attach-item {
+  border-radius: 17px;
+}
+.tpf-label {
+  height: 21px;
+  line-height: 21px;
+  border-radius: 10px;
+}
+.tpf-label-green {
+  background: #3F9A58;
+}
+.tpf-label-yellow {
+  background: #EFD133;
+}
+.tpf-label-red {
+  background: #F02849;
+}
+.tpf-param-star {
+  filter: invert(48%) sepia(2%) saturate(6%) hue-rotate(352deg) brightness(97%) contrast(98%);
+  cursor: pointer;
+}
+.tpf-param-star-active {
+  filter: invert(93%) sepia(81%) saturate(1943%) hue-rotate(314deg) brightness(101%) contrast(93%);
+}
+.task-management-content {
+  height: calc(100vh - 7.2rem);
 }
