@@ -23121,7 +23121,35 @@ body {
 
 /* Custom component styles */
 
-/* Customized task management layout styles */
+/*________________________customized style__________________________________*/
+
+.color-red {
+  color: #E74C3C;
+}
+
+.bg-red {
+  background: #FF4242;
+}
+
+.filter-red {
+  filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg) brightness(94%) contrast(92%);
+}
+
+.filter-blue {
+  filter: invert(21%) sepia(73%) saturate(3564%) hue-rotate(205deg) brightness(96%) contrast(105%);
+}
+
+.color-gray2 {
+  color: #72808E;
+}
+
+.bg-grey2 {
+  background-color: #FBFBFD;
+}
+
+/*__________________________________________________________________________*/
+
+/* ___________Customized task management layout styles ___________________*/
 
 .task-management-navigation {
   font-size: 15px;
@@ -23185,8 +23213,7 @@ body {
 }
 
 .tm-right-sidebar-chat-icon {
-  filter: invert(32%) sepia(86%) saturate(6231%) hue-rotate(207deg)
-    brightness(95%) contrast(101%);
+  filter: invert(32%) sepia(86%) saturate(6231%) hue-rotate(207deg) brightness(95%) contrast(101%);
 }
 
 .tm-right-sidebar-toggle-btn {
@@ -23221,14 +23248,6 @@ body {
 
 .task-management-layout.active-right .task-management-main-content {
   width: 100%;
-}
-
-.color-red {
-  color: #E74C3C;
-}
-
-.filter-red {
-  filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg) brightness(94%) contrast(92%);
 }
 
 .task-management-tab {
@@ -23268,6 +23287,88 @@ body {
 
 .task-management-content {
   height: calc(100vh - 7.2rem);
+}
+
+/*______________________________chatbox______________________________*/
+
+.chatbox-container {
+  height: 100%;
+}
+
+.chatbox-col-left {
+  width: 330px;
+}
+
+.chatbox-search > input {
+  background: #F2F2F2;
+  border: 1px solid #CAD1DB;
+  box-sizing: border-box;
+  border-radius: 17.5px;
+  height: 35px;
+  width: 260px;
+  margin-right: 12px;
+  outline: none;
+  padding: 0 12px 0 35px;
+  font-size: 13px;
+}
+
+.chatbox-list-state-dropdown {
+  background: #F2F2F2;
+  border-radius: 12px;
+  height: 24px;
+  padding: 2px 12px;
+  font-size: 13px;
+}
+
+.chatbox-item-container {
+  height: calc(100% - 102px);
+}
+
+.chatbox-item:hover {
+  background: #0060E1;
+  color: #fff;
+}
+
+.chatbox-item-text {
+  width: calc(100% - 48px);
+}
+
+.chatbox-item-text-name {
+  font-size: 17px;
+  color: #001A33;
+}
+
+.chatbox-item-text-date {
+  color: #72808E;
+  flex-shrink: 0;
+}
+
+.chatbox-item-text-date.color-red {
+  color: #E74C3C;
+}
+
+.chatbox-item-text-preview {
+  color: #72808E;
+}
+
+.chatbox-item-text-pin {
+  filter: invert(55%) sepia(19%) saturate(336%) hue-rotate(169deg) brightness(86%) contrast(84%);
+}
+
+.chatbox-item:hover .chatbox-item-text-name, .chatbox-item:hover .chatbox-item-text-date, .chatbox-item:hover .chatbox-item-text-preview {
+  color: #fff;
+}
+
+.chatbox-item:hover .chatbox-item-text-pin {
+  filter: invert(96%) sepia(8%) saturate(277%) hue-rotate(247deg) brightness(119%) contrast(100%);
+}
+
+.chatbox-item-option {
+  display: none;
+}
+
+.chatbox-item:hover .chatbox-item-option, .chatbox-item-option:hover {
+  display: block;
 }
 
 @media (min-width: 640px) {
@@ -134344,3 +134445,5 @@ body {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
+
+

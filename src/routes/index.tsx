@@ -46,6 +46,9 @@ import MessagesDetailPage from "views/pages/messages/detail";
 // Tasks Pages
 import TasksPage from "views/pages/tasks";
 
+// Teaser Pages
+import TeaserPage from "views/pages/teaser";
+
 // Applications Pages
 import ApplicationsPage from "views/pages/applications";
 
@@ -176,6 +179,19 @@ const Routes: FC = () => {
                         component={TasksPage}
                       />
                       <Route path="/tasks/*" component={ErrorPage} />
+                    </Switch>
+                  </TaskManagementLayout>
+                </Route>
+
+                <Route path="/teaser">
+                  <TaskManagementLayout>
+                    <Switch>
+                      {/*<ProtectedRoute*/}
+                      {/*    exact*/}
+                      {/*    path="/teaser"*/}
+                      {/*    component={TeaserPage}*/}
+                      {/*/>*/}
+                      <Route path="/teaser" component={TeaserPage} />
                     </Switch>
                   </TaskManagementLayout>
                 </Route>
