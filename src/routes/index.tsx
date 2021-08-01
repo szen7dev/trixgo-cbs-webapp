@@ -186,12 +186,12 @@ const Routes: FC = () => {
                 <Route path="/teaser">
                   <TaskManagementLayout>
                     <Switch>
-                      {/*<ProtectedRoute*/}
-                      {/*    exact*/}
-                      {/*    path="/teaser"*/}
-                      {/*    component={TeaserPage}*/}
-                      {/*/>*/}
-                      <Route path="/teaser" component={TeaserPage} />
+                      <ProtectedRoute
+                          exact
+                          path="/teaser"
+                          component={TeaserPage}
+                      />
+                      <Route path="/applications/*" component={ErrorPage} />
                     </Switch>
                   </TaskManagementLayout>
                 </Route>

@@ -1,7 +1,10 @@
 import {FC, useState} from "react";
-import { Menu, Popover } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
+
+import ChatInfo from "./information";
 
 import searchIcon from "assets/images/icon-search.png";
+import searchIcon2 from "assets/images/icons8-search-50.png";
 import messageIcon from "assets/images/RightSideBarIcon/icons8-edit-chat-history-48.png";
 import expandIcon from "assets/images/icon-expand-arrow.png";
 import expandRightIcon from "assets/images/icon-expand-arrow-right.png";
@@ -12,17 +15,33 @@ import pinIcon from "assets/images/icons8-push-pin-64.png";
 import doubleTickIcon from "assets/images/icons8-double-tick-48.png";
 import reportIcon from "assets/images/icons8-report-file-64.png";
 import optionIcon from "assets/images/icon-3dots.png";
+import optionIcon2 from "assets/images/icon-3dots-vertical.svg";
 import removeIcon from "assets/images/icons8-remove-48.png";
 import toggleIcon from "assets/images/icons8-toggle-on-50.png";
 import cancelIcon from "assets/images/icons8-cancel-50.png";
+import showInformationIcon from "assets/images/icons8-restaurant-menu-64.png";
+
+import iconOption1 from "assets/images/TaskManagementHeaderOptions/icons8-add-user-group-man-man-48.png";
+import iconOption2 from "assets/images/TaskManagementHeaderOptions/icons8-edit-128.png";
+import iconOption3 from "assets/images/TaskManagementHeaderOptions/icons8-push-pin-64.png";
+import iconOption4 from "assets/images/TaskManagementHeaderOptions/icons8-report-file-64.png";
+import iconOption5 from "assets/images/TaskManagementHeaderOptions/icons8-exit-64.png";
 
 const TeaserPage: FC = () => {
     const [isChatboxSearchVisible, setIsChatboxSearchVisible] = useState(false);
+    const [isShowInformation, setIsShowInformation] = useState(false);
+
+    //________________show/hide search dropdown__________________
     const enableChatboxSearchVisible = () => {
         setIsChatboxSearchVisible(true);
     };
     const disableChatboxSearchVisible = () => {
         setIsChatboxSearchVisible(false);
+    };
+
+    //________________show/hide right column - chat box information_______________
+    const toggleChatboxInformationVisible = () => {
+        setIsShowInformation(!isShowInformation);
     };
 
     return (
@@ -140,7 +159,7 @@ const TeaserPage: FC = () => {
                 {/*_______________________chatbox list____________________*/}
                 <div className="chatbox-item-container overflow-auto">
                     {/*______________________chatbox item________________________*/}
-                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-grey2">
+                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-gray2">
                         <div className="chatbox-item-content pt-2 pb-2 pr-3 pl-3 flex justify-center items-center">
                             <div className="chatbox-item-avatar relative">
                                 <img className="w-12 h-12 rounded-full" src={avatar} alt="Avartar" />
@@ -250,7 +269,7 @@ const TeaserPage: FC = () => {
                         </div>
                     </div>
                     {/*______________________chatbox item________________________*/}
-                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-grey2">
+                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-gray2">
                         <div className="chatbox-item-content pt-2 pb-2 pr-3 pl-3 flex justify-center items-center">
                             <div className="chatbox-item-avatar relative">
                                 <img className="w-12 h-12 rounded-full" src={avatar} alt="Avartar" />
@@ -324,7 +343,7 @@ const TeaserPage: FC = () => {
                         </div>
                     </div>
                     {/*______________________chatbox item________________________*/}
-                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-grey2">
+                    <div className="chatbox-item relative cursor-pointer transition-all duration-200 bg-gray2">
                         <div className="chatbox-item-content pt-2 pb-2 pr-3 pl-3 flex justify-center items-center">
                             <div className="chatbox-item-avatar relative">
                                 <img className="w-12 h-12 rounded-full" src={avatar} alt="Avartar" />
@@ -587,6 +606,90 @@ const TeaserPage: FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/*_________________________left column_____________________________*/}
+            <div className={`${isShowInformation && 'chatbox-col-main-show-info'} chatbox-col-main flex`}>
+                <div className="chatbox-area w-full">
+                    <div className="chatbox-area-title flex justify-between items-end pt-2 pb-2 pl-5 pr-4 border-b border-secondary-light">
+                        <div>
+                            <p className="text-lg font-bold">Vu Nam - Thông tin dự án</p>
+                            <span className="color-gray2">7 thành viên</span>
+                        </div>
+                        <div className="flex items-center">
+                            <button className="ml-6">
+                                <img className="w-6" src={searchIcon2} alt="Search" />
+                            </button>
+                            <button className="ml-6" onClick={toggleChatboxInformationVisible}>
+                                <img className={`${isShowInformation && 'filter-blue'} w-6`} src={showInformationIcon} alt="Info" />
+                            </button>
+                            <div className="relative">
+                                <Menu>
+                                    <Menu.Button className="ml-6 bg-gray1 w-7 h-7 rounded-full flex items-center justify-center">
+                                        <img className="w-4 opacity-70" src={optionIcon2} alt="Option" />
+                                    </Menu.Button>
+                                    <Menu.Items className="absolute top-full right-0 w-48 shadow-md bg-primary-light z-10">
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    className={`${active && 'bg-lighter-gray'} flex items-center pl-3 pr-3 pt-2 pb-2 w-full text-left text-sm`}
+                                                >
+                                                    <img className="w-6 h-6 object-contain mr-2 opacity-60" src={iconOption1} alt="Option" />
+                                                    Thêm thành viên
+                                                </button>
+                                            )}
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    className={`${active && 'bg-lighter-gray'} flex items-center pl-3 pr-3 pt-2 pb-2 w-full text-left text-sm`}
+                                                >
+                                                    <img className="w-6 h-6 object-contain mr-2 opacity-60" src={iconOption2} alt="Option" />
+                                                    Cập nhật thông tin
+                                                </button>
+                                            )}
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    className={`${active && 'bg-lighter-gray'} flex items-center pl-3 pr-3 pt-2 pb-2 w-full text-left text-sm`}
+                                                >
+                                                    <img className="w-6 h-6 object-contain mr-2 opacity-60" src={iconOption3} alt="Option" />
+                                                    Ghim hội thoại
+                                                </button>
+                                            )}
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    className={`${active && 'bg-lighter-gray'} flex items-center pl-3 pr-3 pt-2 pb-2 w-full text-left text-sm`}
+                                                >
+                                                    <img className="w-6 h-6 object-contain mr-2 opacity-60" src={iconOption4} alt="Option" />
+                                                    Ẩn hội thoại
+                                                </button>
+                                            )}
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    className={`${active && 'bg-lighter-gray'} color-red flex items-center pl-3 pr-3 pt-2 pb-2 w-full text-left text-sm`}
+                                                >
+                                                    <img className="w-6 h-6 object-contain mr-2 opacity-60 filter-red" src={iconOption5} alt="Option" />
+                                                    Rời hội thoại
+                                                </button>
+                                            )}
+                                        </Menu.Item>
+                                    </Menu.Items>
+                                </Menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {isShowInformation && (
+                    <ChatInfo handleInformationCb={setIsShowInformation} />
+                )}
+            </div>
+
+            {/*_________________________left column_____________________________*/}
         </div>
     );
 };

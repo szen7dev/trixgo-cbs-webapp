@@ -222,7 +222,10 @@
 .color-gray2 {
   color: #72808E;
 }
-.bg-grey2 {
+.bg-gray1 {
+  background-color: #E4E6EB;
+}
+.bg-gray2 {
   background-color: #FBFBFD;
 }
 /*__________________________________________________________________________*/
@@ -397,11 +400,11 @@
 .chatbox-item:hover .chatbox-item-text-pin {
   filter: invert(96%) sepia(8%) saturate(277%) hue-rotate(247deg) brightness(119%) contrast(100%);
 }
-.chatbox-item-option {
-  display: none;
+.chatbox-item-option > button {
+  opacity: 0;
 }
-.chatbox-item:hover .chatbox-item-option, .chatbox-item-option:hover {
-  display: block;
+.chatbox-item:hover .chatbox-item-option > button {
+  opacity: 1;
 }
 .chatbox-item-option-level2-content {
   display: none;
@@ -419,5 +422,16 @@
 .chatbox-search-result {
   max-height: calc(100% - 48px);
 }
-
+.chatbox-col-main {
+  width: calc(100% - 330px);
+}
+.chatbox-col-main-show-info .chatbox-area {
+  width: calc(100% - 360px);
+}
+.chatbox-info {
+  width: 360px;
+  height: calc(100vh - 64px);
+  overflow-y: overlay;
+  overflow-x: hidden;
+}
 
