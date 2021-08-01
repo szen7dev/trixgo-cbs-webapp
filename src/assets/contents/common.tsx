@@ -78,6 +78,18 @@ export const NavLinks: NavLink[] = [
     ),
   },
   {
+    id: "nav-link-teaser",
+    label: "Teaser",
+    url: "/teaser",
+    pathname: "teaser",
+    icon: (
+        <ClipboardCheckIcon
+            pathname="tasks"
+            className="float-left h-6 w-6 mr-6"
+        />
+    ),
+  },
+  {
     id: "nav-link-applications",
     label: "Applications",
     url: "/applications",
@@ -161,6 +173,13 @@ export const TaskManagementNavLinks: TaskManagementNavLink[] = [
         url: "/tasks",
         pathname: "tasks",
         icon: <ClipboardCheckIcon pathname="tasks" className="h-5 w-5 mr-3" />,
+      },
+      {
+        id: "nav-link-teaser",
+        label: "Teaser",
+        url: "/teaser",
+        pathname: "teaser",
+        icon: <ClipboardCheckIcon pathname="teaser" className="h-5 w-5 mr-3" />,
       },
       {
         id: "nav-link-applications",
