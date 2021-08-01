@@ -23127,6 +23127,10 @@ body {
   color: #E74C3C;
 }
 
+.color-blue {
+  color: #0060E1;
+}
+
 .bg-red {
   background: #FF4242;
 }
@@ -23299,7 +23303,7 @@ body {
   width: 330px;
 }
 
-.chatbox-search > input {
+.chatbox-search-input {
   background: #F2F2F2;
   border: 1px solid #CAD1DB;
   box-sizing: border-box;
@@ -23308,8 +23312,13 @@ body {
   width: 260px;
   margin-right: 12px;
   outline: none;
-  padding: 0 12px 0 35px;
+  padding: 0 30px 0 35px;
   font-size: 13px;
+}
+
+.chatbox-search-input:focus {
+  border-color: #0060E1;
+  background: #fff;
 }
 
 .chatbox-list-state-dropdown {
@@ -23355,7 +23364,7 @@ body {
   filter: invert(55%) sepia(19%) saturate(336%) hue-rotate(169deg) brightness(86%) contrast(84%);
 }
 
-.chatbox-item:hover .chatbox-item-text-name, .chatbox-item:hover .chatbox-item-text-date, .chatbox-item:hover .chatbox-item-text-preview {
+.chatbox-item:hover .chatbox-item-text-name, .chatbox-item:hover .chatbox-item-text-name .color-blue, .chatbox-item:hover .chatbox-item-text-date, .chatbox-item:hover .chatbox-item-text-preview {
   color: #fff;
 }
 
@@ -23369,6 +23378,27 @@ body {
 
 .chatbox-item:hover .chatbox-item-option, .chatbox-item-option:hover {
   display: block;
+}
+
+.chatbox-item-option-level2-content {
+  display: none;
+}
+
+.chatbox-item-option-level2:hover .chatbox-item-option-level2-content {
+  display: block;
+}
+
+.toggle-icon-active {
+  filter: invert(16%) sepia(83%) saturate(5216%) hue-rotate(207deg) brightness(102%) contrast(101%);
+  transform: rotate(180deg);
+}
+
+.chatbox-search-container {
+  top: 60px;
+}
+
+.chatbox-search-result {
+  max-height: calc(100% - 48px);
 }
 
 @media (min-width: 640px) {
