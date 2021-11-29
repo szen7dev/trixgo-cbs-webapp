@@ -11,9 +11,9 @@ const FullPage: FC<Props> = ({ children, isAuthentication = false }) => {
   return (
     <div
       className={cn(
-        "min-h-screen flex items-center justify-center px-6 py-12 md:px-4 lg:px-8",
+        "h-screen flex items-center justify-center",
         {
-          "bg-authentication bg-cover bg-no-repeat": isAuthentication,
+          "bg-cover bg-no-repeat": isAuthentication,
         }
       )}
     >
