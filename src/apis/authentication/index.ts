@@ -15,7 +15,7 @@ import {
   SignInResponse,
 } from "typings/auth";
 
-const authURL = "/auth";
+const authURL = "/api/auth";
 
 const AuthenticationRepository = {
   async register(payload: RegisterPayload): Promise<RegisterResponse> {

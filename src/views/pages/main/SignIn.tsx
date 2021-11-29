@@ -3,27 +3,24 @@ import { FC, useState, FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { object, string } from "yup";
-import cn from "classnames";
 import { map as _map } from "lodash";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "services/hooks/useAuth";
-
 import Loader from "components/shared/Loader";
-import WhiteLogoImage from "assets/images/white-logo.png";
-import MailIcon from "assets/icons/Mail";
-import MailOpenIcon from "assets/icons/MailOpen";
-import LockClosedIcon from "assets/icons/LockClosed";
-import LockOpenIcon from "assets/icons/LockOpen";
 import { LOCALES } from "assets/contents/authentication";
+import SignInLogo from 'assets/images/signin-logo.svg';
+import SignInImage from 'assets/images/signin-image.svg'
+import MailIcon from "assets/images/icons-email.svg";
+import LockIcon from "assets/images/icons-lock.svg";
 
 import { SignInPayload } from "typings/auth";
 
-const SignInPage: FC = () => {
+const LoginPage: FC = () => {
   const { t, i18n } = useTranslation(["signIn"]);
   const { isLoading, signIn } = useAuth();
 
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[0].id);
-  const [activeField, setActiveField] = useState("");
 
   const initialValues: SignInPayload = {
     email: "",
@@ -40,52 +37,25 @@ const SignInPage: FC = () => {
       .required("* Password required!"),
   });
 
+  const fontFamily = "Arial";
+
   return (
     <>
       {isLoading && <Loader className="border-primary" />}
-      <div className="grid grid-cols-2 w-[1000px] bg-primary-light rounded-lg shadow-2xl">
-        <div className="relative bg-authentication-img bg-cover bg-no-repeat w-[500px] h-[650px]">
-          <img src={WhiteLogoImage} alt="Logo" className="mt-7" />
-
-          <p className="absolute bottom-20 font-medium text-base leading-5 text-primary-light px-8">
-            {t("signIn:target")}
-          </p>
-        </div>
-
-        <div className="flex flex-col py-8 pr-8 pl-16">
-          <div className="flex justify-end">
-            {_map(LOCALES, (locale, idx: number) => (
-              <span
-                key={locale.id}
-                className="flex items-center cursor-pointer ml-3"
-                onClick={() => {
-                  setSelectedLocale(locale.id);
-                  i18n.changeLanguage(locale.code);
-                }}
-              >
-                {selectedLocale === locale.id ? locale.flag : locale.grayFlag}{" "}
-                <strong
-                  className={cn("uppercase text-lg ml-2", {
-                    "border-r-2 border-solid border-secondary-gray":
-                      idx !== LOCALES.length - 1,
-                    "text-accent-gray": selectedLocale === locale.id,
-                    "text-secondary-gray": selectedLocale !== locale.id,
-                    "pr-3": idx !== LOCALES.length - 1,
-                  })}
-                >
-                  {locale.code}
-                </strong>
-              </span>
-            ))}
+      <section className="flex h-full w-full">
+        <div className="w-7/12">
+          <div className="flex justify-center mt-20 mb-12">
+            <img src={SignInLogo} alt="SignIn" />
           </div>
+          <div className="max-w-xl ml-72">
+            <h1 style={{fontFamily}} className="font-bold text-4xl">
+              {t("signIn:title")}
+            </h1>
 
-          <h1 className="font-semibold text-3xl leading-8 text-accent-gray mt-10">
-            {t("signIn:title")}
-          </h1>
-
-          <p className="font-medium text-base text-accent-gray mt-3">
-            {t("signIn:description")}
-          </p>
+            <p className="text-base text-primary-gray mt-5">
+              {t("signIn:description")}
+            </p>
+          </div>
 
           <div className="mt-14">
             <Formik
@@ -96,43 +66,29 @@ const SignInPage: FC = () => {
               }}
             >
               {(formik) => {
-                const { errors, touched, isValid, dirty, handleBlur } = formik;
+                const { handleBlur } = formik;
 
                 return (
                   <Form>
-                    <div className="relative">
-                      <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                        <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                          {activeField === "email" ? (
-                            <MailOpenIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative": errors.email && touched.email,
-                              })}
-                            />
-                          ) : (
-                            <MailIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative": errors.email && touched.email,
-                              })}
-                            />
-                          )}
-                        </div>
-                      </div>
+                    <div className="relative max-w-md ml-72">
+                      <p style={{ fontSize: "1.063rem", color: "#757c8a" }}>
+                        {t("signIn:email")}
+                      </p>
                       <Field
                         type="text"
                         name="email"
                         placeholder={t("signIn:emailPlaceholder")}
-                        className={cn("form-input mb-3", {
-                          "input-error": errors.email && touched.email,
-                        })}
-                        onFocus={(e: FormEvent<HTMLInputElement>) =>
-                          setActiveField((e.target as HTMLInputElement).name)
-                        }
+                        className="border-b h-12 w-full outline-none mb-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
-                          setActiveField("");
                         }}
                       />
+                      <div className="absolute top-10 -right-4 flex border border-transparent w-10">
+                        <div className="flex items-center justify-center">
+                          <img src={MailIcon} alt="Mail Icon" />
+                        </div>
+                      </div>
+
                       <ErrorMessage
                         name="email"
                         component="span"
@@ -140,41 +96,26 @@ const SignInPage: FC = () => {
                       />
                     </div>
 
-                    <div className="relative mt-5">
-                      <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                        <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                          {activeField === "password" ? (
-                            <LockOpenIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative":
-                                  errors.password && touched.password,
-                              })}
-                            />
-                          ) : (
-                            <LockClosedIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative":
-                                  errors.password && touched.password,
-                              })}
-                            />
-                          )}
-                        </div>
-                      </div>
+                    <div className="relative max-w-md ml-72 mt-5">
+                    <p style={{ fontSize: "1.063rem", color: "#757c8a" }}>
+                      {t("signIn:password")}
+                    </p>
                       <Field
                         type="password"
                         name="password"
                         placeholder={t("signIn:passwordPlaceholder")}
-                        className={cn("form-input mb-3", {
-                          "input-error": errors.password && touched.password,
-                        })}
-                        onFocus={(e: FormEvent<HTMLInputElement>) =>
-                          setActiveField((e.target as HTMLInputElement).name)
-                        }
+                        className="border-b h-12 w-full outline-none mb-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
-                          setActiveField("");
                         }}
                       />
+
+                      <div className="absolute top-10 -right-4 flex border border-transparent w-10">
+                        <div className="flex items-center justify-center">
+                          <img src={LockIcon} className="text-negative" alt="Password Icon" />
+                        </div>
+                      </div>
+
                       <ErrorMessage
                         name="password"
                         component="span"
@@ -182,33 +123,66 @@ const SignInPage: FC = () => {
                       />
                     </div>
 
-                    <div className="flex justify-between items-center mt-14">
-                      <a
-                        href="/authentication/register"
-                        className="font-semibold text-base text-primary hover:text-secondary hover:underline"
-                      >
-                        {t("signIn:register")}
-                      </a>
+                    <div className="flex justify-between max-w-md ml-72 mt-14">
+                      <div>
+                        <span style={{ color: '#757c8a' }}>{t("signIn:registerQuestion")} {" "}</span>
+                        <Link to="/authentication/register">
+                          <span className="uppercase text-secondary hover:cursor-pointer">
+                            {t("signIn:register")}
+                          </span>
+                        </Link>
+                      </div>
+                      <Link to="/authentication/register">
+                        <p className="text-secondary">
+                          {t("signIn:forgotPassword")}
+                        </p>
+                      </Link>
+                    </div>
+
+                    <div className="flex justify-between max-w-md ml-72 mt-14">
                       <button
                         type="submit"
-                        disabled={!(dirty && isValid)}
-                        className={cn("medium-button", {
-                          "disabled-button": !(dirty && isValid),
-                          "primary-button": dirty && isValid,
-                        })}
+                        className="w-56 h-14 rounded-lg text-primary-light hover:opacity-90"
+                        style={{ background: "#0060e1" }}
                       >
                         {t("signIn:submitButton")}
                       </button>
+
+                      <div className="flex justify-end">
+                        {_map(LOCALES, (locale, idx: number) => (
+                          <span
+                            key={locale.id}
+                            className="flex items-center cursor-pointer select-none hover:opacity-80"
+                            onClick={() => {
+                              setSelectedLocale(locale.id);
+                              i18n.changeLanguage(locale.code);
+                            }}
+                          >
+                            {selectedLocale !== locale.id && locale.flag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </Form>
                 );
               }}
             </Formik>
           </div>
+
         </div>
-      </div>
+
+        <div className="w-5/12" style={{ background: "#0060e1" }}>
+          <div className="relative">
+            <img className="object-fill max-h-screen" src={SignInImage} alt="Logo" />
+
+            <div className="absolute top-1/3 max-w-md ml-52">
+              <p style={{fontFamily}} className="font-bold text-5xl leading-tight text-primary-light">{t("signIn:target")}</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
-  );
+  )
 };
 
-export default SignInPage;
+export default LoginPage;

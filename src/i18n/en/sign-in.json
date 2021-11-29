@@ -1,9 +1,13 @@
 {
-  "target": "The goal of TrixGo is to help businesses build a solid 4.0 management system, thereby rapidly developing",
-  "title": "Sign In",
-  "description": "Welcome to TrixGo. Sign in to start working",
-  "emailPlaceholder": "Email",
-  "passwordPlaceholder": "Password",
-  "register": "Register an new account",
+  "target": "Specialized management platform for the construction industry",
+  "title": "Welcome to Trixgo",
+  "description": "Provide your details to continue to visit",
+  "email": "Email",
+  "password": "Password",
+  "emailPlaceholder": "Enter your email here",
+  "passwordPlaceholder": "Enter your password here",
+  "forgotPassword": "Forgot password?",
+  "register": "Register",
+  "registerQuestion": "Don't have an account?",
   "submitButton": "Sign in"
 }
