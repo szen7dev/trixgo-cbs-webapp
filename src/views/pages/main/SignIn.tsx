@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "services/hooks/useAuth";
 import Loader from "components/shared/Loader";
 import { LOCALES } from "assets/contents/authentication";
-import SignInLogo from 'assets/images/signin-logo.svg';
-import SignInImage from 'assets/images/signin-image.svg'
+import SignInLogo from "assets/images/signin-logo.svg";
+import SignInImage from "assets/images/signin-image.svg";
 import MailIcon from "assets/images/icons-email.svg";
 import LockIcon from "assets/images/icons-lock.svg";
 
@@ -38,6 +38,9 @@ const LoginPage: FC = () => {
   });
 
   const fontFamily = "Arial";
+  const textGray = "#757c8a";
+  const backgroundBlue = "#0060e1";
+  const borderGray = "#cccccc";
 
   return (
     <>
@@ -48,7 +51,7 @@ const LoginPage: FC = () => {
             <img src={SignInLogo} alt="SignIn" />
           </div>
           <div className="max-w-xl ml-72">
-            <h1 style={{fontFamily}} className="font-bold text-4xl">
+            <h1 style={{ fontFamily }} className="font-bold text-4xl">
               {t("signIn:title")}
             </h1>
 
@@ -71,19 +74,20 @@ const LoginPage: FC = () => {
                 return (
                   <Form>
                     <div className="relative max-w-md ml-72">
-                      <p style={{ fontSize: "1.063rem", color: "#757c8a" }}>
+                      <p style={{ fontSize: "1.063rem", color: textGray }}>
                         {t("signIn:email")}
                       </p>
                       <Field
                         type="text"
                         name="email"
                         placeholder={t("signIn:emailPlaceholder")}
-                        className="border-b h-12 w-full outline-none mb-3"
+                        className="h-12 w-full outline-none mb-3"
+                        style={{ borderBottom: `1px solid ${borderGray}` }}
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
-                      <div className="absolute top-10 -right-4 flex border border-transparent w-10">
+                      <div className="absolute top-9 -right-4 flex border border-transparent w-10">
                         <div className="flex items-center justify-center">
                           <img src={MailIcon} alt="Mail Icon" />
                         </div>
@@ -97,22 +101,27 @@ const LoginPage: FC = () => {
                     </div>
 
                     <div className="relative max-w-md ml-72 mt-5">
-                    <p style={{ fontSize: "1.063rem", color: "#757c8a" }}>
-                      {t("signIn:password")}
-                    </p>
+                      <p style={{ fontSize: "1.063rem", color: textGray }}>
+                        {t("signIn:password")}
+                      </p>
                       <Field
                         type="password"
                         name="password"
                         placeholder={t("signIn:passwordPlaceholder")}
-                        className="border-b h-12 w-full outline-none mb-3"
+                        style={{ borderBottom: `1px solid ${borderGray}` }}
+                        className="h-12 w-full outline-none mb-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
 
-                      <div className="absolute top-10 -right-4 flex border border-transparent w-10">
+                      <div className="absolute top-9 -right-4 flex border border-transparent w-10">
                         <div className="flex items-center justify-center">
-                          <img src={LockIcon} className="text-negative" alt="Password Icon" />
+                          <img
+                            src={LockIcon}
+                            className="text-negative"
+                            alt="Password Icon"
+                          />
                         </div>
                       </div>
 
@@ -125,14 +134,16 @@ const LoginPage: FC = () => {
 
                     <div className="flex justify-between max-w-md ml-72 mt-14">
                       <div>
-                        <span style={{ color: '#757c8a' }}>{t("signIn:registerQuestion")} {" "}</span>
+                        <span style={{ color: textGray }}>
+                          {t("signIn:registerQuestion")}{" "}
+                        </span>
                         <Link to="/authentication/register">
                           <span className="uppercase text-secondary hover:cursor-pointer">
                             {t("signIn:register")}
                           </span>
                         </Link>
                       </div>
-                      <Link to="/authentication/register">
+                      <Link to="/authentication/reset-password">
                         <p className="text-secondary">
                           {t("signIn:forgotPassword")}
                         </p>
@@ -143,7 +154,7 @@ const LoginPage: FC = () => {
                       <button
                         type="submit"
                         className="w-56 h-14 rounded-lg text-primary-light hover:opacity-90"
-                        style={{ background: "#0060e1" }}
+                        style={{ background: backgroundBlue }}
                       >
                         {t("signIn:submitButton")}
                       </button>
@@ -168,21 +179,29 @@ const LoginPage: FC = () => {
               }}
             </Formik>
           </div>
-
         </div>
 
-        <div className="w-5/12" style={{ background: "#0060e1" }}>
+        <div className="w-5/12" style={{ background: backgroundBlue }}>
           <div className="relative">
-            <img className="object-fill max-h-screen" src={SignInImage} alt="Logo" />
+            <img
+              className="object-fill max-h-screen"
+              src={SignInImage}
+              alt="Logo"
+            />
 
             <div className="absolute top-1/3 max-w-md ml-52">
-              <p style={{fontFamily}} className="font-bold text-5xl leading-tight text-primary-light">{t("signIn:target")}</p>
+              <p
+                style={{ fontFamily }}
+                className="font-bold text-5xl leading-tight text-primary-light"
+              >
+                {t("signIn:target")}
+              </p>
             </div>
           </div>
         </div>
       </section>
     </>
-  )
+  );
 };
 
 export default LoginPage;
