@@ -5,9 +5,9 @@ import cn from "classnames";
 import styles from "./style.module.css";
 
 const _pages = [
-	{ id: 'dashboard', title: 'Dashboard', type: 'asc' },
-	{ id: 'finnace', title: 'Kế hoạch tài chính', type: 'asc' },
-	{ id: 'report', title: 'Báo cáo', type: 'asc' },
+	{ id: 'dashboard', title: 'Dashboard' },
+	{ id: 'finnace', title: 'Kế hoạch tài chính' },
+	{ id: 'report', title: 'Báo cáo' },
 ]
 
 const ExamplePage: FC = () => {
@@ -18,10 +18,11 @@ const ExamplePage: FC = () => {
 	}, []);
 
 	return (
+		// <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
 		<div className={styles.content}>
-			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
-				<div className="flex flex-wrap h-full justify-center flex-1">
-					{pages.map(page => <div key={page.id} className={styles.navigator}>
+			<div className={cn(styles.header, 'px-4 flex justify-between w-full')}>
+				<div className="flex flex-wrap justify-center flex-1">
+					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'dashboard' })}>
 						<button>
 							{page.title}
 						</button>

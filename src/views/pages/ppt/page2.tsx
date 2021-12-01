@@ -25,23 +25,21 @@ const ExamplePage: FC = () => {
 	};
 
 	return (
-		<div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
+		<div className={cn(styles.content,styles.col)}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
-				<div className="flex flex-wrap">
-					<div className="font-bold mr-28">
-						Danh mục dự án
+				<div className="flex flex-wrap items-center">
+					<div className={styles['item-sort']}>
+						<span>
+							Danh mục dự án
+						</span>
 					</div>
 					{sorts.map((item, index) => (
-						<div key={item.id} className={cn(styles['item-sort'], 'mr-28', { [styles.active]: item.type === 'desc' })}>
+						<div key={item.id} className={cn(styles['item-sort'], { [styles.active]: item.type === 'desc' })}>
 							<button className="font-bold" onClick={() => handleSort(item, index)}>
 								{
 									item.type === 'asc'
-										? <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-										</svg>
-										: <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-										</svg>
+										? <img src="/icon-sort-gray.png" alt="asc" className="inline mr-2" />
+										: <img src="/icon-sort-blue.png" alt="desc" className="inline mr-2" />
 								}
 								{item.title}
 							</button>
@@ -49,24 +47,24 @@ const ExamplePage: FC = () => {
 					))}
 				</div>
 				<div className={cn(styles['input-container'], 'my-2.5 rounded-full flex')}>
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-4 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 					</svg>
-					<input className="bg-transparent focus:outline-none py-3 px-2.5 flex-1" placeholder="Tìm kiếm" />
+					<input className="bg-transparent focus:outline-none flex-1" placeholder="Tìm kiếm" />
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto px-2">
-				<table className={cn(styles['table-project'], styles.table,'mt-2')}>
+				<table className={cn(styles['table-project'], styles.table, 'mt-2')}>
 					<thead>
 						<tr>
 							<th>TT</th>
-							<th className="text-left">Nội dung</th>
+							<th style={{ minWidth: "240px" }}>Nội dung</th>
 							<th>Tổng mức đầu tư</th>
-							<th>Tình trạng hiện tại</th>
-							<th className="text-left">Ngày liên hệ gần nhất</th>
-							<th>Đầu mối kết nối</th>
-							<th>Khả năng thành công</th>
-							<th className="text-left">Ghi chú tiến trình</th>
+							<th style={{ minWidth: "264px" }}>Tình trạng hiện tại</th>
+							<th style={{ minWidth: "100px" }}>Ngày liên hệ gần nhất</th>
+							<th style={{ minWidth: "74px" }}>Đầu mối kết nối</th>
+							<th style={{ minWidth: "92px" }}>Khả năng thành công</th>
+							<th style={{ minWidth: "400px" }}>Ghi chú tiến trình</th>
 							<th>Số ngày cách đây</th>
 						</tr>
 					</thead>

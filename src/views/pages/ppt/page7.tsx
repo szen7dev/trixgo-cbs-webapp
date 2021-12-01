@@ -18,7 +18,8 @@ const ExamplePage: FC = () => {
 	}, []);
 
 	return (
-		<div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
+		<div className={cn(styles.content,styles.col)}>
+		{/* <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}> */}
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
 				<div className="flex flex-wrap h-full justify-center flex-1">
 					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'budget' })}>
@@ -39,16 +40,16 @@ const ExamplePage: FC = () => {
 					<thead>
 						<tr>
 							<th>TT</th>
-							<th className="text-left" style={{ minWidth: '120px' }}>Nội dung (không gồm VAT)</th>
-							<th>Ngân sách</th>
-							<th>Dự báo (phát sinh)</th>
-							<th>Ký hợp đồng</th>
-							<th>Tạm ứng</th>
-							<th>Sản lượng</th>
-							<th className="text-left">Nghiệm thu hoàn thành</th>
-							<th>Thanh toán</th>
-							<th>Còn lại</th>
-							<th>Ghi chú</th>
+							<th style={{ minWidth: '240px' }}>Nội dung (không gồm VAT)</th>
+							<th style={{ minWidth: '122px' }}>Ngân sách</th>
+							<th style={{ minWidth: '122px' }}>Dự báo (phát sinh)</th>
+							<th style={{ minWidth: '122px' }}>Ký hợp đồng</th>
+							<th style={{ minWidth: '122px' }}>Tạm ứng</th>
+							<th style={{ minWidth: '125px' }}>Sản lượng</th>
+							<th style={{ minWidth: '132px' }}>Nghiệm thu hoàn thành</th>
+							<th style={{ minWidth: '123px' }}>Thanh toán</th>
+							<th style={{ minWidth: '124px' }}>Còn lại</th>
+							<th style={{ minWidth: '246px' }}>Ghi chú</th>
 						</tr>
 					</thead>
 					<tbody>

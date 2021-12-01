@@ -11,7 +11,7 @@ const listSort = [
 	{ id: 'status', title: 'Trạng thái', type: 'asc' },
 ]
 
-const _data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const _data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
 
 const ExamplePage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
@@ -30,21 +30,19 @@ const ExamplePage: FC = () => {
 	return (
 		<div className={cn(styles.content, 'flex flex-wrap')}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center sticky top-0')}>
-				<div className="flex flex-wrap">
-					<div className="font-bold mr-28">
-						Danh mục dự án
+				<div className="flex flex-wrap items-center">
+					<div className={styles['item-sort']}>
+						<span>
+							Danh mục dự án
+						</span>
 					</div>
 					{sorts.map((item, index) => (
-						<div key={item.id} className={cn(styles['item-sort'], 'mr-28', { [styles.active]: item.type === 'desc' })}>
+						<div key={item.id} className={cn(styles['item-sort'], { [styles.active]: item.type === 'desc' })}>
 							<button className="font-bold" onClick={() => handleSort(item, index)}>
 								{
 									item.type === 'asc'
-										? <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-										</svg>
-										: <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4" />
-										</svg>
+										? <img src="/icon-sort-gray.png" alt="asc" className="inline mr-2" />
+										: <img src="/icon-sort-blue.png" alt="desc" className="inline mr-2" />
 								}
 								{item.title}
 							</button>
@@ -52,23 +50,23 @@ const ExamplePage: FC = () => {
 					))}
 				</div>
 				<div className={cn(styles['input-container'], 'rounded-full flex my-2.5')}>
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-4 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
 					</svg>
-					<input className="bg-transparent focus:outline-none py-3 px-2.5 flex-1" placeholder="Tìm kiếm" />
+					<input className="bg-transparent focus:outline-none flex-1" placeholder="Tìm kiếm" />
 				</div>
 			</div>
 
-			<div className={cn(styles.container, 'gap-4 p-4 pb-20')}>
+			<div className={cn(styles.container, 'flex flex-wrap w-full px-2 pb-20')}>
 				{
 					data.map((_item: null, index: number) => {
 						return (
-							<div key={index} className={cn(styles.item, 'pt-3.5 px-4 pb-5')}>
+							<div key={index} className={cn(styles.item)}>
 								<div className={styles.image}>
-									<img width="130" height="130" />
+									<img width="130" height="130" src="/project.jpg" alt="project" />
 									<div>
 										<div className={cn(styles.progress, "w-full")} style={{ '--width': `${Math.floor(Math.random() * 100)}%` } as React.CSSProperties} />
-										<div className="flex justify-between mt-3" style={{ color: 'black' }}>
+										<div className={cn(styles.date, "flex justify-between mt-3")} style={{ color: 'black' }}>
 											<span>15/12/20</span>
 											<span>26/3/23</span>
 										</div>
@@ -78,10 +76,10 @@ const ExamplePage: FC = () => {
 										</ul>
 									</div>
 								</div>
-								<h3 className="font-bold mt-6" style={{ lineHeight: "18.4px" }}>
+								<h3>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
 								</h3>
-								<p className="text-xs">
+								<p className="truncate">
 									Công ty Cổ phần Đầu tư và Thương mại Thủ Đô
 								</p>
 								<div className={cn(styles.tag, "grid gap-6 justify-center text-center mt-6 whitespace-nowrap")}>
@@ -107,12 +105,12 @@ const ExamplePage: FC = () => {
 				<div className="bg-white px-4 flex items-center justify-between sm:px-6">
 					<div className={cn(styles['pagination-container'], "mx-auto hidden sm:flex-1 sm:flex sm:items-start sm:justify-between mt-5")}>
 						<button
-							className="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50"
+							className="relative inline-flex items-center py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50"
 						>
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ marginLeft: "15px" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
 							</svg>
-							<span className="mx-2">Lùi</span>
+							<span style={{ marginRight: "30px", marginLeft: "9px" }}>LÙI</span>
 						</button>
 						<nav className="relative z-0 inline-flex " aria-label="Pagination">
 							{/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
@@ -164,10 +162,10 @@ const ExamplePage: FC = () => {
 							</div>
 						</nav>
 						<button
-							className="ml-3 relative inline-flex items-center px-4 py-2 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50"
+							className="ml-3 relative inline-flex items-center py-2 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50"
 						>
-							<span className="mx-2">Tiếp</span>
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<span style={{ marginLeft: "30px", marginRight: "9px" }}>TIẾP</span>
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ marginRight: "15px" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
 							</svg>
 						</button>

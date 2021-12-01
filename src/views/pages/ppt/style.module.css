@@ -3,6 +3,12 @@
   color: rgba(102, 102, 102, 1);
   height: calc(100vh - 64px);
   overflow-y: auto;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.content.col {
+	flex-direction: column;
+	display: flex;
 }
 
 .header {
@@ -13,28 +19,42 @@
 }
 
 .navigator {
-	border-bottom: solid 2px transparent;
+  border-bottom: solid 2px transparent;
   padding: 0 8px;
   margin: 0 12px;
   height: 100%;
   display: flex;
-	align-items: center;
-	justify-content: center;
-	min-width: 110px;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+	line-height: 16.1px;
+	font-size: 14px;
 }
 
 .navigator.active {
-	border-bottom-color: #0165BE;
-	color: black;
-	font-weight: bold;
+  border-bottom-color: #0165BE;
+  color: black;
+  font-weight: bold;
 }
 
 .item-sort {
+  font-size: 13px;
+  line-height: 14.95px;
   color: rgba(102, 102, 102, 1);
+  font-weight: 700;
 }
 
 .item-sort.active {
   color: rgba(0, 96, 225, 1);
+}
+
+.item-sort:not(:last-child) {
+  margin-right: 116px;
+}
+
+.item-sort>* {
+  display: flex;
+  align-items: center
 }
 
 .input-container {
@@ -43,22 +63,52 @@
   min-width: 350px;
 }
 
+.input-container svg {
+  margin-left: 15px;
+}
+
+.input-container input {
+  line-height: 15px;
+  font-size: 13px;
+  padding: 12px 11px;
+}
+
 .item {
+  width: 291px;
+  height: 310px;
   border-radius: 10px;
   border-color: #CCCCCC;
+  margin-top: 16px;
   border-width: 0.5px;
+  padding: 14px 13px 18px 18px;
+  margin: 16px 8px 0px 8px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.item>h3 {
+  font-weight: 700;
+  margin-top: 24px;
+  line-height: 18.4px;
+  /* letter-spacing: -0.1px; */
+}
+
+.item>p {
+  letter-spacing: -0.1px;
+  line-height: 13.8px;
+  margin-top: 7px;
+  font-size: 12px;
+}
+
 .container {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* display: grid; */
+  /* grid-template-columns: repeat(4, minmax(0, 1fr)); */
 }
 
 .image {
   display: grid;
   grid-template-columns: 130px auto;
   gap: 12px;
+	font-size: 14px;
 }
 
 .item h3 {
@@ -85,6 +135,13 @@
 
 .tag h4 {
   color: black;
+  line-height: 16.1px;
+}
+
+.tag p {
+  font-size: 12px;
+  line-height: 13.8px;
+  margin-top: 7px;
 }
 
 .progress {
@@ -99,6 +156,11 @@
   background-color: #666666;
   width: var(--width);
   display: block;
+}
+
+.date {
+  font-size: 12px;
+  line-height: 13.8px;
 }
 
 .pagination {
@@ -135,11 +197,20 @@
   max-width: 1250px;
 }
 
+.table,
+tr,
+th,
+td {
+  line-height: 14.95px;
+  font-size: 13px;
+}
+
 .table {
   width: 100%;
   border-collapse: separate;
   text-align: center;
   border-spacing: 0;
+	color: black;
 }
 
 td {
@@ -152,6 +223,7 @@ td {
 }
 
 .table thead tr th {
+	text-align: left;
   position: sticky;
   top: 0;
   background-color: rgba(71, 129, 207, 1);
@@ -164,7 +236,10 @@ td {
 
 .table-project thead tr th:last-child {
   width: 1%;
-  min-width: 95px;
+  min-width: 89px;
+}
+.table-project tbody tr td:last-child{
+	background-color: #F55F5F;
 }
 
 .table tbody tr th {
@@ -180,7 +255,6 @@ td {
 
 table.table tbody th,
 table.table tbody td {
-  line-height: 15px;
   padding: 10px 8px 5px 8px;
 }
 
