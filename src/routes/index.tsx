@@ -22,6 +22,7 @@ import TaskManagementLayout from "views/layouts/TaskManagementLayout";
 // Main Pages
 import SignInPage from "views/pages/main/SignIn";
 import RegisterPage from "views/pages/main/Register";
+import ResetPasswordPage from "views/pages/main/ResetPassword";
 import ErrorPage from "views/pages/main/Error";
 
 // Dashboard Pages
@@ -87,6 +88,11 @@ const Routes: FC = () => {
                         exact
                         path="/authentication/register"
                         component={RegisterPage}
+                      />
+                      <Route
+                        exact
+                        path="/authentication/reset-password"
+                        component={ResetPasswordPage}
                       />
                       <Route path="/authentication/*" component={ErrorPage} />
                     </Switch>
