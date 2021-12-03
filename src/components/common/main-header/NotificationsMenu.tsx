@@ -12,9 +12,9 @@ const NotificationsMenu: FC = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="w-8 h-8 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-3">
+        <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
           <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-negative border-2 border-primary-light rounded-full"></div>
-          <BellIcon className="w-4 h-4 text-primary-gray" />
+          <BellIcon className="w-5 h-5 text-primary-gray" />
         </Menu.Button>
       </div>
 
