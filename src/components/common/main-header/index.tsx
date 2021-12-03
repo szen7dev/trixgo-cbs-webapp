@@ -3,11 +3,9 @@ import { FC } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import MainSearchDialog from "components/common/MainSearchDialog";
-import MessagesMenu from "./MessagesMenu";
 import NotificationsMenu from "./NotificationsMenu";
 import UserMenu from "./UserMenu";
 import SearchIcon from "assets/icons/Search";
-import ViewGridIcon from "assets/icons/ViewGrid";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import iconGrid from "assets/images/icons8-menu-100.png";
 

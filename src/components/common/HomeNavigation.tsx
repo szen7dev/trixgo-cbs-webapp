@@ -1,7 +1,5 @@
 import { FC } from "react";
 
-import { map as _map } from "lodash";
-
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import dollarIcon from "assets/images/icons8-us-dollar-80.png";
 import chevronRight from "assets/images/icon-expand-arrow-right.png";

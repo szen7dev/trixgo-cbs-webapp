@@ -4,7 +4,6 @@ import { Menu, Transition } from "@headlessui/react";
 
 import { useAuth } from "services/hooks/useAuth";
 
-import ChevronDownIcon from "assets/icons/ChevronDown";
 import InformationCircleIcon from "assets/icons/InformationCircle";
 import CogIcon from "assets/icons/Cog";
 import QuestionMarkCircleIcon from "assets/icons/QuestionMarkCircle";
