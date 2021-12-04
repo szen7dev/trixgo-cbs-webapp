@@ -4,32 +4,25 @@ import { Menu, Transition } from "@headlessui/react";
 
 import { useAuth } from "services/hooks/useAuth";
 
-import ChevronDownIcon from "assets/icons/ChevronDown";
 import InformationCircleIcon from "assets/icons/InformationCircle";
 import CogIcon from "assets/icons/Cog";
 import QuestionMarkCircleIcon from "assets/icons/QuestionMarkCircle";
 import MoonIcon from "assets/icons/Moon";
 import LogoutIcon from "assets/icons/Logout";
+import defaultThumbnail from "assets/images/thumbnail2.png";
 
 const UserMenu: FC = () => {
   const { user, signOut } = useAuth();
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center ml-6">
         <Menu.Button className="flex justify-center items-center group focus:outline-none">
           <img
-            src={user?.avatar}
+            src={user ? user.avatar : defaultThumbnail}
             alt="User Avatar"
             className="w-8 h-8 rounded-full"
           />
-          <div className="flex items-center truncate">
-            <span className="truncate ml-2 text-sm font-medium group-hover:text-dark">
-              {`Hi, ${user?.firstName} ${user?.lastName}`}
-            </span>
-
-            <ChevronDownIcon className="w-3 h-3 ml-1.5 text-secondary-gray" />
-          </div>
         </Menu.Button>
       </div>
 
@@ -47,7 +40,7 @@ const UserMenu: FC = () => {
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-3">
               <div className="relative">
                 <img
-                  src={user?.avatar}
+                  src={user ? user.avatar : defaultThumbnail}
                   alt="User Avatar"
                   className="w-14 h-14 rounded-full"
                 />

@@ -17,7 +17,7 @@ import ChatProvider from "services/providers/Chat";
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import ExampleLayout from "views/layouts/Example";
-import TaskManagementLayout from "views/layouts/TaskManagementLayout";
+import HomeLayout from "views/layouts/HomeLayout";
 
 // Main Pages
 import SignInPage from "views/pages/main/SignIn";
@@ -67,6 +67,14 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
+              <Route path="/tasks">
+                  <HomeLayout>
+                    <Switch>
+                      <Route path="/tasks" component={DashboardPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
+
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>
@@ -176,8 +184,8 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                <Route path="/tasks">
-                  <TaskManagementLayout>
+                {/* <Route path="/tasks">
+                  <HomeLayout>
                     <Switch>
                       <ProtectedRoute
                         exact
@@ -186,11 +194,11 @@ const Routes: FC = () => {
                       />
                       <Route path="/tasks/*" component={ErrorPage} />
                     </Switch>
-                  </TaskManagementLayout>
-                </Route>
+                  </HomeLayout>
+                </Route> */}
 
                 <Route path="/teaser">
-                  <TaskManagementLayout>
+                  <HomeLayout>
                     <Switch>
                       <ProtectedRoute
                           exact
@@ -199,7 +207,7 @@ const Routes: FC = () => {
                       />
                       <Route path="/applications/*" component={ErrorPage} />
                     </Switch>
-                  </TaskManagementLayout>
+                  </HomeLayout>
                 </Route>
 
                 <Route path="/applications">

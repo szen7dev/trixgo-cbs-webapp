@@ -5,7 +5,7 @@ import ChatInfo from "./information";
 
 import searchIcon from "assets/images/icon-search.png";
 import searchIcon2 from "assets/images/icons8-search-50.png";
-import messageIcon from "assets/images/RightSideBarIcon/icons8-edit-chat-history-48.png";
+import messageIcon from "assets/images/icons8-edit-chat-history-48.png";
 import expandIcon from "assets/images/icon-expand-arrow.png";
 import expandRightIcon from "assets/images/icon-expand-arrow-right.png";
 import expandLeftIcon from "assets/images/icon-expand-arrow-left.png";
