@@ -1,16 +1,15 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo } from "react";
 
 import cn from "classnames";
 
 import styles from "./style.module.css";
 
-const _pages = [
+const pages = [
 	{ id: 'budget', title: 'Ngân sách' },
 	{ id: 'wattage', title: 'Kế hoạch tài chính' },
 ]
 
 const ProjectBudgetPage: FC = () => {
-	const [pages, setPages] = useState(_pages);
 	const data = useMemo(() => [null, null], []);
 
 	useEffect(() => {

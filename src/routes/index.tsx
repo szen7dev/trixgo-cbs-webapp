@@ -256,16 +256,16 @@ const Routes: FC = () => {
 
                 <Route path="/ppt">
                   <Switch>
-                    <Route exact path="/ppt/page6" component={ProjectProgressPage} />
+                    <Route exact path="/ppt/:id/schedule" component={ProjectProgressPage} />
                     <Router>
                       <HomeLayout>
                         <Switch>
-                          <Route exact path="/ppt" component={ProjectCategoryPage} />
-                          <Route exact path="/ppt/page2" component={ProjectDeployingPage} />
-                          <Route exact path="/ppt/page3" component={ProjectInvestPage} />
-                          <Route exact path="/ppt/page4" component={ProjectHomePage} />
-                          <Route exact path="/ppt/page5" component={ProjectReportPage} />
-                          <Route exact path="/ppt/page7" component={ProjectBudgetPage} />
+                          <Route exact path="/ppt/home" component={ProjectCategoryPage} />
+                          <Route exact path="/ppt/market" component={ProjectDeployingPage} />
+                          <Route exact path="/ppt/porfolio" component={ProjectInvestPage} />
+                          <Route exact path="/ppt/:id/home" component={ProjectHomePage} />
+                          <Route exact path="/ppt/:id/dashboard" component={ProjectReportPage} />
+                          <Route exact path="/ppt/:id/budget" component={ProjectBudgetPage} />
                           <Route path="/ppt/*" component={ErrorPage} />
                         </Switch>
                       </HomeLayout>

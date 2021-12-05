@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -7,8 +7,9 @@ import cn from "classnames";
 import getPlugins, { _data, optionsOne as options } from "./chart/ProjectDoughnutChart";
 
 import styles from "./style.module.css";
+import { Link } from "react-router-dom";
 
-const _pages = [
+const pages = [
 	{ id: 'dashboard', title: 'Dashboard' },
 	{ id: 'finnace', title: 'Kế hoạch tài chính' },
 	{ id: 'report', title: 'Báo cáo' },
@@ -19,7 +20,6 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const plugins = getPlugins('205', 'PROJECTS')
 
 const ProjectInvestPage: FC = () => {
-	const [pages, setPages] = useState(_pages);
 	const data = useMemo(() => {
 		const _data: Array<{ id: string, progress: number } | null> = [];
 		_data.length = 10;
@@ -38,7 +38,7 @@ const ProjectInvestPage: FC = () => {
 		// <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
 		<div className={cn(styles.content, styles['bg-gray'])}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full')}>
-				<div className="flex flex-wrap justify-center flex-1">
+				<div className="flex justify-center flex-1">
 					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'dashboard' })}>
 						<button>
 							{page.title}
@@ -52,56 +52,84 @@ const ProjectInvestPage: FC = () => {
 					<input className="bg-transparent focus:outline-none py-3 px-2.5 flex-1" placeholder="Tìm kiếm" />
 				</div>
 			</div>
-			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 flex-1")}>
+			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1")}>
 				{/* Content */}
 				<div className="flex flex-wrap -mx-2">
-					<div className={cn("px-2")}>
-						<div className={cn(styles.cell, styles.border, 'h-full pl-5 pr-12 pt-7')}>
+					<div className={cn("px-2 mt-4  flex-auto")}>
+						<div className={cn(styles.cell, styles.border, 'h-full pl-5 pr-12 pt-7 pb-8')}>
 							<div className={cn(styles['finance-progress'], styles['text-xxl'])}>
-								<div className={styles.warn}>7</div>
-								<div className={styles.success}>125</div>
-								<div className={styles.purple}>62</div>
-								<div className={styles.danger}>6</div>
+								<Link to="/">
+									<div className={styles.warn}>7</div>
+								</Link>
+								<Link to="/">
+									<div className={styles.success}>125</div>
+								</Link>
+								<Link to="/">
+									<div className={styles.purple}>62</div>
+								</Link>
+								<Link to="/">
+									<div className={styles.danger}>6</div>
+								</Link>
 							</div>
 							<div className={cn(styles['text-normal'], "grid grid-cols-2 gap-y-5 gap-x-8 mt-8")}>
 								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<div className={cn(styles.success, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, ĐÚNG NGÂN SÁCH</div>
+									<Link to="/">
+										<div className={cn(styles.success, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+									</Link>
+								</div>
 								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<div className={cn(styles.purple, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, ĐÚNG NGÂN SÁCH</div>
+									<Link to="/">
+										<div className={cn(styles.purple, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+									</Link>
+								</div>
 								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<div className={cn(styles.warn, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH</div>
+									<Link to="/">
+										<div className={cn(styles.warn, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+									</Link>
+								</div>
 								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<div className={cn(styles.danger, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, VƯỢT NGÂN SÁCH</div>
+									<Link to="/">
+										<div className={cn(styles.danger, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+									</Link>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div className={cn("px-2")} style={{ minWidth: "405px" }}>
-						<div className={cn(styles.cell, styles.border, 'h-full')}>
+					<div className={cn("px-2 mt-4 flex-1")} style={{ minWidth: "405px" }}>
+						<div className={cn(styles.cell, styles.border, 'h-full pb-4')}>
 							<div className="px-3.5">
 								<div>
-									<p className={cn(styles['text-small'], 'mt-5')}>Ngân sách (100%)</p>
-									<div className={cn(styles['text-small'], "flex items-center")} style={{ marginTop: '5px' }}>
+									<Link to="/">
+										<p className={cn(styles['text-small'], 'mt-5')}>Ngân sách (100%)</p>
+									</Link>
+									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.success, 'mr-2')} style={{ width: "299px", height: '12px' }}></div>
 										<div>$696.8 MM</div>
 									</div>
 								</div>
 								<div>
-									<p className={cn(styles['text-small'], 'mt-5')}>Dự báo (98%)</p>
-									<div className={cn(styles['text-small'], "flex items-center")} style={{ marginTop: '5px' }}>
+									<Link to="/">
+										<p className={cn(styles['text-small'], 'mt-5')}>Dự báo (98%)</p>
+									</Link>
+									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.purple, 'mr-2')} style={{ width: "266px", height: '12px' }}></div>
 										<div>$547.6 MM</div>
 									</div>
 								</div>
 								<div>
-									<p className={cn(styles['text-small'], 'mt-5')}>Đã ký hợp đồng (82%)</p>
-									<div className={cn(styles['text-small'], "flex items-center")} style={{ marginTop: '5px' }}>
+									<Link to="/">
+										<p className={cn(styles['text-small'], 'mt-5')}>Đã ký hợp đồng (82%)</p>
+									</Link>
+									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.info, 'mr-2')} style={{ width: "213px", height: '12px' }}></div>
 										<div>$373.5 MM</div>
 									</div>
 								</div>
 								<div>
-									<p className={cn(styles['text-small'], 'mt-5')}>Đã giải ngân (57%)</p>
-									<div className={cn(styles['text-small'], "flex items-center")} style={{ marginTop: '5px' }}>
+									<Link to="/">
+										<p className={cn(styles['text-small'], 'mt-5')}>Đã giải ngân (57%)</p>
+									</Link>
+									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.warn, 'mr-2')} style={{ width: "153px", height: '12px' }}></div>
 										<div>$65.2 MM</div>
 									</div>
@@ -109,19 +137,31 @@ const ProjectInvestPage: FC = () => {
 							</div>
 						</div>
 					</div>
-					<div className={cn("px-2")}>
+					<div className={cn("px-2 mt-4 flex-1")}>
 						<div className={cn(styles.cell, styles.border, "flex pl-11 pr-10 pt-7 pb-7 h-full")}>
 							<div className={styles['finance-pie']}>
 								<Doughnut data={_data} options={options} plugins={plugins} />
 							</div>
 							<div>
 								<ul>
-									<li className="flex items-center"><div className={cn(styles.info, 'w-3 h-3 rounded-lg')}></div>Chưa bắt đầu (100)</li>
-									<li className="flex items-center"><div className={cn(styles.warn, 'w-3 h-3 rounded-lg')}></div>Lập kế hoạch (80)</li>
-									<li className="flex items-center"><div className={cn(styles.purple, 'w-3 h-3 rounded-lg')}></div>Thiết kế (15)</li>
-									<li className="flex items-center"><div className={cn(styles.plum, 'w-3 h-3 rounded-lg')}></div>Đấu thầu (5)</li>
-									<li className="flex items-center"><div className={cn(styles.success, 'w-3 h-3 rounded-lg')}></div>Xây dựng (3)</li>
-									<li className="flex items-center"><div className={cn(styles.gray, 'w-3 h-3 rounded-lg')}></div>Khác (2)</li>
+									<li className="whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.info, styles.circle, 'w-3 h-3 rounded-lg')}></div>Chưa bắt đầu (100)</Link>
+									</li>
+									<li className="flex items-center whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.warn, 'w-3 h-3 rounded-lg')}></div>Lập kế hoạch (80)</Link>
+									</li>
+									<li className="flex items-center whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.purple, 'w-3 h-3 rounded-lg')}></div>Thiết kế (15)</Link>
+									</li>
+									<li className="flex items-center whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.plum, 'w-3 h-3 rounded-lg')}></div>Đấu thầu (5)</Link>
+									</li>
+									<li className="flex items-center whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.success, 'w-3 h-3 rounded-lg')}></div>Xây dựng (3)</Link>
+									</li>
+									<li className="flex items-center whitespace-nowrap">
+										<Link to="/" className="flex items-center"><div className={cn(styles.gray, 'w-3 h-3 rounded-lg')}></div>Khác (2)</Link>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -161,7 +201,11 @@ const ProjectInvestPage: FC = () => {
 										return (
 											<tr key={d.id}>
 												<td>
-													<div className={styles.black}>CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</div>
+													<div className={styles.black}>
+														<Link to="/">
+															CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
+														</Link>
+													</div>
 													<div className={cn(styles['text-tiny'], "mt-3")}>
 														<div className={cn(styles[getRandomColor()], 'inline-block w-2 h-2 mr-1.5 rounded-lg')} style={{ backgroundColor: 'currentcolor' }} />
 														ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
@@ -246,7 +290,7 @@ const ProjectInvestPage: FC = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 };
 export default ProjectInvestPage;

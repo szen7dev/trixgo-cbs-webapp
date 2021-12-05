@@ -14,11 +14,10 @@ const listSort = [
 	{ id: 'status', title: 'Trạng thái', type: 'asc' },
 ]
 
-const _data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
 
 const ProjectCategoryPage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
-	const [data, setData] = useState(_data);
 
 	useEffect(() => {
 		document.title = "PPT - Danh mục dự án"
@@ -79,7 +78,7 @@ const ProjectCategoryPage: FC = () => {
 										</ul>
 									</div>
 								</div>
-								<h3>
+								<h3 className={styles['line-clamp-2']}>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
 								</h3>
 								<p className="truncate">

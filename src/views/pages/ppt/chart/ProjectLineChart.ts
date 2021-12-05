@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { AnimationEvent } from "chart.js";
-
 function fakeValues(from: number, to: number, prev = 0, step = 1) {
   let current = prev;
   const values = [];
@@ -19,7 +16,7 @@ function fakeValues(from: number, to: number, prev = 0, step = 1) {
   return values;
 }
 const options = {
-  // responsive: true,
+  responsive: true,
   maintainAspectRatio: false,
 	tooltip: {
 		enabled: false,
