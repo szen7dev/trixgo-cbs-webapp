@@ -9,7 +9,7 @@ const _pages = [
 	{ id: 'wattage', title: 'Kế hoạch tài chính' },
 ]
 
-const ExamplePage: FC = () => {
+const ProjectBudgetPage: FC = () => {
 	const [pages, setPages] = useState(_pages);
 	const data = useMemo(() => [null, null], []);
 
@@ -18,8 +18,7 @@ const ExamplePage: FC = () => {
 	}, []);
 
 	return (
-		<div className={cn(styles.content,styles.col)}>
-		{/* <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}> */}
+		<div className={cn(styles.content, styles.col)}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
 				<div className="flex flex-wrap h-full justify-center flex-1">
 					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'budget' })}>
@@ -36,7 +35,7 @@ const ExamplePage: FC = () => {
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto px-2">
-				<table className={cn(styles.table, 'mt-2')}>
+				<table className={cn(styles.table, styles.black, styles['text-normal'], 'mt-2')}>
 					<thead>
 						<tr>
 							<th>TT</th>
@@ -60,17 +59,17 @@ const ExamplePage: FC = () => {
 										? (<tr key={index}>
 											<th>A1</th>
 											<th className="text-left">GÓI THẦU XÂY DỰNG VÀ THIẾT BỊ</th>
-											<th className="text-right" style={{width:'1%'}}>15.000.000.000</th>
-											<th className="text-right" style={{width:'1%'}}>15.000.000.000</th>
-											<th className="text-right" style={{width:'1%'}}>15.000.000.000</th>
+											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
+											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
+											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
 											<th colSpan={6} className="text-left"></th>
 										</tr>)
 										: (<tr key={index}>
 											<td className="px-4">{index}</td>
 											<td className="text-left">Thi công san lấp mặt bằng</td>
-											<td className="text-right" style={{width:'1%'}}>5.000.000.000</td>
-											<td className="text-right" style={{width:'1%'}}>5.000.000.000</td>
-											<td className="text-right" style={{width:'1%'}}>5.000.000.000</td>
+											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
+											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
+											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
 											<td></td>
 											<td className="text-center"></td>
 											<td className="text-left"></td>
@@ -93,4 +92,4 @@ const ExamplePage: FC = () => {
  * ? export default must be capital syntax
  * ? export const must be camel case syntax
  */
-export default ExamplePage;
+export default ProjectBudgetPage;

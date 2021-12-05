@@ -2,6 +2,8 @@ import { FC, useEffect, useMemo, useState } from "react";
 
 import cn from "classnames";
 
+import iconSort from "assets/images/icon-sort-gray.png";
+import iconSorted from "assets/images/icon-sort-blue.png";
 import styles from "./style.module.css";
 
 const listSort = [
@@ -10,7 +12,7 @@ const listSort = [
 	{ id: 'date', title: 'Ngày liên hệ', type: 'asc' },
 ]
 
-const ExamplePage: FC = () => {
+const ProjectDeployingPage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
 	const data = useMemo(() => [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], []);
 
@@ -25,7 +27,7 @@ const ExamplePage: FC = () => {
 	};
 
 	return (
-		<div className={cn(styles.content,styles.col)}>
+		<div className={cn(styles.content, "flex flex-col overflow-hidden h-full")}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
 				<div className="flex flex-wrap items-center">
 					<div className={styles['item-sort']}>
@@ -38,8 +40,8 @@ const ExamplePage: FC = () => {
 							<button className="font-bold" onClick={() => handleSort(item, index)}>
 								{
 									item.type === 'asc'
-										? <img src="/icon-sort-gray.png" alt="asc" className="inline mr-2" />
-										: <img src="/icon-sort-blue.png" alt="desc" className="inline mr-2" />
+										? <img src={iconSort} alt="asc" className="inline mr-2" />
+										: <img src={iconSorted} alt="desc" className="inline mr-2" />
 								}
 								{item.title}
 							</button>
@@ -53,9 +55,9 @@ const ExamplePage: FC = () => {
 					<input className="bg-transparent focus:outline-none flex-1" placeholder="Tìm kiếm" />
 				</div>
 			</div>
-			<div className="flex-1 overflow-y-auto px-2">
-				<table className={cn(styles['table-project'], styles.table, 'mt-2')}>
-					<thead>
+			<div className={cn(styles.scroll, "flex-1 overflow-y-auto px-2")}>
+				<table className={cn(styles['table-project'], styles.table, styles['text-normal'], 'mt-2')}>
+					<thead className={styles.black}>
 						<tr>
 							<th>TT</th>
 							<th style={{ minWidth: "240px" }}>Nội dung</th>
@@ -68,7 +70,7 @@ const ExamplePage: FC = () => {
 							<th>Số ngày cách đây</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody className={styles.black}>
 						{
 							data.map((_item, index) => {
 								return (
@@ -103,4 +105,4 @@ const ExamplePage: FC = () => {
  * ? export default must be capital syntax
  * ? export const must be camel case syntax
  */
-export default ExamplePage;
+export default ProjectDeployingPage;

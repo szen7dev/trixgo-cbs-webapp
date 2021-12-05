@@ -2,6 +2,9 @@ import { FC, useEffect, useState } from "react";
 
 import cn from "classnames";
 
+import projectImage from "assets/images/project.jpg";
+import iconSort from "assets/images/icon-sort-gray.png";
+import iconSorted from "assets/images/icon-sort-blue.png";
 import styles from "./style.module.css";
 
 const listSort = [
@@ -13,7 +16,7 @@ const listSort = [
 
 const _data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
 
-const ExamplePage: FC = () => {
+const ProjectCategoryPage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
 	const [data, setData] = useState(_data);
 
@@ -28,7 +31,7 @@ const ExamplePage: FC = () => {
 	};
 
 	return (
-		<div className={cn(styles.content, 'flex flex-wrap')}>
+		<div className={styles.content}>
 			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center sticky top-0')}>
 				<div className="flex flex-wrap items-center">
 					<div className={styles['item-sort']}>
@@ -41,8 +44,8 @@ const ExamplePage: FC = () => {
 							<button className="font-bold" onClick={() => handleSort(item, index)}>
 								{
 									item.type === 'asc'
-										? <img src="/icon-sort-gray.png" alt="asc" className="inline mr-2" />
-										: <img src="/icon-sort-blue.png" alt="desc" className="inline mr-2" />
+										? <img src={iconSort} alt="asc" className="inline mr-2" />
+										: <img src={iconSorted} alt="desc" className="inline mr-2" />
 								}
 								{item.title}
 							</button>
@@ -57,15 +60,15 @@ const ExamplePage: FC = () => {
 				</div>
 			</div>
 
-			<div className={cn(styles.container, 'flex flex-wrap w-full px-2 pb-20')}>
+			<div className={cn(styles.scroll, 'flex flex-wrap w-full pl-2 pr-2 pb-20 flex-1 overflow-y-auto')}>
 				{
 					data.map((_item: null, index: number) => {
 						return (
 							<div key={index} className={cn(styles.item)}>
 								<div className={styles.image}>
-									<img width="130" height="130" src="/project.jpg" alt="project" />
+									<img width="130" height="130" src={projectImage} alt="project" />
 									<div>
-										<div className={cn(styles.progress, "w-full")} style={{ '--width': `${Math.floor(Math.random() * 100)}%` } as React.CSSProperties} />
+										<div className={cn(styles.progress, "w-full h-1.5")} style={{ '--width': `${Math.floor(Math.random() * 100)}%` } as React.CSSProperties} />
 										<div className={cn(styles.date, "flex justify-between mt-3")} style={{ color: 'black' }}>
 											<span>15/12/20</span>
 											<span>26/3/23</span>
@@ -181,4 +184,4 @@ const ExamplePage: FC = () => {
  * ? export default must be capital syntax
  * ? export const must be camel case syntax
  */
-export default ExamplePage;
+export default ProjectCategoryPage;

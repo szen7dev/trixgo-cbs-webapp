@@ -1,22 +1,137 @@
+/*______________________________Variable______________________________*/
+
+:root {
+  --text-tn: 10px;
+  --text-sm: 12px;
+  --text-base: 13px;
+  --text-l: 14px;
+  --text-xl: 16px;
+  --text-2xl: 18px;
+
+  --leading-tn: 11.5px;
+  --leading-sm: 13.8px;
+  --leading-base: 14.95px;
+  --leading-l: 16.1px;
+  --leading-xl: 18.4px;
+  --leading-2xl: 20.7px;
+
+  --gray: rgba(102, 102, 102, 1);
+  /* #666666 */
+  --light-gray: rgba(219, 231, 242, 1);
+  /* #DBE7F2 */
+  --green: rgba(6, 163, 2, 1);
+  /* #06A302 */
+  --blue: rgba(44, 134, 237, 1);
+  /* #2C86ED */
+  --lime: rgba(0, 202, 153, 1);
+  /* #00CA99 */
+  --orange: rgba(255, 165, 0, 1);
+  /* #FFA500 */
+  --orange-2: #FF9900;
+  --purple: rgba(155, 89, 182, 1);
+  /* #9B59B6 */
+}
+
+.text-tiny {
+  font-size: 10px;
+  line-height: 11.5px;
+}
+
+.text-small {
+  font-size: 12px;
+  line-height: 13.8px;
+}
+
+.text-normal {
+  font-size: 13px;
+  line-height: 14.95px;
+}
+
+.text-large {
+  font-size: 14px;
+  line-height: 16.1px;
+}
+.content h4,
+.text-xl {
+  font-size: 16px;
+  line-height: 18.4px;
+}
+.content h3,
+.text-2xl {
+  font-size: 18px;
+  line-height: 20.7px;
+}
+.content h2,
+.text-xxl {
+  font-size: 24px;
+  line-height: 27.6px;
+}
+
+
+.circle {
+  background-color: currentColor;
+}
+
+.warn {
+  color: #FF9900;
+}
+
+.success {
+  color: #008000;
+}
+
+.lime {
+  color: rgba(0, 202, 153, 1);
+}
+
+.purple {
+  color: #9B59B6;
+}
+
+.danger {
+  color: #FF4242;
+}
+
+.rose {
+  color: #F55F5F;
+}
+
+.info {
+  color: rgba(0, 96, 225, 1);
+}
+
+.dark-gray {
+  color: #CCCCCC
+}
+
+.gray {
+  color: #DBE7F2;
+}
+
+.plum {
+  color: #E03B56;
+}
+
+.black {
+  color: black !important;
+}
+
+/* */
+
 .content {
-  width: 100%;
-  color: rgba(102, 102, 102, 1);
-  height: calc(100vh - 64px);
-  overflow-y: auto;
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 }
 
 .bg-gray {
   background-color: rgba(240, 240, 240, 1);
 }
 
-.content.col {
-  flex-direction: column;
-  display: flex;
-}
-
 .header {
-  color: rgba(102, 102, 102, 1);
+  color: var(--gray);
   /* border-bottom: 0.5px; */
   border: 0.5px solid #CCCCCC;
   background-color: white;
@@ -41,6 +156,10 @@
   font-weight: bold;
 }
 
+.navigator.active>* {
+  font-weight: bold;
+}
+
 .item-sort {
   font-size: 13px;
   line-height: 14.95px;
@@ -62,7 +181,6 @@
 }
 
 .input-container {
-  @apply bg-black bg-opacity-30;
   background-color: #F5F6F9;
   min-width: 350px;
 }
@@ -85,8 +203,9 @@
   margin-top: 16px;
   border-width: 0.5px;
   padding: 14px 13px 18px 18px;
-  margin: 16px 8px 0px 8px;
+  margin: 16px 15px 0px 0px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: rgba(102, 102, 102, 1);
 }
 
 .item>h3 {
@@ -101,11 +220,6 @@
   line-height: 13.8px;
   margin-top: 7px;
   font-size: 12px;
-}
-
-.container {
-  /* display: grid; */
-  /* grid-template-columns: repeat(4, minmax(0, 1fr)); */
 }
 
 .image {
@@ -150,14 +264,13 @@
 
 .progress {
   border: 0.5px solid #CCCCCC;
-  height: 6px;
   box-sizing: content-box;
 }
 
 .progress::after {
   content: '';
   height: 100%;
-  background-color: #666666;
+  background-color: currentColor;
   width: var(--width);
   display: block;
 }
@@ -201,14 +314,7 @@
   max-width: 1250px;
 }
 
-.table,
-tr,
-th,
-td {
-  line-height: 14.95px;
-  font-size: 13px;
-}
-
+/*______________________________Table______________________________*/
 .table {
   width: 100%;
   border-collapse: separate;
@@ -219,11 +325,6 @@ td {
 
 td {
   vertical-align: top;
-}
-
-.table thead {
-  /* color: black; */
-  /* border: 0.5px solid #CCCCCC; */
 }
 
 .table thead tr th {
@@ -263,29 +364,33 @@ table.table tbody td {
   padding: 10px 8px 5px 8px;
 }
 
-@media (min-width: 1800px) {
-  .container {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
+/*______________________________Setting______________________________*/
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-/* Finance */
-.finance-cell {
+/*______________________________Finance______________________________*/
+.cell {
   background: #FFFFFF;
-  border: 0.5px solid #CCCCCC;
   box-sizing: border-box;
 }
 
-.finance-cell ul>li {
+.cell.border {
+  border: 0.5px solid #CCCCCC;
+}
+
+.cell ul>li {
   line-height: 16.1px;
   font-size: 14px;
 }
 
-.finance-cell ul>li:not(:first-child) {
+.cell ul>li:not(:first-child) {
   margin-top: 17px;
 }
 
-.finance-cell ul>li>div {
+.cell ul>li>div {
   display: inline-block;
   background-color: currentColor;
   margin-right: 14px;
@@ -303,8 +408,6 @@ table.table tbody td {
   align-items: center;
   margin: 10px 25px;
   border: 4px solid;
-  font-size: 24px;
-  line-height: 27.6px;
   border-radius: 999px;
   width: 75px;
   height: 75px;
@@ -320,71 +423,247 @@ table.table tbody td {
 }
 
 .finance-pie {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 154px;
-  height: 154px;
-  border-radius: 50%;
-  background-image: conic-gradient(#E03B56 0 90deg,
-      #00CA99 90deg 150deg,
-      #DBE7F2 150deg 170deg,
-      #2C86ED 170deg 210deg,
-      #FFA500 210deg 275deg,
-      #9B59B6 275deg 330deg,
-      #E03B56 330deg 0);
-}
-
-.finance-pie>div {
+  margin-right: 54px;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  width: 124px;
-  height: 124px;
-  border-radius: 50%;
 }
 
-.finance-pie h3 {
-  color: black;
-  font-size: 36px;
-  line-height: 40px;
+.finance-pie>canvas {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-.finance-pie p {
-  font-size: 16px;
-  text-transform: uppercase;
-  line-height: 20px;
-}
-
-.warn {
-  color: #FF9900;
-}
-
-.success {
-  color: #008000;
-}
-
-.purple {
-  color: #9B59B6;
-}
-
-.danger {
-  color: #FF4242;
-}
-
-.info {
-  color: #2C86ED;
-}
-
-.gray {
-  color: #DBE7F2;
-}
-
-.plum {
-  color: #E03B56;
-}
 
 .finance-table thead th {
-	font-weight: normal;
+  font-weight: normal;
+  padding: 11px 24px;
+  line-height: 14.95px;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.finance-table tbody td {
+  border: 0.5px solid #CCCCCC;
+}
+
+.bar {
+  background-color: currentColor;
+}
+
+/*______________________________Invest______________________________*/
+.invest tr td:nth-child(1) {
+  padding: 16px 18px 12px 15px;
+  width: 1%;
+  min-width: 308px;
+}
+
+.invest tr td:nth-child(2) {
+  padding: 16px 13px 12px 14px;
+  width: 174px;
+}
+
+.invest tr td:nth-child(3) {
+  padding: 16px 19px 12px 22px;
+  width: 170px;
+}
+
+.invest tr td:nth-child(4) {
+  padding: 16px 19px 12px 22px;
+  width: 170px;
+}
+
+.invest tr td:nth-child(5) {
+  padding: 16px 16px 12px 26px;
+  width: 143px;
+}
+
+.invest tr td:nth-child(6) {
+  padding: 16px 17px 12px 15px;
+  width: 100px;
+}
+
+.invest tr td:nth-child(7) {
+  padding: 16px 16px 12px 24px;
+}
+
+
+/*______________________________Report Page______________________________*/
+
+.next,
+.prev {
+  border: 0.5px solid #CCCCCC;
+  background: #F6F7F8;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.report .profile-wrapper {
+  padding: 17px 15px 0 14px;
+}
+
+.report h3 {
+  font-size: 18px;
+  line-height: 20.7px;
+  font-weight: 700;
+}
+
+.report .profile-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  row-gap: 15px;
+  column-gap: 14px;
+  margin-top: 26px;
+}
+
+.report .profile-container>div {
+  background-color: rgba(240, 240, 240, 1);
+  padding: 10px 14px 3px 15px;
+}
+
+.report .profile-container>div p:nth-child(1) {
+  font-size: 16px;
+  line-height: 18.4px;
+  color: black;
+}
+
+.report .profile-container>div p:nth-child(2) {
+  height: 20px;
+  margin-top: 11px;
+}
+
+.report .contractor-wrapper {
+  padding: 17px 16px 0 15px;
+}
+
+.report .chart {
+  width: 110px;
+}
+
+.report .budget-wrapper {
+  padding: 17px 20px 22px 25px;
+}
+
+.report .budget-wrapper table {
+  width: 100%;
+}
+
+.report .budget-wrapper td {
+  vertical-align: bottom;
+}
+
+.report .budget-wrapper table tr td:first-child {
+  padding-right: 16px;
+}
+
+.report .budget-wrapper table tr td:nth-child(2) {
+  padding-right: 41px;
+  padding-bottom: 5px;
+}
+
+.report .budget-wrapper table tr td:last-child,
+.report .budget-wrapper table tr td:first-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.report .budget-wrapper table tr td:last-child {
+  color: black;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  text-align: right;
+}
+
+.report .quick-report p {
+  margin-top: 4px;
+}
+
+.report .contract-status {
+  display: flex;
+  justify-content: center;
+}
+
+.report .contract-status div {
+  border-color: currentColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 11px 18px;
+  border: 2px solid;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+}
+
+.report .work-wrapper table tr {
+  border-bottom: 0.5px solid #CCCCCC;
+}
+
+.report .work-wrapper table td {
+  padding-bottom: 17px;
+  vertical-align: bottom;
+}
+
+.report .work-wrapper table td:last-child {
+  width: 1%;
+}
+
+.report .work-wrapper table td:nth-child(2),
+.report .work-wrapper table td:nth-child(3) {
+  width: 1%;
+}
+
+
+/*______________________________Home______________________________*/
+.image-home {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.pagination .swiper-pagination-bullet {
+	margin: 0 4px;
+}
+
+/*______________________________Porogress______________________________*/
+.progress-header {
+	position: sticky;
+	top: 0;
+	background-color: #2C2C2C;
+	color: white;
+	padding: 8px;
+}
+
+
+/*______________________________Custom Scroll______________________________*/
+
+.scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 90, 90, 0) transparent;
+  transition: all .3s ease;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+  color: rgba(0, 0, 0, 0);
+}
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+  box-shadow: inset 0 0 0 10px;
+}
+
+.scroll:hover {
+  scrollbar-color: rgba(90, 90, 90, .3) transparent;
+  color: rgba(8, 5, 5, 0.3);
+}
+
+.scroll>* {
+  color: rgba(102, 102, 102, 1);
 }

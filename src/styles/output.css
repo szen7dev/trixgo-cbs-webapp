@@ -23155,73 +23155,113 @@ body {
   background-color: #FBFBFD;
 }
 
+a, button {
+  transition: all 0.2s linear 0s;
+}
+
 /*__________________________________________________________________________*/
 
 /* ___________Customized task management layout styles ___________________*/
 
-.task-management-navigation {
+.t-leftsidebar-navigation {
   font-size: 15px;
+  width: 280px;
 }
 
-.task-management-navigation-container {
-  height: calc(100% - 50px);
-}
-
-.tm-left-sidebar-group:last-child {
-  border: none;
-}
-
-.tm-left-sidebar-item {
-  border-radius: 0 25px 25px 0;
-}
-
-.tm-left-sidebar-item:hover,
-.tm-left-sidebar-item.active {
-  background: #e6f1ff;
-  border-radius: 0 25px 25px 0;
-  color: #0060e1;
-}
-
-.tm-left-sidebar-progress {
-  background: #dadce0;
-}
-
-.tm-left-sidebar-progress-value {
-  background: #5f6368;
-}
-
-.task-management-layout.active .task-management-navigation {
-  width: 3rem;
-}
-
-.task-management-layout.active .tm-left-sidebar-item-text {
-  opacity: 0;
-}
-
-.task-management-layout.active .tm-left-sidebar-footer {
-  opacity: 0;
-}
-
-.task-management-layout.active .task-management-main-content {
-  padding-left: 3rem;
-}
-
-.task-management-layout.active .task-management-navigation-container {
+.t-leftsidebar-navigation-container {
   height: 100%;
+  overflow: auto;
+  padding: 20px 15px 20px 20px;
+  background-color: #F5F6F9;
 }
 
-.task-management-layout.active .tm-left-sidebar-group-title {
-  height: 0;
-  padding: 0;
-  opacity: 0;
+.t-leftsidebar-user-text {
+  width: calc(100% - 60px);
+  color: #000;
+}
+
+.t-leftsidebar-user-text-price {
+  font-size: 13px;
+}
+
+.t-leftsidebar-menu-title {
+  font-size: 13px;
+  color: #798295;
+}
+
+.t-leftsidebar-menu-item {
+  font-weight: bold;
+  color: #666;
+}
+
+.t-leftsidebar-menu-item > span {
+  width: calc(100% - 36px);
+}
+
+.t-leftsidebar-menu-showmore-btn {
+  font-size: 13px;
+  color: #798295;
+}
+
+/* ________________________________________taiwind fixing_________________________________ */
+
+.t-leftsidebar-friends {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 32px;
+  font-size: 13px;
+  color: #798295;
+}
+
+.t-leftsidebar-friends > span {
+  box-sizing: border-box;
+}
+
+.t-leftsidebar-friends-group {
+  display: flex;
+  align-items: center;
+}
+
+.t-leftsidebar-friends-group > div {
+  position: relative;
+  width: 25px;
+  overflow: visible;
+}
+
+.t-leftsidebar-friends-group > div:last-child {
+  width: 40px;
+  background: #fff;
+  border-radius: 50%;
+  height: 40px;
+}
+
+.t-leftsidebar-friends-group > div img {
+  width: 40px;
+  height: 40px;
+  max-width: none;
+}
+
+.t-leftsidebar-friends-group > div:last-child img {
+  filter: invert(56%) sepia(50%) saturate(6891%) hue-rotate(196deg) brightness(98%) contrast(89%);
+  padding: 6px;
+}
+
+.tm-right-sidebar {
+  width: 78px;
+}
+
+.home-layout {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
 .tm-right-sidebar-chat-item-online {
   background: #008000;
 }
 
-.tm-right-sidebar-chat-icon {
-  filter: invert(32%) sepia(86%) saturate(6231%) hue-rotate(207deg) brightness(95%) contrast(101%);
+.tm-right-sidebar-chat-btn {
+  background-color: #F0F0F0;
 }
 
 .tm-right-sidebar-toggle-btn {
@@ -23232,29 +23272,29 @@ body {
   background: #a3a6ad;
 }
 
-.task-management-layout.active-right .tm-right-sidebar-toggle-btn {
+.home-layout.active-right .tm-right-sidebar-toggle-btn {
   right: -15px;
   text-align: left;
 }
 
-.task-management-layout.active-right .tm-right-sidebar-toggle-btn img {
+.home-layout.active-right .tm-right-sidebar-toggle-btn img {
   transform: rotate(180deg);
 }
 
-.task-management-layout.active-right .tm-right-sidebar {
-  right: -3rem;
+.home-layout.active-right .tm-right-sidebar {
+  right: -78px;
 }
 
 .text-15px {
   font-size: 15px;
 }
 
-.task-management-main-content {
-  width: calc(100% - 3rem);
+.home-main-content {
+  width: calc(100% - 78px);
   height: calc(100vh - 4rem);
 }
 
-.task-management-layout.active-right .task-management-main-content {
+.home-layout.active-right .home-main-content {
   width: 100%;
 }
 
@@ -23295,6 +23335,36 @@ body {
 
 .task-management-content {
   height: calc(100vh - 7.2rem);
+}
+
+/*____________________________________________________________*/
+
+.t-header-company-name {
+  width: 260px;
+}
+
+.t-header-menu > a {
+  font-weight: bold;
+  margin: 0 20px;
+  color: #666;
+}
+
+.t-header-menu > a.active, .t-header-menu > a:hover {
+  color: #0060E1;
+}
+
+.t-header-investment-category-btn {
+  background-color: #DBE7F2;
+  border-radius: 2px;
+  height: 40px;
+  padding: 0 12px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #666;
+}
+
+.t-header-investment-category-btn:hover {
+  background-color: #bccddd;
 }
 
 /*______________________________chatbox______________________________*/

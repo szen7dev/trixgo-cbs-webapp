@@ -59,11 +59,14 @@ import SettingsPage from "views/pages/settings";
 // Example pages
 import ExamplePage from "views/pages/example";
 
-// Ppt pages
-import PptPage from "views/pages/ppt";
-import PptPage2 from "views/pages/ppt/page2";
-import PptPage3 from "views/pages/ppt/page3";
-import PptPage7 from "views/pages/ppt/page7";
+// Project pages
+import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
+import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
+import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
+import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
+import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
+import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 const Routes: FC = () => {
   return (
@@ -73,7 +76,7 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
-              <Route path="/tasks">
+                <Route path="/tasks">
                   <HomeLayout>
                     <Switch>
                       <Route path="/tasks" component={DashboardPage} />
@@ -252,15 +255,22 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/ppt">
-                  <MainLayout>
-                    <Switch>
-                      <Route exact path="/ppt" component={PptPage} />
-                      <Route exact path="/ppt/page2" component={PptPage2} />
-                      <Route exact path="/ppt/page3" component={PptPage3} />
-                      <Route exact path="/ppt/page7" component={PptPage7} />
-                      <Route path="/ppt/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
+                  <Switch>
+                    <Route exact path="/ppt/page6" component={ProjectProgressPage} />
+                    <Router>
+                      <HomeLayout>
+                        <Switch>
+                          <Route exact path="/ppt" component={ProjectCategoryPage} />
+                          <Route exact path="/ppt/page2" component={ProjectDeployingPage} />
+                          <Route exact path="/ppt/page3" component={ProjectInvestPage} />
+                          <Route exact path="/ppt/page4" component={ProjectHomePage} />
+                          <Route exact path="/ppt/page5" component={ProjectReportPage} />
+                          <Route exact path="/ppt/page7" component={ProjectBudgetPage} />
+                          <Route path="/ppt/*" component={ErrorPage} />
+                        </Switch>
+                      </HomeLayout>
+                    </Router>
+                  </Switch>
                 </Route>
 
                 <Route path="*">
