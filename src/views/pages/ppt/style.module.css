@@ -205,6 +205,35 @@
   padding: 12px 11px;
 }
 
+.header-list-sort {
+	border-left: 1px solid #CCCCCC;
+	padding-left: 8px;
+}
+
+.header-item-sort {
+	background-color: #F7F6FC;
+	padding: 6px 6px;
+	display: flex;
+	align-items: center;
+	width: 90px;
+}
+.header-item-sort:first-child {
+	border-radius: 8px 0 0 8px;
+}
+.header-item-sort:last-child {
+	border-radius: 0 8px 8px 0;
+}
+
+.header-item-sort.active {
+	color: var(--blue);
+	background-color: #EAF2FE;
+}
+
+.header-item-sort:first-child,
+.header-item-sort:last-child {
+	width: 75px;
+}
+
 .item {
   width: 291px;
   height: 310px;
