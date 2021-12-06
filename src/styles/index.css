@@ -14,6 +14,7 @@
 
   body {
     font-family: SanFranciscoDisplay, sans-serif;
+    font-size: 13px;
   }
 
   /**
@@ -21,10 +22,10 @@
    */
 
   ::-webkit-scrollbar {
-    @apply w-4;
+    @apply w-3;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-light border-4 border-solid border-primary-light bg-clip-padding rounded-full;
+    @apply bg-secondary-light border-3 border-solid border-primary-light bg-clip-padding rounded-full;
   }
 
   .Toastify__toast--success {
@@ -170,37 +171,6 @@
   .round-checkbox input[type="checkbox"]:checked + label:after {
     @apply opacity-100;
   }
-
-  /* Symbols */
-  .message-symbol {
-    height: 28px;
-    width: 28px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
-    background-position: 0px -1247px;
-    background-size: auto;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
-
-  .video-symbol {
-    height: 28px;
-    width: 28px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
-    background-position: 0px -1566px;
-    background-size: auto;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
-
-  .live-stream-symbol {
-    height: 28px;
-    width: 28px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yV/r/Sly2VzFz06G.png);
-    background-position: 0px -493px;
-    background-size: auto;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
 }
 
 /*________________________customized style__________________________________*/
@@ -217,7 +187,7 @@
   filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg) brightness(94%) contrast(92%);
 }
 .filter-blue {
-  filter: invert(21%) sepia(73%) saturate(3564%) hue-rotate(205deg) brightness(96%) contrast(105%);
+  filter: invert(28%) sepia(68%) saturate(5577%) hue-rotate(207deg) brightness(92%) contrast(102%);
 }
 .color-gray2 {
   color: #72808E;
@@ -236,12 +206,12 @@ a, button {
 /* ___________Customized task management layout styles ___________________*/
 .t-leftsidebar-navigation {
   font-size: 15px;
-  width: 280px;
+  width: 240px;
 }
 .t-leftsidebar-navigation-container {
   height: 100%;
   overflow: auto;
-  padding: 20px 15px 20px 20px;
+  padding: 15px 10px 10px;
   background-color: #F5F6F9;
 }
 .t-leftsidebar-user-text {
@@ -266,36 +236,17 @@ a, button {
   font-size: 13px;
   color: #798295;
 }
-/* ________________________________________taiwind fixing_________________________________ */
 .t-leftsidebar-friends {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-bottom: 32px;
   font-size: 13px;
   color: #798295;
 }
-.t-leftsidebar-friends > span {
-  box-sizing: border-box;
-}
-.t-leftsidebar-friends-group {
-  display: flex;
-  align-items: center;
-}
 .t-leftsidebar-friends-group > div {
-  position: relative;
   width: 25px;
-  overflow: visible;
 }
 .t-leftsidebar-friends-group > div:last-child {
   width: 40px;
-  background: #fff;
-  border-radius: 50%;
-  height: 40px;
 }
 .t-leftsidebar-friends-group > div img {
-  width: 40px;
-  height: 40px;
   max-width: none;
 }
 .t-leftsidebar-friends-group > div:last-child img {
@@ -303,16 +254,8 @@ a, button {
   padding: 6px;
 }
 .tm-right-sidebar {
-  width: 78px;
+  width: 55px;
 }
-
-
-
-
-
-
-
-
 .home-layout {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
@@ -343,8 +286,9 @@ a, button {
   font-size: 15px;
 }
 .home-main-content {
-  width: calc(100% - 78px);
+  width: calc(100% - 55px);
   height: calc(100vh - 4rem);
+  padding-left: 240px;
 }
 .home-layout.active-right .home-main-content {
   width: 100%;
@@ -379,13 +323,10 @@ a, button {
 .task-management-content {
   height: calc(100vh - 7.2rem);
 }
-/*____________________________________________________________*/
 .t-header-company-name {
   width: 260px;
 }
 .t-header-menu > a {
-  font-weight: bold;
-  margin: 0 20px;
   color: #666;
 }
 .t-header-menu > a.active, .t-header-menu > a:hover {
@@ -402,6 +343,15 @@ a, button {
 }
 .t-header-investment-category-btn:hover {
   background-color: #bccddd;
+}
+.t-header-notification-item-container {
+  height: 330px;
+}
+.t-right-sidebar-btn-add {
+
+}
+.t-right-sidebar-btn-add > img {
+  
 }
 
 /*______________________________chatbox______________________________*/

@@ -17,7 +17,7 @@ const MainHeader: FC = () => {
       <div className="px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 -mb-px">
           {/* Header: Left side */}
-          <div className="flex items-center">
+          <div className="flex items-center whitespace-nowrap">
             <div className="t-header-company-name flex items-center">
               <img src={fakeThumbnail} alt="Company avatar" className="w-12 h-12 rounded-full" />
               <div className="flex items-center truncate">
@@ -27,20 +27,21 @@ const MainHeader: FC = () => {
               </div>
             </div>
 
-            <div className="t-header-menu flex items-center">
-              <a className="active" href="/">Home</a>
-              <a href="/">Công việc</a>
-              <a href="/">Nhân sự</a>
-              <a href="/">Tài chính</a>
-              <a href="/">Hồ sơ</a>
-              <a href="/">Hợp đồng</a>
+            <div className="t-header-menu flex items-center flex-wrap">
+              <a className="font-bold ml-5 mr-5 active" href="/">Home</a>
+              <a className="font-bold ml-5 mr-5" href="/">Công việc</a>
+              <a className="font-bold ml-5 mr-5" href="/">Nhân sự</a>
+              <a className="font-bold ml-5 mr-5" href="/">Tài chính</a>
+              <a className="font-bold ml-5 mr-5" href="/">Hồ sơ</a>
+              <a className="font-bold ml-5 mr-5" href="/">Hợp đồng</a>
             </div>
           </div>
 
-          <button className="t-header-investment-category-btn">Danh mục đầu tư</button>
+          <button className="t-header-investment-category-btn whitespace-nowrap">Danh mục đầu tư</button>
 
           {/* Header: Right side */}
           <div className="flex items-center">
+            {/* Search menu */}
             <button
               aria-controls="search-modal"
               className="w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
@@ -56,7 +57,6 @@ const MainHeader: FC = () => {
             </button>
 
             {/* <MessagesMenu /> */}
-
             <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button>
