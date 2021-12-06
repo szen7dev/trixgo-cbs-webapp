@@ -1,11 +1,14 @@
 {
-  "target": "Mục tiêu của TrixGo là giúp doanh nghiệp xây dựng được hệ thống quản trị 4.0 vững chăc, từ đó nhanh chóng phát triển",
-  "title": "Đăng ký",
-  "description": "Đăng ký tài khoản mới của bạn để bắt đầu sử dụng TrixGo",
-  "emailPlaceholder": "Email",
-  "firstNamePlaceholder": "Tên",
-  "lastNamePlaceholder": "Họ",
-  "passwordPlaceholder": "Mật khẩu",
-  "signIn": "Đã có tài khoản? Đăng nhập",
-  "submitButton": "Đăng ký"
+  "title": "Điền thông tin đăng ký trải nghiệm",
+  "fullName": "Họ và tên",
+  "comOrgName": "Tên công ty/tổ chức",
+  "email": "Email",
+  "typeOrg": "Loại doanh nghiệp/tổ chức",
+  "phoneNumber": "Số điện thoại",
+  "fullNamePlaceholder": "Nhập họ và tên của bạn",
+  "comOrgNamePlaceholder": "Nhập tên công ty/tổ chức",
+  "emailPlaceholder": "Nhập địa chỉ email",
+  "typeOrgPlaceholder": "Chọn loại hình",
+  "phoneNumberPlaceholder": "Nhập số điện thoại",
+  "submit": "Gửi yêu cầu"
 }
