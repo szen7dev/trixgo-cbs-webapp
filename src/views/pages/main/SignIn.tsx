@@ -13,6 +13,7 @@ import SignInLogo from "assets/images/signin-logo.svg";
 import SignInImage from "assets/images/signin-image.svg";
 import MailIcon from "assets/images/icons-email.svg";
 import LockIcon from "assets/images/icons-lock.svg";
+import RegisterPage from "./Register";
 
 import { SignInPayload } from "typings/auth";
 
@@ -21,6 +22,7 @@ const LoginPage: FC = () => {
   const { isLoading, signIn } = useAuth();
 
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[0].id);
+  const [showRegister, setShowRegister] = useState(false);
 
   const initialValues: SignInPayload = {
     email: "",
@@ -41,6 +43,8 @@ const LoginPage: FC = () => {
   const textGray = "#757c8a";
   const backgroundBlue = "#0060e1";
   const borderGray = "#cccccc";
+
+  const handleClickShowRegister = () => setShowRegister(!showRegister);
 
   return (
     <>
@@ -137,11 +141,16 @@ const LoginPage: FC = () => {
                         <span style={{ color: textGray }}>
                           {t("signIn:registerQuestion")}{" "}
                         </span>
-                        <Link to="/authentication/register">
-                          <span className="uppercase text-secondary hover:cursor-pointer">
-                            {t("signIn:register")}
-                          </span>
-                        </Link>
+                        <span
+                          className="uppercase text-secondary cursor-pointer"
+                          onClick={() => handleClickShowRegister()}
+                        >
+                          {t("signIn:register")}
+                        </span>
+                        <RegisterPage
+                          showRegister={showRegister}
+                          handleClickShowRegister={handleClickShowRegister}
+                        />
                       </div>
                       <Link to="/authentication/reset-password">
                         <p className="text-secondary">
@@ -181,7 +190,7 @@ const LoginPage: FC = () => {
           </div>
         </div>
 
-        <div className="w-5/12" style={{ background: backgroundBlue }}>
+        <div className="w-5/12 z-0" style={{ background: backgroundBlue }}>
           <div className="relative">
             <img
               className="object-fill max-h-screen"

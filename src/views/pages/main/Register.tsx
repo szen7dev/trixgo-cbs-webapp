@@ -1,310 +1,263 @@
-import { FC, useState, FormEvent } from "react";
+import { FC, FormEvent, useEffect, useRef } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { object, string } from "yup";
-import cn from "classnames";
-import { map as _map } from "lodash";
-
-import { useAuth } from "services/hooks/useAuth";
-
-import Loader from "components/shared/Loader";
-import WhiteLogoImage from "assets/images/white-logo.png";
-import MailIcon from "assets/icons/Mail";
-import MailOpenIcon from "assets/icons/MailOpen";
-import PencilIcon from "assets/icons/Pencil";
-import PencilAltIcon from "assets/icons/PencilAlt";
-import LockClosedIcon from "assets/icons/LockClosed";
-import LockOpenIcon from "assets/icons/LockOpen";
-import { LOCALES } from "assets/contents/authentication";
 
 import { RegisterPayload } from "typings/auth";
 
-const RegisterPage: FC = () => {
-  const { t, i18n } = useTranslation(["register"]);
-  const { isLoading, register } = useAuth();
+import CloseIcon from "assets/images/icon-close.svg";
 
-  const [selectedLocale, setSelectedLocale] = useState(LOCALES[0].id);
-  const [activeField, setActiveField] = useState("");
+type Props = {
+  showRegister: boolean;
+  handleClickShowRegister: (show: boolean) => void;
+};
+
+const RegisterPage: FC<Props> = (props) => {
+  const { t } = useTranslation(["register"]);
+  const { showRegister, handleClickShowRegister } = props;
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleCloseModal = () => {
+    handleClickShowRegister(!showRegister);
+  };
+
+  const handleClickOutside = (e: Event) => {
+    if (ref.current && !ref.current.contains(e.target as Node)) {
+      handleClickShowRegister(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  });
 
   const initialValues: RegisterPayload = {
+    fullName: "",
+    companyName: "",
     email: "",
-    firstName: "",
-    lastName: "",
-    password: "",
+    typeOrg: "",
+    phoneNumber: "",
   };
 
   const registerSchema = object().shape({
+    fullName: string().required("First and last name required!"),
+    companyName: string().required("Name of company/organization required!"),
     email: string()
-      .email("* Please enter valid email address")
-      .required("* Email required!"),
-    firstName: string()
-      .max(25, "* First name too large (25 characters max)")
-      .required("* First name required!"),
-    lastName: string()
-      .max(25, "* Last name too large (25 characters max)")
-      .required("* Last name required!"),
-    password: string()
-      .min(7, "* Password must be at least 8 characters")
-      .max(25, "* Password too large (25 characters max)")
-      .required("* Password required!"),
+      .email("Please enter valid email address")
+      .required("Email required!"),
+    typeOrg: string().required("Type of business/organization required!"),
+    phoneNumber: string().required("Phone number required!"),
   });
 
   return (
-    <>
-      {isLoading && <Loader className="border-primary" />}
-      <div className="grid grid-cols-2 w-[1000px] bg-primary-light rounded-lg shadow-2xl">
-        <div className="relative bg-authentication-img bg-cover bg-no-repeat w-[500px] h-[650px]">
-          <img src={WhiteLogoImage} alt="Logo" className="mt-7" />
-
-          <p className="absolute bottom-20 font-medium text-base leading-5 text-primary-light px-8">
-            {t("register:target")}
-          </p>
-        </div>
-
-        <div className="flex flex-col py-8 pr-8 pl-16">
-          <div className="flex justify-end">
-            {_map(LOCALES, (locale, idx: number) => (
-              <span
-                key={locale.id}
-                className="flex items-center cursor-pointer ml-3"
-                onClick={() => {
-                  setSelectedLocale(locale.id);
-                  i18n.changeLanguage(locale.code);
-                }}
+    <div>
+      {showRegister ? (
+        <section
+          className="fixed flex justify-center items-center inset-0 z-10"
+          style={{
+            background: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div
+            className="relative p-5"
+            ref={ref}
+            style={{
+              background: "#ffffff",
+              width: 600,
+            }}
+          >
+            <div>
+              <p
+                className="font-bold text-center text-xl pt-4 pb-2"
+                style={{ color: "#0060e1" }}
               >
-                {selectedLocale === locale.id ? locale.flag : locale.grayFlag}{" "}
-                <strong
-                  className={cn("uppercase text-lg ml-2", {
-                    "border-r-2 border-solid border-secondary-gray":
-                      idx !== LOCALES.length - 1,
-                    "text-accent-gray": selectedLocale === locale.id,
-                    "text-secondary-gray": selectedLocale !== locale.id,
-                    "pr-3": idx !== LOCALES.length - 1,
-                  })}
-                >
-                  {locale.code}
-                </strong>
-              </span>
-            ))}
-          </div>
+                {t("register:title")}
+              </p>
+              <img
+                className="absolute right-4 top-4 cursor-pointer"
+                src={CloseIcon}
+                alt="Close"
+                onClick={() => handleCloseModal()}
+              />
+            </div>
+            <div>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={registerSchema}
+                onSubmit={(values) => console.log(values)}
+              >
+                {(formik) => {
+                  const { handleBlur } = formik;
 
-          <h1 className="font-semibold text-3xl leading-8 text-accent-gray mt-10">
-            {t("register:title")}
-          </h1>
-
-          <p className="font-medium text-base text-accent-gray mt-3">
-            {t("register:description")}
-          </p>
-
-          <div className="mt-10">
-            <Formik
-              initialValues={initialValues}
-              validationSchema={registerSchema}
-              onSubmit={(values) => {
-                register(values);
-              }}
-            >
-              {(formik) => {
-                const { errors, touched, isValid, dirty, handleBlur } = formik;
-
-                return (
-                  <Form>
-                    <div className="relative">
-                      <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                        <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                          {activeField === "email" ? (
-                            <MailOpenIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative": errors.email && touched.email,
-                              })}
-                            />
-                          ) : (
-                            <MailIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative": errors.email && touched.email,
-                              })}
-                            />
-                          )}
+                  return (
+                    <Form>
+                      <div className="p-5">
+                        <p
+                          className="font-medium text-sm"
+                          style={{ color: "#252b37" }}
+                        >
+                          {t("register:fullName")}
+                        </p>
+                        <div>
+                          <Field
+                            type="text"
+                            name="fullName"
+                            placeholder={t("register:fullNamePlaceholder")}
+                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
+                            style={{
+                              border: "1px solid #e1e5f7",
+                              background: "#f5f6fA",
+                            }}
+                            onBlur={(e: FormEvent<HTMLInputElement>) => {
+                              handleBlur(e);
+                            }}
+                          />
                         </div>
-                      </div>
-                      <Field
-                        type="text"
-                        name="email"
-                        placeholder={t("register:emailPlaceholder")}
-                        className={cn("form-input mb-3", {
-                          "input-error": errors.email && touched.email,
-                        })}
-                        onFocus={(e: FormEvent<HTMLInputElement>) =>
-                          setActiveField((e.target as HTMLInputElement).name)
-                        }
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                          setActiveField("");
-                        }}
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="span"
-                        className="font-normal text-sm text-negative italic"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mt-5">
-                      <div className="relative">
-                        <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                          <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                            {activeField === "firstName" ? (
-                              <PencilAltIcon
-                                className={cn("w-6 h-6", {
-                                  "text-negative":
-                                    errors.firstName && touched.firstName,
-                                })}
-                              />
-                            ) : (
-                              <PencilIcon
-                                className={cn("w-6 h-6", {
-                                  "text-negative":
-                                    errors.firstName && touched.firstName,
-                                })}
-                              />
-                            )}
-                          </div>
-                        </div>
-                        <Field
-                          type="text"
-                          name="firstName"
-                          placeholder={t("register:firstNamePlaceholder")}
-                          className={cn("form-input mb-3", {
-                            "input-error":
-                              errors.firstName && touched.firstName,
-                          })}
-                          onFocus={(e: FormEvent<HTMLInputElement>) =>
-                            setActiveField((e.target as HTMLInputElement).name)
-                          }
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                            setActiveField("");
-                          }}
-                        />
                         <ErrorMessage
-                          name="firstName"
+                          name="fullName"
                           component="span"
-                          className="font-normal text-sm text-negative italic"
+                          className="font-normal text-sm text-negative"
                         />
                       </div>
 
-                      <div className="relative">
-                        <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                          <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                            {activeField === "lastName" ? (
-                              <PencilAltIcon
-                                className={cn("w-6 h-6", {
-                                  "text-negative":
-                                    errors.lastName && touched.lastName,
-                                })}
-                              />
-                            ) : (
-                              <PencilIcon
-                                className={cn("w-6 h-6", {
-                                  "text-negative":
-                                    errors.lastName && touched.lastName,
-                                })}
-                              />
-                            )}
-                          </div>
+                      <div className="pb-5 pr-5 pl-5">
+                        <p
+                          className="font-medium text-sm"
+                          style={{ color: "#252b37" }}
+                        >
+                          {t("register:comOrgName")}
+                        </p>
+                        <div>
+                          <Field
+                            type="text"
+                            name="companyName"
+                            placeholder={t("register:comOrgNamePlaceholder")}
+                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
+                            style={{
+                              border: "1px solid #e1e5f7",
+                              background: "#f5f6fA",
+                            }}
+                            onBlur={(e: FormEvent<HTMLInputElement>) => {
+                              handleBlur(e);
+                            }}
+                          />
                         </div>
-                        <Field
-                          type="text"
-                          name="lastName"
-                          placeholder={t("register:lastNamePlaceholder")}
-                          className={cn("form-input mb-3", {
-                            "input-error": errors.lastName && touched.lastName,
-                          })}
-                          onFocus={(e: FormEvent<HTMLInputElement>) =>
-                            setActiveField((e.target as HTMLInputElement).name)
-                          }
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                            setActiveField("");
-                          }}
-                        />
                         <ErrorMessage
-                          name="lastName"
+                          name="companyName"
                           component="span"
-                          className="font-normal text-sm text-negative italic"
+                          className="font-normal text-sm text-negative"
                         />
                       </div>
-                    </div>
 
-                    <div className="relative mt-5">
-                      <div className="absolute top-3 left-1 flex border border-transparent w-10">
-                        <div className="flex items-center justify-center rounded-tl rounded-bl z-10 text-accent-gray text-lg h-full w-full">
-                          {activeField === "password" ? (
-                            <LockOpenIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative":
-                                  errors.password && touched.password,
-                              })}
-                            />
-                          ) : (
-                            <LockClosedIcon
-                              className={cn("w-6 h-6", {
-                                "text-negative":
-                                  errors.password && touched.password,
-                              })}
-                            />
-                          )}
+                      <div className="pb-5 pr-5 pl-5">
+                        <p
+                          className="font-medium text-sm"
+                          style={{ color: "#252b37" }}
+                        >
+                          {t("register:email")}
+                        </p>
+                        <div>
+                          <Field
+                            type="email"
+                            name="email"
+                            placeholder={t("register:emailPlaceholder")}
+                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
+                            style={{
+                              border: "1px solid #e1e5f7",
+                              background: "#f5f6fA",
+                            }}
+                            onBlur={(e: FormEvent<HTMLInputElement>) => {
+                              handleBlur(e);
+                            }}
+                          />
                         </div>
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
                       </div>
-                      <Field
-                        type="password"
-                        name="password"
-                        placeholder={t("register:passwordPlaceholder")}
-                        className={cn("form-input mb-3", {
-                          "input-error": errors.password && touched.password,
-                        })}
-                        onFocus={(e: FormEvent<HTMLInputElement>) =>
-                          setActiveField((e.target as HTMLInputElement).name)
-                        }
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                          setActiveField("");
-                        }}
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="span"
-                        className="font-normal text-sm text-negative italic"
-                      />
-                    </div>
 
-                    <div className="flex justify-between items-center mt-10">
-                      <a
-                        href="/authentication/sign-in"
-                        className="font-semibold text-base text-primary hover:text-secondary hover:underline"
-                      >
-                        {t("register:signIn")}
-                      </a>
-                      <button
-                        type="submit"
-                        disabled={!(dirty && isValid)}
-                        className={cn("medium-button", {
-                          "disabled-button": !(dirty && isValid),
-                          "primary-button": dirty && isValid,
-                        })}
-                      >
-                        {t("register:submitButton")}
-                      </button>
-                    </div>
-                  </Form>
-                );
-              }}
-            </Formik>
+                      <div className="pb-5 pr-5 pl-5">
+                        <p
+                          className="font-medium text-sm"
+                          style={{ color: "#252b37" }}
+                        >
+                          {t("register:typeOrg")}
+                        </p>
+                        <div>
+                          <Field
+                            type="text"
+                            name="typeOrg"
+                            placeholder={t("register:typeOrgPlaceholder")}
+                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
+                            style={{
+                              border: "1px solid #e1e5f7",
+                              background: "#f5f6fA",
+                            }}
+                            onBlur={(e: FormEvent<HTMLInputElement>) => {
+                              handleBlur(e);
+                            }}
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="typeOrg"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
+                      </div>
+
+                      <div className="pr-5 pl-5">
+                        <p
+                          className="font-medium text-sm"
+                          style={{ color: "#252b37" }}
+                        >
+                          {t("register:phoneNumber")}
+                        </p>
+                        <div>
+                          <Field
+                            type="text"
+                            name="phoneNumber"
+                            placeholder={t("register:phoneNumberPlaceholder")}
+                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
+                            style={{
+                              border: "1px solid #e1e5f7",
+                              background: "#f5f6fA",
+                            }}
+                            onBlur={(e: FormEvent<HTMLInputElement>) => {
+                              handleBlur(e);
+                            }}
+                          />
+                        </div>
+                        <ErrorMessage
+                          name="phoneNumber"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
+                      </div>
+
+                      <div className="mt-4 mb-4 pr-5 pl-5">
+                        <button
+                          type="submit"
+                          className="w-full h-12 rounded-sm text-primary-light hover:opacity-90"
+                          style={{ background: "#0060E1" }}
+                        >
+                          {t("register:submit")}
+                        </button>
+                      </div>
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
           </div>
-        </div>
-      </div>
-    </>
+        </section>
+      ) : null}
+    </div>
   );
 };
 
