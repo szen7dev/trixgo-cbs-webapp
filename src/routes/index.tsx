@@ -38,7 +38,7 @@ import OrdersPage from "views/pages/orders";
 import CampaignsPage from "views/pages/campaigns";
 
 // Team Pages
-import TeamPage from "views/pages/team";
+import HumansPage from "views/pages/humans";
 
 // Messages pages
 import MessagesHomePage from "views/pages/messages/home";
@@ -67,7 +67,7 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
-              <Route path="/tasks">
+                <Route path="/tasks">
                   <HomeLayout>
                     <Switch>
                       <Route path="/tasks" component={DashboardPage} />
@@ -157,11 +157,11 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                <Route path="/team">
+                <Route path="/human/home">
                   <MainLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/team" component={TeamPage} />
-                      <Route path="/team/*" component={ErrorPage} />
+                      <Route exact path="/human/home" component={HumansPage} />
+                      <Route path="/human/home/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
                 </Route>
@@ -201,9 +201,9 @@ const Routes: FC = () => {
                   <HomeLayout>
                     <Switch>
                       <ProtectedRoute
-                          exact
-                          path="/teaser"
-                          component={TeaserPage}
+                        exact
+                        path="/teaser"
+                        component={TeaserPage}
                       />
                       <Route path="/applications/*" component={ErrorPage} />
                     </Switch>
