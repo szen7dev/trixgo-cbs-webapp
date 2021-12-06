@@ -2,11 +2,8 @@ import { FC, Fragment } from "react";
 
 import { Menu, Transition } from "@headlessui/react";
 
-import Popover from "components/shared/Popover";
 import NotificationItem from "components/shared/NotificationItem";
 import BellIcon from "assets/icons/Bell";
-import MailOpenIcon from "assets/icons/MailOpen";
-import ArrowsExpandIcon from "assets/icons/ArrowsExpand";
 
 const NotificationsMenu: FC = () => {
   return (
@@ -27,55 +24,43 @@ const NotificationsMenu: FC = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -left-44 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2">
-          <div className="flex justify-between items-center px-4 pt-3">
-            <h1 className="font-bold text-2xl leading-7 text-dark">
-              Thông báo
-            </h1>
-
-            <div className="flex">
-              <Popover tooltip="Đánh dấu tất cả là đã đọc">
-                <button className="w-8 h-8 flex items-center justify-center hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none mx-1">
-                  <MailOpenIcon className="w-5 h-5 text-primary-gray" />
-                </button>
-              </Popover>
-
-              <Popover tooltip="Xem tất cả thông báo">
-                <button className="w-8 h-8 flex items-center justify-center hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none mx-1">
-                  <ArrowsExpandIcon className="w-5 h-5 text-primary-gray" />
-                </button>
-              </Popover>
-            </div>
+        <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2">
+          <div className="font-bold text-2xl leading-7 text-dark px-4 pt-3">
+            Thông báo (25)
           </div>
 
-          <div className="p-2">
+          <div className="flex justify-between items-center px-4 pt-3">
+            <span className="font-bold text-lg text-dark">
+              Mới
+            </span>
+            <a className="text-primary" href="/">Xem tất cả</a>
+          </div>
+
+          <div className="t-header-notification-item-container overflow-auto">
             <Menu.Item>
               <NotificationItem
                 avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
-                badge={<span className="message-symbol" />}
-                content="<strong>Khánh Ney</strong> đã cập nhật trạng thái của anh ấy"
-                lastActive="3 giờ trước"
-                hasSeen={false}
+                author="Nguyen Manh Luan"
+                content="Tạo một mẩu tin tại <span class='text-secondary'>Dự án Demo</span> thuộc ứng dụng TrixGo PCM"
+                lastActive="Cách đây 54 phút"
               />
             </Menu.Item>
 
             <Menu.Item>
               <NotificationItem
                 avatar="https://s120-ava-talk.zadn.vn/7/9/0/2/45/120/f573ead9e85e2e06ac3b86072ffc8e4e.jpg"
-                badge={<span className="live-stream-symbol" />}
-                content="<strong>Nguyễn V. Tuấn</strong> đã phát trực tiếp: 'Đội tuyển Việt Nam vô địch!'"
-                lastActive="1 giờ trước"
-                hasSeen
+                author="Nguyen Manh Luan"
+                content="Tạo một mẩu tin tại <span class='text-secondary'>Dự án Demo</span> thuộc ứng dụng TrixGo PCM"
+                lastActive="Cách đây 54 phút"
               />
             </Menu.Item>
 
             <Menu.Item>
               <NotificationItem
                 avatar="https://s120-ava-talk.zadn.vn/1/e/7/3/5/120/b3fbae654335aec95c35e350a5850017.jpg"
-                badge={<span className="video-symbol" />}
-                content="<strong>Hiep Nguyen Huu</strong> đã đăng video mới"
-                lastActive="2 giờ trước"
-                hasSeen={false}
+                author="Nguyen Manh Luan"
+                content="Tạo một mẩu tin tại <span class='text-secondary'>Dự án Demo</span> thuộc ứng dụng TrixGo PCM"
+                lastActive="Cách đây 54 phút"
               />
             </Menu.Item>
           </div>
