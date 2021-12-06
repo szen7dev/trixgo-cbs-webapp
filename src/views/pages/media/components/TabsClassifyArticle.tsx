@@ -1,0 +1,90 @@
+import { FC } from 'react'
+import { Dialog, Transition, TransitionEvents } from '@headlessui/react'
+
+interface Props {
+	show: boolean
+	toggle(): void
+	onSelect?(): unknown
+	showMore?(): unknown
+}
+
+const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showMore, onSelect, ...props }) => {
+	return (
+		<Transition
+			show={show}
+			as="div"
+			enter="transition-all duration-300"
+			enterFrom="opacity-0 left-full"
+			enterTo="opacity-100 left-0"
+			leave="transition-all duration-300"
+			leaveFrom="opacity-100 left-0"
+			leaveTo="opacity-0 left-full"
+			className="absolute z-10 left-0 inset-y-0 w-full bg-primary-light"
+			{...props}
+		>
+
+			<div className="flex items-center px-6 py-2.5 border-b border-secondary-gray border-opacity-30">
+				<button type="button" className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl mr-5" onClick={() => toggle()}>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+					</svg>
+				</button>
+				<Dialog.Title
+					as="h3"
+					className="text-lg leading-6 text-accent-gray font-bold"
+				>
+					Phân loại bài viết
+				</Dialog.Title>
+			</div>
+			<div className="py-2.5 pl-6 pr-4">
+				<label className="flex mt-4 pb-3.5 cursor-pointer">
+					<input type="radio" name="type" />
+					<div>
+						<p className="text-dark leading-5">Thành viên trong công ty</p>
+						<p className="text-secondary-gray text-sm leading-4">Thành viên trong công ty</p>
+					</div>
+				</label>
+				<label className="flex mt-4 pb-3.5 cursor-pointer">
+					<input type="radio" name="type" />
+					<div>
+						<p className="text-dark leading-5">Chỉ mình tôi</p>
+						<p className="text-secondary-gray text-sm leading-4">Chỉ mình tôi</p>
+					</div>
+				</label>
+				<label className="flex mt-4 pb-3.5 cursor-pointer">
+					<input type="radio" name="type" onClick={() => showMore && showMore()} />
+					<div>
+						<p className="text-dark leading-5">Dự án, phòng ban</p>
+						<p className="text-secondary-gray text-sm leading-4">Dự án, phòng ban mà bạ là thành viên</p>
+					</div>
+					<div className="ml-auto text-primary-gray">
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+						</svg>
+					</div>
+				</label>
+				<label className="flex mt-4 pb-3.5 cursor-pointer">
+					<input type="radio" name="type" onClick={() => showMore && showMore()} />
+					<div>
+						<p className="text-dark leading-5">Cộng đồng</p>
+						<p className="text-secondary-gray text-sm leading-4">Cộng đồng doanh nghiệp</p>
+					</div>
+					<div className="ml-auto text-primary-gray">
+						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+						</svg>
+					</div>
+				</label>
+				<label className="flex mt-4 pb-3.5 cursor-pointer">
+					<input type="radio" name="type" />
+					<div>
+						<p className="text-dark leading-5">Hệ thống</p>
+						<p className="text-secondary-gray text-sm leading-4">Thông báo từ hệ thống</p>
+					</div>
+				</label>
+			</div>
+		</Transition>
+	)
+}
+
+export default TabsClassifyArticle

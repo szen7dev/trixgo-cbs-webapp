@@ -68,6 +68,9 @@ import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
 import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
 import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
+// Social pages
+import SocialHomePage from "views/pages/media/SocialHomePage";
+
 const Routes: FC = () => {
   return (
     <Router>
@@ -263,14 +266,22 @@ const Routes: FC = () => {
                           <Route exact path="/ppt/home" component={ProjectCategoryPage} />
                           <Route exact path="/ppt/market" component={ProjectDeployingPage} />
                           <Route exact path="/ppt/porfolio" component={ProjectInvestPage} />
-                          <Route exact path="/ppt/:id/home" component={ProjectHomePage} />
-                          <Route exact path="/ppt/:id/dashboard" component={ProjectReportPage} />
-                          <Route exact path="/ppt/:id/budget" component={ProjectBudgetPage} />
+                          <Route exact path="/ppt/project/:id/home" component={ProjectHomePage} />
+                          <Route exact path="/ppt/project/:id/dashboard" component={ProjectReportPage} />
+                          <Route exact path="/ppt/project/:id/budget" component={ProjectBudgetPage} />
                           <Route path="/ppt/*" component={ErrorPage} />
                         </Switch>
                       </HomeLayout>
                     </Router>
                   </Switch>
+                </Route>
+
+                <Route path="/social">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/social/home" component={SocialHomePage} />
+                    </Switch>
+                  </HomeLayout>
                 </Route>
 
                 <Route path="*">
