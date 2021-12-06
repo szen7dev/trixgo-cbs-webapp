@@ -72,7 +72,7 @@ const ResetPasswordPage: FC = () => {
       <div className="w-7/12">
         <div
           className="flex flex-col justify-center h-full w-full"
-          style={{ padding: "0 17rem" }}
+          style={{ padding: "0 18rem" }}
         >
           <Formik
             initialValues={initialValues}
