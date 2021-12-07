@@ -18,10 +18,11 @@ export type AuthState = {
 };
 
 export type RegisterPayload = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
+  fullName: string,
+  companyName: string,
+  email: string,
+  typeOrg: string,
+  phoneNumber: string
 };
 
 export type RegisterResponse = APIResponse & {

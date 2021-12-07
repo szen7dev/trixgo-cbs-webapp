@@ -7,14 +7,15 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import icon3dots from "assets/images/icon-3dots.png";
 import iconMissile from "assets/images/icon-missile.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
+import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 
 const HomeNavigation: FC = () => {
   return (
     <div className="t-leftsidebar-navigation fixed left-0 top-16 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* user */}
-        <div className="t-leftsidebar-user flex items-center mb-5">
-          <img src={fakeThumbnail} alt="Thumbnail" className="w-12 h-12 rounded-full mr-3" />
+        <div className="t-leftsidebar-user flex items-center mb-4">
+          <img src={fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <div className="t-leftsidebar-user-text">
             <p className="t-leftsidebar-user-text-name font-bold mb-1">Nguyễn Văn Tuấn-CBS</p>
             <div className="t-leftsidebar-user-text-price flex items-center">
@@ -26,7 +27,7 @@ const HomeNavigation: FC = () => {
         </div>
 
         {/* menu block */}
-        <div className="t-leftsidebar-menu-block mb-8">
+        <div className="t-leftsidebar-menu-block mb-4">
           <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
           <div className="t-leftsidebar-menu-container">
             <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
@@ -54,31 +55,31 @@ const HomeNavigation: FC = () => {
         </div>
 
         {/* friends group */}
-        <div className="t-leftsidebar-friends">
+        <div className="t-leftsidebar-friends flex items-center justify-around mb-4">
           <span>Bạn bè</span>
-          <div className="t-leftsidebar-friends-group">
-            <div>
-              <img src={fakeThumbnail} alt="Thumbnail" className="w-12 h-12 rounded-full border-2 border-primary-light" />
+          <div className="t-leftsidebar-friends-group flex items-center">
+            <div className="relative overflow-visible">
+              <img src={fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full border-2 border-primary-light" />
             </div>
-            <div>
-              <img src={fakeThumbnail} alt="Thumbnail" className="w-12 h-12 rounded-full border-2 border-primary-light" />
+            <div className="relative overflow-visible">
+              <img src={fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full border-2 border-primary-light" />
             </div>
-            <div>
-              <img src={fakeThumbnail} alt="Thumbnail" className="w-12 h-12 rounded-full border-2 border-primary-light" />
+            <div className="relative overflow-visible">
+              <img src={fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full border-2 border-primary-light" />
             </div>
-            <div>
-              <img src={fakeThumbnail} alt="Thumbnail" className="w-12 h-12 rounded-full border-2 border-primary-light" />
+            <div className="relative overflow-visible">
+              <img src={fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full border-2 border-primary-light" />
             </div>
-            <div>
+            <div className="relative overflow-visible w-10 h-10 bg-primary-light rounded-full">
               <button>
-                <img src={iconPlus} alt="Thumbnail" className="w-12 h-12 rounded-full" />
+                <img src={iconPlus} alt="Thumbnail" className="w-10 h-10 rounded-full" />
               </button>
             </div>
           </div>
         </div>
 
         {/* menu block */}
-        <div className="t-leftsidebar-menu-block mb-8">
+        <div className="t-leftsidebar-menu-block mb-4">
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
           <div className="t-leftsidebar-menu-container">
             <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
@@ -101,7 +102,13 @@ const HomeNavigation: FC = () => {
           </div>
         </div>
 
-        {/* menu block */}
+        {/* customize data block */}
+        <div className="t-leftsidebar-customize-data text-center">
+          <img className="block ml-auto mr-auto mb-2 w-16 h-16" src={iconBigFolder} alt="Folder" />
+          <div className="font-bold text-2xl text-dark mb-3" role="none">Tùy chỉnh dữ liệu?</div>
+          <p className="text-secondary-gray mb-4">Tạo và sắp xếp các dữ liệu được quyền truy cập theo cách mà bạn mong muốn</p>
+          <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
+        </div>
 
       </div>
     </div>

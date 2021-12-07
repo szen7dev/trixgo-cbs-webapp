@@ -30,7 +30,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
       <HomeNavigation />
 
       {/* Content area */}
-      <main className="home-main-content transition-all duration-500 ease-out pl-72 overflow-auto">
+      <main className="home-main-content transition-all duration-500 ease-out overflow-auto">
         {children}
       </main>
 
@@ -40,7 +40,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
       {/* Collapse right side bar button */}
       <button
         onClick={handleRightSideBarEvent}
-        className="tm-right-sidebar-toggle-btn fixed bottom-4 right-4 z-10 w-12 h-12 pl-3 pr-3 rounded-full text-center transition-all duration-500 ease-out"
+        className="tm-right-sidebar-toggle-btn fixed bottom-2 right-2 z-10 w-10 h-10 pl-3 pr-3 rounded-full text-center transition-all duration-500 ease-out"
       >
         <img
           className="w-5 inline-block transition-all duration-500 ease-out"
