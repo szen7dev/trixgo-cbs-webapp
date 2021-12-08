@@ -175,30 +175,33 @@
 
 /*________________________customized style__________________________________*/
 .color-red {
-  color: #E74C3C;
+  color: #e74c3c;
 }
 .color-blue {
-  color: #0060E1;
+  color: #0060e1;
 }
 .bg-red {
-  background: #FF4242;
+  background: #ff4242;
 }
 .filter-red {
-  filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg) brightness(94%) contrast(92%);
+  filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg)
+    brightness(94%) contrast(92%);
 }
 .filter-blue {
-  filter: invert(28%) sepia(68%) saturate(5577%) hue-rotate(207deg) brightness(92%) contrast(102%);
+  filter: invert(28%) sepia(68%) saturate(5577%) hue-rotate(207deg)
+    brightness(92%) contrast(102%);
 }
 .color-gray2 {
-  color: #72808E;
+  color: #72808e;
 }
 .bg-gray1 {
-  background-color: #E4E6EB;
+  background-color: #e4e6eb;
 }
 .bg-gray2 {
-  background-color: #FBFBFD;
+  background-color: #fbfbfd;
 }
-a, button {
+a,
+button {
   transition: all 0.2s linear 0s;
 }
 
@@ -212,7 +215,7 @@ a, button {
   height: 100%;
   overflow: auto;
   padding: 15px 10px 10px;
-  background-color: #F5F6F9;
+  background-color: #f5f6f9;
 }
 .t-leftsidebar-user-text {
   width: calc(100% - 60px);
@@ -250,7 +253,8 @@ a, button {
   max-width: none;
 }
 .t-leftsidebar-friends-group > div:last-child img {
-  filter: invert(56%) sepia(50%) saturate(6891%) hue-rotate(196deg) brightness(98%) contrast(89%);
+  filter: invert(56%) sepia(50%) saturate(6891%) hue-rotate(196deg)
+    brightness(98%) contrast(89%);
   padding: 6px;
 }
 .tm-right-sidebar {
@@ -264,7 +268,7 @@ a, button {
   background: #008000;
 }
 .tm-right-sidebar-chat-btn {
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
 }
 .tm-right-sidebar-toggle-btn {
   background: #e4e6eb;
@@ -294,7 +298,7 @@ a, button {
   width: 100%;
 }
 .task-management-tab {
-  background: #D8D8D8;
+  background: #d8d8d8;
 }
 .tpf-attach-item {
   border-radius: 17px;
@@ -305,20 +309,22 @@ a, button {
   border-radius: 10px;
 }
 .tpf-label-green {
-  background: #3F9A58;
+  background: #3f9a58;
 }
 .tpf-label-yellow {
-  background: #EFD133;
+  background: #efd133;
 }
 .tpf-label-red {
-  background: #F02849;
+  background: #f02849;
 }
 .tpf-param-star {
-  filter: invert(48%) sepia(2%) saturate(6%) hue-rotate(352deg) brightness(97%) contrast(98%);
+  filter: invert(48%) sepia(2%) saturate(6%) hue-rotate(352deg) brightness(97%)
+    contrast(98%);
   cursor: pointer;
 }
 .tpf-param-star-active {
-  filter: invert(93%) sepia(81%) saturate(1943%) hue-rotate(314deg) brightness(101%) contrast(93%);
+  filter: invert(93%) sepia(81%) saturate(1943%) hue-rotate(314deg)
+    brightness(101%) contrast(93%);
 }
 .task-management-content {
   height: calc(100vh - 7.2rem);
@@ -329,11 +335,12 @@ a, button {
 .t-header-menu > a {
   color: #666;
 }
-.t-header-menu > a.active, .t-header-menu > a:hover {
-  color: #0060E1;
+.t-header-menu > a.active,
+.t-header-menu > a:hover {
+  color: #0060e1;
 }
 .t-header-investment-category-btn {
-  background-color: #DBE7F2;
+  background-color: #dbe7f2;
   border-radius: 2px;
   height: 40px;
   padding: 0 12px;
@@ -348,7 +355,6 @@ a, button {
   height: 330px;
 }
 .t-right-sidebar-btn-add {
-
 }
 .t-right-sidebar-btn-add > img {
 
@@ -362,8 +368,8 @@ a, button {
   width: 330px;
 }
 .chatbox-search-input {
-  background: #F2F2F2;
-  border: 1px solid #CAD1DB;
+  background: #f2f2f2;
+  border: 1px solid #cad1db;
   box-sizing: border-box;
   border-radius: 17.5px;
   height: 35px;
@@ -374,11 +380,11 @@ a, button {
   font-size: 13px;
 }
 .chatbox-search-input:focus {
-  border-color: #0060E1;
+  border-color: #0060e1;
   background: #fff;
 }
 .chatbox-list-state-dropdown {
-  background: #F2F2F2;
+  background: #f2f2f2;
   border-radius: 12px;
   height: 24px;
   padding: 2px 12px;
@@ -388,7 +394,7 @@ a, button {
   height: calc(100% - 102px);
 }
 .chatbox-item:hover {
-  background: #0060E1;
+  background: #0060e1;
   color: #fff;
 }
 .chatbox-item-text {
@@ -396,26 +402,31 @@ a, button {
 }
 .chatbox-item-text-name {
   font-size: 17px;
-  color: #001A33;
+  color: #001a33;
 }
 .chatbox-item-text-date {
-  color: #72808E;
+  color: #72808e;
   flex-shrink: 0;
 }
 .chatbox-item-text-date.color-red {
-  color: #E74C3C;
+  color: #e74c3c;
 }
 .chatbox-item-text-preview {
-  color: #72808E;
+  color: #72808e;
 }
 .chatbox-item-text-pin {
-  filter: invert(55%) sepia(19%) saturate(336%) hue-rotate(169deg) brightness(86%) contrast(84%);
+  filter: invert(55%) sepia(19%) saturate(336%) hue-rotate(169deg)
+    brightness(86%) contrast(84%);
 }
-.chatbox-item:hover .chatbox-item-text-name, .chatbox-item:hover .chatbox-item-text-name .color-blue, .chatbox-item:hover .chatbox-item-text-date, .chatbox-item:hover .chatbox-item-text-preview {
+.chatbox-item:hover .chatbox-item-text-name,
+.chatbox-item:hover .chatbox-item-text-name .color-blue,
+.chatbox-item:hover .chatbox-item-text-date,
+.chatbox-item:hover .chatbox-item-text-preview {
   color: #fff;
 }
 .chatbox-item:hover .chatbox-item-text-pin {
-  filter: invert(96%) sepia(8%) saturate(277%) hue-rotate(247deg) brightness(119%) contrast(100%);
+  filter: invert(96%) sepia(8%) saturate(277%) hue-rotate(247deg)
+    brightness(119%) contrast(100%);
 }
 .chatbox-item-option > button {
   opacity: 0;
@@ -430,7 +441,8 @@ a, button {
   display: block;
 }
 .toggle-icon-active {
-  filter: invert(16%) sepia(83%) saturate(5216%) hue-rotate(207deg) brightness(102%) contrast(101%);
+  filter: invert(16%) sepia(83%) saturate(5216%) hue-rotate(207deg)
+    brightness(102%) contrast(101%);
   transform: rotate(180deg);
 }
 .chatbox-search-container {
