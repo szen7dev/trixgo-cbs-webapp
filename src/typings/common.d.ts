@@ -20,3 +20,11 @@ export type TaskManagementNavLink = {
   title: string;
   navLink: NavLink[];
 };
+
+export type NavLinkAccounting = {
+  id: string;
+  label: string;
+  url: string;
+  pathname: string;
+  icon?: ReactNode;
+}
