@@ -308,7 +308,7 @@ const Routes: FC = () => {
                 </Route>
 
                   <Route path="/accounting">
-                    <Redirect to="/accounting/accbill" />
+                    {/*<Redirect to="/accounting/accbill" />*/}
                     <MainLayout>
                         <Switch>
                           <Route exact path="/accounting/accbill">
