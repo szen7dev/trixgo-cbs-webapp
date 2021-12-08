@@ -29,6 +29,8 @@ import iconDown from 'assets/images/Frame 1745.png';
 import './style.css';
 
 import { PostPayload } from "typings/social";
+import PostImage from "./components/PostImage";
+import PostFile from "./components/PostFile";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -265,6 +267,7 @@ const SocialHomePage: FC = () => {
 						{
 							formik => {
 								const { errors, setFieldValue, values } = formik;
+								console.log(values.images.length)
 								return (
 									<Form >
 										<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
@@ -296,23 +299,9 @@ const SocialHomePage: FC = () => {
 												className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 												{...formik.getFieldProps('content')}
 											></textarea>
-											<div className="post__files flex flex-wrap border custom-scroll">
-												{values.images.map((file, index) => {
-													if (typeof file === 'object') return (
-														<div key={file.name + index} className="post__files-image">
-															<img src={URL.createObjectURL(file)} alt="" />
-														</div>
-													)
-													return null
-												})}
-												{values.files.map((file, index) => {
-													if (typeof file === 'object') return (
-														<div key={file.name + index} className="post__files-file">
-															<img src={URL.createObjectURL(file)} alt="" />
-														</div>
-													)
-													return null
-												})}
+											<div className="post__files flex flex-wrap border custom-scroll pt-7 px-9">
+												<PostImage images={values.images} />
+												<PostFile files={values.files} />
 											</div>
 										</div>
 										<div className="flex justify-between pt-5 px-6 pb-6 mb-0.5">
@@ -327,7 +316,7 @@ const SocialHomePage: FC = () => {
 															if (isNaN(Number(key))) continue;
 															files.push(event.target.files[Number(key)]);
 														}
-														setFieldValue('images', values.files.concat(files))
+														setFieldValue('images', values.images.concat(files))
 													}} />
 												</label>
 												<label className="w-10 h-10 rounded-md bg-gray-100 flex justify-center items-center cursor-pointer">
