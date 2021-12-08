@@ -45,7 +45,7 @@ import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-import TasksPage from "views/pages/tasks";
+// import TasksPage from "views/pages/tasks";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
