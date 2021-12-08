@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useRef } from "react";
+import { FC, FormEvent, useRef } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -7,6 +7,8 @@ import { object, string } from "yup";
 import { RegisterPayload } from "typings/auth";
 
 import CloseIcon from "assets/images/icon-close.svg";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+import { useAuth } from "services/hooks/useAuth";
 
 type Props = {
   showRegister: boolean;
@@ -15,6 +17,7 @@ type Props = {
 
 const RegisterPage: FC<Props> = (props) => {
   const { t } = useTranslation(["register"]);
+  const { register } = useAuth();
   const { showRegister, handleClickShowRegister } = props;
   const ref = useRef<HTMLDivElement>(null);
 
@@ -22,18 +25,7 @@ const RegisterPage: FC<Props> = (props) => {
     handleClickShowRegister(!showRegister);
   };
 
-  const handleClickOutside = (e: Event) => {
-    if (ref.current && !ref.current.contains(e.target as Node)) {
-      handleClickShowRegister(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  });
+  useOnClickOutside(ref, () => handleClickShowRegister(false));
 
   const initialValues: RegisterPayload = {
     fullName: "",
@@ -88,7 +80,7 @@ const RegisterPage: FC<Props> = (props) => {
               <Formik
                 initialValues={initialValues}
                 validationSchema={registerSchema}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => register(values)}
               >
                 {(formik) => {
                   const { handleBlur } = formik;
