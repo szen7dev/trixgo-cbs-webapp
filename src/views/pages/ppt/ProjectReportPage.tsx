@@ -37,7 +37,7 @@ const ProjectReportPage: FC = () => {
 						<div className="flex flex-wrap w-full">
 							<div className="flex flex-wrap w-full">
 								{/* Timeline */}
-								<ReportTimeLine className={cn(styles.cell, "flex-1 mx-2 py-3 px-6 flex items-end mt-4 flex-auto")} />
+								<ReportTimeLine className={cn(styles.cell, "mx-2 py-3 px-6 flex items-end mt-4 flex-auto")} />
 
 								<div className="flex flex-1">
 									{/* Total Invest */}

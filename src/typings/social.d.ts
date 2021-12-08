@@ -1,6 +1,6 @@
 export type PostPayload = {
   title: string;
   content: string;
-  files: File[];
-  type: string;
+  files: Array<File>;
+  images: Array<File>;
 };

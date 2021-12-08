@@ -71,6 +71,10 @@ module.exports = {
       borderWidth: {
         6: "6px",
       },
+			lineHeight: {
+				"[15px]": "14.95px",
+				
+			}
     },
   },
   variants: {

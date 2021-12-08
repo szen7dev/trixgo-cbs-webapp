@@ -25,7 +25,7 @@
     @apply w-3;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-light border-3 border-solid border-primary-light bg-clip-padding rounded-full;
+    @apply bg-secondary-light border-2 border-solid border-primary-light bg-clip-padding rounded-full;
   }
 
   .Toastify__toast--success {
