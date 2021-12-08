@@ -3,11 +3,14 @@ export type PostPayload = {
   content: string;
   files: Array<File>;
   images: Array<File>;
+	type: string,
 };
 
 export type PostFileProps = {
-	files?: Array<File>;
-}
+  files?: Array<File>;
+  onRemove(index: number): void;
+};
 export type PostImageProps = {
-	images?: Array<File>;
-}
+  images?: Array<File>;
+  onRemove(index: number): void;
+};

@@ -52,11 +52,13 @@ export const NavLinks: NavLink[] = [
     ),
   },
   {
-    id: "nav-link-team",
-    label: "Team",
-    url: "/team",
-    pathname: "team",
-    icon: <UserGroupIcon pathname="team" className="float-left h-6 w-6 mr-6" />,
+    id: "nav-link-human",
+    label: "Human",
+    url: "/human/home",
+    pathname: "human",
+    icon: (
+      <UserGroupIcon pathname="human" className="float-left h-6 w-6 mr-6" />
+    ),
   },
   {
     id: "nav-link-messages",
@@ -83,10 +85,10 @@ export const NavLinks: NavLink[] = [
     url: "/teaser",
     pathname: "teaser",
     icon: (
-        <ClipboardCheckIcon
-            pathname="tasks"
-            className="float-left h-6 w-6 mr-6"
-        />
+      <ClipboardCheckIcon
+        pathname="tasks"
+        className="float-left h-6 w-6 mr-6"
+      />
     ),
   },
   {
@@ -154,11 +156,11 @@ export const TaskManagementNavLinks: TaskManagementNavLink[] = [
     title: "Công việc",
     navLink: [
       {
-        id: "nav-link-team",
-        label: "Team",
-        url: "/team",
-        pathname: "team",
-        icon: <UserGroupIcon pathname="team" className="h-5 w-5 mr-3" />,
+        id: "nav-link-human",
+        label: "Human",
+        url: "/human/home",
+        pathname: "human",
+        icon: <UserGroupIcon pathname="human" className="h-5 w-5 mr-3" />,
       },
       {
         id: "nav-link-messages",

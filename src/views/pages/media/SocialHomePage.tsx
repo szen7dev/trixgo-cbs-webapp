@@ -11,13 +11,14 @@ import { FC, useState } from "react";
 
 import { Link } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import { object, string, array } from "yup";
 import cn from "classnames";
 
 import ModalCreatePost from "./components/ModalCreatePost";
 import TabsClassifyArticle from "./components/TabsClassifyArticle";
 import TabsClassifyArticleCommunity from "./components/TabsClassifyArticleCommunity";
+import TabsClassifyDepartment from "./components/TabsClassifyDepartment";
 import TabsOverlay from "./components/TabsOverlay";
 
 import image from 'assets/images/media/hoi-thao-khoa-hoc-la-gi 1.png';
@@ -26,11 +27,16 @@ import imageV from 'assets/images/media/image 177.png';
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
 import iconDown from 'assets/images/Frame 1745.png';
+import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
+import iconEye from 'assets/images/icons8-eye-96 1.png';
+import iconComment from 'assets/images/icon-chat-project.png';
 import './style.css';
 
 import { PostPayload } from "typings/social";
 import PostImage from "./components/PostImage";
 import PostFile from "./components/PostFile";
+import IconImage from "./components/IconImage";
+import IconFile from "./components/IconFile";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -39,22 +45,17 @@ const pages = [
 	{ id: "3", title: 'Phòng ban' },
 ]
 
+type _TypeSetFieldValue = (field: string, values: File[]) => void
+
 const SocialHomePage: FC = () => {
-	/**
-	 * ? Define orders:
-	 * ? 1. redux definition
-	 * ? 2. react definition
-	 * ? 3. third party libraries definition
-	 * ? 4. libs, services, data definition
-	 * ? 5. helpers, util definition
-	 * ? 6. local definition
-	 */
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
+	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
 	const [showClassifyArticleCommunity, setShowClassifyArticleCommunity] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 	const toggleClassifyArticle = () => setShowClassifyArticle(!showClassifyArticle);
+	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
 	const initialValues: PostPayload = {
@@ -62,6 +63,7 @@ const SocialHomePage: FC = () => {
 		content: "",
 		files: [],
 		images: [],
+		type: 'just-me',
 	};
 
 	const registerSchema = object().shape({
@@ -85,17 +87,24 @@ const SocialHomePage: FC = () => {
 			),
 	});
 
+	const currentSelected = (key: string) => {
+		switch (key) {
+			case 'company':
+				return "Thành viên trong công ty";
+			case 'just-me':
+				return "Chỉ mình tôi";
+			case 'departments':
+				return "Dự án, phòng ban";
+			case 'community':
+				return "Cộng đồng";
+			case 'system':
+				return "Hệ thống";
+			default:
+				return "Thành viên trong công ty";
+		}
+	}
+
 	return (
-		/**
-		 * ? Props and attribute orders
-		 * ? 1. key
-		 * ? 2. type
-		 * ? 3. value
-		 * ? 4. props
-		 * ? 5. className
-		 * ? 6. styles
-		 * ? 7. events handle
-		 */
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
@@ -125,24 +134,40 @@ const SocialHomePage: FC = () => {
 								<div className="w-full">
 									<img src={image} alt="" className="w-full h-full object-cover" />
 								</div>
-								<div className="inline-flex flex-col px-5 py-4 w-full lg:w-min box-content" style={{ minWidth: "287px" }}>
-									<h4 className="text-2xl leading-7 font-bold px-2">
-										PGI Partners tổ chức buổi workshop về thanh toán các gói thầu xây lắp
+								<div className="inline-flex flex-col px-5 pt-4 pb-3 w-full lg:w-min box-content" style={{ minWidth: "287px", minHeight: "363px" }}>
+									<h4 className="text-2xl leading-7 font-bold px-2.5">
+										<Link to="/social/post">
+											PGI Partners tổ chức buổi workshop về thanh toán các gói thầu xây lắp
+										</Link>
 									</h4>
 									<div className="line-clamp flex-1">
-										<p className="mt-5 px-2 flex-1 text-base">Sở Y tế Hà Nội vừa đồng ý với đề xuất của Trung tâm Kiểm soát Bệnh tật phương án rút khoảng cách giữa 2 mũi vaccine AstraZeneca về còn tối thiểu 4 tuần nhằm tăng tốc độ tiêm chủng toàn quốc.</p>
+										<p className="mt-5 px-2.5 flex-1 text-base">Sở Y tế Hà Nội vừa đồng ý với đề xuất của Trung tâm Kiểm soát Bệnh tật phương án rút khoảng cách giữa 2 mũi vaccine AstraZeneca về còn tối thiểu 4 tuần nhằm tăng tốc độ tiêm chủng toàn quốc.</p>
 									</div>
-									<p className="text-[13px] leading-[15px] px-2 border-b border-primary-gray border-opacity-20 text-secondary-gray pb-3 mt-3">
+									<p className="text-[13px] leading-[15px] px-2 border-b border-primary-gray border-opacity-20 text-secondary-gray pb-2.5 mt-3">
 										Nguyễn Văn Tuấn-CBS
 										<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
 										Phòng kế toán
 										<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
 										6h
 									</p>
+									<p className="flex justify-between text-primary-gray mt-3 px-1">
+										<span>
+											<img src={iconThumb} alt="Like" className="inline-block mr-2" />
+											28,7k
+										</span>
+										<span>
+											<img src={iconComment} alt="Comment" className="inline-block mr-2" />
+											21,3k
+										</span>
+										<span>
+											<img src={iconEye} alt="View" className="inline-block mr-2" />
+											11,2k
+										</span>
+									</p>
 								</div>
 							</div>
 							<div className="social__ad hidden xl:block flex-1 mt-4 w-full lg:w-min px-3.5" style={{ minWidth: "406px" }}>
-								<img src={ad} alt="" />
+								<img src={ad} alt="" className="h-full object-cover" />
 							</div>
 						</div>
 						<div className="border-gray-300 border-t mx-3.5"></div>
@@ -151,9 +176,15 @@ const SocialHomePage: FC = () => {
 								<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
 								<ul>
 									<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }}>
-										<p className="font-bold text-lg leading-5">Tăng hạn sử dụng gần 3 triệu liều vaccine Pfizer lên 9 tháng</p>
+										<p className="font-bold text-lg leading-5">
+											<Link to="/social/post">
+												Tăng hạn sử dụng gần 3 triệu liều vaccine Pfizer lên 9 tháng
+											</Link>
+										</p>
 										<div className="flex mt-3">
-											<img src={imageV} alt="vaccine" className="inline-block mr-7 object-cover" style={{ width: "180px" }} />
+											<Link to="/social/post" className="inline-block mr-7" style={{ minWidth: "180px" }}>
+												<img src={imageV} alt="vaccine" />
+											</Link>
 											<div className="flex flex-col">
 												<p className="text-sm leading-4">Trong 13.972 ca nhiễm Bộ Y tế công bố tối 30/11 có 13.966 ca tại 62 tỉnh thành, tăng 208 ca so với hôm qua, và cao nhất kể từ khi &quot;bình thường mới&quot;; 14.624 người khỏi bệnh; 197 ca tử vong.</p>
 												<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
@@ -171,9 +202,15 @@ const SocialHomePage: FC = () => {
 										</div>
 									</li>
 									<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }}>
-										<p className="font-bold text-lg leading-5">Tăng hạn sử dụng gần 3 triệu liều vaccine Pfizer lên 9 tháng</p>
+										<p className="font-bold text-lg leading-5">
+											<Link to="/social/post">
+												Tăng hạn sử dụng gần 3 triệu liều vaccine Pfizer lên 9 tháng
+											</Link>
+										</p>
 										<div className="flex mt-3">
-											<img src={imageV} alt="vaccine" className="inline-block mr-7" style={{ width: "180px" }} />
+											<Link to="/social/post" className="inline-block mr-7" style={{ minWidth: "180px" }}>
+												<img src={imageV} alt="vaccine" />
+											</Link>
 											<div className="flex flex-col">
 												<p className="text-sm leading-4">Trong 13.972 ca nhiễm Bộ Y tế công bố tối 30/11 có 13.966 ca tại 62 tỉnh thành, tăng 208 ca so với hôm qua, và cao nhất kể từ khi &quot;bình thường mới&quot;; 14.624 người khỏi bệnh; 197 ca tử vong.</p>
 												<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
@@ -220,31 +257,49 @@ const SocialHomePage: FC = () => {
 								<ul>
 									<li className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>
 										<div className='max-w-xs'>
-											<Link to="/" className="text-lg leading-5"><b>
+											<Link to="/social/post" className="text-lg leading-5"><b>
 												Thầy trò HLV Park luyện tập trong mưa
 											</b></Link>
-											<p className="mt-4 text-sm" style={{ lineHeight: "18px" }}>
+											<p className="mt-4 text-sm leading-[18px]">
 												Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
+												<div className="inline-flex items-start align-middle ml-1.5">
+													<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
+													<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+														21,3k
+													</span>
+												</div>
 											</p>
 										</div>
 									</li>
 									<li className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>
 										<div className='max-w-xs'>
-											<Link to="/" className="text-lg leading-5"><b>
+											<Link to="/social/post" className="text-lg leading-5"><b>
 												Thầy trò HLV Park luyện tập trong mưa
 											</b></Link>
-											<p className="mt-4 text-sm" style={{ lineHeight: "18px" }}>
+											<p className="mt-4 text-sm leading-[18px]">
 												Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
+												<div className="inline-flex items-start align-middle ml-1.5">
+													<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
+													<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+														21,3k
+													</span>
+												</div>
 											</p>
 										</div>
 									</li>
 									<li className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>
 										<div className='max-w-xs'>
-											<Link to="/" className="text-lg leading-5"><b>
+											<Link to="/social/post" className="text-lg leading-5"><b>
 												Thầy trò HLV Park luyện tập trong mưa
 											</b></Link>
-											<p className="mt-4 text-sm" style={{ lineHeight: "18px" }}>
+											<p className="mt-4 text-sm leading-[18px]">
 												Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
+												<div className="inline-flex items-start align-middle ml-1.5">
+													<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
+													<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+														21,3k
+													</span>
+												</div>
 											</p>
 										</div>
 									</li>
@@ -262,14 +317,18 @@ const SocialHomePage: FC = () => {
 					<Formik
 						initialValues={initialValues}
 						validationSchema={registerSchema}
-						onSubmit={(values) => console.log(values)}
+						onSubmit={(values) => { return }}
 					>
 						{
 							formik => {
-								const { errors, setFieldValue, values } = formik;
-								console.log(values.images.length)
+								const { setFieldValue, values } = formik;
+								const handlePopItem = (items: File[], field: string, index: number, _setFieldValue: _TypeSetFieldValue) => {
+									const newImages = [...items];
+									newImages.splice(index, 1);
+									_setFieldValue(field, newImages)
+								}
 								return (
-									<Form >
+									<Form autoComplete="off" >
 										<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 											<Dialog.Title
 												as="h3"
@@ -286,30 +345,34 @@ const SocialHomePage: FC = () => {
 										<div className="px-6 mt-3">
 											<button type="button" onClick={toggleClassifyArticle} className="btn__select w-56 flex justify-between items-center">
 												<span>
-													Chỉ mình tôi
+													{currentSelected(values.type)}
 												</span>
 												<img src={iconDown} alt="icon down" className="inline-block" />
 											</button>
 										</div>
 										<div className="px-6 mt-2 pt-3.5 flex-1">
-											<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none" {...formik.getFieldProps('title')} />
+											<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
 											<textarea
 												rows={5}
 												placeholder="Biên soạn nội dung"
 												className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 												{...formik.getFieldProps('content')}
 											></textarea>
-											<div className="post__files flex flex-wrap border custom-scroll pt-7 px-9">
-												<PostImage images={values.images} />
-												<PostFile files={values.files} />
+											<div className="post__files flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto pt-2 pb-6 px-9">
+												<PostImage
+													images={values.images}
+													onRemove={(index: number) => { handlePopItem(values.images, 'images', index, setFieldValue) }}
+												/>
+												<PostFile
+													files={values.files}
+													onRemove={(index: number) => { handlePopItem(values.files, 'files', index, setFieldValue) }}
+												/>
 											</div>
 										</div>
 										<div className="flex justify-between pt-5 px-6 pb-6 mb-0.5">
-											<div className="flex">
-												<label className="w-10 h-10 rounded-md bg-gray-100 flex justify-center items-center cursor-pointer">
-													<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M16.2 8.11053C11.643 8.32416 7.93 11.7655 7.2957 16.2H15.3C15.7971 16.2 16.2 15.7971 16.2 15.3V8.11053ZM5.48017 16.2C6.12964 10.7693 10.6479 6.52724 16.2 6.30884V2.7C16.2 2.20294 15.7971 1.8 15.3 1.8H2.7C2.20294 1.8 1.8 2.20294 1.8 2.7V15.3C1.8 15.7971 2.20294 16.2 2.7 16.2H5.48017ZM2.7 0H15.3C16.7912 0 18 1.20883 18 2.7V15.3C18 16.7912 16.7912 18 15.3 18H2.7C1.20883 18 0 16.7912 0 15.3V2.7C0 1.20883 1.20883 0 2.7 0ZM5.4 7.2C4.40589 7.2 3.6 6.39411 3.6 5.4C3.6 4.40589 4.40589 3.6 5.4 3.6C6.39411 3.6 7.2 4.40589 7.2 5.4C7.2 6.39411 6.39411 7.2 5.4 7.2Z" fill="#666666" />
-													</svg>
+											<div className="flex pl-11">
+												<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
+													<IconImage />
 													<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => {
 														const files: Array<File> = [];
 														for (const key in event.target.files) {
@@ -319,11 +382,9 @@ const SocialHomePage: FC = () => {
 														setFieldValue('images', values.images.concat(files))
 													}} />
 												</label>
-												<label className="w-10 h-10 rounded-md bg-gray-100 flex justify-center items-center cursor-pointer">
-													<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M1.8 6.3H16.2V4.5C16.2 4.00294 15.7971 3.6 15.3 3.6H7.35442L5.55442 1.8H2.7C2.20294 1.8 1.8 2.20294 1.8 2.7V6.3ZM1.8 8.1V15.3C1.8 15.7971 2.20294 16.2 2.7 16.2H15.3C15.7971 16.2 16.2 15.7971 16.2 15.3V8.1H1.8ZM2.7 0H5.55442C6.03181 0 6.48964 0.189642 6.82721 0.527208L8.1 1.8H15.3C16.7912 1.8 18 3.00883 18 4.5V15.3C18 16.7912 16.7912 18 15.3 18H2.7C1.20883 18 0 16.7912 0 15.3V2.7C0 1.20883 1.20883 0 2.7 0Z" fill="#666666" />
-													</svg>
-													<input type="file" name="files" id="file" className="hidden" accept="application/pdf" multiple onChange={event => {
+												<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
+													<IconFile />
+													<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => {
 														const files: Array<File> = [];
 														for (const key in event.target.files) {
 															if (isNaN(Number(key))) continue;
@@ -341,8 +402,22 @@ const SocialHomePage: FC = () => {
 										<TabsClassifyArticle
 											show={showClassifyArticle}
 											toggle={toggleClassifyArticle}
-											showMore={() => {
-												toggleClassifyArticleCommunity()
+											showMore={(type: string) => {
+												switch (type) {
+													case 'community':
+														toggleClassifyArticleCommunity()
+														break;
+													default:
+														toggleClassifyDepartment();
+														break;
+												}
+											}}
+										/>
+										<TabsClassifyDepartment
+											show={showClassifyDepartment}
+											toggle={toggleClassifyDepartment}
+											afterEnter={() => {
+												toggleClassifyArticle()
 											}}
 										/>
 										<TabsClassifyArticleCommunity
@@ -363,9 +438,4 @@ const SocialHomePage: FC = () => {
 	);
 };
 
-/**
- * ? Export rules:
- * ? export default must be capital syntax
- * ? export const must be camel case syntax
- */
 export default SocialHomePage;
