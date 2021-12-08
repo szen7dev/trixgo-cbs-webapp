@@ -27,7 +27,7 @@ const TabsList: FC<Props> = (props) => {
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>
-        <div className="flex flex-wrap justify-around gap-4 px-8 py-4">
+        <div className="flex flex-wrap justify-around gap-y-4 gap-x-2 px-6 py-4">
           {data.map((item) => {
             return (
               <div

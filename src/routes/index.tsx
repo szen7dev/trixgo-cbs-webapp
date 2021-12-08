@@ -39,14 +39,14 @@ import CampaignsPage from "views/pages/campaigns";
 
 // Team Pages
 import HumansPage from "views/pages/humans";
-import EmployeeInfo from "views/pages/humans/components/EmployeeInfo";
+import HumanInfo from "views/pages/humans/components/HumanInfo";
 
 // Messages pages
 import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-import TasksPage from "views/pages/tasks";
+// import TasksPage from "views/pages/tasks";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
@@ -171,10 +171,7 @@ const Routes: FC = () => {
                   <HomeLayout>
                     <Switch>
                       <Route exact path="/human/home" component={HumansPage} />
-                      <Route
-                        path="/human/home/hid=:id"
-                        component={EmployeeInfo}
-                      />
+                      <Route path="/human/home/hid=:id" component={HumanInfo} />
                       <Route path="/human/home/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>

@@ -9,7 +9,7 @@ import HumanStyle from "./human.module.css";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import ListIcon from "assets/images/icon-bulleted-list.svg";
 import AddIcon from "assets/images/icon-add.svg";
-import NewEmployeeModal from "./components/NewEmployeeModal";
+import NewHumanModal from "./components/NewHumanModal";
 
 const HumansPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
@@ -21,7 +21,7 @@ const HumansPage: FC = () => {
 
   return (
     <section className="w-full">
-      <div className="flex justify-between h-14 px-8 border border-gray-200">
+      <div className="flex justify-between h-14 px-6 border border-gray-200">
         <div className="flex items-center">
           <button
             className={
@@ -131,7 +131,7 @@ const HumansPage: FC = () => {
               Nhân sự mới
             </span>
           </button>
-          <NewEmployeeModal openModal={openModal} setOpenModal={setOpenModal} />
+          <NewHumanModal openModal={openModal} setOpenModal={setOpenModal} />
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef } from "react";
 
 import { useHistory } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import WorkHistory from "./views/WorkHistory";
 import WorkExperience from "./views/WorkExperience";
 import ExperienceAppointment from "./views/ExperienceAppointment";
 import Education from "./views/Education";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 
 import BackIcon from "assets/images/icon-back.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
@@ -15,28 +16,18 @@ import PrintIcon from "assets/images/icons8-print-96.png";
 import CopyIcon from "assets/images/icons8-copy-96.png";
 import PencilIcon from "assets/images/icons8-pencil-96.png";
 import DeleteIcon from "assets/images/icons8-remove-96.png";
+import Certificate from "./views/Certificate";
 
-const EmployeeInfo: FC = () => {
+const HumanInfo: FC = () => {
   const [openHumanOption, setOpenHumanOption] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const history = useHistory();
 
-  const handleClickOutside = (e: Event) => {
-    if (ref.current && !ref.current.contains(e.target as Node)) {
-      setOpenHumanOption(!openHumanOption);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  });
+  useOnClickOutside(ref, () => setOpenHumanOption(!openHumanOption));
 
   return (
-    <main>
+    <main className="mb-4">
       <div className="flex items-center justify-between px-4 h-12 border border-gray-200">
         <img
           src={BackIcon}
@@ -101,9 +92,10 @@ const EmployeeInfo: FC = () => {
         <WorkExperience />
         <ExperienceAppointment />
         <Education />
+        <Certificate />
       </section>
     </main>
   );
 };
 
-export default EmployeeInfo;
+export default HumanInfo;

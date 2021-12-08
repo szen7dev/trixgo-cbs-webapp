@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC } from "react";
 
 import "../human.module.css";
 
@@ -9,33 +9,12 @@ type Props = {
   setOpenModal: (setOpenModal: boolean) => void;
 };
 
-const NewEmployeeModal: FC<Props> = (props) => {
-  const [openSelect, setOpenSelect] = useState<boolean>(false);
-  const ref = useRef<HTMLInputElement>(null);
-
+const NewHumanModal: FC<Props> = (props) => {
   const { openModal, setOpenModal } = props;
 
   const handleCloseModal = () => {
     setOpenModal(!openModal);
   };
-
-  const handleOpenSelect = () => {
-    console.log(openSelect);
-    setOpenSelect(!openSelect);
-  };
-
-  const handleClickOutside = (e: Event) => {
-    if (ref.current && !ref.current.contains(e.target as Node)) {
-      setOpenSelect(!openSelect);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  });
 
   return (
     <main>
@@ -442,4 +421,4 @@ const NewEmployeeModal: FC<Props> = (props) => {
   );
 };
 
-export default NewEmployeeModal;
+export default NewHumanModal;
