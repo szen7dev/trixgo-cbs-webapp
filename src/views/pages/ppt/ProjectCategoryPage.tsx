@@ -14,7 +14,7 @@ const listSort = [
 	{ id: 'status', title: 'Trạng thái', type: 'asc' },
 ]
 
-const data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const data: Array<number> = Array.from(Array(4).keys());
 
 const ProjectCategoryPage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
@@ -61,7 +61,7 @@ const ProjectCategoryPage: FC = () => {
 
 			<div className={cn(styles.scroll, 'flex flex-wrap w-full pl-2 pr-2 pb-20 flex-1 overflow-y-auto')}>
 				{
-					data.map((_item: null, index: number) => {
+					data.map((_item: number, index: number) => {
 						return (
 							<div key={index} className={cn(styles.item)}>
 								<div className={styles.image}>

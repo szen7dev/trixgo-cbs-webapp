@@ -72,6 +72,8 @@ import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 // Social pages
 import SocialHomePage from "views/pages/media/SocialHomePage";
 import SocialPostPage from "views/pages/media/SocialPostPage";
+import DocumentHomePage from "views/pages/document/DocumentHomePage";
+import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
 
 const Routes: FC = () => {
 	return (
@@ -264,7 +266,7 @@ const Routes: FC = () => {
 									<Switch>
 										<Route
 											exact
-											path="/ppt/page6"
+											path="/ppt/project/:id/schedule"
 											component={ProjectProgressPage}
 										/>
 										<Router>
@@ -272,32 +274,32 @@ const Routes: FC = () => {
 												<Switch>
 													<Route
 														exact
-														path="/ppt"
+														path="/ppt/home"
 														component={ProjectCategoryPage}
 													/>
 													<Route
 														exact
-														path="/ppt/page2"
+														path="/ppt/market"
 														component={ProjectDeployingPage}
 													/>
 													<Route
 														exact
-														path="/ppt/page3"
+														path="/ppt/portfolio"
 														component={ProjectInvestPage}
 													/>
 													<Route
 														exact
-														path="/ppt/page4"
+														path="/ppt/project/:id/home"
 														component={ProjectHomePage}
 													/>
 													<Route
 														exact
-														path="/ppt/page5"
+														path="/ppt/project/:id/dashboard"
 														component={ProjectReportPage}
 													/>
 													<Route
 														exact
-														path="/ppt/page7"
+														path="/ppt/project/:id/budget"
 														component={ProjectBudgetPage}
 													/>
 													<Route path="/ppt/*" component={ErrorPage} />
@@ -313,6 +315,16 @@ const Routes: FC = () => {
 											<Route exact path="/social/home" component={SocialHomePage} />
 											<Route exact path="/social/post" component={SocialPostPage} />
 											<Route path="/social/*" component={ErrorPage} />
+										</Switch>
+									</HomeLayout>
+								</Route>
+
+								<Route path="/document">
+									<HomeLayout>
+										<Switch>
+											<Route exact path="/document/home" component={DocumentHomePage} />
+											<Route exact path="/document/project/:id/document" component={DocumentProjectPage} />
+											<Route path="/document/*" component={ErrorPage} />
 										</Switch>
 									</HomeLayout>
 								</Route>
