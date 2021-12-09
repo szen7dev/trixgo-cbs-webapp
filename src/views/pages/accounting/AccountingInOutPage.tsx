@@ -1,9 +1,9 @@
-import {FC} from "react";
+import React, {FC} from "react";
 
-const AccoutingInOutPage:FC = () => {
+const AccountingInOutPage:FC = () => {
     return (
         <h1>In out</h1>
     )
 }
 
-export default AccoutingInOutPage;
+export default AccountingInOutPage;

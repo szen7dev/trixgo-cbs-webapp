@@ -70,7 +70,7 @@ import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
 import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 // Accounting pages
-import AccountingLayout from "../views/pages/accounting";
+import AccountingLayout from "../views/layouts/AccountingLayout";
 import AccountingTicketsPage from "../views/pages/accounting/AccountingTicketsPage";
 import AccountingDetailPage from "../views/pages/accounting/AccountingDetailPage";
 import AccountingDiaryPage from "../views/pages/accounting/AccountingDiaryPage";
@@ -320,7 +320,7 @@ const Routes: FC = () => {
                             <Redirect to="/accounting/accbill" />
                           </Route>
                           <Route exact path="/accounting/accbill">
-                            <AccountingLayout showActionButton={true}>
+                            <AccountingLayout showActionButton={true} showAddNewButton={true}>
                               <AccountingTicketsPage/>
                             </AccountingLayout>
                           </Route>
