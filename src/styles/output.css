@@ -49407,7 +49407,7 @@ button {
 }
 
 .select-dropdown .select-options-container .select-options-section .select-option {
-  transition: background-color 0.25s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
 }
 
 .select-dropdown .select-options-container .select-options-section .select-option:hover {
