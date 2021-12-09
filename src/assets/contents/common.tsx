@@ -229,10 +229,10 @@ export const NavLinksAccounting: NavLinkAccounting[] = [
     pathname: "in-out",
   },
   {
-    id: "nav-link-accounting-dept-fl",
+    id: "nav-link-accounting-debt-fl",
     label: "Theo dõi công nợ",
-    url: "/accounting/dept",
-    pathname: "dept",
+    url: "/accounting/debt",
+    pathname: "debt",
   },
   {
     id: "nav-link-accounting-vat",

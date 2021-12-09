@@ -6,10 +6,10 @@ import {map as _map} from "lodash";
 import { NavLinksAccounting } from "assets/contents/common";
 type Props = {
     children: ReactNode;
-    noActionButton?: boolean;
+    showActionButton?: boolean;
 };
 
-const AccountingLayout: FC<Props> = ({children,noActionButton}) => {
+const AccountingLayout: FC<Props> = ({children,showActionButton}) => {
     useEffect(() => {
         document.title = "KẾ TOÁN";
     }, []);
@@ -42,7 +42,7 @@ const AccountingLayout: FC<Props> = ({children,noActionButton}) => {
                         ))}
                     </ul>
                     {
-                        !noActionButton?
+                        showActionButton?
                             <button className="btn btn-primary">
                                 Tạo mới
                             </button>

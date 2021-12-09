@@ -71,8 +71,14 @@ import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 // Accounting pages
 import AccountingLayout from "../views/pages/accounting";
-import AccountingTicketsPage from "../views/pages/accounting/AccontingTicketsPage";
-import AccountingDetailPage from "../views/pages/accounting/AccontingDetailPage";
+import AccountingTicketsPage from "../views/pages/accounting/AccountingTicketsPage";
+import AccountingDetailPage from "../views/pages/accounting/AccountingDetailPage";
+import AccountingDiaryPage from "../views/pages/accounting/AccountingDiaryPage";
+import AccountingInOutPage from "../views/pages/accounting/AccountingInOutPage";
+import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
+import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
+import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
 const Routes: FC = () => {
   return (
       <Router>
@@ -307,18 +313,55 @@ const Routes: FC = () => {
                   </Switch>
                 </Route>
 
-                  <Route path="/accounting">
-                    {/*<Redirect to="/accounting/accbill" />*/}
+                  <Route path="/accounting/:path?">
                     <MainLayout>
                         <Switch>
+                          <Route exact path="/accounting">
+                            <Redirect to="/accounting/accbill" />
+                          </Route>
                           <Route exact path="/accounting/accbill">
-                            <AccountingLayout>
+                            <AccountingLayout showActionButton={true}>
                               <AccountingTicketsPage/>
                             </AccountingLayout>
                           </Route>
                           <Route exact path="/accounting/detail">
-                            <AccountingLayout noActionButton={true}>
+                            <AccountingLayout>
                               <AccountingDetailPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/diary">
+                            <AccountingLayout>
+                              <AccountingDiaryPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/in-out">
+                            <AccountingLayout>
+                              <AccountingInOutPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/debt">
+                            <AccountingLayout>
+                              <AccountingDebtPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/diary">
+                            <AccountingLayout>
+                              <AccountingDiaryPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/vat">
+                            <AccountingLayout>
+                              <AccountingVatPage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/report-finance">
+                            <AccountingLayout>
+                              <AccountingReportFinancePage/>
+                            </AccountingLayout>
+                          </Route>
+                          <Route exact path="/accounting/support-tools">
+                            <AccountingLayout>
+                              <AccountingSupportToolsPage/>
                             </AccountingLayout>
                           </Route>
                         </Switch>
