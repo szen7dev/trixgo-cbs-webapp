@@ -1,10 +1,6 @@
-import { FC, useState } from "react";
-
-import cn from "classnames";
+import { FC, useEffect, useState } from "react";
 
 import Tabs from "./tabs/TabsList";
-
-import HumanStyle from "./human.module.css";
 
 import SearchIcon from "assets/images/icons8-search-120.png";
 import ListIcon from "assets/images/icon-bulleted-list.svg";
@@ -19,17 +15,18 @@ const HumansPage: FC = () => {
     setToggleTab(index);
   };
 
+  useEffect(() => {
+    document.title = "Human - Quản lý nhân sự";
+  }, []);
+
   return (
     <section className="w-full">
-      <div className="flex justify-between h-14 px-6 border border-gray-200">
+      <div className="sticky top-0 bg-primary-light z-10 flex justify-between h-14 px-6 border border-gray-200">
         <div className="flex items-center">
           <button
             className={
               toggleTab === 1
-                ? cn(
-                    HumanStyle.tabActive,
-                    "w-auto h-full p-2 font-bold text-sm"
-                  )
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
             onClick={() => handleToggleTab(1)}
@@ -39,10 +36,7 @@ const HumansPage: FC = () => {
           <button
             className={
               toggleTab === 2
-                ? cn(
-                    HumanStyle.tabActive,
-                    "w-auto h-full p-2 font-bold text-sm"
-                  )
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
             onClick={() => handleToggleTab(2)}
@@ -52,10 +46,7 @@ const HumansPage: FC = () => {
           <button
             className={
               toggleTab === 3
-                ? cn(
-                    HumanStyle.tabActive,
-                    "w-auto h-full p-2 font-bold text-sm"
-                  )
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
             onClick={() => handleToggleTab(3)}
@@ -65,10 +56,7 @@ const HumansPage: FC = () => {
           <button
             className={
               toggleTab === 4
-                ? cn(
-                    HumanStyle.tabActive,
-                    "w-auto h-full p-2 font-bold text-sm"
-                  )
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
             onClick={() => handleToggleTab(4)}
@@ -78,10 +66,7 @@ const HumansPage: FC = () => {
           <button
             className={
               toggleTab === 5
-                ? cn(
-                    HumanStyle.tabActive,
-                    "w-auto h-full p-2 font-bold text-sm"
-                  )
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
             onClick={() => handleToggleTab(5)}
@@ -91,7 +76,7 @@ const HumansPage: FC = () => {
         </div>
 
         <div className="flex items-center">
-          <div className={cn(HumanStyle.searchDiv, "relative px-4")}>
+          <div className="relative px-4 border-r-2 border-accent-light">
             <span>
               <img
                 src={SearchIcon}

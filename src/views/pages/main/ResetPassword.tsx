@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ const ResetPasswordPage: FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { t } = useTranslation(["signIn", "forgotPassword"]);
+  const { t } = useTranslation(["signIn", "resetPassword"]);
   const history = useHistory();
 
   const { step1, step2, step3 } = step;
@@ -61,6 +61,10 @@ const ResetPasswordPage: FC = () => {
             .oneOf([Yup.ref("password")], "The two passwords do not match")
             .required("Confirm password required!"),
         });
+
+  useEffect(() => {
+    document.title = `Trixgo - ${t("resetPassword:resetPassword")}`;
+  }, [t]);
 
   const fontFamily = "Arial";
   const textGray = "#757c8a";
@@ -118,23 +122,23 @@ const ResetPasswordPage: FC = () => {
                         }}
                       />
                       <span className="pl-3 font-bold" style={{ fontFamily }}>
-                        {t("forgotPassword:back")}
+                        {t("resetPassword:back")}
                       </span>
                     </div>
                     {currentStep === step1 ? (
                       <p className="font-bold text-xl" style={{ fontFamily }}>
-                        {t("forgotPassword:resetPassword")}
+                        {t("resetPassword:resetPassword")}
                       </p>
                     ) : currentStep === step2 ? (
                       <p className="font-bold text-xl" style={{ fontFamily }}>
-                        {t("forgotPassword:checkEmail")}
+                        {t("resetPassword:checkEmail")}
                       </p>
                     ) : (
                       <p
                         className="font-bold text-xl ml-14"
                         style={{ fontFamily }}
                       >
-                        {t("forgotPassword:createPassword")}
+                        {t("resetPassword:createPassword")}
                       </p>
                     )}
                     {currentStep !== step3 && (
@@ -163,7 +167,7 @@ const ResetPasswordPage: FC = () => {
                               }
                         }
                       >
-                        {t("forgotPassword:next")}
+                        {t("resetPassword:next")}
                       </button>
                     )}
                   </div>
@@ -171,7 +175,7 @@ const ResetPasswordPage: FC = () => {
                   {currentStep === step1 ? (
                     <>
                       <p className="p-5" style={{ color: textGray }}>
-                        {t("forgotPassword:resetDescription")}
+                        {t("resetPassword:resetDescription")}
                       </p>
 
                       <div className="p-5">
@@ -179,7 +183,7 @@ const ResetPasswordPage: FC = () => {
                           className="uppercase"
                           style={{ color: textGray, fontFamily }}
                         >
-                          {t("forgotPassword:email")}
+                          {t("resetPassword:email")}
                         </p>
                         <Field
                           type="email"
@@ -215,18 +219,18 @@ const ResetPasswordPage: FC = () => {
                         className="p-5 text-center"
                         style={{ color: textGray, fontFamily }}
                       >
-                        {t("forgotPassword:checkEmailDescription")}
+                        {t("resetPassword:checkEmailDescription")}
                       </p>
 
                       <div className="px-5">
                         <p className="uppercase" style={{ color: textGray }}>
-                          {t("forgotPassword:otp")}
+                          {t("resetPassword:otp")}
                         </p>
                         <Field
                           type="text"
                           name="otp"
                           autoFocus={true}
-                          placeholder={t("forgotPassword:otpPlaceholder")}
+                          placeholder={t("resetPassword:otpPlaceholder")}
                           className="w-full p-2 mt-2.5 rounded-lg outline-none"
                           style={{ border: `1px solid ${borderGray}` }}
                           onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -246,7 +250,7 @@ const ResetPasswordPage: FC = () => {
                           className="pl-2 text-sm"
                           style={{ color: blueColor, fontFamily }}
                         >
-                          {t("forgotPassword:resendOTP")}
+                          {t("resetPassword:resendOTP")}
                         </span>
                       </div>
 
@@ -260,7 +264,7 @@ const ResetPasswordPage: FC = () => {
                             color: "#ffffff",
                           }}
                         >
-                          {t("forgotPassword:next")}
+                          {t("resetPassword:next")}
                         </button>
                       </div>
 
@@ -276,7 +280,7 @@ const ResetPasswordPage: FC = () => {
                         className="p-5"
                         style={{ color: textGray, fontFamily }}
                       >
-                        {t("forgotPassword:createPasswordDescription")}
+                        {t("resetPassword:createPasswordDescription")}
                       </p>
 
                       <div>
@@ -292,7 +296,7 @@ const ResetPasswordPage: FC = () => {
                             type={showPassword ? "text" : "password"}
                             name="password"
                             autoFocus={true}
-                            placeholder={t("forgotPassword:otpPlaceholder")}
+                            placeholder={t("resetPassword:otpPlaceholder")}
                             className="w-full p-2 mt-2.5 rounded-lg outline-none"
                             style={{ border: `1px solid ${borderGray}` }}
                             onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -310,7 +314,7 @@ const ResetPasswordPage: FC = () => {
                               className="pt-1 text-xs"
                               style={{ color: textGray, fontFamily }}
                             >
-                              {t("forgotPassword:passwordWarning")}
+                              {t("resetPassword:passwordWarning")}
                             </p>
                           ) : (
                             <ErrorMessage
@@ -328,13 +332,13 @@ const ResetPasswordPage: FC = () => {
                             className="uppercase"
                             style={{ color: textGray, fontFamily }}
                           >
-                            {t("forgotPassword:confirmPassword")}
+                            {t("resetPassword:confirmPassword")}
                           </p>
                           <Field
                             id="confirmPassword"
                             type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
-                            placeholder={t("forgotPassword:otpPlaceholder")}
+                            placeholder={t("resetPassword:otpPlaceholder")}
                             className="w-full p-2 mt-2.5 rounded-lg outline-none"
                             style={{ border: `1px solid ${borderGray}` }}
                             onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -356,7 +360,7 @@ const ResetPasswordPage: FC = () => {
                               className="text-xs"
                               style={{ color: textGray, fontFamily }}
                             >
-                              {t("forgotPassword:confirmPasswordWarning")}
+                              {t("resetPassword:confirmPasswordWarning")}
                             </span>
                           ) : (
                             <ErrorMessage
@@ -377,7 +381,7 @@ const ResetPasswordPage: FC = () => {
                               color: "#ffffff",
                             }}
                           >
-                            {t("forgotPassword:next")}
+                            {t("resetPassword:next")}
                           </button>
                         </div>
                       </div>
