@@ -22,8 +22,8 @@ const AccountingLayout: FC<Props> = ({children,showActionButton, showAddNewButto
 
     return (
         <div className="w-full">
-            <div className="overflow-y-auto p-4 pt-0 flex-1 h-full">
-                <div className="flex border-b border-gray-200 align-items-center">
+            <div className="overflow-y-auto flex-1 h-full">
+                <div className="flex border-b border-gray-200 align-items-center pl-4 pr-4">
                     <ul className="nav flex flex-1 ">
                         {_map(NavLinksAccounting, (link) => (
                             <li
