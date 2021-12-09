@@ -5,29 +5,11 @@ const AccountingTicketsPage:FC = () => {
     return (
         <div>
             <div className="flex flex-wrap w-full">
-                <DropdownSearchable id="ticket-creator" placeholder="Người tạo phiếu"
-                                    onchangeValue={(item => {
-                                        console.log(item)
-                                    })}
-                                    className={"ml-10"}
-                data={[
-                    {
-                        id: 1,
-                        text: "hello"
-                    },
-                    {
-                        id: 1,
-                        text: "hello"
-                    },
-                    {
-                        id: 1,
-                        text: "hello"
-                    },
-                    {
-                        id: 1,
-                        text: "hello"
-                    }
-                ]}/>
+                <DropdownSearchable
+                id="ticket-creator" placeholder="Người tạo phiếu"
+                searchUrl={"/user/get-list"}
+                searchParam={"search"}
+                />
             </div>
         </div>
     )

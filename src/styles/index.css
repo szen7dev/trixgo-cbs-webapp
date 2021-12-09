@@ -509,3 +509,29 @@ button {
 .align-items-center {
   align-items: center!important;
 }
+.select-search:focus {
+  outline: none;
+}
+.select-dropdown {
+  min-width: 150px;
+}
+.select-dropdown .select-options-container {
+  min-width: 240px;
+  max-height: 450px;
+  overflow-y: scroll;
+}
+.select-dropdown .select-options-container .select-options-section {
+
+}
+.alert-warning {
+  color: #664d03;
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+}
+.alert {
+  position: relative;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
