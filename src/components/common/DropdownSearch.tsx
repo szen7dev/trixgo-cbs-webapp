@@ -2,7 +2,6 @@ import React, {FC, ReactNode, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import API from "../../apis/repository";
 import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
-import {data} from "autoprefixer";
 
 export type Item = {
     id: string | number;
@@ -13,6 +12,7 @@ export type Item = {
 
 type Props = {
     id?: string;
+    data?: Array<Item>;
     placeholder?: string;
     searchUrl?: string;
     searchParam?: string;
@@ -27,6 +27,7 @@ type Params = {
     [key: string]: string;
 }
 const DropdownSearchable:FC<Props> = ({
+      data,
       searchUrl,
       searchParam,
       id,
@@ -41,9 +42,29 @@ const DropdownSearchable:FC<Props> = ({
     const [value, setValue] = useState<Item>();
     const [displayData, setDisplayData] = useState<Array<Item>>([]);
     const [showOption, setShowOption] = useState(false);
+    const [firstInit, setFirstInit] = useState(true);
+    const [defaultValueHaveBeenChange, setDefaultValueHaveBeenChange] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setFirstInit(false)
+        // in case having default data array and default value id
+        if (data) {
+            setDisplayData(data)
+            const initialItem = data?.find(item => item.id === initialValue);
+            setValue(initialItem);
+        }
+    }, []);
+
+    useEffect(() => {
+        // in case have to make request for first time and default value id
+        if (!data && !defaultValueHaveBeenChange) {
+            const initialItem = displayData?.find(item => item.id === initialValue);
+            setValue(initialItem)
+        }
+    }, [displayData])
 
     useEffect(() => {
         /**
@@ -64,17 +85,20 @@ const DropdownSearchable:FC<Props> = ({
     }, [wrapperRef]);
 
     useEffect(() => {
+        //If already have data, dont make request for first time
+        if (firstInit && data) return ;
         const delayDebounceFn = setTimeout(() => {
             // Send Axios request here
             doSearching(searchTerm)
         }, 1000)
 
         return () => clearTimeout(delayDebounceFn)
-    }, [searchTerm])
+    }, [searchTerm,data])
 
     const handleSetValue = (item: Item) => {
         setValue(item);
         setShowOption(false);
+        setDefaultValueHaveBeenChange(true);
         if (onchangeValue) {
             onchangeValue(item);
         }
@@ -104,13 +128,13 @@ const DropdownSearchable:FC<Props> = ({
     const renderOptions = () => {
         if (displayData?.length === 0 ) {
             return (
-                <div className={"pt-3 pb-3 alert alert-warning mt-3"}>Danh sách rỗng</div>
+                <div className={"pt-3 pb-3 alert alert-warning m-3"}>Danh sách rỗng</div>
             )
         }
         return _map(displayData, (option) => (
             <div
                 key={option.id}
-                className={"flex align-items-center cursor-pointer pt-2 pb-2 " + classNameItem ?? ''}
+                className={"select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " + (classNameItem ?? '') + (option.id === value?.id ? 'bg-blue-100':'')}
                 onClick={() => handleSetValue(option)}
                 data-option-value={option.id}
             >
@@ -126,8 +150,8 @@ const DropdownSearchable:FC<Props> = ({
     }
 
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={"relative select-dropdown " + className??''} data-value={value?.id}>
-            <p onClick={() => toggleShowOption()} className="flex border border-gray-400 p-1 rounded pl-2 pr-2 cursor-pointer align-items-center">
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={"relative select-dropdown " + (className??'')} data-value={value?.id}>
+            <p onClick={() => toggleShowOption()} className="flex border border-gray-400 p-1 h-full rounded pl-2 pr-2 cursor-pointer align-items-center">
                 <span className={"flex-1"}>{value?.text??placeholder}</span>
                 <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4"/>
@@ -142,7 +166,7 @@ const DropdownSearchable:FC<Props> = ({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className="select-options-section pr-4 pl-4">
+                <div className="select-options-section overflow-auto">
                     {renderOptions()}
                 </div>
             </div>:null}

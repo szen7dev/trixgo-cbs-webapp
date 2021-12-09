@@ -506,6 +506,16 @@ button {
   background-color: #0b5ed7;
   border-color: #0a58ca;
 }
+.btn-success {
+  background: #00C614;
+  color: white;
+  border-color: #00C614;
+}
+.btn-success:hover {
+  color: #fff;
+  background-color: #01ac12;
+  border-color: #01ac12;
+}
 .align-items-center {
   align-items: center!important;
 }
@@ -514,14 +524,20 @@ button {
 }
 .select-dropdown {
   min-width: 150px;
+  min-height: 32px;
 }
 .select-dropdown .select-options-container {
   min-width: 240px;
-  max-height: 450px;
-  overflow-y: scroll;
 }
 .select-dropdown .select-options-container .select-options-section {
-
+  max-height: 250px;
+}
+.select-dropdown .select-options-container .select-options-section .select-option {
+  transition: background-color 0.25s ease-in-out;
+}
+.select-dropdown .select-options-container .select-options-section .select-option:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(219, 234, 254, var(--tw-bg-opacity));
 }
 .alert-warning {
   color: #664d03;
