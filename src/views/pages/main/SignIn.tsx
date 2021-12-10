@@ -27,6 +27,7 @@ const LoginPage: FC = () => {
   const initialValues: SignInPayload = {
     email: "",
     password: "",
+    platform: "1"
   };
 
   const signInSchema = object().shape({

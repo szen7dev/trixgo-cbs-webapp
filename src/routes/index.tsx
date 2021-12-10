@@ -16,7 +16,6 @@ import ChatProvider from "services/providers/Chat";
 // Layouts
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
-import ExampleLayout from "views/layouts/Example";
 import HomeLayout from "views/layouts/HomeLayout";
 
 // Main Pages
@@ -56,9 +55,6 @@ import ApplicationsPage from "views/pages/applications";
 
 // Settings Pages
 import SettingsPage from "views/pages/settings";
-
-// Example pages
-import ExamplePage from "views/pages/example";
 
 // Project pages
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
@@ -255,15 +251,6 @@ const Routes: FC = () => {
                         <Route path="/settings/*" component={ErrorPage} />
                       </Switch>
                     </MainLayout>
-                  </Route>
-
-                  <Route path="/example">
-                    <ExampleLayout>
-                      <Switch>
-                        <Route exact path="/example" component={ExamplePage} />
-                        <Route path="/example/*" component={ErrorPage} />
-                      </Switch>
-                    </ExampleLayout>
                   </Route>
 
                 <Route path="/ppt">

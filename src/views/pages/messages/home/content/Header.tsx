@@ -1,7 +1,5 @@
 import { Dispatch, SetStateAction, FC } from "react";
 
-import { useChat } from "services/hooks/useChat";
-
 import ConversationLogo from "components/shared/ConversationLogo";
 import PhoneIcon from "assets/icons/Phone";
 import VideoCameraIcon from "assets/icons/VideoCamera";
@@ -16,19 +14,18 @@ const MessageHeader: FC<Props> = ({
   isShowInformation,
   handleInformationCb,
 }) => {
-  const { currentConversation } = useChat();
 
   return (
     <div className="flex justify-between border-b border-solid border-secondary-light shadow-sm py-3 px-5">
       <div className="flex">
         <ConversationLogo
-          logo={currentConversation ? currentConversation.logo : []}
+          logo={[]}
           isOnline
         />
 
         <div className="flex flex-col justify-center ml-4">
           <h5 className="font-semibold text-lg leading-5 mb-1">
-            {currentConversation?.name}
+            Nguyễn Văn Tuấn
           </h5>
           <small className="font-normal text-sm leading-4 text-secondary-gray">
             <i>Hoạt động 10 phút trước</i>

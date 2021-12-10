@@ -1,21 +1,11 @@
-import { FC, useEffect } from "react";
-
-import { useAuth } from "services/hooks/useAuth";
-import { useChat } from "services/hooks/useChat";
+import { FC } from "react";
 
 import MessagesSidebar from "./sidebar";
 import WelcomeChatting from "./welcome";
 import MessagesContent from "./content";
 
 const MessagesPage: FC = () => {
-  const { fetchFriendContacts } = useAuth();
-  const { currentConversation, fetchConversations } = useChat();
-
-  useEffect(() => {
-    fetchConversations();
-    fetchFriendContacts();
-  }, [fetchConversations, fetchFriendContacts]);
-
+  const currentConversation = true; // hard code fake data
   return (
     <>
       <MessagesSidebar />

@@ -10,49 +10,21 @@ export type User = {
 
 export type AuthState = {
   isLoading: boolean;
-  accessToken: string | null;
-  refreshToken: string | null;
+  token: string | null;
   user: User | null;
   hasAuthenticated: boolean;
-  friendContacts: User[];
-};
-
-export type RegisterPayload = {
-  fullName: string,
-  companyName: string,
-  email: string,
-  typeOrg: string,
-  phoneNumber: string
-};
-
-export type RegisterResponse = APIResponse & {
-  result: {
-    verification: string;
-  };
-};
-
-export type VerifyEmailPayload = {
-  verification: string;
-};
-
-export type verifyEmailResponse = APIResponse & {
-  result: {
-    user: User;
-    accessToken: string;
-    refreshToken: string;
-  };
 };
 
 export type SignInPayload = {
   email: string;
   password: string;
+  platform: string;
 };
 
 export type SignInResponse = APIResponse & {
-  result: {
+  data: {
     user: User;
-    accessToken: string;
-    refreshToken: string;
+    token: string;
   };
 };
 
@@ -68,8 +40,7 @@ export type SetAuth = {
   type: "SIGN_IN_SUCCESS";
   payload: {
     user: User;
-    accessToken: string;
-    refreshToken: string;
+    token: string;
   };
 };
 
@@ -81,15 +52,9 @@ export type RemoveAuth = {
   type: "SIGN_OUT";
 };
 
-export type SetFriendContacts = {
-  type: "SET_FRIEND_CONTACTS";
-  payload: User[];
-};
-
 export type AuthActions =
   | RequestAPI
   | RequestAPIComplete
   | SignInError
   | SetAuth
-  | RemoveAuth
-  | SetFriendContacts;
+  | RemoveAuth;

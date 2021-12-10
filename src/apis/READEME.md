@@ -1,3 +1,0 @@
-## API
-
-This directory contains the declarations of the function get apis such as axios...
