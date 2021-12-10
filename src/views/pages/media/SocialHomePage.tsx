@@ -15,7 +15,7 @@ import { Formik, Form } from "formik";
 import { object, string, array } from "yup";
 import cn from "classnames";
 
-import ModalCreatePost from "./components/ModalCreatePost";
+import ModalContainer from "./components/ModalContainer";
 import TabsClassifyArticle from "./components/TabsClassifyArticle";
 import TabsClassifyArticleCommunity from "./components/TabsClassifyArticleCommunity";
 import TabsClassifyDepartment from "./components/TabsClassifyDepartment";
@@ -312,12 +312,12 @@ const SocialHomePage: FC = () => {
 					</button>
 				</div>
 			</div>
-			<ModalCreatePost isModalOpen={isShowCreateModal} toggle={() => ''}>
+			<ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
 					<Formik
 						initialValues={initialValues}
 						validationSchema={registerSchema}
-						onSubmit={(values) => { return }}
+						onSubmit={(_values) => { return }}
 					>
 						{
 							formik => {
@@ -358,7 +358,7 @@ const SocialHomePage: FC = () => {
 												className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 												{...formik.getFieldProps('content')}
 											></textarea>
-											<div className="post__files flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto pt-2 pb-6 px-9">
+											<div className={cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto", (!values.images.length && !values.files.length) ? "h-0 border-none" : "post__files pt-2 pb-6 px-9")}>
 												<PostImage
 													images={values.images}
 													onRemove={(index: number) => { handlePopItem(values.images, 'images', index, setFieldValue) }}
@@ -366,6 +366,7 @@ const SocialHomePage: FC = () => {
 												<PostFile
 													files={values.files}
 													onRemove={(index: number) => { handlePopItem(values.files, 'files', index, setFieldValue) }}
+													className="w-full mx-2.5"
 												/>
 											</div>
 										</div>
@@ -433,7 +434,7 @@ const SocialHomePage: FC = () => {
 						}
 					</Formik>
 				</div>
-			</ModalCreatePost>
+			</ModalContainer>
 		</>
 	);
 };

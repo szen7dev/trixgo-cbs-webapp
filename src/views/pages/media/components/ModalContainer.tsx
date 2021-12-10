@@ -6,7 +6,7 @@ interface Props {
 	toggle(): void
 }
 
-const ModalCreatePost: FC<Props> = ({ isModalOpen, toggle, children }) => {
+const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children }) => {
 	return (
 		<Transition.Root appear show={isModalOpen} as={Fragment}>
 			<Dialog
@@ -52,4 +52,4 @@ const ModalCreatePost: FC<Props> = ({ isModalOpen, toggle, children }) => {
 	)
 }
 
-export default ModalCreatePost
+export default ModalContainer

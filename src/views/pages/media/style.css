@@ -48,7 +48,6 @@
 .post__files-file {
   position: relative;
   height: 74px;
-  width: 100%;
   background-color: #F1F1F1;
   border: 0.2px solid #CCCCCC;
   box-sizing: border-box;
@@ -210,35 +209,37 @@
 }
 
 .post__content {
-  padding: 12px 24px;
+  padding: 12px 0;
 }
 
-.post__content p {
+.post__content>p {
   font-size: 20px;
   line-height: 23px;
-  margin-top: 1rem;
   text-align: justify;
+  padding: 0 24px;
 }
 
 .post__content-images {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 24px;
 }
 
 .post__content-images>div {
-	margin-right: 12px;
-	width: 226px;
-	height: 226px;
+  margin-right: 12px;
+  width: 226px;
+  height: 226px;
 }
+
 .post__content-images>div img {
-	object-fit: cover;
+  object-fit: cover;
 }
 
 .post__suggest {
   min-width: 301px;
-	font-size: 13px;
+  font-size: 13px;
   line-height: 14.95px;
-	padding: 0 14px 0 22px;
+  padding: 0 14px 0 22px;
 }
 
 .post__suggest>p {
@@ -265,4 +266,42 @@
   padding: 6px 6px 6px 7px;
   color: white;
   border-radius: 3px;
+}
+
+.react__wrapper {}
+
+.react__images {
+}
+
+.react__images.collapsed {
+  margin-right: 0;
+}
+.react__images-footer {
+	font-size: 18px;
+	line-height: 21px;
+}
+
+.react__comments-wrapper {
+	flex: 0 0 436px;
+	margin-right: 0;
+}
+
+.react__comments-wrapper.collapsed {
+	margin-right: -436px;
+}
+
+.react__comments-container {
+}
+
+.react__slider {
+  min-height: 500px;
+}
+
+.react__slider-btn {
+  width: 50px;
+  height: 50px;
+}
+
+.react__slider-left,
+.react__slider-right {
 }

@@ -4,8 +4,9 @@ import { Menu, Transition } from "@headlessui/react";
 import cn from "classnames";
 
 import DocumentDropdown from "./components/DocumentDropdown";
-import iconTrash from 'assets/images/icons8-remove-96.png';
-import iconPencil from 'assets/images/icons8-pencil-96.png';
+
+import iconTrash from 'assets/images/icons8-remove.svg';
+import iconPencil from 'assets/images/icons8-pencil.svg';
 import styles from './document.module.css';
 
 import { IPackage, IProjects } from "typings/document";
@@ -77,7 +78,6 @@ const DocumentProjectPage: FC = () => {
 	const [isShow, setIsShow] = useState<boolean>(false);
 
 	const toggleModalConfirm = () => {
-		console.log('clicked')
 		setIsShow(!isShow);
 	}
 

@@ -17,7 +17,7 @@ const AccountingTicketsPage:FC = () => {
                 <h3 className={"font-bold text-lg pb-2 text-gray-600"}>Phiếu chi</h3>
                 <div className="flex flex-wrap w-full">
                     <input className={"border border-gray-400 p-1 rounded pl-2 pr-2 w-3/12"} placeholder={"Nhập từ khóa tìm kiếm"}/>
-                    <DropdownSearchable
+                    {/* <DropdownSearchable
                         className={"ml-2"}
                         id="ticket-creator" placeholder="Người tạo phiếu"
                         searchUrl={"/user/get-list"}
@@ -86,7 +86,7 @@ const AccountingTicketsPage:FC = () => {
                         id="ticket-creator" placeholder="Hợp đồng"
                         searchUrl={"/user/get-list"}
                         searchParam={"search"}
-                    />
+                    /> */}
                     <DatePicker
                         wrapperClassName={"w-auto ml-2"}
                         name="startDate"
