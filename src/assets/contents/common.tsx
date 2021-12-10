@@ -1,4 +1,4 @@
-import { NavLink, TaskManagementNavLink } from "typings/common";
+import { NavLink, TaskManagementNavLink, NavLinkAccounting } from "typings/common";
 
 import DashboardNavIcon from "assets/icons/DashboardNav";
 import SwitchVerticalIcon from "assets/icons/SwitchVertical";
@@ -200,5 +200,56 @@ export const TaskManagementNavLinks: TaskManagementNavLink[] = [
         icon: <SettingsIcon pathname="settings" className="h-5 w-5 mr-3" />,
       },
     ],
+  },
+];
+
+export const NavLinksAccounting: NavLinkAccounting[] = [
+  {
+    id: "nav-link-accounting-ticket",
+    label: "Phiếu",
+    url: "/accounting/accbill",
+    pathname: "accbill"
+  },
+  {
+    id: "nav-link-accounting-detail",
+    label: "Chi tiết tài khoản",
+    url: "/accounting/detail",
+    pathname: "detail",
+  },
+  {
+    id: "nav-link-accounting-diary",
+    label: "Nhật ký chung",
+    url: "/accounting/diary",
+    pathname: "diary",
+  },
+  {
+    id: "nav-link-accounting-in-out",
+    label: "Nhập xuất tồn",
+    url: "/accounting/in-out",
+    pathname: "in-out",
+  },
+  {
+    id: "nav-link-accounting-debt-fl",
+    label: "Theo dõi công nợ",
+    url: "/accounting/debt",
+    pathname: "debt",
+  },
+  {
+    id: "nav-link-accounting-vat",
+    label: "Bảng kê VAT",
+    url: "/accounting/vat",
+    pathname: "vat",
+  },
+  {
+    id: "nav-link-accounting-report-finance",
+    label: "Báo cáo tài chính",
+    url: "/accounting/report-finance",
+    pathname: "report-finance",
+  },
+  {
+    id: "nav-link-applications",
+    label: "Công cụ hỗ trợ",
+    url: "/accounting/support-tools",
+    pathname: "support-tools",
   },
 ];
