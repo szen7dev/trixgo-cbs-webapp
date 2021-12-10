@@ -6,8 +6,7 @@ import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 export type Item = {
     id: string | number;
     text: string | number;
-    beforeOption?: ReactNode;
-    afterOption?: ReactNode;
+    imageUrl?: string;
     [key: string]: string | number | ReactNode;
 }
 
@@ -142,8 +141,8 @@ const DropdownSearchable:FC<Props> = ({
                 {
                     renderItem?
                         renderItem(option):
-                        <div className={"flex"}>
-                            {option.beforeOption}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>{option.afterOption}
+                        <div className={"flex align-items-center"}>
+                            {option?.imageUrl?<img src={option.imageUrl} className={"w-9 h-9"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
                         </div>
                 }
             </div>
@@ -167,7 +166,7 @@ const DropdownSearchable:FC<Props> = ({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <div className="select-options-section overflow-auto">
+                <div className="select-options-section overflow-auto bg-white">
                     {renderOptions()}
                 </div>
             </div>:null}

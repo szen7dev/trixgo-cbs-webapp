@@ -2,10 +2,13 @@ import React, {FC} from "react";
 import DropdownSearchable from "../../../components/common/DropdownSearch";
 import { ReactComponent as ThreeDotsVertical } from '.././../../icons/ThreeDotsVertical.svg';
 import { ReactComponent as ThreeDotsHorizontal } from '.././../../icons/ThreeDotsHorizontal.svg';
-import { ReactComponent as Copy } from '.././../../icons/Copy.svg';
 import { ReactComponent as Printer } from '.././../../icons/Printer.svg';
 import { ReactComponent as Trash } from '.././../../icons/Trash.svg';
 import { ReactComponent as Pen } from '.././../../icons/Pen.svg';
+import { ReactComponent as Copy } from '.././../../icons/Copy.svg';
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AccountingTicketsPage:FC = () => {
     return (
@@ -23,7 +26,8 @@ const AccountingTicketsPage:FC = () => {
                         data={[
                             {
                                 id: 1,
-                                text:"Trần Thanh Quang"
+                                text:"Trần Thanh Quang",
+                                imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png"
                             },
                             {
                                 id: 2,
@@ -82,6 +86,54 @@ const AccountingTicketsPage:FC = () => {
                         id="ticket-creator" placeholder="Hợp đồng"
                         searchUrl={"/user/get-list"}
                         searchParam={"search"}
+                    />
+                    <DatePicker
+                        wrapperClassName={"w-auto ml-2"}
+                        name="startDate"
+                        selected={null}
+                        dateFormat="dd/MM/yyyy"
+                        customInput={
+                            <div className={"relative w-auto ml-2 min-h-fit"}>
+                                <input
+                                    placeholder={"Từ ngày"}
+                                    type="text"
+                                    name="startDate"
+                                    className="border border-gray-400 p-1 rounded pl-2 pr-2"
+                                />
+                                <div className={"absolute inset-y-0 right-0 h-full flex align-items-center pr-2"}>
+                                    <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        }
+                        onChange={(date: Date | null) =>
+                            console.log("birthDate", date)
+                        }
+                    />
+                    <DatePicker
+                        wrapperClassName={"w-auto ml-2"}
+                        name="endDate"
+                        selected={null}
+                        dateFormat="dd/MM/yyyy"
+                        customInput={
+                            <div className={"relative w-auto ml-2 min-h-fit"}>
+                                <input
+                                    placeholder={"Đến ngày"}
+                                    type="text"
+                                    name="startDate"
+                                    className="border border-gray-400 p-1 rounded pl-2 pr-2"
+                                />
+                                <div className={"absolute inset-y-0 right-0 h-full flex align-items-center pr-2"}>
+                                    <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        }
+                        onChange={(date: Date | null) =>
+                            console.log("birthDate", date)
+                        }
                     />
                     <button className="btn btn-primary ml-2">
                         Tạo mới

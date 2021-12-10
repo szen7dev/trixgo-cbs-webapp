@@ -49514,6 +49514,7 @@ button {
 
 .acc-action-row {
   min-width: 260px;
+  right: 50%;
 }
 
 @media (min-width: 640px) {
