@@ -564,8 +564,9 @@ video {
 }
 
 body {
-  font-family: SanFranciscoDisplay, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 13px;
+  overflow: hidden;
 }
 
 /**
@@ -49070,8 +49071,7 @@ button {
 }
 
 .home-layout {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  overflow: hidden;
 }
 
 .tm-right-sidebar-chat-item-online {
@@ -49082,12 +49082,53 @@ button {
   background-color: #f0f0f0;
 }
 
-.tm-right-sidebar-toggle-btn {
+.tm-header-toggle-btn {
   background: #e4e6eb;
 }
 
-.tm-right-sidebar-toggle-btn:hover {
+.tm-header-toggle-btn:hover {
   background: #a3a6ad;
+}
+
+.home-layout.collapse-header .tm-header-toggle-btn {
+  top: -12px;
+}
+
+.home-layout.collapse-header .tm-header-toggle-btn img {
+  transform: rotate(180deg);
+}
+
+.home-layout.collapse-header {
+  height: 100vh;
+}
+
+.home-layout.collapse-header .tm-right-sidebar {
+  top: -30px;
+}
+
+.home-layout.collapse-header .t-leftsidebar-navigation {
+  top: 0;
+}
+
+.home-layout.collapse-header .home-header {
+  top: -64px;
+}
+
+.home-layout.collapse-header .home-main-content {
+  height: 100vh;
+  top: -64px;
+}
+
+.home-layout.collapse-header .home-left-sidebar-collapse-btn {
+  top: -40px;
+}
+
+.home-layout.active-right .tm-header-toggle-btn {
+  right: -5px;
+  text-align: left;
+}
+
+.home-layout.collapse-header .home-header {
 }
 
 .home-layout.active-right .tm-right-sidebar-toggle-btn {
@@ -49189,10 +49230,12 @@ button {
   height: 330px;
 }
 
-.t-right-sidebar-btn-add {
+.home-layout.collapse-left .t-leftsidebar-navigation {
+  left: -240px;
 }
 
-.t-right-sidebar-btn-add > img {
+.home-layout.collapse-left .home-main-content {
+  padding-left: 0;
 }
 
 /*______________________________chatbox______________________________*/
