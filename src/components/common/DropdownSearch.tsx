@@ -8,6 +8,7 @@ export type Item = {
     text: string | number;
     beforeOption?: ReactNode;
     afterOption?: ReactNode;
+    [key: string]: string | number | ReactNode;
 }
 
 type Props = {
@@ -49,10 +50,10 @@ const DropdownSearchable:FC<Props> = ({
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setFirstInit(false)
+        setFirstInit(false);
         // in case having default data array and default value id
         if (data) {
-            setDisplayData(data)
+            setDisplayData(data);
             const initialItem = data?.find(item => item.id === initialValue);
             setValue(initialItem);
         }
@@ -64,7 +65,7 @@ const DropdownSearchable:FC<Props> = ({
             const initialItem = displayData?.find(item => item.id === initialValue);
             setValue(initialItem)
         }
-    }, [displayData])
+    }, [displayData]);
 
     useEffect(() => {
         /**
@@ -90,10 +91,10 @@ const DropdownSearchable:FC<Props> = ({
         const delayDebounceFn = setTimeout(() => {
             // Send Axios request here
             doSearching(searchTerm)
-        }, 1000)
+        }, 1000);
 
         return () => clearTimeout(delayDebounceFn)
-    }, [searchTerm,data])
+    }, [searchTerm,data]);
 
     const handleSetValue = (item: Item) => {
         setValue(item);
@@ -106,7 +107,7 @@ const DropdownSearchable:FC<Props> = ({
 
     const toggleShowOption = () => {
         setShowOption(!showOption)
-    }
+    };
 
     const doSearching = async (searchString:string) => {
         if (!searchUrl||!searchParam) return;
@@ -114,7 +115,7 @@ const DropdownSearchable:FC<Props> = ({
         params[searchParam] = searchString;
         const {result} = await getSearchResult(searchUrl, params);
         setDisplayData(result??[]);
-    }
+    };
 
     const getSearchResult = async (url:string, params:Params={}): Promise<GetSearchSelectResponse> => {
         const { data } = await API.get<GetSearchSelectResponse>(
@@ -123,7 +124,7 @@ const DropdownSearchable:FC<Props> = ({
         );
 
         return data;
-    }
+    };
 
     const renderOptions = () => {
         if (displayData?.length === 0 ) {
@@ -147,7 +148,7 @@ const DropdownSearchable:FC<Props> = ({
                 }
             </div>
         ))
-    }
+    };
 
     return (
         <div ref={wrapperRef} id={id} placeholder={placeholder} className={"relative select-dropdown " + (className??'')} data-value={value?.id}>
