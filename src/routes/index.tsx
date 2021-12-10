@@ -314,7 +314,7 @@ const Routes: FC = () => {
                 </Route>
 
                   <Route path="/accounting/:path?">
-                    <MainLayout>
+                    <HomeLayout>
                         <Switch>
                           <Route exact path="/accounting">
                             <Redirect to="/accounting/accbill" />
@@ -365,7 +365,7 @@ const Routes: FC = () => {
                             </AccountingLayout>
                           </Route>
                         </Switch>
-                    </MainLayout>
+                    </HomeLayout>
                   </Route>
 
                   <Route path="*">
