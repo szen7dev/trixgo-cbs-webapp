@@ -25,8 +25,7 @@ const reducer = (state: AuthState, action: AuthActions): AuthState => {
         ...state,
         hasAuthenticated: true,
         user: action.payload.user,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
+        token: action.payload.token,
         isLoading: false,
       };
     case "SIGN_IN_ERROR":
@@ -40,14 +39,8 @@ const reducer = (state: AuthState, action: AuthActions): AuthState => {
         ...state,
         hasAuthenticated: false,
         user: null,
-        accessToken: null,
-        refreshToken: null,
+        token: null,
         isLoading: false,
-      };
-    case "SET_FRIEND_CONTACTS":
-      return {
-        ...state,
-        friendContacts: action.payload,
       };
     default:
       return state;
