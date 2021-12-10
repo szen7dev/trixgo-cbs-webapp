@@ -49,7 +49,7 @@ const UserMenu: FC = () => {
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
                   <span className="font-bold">
-                    {user?.firstName} {user?.lastName}
+                    {user?.fullname}
                   </span>
                   <span className="font-normal text-sm leading-4">
                     Xem công việc của bạn

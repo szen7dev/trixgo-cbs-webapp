@@ -76,7 +76,7 @@ const CreateConversationDialog: FC = () => {
   useEffect(() => {
     setPayload({
       ...payload,
-      logo: _map(selectedContact, (contact) => contact?.avatar),
+      logo: _map(selectedContact, (contact) => contact?.image),
       userIds: _map(selectedContact, (contact) => contact?._id),
     });
 
@@ -135,12 +135,12 @@ const CreateConversationDialog: FC = () => {
             )}
           >
             <img
-              src={user?.avatar}
+              src={user?.image}
               alt="User avatar"
               className="w-6 h-6 object-cover rounded-full mr-2"
             />
             <span className="max-w-[100px] truncate">
-              {user?.firstName} {user?.lastName}
+              {user?.fullname}
             </span>
           </span>
 
@@ -150,12 +150,12 @@ const CreateConversationDialog: FC = () => {
               className="flex justify-center items-center rounded-full font-bold bg-secondary-light text-sm leading-loose py-1 pl-2 pr-3 m-1"
             >
               <img
-                src={contact?.avatar}
+                src={contact?.image}
                 alt="User avatar"
                 className="w-6 h-6 object-cover rounded-full mr-2"
               />
               <span className="max-w-[100px] truncate">
-                {contact?.firstName} {contact?.lastName}
+                {contact?.fullname}
               </span>
               <XIcon
                 className="w-5 h-5 text-primary-gray cursor-pointer ml-2"
