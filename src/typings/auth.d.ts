@@ -2,10 +2,14 @@ import { APIResponse } from "./apis/response";
 
 export type User = {
   _id: string;
-  avatar: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+  email: string,
+  phone: string,
+  fullname: string,
+  company: string,
+  signature: string,
+  status: number,
+  level: number,
+  image: string
 };
 
 export type AuthState = {

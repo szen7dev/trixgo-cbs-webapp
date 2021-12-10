@@ -57,7 +57,6 @@ export const useAuth = (): UseAuth => {
     });
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
-    toast.success("Đăng xuất thành công");
     window.location.reload();
   };
 

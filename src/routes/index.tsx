@@ -18,11 +18,11 @@ import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
 
-// Main Pages
-import SignInPage from "views/pages/main/SignIn";
-import RegisterPage from "views/pages/main/Register";
-import ResetPasswordPage from "views/pages/main/ResetPassword";
-import ErrorPage from "views/pages/main/Error";
+// Authentication Pages
+import SignInPage from "views/pages/authentication/SignIn";
+import RegisterPage from "views/pages/authentication/Register";
+import ResetPasswordPage from "views/pages/authentication/ResetPassword";
+import ErrorPage from "views/pages/authentication/Error";
 
 // Dashboard Pages
 import DashboardPage from "views/pages/dashboard";
