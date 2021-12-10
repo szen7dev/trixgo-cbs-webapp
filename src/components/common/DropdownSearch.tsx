@@ -2,6 +2,7 @@ import React, {FC, ReactNode, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import API from "../../apis/repository";
 import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
+import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 
 export type Item = {
     id: string | number;
@@ -66,23 +67,7 @@ const DropdownSearchable:FC<Props> = ({
         }
     }, [displayData]);
 
-    useEffect(() => {
-        /**
-         * Hide options if clicked on outside of element
-         */
-        function handleClickOutside(event: { target: any; }) {
-            if (wrapperRef && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setShowOption(false);
-            }
-        }
-
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef]);
+    useOnClickOutside(wrapperRef, () => setShowOption(false))
 
     useEffect(() => {
         //If already have data, dont make request for first time
@@ -142,7 +127,7 @@ const DropdownSearchable:FC<Props> = ({
                     renderItem?
                         renderItem(option):
                         <div className={"flex align-items-center"}>
-                            {option?.imageUrl?<img src={option.imageUrl} className={"w-9 h-9"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
+                            {option?.imageUrl?<img alt={"Avt"} src={option.imageUrl} className={"w-9 h-9"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
                         </div>
                 }
             </div>

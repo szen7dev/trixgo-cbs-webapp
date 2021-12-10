@@ -49517,6 +49517,14 @@ button {
   right: 50%;
 }
 
+.pagination-container {
+  position: sticky;
+  width: 100%;
+  background-color: white;
+  bottom: 0;
+  max-height: 55px;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

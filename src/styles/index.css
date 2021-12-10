@@ -624,3 +624,10 @@ button {
   min-width: 260px;
   right: 50%;
 }
+.pagination-container {
+  position: sticky;
+  width: 100%;
+  background-color: white;
+  bottom: 0;
+  max-height: 55px;
+}
