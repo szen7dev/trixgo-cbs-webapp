@@ -4,11 +4,9 @@ import { AuthState, AuthActions } from "typings/auth";
 
 export const initialState: AuthState = {
   isLoading: false,
-  accessToken: null,
-  refreshToken: null,
+  token: null,
   user: null,
-  hasAuthenticated: false,
-  friendContacts: [],
+  hasAuthenticated: false
 };
 
 const AuthContext = createContext<{

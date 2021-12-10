@@ -1,4 +1,4 @@
 export type APIResponse = {
-  isSuccess: boolean;
+  error: boolean;
   message: string;
 };

@@ -1,4 +1,4 @@
-import { FC, useState, FormEvent } from "react";
+import { FC, useState, FormEvent, useEffect } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -27,6 +27,7 @@ const LoginPage: FC = () => {
   const initialValues: SignInPayload = {
     email: "",
     password: "",
+    platform: "1"
   };
 
   const signInSchema = object().shape({
@@ -45,6 +46,10 @@ const LoginPage: FC = () => {
   const borderGray = "#cccccc";
 
   const handleClickShowRegister = () => setShowRegister(!showRegister);
+
+  useEffect(() => {
+    document.title = `Trixgo - ${t("signIn:submitButton")}`;
+  }, [t]);
 
   return (
     <>

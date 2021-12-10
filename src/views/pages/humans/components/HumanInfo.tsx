@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
 
@@ -14,8 +14,8 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
 import Avatar from "assets/images/avatar.jpg";
 import PrintIcon from "assets/images/icons8-print-96.png";
 import CopyIcon from "assets/images/icons8-copy-96.png";
-import PencilIcon from "assets/images/icons8-pencil-96.png";
-import DeleteIcon from "assets/images/icons8-remove-96.png";
+import PencilIcon from "assets/images/icons8-pencil.svg";
+import DeleteIcon from "assets/images/icons8-remove.svg";
 import Certificate from "./views/Certificate";
 
 const HumanInfo: FC = () => {
@@ -25,6 +25,10 @@ const HumanInfo: FC = () => {
   const history = useHistory();
 
   useOnClickOutside(ref, () => setOpenHumanOption(!openHumanOption));
+
+  useEffect(() => {
+    document.title = "Human - Chi tiết nhân sự";
+  }, []);
 
   return (
     <main className="mb-4">

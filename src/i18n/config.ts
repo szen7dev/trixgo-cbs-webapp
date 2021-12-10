@@ -5,24 +5,24 @@ import signInEN from "./en/sign-in.json";
 import signInVN from "./vn/sign-in.json";
 import registerEN from "./en/register.json";
 import registerVN from "./vn/register.json";
-import forgotPasswordEN from "./en/forgot-password.json";
-import forgotPasswordVN from "./vn/forgot-password.json";
+import resetPasswordEN from "./en/reset-password.json";
+import resetPasswordVN from "./vn/reset-password.json";
 
 export const resources = {
   en: {
     signIn: signInEN,
     register: registerEN,
-    forgotPassword: forgotPasswordEN,
+    resetPassword: resetPasswordEN,
   },
   vn: {
     signIn: signInVN,
     register: registerVN,
-    forgotPassword: forgotPasswordVN,
+    resetPassword: resetPasswordVN,
   },
 } as const;
 
 i18n.use(initReactI18next).init({
   lng: "en",
-  ns: ["signIn", "register", "forgotPassword"],
+  ns: ["signIn", "register", "resetPassword"],
   resources,
 });
