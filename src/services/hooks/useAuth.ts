@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 import AuthContext from "services/contexts/Auth";
@@ -26,6 +26,23 @@ export const useAuth = (): UseAuth => {
   const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
     useMutation((payload: SignInPayload) =>
       AuthenticationRepository.signIn(payload)
+    );
+
+  const {
+    isLoading: isLoadingListMedias,
+    refetch: refetchListMedias,
+    data: dataListMedias,
+  } =
+    useQuery(                                                   // https://react-query.tanstack.com/reference/useInfiniteQuery
+      "list_medias",
+      async ({ pageParams }: any) => AuthenticationRepository.listMedias({ lastestID: pageParams ? pageParams : "" }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: true,                                              // https://react-query.tanstack.com/guides/disabling-queries
+      }
     );
 
   const signIn = async (payload: SignInPayload) => {
@@ -59,6 +76,10 @@ export const useAuth = (): UseAuth => {
     localStorage.removeItem("token");
     window.location.reload();
   };
+
+  const getUserInfo = () => {
+
+  }
 
   useEffect(() => {
     if (

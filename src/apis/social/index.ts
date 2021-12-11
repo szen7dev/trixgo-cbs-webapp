@@ -12,7 +12,7 @@ const mediaURL = "/api/medias";
 const SocialRepository = {
     async listMedias(payload: ListMediasPayload): Promise<ListMediasResponse> {
         const { data } = await API.get<ListMediasResponse>(
-            `${mediaURL}/${convertObToUrl(payload)}`
+            `${mediaURL}?${convertObToUrl(payload)}`
         );
         return data;
     },

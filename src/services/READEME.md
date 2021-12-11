@@ -1,3 +1,3 @@
-## SERVICES
+## QUY CHUẨN CÁCH CALL API 
 
-This directory contains files whichs export instant of services.
+### TRƯỜNG HỢP 1:

@@ -20,7 +20,7 @@ export const useSocial = (): UseSocial => {
     } =
         useInfiniteQuery(                                                   // https://react-query.tanstack.com/reference/useInfiniteQuery
             "list_medias",
-            async ({ pageParams }: any) => SocialRepository.listMedias({ lastestID: pageParams }),
+            async ({ pageParams }: any) => SocialRepository.listMedias({ lastestID: pageParams ? pageParams: "" }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
@@ -30,7 +30,7 @@ export const useSocial = (): UseSocial => {
             }
         );
 
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.listRecords));
+    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
 
     return {
         listMedias,
