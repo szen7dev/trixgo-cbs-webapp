@@ -19,6 +19,8 @@ import iconComment from 'assets/images/icon-chat-project.png';
 import iconNext from 'assets/images/icons8-next-page-50.png';
 import iconCollapse from 'assets/images/icons8-collapse-48.png';
 import iconFit from 'assets/images/icons8-fit-to-width-50.png';
+import iconFace from 'assets/images/icons8-grinning-face-with-sweat-48.png';
+import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 import './style.css';
 
 import { FileProps, ImageProps } from "typings/social";
@@ -132,15 +134,6 @@ const SocialPostPage: FC = () => {
 										</div>}
 									</div>
 								))}
-								{/* <div className="mt-4 cursor-pointer" onClick={toggleModalImage} >
-									<img src={imageContent} alt="" />
-								</div>
-								<div className="relative mt-4 cursor-pointer" onClick={toggleModalImage} >
-									<img src={imageContent} alt="" />
-									<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
-										+12
-									</div>
-								</div> */}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
@@ -243,6 +236,7 @@ const SocialPostPage: FC = () => {
 			</ModalContainer>
 			<ModalFullContainer isModalOpen={modalShowImage} toggle={toggleModalImage}>
 				<div className="flex overflow-hidden transition-all transform w-full h-full">
+					{/* Image slider */}
 					<div className="flex flex-col min-h-full flex-auto text-white">
 						{/* Header react with image */}
 						<div className="flex justify-between px-6 pt-3 pb-7">
@@ -274,7 +268,7 @@ const SocialPostPage: FC = () => {
 									</svg>
 								</button>
 								<button className="flex h-11 w-11 pt-1" onClick={toggleCollapse}>
-									<img src={collapsed ? iconCollapse : iconFit} alt="Fit" />
+									<img src={collapsed ? iconCollapse : iconFit} alt="Fit" className="h-8 w-8" />
 								</button>
 							</div>
 						</div>
@@ -312,9 +306,38 @@ const SocialPostPage: FC = () => {
 							</div>
 							<p className="text-[15px] pl-4 pr-5 mt-2.5 leading-4">Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn</p>
 						</div>
+						{/* Reaction */}
+						<div className="flex pb-2 mx-2.5 text-[15px] leading-4 mt-2">
+							<div className="flex flex-grow gap-x-2.5">
+								<div className="flex items-center rounded-full gap-x-2 pl-3.5 pr-2.5 py-0.5 border border-gray-300">
+									<img src={iconFace} alt="" className="h-6 w-6" />
+									<img src={iconFace} alt="" className="h-6 w-6" />
+									<span>15</span>
+								</div>
+								<div className="rounded-full border border-gray-300 p-0.5">
+									<img src={iconFacebookLike} alt="" className="h-6 w-6" />
+								</div>
+							</div>
+							<div className="flex items-center text-secondary-gray mr-4">
+								<span>
+									2 bình luận
+								</span>
+							</div>
+						</div>
+						{/* Divide */}
+						<div className="border-t border-gray-300 ml-4 mr-5"></div>
+
 						{/* Comment */}
-						<div className="flex-1">
-							post
+						<div className="react__comments-container flex-1 pt-4">
+							{/* Showmore Comment */}
+							<div className="react__comments-header ml-4 mr-5">
+								<span>View more 6 comment</span>
+							</div>
+							<ul>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
 						</div>
 						{/* Footer */}
 						<div>

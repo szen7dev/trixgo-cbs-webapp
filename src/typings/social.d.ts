@@ -1,4 +1,5 @@
 import { APIResponse } from "./apis/response";
+import { CancelTokenSource } from "axios";
 
 export type PostPayload = {
   title: string;
@@ -9,12 +10,12 @@ export type PostPayload = {
 };
 
 export type PostFileProps = {
-  files?: Array<File | FileProps>;
-  onRemove?(index: number): void;
+  files?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload): void;
 };
 export type PostImageProps = {
-  images?: Array<File>;
-  onRemove(index: number): void;
+  images?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload): void;
 };
 
 export type FileProps = {
@@ -89,4 +90,11 @@ export type MediaProps = {
   createAt: string,
   createdAt: string,
   updatedAt: string,
+};
+export type FilePropsUpload = {
+  id: number;
+  file: File;
+  progress: number;
+	cancelTokenSource: CancelTokenSource;
+	proimise?: Interval;
 };

@@ -62,3 +62,7 @@ export type AuthActions =
   | SignInError
   | SetAuth
   | RemoveAuth;
+
+export type UserInfoResponse = APIResponse & {
+  data: User;
+};

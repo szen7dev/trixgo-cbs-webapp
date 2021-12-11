@@ -17,32 +17,40 @@ type UseAuth = {
   token: string | null;
   signIn: (payload: SignInPayload) => void;
   signOut: () => void;
+  dataUserInfo: any;
 };
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
   const history = useHistory();
 
+  useEffect(() => {
+    if (
+      localStorage.getItem("currentUser") === null ||
+      localStorage.getItem("token") === null
+    ) {
+      dispatch({ type: "SIGN_IN_ERROR" });
+    } else {
+      API.defaults.headers.Authorization = `Bearer ${JSON.parse(
+        localStorage.getItem("token") as string
+      )}`;
+
+      dispatch({
+        type: "SIGN_IN_SUCCESS",
+        payload: {
+          user: JSON.parse(localStorage.getItem("currentUser") as string),
+          token: localStorage.getItem("token") as string
+        },
+      });
+    }
+  }, [dispatch]);
+
+  const { data: dataUserInfo } =
+    useQuery("user_info", () => AuthenticationRepository.usersInfo());
+
   const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
     useMutation((payload: SignInPayload) =>
       AuthenticationRepository.signIn(payload)
-    );
-
-  const {
-    isLoading: isLoadingListMedias,
-    refetch: refetchListMedias,
-    data: dataListMedias,
-  } =
-    useQuery(                                                   // https://react-query.tanstack.com/reference/useInfiniteQuery
-      "list_medias",
-      async ({ pageParams }: any) => AuthenticationRepository.listMedias({ lastestID: pageParams ? pageParams : "" }),
-      {
-        getNextPageParam: ({ nextCursor }: any) => {
-          return nextCursor || undefined;
-        },
-        refetchOnWindowFocus: false,
-        enabled: true,                                              // https://react-query.tanstack.com/guides/disabling-queries
-      }
     );
 
   const signIn = async (payload: SignInPayload) => {
@@ -77,31 +85,6 @@ export const useAuth = (): UseAuth => {
     window.location.reload();
   };
 
-  const getUserInfo = () => {
-
-  }
-
-  useEffect(() => {
-    if (
-      localStorage.getItem("currentUser") === null ||
-      localStorage.getItem("token") === null
-    ) {
-      dispatch({ type: "SIGN_IN_ERROR" });
-    } else {
-      API.defaults.headers.Authorization = `Bearer ${JSON.parse(
-        localStorage.getItem("token") as string
-      )}`;
-
-      dispatch({
-        type: "SIGN_IN_SUCCESS",
-        payload: {
-          user: JSON.parse(localStorage.getItem("currentUser") as string),
-          token: localStorage.getItem("token") as string
-        },
-      });
-    }
-  }, [dispatch]);
-
   return {
     isLoading:
       isSigningIn,
@@ -112,5 +95,6 @@ export const useAuth = (): UseAuth => {
     token: JSON.parse(localStorage.getItem("token") as string),
     signIn,
     signOut,
+    dataUserInfo
   };
 };
