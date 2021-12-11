@@ -309,23 +309,28 @@ const Routes: FC = () => {
                   </Switch>
                 </Route>
 
-								<Route path="/social">
-									<HomeLayout>
-										<Switch>
-											<Route	exact	path="/social/home" component={SocialHomePage}/>
-											<Route	exact	path="/social/post" component={SocialPostPage}/>
-											<Route path="/social/*" component={ErrorPage} />
-										</Switch>
-									</HomeLayout>
+                <Route path="/social">
+                  <MainLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/applications"
+                        component={ApplicationsPage}
+                      />
+                      <Route exact path="/social/home" component={SocialHomePage} />
+                      <Route exact path="/social/post" component={SocialPostPage} />
+                      <Route path="/social/*" component={ErrorPage} />
+                    </Switch>
+                  </MainLayout>
                 </Route>
 
-								<Route path="/document">
-									<HomeLayout>
-										<Switch>
-											<Route	exact	path="/document/home" component={DocumentHomePage}/>
-											<Route	exact	path="/document/project/:id/document" component={DocumentProjectPage}/>
-											<Route path="/document/*" component={ErrorPage} />
-										</Switch>
+                <Route path="/document">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/document/home" component={DocumentHomePage} />
+                      <Route exact path="/document/project/:id/document" component={DocumentProjectPage} />
+                      <Route path="/document/*" component={ErrorPage} />
+                    </Switch>
 									</HomeLayout>
                 </Route>
 

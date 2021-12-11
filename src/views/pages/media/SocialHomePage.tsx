@@ -14,6 +14,8 @@ import SocialSpecializedTopics from "./home/SocialSpecializedTopics";
 import SocialInternalArticles from "./home/SocialInternalArticles";
 import SocialCommunityPost from "./home/SocialCommunityPost";
 import ModalCreateArticle from "./home/ModalCreateArticle";
+import { useAuth } from "services/hooks/useAuth";
+import { useSocial } from "services/hooks/useSocial";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -27,6 +29,10 @@ const SocialHomePage: FC = () => {
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
+	const {listMedias} = useSocial();
+	const {dataUserInfo} = useAuth();
+	console.log("dataUserInfo",dataUserInfo);
+	console.log("listMedias",listMedias);
 	return (
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
