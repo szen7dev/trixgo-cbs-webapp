@@ -6,9 +6,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
 import Paginate from "../../../components/common/Paginate";
+import AccountingNavigation from "../../layouts/AccountingNavigation";
+import {useModal} from "../../../services/hooks/useModal";
+import CreateNewTicket from "./components/CreateNewTicket";
 
 const AccountingTicketsPage:FC = () => {
-
+    const { openModal } = useModal();
+    const {} =
     const nextPage = () => {
         console.log('1')
     }
@@ -18,10 +22,27 @@ const AccountingTicketsPage:FC = () => {
 
     return (
         <>
+            <AccountingNavigation>
+                <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                        openModal(
+                            <CreateNewTicket/>
+                        )
+                    }
+                >
+                    Tạo mới
+                </button>
+                <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
+                    <svg width="4" height="18" viewBox="0 0 4 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M4 16C4 17.1046 3.10457 18 2 18C0.89543 18 0 17.1046 0 16C0 14.8954 0.89543 14 2 14C3.10457 14 4 14.8954 4 16ZM4 9C4 10.1046 3.10457 11 2 11C0.89543 11 0 10.1046 0 9C0 7.89543 0.89543 7 2 7C3.10457 7 4 7.89543 4 9ZM4 2C4 3.10457 3.10457 4 2 4C0.89543 4 0 3.10457 0 2C0 0.895428 0.89543 -3.8147e-06 2 -3.8147e-06C3.10457 -3.8147e-06 4 0.895428 4 2Z" fill="#70747C"/>
+                    </svg>
+                </button>
+            </AccountingNavigation>
             <div>
                 <div className={"p-3"}>
                     <h3 className={"font-bold text-lg text-gray-600"}>Phiếu chi</h3>
-                    <div className="flex w-full">
+                    <div className="flex w-full flex-wrap">
                         <input className={"border border-gray-400 p-1 rounded pl-2 pr-2 w-3/12 mt-2"} placeholder={"Nhập từ khóa tìm kiếm"}/>
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
@@ -94,7 +115,7 @@ const AccountingTicketsPage:FC = () => {
                             searchParam={"search"}
                         />
                         <DatePicker
-                            wrapperClassName={"w-auto ml-2 mt-2"}
+                            wrapperClassName={"w-auto mt-2"}
                             name="startDate"
                             selected={null}
                             dateFormat="dd/MM/yyyy"
@@ -118,7 +139,7 @@ const AccountingTicketsPage:FC = () => {
                             }
                         />
                         <DatePicker
-                            wrapperClassName={"w-auto ml-2 mt-2"}
+                            wrapperClassName={"w-auto mt-2"}
                             name="endDate"
                             selected={null}
                             dateFormat="dd/MM/yyyy"
@@ -142,7 +163,7 @@ const AccountingTicketsPage:FC = () => {
                             }
                         />
                         <button className="btn btn-primary ml-2 mt-2">
-                            Tạo mới
+                            Tra cứu
                         </button>
                         <button className="btn btn-success ml-2 mt-2">
                             Lưu
