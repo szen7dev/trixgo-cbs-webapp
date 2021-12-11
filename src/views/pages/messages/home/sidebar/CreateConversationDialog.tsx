@@ -1,5 +1,6 @@
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
-
+import { CreateConversationPayload } from "typings/apis/chatting";
+import { User } from "typings/auth";
 import { List } from "react-virtualized";
 import cn from "classnames";
 import { map as _map } from "lodash";
@@ -9,21 +10,14 @@ import { filter as _filter } from "lodash";
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/useAuth";
 import { useWindowDimensions } from "services/hooks/useWindowDimensions";
-import { useChat } from "services/hooks/useChat";
 
 import XIcon from "assets/icons/X";
 import SearchIcon from "assets/icons/Search";
 
-import { NEW_CONVERSATION_NAME_MAX_LENGTH } from "utils/constants";
-
-import { CreateConversationPayload } from "typings/apis/chatting";
-import { User } from "typings/auth";
-
 const CreateConversationDialog: FC = () => {
   const { closeModal } = useModal();
-  const { user, friendContacts } = useAuth();
+  const { user } = useAuth();
   const { width } = useWindowDimensions();
-  const { createConversation } = useChat();
 
   const inviteFriendsEditableContentRef = useRef<HTMLDivElement>(null);
   const inviteFriendsRef = useRef<HTMLDivElement>(null);
@@ -34,55 +28,10 @@ const CreateConversationDialog: FC = () => {
     userIds: [],
   });
 
-  const onSelectContact = (selectContact: User) => {
-    if (!_find(selectedContact, (contact) => contact === selectContact)) {
-      setSelectedContact([...selectedContact, ...[selectContact]]);
-    } else {
-      setSelectedContact(
-        _filter(selectedContact, (contact) => contact !== selectContact)
-      );
-    }
-  };
-
   const onRemoveContact = (removeContact: User) => {
     setSelectedContact(
       _filter(selectedContact, (contact) => contact !== removeContact)
     );
-  };
-
-  const getConversationNameFromContactNames = (): string => {
-    let name = `${user?.firstName} ${user?.lastName},`;
-
-    for (let index = 0; index < selectedContact.length; index++) {
-      if (name.length > NEW_CONVERSATION_NAME_MAX_LENGTH) break;
-
-      const element = selectedContact[index];
-      name += ` ${element.firstName} ${element.lastName},`;
-    }
-
-    if (name.length > NEW_CONVERSATION_NAME_MAX_LENGTH) {
-      name = name.replace(
-        name.substring(NEW_CONVERSATION_NAME_MAX_LENGTH - 4, name.length),
-        "..."
-      );
-    } else {
-      if (name.slice(-1) === ",") name = name.slice(0, -1);
-    }
-
-    return name;
-  };
-
-  const handleSubmit = () => {
-    const query = {
-      ...payload,
-      name: !payload.name.length
-        ? getConversationNameFromContactNames()
-        : payload.name,
-      logo: [user?.avatar, ...payload.logo] as string[],
-      userIds: [...[user?._id], ...payload.userIds] as string[],
-    };
-
-    createConversation(query);
   };
 
   const contactsRender = ({
@@ -94,40 +43,31 @@ const CreateConversationDialog: FC = () => {
     index: number;
     style: CSSProperties;
   }) => {
-    const { _id, avatar, firstName, lastName } = friendContacts[index];
-
     return (
       <div
         key={key}
         className="flex items-center w-full h-12 rounded-md hover:bg-secondary-light cursor-pointer py-1 px-2 my-1"
-        onClick={() => onSelectContact(friendContacts[index])}
         style={style}
       >
         <div className="round-checkbox mr-6">
           <input
-            id={`invite-friend-contact-${_id}`}
+            id={`invite-friend-contact-${"1"}`}
             type="checkbox"
-            checked={
-              !!_find(
-                selectedContact,
-                (contact) => contact === friendContacts[index]
-              )
-            }
-            onChange={() => onSelectContact(friendContacts[index])}
+            checked={true}
           />
-          <label htmlFor={`invite-friend-contact-${_id}`}></label>
+          <label htmlFor={`invite-friend-contact-${"1"}`}></label>
         </div>
 
         <div className="relative mr-3">
           <img
-            src={avatar}
+            src={"https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg"}
             alt="User Avatar"
             className="w-10 h-10 rounded-full"
           />
         </div>
 
         <span className="max-w-[250px] truncate font-bold">
-          {firstName} {lastName}
+          Nguyễn Văn Tuấn
         </span>
       </div>
     );
@@ -136,7 +76,7 @@ const CreateConversationDialog: FC = () => {
   useEffect(() => {
     setPayload({
       ...payload,
-      logo: _map(selectedContact, (contact) => contact?.avatar),
+      logo: _map(selectedContact, (contact) => contact?.image),
       userIds: _map(selectedContact, (contact) => contact?._id),
     });
 
@@ -195,12 +135,12 @@ const CreateConversationDialog: FC = () => {
             )}
           >
             <img
-              src={user?.avatar}
+              src={user?.image}
               alt="User avatar"
               className="w-6 h-6 object-cover rounded-full mr-2"
             />
             <span className="max-w-[100px] truncate">
-              {user?.firstName} {user?.lastName}
+              {user?.fullname}
             </span>
           </span>
 
@@ -210,12 +150,12 @@ const CreateConversationDialog: FC = () => {
               className="flex justify-center items-center rounded-full font-bold bg-secondary-light text-sm leading-loose py-1 pl-2 pr-3 m-1"
             >
               <img
-                src={contact?.avatar}
+                src={contact?.image}
                 alt="User avatar"
                 className="w-6 h-6 object-cover rounded-full mr-2"
               />
               <span className="max-w-[100px] truncate">
-                {contact?.firstName} {contact?.lastName}
+                {contact?.fullname}
               </span>
               <XIcon
                 className="w-5 h-5 text-primary-gray cursor-pointer ml-2"
@@ -240,7 +180,7 @@ const CreateConversationDialog: FC = () => {
         <List
           width={width / 4 - 32}
           height={390}
-          rowCount={friendContacts.length}
+          rowCount={50}
           rowHeight={52}
           rowRenderer={contactsRender}
         />
@@ -261,7 +201,6 @@ const CreateConversationDialog: FC = () => {
             "disabled-button": !selectedContact.length,
             "primary-button": !!selectedContact.length,
           })}
-          onClick={handleSubmit}
         >
           Tạo hội thoại
         </button>

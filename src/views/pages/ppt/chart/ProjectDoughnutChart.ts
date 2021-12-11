@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Chart as ChartJS,
   BubbleDataPoint,
@@ -17,7 +18,6 @@ export const optionsOne = {
   plugins: { datalabels: { display: false } },
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getPlugins(
   title: string,
   subtitle: string,

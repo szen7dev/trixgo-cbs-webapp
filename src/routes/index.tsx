@@ -16,14 +16,13 @@ import ChatProvider from "services/providers/Chat";
 // Layouts
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
-import ExampleLayout from "views/layouts/Example";
 import HomeLayout from "views/layouts/HomeLayout";
 
-// Main Pages
-import SignInPage from "views/pages/main/SignIn";
-import RegisterPage from "views/pages/main/Register";
-import ResetPasswordPage from "views/pages/main/ResetPassword";
-import ErrorPage from "views/pages/main/Error";
+// Authentication Pages
+import SignInPage from "views/pages/authentication/SignIn";
+import RegisterPage from "views/pages/authentication/Register";
+import ResetPasswordPage from "views/pages/authentication/ResetPassword";
+import ErrorPage from "views/pages/authentication/Error";
 
 // Dashboard Pages
 import DashboardPage from "views/pages/dashboard";
@@ -57,9 +56,6 @@ import ApplicationsPage from "views/pages/applications";
 // Settings Pages
 import SettingsPage from "views/pages/settings";
 
-// Example pages
-import ExamplePage from "views/pages/example";
-
 // Project pages
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
@@ -78,6 +74,15 @@ import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
 import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
+
+// Social pages
+import SocialHomePage from "views/pages/media/SocialHomePage";
+import SocialPostPage from "views/pages/media/SocialPostPage";
+
+// Document pages
+import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
+import DocumentHomePage from "views/pages/document/DocumentHomePage";
+
 const Routes: FC = () => {
   return (
       <Router>
@@ -256,15 +261,6 @@ const Routes: FC = () => {
                     </MainLayout>
                   </Route>
 
-                  <Route path="/example">
-                    <ExampleLayout>
-                      <Switch>
-                        <Route exact path="/example" component={ExamplePage} />
-                        <Route path="/example/*" component={ErrorPage} />
-                      </Switch>
-                    </ExampleLayout>
-                  </Route>
-
                 <Route path="/ppt">
                   <Switch>
                     <Route
@@ -310,6 +306,31 @@ const Routes: FC = () => {
                       </HomeLayout>
                     </Router>
                   </Switch>
+                </Route>
+
+                <Route path="/social">
+                  <MainLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/applications"
+                        component={ApplicationsPage}
+                      />
+                      <Route exact path="/social/home" component={SocialHomePage} />
+                      <Route exact path="/social/post" component={SocialPostPage} />
+                      <Route path="/social/*" component={ErrorPage} />
+                    </Switch>
+                  </MainLayout>
+                </Route>
+
+                <Route path="/document">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/document/home" component={DocumentHomePage} />
+                      <Route exact path="/document/project/:id/document" component={DocumentProjectPage} />
+                      <Route path="/document/*" component={ErrorPage} />
+                    </Switch>
+									</HomeLayout>
                 </Route>
 
                   <Route path="/accounting/:path?">
