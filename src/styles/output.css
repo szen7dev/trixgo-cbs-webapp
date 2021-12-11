@@ -33883,6 +33883,45 @@ body {
   font-size: 15px;
 }
 
+.text-x-small {
+  font-size: 12px;
+}
+
+.text-small {
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.text-medium {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.text-large {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.text-x-large {
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.text-2x-large {
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.text-3x-large {
+  font-size: 24px;
+  line-height: 27.6px;
+}
+
+.text-4x-large {
+  font-size: 30px;
+  line-height: 34.5px;
+}
+
 .font-thin {
   font-weight: 100;
 }
@@ -82637,6 +82676,45 @@ button {
     font-size: 15px;
   }
 
+  .sm\:text-x-small {
+    font-size: 12px;
+  }
+
+  .sm\:text-small {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  .sm\:text-medium {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .sm\:text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .sm\:text-x-large {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .sm\:text-2x-large {
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .sm\:text-3x-large {
+    font-size: 24px;
+    line-height: 27.6px;
+  }
+
+  .sm\:text-4x-large {
+    font-size: 30px;
+    line-height: 34.5px;
+  }
+
   .sm\:font-thin {
     font-weight: 100;
   }
@@ -130780,6 +130858,45 @@ button {
 
   .md\:text-\[15px\] {
     font-size: 15px;
+  }
+
+  .md\:text-x-small {
+    font-size: 12px;
+  }
+
+  .md\:text-small {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  .md\:text-medium {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .md\:text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .md\:text-x-large {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .md\:text-2x-large {
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .md\:text-3x-large {
+    font-size: 24px;
+    line-height: 27.6px;
+  }
+
+  .md\:text-4x-large {
+    font-size: 30px;
+    line-height: 34.5px;
   }
 
   .md\:font-thin {
@@ -178927,6 +179044,45 @@ button {
     font-size: 15px;
   }
 
+  .lg\:text-x-small {
+    font-size: 12px;
+  }
+
+  .lg\:text-small {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  .lg\:text-medium {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .lg\:text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lg\:text-x-large {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .lg\:text-2x-large {
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .lg\:text-3x-large {
+    font-size: 24px;
+    line-height: 27.6px;
+  }
+
+  .lg\:text-4x-large {
+    font-size: 30px;
+    line-height: 34.5px;
+  }
+
   .lg\:font-thin {
     font-weight: 100;
   }
@@ -227072,6 +227228,45 @@ button {
     font-size: 15px;
   }
 
+  .xl\:text-x-small {
+    font-size: 12px;
+  }
+
+  .xl\:text-small {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  .xl\:text-medium {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .xl\:text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .xl\:text-x-large {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .xl\:text-2x-large {
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .xl\:text-3x-large {
+    font-size: 24px;
+    line-height: 27.6px;
+  }
+
+  .xl\:text-4x-large {
+    font-size: 30px;
+    line-height: 34.5px;
+  }
+
   .xl\:font-thin {
     font-weight: 100;
   }
@@ -275215,6 +275410,45 @@ button {
 
   .\32xl\:text-\[15px\] {
     font-size: 15px;
+  }
+
+  .\32xl\:text-x-small {
+    font-size: 12px;
+  }
+
+  .\32xl\:text-small {
+    font-size: 13px;
+    line-height: 15px;
+  }
+
+  .\32xl\:text-medium {
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .\32xl\:text-large {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .\32xl\:text-x-large {
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .\32xl\:text-2x-large {
+    font-size: 20px;
+    line-height: 23px;
+  }
+
+  .\32xl\:text-3x-large {
+    font-size: 24px;
+    line-height: 27.6px;
+  }
+
+  .\32xl\:text-4x-large {
+    font-size: 30px;
+    line-height: 34.5px;
   }
 
   .\32xl\:font-thin {
