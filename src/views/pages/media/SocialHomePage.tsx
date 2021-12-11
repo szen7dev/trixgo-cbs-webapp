@@ -7,8 +7,8 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState } from "react";
-
+import { FC, useEffect, useState } from "react";
+import { useSocial } from "services/hooks/useSocial";
 import { Link } from "react-router-dom";
 import { Dialog } from "@headlessui/react";
 import { Formik, Form } from "formik";
@@ -32,7 +32,7 @@ import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import './style.css';
 
-import { PostPayload } from "typings/social";
+import { ListMediasPayload, PostPayload } from "typings/social";
 import PostImage from "./components/PostImage";
 import PostFile from "./components/PostFile";
 import IconImage from "./components/IconImage";
@@ -45,9 +45,12 @@ const pages = [
 	{ id: "3", title: 'Phòng ban' },
 ]
 
-type _TypeSetFieldValue = (field: string, values: File[]) => void
+type _TypeSetFieldValue = (field: string, values: File[]) => void;
 
 const SocialHomePage: FC = () => {
+	const { listMedias } = useSocial();
+	console.log("listMedias", listMedias);
+
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
