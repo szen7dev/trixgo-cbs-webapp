@@ -1,3 +1,5 @@
+import { CancelTokenSource } from "axios";
+
 export type PostPayload = {
   title: string;
   content: string;
@@ -7,12 +9,12 @@ export type PostPayload = {
 };
 
 export type PostFileProps = {
-  files?: Array<File | FileProps>;
-  onRemove?(index: number): void;
+  files?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload): void;
 };
 export type PostImageProps = {
-  images?: Array<File>;
-  onRemove(index: number): void;
+  images?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload): void;
 };
 
 export type FileProps = {
@@ -27,4 +29,12 @@ export type ImageProps = {
   url: string;
   name: string;
   size: number;
-}
+};
+
+export type FilePropsUpload = {
+  id: number;
+  file: File;
+  progress: number;
+	cancelTokenSource: CancelTokenSource;
+	proimise?: Interval;
+};

@@ -1,3 +1,9 @@
+:root {
+  --gray-500: rgba(37, 43, 55, 1);
+  --gray-400: rgba(67, 77, 99, 1);
+  --gray-300: rgba(101, 103, 107, 1)
+}
+
 .leading-\[18px\] {
   line-height: 18px;
 }
@@ -76,6 +82,13 @@
   width: 50px;
   height: 50px;
   background-color: white;
+}
+.post__files-file.loading {
+	background-color: #C8E2FD;
+}
+.post__files-file.loading .btn-download {
+  background-color: transparent;
+  border: 2px solid #0060E1;
 }
 
 .post__classify-type {
@@ -270,27 +283,15 @@
 
 .react__wrapper {}
 
-.react__images {
-}
+.react__images {}
 
 .react__images.collapsed {
   margin-right: 0;
 }
+
 .react__images-footer {
-	font-size: 18px;
-	line-height: 21px;
-}
-
-.react__comments-wrapper {
-	flex: 0 0 436px;
-	margin-right: 0;
-}
-
-.react__comments-wrapper.collapsed {
-	margin-right: -436px;
-}
-
-.react__comments-container {
+  font-size: 18px;
+  line-height: 21px;
 }
 
 .react__slider {
@@ -303,5 +304,27 @@
 }
 
 .react__slider-left,
-.react__slider-right {
+.react__slider-right {}
+
+.react__comments-wrapper {
+  flex: 0 0 436px;
+  margin-right: 0;
+}
+
+.react__comments-wrapper.collapsed {
+  margin-right: -436px;
+}
+
+.react__comments-container {}
+
+.react__comments-header {
+	color: var(--gray-300);
+}
+
+.react__comment-title {
+	color: var(--gray-500);
+}
+
+.react__comment-content {
+	color: var(--gray-400);
 }
