@@ -75,6 +75,15 @@ import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
 import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
+
+// Social pages
+import SocialHomePage from "views/pages/media/SocialHomePage";
+import SocialPostPage from "views/pages/media/SocialPostPage";
+
+// Document pages
+import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
+import DocumentHomePage from "views/pages/document/DocumentHomePage";
+
 const Routes: FC = () => {
   return (
       <Router>
@@ -298,6 +307,26 @@ const Routes: FC = () => {
                       </HomeLayout>
                     </Router>
                   </Switch>
+                </Route>
+
+								<Route path="/social">
+									<HomeLayout>
+										<Switch>
+											<Route	exact	path="/social/home" component={SocialHomePage}/>
+											<Route	exact	path="/social/post" component={SocialPostPage}/>
+											<Route path="/social/*" component={ErrorPage} />
+										</Switch>
+									</HomeLayout>
+                </Route>
+
+								<Route path="/document">
+									<HomeLayout>
+										<Switch>
+											<Route	exact	path="/document/home" component={DocumentHomePage}/>
+											<Route	exact	path="/document/project/:id/document" component={DocumentProjectPage}/>
+											<Route path="/document/*" component={ErrorPage} />
+										</Switch>
+									</HomeLayout>
                 </Route>
 
                   <Route path="/accounting/:path?">

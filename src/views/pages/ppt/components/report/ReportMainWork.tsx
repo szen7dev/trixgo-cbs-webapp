@@ -2,9 +2,6 @@ import React from 'react'
 
 import cn from "classnames";
 
-import ChartDoughnutSmall from '../../chart/ChartDoughnutSmall'
-import { _data } from '../../chart/ProjectDoughnutChart'
-
 import styles from "../../style.module.css";
 import iconChat from 'assets/images/icon-chat-project.png';
 

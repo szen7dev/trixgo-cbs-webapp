@@ -34044,6 +34044,10 @@ body {
   line-height: 2;
 }
 
+.leading-\[15px\] {
+  line-height: 14.95px;
+}
+
 .tracking-tighter {
   letter-spacing: -0.05em;
 }
@@ -42110,6 +42114,66 @@ body {
   opacity: 1;
 }
 
+.disabled\:opacity-0:disabled {
+  opacity: 0;
+}
+
+.disabled\:opacity-5:disabled {
+  opacity: 0.05;
+}
+
+.disabled\:opacity-10:disabled {
+  opacity: 0.1;
+}
+
+.disabled\:opacity-20:disabled {
+  opacity: 0.2;
+}
+
+.disabled\:opacity-25:disabled {
+  opacity: 0.25;
+}
+
+.disabled\:opacity-30:disabled {
+  opacity: 0.3;
+}
+
+.disabled\:opacity-40:disabled {
+  opacity: 0.4;
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}
+
+.disabled\:opacity-60:disabled {
+  opacity: 0.6;
+}
+
+.disabled\:opacity-70:disabled {
+  opacity: 0.7;
+}
+
+.disabled\:opacity-75:disabled {
+  opacity: 0.75;
+}
+
+.disabled\:opacity-80:disabled {
+  opacity: 0.8;
+}
+
+.disabled\:opacity-90:disabled {
+  opacity: 0.9;
+}
+
+.disabled\:opacity-95:disabled {
+  opacity: 0.95;
+}
+
+.disabled\:opacity-100:disabled {
+  opacity: 1;
+}
+
 .bg-blend-normal {
   background-blend-mode: normal;
 }
@@ -49365,6 +49429,40 @@ button {
   height: calc(100vh - 64px);
   overflow-y: overlay;
   overflow-x: hidden;
+}
+
+/*______________________________Custom Scroll______________________________*/
+
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 90, 90, 0) transparent;
+  transition: all .3s ease;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+  color: rgba(0, 0, 0, 0);
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+  box-shadow: inset 0 0 0 10px;
+}
+
+.custom-scroll:hover {
+  scrollbar-color: rgba(90, 90, 90, .3) transparent;
+  color: rgba(8, 5, 5, 0.3);
+}
+
+.custom-scroll>* {
+  color: rgba(102, 102, 102, 1);
 }
 
 .acc-active-tab {
@@ -82700,6 +82798,10 @@ button {
     line-height: 2;
   }
 
+  .sm\:leading-\[15px\] {
+    line-height: 14.95px;
+  }
+
   .sm\:tracking-tighter {
     letter-spacing: -0.05em;
   }
@@ -90763,6 +90865,66 @@ button {
   }
 
   .sm\:focus\:opacity-100:focus {
+    opacity: 1;
+  }
+
+  .sm\:disabled\:opacity-0:disabled {
+    opacity: 0;
+  }
+
+  .sm\:disabled\:opacity-5:disabled {
+    opacity: 0.05;
+  }
+
+  .sm\:disabled\:opacity-10:disabled {
+    opacity: 0.1;
+  }
+
+  .sm\:disabled\:opacity-20:disabled {
+    opacity: 0.2;
+  }
+
+  .sm\:disabled\:opacity-25:disabled {
+    opacity: 0.25;
+  }
+
+  .sm\:disabled\:opacity-30:disabled {
+    opacity: 0.3;
+  }
+
+  .sm\:disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+
+  .sm\:disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .sm\:disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+
+  .sm\:disabled\:opacity-70:disabled {
+    opacity: 0.7;
+  }
+
+  .sm\:disabled\:opacity-75:disabled {
+    opacity: 0.75;
+  }
+
+  .sm\:disabled\:opacity-80:disabled {
+    opacity: 0.8;
+  }
+
+  .sm\:disabled\:opacity-90:disabled {
+    opacity: 0.9;
+  }
+
+  .sm\:disabled\:opacity-95:disabled {
+    opacity: 0.95;
+  }
+
+  .sm\:disabled\:opacity-100:disabled {
     opacity: 1;
   }
 
@@ -130781,6 +130943,10 @@ button {
     line-height: 2;
   }
 
+  .md\:leading-\[15px\] {
+    line-height: 14.95px;
+  }
+
   .md\:tracking-tighter {
     letter-spacing: -0.05em;
   }
@@ -138844,6 +139010,66 @@ button {
   }
 
   .md\:focus\:opacity-100:focus {
+    opacity: 1;
+  }
+
+  .md\:disabled\:opacity-0:disabled {
+    opacity: 0;
+  }
+
+  .md\:disabled\:opacity-5:disabled {
+    opacity: 0.05;
+  }
+
+  .md\:disabled\:opacity-10:disabled {
+    opacity: 0.1;
+  }
+
+  .md\:disabled\:opacity-20:disabled {
+    opacity: 0.2;
+  }
+
+  .md\:disabled\:opacity-25:disabled {
+    opacity: 0.25;
+  }
+
+  .md\:disabled\:opacity-30:disabled {
+    opacity: 0.3;
+  }
+
+  .md\:disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+
+  .md\:disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .md\:disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+
+  .md\:disabled\:opacity-70:disabled {
+    opacity: 0.7;
+  }
+
+  .md\:disabled\:opacity-75:disabled {
+    opacity: 0.75;
+  }
+
+  .md\:disabled\:opacity-80:disabled {
+    opacity: 0.8;
+  }
+
+  .md\:disabled\:opacity-90:disabled {
+    opacity: 0.9;
+  }
+
+  .md\:disabled\:opacity-95:disabled {
+    opacity: 0.95;
+  }
+
+  .md\:disabled\:opacity-100:disabled {
     opacity: 1;
   }
 
@@ -178862,6 +179088,10 @@ button {
     line-height: 2;
   }
 
+  .lg\:leading-\[15px\] {
+    line-height: 14.95px;
+  }
+
   .lg\:tracking-tighter {
     letter-spacing: -0.05em;
   }
@@ -186925,6 +187155,66 @@ button {
   }
 
   .lg\:focus\:opacity-100:focus {
+    opacity: 1;
+  }
+
+  .lg\:disabled\:opacity-0:disabled {
+    opacity: 0;
+  }
+
+  .lg\:disabled\:opacity-5:disabled {
+    opacity: 0.05;
+  }
+
+  .lg\:disabled\:opacity-10:disabled {
+    opacity: 0.1;
+  }
+
+  .lg\:disabled\:opacity-20:disabled {
+    opacity: 0.2;
+  }
+
+  .lg\:disabled\:opacity-25:disabled {
+    opacity: 0.25;
+  }
+
+  .lg\:disabled\:opacity-30:disabled {
+    opacity: 0.3;
+  }
+
+  .lg\:disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+
+  .lg\:disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .lg\:disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+
+  .lg\:disabled\:opacity-70:disabled {
+    opacity: 0.7;
+  }
+
+  .lg\:disabled\:opacity-75:disabled {
+    opacity: 0.75;
+  }
+
+  .lg\:disabled\:opacity-80:disabled {
+    opacity: 0.8;
+  }
+
+  .lg\:disabled\:opacity-90:disabled {
+    opacity: 0.9;
+  }
+
+  .lg\:disabled\:opacity-95:disabled {
+    opacity: 0.95;
+  }
+
+  .lg\:disabled\:opacity-100:disabled {
     opacity: 1;
   }
 
@@ -226943,6 +227233,10 @@ button {
     line-height: 2;
   }
 
+  .xl\:leading-\[15px\] {
+    line-height: 14.95px;
+  }
+
   .xl\:tracking-tighter {
     letter-spacing: -0.05em;
   }
@@ -235006,6 +235300,66 @@ button {
   }
 
   .xl\:focus\:opacity-100:focus {
+    opacity: 1;
+  }
+
+  .xl\:disabled\:opacity-0:disabled {
+    opacity: 0;
+  }
+
+  .xl\:disabled\:opacity-5:disabled {
+    opacity: 0.05;
+  }
+
+  .xl\:disabled\:opacity-10:disabled {
+    opacity: 0.1;
+  }
+
+  .xl\:disabled\:opacity-20:disabled {
+    opacity: 0.2;
+  }
+
+  .xl\:disabled\:opacity-25:disabled {
+    opacity: 0.25;
+  }
+
+  .xl\:disabled\:opacity-30:disabled {
+    opacity: 0.3;
+  }
+
+  .xl\:disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+
+  .xl\:disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .xl\:disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+
+  .xl\:disabled\:opacity-70:disabled {
+    opacity: 0.7;
+  }
+
+  .xl\:disabled\:opacity-75:disabled {
+    opacity: 0.75;
+  }
+
+  .xl\:disabled\:opacity-80:disabled {
+    opacity: 0.8;
+  }
+
+  .xl\:disabled\:opacity-90:disabled {
+    opacity: 0.9;
+  }
+
+  .xl\:disabled\:opacity-95:disabled {
+    opacity: 0.95;
+  }
+
+  .xl\:disabled\:opacity-100:disabled {
     opacity: 1;
   }
 
@@ -275024,6 +275378,10 @@ button {
     line-height: 2;
   }
 
+  .\32xl\:leading-\[15px\] {
+    line-height: 14.95px;
+  }
+
   .\32xl\:tracking-tighter {
     letter-spacing: -0.05em;
   }
@@ -283087,6 +283445,66 @@ button {
   }
 
   .\32xl\:focus\:opacity-100:focus {
+    opacity: 1;
+  }
+
+  .\32xl\:disabled\:opacity-0:disabled {
+    opacity: 0;
+  }
+
+  .\32xl\:disabled\:opacity-5:disabled {
+    opacity: 0.05;
+  }
+
+  .\32xl\:disabled\:opacity-10:disabled {
+    opacity: 0.1;
+  }
+
+  .\32xl\:disabled\:opacity-20:disabled {
+    opacity: 0.2;
+  }
+
+  .\32xl\:disabled\:opacity-25:disabled {
+    opacity: 0.25;
+  }
+
+  .\32xl\:disabled\:opacity-30:disabled {
+    opacity: 0.3;
+  }
+
+  .\32xl\:disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+
+  .\32xl\:disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .\32xl\:disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+
+  .\32xl\:disabled\:opacity-70:disabled {
+    opacity: 0.7;
+  }
+
+  .\32xl\:disabled\:opacity-75:disabled {
+    opacity: 0.75;
+  }
+
+  .\32xl\:disabled\:opacity-80:disabled {
+    opacity: 0.8;
+  }
+
+  .\32xl\:disabled\:opacity-90:disabled {
+    opacity: 0.9;
+  }
+
+  .\32xl\:disabled\:opacity-95:disabled {
+    opacity: 0.95;
+  }
+
+  .\32xl\:disabled\:opacity-100:disabled {
     opacity: 1;
   }
 

@@ -14,11 +14,10 @@ const listSort = [
 	{ id: 'status', title: 'Trạng thái', type: 'asc' },
 ]
 
-const _data: Array<null> = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+const data: Array<number> = Array.from(Array(4).keys());
 
 const ProjectCategoryPage: FC = () => {
 	const [sorts, setSorting] = useState(listSort);
-	const [data, setData] = useState(_data);
 
 	useEffect(() => {
 		document.title = "PPT - Danh mục dự án"
@@ -62,7 +61,7 @@ const ProjectCategoryPage: FC = () => {
 
 			<div className={cn(styles.scroll, 'flex flex-wrap w-full pl-2 pr-2 pb-20 flex-1 overflow-y-auto')}>
 				{
-					data.map((_item: null, index: number) => {
+					data.map((_item: number, index: number) => {
 						return (
 							<div key={index} className={cn(styles.item)}>
 								<div className={styles.image}>
@@ -79,7 +78,7 @@ const ProjectCategoryPage: FC = () => {
 										</ul>
 									</div>
 								</div>
-								<h3>
+								<h3 className={styles['line-clamp-2']}>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
 								</h3>
 								<p className="truncate">
