@@ -1,7 +1,7 @@
 # QUY CHUẨN CÁCH CALL API THEO REACT-QUERY 
 https://react-query.tanstack.com/
 
-## useQuery
+## useQuery - https://react-query.tanstack.com/reference/useQuery
 useQuery dùng trong trường hợp cần call API dạng object trong quá trình mounting. 
 Ví dụ lấy thông tin của user, cấu hình dữ liệu của dự án v.v...
 
@@ -31,7 +31,7 @@ Example: useSocial
             }
         );
 ```
-## useMutation
+## useMutation - https://react-query.tanstack.com/reference/useMutation
 useMutation dùng trong trường hợp cần call API trong quá trình updating
 Ví dụ call API trong trường hợp cần người dùng bấm nút đăng nhập, hoặc tạo form v.v...
 
