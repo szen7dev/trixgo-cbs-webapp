@@ -49574,7 +49574,7 @@ button {
 }
 
 .select-dropdown {
-  min-width: 150px;
+  min-width: 140px;
   min-height: 32px;
 }
 
@@ -49652,6 +49652,19 @@ button {
 .acc-action-row {
   min-width: 260px;
   right: 50%;
+}
+
+.pagination-container {
+  position: sticky;
+  width: 100%;
+  background-color: white;
+  bottom: 0;
+}
+
+.btn.disabled, .btn:disabled, button:disabled {
+  color: #fff;
+  background-color: #e3e6ea;
+  border-color: #e3e6ea;
 }
 
 @media (min-width: 640px) {

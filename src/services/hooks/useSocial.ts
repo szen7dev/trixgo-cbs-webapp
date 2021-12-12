@@ -11,7 +11,10 @@ type UseSocial = {
     createPost: (payload: MediaPayload) => Promise<void>,
     refetchListMedias: () => void,
     nextPageListMedias: () => void,
-    prevPageListMedias: () => void
+    prevPageListMedias: () => void,
+    totalRecord: number | undefined,
+    totalPages: number | undefined,
+    hasNextPage: boolean | undefined
 };
 
 export const useSocial = () : UseSocial => {
@@ -47,7 +50,8 @@ export const useSocial = () : UseSocial => {
         refetch: refetchListMedias,
         data: dataListMedias,
         fetchNextPage: nextPageListMedias,
-        fetchPreviousPage: prevPageListMedias
+        fetchPreviousPage: prevPageListMedias,
+        hasNextPage: hasNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
             "list_medias",
@@ -65,6 +69,8 @@ export const useSocial = () : UseSocial => {
         );
 
     const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
+    const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
+    const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 
     return {
         createPost,
@@ -72,6 +78,9 @@ export const useSocial = () : UseSocial => {
         isLoadingListMedias,
         refetchListMedias,
         nextPageListMedias,
-        prevPageListMedias
+        prevPageListMedias,
+        totalRecord,
+        totalPages,
+        hasNextPage
     };
 };

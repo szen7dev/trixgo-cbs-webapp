@@ -50,7 +50,9 @@ export type ListMediasPayload = {
 
 export type ListMediasResponse = APIResponse & {
   data: {
-    listRecords: Array<any>
+    listRecords: Array<any>,
+    totalRecord: number,
+    totalPages?: number
   }
 };
 
