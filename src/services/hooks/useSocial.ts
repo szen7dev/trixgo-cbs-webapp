@@ -28,7 +28,6 @@ export const useSocial = () : UseSocial => {
     const createPost = async (payload: MediaPayload) => {
         try {
             const { error, data, message } = await createPostAsync(payload);
-            console.log({ error, data, message });
 
             if (!error) {
                 dispatch(addMedia(data));

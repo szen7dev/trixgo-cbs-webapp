@@ -13,7 +13,7 @@ const SocialRepository = {
         );
         return data;
     },
-    async getInfo(id: string): Promise<infoMediaResponse> {
+    async mediaInfo(id: string): Promise<infoMediaResponse> {
         const { data } = await API.get<infoMediaResponse>(
             `${mediaURL}/${id}`
         );

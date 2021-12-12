@@ -1,8 +1,8 @@
-import { FC, Fragment, useState, useEffect } from "react";
+import { FC, Fragment, useState } from "react";
 
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
-import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 
 import moment from 'moment';
 import cn from 'classnames';
@@ -26,12 +26,11 @@ import iconFace from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 import './style.css';
 
-import { FileProps, ImageProps, MediaProps } from "typings/social";
+import { FileProps, ImageProps } from "typings/social";
 import ModalFullContainer from "./components/ModalFullContainer";
 import SocialRepository from "apis/social";
 
 const SocialPostPage: FC = () => {
-	const [media, setMedia] = useState<MediaProps>();
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<boolean>(false);
 	const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -39,21 +38,12 @@ const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const params = useParams<{ id: string }>();
 
-	const { mutateAsync: getInfoAsync } =
-		useMutation((id: string) =>
-			SocialRepository.getInfo(id)
-		);
+	const { data, isError } = useQuery('media_info', () => SocialRepository.mediaInfo(params.id));
+	const media = data?.data;
 
-	useEffect(() => {
-		(async () => {
-			const { error, data } = await getInfoAsync(params.id);
-			if(error){
-				return history.push('/social/home');
-			}
-
-			setMedia(data);
-		})();
-	}, [params.id])
+	if(isError){
+		history.push('/social/home');
+	}
 
 	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ id: _, url: '/logo.png', name: "test", size: 123123 }))
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
@@ -70,8 +60,6 @@ const SocialPostPage: FC = () => {
 	const toggleCollapse = () => setCollapsed(!collapsed);
 	const handleNextImage = () => setImageIndex(imageIndex + 1);
 	const handlePreviousImage = () => setImageIndex(imageIndex - 1);
-
-	console.log({ POST_ID: params.id, media });
 
 	if(!media){
 		return <Loader className="border-primary" />;
