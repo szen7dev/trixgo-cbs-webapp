@@ -14,6 +14,10 @@ export type PostResponse = APIResponse & {
   message: string,
 };
 
+export type infoMediaResponse = APIResponse & {
+  data: MediaProps
+};
+
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
   onRemove?(file: FileProps | FilePropsUpload): void;

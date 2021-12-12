@@ -17,18 +17,17 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 				{medias.data.length && medias.data.map((media: MediaProps) => (
 					<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }} key={media._id}>
 						<p className="font-bold text-lg leading-5">
-							<Link to="/social/post">
+							<Link to={`/social/post/${media._id}`}>
 								{media.title}
 							</Link>
 						</p>
 						<div className="flex mt-3">
-							<Link to="/social/post" className="inline-block mr-7" style={{ minWidth: "180px" }}>
+							<Link to={`/social/post/${media._id}`} className="inline-block mr-7" style={{ minWidth: "180px" }}>
 								<img src={image} alt="vaccine" />
 							</Link>
 							<div className="flex flex-col">
 								<p className="text-sm leading-4">
-									{/* Trong 13.972 ca nhiễm Bộ Y tế công bố tối 30/11 có 13.966 ca tại 62 tỉnh thành, tăng 208 ca so với hôm qua, và cao nhất kể từ khi &quot;bình thường mới&quot;; 14.624 người khỏi bệnh; 197 ca tử vong. */}
-									{media.content.length > 200 ? media.content.substring(0, 200) : media.content}
+									{media.content.length > 200 ? `${media.content.substring(0, 200)}...` : media.content}
 								</p>
 								<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
 									<Link to="/">

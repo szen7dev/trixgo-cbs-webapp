@@ -318,7 +318,7 @@ const Routes: FC = () => {
                         component={ApplicationsPage}
                       />
                       <Route exact path="/social/home" component={SocialHomePage} />
-                      <Route exact path="/social/post" component={SocialPostPage} />
+                      <Route exact path="/social/post/:id" component={SocialPostPage} />
                       <Route path="/social/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>

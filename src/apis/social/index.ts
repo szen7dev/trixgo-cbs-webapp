@@ -1,6 +1,6 @@
 import API from "../repository";
 
-import { ListMediasPayload, ListMediasResponse, MediaPayload, PostResponse } from "typings/social";
+import { ListMediasPayload, ListMediasResponse, infoMediaResponse, MediaPayload, PostResponse } from "typings/social";
 import { convertObToUrl } from "helpers";
 
 const mediaURL = "/api/medias";
@@ -10,6 +10,12 @@ const SocialRepository = {
         const { data } = await API.post<PostResponse>(
             `${mediaURL}`,
             payload
+        );
+        return data;
+    },
+    async getInfo(id: string): Promise<infoMediaResponse> {
+        const { data } = await API.get<infoMediaResponse>(
+            `${mediaURL}/${id}`
         );
         return data;
     },
