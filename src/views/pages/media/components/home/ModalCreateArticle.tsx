@@ -1,11 +1,17 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react';
 
+/**
+ * LIBRARIES
+ */
 import { Dialog } from '@headlessui/react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
 
+/**
+ * ASSETS, COMPONENTS
+ */
 import IconFile from '../Icon/IconFile';
 import IconImage from '../Icon/IconImage';
 import PostFile from '../post/PostFile';
@@ -14,19 +20,28 @@ import TabsClassifyArticle from './TabsClassifyArticle';
 import TabsClassifyArticleCommunity from './TabsClassifyArticleCommunity';
 import TabsClassifyDepartment from './TabsClassifyDepartment';
 import TabsOverlay from './TabsOverlay';
-
 import iconDown from 'assets/images/Frame 1745.png';
 
-import { FileProps, FilePropsUpload, ModalProps, PostPayload } from 'typings/social';
+/**
+ * CONTEXTS
+ */
 import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
 import useUpload from '../../context/useUpload';
 import uploadActions from '../../context/upload.actions';
 import { IMethodFiles, IMethodImages } from '../../context/upload';
 import { modifyUploadedFiles } from '../../context/upload.utils';
 
+/**
+ * Types, Services
+ */
+import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { useSocial } from 'services/hooks/useSocial';
+
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
 	title: "",
 	content: "",
+	files: [],
+	images: [],
 	type: 'just-me',
 } }) => {
 	const [uploads,
@@ -39,6 +54,8 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 			removeUploadedFile,
 			removeUploadedImage,
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
+
+	const { createMedia } = useSocial();
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -70,9 +87,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
-	const registerSchema = object().shape({
-		title: string().required("First and last name required!"),
-		content: string().required("First and last name required!"),
+	const mediaSchema = object().shape({
+		title: string().required("Bạn cần nhập tiêu đề cho bài viết"),
+		content: string().required("Bạn cần nhập nội dung cho bài viết"),
+		type: string().required("Loại bài viết không hợp lệ"),
 	});
 
 	const currentSelected = (key: string) => {
@@ -97,8 +115,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		if (attribute === 'images') setUploadImage(event.target.files);
 	}
 
-	const handleSubmit = async (values: PostPayload) => {
+	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
+		console.log({ values, uploads })
+		await createMedia(values);
+		toggle();
 		return [values, uploads];
 	};
 
@@ -124,7 +145,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		// <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" {...props}>
 		<Formik
 			initialValues={initialValues}
-			validationSchema={registerSchema}
+			validationSchema={mediaSchema}
 			onSubmit={handleSubmit}
 		>
 			{
@@ -155,12 +176,22 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 							</div>
 							<div className="px-6 mt-2 pt-3.5 flex-1">
 								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
+								<ErrorMessage
+									name="title"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
 									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 									{...formik.getFieldProps('content')}
 								></textarea>
+								<ErrorMessage
+									name="content"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<div
 									className={
 										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
@@ -201,7 +232,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								showMore={(type: string) => {
 									switch (type) {
 										case 'community':
-											toggleClassifyArticleCommunity()
+											toggleClassifyArticleCommunity();
 											break;
 										default:
 											toggleClassifyDepartment();

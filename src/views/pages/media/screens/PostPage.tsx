@@ -1,15 +1,28 @@
 import { FC, Fragment, useState } from "react";
 
-import { Link } from "react-router-dom";
+/**
+ * LIBRARIES
+ */
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
-
+import { useQuery } from "react-query";
+import moment from 'moment';
 import cn from 'classnames';
 
+/**
+ * COMPONENTS
+ */
 import ModalFullContainer from "../components/ModalFullContainer";
 import ModalContainer from "../components/ModalContainer";
 import PostFile from '../components/post/PostFile';
 import ViewPost from "../components/post/ViewPost";
+import Loader from "components/shared/Loader";
+import ReplyCommentField from "../components/ReplyCommentField";
+import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
+/**
+ * ASSETS
+ */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
@@ -20,20 +33,33 @@ import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
-// Types
+/**
+ * Types, Services, Apis
+ */
 import { FileProps, ImageProps } from "typings/social";
-import ReplyCommentField from "../components/ReplyCommentField";
-import ModalCreateArticle from "../components/home/ModalCreateArticle";
+import { useSocial } from 'services/hooks/useSocial';
+import SocialRepository from "apis/social";
 
 const SocialPostPage: FC = () => {
+	const params = useParams<{ id: string }>();
+	const history = useHistory();
+	const { deleteMedia } = useSocial();
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
+
+	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
+	const media = data?.data;
 
 	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
+
+	const handleDeleteMedia = async () => {
+		await deleteMedia(params.id);
+		history.push('/social/home');
+	}
 
 	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
@@ -46,9 +72,13 @@ const SocialPostPage: FC = () => {
 	}))
 	
 	const initialState = {
-		title: "asdasd",
-		content: "dasdasdasdasd",
+		title: "",
+		content: "",
 		type: 'just-me',
+	}
+
+	if(!media){
+		return <Loader className="border-primary" />;
 	}
 
 	return (
@@ -58,7 +88,9 @@ const SocialPostPage: FC = () => {
 					{/* Header */}
 					<div className="page__post-header text-black">
 						<div className="flex justify-between">
-							<h1 className="page__post-title mr-6">Hơn 110.000 người đi tàu Cát Linh - Hà Đông sau một tuần có phí, liệu có hiệu quả?</h1>
+							<h1 className="page__post-title mr-6">
+								{media.title}
+							</h1>
 							<Menu as="div" className="relative inline-block">
 								<Menu.Button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center">
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -87,7 +119,7 @@ const SocialPostPage: FC = () => {
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={handleDeleteMedia}>
 											<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 											Xóa
 										</button>
@@ -105,7 +137,7 @@ const SocialPostPage: FC = () => {
 								<div className="post__author-info">
 									<p className="text-lg leading-5 font-bold">
 										<Link to="/">
-											Lê Văn Thành
+											{media.author?.fullname}
 										</Link>
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
@@ -120,7 +152,7 @@ const SocialPostPage: FC = () => {
 								</div>
 							</div>
 							<div className=" text-primary-gray">
-								<span className="mr-6">29/11/2021 15:37</span>
+								<span className="mr-6">{moment(media.createAt).format('DD/MM/YYYY HH:mm')}</span>
 								<button className="post__follow">Theo dõi</button>
 							</div>
 						</div>
@@ -143,16 +175,7 @@ const SocialPostPage: FC = () => {
 								<PostFile files={files} />
 							</div>
 							<p>
-								Buổi sáng tháng 10 sáu năm trước, người phụ trách kinh doanh thị trường phía Nam vừa bay từ Sài Gòn ra, bước vào phòng họp và chia sẻ tin đồn hãng Dell sẽ mua lại công ty chúng tôi.
-							</p>
-							<p>
-								Đó là cuộc họp đầu tuần tại trụ sở văn phòng đại diện EMC Việt Nam, tầng 14, toà nhà IPH, đường Xuân Thuỷ, Hà Nội. Tôi lúc đó đang là trưởng nhóm tư vấn công nghệ tại Việt Nam của công ty hàng đầu thế giới về hệ thống lưu trữ này.
-							</p>
-							<p>
-								Vị sếp lớn trấn an rằng tin đồn này có từ lâu, &quot;việc đó gần như không thể xảy ra&quot;, anh nói, &quot;cá bé không thể nuốt cá lớn được&quot;.
-							</p>
-							<p>
-								Gọi là cá bé vì khi đó Dell là công ty tư nhân, giá trị ước tính khoảng 24 tỷ USD. Trong khi đó, EMC có vốn hoá thị trường ước tính 35 tỷ USD, chưa kể EMC còn sở hữu khoảng 80% cổ phần của Vmware, một tên tuổi về ảo hoá hạ tầng công nghệ thông tin thị giá tương đương 23 tỷ USD nữa.
+								{media.content}
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px]">
 								<span>
