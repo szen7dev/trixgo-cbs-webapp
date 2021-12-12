@@ -28,9 +28,10 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 					const name = 'progress' in d ? d.file.name : d.name;
 					const size = 'progress' in d ? d.file.size : d.size;
 					const download = 'progress' in d ? d.file : d;
+					const key = 'progress' in d ? d.id : d._id;
 
 					return (
-						<div key={d.id}  {...props} className={cn("post__files-file flex pl-3.5 py-2.5 pr-6", props.className, { loading: 'progress' in d && d.progress < 100 })}>
+						<div key={key}  {...props} className={cn("post__files-file flex pl-3.5 py-2.5 pr-6", props.className, { loading: 'progress' in d && d.progress < 100 })}>
 							<div className="mr-3.5"><img src={pdfIcon} alt="pdf icon" /></div>
 							<div className="flex-1">
 								<p className="text-sm leading-4 mt-2.5">{name}</p>

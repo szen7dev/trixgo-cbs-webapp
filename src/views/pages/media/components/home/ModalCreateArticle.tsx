@@ -22,11 +22,23 @@ import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
 import useUpload from '../../context/useUpload';
 import uploadActions from '../../context/upload.actions';
 import { IMethodFiles, IMethodImages } from '../../context/upload';
+import { modifyUploadedFiles } from '../../context/upload.utils';
 
-type _TypeSetFieldValue = (field: string, values: File[]) => void
-
-const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
-	const [uploads, { setUploadFile, setUploadImage, uploadImage, uploadFile, cancelUploadImage, cancelUploadFile }] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE)
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
+	title: "",
+	content: "",
+	type: 'just-me',
+} }) => {
+	const [uploads,
+		{ setUploadFile,
+			setUploadImage,
+			uploadImage,
+			uploadFile,
+			cancelUploadImage,
+			cancelUploadFile,
+			removeUploadedFile,
+			removeUploadedImage,
+		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -58,14 +70,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
-	const initialValues: PostPayload = {
-		title: "",
-		content: "",
-		files: [],
-		images: [],
-		type: 'just-me',
-	};
-
 	const registerSchema = object().shape({
 		title: string().required("First and last name required!"),
 		content: string().required("First and last name required!"),
@@ -88,7 +92,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, values: PostPayload, attribute: 'files' | 'images', setFieldValue: _TypeSetFieldValue) => {
+	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
 		if (attribute === 'files') setUploadFile(event.target.files);
 		if (attribute === 'images') setUploadImage(event.target.files);
 	}
@@ -98,14 +102,22 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
 		return [values, uploads];
 	};
 
-	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
-		if (refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
-		cancelUploadFile(file)
+	const handleCancelUploadFile = (file: FileProps | FilePropsUpload) => {
+		if ('id' in file && refsFiles.current[file.id]) {
+			clearInterval(refsFiles.current[file.id])
+			cancelUploadFile(file)
+		} else {
+			removeUploadedFile(file)
+		}
 	}
 
-	const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
-		if (refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
-		cancelUploadImage(file)
+	const handleCancelUploadImage = (file: FileProps | FilePropsUpload) => {
+		if ('id' in file && refsImages.current[file.id]) {
+			clearInterval(refsImages.current[file.id])
+			cancelUploadImage(file)
+		} else {
+			removeUploadedImage(file)
+		}
 	}
 
 	return (
@@ -151,19 +163,19 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
 								></textarea>
 								<div
 									className={
-										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto ",
+										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
 											(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0 border-none" : "post__files pt-2 pb-6 px-9")
 									}
 								>
 									<PostImage
 										images={toArray(uploads.images)}
-										onRemove={handleCancleUploadImage}
+										onRemove={handleCancelUploadImage}
 										className="post__files-row pt-5 text-black gap-9 flex-wrap"
 									/>
 									<PostFile
 										files={toArray(uploads.files)}
-										onRemove={handleCancleUploadFile}
-										className="w-full mx-2.5"
+										onRemove={handleCancelUploadFile}
+										className="w-full mx-2.5 text-black"
 									/>
 								</div>
 							</div>
@@ -171,11 +183,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, values, 'images', setFieldValue)} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images')} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, values, 'files', setFieldValue)} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files')} />
 									</label>
 								</div>
 								<div>

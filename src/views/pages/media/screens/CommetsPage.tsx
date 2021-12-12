@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import ModalContainer from "../components/ModalContainer";
 
@@ -9,6 +9,7 @@ import '../style.css';
 
 const CommentsPage: FC = () => {
 	const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+	const history = useHistory();
 
 	const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
 
@@ -18,7 +19,7 @@ const CommentsPage: FC = () => {
 				{/* Header */}
 				<div className="comment__header px-4 flex justify-between	w-full">
 					<div className="py-1">
-						<button type="button" className="p-2 rounded-3xl">
+						<button type="button" className="p-2 rounded-3xl" onClick={()=>history.goBack()}>
 							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
 							</svg>
