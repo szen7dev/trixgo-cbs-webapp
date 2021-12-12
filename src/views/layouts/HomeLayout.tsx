@@ -36,7 +36,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
       })}
     >
       {/* Collapse menu button */}
-      <button onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-4 left-2 z-40 p-2">
+      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-4 left-2 z-40 p-2">
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
@@ -53,13 +53,14 @@ const HomeLayout: FC<Props> = ({ children }) => {
 
       {/* Collapse header button */}
       <button
+        title="Toggle header"
         onClick={handleHeaderEvent}
-        className="tm-header-toggle-btn fixed top-20 right-3 z-50 w-8 h-8 pl-2 pr-2 rounded-md bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
+        className="tm-header-toggle-btn fixed top-16 right-3 z-50 w-8 h-8 pl-2 pr-2 rounded-md bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
       >
         <img
           className="w-3 inline-block transition-all duration-500 ease-out"
           src={chevronUpIcon}
-          alt="Right side bar toggle button"
+          alt="Header toggle button"
         />
       </button>
 
@@ -68,13 +69,14 @@ const HomeLayout: FC<Props> = ({ children }) => {
 
       {/* Collapse right side bar button */}
       <button
+        title="Toggle right sidebar"
         onClick={handleRightSideBarEvent}
         className="tm-right-sidebar-toggle-btn fixed bottom-2 right-2 z-10 w-10 h-10 pl-3 pr-3 rounded-full bg-secondary-light hover:bg-accent-light text-center transition-all duration-500 ease-out"
       >
         <img
           className="w-5 inline-block transition-all duration-500 ease-out"
           src={chevronRightIcon}
-          alt="Right side bar toggle button"
+          alt="Right sidebar toggle button"
         />
       </button>
     </section>

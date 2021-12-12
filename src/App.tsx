@@ -29,7 +29,7 @@ const App: FC = () => {
         pauseOnHover
       />
 
-      <ReactQueryDevtools initialIsOpen />
+      {/* <ReactQueryDevtools initialIsOpen /> */}
     </QueryClientProvider>
   );
 };
