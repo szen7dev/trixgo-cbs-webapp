@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 /**
  * LIBRARIES
@@ -34,8 +34,8 @@ import { modifyUploadedFiles } from '../../context/upload.utils';
 /**
  * Types, Services
  */
- import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
- import { useSocial } from 'services/hooks/useSocial';
+import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { useSocial } from 'services/hooks/useSocial';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
 	title: "",
