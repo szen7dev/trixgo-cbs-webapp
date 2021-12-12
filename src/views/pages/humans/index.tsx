@@ -11,7 +11,7 @@ const HumansPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
   const [openModal, setOpenModal] = useState(false);
 
-  const handleToggleTab = (index: any) => {
+  const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
 
@@ -21,7 +21,7 @@ const HumansPage: FC = () => {
 
   return (
     <section className="w-full">
-      <div className="sticky top-0 bg-primary-light z-10 flex justify-between h-14 px-6 border border-gray-200">
+      <div className="sticky top-0 bg-primary-light z-10 flex justify-between h-12 px-6 border border-gray-200">
         <div className="flex items-center">
           <button
             className={

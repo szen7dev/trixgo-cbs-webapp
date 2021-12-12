@@ -10,7 +10,7 @@ import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 
 const WorkHistory: FC = () => {
-  const [openFileOption, setOpenFileOption] = useState(false);
+  const [openFileOption, setOpenFileOption] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(ref, () => setOpenFileOption(!openFileOption));
