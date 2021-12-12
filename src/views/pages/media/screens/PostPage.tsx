@@ -18,6 +18,7 @@ import PostFile from '../components/post/PostFile';
 import ViewPost from "../components/post/ViewPost";
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
+import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
 /**
  * ASSETS
@@ -33,7 +34,7 @@ import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
 /**
- * Types, Services, APIS
+ * Types, Services, Apis
  */
 import { FileProps, ImageProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
@@ -43,12 +44,14 @@ const SocialPostPage: FC = () => {
 	const params = useParams<{ id: string }>();
 	const history = useHistory();
 	const { deleteMedia } = useSocial();
+	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
 	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
 	const media = data?.data;
 
+	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
@@ -58,15 +61,21 @@ const SocialPostPage: FC = () => {
 		history.push('/social/home');
 	}
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ id: _, url: '/logo.png', name: "test", size: 123123 }))
+	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-		id: _,
+		_id: _,
 		url: i % 2
 			? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
 			: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
 		name: "test",
 		size: 123123
 	}))
+	
+	const initialState = {
+		title: "",
+		content: "",
+		type: 'just-me',
+	}
 
 	if(!media){
 		return <Loader className="border-primary" />;
@@ -106,7 +115,7 @@ const SocialPostPage: FC = () => {
 											<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 											Copy link
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMedia}>
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
@@ -154,7 +163,7 @@ const SocialPostPage: FC = () => {
 						<div className="post__content pb-2.5">
 							<div className="post__content-images">
 								{images.slice(0, 3).map((image, i) => (
-									<div key={image.id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+									<div key={image._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
 										<img src={image.url} alt="" className="object-cover h-full w-full" />
 										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
 											+{images.length - 2}
@@ -219,6 +228,11 @@ const SocialPostPage: FC = () => {
 					</div>
 				</div>
 			</div>
+			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+					<ModalCreateArticle show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
+				</div>
+			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" style={{ width: "550px", maxHeight: "440px" }}>
 					<div className="flex items-center justify-between border-b border-secondary-gray border-opacity-30 px-3">

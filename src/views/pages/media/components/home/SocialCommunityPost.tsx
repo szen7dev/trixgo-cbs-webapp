@@ -16,9 +16,9 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 						</b></Link>
 						<div className="mt-4 text-sm leading-[18px]">
 							Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
-							<div className="inline-flex items-start align-middle ml-1.5">
+							<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 								<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
-								<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+								<span className="text-primary">
 									21,3k
 								</span>
 							</div>
@@ -32,9 +32,9 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 						</b></Link>
 						<div className="mt-4 text-sm leading-[18px]">
 							Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
-							<div className="inline-flex items-start align-middle ml-1.5">
+							<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 								<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
-								<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+								<span className="text-primary">
 									21,3k
 								</span>
 							</div>
@@ -48,9 +48,9 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 						</b></Link>
 						<div className="mt-4 text-sm leading-[18px]">
 							Một ngày trước khi sang Singapore dự AFF Cup, HLV Park Hang-seo cho các cầu thủ tập luyện bất chấp mưa to.
-							<div className="inline-flex items-start align-middle ml-1.5">
+							<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 								<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
-								<span className="text-primary" style={{ fontSize: "10px", lineHeight: '11.5px' }}>
+								<span className="text-primary">
 									21,3k
 								</span>
 							</div>

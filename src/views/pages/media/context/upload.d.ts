@@ -23,7 +23,7 @@ interface IMethodImages {
   failureUploadImage: dispatch;
   uploadImage: dispatch;
   cancelUploadImage: dispatch;
-
+  removeUploadedImage: dispatch;
 }
 
 interface IMethodFiles {
@@ -33,6 +33,7 @@ interface IMethodFiles {
   failureUploadFile: dispatch;
   uploadFile: dispatch;
   cancelUploadFile: dispatch;
+  removeUploadedFile: dispatch;
 }
 
 interface IMethod {

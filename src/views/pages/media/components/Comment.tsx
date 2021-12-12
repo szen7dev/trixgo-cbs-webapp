@@ -2,6 +2,8 @@ import { FC, HTMLAttributes } from 'react'
 
 import cn from "classnames";
 
+import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
+
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
@@ -24,7 +26,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ comment, onClickR
 				</div>
 			</div>
 			{/* Info and reply */}
-			<div className='group'>
+			<div className='group w-full'>
 				<div className="flex items-center">
 					<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
 						<p className="font-bold text-medium">{comment.name}</p>
@@ -38,11 +40,18 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ comment, onClickR
 				{EndComment
 					? <EndComment />
 					:
-					<ul className="inline-block mt-1">
-						<li className="inline-block mr-2"><a href="/">10/6/20, 17:35</a></li>
-						<li className="inline-block mr-2"><button className="font-bold">Thích</button></li>
-						<li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>
-					</ul>
+					<div className="flex justify-between mt-1">
+						<ul className="inline-block">
+							<li className="inline-block mr-2"><a href="/">10/6/20, 17:35</a></li>
+							<li className="inline-block mr-2"><button className="font-bold">Thích</button></li>
+							<li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>
+						</ul>
+						<div>
+							<span className='align-middle text-secondary-gray mr-0.5'>215</span>
+							<span className='relative z-10 -mr-3'><img src={iconFaceSweet} alt="" className='inline' /></span>
+							<span><img src={iconFaceSweet} alt="" className='inline' /></span>
+						</div>
+					</div>
 				}
 			</div>
 		</div>

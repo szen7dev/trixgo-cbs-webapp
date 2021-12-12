@@ -35,7 +35,6 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 		cancelUploadFile
 	}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
 	const [text, setText] = useState<string>('');
-
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -60,12 +59,12 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 	}, [Object.keys(uploads.images).length])
 
 	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
-		if (refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
+		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
 		cancelUploadFile(file)
 	}
 
 	const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
-		if (refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
+		if ('id' in file && refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
 		cancelUploadImage(file)
 	}
 
