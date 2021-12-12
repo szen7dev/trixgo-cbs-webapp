@@ -7,8 +7,14 @@ import ThreeDotIcon from "assets/images/icon-3dots.png";
 import PreviousIcon from "assets/images/icon-expand-arrow-left.png";
 import NextIcon from "assets/images/icon-expand-arrow-right.png";
 
+type Item = {
+  id: number;
+  name: string;
+  role: string;
+};
+
 type Props = {
-  data: Record<string, any>;
+  data: Array<Item>;
 };
 
 const HumanList: FC<Props> = (props) => {
@@ -17,7 +23,7 @@ const HumanList: FC<Props> = (props) => {
   return (
     <>
       <div className="flex flex-wrap justify-around gap-y-4 gap-x-2 px-6 py-4">
-        {data.map((item: any) => {
+        {data.map((item: Item) => {
           return (
             <div
               key={item.id}

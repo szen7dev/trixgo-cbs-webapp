@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 
 import { useHistory } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 import AuthContext from "services/contexts/Auth";
@@ -17,11 +17,36 @@ type UseAuth = {
   token: string | null;
   signIn: (payload: SignInPayload) => void;
   signOut: () => void;
+  dataUserInfo: any;
 };
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
   const history = useHistory();
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("currentUser") === null ||
+      localStorage.getItem("token") === null
+    ) {
+      dispatch({ type: "SIGN_IN_ERROR" });
+    } else {
+      API.defaults.headers.Authorization = `Bearer ${JSON.parse(
+        localStorage.getItem("token") as string
+      )}`;
+
+      dispatch({
+        type: "SIGN_IN_SUCCESS",
+        payload: {
+          user: JSON.parse(localStorage.getItem("currentUser") as string),
+          token: localStorage.getItem("token") as string
+        },
+      });
+    }
+  }, [dispatch]);
+
+  const { data: dataUserInfo } =
+    useQuery("user_info", () => AuthenticationRepository.usersInfo());
 
   const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
     useMutation((payload: SignInPayload) =>
@@ -60,27 +85,6 @@ export const useAuth = (): UseAuth => {
     window.location.reload();
   };
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("currentUser") === null ||
-      localStorage.getItem("token") === null
-    ) {
-      dispatch({ type: "SIGN_IN_ERROR" });
-    } else {
-      API.defaults.headers.Authorization = `Bearer ${JSON.parse(
-        localStorage.getItem("token") as string
-      )}`;
-
-      dispatch({
-        type: "SIGN_IN_SUCCESS",
-        payload: {
-          user: JSON.parse(localStorage.getItem("currentUser") as string),
-          token: localStorage.getItem("token") as string
-        },
-      });
-    }
-  }, [dispatch]);
-
   return {
     isLoading:
       isSigningIn,
@@ -91,5 +95,6 @@ export const useAuth = (): UseAuth => {
     token: JSON.parse(localStorage.getItem("token") as string),
     signIn,
     signOut,
+    dataUserInfo
   };
 };

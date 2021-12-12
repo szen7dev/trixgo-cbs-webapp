@@ -1,12 +1,7 @@
 import { FC, useState } from 'react';
 
-import { toArray } from 'lodash';
-import cn from "classnames";
-
 import Comment from './Comment'
 import EditButton from './EditButton';
-import PostFile from './post/PostFile';
-import PostImage from './post/PostImage';
 import ReplyCommentField from './ReplyCommentField';
 
 interface Props {

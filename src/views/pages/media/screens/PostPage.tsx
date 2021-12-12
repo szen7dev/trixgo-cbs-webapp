@@ -1,14 +1,9 @@
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 import { Link } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 
 import cn from 'classnames';
-
-// Hook
-import useUpload from "../context/useUpload";
-import fileUploadReducer, { INITIAL_STATE } from "../context/upload.reducer";
-import uploadActions from "../context/upload.actions";
 
 import ModalFullContainer from "../components/ModalFullContainer";
 import ModalContainer from "../components/ModalContainer";
@@ -26,10 +21,7 @@ import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
 // Types
-import { IMethodFiles, IMethodImages } from "../context/upload";
-import { FileProps, FilePropsUpload, ImageProps } from "typings/social";
-import PostImage from "../components/post/PostImage";
-import { toArray } from "lodash";
+import { FileProps, ImageProps } from "typings/social";
 import ReplyCommentField from "../components/ReplyCommentField";
 
 const SocialPostPage: FC = () => {

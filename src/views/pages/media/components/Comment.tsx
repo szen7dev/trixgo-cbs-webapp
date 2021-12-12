@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, ReactElement } from 'react'
+import { FC, HTMLAttributes } from 'react'
 
 import cn from "classnames";
 

@@ -4,6 +4,9 @@ import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
 
+import { useSocial } from "services/hooks/useSocial";
+import { useAuth } from "services/hooks/useAuth";
+
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
 import '../style.css';
@@ -27,6 +30,10 @@ const SocialHomePage: FC = () => {
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
+	const {listMedias} = useSocial();
+	const {dataUserInfo} = useAuth();
+	console.log("dataUserInfo",dataUserInfo);
+	console.log("listMedias",listMedias);
 	return (
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
