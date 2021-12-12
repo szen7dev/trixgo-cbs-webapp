@@ -38,3 +38,8 @@ export type FilePropsUpload = {
 	cancelTokenSource: CancelTokenSource;
 	proimise?: Interval;
 };
+
+interface ModalProps {
+	show: boolean
+	toggle(): void
+}

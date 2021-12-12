@@ -6,10 +6,10 @@ import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
 
-import IconFile from '../components/IconFile';
-import IconImage from '../components/IconImage';
-import PostFile from '../components/PostFile';
-import PostImage from '../components/PostImage';
+import IconFile from '../Icon/IconFile';
+import IconImage from '../Icon/IconImage';
+import PostFile from '../post/PostFile';
+import PostImage from '../post/PostImage';
 import TabsClassifyArticle from './TabsClassifyArticle';
 import TabsClassifyArticleCommunity from './TabsClassifyArticleCommunity';
 import TabsClassifyDepartment from './TabsClassifyDepartment';
@@ -17,20 +17,16 @@ import TabsOverlay from './TabsOverlay';
 
 import iconDown from 'assets/images/Frame 1745.png';
 
-import { FileProps, FilePropsUpload, PostPayload } from 'typings/social';
-import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
-import useUpload from '../context/useUpload';
-import uploadActions from '../context/upload.actions';
+import { FileProps, FilePropsUpload, ModalProps, PostPayload } from 'typings/social';
+import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
+import useUpload from '../../context/useUpload';
+import uploadActions from '../../context/upload.actions';
+import { IMethodFiles, IMethodImages } from '../../context/upload';
 
 type _TypeSetFieldValue = (field: string, values: File[]) => void
 
-interface IProps {
-	show: boolean
-	toggle(): void
-}
-
-const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
-	const [uploads, { setUploadFile, setUploadImage, uploadImage, uploadFile, cancelUploadImage, cancelUploadFile }] = useUpload(fileUploadReducer, uploadActions, INITIAL_STATE)
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, show }) => {
+	const [uploads, { setUploadFile, setUploadImage, uploadImage, uploadFile, cancelUploadImage, cancelUploadFile }] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE)
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -44,8 +40,11 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		const filetoUpload = toArray(uploads.files).filter(file => file.progress === 0);
 		uploadFile(filetoUpload, isMounted, refsFiles.current);
 		return () => { isMounted = true };
+
+		// Pass length of files as dependencies to trigger uploadFile only when add or remove file
+		// If use uploads.files only, thi effect will run all the time
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [uploads.files])
+	}, [Object.keys(uploads.files).length])
 
 	useEffect(() => {
 		let isMounted = false;
@@ -53,7 +52,7 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		uploadImage(imageToUpload, isMounted, refsImages.current);
 		return () => { isMounted = true };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [uploads.images])
+	}, [Object.keys(uploads.images).length])
 
 	const toggleClassifyArticle = () => setShowClassifyArticle(!showClassifyArticle);
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
@@ -152,13 +151,14 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 								></textarea>
 								<div
 									className={
-										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
+										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto ",
 											(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0 border-none" : "post__files pt-2 pb-6 px-9")
 									}
 								>
 									<PostImage
 										images={toArray(uploads.images)}
 										onRemove={handleCancleUploadImage}
+										className="post__files-row pt-5 text-black gap-9 flex-wrap"
 									/>
 									<PostFile
 										files={toArray(uploads.files)}

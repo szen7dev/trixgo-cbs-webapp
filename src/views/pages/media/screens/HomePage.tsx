@@ -2,18 +2,18 @@ import { FC, useState } from "react";
 
 import cn from "classnames";
 
-import ModalContainer from "./components/ModalContainer";
+import ModalContainer from "../components/ModalContainer";
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
-import './style.css';
+import '../style.css';
 
-import SocialMainArticle from "./home/SocialMainArticle";
-import SocialAdvertisement from "./home/SocialAdvertisement";
-import SocialSpecializedTopics from "./home/SocialSpecializedTopics";
-import SocialInternalArticles from "./home/SocialInternalArticles";
-import SocialCommunityPost from "./home/SocialCommunityPost";
-import ModalCreateArticle from "./home/ModalCreateArticle";
+import SocialMainArticle from "../components/home/SocialMainArticle";
+import SocialAdvertisement from "../components/home/SocialAdvertisement";
+import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics";
+import SocialInternalArticles from "../components/home/SocialInternalArticles";
+import SocialCommunityPost from "../components/home/SocialCommunityPost";
+import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },

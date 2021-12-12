@@ -77,8 +77,9 @@ import AccountingReportFinancePage from "../views/pages/accounting/AccountingRep
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
 
 // Social pages
-import SocialHomePage from "views/pages/media/SocialHomePage";
-import SocialPostPage from "views/pages/media/SocialPostPage";
+import SocialHomePage from "views/pages/media/screens/HomePage";
+import SocialPostPage from "views/pages/media/screens/PostPage";
+import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 
 // Document pages
 import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
@@ -314,6 +315,7 @@ const Routes: FC = () => {
 										<Switch>
 											<Route	exact	path="/social/home" component={SocialHomePage}/>
 											<Route	exact	path="/social/post" component={SocialPostPage}/>
+											<Route	exact	path="/social/comments" component={SocialCommentsPage}/>
 											<Route path="/social/*" component={ErrorPage} />
 										</Switch>
 									</HomeLayout>
