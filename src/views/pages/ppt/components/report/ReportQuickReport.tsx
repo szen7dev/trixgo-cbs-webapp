@@ -26,7 +26,7 @@ const ReportQuickReport: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...
 					Cần tập trung đẩy nhanh công tác chọn thầu theo đúng kế hoạch các bên đã thống nhất. Xử lý quan hệ với địa phương để đảm...
 				</p>
 			</div>
-			<a href="#" className={styles.info}>Xem tất cả</a>
+			<button className={styles.info}>Xem tất cả</button>
 		</div>
 	)
 }

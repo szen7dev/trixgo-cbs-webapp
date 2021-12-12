@@ -51,22 +51,24 @@
   font-size: 14px;
   line-height: 16.1px;
 }
+
 .content h4,
 .text-xl {
   font-size: 16px;
   line-height: 18.4px;
 }
+
 .content h3,
 .text-2xl {
   font-size: 18px;
   line-height: 20.7px;
 }
+
 .content h2,
 .text-xxl {
   font-size: 24px;
   line-height: 27.6px;
 }
-
 
 .circle {
   background-color: currentColor;
@@ -114,6 +116,14 @@
 
 .black {
   color: black !important;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 /* */
@@ -193,6 +203,35 @@
   line-height: 15px;
   font-size: 13px;
   padding: 12px 11px;
+}
+
+.header-list-sort {
+	border-left: 1px solid #CCCCCC;
+	padding-left: 8px;
+}
+
+.header-item-sort {
+	background-color: #F7F6FC;
+	padding: 6px 6px;
+	display: flex;
+	align-items: center;
+	width: 90px;
+}
+.header-item-sort:first-child {
+	border-radius: 8px 0 0 8px;
+}
+.header-item-sort:last-child {
+	border-radius: 0 8px 8px 0;
+}
+
+.header-item-sort.active {
+	color: var(--blue);
+	background-color: #EAF2FE;
+}
+
+.header-item-sort:first-child,
+.header-item-sort:last-child {
+	width: 75px;
 }
 
 .item {
@@ -353,10 +392,24 @@ td {
   padding: 10px 8px 5px 8px;
 }
 
+.table tbody th,
 .table tbody td {
-  border: 0.5px solid #CCCCCC;
+	border-width: 0.5px 0.5px 0 0;
+	border-style: solid;
+	border-color: #CCCCCC;
+}
+
+.table tbody td {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.table tbody td:first-child,
+.table tbody th:first-child {
+	border-left-width: 0.5px;
+}
+.table tbody tr:last-child td {
+	border-bottom-width: 0.5px;
 }
 
 table.table tbody th,
@@ -390,7 +443,7 @@ table.table tbody td {
   margin-top: 17px;
 }
 
-.cell ul>li>div {
+.cell ul>li>a>div {
   display: inline-block;
   background-color: currentColor;
   margin-right: 14px;
@@ -500,7 +553,7 @@ table.table tbody td {
 }
 
 .report .profile-wrapper {
-  padding: 17px 15px 0 14px;
+  padding: 17px 15px 24px 14px;
 }
 
 .report h3 {
@@ -534,7 +587,7 @@ table.table tbody td {
 }
 
 .report .contractor-wrapper {
-  padding: 17px 16px 0 15px;
+  padding: 17px 16px 24px 15px;
 }
 
 .report .chart {
@@ -543,6 +596,7 @@ table.table tbody td {
 
 .report .budget-wrapper {
   padding: 17px 20px 22px 25px;
+	min-width: 400px;
 }
 
 .report .budget-wrapper table {
@@ -621,16 +675,16 @@ table.table tbody td {
 }
 
 .pagination .swiper-pagination-bullet {
-	margin: 0 4px;
+  margin: 0 4px;
 }
 
 /*______________________________Porogress______________________________*/
 .progress-header {
-	position: sticky;
-	top: 0;
-	background-color: #2C2C2C;
-	color: white;
-	padding: 8px;
+  position: sticky;
+  top: 0;
+  background-color: #2C2C2C;
+  color: white;
+  padding: 8px;
 }
 
 

@@ -28,6 +28,14 @@ module.exports = {
         "[13px]": "13px",
         "[14px]": "14px",
         "[15px]": "15px",
+				"x-small": ["12px"],
+				"small": ["13px", "15px"],
+				"medium": ["14px", "16px"],
+				"large": ["16px", "24px"],
+				"x-large": ["18px", "21px"],
+				"2x-large": ["20px", "23px"],
+				"3x-large": ["24px", "27.6px"],
+				"4x-large": ["30px", "34.5px"]
       },
       inset: {
         "[55%]": "55%",
@@ -71,10 +79,16 @@ module.exports = {
       borderWidth: {
         6: "6px",
       },
+			lineHeight: {
+				"[15px]": "14.95px",
+				
+			}
     },
   },
   variants: {
-    extend: {},
+    extend: {
+			opacity: ['disabled']
+		},
   },
   plugins: [],
 };

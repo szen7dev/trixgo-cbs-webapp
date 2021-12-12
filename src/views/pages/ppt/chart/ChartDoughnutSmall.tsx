@@ -15,6 +15,7 @@ import getPlugins from './ProjectDoughnutChart';
 
 interface Props {
 	_data: {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		datasets: Array<any>
 	}
 	title?: string
@@ -39,7 +40,7 @@ const options = {
 }
 
 const ChartDoughnutSmall: React.FC<Props> = ({ _data, title = '28', subtitle = "GÓI THẦU" }) => {
-	const plugins = React.useMemo(() => getPlugins(title, subtitle, { titleSize: 24, subtitleSize: 10, bold: false }), []);
+	const plugins = React.useMemo(() => getPlugins(title, subtitle, { titleSize: 24, subtitleSize: 10, bold: false }), [subtitle, title]);
 
 	return (
 		<Doughnut

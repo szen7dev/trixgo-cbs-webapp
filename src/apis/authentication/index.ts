@@ -1,45 +1,22 @@
 import API from "../repository";
 
-import {
-  REGISTER_API_URL,
-  VERIFY_EMAIL_API_URL,
-  SIGN_IN_API_URL,
-} from "utils/constants";
-
-import {
-  RegisterPayload,
-  RegisterResponse,
-  VerifyEmailPayload,
-  verifyEmailResponse,
-  SignInPayload,
-  SignInResponse,
-} from "typings/auth";
+import { SignInPayload, SignInResponse, UserInfoResponse } from "typings/auth";
 
 const authURL = "/api/auth";
 
 const AuthenticationRepository = {
-  async register(payload: RegisterPayload): Promise<RegisterResponse> {
-    const { data } = await API.post<RegisterResponse>(
-      `${authURL}${REGISTER_API_URL}`,
-      payload
-    );
-
-    return data;
-  },
-  async verifyEmail(payload: VerifyEmailPayload): Promise<verifyEmailResponse> {
-    const { data } = await API.post<verifyEmailResponse>(
-      `${authURL}${VERIFY_EMAIL_API_URL}`,
-      payload
-    );
-
-    return data;
-  },
   async signIn(payload: SignInPayload): Promise<SignInResponse> {
     const { data } = await API.post<SignInResponse>(
-      `${authURL}${SIGN_IN_API_URL}`,
+      `${authURL}/users/login`,
       payload
     );
+    return data;
+  },
 
+  async usersInfo(): Promise<UserInfoResponse> {
+    const { data } = await API.get<UserInfoResponse>(
+      `${authURL}/users/me?select={"company": "", "department": ""}&filter={"conversationsPin": 0, "friends": 0, "recentlyFriends": 0, "devices": 0, "registrationID": 0}`
+    );
     return data;
   },
 };

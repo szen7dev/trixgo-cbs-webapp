@@ -2,9 +2,7 @@ import { CSSProperties, FC } from "react";
 
 import { List } from "react-virtualized";
 
-import { useAuth } from "services/hooks/useAuth";
 import { useModal } from "services/hooks/useModal";
-import { useChat } from "services/hooks/useChat";
 import { useWindowDimensions } from "services/hooks/useWindowDimensions";
 
 import ChatItem from "components/shared/ChatItem";
@@ -14,13 +12,8 @@ import VideoCameraIcon from "assets/icons/VideoCamera";
 import PencilAltIcon from "assets/icons/PencilAlt";
 import SearchIcon from "assets/icons/Search";
 
-import { getMessageTimeDuration } from "helpers/time";
-
 const MessagesSidebar: FC = () => {
-  const { user } = useAuth();
   const { openModal } = useModal();
-  const { conversations, currentConversation, handleSelectConversation } =
-    useChat();
   const { height } = useWindowDimensions();
 
   const conversationRender = ({
@@ -32,26 +25,30 @@ const MessagesSidebar: FC = () => {
     index: number;
     style: CSSProperties;
   }) => {
-    const { _id, messages, logo, name } = conversations[index];
+    const { _id, messages, logo, name } = {
+      _id: "11",
+      messages: "Xin chào Trixgo",
+      logo: "",
+      name: "Nguyễn Văn Tuấn"
+    };
     const lastMessage = messages[messages.length - 1];
 
     return (
       <div
         key={key}
         style={style}
-        onClick={() => handleSelectConversation(conversations[index])}
       >
         <ChatItem
-          isMe={lastMessage && lastMessage.senderId === user?._id}
-          hasSeen={lastMessage?.status === 1}
+          isMe={false}
+          hasSeen={true}
           isOnline
           avatar={logo[1]}
           name={name}
-          lastMessage={lastMessage ? lastMessage.content : ""}
+          lastMessage={"Xin chào Trixgo"}
           lastActive={
-            lastMessage ? getMessageTimeDuration(lastMessage.modifiedAt) : ""
+            "20/12/2020"
           }
-          isActive={_id === currentConversation?._id}
+          isActive={true}
         />
       </div>
     );
@@ -108,7 +105,7 @@ const MessagesSidebar: FC = () => {
         <List
           width={367}
           height={height - 189}
-          rowCount={conversations.length}
+          rowCount={50}
           rowHeight={80}
           rowRenderer={conversationRender}
         />
