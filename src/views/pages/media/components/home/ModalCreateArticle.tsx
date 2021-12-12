@@ -36,6 +36,7 @@ import { modifyUploadedFiles } from '../../context/upload.utils';
  */
 import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
 import { useSocial } from 'services/hooks/useSocial';
+import { useFile } from 'services/hooks/useUpload';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
 	title: "",
@@ -56,6 +57,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { createMedia } = useSocial();
+	const { addFileToUpload } = useFile('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -110,7 +112,12 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
+	const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
+		if(event?.target?.files?.length){
+			const files = Array.prototype.slice.call(event.target.files);
+			addFileToUpload(files);
+		}
+
 		if (attribute === 'files') setUploadFile(event.target.files);
 		if (attribute === 'images') setUploadImage(event.target.files);
 	}

@@ -12,8 +12,8 @@ const FileRepository = {
         );
         return data;
     },
-    async uploadFileToS3(payload: UploadPayload): Promise<{}> {
-        const { data } = await API.put<{}>(
+    async uploadFileToS3(payload: UploadPayload): Promise<{ id: string }> {
+        const { data } = await API.put<{ id: string }>(
             payload.url,
             payload.file,
             {

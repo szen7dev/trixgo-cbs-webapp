@@ -4,13 +4,13 @@ import { CancelTokenSource } from "axios";
 export type FilePayload = {
   type: string;
   name: string;
-  size: number;
+  size: string;
   app?: string;
 };
 
 export type UploadPayload = {
   url: string;
-  file: FormDataEntryValue
+  file: FilePayload
 }
 
 export type FileResponse = APIResponse & {
@@ -31,6 +31,7 @@ export type FileProps = {
   name: string,
   url: string,
   size: number,
+  type: string,
   userCreate: string,
   modifyAt: string,
   createAt: string,
