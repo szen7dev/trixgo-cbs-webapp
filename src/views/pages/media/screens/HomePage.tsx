@@ -1,12 +1,7 @@
 import { FC, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-
 import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
-
-import { useSocial } from "services/hooks/useSocial";
-import { setMedias } from 'redux/reducer/SocialSlice';
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
@@ -28,17 +23,9 @@ const pages = [
 ]
 
 const SocialHomePage: FC = () => {
-	const dispatch = useDispatch();
-	const { listMedias } = useSocial();
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
-
-	useEffect(() => {
-		if(listMedias.length){
-			dispatch(setMedias(listMedias));
-		}
-	}, [listMedias.length])
 
 	return (
 		<>

@@ -1,20 +1,19 @@
 import React from 'react'
 import moment from 'moment';
-import { useSelector } from 'react-redux'
+import { useSocial } from "services/hooks/useSocial";
 import { Link } from 'react-router-dom';
 
 import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/social';
-import { RootState } from 'redux/reducer';
 
 const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const medias = useSelector((state: RootState) => state.medias);
+	const { listMedias } = useSocial();
 
 	return (
 		<div {...props}>
 			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
 			<ul>
-				{medias.data.length && medias.data.map((media: MediaProps) => (
+				{listMedias.length && listMedias.map((media: MediaProps) => (
 					<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }} key={media._id}>
 						<p className="font-bold text-lg leading-5">
 							<Link to={`/social/post/${media._id}`}>

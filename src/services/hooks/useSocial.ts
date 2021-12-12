@@ -1,14 +1,13 @@
-import { useDispatch } from "react-redux";
 import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
-import { addMedia } from 'redux/reducer/SocialSlice';
 import { MediaProps, MediaPayload } from "typings/social";
 
 type UseSocial = {
     listMedias: Array<MediaProps>,
     isLoadingListMedias: boolean,
-    createPost: (payload: MediaPayload) => Promise<void>,
+    createMedia: (payload: MediaPayload) => Promise<void>,
+    deleteMedia: (id: string) => Promise<void>,
     refetchListMedias: () => void,
     nextPageListMedias: () => void,
     prevPageListMedias: () => void,
@@ -18,31 +17,15 @@ type UseSocial = {
 };
 
 export const useSocial = () : UseSocial => {
-    const dispatch = useDispatch();
-
-    const { mutateAsync: createPostAsync } =
+    const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
-            SocialRepository.createPost(payload)
+            SocialRepository.createMedia(payload)
         );
-
-    const createPost = async (payload: MediaPayload) => {
-        try {
-            const { error, data, message } = await createPostAsync(payload);
-
-            if (!error) {
-                dispatch(addMedia(data));
-                toast.success('Tạo bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
+        
+    const { mutateAsync: deleteMediaAsync } =
+        useMutation((id: string) =>
+            SocialRepository.deleteMedia(id)
+        );
 
     const {
         isLoading: isLoadingListMedias,
@@ -67,12 +50,53 @@ export const useSocial = () : UseSocial => {
             }
         );
 
+    const createMedia = async (payload: MediaPayload) => {
+        try {
+            const { error, data, message } = await createMediaAsync(payload);
+            console.log({ error, data, message });
+
+            if (!error) {
+                refetchListMedias();
+                toast.success('Tạo bài viết thành công');
+            } else {
+                toast.error(message);
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const deleteMedia = async (id: string) => {
+        try {
+            const { error, data, message } = await deleteMediaAsync(id);
+            console.log({ error, data, message });
+
+            if (!error) {
+                refetchListMedias();
+                toast.success('Xóa bài viết thành công');
+            } else {
+                toast.error(message);
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 
     return {
-        createPost,
+        createMedia,
+        deleteMedia,
         listMedias,
         isLoadingListMedias,
         refetchListMedias,

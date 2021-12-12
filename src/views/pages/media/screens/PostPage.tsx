@@ -1,18 +1,27 @@
 import { FC, Fragment, useState } from "react";
 
+/**
+ * LIBRARIES
+ */
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { useQuery } from "react-query";
-
 import moment from 'moment';
 import cn from 'classnames';
 
+/**
+ * COMPONENTS
+ */
 import ModalFullContainer from "../components/ModalFullContainer";
 import ModalContainer from "../components/ModalContainer";
 import PostFile from '../components/post/PostFile';
 import ViewPost from "../components/post/ViewPost";
-
 import Loader from "components/shared/Loader";
+import ReplyCommentField from "../components/ReplyCommentField";
+
+/**
+ * ASSETS
+ */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
@@ -23,23 +32,31 @@ import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
-// Types
+/**
+ * Types, Services, APIS
+ */
 import { FileProps, ImageProps } from "typings/social";
-import ReplyCommentField from "../components/ReplyCommentField";
+import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 
 const SocialPostPage: FC = () => {
 	const params = useParams<{ id: string }>();
+	const history = useHistory();
+	const { deleteMedia } = useSocial();
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data, isError } =
-    	useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
+	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
 	const media = data?.data;
 
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
+
+	const handleDeleteMedia = async () => {
+		await deleteMedia(params.id);
+		history.push('/social/home');
+	}
 
 	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ id: _, url: '/logo.png', name: "test", size: 123123 }))
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
@@ -93,7 +110,7 @@ const SocialPostPage: FC = () => {
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={handleDeleteMedia}>
 											<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 											Xóa
 										</button>

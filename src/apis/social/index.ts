@@ -6,10 +6,16 @@ import { convertObToUrl } from "helpers";
 const mediaURL = "/api/medias";
 
 const SocialRepository = {
-    async createPost(payload: MediaPayload): Promise<PostResponse> {
+    async createMedia(payload: MediaPayload): Promise<PostResponse> {
         const { data } = await API.post<PostResponse>(
             `${mediaURL}`,
             payload
+        );
+        return data;
+    },
+    async deleteMedia(id: string): Promise<infoMediaResponse> {
+        const { data } = await API.delete<infoMediaResponse>(
+            `${mediaURL}?mediaID=${id}`
         );
         return data;
     },
