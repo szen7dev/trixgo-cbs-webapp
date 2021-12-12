@@ -1,4 +1,5 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import cn from "classnames";
 
@@ -14,25 +15,30 @@ import SocialSpecializedTopics from "./home/SocialSpecializedTopics";
 import SocialInternalArticles from "./home/SocialInternalArticles";
 import SocialCommunityPost from "./home/SocialCommunityPost";
 import ModalCreateArticle from "./home/ModalCreateArticle";
-import { useAuth } from "services/hooks/useAuth";
 import { useSocial } from "services/hooks/useSocial";
+import { setMedias } from 'redux/reducer/SocialSlice';
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	{ id: "1", title: 'Phòng ban' },
+	{ id: "1", title: 'Bài viết của tôi' },
 	{ id: "2", title: 'Phòng ban' },
-	{ id: "3", title: 'Phòng ban' },
+	{ id: "3", title: 'Cộng đồng' },
+	{ id: "4", title: 'Hệ thống' },
 ]
 
 const SocialHomePage: FC = () => {
+	const dispatch = useDispatch();
+	const { listMedias } = useSocial();
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
-	const {listMedias} = useSocial();
-	const {dataUserInfo} = useAuth();
-	console.log("dataUserInfo",dataUserInfo);
-	console.log("listMedias",listMedias);
+	useEffect(() => {
+		if(listMedias.length){
+			dispatch(setMedias(listMedias));
+		}
+	}, [listMedias.length])
+
 	return (
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">

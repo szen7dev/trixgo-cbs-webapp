@@ -1,7 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
-export type PostPayload = {
+export type MediaPayload = {
   title: string;
   content: string;
   files: Array<File>;
@@ -9,10 +9,16 @@ export type PostPayload = {
   type: string;
 };
 
+export type PostResponse = APIResponse & {
+  data: MediaProps,
+  message: string,
+};
+
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
   onRemove?(file: FileProps | FilePropsUpload): void;
 };
+
 export type PostImageProps = {
   images?: Array<FileProps | FilePropsUpload>;
   onRemove?(file: FileProps | FilePropsUpload): void;
@@ -34,6 +40,8 @@ export type ImageProps = {
 
 export type ListMediasPayload = {
   lastestID?: string;
+  limit?: number;
+  companyID?: string;
 };
 
 export type ListMediasResponse = APIResponse & {
@@ -44,6 +52,7 @@ export type ListMediasResponse = APIResponse & {
 
 export type MediaProps = {
   _id: string,
+  title: string,
   content: string,
   type: number,
   files: Array<{
@@ -65,7 +74,7 @@ export type MediaProps = {
   status: number,
   kind: number,
   state: number,
-  author: Array<{
+  author: {
     _id: string,
     image: string,
     company: Array<{
@@ -73,7 +82,7 @@ export type MediaProps = {
       name: string
     }>,
     fullname: string
-  }>,
+  },
   location: {
     type: string,
     _id: string,
@@ -91,6 +100,7 @@ export type MediaProps = {
   createdAt: string,
   updatedAt: string,
 };
+
 export type FilePropsUpload = {
   id: number;
   file: File;

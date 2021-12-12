@@ -17,10 +17,11 @@ import TabsOverlay from './TabsOverlay';
 
 import iconDown from 'assets/images/Frame 1745.png';
 
-import { FileProps, FilePropsUpload, PostPayload } from 'typings/social';
+import { FileProps, FilePropsUpload, MediaPayload } from 'typings/social';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import useUpload from '../context/useUpload';
 import uploadActions from '../context/upload.actions';
+import { useSocial } from "services/hooks/useSocial";
 
 type _TypeSetFieldValue = (field: string, values: File[]) => void
 
@@ -31,6 +32,8 @@ interface IProps {
 
 const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 	const [uploads, { setUploadFile, setUploadImage, uploadImage, uploadFile, cancelUploadImage, cancelUploadFile }] = useUpload(fileUploadReducer, uploadActions, INITIAL_STATE)
+
+	const { createPost } = useSocial();
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -59,7 +62,7 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
-	const initialValues: PostPayload = {
+	const initialValues: MediaPayload = {
 		title: "",
 		content: "",
 		files: [],
@@ -67,9 +70,10 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		type: 'just-me',
 	};
 
-	const registerSchema = object().shape({
-		title: string().required("First and last name required!"),
-		content: string().required("First and last name required!"),
+	const mediaSchema = object().shape({
+		title: string().required("Title of post required!"),
+		content: string().required("Content of post required!"),
+		type: string().required("Type of post required!"),
 	});
 
 	const currentSelected = (key: string) => {
@@ -89,13 +93,16 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, values: PostPayload, attribute: 'files' | 'images', setFieldValue: _TypeSetFieldValue) => {
+	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, values: MediaPayload, attribute: 'files' | 'images', setFieldValue: _TypeSetFieldValue) => {
 		if (attribute === 'files') setUploadFile(event.target.files);
 		if (attribute === 'images') setUploadImage(event.target.files);
 	}
 
-	const handleSubmit = async (values: PostPayload) => {
+	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
+		console.log({ values, uploads })
+		await createPost(values);
+		toggle();
 		return [values, uploads];
 	};
 
@@ -113,7 +120,7 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		// <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" {...props}>
 		<Formik
 			initialValues={initialValues}
-			validationSchema={registerSchema}
+			validationSchema={mediaSchema}
 			onSubmit={handleSubmit}
 		>
 			{
@@ -189,7 +196,7 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 								showMore={(type: string) => {
 									switch (type) {
 										case 'community':
-											toggleClassifyArticleCommunity()
+											toggleClassifyArticleCommunity();
 											break;
 										default:
 											toggleClassifyDepartment();
