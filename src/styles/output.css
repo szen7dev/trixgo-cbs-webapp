@@ -49661,6 +49661,12 @@ button {
   bottom: 0;
 }
 
+.btn.disabled, .btn:disabled, button:disabled {
+  color: #fff;
+  background-color: #e3e6ea;
+  border-color: #e3e6ea;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

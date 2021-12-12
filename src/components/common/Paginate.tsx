@@ -1,32 +1,33 @@
-import React, {FC, useState} from "react";
-
-type Page = {
-    totalPage: number;
-    nextPageScope: string;
-    currentIndex: number
-}
+import React, {FC, useEffect, useState} from "react";
 
 type Props = {
-    prevPageAction: () => void;
-    nextPageAction: () => void
+    prevPageAction?: () => void;
+    nextPageAction?: () => void;
+    isFetching?: boolean;
+    totalRecord?: number;
+    totalPages?:number;
+    hasNextPage?:boolean;
 }
 
-const Paginate:FC<Props> = ({prevPageAction,nextPageAction}) => {
-    const [pager, setPager] = useState<Page>({
-        totalPage:0,
-        nextPageScope:'',
-        currentIndex:0
-    });
-    const [isNavigating, setNavigating] =useState('');
+const Paginate:FC<Props> = ({prevPageAction,nextPageAction,totalRecord, totalPages, isFetching, hasNextPage}) => {
+    const [isNavigating, setNavigating] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(1);
 
+    useEffect(() => {
+        if (!isFetching) {
+            setNavigating('');
+        }
+    },[isFetching])
     const handlePrevPage = () => {
         setNavigating('prev');
-        prevPageAction()
+        setCurrentIndex(currentIndex => currentIndex-1);
+        if (prevPageAction) prevPageAction()
     }
 
     const handleNextPage = () => {
         setNavigating('next');
-        nextPageAction()
+        setCurrentIndex(currentIndex => currentIndex+1);
+        if (nextPageAction) nextPageAction()
     }
 
     return (
@@ -34,6 +35,7 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction}) => {
             <div className="bg-white px-4 items-center flex items-center justify-center relative">
                 <div className={'inline-flex'}>
                     <button
+                        disabled={currentIndex===1||isFetching}
                         onClick={() => handlePrevPage()}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tl-md rounded-bl-md"}
                     >
@@ -42,9 +44,10 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction}) => {
                         </svg>
                     </button>
                     <div className={"flex items-center justify-center border-t border-b pl-4 pr-4 text-gray-700 border-gray-300"}>
-                        <span> {pager.currentIndex} trong {pager.totalPage}</span>
+                        <span> {currentIndex} trong {totalPages}</span>
                     </div>
                     <button
+                        disabled={!hasNextPage||isFetching}
                         onClick={() => handleNextPage()}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tr-md rounded-br-md"}
                     >
@@ -55,7 +58,7 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction}) => {
                 </div>
             </div>
             <div className={"absolute right-0 text-gray-500"}>
-                180 MẨU TIN
+                {totalRecord} MẨU TIN
             </div>
         </div>
     )

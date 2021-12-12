@@ -9,16 +9,19 @@ import Paginate from "../../../components/common/Paginate";
 import AccountingNavigation from "../../layouts/AccountingNavigation";
 import {useModal} from "../../../services/hooks/useModal";
 import CreateNewTicket from "./components/CreateNewTicket";
+import {useSocial} from "../../../services/hooks/useSocial";
 
 const AccountingTicketsPage:FC = () => {
     const { openModal } = useModal();
-    const {} =
-    const nextPage = () => {
-        console.log('1')
-    }
-    const prevPage = () => {
-        console.log('1')
-    }
+    const {
+        listMedias,
+        isLoadingListMedias,
+        nextPageListMedias,
+        prevPageListMedias,
+        totalRecord,
+        totalPages,
+        hasNextPage
+    } = useSocial();
 
     return (
         <>
@@ -47,8 +50,8 @@ const AccountingTicketsPage:FC = () => {
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
                             id="ticket-creator" placeholder="Người tạo phiếu"
-                            searchUrl={"/user/get-list"}
-                            searchParam={"search"}
+                            // searchUrl={"/user/get-list"}
+                            // searchParam={"search"}
                             initialValue={1}
                             data={[
                                 {
@@ -105,14 +108,14 @@ const AccountingTicketsPage:FC = () => {
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
                             id="ticket-creator" placeholder="Mã khách"
-                            searchUrl={"/user/get-list"}
-                            searchParam={"search"}
+                            // searchUrl={"/user/get-list"}
+                            // searchParam={"search"}
                         />
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
                             id="ticket-creator" placeholder="Hợp đồng"
-                            searchUrl={"/user/get-list"}
-                            searchParam={"search"}
+                            // searchUrl={"/user/get-list"}
+                            // searchParam={"search"}
                         />
                         <DatePicker
                             wrapperClassName={"w-auto mt-2"}
@@ -464,7 +467,7 @@ const AccountingTicketsPage:FC = () => {
                     </tbody>
                 </table>
             </div>
-            <Paginate nextPageAction={() => nextPage()} prevPageAction={() => prevPage()}/>
+            <Paginate  hasNextPage={hasNextPage} totalRecord={totalRecord} totalPages={totalPages} isFetching={isLoadingListMedias} nextPageAction={nextPageListMedias} prevPageAction={prevPageListMedias}/>
         </>
     )
 };
