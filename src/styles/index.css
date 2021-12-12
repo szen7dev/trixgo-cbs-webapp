@@ -23,10 +23,10 @@
    */
 
   ::-webkit-scrollbar {
-    @apply w-3;
+    @apply w-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-light border-2 border-solid border-primary-light bg-clip-padding rounded-full;
+    @apply bg-secondary-gray border-2 border-solid border-primary-light bg-clip-padding rounded-full;
   }
 
   .Toastify__toast--success {
@@ -209,7 +209,6 @@ button {
 /*__________________________________________________________________________*/
 /* ___________Customized task management layout styles ___________________*/
 .t-leftsidebar-navigation {
-  font-size: 15px;
   width: 240px;
 }
 .t-leftsidebar-navigation-container {
@@ -228,10 +227,6 @@ button {
 .t-leftsidebar-menu-title {
   font-size: 13px;
   color: #798295;
-}
-.t-leftsidebar-menu-item {
-  font-weight: bold;
-  color: #666;
 }
 .t-leftsidebar-menu-item > span {
   width: calc(100% - 36px);
@@ -272,6 +267,7 @@ button {
 }
 .tm-header-toggle-btn {
   background: #e4e6eb;
+  top: 70px;
 }
 .tm-header-toggle-btn:hover {
   background: #a3a6ad;
@@ -292,22 +288,18 @@ button {
   top: 0;
 }
 .home-layout.collapse-header .home-header {
-  top: -64px;
+  top: -56px;
 }
 .home-layout.collapse-header .home-main-content {
   height: 100vh;
-  top: -64px;
+  top: -56px;
 }
 .home-layout.collapse-header .home-left-sidebar-collapse-btn {
   top: -40px;
 }
-
 .home-layout.active-right .tm-header-toggle-btn {
   right: -5px;
   text-align: left;
-}
-.home-layout.collapse-header .home-header {
-
 }
 .home-layout.active-right .tm-right-sidebar-toggle-btn {
   right: -15px;
