@@ -1,36 +1,61 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react';
 
+/**
+ * LIBRARIES
+ */
 import { Dialog } from '@headlessui/react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
 
-import IconFile from '../components/IconFile';
-import IconImage from '../components/IconImage';
-import PostFile from '../components/PostFile';
-import PostImage from '../components/PostImage';
+/**
+ * ASSETS, COMPONENTS
+ */
+import IconFile from '../Icon/IconFile';
+import IconImage from '../Icon/IconImage';
+import PostFile from '../post/PostFile';
+import PostImage from '../post/PostImage';
 import TabsClassifyArticle from './TabsClassifyArticle';
 import TabsClassifyArticleCommunity from './TabsClassifyArticleCommunity';
 import TabsClassifyDepartment from './TabsClassifyDepartment';
 import TabsOverlay from './TabsOverlay';
-
 import iconDown from 'assets/images/Frame 1745.png';
 
-import { FileProps, FilePropsUpload, PostPayload } from 'typings/social';
-import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
-import useUpload from '../context/useUpload';
-import uploadActions from '../context/upload.actions';
+/**
+ * CONTEXTS
+ */
+import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
+import useUpload from '../../context/useUpload';
+import uploadActions from '../../context/upload.actions';
+import { IMethodFiles, IMethodImages } from '../../context/upload';
+import { modifyUploadedFiles } from '../../context/upload.utils';
 
-type _TypeSetFieldValue = (field: string, values: File[]) => void
+/**
+ * Types, Services
+ */
+import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { useSocial } from 'services/hooks/useSocial';
 
-interface IProps {
-	show: boolean
-	toggle(): void
-}
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
+	title: "",
+	content: "",
+	files: [],
+	images: [],
+	type: 'just-me',
+} }) => {
+	const [uploads,
+		{ setUploadFile,
+			setUploadImage,
+			uploadImage,
+			uploadFile,
+			cancelUploadImage,
+			cancelUploadFile,
+			removeUploadedFile,
+			removeUploadedImage,
+		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
-const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
-	const [uploads, { setUploadFile, setUploadImage, uploadImage, uploadFile, cancelUploadImage, cancelUploadFile }] = useUpload(fileUploadReducer, uploadActions, INITIAL_STATE)
+	const { createMedia } = useSocial();
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -44,8 +69,11 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		const filetoUpload = toArray(uploads.files).filter(file => file.progress === 0);
 		uploadFile(filetoUpload, isMounted, refsFiles.current);
 		return () => { isMounted = true };
+
+		// Pass length of files as dependencies to trigger uploadFile only when add or remove file
+		// If use uploads.files only, thi effect will run all the time
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [uploads.files])
+	}, [Object.keys(uploads.files).length])
 
 	useEffect(() => {
 		let isMounted = false;
@@ -53,23 +81,16 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		uploadImage(imageToUpload, isMounted, refsImages.current);
 		return () => { isMounted = true };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [uploads.images])
+	}, [Object.keys(uploads.images).length])
 
 	const toggleClassifyArticle = () => setShowClassifyArticle(!showClassifyArticle);
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
-	const initialValues: PostPayload = {
-		title: "",
-		content: "",
-		files: [],
-		images: [],
-		type: 'just-me',
-	};
-
-	const registerSchema = object().shape({
-		title: string().required("First and last name required!"),
-		content: string().required("First and last name required!"),
+	const mediaSchema = object().shape({
+		title: string().required("Bạn cần nhập tiêu đề cho bài viết"),
+		content: string().required("Bạn cần nhập nội dung cho bài viết"),
+		type: string().required("Loại bài viết không hợp lệ"),
 	});
 
 	const currentSelected = (key: string) => {
@@ -89,31 +110,42 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, values: PostPayload, attribute: 'files' | 'images', setFieldValue: _TypeSetFieldValue) => {
+	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
 		if (attribute === 'files') setUploadFile(event.target.files);
 		if (attribute === 'images') setUploadImage(event.target.files);
 	}
 
-	const handleSubmit = async (values: PostPayload) => {
+	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
+		console.log({ values, uploads })
+		await createMedia(values);
+		toggle();
 		return [values, uploads];
 	};
 
-	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
-		if (refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
-		cancelUploadFile(file)
+	const handleCancelUploadFile = (file: FileProps | FilePropsUpload) => {
+		if ('id' in file && refsFiles.current[file.id]) {
+			clearInterval(refsFiles.current[file.id])
+			cancelUploadFile(file)
+		} else {
+			removeUploadedFile(file)
+		}
 	}
 
-	const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
-		if (refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
-		cancelUploadImage(file)
+	const handleCancelUploadImage = (file: FileProps | FilePropsUpload) => {
+		if ('id' in file && refsImages.current[file.id]) {
+			clearInterval(refsImages.current[file.id])
+			cancelUploadImage(file)
+		} else {
+			removeUploadedImage(file)
+		}
 	}
 
 	return (
 		// <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" {...props}>
 		<Formik
 			initialValues={initialValues}
-			validationSchema={registerSchema}
+			validationSchema={mediaSchema}
 			onSubmit={handleSubmit}
 		>
 			{
@@ -144,12 +176,22 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 							</div>
 							<div className="px-6 mt-2 pt-3.5 flex-1">
 								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
+								<ErrorMessage
+									name="title"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
 									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 									{...formik.getFieldProps('content')}
 								></textarea>
+								<ErrorMessage
+									name="content"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<div
 									className={
 										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
@@ -158,12 +200,13 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 								>
 									<PostImage
 										images={toArray(uploads.images)}
-										onRemove={handleCancleUploadImage}
+										onRemove={handleCancelUploadImage}
+										className="post__files-row pt-5 text-black gap-9 flex-wrap"
 									/>
 									<PostFile
 										files={toArray(uploads.files)}
-										onRemove={handleCancleUploadFile}
-										className="w-full mx-2.5"
+										onRemove={handleCancelUploadFile}
+										className="w-full mx-2.5 text-black"
 									/>
 								</div>
 							</div>
@@ -171,11 +214,11 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, values, 'images', setFieldValue)} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images')} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, values, 'files', setFieldValue)} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files')} />
 									</label>
 								</div>
 								<div>
@@ -189,7 +232,7 @@ const ModalCreateArticle: FC<IProps> = ({ toggle, show }) => {
 								showMore={(type: string) => {
 									switch (type) {
 										case 'community':
-											toggleClassifyArticleCommunity()
+											toggleClassifyArticleCommunity();
 											break;
 										default:
 											toggleClassifyDepartment();

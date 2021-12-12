@@ -1,13 +1,28 @@
 import { FC, Fragment, useState } from "react";
 
-import { Link } from "react-router-dom";
+/**
+ * LIBRARIES
+ */
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
-
+import { useQuery } from "react-query";
+import moment from 'moment';
 import cn from 'classnames';
 
-import ModalContainer from "./components/ModalContainer";
-import PostFile from './components/PostFile';
+/**
+ * COMPONENTS
+ */
+import ModalFullContainer from "../components/ModalFullContainer";
+import ModalContainer from "../components/ModalContainer";
+import PostFile from '../components/post/PostFile';
+import ViewPost from "../components/post/ViewPost";
+import Loader from "components/shared/Loader";
+import ReplyCommentField from "../components/ReplyCommentField";
+import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
+/**
+ * ASSETS
+ */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
@@ -16,37 +31,55 @@ import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconCopy from 'assets/images/icons8-copy-96.png';
 import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
-import iconNext from 'assets/images/icons8-next-page-50.png';
-import iconCollapse from 'assets/images/icons8-collapse-48.png';
-import iconFit from 'assets/images/icons8-fit-to-width-50.png';
-import iconFace from 'assets/images/icons8-grinning-face-with-sweat-48.png';
-import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
-import './style.css';
+import '../style.css';
 
+/**
+ * Types, Services, Apis
+ */
 import { FileProps, ImageProps } from "typings/social";
-import ModalFullContainer from "./components/ModalFullContainer";
+import { useSocial } from 'services/hooks/useSocial';
+import SocialRepository from "apis/social";
 
 const SocialPostPage: FC = () => {
+	const params = useParams<{ id: string }>();
+	const history = useHistory();
+	const { deleteMedia } = useSocial();
+	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
-	const [modalShowImage, setModalShowImage] = useState<boolean>(false);
-	const [collapsed, setCollapsed] = useState<boolean>(false);
-	const [imageIndex, setImageIndex] = useState<number>(0);
+	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ id: _, url: '/logo.png', name: "test", size: 123123 }))
+	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
+	const media = data?.data;
+
+	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
+	const toggleModalReact = () => setModalShowReact(!modalShowReact);
+	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
+	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
+
+	const handleDeleteMedia = async () => {
+		await deleteMedia(params.id);
+		history.push('/social/home');
+	}
+
+	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-		id: _,
+		_id: _,
 		url: i % 2
 			? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
 			: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
 		name: "test",
 		size: 123123
 	}))
+	
+	const initialState = {
+		title: "",
+		content: "",
+		type: 'just-me',
+	}
 
-	const toggleModalReact = () => setModalShowReact(!modalShowReact);
-	const toggleModalImage = () => setModalShowImage(!modalShowImage);
-	const toggleCollapse = () => setCollapsed(!collapsed);
-	const handleNextImage = () => setImageIndex(imageIndex + 1);
-	const handlePreviousImage = () => setImageIndex(imageIndex - 1);
+	if(!media){
+		return <Loader className="border-primary" />;
+	}
 
 	return (
 		<>
@@ -55,7 +88,9 @@ const SocialPostPage: FC = () => {
 					{/* Header */}
 					<div className="page__post-header text-black">
 						<div className="flex justify-between">
-							<h1 className="page__post-title mr-6">Hơn 110.000 người đi tàu Cát Linh - Hà Đông sau một tuần có phí, liệu có hiệu quả?</h1>
+							<h1 className="page__post-title mr-6">
+								{media.title}
+							</h1>
 							<Menu as="div" className="relative inline-block">
 								<Menu.Button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center">
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -80,11 +115,11 @@ const SocialPostPage: FC = () => {
 											<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 											Copy link
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMedia}>
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={handleDeleteMedia}>
 											<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 											Xóa
 										</button>
@@ -102,7 +137,7 @@ const SocialPostPage: FC = () => {
 								<div className="post__author-info">
 									<p className="text-lg leading-5 font-bold">
 										<Link to="/">
-											Lê Văn Thành
+											{media.author?.fullname}
 										</Link>
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
@@ -117,17 +152,18 @@ const SocialPostPage: FC = () => {
 								</div>
 							</div>
 							<div className=" text-primary-gray">
-								<span className="mr-6">29/11/2021 15:37</span>
+								<span className="mr-6">{moment(media.createAt).format('DD/MM/YYYY HH:mm')}</span>
 								<button className="post__follow">Theo dõi</button>
 							</div>
 						</div>
 					</div>
 					{/* Content */}
 					<div className="flex pr-6 text-black">
-						<div className="post__content  border-b border-gray-300 pb-2.5">
+						{/* Main post */}
+						<div className="post__content pb-2.5">
 							<div className="post__content-images">
 								{images.slice(0, 3).map((image, i) => (
-									<div key={image.id} className="mt-4 cursor-pointer relative" onClick={() => { setImageIndex(i); toggleModalImage() }} >
+									<div key={image._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
 										<img src={image.url} alt="" className="object-cover h-full w-full" />
 										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
 											+{images.length - 2}
@@ -139,16 +175,7 @@ const SocialPostPage: FC = () => {
 								<PostFile files={files} />
 							</div>
 							<p>
-								Buổi sáng tháng 10 sáu năm trước, người phụ trách kinh doanh thị trường phía Nam vừa bay từ Sài Gòn ra, bước vào phòng họp và chia sẻ tin đồn hãng Dell sẽ mua lại công ty chúng tôi.
-							</p>
-							<p>
-								Đó là cuộc họp đầu tuần tại trụ sở văn phòng đại diện EMC Việt Nam, tầng 14, toà nhà IPH, đường Xuân Thuỷ, Hà Nội. Tôi lúc đó đang là trưởng nhóm tư vấn công nghệ tại Việt Nam của công ty hàng đầu thế giới về hệ thống lưu trữ này.
-							</p>
-							<p>
-								Vị sếp lớn trấn an rằng tin đồn này có từ lâu, &quot;việc đó gần như không thể xảy ra&quot;, anh nói, &quot;cá bé không thể nuốt cá lớn được&quot;.
-							</p>
-							<p>
-								Gọi là cá bé vì khi đó Dell là công ty tư nhân, giá trị ước tính khoảng 24 tỷ USD. Trong khi đó, EMC có vốn hoá thị trường ước tính 35 tỷ USD, chưa kể EMC còn sở hữu khoảng 80% cổ phần của Vmware, một tên tuổi về ảo hoá hạ tầng công nghệ thông tin thị giá tương đương 23 tỷ USD nữa.
+								{media.content}
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px]">
 								<span>
@@ -159,9 +186,9 @@ const SocialPostPage: FC = () => {
 								</span>
 								<span>
 									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
-									<button onClick={toggleModalReact}>
+									<Link to="/social/comments">
 										21,3k
-									</button>
+									</Link>
 								</span>
 								<span>
 									<img src={iconEye} alt="View" className="inline-block mr-2" />
@@ -170,7 +197,13 @@ const SocialPostPage: FC = () => {
 									</button>
 								</span>
 							</div>
+							<div className="border-b border-gray-300"></div>
+							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
+								
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
+							</div>
 						</div>
+						{/* Post Suggest */}
 						<div className="post__suggest">
 							<p>Liên quan</p>
 							<div>
@@ -195,6 +228,11 @@ const SocialPostPage: FC = () => {
 					</div>
 				</div>
 			</div>
+			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+					<ModalCreateArticle show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
+				</div>
+			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" style={{ width: "550px", maxHeight: "440px" }}>
 					<div className="flex items-center justify-between border-b border-secondary-gray border-opacity-30 px-3">
@@ -230,121 +268,12 @@ const SocialPostPage: FC = () => {
 								</div>
 							</li>
 						))}
-						<li></li>
 					</ul>
 				</div>
 			</ModalContainer>
-			<ModalFullContainer isModalOpen={modalShowImage} toggle={toggleModalImage}>
+			<ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
 				<div className="flex overflow-hidden transition-all transform w-full h-full">
-					{/* Image slider */}
-					<div className="flex flex-col min-h-full flex-auto text-white">
-						{/* Header react with image */}
-						<div className="flex justify-between px-6 pt-3 pb-7">
-							<div className="flex items-start justify-center" style={{ minWidth: "100px" }}>
-								<button className="focus:outline-none rounded-3xl mr-8" onClick={toggleModalImage}>
-									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-									</svg>
-								</button>
-								<div>
-									<p className="text-base">Nguyễn Thu Hương-CPMI</p>
-									<p className="text-sm">Today 02:19</p>
-								</div>
-							</div>
-							<div className="flex gap-x-5">
-								<button className="h-11 w-11 text-center">
-									<svg xmlns="http://www.w3.org/2000/svg" className="inline-block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-									</svg>
-								</button>
-								<button className="h-11 w-11 text-center">
-									<svg xmlns="http://www.w3.org/2000/svg" className="inline-block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
-									</svg>
-								</button>
-								<button className="h-11 w-11 text-center">
-									<svg xmlns="http://www.w3.org/2000/svg" className="inline-block h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-										<path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-									</svg>
-								</button>
-								<button className="flex h-11 w-11 pt-1" onClick={toggleCollapse}>
-									<img src={collapsed ? iconCollapse : iconFit} alt="Fit" className="h-8 w-8" />
-								</button>
-							</div>
-						</div>
-						{/* Main images */}
-						<div className="flex flex-grow overflow-hidden">
-							<div className="flex items-center px-3 select-none">
-								<button className="disabled:opacity-30" disabled={imageIndex === 0} onClick={handlePreviousImage}>
-									<img src={iconNext} alt="next" className="react__slider-btn" />
-								</button>
-							</div>
-							<div className="react__slider flex flex-1 justify-center px-2">
-								<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].url} />
-							</div>
-							<div className="flex items-center px-3 select-none">
-								<button className="disabled:opacity-30" disabled={imageIndex === images.length - 1} onClick={handleNextImage}>
-									<img src={iconNext} alt="next" className="react__slider-btn transform rotate-180" />
-								</button>
-							</div>
-						</div>
-						{/* Footer Image */}
-						<div className="react__images-footer text-center py-7">
-							Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn....
-						</div>
-					</div>
-
-					<div className={cn("react__comments-wrapper transition-all flex flex-col text-black bg-white h-full overflow-hidden", { collapsed })}>
-						{/* Header post */}
-						<div className="pt-4">
-							<div className="flex px-4">
-								<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="rounded-full w-12 h-12 mr-2" />
-								<div>
-									<p className="text-black text-[15px] font-bold">Nguyễn Thu Hương-CPMI</p>
-									<p className="leading-[15px] mt-1">15:30 15/2/2021</p>
-								</div>
-							</div>
-							<p className="text-[15px] pl-4 pr-5 mt-2.5 leading-4">Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn</p>
-						</div>
-						{/* Reaction */}
-						<div className="flex pb-2 mx-2.5 text-[15px] leading-4 mt-2">
-							<div className="flex flex-grow gap-x-2.5">
-								<div className="flex items-center rounded-full gap-x-2 pl-3.5 pr-2.5 py-0.5 border border-gray-300">
-									<img src={iconFace} alt="" className="h-6 w-6" />
-									<img src={iconFace} alt="" className="h-6 w-6" />
-									<span>15</span>
-								</div>
-								<div className="rounded-full border border-gray-300 p-0.5">
-									<img src={iconFacebookLike} alt="" className="h-6 w-6" />
-								</div>
-							</div>
-							<div className="flex items-center text-secondary-gray mr-4">
-								<span>
-									2 bình luận
-								</span>
-							</div>
-						</div>
-						{/* Divide */}
-						<div className="border-t border-gray-300 ml-4 mr-5"></div>
-
-						{/* Comment */}
-						<div className="react__comments-container flex-1 pt-4">
-							{/* Showmore Comment */}
-							<div className="react__comments-header ml-4 mr-5">
-								<span>View more 6 comment</span>
-							</div>
-							<ul>
-								<li></li>
-								<li></li>
-								<li></li>
-							</ul>
-						</div>
-						{/* Footer */}
-						<div>
-							footer
-						</div>
-						{/* </div> */}
-					</div>
+					<ViewPost show={modalShowImage.show} toggle={closeModalImage} images={images} index={modalShowImage.index} />
 				</div>
 			</ModalFullContainer>
 		</>

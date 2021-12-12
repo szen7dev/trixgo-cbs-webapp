@@ -1,3 +1,4 @@
+import { FileProps } from "./../../../../typings/social.d";
 import uploadFileTypes from "./upload.types";
 
 import { TAction } from "./upload.d";
@@ -10,6 +11,7 @@ interface IImageActions {
   failureUploadImage: TAction;
   uploadImage: TAction;
   cancelUploadImage: TAction;
+	removeUploadedImage: TAction;
 }
 interface IFileActions {
   setUploadFile: TAction;
@@ -18,6 +20,7 @@ interface IFileActions {
   failureUploadFile: TAction;
   uploadFile: TAction;
   cancelUploadFile: TAction;
+	removeUploadedFile: TAction;
 }
 
 const actionsImages: IImageActions = {
@@ -109,6 +112,13 @@ const actionsImages: IImageActions = {
     });
     return true;
   },
+	removeUploadedImage: (dispatch) => (file: FileProps) => {
+    dispatch({
+      type: uploadFileTypes.REMOVE_UPLOADED_IMAGE,
+      payload: file._id,
+    });
+    return true;
+  },
 };
 const actionsFiles: IFileActions = {
   setUploadFile: (dispatch) => (payload: File[]) =>
@@ -195,6 +205,13 @@ const actionsFiles: IFileActions = {
     dispatch({
       type: uploadFileTypes.CANCEL_UPLOAD_FILE,
       payload: file.id,
+    });
+    return true;
+  },
+  removeUploadedFile: (dispatch) => (file: FileProps) => {
+    dispatch({
+      type: uploadFileTypes.REMOVE_UPLOADED_FILE,
+      payload: file._id,
     });
     return true;
   },

@@ -29,7 +29,7 @@ const TabsClassifyDepartment: FC<TransitionEvents & Props> = ({ show, toggle, sh
 			leave="transition-all duration-300"
 			leaveFrom="opacity-100 left-0"
 			leaveTo="opacity-0 left-full"
-			className="absolute z-10 left-0 inset-y-0 w-full bg-primary-light"
+			className="flex flex-col absolute z-10 left-0 inset-y-0 w-full bg-primary-light"
 			{...props}
 		>
 
@@ -46,7 +46,7 @@ const TabsClassifyDepartment: FC<TransitionEvents & Props> = ({ show, toggle, sh
 					Chọn dự án, phòng ban
 				</Dialog.Title>
 			</div>
-			<div className="py-2.5 px-6">
+			<div className="py-2.5 px-6 overflow-y-auto">
 				<div className="post__department-filter rounded-full flex my-2.5">
 					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

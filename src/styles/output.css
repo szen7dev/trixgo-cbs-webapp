@@ -49500,9 +49500,9 @@ button {
   color: rgba(8, 5, 5, 0.3);
 }
 
-.custom-scroll>* {
+/* .custom-scroll>* {
   color: rgba(102, 102, 102, 1);
-}
+} */
 
 .acc-active-tab {
   box-shadow: 0 2px 0 #0165be;

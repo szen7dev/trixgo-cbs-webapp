@@ -165,6 +165,5 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css": [
       "prettier --write"
     ]
-  },
-  "proxy": "http://localhost:3000"
+  }
 }
