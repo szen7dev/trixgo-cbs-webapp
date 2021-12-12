@@ -26,7 +26,7 @@
 
 
 .post__files {
-  height: 232px;
+  max-height: 232px;
   border-color: #CCCCCC;
   overflow-y: auto;
 }
@@ -35,15 +35,15 @@
   display: flex;
 }
 
-.post__files .post__files-image {
+.post__files-image {
   position: relative;
   height: 186px;
   width: 186px;
 }
 
-.post__files .post__files-image:not(:last-child) {
+/* .post__files-row .post__files-image:not(:last-child) {
   margin-right: 38px;
-}
+} */
 
 .post__files-image img {
   height: 100%;
@@ -327,4 +327,35 @@
 
 .react__comment-content {
 	color: var(--gray-400);
+}
+
+.react__replay [contenteditable][placeholder]:empty:before {
+	content: attr(placeholder);
+	position: absolute;
+	color: gray;
+	background-color: transparent;
+}
+.react__replay {
+	max-height: 300px;
+	/* overflow-y: auto; */
+}
+
+/* Comment page */
+.comment__header {
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	z-index: 10;
+}
+
+.comment__wrapper {
+	background-color: #F0F0F0;
+}
+
+.comment__header-main,
+.comment__container {
+	max-width: 680px;
+}
+
+.comment__container {
+	margin: 0 auto;
+	background-color: white;
 }
