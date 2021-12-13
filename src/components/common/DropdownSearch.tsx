@@ -3,6 +3,8 @@ import {map as _map} from "lodash";
 import API from "../../apis/repository";
 import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
+import Close from "../../assets/icons/Close";
+import TriangleDown from "../../assets/icons/TriangleDown";
 
 export type Item = {
     id: string | number;
@@ -17,11 +19,13 @@ type Props = {
     placeholder?: string;
     searchUrl?: string;
     searchParam?: string;
-    initialValue?: string | number;
+    initialValue?: string | number | Array<string|number>;
     onchangeValue?: (item: Item) => void;
     className?: string;
     classNameItem?: string;
-    renderItem?: (item: Item) => ReactNode
+    classNameInput?: string;
+    renderItem?: (item: Item) => ReactNode;
+    isMultiple?: boolean;
 }
 
 type Params = {
@@ -37,10 +41,13 @@ const DropdownSearchable:FC<Props> = ({
       onchangeValue,
       className,
       classNameItem,
-      renderItem
+      classNameInput,
+      renderItem,
+      isMultiple
     }) => {
 
     const [value, setValue] = useState<Item>();
+    const [values, setValues] = useState<Array<Item>>();
     const [displayData, setDisplayData] = useState<Array<Item>>([]);
     const [showOption, setShowOption] = useState(false);
     const [firstInit, setFirstInit] = useState(true);
@@ -54,16 +61,14 @@ const DropdownSearchable:FC<Props> = ({
         // in case having default data array and default value id
         if (data) {
             setDisplayData(data);
-            const initialItem = data?.find(item => item.id === initialValue);
-            setValue(initialItem);
+            setDefaultValue(data);
         }
     }, []);
 
     useEffect(() => {
         // in case have to make request for first time and default value id
         if (!data && !defaultValueHaveBeenChange) {
-            const initialItem = displayData?.find(item => item.id === initialValue);
-            setValue(initialItem)
+            setDefaultValue(displayData);
         }
     }, [displayData]);
 
@@ -81,7 +86,11 @@ const DropdownSearchable:FC<Props> = ({
     }, [searchTerm,data]);
 
     const handleSetValue = (item: Item) => {
-        setValue(item);
+        if (isMultiple) {
+            setValues(oldValues => [...oldValues??[], item]);
+        } else {
+            setValue(item);
+        }
         setShowOption(false);
         setDefaultValueHaveBeenChange(true);
         if (onchangeValue) {
@@ -110,6 +119,24 @@ const DropdownSearchable:FC<Props> = ({
         return data;
     };
 
+    const setDefaultValue = (checkDataArr:Array<Item>) => {
+        if (initialValue) {
+            if (isMultiple) {
+                if (typeof initialValue !== "number" && typeof initialValue !== "string") {
+                    const initialItem = checkDataArr?.filter(item => initialValue.includes(item.id));
+                    setValues(initialItem ?? []);
+                }
+            } else {
+                const initialItem = checkDataArr?.find(item => item.id === initialValue);
+                setValue(initialItem);
+            }
+        }
+    }
+
+    const handleRemoveItem = (id:string|number) => {
+        setValues(values?.filter(item => item.id !== id));
+    };
+
     const renderOptions = () => {
         if (displayData?.length === 0 ) {
             return (
@@ -119,7 +146,11 @@ const DropdownSearchable:FC<Props> = ({
         return _map(displayData, (option) => (
             <div
                 key={option.id}
-                className={"select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " + (classNameItem ?? '') + (option.id === value?.id ? 'bg-blue-100':'')}
+                className={
+                    "select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " +
+                    (classNameItem ?? '') +
+                    (isMultiple ? (values?.find(v => v.id === option.id) ? 'bg-blue-100':'') : (option.id === value?.id ? 'bg-blue-100':''))
+                }
                 onClick={() => handleSetValue(option)}
                 data-option-value={option.id}
             >
@@ -127,21 +158,46 @@ const DropdownSearchable:FC<Props> = ({
                     renderItem?
                         renderItem(option):
                         <div className={"flex align-items-center"}>
-                            {option?.imageUrl?<img alt={"Avt"} src={option.imageUrl} className={"w-9 h-9"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
+                            {option?.imageUrl?<img alt={"Avt"} src={option.imageUrl} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
                         </div>
                 }
             </div>
         ))
     };
 
+    const renderSelectedValue = () => {
+        if (isMultiple) {
+            return (
+                <div className={"flex border border-gray-400 p-1 h-full rounded pl-2 pr-4 cursor-pointer align-items-center flex-wrap overflow-y-scroll " + (classNameInput??'')}>
+                    {/*<div className={"flex flex-wrap"}>*/}
+                        {_map(values, (option) => (
+                            <div onClick={() => handleRemoveItem(option.id)} key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
+                                {option?.text}
+                                <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
+                                    <Close/>
+                                </div>
+                            </div>
+                        ))}
+                    {/*</div>*/}
+                    <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"} onClick={() => toggleShowOption()}>
+                        <TriangleDown/>
+                    </div>
+                </div>
+            )
+        }
+        return (
+            <div onClick={() => toggleShowOption()} className={"relative flex border border-gray-400 p-1 h-full rounded pl-2 pr-4 cursor-pointer align-items-center " + (classNameInput??'')}>
+                <span className={"flex-1"}>{value?.text??placeholder}</span>
+                <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                    <TriangleDown/>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div ref={wrapperRef} id={id} placeholder={placeholder} className={"relative select-dropdown " + (className??'')} data-value={value?.id}>
-            <p onClick={() => toggleShowOption()} className="flex border border-gray-400 p-1 h-full rounded pl-2 pr-2 cursor-pointer align-items-center">
-                <span className={"flex-1"}>{value?.text??placeholder}</span>
-                <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4"/>
-                </svg>
-            </p>
+            {renderSelectedValue()}
             {showOption?<div className={"shadow-lg rounded select-options-container absolute"}>
                 <input
                     className="select-search w-full p-3 pt-5 border-b"
@@ -158,5 +214,8 @@ const DropdownSearchable:FC<Props> = ({
         </div>
     )
 };
-
+const defaultProps: Props = {
+    isMultiple: false,
+}
+DropdownSearchable.defaultProps = defaultProps;
 export default DropdownSearchable;

@@ -9,7 +9,7 @@ export type FilePayload = {
 } & Partial<File>;
 
 export type UploadPayload = {
-  url: string;
+  signedUrl: string;
   file: FilePayload;
   progress?: (percentCompleted: number) => void
 }

@@ -56,6 +56,8 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			cancelUploadFile,
 			removeUploadedFile,
 			removeUploadedImage,
+			setUploadFileProgress,
+			setUploadImageProgress,
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { createMedia, updateMedia } = useSocial();
@@ -102,12 +104,20 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		attribute: 'files' | 'images',
 		formik: FormikProps<MediaPayload>) => {
 
+		if (attribute === 'files') setUploadFile(event.target.files);
+		if (attribute === 'images') setUploadImage(event.target.files);
+
 		if(event?.target?.files?.length){
 			const files = Array.prototype.slice.call(event.target.files);
+
 			const filesID = await addFileToUpload({
 				files, 
-				progressUpload: percentCompleted => {
-					console.log({ percentCompleted })
+				progress: percentCompleted => {
+					for (const index in files) {
+						setUploadImageProgress(index, percentCompleted);
+					}
+
+					console.log(`${percentCompleted}%`)
 				}
 			});
 
@@ -115,24 +125,21 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 				formik.setFieldValue(attribute, filesID);
 			}
 		}
-
-		if (attribute === 'files') setUploadFile(event.target.files);
-		if (attribute === 'images') setUploadImage(event.target.files);
 	}
 
 	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
-		switch (modalType) {
-			case 'create':
-				await createMedia(values);
-				break;
-			case 'update':
-				values.mediaID = initialValues.mediaID;
-				await updateMedia(values);
-				break;
-			default:
-				break;
-		}
+		// switch (modalType) {
+		// 	case 'create':
+		// 		await createMedia(values);
+		// 		break;
+		// 	case 'update':
+		// 		values.mediaID = initialValues.mediaID;
+		// 		await updateMedia(values);
+		// 		break;
+		// 	default:
+		// 		break;
+		// }
 
 		console.log({ values, uploads })
 

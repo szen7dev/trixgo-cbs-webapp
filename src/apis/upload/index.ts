@@ -23,7 +23,7 @@ const FileRepository = {
         axiosS3.defaults.headers['Content-Type'] = payload.file.type;
 
         const { data } = await axiosS3.put<{ id: string }>(
-            payload.url,
+            payload.signedUrl,
             payload.file,
             {
                 onUploadProgress: function(progressEvent) {

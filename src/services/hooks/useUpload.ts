@@ -2,7 +2,6 @@
  * LIBRARIES
  */
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 
 /**
  * Types, APIs
@@ -10,7 +9,7 @@ import { toast } from "react-toastify";
 import FileRepository from "apis/upload";
 import { FilePayload, UploadPayload, FileProps } from "typings/file";
 
-interface GenerateLinkResponse{
+type GenerateLinkResponse = {
     signedUrl: string,
     file: FilePayload,
     result?: FileProps
@@ -18,13 +17,13 @@ interface GenerateLinkResponse{
 
 type UploadFileProps = {
     files: FilePayload[],
-    progressUpload?: (percentCompleted: number) => void
+    progress?: (percentCompleted: number) => void
 }
 
 type UseFile = {
     generateLinkS3: (payload: FilePayload) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, progressUpload }: UploadFileProps) => Promise<(string | undefined)[] | undefined>,
+    addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<(string | undefined)[] | undefined>,
 };
 
 export const useFile = (app?: string) : UseFile => {
@@ -43,11 +42,15 @@ export const useFile = (app?: string) : UseFile => {
             FileRepository.uploadFileToS3(payload)
         ); 
 
+    // window.onbeforeunload = function() {
+    //     return true;
+    // };
+
     const generateLinkS3 = async (payload: FilePayload) => {
         try {
             const { data } = await generateLinkS3Async(payload);
             const { infoGenerateLink, infoFileAfterInsert } = data;
-            console.log({ 'GENERATE_LINK': data });
+            // console.log({ 'GENERATE_LINK': data });
 
             return {
                 signedUrl: infoGenerateLink.data,
@@ -65,15 +68,10 @@ export const useFile = (app?: string) : UseFile => {
             await uploadFileToS3Async(payload);
         } catch (error: unknown) {
             console.error(error);
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
         }
     };
 
-    const addFileToUpload = async ({ files, progressUpload }: UploadFileProps) => {
+    const addFileToUpload = async ({ files, progress }: UploadFileProps) => {
         let urlsPromise: Promise<GenerateLinkResponse>[] = [];
 
         if(!files.length) return;
@@ -92,10 +90,8 @@ export const useFile = (app?: string) : UseFile => {
         const listURLPresigned = await Promise.all(urlsPromise);
 
         listURLPresigned.length && listURLPresigned.map((link: GenerateLinkResponse) => {
-            if(link){
-                const { signedUrl, file } = link;
-                uploadFileToS3({ url: signedUrl, file, progress: progressUpload });
-            }
+            const { signedUrl, file } = link;
+            uploadFileToS3({ signedUrl, file, progress });
         })
 
         return listURLPresigned.map(file => file.result?._id);
