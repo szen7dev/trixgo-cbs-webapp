@@ -92,10 +92,10 @@ const Routes: FC = () => {
             <ChatProvider>
               <ModalProvider>
                 <Switch>
-                  <Route path="/tasks">
+                  <Route path="/">
                     <HomeLayout>
                       <Switch>
-                        <Route path="/tasks" component={DashboardPage} />
+                        <Route path="/" component={DashboardPage} />
                       </Switch>
                     </HomeLayout>
                   </Route>
@@ -126,7 +126,7 @@ const Routes: FC = () => {
                     </FullPageLayout>
                   </Route>
 
-                  <Route exact path="/">
+                  {/* <Route exact path="/">
                     <Redirect to="/dashboard" />
                   </Route>
 
@@ -141,7 +141,7 @@ const Routes: FC = () => {
                         <Route path="/dashboard/*" component={ErrorPage} />
                       </Switch>
                     </MainLayout>
-                  </Route>
+                  </Route> */}
 
                   <Route path="/customers">
                     <MainLayout>
