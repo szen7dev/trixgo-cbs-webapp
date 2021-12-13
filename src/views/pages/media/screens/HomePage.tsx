@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
@@ -78,7 +78,7 @@ const SocialHomePage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle show={isShowCreateModal} toggle={toggleCreateModal} />
+					<ModalCreateArticle show={isShowCreateModal} toggle={toggleCreateModal} modalType="create" />
 				</div>
 			</ModalContainer>
 		</>

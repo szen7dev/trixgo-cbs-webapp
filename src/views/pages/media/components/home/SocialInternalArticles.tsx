@@ -13,7 +13,7 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 		<div {...props}>
 			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
 			<ul>
-				{listMedias.length && listMedias.map((media: MediaProps) => (
+				{listMedias.length ? listMedias.map((media: MediaProps) => (
 					<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }} key={media._id}>
 						<p className="font-bold text-lg leading-5">
 							<Link to={`/social/post/${media._id}`}>
@@ -42,7 +42,7 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 							</div>
 						</div>
 					</li>
-				))}
+				)) : ''}
 			</ul>
 		</div>
 	)
