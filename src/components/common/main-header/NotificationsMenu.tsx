@@ -3,7 +3,7 @@ import { FC, Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 import NotificationItem from "components/shared/NotificationItem";
-import BellIcon from "assets/icons/Bell";
+import iconNotification from "assets/images/icons8-notification-32.png";
 
 const NotificationsMenu: FC = () => {
   return (
@@ -11,7 +11,7 @@ const NotificationsMenu: FC = () => {
       <div>
         <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
           <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">25</span>
-          <BellIcon className="w-5 h-5 text-primary-gray" />
+          <img src={iconNotification} alt="Filter" className="w-6 h-6 filter-secondary-gray" />
         </Menu.Button>
       </div>
 

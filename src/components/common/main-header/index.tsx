@@ -4,10 +4,10 @@ import { useModal } from "services/hooks/useModal";
 
 import MainSearchDialog from "components/common/MainSearchDialog";
 import NotificationsMenu from "./NotificationsMenu";
+import AppsMenu from "./AppsMenu";
 import UserMenu from "./UserMenu";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
-import iconGrid from "assets/images/icons8-menu-100.png";
 import iconFilter from "assets/images/icons8-filter-96.png";
 
 const MainHeader: FC = () => {
@@ -62,9 +62,11 @@ const MainHeader: FC = () => {
             </button>
 
             {/* <MessagesMenu /> */}
-            <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
+
+            <AppsMenu />
+            {/* <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
-            </button>
+            </button> */}
 
             <NotificationsMenu />
 
