@@ -1,11 +1,17 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react';
 
+/**
+ * LIBRARIES
+ */
 import { Dialog } from '@headlessui/react';
-import { Form, Formik } from 'formik';
+import { Form, Formik, ErrorMessage, FormikProps } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
 
+/**
+ * ASSETS, COMPONENTS
+ */
 import IconFile from '../Icon/IconFile';
 import IconImage from '../Icon/IconImage';
 import PostFile from '../post/PostFile';
@@ -14,17 +20,28 @@ import TabsClassifyArticle from './TabsClassifyArticle';
 import TabsClassifyArticleCommunity from './TabsClassifyArticleCommunity';
 import TabsClassifyDepartment from './TabsClassifyDepartment';
 import TabsOverlay from './TabsOverlay';
-
 import iconDown from 'assets/images/Frame 1745.png';
 
-import { FileProps, FilePropsUpload, ModalProps, PostPayload } from 'typings/social';
+/**
+ * CONTEXTS
+ */
 import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
 import useUpload from '../../context/useUpload';
 import uploadActions from '../../context/upload.actions';
 import { IMethodFiles, IMethodImages } from '../../context/upload';
 import { modifyUploadedFiles } from '../../context/upload.utils';
 
-const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
+/**
+ * Types, Services
+ */
+import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { AddFileUploadResponse } from 'typings/file';
+import { useSocial } from 'services/hooks/useSocial';
+import { useFile } from 'services/hooks/useUpload';
+import { typeTextSelected } from '../../utils';
+
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
+	mediaID: "",
 	title: "",
 	content: "",
 	type: 'just-me',
@@ -38,7 +55,12 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 			cancelUploadFile,
 			removeUploadedFile,
 			removeUploadedImage,
+			setUploadFileProgress,
+			setUploadImageProgress,
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
+
+	const { createMedia, updateMedia } = useSocial();
+	const { addFileToUpload } = useFile('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -70,35 +92,57 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
 	const toggleClassifyArticleCommunity = () => setShowClassifyArticleCommunity(!showClassifyArticleCommunity);
 
-	const registerSchema = object().shape({
-		title: string().required("First and last name required!"),
-		content: string().required("First and last name required!"),
+	const mediaSchema = object().shape({
+		title: string().required("Bạn cần nhập tiêu đề cho bài viết"),
+		content: string().required("Bạn cần nhập nội dung cho bài viết"),
+		type: string().required("Loại bài viết không hợp lệ"),
 	});
 
-	const currentSelected = (key: string) => {
-		switch (key) {
-			case 'company':
-				return "Thành viên trong công ty";
-			case 'just-me':
-				return "Chỉ mình tôi";
-			case 'departments':
-				return "Dự án, phòng ban";
-			case 'community':
-				return "Cộng đồng";
-			case 'system':
-				return "Hệ thống";
-			default:
-				return "Thành viên trong công ty";
+	const handleSetFiles = async (
+		event: React.ChangeEvent<HTMLInputElement>,
+		attribute: 'files' | 'images',
+		formik: FormikProps<MediaPayload>) => {
+
+		if (attribute === 'files') setUploadFile(event.target.files);
+		if (attribute === 'images') setUploadImage(event.target.files);
+
+		if(event?.target?.files?.length){
+			const files = Array.prototype.slice.call(event.target.files);
+			const listFileUploaded: AddFileUploadResponse[] = [];
+
+			for (const file of files) {
+				const { id, name } = await addFileToUpload({
+					files: file,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, file, refsImages.current)
+					}
+				});
+
+				listFileUploaded.push({ id, name });
+			}
+
+			if(listFileUploaded && listFileUploaded.length){
+				formik.setFieldValue(attribute, listFileUploaded.map(file => file.id));
+			}
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
-		if (attribute === 'files') setUploadFile(event.target.files);
-		if (attribute === 'images') setUploadImage(event.target.files);
-	}
-
-	const handleSubmit = async (values: PostPayload) => {
+	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
+		switch (modalType) {
+			case 'create':
+				await createMedia(values);
+				break;
+			case 'update':
+				values.mediaID = initialValues.mediaID;
+				await updateMedia(values);
+				break;
+			default:
+				break;
+		}
+
+		console.log({ values, uploads })
+		toggle();
 		return [values, uploads];
 	};
 
@@ -124,12 +168,12 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		// <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" {...props}>
 		<Formik
 			initialValues={initialValues}
-			validationSchema={registerSchema}
+			validationSchema={mediaSchema}
 			onSubmit={handleSubmit}
 		>
 			{
 				formik => {
-					const { setFieldValue, values } = formik;
+					const { values } = formik;
 					return (
 						<Form autoComplete="off" >
 							<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
@@ -148,19 +192,29 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 							<div className="px-6 mt-3">
 								<button type="button" onClick={toggleClassifyArticle} className="btn__select w-56 flex justify-between items-center">
 									<span>
-										{currentSelected(values.type)}
+										{typeTextSelected(values.type)}
 									</span>
 									<img src={iconDown} alt="icon down" className="inline-block" />
 								</button>
 							</div>
 							<div className="px-6 mt-2 pt-3.5 flex-1">
 								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
+								<ErrorMessage
+									name="title"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
 									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
 									{...formik.getFieldProps('content')}
 								></textarea>
+								<ErrorMessage
+									name="content"
+									component="span"
+									className="font-normal text-sm text-negative italic"
+								/>
 								<div
 									className={
 										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
@@ -183,11 +237,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images')} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images', formik)} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files')} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files', formik)} />
 									</label>
 								</div>
 								<div>
@@ -201,7 +255,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								showMore={(type: string) => {
 									switch (type) {
 										case 'community':
-											toggleClassifyArticleCommunity()
+											toggleClassifyArticleCommunity();
 											break;
 										default:
 											toggleClassifyDepartment();

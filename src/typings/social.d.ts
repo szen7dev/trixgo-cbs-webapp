@@ -1,16 +1,29 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
-export type PostPayload = {
+export type MediaPayload = {
+  mediaID?: string,
   title: string;
   content: string;
+  files?: Array<FileProps>,
+  images?: Array<FileProps>,
   type: string;
+};
+
+export type PostResponse = APIResponse & {
+  data: MediaProps,
+  message: string,
+};
+
+export type infoMediaResponse = APIResponse & {
+  data: MediaProps
 };
 
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
   onRemove?(file: FileProps | FilePropsUpload): void;
 };
+
 export type PostImageProps = {
   images?: Array<FileProps | FilePropsUpload>;
   onRemove?(file: FileProps | FilePropsUpload): void;
@@ -21,6 +34,12 @@ export type FileProps = {
   url: string;
   name: string;
   size: number;
+  file?: {
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+  }
 };
 
 export type ImageProps = {
@@ -28,10 +47,18 @@ export type ImageProps = {
   url: string;
   name: string;
   size: number;
+  file?: {
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+  }
 };
 
 export type ListMediasPayload = {
   lastestID?: string;
+  limit?: number;
+  companyID?: string;
 };
 
 export type ListMediasResponse = APIResponse & {
@@ -43,37 +70,28 @@ export type ListMediasResponse = APIResponse & {
 };
 
 export type MediaProps = {
-  _id: string;
-  content: string;
-  type: number;
-  files: Array<{
-    _id: string;
-    name: string;
-    size: string;
-    url: string;
-  }>;
+  _id: string,
+  title: string,
+  content: string,
+  type: number,
+  files: FileProps[] | undefined,
+  images: FileProps[] | undefined,
   tagFriends: Array<{
     _id: string;
     fullname: string;
   }>;
-  images: Array<{
-    _id: string;
-    name: string;
-    size: string;
-    url: string;
-  }>;
-  status: number;
-  kind: number;
-  state: number;
-  author: Array<{
-    _id: string;
-    image: string;
+  status: number,
+  kind: number,
+  state: number,
+  author: {
+    _id: string,
+    image: string,
     company: Array<{
-      _id: string;
-      name: string;
-    }>;
-    fullname: string;
-  }>;
+      _id: string,
+      name: string
+    }>,
+    fullname: string
+  },
   location: {
     type: string;
     _id: string;
@@ -88,6 +106,7 @@ export type MediaProps = {
   createdAt: string;
   updatedAt: string;
 };
+
 export type FilePropsUpload = {
   id: number;
   file: File;
@@ -99,11 +118,13 @@ export type FilePropsUpload = {
 interface ModalProps {
   show: boolean;
   toggle(): void;
+  modalType?: 'create' | 'update';
   initialValues?: {
+    mediaID?: string;
     title: string;
     content: string;
     type: string;
   };
-  files?: Array<FileProps>;
-  images?: Array<FileProps>;
+  files?: FileProps[] | undefined;
+  images?: FileProps[] | undefined;
 }
