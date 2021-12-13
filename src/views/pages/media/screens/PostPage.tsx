@@ -34,21 +34,22 @@ import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
 /**
- * Types, Services, Apis
+ * Types, Services, Utils
  */
 import { FileProps, ImageProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
+import { typePostSelected } from '../utils';
 
 const SocialPostPage: FC = () => {
-	const params = useParams<{ id: string }>();
 	const history = useHistory();
+	const { mediaID } = useParams<{ mediaID: string }>();
 	const { deleteMedia } = useSocial();
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
+	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(mediaID));
 	const media = data?.data;
 
 	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
@@ -57,7 +58,7 @@ const SocialPostPage: FC = () => {
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
 
 	const handleDeleteMedia = async () => {
-		await deleteMedia(params.id);
+		await deleteMedia(mediaID);
 		history.push('/social/home');
 	}
 
@@ -70,15 +71,17 @@ const SocialPostPage: FC = () => {
 		name: "test",
 		size: 123123
 	}))
-	
-	const initialState = {
-		title: "",
-		content: "",
-		type: 'just-me',
-	}
 
 	if(!media){
 		return <Loader className="border-primary" />;
+	}
+	console.log({ media })
+
+	const initialState = {
+		mediaID,
+		title: media.title,
+		content: media.content,
+		type: typePostSelected(media.type),
 	}
 
 	return (
@@ -162,9 +165,9 @@ const SocialPostPage: FC = () => {
 						{/* Main post */}
 						<div className="post__content pb-2.5">
 							<div className="post__content-images">
-								{images.slice(0, 3).map((image, i) => (
-									<div key={image._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-										<img src={image.url} alt="" className="object-cover h-full w-full" />
+								{media.images.slice(0, 3).map((image, i) => (
+									<div key={image.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+										<img src={image.file?.url} alt="" className="object-cover h-full w-full" />
 										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
 											+{images.length - 2}
 										</div>}
@@ -172,7 +175,7 @@ const SocialPostPage: FC = () => {
 								))}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
-								<PostFile files={files} />
+								{/* <PostFile files={files} /> */}
 							</div>
 							<p>
 								{media.content}
@@ -199,7 +202,6 @@ const SocialPostPage: FC = () => {
 							</div>
 							<div className="border-b border-gray-300"></div>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								
 								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
 							</div>
 						</div>
@@ -230,7 +232,7 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
+					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
 				</div>
 			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>

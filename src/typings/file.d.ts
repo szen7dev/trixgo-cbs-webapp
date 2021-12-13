@@ -6,11 +6,12 @@ export type FilePayload = {
   name: string;
   size: string;
   app?: string;
-};
+} & Partial<File>;
 
 export type UploadPayload = {
   url: string;
-  file: FilePayload
+  file: FilePayload;
+  progress?: (percentCompleted: number) => void
 }
 
 export type FileResponse = APIResponse & {

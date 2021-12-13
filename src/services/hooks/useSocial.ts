@@ -7,6 +7,7 @@ type UseSocial = {
     listMedias: Array<MediaProps>,
     isLoadingListMedias: boolean,
     createMedia: (payload: MediaPayload) => Promise<void>,
+    updateMedia: (payload: MediaPayload) => Promise<void>,
     deleteMedia: (id: string) => Promise<void>,
     refetchListMedias: () => void,
     nextPageListMedias: () => void,
@@ -20,6 +21,11 @@ export const useSocial = () : UseSocial => {
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
+        );
+
+    const { mutateAsync: updateMediaAsync } =
+        useMutation((payload: MediaPayload) =>
+            SocialRepository.updateMedia(payload)
         );
         
     const { mutateAsync: deleteMediaAsync } =
@@ -70,6 +76,25 @@ export const useSocial = () : UseSocial => {
         }
     };
 
+    const updateMedia = async (payload: MediaPayload) => {
+        try {
+            const { error, data, message } = await updateMediaAsync(payload);
+            console.log({ error, data, message });
+
+            if (!error) {
+                toast.success('Cập nhật bài viết thành công');
+            } else {
+                toast.error(message);
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const deleteMedia = async (id: string) => {
         try {
             const { error, data, message } = await deleteMediaAsync(id);
@@ -96,6 +121,7 @@ export const useSocial = () : UseSocial => {
 
     return {
         createMedia,
+        updateMedia,
         deleteMedia,
         listMedias,
         isLoadingListMedias,
