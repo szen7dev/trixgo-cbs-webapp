@@ -139,7 +139,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								>
 									Bài viết mới
 								</Dialog.Title>
-								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" onClick={() => toggle()}>
+								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 									</svg>
