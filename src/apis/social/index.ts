@@ -13,6 +13,13 @@ const SocialRepository = {
         );
         return data;
     },
+    async updateMedia(payload: MediaPayload): Promise<PostResponse> {
+        const { data } = await API.put<PostResponse>(
+            `${mediaURL}`,
+            payload
+        );
+        return data;
+    },
     async deleteMedia(id: string): Promise<infoMediaResponse> {
         const { data } = await API.delete<infoMediaResponse>(
             `${mediaURL}?mediaID=${id}`
