@@ -165,9 +165,9 @@ const SocialPostPage: FC = () => {
 						{/* Main post */}
 						<div className="post__content pb-2.5">
 							<div className="post__content-images">
-								{media.images.slice(0, 3).map((image, i) => (
-									<div key={image.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-										<img src={image.file?.url} alt="" className="object-cover h-full w-full" />
+								{media.images && media.images.slice(0, 3).map((image, i) => (
+									<div key={image?.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+										<img src={image?.file?.url} alt="" className="object-cover h-full w-full" />
 										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
 											+{images.length - 2}
 										</div>}
@@ -232,7 +232,7 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
+					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={media.files} images={media.images} />
 				</div>
 			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>

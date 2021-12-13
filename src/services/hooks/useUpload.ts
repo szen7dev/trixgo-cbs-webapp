@@ -7,23 +7,24 @@ import { useMutation } from "react-query";
  * Types, APIs
  */
 import FileRepository from "apis/upload";
-import { FilePayload, UploadPayload, FileProps } from "typings/file";
+import { FilePayload, UploadPayload, FileProps, AddFileUploadResponse } from "typings/file";
 
 type GenerateLinkResponse = {
     signedUrl: string,
+    fileName: string,
     file: FilePayload,
     result?: FileProps
 }
 
 type UploadFileProps = {
-    files: FilePayload[],
+    files: FilePayload,
     progress?: (percentCompleted: number) => void
 }
 
 type UseFile = {
     generateLinkS3: (payload: FilePayload) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<(string | undefined)[] | undefined>,
+    addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<AddFileUploadResponse>,
 };
 
 export const useFile = (app?: string) : UseFile => {
@@ -40,11 +41,7 @@ export const useFile = (app?: string) : UseFile => {
     const { mutateAsync: uploadFileToS3Async } =
         useMutation((payload: UploadPayload) =>
             FileRepository.uploadFileToS3(payload)
-        ); 
-
-    // window.onbeforeunload = function() {
-    //     return true;
-    // };
+        );
 
     const generateLinkS3 = async (payload: FilePayload) => {
         try {
@@ -55,11 +52,12 @@ export const useFile = (app?: string) : UseFile => {
             return {
                 signedUrl: infoGenerateLink.data,
                 file: payload,
+                fileName: infoFileAfterInsert.name,
                 result: infoFileAfterInsert
             }
         } catch (error: unknown) {
             console.error(error);
-            return { signedUrl: '', file: payload };
+            return { signedUrl: '', fileName: '', file: payload };
         }
     };
 
@@ -72,29 +70,32 @@ export const useFile = (app?: string) : UseFile => {
     };
 
     const addFileToUpload = async ({ files, progress }: UploadFileProps) => {
-        let urlsPromise: Promise<GenerateLinkResponse>[] = [];
+        // let urlsPromise: Promise<GenerateLinkResponse>[] = [];
 
-        if(!files.length) return;
+        // if(!files.length) return;
 
-        if(files.length === 1){
-            const infoUrl = generateLinkS3(files[0]);
-            urlsPromise = [infoUrl];
-        } else{
-            for (const file of files) {
-                const infoUrl = generateLinkS3(file);
-                urlsPromise = [...urlsPromise, infoUrl];
-            }   
-        }
+        // if(files.length === 1){
+        //     const infoUrl = generateLinkS3(files[0]);
+        //     urlsPromise = [infoUrl];
+        // } else{
+        //     for (const file of files) {
+        //         const infoUrl = generateLinkS3(file);
+        //         urlsPromise = [...urlsPromise, infoUrl];
+        //     }   
+        // }
 
-        // Generate link S3 -> get list link presigned upload -> upload S3 async
-        const listURLPresigned = await Promise.all(urlsPromise);
+        // // Generate link S3 -> get list link presigned upload -> upload S3 async
+        // const listURLPresigned = await Promise.all(urlsPromise);
 
-        listURLPresigned.length && listURLPresigned.map((link: GenerateLinkResponse) => {
-            const { signedUrl, file } = link;
-            uploadFileToS3({ signedUrl, file, progress });
-        })
+        // listURLPresigned.length && listURLPresigned.map((link: GenerateLinkResponse) => {
+        //     const { signedUrl, file } = link;
+        //     uploadFileToS3({ signedUrl, file, progress });
+        // })
 
-        return listURLPresigned.map(file => file.result?._id);
+        const { signedUrl, file, fileName, result } = await generateLinkS3(files);
+        await uploadFileToS3({ signedUrl, file, progress });
+
+        return { id: result?._id, name: fileName };
     }
 
     return {
