@@ -14,6 +14,11 @@ export type UploadPayload = {
   progress?: (percentCompleted: number) => void
 }
 
+export type AddFileUploadResponse = {
+  id: string | undefined;
+  name: string;
+}
+
 export type FileResponse = APIResponse & {
   data: {
     infoGenerateLink: {

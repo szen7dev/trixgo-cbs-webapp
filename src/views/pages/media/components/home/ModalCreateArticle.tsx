@@ -35,6 +35,7 @@ import { modifyUploadedFiles } from '../../context/upload.utils';
  * Types, Services
  */
 import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { AddFileUploadResponse } from 'typings/file';
 import { useSocial } from 'services/hooks/useSocial';
 import { useFile } from 'services/hooks/useUpload';
 import { typeTextSelected } from '../../utils';
@@ -43,8 +44,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	mediaID: "",
 	title: "",
 	content: "",
-	files: [],
-	images: [],
 	type: 'just-me',
 } }) => {
 	const [uploads,
@@ -109,40 +108,40 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 
 		if(event?.target?.files?.length){
 			const files = Array.prototype.slice.call(event.target.files);
+			const listFileUploaded: AddFileUploadResponse[] = [];
 
-			const filesID = await addFileToUpload({
-				files, 
-				progress: percentCompleted => {
-					for (const index in files) {
-						setUploadImageProgress(index, percentCompleted);
+			for (const file of files) {
+				const { id, name } = await addFileToUpload({
+					files: file,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, file, refsImages.current)
 					}
+				});
 
-					console.log(`${percentCompleted}%`)
-				}
-			});
+				listFileUploaded.push({ id, name });
+			}
 
-			if(filesID && filesID.length){
-				formik.setFieldValue(attribute, filesID);
+			if(listFileUploaded && listFileUploaded.length){
+				formik.setFieldValue(attribute, listFileUploaded.map(file => file.id));
 			}
 		}
 	}
 
 	const handleSubmit = async (values: MediaPayload) => {
 		// Handle api here!
-		// switch (modalType) {
-		// 	case 'create':
-		// 		await createMedia(values);
-		// 		break;
-		// 	case 'update':
-		// 		values.mediaID = initialValues.mediaID;
-		// 		await updateMedia(values);
-		// 		break;
-		// 	default:
-		// 		break;
-		// }
+		switch (modalType) {
+			case 'create':
+				await createMedia(values);
+				break;
+			case 'update':
+				values.mediaID = initialValues.mediaID;
+				await updateMedia(values);
+				break;
+			default:
+				break;
+		}
 
 		console.log({ values, uploads })
-
 		toggle();
 		return [values, uploads];
 	};
