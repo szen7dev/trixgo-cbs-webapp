@@ -11,7 +11,7 @@ import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 
 const HomeNavigation: FC = () => {
   return (
-    <div className="t-leftsidebar-navigation fixed left-0 top-16 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
+    <div className="t-leftsidebar-navigation fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* user */}
         <div className="t-leftsidebar-user flex items-center mb-4">
@@ -30,19 +30,19 @@ const HomeNavigation: FC = () => {
         <div className="t-leftsidebar-menu-block mb-4">
           <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
           <div className="t-leftsidebar-menu-container">
-            <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
+            <a className="t-leftsidebar-menu-item flex items-center mb-5 text-primary-gray" href="/">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý công việc</span>
             </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
+            <a className="t-leftsidebar-menu-item flex items-center mb-5 text-primary-gray" href="/">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hồ sơ</span>
             </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
+            <a className="t-leftsidebar-menu-item flex items-center mb-5 text-primary-gray" href="/">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý nhân sự</span>
             </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-5" href="/">
+            <a className="t-leftsidebar-menu-item flex items-center mb-5 text-primary-gray" href="/">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hợp đồng</span>
             </a>

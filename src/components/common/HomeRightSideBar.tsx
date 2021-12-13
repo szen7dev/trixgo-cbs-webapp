@@ -13,7 +13,7 @@ const HomeRightSideBar: FC = () => {
   return (
     <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light">
       <div className="flex items-center flex-col">
-        <button className="t-right-sidebar-btn-add w-10 h-10 bg-primary-light rounded-full bg-secondary-light hover:bg-accent-light mt-16">
+        <button className="t-right-sidebar-btn-add w-10 h-10 bg-primary-light rounded-full bg-secondary-light hover:bg-accent-light mt-14">
           <img src={iconPlus} alt="Thumbnail" className="w-6 h-6 mr-auto ml-auto rounded-full filter-blue" />
         </button>
         <a className="mt-4" href="/">

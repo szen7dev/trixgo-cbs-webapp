@@ -15,7 +15,9 @@ export const INITIAL_STATE: ISTATE = {
   images: {},
 };
 
-const fileUploadReducer: TReducer = (state = INITIAL_STATE, action) => {
+const fileUploadReducer: TReducer = (state, action) => {
+	let cloneFiles;
+	let cloneImages;
   switch (action.type) {
     case uploadFileTypes.SET_UPLOAD_FILE:
       return {
@@ -102,16 +104,28 @@ const fileUploadReducer: TReducer = (state = INITIAL_STATE, action) => {
         },
       };
     case uploadFileTypes.CANCEL_UPLOAD_FILE:
-      // eslint-disable-next-line no-case-declarations
-      const cloneFiles = { ...state.files };
+			cloneFiles = { ...state.files };
       delete cloneFiles[action.payload];
       return {
         ...state,
         files: cloneFiles,
       };
     case uploadFileTypes.CANCEL_UPLOAD_IMAGE:
-      // eslint-disable-next-line no-case-declarations
-      const cloneImages = { ...state.images };
+      cloneImages = { ...state.images };
+      delete cloneImages[action.payload];
+      return {
+        ...state,
+        images: cloneImages,
+      };
+    case uploadFileTypes.REMOVE_UPLOADED_FILE:
+			cloneFiles = { ...state.files };
+      delete cloneFiles[action.payload];
+      return {
+        ...state,
+        files: cloneFiles,
+      };
+    case uploadFileTypes.REMOVE_UPLOADED_IMAGE:
+      cloneImages = { ...state.images };
       delete cloneImages[action.payload];
       return {
         ...state,

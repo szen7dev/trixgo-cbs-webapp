@@ -10,7 +10,7 @@ const NotificationsMenu: FC = () => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
-          <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-negative border-2 border-primary-light rounded-full"></div>
+          <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">25</span>
           <BellIcon className="w-5 h-5 text-primary-gray" />
         </Menu.Button>
       </div>

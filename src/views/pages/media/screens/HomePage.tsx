@@ -1,27 +1,25 @@
-import { FC, useState } from "react";
-
+import { FC, useState, useEffect } from "react";
 import cn from "classnames";
 
-import ModalContainer from "./components/ModalContainer";
+import ModalContainer from "../components/ModalContainer";
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
-import './style.css';
+import '../style.css';
 
-import SocialMainArticle from "./home/SocialMainArticle";
-import SocialAdvertisement from "./home/SocialAdvertisement";
-import SocialSpecializedTopics from "./home/SocialSpecializedTopics";
-import SocialInternalArticles from "./home/SocialInternalArticles";
-import SocialCommunityPost from "./home/SocialCommunityPost";
-import ModalCreateArticle from "./home/ModalCreateArticle";
-import { useAuth } from "services/hooks/useAuth";
-import { useSocial } from "services/hooks/useSocial";
+import SocialMainArticle from "../components/home/SocialMainArticle";
+import SocialAdvertisement from "../components/home/SocialAdvertisement";
+import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics";
+import SocialInternalArticles from "../components/home/SocialInternalArticles";
+import SocialCommunityPost from "../components/home/SocialCommunityPost";
+import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	{ id: "1", title: 'Phòng ban' },
+	{ id: "1", title: 'Bài viết của tôi' },
 	{ id: "2", title: 'Phòng ban' },
-	{ id: "3", title: 'Phòng ban' },
+	{ id: "3", title: 'Cộng đồng' },
+	{ id: "4", title: 'Hệ thống' },
 ]
 
 const SocialHomePage: FC = () => {
@@ -29,10 +27,6 @@ const SocialHomePage: FC = () => {
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
-	const {listMedias} = useSocial();
-	const {dataUserInfo} = useAuth();
-	console.log("dataUserInfo",dataUserInfo);
-	console.log("listMedias",listMedias);
 	return (
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">

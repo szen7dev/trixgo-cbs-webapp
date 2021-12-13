@@ -23,7 +23,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 			leave="transition-all duration-300"
 			leaveFrom="opacity-100 left-0"
 			leaveTo="opacity-0 left-full"
-			className="absolute z-10 left-0 inset-y-0 w-full bg-primary-light"
+			className="flex flex-col absolute z-10 left-0 inset-y-0 w-full bg-primary-light"
 			{...props}
 		>
 
@@ -40,7 +40,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 					Phân loại bài viết
 				</Dialog.Title>
 			</div>
-			<div className="py-2.5 pl-6 pr-4">
+			<div className="py-2.5 pl-6 pr-4 overflow-y-auto">
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
 					<Field type="radio" value="company" name="type" className="post__classify-type" />
 					<div className="mr-3">

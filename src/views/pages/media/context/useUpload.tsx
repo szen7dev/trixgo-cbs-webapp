@@ -1,20 +1,18 @@
 import { useReducer } from 'react';
-import { dispatch, IMethod, TUseUpload } from './upload';
+import { IActions, IMethod, ISTATE, TReducer } from './upload';
 
-interface IBoundActions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[key: string]: dispatch<any>
-}
-
-const useUpload: TUseUpload = (reducer, action, defaultValues) => {
+function useUpload<T extends IMethod>(reducer: TReducer,
+	action: IActions,
+	defaultValues: ISTATE): [ISTATE, T] {
 	const [state, dispatch] = useReducer(reducer, defaultValues);
 
-	const boundActions: IBoundActions = {}
+	const boundActions: IMethod = {}
 
 	for (const key in action) {
 		boundActions[key] = action[key](dispatch)
 	}
-	return [state, boundActions as IMethod];
+
+	return [state, boundActions as T];
 }
 
 export default useUpload;
