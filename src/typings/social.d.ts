@@ -2,6 +2,7 @@ import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
 export type MediaPayload = {
+  mediaID?: string,
   title: string;
   content: string;
   files?: Array<FileProps>,
@@ -33,6 +34,12 @@ export type FileProps = {
   url: string;
   name: string;
   size: number;
+  file?: {
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+  }
 };
 
 export type ImageProps = {
@@ -40,6 +47,12 @@ export type ImageProps = {
   url: string;
   name: string;
   size: number;
+  file?: {
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+  }
 };
 
 export type ListMediasPayload = {
@@ -61,22 +74,12 @@ export type MediaProps = {
   title: string,
   content: string,
   type: number,
-  files: Array<{
-    _id: string;
-    name: string;
-    size: string;
-    url: string;
-  }>;
+  files: FileProps[] | undefined,
+  images: FileProps[] | undefined,
   tagFriends: Array<{
     _id: string;
     fullname: string;
   }>;
-  images: Array<{
-    _id: string,
-    name: string,
-    size: string,
-    url: string
-  }>,
   status: number,
   kind: number,
   state: number,
@@ -115,11 +118,13 @@ export type FilePropsUpload = {
 interface ModalProps {
   show: boolean;
   toggle(): void;
+  modalType?: 'create' | 'update';
   initialValues?: {
+    mediaID?: string;
     title: string;
     content: string;
     type: string;
   };
-  files?: Array<FileProps>;
-  images?: Array<FileProps>;
+  files?: FileProps[] | undefined;
+  images?: FileProps[] | undefined;
 }
