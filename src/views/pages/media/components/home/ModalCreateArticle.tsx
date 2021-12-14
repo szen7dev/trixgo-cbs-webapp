@@ -46,6 +46,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	content: "",
 	type: 'just-me',
 } }) => {
+
+	// console.log({ files, images })
+
 	const [uploads,
 		{ setUploadFile,
 			setUploadImage,
@@ -55,8 +58,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			cancelUploadFile,
 			removeUploadedFile,
 			removeUploadedImage,
-			setUploadFileProgress,
-			setUploadImageProgress,
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { createMedia, updateMedia } = useSocial();
@@ -181,9 +182,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 									as="h3"
 									className="text-lg leading-6 font-bold"
 								>
-									Bài viết mới
+									{initialValues.mediaID ? 'Cập nhật bài viết' : 'Bài viết mới'} 
 								</Dialog.Title>
-								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" onClick={() => toggle()}>
+								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 									</svg>
