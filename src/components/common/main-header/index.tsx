@@ -4,10 +4,11 @@ import { useModal } from "services/hooks/useModal";
 
 import MainSearchDialog from "components/common/MainSearchDialog";
 import NotificationsMenu from "./NotificationsMenu";
+import AppsMenu from "./AppsMenu";
 import UserMenu from "./UserMenu";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
-import iconGrid from "assets/images/icons8-menu-100.png";
+import iconFilter from "assets/images/icons8-filter-96.png";
 
 const MainHeader: FC = () => {
   const { openModal } = useModal();
@@ -15,11 +16,11 @@ const MainHeader: FC = () => {
   return (
     <header className="home-header relative top-0 transition-all duration-500 ease-out top-0 bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
       <div className="px-4 lg:px-8 pl-10 lg:pl-10">
-        <div className="flex items-center justify-between h-16 -mb-px">
+        <div className="flex items-center justify-between h-14 -mb-px">
           {/* Header: Left side */}
           <div className="flex items-center whitespace-nowrap">
             <div className="t-header-company-name flex items-center">
-              <img src={fakeThumbnail} alt="Company avatar" className="w-12 h-12 rounded-full" />
+              <img src={fakeThumbnail} alt="Company avatar" className="w-10 h-10 rounded-full" />
               <div className="flex items-center truncate">
                 <span className="truncate ml-2 font-bold">
                   PGI Partners JSC
@@ -56,10 +57,16 @@ const MainHeader: FC = () => {
               <SearchIcon className="w-4 h-4" />
             </button>
 
-            {/* <MessagesMenu /> */}
-            <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
-              <img src={iconGrid} alt="Grid" className="w-6 h-6" />
+            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md transition duration-150 focus:outline-none ml-6">
+              <img src={iconFilter} alt="Filter" className="w-6 h-6" />
             </button>
+
+            {/* <MessagesMenu /> */}
+
+            <AppsMenu />
+            {/* <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
+              <img src={iconGrid} alt="Grid" className="w-6 h-6" />
+            </button> */}
 
             <NotificationsMenu />
 

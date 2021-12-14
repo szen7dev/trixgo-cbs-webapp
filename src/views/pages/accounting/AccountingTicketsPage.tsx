@@ -30,7 +30,9 @@ const AccountingTicketsPage:FC = () => {
                     className="btn btn-primary"
                     onClick={() =>
                         openModal(
-                            <CreateNewTicket/>
+                            <div className={"bg-white inline-block w-full overflow-hidden align-top transition-all transform bg-primary-light shadow-xl rounded mt-28"}>
+                                <CreateNewTicket/>
+                            </div>
                         )
                     }
                 >
@@ -110,6 +112,59 @@ const AccountingTicketsPage:FC = () => {
                             id="ticket-creator" placeholder="Mã khách"
                             // searchUrl={"/user/get-list"}
                             // searchParam={"search"}
+                            initialValue={[1,2,3]}
+                            data={[
+                                {
+                                    id: 1,
+                                    text:"Trần Thanh Quang",
+                                    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png"
+                                },
+                                {
+                                    id: 2,
+                                    text:"Trần Thanh Quang 2"
+                                },
+                                {
+                                    id: 3,
+                                    text:"Trần Thanh Quang 3"
+                                },
+                                {
+                                    id: 4,
+                                    text:"Trần Thanh Quang 4"
+                                },
+                                {
+                                    id: 5,
+                                    text:"Trần Thanh Quang 5"
+                                },
+                                {
+                                    id: 6,
+                                    text:"Trần Thanh Quang 6"
+                                },
+                                {
+                                    id: 7,
+                                    text:"Trần Thanh Quang 7"
+                                },
+                                {
+                                    id: 8,
+                                    text:"Trần Thanh Quang 8"
+                                },
+                                {
+                                    id: 9,
+                                    text:"Trần Thanh Quang 9"
+                                },
+                                {
+                                    id: 10,
+                                    text:"Trần Thanh Quang 10"
+                                },
+                                {
+                                    id: 11,
+                                    text:"Trần Thanh Quang 11"
+                                },
+                                {
+                                    id: 12,
+                                    text:"Trần Thanh Quang 12"
+                                }
+                            ]}
+                            isMultiple={true}
                         />
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
