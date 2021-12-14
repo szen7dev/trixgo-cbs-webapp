@@ -92,10 +92,10 @@ const Routes: FC = () => {
             <ChatProvider>
               <ModalProvider>
                 <Switch>
-                  <Route path="/">
+                  <Route exact path="/">
                     <HomeLayout>
                       <Switch>
-                        <Route path="/" component={DashboardPage} />
+                        <Route exact path="/" component={DashboardPage} />
                       </Switch>
                     </HomeLayout>
                   </Route>

@@ -175,7 +175,7 @@ const SocialPostPage: FC = () => {
 								))}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
-								{/* <PostFile files={files} /> */}
+								<PostFile files={files} />
 							</div>
 							<p>
 								{media.content}
