@@ -31,7 +31,7 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction,totalRecord, totalPag
     }
 
     return (
-        <div className={'min-w-24 min-h-24 pagination-container border-t z-10 flex items-center justify-center py-2'}>
+        <div className={'min-w-24 min-h-24 absolute bottom-0 w-full border-t z-10 flex items-center justify-center py-2 bg-white'}>
             <div className="bg-white px-4 items-center flex items-center justify-center relative">
                 <div className={'inline-flex'}>
                     <button

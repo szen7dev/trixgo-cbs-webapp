@@ -1,16 +1,16 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
-export type FilePayload = {
+export type FilePayload = Partial<File> & {
   type: string;
   name: string;
   size: string;
   app?: string;
-} & Partial<File>;
+};
 
 export type UploadPayload = {
   signedUrl: string;
-  file: FilePayload;
+  file: File;
   progress?: (percentCompleted: number) => void
 }
 

@@ -9,7 +9,6 @@ import CogIcon from "assets/icons/Cog";
 import QuestionMarkCircleIcon from "assets/icons/QuestionMarkCircle";
 import MoonIcon from "assets/icons/Moon";
 import LogoutIcon from "assets/icons/Logout";
-import defaultThumbnail from "assets/images/thumbnail2.png";
 
 const UserMenu: FC = () => {
   const { user, signOut } = useAuth();
