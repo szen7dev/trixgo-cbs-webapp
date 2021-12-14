@@ -21,12 +21,12 @@ export type infoMediaResponse = APIResponse & {
 
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload): void;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
 export type PostImageProps = {
   images?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload): void;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
 interface FileProp {

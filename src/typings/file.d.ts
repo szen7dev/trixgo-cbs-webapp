@@ -15,7 +15,7 @@ export type UploadPayload = {
 }
 
 export type AddFileUploadResponse = {
-  id: string | undefined;
+  _id: string | undefined;
   name: string;
 }
 

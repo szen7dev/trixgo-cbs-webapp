@@ -6,6 +6,7 @@ import { TAction } from "./upload.d";
 interface IImageActions {
   setUploadImage: TAction;
   setUploadImageProgress: TAction;
+  setIDImageUploaded: TAction;
   successUploadImage: TAction;
   failureUploadImage: TAction;
   removeUploadedImage: TAction;
@@ -13,6 +14,7 @@ interface IImageActions {
 interface IFileActions {
   setUploadFile: TAction;
   setUploadFileProgress: TAction;
+  setIDFileUploaded: TAction;
   successUploadFile: TAction;
   failureUploadFile: TAction;
   removeUploadedFile: TAction;
@@ -130,6 +132,11 @@ const actionsImages: IImageActions = {
         progress,
       },
     }),
+  setIDImageUploaded: (dispatch) => (id: number, key: string) =>
+    dispatch({
+      type: uploadFileTypes.SET_ID_IMAGE_UPLOADED,
+      payload: { id, key },
+    }),
   successUploadImage: (dispatch) => (id: number) =>
     dispatch({
       type: uploadFileTypes.SUCCESS_UPLOAD_IMAGE,
@@ -140,10 +147,10 @@ const actionsImages: IImageActions = {
       type: uploadFileTypes.FAILURE_UPLOAD_IMAGE,
       payload: id,
     }),
-  removeUploadedImage: (dispatch) => (file: FileProps) => {
+  removeUploadedImage: (dispatch) => (id: number) => {
     dispatch({
       type: uploadFileTypes.REMOVE_UPLOADED_IMAGE,
-      payload: file._id,
+      payload: id,
     });
     return true;
   },
@@ -163,6 +170,11 @@ const actionsFiles: IFileActions = {
         progress,
       },
     }),
+  setIDFileUploaded: (dispatch) => (id: number, key: string) =>
+    dispatch({
+      type: uploadFileTypes.SET_ID_FILE_UPLOADED,
+      payload: { id, key },
+    }),
   successUploadFile: (dispatch) => (id: number) =>
     dispatch({
       type: uploadFileTypes.SUCCESS_UPLOAD_FILE,
@@ -173,10 +185,10 @@ const actionsFiles: IFileActions = {
       type: uploadFileTypes.FAILURE_UPLOAD_FILE,
       payload: id,
     }),
-  removeUploadedFile: (dispatch) => (file: FileProps) => {
+  removeUploadedFile: (dispatch) => (id: number) => {
     dispatch({
       type: uploadFileTypes.REMOVE_UPLOADED_FILE,
-      payload: file._id,
+      payload: id,
     });
     return true;
   },
