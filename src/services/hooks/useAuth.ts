@@ -66,7 +66,7 @@ export const useAuth = (): UseAuth => {
         API.defaults.headers.Authorization = `Bearer ${data.token}`;
 
         toast.success("Đăng nhập thành công");
-        history.push("/dashboard");
+        history.push("/");
       } else {
         dispatch({ type: "SIGN_IN_ERROR" });
         toast.error(message);

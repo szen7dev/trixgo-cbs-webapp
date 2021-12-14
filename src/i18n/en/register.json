@@ -1,14 +1,16 @@
 {
   "title": "Fill in the registration information for the experience",
-  "fullName": "First and last name",
-  "comOrgName": "Name of company/organization",
+  "fullName": "First and last name (*)",
+  "comOrgName": "Name of company/organization (*)",
   "email": "Email",
-  "typeOrg": "Type of business/organization",
-  "phoneNumber": "Phone number",
+  "typeOrg": "Type of business/organization (*)",
+  "phoneNumber": "Phone number (*)",
+  "description": "Describe/note important information",
   "fullNamePlaceholder": "Enter your first and last name",
   "comOrgNamePlaceholder": "Enter company/organization name",
   "emailPlaceholder": "Enter your email address",
   "typeOrgPlaceholder": "Choose type",
   "phoneNumberPlaceholder": "Enter your phone number",
+  "descriptionPlachoher": "Enter description",
   "submit": "Send request"
 }

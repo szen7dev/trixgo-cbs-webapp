@@ -7,6 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import SocketProvider from "services/providers/Socket";
 import AuthProvider from "services/providers/Auth";
 import ProtectedRoute from "components/common/ProtectedRoute";
 import ThemeProvider from "services/providers/Theme";
@@ -74,6 +75,7 @@ import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
 import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "../views/pages/accounting/AccountingTicketDetailPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -92,10 +94,10 @@ const Routes: FC = () => {
             <ChatProvider>
               <ModalProvider>
                 <Switch>
-                  <Route path="/tasks">
+                  <Route exact path="/">
                     <HomeLayout>
                       <Switch>
-                        <Route path="/tasks" component={DashboardPage} />
+                        <Route exact path="/" component={DashboardPage} />
                       </Switch>
                     </HomeLayout>
                   </Route>
@@ -126,7 +128,7 @@ const Routes: FC = () => {
                     </FullPageLayout>
                   </Route>
 
-                  <Route exact path="/">
+                  {/* <Route exact path="/">
                     <Redirect to="/dashboard" />
                   </Route>
 
@@ -141,7 +143,7 @@ const Routes: FC = () => {
                         <Route path="/dashboard/*" component={ErrorPage} />
                       </Switch>
                     </MainLayout>
-                  </Route>
+                  </Route> */}
 
                   <Route path="/customers">
                     <MainLayout>
@@ -312,14 +314,16 @@ const Routes: FC = () => {
                 <Route path="/social">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/applications"
-                        component={ApplicationsPage}
-                      />
-                      <Route exact path="/social/home" component={SocialHomePage} />
-                      <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
-											<Route	exact	path="/social/comments" component={SocialCommentsPage}/>
+                      <SocketProvider>
+                        <ProtectedRoute
+                          exact
+                          path="/applications"
+                          component={ApplicationsPage}
+                        />
+                        <Route exact path="/social/home" component={SocialHomePage} />
+                        <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
+                        <Route	exact	path="/social/comments" component={SocialCommentsPage}/>
+                      </SocketProvider>
                       <Route path="/social/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
@@ -341,33 +345,16 @@ const Routes: FC = () => {
                           <Route exact path="/accounting">
                             <Redirect to="/accounting/accbill" />
                           </Route>
-                          <Route exact path="/accounting/accbill">
-                              <AccountingTicketsPage/>
-                          </Route>
-                          <Route exact path="/accounting/detail">
-                              <AccountingDetailPage/>
-                          </Route>
-                          <Route exact path="/accounting/diary">
-                              <AccountingDiaryPage/>
-                          </Route>
-                          <Route exact path="/accounting/in-out">
-                              <AccountingInOutPage/>
-                          </Route>
-                          <Route exact path="/accounting/debt">
-                              <AccountingDebtPage/>
-                          </Route>
-                          <Route exact path="/accounting/diary">
-                              <AccountingDiaryPage/>
-                          </Route>
-                          <Route exact path="/accounting/vat">
-                              <AccountingVatPage/>
-                          </Route>
-                          <Route exact path="/accounting/report-finance">
-                              <AccountingReportFinancePage/>
-                          </Route>
-                          <Route exact path="/accounting/support-tools">
-                              <AccountingSupportToolsPage/>
-                          </Route>
+                          <ProtectedRoute exact path="/accounting/accbill" component={AccountingTicketsPage}/>
+                          <ProtectedRoute exact path="/accounting/accbill/:id" component={AccountingTicketDetailPage} />
+                          <ProtectedRoute exact path="/accounting/detail" component={AccountingDetailPage}/>
+                          <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage}/>
+                          <ProtectedRoute exact path="/accounting/in-out" component={AccountingInOutPage}/>
+                          <ProtectedRoute exact path="/accounting/debt" component={AccountingDebtPage}/>
+                          <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage}/>
+                          <ProtectedRoute exact path="/accounting/vat" component={AccountingVatPage}/>
+                          <ProtectedRoute exact path="/accounting/report-finance" component={AccountingReportFinancePage}/>
+                          <ProtectedRoute exact path="/accounting/support-tools" component={AccountingSupportToolsPage}/>
                         </Switch>
                     </HomeLayout>
                   </Route>

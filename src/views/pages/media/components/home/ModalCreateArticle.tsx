@@ -38,6 +38,7 @@ import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/so
 import { AddFileUploadResponse } from 'typings/file';
 import { useSocial } from 'services/hooks/useSocial';
 import { useFile } from 'services/hooks/useUpload';
+import { useSocket } from 'services/hooks/useSocket';
 import { typeTextSelected } from '../../utils';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
@@ -46,6 +47,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	content: "",
 	type: 'just-me',
 } }) => {
+
 	const [uploads,
 		{ setUploadFile,
 			setUploadImage,
@@ -55,12 +57,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			cancelUploadFile,
 			removeUploadedFile,
 			removeUploadedImage,
-			setUploadFileProgress,
-			setUploadImageProgress,
 		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { createMedia, updateMedia } = useSocial();
 	const { addFileToUpload } = useFile('MEDIA');
+	const { socket } = useSocket();
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -141,6 +142,8 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 				break;
 		}
 
+		socket?.emit('CLIENT_SEND_CHATTING_TEST', { values, uploads })
+
 		console.log({ values, uploads })
 		toggle();
 		return [values, uploads];
@@ -181,7 +184,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 									as="h3"
 									className="text-lg leading-6 font-bold"
 								>
-									Bài viết mới
+									{initialValues.mediaID ? 'Cập nhật bài viết' : 'Bài viết mới'} 
 								</Dialog.Title>
 								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

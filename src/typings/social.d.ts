@@ -108,6 +108,7 @@ export type MediaProps = {
 };
 
 export type FilePropsUpload = {
+  _id: string;
   id: number;
   file: File;
   progress: number;

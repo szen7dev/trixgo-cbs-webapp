@@ -192,6 +192,14 @@
   filter: invert(28%) sepia(68%) saturate(5577%) hue-rotate(207deg)
     brightness(92%) contrast(102%);
 }
+.filter-primary-gray {
+  filter: invert(29%) sepia(63%) saturate(0%) hue-rotate(164deg)
+    brightness(118%) contrast(91%);
+}
+.filter-secondary-gray {
+  filter: invert(52%) sepia(15%) saturate(400%) hue-rotate(183deg)
+    brightness(95%) contrast(92%);
+}
 .color-gray2 {
   color: #72808e;
 }
@@ -316,7 +324,7 @@ button {
 }
 .home-main-content {
   width: calc(100% - 55px);
-  height: calc(100vh - 4rem);
+  height: calc(100vh - 55px);
   padding-left: 240px;
 }
 .home-layout.active-right .home-main-content {
@@ -387,9 +395,6 @@ button {
 }
 
 /*______________________________home page - no taiwind yet___________________________*/
-.t-home {
-  box-sizing: border-box;
-}
 .t-home-col-left {
   width: 66.66%;
   padding: 16px 8px 16px 16px;
@@ -460,13 +465,13 @@ button {
   padding: 16px 16px 16px 8px;
 }
 .t-home-block {
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 .t-home-block-title {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 .t-home-block-title > span {
   color: #666;
@@ -604,12 +609,9 @@ button {
   margin-right: 5px;
   filter: invert(40%) sepia(0%) saturate(0%) hue-rotate(102deg) brightness(96%) contrast(88%);
 }
-.t-home-actions {
-  box-sizing: border-box;
-}
 .t-home-actions-item {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .t-home-actions-img {
   width: 60px;
@@ -634,16 +636,14 @@ button {
 .t-home-actions-date {
   margin-left: 10px;
 }
-.t-home-actions-info {
-  box-sizing: border-box;
-}
 .t-home-solution {
   background: #4781CF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
-  padding: 8px 12px;
+  padding: 4px 12px;
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  align-items: center;
 }
 .t-home-solution-text {
   width: calc(100% - 72px);
@@ -654,10 +654,6 @@ button {
 .t-home-solution-title {
   font-size: 14px;
   font-weight: bold;
-  margin-bottom: 4px;
-}
-.t-home-solution-description {
-  margin-bottom: 8px;
 }
 .t-home-solution-link > a {
   display: flex;
@@ -682,9 +678,9 @@ button {
 .t-home-right-block {
   background: #FFFFFF;
   border: 1px solid #EDEEF2;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   border-radius: 5px;
-  padding: 16px;
+  padding: 12px 16px;
 }
 .t-home-bidding {
   display: flex;
@@ -701,24 +697,25 @@ button {
   font-size: 14px;
   font-weight: bold;
   color: #666;
-  margin-bottom: 4px;
 }
 .t-home-bidding-description {
   color: #798295;
+  line-height: 1.1;
 }
 .t-home-operation {
-  margin-top: 16px;
+  margin-top: 8px;
 }
 .t-home-operation > img {
-  width: 43%;
+  width: 40%;
+  max-width: 192px;;
 }
 .t-home-operation-text {
-  width: 57%;
+  width: 60%;
   color: #000;
   padding-left: 16px;
 }
 .t-home-operation-text > div {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .t-home-operation-text > a {
   color: #666666;
@@ -744,9 +741,10 @@ button {
 .t-home-training {
   display: flex;
   align-items: center;
-  margin: 16px -16px;
-  padding: 0 16px;
+  margin: 12px -16px;
+  padding: 0 16px 1px;
   border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
 }
 .t-home-training-progress {
   padding-right: 16px;
@@ -754,7 +752,7 @@ button {
 }
 .t-home-training-progress-item {
   display: flex;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   align-items: center;
 }
 .t-home-training-progress-bar {
@@ -776,15 +774,86 @@ button {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
+  margin-bottom: 20px;
+  min-width: 100px;
 }
 .t-home-business-group > img {
-  width: calc(100% - 136px)
+  width: calc(100% - 156px);
+  max-width: 324px;
 }
 .t-home-business-group .t-home-operation-text {
-  width: 136px;
+  width: 156px;
 }
 .t-home-business-group .t-home-operation-text > a {
   font-weight: bold;
+}
+.t-header-app-search {
+  position: relative;
+  margin-bottom: 20px;
+}
+.t-header-app-search > img {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+}
+.t-header-app-search > input {
+  height: 40px;
+  border: none;
+  background-color: #F5F6F9;
+  border-radius: 20px;
+  width: 100%;
+  padding: 0 12px 0 48px;
+  outline: none;
+}
+.t-header-app-search-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.t-header-app-search-results > a {
+  width: 33.33%;
+  padding: 0 8px;
+  margin-bottom: 12px;
+  text-align: center;
+  line-height: 1.2;
+}
+.t-header-app-search-results > a > span {
+  display: block;
+}
+.t-header-app-search-results > a > img {
+  margin: 0 auto 4px;
+}
+.t-home-event-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.t-home-event-item:last-child {
+  margin-bottom: 0;
+}
+.t-home-event-item > img {
+  width: 40px;
+}
+.t-home-event-item > div {
+  width: calc(100% - 40px);
+  padding-left: 16px;
+}
+.t-home-actions-accept {
+  background-color: #0060E1;
+  border-radius: 5px;
+  height: 36px;
+  color: #fff;
+  font-size: 14px;
+  margin-right: 8px;
+  padding: 0 12px;
+}
+.t-home-actions-denied {
+  background-color: #F0F0F0;
+  border-radius: 5px;
+  height: 36px;
+  color: #666;
+  font-size: 14px;
+  padding: 0 12px;
 }
 
 /*______________________________chatbox______________________________*/
@@ -797,7 +866,6 @@ button {
 .chatbox-search-input {
   background: #f2f2f2;
   border: 1px solid #cad1db;
-  box-sizing: border-box;
   border-radius: 17.5px;
   height: 35px;
   width: 260px;
@@ -925,7 +993,7 @@ button {
   color: rgba(102, 102, 102, 1);
 } */
 .acc-active-tab {
-  box-shadow: 0 2px 0 #0165be;
+  border-bottom: 2px solid #0165be;
 }
 .acc-active-tab > a {
   font-weight: bold;
@@ -984,7 +1052,7 @@ button {
   outline: none;
 }
 .select-dropdown {
-  min-width: 160px;
+  /*min-width: 160px;*/
   min-height: 32px;
   max-width: 240px;
   max-height: 40px;
@@ -1032,7 +1100,7 @@ button {
 .form-check-input {
   width: 24px;
   height: 24px;
-  margin-top: 0.25em;
+  /*margin-top: 0.25em;*/
   vertical-align: top;
   background-color: #fff;
   background-repeat: no-repeat;
@@ -1050,18 +1118,39 @@ button {
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
+.form-check-input[type=radio] {
+  border-radius: 50%;
+}
+.form-check-input:checked[type=radio] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
 .acc-action-row {
   min-width: 260px;
   right: 50%;
 }
-.pagination-container {
-  position: sticky;
-  width: 100%;
-  background-color: white;
-  bottom: 0;
+.paginate-wrapper {
+  height: calc(100vh - 4rem);
 }
 .btn.disabled, .btn:disabled, button:disabled {
   color: #fff;
   background-color: #e3e6ea;
   border-color: #e3e6ea;
+}
+input::placeholder {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #d2d6db;
+}
+input[type="text"] {
+  min-height: 32px;
+}
+.column-table-cell {
+  display:table-row;
+
+}
+.cell-table-cell {
+  display: table-cell;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }

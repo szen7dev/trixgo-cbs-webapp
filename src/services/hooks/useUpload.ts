@@ -7,33 +7,33 @@ import { useMutation } from "react-query";
  * Types, APIs
  */
 import FileRepository from "apis/upload";
-import { FilePayload, UploadPayload, FileProps, AddFileUploadResponse } from "typings/file";
+import { UploadPayload, FileProps, AddFileUploadResponse } from "typings/file";
 
 type GenerateLinkResponse = {
     signedUrl: string,
     fileName: string,
-    file: FilePayload,
+    file: File,
     result?: FileProps
 }
 
-type UploadFileProps = {
-    files: FilePayload,
+export type UploadFileProps = {
+    files: File,
     progress?: (percentCompleted: number) => void
 }
 
 type UseFile = {
-    generateLinkS3: (payload: FilePayload) => Promise<GenerateLinkResponse>,
+    generateLinkS3: (payload: File) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
     addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<AddFileUploadResponse>,
 };
 
 export const useFile = (app?: string) : UseFile => {
     const { mutateAsync: generateLinkS3Async } =
-        useMutation((payload: FilePayload) =>
+        useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
                 type: payload.type,
-                size: payload.size,
+                size: payload.size as never,
                 app
             })
         );
@@ -43,7 +43,7 @@ export const useFile = (app?: string) : UseFile => {
             FileRepository.uploadFileToS3(payload)
         );
 
-    const generateLinkS3 = async (payload: FilePayload) => {
+    const generateLinkS3 = async (payload: File) => {
         try {
             const { data } = await generateLinkS3Async(payload);
             const { infoGenerateLink, infoFileAfterInsert } = data;
