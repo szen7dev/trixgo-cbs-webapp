@@ -74,6 +74,7 @@ import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
 import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "../views/pages/accounting/AccountingTicketDetailPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -344,6 +345,7 @@ const Routes: FC = () => {
                           <Route exact path="/accounting/accbill">
                               <AccountingTicketsPage/>
                           </Route>
+                          <Route exact path="/accounting/accbill/:id" component={AccountingTicketDetailPage} />
                           <Route exact path="/accounting/detail">
                               <AccountingDetailPage/>
                           </Route>

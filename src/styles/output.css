@@ -49982,7 +49982,7 @@ button {
 } */
 
 .acc-active-tab {
-  box-shadow: 0 2px 0 #0165be;
+  border-bottom: 2px solid #0165be;
 }
 
 .acc-active-tab > a {
@@ -50142,11 +50142,8 @@ button {
   right: 50%;
 }
 
-.pagination-container {
-  position: sticky;
-  width: 100%;
-  background-color: white;
-  bottom: 0;
+.paginate-wrapper {
+  height: calc(100vh - 4rem);
 }
 
 .btn.disabled, .btn:disabled, button:disabled {

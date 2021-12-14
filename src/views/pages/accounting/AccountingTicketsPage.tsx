@@ -10,6 +10,7 @@ import AccountingNavigation from "../../layouts/AccountingNavigation";
 import {useModal} from "../../../services/hooks/useModal";
 import CreateNewTicket from "./components/CreateNewTicket";
 import {useSocial} from "../../../services/hooks/useSocial";
+import {NavLink} from "react-router-dom";
 
 const AccountingTicketsPage:FC = () => {
     const { openModal } = useModal();
@@ -24,7 +25,7 @@ const AccountingTicketsPage:FC = () => {
     } = useSocial();
 
     return (
-        <>
+        <div className={"paginate-wrapper relative"}>
             <AccountingNavigation>
                 <button
                     className="btn btn-primary"
@@ -260,7 +261,7 @@ const AccountingTicketsPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </td>
                         <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
+                            <NavLink exact to={"/accounting/accbill/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
                             <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </td>
                         <td className={"pt-2 pb-2"}>05/11/2021</td>
@@ -279,235 +280,7 @@ const AccountingTicketsPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </td>
                         <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
-                            <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </td>
-                        <td className={"pt-2 pb-2"}>05/11/2021</td>
-                        <td className={"pt-2 pb-2"}>Phiếu chi</td>
-                        <td className={"pt-2 pb-2"}>PGI.PKT13</td>
-                        <td className={"pt-2 pb-2"}>Công ty xăng dầu số 2 Vạn Phúc</td>
-                        <td className={"pt-2 pb-2"}>Cung cấp xăng dầu định kỳ</td>
-                        <td className={"pt-2 pb-2"}>34.125.000</td>
-                        <td className={"pt-2 pb-2"}>Đã cung cấp chứng từ gốc trả về cho công ty</td>
-                        <td className={"pt-2 pb-2 text-center"}>
-                            <ActionAccountingGroup/>
-                        </td>
-                    </tr>
-                    <tr className={"border-b"}>
-                        <td className={"w-1/12 pt-2 pb-2 text-center"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </td>
-                        <td className={"pt-2 pb-2"}>
-                            <p className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</p>
+                            <NavLink exact to={"/accounting/accbill/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
                             <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </td>
                         <td className={"pt-2 pb-2"}>05/11/2021</td>
@@ -525,7 +298,7 @@ const AccountingTicketsPage:FC = () => {
                 </table>
             </div>
             <Paginate  hasNextPage={hasNextPage} totalRecord={totalRecord} totalPages={totalPages} isFetching={isLoadingListMedias} nextPageAction={nextPageListMedias} prevPageAction={prevPageListMedias}/>
-        </>
+        </div>
     )
 };
 

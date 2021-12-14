@@ -178,7 +178,7 @@ const DropdownSearchable:FC<Props> = ({
             return (
                 <div
                     onClick={() => toggleShowOption()}
-                    className={(classNameInput??'') + " flex p-1 h-full pl-2 pr-4 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+                    className={(classNameInput??'') + " flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
                 >
                     {/*<div className={"flex flex-wrap"}>*/}
                     {
@@ -205,7 +205,7 @@ const DropdownSearchable:FC<Props> = ({
             )
         }
         return (
-            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-4 cursor-pointer align-items-center"}>
+            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center"}>
                 {
                     allowClearValueSingleInput?
                         (
