@@ -26,6 +26,8 @@ type Props = {
     classNameInput?: string;
     renderItem?: (item: Item) => ReactNode;
     isMultiple?: boolean;
+    showTriangle?: boolean;
+    allowClearValueSingleInput?: boolean;
 }
 
 type Params = {
@@ -43,7 +45,9 @@ const DropdownSearchable:FC<Props> = ({
       classNameItem,
       classNameInput,
       renderItem,
-      isMultiple
+      isMultiple,
+      showTriangle,
+      allowClearValueSingleInput
     }) => {
 
     const [value, setValue] = useState<Item>();
@@ -137,6 +141,10 @@ const DropdownSearchable:FC<Props> = ({
         setValues(values?.filter(item => item.id !== id));
     };
 
+    const handleRemoveItemSingle = () => {
+        setValue(undefined);
+    };
+
     const renderOptions = () => {
         if (displayData?.length === 0 ) {
             return (
@@ -147,8 +155,8 @@ const DropdownSearchable:FC<Props> = ({
             <div
                 key={option.id}
                 className={
-                    "select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " +
                     (classNameItem ?? '') +
+                    " select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " +
                     (isMultiple ? (values?.find(v => v.id === option.id) ? 'bg-blue-100':'') : (option.id === value?.id ? 'bg-blue-100':''))
                 }
                 onClick={() => handleSetValue(option)}
@@ -168,37 +176,61 @@ const DropdownSearchable:FC<Props> = ({
     const renderSelectedValue = () => {
         if (isMultiple) {
             return (
-                <div className={"flex border border-gray-400 p-1 h-full rounded pl-2 pr-4 cursor-pointer align-items-center flex-wrap overflow-y-scroll " + (classNameInput??'')}>
+                <div
+                    onClick={() => toggleShowOption()}
+                    className={(classNameInput??'') + " flex p-1 h-full pl-2 pr-4 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+                >
                     {/*<div className={"flex flex-wrap"}>*/}
-                        {_map(values, (option) => (
-                            <div onClick={() => handleRemoveItem(option.id)} key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
+                    {
+                        typeof values === "undefined" || values?.length <= 0?
+                        <span
+                            className={"flex-1 text-left text-gray-300"}>
+                            {placeholder}
+                        </span>:
+                        null
+                    }
+                    {_map(values, (option) => (
+                            <div key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
                                 {option?.text}
                                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
-                                    <Close/>
+                                    <Close onClick={() => handleRemoveItem(option.id)}/>
                                 </div>
                             </div>
                         ))}
                     {/*</div>*/}
-                    <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"} onClick={() => toggleShowOption()}>
-                        <TriangleDown/>
+                    <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                        {showTriangle?<TriangleDown/>:null}
                     </div>
                 </div>
             )
         }
         return (
-            <div onClick={() => toggleShowOption()} className={"relative flex border border-gray-400 p-1 h-full rounded pl-2 pr-4 cursor-pointer align-items-center " + (classNameInput??'')}>
-                <span className={"flex-1"}>{value?.text??placeholder}</span>
+            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-4 cursor-pointer align-items-center"}>
+                {
+                    allowClearValueSingleInput?
+                        (
+                            !value ?
+                            <span className={"flex-1 text-left text-gray-300"}>{placeholder}</span>:
+                            <div className={"flex-1 text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
+                                {value?.text??placeholder}
+                                <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
+                                    <Close onClick={() => handleRemoveItemSingle()}/>
+                                </div>
+                            </div>
+                        ):
+                        <span className={"flex-1 text-left " + (!value ? "text-gray-300":'')}>{value?.text??placeholder}</span>
+                }
                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
-                    <TriangleDown/>
+                    {showTriangle?<TriangleDown/>:null}
                 </div>
             </div>
         )
     }
 
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={"relative select-dropdown " + (className??'')} data-value={value?.id}>
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={(className??'') + " relative select-dropdown"} data-value={value?.id}>
             {renderSelectedValue()}
-            {showOption?<div className={"shadow-lg rounded select-options-container absolute"}>
+            {showOption?<div className={"shadow-lg rounded select-options-container absolute z-20"}>
                 <input
                     className="select-search w-full p-3 pt-5 border-b"
                     placeholder={"Nhập nội dung"}
@@ -216,6 +248,7 @@ const DropdownSearchable:FC<Props> = ({
 };
 const defaultProps: Props = {
     isMultiple: false,
+    showTriangle: true,
 }
 DropdownSearchable.defaultProps = defaultProps;
 export default DropdownSearchable;

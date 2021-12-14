@@ -30,7 +30,7 @@ const AccountingTicketsPage:FC = () => {
                     className="btn btn-primary"
                     onClick={() =>
                         openModal(
-                            <div className={"bg-white inline-block w-full overflow-hidden align-top transition-all transform bg-primary-light shadow-xl rounded mt-28"}>
+                            <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
                                 <CreateNewTicket/>
                             </div>
                         )
@@ -51,6 +51,7 @@ const AccountingTicketsPage:FC = () => {
                         <input className={"border border-gray-400 p-1 rounded pl-2 pr-2 w-3/12 mt-2"} placeholder={"Nhập từ khóa tìm kiếm"}/>
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
+                            classNameInput={"border border-gray-400 rounded"}
                             id="ticket-creator" placeholder="Người tạo phiếu"
                             // searchUrl={"/user/get-list"}
                             // searchParam={"search"}
@@ -109,10 +110,11 @@ const AccountingTicketsPage:FC = () => {
                         />
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
+                            classNameInput={"border border-gray-400 rounded"}
                             id="ticket-creator" placeholder="Mã khách"
                             // searchUrl={"/user/get-list"}
                             // searchParam={"search"}
-                            initialValue={[1,2,3]}
+                            initialValue={1}
                             data={[
                                 {
                                     id: 1,
@@ -164,10 +166,10 @@ const AccountingTicketsPage:FC = () => {
                                     text:"Trần Thanh Quang 12"
                                 }
                             ]}
-                            isMultiple={true}
                         />
                         <DropdownSearchable
                             className={"ml-2 mt-2"}
+                            classNameInput={"border border-gray-400 rounded"}
                             id="ticket-creator" placeholder="Hợp đồng"
                             // searchUrl={"/user/get-list"}
                             // searchParam={"search"}

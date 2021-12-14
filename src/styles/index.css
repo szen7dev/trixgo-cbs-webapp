@@ -984,7 +984,7 @@ button {
   outline: none;
 }
 .select-dropdown {
-  min-width: 160px;
+  /*min-width: 160px;*/
   min-height: 32px;
   max-width: 240px;
   max-height: 40px;
@@ -1032,7 +1032,7 @@ button {
 .form-check-input {
   width: 24px;
   height: 24px;
-  margin-top: 0.25em;
+  /*margin-top: 0.25em;*/
   vertical-align: top;
   background-color: #fff;
   background-repeat: no-repeat;
@@ -1050,6 +1050,12 @@ button {
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
+.form-check-input[type=radio] {
+  border-radius: 50%;
+}
+.form-check-input:checked[type=radio] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
 .acc-action-row {
   min-width: 260px;
   right: 50%;
@@ -1064,4 +1070,22 @@ button {
   color: #fff;
   background-color: #e3e6ea;
   border-color: #e3e6ea;
+}
+input::placeholder {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #d2d6db;
+}
+input[type="text"] {
+  min-height: 32px;
+}
+.column-table-cell {
+  display:table-row;
+
+}
+.cell-table-cell {
+  display: table-cell;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
