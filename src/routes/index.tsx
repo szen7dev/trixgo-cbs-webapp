@@ -7,6 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import SocketProvider from "services/providers/Socket";
 import AuthProvider from "services/providers/Auth";
 import ProtectedRoute from "components/common/ProtectedRoute";
 import ThemeProvider from "services/providers/Theme";
@@ -313,14 +314,16 @@ const Routes: FC = () => {
                 <Route path="/social">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/applications"
-                        component={ApplicationsPage}
-                      />
-                      <Route exact path="/social/home" component={SocialHomePage} />
-                      <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
-											<Route	exact	path="/social/comments" component={SocialCommentsPage}/>
+                      <SocketProvider>
+                        <ProtectedRoute
+                          exact
+                          path="/applications"
+                          component={ApplicationsPage}
+                        />
+                        <Route exact path="/social/home" component={SocialHomePage} />
+                        <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
+                        <Route	exact	path="/social/comments" component={SocialCommentsPage}/>
+                      </SocketProvider>
                       <Route path="/social/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>

@@ -38,6 +38,7 @@ import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/so
 import { AddFileUploadResponse } from 'typings/file';
 import { useSocial } from 'services/hooks/useSocial';
 import { useFile } from 'services/hooks/useUpload';
+import { useSocket } from 'services/hooks/useSocket';
 import { typeTextSelected } from '../../utils';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
@@ -46,8 +47,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	content: "",
 	type: 'just-me',
 } }) => {
-
-	// console.log({ files, images })
 
 	const [uploads,
 		{ setUploadFile,
@@ -62,6 +61,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 
 	const { createMedia, updateMedia } = useSocial();
 	const { addFileToUpload } = useFile('MEDIA');
+	const { socket } = useSocket();
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
@@ -141,6 +141,8 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			default:
 				break;
 		}
+
+		socket?.emit('CLIENT_SEND_CHATTING_TEST', { values, uploads })
 
 		console.log({ values, uploads })
 		toggle();
