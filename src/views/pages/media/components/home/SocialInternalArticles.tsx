@@ -21,7 +21,7 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 							</Link>
 						</p>
 						<div className="flex mt-3">
-							<Link to={`/social/post/${media._id}`} className="inline-block mr-7" style={{ minWidth: "180px" }}>
+							<Link to={`/social/post/${media._id}`} className="inline-block mr-7 flex-shrink-0" style={{ width: "180px" }}>
 								<img src={image} alt="vaccine" />
 							</Link>
 							<div className="flex flex-col">

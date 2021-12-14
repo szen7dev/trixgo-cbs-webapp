@@ -8,7 +8,7 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import PostImage from './post/PostImage';
 import PostFile from './post/PostFile';
 
-import useUpload from '../context/useUpload';
+import useCustomReducer from '../context/useCustomReducer';
 import { IMethodFiles, IMethodImages } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import uploadActions from '../context/upload.actions';
@@ -29,34 +29,12 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 	const [uploads, {
 		setUploadFile,
 		setUploadImage,
-		uploadImage,
-		uploadFile,
 		cancelUploadImage,
 		cancelUploadFile
-	}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
 	const [text, setText] = useState<string>('');
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
-
-	useEffect(() => {
-		let isMounted = false;
-		const filetoUpload = toArray(uploads.files).filter(file => file.progress === 0);
-		uploadFile(filetoUpload, isMounted, refsFiles.current);
-		return () => { isMounted = true };
-
-		// Pass length of files as dependencies to trigger uploadFile only when add or remove file
-		// If use uploads.files only, thi effect will run all the time
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.files).length])
-
-	useEffect(() => {
-		let isMounted = false;
-		const imageToUpload = toArray(uploads.images).filter(file => file.progress === 0);
-		uploadImage(imageToUpload, isMounted, refsImages.current);
-		return () => { isMounted = true };
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.images).length])
 
 	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
 		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])

@@ -53,6 +53,10 @@ const SocialPostPage: FC = () => {
 	const media = data?.data;
 
 	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
+	const toggleModalEditMediaEdit = (e: React.MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
+		setModalEditMedia(!modalEditMedia);
+	}
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
@@ -118,7 +122,7 @@ const SocialPostPage: FC = () => {
 											<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 											Copy link
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMedia}>
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMediaEdit}>
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
