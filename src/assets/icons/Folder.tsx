@@ -1,0 +1,17 @@
+import React from "react";
+
+const FolderIcon = () => {
+    return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+            <rect width="24" height="24" fill="url(#pattern0)"/>
+            <defs>
+                <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlinkHref="#image0_6962_1420" transform="scale(0.01)"/>
+                </pattern>
+                <image id="image0_6962_1420" width="100" height="100" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAADe0lEQVR4nO3dP2iTQRzG8edeE0Gqw+um7e5gFxuhDq5ugU4Bh6pQ0iMBBwc3B0VBJzep17exgoooHevi0KmDoo0OiosIDq12sVHbLtrkHJpCvLwhhb5/fmmeD3R4L0fu6Ldv+r4NNAAREREREVGyVKcHCoXCQd/3NYBxAMMABiJacw3AglLq2vT09OeInnPfCA0yMTFxPJPJvABwKsa1fzcajXylUlmMcY2e0xakeWa8Rrwxdqx5npczxnxNYK2e4LkDzZepJGIAwNFGo/GsUCgcSGg98TIhY+PO8fzW1lZpdnb2WxQLaq2vA7jRMjTq+/4VAHejeP5e13aGADj53wTPK0cVAwCCILgJYMEZvlUul09EtUYvCwtyuPXAGLMS8ZrW87xL2L7a2nGoXq8/1VpnI16r54QFiZ0xZkUpddUZHgFwJ439SNJ2laW1tq3HQRB0vFfZ69qTk5MvlVLnYnp+aTaVUh+stU9qtdrM3Nzcn7BJqZwhTTabzV4EsJriHpI0YK09A+Ce7/uvtNbHwialGQRTU1OrnueNAfiZ5j5SMKKUmg/7nZlqEAAwxrwBcBrAcwA/Ut5OYqy1OQBFdzzsPiRxQRB8AXA+7X3EqVQqDVprjbU23zJ8AcD91nmpnyH9whizUq/Xy87wsDuPQRJUqVSWnaEj7hwGEYZBhGEQYbpeZWmtF7H95/io3jHsV5sA3nebtJvL3rN73wth+we66/eSL1nCMIgwu3nJivQdw37V4U69TdczJOp3DPtVhzv1Nl2DxPCOYd8KuVNvw98hwjCIMAwiDIMIwyDCMIgwDCIMgwjDIMIwiDAMIgyDCMMgwjCIMAwiDIMIwyDCMIgwDCIMgwjDIMIwiDAMIgyDCMMgwjCIMAwiDIMIwyDCMIgwDCIMgwjDIMIwiDAMIgyDCMMgwjCIMAwiDIMIwyDCMIgwDCIMgwjDIMIwiDAMIgyDCMMgwjCIMAwiDIMIwyDChAVZbz0olUqDCe1l3ysWi0PO0Lo7JyzIp9YDa61hlL0rFotDnucZZ/ijOy/sP1s/BjC6c2CtzVtrl7XWEW+RlFKP3LG2M6RWq80AeJfIjvrbW2vtA3ewLUjzEyjzSqlqItvqT0sAxoIg+Os+EPo55tVqdSOXyz0E8B2A3/w6GOsW978NAEtKqdsALgdB8CvtDREREREREQHAP1PkzzCISNxOAAAAAElFTkSuQmCC"/>
+            </defs>
+        </svg>
+    )
+}
+
+export default FolderIcon;
