@@ -84,6 +84,9 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 // Document pages
 import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
 import DocumentHomePage from "views/pages/document/DocumentHomePage";
+import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
+
+//Financial
 
 const Routes: FC = () => {
   return (
@@ -353,6 +356,14 @@ const Routes: FC = () => {
                           <ProtectedRoute exact path="/accounting/report-finance" component={AccountingReportFinancePage}/>
                           <ProtectedRoute exact path="/accounting/support-tools" component={AccountingSupportToolsPage}/>
                         </Switch>
+                    </HomeLayout>
+                  </Route>
+
+                  <Route path="/financial/:path?">
+                    <HomeLayout>
+                      <Switch>
+                        <Route exact path={"/financial/planning/:id"} component={FinancialPlanningDetailPage}/>
+                      </Switch>
                     </HomeLayout>
                   </Route>
 
