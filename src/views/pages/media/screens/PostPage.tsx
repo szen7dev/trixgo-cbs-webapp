@@ -66,7 +66,13 @@ const SocialPostPage: FC = () => {
 		history.push('/social/home');
 	}
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
+	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
+		_id: _,
+		url: '/logo.png',
+		name: "test",
+		size: 123123
+	}))
+
 	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
 		_id: _,
 		url: i % 2
@@ -79,7 +85,7 @@ const SocialPostPage: FC = () => {
 	if(!media){
 		return <Loader className="border-primary" />;
 	}
-	console.log({ media })
+	console.log({ media, FILES: media.files, IMAGES: media.images })
 
 	const initialState = {
 		mediaID,
@@ -138,7 +144,7 @@ const SocialPostPage: FC = () => {
 							<div className="post__author">
 								<div className="post__author-avt">
 									<Link to="/">
-										<img src={avatar} alt="" className="object-cover" />
+										<img src={media.author.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author.image}` : avatar} alt="" className="object-cover" />
 									</Link>
 								</div>
 								<div className="post__author-info">
@@ -169,17 +175,22 @@ const SocialPostPage: FC = () => {
 						{/* Main post */}
 						<div className="post__content pb-2.5 flex-grow">
 							<div className="post__content-images">
-								{media.images && media.images.slice(0, 3).map((image, i) => (
-									<div key={image?.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-										<img src={image?.file?.url} alt="" className="object-cover h-full w-full" />
-										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
-											+{images.length - 2}
-										</div>}
-									</div>
-								))}
+								{media.images && media.images.slice(0, 3).map((image, i) => {
+									const id = image.file ? image.file._id : image._id; 
+									const url = image.file ? image.file.url : image.url; 
+
+									return (
+										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+											<img src={url} alt="" className="object-cover h-full w-full" />
+											{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
+												+{images.length - 2}
+											</div>}
+										</div>
+									)
+								})}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
-								<PostFile files={files} />
+								<PostFile files={media.files} />
 							</div>
 							<p>
 								{media.content}
