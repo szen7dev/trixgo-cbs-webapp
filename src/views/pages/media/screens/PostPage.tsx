@@ -161,9 +161,9 @@ const SocialPostPage: FC = () => {
 						</div>
 					</div>
 					{/* Content */}
-					<div className="flex pr-6 text-black">
+					<div className="flex pr-6 text-black gap-x-6">
 						{/* Main post */}
-						<div className="post__content pb-2.5">
+						<div className="post__content pb-2.5 flex-grow">
 							<div className="post__content-images">
 								{media.images && media.images.slice(0, 3).map((image, i) => (
 									<div key={image?.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
@@ -180,7 +180,7 @@ const SocialPostPage: FC = () => {
 							<p>
 								{media.content}
 							</p>
-							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px]">
+							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
 								<span>
 									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
@@ -206,7 +206,7 @@ const SocialPostPage: FC = () => {
 							</div>
 						</div>
 						{/* Post Suggest */}
-						<div className="post__suggest">
+						<div className="post__suggest flex-shrink-0">
 							<p>Liên quan</p>
 							<div>
 								<Link to="/"><div>21,3k</div></Link>

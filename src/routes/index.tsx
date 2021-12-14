@@ -92,13 +92,13 @@ const Routes: FC = () => {
             <ChatProvider>
               <ModalProvider>
                 <Switch>
-                  <Route path="/">
+                  {/* <Route path="/">
                     <HomeLayout>
                       <Switch>
                         <Route path="/" component={DashboardPage} />
                       </Switch>
                     </HomeLayout>
-                  </Route>
+                  </Route> */}
 
                   <Route path="/authentication/:path?">
                     <FullPageLayout isAuthentication>
