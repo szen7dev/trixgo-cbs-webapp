@@ -18,12 +18,13 @@ type TReducer = (state: ISTATE, action: IAction) => ISTATE;
 
 interface IMethodImages {
   setUploadImage: dispatch;
-  setUploadImageProgress: dispatch;
-  successUploadImage: dispatch;
+  setUploadImageProgress: (id: number | string, progress: number) => void;
+  successUploadImage: (id: number | string) => void;
   failureUploadImage: dispatch;
   uploadImage: dispatch;
   cancelUploadImage: dispatch;
   removeUploadedImage: dispatch;
+  errorUploadImage: dispatch;
 }
 
 interface IMethodFiles {

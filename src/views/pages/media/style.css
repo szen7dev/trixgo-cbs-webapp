@@ -249,7 +249,7 @@
 }
 
 .post__suggest {
-  min-width: 301px;
+  width: 301px;
   font-size: 13px;
   line-height: 14.95px;
   padding: 0 14px 0 22px;
