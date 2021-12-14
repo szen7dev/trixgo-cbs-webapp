@@ -74,6 +74,7 @@ import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
 import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "../views/pages/accounting/AccountingTicketDetailPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -341,33 +342,16 @@ const Routes: FC = () => {
                           <Route exact path="/accounting">
                             <Redirect to="/accounting/accbill" />
                           </Route>
-                          <Route exact path="/accounting/accbill">
-                              <AccountingTicketsPage/>
-                          </Route>
-                          <Route exact path="/accounting/detail">
-                              <AccountingDetailPage/>
-                          </Route>
-                          <Route exact path="/accounting/diary">
-                              <AccountingDiaryPage/>
-                          </Route>
-                          <Route exact path="/accounting/in-out">
-                              <AccountingInOutPage/>
-                          </Route>
-                          <Route exact path="/accounting/debt">
-                              <AccountingDebtPage/>
-                          </Route>
-                          <Route exact path="/accounting/diary">
-                              <AccountingDiaryPage/>
-                          </Route>
-                          <Route exact path="/accounting/vat">
-                              <AccountingVatPage/>
-                          </Route>
-                          <Route exact path="/accounting/report-finance">
-                              <AccountingReportFinancePage/>
-                          </Route>
-                          <Route exact path="/accounting/support-tools">
-                              <AccountingSupportToolsPage/>
-                          </Route>
+                          <ProtectedRoute exact path="/accounting/accbill" component={AccountingTicketsPage}/>
+                          <ProtectedRoute exact path="/accounting/accbill/:id" component={AccountingTicketDetailPage} />
+                          <ProtectedRoute exact path="/accounting/detail" component={AccountingDetailPage}/>
+                          <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage}/>
+                          <ProtectedRoute exact path="/accounting/in-out" component={AccountingInOutPage}/>
+                          <ProtectedRoute exact path="/accounting/debt" component={AccountingDebtPage}/>
+                          <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage}/>
+                          <ProtectedRoute exact path="/accounting/vat" component={AccountingVatPage}/>
+                          <ProtectedRoute exact path="/accounting/report-finance" component={AccountingReportFinancePage}/>
+                          <ProtectedRoute exact path="/accounting/support-tools" component={AccountingSupportToolsPage}/>
                         </Switch>
                     </HomeLayout>
                   </Route>
