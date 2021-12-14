@@ -24,10 +24,10 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 	return (
 		<>
 			{
-				files.map((d, index) => {
-					const name = 'progress' in d ? d.file.name : d.name;
-					const size = 'progress' in d ? d.file.size : d.size;
-					const download = 'progress' in d ? d.file : d;
+				files.map((d) => {
+					const name = 'progress' in d ? d.file.name : (d.file ? d.file.name : d.name);
+					const size = 'progress' in d ? d.file.size : (d.file ? d.file.size : d.size);
+					const download = 'progress' in d ? d.file : (d.file ? d.file : d);
 					const key = 'progress' in d ? d.id : d._id;
 
 					return (
@@ -47,7 +47,7 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 							<button
 								type="button"
 								className={cn("close-btn absolute top -top-3.5 -right-3 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", { "hidden": !onRemove })}
-								onClick={() => onRemove && onRemove(d)}
+								onClick={() => onRemove && onRemove(d, 'FILE')}
 							>
 								<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
