@@ -24,7 +24,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         ...state,
         files: {
           ...state.files,
-          ...modifyFiles(state.files, action.payload),
+          ...action.payload,
         },
       };
     case uploadFileTypes.SET_UPLOAD_IMAGE:
@@ -32,7 +32,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         ...state,
         images: {
           ...state.images,
-          ...modifyFiles(state.images, action.payload),
+          ...action.payload,
         },
       };
     case uploadFileTypes.SET_UPLOAD_FILE_PROGRESS:
