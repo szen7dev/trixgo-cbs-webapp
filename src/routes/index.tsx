@@ -94,13 +94,6 @@ const Routes: FC = () => {
             <ChatProvider>
               <ModalProvider>
                 <Switch>
-                  <Route exact path="/">
-                    <HomeLayout>
-                      <Switch>
-                        <Route exact path="/" component={DashboardPage} />
-                      </Switch>
-                    </HomeLayout>
-                  </Route>
 
                   <Route path="/authentication/:path?">
                     <FullPageLayout isAuthentication>
@@ -128,22 +121,22 @@ const Routes: FC = () => {
                     </FullPageLayout>
                   </Route>
 
-                  {/* <Route exact path="/">
+                  <Route exact path="/">
                     <Redirect to="/dashboard" />
                   </Route>
 
                   <Route path="/dashboard">
-                    <MainLayout>
+                    <HomeLayout>
                       <Switch>
                         <ProtectedRoute
-                            exact
-                            path="/dashboard"
-                            component={DashboardPage}
+                          exact
+                          path="/dashboard"
+                          component={DashboardPage}
                         />
                         <Route path="/dashboard/*" component={ErrorPage} />
                       </Switch>
-                    </MainLayout>
-                  </Route> */}
+                    </HomeLayout>
+                  </Route>
 
                   <Route path="/customers">
                     <MainLayout>
