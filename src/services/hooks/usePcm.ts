@@ -45,7 +45,11 @@ export const useSocial = () : UseSocial => {
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
             "list_medias",
             async ({ pageParams }: any) => 
-            SocialRepository.listMedias(),
+            SocialRepository.listMedias({ 
+                lastestID: pageParams ? pageParams : "",
+                filter: JSON.stringify({name: 1, assignee: 1, actualFinishTime: 1}),
+                populates: JSON.stringify({value: "assignee author project group", select: "name fullname image sign"})
+            }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;

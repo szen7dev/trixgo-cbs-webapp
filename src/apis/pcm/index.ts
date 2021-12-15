@@ -32,9 +32,9 @@ const SocialRepository = {
         );
         return data;
     },
-    async listMedias(): Promise<ListMediasResponse> {
+    async listMedias(payload: ListMediasPayload): Promise<ListMediasResponse> {
         const { data } = await API.get<ListMediasResponse>(
-            `${pcmURL}/pcm_plan_tasks`
+            `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
         );
         return data;
     },

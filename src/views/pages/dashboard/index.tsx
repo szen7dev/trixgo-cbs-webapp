@@ -24,7 +24,7 @@ import moment from "moment";
 
 const HomePage: FC = () => {
   const { listMedias } = useSocial()
-  // console.log(listMedias)
+  console.log(listMedias)
 
   const settings = {
     dots: false,
@@ -192,7 +192,7 @@ const HomePage: FC = () => {
               {/* recent actions item */}
               {listMedias.length ? listMedias.map((media: any) => (
                 <div key={media._id} className="t-home-actions-item">
-                  <img className="t-home-actions-img" src={fakeThumbnail} alt="Thumbnail" />
+                  <img className="t-home-actions-img" src={`${process.env.REACT_APP_URL_S3_USER}/${media.assignee.image}`} alt="Thumbnail" />
                   <div className="t-home-actions-text">
                     <div className="t-home-actions-title">
                       <span className="t-home-actions-title-content">

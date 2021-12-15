@@ -61,6 +61,8 @@ export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
   companyID?: string;
+  populates? : string;
+  filter? : string;
 };
 
 export type ListMediasResponse = APIResponse & {
