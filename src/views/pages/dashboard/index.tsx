@@ -19,7 +19,13 @@ import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import iconBirthday from "assets/images/icons8-event-64.png";
 
+import { useSocial } from 'services/hooks/usePcm';
+import moment from "moment";
+
 const HomePage: FC = () => {
+  const { listMedias } = useSocial()
+  // console.log(listMedias)
+
   const settings = {
     dots: false,
     infinite: true,
@@ -184,7 +190,23 @@ const HomePage: FC = () => {
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
-              <div className="t-home-actions-item">
+              {listMedias.length ? listMedias.map((media: any) => (
+                <div key={media._id} className="t-home-actions-item">
+                  <img className="t-home-actions-img" src={fakeThumbnail} alt="Thumbnail" />
+                  <div className="t-home-actions-text">
+                    <div className="t-home-actions-title">
+                      <span className="t-home-actions-title-content">
+                        {media.name}
+                      </span>
+                      <span className="t-home-actions-date">{moment(media.actualFinishTime).format('L')}</span>
+                    </div>
+                    <div className="t-home-actions-info">
+                      Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
+                    </div>
+                  </div>
+                </div>
+              )) : ''}
+              {/* <div className="t-home-actions-item">
                 <img className="t-home-actions-img" src={fakeThumbnail} alt="Thumbnail" />
                 <div className="t-home-actions-text">
                   <div className="t-home-actions-title">
@@ -197,9 +219,9 @@ const HomePage: FC = () => {
                     Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* recent actions item */}
-              <div className="t-home-actions-item">
+              {/* <div className="t-home-actions-item">
                 <img className="t-home-actions-img" src={fakeThumbnail} alt="Thumbnail" />
                 <div className="t-home-actions-text">
                   <div className="t-home-actions-title">
@@ -212,22 +234,8 @@ const HomePage: FC = () => {
                     Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
                   </div>
                 </div>
-              </div>
-              {/* recent actions item */}
-              <div className="t-home-actions-item">
-                <img className="t-home-actions-img" src={fakeThumbnail} alt="Thumbnail" />
-                <div className="t-home-actions-text">
-                  <div className="t-home-actions-title">
-                    <span className="t-home-actions-title-content">
-                      PKT đồng ý với HSTT đợt 4, giá trị được TT lần này: 554.101.100. Kính trình ban lãnh đạo...
-                    </span>
-                    <span className="t-home-actions-date">07/11/21</span>
-                  </div>
-                  <div className="t-home-actions-info">
-                    Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
-                  </div>
-                </div>
-              </div>
+              </div> */}
+
             </div>
           </div>
         </div>

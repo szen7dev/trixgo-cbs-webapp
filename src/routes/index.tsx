@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import {
   BrowserRouter as Router,
@@ -89,6 +89,11 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 //Financial
 
 const Routes: FC = () => {
+
+  useEffect(() => {
+    document.title = "Trixgo | Quản trị doanh nghiệp";
+  }, []);
+
   return (
     <Router>
       <AuthProvider>

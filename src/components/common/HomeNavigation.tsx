@@ -68,7 +68,7 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý nhân sự</span>
 						</Link>
-            <Link to={`/accounting/home`} className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray">
+            <Link to={`/accounting/accbill`} className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Kế toán</span>
 						</Link>
