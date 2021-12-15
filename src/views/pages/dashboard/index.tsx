@@ -19,7 +19,13 @@ import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import iconBirthday from "assets/images/icons8-event-64.png";
 
+import { useSocial } from 'services/hooks/usePcm';
+import moment from "moment";
+
 const HomePage: FC = () => {
+  const { listMedias } = useSocial()
+  console.log(listMedias)
+
   const settings = {
     dots: false,
     infinite: true,
@@ -184,7 +190,23 @@ const HomePage: FC = () => {
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
-              <div className="flex mb-4">
+              {listMedias.length ? listMedias.map((media: any) => (
+                <div key={media._id} className="flex mb-4">
+                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${media.assignee.image}`} alt="Thumbnail" />
+                  <div className="t-home-actions-text text-secondary-gray">
+                    <div className="flex justify-between mb-1">
+                      <span className="t-home-actions-title-content text-dark">
+                        {media.name}
+                      </span>
+                      <span className="ml-2">{moment(media.actualFinishTime).format('L')}</span>
+                    </div>
+                  <div>
+                      Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
+                    </div>
+                  </div>
+                </div>
+              )) : ''}
+              {/* <div className="flex mb-4">
                 <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
                 <div className="t-home-actions-text text-secondary-gray">
                   <div className="flex justify-between mb-1">
@@ -197,9 +219,9 @@ const HomePage: FC = () => {
                     Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* recent actions item */}
-              <div className="flex mb-4">
+              {/* <div className="flex mb-4">
                 <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
                 <div className="t-home-actions-text text-secondary-gray">
                   <div className="flex justify-between mb-1">
@@ -212,22 +234,8 @@ const HomePage: FC = () => {
                     Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
                   </div>
                 </div>
-              </div>
-              {/* recent actions item */}
-              <div className="flex mb-4">
-                <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
-                <div className="t-home-actions-text text-secondary-gray">
-                  <div className="flex justify-between mb-1">
-                    <span className="t-home-actions-title-content text-dark">
-                      PKT đồng ý với HSTT đợt 4, giá trị được TT lần này: 554.101.100. Kính trình ban lãnh đạo...
-                    </span>
-                    <span className="ml-2">07/11/21</span>
-                  </div>
-                  <div>
-                    Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
-                  </div>
-                </div>
-              </div>
+              </div> */}
+
             </div>
           </div>
         </div>

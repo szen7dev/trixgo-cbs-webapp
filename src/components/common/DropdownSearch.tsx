@@ -237,6 +237,7 @@ const DropdownSearchable:FC<Props> = ({
                     type='text'
                     autoComplete='off'
                     value={searchTerm}
+                    autoFocus
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <div className="select-options-section overflow-auto bg-white">

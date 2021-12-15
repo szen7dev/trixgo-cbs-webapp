@@ -1,49 +1,44 @@
-import { useState, useEffect, useContext } from 'react';
-import SocketContext from 'services/contexts/Socket';
+import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
 type UseSocket = {
-  socket: SocketIOClient.Socket | null;
-  connect: () => SocketIOClient.Socket;
-  disconnect: () => void;
-  isConnected: () => boolean;
+    socketRef: any;
 };
 
 export const useSocket = (): UseSocket => {
-    const { dispatch } = useContext(SocketContext);
-    const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-
+    const socketRef: any = useRef(null);
     useEffect(() => {
-        connect();
+        async function initSocket() {
+            const token = localStorage.getItem('token') as string;
+            const url = `${process.env.REACT_APP_URL_SOCKET}?token=${JSON.parse(token)}`;
+            console.log("url",url);
+            const socket = io(url, {
+                transports: ['websocket'],
+                upgrade: false,
+                jsonp: false,
+            });
 
-        // return () => {
-        //     initSocket.close();
-        // };
-    }, [setSocket]);
+            socket.connect();
+            socket.on('connect', () => {
+                console.log('--------connected to socket server-------');
+            });
 
-    const isConnected = () => socket ? socket.connected : false;
+            socket.on('error', (error: any) => {
+                console.log("--------error to socket server-------", error);
+            });
+            socket.on('connect_error', (con_error: any) => {
+                console.log("--------connect_error to socket server-------", con_error);
+            });
 
-    const connect = () => {
-        const token = localStorage.getItem('token') as string;
-        const initSocket = io(`${process.env.REACT_APP_URL_SOCKET}?token=${JSON.parse(token)}`);
+            socketRef.current = socket;
+        }
 
-        setSocket(initSocket);
-        dispatch({ type: "CONNNECT" });
+        initSocket();
+        return () => {
+            console.log("disconnect socket");
+            socketRef.current.disconnect();
+        }
+    }, []);
 
-        return initSocket;
-    }
-
-    const disconnect = () => {
-        setSocket(null);
-        dispatch({ type: "DISCONNNECT" });
-
-        if(socket && socket.connected) socket.close();
-    }
-
-    return {
-        socket,
-        connect,
-        disconnect,
-        isConnected
-    };
+    return socketRef;
 };
