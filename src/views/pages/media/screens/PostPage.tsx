@@ -36,7 +36,7 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps } from "typings/social";
+import { FileProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
@@ -60,7 +60,7 @@ const SocialPostPage: FC = () => {
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
- 
+
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
