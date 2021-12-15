@@ -60,32 +60,31 @@ const SocialPostPage: FC = () => {
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
-
+ 
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
 	}
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
-		_id: _,
-		url: '/logo.png',
-		name: "test",
-		size: 123123
-	}))
+	// const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
+	// 	_id: _,
+	// 	url: '/logo.png',
+	// 	name: "test",
+	// 	size: 123123
+	// }))
 
-	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-		_id: _,
-		url: i % 2
-			? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
-			: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
-		name: "test",
-		size: 123123
-	}))
+	// const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
+	// 	_id: _,
+	// 	url: i % 2
+	// 		? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
+	// 		: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
+	// 	name: "test",
+	// 	size: 123123
+	// }))
 
 	if(!media){
 		return <Loader className="border-primary" />;
 	}
-	console.log({ media, FILES: media.files, IMAGES: media.images })
 
 	const initialState = {
 		mediaID,
@@ -93,6 +92,9 @@ const SocialPostPage: FC = () => {
 		content: media.content,
 		type: typePostSelected(media.type),
 	}
+	const images: FileProps[] = media.images || [];
+	const files: FileProps[] = media.files || [];
+	console.log({ media, FILES: files, IMAGES: images })
 
 	return (
 		<>
@@ -171,26 +173,29 @@ const SocialPostPage: FC = () => {
 						</div>
 					</div>
 					{/* Content */}
-					<div className="flex px-6 text-black gap-x-6">
+					<div className="flex px-1 text-black gap-x-6">
 						{/* Main post */}
-						<div className="post__content pb-2.5 flex-grow">
+						<div className="post__content pb-2.5 flex-grow" >
 							<div className="post__content-images">
-								{media.images && media.images.slice(0, 3).map((image, i) => {
+								{images.length && images.slice(0, 3).map((image, i) => {
 									const id = image.file ? image.file._id : image._id; 
+									const name = image.file ? image.file.name : image.name; 
 									const url = image.file ? image.file.url : image.url; 
 
 									return (
 										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-											<img src={url} alt="" className="object-cover h-full w-full" />
-											{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
-												+{images.length - 2}
-											</div>}
+											<img src={url} alt={name} className="object-cover h-full w-full" />
+											{i === 2 && images.length > 3 && (
+												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
+													+{images.length - 2}
+												</div>
+											)}
 										</div>
 									)
 								})}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
-								<PostFile files={media.files} />
+								<PostFile files={files} />
 							</div>
 							<p>
 								{media.content}
