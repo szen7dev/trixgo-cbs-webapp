@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cn from 'classnames';
 
 import pdfIcon from 'assets/images/icons8-pdf-48 1.png';
-import downloadIcon from 'assets/images/icons8-download-48 3.png';
+import downloadIcon from 'assets/images/icons8-download-48.png';
 
 import { FileProps, PostFileProps } from 'typings/social';
 

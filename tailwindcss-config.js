@@ -17,6 +17,7 @@ module.exports = {
         positive: "#10b981",
         dark: "#000000",
         "primary-gray": "#666666",
+        "primary-border": "#cccccc",
         "secondary-gray": "#798295",
         "accent-gray": "#1e293b",
         "lighter-gray": "#f1f5f9",

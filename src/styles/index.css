@@ -298,6 +298,15 @@ button {
 .home-layout.collapse-header .home-header {
   top: -56px;
 }
+.home-main-content {
+  width: calc(100% - 55px);
+  height: calc(100vh - 55px);
+  padding-left: 240px;
+  top: 0;
+}
+.home-layout.active-right .home-main-content {
+  width: 100%;
+}
 .home-layout.collapse-header .home-main-content {
   height: 100vh;
   top: -56px;
@@ -321,14 +330,6 @@ button {
 }
 .text-15px {
   font-size: 15px;
-}
-.home-main-content {
-  width: calc(100% - 55px);
-  height: calc(100vh - 55px);
-  padding-left: 240px;
-}
-.home-layout.active-right .home-main-content {
-  width: 100%;
 }
 .task-management-tab {
   background: #d8d8d8;
@@ -392,6 +393,49 @@ button {
 }
 .home-layout.collapse-left .home-main-content {
   padding-left: 0;
+}
+.kanban-board-layout.collapse-header .home-header {
+  top: -80px;
+}
+.kanban-board-layout .tm-header-toggle-btn {
+  top: 90px;
+}
+.kanban-board-layout.collapse-header .tm-header-toggle-btn {
+  top: -12px;
+}
+.kanban-board-layout .tm-right-sidebar {
+  top: 5rem;
+}
+.kanban-board-layout.collapse-header .tm-right-sidebar {
+  top: -30px;
+}
+.kanban-board-layout .home-main-content {
+  height: calc(100vh - 80px);
+  padding-left: 0;
+}
+.kanban-board-layout.collapse-header .home-main-content {
+  height: 100vh;
+  top: -80px;
+}
+.kanban-board-header-text {
+  max-width: 660px;
+}
+.kanban-board-header-text > p {
+  font-size: 24px;
+}
+.kanban-board-header-btn-group > button {
+  background: #F7F6FC;
+  border-radius: 5px 0px 0px 5px;
+}
+.kanban-board-header-btn-group > button:last-child {
+  border-radius: 0px 5px 5px 0px;
+}
+.kanban-board-header-btn-group > button.active, .kanban-board-header-btn-group > button:hover {
+  background: #EAF2FE;
+  color: #0060E1;
+}
+.kanban-board-header-btn-add-new {
+  background: #00C614;
 }
 
 /*______________________________home page___________________________*/

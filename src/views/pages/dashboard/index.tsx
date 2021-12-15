@@ -236,7 +236,7 @@ const HomePage: FC = () => {
       {/* main content - right column */}
       <div className="w-1/3 pl-2 pt-4 pb-4 pr-4">
         <div className="t-home-solution pt-1 pb-1 pl-3 pr-3 mb-4 flex items-center">
-          <div className="t-home-solution-text text-[12px] text-primary-dark">
+          <div className="t-home-solution-text text-[12px] text-primary-light">
             <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề Quản lý giá</div>
             <div className="t-home-solution-description">Tất cả các vấn đề quan trọng liên quan tới kiểm soát ngân sách, giá</div>
             <div className="t-home-solution-link">
@@ -305,7 +305,7 @@ const HomePage: FC = () => {
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
-            <div className="t-home-training-progress pr-4 grow">
+            <div className="t-home-training-progress pr-4 flex-grow">
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "10%" }}></div>
@@ -325,7 +325,7 @@ const HomePage: FC = () => {
                 <div className="w-3/4 whitespace-nowrap pl-3">Workshop chia sẻ kinh nghiệm </div>
               </div>
             </div>
-            <button className="t-home-training-btn grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5">Tham gia</button>
+            <button className="t-home-training-btn flex-grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5 rounded-md">Tham gia</button>
           </div>
 
           <div className="t-home-right-block-common">

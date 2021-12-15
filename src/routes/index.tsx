@@ -18,6 +18,7 @@ import ChatProvider from "services/providers/Chat";
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
+import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -27,6 +28,9 @@ import ErrorPage from "views/pages/authentication/Error";
 
 // Dashboard Pages
 import DashboardPage from "views/pages/dashboard";
+
+// KanbanBoardPage Pages
+import KanbanBoardPage from "views/pages/kanbanBoard";
 
 // Customers Pages
 import CustomersPage from "views/pages/customers";
@@ -136,6 +140,19 @@ const Routes: FC = () => {
                         <Route path="/dashboard/*" component={ErrorPage} />
                       </Switch>
                     </HomeLayout>
+                  </Route>
+
+                  <Route path="/kanban-board">
+                    <KanbanBoardLayout>
+                      <Switch>
+                        <ProtectedRoute
+                          exact
+                          path="/kanban-board"
+                          component={KanbanBoardPage}
+                        />
+                        <Route path="/kanban-board/*" component={ErrorPage} />
+                      </Switch>
+                    </KanbanBoardLayout>
                   </Route>
 
                   <Route path="/customers">
