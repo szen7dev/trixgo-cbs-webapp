@@ -13,7 +13,7 @@ import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics"
 import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
-import { useSocket } from "services/hooks/useSocket";
+// import { useSocket } from "services/hooks/useSocket";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -28,7 +28,7 @@ const SocialHomePage: FC = () => {
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
-	const socketRef = useSocket();
+	// const socketRef = useSocket();
 
 	return (
 		<>
