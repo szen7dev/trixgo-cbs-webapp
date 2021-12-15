@@ -49,10 +49,13 @@ const SocialPostPage: FC = () => {
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(mediaID));
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));  
 	const media = data?.data;
 
-	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
+	const toggleModalEditMedia = () => {
+		refetch();
+		setModalEditMedia(!modalEditMedia);
+	};
 	const toggleModalEditMediaEdit = (e: React.MouseEvent<HTMLElement>) => {
 		e.stopPropagation();
 		setModalEditMedia(!modalEditMedia);
