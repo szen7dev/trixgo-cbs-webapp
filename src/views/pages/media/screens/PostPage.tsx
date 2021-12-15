@@ -146,7 +146,7 @@ const SocialPostPage: FC = () => {
 							<div className="post__author">
 								<div className="post__author-avt">
 									<Link to="/">
-										<img src={media.author.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author.image}` : avatar} alt="" className="object-cover" />
+										<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
 									</Link>
 								</div>
 								<div className="post__author-info">
