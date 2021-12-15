@@ -15,9 +15,9 @@ const KanbanBoardHeader: FC = () => {
       {/* Header: Left side */}
       <div className="kanban-board-header-col-left flex items-center">
         <img className="w-6 h-6 mr-4 object-contain" src={iconComputer} alt="Kanban board title" />
-        <div className="kanban-board-header-text white-space-nowrap truncate">
-          <p className="text-dark font-bold">Quy trình biên soạn và thương thảo hợp đồng cho Dự án</p>
-          <div className="text-primary-gray">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</div>
+        <div className="kanban-board-header-text white-space-nowrap">
+          <p className="text-dark font-bold truncate">Quy trình biên soạn và thương thảo hợp đồng cho Dự án</p>
+          <div className="text-primary-gray truncate">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</div>
         </div>
       </div>
       
@@ -40,7 +40,7 @@ const KanbanBoardHeader: FC = () => {
 
       {/* Header: Right side */}
       <div className="kanban-board-header-col-right flex items-center">
-        <button className="relative w-10 h-10 mr-7 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md transition duration-150 focus:outline-none ml-6">
+        <button className="relative w-10 h-10 mr-7 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light rounded-md transition duration-150 focus:outline-none ml-6">
           <img src={iconFilter} alt="Filter" className="w-6 h-6 object-contain" />
         </button>
         <div className="kanban-board-header-btn-group flex">

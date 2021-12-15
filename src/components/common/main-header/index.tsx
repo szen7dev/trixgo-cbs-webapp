@@ -57,7 +57,7 @@ const MainHeader: FC = () => {
               <SearchIcon className="w-4 h-4" />
             </button>
 
-            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md transition duration-150 focus:outline-none ml-6">
+            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
               <img src={iconFilter} alt="Filter" className="w-6 h-6" />
             </button>
 

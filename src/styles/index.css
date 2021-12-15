@@ -29,6 +29,10 @@
     @apply bg-secondary-gray border-2 border-solid border-primary-light bg-clip-padding rounded-full;
   }
 
+  .t-scrollbar-horizontal::-webkit-scrollbar {
+    @apply h-3;
+  }
+
   .Toastify__toast--success {
     background: #10b981 !important;
   }
@@ -436,6 +440,69 @@ button {
 }
 .kanban-board-header-btn-add-new {
   background: #00C614;
+}
+
+/*______________________________kanban board page___________________________*/
+.t-kanban-col-header-progress-red {
+  background-color: #F55F5F;
+}
+.t-kanban-col-header-progress-orange {
+  background-color: #FF9900;
+}
+.t-kanban-col-header-progress-green {
+  background-color: #00CA99;
+}
+.t-kanban-container {
+  min-width: 1700px;
+}
+.t-kanban-col-header {
+  min-height: 84px;
+}
+.t-kanban-col-header-title > span {
+  width: calc(100% - 30px);
+  line-height: 1;
+  height: 54px;
+}
+.t-kanban-col-header-complete .t-kanban-col-header-title > span {
+  height: auto;
+}
+.t-kanban-col-header-progress {
+  border-radius: 6px;
+}
+.t-kanban-col-header-progress > div {
+  height: 12px;
+  font-size: 10px;
+  line-height: 1.1;
+  color: #fff;
+  text-align: center;
+}
+.t-kanban-item-title {
+  min-height: 65px;
+  line-height: 1.2;
+}
+.t-kanban-item-description {
+  min-height: 63px;
+  line-height: 1.2;
+}
+.t-kanban-item-orange {
+  color: #FF9900;
+}
+.t-kanban-item-green {
+  color: #00CA99;
+}
+.t-kanban-item-white {
+  color: #fff;
+}
+.t-kanban-item-expired {
+  background-color: #F55F5F;
+  color: #fff;
+}
+.t-kanban-item-success {
+  background-color: #36AB80;
+  color: #fff;
+}
+.t-kanban-item-expired .t-kanban-item-description, .t-kanban-item-success .t-kanban-item-description {
+  color: #fff;
 }
 
 /*______________________________home page___________________________*/
