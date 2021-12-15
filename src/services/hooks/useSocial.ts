@@ -62,7 +62,6 @@ export const useSocial = () : UseSocial => {
             console.log({ error, data, message });
 
             if (!error) {
-                refetchListMedias();
                 toast.success('Tạo bài viết thành công');
             } else {
                 toast.error(message);
@@ -80,7 +79,6 @@ export const useSocial = () : UseSocial => {
         try {
             const { error, data, message } = await updateMediaAsync(payload);
             console.log({ error, data, message });
-
             if (!error) {
                 toast.success('Cập nhật bài viết thành công');
             } else {
@@ -101,7 +99,6 @@ export const useSocial = () : UseSocial => {
             console.log({ error, data, message });
 
             if (!error) {
-                refetchListMedias();
                 toast.success('Xóa bài viết thành công');
             } else {
                 toast.error(message);
