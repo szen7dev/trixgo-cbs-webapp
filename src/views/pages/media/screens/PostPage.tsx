@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, FormEvent, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -67,6 +67,10 @@ const SocialPostPage: FC = () => {
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
+	}
+
+	const handleComment = (input: string | FormEvent<HTMLDivElement>) => {
+		console.log({ input });
 	}
 
 	// const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
@@ -225,7 +229,7 @@ const SocialPostPage: FC = () => {
 							</div>
 							<div className="border-b border-gray-300"></div>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} />
 							</div>
 						</div>
 						{/* Post Suggest */}

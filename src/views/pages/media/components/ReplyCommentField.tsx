@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react';
 
 import cn from 'classnames';
 
@@ -20,7 +20,7 @@ interface Props {
 	// setUploadImage?: (files: File[]) => unknown;
 	onTextChange?: (input: string) => unknown;
 	attachFile?: boolean;
-	onSubmit?: (input: string) => unknown;
+	onSubmit?: (input: string) => void;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
 }
@@ -126,7 +126,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button className="flex items-center justify-center h-9 w-9" onSubmit={handleSubmit}>
+					<button className="flex items-center justify-center h-9 w-9" onClick={handleSubmit}>
 						<img src={iconEmailSend} alt="Icon attach" className="h-9 w-9" />
 					</button>
 				</div>
