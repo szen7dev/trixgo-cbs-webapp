@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
@@ -28,7 +28,22 @@ const SocialHomePage: FC = () => {
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
-	// const socketRef = useSocket();
+	// const socketRef: any = useSocket();
+
+	useEffect(() => {
+		const message = {
+            _id: '-1',
+            title: 'Hêlellele Minh!',
+        };
+		
+		// const socket = socketRef.current;
+        // if (!socket) return;
+		// console.log("Data Send To Server: ", message);
+        // socket.emit('CLIENT_SEND_CHATTING_TEST', message);
+		// socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
+		// 	console.log("Data Server Send To Client: ", res);
+		// });
+	}, []);
 
 	return (
 		<>
