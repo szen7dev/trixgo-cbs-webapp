@@ -17,7 +17,7 @@ const MainHeader: FC = () => {
   const { user } = useAuth();
 
   return (
-    <header className="home-header relative top-0 transition-all duration-500 ease-out top-0 bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
+    <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
       <div className="px-4 lg:px-8 pl-10 lg:pl-10">
         <div className="flex items-center justify-between h-14 -mb-px">
           {/* Header: Left side */}
@@ -63,7 +63,7 @@ const MainHeader: FC = () => {
               <SearchIcon className="w-4 h-4" />
             </button>
 
-            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md transition duration-150 focus:outline-none ml-6">
+            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
               <img src={iconFilter} alt="Filter" className="w-6 h-6" />
             </button>
 

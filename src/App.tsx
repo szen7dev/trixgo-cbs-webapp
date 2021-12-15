@@ -1,7 +1,6 @@
 import { FC } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 
 import "i18n/config";
@@ -28,8 +27,6 @@ const App: FC = () => {
         draggable
         pauseOnHover
       />
-
-      {/* <ReactQueryDevtools initialIsOpen /> */}
     </QueryClientProvider>
   );
 };

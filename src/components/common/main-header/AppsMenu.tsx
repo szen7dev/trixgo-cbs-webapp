@@ -25,46 +25,46 @@ const AppsMenu: FC = () => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute -right-3 w-80 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1">
-          <div className="t-header-app-search">
-            <img src={iconSearch} alt="Filter" className="w-6 h-6 filter-primary-gray" />
-            <input type="text" placeholder="Tìm kiếm" />
+          <div className="t-header-app-search relative mb-5">
+            <img src={iconSearch} alt="Filter" className="w-6 h-6 filter-primary-gray absolute top-2 left-3" />
+            <input className="h-10 border-0 bg-secondary-light w-full pr-3 pl-12 outline-none" type="text" placeholder="Tìm kiếm" />
           </div>
-          <div className="t-header-app-search-results">
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Quản lý dự án</span>
+          <div className="flex flex-wrap justify-around">
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>App</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Trixgo 1234</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Quản lý dự án</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Trixgo 1234</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Quản lý dự án</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>App</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>App</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
             </a>
-            <a href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10" />
-              <span>Trixgo 1234</span>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
             </a>
           </div>
         </Menu.Items>
