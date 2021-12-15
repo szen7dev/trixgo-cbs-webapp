@@ -42,7 +42,7 @@ const HomePage: FC = () => {
       <div className="w-2/3 pt-4 pr-2 pl-4 pb-4">
         <div className="t-home-col-left-wrapper mr-auto ml-auto max-w-full">
           {/* summary block */}
-          <div className="t-home-summary flex flex-wrap items-center">
+          <div className="t-home-summary flex flex-wrap items-center justify-center">
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">25</div>
@@ -347,9 +347,9 @@ const HomePage: FC = () => {
               <div>
                 Hãy để cộng đồng biết tới dịch vụ và lợi ích mà Doanh nghiệp bạn mang lại
               </div>
-              <a className="font-bold" href="/">
+              <a className="flex items-center text-primary-gray" href="/">
                 Xem ngay
-                <span>
+                <span className="ml-2 rounded-full p-1 inline-block">
                   <img src={iconArrowRight} alt="Arrow" />
                 </span>
               </a>
