@@ -28,7 +28,7 @@ import iconDown from 'assets/images/Frame 1745.png';
 import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
 import useCustomReducer from '../../context/useCustomReducer';
 import uploadActions from '../../context/upload.actions';
-import { IFile, IMethodFiles, IMethodImages } from '../../context/upload';
+import { IMethodFiles, IMethodImages } from '../../context/upload';
 import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../../context/upload.utils';
 
 /**
