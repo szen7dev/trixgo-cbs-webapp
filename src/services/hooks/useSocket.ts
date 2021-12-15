@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
 type UseSocket = {
-    socketRef: SocketIOClient.Socket | null;
+    socketRef: any;
 };
 
 export const useSocket = (): UseSocket => {
