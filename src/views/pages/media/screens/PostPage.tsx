@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, FormEvent, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -36,7 +36,7 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps } from "typings/social";
+import { FileProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
@@ -44,13 +44,17 @@ import { typePostSelected } from '../utils';
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia } = useSocial();
+	const { deleteMedia, createComment } = useSocial();
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
 	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));  
 	const media = data?.data;
+
+	if(!media){
+		return <Loader className="border-primary" />;
+	}
 
 	const toggleModalEditMedia = () => {
 		refetch();
@@ -63,10 +67,23 @@ const SocialPostPage: FC = () => {
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
- 
+
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
+	}
+
+	const handleComment = async (text: string | FormEvent<HTMLDivElement>) => {
+		console.log({ text });
+		await createComment({
+			mediaID: media?._id || '',
+			content: text as string
+		})
+	}
+
+	const handleTextChange = (input: React.FormEvent<HTMLSpanElement>) => {
+		console.log({ INPUT: input.currentTarget.innerText });
+		// input.currentTarget.innerText = ''
 	}
 
 	// const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
@@ -85,10 +102,6 @@ const SocialPostPage: FC = () => {
 	// 	size: 123123
 	// }))
 
-	if(!media){
-		return <Loader className="border-primary" />;
-	}
-
 	const initialState = {
 		mediaID,
 		title: media.title,
@@ -97,7 +110,6 @@ const SocialPostPage: FC = () => {
 	}
 	const images: FileProps[] = media.images || [];
 	const files: FileProps[] = media.files || [];
-	console.log({ media, FILES: files, IMAGES: images })
 
 	return (
 		<>
@@ -149,7 +161,7 @@ const SocialPostPage: FC = () => {
 							<div className="post__author">
 								<div className="post__author-avt">
 									<Link to="/">
-										<img src={media.author.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author.image}` : avatar} alt="" className="object-cover" />
+										<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
 									</Link>
 								</div>
 								<div className="post__author-info">
@@ -225,7 +237,7 @@ const SocialPostPage: FC = () => {
 							</div>
 							<div className="border-b border-gray-300"></div>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} onTextChange={handleTextChange} />
 							</div>
 						</div>
 						{/* Post Suggest */}

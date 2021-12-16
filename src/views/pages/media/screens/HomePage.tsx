@@ -30,11 +30,11 @@ const SocialHomePage: FC = () => {
 
 	// const socketRef: any = useSocket();
 
-	useEffect(() => {
-		const message = {
-            _id: '-1',
-            title: 'Hêlellele Minh!',
-        };
+	// useEffect(() => {
+		// const message = {
+        //     _id: '-1',
+        //     title: 'Hêlellele Minh!',
+        // };
 		
 		// const socket = socketRef.current;
         // if (!socket) return;
@@ -43,7 +43,7 @@ const SocialHomePage: FC = () => {
 		// socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
 		// 	console.log("Data Server Send To Client: ", res);
 		// });
-	}, []);
+	// }, []);
 
 	return (
 		<>

@@ -10,6 +10,20 @@ export type MediaPayload = {
   type: string;
 };
 
+export type CommentMediaPayload = {
+  mediaID: string;
+  commentID?: string;
+  parentID?: string;
+  content: string;
+  files?: Array<FileProps>;
+  images?: Array<FileProps>;
+};
+
+export type CommentMediaResponse = APIResponse & {
+  data: CommentMediaProps;
+  message: string;
+};
+
 export type PostResponse = APIResponse & {
   data: MediaProps;
   message: string;
@@ -70,6 +84,21 @@ export type ListMediasResponse = APIResponse & {
     totalPages?: number;
   };
 };
+
+export type CommentMediaProps = {
+  _id: string;
+  media: string;
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
+  comment: string;
+  parent: string;
+  lastestReplyID: string;
+  author: {
+    _id: string;
+    image: string;
+    fullname: string;
+  };
+}
 
 export type MediaProps = {
   _id: string;
