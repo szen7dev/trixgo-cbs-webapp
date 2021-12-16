@@ -2,16 +2,17 @@ import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 
 type UseSocket = {
-    socketRef: any;
+    socketRef: SocketIOClient.Socket | null;
 };
 
 export const useSocket = (): UseSocket => {
-    const socketRef: any = useRef(null);
+    const socketRef: any = useRef<SocketIOClient.Socket | null>(null);
+
     useEffect(() => {
-        async function initSocket() {
+        const initSocket = () => {
             const token = localStorage.getItem('token') as string;
             const url = `${process.env.REACT_APP_URL_SOCKET}?token=${JSON.parse(token)}`;
-            console.log("url",url);
+
             const socket = io(url, {
                 transports: ['websocket'],
                 upgrade: false,
