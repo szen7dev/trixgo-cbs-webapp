@@ -12440,6 +12440,11 @@ react-onclickoutside@^6.12.0:
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.12.1.tgz#92dddd28f55e483a1838c5c2930e051168c1e96b"
   integrity sha512-a5Q7CkWznBRUWPmocCvE8b6lEYw1s6+opp/60dCunhO+G6E4tDTO2Sd2jKE+leEnnrLAE2Wj5DlDHNqj5wPv1Q==
 
+react-onesignal@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-onesignal/-/react-onesignal-2.0.2.tgz#b6f5ecf4ef64589b77289678df629a2ac712168c"
+  integrity sha512-jirsWxaKkfoHN3OWNO1462jcWb+8GkIw1zpll7ErYhaYTsLaE789bsx2ZRfmS9bqabi6Of5U0xKdKlIwEfuzzg==
+
 react-popper-tooltip@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/react-popper-tooltip/-/react-popper-tooltip-3.1.1.tgz#329569eb7b287008f04fcbddb6370452ad3f9eac"
