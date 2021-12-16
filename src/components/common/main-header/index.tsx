@@ -1,6 +1,5 @@
 import { FC } from "react";
-
-import { useModal } from "services/hooks/useModal";
+import { Link } from 'react-router-dom';
 
 import MainSearchDialog from "components/common/MainSearchDialog";
 import NotificationsMenu from "./NotificationsMenu";
@@ -9,12 +8,13 @@ import UserMenu from "./UserMenu";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import iconFilter from "assets/images/icons8-filter-96.png";
-import { useAuth } from "services/hooks/useAuth";
-import { Link } from 'react-router-dom';
+
+import { useModal } from "services/hooks/useModal";
+import { useNotification } from 'services/hooks/useNotification';
 
 const MainHeader: FC = () => {
   const { openModal } = useModal();
-  const { user } = useAuth();
+  const { listNotifications } = useNotification();
 
   return (
     <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
@@ -74,7 +74,7 @@ const MainHeader: FC = () => {
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu />
+            <NotificationsMenu notifications={listNotifications} />
 
             <UserMenu />
           </div>

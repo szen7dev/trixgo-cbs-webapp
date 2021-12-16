@@ -64,8 +64,7 @@ export const useSocial = () : UseSocial => {
 
     const createMedia = async (payload: MediaPayload) => {
         try {
-            const { error, data, message } = await createMediaAsync(payload);
-            console.log({ error, data, message });
+            const { error, message } = await createMediaAsync(payload);
 
             if (!error) {
                 refetchListMedias();
@@ -84,8 +83,7 @@ export const useSocial = () : UseSocial => {
 
     const updateMedia = async (payload: MediaPayload) => {
         try {
-            const { error, data, message } = await updateMediaAsync(payload);
-            console.log({ error, data, message });
+            const { error, message } = await updateMediaAsync(payload);
 
             if (!error) {
                 toast.success('Cập nhật bài viết thành công');
@@ -103,8 +101,7 @@ export const useSocial = () : UseSocial => {
 
     const deleteMedia = async (id: string) => {
         try {
-            const { error, data, message } = await deleteMediaAsync(id);
-            console.log({ error, data, message });
+            const { error, message } = await deleteMediaAsync(id);
 
             if (!error) {
                 refetchListMedias();
@@ -138,7 +135,7 @@ export const useSocial = () : UseSocial => {
         }
     };
 
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
+    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 

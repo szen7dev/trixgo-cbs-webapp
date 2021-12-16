@@ -190,15 +190,15 @@ const HomePage: FC = () => {
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
-              {listMedias.length ? listMedias.map((media: any) => (
-                <div key={media._id} className="flex mb-4">
-                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${media.assignee.image}`} alt="Thumbnail" />
+              {listMedias?.length ? listMedias?.map((media: any) => (
+                <div key={media?._id} className="flex mb-4">
+                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${media?.assignee?.image}`} alt="Thumbnail" />
                   <div className="t-home-actions-text text-secondary-gray">
                     <div className="flex justify-between mb-1">
                       <span className="t-home-actions-title-content text-dark">
-                        {media.name}
+                        {media?.name}
                       </span>
-                      <span className="ml-2">{moment(media.actualFinishTime).format('L')}</span>
+                      <span className="ml-2">{moment(media?.actualFinishTime).format('L')}</span>
                     </div>
                   <div>
                       Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
