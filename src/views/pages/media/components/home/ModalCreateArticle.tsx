@@ -35,6 +35,7 @@ import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../../context/upload
  * Types, Services
  */
 import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { useAuth } from 'services/hooks/useAuth';
 import { useSocial } from 'services/hooks/useSocial';
 import { useFile as useUpload } from 'services/hooks/useUpload';
 import { typeTextSelected } from '../../utils';
@@ -58,6 +59,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			removeUploadedFile,
 		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
+	const { user } = useAuth();
 	const { createMedia, updateMedia } = useSocial();
 	const { addFileToUpload } = useUpload('MEDIA');
 
@@ -138,6 +140,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		// Handle api here!
 		switch (modalType) {
 			case 'create':
+				values.companyID = user?.company;
 				await createMedia(values);
 				break;
 			case 'update':

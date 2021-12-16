@@ -3,6 +3,7 @@ import { CancelTokenSource } from "axios";
 
 export type MediaPayload = {
   mediaID?: string;
+  companyID?: string;
   title: string;
   content: string;
   files?: Array<FileProps>;
@@ -136,6 +137,7 @@ export type MediaProps = {
   createAt: string;
   createdAt: string;
   updatedAt: string;
+  receivers?: string[]
 };
 
 export type FilePropsUpload = {

@@ -5,7 +5,7 @@ import { NotificationProps } from "typings/notification";
 type UseNotification = {
     listNotifications: Array<NotificationProps>,
     isLoadingListNotification: boolean,
-    refetchListMedias: () => void,
+    refetchListNotification: () => void,
     nextPageListNotification: () => void,
     prevPageListNotification: () => void,
     totalRecord: number | undefined,
@@ -16,7 +16,7 @@ type UseNotification = {
 export const useNotification = () : UseNotification => {
     const {
         isLoading: isLoadingListNotification,
-        refetch: refetchListMedias,
+        refetch: refetchListNotification,
         data: dataListNotifications,
         fetchNextPage: nextPageListNotification,
         fetchPreviousPage: prevPageListNotification,
@@ -44,7 +44,7 @@ export const useNotification = () : UseNotification => {
     return {
         listNotifications,
         isLoadingListNotification,
-        refetchListMedias,
+        refetchListNotification,
         nextPageListNotification,
         prevPageListNotification,
         totalRecord,
