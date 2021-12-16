@@ -10,6 +10,8 @@ import CloseIcon from "assets/images/icon-close.svg";
 import ExpandIcon from "assets/images/icon-expand-arrow.svg";
 import TagIcon from "assets/images/icons8-price-tag.svg";
 
+import "styles/common.css";
+
 type Props = {
   showRegister: boolean;
   handleClickShowRegister: (show: boolean) => void;
@@ -96,30 +98,10 @@ const RegisterPage: FC<Props> = (props) => {
                         <p className="font-medium text-sm">
                           {t("register:comOrgName")}
                         </p>
-                        <Field
-                          type="text"
-                          name="companyName"
-                          placeholder={t("register:comOrgNamePlaceholder")}
-                          className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                          }}
-                        />
-                        <ErrorMessage
-                          name="companyName"
-                          component="span"
-                          className="font-normal text-sm text-negative"
-                        />
-                      </div>
-
-                      <div className="pb-5 pr-5 pl-5">
-                        <p className="font-medium text-sm">
-                          {t("register:typeOrg")}
-                        </p>
                         <div className="relative">
                           <Field
-                            name="typeOrg"
-                            placeholder={t("register:typeOrgPlaceholder")}
+                            name="comOrgName"
+                            placeholder={t("register:comOrgNamePlaceholder")}
                             className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
                             onClick={() => setOpenSelect(!openSelect)}
                           />
@@ -134,51 +116,117 @@ const RegisterPage: FC<Props> = (props) => {
                               ref={optionRef}
                               className="absolute w-full bg-primary-light rounded-sm shadow-lg py-2"
                             >
-                              <div
-                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
-                                onClick={() => {
-                                  setOpenSelect(!openSelect);
-                                  setFieldValue("typeOrg", "Doanh nghiệp");
-                                }}
-                              >
-                                <img src={TagIcon} alt="Tag" className="mr-5" />
-                                <span>Doanh nghiệp</span>
+                              <div>
+                                <Field
+                                  type="text"
+                                  name="typeOrg"
+                                  placeholder="Search here"
+                                  className="h-12 w-full flex items-center px-5 outline-none"
+                                />
                               </div>
                               <div
                                 className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
                                 onClick={() => {
                                   setOpenSelect(!openSelect);
                                   setFieldValue(
-                                    "typeOrg",
-                                    "Cơ quan hành chính công"
+                                    "comOrgName",
+                                    "Đại học xây dựng Hà Nội"
                                   );
                                 }}
                               >
                                 <img src={TagIcon} alt="Tag" className="mr-5" />
-                                <span>Cơ quan hành chính công</span>
+                                <span>Đại học xây dựng Hà Nội</span>
                               </div>
                               <div
                                 className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
                                 onClick={() => {
                                   setOpenSelect(!openSelect);
-                                  setFieldValue("typeOrg", "Đại học/Cao đẳng");
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 2"
+                                  );
                                 }}
                               >
                                 <img src={TagIcon} alt="Tag" className="mr-5" />
-                                <span>Đại học/Cao đẳng</span>
+                                <span>Kết quả trả về 2</span>
                               </div>
                               <div
                                 className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
                                 onClick={() => {
                                   setOpenSelect(!openSelect);
-                                  setFieldValue("typeOrg", "Khác");
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 3"
+                                  );
                                 }}
                               >
                                 <img src={TagIcon} alt="Tag" className="mr-5" />
-                                <span>Khác</span>
+                                <span>Kết quả trả về 3</span>
+                              </div>
+                              <div
+                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
+                                onClick={() => {
+                                  setOpenSelect(!openSelect);
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 4"
+                                  );
+                                }}
+                              >
+                                <img src={TagIcon} alt="Tag" className="mr-5" />
+                                <span>Kết quả trả về 4</span>
                               </div>
                             </div>
                           )}
+                        </div>
+                        <ErrorMessage
+                          name="typeOrg"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
+                      </div>
+
+                      <div className="pb-5 pr-5 pl-5">
+                        <p className="font-medium text-sm">
+                          {t("register:typeOrg")}
+                        </p>
+                        <div className="grid grid-cols-2 gap-3 mt-2.5">
+                          <label className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Doanh nghiệp"
+                              className="w-6 h-6 mr-4 cursor-pointer"
+                            />
+                            <span>Doanh nghiệp</span>
+                          </label>
+                          <div className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Sinh viên"
+                              className="w-6 h-6 mr-4 cursor-pointer"
+                            />
+                            <span>Sinh viên</span>
+                          </div>
+                          <label className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Tổ chức hành chính công"
+                              className="w-6 h-6 mr-4 cursor-pointer checked:bg-primary"
+                            />
+                            <span>Tổ chức hành chính công</span>
+                          </label>
+                          <div className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Khác"
+                              className="w-6 h-6 mr-4 cursor-pointer text-primary"
+                            />
+                            <span>Khác</span>
+                          </div>
                         </div>
                         <ErrorMessage
                           name="typeOrg"
