@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useMutation } from "react-query";
+import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
 import { MediaProps, MediaPayload, CommentMediaPayload } from "typings/social";
@@ -19,6 +20,8 @@ type UseSocial = {
 };
 
 export const useSocial = () : UseSocial => {
+    const { current: socket }: any = useSocket();
+
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
@@ -64,11 +67,16 @@ export const useSocial = () : UseSocial => {
 
     const createMedia = async (payload: MediaPayload) => {
         try {
-            const { error, message } = await createMediaAsync(payload);
+            const { error, data, message } = await createMediaAsync(payload);
+            console.log({ error, data, message });
 
             if (!error) {
                 refetchListMedias();
+
                 toast.success('Tạo bài viết thành công');
+                socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
+                    receivers: data.receivers
+                });
             } else {
                 toast.error(message);
             }

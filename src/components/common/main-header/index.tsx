@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
 import MainSearchDialog from "components/common/MainSearchDialog";
@@ -10,11 +10,22 @@ import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import iconFilter from "assets/images/icons8-filter-96.png";
 
 import { useModal } from "services/hooks/useModal";
+import { useSocket } from "services/hooks/useSocket";
 import { useNotification } from 'services/hooks/useNotification';
 
 const MainHeader: FC = () => {
   const { openModal } = useModal();
-  const { listNotifications } = useNotification();
+  const { listNotifications, refetchListNotification } = useNotification();
+  const socketRef: any = useSocket();
+
+  useEffect(() => {
+		const socket = socketRef.current;
+    if (!socket) return;
+
+		socket.on('NOTIFICATION_SSC_ADD_MEDIA', (res: any) => {
+      refetchListNotification();
+		});
+	}, []);
 
   return (
     <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">

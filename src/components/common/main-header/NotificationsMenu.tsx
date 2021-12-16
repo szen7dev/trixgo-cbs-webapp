@@ -17,7 +17,11 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
-          <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">{notifications.length}</span>
+          {notifications.length ? (
+            <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
+              {notifications.length}
+            </span>
+          ) : ''}
           <img src={iconNotification} alt="Filter" className="w-6 h-6 filter-secondary-gray" />
         </Menu.Button>
       </div>
@@ -33,7 +37,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
       >
         <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2">
           <div className="font-bold text-2xl leading-7 text-dark px-4 pt-3">
-            Thông báo ({notifications.length})
+            Thông báo {notifications.length ? `(${notifications.length})` : ''}
           </div>
 
           <div className="flex justify-between items-center px-4 pt-3">
@@ -44,16 +48,16 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
           </div>
 
           <div className="t-header-notification-item-container overflow-auto">
-            {notifications.length && notifications.map(notification => (
+            {notifications.length ? notifications.map(notification => (
               <Menu.Item key={notification._id}>
                 <NotificationItem
                   avatar={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender.image}`}
                   author={notification.sender.fullname}
-                  content={notification.content}
+                  content={notification.title}
                   lastActive={moment(notification.createdAt).fromNow()}
                 />
               </Menu.Item>
-            ))}
+            )) : ''}
           </div>
         </Menu.Items>
       </Transition>
