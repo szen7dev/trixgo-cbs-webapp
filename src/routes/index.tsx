@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import {
   BrowserRouter as Router,
@@ -17,6 +17,7 @@ import ChatProvider from "services/providers/Chat";
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
+import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -26,6 +27,9 @@ import ErrorPage from "views/pages/authentication/Error";
 
 // Dashboard Pages
 import DashboardPage from "views/pages/dashboard";
+
+// KanbanBoardPage Pages
+import KanbanBoardPage from "views/pages/kanbanBoard";
 
 // Customers Pages
 import CustomersPage from "views/pages/customers";
@@ -89,6 +93,11 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 //Financial
 
 const Routes: FC = () => {
+
+  useEffect(() => {
+    document.title = "Trixgo | Quản trị doanh nghiệp";
+  }, []);
+
   return (
     <Router>
       <AuthProvider>
@@ -96,13 +105,6 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
-                <Route exact path="/">
-                  <HomeLayout>
-                    <Switch>
-                      <Route exact path="/" component={DashboardPage} />
-                    </Switch>
-                  </HomeLayout>
-                </Route>
 
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
@@ -130,22 +132,35 @@ const Routes: FC = () => {
                   </FullPageLayout>
                 </Route>
 
-                {/* <Route exact path="/">
+                  <Route exact path="/">
                     <Redirect to="/dashboard" />
                   </Route>
 
                   <Route path="/dashboard">
-                    <MainLayout>
+                    <HomeLayout>
                       <Switch>
                         <ProtectedRoute
-                            exact
-                            path="/dashboard"
-                            component={DashboardPage}
+                          exact
+                          path="/dashboard"
+                          component={DashboardPage}
                         />
                         <Route path="/dashboard/*" component={ErrorPage} />
                       </Switch>
-                    </MainLayout>
-                  </Route> */}
+                    </HomeLayout>
+                  </Route>
+
+                  <Route path="/kanban-board">
+                    <KanbanBoardLayout>
+                      <Switch>
+                        <ProtectedRoute
+                          exact
+                          path="/kanban-board"
+                          component={KanbanBoardPage}
+                        />
+                        <Route path="/kanban-board/*" component={ErrorPage} />
+                      </Switch>
+                    </KanbanBoardLayout>
+                  </Route>
 
                 <Route path="/customers">
                   <MainLayout>

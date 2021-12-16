@@ -13,7 +13,7 @@ import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics"
 import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
-import { useSocket } from "services/hooks/useSocket";
+// import { useSocket } from "services/hooks/useSocket";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -31,20 +31,18 @@ const SocialHomePage: FC = () => {
 	// const socketRef: any = useSocket();
 
 	// useEffect(() => {
-	// 	const message = {
-    //         _id: '-1',
-    //         title: 'Hêlellele Minh!',
-    //     };
-
-	// 	const socket = socketRef.current;
-    //     if (!socket) return;
-
-	// 	console.log("Data Send To Server: ", message);
-
-    //     socket.emit('CLIENT_SEND_CHATTING_TEST', message);
-	// 	socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
-	// 		console.log("Data Server Send To Client: ", res);
-	// 	});
+		// const message = {
+        //     _id: '-1',
+        //     title: 'Hêlellele Minh!',
+        // };
+		
+		// const socket = socketRef.current;
+        // if (!socket) return;
+		// console.log("Data Send To Server: ", message);
+        // socket.emit('CLIENT_SEND_CHATTING_TEST', message);
+		// socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
+		// 	console.log("Data Server Send To Client: ", res);
+		// });
 	// }, []);
 
 	return (
