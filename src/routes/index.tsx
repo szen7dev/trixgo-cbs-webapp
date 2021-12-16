@@ -85,6 +85,10 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import DocumentProjectPage from "views/pages/document/DocumentProjectPage";
 import DocumentHomePage from "views/pages/document/DocumentHomePage";
 
+// Cmc pages
+import CmcsPage from "views/pages/cmcs";
+import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
+
 const Routes: FC = () => {
   return (
       <Router>
@@ -355,6 +359,16 @@ const Routes: FC = () => {
                         </Switch>
                     </HomeLayout>
                   </Route>
+
+                <Route path="/cmcs">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/management-report" component={CmcManagementReport} />
+                      <Route path="/cmcs/*" component={ErrorPage} />
+                    </Switch>
+									</HomeLayout>
+                </Route>
 
                   <Route path="*">
                     <FullPageLayout>
