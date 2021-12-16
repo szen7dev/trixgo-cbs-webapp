@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import { IActions, IMethod, ISTATE, TReducer } from './upload';
 
-function useUpload<T extends IMethod>(reducer: TReducer,
+function useCustomReducer<T extends IMethod>(reducer: TReducer,
 	action: IActions,
 	defaultValues: ISTATE): [ISTATE, T] {
 	const [state, dispatch] = useReducer(reducer, defaultValues);
@@ -15,4 +15,4 @@ function useUpload<T extends IMethod>(reducer: TReducer,
 	return [state, boundActions as T];
 }
 
-export default useUpload;
+export default useCustomReducer;

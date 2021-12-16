@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react';
 
 import cn from 'classnames';
 
@@ -8,7 +8,7 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import PostImage from './post/PostImage';
 import PostFile from './post/PostFile';
 
-import useUpload from '../context/useUpload';
+import useCustomReducer from '../context/useCustomReducer';
 import { IMethodFiles, IMethodImages } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import uploadActions from '../context/upload.actions';
@@ -18,9 +18,9 @@ import { FileProps, FilePropsUpload } from 'typings/social';
 interface Props {
 	// setUploadFile?: (files: File[]) => unknown;
 	// setUploadImage?: (files: File[]) => unknown;
-	onTextChange?: (input: string) => unknown;
+	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
 	attachFile?: boolean;
-	onSubmit?: (input: string) => unknown;
+	onSubmit?: (input: string) => void;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
 }
@@ -29,34 +29,13 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 	const [uploads, {
 		setUploadFile,
 		setUploadImage,
-		uploadImage,
-		uploadFile,
 		cancelUploadImage,
 		cancelUploadFile
-	}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+
 	const [text, setText] = useState<string>('');
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
-
-	useEffect(() => {
-		let isMounted = false;
-		const filetoUpload = toArray(uploads.files).filter(file => file.progress === 0);
-		uploadFile(filetoUpload, isMounted, refsFiles.current);
-		return () => { isMounted = true };
-
-		// Pass length of files as dependencies to trigger uploadFile only when add or remove file
-		// If use uploads.files only, thi effect will run all the time
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.files).length])
-
-	useEffect(() => {
-		let isMounted = false;
-		const imageToUpload = toArray(uploads.images).filter(file => file.progress === 0);
-		uploadImage(imageToUpload, isMounted, refsImages.current);
-		return () => { isMounted = true };
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.images).length])
 
 	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
 		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
@@ -73,11 +52,13 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 		if (!event.target.files) return;
 		const images: File[] = [];
 		const files: File[] = [];
+
 		for (let i = 0; i < event.target.files.length; i++) {
 			if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
 			// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
 			files.push(event.target.files[i])
 		}
+
 		if (files.length) setUploadFile && setUploadFile(files);
 		if (images.length) setUploadImage && setUploadImage(images);
 	}
@@ -127,7 +108,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 							// Handle change text
 							onInput={e => {
 								onTextChange
-									? onTextChange(e.currentTarget.innerText)
+									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
 							}
 							}
@@ -148,7 +129,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button className="flex items-center justify-center h-9 w-9" onSubmit={handleSubmit}>
+					<button className="flex items-center justify-center h-9 w-9" onClick={handleSubmit}>
 						<img src={iconEmailSend} alt="Icon attach" className="h-9 w-9" />
 					</button>
 				</div>

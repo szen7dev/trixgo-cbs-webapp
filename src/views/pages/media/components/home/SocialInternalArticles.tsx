@@ -21,12 +21,12 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 							</Link>
 						</p>
 						<div className="flex mt-3">
-							<Link to={`/social/post/${media._id}`} className="inline-block mr-7" style={{ minWidth: "180px" }}>
-								<img src={image} alt="vaccine" />
+							<Link to={`/social/post/${media._id}`} className="inline-block mr-7 flex-shrink-0" style={{ width: "180px" }}>
+								<img src={(media.images && media.images.length) ? media.images[0].url : image} alt="vaccine" />
 							</Link>
 							<div className="flex flex-col">
 								<p className="text-sm leading-4">
-									{media.content.length > 200 ? `${media.content.substring(0, 200)}...` : media.content}
+									{media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content}
 								</p>
 								<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
 									<Link to="/">

@@ -95,7 +95,7 @@ export const useFile = (app?: string) : UseFile => {
         const { signedUrl, file, fileName, result } = await generateLinkS3(files);
         await uploadFileToS3({ signedUrl, file, progress });
 
-        return { id: result?._id, name: fileName };
+        return { _id: result?._id, name: fileName };
     }
 
     return {

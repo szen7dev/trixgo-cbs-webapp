@@ -2,44 +2,60 @@ import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
 export type MediaPayload = {
-  mediaID?: string,
+  mediaID?: string;
   title: string;
   content: string;
-  files?: Array<FileProps>,
-  images?: Array<FileProps>,
+  files?: Array<FileProps>;
+  images?: Array<FileProps>;
   type: string;
 };
 
+export type CommentMediaPayload = {
+  mediaID: string;
+  commentID?: string;
+  parentID?: string;
+  content: string;
+  files?: Array<FileProps>;
+  images?: Array<FileProps>;
+};
+
+export type CommentMediaResponse = APIResponse & {
+  data: CommentMediaProps;
+  message: string;
+};
+
 export type PostResponse = APIResponse & {
-  data: MediaProps,
-  message: string,
+  data: MediaProps;
+  message: string;
 };
 
 export type infoMediaResponse = APIResponse & {
-  data: MediaProps
+  data: MediaProps;
 };
 
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload): void;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
 export type PostImageProps = {
   images?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload): void;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
-export type FileProps = {
+interface FileProp {
   _id: number | string;
   url: string;
   name: string;
   size: number;
-  file?: {
-    _id: number | string;
-    url: string;
-    name: string;
-    size: number;
-  }
+}
+
+export type FileProps = {
+	file?: FileProp
+  _id: number | string;
+  url: string;
+  name: string;
+  size: number;
 };
 
 export type ImageProps = {
@@ -52,7 +68,7 @@ export type ImageProps = {
     url: string;
     name: string;
     size: number;
-  }
+  };
 };
 
 export type ListMediasPayload = {
@@ -69,29 +85,44 @@ export type ListMediasResponse = APIResponse & {
   };
 };
 
+export type CommentMediaProps = {
+  _id: string;
+  media: string;
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
+  comment: string;
+  parent: string;
+  lastestReplyID: string;
+  author: {
+    _id: string;
+    image: string;
+    fullname: string;
+  };
+}
+
 export type MediaProps = {
-  _id: string,
-  title: string,
-  content: string,
-  type: number,
-  files: FileProps[] | undefined,
-  images: FileProps[] | undefined,
+  _id: string;
+  title: string;
+  content: string;
+  type: number;
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
   tagFriends: Array<{
     _id: string;
     fullname: string;
   }>;
-  status: number,
-  kind: number,
-  state: number,
+  status: number;
+  kind: number;
+  state: number;
   author: {
-    _id: string,
-    image: string,
+    _id: string;
+    image: string;
     company: Array<{
-      _id: string,
-      name: string
-    }>,
-    fullname: string
-  },
+      _id: string;
+      name: string;
+    }>;
+    fullname: string;
+  };
   location: {
     type: string;
     _id: string;
@@ -119,7 +150,7 @@ export type FilePropsUpload = {
 interface ModalProps {
   show: boolean;
   toggle(): void;
-  modalType?: 'create' | 'update';
+  modalType?: "create" | "update";
   initialValues?: {
     mediaID?: string;
     title: string;

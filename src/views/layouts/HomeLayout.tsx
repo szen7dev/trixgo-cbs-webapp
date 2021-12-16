@@ -36,7 +36,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
       })}
     >
       {/* Collapse menu button */}
-      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-4 left-2 z-40 p-2">
+      <button title="Toggle left sidebar" onClick={handleMenuEvent} className="home-left-sidebar-collapse-btn transition-all duration-500 ease-out fixed top-3 left-2 z-40 p-2">
         <img className="w-4" src={menuIcon} alt="Menu" />
       </button>
 
