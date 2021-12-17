@@ -25,7 +25,7 @@ const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index, idDetail}) =>
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"}>
                     {rowData.tt}
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100"}>
+                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"}>
                     {rowData.content}
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100"}>
@@ -45,10 +45,10 @@ const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index, idDetail}) =>
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100"}>
 
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100"}>
+                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"}>
 
                 </div>
-                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3/12"}>
+                <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"}>
 
                 </div>
                 <RightClickMenu wrapperRef={wrapperRef} menu={<MenuMainRow/>}/>
