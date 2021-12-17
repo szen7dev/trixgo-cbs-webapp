@@ -92,6 +92,10 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 
 //Financial
 
+// Cmc pages
+import CmcsPage from "views/pages/cmcs";
+import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
+
 const Routes: FC = () => {
 
   useEffect(() => {
@@ -382,17 +386,27 @@ const Routes: FC = () => {
                   </HomeLayout>
                 </Route>
 
-                <Route path="*">
-                  <FullPageLayout>
-                    <Route path="/*" component={ErrorPage} />
-                  </FullPageLayout>
+                <Route path="/cmcs">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/management-report" component={CmcManagementReport} />
+                      <Route path="/cmcs/*" component={ErrorPage} />
+                    </Switch>
+									</HomeLayout>
                 </Route>
-              </Switch>
-            </ModalProvider>
-          </ChatProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </Router>
+
+                  <Route path="*">
+                    <FullPageLayout>
+                      <Route path="/*" component={ErrorPage} />
+                    </FullPageLayout>
+                  </Route>
+                </Switch>
+              </ModalProvider>
+            </ChatProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </Router>
   );
 };
 

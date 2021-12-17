@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useMutation } from "react-query";
+import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
 import { MediaProps, MediaPayload, CommentMediaPayload } from "typings/social";
@@ -19,6 +20,8 @@ type UseSocial = {
 };
 
 export const useSocial = () : UseSocial => {
+    const { current: socket }: any = useSocket();
+
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
@@ -69,7 +72,11 @@ export const useSocial = () : UseSocial => {
 
             if (!error) {
                 refetchListMedias();
+
                 toast.success('Tạo bài viết thành công');
+                socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
+                    receivers: data.receivers
+                });
             } else {
                 toast.error(message);
             }
@@ -84,8 +91,7 @@ export const useSocial = () : UseSocial => {
 
     const updateMedia = async (payload: MediaPayload) => {
         try {
-            const { error, data, message } = await updateMediaAsync(payload);
-            console.log({ error, data, message });
+            const { error, message } = await updateMediaAsync(payload);
 
             if (!error) {
                 toast.success('Cập nhật bài viết thành công');
@@ -103,8 +109,7 @@ export const useSocial = () : UseSocial => {
 
     const deleteMedia = async (id: string) => {
         try {
-            const { error, data, message } = await deleteMediaAsync(id);
-            console.log({ error, data, message });
+            const { error, message } = await deleteMediaAsync(id);
 
             if (!error) {
                 refetchListMedias();
@@ -138,7 +143,7 @@ export const useSocial = () : UseSocial => {
         }
     };
 
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
+    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 

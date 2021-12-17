@@ -86,22 +86,6 @@ const SocialPostPage: FC = () => {
 		// input.currentTarget.innerText = ''
 	}
 
-	// const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
-	// 	_id: _,
-	// 	url: '/logo.png',
-	// 	name: "test",
-	// 	size: 123123
-	// }))
-
-	// const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-	// 	_id: _,
-	// 	url: i % 2
-	// 		? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
-	// 		: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
-	// 	name: "test",
-	// 	size: 123123
-	// }))
-
 	const initialState = {
 		mediaID,
 		title: media.title,
