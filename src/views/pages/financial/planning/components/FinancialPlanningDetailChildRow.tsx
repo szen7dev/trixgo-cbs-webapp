@@ -1,6 +1,8 @@
-import React, {FC} from "react";
+import React, {FC, useRef} from "react";
 import DatePicker from "react-datepicker";
 import DropdownSearchable from "../../../../../components/common/DropdownSearch";
+import RightClickMenu from "../../../../../components/common/RightClickMenu";
+import MenuChildRow from "./MenuChildRow";
 type RowPlanningFinancial = {
     collapsed: boolean;
     _id: string|number;
@@ -24,8 +26,10 @@ type Props = {
 }
 
 const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, isLastRow}) => {
+    const wrapperRef = useRef<HTMLDivElement>(null);
     return (
         <div
+            ref={wrapperRef}
             style={
                 collapsed?
                     {transform: "scaleY(0)", transformOrigin: "top center", height:0, visibility: "collapse"}:
@@ -94,6 +98,7 @@ const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, i
             <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-white w-3/12"}>
                 <input className={"w-full h-full "} onChange={(event) => console.log(event.target.value)} value={rowData.ghiChu}/>
             </div>
+            <RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow/>}/>
         </div>
     )
 }

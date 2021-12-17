@@ -1,34 +1,25 @@
-import React, {FC} from "react";
+import React, {FC, useRef} from "react";
 import CollapseButton from "./CollapseButton";
 import {map as _map} from "lodash";
 import FinancialPlanningDetailChildRow from "./FinancialPlanningDetailChildRow";
-type RowPlanningFinancial = {
-    collapsed: boolean;
-    _id: string|number;
-    tt?: string|number;
-    content?: string;
-    ngayDuKien?: string;
-    duKienThu?: string|number;
-    thucTheThu?: string|number;
-    duKienChi?: string|number;
-    thucTeChi?: string|number;
-    ngayThucTe?: string;
-    hopDong?: string|number;
-    ghiChu?: string;
-    childrens?: RowPlanningFinancial[]
-}
+import RightClickMenu from "../../../../../components/common/RightClickMenu";
+import {RowPlanningFinancial} from "../../../../../typings/app";
+import MenuMainRow from "./MenuMainRow";
+
 type Props = {
     rowData: RowPlanningFinancial;
     index: number|string;
+    idDetail: number|string;
 }
 
-const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index}) => {
+const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index, idDetail}) => {
+    const wrapperRef = useRef<HTMLDivElement>(null);
     return (
         <>
-            <div className={"row flex table-row font-semibold main-row " + (rowData.collapsed?"collapsed ":"not-collapsed ")}>
+            <div ref={wrapperRef} className={"row flex table-row font-semibold main-row " + (rowData.collapsed?"collapsed ":"not-collapsed ")}>
                 <div className={"financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell align-middle border border-gray-300 transition duration-300 ease-in-out"}>
                     <div className={"flex flex-col items-center justify-center"}>
-                        <CollapseButton collapsed={rowData.collapsed}/>
+                        <CollapseButton idDetail={idDetail} collapsed={rowData.collapsed} index={index}/>
                     </div>
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"}>
@@ -60,6 +51,7 @@ const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index}) => {
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3/12"}>
 
                 </div>
+                <RightClickMenu wrapperRef={wrapperRef} menu={<MenuMainRow/>}/>
             </div>
             {
                 _map(rowData.childrens, (childRow, indexChild) => (

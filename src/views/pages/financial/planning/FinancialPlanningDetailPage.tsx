@@ -103,9 +103,43 @@ const FinancialPlanningDetailPage:FC = () => {
                     </div>
                     {
                         _map(mapData, (row, index) => (
-                            <FinancialPlanningDetailMainRow key={row._id} rowData={row} index={index}/>
+                            <FinancialPlanningDetailMainRow key={row._id} idDetail={id} rowData={row} index={index}/>
                         ))
                     }
+                    <div className={"row flex table-row font-semibold total-row"}>
+                        <div className={"financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell align-middle border border-gray-300 transition duration-300 ease-in-out"}>
+
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100 w-3"}>
+
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                            TỔNG
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                            900.000.000.000
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                            900.000.000.000
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                            900.000.000.000
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+                            900.000.000.000
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100"}>
+
+                        </div>
+                        <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-yellow-100 w-3/12"}>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

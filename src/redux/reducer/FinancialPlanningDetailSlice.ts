@@ -86,10 +86,28 @@ const financialPlanningDetailSlice = createSlice({
                 ]
             };
         },
-
+        setChildRowCollapsed(state, action) {
+            state.data = {
+                ...state.data,
+                [action.payload._id]: [
+                    ...state.data[action.payload._id].map((item: any) => {
+                        const index = state.data[action.payload._id].indexOf(item);
+                        if (index == action.payload.index) {
+                            return {
+                                ...item??{},
+                                collapsed: action.payload.collapsed
+                            }
+                        }
+                        return {
+                            ...item??{}
+                        }
+                    })
+                ]
+            };
+        }
     },
     extraReducers: {}
 });
 
-export const { setFinancialPlanningDetail , setMainRowCollapsed } = financialPlanningDetailSlice.actions;
+export const { setFinancialPlanningDetail , setMainRowCollapsed, setChildRowCollapsed } = financialPlanningDetailSlice.actions;
 export default financialPlanningDetailSlice.reducer;
