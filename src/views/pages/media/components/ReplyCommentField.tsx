@@ -13,19 +13,31 @@ import { IMethodFiles, IMethodImages } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import uploadActions from '../context/upload.actions';
 import { toArray } from 'lodash';
-import { FileProps, FilePropsUpload } from 'typings/social';
+import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
+import { useCommentSocial } from 'services/hooks/useSocial';
 
 interface Props {
 	// setUploadFile?: (files: File[]) => unknown;
 	// setUploadImage?: (files: File[]) => unknown;
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
 	attachFile?: boolean;
-	onSubmit?: (input: string) => void;
+	onSubmit?: (input: string, parentID?: string) => void;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
+	parentID?: string,
+	mediaID: string,
 }
 
-const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ fileContainerClassName, inputContainerClassName, onSubmit, attachFile, onTextChange, ...props }) => {
+const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ 
+	fileContainerClassName, 
+	inputContainerClassName,
+	onSubmit,
+	onTextChange,
+	attachFile,
+	parentID,
+	mediaID,
+	...props
+}) => {
 	const [uploads, {
 		setUploadFile,
 		setUploadImage,
@@ -34,6 +46,8 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
 
 	const [text, setText] = useState<string>('');
+	const { createComment, refetchListComments } = useCommentSocial({ mediaID });
+	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -63,8 +77,18 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 		if (images.length) setUploadImage && setUploadImage(images);
 	}
 
-	const handleSubmit = () => {
-		onSubmit && onSubmit(text);
+	const handleSubmit = async () => {
+		const dataInsert: CommentPayload = {
+			mediaID,
+			content: text
+		}
+		parentID && (dataInsert.parentID = parentID);
+
+		await createComment(dataInsert);
+		refetchListComments();
+
+		// Clear text input comment
+		refInputComment.current && (refInputComment.current.innerText = '');
 	}
 
 	return (
@@ -104,6 +128,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 								const text = e.clipboardData.getData('text/plain');
 								window.document.execCommand('insertText', false, text);
 							}}
+							ref={refInputComment}
 							style={{ color: 'black' }}
 							// Handle change text
 							onInput={e => {
@@ -112,8 +137,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 									: setText(e.currentTarget.innerText)
 							}
 							}
-						>
-						</span>
+						></span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
 							<input

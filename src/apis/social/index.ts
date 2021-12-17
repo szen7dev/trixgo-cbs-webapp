@@ -5,10 +5,11 @@ import {
     ListMediasResponse,
     infoMediaResponse,
     MediaPayload,
-    PostResponse,
-    CommentMediaPayload,
-    CommentMediaResponse
+    PostResponse, 
+    CommentPayload,
+    ListCommentsPayload
 } from "typings/social";
+import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "helpers";
 
 const mediaURL = "/api/medias";
@@ -57,23 +58,29 @@ const SocialRepository = {
      * @param payload
      * @returns 
      */
-    async createComment(payload: CommentMediaPayload): Promise<CommentMediaResponse> {
-        const { data } = await API.post<CommentMediaResponse>(
-            `${mediaURL}/comment`,
+    async createComment(payload: CommentPayload): Promise<CommentResponse> {
+        const { data } = await API.post<CommentResponse>(
+            `${mediaURL}/comments`,
             payload
         );
         return data;
     },
-    async updateComment(payload: CommentMediaPayload): Promise<CommentMediaResponse> {
-        const { data } = await API.put<CommentMediaResponse>(
-            `${mediaURL}/comment`,
-            payload
-        );
-        return data;
-    },
-    async deleteCommentMedia(id: string): Promise<CommentMediaResponse> {
-        const { data } = await API.delete<CommentMediaResponse>(
-            `${mediaURL}?mediaID=${id}`
+    // async updateComment(payload: CommentPayload): Promise<CommentResponse> {
+    //     const { data } = await API.put<CommentResponse>(
+    //         `${mediaURL}/comment`,
+    //         payload
+    //     );
+    //     return data;
+    // },
+    // async deleteCommentMedia(id: string): Promise<CommentResponse> {
+    //     const { data } = await API.delete<CommentResponse>(
+    //         `${mediaURL}?mediaID=${id}`
+    //     );
+    //     return data;
+    // },
+    async listComments(payload: ListCommentsPayload): Promise<ListCommentResponse> {
+        const { data } = await API.get<ListCommentResponse>(
+            `${mediaURL}/comments?${convertObToUrl(payload)}`
         );
         return data;
     },
