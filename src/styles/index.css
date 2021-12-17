@@ -1066,3 +1066,6 @@ input[type="text"] {
   background: #666666;
   top: 50%;
 }
+.financial-planning-table .header {
+  top: 63px;
+}
