@@ -1,0 +1,76 @@
+import { FC, Fragment } from "react";
+
+import { Menu, Transition } from "@headlessui/react";
+
+import iconGrid from "assets/images/icons8-menu-100.png";
+import iconSearch from "assets/images/icons8-search-50.png";
+import appLogo from "assets/images/trixgo-logo.png";
+
+const AppsMenu: FC = () => {
+  return (
+    <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <Menu.Button className="w-10 h-10 inline-flex items-center justify-center transition duration-150 focus:outline-none ml-6">
+          <img src={iconGrid} alt="Filter" className="w-6 h-6 filter-secondary-gray" />
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute -right-3 w-80 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 pt-4 pr-4 pl-4 pb-1">
+          <div className="t-header-app-search relative mb-5">
+            <img src={iconSearch} alt="Filter" className="w-6 h-6 filter-primary-gray absolute top-2 left-3" />
+            <input className="h-10 border-0 bg-secondary-light w-full pr-3 pl-12 outline-none" type="text" placeholder="Tìm kiếm" />
+          </div>
+          <div className="flex flex-wrap justify-around">
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">App</span>
+            </a>
+            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Trixgo 1234</span>
+            </a>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
+};
+
+export default AppsMenu;

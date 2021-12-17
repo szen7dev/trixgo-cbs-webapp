@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, FormEvent, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -34,52 +34,66 @@ import iconComment from 'assets/images/icon-chat-project.png';
 import '../style.css';
 
 /**
- * Types, Services, Apis
+ * Types, Services, Utils
  */
-import { FileProps, ImageProps } from "typings/social";
+import { FileProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
+import { typePostSelected } from '../utils';
 
 const SocialPostPage: FC = () => {
-	const params = useParams<{ id: string }>();
 	const history = useHistory();
-	const { deleteMedia } = useSocial();
+	const { mediaID } = useParams<{ mediaID: string }>();
+	const { deleteMedia, createComment } = useSocial();
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(params.id));
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));  
 	const media = data?.data;
 
-	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
+	if(!media){
+		return <Loader className="border-primary" />;
+	}
+
+	const toggleModalEditMedia = () => {
+		refetch();
+		setModalEditMedia(!modalEditMedia);
+	};
+	const toggleModalEditMediaEdit = (e: React.MouseEvent<HTMLElement>) => {
+		e.stopPropagation();
+		setModalEditMedia(!modalEditMedia);
+	}
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
 
 	const handleDeleteMedia = async () => {
-		await deleteMedia(params.id);
+		await deleteMedia(mediaID);
 		history.push('/social/home');
 	}
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
-	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-		_id: _,
-		url: i % 2
-			? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
-			: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
-		name: "test",
-		size: 123123
-	}))
-	
-	const initialState = {
-		title: "",
-		content: "",
-		type: 'just-me',
+	const handleComment = async (text: string | FormEvent<HTMLDivElement>) => {
+		console.log({ text });
+		await createComment({
+			mediaID: media?._id || '',
+			content: text as string
+		})
 	}
 
-	if(!media){
-		return <Loader className="border-primary" />;
+	const handleTextChange = (input: React.FormEvent<HTMLSpanElement>) => {
+		console.log({ INPUT: input.currentTarget.innerText });
+		// input.currentTarget.innerText = ''
 	}
+
+	const initialState = {
+		mediaID,
+		title: media.title,
+		content: media.content,
+		type: typePostSelected(media.type),
+	}
+	const images: FileProps[] = media.images || [];
+	const files: FileProps[] = media.files || [];
 
 	return (
 		<>
@@ -115,7 +129,7 @@ const SocialPostPage: FC = () => {
 											<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 											Copy link
 										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMedia}>
+										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMediaEdit}>
 											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 											Cập nhật
 										</button>
@@ -131,7 +145,7 @@ const SocialPostPage: FC = () => {
 							<div className="post__author">
 								<div className="post__author-avt">
 									<Link to="/">
-										<img src={avatar} alt="" className="object-cover" />
+										<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
 									</Link>
 								</div>
 								<div className="post__author-info">
@@ -158,18 +172,26 @@ const SocialPostPage: FC = () => {
 						</div>
 					</div>
 					{/* Content */}
-					<div className="flex pr-6 text-black">
+					<div className="flex px-1 text-black gap-x-6">
 						{/* Main post */}
-						<div className="post__content pb-2.5">
+						<div className="post__content pb-2.5 flex-grow" >
 							<div className="post__content-images">
-								{images.slice(0, 3).map((image, i) => (
-									<div key={image._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-										<img src={image.url} alt="" className="object-cover h-full w-full" />
-										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
-											+{images.length - 2}
-										</div>}
-									</div>
-								))}
+								{images.length && images.slice(0, 3).map((image, i) => {
+									const id = image.file ? image.file._id : image._id; 
+									const name = image.file ? image.file.name : image.name; 
+									const url = image.file ? image.file.url : image.url; 
+
+									return (
+										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+											<img src={url} alt={name} className="object-cover h-full w-full" />
+											{i === 2 && images.length > 3 && (
+												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
+													+{images.length - 2}
+												</div>
+											)}
+										</div>
+									)
+								})}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
@@ -177,7 +199,7 @@ const SocialPostPage: FC = () => {
 							<p>
 								{media.content}
 							</p>
-							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px]">
+							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
 								<span>
 									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
@@ -199,12 +221,11 @@ const SocialPostPage: FC = () => {
 							</div>
 							<div className="border-b border-gray-300"></div>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} onTextChange={handleTextChange} />
 							</div>
 						</div>
 						{/* Post Suggest */}
-						<div className="post__suggest">
+						<div className="post__suggest flex-shrink-0">
 							<p>Liên quan</p>
 							<div>
 								<Link to="/"><div>21,3k</div></Link>
@@ -230,7 +251,7 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={files} images={images} />
+					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={media.files} images={media.images} />
 				</div>
 			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>

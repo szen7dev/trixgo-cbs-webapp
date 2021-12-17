@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 /**
  * LIBRARIES
  */
 import { Dialog } from '@headlessui/react';
-import { Form, Formik, ErrorMessage } from 'formik';
+import { Form, Formik, ErrorMessage, FormikProps } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
@@ -26,62 +26,49 @@ import iconDown from 'assets/images/Frame 1745.png';
  * CONTEXTS
  */
 import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
-import useUpload from '../../context/useUpload';
+import useCustomReducer from '../../context/useCustomReducer';
 import uploadActions from '../../context/upload.actions';
 import { IMethodFiles, IMethodImages } from '../../context/upload';
-import { modifyUploadedFiles } from '../../context/upload.utils';
+import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../../context/upload.utils';
 
 /**
  * Types, Services
  */
 import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { useAuth } from 'services/hooks/useAuth';
 import { useSocial } from 'services/hooks/useSocial';
+import { useFile as useUpload } from 'services/hooks/useUpload';
+import { typeTextSelected } from '../../utils';
 
-const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initialValues = {
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
+	mediaID: "",
 	title: "",
 	content: "",
-	files: [],
-	images: [],
 	type: 'just-me',
 } }) => {
-	const [uploads,
-		{ setUploadFile,
-			setUploadImage,
-			uploadImage,
-			uploadFile,
-			cancelUploadImage,
-			cancelUploadFile,
-			removeUploadedFile,
-			removeUploadedImage,
-		}] = useUpload<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
-	const { createMedia } = useSocial();
+	const [uploads,
+		{
+			setUploadImageProgress,
+			setUploadFileProgress,
+			setIDImageUploaded,
+			setIDFileUploaded,
+			setUploadImage,
+			setUploadFile,
+			removeUploadedImage,
+			removeUploadedFile,
+		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
+
+	const { user } = useAuth();
+	const { createMedia, updateMedia } = useSocial();
+	const { addFileToUpload } = useUpload('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
 	const [showClassifyArticleCommunity, setShowClassifyArticleCommunity] = useState(false);
 
-	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
-	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
-
-	useEffect(() => {
-		let isMounted = false;
-		const filetoUpload = toArray(uploads.files).filter(file => file.progress === 0);
-		uploadFile(filetoUpload, isMounted, refsFiles.current);
-		return () => { isMounted = true };
-
-		// Pass length of files as dependencies to trigger uploadFile only when add or remove file
-		// If use uploads.files only, thi effect will run all the time
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.files).length])
-
-	useEffect(() => {
-		let isMounted = false;
-		const imageToUpload = toArray(uploads.images).filter(file => file.progress === 0);
-		uploadImage(imageToUpload, isMounted, refsImages.current);
-		return () => { isMounted = true };
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [Object.keys(uploads.images).length])
+	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
+	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
 	const toggleClassifyArticle = () => setShowClassifyArticle(!showClassifyArticle);
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
@@ -93,56 +80,91 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		type: string().required("Loại bài viết không hợp lệ"),
 	});
 
-	const currentSelected = (key: string) => {
-		switch (key) {
-			case 'company':
-				return "Thành viên trong công ty";
-			case 'just-me':
-				return "Chỉ mình tôi";
-			case 'departments':
-				return "Dự án, phòng ban";
-			case 'community':
-				return "Cộng đồng";
-			case 'system':
-				return "Hệ thống";
-			default:
-				return "Thành viên trong công ty";
+	const handleSetFiles = async (
+		event: React.ChangeEvent<HTMLInputElement>,
+		attribute: 'files' | 'images',
+		formik: FormikProps<MediaPayload>) => {
+
+		if (event?.target?.files?.length) {
+			// const imgLastKey = Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] || null;
+			// const fileLastKey = Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] || null;
+
+			// Modify file to with key with each file;
+			const [files, images] = modifyUploadedFilesV2({
+				imgLastKey: Object.keys(uploads.images).length || null,
+				fileLastKey: Object.keys(uploads.files).length || null,
+			}, event.target.files);
+
+			setUploadImage(images);
+			setUploadFile(files);
+
+			// Upload images
+			for (const [key, { file }] of Object.entries(images)) {
+				const { _id } = await addFileToUpload({
+					files: file,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+						setUploadImageProgress(key, percentCompleted)
+					}
+				})
+				setIDImageUploaded(key, _id);
+			}
+
+			// Upload files
+			for (const [key, { file }] of Object.entries(files)) {
+				const { _id } = await addFileToUpload({
+					files: file,
+					progress: percentCompleted => {
+						console.log(`${percentCompleted}%`, key);
+						setUploadFileProgress(key, percentCompleted)
+					}
+				})
+				setIDFileUploaded(key, _id);
+			}
 		}
 	}
 
-	const handleSetFiles = (event: React.ChangeEvent<HTMLInputElement>, attribute: 'files' | 'images') => {
-		if (attribute === 'files') setUploadFile(event.target.files);
-		if (attribute === 'images') setUploadImage(event.target.files);
-	}
-
 	const handleSubmit = async (values: MediaPayload) => {
+		values.images = [];
+		values.files = [];
+
+		// Get list file uploaded
+		for (const [_, { _id }] of Object.entries(uploads.images)) {
+			_id && (values.images = [...values.images || [], _id]);
+		}
+
+		for (const [_, { _id }] of Object.entries(uploads.files)) {
+			_id && (values.files = [...values.files || [], _id]);
+		}
+
 		// Handle api here!
+		switch (modalType) {
+			case 'create':
+				values.companyID = user?.company;
+				await createMedia(values);
+				break;
+			case 'update':
+				values.mediaID = initialValues.mediaID;
+				await updateMedia(values);
+				break;
+			default:
+				break;
+		}
+
 		console.log({ values, uploads })
-		await createMedia(values);
 		toggle();
 		return [values, uploads];
 	};
 
-	const handleCancelUploadFile = (file: FileProps | FilePropsUpload) => {
-		if ('id' in file && refsFiles.current[file.id]) {
-			clearInterval(refsFiles.current[file.id])
-			cancelUploadFile(file)
-		} else {
-			removeUploadedFile(file)
-		}
-	}
-
-	const handleCancelUploadImage = (file: FileProps | FilePropsUpload) => {
-		if ('id' in file && refsImages.current[file.id]) {
-			clearInterval(refsImages.current[file.id])
-			cancelUploadImage(file)
-		} else {
-			removeUploadedImage(file)
+	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
+		if ('id' in file){
+			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+		} else{
+			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
 		}
 	}
 
 	return (
-		// <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" {...props}>
 		<Formik
 			initialValues={initialValues}
 			validationSchema={mediaSchema}
@@ -150,7 +172,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 		>
 			{
 				formik => {
-					const { setFieldValue, values } = formik;
+					const { values } = formik;
 					return (
 						<Form autoComplete="off" >
 							<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
@@ -158,9 +180,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 									as="h3"
 									className="text-lg leading-6 font-bold"
 								>
-									Bài viết mới
+									{initialValues.mediaID ? 'Cập nhật bài viết' : 'Bài viết mới'}
 								</Dialog.Title>
-								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" onClick={() => toggle()}>
+								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 									</svg>
@@ -169,7 +191,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 							<div className="px-6 mt-3">
 								<button type="button" onClick={toggleClassifyArticle} className="btn__select w-56 flex justify-between items-center">
 									<span>
-										{currentSelected(values.type)}
+										{typeTextSelected(values.type)}
 									</span>
 									<img src={iconDown} alt="icon down" className="inline-block" />
 								</button>
@@ -200,12 +222,12 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								>
 									<PostImage
 										images={toArray(uploads.images)}
-										onRemove={handleCancelUploadImage}
+										onRemove={handleRemoveUpload}
 										className="post__files-row pt-5 text-black gap-9 flex-wrap"
 									/>
 									<PostFile
 										files={toArray(uploads.files)}
-										onRemove={handleCancelUploadFile}
+										onRemove={handleRemoveUpload}
 										className="w-full mx-2.5 text-black"
 									/>
 								</div>
@@ -214,11 +236,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images')} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images', formik)} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files')} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files', formik)} />
 									</label>
 								</div>
 								<div>
@@ -259,7 +281,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, files, images, initi
 				}
 			}
 		</Formik>
-		// </div>
 	)
 }
 

@@ -1,5 +1,4 @@
 import uploadFileTypes from "./upload.types";
-import { modifyFiles } from "./upload.utils";
 
 import { ISTATE, TReducer } from "./upload.d";
 
@@ -24,7 +23,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         ...state,
         files: {
           ...state.files,
-          ...modifyFiles(state.files, action.payload),
+          ...action.payload,
         },
       };
     case uploadFileTypes.SET_UPLOAD_IMAGE:
@@ -32,7 +31,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         ...state,
         images: {
           ...state.images,
-          ...modifyFiles(state.images, action.payload),
+          ...action.payload,
         },
       };
     case uploadFileTypes.SET_UPLOAD_FILE_PROGRESS:
@@ -54,6 +53,28 @@ const fileUploadReducer: TReducer = (state, action) => {
           [action.payload.id]: {
             ...state.images[action.payload.id],
             progress: action.payload.progress,
+          },
+        },
+      };
+    case uploadFileTypes.SET_ID_IMAGE_UPLOADED: 
+      return {
+        ...state,
+        images: {
+          ...state.images,
+          [action.payload.id]: {
+            ...state.images[action.payload.id],
+            _id: action.payload.key,
+          },
+        },
+      };
+    case uploadFileTypes.SET_ID_FILE_UPLOADED: 
+      return {
+        ...state,
+        files: {
+          ...state.files,
+          [action.payload.id]: {
+            ...state.files[action.payload.id],
+            _id: action.payload.key,
           },
         },
       };
@@ -118,7 +139,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         images: cloneImages,
       };
     case uploadFileTypes.REMOVE_UPLOADED_FILE:
-			cloneFiles = { ...state.files };
+      cloneFiles = { ...state.files };
       delete cloneFiles[action.payload];
       return {
         ...state,

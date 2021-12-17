@@ -1,16 +1,22 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
-export type FilePayload = {
+export type FilePayload = Partial<File> & {
   type: string;
   name: string;
-  size: number;
+  size: string;
   app?: string;
 };
 
 export type UploadPayload = {
-  url: string;
-  file: FormDataEntryValue
+  signedUrl: string;
+  file: File;
+  progress?: (percentCompleted: number) => void
+}
+
+export type AddFileUploadResponse = {
+  _id: string | undefined;
+  name: string;
 }
 
 export type FileResponse = APIResponse & {
@@ -31,6 +37,7 @@ export type FileProps = {
   name: string,
   url: string,
   size: number,
+  type: string,
   userCreate: string,
   modifyAt: string,
   createAt: string,

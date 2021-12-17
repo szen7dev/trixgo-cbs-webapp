@@ -1,11 +1,16 @@
-import { FC, FormEvent, useRef } from "react";
+import { FC, FormEvent, useRef, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { object, string } from "yup";
 
-import CloseIcon from "assets/images/icon-close.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+
+import CloseIcon from "assets/images/icon-close.svg";
+import ExpandIcon from "assets/images/icon-expand-arrow.svg";
+import TagIcon from "assets/images/icons8-price-tag.svg";
+
+import "styles/common.css";
 
 type Props = {
   showRegister: boolean;
@@ -13,16 +18,22 @@ type Props = {
 };
 
 const RegisterPage: FC<Props> = (props) => {
+  const [openSelect, setOpenSelect] = useState(false);
   const { t } = useTranslation(["register"]);
   const { showRegister, handleClickShowRegister } = props;
-  const ref = useRef<HTMLDivElement>(null);
+  const optionRef = useRef<HTMLDivElement>(null);
 
-  const handleCloseModal = () => {
-    handleClickShowRegister(!showRegister);
+  const initialValues = {
+    fullName: "",
+    comOrgName: "",
+    email: "",
+    typeOrg: "",
+    phoneNumber: "",
+    description: "",
   };
 
-  useOnClickOutside(ref, () => handleClickShowRegister(false));
- 
+  useOnClickOutside(optionRef, () => setOpenSelect(!openSelect));
+
   const registerSchema = object().shape({
     fullName: string().required("First and last name required!"),
     companyName: string().required("Name of company/organization required!"),
@@ -38,65 +49,44 @@ const RegisterPage: FC<Props> = (props) => {
       {showRegister ? (
         <section
           className="fixed flex justify-center items-center inset-0 z-10"
-          style={{
-            background: "rgba(0, 0, 0, 0.5)",
-          }}
+          style={{ background: "rgba(0, 0, 0, 0.5)" }}
         >
-          <div
-            className="relative p-5"
-            ref={ref}
-            style={{
-              background: "#ffffff",
-              width: 600,
-            }}
-          >
+          <div className="relative p-5 bg-primary-light" style={{ width: 600 }}>
             <div>
-              <p
-                className="font-bold text-center text-xl pt-4 pb-2"
-                style={{ color: "#0060e1" }}
-              >
+              <p className="font-bold text-center text-primary text-xl pt-4 pb-2">
                 {t("register:title")}
               </p>
               <img
                 className="absolute right-4 top-4 cursor-pointer"
                 src={CloseIcon}
                 alt="Close"
-                onClick={() => handleCloseModal()}
+                onClick={() => handleClickShowRegister(!showRegister)}
               />
             </div>
             <div>
               <Formik
-                initialValues={{}}
+                initialValues={initialValues}
                 validationSchema={registerSchema}
-                onSubmit={(values) => {console.log(values)}}
+                onSubmit={(values) => console.log(values)}
               >
                 {(formik) => {
-                  const { handleBlur } = formik;
+                  const { handleBlur, handleChange, setFieldValue } = formik;
 
                   return (
                     <Form>
                       <div className="p-5">
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: "#252b37" }}
-                        >
+                        <p className="font-medium text-sm">
                           {t("register:fullName")}
                         </p>
-                        <div>
-                          <Field
-                            type="text"
-                            name="fullName"
-                            placeholder={t("register:fullNamePlaceholder")}
-                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
-                            style={{
-                              border: "1px solid #e1e5f7",
-                              background: "#f5f6fA",
-                            }}
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
-                        </div>
+                        <Field
+                          type="text"
+                          name="fullName"
+                          placeholder={t("register:fullNamePlaceholder")}
+                          className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
                         <ErrorMessage
                           name="fullName"
                           component="span"
@@ -105,84 +95,89 @@ const RegisterPage: FC<Props> = (props) => {
                       </div>
 
                       <div className="pb-5 pr-5 pl-5">
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: "#252b37" }}
-                        >
+                        <p className="font-medium text-sm">
                           {t("register:comOrgName")}
                         </p>
-                        <div>
+                        <div className="relative">
                           <Field
-                            type="text"
-                            name="companyName"
+                            name="comOrgName"
                             placeholder={t("register:comOrgNamePlaceholder")}
-                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
-                            style={{
-                              border: "1px solid #e1e5f7",
-                              background: "#f5f6fA",
-                            }}
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
+                            className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
+                            onClick={() => setOpenSelect(!openSelect)}
                           />
-                        </div>
-                        <ErrorMessage
-                          name="companyName"
-                          component="span"
-                          className="font-normal text-sm text-negative"
-                        />
-                      </div>
+                          <img
+                            src={ExpandIcon}
+                            alt="Expand"
+                            className="absolute top-6 right-5"
+                          />
 
-                      <div className="pb-5 pr-5 pl-5">
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: "#252b37" }}
-                        >
-                          {t("register:email")}
-                        </p>
-                        <div>
-                          <Field
-                            type="email"
-                            name="email"
-                            placeholder={t("register:emailPlaceholder")}
-                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
-                            style={{
-                              border: "1px solid #e1e5f7",
-                              background: "#f5f6fA",
-                            }}
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
-                        </div>
-                        <ErrorMessage
-                          name="email"
-                          component="span"
-                          className="font-normal text-sm text-negative"
-                        />
-                      </div>
-
-                      <div className="pb-5 pr-5 pl-5">
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: "#252b37" }}
-                        >
-                          {t("register:typeOrg")}
-                        </p>
-                        <div>
-                          <Field
-                            type="text"
-                            name="typeOrg"
-                            placeholder={t("register:typeOrgPlaceholder")}
-                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
-                            style={{
-                              border: "1px solid #e1e5f7",
-                              background: "#f5f6fA",
-                            }}
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
+                          {openSelect && (
+                            <div
+                              ref={optionRef}
+                              className="absolute w-full bg-primary-light rounded-sm shadow-lg py-2"
+                            >
+                              <div>
+                                <Field
+                                  type="text"
+                                  name="typeOrg"
+                                  placeholder="Search here"
+                                  className="h-12 w-full flex items-center px-5 outline-none"
+                                />
+                              </div>
+                              <div
+                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
+                                onClick={() => {
+                                  setOpenSelect(!openSelect);
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Đại học xây dựng Hà Nội"
+                                  );
+                                }}
+                              >
+                                <img src={TagIcon} alt="Tag" className="mr-5" />
+                                <span>Đại học xây dựng Hà Nội</span>
+                              </div>
+                              <div
+                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
+                                onClick={() => {
+                                  setOpenSelect(!openSelect);
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 2"
+                                  );
+                                }}
+                              >
+                                <img src={TagIcon} alt="Tag" className="mr-5" />
+                                <span>Kết quả trả về 2</span>
+                              </div>
+                              <div
+                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
+                                onClick={() => {
+                                  setOpenSelect(!openSelect);
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 3"
+                                  );
+                                }}
+                              >
+                                <img src={TagIcon} alt="Tag" className="mr-5" />
+                                <span>Kết quả trả về 3</span>
+                              </div>
+                              <div
+                                className="h-12 flex items-center px-5 cursor-pointer hover:bg-accent-light"
+                                onClick={() => {
+                                  setOpenSelect(!openSelect);
+                                  setFieldValue(
+                                    "comOrgName",
+                                    "Kết quả trả về 4"
+                                  );
+                                }}
+                              >
+                                <img src={TagIcon} alt="Tag" className="mr-5" />
+                                <span>Kết quả trả về 4</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
                         <ErrorMessage
                           name="typeOrg"
@@ -191,28 +186,88 @@ const RegisterPage: FC<Props> = (props) => {
                         />
                       </div>
 
-                      <div className="pr-5 pl-5">
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: "#252b37" }}
-                        >
+                      <div className="pb-5 pr-5 pl-5">
+                        <p className="font-medium text-sm">
+                          {t("register:typeOrg")}
+                        </p>
+                        <div className="grid grid-cols-2 gap-3 mt-2.5">
+                          <label className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Doanh nghiệp"
+                              className="w-6 h-6 mr-4 cursor-pointer"
+                            />
+                            <span>Doanh nghiệp</span>
+                          </label>
+                          <div className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Sinh viên"
+                              className="w-6 h-6 mr-4 cursor-pointer"
+                            />
+                            <span>Sinh viên</span>
+                          </div>
+                          <label className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Tổ chức hành chính công"
+                              className="w-6 h-6 mr-4 cursor-pointer checked:bg-primary"
+                            />
+                            <span>Tổ chức hành chính công</span>
+                          </label>
+                          <div className="flex items-center">
+                            <Field
+                              type="radio"
+                              name="typeOrg"
+                              value="Khác"
+                              className="w-6 h-6 mr-4 cursor-pointer text-primary"
+                            />
+                            <span>Khác</span>
+                          </div>
+                        </div>
+                        <ErrorMessage
+                          name="typeOrg"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
+                      </div>
+
+                      <div className="pb-5 pr-5 pl-5">
+                        <p className="font-medium text-sm">
+                          {t("register:email")}
+                        </p>
+                        <Field
+                          type="email"
+                          name="email"
+                          placeholder={t("register:emailPlaceholder")}
+                          className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="span"
+                          className="font-normal text-sm text-negative"
+                        />
+                      </div>
+
+                      <div className="pb-5 pr-5 pl-5">
+                        <p className="font-medium text-sm">
                           {t("register:phoneNumber")}
                         </p>
-                        <div>
-                          <Field
-                            type="text"
-                            name="phoneNumber"
-                            placeholder={t("register:phoneNumberPlaceholder")}
-                            className="w-full p-2 mt-2.5 rounded-sm outline-none"
-                            style={{
-                              border: "1px solid #e1e5f7",
-                              background: "#f5f6fA",
-                            }}
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
-                        </div>
+                        <Field
+                          type="text"
+                          name="phoneNumber"
+                          placeholder={t("register:phoneNumberPlaceholder")}
+                          className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
+                          onBlur={(e: FormEvent<HTMLInputElement>) => {
+                            handleBlur(e);
+                          }}
+                        />
                         <ErrorMessage
                           name="phoneNumber"
                           component="span"
@@ -220,11 +275,25 @@ const RegisterPage: FC<Props> = (props) => {
                         />
                       </div>
 
+                      <div className="pr-5 pl-5">
+                        <p className="font-medium text-sm">
+                          {t("register:description")}
+                        </p>
+                        <textarea
+                          name="description"
+                          className="w-full p-2 mt-2.5 rounded-sm border border-secondary-light bg-secondary-light outline-none"
+                          rows={4}
+                          placeholder={t("register:descriptionPlachoher")}
+                          onChange={(e: FormEvent<HTMLTextAreaElement>) => {
+                            handleChange(e);
+                          }}
+                        ></textarea>
+                      </div>
+
                       <div className="mt-4 mb-4 pr-5 pl-5">
                         <button
                           type="submit"
-                          className="w-full h-12 rounded-sm text-primary-light hover:opacity-90"
-                          style={{ background: "#0060E1" }}
+                          className="w-full h-12 rounded-sm bg-primary text-primary-light hover:opacity-90"
                         >
                           {t("register:submit")}
                         </button>

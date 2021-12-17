@@ -13,6 +13,7 @@ import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics"
 import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
+// import { useSocket } from "services/hooks/useSocket";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
@@ -26,6 +27,23 @@ const SocialHomePage: FC = () => {
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
+
+	// const socketRef: any = useSocket();
+
+	// useEffect(() => {
+		// const message = {
+        //     _id: '-1',
+        //     title: 'Hêlellele Minh!',
+        // };
+		
+		// const socket = socketRef.current;
+        // if (!socket) return;
+		// console.log("Data Send To Server: ", message);
+        // socket.emit('CLIENT_SEND_CHATTING_TEST', message);
+		// socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
+		// 	console.log("Data Server Send To Client: ", res);
+		// });
+	// }, []);
 
 	return (
 		<>
@@ -78,7 +96,7 @@ const SocialHomePage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={isShowCreateModal} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle show={isShowCreateModal} toggle={toggleCreateModal} />
+					<ModalCreateArticle show={isShowCreateModal} toggle={toggleCreateModal} modalType="create" />
 				</div>
 			</ModalContainer>
 		</>

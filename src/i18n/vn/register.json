@@ -1,14 +1,16 @@
 {
   "title": "Điền thông tin đăng ký trải nghiệm",
-  "fullName": "Họ và tên",
-  "comOrgName": "Tên công ty/tổ chức",
-  "email": "Email",
-  "typeOrg": "Loại doanh nghiệp/tổ chức",
-  "phoneNumber": "Số điện thoại",
+  "fullName": "Họ và tên (*)",
+  "comOrgName": "Tên công ty/tổ chức (*)",
+  "email": "Email (*)",
+  "typeOrg": "Phân loại (*)",
+  "phoneNumber": "Số điện thoại (*)",
+  "description": "Mô tả/ghi chú thông tin quan trọng",
   "fullNamePlaceholder": "Nhập họ và tên của bạn",
   "comOrgNamePlaceholder": "Nhập tên công ty/tổ chức",
   "emailPlaceholder": "Nhập địa chỉ email",
   "typeOrgPlaceholder": "Chọn loại hình",
   "phoneNumberPlaceholder": "Nhập số điện thoại",
+  "descriptionPlachoher": "Nhập mô tả",
   "submit": "Gửi yêu cầu"
 }
