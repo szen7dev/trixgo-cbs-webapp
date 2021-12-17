@@ -1,4 +1,4 @@
-import { FC, FormEvent, Fragment, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -19,6 +19,7 @@ import ViewPost from "../components/post/ViewPost";
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
+import RootCommentsList from '../components/RootCommentsList';
 
 /**
  * ASSETS
@@ -37,14 +38,15 @@ import '../style.css';
  * Types, Services, Utils
  */
 import { FileProps } from "typings/social";
-import { useSocial } from 'services/hooks/useSocial';
+import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia, createComment } = useSocial();
+	const { deleteMedia } = useSocial();
+	const { listComments } = useCommentSocial({ mediaID });
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
@@ -71,19 +73,6 @@ const SocialPostPage: FC = () => {
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
-	}
-
-	const handleComment = async (text: string | FormEvent<HTMLDivElement>) => {
-		console.log({ text });
-		await createComment({
-			mediaID: media?._id || '',
-			content: text as string
-		})
-	}
-
-	const handleTextChange = (input: React.FormEvent<HTMLSpanElement>) => {
-		console.log({ INPUT: input.currentTarget.innerText });
-		// input.currentTarget.innerText = ''
 	}
 
 	const initialState = {
@@ -176,7 +165,7 @@ const SocialPostPage: FC = () => {
 						{/* Main post */}
 						<div className="post__content pb-2.5 flex-grow" >
 							<div className="post__content-images">
-								{images.length && images.slice(0, 3).map((image, i) => {
+								{images.length ? images.slice(0, 3).map((image, i) => {
 									const id = image.file ? image.file._id : image._id; 
 									const name = image.file ? image.file.name : image.name; 
 									const url = image.file ? image.file.url : image.url; 
@@ -191,7 +180,7 @@ const SocialPostPage: FC = () => {
 											)}
 										</div>
 									)
-								})}
+								}) : ''}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
@@ -220,8 +209,9 @@ const SocialPostPage: FC = () => {
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
+							<RootCommentsList className="px-5" comments={listComments} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} onTextChange={handleTextChange} />
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />
 							</div>
 						</div>
 						{/* Post Suggest */}
