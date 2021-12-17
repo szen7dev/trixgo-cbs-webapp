@@ -50471,6 +50471,10 @@ input[type="text"] {
   top: 50%;
 }
 
+.financial-planning-table .header {
+  top: 63px;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

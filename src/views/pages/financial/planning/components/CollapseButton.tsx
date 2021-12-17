@@ -1,13 +1,24 @@
-import React, {FC, useContext} from "react";
+import React, {FC} from "react";
+import {setChildRowCollapsed} from "../../../../../redux/reducer/FinancialPlanningDetailSlice";
+import {useDispatch} from "react-redux";
 type Props = {
     collapsed: boolean;
+    index: string|number;
+    idDetail: string|number;
 }
-const CollapseButton:FC<Props> = ({collapsed}) => {
+const CollapseButton:FC<Props> = ({collapsed,index, idDetail}) => {
+    const dispatch = useDispatch()
+
     return (
-        <button className={
-            "rounded mb-1 block w-5 h-5 " +
-            ((collapsed)?"bg-gray-600":"bg-white text-gray-600")
-        }>
+        <button
+            className={
+                "rounded mb-1 block w-5 h-5 " +
+                ((collapsed)?"bg-gray-600":"bg-white text-gray-600")
+            }
+            onClick={() => {
+                dispatch(setChildRowCollapsed({_id: idDetail, index, collapsed: !collapsed}))
+            }}
+        >
             {(collapsed)?"+":"-"}
         </button>
     )
