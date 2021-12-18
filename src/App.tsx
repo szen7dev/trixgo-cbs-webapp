@@ -12,19 +12,13 @@ import "swiper/swiper.min.css";
 import "styles/output.css";
 
 import AuthRespository from 'apis/authentication';
+import { useAuth } from "services/hooks/useAuth";
 
 const queryClient = new QueryClient();
 
 const App: FC = () => {	
+  const { user } = useAuth();
 	useEffect(() => {
-    AuthRespository.updateDevice({
-      platform: '',
-      deviceID: '',
-      deviceName: '',
-      registrationID: '',
-      oneSignalID: '',
-    });
-
 	if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
 		navigator.serviceWorker.register('/OneSignalSDKWorker.js');
 	}
@@ -41,13 +35,13 @@ const App: FC = () => {
 	.then(e => {
     OneSignalReact.getUserId(async function(oneSignalWebPushID) {
       await AuthRespository.updateDevice({
-        platform: '',
-        deviceID: '',
-        deviceName: '',
-        registrationID: '',
-        oneSignalID: '',
+        platform: 'BROWSER',
+        deviceID: 'BROWSER',
+        deviceName: 'BROWSER',
+        registrationID: oneSignalWebPushID || '',
+        oneSignalID: oneSignalWebPushID || '',
+        userID: user?._id
       });
-      console.log({ oneSignalWebPushID })
     });
   })
 	.catch(e => console.log(e.message));
