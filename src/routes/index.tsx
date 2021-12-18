@@ -49,7 +49,8 @@ import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-// import TasksPage from "views/pages/tasks";
+import TasksPage from "views/pages/tasks";
+import TaskDetailPage from "views/pages/tasks/detail";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
@@ -233,18 +234,23 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                {/* <Route path="/tasks">
+                <Route path="/tasks">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute
+                      <Route
                         exact
                         path="/tasks"
                         component={TasksPage}
                       />
+                      <Route
+                        exact
+                        path="/tasks/detail"
+                        component={TaskDetailPage}
+                      />
                       <Route path="/tasks/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
-                </Route> */}
+                </Route>
 
                 <Route path="/teaser">
                   <HomeLayout>
