@@ -235,20 +235,11 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                <Route path="/tasks">
+                <Route path="/pcm/:path?">
                   <HomeLayout>
                     <Switch>
-                      <Route
-                        exact
-                        path="/tasks"
-                        component={TasksPage}
-                      />
-                      <Route
-                        exact
-                        path="/tasks/detail"
-                        component={TaskDetailPage}
-                      />
-                      <Route path="/tasks/*" component={ErrorPage} />
+                      <ProtectedRoute exact path={"/pcm/home"} component={TasksPage} />
+                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>
