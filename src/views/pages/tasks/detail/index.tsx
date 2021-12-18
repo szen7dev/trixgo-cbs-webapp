@@ -1,16 +1,16 @@
 import { FC } from "react";
 
-import downloadIcon from "assets/images/icons8-download-48_2.png";
-import shareIcon from "assets/images/icons8-share-rounded-96_1.svg";
-import sendEmailIcon from "assets/images/icons8-send-email-96_1.svg";
-import copyIcon from "assets/images/icons8-copy-96_1.svg";
+import DownloadIcon from "assets/images/icons8-download-48_2.png";
+import ShareIcon from "assets/images/icons8-share-rounded-96_1.svg";
+import SendEmailIcon from "assets/images/icons8-send-email-96_1.svg";
+import CopyIcon from "assets/images/icons8-copy-96_1.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
-import iconPencil from "assets/images/icons8-pencil.svg";
-import removeIcon from "assets/images/icons8-remove.svg";
-import iconPrint from "assets/images/icons8-print-32.png";
-import sharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
-import stackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
-import iconStar from "assets/images/icon-star-filled.png";
+import IconPencil from "assets/images/icons8-pencil.svg";
+import RemoveIcon from "assets/images/icons8-remove.svg";
+import IconPrint from "assets/images/icons8-print-32.png";
+import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
+import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
+import IconStar from "assets/images/icon-star-filled.png";
 
 const TaskDetailPage: FC = () => {
   return (
@@ -38,27 +38,27 @@ const TaskDetailPage: FC = () => {
           <button className="mx-3">
             <img
               className="w-6 opacity-80"
-              src={downloadIcon}
+              src={DownloadIcon}
               alt="Download icon"
             />
           </button>
           <button className="mx-3">
-            <img className="w-6" src={shareIcon} alt="Share icon" />
+            <img className="w-6" src={ShareIcon} alt="Share icon" />
           </button>
           <button className="mx-3">
-            <img className="w-6" src={copyIcon} alt="Copy icon" />
+            <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button>
           <button className="mx-3">
-            <img className="w-6" src={sendEmailIcon} alt="Send email icon" />
+            <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
           <button className="mx-3">
-            <img className="w-6" src={iconPencil} alt="Pencil icon" />
+            <img className="w-6" src={IconPencil} alt="Pencil icon" />
           </button>
           <button className="mx-3">
-            <img className="w-6" src={removeIcon} alt="Remove icon" />
+            <img className="w-6" src={RemoveIcon} alt="Remove icon" />
           </button>
           <button className="mx-3">
-            <img className="w-6 opacity-80" src={iconPrint} alt="Print icon" />
+            <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button>
         </div>
 
@@ -89,18 +89,18 @@ const TaskDetailPage: FC = () => {
           <div className="flex justify-between items-end">
             <div className="flex flex-col space-y-2">
               <div className="flex items-end">
-                <img className="w-6" src={sharedFolderIcon} alt="Folder icon" />
+                <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-xs text-gray-500 mx-2">
                   CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
                 </span>
                 <div className="tpf-param-star tpf-param-star-active">
-                  <img className="h-6 w-6" src={iconStar} alt="Star" />
+                  <img className="h-6 w-6" src={IconStar} alt="Star" />
                 </div>
               </div>
               <div className="flex items-end">
                 <img
                   className="w-6"
-                  src={stackedOrganizationIcon}
+                  src={StackedOrganizationIcon}
                   alt="Organizational icon"
                 />
                 <span className="text-xs text-gray-500 mx-2">
