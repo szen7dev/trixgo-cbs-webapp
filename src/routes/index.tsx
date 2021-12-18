@@ -379,6 +379,10 @@ const Routes: FC = () => {
                   </HomeLayout>
                 </Route>
 
+                <Route exact path="/fin/home">
+                    <Redirect to="/fin/cashflow" />
+                </Route>
+
                 <Route path="/fin/:path?">
                   <HomeLayout>
                     <Switch>

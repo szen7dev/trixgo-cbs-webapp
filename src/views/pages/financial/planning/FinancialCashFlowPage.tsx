@@ -95,7 +95,7 @@ const FinancialCashFlowPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
+                            <NavLink to={"/fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
                             <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b"}>
@@ -126,7 +126,7 @@ const FinancialCashFlowPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
+                            <NavLink to={"/fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
                             <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b"}>
@@ -157,7 +157,7 @@ const FinancialCashFlowPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
+                            <NavLink to={"/fin/cashflow/123"}>Kế hoạch dòng tiền T12.21</NavLink>
                             <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b"}>
