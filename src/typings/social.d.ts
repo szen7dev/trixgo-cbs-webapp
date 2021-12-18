@@ -56,6 +56,7 @@ export type ImageProps = {
 export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
+  type?: string,
   mediaID?: string;
   companyID?: string;
   parentID?: string;
@@ -108,7 +109,10 @@ export type MediaProps = {
   createAt: string;
   createdAt: string;
   updatedAt: string;
-  receivers?: string[]
+  receivers?: string[],
+  totalComments?: number,
+  totalWatched?: number,
+  totalReactions?: number,
 };
 
 export type FilePropsUpload = {
@@ -135,6 +139,7 @@ interface ModalProps {
 }
 
 export type ListCommentsPayload = {
+  key?: string,
   lastestID?: string;
   limit?: number;
   mediaID?: string;

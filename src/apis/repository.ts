@@ -1,7 +1,11 @@
 import Axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_ENV === 'development' 
+  ? process.env.REACT_APP_API_DOMAIN_LOCAL
+  : process.env.REACT_APP_API_DOMAIN_STAGING;
+
 const API = Axios.create({
-  baseURL: process.env.REACT_APP_API_DOMAIN,
+  baseURL: BASE_URL,
   headers: {
     "Accept": "application/json",
     "Content-Type": "application/json",

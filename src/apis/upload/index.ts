@@ -2,8 +2,12 @@ import Axios from "axios";
 import API from "../repository";
 import { FilePayload, FileResponse, UploadPayload } from "typings/file";
 
+const BASE_URL = process.env.REACT_APP_ENV === 'development' 
+  ? process.env.REACT_APP_API_DOMAIN_LOCAL
+  : process.env.REACT_APP_API_DOMAIN_STAGING
+
 const axiosS3 = Axios.create({
-  baseURL: process.env.REACT_APP_API_DOMAIN,
+  baseURL: BASE_URL,
   headers: {
     "Accept": "application/json",
   },

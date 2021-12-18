@@ -17,10 +17,10 @@ import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	{ id: "1", title: 'Bài viết của tôi' },
-	{ id: "2", title: 'Phòng ban' },
-	{ id: "3", title: 'Cộng đồng' },
-	{ id: "4", title: 'Hệ thống' },
+	// { id: "1", title: 'Bài viết của tôi' },
+	// { id: "2", title: 'Phòng ban' },
+	// { id: "3", title: 'Cộng đồng' },
+	// { id: "4", title: 'Hệ thống' },
 ]
 
 const SocialHomePage: FC = () => {

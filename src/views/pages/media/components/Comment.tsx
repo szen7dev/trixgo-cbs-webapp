@@ -5,11 +5,17 @@ import moment from "moment";
 
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import { CommentProps } from 'typings/common';
+import { useCommentSocial } from 'services/hooks/useSocial';
+
+type OptionsProps = {
+	onUpdate?: () => unknown,
+	onDelete?: () => unknown,
+}
 
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
-	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement>>;
+	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
 	comment: CommentProps
 }
@@ -17,6 +23,11 @@ interface Props {
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ 
 	comment, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
+	const { deleteComment } = useCommentSocial();
+	const handleDeleteComment = () => {
+		deleteComment(comment._id);
+	}
+
 	return (
 		<div {...props} className={cn("flex pb-1.5", props.className)}>
 			{/* Avatar */}
@@ -34,7 +45,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							{comment.comment.content}
 						</p>
 					</div>
-					{Options && <Options className="opacity-0 group-hover:opacity-100" />}
+					{Options && <Options className="opacity-0 group-hover:opacity-100" onDelete={handleDeleteComment} />}
 				</div>
 				<div>
 

@@ -62,6 +62,11 @@ export type CommentResponse = APIResponse & {
 };
 
 export type ListCommentResponse = APIResponse & {
-  data: CommentProps[];
+  data: {
+    listRecords: CommentProps[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string
+  };
   message: string;
 };
