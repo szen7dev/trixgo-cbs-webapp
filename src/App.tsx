@@ -28,7 +28,11 @@ const App: FC = () => {
 
 		allowLocalhostAsSecureOrigin: true,
 	})
-	.then(e => console.info('Onesignal Initial'))
+	.then(e => {
+    OneSignalReact.getUserId( function(oneSignalWebPushID) {
+      console.log({ oneSignalWebPushID })
+    });
+  })
 	.catch(e => console.log(e.message));
 }, [])
 
