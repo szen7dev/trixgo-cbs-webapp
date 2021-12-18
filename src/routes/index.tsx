@@ -95,6 +95,7 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 // Cmc pages
 import CmcsPage from "views/pages/cmcs";
 import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
+import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 const Routes: FC = () => {
 
@@ -378,10 +379,11 @@ const Routes: FC = () => {
                   </HomeLayout>
                 </Route>
 
-                <Route path="/financial/:path?">
+                <Route path="/fin/:path?">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path={"/financial/planning/:id"} component={FinancialPlanningDetailPage} />
+                      <ProtectedRoute exact path={"/fin/cashflow"} component={FinancialCashFlowPage} />
+                      <ProtectedRoute exact path={"/fin/cashflow/:id"} component={FinancialPlanningDetailPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>
