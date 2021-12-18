@@ -46,7 +46,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
 
 	const [text, setText] = useState<string>('');
-	const { createComment, refetchListComments } = useCommentSocial({ mediaID });
+	const { createComment } = useCommentSocial({ mediaID, key: `${mediaID}-list-comments` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
@@ -85,7 +85,6 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		parentID && (dataInsert.parentID = parentID);
 
 		await createComment(dataInsert);
-		refetchListComments();
 
 		// Clear text input comment
 		refInputComment.current && (refInputComment.current.innerText = '');

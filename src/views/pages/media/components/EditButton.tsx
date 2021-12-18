@@ -6,7 +6,15 @@ import { Menu, Transition } from "@headlessui/react";
 import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
 
-const EditButton: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+type Props = {
+	onUpdate?: () => unknown,
+	onDelete?: () => unknown,
+} & HTMLAttributes<HTMLDivElement>
+
+const EditButton: FC<Props> = ({ ...props }) => {
+	const onDelete = () => props.onDelete && props.onDelete();
+	const onUpdate = () => props.onUpdate && props.onUpdate();
+
 	return (
 		<Menu as="div" className={cn("transition-all relative inline-block ml-2", props.className)}>
 			<Menu.Button className="w-8 h-8 rounded-full bg-gray-100 flex justify-center items-center">
@@ -24,11 +32,11 @@ const EditButton: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 				leaveTo="transform opacity-0 scale-95"
 			>
 				<div className="z-10 absolute right-1/2 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-					<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={onUpdate}>
 						<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 						Cập nhật
 					</button>
-					<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+					<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={onDelete}>
 						<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
 						Xóa
 					</button>
