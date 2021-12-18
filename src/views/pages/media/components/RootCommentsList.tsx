@@ -15,7 +15,7 @@ type Props = {
 const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 	const [commentsNext, setCommentsNext] = useState<CommentProps[] | []>(comments || []);
-	console.log({ comments, mediaID, totalRecord, limit, nextCursor });
+	// console.log({ comments, mediaID, totalRecord, limit, nextCursor });
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await SocialRepository.listComments({ 

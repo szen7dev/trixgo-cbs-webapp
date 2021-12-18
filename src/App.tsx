@@ -16,15 +16,15 @@ import AuthRespository from 'apis/authentication';
 const queryClient = new QueryClient();
 
 const App: FC = () => {	
-	useEffect(() => {
-    AuthRespository.updateDevice({
-      platform: '',
-      deviceID: '',
-      deviceName: '',
-      registrationID: '',
-      oneSignalID: '',
-    });
+  AuthRespository.updateDevice({
+    platform: '',
+    deviceID: '',
+    deviceName: '',
+    registrationID: '',
+    oneSignalID: '',
+  });
 
+	useEffect(() => {
 	if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
 		navigator.serviceWorker.register('/OneSignalSDKWorker.js');
 	}
