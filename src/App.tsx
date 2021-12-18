@@ -11,10 +11,20 @@ import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
 
+import AuthRespository from 'apis/authentication';
+
 const queryClient = new QueryClient();
 
 const App: FC = () => {	
 	useEffect(() => {
+    AuthRespository.updateDevice({
+      platform: '',
+      deviceID: '',
+      deviceName: '',
+      registrationID: '',
+      oneSignalID: '',
+    });
+
 	if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
 		navigator.serviceWorker.register('/OneSignalSDKWorker.js');
 	}
@@ -29,7 +39,14 @@ const App: FC = () => {
 		allowLocalhostAsSecureOrigin: true,
 	})
 	.then(e => {
-    OneSignalReact.getUserId( function(oneSignalWebPushID) {
+    OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+      await AuthRespository.updateDevice({
+        platform: '',
+        deviceID: '',
+        deviceName: '',
+        registrationID: '',
+        oneSignalID: '',
+      });
       console.log({ oneSignalWebPushID })
     });
   })
