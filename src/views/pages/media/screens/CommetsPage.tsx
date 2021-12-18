@@ -50,7 +50,7 @@ const CommentsPage: FC = () => {
 							<span>Xem 26 bình luận sau</span>
 						</div>
 						<div className='flex flex-col sticky bottom-0 bg-white w-full max-h-full overflow-y-auto'>
-							<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" />
+							<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID="" />
 						</div>
 					</div>
 				</div>
