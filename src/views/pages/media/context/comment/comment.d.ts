@@ -1,10 +1,14 @@
-export type CommentState = {
+export type CommentsState = {
     comments: CommentProps[],
-    commentsReply: CommentProps[]
+    commentsReply: {
+        [key: string]: CommentProps[]
+    }
 };
 
-export type SetListComments = {
-    type: 'SET_LIST_COMMENTS',
+export type CommentState = CommentProps;
+
+export type SetComments = {
+    type: 'SET_COMMENTS' | 'SET_COMMENTS_REPLY' | 'VIEW_MORE_COMMENTS' | 'VIEW_MORE_COMMENTS_REPLY',
     payload: CommentProps[]
 }
 
@@ -16,7 +20,8 @@ export type AddComment = {
 export type DeleteComment = {
     type: 'DELETE_COMMENT',
     payload: {
-        _id: string
+        _id: string,
+        parent: string,
     }
 }
 
@@ -26,7 +31,7 @@ export type UpdateComment = {
 }
 
 export type CommentActions =
-  | SetListComments
+  | SetComments
   | AddComment
   | DeleteComment
   | UpdateComment
