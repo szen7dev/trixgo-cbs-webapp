@@ -1,4 +1,8 @@
 /* eslint-disable */
+let autoGeneratePx = {}
+for (let i=1; i <= 1000; i++) {
+  autoGeneratePx[`[${i}px]`] = `${i}px`;
+}
 module.exports = {
   purge: [],
   darkMode: "class", // or 'media' or false
@@ -24,7 +28,33 @@ module.exports = {
         "primary-light": "#ffffff",
         "secondary-light": "#F5F6F9",
         "accent-light": "#E9EAEF",
-        "green-success": "#00C614"
+        "green-success": "#00C614",
+
+				"cbs-primary": "#0060E1",
+				"cbs-secondary": "#4781CF",
+				"cbs-gray": "#F0F0F0",
+				"cbs-active-comment": "#E7F3FF",
+				"cbs-green": "#00C614",
+				"cbs-subtext": "#666666",
+				"cbs-summary": "#FFF2CC",
+				"cbs-schedule-yestoday": "#03C9D7",
+				"cbs-schedule-today": "#00C292",
+				"cbs-schedule-oneweek": "#FEC90F",
+				"cbs-schedule-twoweek": "#FB9678",
+				"cbs-schedule-threeweek": "#E46A76",
+				"cbs-schedule-expired": "#F55F5F",
+				"cbs-schedule-nextweek": "#FF9900",
+				"cbs-schedule-after-7days": "#00CA99",
+				"cbs-left-menu": "#F5F6F9",
+				"cbs-table-header": "#F7F8F9",
+				"cbs-completed": "#36AB80",
+				"cbs-failed": "#CA5E59",
+				"cbs-border": "#CCCCCC",
+				"cbs-up": "#EDF7ED",
+				"cbs-up-text": "#4CAF50",
+				"cbs-down": "#FEECEB",
+				"cbs-down-text": "#F44336",
+				"cbs-nav-text": "#00B9F2",
       },
       fontSize: {
         "[13px]": "13px",
@@ -43,43 +73,25 @@ module.exports = {
         "[55%]": "55%",
       },
       width: {
-        "[34px]": "34px",
-        "[52px]": "52px",
-        "[74px]": "74px",
-        "[500px]": "500px",
-        "[1000px]": "1000px",
-        "[14px]" : "14px",
-        "[24px]" : "24px",
+        ...autoGeneratePx,
         fill: "-webkit-fill-available",
       },
       height: {
-        "[34px]": "34px",
-        "[32px]": "32px",
-        "[30px]": "30px",
-        "[38px]": "38px",
-        "[52px]": "52px",
-        "[650px]": "650px",
-        "[14px]" : "14px",
-        "[24px]" : "24px",
-        "[16px]" : "16px",
+        ...autoGeneratePx,
         max: "max-content",
       },
       minWidth: {
-        "[5px]": "5px",
-        "[250px]": "250px",
+        ...autoGeneratePx,
       },
       maxWidth: {
-        "[100px]": "100px",
-        "[169px]": "169px",
-        "[250px]": "250px",
-        "[380px]": "380px",
+        ...autoGeneratePx,
         "[75%]": "75%",
       },
       minHeight: {
-        "[54px]": "54px",
+        ...autoGeneratePx,
       },
       maxHeight: {
-        "[98px]": "98px",
+        ...autoGeneratePx,
       },
       backgroundImage: {
         authentication: "url('../assets/images/background-authentication.png')",
@@ -94,6 +106,9 @@ module.exports = {
       },
       transformOrigin: {
         'top-left-1/2-0' : "50% 0"
+      },
+      paddingRight: {
+        "[100px]": "100px"
       }
     },
   },

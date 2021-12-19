@@ -1,14 +1,14 @@
 import { Dispatch, createContext } from "react";
 
-import { CommentState, CommentActions } from "./comment";
+import { CommentsState, CommentActions } from "./comment";
 
-export const initialState: CommentState = {
+export const initialState: CommentsState = {
   comments: [],
-  commentsReply: [],
-};
+  commentsReply: {}
+}
 
 const CommentContext = createContext<{
-  state: CommentState;
+  state: CommentsState;
   dispatch: Dispatch<CommentActions>;
 }>({
   state: initialState,
