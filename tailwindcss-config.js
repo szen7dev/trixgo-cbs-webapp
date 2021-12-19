@@ -1,4 +1,8 @@
 /* eslint-disable */
+let autoGeneratePx = {}
+for (let i=1; i <= 1000; i++) {
+  autoGeneratePx[`[${i}px]`] = `${i}px`;
+}
 module.exports = {
   purge: [],
   darkMode: "class", // or 'media' or false
@@ -43,46 +47,25 @@ module.exports = {
         "[55%]": "55%",
       },
       width: {
-        "[34px]": "34px",
-        "[52px]": "52px",
-        "[74px]": "74px",
-        "[500px]": "500px",
-        "[1000px]": "1000px",
-        "[14px]" : "14px",
-        "[24px]" : "24px",
+        ...autoGeneratePx,
         fill: "-webkit-fill-available",
       },
       height: {
-        "[34px]": "34px",
-        "[32px]": "32px",
-        "[30px]": "30px",
-        "[38px]": "38px",
-        "[52px]": "52px",
-        "[650px]": "650px",
-        "[14px]" : "14px",
-        "[24px]" : "24px",
-        "[16px]" : "16px",
-        "[45px]" : "45px",
+        ...autoGeneratePx,
         max: "max-content",
       },
       minWidth: {
-        "[5px]": "5px",
-        "[250px]": "250px",
-        "[600px]": "600px"
+        ...autoGeneratePx,
       },
       maxWidth: {
-        "[100px]": "100px",
-        "[169px]": "169px",
-        "[250px]": "250px",
-        "[380px]": "380px",
+        ...autoGeneratePx,
         "[75%]": "75%",
-        "[900px]": "900px",
       },
       minHeight: {
-        "[54px]": "54px",
+        ...autoGeneratePx,
       },
       maxHeight: {
-        "[98px]": "98px",
+        ...autoGeneratePx,
       },
       backgroundImage: {
         authentication: "url('../assets/images/background-authentication.png')",

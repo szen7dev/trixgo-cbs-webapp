@@ -13,6 +13,7 @@ import TrashIcon from "assets/images/icons8-remove-96.svg";
 import PrintIcon from "assets/images/icons8-print-96.svg";
 import ThreeDotsVertical from "../../../../assets/images/icon-3dots-vertical.svg";
 import FinancialCashFlowFilterButton from "./components/FinancialCashFlow/FinancialCashFlowFilterButton";
+import SearchInput from "../../../../components/common/SearchInput";
 
 const FinancialCashFlowPage:FC = () => {
 
@@ -21,10 +22,7 @@ const FinancialCashFlowPage:FC = () => {
             <div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
                 <div className={"flex items-center flex-1"}>
                     <div className={"text-lg"}>Kế hoạch dòng tiền</div>
-                    <div className={"relative flex items-center ml-4"}>
-                        <img src={SearchIcon} alt={"icon search"} className={"absolute w-[14px] h-[14px] left-2"}/>
-                        <input className={"h-[30px] w-full bg-gray-50 pl-10 rounded"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}/>
-                    </div>
+                    <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)}/>
                     <FinancialCashFlowFilterButton/>
                     <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"}/>
                     <button className={"flex items-center mr-3"}>
