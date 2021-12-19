@@ -137,24 +137,28 @@ const TaskDetailPage: FC = () => {
         </div>
 
         {/*_____________task detail______________*/}
-        <div className="bg-white mt-2 flex p-5">
+        <div className="bg-white mt-2 flex py-5 pr-5">
           {/*_____________task content______________*/}
-          <div className="w-3/4 pr-5">
-            <div>
-              <p className="text-[13px]">
-                Kính gửi Chủ Đầu Tư và Ban QLDA,
-                <br /> Tư vấn thiết kế 112 đệ trình hồ sơ thanh toán đợt 03 của
-                Hợp đồng thiết kế số 34A/2020/HĐTV/TĐ- 1+1. Kính đề nghị Chủ đầu
-                tư và Tư vấn QLDA xem xét và phê duyệt.
-                <br /> Thông tin chi tiết vui lòng xem trong file đính...
-              </p>
-              <p className="text-[13px] text-primary mt-2.5 mb-4">
-                Xem thêm/Thu gọn
-              </p>
-            </div>
+          <div className="w-3/4">
+            <div className="pl-5 pr-8">
+              <div>
+                <p className="text-[13px]">
+                  Kính gửi Chủ Đầu Tư và Ban QLDA,
+                  <br /> Tư vấn thiết kế 112 đệ trình hồ sơ thanh toán đợt 03
+                  của Hợp đồng thiết kế số 34A/2020/HĐTV/TĐ- 1+1. Kính đề nghị
+                  Chủ đầu tư và Tư vấn QLDA xem xét và phê duyệt.
+                  <br /> Thông tin chi tiết vui lòng xem trong file đính...
+                </p>
+                <p className="text-[13px] text-primary mt-2.5 mb-4">
+                  Xem thêm/Thu gọn
+                </p>
+              </div>
 
-            <FileAttachment />
-            <CheckList />
+              <FileAttachment />
+            </div>
+            <div className="mt-8 pr-3">
+              <CheckList />
+            </div>
           </div>
 
           {/*_____________task sidebar______________*/}
