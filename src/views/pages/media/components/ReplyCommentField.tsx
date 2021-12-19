@@ -1,6 +1,7 @@
 import React, { FC, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
+import { toast } from "react-toastify";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -69,6 +70,8 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		const images: File[] = [];
 		const files: File[] = [];
 
+		toast.warn('Tính năng đang phát triển');
+
 		for (let i = 0; i < event.target.files.length; i++) {
 			if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
 			// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
@@ -102,7 +105,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "post__files pt-2 pb-6")
 				}
 			>
-				<PostImage
+				{/* <PostImage
 					images={toArray(uploads.images)}
 					onRemove={handleCancleUploadImage}
 					className="post__files-row pt-5 text-black gap-5 flex-wrap"
@@ -111,7 +114,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 					files={toArray(uploads.files)}
 					onRemove={handleCancleUploadFile}
 					className="text-black w-full mr-4"
-				/>
+				/> */}
 			</div>
 			<div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">

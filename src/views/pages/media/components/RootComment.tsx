@@ -18,10 +18,10 @@ const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedCom
 	const { state, dispatch } = useContext(CommentContext);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment.comment.amountCommentReply - 1);
-	const commentsReply = state.commentsReply[comment._id] || [];
+	const commentsReply = [comment.lastestReplyID, ...(state.commentsReply[comment._id] || [])].filter(Boolean);
 
 	const handleClickViewMore = async () => {
-		const lastestID = commentsReply.length ? state.commentsReply[comment._id][0]._id : null;
+		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
 
 		const { error, data } = await SocialRepository.listComments({ 
 			lastestID,
@@ -58,11 +58,6 @@ const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedCom
 				) : ''}
 				{/* Nested comment */}
 				<ul>
-					{(comment.lastestReplyID && !commentsReply.length) ? (
-						<li>
-							<div className="pl-11">{NestedComment ? <NestedComment comment={comment.lastestReplyID} onClickReply={() => setIsReply(true)} renderOptions={EditButton} /> : null}</div>
-						</li>
-					) : ''}
 					{commentsReply.length ? commentsReply.map(commentReply => (
 						<li key={commentReply._id}>
 							<div className="pl-11">{NestedComment ? <NestedComment comment={commentReply} onClickReply={() => setIsReply(true)} renderOptions={EditButton} /> : null}</div>

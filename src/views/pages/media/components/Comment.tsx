@@ -28,8 +28,6 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	const { dispatch } = useContext(CommentContext);
 
 	const handleDeleteComment = () => {
-		console.log('Deleted...', comment._id);
-		
 		deleteComment(comment._id);
 		dispatch({
 			type: "DELETE_COMMENT",

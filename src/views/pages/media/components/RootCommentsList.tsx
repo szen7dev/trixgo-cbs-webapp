@@ -16,10 +16,10 @@ type Props = {
 const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
-
+	
 	useEffect(() => {
 		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
-	}, [comments])
+	}, [comments?.length])
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await SocialRepository.listComments({ 

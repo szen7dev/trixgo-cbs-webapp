@@ -39,7 +39,7 @@ import '../style.css';
  */
 import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
-import { typePostSelected } from '../utils';
+import { typePostSelected, abbreviateNumber } from '../utils';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import CommentProvider from '../context/comment/comment.provider';
 
@@ -196,19 +196,19 @@ const SocialPostPage: FC = () => {
 								<span>
 									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
-										28,7k
+										0
 									</button>
 								</span>
 								<span>
 									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
 									<Link to="/social/comments">
-										21,3k
+										{abbreviateNumber(totalRecord)}
 									</Link>
 								</span>
 								<span>
 									<img src={iconEye} alt="View" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
-										11,2k
+										0
 									</button>
 								</span>
 							</div>
