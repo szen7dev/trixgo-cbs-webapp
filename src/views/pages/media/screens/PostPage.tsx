@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, FormEvent, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -36,7 +36,7 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps } from "typings/social";
+import { FileProps } from "typings/social";
 import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
@@ -44,15 +44,22 @@ import { typePostSelected } from '../utils';
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia } = useSocial();
+	const { deleteMedia, createComment } = useSocial();
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data } = useQuery("media_info", () => SocialRepository.mediaInfo(mediaID));
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));  
 	const media = data?.data;
 
-	const toggleModalEditMedia = () => setModalEditMedia(!modalEditMedia);
+	if(!media){
+		return <Loader className="border-primary" />;
+	}
+
+	const toggleModalEditMedia = () => {
+		refetch();
+		setModalEditMedia(!modalEditMedia);
+	};
 	const toggleModalEditMediaEdit = (e: React.MouseEvent<HTMLElement>) => {
 		e.stopPropagation();
 		setModalEditMedia(!modalEditMedia);
@@ -66,20 +73,34 @@ const SocialPostPage: FC = () => {
 		history.push('/social/home');
 	}
 
-	const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ _id: _, url: '/logo.png', name: "test", size: 123123 }))
-	const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
-		_id: _,
-		url: i % 2
-			? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
-			: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
-		name: "test",
-		size: 123123
-	}))
-
-	if(!media){
-		return <Loader className="border-primary" />;
+	const handleComment = async (text: string | FormEvent<HTMLDivElement>) => {
+		console.log({ text });
+		await createComment({
+			mediaID: media?._id || '',
+			content: text as string
+		})
 	}
-	console.log({ media })
+
+	const handleTextChange = (input: React.FormEvent<HTMLSpanElement>) => {
+		console.log({ INPUT: input.currentTarget.innerText });
+		// input.currentTarget.innerText = ''
+	}
+
+	// const files: Array<FileProps> = Array.from(Array(2).keys()).map((_, i) => ({ 
+	// 	_id: _,
+	// 	url: '/logo.png',
+	// 	name: "test",
+	// 	size: 123123
+	// }))
+
+	// const images: Array<ImageProps> = Array.from(Array(4).keys()).map((_, i) => ({
+	// 	_id: _,
+	// 	url: i % 2
+	// 		? 'https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg'
+	// 		: 'https://images2.fanpop.com/images/photos/7800000/Nature-Full-HD-Wallpaper-national-geographic-7822527-1920-1080.jpg',
+	// 	name: "test",
+	// 	size: 123123
+	// }))
 
 	const initialState = {
 		mediaID,
@@ -87,6 +108,8 @@ const SocialPostPage: FC = () => {
 		content: media.content,
 		type: typePostSelected(media.type),
 	}
+	const images: FileProps[] = media.images || [];
+	const files: FileProps[] = media.files || [];
 
 	return (
 		<>
@@ -138,7 +161,7 @@ const SocialPostPage: FC = () => {
 							<div className="post__author">
 								<div className="post__author-avt">
 									<Link to="/">
-										<img src={avatar} alt="" className="object-cover" />
+										<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
 									</Link>
 								</div>
 								<div className="post__author-info">
@@ -165,18 +188,26 @@ const SocialPostPage: FC = () => {
 						</div>
 					</div>
 					{/* Content */}
-					<div className="flex px-6 text-black gap-x-6">
+					<div className="flex px-1 text-black gap-x-6">
 						{/* Main post */}
-						<div className="post__content pb-2.5 flex-grow">
+						<div className="post__content pb-2.5 flex-grow" >
 							<div className="post__content-images">
-								{media.images && media.images.slice(0, 3).map((image, i) => (
-									<div key={image?.file?._id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
-										<img src={image?.file?.url} alt="" className="object-cover h-full w-full" />
-										{i === 2 && images.length > 3 && <div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
-											+{images.length - 2}
-										</div>}
-									</div>
-								))}
+								{images.length && images.slice(0, 3).map((image, i) => {
+									const id = image.file ? image.file._id : image._id; 
+									const name = image.file ? image.file.name : image.name; 
+									const url = image.file ? image.file.url : image.url; 
+
+									return (
+										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+											<img src={url} alt={name} className="object-cover h-full w-full" />
+											{i === 2 && images.length > 3 && (
+												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
+													+{images.length - 2}
+												</div>
+											)}
+										</div>
+									)
+								})}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
@@ -206,7 +237,7 @@ const SocialPostPage: FC = () => {
 							</div>
 							<div className="border-b border-gray-300"></div>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t"/>
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} onTextChange={handleTextChange} />
 							</div>
 						</div>
 						{/* Post Suggest */}

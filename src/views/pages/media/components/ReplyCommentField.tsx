@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react';
 
 import cn from 'classnames';
 
@@ -18,9 +18,9 @@ import { FileProps, FilePropsUpload } from 'typings/social';
 interface Props {
 	// setUploadFile?: (files: File[]) => unknown;
 	// setUploadImage?: (files: File[]) => unknown;
-	onTextChange?: (input: string) => unknown;
+	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
 	attachFile?: boolean;
-	onSubmit?: (input: string) => unknown;
+	onSubmit?: (input: string) => void;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
 }
@@ -32,6 +32,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 		cancelUploadImage,
 		cancelUploadFile
 	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+
 	const [text, setText] = useState<string>('');
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
@@ -51,11 +52,13 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 		if (!event.target.files) return;
 		const images: File[] = [];
 		const files: File[] = [];
+
 		for (let i = 0; i < event.target.files.length; i++) {
 			if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
 			// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
 			files.push(event.target.files[i])
 		}
+
 		if (files.length) setUploadFile && setUploadFile(files);
 		if (images.length) setUploadImage && setUploadImage(images);
 	}
@@ -105,7 +108,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 							// Handle change text
 							onInput={e => {
 								onTextChange
-									? onTextChange(e.currentTarget.innerText)
+									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
 							}
 							}
@@ -126,7 +129,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ f
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button className="flex items-center justify-center h-9 w-9" onSubmit={handleSubmit}>
+					<button className="flex items-center justify-center h-9 w-9" onClick={handleSubmit}>
 						<img src={iconEmailSend} alt="Icon attach" className="h-9 w-9" />
 					</button>
 				</div>
