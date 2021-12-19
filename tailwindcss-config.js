@@ -62,11 +62,13 @@ module.exports = {
         "[14px]" : "14px",
         "[24px]" : "24px",
         "[16px]" : "16px",
+        "[45px]" : "45px",
         max: "max-content",
       },
       minWidth: {
         "[5px]": "5px",
         "[250px]": "250px",
+        "[600px]": "600px"
       },
       maxWidth: {
         "[100px]": "100px",
@@ -74,6 +76,7 @@ module.exports = {
         "[250px]": "250px",
         "[380px]": "380px",
         "[75%]": "75%",
+        "[900px]": "900px",
       },
       minHeight: {
         "[54px]": "54px",
@@ -94,6 +97,9 @@ module.exports = {
       },
       transformOrigin: {
         'top-left-1/2-0' : "50% 0"
+      },
+      paddingRight: {
+        "[100px]": "100px"
       }
     },
   },
