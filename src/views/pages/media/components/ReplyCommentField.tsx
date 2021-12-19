@@ -39,7 +39,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	mediaID,
 	...props
 }) => {
-	const { state, dispatch } = useContext(CommentContext);
+	const { dispatch } = useContext(CommentContext);
 	const [uploads, {
 		setUploadFile,
 		setUploadImage,
@@ -87,10 +87,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		parentID && (dataInsert.parentID = parentID);
 
 		const infoAfterCreate = await createComment(dataInsert);
-		dispatch({
-			type: 'ADD_COMMENT',
-			payload: infoAfterCreate
-		})
+		dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
 
 		// Clear text input comment
 		refInputComment.current && (refInputComment.current.innerText = '');

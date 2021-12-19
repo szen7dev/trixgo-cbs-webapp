@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useState, useContext } from 'react';
+import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 import Comment from './Comment';
 import RootComment from './RootComment';
 import { CommentProps } from 'typings/common';
@@ -9,34 +9,35 @@ type Props = {
 	comments?: CommentProps[],
 	mediaID?: string,
 	totalRecord?: number,
-	limit?: number
+	limit?: number,
 	nextCursor?: string
 } & HTMLAttributes<HTMLUListElement>
 
 const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
-	const { state } = useContext(CommentContext);
+	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
-	const [commentsNext, setCommentsNext] = useState<CommentProps[] | []>(comments || []);
-	// console.log({ comments, mediaID, totalRecord, limit, nextCursor });
-	console.log({ state });
+
+	useEffect(() => {
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
+	}, [comments])
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await SocialRepository.listComments({ 
-			lastestID: nextCursor,
+			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
 			populates: JSON.stringify({
 				value: 'comment userCreate lastestReplyID',
-				select: '_id fullname image content files images amountReaction'
+				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
 			}),
 			populates1: JSON.stringify({
 				value: 'comment userCreate',
-				select: '_id fullname image content files images'
+				select: '_id fullname image content files images amountCommentReply amountReaction'
 			}),
 		});
 		setAmountComment(amountComment - limit);
 
 		if(!error && data.listRecords.length){
-			setCommentsNext(commentNext => [...data.listRecords, ...commentNext]);
+			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
 		}
 	}
 
@@ -52,7 +53,7 @@ const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit
 				</div>
 			) : ''}
 			<ul {...props}>
-				{(commentsNext && commentsNext.length) ? commentsNext.map((comment: CommentProps) => (
+				{(state.comments && state.comments.length) ? state.comments.map((comment: CommentProps) => (
 					<li key={comment._id} className='mt-2.5'>
 						<RootComment
 							comment={comment}
