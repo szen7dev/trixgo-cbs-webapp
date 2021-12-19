@@ -7,10 +7,16 @@ import Close from "../../assets/icons/Close";
 import TriangleDown from "../../assets/icons/TriangleDown";
 
 export type Item = {
-    id: string | number;
-    text: string | number;
+    id?: string | number;
+    text?: string | number;
     imageUrl?: string;
-    [key: string]: string | number | ReactNode;
+    [x: string]: any;
+}
+
+type FormatItem = {
+    id?: string | number;
+    text?: string | number;
+    [x: string]: any;
 }
 
 type Props = {
@@ -24,11 +30,14 @@ type Props = {
     className?: string;
     classNameItem?: string;
     classNameInput?: string;
+    focusedClass?: string;
     renderItem?: (item: Item) => ReactNode;
     renderSelectedItem?: (item: Item) => ReactNode;
     isMultiple?: boolean;
     showTriangle?: boolean;
     allowClearValueSingleInput?: boolean;
+    maxWidthInput?: string;
+    formatItem?: FormatItem
 }
 
 type Params = {
@@ -45,11 +54,14 @@ const DropdownSearchable:FC<Props> = ({
       className,
       classNameItem,
       classNameInput,
+      focusedClass,
       renderItem,
       isMultiple,
       showTriangle,
       allowClearValueSingleInput,
-      renderSelectedItem
+      renderSelectedItem,
+      maxWidthInput,
+      formatItem
     }) => {
 
     const [value, setValue] = useState<Item>();
@@ -91,6 +103,26 @@ const DropdownSearchable:FC<Props> = ({
         return () => clearTimeout(delayDebounceFn)
     }, [searchTerm,data]);
 
+    const readDataValue = (item: Item|undefined, key: string) => {
+        if (!item) return undefined;
+        if (formatItem) {
+            return item[formatItem[key]]
+        }
+        return item[key];
+    }
+
+    const modifyItem = (item: Item) => {
+        if (formatItem) {
+            return {
+                ...item,
+                id: item[formatItem.id??"id"],
+                text: item[formatItem.text??"text"],
+                imageUrl: item[formatItem.imageUrl??"imageUrl"],
+            }
+        }
+        return item
+    }
+
     const handleSetValue = (item: Item) => {
         if (isMultiple) {
             setValues(oldValues => [...oldValues??[], item]);
@@ -129,18 +161,18 @@ const DropdownSearchable:FC<Props> = ({
         if (initialValue) {
             if (isMultiple) {
                 if (typeof initialValue !== "number" && typeof initialValue !== "string") {
-                    const initialItem = checkDataArr?.filter(item => initialValue.includes(item.id));
+                    const initialItem = checkDataArr?.filter(item => initialValue.includes(readDataValue(item, "id")));
                     setValues(initialItem ?? []);
                 }
             } else {
-                const initialItem = checkDataArr?.find(item => item.id === initialValue);
+                const initialItem = checkDataArr?.find(item => readDataValue(item, "id") === initialValue);
                 setValue(initialItem);
             }
         }
     }
 
     const handleRemoveItem = (id:string|number) => {
-        setValues(values?.filter(item => item.id !== id));
+        setValues(values?.filter(item => readDataValue(item,"id") !== id));
     };
 
     const handleRemoveItemSingle = () => {
@@ -155,20 +187,23 @@ const DropdownSearchable:FC<Props> = ({
         }
         return _map(displayData, (option) => (
             <div
-                key={option.id}
+                key={readDataValue(option,"id")}
                 className={
                     (classNameItem ?? '') +
                     " select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " +
-                    (isMultiple ? (values?.find(v => v.id === option.id) ? 'bg-blue-100':'') : (option.id === value?.id ? 'bg-blue-100':''))
+                    (
+                        isMultiple ?
+                            (values?.find(v => readDataValue(v,"id") === readDataValue(option,"id")) ? 'bg-blue-100':'') :
+                            (readDataValue(option,"id")=== readDataValue(value,"id") ? 'bg-blue-100':''))
                 }
                 onClick={() => handleSetValue(option)}
                 data-option-value={option.id}
             >
                 {
                     renderItem?
-                        renderItem(option):
+                        renderItem(modifyItem(option)):
                         <div className={"flex align-items-center"}>
-                            {option?.imageUrl?<img alt={"Avt"} src={option.imageUrl} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
+                            {readDataValue(option,"imageUrl")?<img alt={"Avt"} src={readDataValue(option,"imageUrl")} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{readDataValue(option,"text")}</span>
                         </div>
                 }
             </div>
@@ -192,14 +227,14 @@ const DropdownSearchable:FC<Props> = ({
                         null
                     }
                     {_map(values, (option) => (
-                            <div key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
+                            <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
                                 {
                                     renderSelectedItem?
-                                        renderSelectedItem(option):
-                                        option?.text
+                                        renderSelectedItem(modifyItem(option)):
+                                        readDataValue(option,"text")
                                 }
                                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
-                                    <Close onClick={() => handleRemoveItem(option.id)}/>
+                                    <Close onClick={() => handleRemoveItem(readDataValue(option,"id"))}/>
                                 </div>
                             </div>
                         ))}
@@ -219,11 +254,11 @@ const DropdownSearchable:FC<Props> = ({
                             <div className={"flex-1 text-left text-gray-300"}>{placeholder}</div>:
                             <div className={"flex-1 text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
                                 {
-                                    value?.text?
+                                    readDataValue(value,"text")?
                                         (
                                             renderSelectedItem?
-                                                renderSelectedItem(value):
-                                                value?.text
+                                                renderSelectedItem(modifyItem(value)):
+                                                readDataValue(value,"text")
                                         ) :
                                         placeholder
                                 }
@@ -237,8 +272,8 @@ const DropdownSearchable:FC<Props> = ({
                                 value?.text?
                                     (
                                         renderSelectedItem?
-                                            renderSelectedItem(value):
-                                            value?.text
+                                            renderSelectedItem(modifyItem(value)):
+                                            readDataValue(value,"text")
                                     ) :
                                     placeholder
                             }
@@ -251,8 +286,11 @@ const DropdownSearchable:FC<Props> = ({
         )
     }
 
+    const maxWidthClass = isMultiple?(maxWidthInput?maxWidthInput:"max-w-[250px]"):"";
+    const beingFocusClass = (showOption?(focusedClass??""):"");
+    const extraClassName = (className??'');
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={(className??'') + " relative select-dropdown"} data-value={value?.id}>
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${beingFocusClass}`} data-value={value?.id}>
             {renderSelectedValue()}
             {showOption?<div className={"shadow-lg rounded select-options-container absolute z-50"}>
                 <input
