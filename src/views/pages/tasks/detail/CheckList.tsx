@@ -10,15 +10,20 @@ const CheckList: FC = () => {
   return (
     <div>
       {/* Check list header */}
-      <div className="flex px-5 items-end justify-between mb-5">
+      <div className="flex px-5 items-end justify-around mb-5">
         <div>
           <input type="checkbox" />
           <span className="ml-2 text-x-large">Việc con</span>
         </div>
-
-        <span className="font-bold">Tất cả (12)</span>
-        <span className="text-primary-gray text-xs">Triển khai</span>
-        <span className="text-primary-gray text-xs">Hoàn thành</span>
+        <button className="border-b-2 border-primary px-2">
+          <span className="font-bold">Tất cả (12)</span>
+        </button>
+        <button className="px-2">
+          <span className="text-primary-gray text-xs">Triển khai</span>
+        </button>
+        <button className="px-2">
+          <span className="text-primary-gray text-xs">Hoàn thành</span>
+        </button>
 
         <span>|</span>
 
