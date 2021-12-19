@@ -65,7 +65,7 @@ const MainHeader: FC = () => {
               className="w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
               onClick={() =>
                 openModal(
-                  <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded mt-16 align-top inline-block">
+                  <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
                     <MainSearchDialog />
                   </div>
                 )
