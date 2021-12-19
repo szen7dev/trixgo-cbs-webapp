@@ -299,7 +299,7 @@ const Routes: FC = () => {
                         <Switch>
                           <Route
                             exact
-                            path="/ppt"
+                            path="/ppt/home"
                             component={ProjectCategoryPage}
                           />
                           <Route
@@ -365,10 +365,10 @@ const Routes: FC = () => {
                   <HomeLayout>
                     <Switch>
                       <Route exact path="/accounting">
-                        <Redirect to="/accounting/accbill" />
+                        <Redirect to="/accounting/home" />
                       </Route>
-                      <ProtectedRoute exact path="/accounting/accbill" component={AccountingTicketsPage} />
-                      <ProtectedRoute exact path="/accounting/accbill/:id" component={AccountingTicketDetailPage} />
+                      <ProtectedRoute exact path="/accounting/home" component={AccountingTicketsPage} />
+                      <ProtectedRoute exact path="/accounting/home/:id" component={AccountingTicketDetailPage} />
                       <ProtectedRoute exact path="/accounting/detail" component={AccountingDetailPage} />
                       <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage} />
                       <ProtectedRoute exact path="/accounting/in-out" component={AccountingInOutPage} />
