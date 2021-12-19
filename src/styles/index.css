@@ -935,21 +935,15 @@ button {
   /*min-width: 160px;*/
   min-height: 32px;
   /*max-width: 240px;*/
-  max-height: 40px;
+  /*max-height: 40px;*/
   height: auto;
 }
 .select-dropdown .select-options-container {
   min-width: 240px;
+  top: calc(100% + 5px);
 }
 .select-dropdown .select-options-container .select-options-section {
   max-height: 250px;
-}
-.select-dropdown .select-options-container .select-options-section .select-option {
-  transition: background-color 0.1s ease-in-out;
-}
-.select-dropdown .select-options-container .select-options-section .select-option:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgba(219, 234, 254, var(--tw-bg-opacity));
 }
 .alert-warning {
   color: #664d03;
@@ -1068,4 +1062,8 @@ input[type="text"] {
 }
 .financial-planning-table .header {
   top: 63px;
+}
+[contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #cccccc;
 }
