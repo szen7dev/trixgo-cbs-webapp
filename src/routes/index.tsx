@@ -49,7 +49,8 @@ import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-// import TasksPage from "views/pages/tasks";
+import TasksPage from "views/pages/tasks";
+import TaskDetailPage from "views/pages/tasks/detail";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
@@ -95,6 +96,7 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 // Cmc pages
 import CmcsPage from "views/pages/cmcs";
 import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
+import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 const Routes: FC = () => {
 
@@ -233,18 +235,14 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                {/* <Route path="/tasks">
+                <Route path="/pcm/:path?">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/tasks"
-                        component={TasksPage}
-                      />
-                      <Route path="/tasks/*" component={ErrorPage} />
+                      <ProtectedRoute exact path={"/pcm/home"} component={TasksPage} />
+                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
                   </HomeLayout>
-                </Route> */}
+                </Route>
 
                 <Route path="/teaser">
                   <HomeLayout>
@@ -378,10 +376,15 @@ const Routes: FC = () => {
                   </HomeLayout>
                 </Route>
 
-                <Route path="/financial/:path?">
+                <Route exact path="/fin/home">
+                    <Redirect to="/fin/cashflow" />
+                </Route>
+
+                <Route path="/fin/:path?">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path={"/financial/planning/:id"} component={FinancialPlanningDetailPage} />
+                      <ProtectedRoute exact path={"/fin/cashflow"} component={FinancialCashFlowPage} />
+                      <ProtectedRoute exact path={"/fin/cashflow/:id"} component={FinancialPlanningDetailPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>

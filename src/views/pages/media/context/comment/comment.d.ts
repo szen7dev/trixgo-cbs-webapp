@@ -1,6 +1,6 @@
 export type CommentState = {
-    comments: CommentProps,
-    commentsReply: CommentProps
+    comments: CommentProps[],
+    commentsReply: CommentProps[]
 };
 
 export type SetListComments = {

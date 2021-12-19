@@ -13,11 +13,21 @@ const reducer = (state: CommentState, action: CommentActions): CommentState => {
     case "SET_LIST_COMMENTS":
       return {
         ...state,
+        ...action.payload
       };
-    case "ADD_COMMENT":
+    case "ADD_COMMENT": {
+      const key = action.payload.parentID ? 'commentsReply' : 'comments';
+      const newComment = {
+        [key]: {
+          ...[key],
+          ...action.payload
+        }
+      }
       return {
         ...state,
+        ...newComment
       };
+    }
     case "DELETE_COMMENT":
         return {
             ...state

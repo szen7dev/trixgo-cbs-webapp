@@ -86,7 +86,11 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 		parentID && (dataInsert.parentID = parentID);
 
-		await createComment(dataInsert);
+		const infoAfterCreate = await createComment(dataInsert);
+		dispatch({
+			type: 'ADD_COMMENT',
+			payload: infoAfterCreate
+		})
 
 		// Clear text input comment
 		refInputComment.current && (refInputComment.current.innerText = '');

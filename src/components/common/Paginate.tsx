@@ -57,7 +57,7 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction,totalRecord, totalPag
                     </button>
                 </div>
             </div>
-            <div className={"absolute right-0 text-gray-500"}>
+            <div className={"absolute right-2 text-gray-500"}>
                 {totalRecord} MẨU TIN
             </div>
         </div>

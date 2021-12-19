@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
@@ -53,6 +54,39 @@ export const useAuth = (): UseAuth => {
       AuthenticationRepository.signIn(payload)
     );
 
+  const updateDevice = () => {
+    if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
+      navigator.serviceWorker.register('/OneSignalSDKWorker.js');
+    }
+
+    OneSignalReact.init({
+      appId: "79acfc09-966a-48f5-a9ea-44d90410014f",
+      notifyButton: {
+        enable: true,
+      },
+      notificationClickHandlerMatch: 'origin',
+      notificationClickHandlerAction: 'focus',
+  
+      allowLocalhostAsSecureOrigin: true,
+    })
+    .then(e => {
+      console.log({ e });
+      
+      OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+        console.log({ oneSignalWebPushID });
+        
+        await AuthenticationRepository.updateDevice({
+          platform: 'BROWSER',
+          deviceID: 'BROWSER',
+          deviceName: 'BROWSER',
+          registrationID: oneSignalWebPushID || '',
+          oneSignalID: oneSignalWebPushID || '',
+        });
+      });
+    })
+    .catch(e => console.error(e));
+  }
+
   const signIn = async (payload: SignInPayload) => {
     try {
       dispatch({ type: "REQUEST_API" });
@@ -64,6 +98,8 @@ export const useAuth = (): UseAuth => {
         localStorage.setItem("token", JSON.stringify(data.token));
 
         API.defaults.headers.Authorization = `Bearer ${data.token}`;
+
+        updateDevice();
 
         toast.success("Đăng nhập thành công");
         history.push("/");

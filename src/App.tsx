@@ -1,5 +1,4 @@
-import { FC, useEffect } from "react";
-import OneSignalReact from "react-onesignal";
+import { FC } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
@@ -11,48 +10,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
 
-import AuthRespository from 'apis/authentication';
-
 const queryClient = new QueryClient();
 
-const App: FC = () => {	
-  AuthRespository.updateDevice({
-    platform: '',
-    deviceID: '',
-    deviceName: '',
-    registrationID: '',
-    oneSignalID: '',
-  });
-
-	useEffect(() => {
-	if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
-		navigator.serviceWorker.register('/OneSignalSDKWorker.js');
-	}
-	OneSignalReact.init({
-		appId: "79acfc09-966a-48f5-a9ea-44d90410014f",
-		notifyButton: {
-			enable: true,
-		},
-		notificationClickHandlerMatch: 'origin',
-		notificationClickHandlerAction: 'focus',
-
-		allowLocalhostAsSecureOrigin: true,
-	})
-	.then(e => {
-    OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-      await AuthRespository.updateDevice({
-        platform: '',
-        deviceID: '',
-        deviceName: '',
-        registrationID: '',
-        oneSignalID: '',
-      });
-      console.log({ oneSignalWebPushID })
-    });
-  })
-	.catch(e => console.log(e.message));
-}, [])
-
+const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes />

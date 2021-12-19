@@ -24,19 +24,20 @@ module.exports = {
         "primary-light": "#ffffff",
         "secondary-light": "#F5F6F9",
         "accent-light": "#E9EAEF",
+        "green-success": "#00C614"
       },
       fontSize: {
         "[13px]": "13px",
         "[14px]": "14px",
         "[15px]": "15px",
-				"x-small": ["12px"],
-				"small": ["13px", "15px"],
-				"medium": ["14px", "16px"],
-				"large": ["16px", "24px"],
-				"x-large": ["18px", "21px"],
-				"2x-large": ["20px", "23px"],
-				"3x-large": ["24px", "27.6px"],
-				"4x-large": ["30px", "34.5px"]
+        "x-small": ["12px"],
+        "small": ["13px", "15px"],
+        "medium": ["14px", "16px"],
+        "large": ["16px", "24px"],
+        "x-large": ["18px", "21px"],
+        "2x-large": ["20px", "23px"],
+        "3x-large": ["24px", "27.6px"],
+        "4x-large": ["30px", "34.5px"]
       },
       inset: {
         "[55%]": "55%",
@@ -47,13 +48,20 @@ module.exports = {
         "[74px]": "74px",
         "[500px]": "500px",
         "[1000px]": "1000px",
+        "[14px]" : "14px",
+        "[24px]" : "24px",
         fill: "-webkit-fill-available",
       },
       height: {
         "[34px]": "34px",
+        "[32px]": "32px",
+        "[30px]": "30px",
         "[38px]": "38px",
         "[52px]": "52px",
         "[650px]": "650px",
+        "[14px]" : "14px",
+        "[24px]" : "24px",
+        "[16px]" : "16px",
         max: "max-content",
       },
       minWidth: {
@@ -80,16 +88,19 @@ module.exports = {
       borderWidth: {
         6: "6px",
       },
-			lineHeight: {
-				"[15px]": "14.95px",
-				
-			}
+      lineHeight: {
+        "[15px]": "14.95px",
+
+      },
+      transformOrigin: {
+        'top-left-1/2-0' : "50% 0"
+      }
     },
   },
   variants: {
     extend: {
-			opacity: ['disabled']
-		},
+      opacity: ['disabled']
+    },
   },
   plugins: [],
 };

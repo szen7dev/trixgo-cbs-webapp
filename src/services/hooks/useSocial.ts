@@ -20,7 +20,7 @@ type UseSocial = {
 };
 
 type UseCommentSocial = {
-    createComment: (payload: CommentPayload) => Promise<void>,
+    createComment: (payload: CommentPayload) => Promise<CommentProps | undefined>,
     deleteComment: (id: string) => Promise<void>,
     listComments: Array<CommentProps>,
     totalRecord: number,
@@ -201,6 +201,8 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             console.log({ error, data, message });
 
             error && toast.error(message);
+
+            return data;
         } catch (error: unknown) {
             if (typeof error === "string") {
                 toast.error(error);
