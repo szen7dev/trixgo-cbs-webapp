@@ -1,0 +1,35 @@
+:root {
+  --border-gray: #f0f0f0;
+}
+
+.border {
+  border: 12px solid var(--border-gray);
+}
+
+.borderTop {
+  border-top: 12px solid var(--border-gray);
+}
+
+.borderRight {
+  border-right: 12px solid var(--border-gray);
+}
+
+.borderBottom {
+  border-bottom: 12px solid var(--border-gray);
+}
+
+.borderLeft {
+  border-left: 12px solid var(--border-gray);
+}
+
+.bgMonth {
+  background: #eaf2fe;
+}
+
+.bgQuarter {
+  background: #f7f6fc;
+}
+
+.tableContentMarginLeft {
+  margin-left: -26px;
+}

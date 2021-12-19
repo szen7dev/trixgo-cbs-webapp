@@ -4,8 +4,18 @@ import cn from "classnames";
 
 import styles from "../../styles.module.css";
 
-import ChartDoughnutSmall from "../../charts/CmcChartDoughnutSmall";
-import { _dataTwo } from "views/pages/ppt/chart/ProjectDoughnutChart";
+import ChartDoughnutSmall from "../../../support/chart/SupportDoughnutChart";
+
+const data = {
+  labels: [],
+  datasets: [
+    {
+      data: [118, 305, 95],
+      backgroundColor: ["#E03B56", "#FF9900", "#00CA99"],
+      borderWidth: 0,
+    },
+  ],
+};
 
 const ReceivableReport: FC = () => {
   return (
@@ -15,7 +25,7 @@ const ReceivableReport: FC = () => {
       </p>
 
       <div className={cn("mx-auto", styles.chart)}>
-        <ChartDoughnutSmall _data={_dataTwo} title="518" subtitle="" />
+        <ChartDoughnutSmall _data={data} rotation={-30} title="518" />
       </div>
 
       <div className="mt-4 flex flex-col gap-1">
