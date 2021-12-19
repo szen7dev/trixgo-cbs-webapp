@@ -60,7 +60,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { user } = useAuth();
-	const { createMedia, updateMedia } = useSocial();
+	const { createMedia, updateMedia, refetchListMedias } = useSocial('list_medias_internal_company');
 	const { addFileToUpload } = useUpload('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
@@ -150,6 +150,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			default:
 				break;
 		}
+		refetchListMedias();
 
 		console.log({ values, uploads })
 		toggle();
