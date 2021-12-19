@@ -20,13 +20,13 @@ const PriceApprovalInfo: FC = () => {
             <span className="text-[13px] text-primary-gray">
               Thời gian phê duyệt:
             </span>
-            <span className="text[13px]">15:30 21/12/21</span>
+            <span className="ml-2 text[13px]">15:30 21/12/21</span>
           </div>
           <div>
             <span className="text-[13px] text-primary-gray">
               Người phê duyệt:
             </span>
-            <span className="text[13px]">Nguyễn trung Kiên-PGI</span>
+            <span className="ml-2 text[13px]">Nguyễn Trung Kiên-PGI</span>
           </div>
         </div>
         <div className="w-1/4 flex justify-end">
