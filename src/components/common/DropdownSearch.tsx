@@ -7,10 +7,16 @@ import Close from "../../assets/icons/Close";
 import TriangleDown from "../../assets/icons/TriangleDown";
 
 export type Item = {
-    id: string | number;
-    text: string | number;
+    id?: string | number;
+    text?: string | number;
     imageUrl?: string;
-    [key: string]: string | number | ReactNode;
+    [x: string]: any;
+}
+
+type FormatItem = {
+    id?: string | number;
+    text?: string | number;
+    [x: string]: any;
 }
 
 type Props = {
@@ -24,33 +30,43 @@ type Props = {
     className?: string;
     classNameItem?: string;
     classNameInput?: string;
+    focusedClass?: string;
     renderItem?: (item: Item) => ReactNode;
     renderSelectedItem?: (item: Item) => ReactNode;
     isMultiple?: boolean;
     showTriangle?: boolean;
     allowClearValueSingleInput?: boolean;
+    maxWidthInput?: string;
+    maxHeightInput?: string;
+    formatItem?: FormatItem;
+    inlineSearch?: boolean;
 }
 
 type Params = {
     [key: string]: string;
 }
 const DropdownSearchable:FC<Props> = ({
-      data,
-      searchUrl,
-      searchParam,
-      id,
-      placeholder = 'Lựa chọn',
-      initialValue,
-      onchangeValue,
-      className,
-      classNameItem,
-      classNameInput,
-      renderItem,
-      isMultiple,
-      showTriangle,
-      allowClearValueSingleInput,
-      renderSelectedItem
-    }) => {
+                                          data,
+                                          searchUrl,
+                                          searchParam,
+                                          id,
+                                          placeholder = 'Lựa chọn',
+                                          initialValue,
+                                          onchangeValue,
+                                          className,
+                                          classNameItem,
+                                          classNameInput,
+                                          focusedClass,
+                                          renderItem,
+                                          isMultiple,
+                                          showTriangle,
+                                          allowClearValueSingleInput,
+                                          renderSelectedItem,
+                                          maxWidthInput,
+                                          formatItem,
+                                          inlineSearch,
+                                          maxHeightInput
+                                      }) => {
 
     const [value, setValue] = useState<Item>();
     const [values, setValues] = useState<Array<Item>>();
@@ -91,14 +107,35 @@ const DropdownSearchable:FC<Props> = ({
         return () => clearTimeout(delayDebounceFn)
     }, [searchTerm,data]);
 
+    const readDataValue = (item: Item|undefined, key: string) => {
+        if (!item) return undefined;
+        if (formatItem) {
+            return item[formatItem[key]]
+        }
+        return item[key];
+    }
+
+    const modifyItem = (item: Item) => {
+        if (formatItem) {
+            return {
+                ...item,
+                id: item[formatItem.id??"id"],
+                text: item[formatItem.text??"text"],
+                imageUrl: item[formatItem.imageUrl??"imageUrl"],
+            }
+        }
+        return item
+    }
+
     const handleSetValue = (item: Item) => {
+        setShowOption(false);
+        setSearchTerm('');
+        setDefaultValueHaveBeenChange(true);
         if (isMultiple) {
             setValues(oldValues => [...oldValues??[], item]);
         } else {
             setValue(item);
         }
-        setShowOption(false);
-        setDefaultValueHaveBeenChange(true);
         if (onchangeValue) {
             onchangeValue(item);
         }
@@ -129,18 +166,18 @@ const DropdownSearchable:FC<Props> = ({
         if (initialValue) {
             if (isMultiple) {
                 if (typeof initialValue !== "number" && typeof initialValue !== "string") {
-                    const initialItem = checkDataArr?.filter(item => initialValue.includes(item.id));
+                    const initialItem = checkDataArr?.filter(item => initialValue.includes(readDataValue(item, "id")));
                     setValues(initialItem ?? []);
                 }
             } else {
-                const initialItem = checkDataArr?.find(item => item.id === initialValue);
+                const initialItem = checkDataArr?.find(item => readDataValue(item, "id") === initialValue);
                 setValue(initialItem);
             }
         }
     }
 
     const handleRemoveItem = (id:string|number) => {
-        setValues(values?.filter(item => item.id !== id));
+        setValues(values?.filter(item => readDataValue(item,"id") !== id));
     };
 
     const handleRemoveItemSingle = () => {
@@ -155,94 +192,139 @@ const DropdownSearchable:FC<Props> = ({
         }
         return _map(displayData, (option) => (
             <div
-                key={option.id}
+                key={readDataValue(option,"id")}
                 className={
                     (classNameItem ?? '') +
-                    " select-option flex cursor-pointer pt-2 pb-2 pr-4 pl-4 " +
-                    (isMultiple ? (values?.find(v => v.id === option.id) ? 'bg-blue-100':'') : (option.id === value?.id ? 'bg-blue-100':''))
+                    " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 " +
+                    (
+                        isMultiple ?
+                            (values?.find(v => readDataValue(v,"id") === readDataValue(option,"id")) ? 'bg-blue-100':'') :
+                            (readDataValue(option,"id")=== readDataValue(value,"id") ? 'bg-blue-100':''))
                 }
                 onClick={() => handleSetValue(option)}
                 data-option-value={option.id}
             >
                 {
                     renderItem?
-                        renderItem(option):
+                        renderItem(modifyItem(option)):
                         <div className={"flex align-items-center"}>
-                            {option?.imageUrl?<img alt={"Avt"} src={option.imageUrl} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{option.text}</span>
+                            {readDataValue(option,"imageUrl")?<img alt={"Avt"} src={readDataValue(option,"imageUrl")} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{readDataValue(option,"text")}</span>
                         </div>
                 }
             </div>
         ))
     };
 
-    const renderSelectedValue = () => {
-        if (isMultiple) {
-            return (
-                <div
-                    onClick={() => toggleShowOption()}
-                    className={(classNameInput??'') + " flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
-                >
-                    {/*<div className={"flex flex-wrap"}>*/}
-                    {
-                        typeof values === "undefined" || values?.length <= 0?
+    const renderMultiSelectedValue = () => {
+        return (
+            <div
+                onClick={() => toggleShowOption()}
+                className={(classNameInput??'') + " flex p-1 pl-2 pr-7 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+            >
+                {/*<div className={"flex flex-wrap"}>*/}
+                {
+                    ((typeof values === "undefined" || values?.length <= 0)&&!inlineSearch)?
                         <span
-                            className={"flex-1 text-left text-gray-300"}>
+                            className={"text-left text-gray-300"}>
                             {placeholder}
                         </span>:
                         null
-                    }
-                    {_map(values, (option) => (
-                            <div key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
-                                {
-                                    renderSelectedItem?
-                                        renderSelectedItem(option):
-                                        option?.text
-                                }
-                                <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
-                                    <Close onClick={() => handleRemoveItem(option.id)}/>
-                                </div>
-                            </div>
-                        ))}
-                    {/*</div>*/}
-                    <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
-                        {showTriangle?<TriangleDown/>:null}
+                }
+                {_map(values, (option) => (
+                    <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
+                        {
+                            renderSelectedItem?
+                                renderSelectedItem(modifyItem(option)):
+                                readDataValue(option,"text")
+                        }
+                        <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
+                            <Close onClick={() => handleRemoveItem(readDataValue(option,"id"))}/>
+                        </div>
                     </div>
-                </div>
-            )
-        }
-        return (
-            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center"}>
+                ))}
                 {
-                    allowClearValueSingleInput?
-                        (
-                            !value ?
-                            <div className={"flex-1 text-left text-gray-300"}>{placeholder}</div>:
-                            <div className={"flex-1 text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
-                                {
-                                    value?.text?
-                                        (
-                                            renderSelectedItem?
-                                                renderSelectedItem(value):
-                                                value?.text
-                                        ) :
-                                        placeholder
-                                }
-                                <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
-                                    <Close onClick={() => handleRemoveItemSingle()}/>
-                                </div>
-                            </div>
-                        ):
-                        <div className={"flex-1 text-left " + (!value ? "text-gray-300":'')}>
+                    inlineSearch&&
+                    <input
+                        placeholder={placeholder}
+                        className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                }
+                {/*</div>*/}
+                <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                    {showTriangle?<TriangleDown/>:null}
+                </div>
+            </div>
+        )
+    }
+
+    const renderSingleSelectedValueWithClearValue = () => {
+        return (
+            !value ?
+                (
+                    inlineSearch?
+                    <input
+                        placeholder={placeholder}
+                        className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />:
+                    <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                ):
+                (
+                    <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
+                        {
+                            renderSelectedItem?
+                                renderSelectedItem(modifyItem(value)):
+                                readDataValue(value,"text")
+                        }
+                        <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
+                            <Close onClick={() => handleRemoveItemSingle()}/>
+                        </div>
+                    </div>
+                )
+        )
+    }
+
+    const renderSingleSelectedValueWithoutClearValue = () => {
+        return (
+            !value ?
+                (
+                    inlineSearch?
+                        <input
+                            placeholder={placeholder}
+                            className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />:
+                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                ):
+                (
+                    <div className={"flex-1 flex text-left " + (!value ? "text-gray-300":'')}>
+                        <div>
                             {
-                                value?.text?
+                                readDataValue(value, "text")?
                                     (
                                         renderSelectedItem?
-                                            renderSelectedItem(value):
-                                            value?.text
+                                            renderSelectedItem(modifyItem(value)):
+                                            readDataValue(value,"text")
                                     ) :
                                     placeholder
                             }
                         </div>
+                    </div>
+                )
+        )
+    }
+
+    const renderSingleSelectedValue = () => {
+        return (
+            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center"}>
+                {
+                    allowClearValueSingleInput?
+                        renderSingleSelectedValueWithClearValue():
+                        renderSingleSelectedValueWithoutClearValue()
                 }
                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
                     {showTriangle?<TriangleDown/>:null}
@@ -251,11 +333,22 @@ const DropdownSearchable:FC<Props> = ({
         )
     }
 
+    const renderSelectedValue = () => {
+        if (isMultiple) {
+            return renderMultiSelectedValue();
+        }
+        return renderSingleSelectedValue();
+    }
+
+    const maxWidthClass = isMultiple?(maxWidthInput?maxWidthInput:"max-w-[250px]"):"";
+    const maxHeightClass = isMultiple?(maxHeightInput??""):"";
+    const beingFocusClass = (showOption?(focusedClass??""):"");
+    const extraClassName = (className??'');
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={(className??'') + " relative select-dropdown"} data-value={value?.id}>
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${maxHeightClass} ${beingFocusClass}`} data-value={value?.id}>
             {renderSelectedValue()}
             {showOption?<div className={"shadow-lg rounded select-options-container absolute z-50"}>
-                <input
+                {!inlineSearch&&<input
                     className="select-search w-full p-3 pt-5 border-b"
                     placeholder={"Nhập nội dung"}
                     type='text'
@@ -263,7 +356,7 @@ const DropdownSearchable:FC<Props> = ({
                     value={searchTerm}
                     autoFocus
                     onChange={(e) => setSearchTerm(e.target.value)}
-                />
+                />}
                 <div className="select-options-section overflow-auto bg-white">
                     {renderOptions()}
                 </div>

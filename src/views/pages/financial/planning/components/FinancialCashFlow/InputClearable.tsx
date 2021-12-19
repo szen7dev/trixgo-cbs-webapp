@@ -18,7 +18,7 @@ const InputClearable:FC<Props> = ({onChange,className,placeholder}) => {
     }
     return (
         <div className={"relative flex items-center"}>
-            <input value={value} className={"pl-3 pr-20 " + className} onChange={(event => setInputValue(event.target.value))}/>
+            <input placeholder={placeholder} value={value} className={"pl-3 pr-20 " + className} onChange={(event => setInputValue(event.target.value))}/>
             <div className={"absolute right-3 flex items-center inset-y-0"}>
                 <button onClick={() => clearInput()}>
                     <Close/>
