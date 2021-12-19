@@ -3,7 +3,7 @@ import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import {map as _map} from "lodash"
-import FinancialPlanningDetailMainRow from "./components/FinancialPlanningDetailMainRow";
+import FinancialPlanningDetailMainRow from "./components/FinancialCashFlowDetail/FinancialPlanningDetailMainRow";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {RootState} from "../../../../redux/reducer";

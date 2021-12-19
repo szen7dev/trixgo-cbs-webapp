@@ -25,6 +25,7 @@ type Props = {
     classNameItem?: string;
     classNameInput?: string;
     renderItem?: (item: Item) => ReactNode;
+    renderSelectedItem?: (item: Item) => ReactNode;
     isMultiple?: boolean;
     showTriangle?: boolean;
     allowClearValueSingleInput?: boolean;
@@ -47,7 +48,8 @@ const DropdownSearchable:FC<Props> = ({
       renderItem,
       isMultiple,
       showTriangle,
-      allowClearValueSingleInput
+      allowClearValueSingleInput,
+      renderSelectedItem
     }) => {
 
     const [value, setValue] = useState<Item>();
@@ -191,7 +193,11 @@ const DropdownSearchable:FC<Props> = ({
                     }
                     {_map(values, (option) => (
                             <div key={option.id} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
-                                {option?.text}
+                                {
+                                    renderSelectedItem?
+                                        renderSelectedItem(option):
+                                        option?.text
+                                }
                                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
                                     <Close onClick={() => handleRemoveItem(option.id)}/>
                                 </div>
@@ -210,15 +216,33 @@ const DropdownSearchable:FC<Props> = ({
                     allowClearValueSingleInput?
                         (
                             !value ?
-                            <span className={"flex-1 text-left text-gray-300"}>{placeholder}</span>:
+                            <div className={"flex-1 text-left text-gray-300"}>{placeholder}</div>:
                             <div className={"flex-1 text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
-                                {value?.text??placeholder}
+                                {
+                                    value?.text?
+                                        (
+                                            renderSelectedItem?
+                                                renderSelectedItem(value):
+                                                value?.text
+                                        ) :
+                                        placeholder
+                                }
                                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center pr-2"}>
                                     <Close onClick={() => handleRemoveItemSingle()}/>
                                 </div>
                             </div>
                         ):
-                        <span className={"flex-1 text-left " + (!value ? "text-gray-300":'')}>{value?.text??placeholder}</span>
+                        <div className={"flex-1 text-left " + (!value ? "text-gray-300":'')}>
+                            {
+                                value?.text?
+                                    (
+                                        renderSelectedItem?
+                                            renderSelectedItem(value):
+                                            value?.text
+                                    ) :
+                                    placeholder
+                            }
+                        </div>
                 }
                 <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
                     {showTriangle?<TriangleDown/>:null}
@@ -230,7 +254,7 @@ const DropdownSearchable:FC<Props> = ({
     return (
         <div ref={wrapperRef} id={id} placeholder={placeholder} className={(className??'') + " relative select-dropdown"} data-value={value?.id}>
             {renderSelectedValue()}
-            {showOption?<div className={"shadow-lg rounded select-options-container absolute z-20"}>
+            {showOption?<div className={"shadow-lg rounded select-options-container absolute z-50"}>
                 <input
                     className="select-search w-full p-3 pt-5 border-b"
                     placeholder={"Nhập nội dung"}
