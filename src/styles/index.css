@@ -213,6 +213,18 @@
 .bg-gray2 {
   background-color: #fbfbfd;
 }
+.bg-green {
+  background-color: #00CA99;
+}
+.bg-orange {
+  background-color: #FF9900;
+}
+.bg-red {
+  background-color: #F55F5F;
+}
+.bg-blue {
+  background-color: #0060E1;
+}
 a,
 button {
   transition: all 0.2s linear 0s;
@@ -734,6 +746,31 @@ button {
 }
 .t-home-actions-denied {
   background-color: #F0F0F0;
+}
+
+/*__________________________header search________________________*/
+.t-main-search {
+  width: 900px;
+  max-width: 100%;
+  border: 1px solid #ccc;
+}
+.t-main-search-input > input {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.t-main-search-results input {
+  width: 18px;
+  height: 18px;
+}
+.t-main-search-result-item-content {
+  width: calc(100% - 38px);
+}
+.t-main-search-result-item-incoming .t-main-search-result-item-date {
+  color: #EEC881;
+  background-color: #FCF8F0;
+}
+.t-main-search-result-item-overdue .t-main-search-result-item-date {
+  color: #F3A7AC;
+  background-color: #FDF2F3;
 }
 
 /*______________________________chatbox______________________________*/
