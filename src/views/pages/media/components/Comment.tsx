@@ -1,10 +1,11 @@
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useContext } from 'react'
 
 import cn from "classnames";
 import moment from "moment";
 
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import { CommentProps } from 'typings/common';
+import CommentContext from '../context/comment/comment.context';
 import { useCommentSocial } from 'services/hooks/useSocial';
 
 type OptionsProps = {
@@ -24,8 +25,14 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	comment, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
+	const { dispatch } = useContext(CommentContext);
+
 	const handleDeleteComment = () => {
 		deleteComment(comment._id);
+		dispatch({
+			type: "DELETE_COMMENT",
+			payload: { _id: comment._id, parent: comment.parent }
+		});
 	}
 
 	return (

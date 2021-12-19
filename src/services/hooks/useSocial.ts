@@ -20,7 +20,7 @@ type UseSocial = {
 };
 
 type UseCommentSocial = {
-    createComment: (payload: CommentPayload) => Promise<CommentProps | undefined>,
+    createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
     deleteComment: (id: string) => Promise<void>,
     listComments: Array<CommentProps>,
     totalRecord: number,
@@ -198,8 +198,6 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
     const createComment = async (payload: CommentPayload) => {
         try {
             const { error, data, message } = await createCommentAsync(payload);
-            console.log({ error, data, message });
-
             error && toast.error(message);
 
             return data;
@@ -215,8 +213,6 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
     const deleteComment = async (id: string) => {
         try {
             const { error, message } = await deleteCommentAsync(id);
-            console.log({ error, message });
-
             error && toast.error(message);
         } catch (error: unknown) {
             if (typeof error === "string") {
