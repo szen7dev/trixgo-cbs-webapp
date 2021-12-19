@@ -4,6 +4,7 @@ import InputClearable from "./InputClearable";
 import DropdownSearchable from "../../../../../../components/common/DropdownSearch";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import DatePicker from "react-datepicker";
+import DateIcon from "assets/images/icons8-calendar-100.svg";
 
 const FinancialCashFlowFilterButton:FC = () => {
     const [showFilter, setShowFilter] = useState(false);
@@ -104,7 +105,7 @@ const FinancialCashFlowFilterButton:FC = () => {
                 </div>
                 <div className={"flex items-center mt-4"}>
                     <p className={"text-gray-500 mr-4"}>Ngày tháng</p>
-                    <div className={"flex items-center"}>
+                    <div className={"flex items-center flex-1"}>
                         <div className={"w-1/2 flex items-center"}>
                             <p className={"text-gray-500 mr-4"}>Từ</p>
                             <DatePicker
@@ -112,6 +113,19 @@ const FinancialCashFlowFilterButton:FC = () => {
                                 selected={null}
                                 onChange={(date: Date | null) =>
                                     console.log("birthDate", date)
+                                }
+                                dateFormat="dd/MM/yyyy"
+                                customInput={
+                                    <div className={"relative w-auto ml-2 min-h-fit"}>
+                                        <input
+                                            type="text"
+                                            name="startDate"
+                                            className="border-b border-gray-200 p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
+                                        />
+                                        <div className={"absolute inset-y-0 right-0 h-full flex align-items-center pr-2"}>
+                                            <img src={DateIcon} alt={"calendar icon"}/>
+                                        </div>
+                                    </div>
                                 }
                             />
                         </div>
@@ -122,6 +136,19 @@ const FinancialCashFlowFilterButton:FC = () => {
                                 selected={null}
                                 onChange={(date: Date | null) =>
                                     console.log("birthDate", date)
+                                }
+                                dateFormat="dd/MM/yyyy"
+                                customInput={
+                                    <div className={"relative w-auto ml-2 min-h-fit"}>
+                                        <input
+                                            type="text"
+                                            name="startDate"
+                                            className="border-b border-gray-200 p-1 pl-2 pr-2 focus:outline-none focus:border-primary"
+                                        />
+                                        <div className={"absolute inset-y-0 right-0 h-full flex align-items-center pr-2"}>
+                                            <img src={DateIcon} alt={"calendar icon"}/>
+                                        </div>
+                                    </div>
                                 }
                             />
                         </div>
