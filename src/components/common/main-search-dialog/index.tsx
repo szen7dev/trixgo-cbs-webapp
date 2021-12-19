@@ -17,7 +17,7 @@ const MainSearchDialog: FC = () => {
   };
 
   return (
-    <div className="t-main-search-wrapper overflow-auto rounded pb-10">
+    <div className="t-main-search-wrapper rounded pb-10">
       {/* Search form */}
       <div className="t-main-search-input pt-4 pl-8 pr-8 pb-3 relative">
         <input type="search" placeholder="Tìm kiếm" className="w-full focus:outline-none h-11 border border-solid border-primary-border pl-3 pr-16 rounded-md" />
