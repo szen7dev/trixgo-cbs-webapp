@@ -57,8 +57,11 @@ export type CommentProps = {
 }
 
 export type CommentResponse = APIResponse & {
-  data: CommentProps;
-  message: string;
+  data: {
+    data: CommentProps;
+    message: string;
+    error: boolean;
+  };
 };
 
 export type ListCommentResponse = APIResponse & {

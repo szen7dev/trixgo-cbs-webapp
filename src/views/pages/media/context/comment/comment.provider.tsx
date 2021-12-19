@@ -2,36 +2,81 @@ import { FC, ReactNode, useReducer } from "react";
 
 import CommentContext, { initialState } from "./comment.context";
 
-import { CommentState, CommentActions } from "./comment";
+import { CommentsState, CommentActions } from "./comment";
 
 type Props = {
   children: ReactNode;
 };
 
-const reducer = (state: CommentState, action: CommentActions): CommentState => {
+const reducer = (state: CommentsState, action: CommentActions): CommentsState => {
   switch (action.type) {
-    case "SET_LIST_COMMENTS":
+    case "SET_COMMENTS":
       return {
         ...state,
-        ...action.payload
-      };
-    case "ADD_COMMENT": {
-      const key = action.payload.parentID ? 'commentsReply' : 'comments';
-      const newComment = {
-        [key]: {
-          ...[key],
-          ...action.payload
+        comments: action.payload
+      }
+    case "SET_COMMENTS_REPLY":
+      return {
+        ...state,
+        commentsReply: {
+          [action.payload[0].parent]: action.payload
         }
       }
+    case "VIEW_MORE_COMMENTS":
+      return {
+        ...state,
+        comments: [...action.payload, ...state.comments]
+      }
+    case "VIEW_MORE_COMMENTS_REPLY":
+      return {
+        ...state,
+        commentsReply: {
+          ...state.commentsReply,
+          [action.payload[0].parent]: [
+            ...action.payload,
+            ...state.commentsReply[action.payload[0].parent] || []
+          ]
+        }
+      }
+    case "ADD_COMMENT": {
+      const key = action.payload.parent ? 'commentsReply' : 'comments';
+      let newComment = {};
+
+      if(key === 'commentsReply') {
+        newComment = {
+          [key]: {
+            ...state[key],
+            [action.payload.parent]: [
+              ...state[key][action.payload.parent] || [],
+              action.payload
+            ]
+          }
+        }
+      } else{
+        newComment = {
+          [key]: [
+            ...state[key],
+            {
+              ...action.payload
+            }
+          ]
+        }
+      }
+
       return {
         ...state,
         ...newComment
       };
     }
-    case "DELETE_COMMENT":
-        return {
-            ...state
-        }
+    case "DELETE_COMMENT": {
+      const newState = { ...state };
+      if(action.payload.parent){
+        delete newState.commentsReply[action.payload._id];
+      } else{
+        newState.comments = newState.comments.filter(comment => comment._id !== action.payload._id);
+      }
+      return newState;
+    }
     default:
       return state;
   }
@@ -39,7 +84,7 @@ const reducer = (state: CommentState, action: CommentActions): CommentState => {
 
 const CommentProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer<
-    (state: CommentState, action: CommentActions) => CommentState
+    (state: CommentsState, action: CommentActions) => CommentsState
   >(reducer, initialState);
 
   return (
