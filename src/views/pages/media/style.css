@@ -83,9 +83,11 @@
   height: 50px;
   background-color: white;
 }
+
 .post__files-file.loading {
-	background-color: #C8E2FD;
+  background-color: #C8E2FD;
 }
+
 .post__files-file.loading .btn-download {
   background-color: transparent;
   border: 2px solid #0060E1;
@@ -318,44 +320,51 @@
 .react__comments-container {}
 
 .react__comments-header {
-	color: var(--gray-300);
+  color: var(--gray-300);
 }
 
 .react__comment-title {
-	color: var(--gray-500);
+  color: var(--gray-500);
 }
 
 .react__comment-content {
-	color: var(--gray-400);
+  color: var(--gray-400);
 }
 
 .react__replay [contenteditable][placeholder]:empty:before {
-	content: attr(placeholder);
-	position: absolute;
-	color: gray;
-	background-color: transparent;
+  content: attr(placeholder);
+  position: absolute;
+  color: gray;
+  background-color: transparent;
 }
+
 .react__replay {
-	max-height: 300px;
-	/* overflow-y: auto; */
+  max-height: 300px;
+  /* overflow-y: auto; */
 }
 
 /* Comment page */
 .comment__header {
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-	z-index: 10;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  z-index: 10;
 }
 
 .comment__wrapper {
-	background-color: #F0F0F0;
+  background-color: #F0F0F0;
 }
 
 .comment__header-main,
 .comment__container {
-	max-width: 680px;
+  max-width: 680px;
 }
 
 .comment__container {
-	margin: 0 auto;
-	background-color: white;
+  margin: 0 auto;
+  background-color: white;
+}
+
+/* __________ IMAGE DETAIL _____________ */
+button.media__btn,
+button.media__btn:disabled {
+  background-color: transparent;
 }
