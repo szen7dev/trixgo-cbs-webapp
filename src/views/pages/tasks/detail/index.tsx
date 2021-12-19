@@ -1,9 +1,9 @@
 import { FC } from "react";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
-import ShareIcon from "assets/images/icons8-share-rounded-96_1.svg";
-import SendEmailIcon from "assets/images/icons8-send-email-96_1.svg";
-import CopyIcon from "assets/images/icons8-copy-96_1.svg";
+import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
+import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
+import CopyIcon from "assets/images/icons8-copy-96.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import RemoveIcon from "assets/images/icons8-remove.svg";
