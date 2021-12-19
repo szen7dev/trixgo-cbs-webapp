@@ -20,15 +20,19 @@ type UseSocial = {
 };
 
 type UseCommentSocial = {
-    createComment: (payload: CommentPayload) => Promise<void>,
+    createComment: (payload: CommentPayload) => Promise<CommentProps | undefined>,
+    deleteComment: (id: string) => Promise<void>,
     listComments: Array<CommentProps>,
+    totalRecord: number,
+    limit: number,
+    nextCursor: string | undefined,
     isLoadingListComments: boolean,
     refetchListComments: () => void,
     nextPageListComments: () => void,
     prevPageListComments: () => void,
 }
 
-export const useSocial = () : UseSocial => {
+export const useSocial = (key?: string, type?: string) : UseSocial => {
     const { current: socket }: any = useSocket();
 
     const { mutateAsync: createMediaAsync } =
@@ -55,10 +59,11 @@ export const useSocial = () : UseSocial => {
         hasNextPage: hasNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_medias",
+            key || "list_medias",
             async ({ pageParams }: any) => 
             SocialRepository.listMedias({ 
                 lastestID: pageParams ? pageParams : "",
+                type: type || 'company'
             }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
@@ -148,10 +153,15 @@ export const useSocial = () : UseSocial => {
     };
 };
 
-export const useCommentSocial = (payload: ListCommentsPayload) : UseCommentSocial => {
+export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSocial => {
     const { mutateAsync: createCommentAsync } =
         useMutation((payload: CommentPayload) =>
             SocialRepository.createComment(payload)
+        );
+
+    const { mutateAsync: deleteCommentAsync } =
+        useMutation((id: string) =>
+            SocialRepository.deleteComment(id)
         );
 
     const {
@@ -162,7 +172,7 @@ export const useCommentSocial = (payload: ListCommentsPayload) : UseCommentSocia
         fetchPreviousPage: prevPageListComments,
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_comments",
+            (payload && payload.key) || "list_comments",
             async ({ pageParams }: any) => 
             SocialRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
@@ -190,9 +200,9 @@ export const useCommentSocial = (payload: ListCommentsPayload) : UseCommentSocia
             const { error, data, message } = await createCommentAsync(payload);
             console.log({ error, data, message });
 
-            if (error) {
-                toast.error(message);
-            }
+            error && toast.error(message);
+
+            return data;
         } catch (error: unknown) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -202,9 +212,33 @@ export const useCommentSocial = (payload: ListCommentsPayload) : UseCommentSocia
         }
     };
 
+    const deleteComment = async (id: string) => {
+        try {
+            const { error, message } = await deleteCommentAsync(id);
+            console.log({ error, message });
+
+            error && toast.error(message);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const listComments = [].concat(...(dataListComments?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean)
+    const totalRecord = dataListComments?.pages[0]?.data?.totalRecord || 0;
+    const nextCursor = dataListComments?.pages[0]?.data?.nextCursor;
+    const limit = dataListComments?.pages[0]?.data?.limit || 5;
+
     return {
         createComment,
-        listComments: [].concat(...(dataListComments?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean),
+        deleteComment,
+        listComments,
+        limit,
+        totalRecord,
+        nextCursor,
         isLoadingListComments,
         refetchListComments,
         nextPageListComments,

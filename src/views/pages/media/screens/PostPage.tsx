@@ -38,15 +38,19 @@ import '../style.css';
  * Types, Services, Utils
  */
 import { FileProps } from "typings/social";
-import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
+import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
+import CommentProvider from '../context/comment/comment.provider';
 
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { deleteMedia } = useSocial();
-	const { listComments } = useCommentSocial({ mediaID });
+	const { listComments, totalRecord, limit, nextCursor } = useCommentSocial({ 
+		mediaID, 
+		key: `${mediaID}-list-comments`
+	});
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
@@ -85,7 +89,7 @@ const SocialPostPage: FC = () => {
 	const files: FileProps[] = media.files || [];
 
 	return (
-		<>
+		<CommentProvider>
 			<div className="page__post text-sm custom-scroll">
 				<div className="page__post-container">
 					{/* Header */}
@@ -209,7 +213,12 @@ const SocialPostPage: FC = () => {
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
-							<RootCommentsList className="px-5" comments={listComments} />
+							<RootCommentsList 
+								className="px-5"
+								comments={listComments}
+								totalRecord={totalRecord}
+								limit={limit} nextCursor={nextCursor}
+								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />
 							</div>
@@ -287,7 +296,7 @@ const SocialPostPage: FC = () => {
 					<ViewPost show={modalShowImage.show} toggle={closeModalImage} images={images} index={modalShowImage.index} />
 				</div>
 			</ModalFullContainer>
-		</>
+		</CommentProvider>
 	);
 };
 

@@ -72,12 +72,12 @@ const SocialRepository = {
     //     );
     //     return data;
     // },
-    // async deleteCommentMedia(id: string): Promise<CommentResponse> {
-    //     const { data } = await API.delete<CommentResponse>(
-    //         `${mediaURL}?mediaID=${id}`
-    //     );
-    //     return data;
-    // },
+    async deleteComment(id: string): Promise<{ error: boolean, message: string }> {
+        const { data } = await API.delete<{ error: boolean, message: string }>(
+            `${mediaURL}/comments?commentID=${id}`
+        );
+        return data;
+    },
     async listComments(payload: ListCommentsPayload): Promise<ListCommentResponse> {
         const { data } = await API.get<ListCommentResponse>(
             `${mediaURL}/comments?${convertObToUrl(payload)}`
