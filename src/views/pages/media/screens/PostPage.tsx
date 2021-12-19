@@ -41,6 +41,7 @@ import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
+import CommentProvider from '../context/comment/comment.provider';
 
 const SocialPostPage: FC = () => {
 	const history = useHistory();
@@ -88,7 +89,7 @@ const SocialPostPage: FC = () => {
 	const files: FileProps[] = media.files || [];
 
 	return (
-		<>
+		<CommentProvider>
 			<div className="page__post text-sm custom-scroll">
 				<div className="page__post-container">
 					{/* Header */}
@@ -295,7 +296,7 @@ const SocialPostPage: FC = () => {
 					<ViewPost show={modalShowImage.show} toggle={closeModalImage} images={images} index={modalShowImage.index} />
 				</div>
 			</ModalFullContainer>
-		</>
+		</CommentProvider>
 	);
 };
 

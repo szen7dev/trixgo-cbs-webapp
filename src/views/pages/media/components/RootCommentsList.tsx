@@ -1,8 +1,9 @@
-import { FC, HTMLAttributes, useState } from 'react';
+import { FC, HTMLAttributes, useState, useContext } from 'react';
 import Comment from './Comment';
 import RootComment from './RootComment';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
+import CommentContext from '../context/comment/comment.context';
 
 type Props = {
 	comments?: CommentProps[],
@@ -13,9 +14,11 @@ type Props = {
 } & HTMLAttributes<HTMLUListElement>
 
 const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
+	const { state } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 	const [commentsNext, setCommentsNext] = useState<CommentProps[] | []>(comments || []);
-	console.log({ comments, mediaID, totalRecord, limit, nextCursor });
+	// console.log({ comments, mediaID, totalRecord, limit, nextCursor });
+	console.log({ state });
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await SocialRepository.listComments({ 

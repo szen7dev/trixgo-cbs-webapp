@@ -19,9 +19,8 @@ const AuthenticationRepository = {
     return data;
   },
   async updateDevice(payload: UpdateDevicePayload): Promise<UserInfoResponse> {
-    const token = localStorage.getItem("token") as string;
-    API.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-    
+    // const token = localStorage.getItem("token") as string;
+    // API.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
     const { data } = await API.post<UserInfoResponse>(
       `${authURL}/users/update-device`,
       payload

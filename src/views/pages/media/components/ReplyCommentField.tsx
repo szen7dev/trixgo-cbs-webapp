@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 
@@ -11,6 +11,7 @@ import PostFile from './post/PostFile';
 import useCustomReducer from '../context/useCustomReducer';
 import { IMethodFiles, IMethodImages } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
+import CommentContext from '../context/comment/comment.context';
 import uploadActions from '../context/upload.actions';
 import { toArray } from 'lodash';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
@@ -38,6 +39,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	mediaID,
 	...props
 }) => {
+	const { state, dispatch } = useContext(CommentContext);
 	const [uploads, {
 		setUploadFile,
 		setUploadImage,
@@ -84,7 +86,11 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 		parentID && (dataInsert.parentID = parentID);
 
-		await createComment(dataInsert);
+		const infoAfterCreate = await createComment(dataInsert);
+		dispatch({
+			type: 'ADD_COMMENT',
+			payload: infoAfterCreate
+		})
 
 		// Clear text input comment
 		refInputComment.current && (refInputComment.current.innerText = '');
