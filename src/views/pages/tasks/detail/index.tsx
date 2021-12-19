@@ -14,6 +14,7 @@ import IconStar from "assets/images/icon-star-filled.png";
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
+import PriceApprovalInfo from "./PriceApprovalInfo";
 
 const TaskDetailPage: FC = () => {
   return (
@@ -158,6 +159,9 @@ const TaskDetailPage: FC = () => {
             </div>
             <div className="mt-8 pr-3">
               <CheckList />
+            </div>
+            <div className="px-5 mt-10">
+              <PriceApprovalInfo />
             </div>
           </div>
 
