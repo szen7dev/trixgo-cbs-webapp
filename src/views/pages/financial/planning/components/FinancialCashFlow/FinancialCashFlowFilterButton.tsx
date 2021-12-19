@@ -3,6 +3,7 @@ import SortingIcon from "assets/images/icons8-sorting-100.svg";
 import InputClearable from "./InputClearable";
 import DropdownSearchable from "../../../../../../components/common/DropdownSearch";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
+import DatePicker from "react-datepicker";
 
 const FinancialCashFlowFilterButton:FC = () => {
     const [showFilter, setShowFilter] = useState(false);
@@ -15,7 +16,7 @@ const FinancialCashFlowFilterButton:FC = () => {
             </button>
             {showFilter&&
             <div
-                className={"absolute transition duration-150 top-full left-3 bg-white py-2 px-4 shadow-md z-20 rounded-md max-w-[900px] min-w-[600px]"}>
+                className={"absolute transition duration-150 top-full left-3 bg-white py-2 pb-6 px-4 shadow-md z-20 rounded-md max-w-[900px] min-w-[600px]"}>
                 <InputClearable
                     placeholder={"Nội dung tìm kiếm tại đây"}
                     className={"w-full shadow-lg rounded-md h-[45px]"}
@@ -24,7 +25,113 @@ const FinancialCashFlowFilterButton:FC = () => {
                 <div className={"flex items-center mt-4"}>
                     <p className={"text-gray-500 mr-4"}>Phân loại 1</p>
                     <DropdownSearchable
-                        className={"w-full flex-1"}
+                        placeholder={"Phân loại 1"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                            {
+                                "_id": 2,
+                                "content":"Trần Thanh Quang 2"
+                            },
+                            {
+                                "_id": 3,
+                                "content":"Trần Thanh Quang 3"
+                            },
+                            {
+                                "_id": 4,
+                                "content":"Trần Thanh Quang 4"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 2</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 1"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                            {
+                                "_id": 2,
+                                "content":"Trần Thanh Quang 2"
+                            },
+                            {
+                                "_id": 3,
+                                "content":"Trần Thanh Quang 3"
+                            },
+                            {
+                                "_id": 4,
+                                "content":"Trần Thanh Quang 4"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Ngày tháng</p>
+                    <div className={"flex items-center"}>
+                        <div className={"w-1/2 flex items-center"}>
+                            <p className={"text-gray-500 mr-4"}>Từ</p>
+                            <DatePicker
+                                name="endDate"
+                                selected={null}
+                                onChange={(date: Date | null) =>
+                                    console.log("birthDate", date)
+                                }
+                            />
+                        </div>
+                        <div className={"w-1/2 flex items-center"}>
+                            <p className={"text-gray-500 mr-4"}>Đến</p>
+                            <DatePicker
+                                name="endDate"
+                                selected={null}
+                                onChange={(date: Date | null) =>
+                                    console.log("birthDate", date)
+                                }
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 3</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 3"}
+                        className={"w-full flex-1 border-b border-gray-200"}
                         focusedClass={"border-b border-primary"}
                         maxWidthInput={"max-w-none"}
                         isMultiple={true}
@@ -45,7 +152,184 @@ const FinancialCashFlowFilterButton:FC = () => {
                             id : "_id",
                             text : "content"
                         }}
+                        inlineSearch={true}
                     />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 4</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 4"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 5</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 5"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 5</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 5"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 6</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 6"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại 7</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại 7"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center mt-4"}>
+                    <p className={"text-gray-500 mr-4"}>Phân loại khác</p>
+                    <DropdownSearchable
+                        placeholder={"Phân loại khác"}
+                        className={"w-full flex-1 border-b border-gray-200"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        isMultiple={true}
+                        allowClearValueSingleInput={true}
+                        renderSelectedItem={item => (
+                            <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon}/>
+                                <span>{item.text}</span>
+                            </div>
+                        )}
+                        data={[
+                            {
+                                "_id": 1,
+                                "content":"Trần Thanh Quang"
+                            },
+                        ]}
+                        formatItem={{
+                            id : "_id",
+                            text : "content"
+                        }}
+                        inlineSearch={true}
+                    />
+                </div>
+                <div className={"flex items-center justify-end mt-5"}>
+                    <button onClick={() => setShowFilter(false)} className={"h-[45px] w-[117px] bg-gray-200 rounded mr-3"}>
+                        Bỏ qua
+                    </button>
+                    <button onClick={() => setShowFilter(false)} className={"h-[45px] w-[117px] bg-primary rounded text-white"}>
+                        Xác nhận
+                    </button>
                 </div>
             </div>}
         </div>
