@@ -3,11 +3,11 @@ import { FC, Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import cn from "classnames";
 
-import DocumentDropdown from "./components/DocumentDropdown";
+import DocumentDropdown from "../components/DocumentDropdown";
 
 import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
-import styles from './document.module.css';
+import styles from '../document.module.css';
 
 import { IPackage, IProjects } from "typings/document";
 
@@ -109,48 +109,56 @@ const DocumentProjectPage: FC = () => {
 
 			{/* Content */}
 			<div className="flex flex-1 flex-col overflow-hidden">
-				<div className="flex flex-wrap justify-start items-start content-start w-full px-4 pt-2 gap-x-2 text-black">
+				<div className="flex flex-wrap justify-start items-start content-start w-full px-4 gap-x-2 text-black">
 					<div className="relative inline-block">
-						<input type="text" placeholder="Nhập từ khóa tìm kiếm" className="inline-block px-4 py-1 border rounded-md focus:outline-none" style={{ minWidth: "300px" }} />
+						<input type="text" placeholder="Nhập từ khóa tìm kiếm" className="inline-block mt-2 px-4 py-1 border rounded-md focus:outline-none" style={{ minWidth: "300px" }} />
 					</div>
 					<DocumentDropdown
 						data={pkgs}
 						value={pkg.title}
 						onSelectValue={setPkg}
+						className="mt-2"
 					/>
 					<DocumentDropdown
 						data={subjects}
 						value={subject.title}
 						onSelectValue={setSubject}
+						className="mt-2"
 					/>
 					<DocumentDropdown
 						data={textProperties}
 						value={textProperty.title}
 						onSelectValue={setTextProperty}
+						className="mt-2"
 					/>
 					<DocumentDropdown
 						data={classifies}
 						value={classify.title}
 						onSelectValue={setClassify}
+						className="mt-2"
 					/>
 					<DocumentDropdown
 						data={storageAddresses}
 						value={storageAddress.title}
 						onSelectValue={setStorageAddress}
+						className="mt-2"
 					/>
 					<DocumentDropdown
 						data={dateReceipts}
 						value={dateReceipt.title}
 						onSelectValue={setDateReceipt}
+						className="mt-2"
 					/>
-					<button className="py-1 px-5 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md">Tra cứu</button>
-					<button className={cn(styles.button__green, "py-1 px-5 border hover:bg-opacity-70 text-white rounded-md")}>Lưu</button>
+					<button className="py-1 px-5 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md mt-2">Tra cứu</button>
+					<button className={cn(styles.button__green, "py-1 px-5 border hover:bg-opacity-70 text-white rounded-md mt-2")}>Lưu</button>
 				</div>
 				<div className="flex-1 overflow-y-auto mt-2">
 					<table className={cn(styles.table, styles.black, styles['text-normal'], 'border-separate space-x-0 space-y-0')}>
 						<thead>
 							<tr className="text-primary-gray">
-								<th>TT</th>
+								<th>
+									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+								</th>
 								<th className="pr-4">
 									<div className="flex">
 										<span className="pt-1 mr-6">
@@ -169,9 +177,9 @@ const DocumentProjectPage: FC = () => {
 								<th>Mã hiệu lưu</th>
 								<th className="whitespace-nowrap pr-2">Số lượng</th>
 								<th className="whitespace-nowrap pl-1 pr-2">Tình trạng</th>
-								<th className="w-min pl-1.5">Yêu cầu phản hồi</th>
+								<th className="w-min pl-1.5" style={{ minWidth: "50px" }}>Yêu cầu phản hồi</th>
 								<th>Ghi chú</th>
-								<th>Địa chỉ lưu trữ</th>
+								<th style={{ minWidth: "150px" }}>Địa chỉ lưu trữ</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -192,7 +200,9 @@ const DocumentProjectPage: FC = () => {
 								}, index) => {
 									return (
 										<tr key={index} className="text-left">
-											<td className="px-4"></td>
+											<td className="px-4">
+												<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+											</td>
 											<td className="pr-4">
 												<p>{content}</p>
 												<p className="mt-1.5 text-primary-gray">{created_by}</p>

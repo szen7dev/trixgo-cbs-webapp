@@ -1,27 +1,71 @@
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 import Comment from './Comment';
 import RootComment from './RootComment';
+import { CommentProps } from 'typings/common';
+import SocialRepository from "apis/social";
+import CommentContext from '../context/comment/comment.context';
 
-const comments = Array.from(Array(4).keys()).map((_, i) => ({
-	id: _,
-	name: "Phan Kiên Giang-TNC",
-	image: 'https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg'
-}))
+type Props = {
+	comments?: CommentProps[],
+	mediaID?: string,
+	totalRecord?: number,
+	limit?: number,
+	nextCursor?: string
+} & HTMLAttributes<HTMLUListElement>
 
-const RootCommentsList: FC<HTMLAttributes<HTMLUListElement>> = ({...props}) => {
+const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
+	const { state, dispatch } = useContext(CommentContext);
+	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
+	
+	useEffect(() => {
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
+	}, [comments?.length])
+
+	const handleClickViewMore = async () => {
+		const { error, data } = await SocialRepository.listComments({ 
+			lastestID: state.comments[0]._id,
+			mediaID: mediaID,
+			populates: JSON.stringify({
+				value: 'comment userCreate lastestReplyID',
+				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
+			}),
+			populates1: JSON.stringify({
+				value: 'comment userCreate',
+				select: '_id fullname image content files images amountCommentReply amountReaction'
+			}),
+		});
+		setAmountComment(amountComment - limit);
+
+		if(!error && data.listRecords.length){
+			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
+		}
+	}
+
 	return (
-		<ul {...props}>
-			{comments.map(comment => (
-				<li key={comment.id} className='mt-2.5'>
-					<RootComment
-						comment={comment}
-						// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
-						renderNestedComment={Comment}
-					/>
-				</li>
-			))}
-		</ul>
+		<>
+			{amountComment > 0 ? (
+				<div className="react__comments-header mt-3">
+					<div className='pl-11 mr-5'>
+						<button className='text-medium pb-2 mb-1.5 font-bold' onClick={handleClickViewMore}>
+							View more {amountComment} comment
+						</button>
+					</div>
+				</div>
+			) : ''}
+			<ul {...props}>
+				{(state.comments && state.comments.length) ? state.comments.map((comment: CommentProps) => (
+					<li key={comment._id} className='mt-2.5'>
+						<RootComment
+							comment={comment}
+							limit={limit}
+							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
+							renderNestedComment={Comment}
+						/>
+					</li>
+				)) : ''}
+			</ul>
+		</>
 	)
 }
 
-export default RootCommentsList
+export default RootCommentsList;

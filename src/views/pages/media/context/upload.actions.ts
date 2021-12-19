@@ -1,4 +1,3 @@
-import { FileProps } from "./../../../../typings/social.d";
 import uploadFileTypes from "./upload.types";
 
 import { TAction } from "./upload.d";

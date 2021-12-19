@@ -62,7 +62,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index }) => {
 				{/* Main images */}
 				<div className="flex flex-grow overflow-hidden">
 					<div className="flex items-center px-3 select-none">
-						<button className="disabled:opacity-30" disabled={imageIndex === 0} onClick={handlePreviousImage}>
+						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === 0} onClick={handlePreviousImage}>
 							<img src={iconNext} alt="next" className="react__slider-btn" />
 						</button>
 					</div>
@@ -70,7 +70,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index }) => {
 						<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].url} />
 					</div>
 					<div className="flex items-center px-3 select-none">
-						<button className="disabled:opacity-30" disabled={imageIndex === images.length - 1} onClick={handleNextImage}>
+						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === images.length - 1} onClick={handleNextImage}>
 							<img src={iconNext} alt="next" className="react__slider-btn transform rotate-180" />
 						</button>
 					</div>

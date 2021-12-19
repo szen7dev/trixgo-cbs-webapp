@@ -10,7 +10,14 @@ const mediaSlice = createSlice({
     initialState,
     reducers: {
         setMedias(state, action) {
-            state.data = action.payload;
+            state.data = {
+                ...state.data,
+                [action.payload._id]: action.payload.map((item: any) => {
+                    return {
+                        ...item??{},
+                    }
+                })
+            };
         },
         addMedia(state, action) {
             state.data = [action.payload, ...state.data];

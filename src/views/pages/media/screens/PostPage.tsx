@@ -1,4 +1,4 @@
-import { FC, FormEvent, Fragment, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 /**
  * LIBRARIES
@@ -19,6 +19,7 @@ import ViewPost from "../components/post/ViewPost";
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
+import RootCommentsList from '../components/RootCommentsList';
 
 /**
  * ASSETS
@@ -37,22 +38,27 @@ import '../style.css';
  * Types, Services, Utils
  */
 import { FileProps } from "typings/social";
-import { useSocial } from 'services/hooks/useSocial';
 import SocialRepository from "apis/social";
-import { typePostSelected } from '../utils';
+import { typePostSelected, abbreviateNumber } from '../utils';
+import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
+import CommentProvider from '../context/comment/comment.provider';
 
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia, createComment } = useSocial();
+	const { deleteMedia } = useSocial();
+	const { listComments, totalRecord, limit, nextCursor } = useCommentSocial({
+		mediaID,
+		key: `${mediaID}-list-comments`
+	});
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 
-	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));  
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
 	const media = data?.data;
 
-	if(!media){
+	if (!media) {
 		return <Loader className="border-primary" />;
 	}
 
@@ -60,8 +66,7 @@ const SocialPostPage: FC = () => {
 		refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
-	const toggleModalEditMediaEdit = (e: React.MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
+	const toggleModalEditMediaEdit = () => {
 		setModalEditMedia(!modalEditMedia);
 	}
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
@@ -71,19 +76,6 @@ const SocialPostPage: FC = () => {
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
-	}
-
-	const handleComment = async (text: string | FormEvent<HTMLDivElement>) => {
-		console.log({ text });
-		await createComment({
-			mediaID: media?._id || '',
-			content: text as string
-		})
-	}
-
-	const handleTextChange = (input: React.FormEvent<HTMLSpanElement>) => {
-		console.log({ INPUT: input.currentTarget.innerText });
-		// input.currentTarget.innerText = ''
 	}
 
 	const initialState = {
@@ -96,7 +88,7 @@ const SocialPostPage: FC = () => {
 	const files: FileProps[] = media.files || [];
 
 	return (
-		<>
+		<CommentProvider>
 			<div className="page__post text-sm custom-scroll">
 				<div className="page__post-container">
 					{/* Header */}
@@ -120,24 +112,32 @@ const SocialPostPage: FC = () => {
 									leaveFrom="transform opacity-100 scale-100"
 									leaveTo="transform opacity-0 scale-95"
 								>
-									<div className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-											<img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
-											In ấn
-										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-											<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
-											Copy link
-										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={toggleModalEditMediaEdit}>
-											<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
-											Cập nhật
-										</button>
-										<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={handleDeleteMedia}>
-											<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
-											Xóa
-										</button>
-									</div>
+									<Menu.Items className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
+										<Menu.Item>
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
+												In ấn
+											</button>
+										</Menu.Item>
+										<Menu.Item>
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
+												Copy link
+											</button>
+										</Menu.Item>
+										<Menu.Item onClick={toggleModalEditMediaEdit}>
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+												Cập nhật
+											</button>
+										</Menu.Item>
+										<Menu.Item onClick={handleDeleteMedia}>
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
+												Xóa
+											</button>
+										</Menu.Item>
+									</Menu.Items>
 								</Transition>
 							</Menu>
 						</div>
@@ -176,10 +176,10 @@ const SocialPostPage: FC = () => {
 						{/* Main post */}
 						<div className="post__content pb-2.5 flex-grow" >
 							<div className="post__content-images">
-								{images.length && images.slice(0, 3).map((image, i) => {
-									const id = image.file ? image.file._id : image._id; 
-									const name = image.file ? image.file.name : image.name; 
-									const url = image.file ? image.file.url : image.url; 
+								{images.length ? images.slice(0, 3).map((image, i) => {
+									const id = image.file ? image.file._id : image._id;
+									const name = image.file ? image.file.name : image.name;
+									const url = image.file ? image.file.url : image.url;
 
 									return (
 										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
@@ -191,7 +191,7 @@ const SocialPostPage: FC = () => {
 											)}
 										</div>
 									)
-								})}
+								}) : ''}
 							</div>
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
@@ -203,25 +203,31 @@ const SocialPostPage: FC = () => {
 								<span>
 									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
-										28,7k
+										0
 									</button>
 								</span>
 								<span>
 									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
 									<Link to="/social/comments">
-										21,3k
+										{abbreviateNumber(totalRecord)}
 									</Link>
 								</span>
 								<span>
 									<img src={iconEye} alt="View" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
-										11,2k
+										0
 									</button>
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
+							<RootCommentsList
+								className="px-5"
+								comments={listComments}
+								totalRecord={totalRecord}
+								limit={limit} nextCursor={nextCursor}
+								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" onSubmit={handleComment} onTextChange={handleTextChange} />
+								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />
 							</div>
 						</div>
 						{/* Post Suggest */}
@@ -297,7 +303,7 @@ const SocialPostPage: FC = () => {
 					<ViewPost show={modalShowImage.show} toggle={closeModalImage} images={images} index={modalShowImage.index} />
 				</div>
 			</ModalFullContainer>
-		</>
+		</CommentProvider>
 	);
 };
 
