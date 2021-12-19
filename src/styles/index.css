@@ -978,8 +978,8 @@ button {
   margin-left: -1.5em;
 }
 .form-check-input {
-  width: 24px;
-  height: 24px;
+  width: 16px;
+  height: 16px;
   /*margin-top: 0.25em;*/
   vertical-align: top;
   background-color: #fff;
@@ -1009,7 +1009,7 @@ button {
   right: 50%;
 }
 .paginate-wrapper {
-  height: calc(100vh - 4rem);
+  height: calc(100vh - 3.5rem);
 }
 .btn.disabled, .btn:disabled, button:disabled {
   color: #fff;
@@ -1065,4 +1065,7 @@ input[type="text"] {
   width: 50%;
   background: #666666;
   top: 50%;
+}
+.financial-planning-table .header {
+  top: 63px;
 }

@@ -35,3 +35,19 @@ export type ToggleTheme = {
   payload: Theme;
 };
 export type ThemeActions = ToggleTheme;
+
+export type RowPlanningFinancial = {
+  collapsed: boolean;
+  _id: string|number;
+  tt?: string|number;
+  content?: string;
+  ngayDuKien?: string;
+  duKienThu?: string|number;
+  thucTheThu?: string|number;
+  duKienChi?: string|number;
+  thucTeChi?: string|number;
+  ngayThucTe?: string;
+  hopDong?: string|number;
+  ghiChu?: string;
+  childrens?: RowPlanningFinancial[]
+}

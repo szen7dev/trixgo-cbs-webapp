@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
@@ -13,37 +13,19 @@ import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics"
 import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
-// import { useSocket } from "services/hooks/useSocket";
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	{ id: "1", title: 'Bài viết của tôi' },
-	{ id: "2", title: 'Phòng ban' },
-	{ id: "3", title: 'Cộng đồng' },
-	{ id: "4", title: 'Hệ thống' },
+	// { id: "1", title: 'Bài viết của tôi' },
+	// { id: "2", title: 'Phòng ban' },
+	// { id: "3", title: 'Cộng đồng' },
+	// { id: "4", title: 'Hệ thống' },
 ]
 
 const SocialHomePage: FC = () => {
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
-
-	// const socketRef: any = useSocket();
-
-	// useEffect(() => {
-		// const message = {
-        //     _id: '-1',
-        //     title: 'Hêlellele Minh!',
-        // };
-		
-		// const socket = socketRef.current;
-        // if (!socket) return;
-		// console.log("Data Send To Server: ", message);
-        // socket.emit('CLIENT_SEND_CHATTING_TEST', message);
-		// socket.on('SERVER_SEND_CHATTING_TEST', (res: any) => {
-		// 	console.log("Data Server Send To Client: ", res);
-		// });
-	// }, []);
 
 	return (
 		<>

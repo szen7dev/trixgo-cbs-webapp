@@ -66,3 +66,12 @@ export type AuthActions =
 export type UserInfoResponse = APIResponse & {
   data: User;
 };
+
+export type UpdateDevicePayload = {
+  platform: string,
+  deviceID: string,
+  deviceName: string,
+  registrationID: string,
+  oneSignalID: string,
+  userID?: string,
+}

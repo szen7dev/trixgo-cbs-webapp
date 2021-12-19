@@ -1,24 +1,40 @@
 import { useInfiniteQuery, useMutation } from "react-query";
+import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
-import { MediaProps, MediaPayload, CommentMediaPayload } from "typings/social";
+import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload } from "typings/social";
+import { CommentProps } from 'typings/common';
 
 type UseSocial = {
     listMedias: Array<MediaProps>,
     createMedia: (payload: MediaPayload) => Promise<void>,
     updateMedia: (payload: MediaPayload) => Promise<void>,
     deleteMedia: (id: string) => Promise<void>,
-    createComment: (payload: CommentMediaPayload) => Promise<void>,
     isLoadingListMedias: boolean,
     refetchListMedias: () => void,
     nextPageListMedias: () => void,
     prevPageListMedias: () => void,
     totalRecord: number | undefined,
     totalPages: number | undefined,
-    hasNextPage: boolean | undefined
+    hasNextPage: boolean | undefined,
 };
 
-export const useSocial = () : UseSocial => {
+type UseCommentSocial = {
+    createComment: (payload: CommentPayload) => Promise<CommentProps | undefined>,
+    deleteComment: (id: string) => Promise<void>,
+    listComments: Array<CommentProps>,
+    totalRecord: number,
+    limit: number,
+    nextCursor: string | undefined,
+    isLoadingListComments: boolean,
+    refetchListComments: () => void,
+    nextPageListComments: () => void,
+    prevPageListComments: () => void,
+}
+
+export const useSocial = (key?: string, type?: string) : UseSocial => {
+    const { current: socket }: any = useSocket();
+
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
@@ -34,11 +50,6 @@ export const useSocial = () : UseSocial => {
             SocialRepository.deleteMedia(id)
         );
 
-    const { mutateAsync: createCommentAsync } =
-        useMutation((payload: CommentMediaPayload) =>
-            SocialRepository.createComment(payload)
-        );
-
     const {
         isLoading: isLoadingListMedias,
         refetch: refetchListMedias,
@@ -48,10 +59,11 @@ export const useSocial = () : UseSocial => {
         hasNextPage: hasNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_medias",
+            key || "list_medias",
             async ({ pageParams }: any) => 
             SocialRepository.listMedias({ 
                 lastestID: pageParams ? pageParams : "",
+                type: type || 'company'
             }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
@@ -65,11 +77,14 @@ export const useSocial = () : UseSocial => {
     const createMedia = async (payload: MediaPayload) => {
         try {
             const { error, data, message } = await createMediaAsync(payload);
-            console.log({ error, data, message });
 
             if (!error) {
                 refetchListMedias();
+
                 toast.success('Tạo bài viết thành công');
+                socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
+                    receivers: data.receivers
+                });
             } else {
                 toast.error(message);
             }
@@ -84,8 +99,7 @@ export const useSocial = () : UseSocial => {
 
     const updateMedia = async (payload: MediaPayload) => {
         try {
-            const { error, data, message } = await updateMediaAsync(payload);
-            console.log({ error, data, message });
+            const { error, message } = await updateMediaAsync(payload);
 
             if (!error) {
                 toast.success('Cập nhật bài viết thành công');
@@ -103,8 +117,7 @@ export const useSocial = () : UseSocial => {
 
     const deleteMedia = async (id: string) => {
         try {
-            const { error, data, message } = await deleteMediaAsync(id);
-            console.log({ error, data, message });
+            const { error, message } = await deleteMediaAsync(id);
 
             if (!error) {
                 refetchListMedias();
@@ -121,14 +134,75 @@ export const useSocial = () : UseSocial => {
         }
     };
 
-    const createComment = async (payload: CommentMediaPayload) => {
+    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
+    const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
+
+    return {
+        createMedia,
+        updateMedia,
+        deleteMedia,
+        listMedias,
+        isLoadingListMedias,
+        refetchListMedias,
+        nextPageListMedias,
+        prevPageListMedias,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+    };
+};
+
+export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSocial => {
+    const { mutateAsync: createCommentAsync } =
+        useMutation((payload: CommentPayload) =>
+            SocialRepository.createComment(payload)
+        );
+
+    const { mutateAsync: deleteCommentAsync } =
+        useMutation((id: string) =>
+            SocialRepository.deleteComment(id)
+        );
+
+    const {
+        isLoading: isLoadingListComments,
+        refetch: refetchListComments,
+        data: dataListComments,
+        fetchNextPage: nextPageListComments,
+        fetchPreviousPage: prevPageListComments,
+    } =
+        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+            (payload && payload.key) || "list_comments",
+            async ({ pageParams }: any) => 
+            SocialRepository.listComments({ 
+                lastestID: pageParams ? pageParams : "",
+                populates: JSON.stringify({
+                    value: 'comment userCreate lastestReplyID',
+                    select: '_id fullname image content files images amountCommentReply amountReaction'
+                }),
+                populates1: JSON.stringify({
+                    value: 'comment userCreate',
+                    select: '_id fullname image content files images'
+                }),
+                ...payload
+            }),
+            {
+                getNextPageParam: ({ nextCursor }: any) => {
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+
+    const createComment = async (payload: CommentPayload) => {
         try {
             const { error, data, message } = await createCommentAsync(payload);
             console.log({ error, data, message });
 
-            if (error) {
-                toast.error(message);
-            }
+            error && toast.error(message);
+
+            return data;
         } catch (error: unknown) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -138,22 +212,36 @@ export const useSocial = () : UseSocial => {
         }
     };
 
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
-    const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
+    const deleteComment = async (id: string) => {
+        try {
+            const { error, message } = await deleteCommentAsync(id);
+            console.log({ error, message });
+
+            error && toast.error(message);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const listComments = [].concat(...(dataListComments?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean)
+    const totalRecord = dataListComments?.pages[0]?.data?.totalRecord || 0;
+    const nextCursor = dataListComments?.pages[0]?.data?.nextCursor;
+    const limit = dataListComments?.pages[0]?.data?.limit || 5;
 
     return {
-        createMedia,
-        updateMedia,
-        deleteMedia,
-        listMedias,
         createComment,
-        isLoadingListMedias,
-        refetchListMedias,
-        nextPageListMedias,
-        prevPageListMedias,
+        deleteComment,
+        listComments,
+        limit,
         totalRecord,
-        totalPages,
-        hasNextPage
-    };
-};
+        nextCursor,
+        isLoadingListComments,
+        refetchListComments,
+        nextPageListComments,
+        prevPageListComments,
+    }
+}

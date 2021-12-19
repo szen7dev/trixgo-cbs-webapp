@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Menu } from '@headlessui/react';
+import {NavLink, useParams} from "react-router-dom";
 
 import caretDown from "assets/images/icon-caret-down.png";
 import iconLabels from "assets/images/icon-labels.png";
@@ -174,7 +175,9 @@ const TasksPage: FC = () => {
                         </div>
                         <div className="functional-table-col-content pr-4">
                             <div className="functional-table-col-content-title font-bold mb-1">
-                                <span className="text-secondary-gray">TRX.PRD.BA.</span>Đối chiếu công nợ tài khoản giữa CPMI, PCO và TRIXO năm 2020 và năm 2021
+                                <NavLink to={"/pcm/detail/12345"}>
+                                    <span className="text-secondary-gray">TRX.PRD.BA.</span>Đối chiếu công nợ tài khoản giữa CPMI, PCO và TRIXO năm 2020 và năm 2021
+                                </NavLink>
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">
@@ -215,7 +218,9 @@ const TasksPage: FC = () => {
                         </div>
                         <div className="functional-table-col-content pr-4">
                             <div className="functional-table-col-content-title font-bold mb-1">
-                                <span className="text-secondary-gray">TRX.PRD.BA.</span>Đối chiếu công nợ tài khoản giữa CPMI, PCO và TRIXO năm 2020 và năm 2021
+                                <NavLink to={"/pcm/detail/12345"}>
+                                    <span className="text-secondary-gray">TRX.PRD.BA.</span>Đối chiếu công nợ tài khoản giữa CPMI, PCO và TRIXO năm 2020 và năm 2021
+                                </NavLink>
                             </div>
                             <div className="text-sm mb-2 italic text-primary-gray">Created: Nguyễn Hữu Hiệp-PGI - 28/04/2021 15:30</div>
                             <div className="tpf-attach flex flex-wrap">

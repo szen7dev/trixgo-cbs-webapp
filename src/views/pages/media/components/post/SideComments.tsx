@@ -56,7 +56,7 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 			{/* Footer */}
 			<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 				{/* File upload */}
-				<ReplyCommentField fileContainerClassName='border-t' inputContainerClassName="flex w-full p-2"/>
+				<ReplyCommentField fileContainerClassName='border-t' inputContainerClassName="flex w-full p-2" mediaID="" />
 			</div>
 			{/* </div> */}
 		</div>

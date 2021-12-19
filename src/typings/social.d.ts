@@ -3,25 +3,12 @@ import { CancelTokenSource } from "axios";
 
 export type MediaPayload = {
   mediaID?: string;
+  companyID?: string;
   title: string;
   content: string;
   files?: Array<FileProps>;
   images?: Array<FileProps>;
   type: string;
-};
-
-export type CommentMediaPayload = {
-  mediaID: string;
-  commentID?: string;
-  parentID?: string;
-  content: string;
-  files?: Array<FileProps>;
-  images?: Array<FileProps>;
-};
-
-export type CommentMediaResponse = APIResponse & {
-  data: CommentMediaProps;
-  message: string;
 };
 
 export type PostResponse = APIResponse & {
@@ -59,22 +46,23 @@ export type FileProps = {
 };
 
 export type ImageProps = {
+  file?: FileProp
   _id: number | string;
   url: string;
   name: string;
   size: number;
-  file?: {
-    _id: number | string;
-    url: string;
-    name: string;
-    size: number;
-  };
 };
 
 export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
+  type?: string,
+  mediaID?: string;
   companyID?: string;
+  parentID?: string;
+  filter?: string;
+  select?: string;
+  populates?: string;
 };
 
 export type ListMediasResponse = APIResponse & {
@@ -84,21 +72,6 @@ export type ListMediasResponse = APIResponse & {
     totalPages?: number;
   };
 };
-
-export type CommentMediaProps = {
-  _id: string;
-  media: string;
-  files: FileProps[] | undefined;
-  images: FileProps[] | undefined;
-  comment: string;
-  parent: string;
-  lastestReplyID: string;
-  author: {
-    _id: string;
-    image: string;
-    fullname: string;
-  };
-}
 
 export type MediaProps = {
   _id: string;
@@ -136,6 +109,10 @@ export type MediaProps = {
   createAt: string;
   createdAt: string;
   updatedAt: string;
+  receivers?: string[],
+  totalComments?: number,
+  totalWatched?: number,
+  totalReactions?: number,
 };
 
 export type FilePropsUpload = {
@@ -160,3 +137,25 @@ interface ModalProps {
   files?: FileProps[] | undefined;
   images?: FileProps[] | undefined;
 }
+
+export type ListCommentsPayload = {
+  key?: string,
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  companyID?: string;
+  parentID?: string;
+  filter?: string;
+  select?: string;
+  populates?: string;
+  populates1?: string
+};
+
+export type CommentPayload = {
+  mediaID: string;
+  commentID?: string;
+  parentID?: string;
+  content: string;
+  files?: Array<FileProps>;
+  images?: Array<FileProps>;
+};

@@ -6,9 +6,6 @@ import {NavLink} from "react-router-dom"
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
 import LogIcon from "assets/icons/Log";
 import FolderIcon from "assets/images/icons8-folder-100.svg";
-import DropdownSearchable from "../../../components/common/DropdownSearch";
-import Copy from "../../../assets/images/icons8-copy-96.png";
-import CloseRed from "../../../assets/icons/CloseRed";
 const AccountingTicketDetailPage:FC = () => {
     const params = useParams<{ id: string }>();
 

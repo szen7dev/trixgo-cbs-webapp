@@ -7,8 +7,8 @@ import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/social';
 
 const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { listMedias } = useSocial();
-
+	const { listMedias } = useSocial('list_medias_internal_company');
+	
 	return (
 		<div {...props}>
 			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
