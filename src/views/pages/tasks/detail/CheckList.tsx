@@ -10,7 +10,7 @@ const CheckList: FC = () => {
   return (
     <div>
       {/* Check list header */}
-      <div className="flex px-5 items-end justify-around mb-5">
+      <div className="flex px-5 items-end justify-between mb-5">
         <div>
           <input type="checkbox" />
           <span className="ml-2 text-x-large">Việc con</span>
