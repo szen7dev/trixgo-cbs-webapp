@@ -2,8 +2,8 @@ import React, {FC, useRef} from "react";
 import CollapseButton from "./CollapseButton";
 import {map as _map} from "lodash";
 import FinancialPlanningDetailChildRow from "./FinancialPlanningDetailChildRow";
-import RightClickMenu from "../../../../../components/common/RightClickMenu";
-import {RowPlanningFinancial} from "../../../../../typings/app";
+import RightClickMenu from "../../../../../../components/common/RightClickMenu";
+import {RowPlanningFinancial} from "../../../../../../typings/app";
 import MenuMainRow from "./MenuMainRow";
 
 type Props = {

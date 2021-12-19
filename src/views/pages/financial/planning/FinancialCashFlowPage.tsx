@@ -4,7 +4,6 @@ import Paginate from "../../../../components/common/Paginate";
 import TriangleDown from "assets/icons/TriangleDown";
 import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg"
 import SearchIcon from "assets/images/icons8-search-120.png";
-import SortingIcon from "assets/images/icons8-sorting-100.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
@@ -13,6 +12,8 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import PrintIcon from "assets/images/icons8-print-96.svg";
 import ThreeDotsVertical from "../../../../assets/images/icon-3dots-vertical.svg";
+import FinancialCashFlowFilterButton from "./components/FinancialCashFlow/FinancialCashFlowFilterButton";
+import SearchInput from "../../../../components/common/SearchInput";
 
 const FinancialCashFlowPage:FC = () => {
 
@@ -21,15 +22,9 @@ const FinancialCashFlowPage:FC = () => {
             <div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
                 <div className={"flex items-center flex-1"}>
                     <div className={"text-lg"}>Kế hoạch dòng tiền</div>
-                    <div className={"relative flex items-center ml-4"}>
-                        <img src={SearchIcon} alt={"icon search"} className={"absolute w-[14px] h-[14px] left-2"}/>
-                        <input className={"h-[30px] w-full bg-gray-50 pl-10 rounded"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}/>
-                    </div>
-                    <button className={"bg-gray-50 flex items-center justify-center ml-3 px-3 h-[30px] rounded hover:bg-blue-100"}>
-                        <img src={SortingIcon} alt={"icon sorting icon"}/>
-                        <span className={"ml-2 text-gray-500"}>Filter</span>
-                    </button>
-                    <div className={"mr-4 w-4 border-r border-gray-400 h-[16px]"}/>
+                    <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)}/>
+                    <FinancialCashFlowFilterButton/>
+                    <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"}/>
                     <button className={"flex items-center mr-3"}>
                         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon}/>
                     </button>

@@ -9,9 +9,13 @@ export const useSocket = (): UseSocket => {
     const socketRef: any = useRef<SocketIOClient.Socket | null>(null);
 
     useEffect(() => {
+        const BASE_URL = process.env.REACT_APP_ENV === 'development' 
+            ? process.env.REACT_APP_URL_SOCKET_LOCAL
+            : process.env.REACT_APP_URL_SOCKET_STAGING;
+
         const initSocket = () => {
             const token = localStorage.getItem('token') as string;
-            const url = `${process.env.REACT_APP_URL_SOCKET}?token=${JSON.parse(token)}`;
+            const url = `${BASE_URL}?token=${JSON.parse(token)}`;
 
             const socket = io(url, {
                 transports: ['websocket'],
