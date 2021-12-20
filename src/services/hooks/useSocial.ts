@@ -181,8 +181,8 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
                     select: '_id fullname image content files images amountCommentReply amountReaction'
                 }),
                 populates1: JSON.stringify({
-                    value: 'comment userCreate',
-                    select: '_id fullname image content files images'
+                    value: 'files images',
+                    select: '_id name url size type'
                 }),
                 ...payload
             }),

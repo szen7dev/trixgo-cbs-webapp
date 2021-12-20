@@ -32,8 +32,8 @@ const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedCom
 				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
 			}),
 			populates1: JSON.stringify({
-				value: 'comment userCreate',
-				select: '_id fullname image content files images amountCommentReply amountReaction'
+				value: 'files images',
+				select: '_id name url size type'
 			}),
 		});
 		setAmountReply(amountReply - limit);
