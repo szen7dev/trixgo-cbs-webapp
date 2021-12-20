@@ -2,16 +2,16 @@ import { FC, FormEvent, useRef, useState } from "react";
 
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
-
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
 import "react-day-picker/lib/style.css";
 
-import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import DropdownSearchable from "components/common/DropdownSearch";
+
+import CloseIcon from "assets/images/icon-small-bold-close.svg";
+import TagIcon from "assets/images/icons8-price-tag-96.svg";
 
 const NewHumanModal: FC = () => {
   const [openOption, setOpenOption] = useState(false);
@@ -105,80 +105,34 @@ const NewHumanModal: FC = () => {
                     {/* -------------- Line 1 --------------- */}
 
                     <div className="w-1/5 flex items-center">
-                      <span className="mr-4 text-primary-gray">Phân loại</span>
-                      <div className="relative flex items-center">
-                        <Field
-                          type="text"
-                          name="type"
-                          className="relative w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3 pr-6 "
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                          }}
-                          onClick={() => setOpenOption(!openOption)}
-                        />
-                        {type && (
-                          <img
-                            src={CloseIcon}
-                            alt="Delete"
-                            className="absolute w-3 h-3 right-2 cursor-pointer"
-                            onClick={() => setFieldValue("type", "")}
-                          />
-                        )}
-                        {openOption && (
-                          <div
-                            ref={ref}
-                            className="absolute top-7 w-64 h-80 text-sm bg-primary-light shadow-lg rounded border border-gray-200"
-                          >
-                            <div className="h-14 w-full flex items-center border-b border-gray-200">
-                              <input
-                                type="text"
-                                className="pl-6 outline-none"
-                                placeholder="Nhập nội dung"
-                              />
-                            </div>
-                            <div>
-                              <p className="h-14 w-full px-6 flex items-center cursor-pointer hover:bg-accent-light">
-                                Chính thức
-                              </p>
-                              <p className="h-14 w-full px-6 flex items-center cursor-pointer hover:bg-accent-light">
-                                Cộng tác viên
-                              </p>
-                              <p className="h-14 w-full px-6 flex items-center cursor-pointer hover:bg-accent-light">
-                                Không xác định thời hạn
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-1/5 flex items-center">
-                      <span className="mr-4 text-primary-gray">Phòng ban</span>
+                      <span className="w-3/12 text-primary-gray">
+                        Phân loại
+                      </span>
                       <DropdownSearchable
-                        placeholder="Phòng ban"
-                        className="p-0 outline-none"
+                        placeholder="Phân loại..."
+                        className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         showTriangle={false}
                         maxWidthInput="max-w-none"
-                        // maxHeightInput="max-h-8"
                         renderSelectedItem={(item) => (
-                          <div className={"flex items-center"}>
-                            <img alt={"tag icon"} src={TagIcon} />
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
                             <span>{item.text}</span>
                           </div>
                         )}
                         data={[
                           {
                             _id: 1,
-                            content: "Trần Thanh Quang",
+                            content: "Chính thức",
                           },
                           {
                             _id: 2,
-                            content: "Trần Thanh Quang 2",
+                            content: "Cộng tác viên",
                           },
                           {
                             _id: 3,
-                            content: "Trần Thanh Quang 3",
+                            content: "Không xác định thời hạn",
                           },
                         ]}
                         formatItem={{
@@ -187,23 +141,117 @@ const NewHumanModal: FC = () => {
                         }}
                         inlineSearch={true}
                       />
-                      {/* <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
-                      /> */}
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Chức vụ</span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-3/12 text-primary-gray">
+                        Phòng ban
+                      </span>
+                      <DropdownSearchable
+                        placeholder="Phòng ban..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Developer",
+                          },
+                          {
+                            _id: 2,
+                            content: "Sales",
+                          },
+                          {
+                            _id: 3,
+                            content: "Marketing",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Giới tính</span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">Chức vụ</span>
+                      <DropdownSearchable
+                        placeholder="Chức vụ..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Developer",
+                          },
+                          {
+                            _id: 2,
+                            content: "Sales",
+                          },
+                          {
+                            _id: 3,
+                            content: "Marketing",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">
+                        Giới tính
+                      </span>
+                      <DropdownSearchable
+                        placeholder="Giới tính..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
                   </div>
@@ -211,40 +259,156 @@ const NewHumanModal: FC = () => {
                   {/* -------------- Line 2 --------------- */}
 
                   <div className="flex items-center justify-between h-10 border-b border-gray-200">
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-6/12 text-primary-gray">
                         Tình trạng làm việc
                       </span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                      <DropdownSearchable
+                        placeholder="Tình trạng làm việc..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-6/12 text-primary-gray">
                         Tình trạng nhân sự
                       </span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                      <DropdownSearchable
+                        placeholder="Tình trạng nhân sự..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-5/12 text-primary-gray">
                         Tình trạng SBH
                       </span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                      <DropdownSearchable
+                        placeholder="Tình trạng SBH..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-3/12 text-primary-gray">
                         Gia đình CS
                       </span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                      <DropdownSearchable
+                        placeholder="Gia đình CS..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
                   </div>
@@ -252,49 +416,81 @@ const NewHumanModal: FC = () => {
                   {/* -------------- Line 3 --------------- */}
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Loại hợp đồng
                       </span>
-                      <input
-                        type="text"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                      <DropdownSearchable
+                        placeholder="Loại hợp đồng..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={[
+                          {
+                            _id: 1,
+                            content: "Nam",
+                          },
+                          {
+                            _id: 2,
+                            content: "Nữ",
+                          },
+                          {
+                            _id: 3,
+                            content: "Khác",
+                          },
+                        ]}
+                        formatItem={{
+                          id: "_id",
+                          text: "content",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Số hợp đồng
                       </span>
                       <Field
                         type="text"
                         name="contactNumber"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Số hợp đồng..."
+                        className="w-full h-6 outline-none"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-6/12 text-primary-gray">
                         Thông tin gia đình
                       </span>
                       <Field
                         type="text"
                         name="familyInfo"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Thông tin gia đình..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Thông tin khác
                       </span>
                       <Field
                         type="text"
                         name="otherInfo"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Thông tin khác..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -305,45 +501,55 @@ const NewHumanModal: FC = () => {
                   {/* -------------- Line 4 --------------- */}
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Họ và tên</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-3/12 text-primary-gray">
+                        Họ và tên
+                      </span>
                       <Field
                         type="text"
                         name="fullName"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Họ và tên"
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Mã hiệu</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">Mã hiệu</span>
                       <Field
                         type="text"
                         name="humanCode"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Mã hiệu..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Điện thoại</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-3/12 text-primary-gray">
+                        Điện thoại
+                      </span>
                       <Field
                         type="text"
                         name="phoneNumber"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Điện thoại..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Email</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-1/12 mr-4 text-primary-gray">
+                        Email
+                      </span>
                       <Field
                         type="text"
                         name="email"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Email..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -362,29 +568,27 @@ const NewHumanModal: FC = () => {
                         }
                         onDayChange={(day) => setFieldValue("birthDate", day)}
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày sinh...",
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Số định danh
                       </span>
                       <Field
                         type="text"
                         name="indentityCard"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Số định danh..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-3/12 mr-4 text-primary-gray">
+                      <span className="w-2/12 mr-4 text-primary-gray">
                         Ngày cấp
                       </span>
                       <DayPickerInput
@@ -393,20 +597,18 @@ const NewHumanModal: FC = () => {
                         }
                         onDayChange={(day) => setFieldValue("issuedDate", day)}
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày cấp...",
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Nơi cấp</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">Nơi cấp</span>
                       <Field
                         type="text"
                         name="issuedBy"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Nơi cấp..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -422,20 +624,22 @@ const NewHumanModal: FC = () => {
                       <Field
                         type="text"
                         name="address"
-                        className="w-52 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Nơi ở..."
+                        className="w-52 h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-3/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 text-primary-gray">
                         Thường trú
                       </span>
                       <Field
                         type="text"
                         name="resident"
-                        className="w-52 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Thường trú..."
+                        className="w-52 h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -446,20 +650,22 @@ const NewHumanModal: FC = () => {
                       <Field
                         type="text"
                         name="birthPlace"
-                        className="w-52 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Nơi sinh..."
+                        className="w-52 h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 text-primary-gray">
                         Nguyên quán
                       </span>
                       <Field
                         type="text"
                         name="fromPlace"
-                        className="w-52 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Nguyên quán"
+                        className="w-52 h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -470,32 +676,34 @@ const NewHumanModal: FC = () => {
                   {/* -------------- Line 7 --------------- */}
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">MST</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-1/12 text-primary-gray">MST</span>
                       <Field
                         type="text"
                         name="taxCode"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
-                        Số bảo hiểm
-                      </span>
-                      <Field
-                        type="text"
-                        name="insuranceNumber"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="MST..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 mr-4 text-primary-gray">
+                      <span className="w-4/12 text-primary-gray">
+                        Số bảo hiểm
+                      </span>
+                      <Field
+                        type="text"
+                        name="insuranceNumber"
+                        placeholder="Số bảo hiểm"
+                        className="w-full h-6 outline-none pl-3"
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
+                          handleBlur(e);
+                        }}
+                      />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-3/12 text-primary-gray">
                         Ngày nộp BH
                       </span>
                       <DayPickerInput
@@ -507,22 +715,20 @@ const NewHumanModal: FC = () => {
                           setFieldValue("insuranceDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày nộp BH...",
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Hệ số lương
                       </span>
                       <Field
                         type="text"
                         name="salaryFactor"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Hệ số lương..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -533,51 +739,55 @@ const NewHumanModal: FC = () => {
                   {/* -------------- Line 8 --------------- */}
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">Phụ cấp</span>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">Phụ cấp</span>
                       <Field
                         type="text"
                         name="bonus"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Phụ cấp..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Mức đóng BH
                       </span>
                       <Field
                         type="text"
                         name="salaryInsurance"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Mức đóng BH..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-4/12 text-primary-gray">
                         Người ký nhận
                       </span>
                       <Field
                         type="text"
                         name="signer"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Người ký nhận..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
                       />
                     </div>
-                    <div className="w-1/5">
-                      <span className="mr-4 text-primary-gray">
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-5/12 text-primary-gray">
                         Người ký sa thải
                       </span>
                       <Field
                         type="text"
                         name="fireSigner"
-                        className="w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3"
+                        placeholder="Người ký sa thải..."
+                        className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
                         }}
@@ -589,7 +799,7 @@ const NewHumanModal: FC = () => {
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
-                      <span className="w-8/12 mr-4 text-primary-gray">
+                      <span className="w-5/12 text-primary-gray">
                         Ngày bắt đầu làm việc
                       </span>
                       <DayPickerInput
@@ -601,16 +811,13 @@ const NewHumanModal: FC = () => {
                           setFieldValue("workStartDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày bắt đầu làm việc...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-5/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 mr-4 text-primary-gray">
                         Ngày chấm dứt
                       </span>
                       <DayPickerInput
@@ -620,16 +827,13 @@ const NewHumanModal: FC = () => {
                         }
                         onDayChange={(day) => setFieldValue("workEndDate", day)}
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày chấm dứt...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-5/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 mr-4 text-primary-gray">
                         Ngày bổ nhiệm
                       </span>
                       <DayPickerInput
@@ -641,16 +845,13 @@ const NewHumanModal: FC = () => {
                           setFieldValue("appointmentDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày bổ nhiệm...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-5/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 mr-4 text-primary-gray">
                         Thay đổi lương
                       </span>
                       <DayPickerInput
@@ -662,11 +863,8 @@ const NewHumanModal: FC = () => {
                           setFieldValue("salaryChangeDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Thay đổi lương...",
                         }}
                       />
                     </div>
@@ -676,7 +874,7 @@ const NewHumanModal: FC = () => {
 
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
-                      <span className="w-2/4 mr-4 text-primary-gray">
+                      <span className="w-4/12 text-primary-gray">
                         Ngày ký hợp đồng
                       </span>
                       <DayPickerInput
@@ -686,16 +884,13 @@ const NewHumanModal: FC = () => {
                         }
                         onDayChange={(day) => setFieldValue("contactDate", day)}
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày ký hợp đồng...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-2/4 mr-4 text-primary-gray">
+                      <span className="w-4/12 text-primary-gray">
                         Ngày hiệu lực HĐ
                       </span>
                       <DayPickerInput
@@ -707,16 +902,13 @@ const NewHumanModal: FC = () => {
                           setFieldValue("activeContactDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày hiệu lực HĐ...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-4/12 mr-4 text-primary-gray">
+                      <span className="w-3/12 text-primary-gray">
                         Thời hạn HĐ
                       </span>
                       <DayPickerInput
@@ -728,16 +920,13 @@ const NewHumanModal: FC = () => {
                           setFieldValue("contactRange", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Thời hạn HĐ...",
                         }}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
-                      <span className="w-5/12 mr-4 text-primary-gray">
+                      <span className="w-4/12 text-primary-gray">
                         Ngày nộp sổ BH
                       </span>
                       <DayPickerInput
@@ -749,11 +938,8 @@ const NewHumanModal: FC = () => {
                           setFieldValue("insuranceNoteDate", day)
                         }
                         inputProps={{
-                          className:
-                            "w-32 h-6 border border-gray-200 rounded-xl outline-none pl-3",
-                          placeholder: moment(Date.now())
-                            .format("DD/MM/YYYY")
-                            .toString(),
+                          className: "w-full h-6 outline-none pl-3",
+                          placeholder: "Ngày nộp sổ BH...",
                         }}
                       />
                     </div>
