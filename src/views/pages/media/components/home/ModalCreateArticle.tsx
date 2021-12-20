@@ -37,7 +37,7 @@ import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../../context/upload
 import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
 import { useAuth } from 'services/hooks/useAuth';
 import { useSocial } from 'services/hooks/useSocial';
-import { useFile as useUpload } from 'services/hooks/useUpload';
+import { useUpload } from 'services/hooks/useUpload';
 import { typeTextSelected } from '../../utils';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
@@ -85,42 +85,42 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		attribute: 'files' | 'images',
 		formik: FormikProps<MediaPayload>) => {
 
-		if (event?.target?.files?.length) {
-			// const imgLastKey = Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] || null;
-			// const fileLastKey = Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] || null;
+		if (!event.target.files || !event.target.files.length) return;
 
-			// Modify file to with key with each file;
-			const [files, images] = modifyUploadedFilesV2({
-				imgLastKey: Object.keys(uploads.images).length || null,
-				fileLastKey: Object.keys(uploads.files).length || null,
-			}, event.target.files);
+		// const imgLastKey = Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] || null;
+		// const fileLastKey = Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] || null;
 
-			setUploadImage(images);
-			setUploadFile(files);
+		// Modify file to with key with each file;
+		const [files, images] = modifyUploadedFilesV2({
+			imgLastKey: Object.keys(uploads.images).length || null,
+			fileLastKey: Object.keys(uploads.files).length || null,
+		}, event.target.files);
 
-			// Upload images
-			for (const [key, { file }] of Object.entries(images)) {
-				const { _id } = await addFileToUpload({
-					files: file,
-					progress: percentCompleted => {
-						console.log(`${percentCompleted}%`, key);
-						setUploadImageProgress(key, percentCompleted)
-					}
-				})
-				setIDImageUploaded(key, _id);
-			}
+		setUploadImage(images);
+		setUploadFile(files);
 
-			// Upload files
-			for (const [key, { file }] of Object.entries(files)) {
-				const { _id } = await addFileToUpload({
-					files: file,
-					progress: percentCompleted => {
-						console.log(`${percentCompleted}%`, key);
-						setUploadFileProgress(key, percentCompleted)
-					}
-				})
-				setIDFileUploaded(key, _id);
-			}
+		// Upload images
+		for (const [key, { file }] of Object.entries(images)) {
+			const { _id } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					console.log(`${percentCompleted}%`, key);
+					setUploadImageProgress(key, percentCompleted)
+				}
+			})
+			setIDImageUploaded(key, _id);
+		}
+
+		// Upload files
+		for (const [key, { file }] of Object.entries(files)) {
+			const { _id } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					console.log(`${percentCompleted}%`, key);
+					setUploadFileProgress(key, percentCompleted)
+				}
+			})
+			setIDFileUploaded(key, _id);
 		}
 	}
 
@@ -150,9 +150,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			default:
 				break;
 		}
-		refetchListMedias();
+		console.log({ values, uploads });
 
-		console.log({ values, uploads })
+		refetchListMedias();
 		toggle();
 		return [values, uploads];
 	};
