@@ -151,11 +151,11 @@ const NewHumanModal: FC = () => {
                         )}
                       </div>
                     </div>
-                    <div className="w-1/5 flex">
+                    <div className="w-1/5 flex items-center">
                       <span className="mr-4 text-primary-gray">Phòng ban</span>
                       <DropdownSearchable
                         placeholder="Phòng ban"
-                        className="w-32 h-8 p-0 border border-gray-200 rounded-xl outline-none"
+                        className="p-0 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         showTriangle={false}
