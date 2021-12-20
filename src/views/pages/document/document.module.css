@@ -92,9 +92,9 @@ td {
   line-height: 16.1px;
   border-bottom: 1px solid #CCCCCC;
   border-top: 1px solid #CCCCCC;
-  vertical-align: top;
-	padding-top: 12px;
-	padding-bottom: 12px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	vertical-align: middle;
 }
 .table thead tr th:nth-child(2) {
 	padding-top: 8px;
@@ -119,9 +119,9 @@ td {
 
 }
 
-.table tbody tr td:not(:first-child) {
-  padding-top: 15px;
-  padding-bottom: 12px;
+.table tbody tr td {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .table thead tr th:nth-child(2) {
