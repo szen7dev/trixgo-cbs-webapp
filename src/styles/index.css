@@ -1060,7 +1060,7 @@ input::placeholder {
   color: #d2d6db;
 }
 input[type="text"] {
-  min-height: 32px;
+  min-height: 24px;
 }
 .column-table-cell {
   display:table-row;

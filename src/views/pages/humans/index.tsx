@@ -6,10 +6,13 @@ import SearchIcon from "assets/images/icons8-search-120.png";
 import ListIcon from "assets/images/icon-bulleted-list.svg";
 import AddIcon from "assets/images/icon-add.svg";
 import NewHumanModal from "./components/NewHumanModal";
+import { useModal } from "services/hooks/useModal";
 
 const HumansPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
+
+  const { openModal } = useModal();
 
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
@@ -109,14 +112,23 @@ const HumansPage: FC = () => {
 
           <button
             className="flex items-center"
-            onClick={() => setOpenModal(!openModal)}
+            onClick={() =>
+              openModal(
+                <div
+                  className={
+                    "bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+                  }
+                >
+                  <NewHumanModal />
+                </div>
+              )
+            }
           >
             <img src={AddIcon} alt="Add" />
             <span className="ml-2 uppercase text-primary text-[13px]">
               Nhân sự mới
             </span>
           </button>
-          <NewHumanModal openModal={openModal} setOpenModal={setOpenModal} />
         </div>
       </div>
 
