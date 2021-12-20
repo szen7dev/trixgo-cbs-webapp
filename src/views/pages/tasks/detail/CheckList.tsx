@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useState } from "react";
+import DatePicker from "react-datepicker";
 
 import HumanAvatar from "assets/images/human-avatar.svg";
 import IconPlus from "assets/images/icons8-plus-math-100.png";
@@ -8,6 +9,7 @@ import LinkIcon from "assets/images/icon-linking.png";
 import CheckListItem from "./CheckListItem";
 
 const CheckList: FC = () => {
+  const [visibleForm, setVisibleForm] = useState(false);
   return (
     <div>
       {/* Check list header */}
@@ -154,41 +156,60 @@ const CheckList: FC = () => {
           </div>
           <div className="w-full h-0.5 bg-gray-200 " />
 
-          {/* Form Input */}
-          <div className="shadow-lg p-5">
-            <div className="flex">
-              <div className="w-3/6 border-b-2">
-                <input
-                  className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                  placeholder="Nội dung công việc"
-                />
+          {visibleForm && (
+            <div className="shadow-lg p-5">
+              <div className="flex">
+                <div className="w-3/6 border-b-2">
+                  <input
+                    className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                    placeholder="Nội dung công việc"
+                  />
+                </div>
+                <div className="w-2/6 mx-3 border-b-2">
+                  <input
+                    className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                    placeholder="Người thực hiện"
+                  />
+                </div>
+                <div className="w-1/6 border-b-2">
+                  <DatePicker
+                    wrapperClassName={"w-auto"}
+                    name="dealine"
+                    selected={null}
+                    customInput={
+                      <div className={"relative w-auto ml-2 min-h-fit"}>
+                        <input
+                          placeholder="Thời hạn"
+                          className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                        />
+                      </div>
+                    }
+                    onChange={(date: Date | null) =>
+                      console.log("dealine", date)
+                    }
+                  />
+                </div>
               </div>
-              <div className="w-2/6 mx-3 border-b-2">
-                <input
-                  className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                  placeholder="Người thực hiện"
-                />
-              </div>
-              <div className="w-1/6 border-b-2">
-                <input
-                  className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                  placeholder="Thời hạn"
-                />
-              </div>
-            </div>
 
-            <div className="flex justify-end mt-3">
-              <button className="px-3 py-2 rounded bg-gray-300 text-primary-gray">
-                Bỏ qua
-              </button>
-              <button className="mx-3 px-3 py-2 rounded bg-primary text-white">
-                Xác nhận
-              </button>
+              <div className="flex justify-end mt-3">
+                <button
+                  className="px-3 py-2 rounded bg-gray-300 text-primary-gray"
+                  onClick={() => setVisibleForm(false)}
+                >
+                  Bỏ qua
+                </button>
+                <button
+                  className="mx-3 px-3 py-2 rounded bg-primary text-white"
+                  onClick={() => setVisibleForm(false)}
+                >
+                  Xác nhận
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="shadow-lg mt-5 pb-5 px-5">
-            <button>
+            <button onClick={() => setVisibleForm(true)}>
               <div className="flex items-center text-green-success font-bold">
                 <img src={IconPlus} alt="icon" className="w-4 h-4" />
                 <span className="ml-1">Tạo mới</span>
