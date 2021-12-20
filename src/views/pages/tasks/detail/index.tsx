@@ -15,6 +15,7 @@ import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
+import RelatedFeedback from "./RelatedFeedback";
 
 const TaskDetailPage: FC = () => {
   return (
@@ -74,18 +75,21 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="w-full h-full px-28 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center w-full h-full px-28 bg-gray-100 task-management-content overflow-auto">
         {/*_____________task title______________*/}
-        <div className="bg-white p-5 flex flex-col space-y-2">
+        <div
+          className="bg-white p-5 flex flex-col space-y-2"
+          style={{ width: 1100 }}
+        >
           <span>
             <span className="text-xl leading-8">
               Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
               dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
             </span>
-            <span className="text-white text-xs bg-blue-500 rounded-xl px-2 py-1 mx-3">
+            <span className="inline-block text-white text-xs bg-blue-500 rounded-xl px-2 py-1 mx-3">
               Đang triển khai
             </span>
-            <span className="text-white text-xs rounded-xl px-2 py-1 bg-red-500">
+            <span className="inline-block text-white text-xs rounded-xl px-2 py-1 bg-red-500">
               Cao
             </span>
           </span>
@@ -138,10 +142,10 @@ const TaskDetailPage: FC = () => {
         </div>
 
         {/*_____________task detail______________*/}
-        <div className="bg-white mt-2 flex py-5 pr-5">
+        <div className="flex justify-center bg-white mt-2">
           {/*_____________task content______________*/}
-          <div className="w-3/4">
-            <div className="pl-5 pr-8">
+          <div className="w-[791px]">
+            <div className="pl-5 pr-8 pt-5">
               <div>
                 <p className="text-[13px]">
                   Kính gửi Chủ Đầu Tư và Ban QLDA,
@@ -163,10 +167,13 @@ const TaskDetailPage: FC = () => {
             <div className="px-5 mt-10">
               <PriceApprovalInfo />
             </div>
+            <div className="px-5 mt-10">
+              <RelatedFeedback />
+            </div>
           </div>
 
           {/*_____________task sidebar______________*/}
-          <div className="w-1/4">
+          <div className="w-[309px] px-5 pt-5">
             <SideBar />
           </div>
         </div>

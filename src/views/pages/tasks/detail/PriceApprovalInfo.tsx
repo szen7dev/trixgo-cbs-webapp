@@ -4,7 +4,7 @@ const PriceApprovalInfo: FC = () => {
   return (
     <>
       <p className="text-x-large my-5">Giá trị đệ trình/phê duyệt</p>
-      <div className="flex items-center rounded p-5 bg-green-100 border-2 border-green-300">
+      <div className="flex items-center rounded p-5 bg-blue-100 border-2 border-primay-border">
         <div className="w-3/4">
           <div>
             <span className="text-[13px] text-primary-gray">
