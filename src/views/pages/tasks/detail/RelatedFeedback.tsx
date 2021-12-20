@@ -3,9 +3,12 @@ import { FC, useState } from "react";
 import FeedbackItem from "./FeedbackItem";
 import IconDownload from "assets/images/icons8-reply-arrow-96.svg";
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
+import AttachIcon from "assets/images/icons8-attach-50.png";
 
 const RelatedFeedback: FC = () => {
   const [isExpand, setIsExpand] = useState(true);
+  const [visibleForm, setVisibleForm] = useState(false);
+
   return (
     <div>
       {/* Header */}
@@ -51,12 +54,59 @@ const RelatedFeedback: FC = () => {
         <FeedbackItem expanded={isExpand} />
       </div>
 
-      <div>
-        <button className="flex items-center px-3 py-1 rounded-t-sm border-2 hover:bg-gray-200">
-          <img src={IconDownload} alt="Rely" className="w-6" />
-          <span className="mx-1 text-[13px]">Phản hồi</span>
-        </button>
-      </div>
+      {visibleForm ? (
+        <div className="ml-16">
+          <div className="w-full border-2 rounded my-2">
+            <textarea
+              className="w-full focus: outline-none p-3"
+              placeholder="Biên soạn nội dung (sẽ sử dụng thư viện Editor đổ vào khung này-sử dụng Tiny)"
+              rows={10}
+            />
+          </div>
+          <div className="flex justify-between mt-3">
+            <label className="w-10 h-10">
+              <img
+                src={AttachIcon}
+                alt="Icon attach"
+                className="h-6 w-6 transform -rotate-45"
+              />
+              <input
+                type="file"
+                name="files"
+                id="file"
+                className="hidden"
+                accept="image/*"
+                multiple
+              />
+            </label>
+
+            <div>
+              <button
+                className="px-3 py-2 rounded bg-gray-300 text-primary-gray"
+                onClick={() => setVisibleForm(false)}
+              >
+                Bỏ qua
+              </button>
+              <button
+                className="mx-3 px-3 py-2 rounded bg-primary text-white"
+                onClick={() => setVisibleForm(false)}
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <button
+            className="flex items-center px-3 py-1 rounded-t-sm border-2 hover:bg-gray-200"
+            onClick={() => setVisibleForm(true)}
+          >
+            <img src={IconDownload} alt="Rely" className="w-6" />
+            <span className="mx-1 text-[13px]">Phản hồi</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
