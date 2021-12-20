@@ -10,7 +10,8 @@ import RemoveIcon from "assets/images/icons8-remove.svg";
 import IconPrint from "assets/images/icons8-print-32.png";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
-import IconStar from "assets/images/icon-star-filled.png";
+import IconStar from "assets/images/icons8-star-96.png";
+import MoveStockIcon from "assets/images/icons8-move-stock-96.svg"
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
@@ -81,10 +82,15 @@ const TaskDetailPage: FC = () => {
           className="bg-white p-5 flex flex-col space-y-2"
           style={{ width: 1100 }}
         >
-          <span>
-            <span className="text-xl leading-8">
-              Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
-              dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
+          <span className="text-3x-large leading-8">
+            Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
+            dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
+            <span className="mx-2">
+              <img
+                className="inline h-[24px] w-[24px]"
+                src={IconStar}
+                alt="Star"
+              />
             </span>
             <span className="inline-block text-white text-xs bg-blue-500 rounded-xl px-2 py-1 mx-3">
               Đang triển khai
@@ -101,8 +107,8 @@ const TaskDetailPage: FC = () => {
                 <span className="text-[13px] text-primary-gray mx-2">
                   CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
                 </span>
-                <div className="tpf-param-star tpf-param-star-active">
-                  <img className="h-6 w-6" src={IconStar} alt="Star" />
+                <div>
+                  <img className="h-6 w-6" src={MoveStockIcon} alt="Move stock icon" />
                 </div>
               </div>
               <div className="flex items-end">
