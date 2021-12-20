@@ -90,6 +90,7 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
 import DocumentHomePage from "views/pages/document/screens/DocumentHomePage";
 import DocumentDashboardPage from "views/pages/document/screens/DocumentDashboardPage";
+import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 //Financial
@@ -355,7 +356,7 @@ const Routes: FC = () => {
                     <Switch>
                       <Route exact path="/document/home" component={DocumentHomePage} />
                       <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
-                      <Route exact path="/document/project/:id/document" component={DocumentProjectPage} />
+                      <Route path="/document/project/:id/document" component={DocumentLayout} />
                       <Route path="/document/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>

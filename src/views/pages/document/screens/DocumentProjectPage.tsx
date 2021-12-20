@@ -1,12 +1,10 @@
 import { FC, Fragment, useState } from "react";
 
-import { Menu, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import cn from "classnames";
 
 import DocumentDropdown from "../components/DocumentDropdown";
 
-import iconTrash from 'assets/images/icons8-remove.svg';
-import iconPencil from 'assets/images/icons8-pencil.svg';
 import styles from '../document.module.css';
 
 import { IPackage, IProjects } from "typings/document";
@@ -15,15 +13,6 @@ import ButtonMore from "../components/common/ButtonMore";
 import SearchInput from "components/common/SearchInput";
 import DropdownFilterButton from "../components/DocumentFilterButton";
 import GroupActions from "../components/projects/GroupActions";
-import Paginate from "components/common/Paginate";
-
-const tabs = [
-	{ id: "list", title: "List" },
-	{ id: "x", title: "Phân loại" },
-	{ id: "structure", title: "Thư mục" },
-	{ id: "report", title: "Báo cáo" },
-	{ id: "history", title: "Lịch sử upload file" },
-]
 
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i,
@@ -40,24 +29,13 @@ const data: Array<IProjects> = Array.from(Array(30).keys()).map((_, i) => ({
 	count: 12,
 	signed: false,
 	require_response: true,
-	note: null,
+	note: 'Có bản gốc đi kèm',
 	address: "Cặp F1, Ngăn A5, tủ A"
 }))
 
 const DocumentProjectPage: FC = () => {
-	/**
-	 * ? Define orders:
-	 * ? 1. redux definition
-	 * ? 2. react definition
-	 * ? 3. third party libraries definition
-	 * ? 4. libs, services, data definition
-	 * ? 5. helpers, util definition
-	 * ? 6. local definition
-	 */
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0])
 
-	const [tab, setTab] = useState<string>(tabs[0].id)
-	const [page] = useState<number>(1);
 	const [isShow, setIsShow] = useState<boolean>(false);
 
 	const toggleModalConfirm = () => {
@@ -65,26 +43,7 @@ const DocumentProjectPage: FC = () => {
 	}
 
 	return (
-		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
-			{/* Header */}
-			<div className="px-2 flex justify-between w-full text-primary-gray bg-white border border-gray-300">
-				<div className="flex flex-1 text-medium">
-					{tabs.map(({ id, title }) => (
-						<button
-							key={id}
-							className={cn("border-b-2 border-transparent mx-2 py-2.5", { 'border-primary text-black font-bold': id === tab })}
-							style={{ minWidth: "64px" }}
-							onClick={() => setTab(id)}
-						>
-							{title}
-						</button>
-					))}
-				</div>
-				<div className="py-1 flex items-center">
-
-				</div>
-			</div>
-
+		<>
 			{/* Content */}
 			<div className="flex flex-1 flex-col overflow-hidden">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black">
@@ -102,60 +61,55 @@ const DocumentProjectPage: FC = () => {
 					<ButtonMore />
 				</div>
 				<div className="flex-1 overflow-y-auto">
-					<table className={cn(styles.table, 'text-black text-medium border-separate space-x-0 space-y-0')}>
-						<thead>
-							<tr className="text-primary-gray whitespace-nowrap">
-								<th className="px-4">
+					<table className="text-black text-medium border-separate space-x-0 space-y-0" style={{ borderSpacing: 0 }}>
+						<thead className="">
+							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Nội dung
 									</span>
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Chủ thể ban hành
 									</span>
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Mã hiệu
 									</span>
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Ngày văn bản
 									</span>
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Mã hiệu lưu
 									</span>
 								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Số lượng
 									</span>
 								</th>
-								<th>
-									<span className="pl-2 border-l border-cbs-border">
-										Tình trạng
-									</span>
-								</th>
-								<th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
 										Ghi chú
 									</span>
 								</th>
-								<th style={{ minWidth: "150px" }}>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
 									<span className="pl-2 border-l border-cbs-border">
 										Địa chỉ lưu trữ
 									</span>
 								</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody className="text-small">
 							{
 								data.map(({
 									id,
@@ -170,22 +124,21 @@ const DocumentProjectPage: FC = () => {
 									address,
 								}, index) => {
 									return (
-										<tr key={index} className="text-left">
-											<td className="px-4">
+										<tr key={index} className="text-left hover:bg-cbs-active-comment">
+											<td className="px-4 py-2.5">
 												<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 											</td>
-											<td className="pr-4">
+											<td className="px-2 w-[271px] py-2.5">
 												<p>{content}</p>
 												<p className="mt-1.5 text-primary-gray">{created_by}</p>
 											</td>
-											<td className="pl-4 pr-3">{publisher}</td>
-											<td className="pl-3 pr-0.5">{code}</td>
-											<td className="px-0.5">{created_at}</td>
-											<td>{code}</td>
-											<td className="whitespace-nowrap pr-2" style={{ width: '1%' }}>{count}</td>
-											<td className="whitespace-nowrap pl-1" style={{ width: '1%' }}>{signed ? "Đã ký" : "Chưa ký"}</td>
-											<td>{note}</td>
-											<td>{address}</td>
+											<td className="py-2.5 px-2 w-[150px]">{publisher}</td>
+											<td className="py-2.5 px-2 w-[166px]">{code}</td>
+											<td className="py-2.5 px-2 w-24 text-right">{created_at}</td>
+											<td className="py-2.5 px-2">{code}</td>
+											<td className="py-2.5 px-2 whitespace-nowrap text-right min-w-[85px]" style={{ width: '1%' }}>{count}</td>
+											<td className="py-2.5 px-2 box-border">{note}</td>
+											<td className="py-2.5 px-2">{address}</td>
 										</tr>
 									)
 								})
@@ -271,7 +224,7 @@ const DocumentProjectPage: FC = () => {
 					</div>
 				</div>
 			</Transition.Root>
-		</div>
+		</>
 	);
 };
 
