@@ -82462,7 +82462,7 @@ input::placeholder {
 }
 
 input[type="text"] {
-  min-height: 32px;
+  min-height: 24px;
 }
 
 .column-table-cell {
