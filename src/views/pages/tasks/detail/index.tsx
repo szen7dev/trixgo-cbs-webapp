@@ -75,7 +75,7 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="flex flex-col items-center w-full h-full px-28 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center w-full h-full px-28 pb-5 bg-gray-100 task-management-content overflow-auto">
         {/*_____________task title______________*/}
         <div
           className="bg-white p-5 flex flex-col space-y-2"
@@ -167,7 +167,7 @@ const TaskDetailPage: FC = () => {
             <div className="px-5 mt-10">
               <PriceApprovalInfo />
             </div>
-            <div className="px-5 mt-10">
+            <div className="px-5 my-10">
               <RelatedFeedback />
             </div>
           </div>
