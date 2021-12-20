@@ -51,7 +51,7 @@ const RelatedFeedback: FC = () => {
       <div>
         <FeedbackItem expanded={isExpand} />
         <FeedbackItem expanded={isExpand} />
-        <FeedbackItem expanded={isExpand} />
+        <FeedbackItem expanded={isExpand} showImageTest={true} />
       </div>
 
       {visibleForm ? (

@@ -85,10 +85,11 @@ const CheckList: FC = () => {
         )}
       </div>
 
-      <div className="rounded-sm border-2 border-slate-400">
+      <div className="rounded-sm border border-slate-400">
         {/* Check list items */}
         <div className="shadow-lg">
           <div className="w-full">
+            <CheckListItem />
             <CheckListItem />
             <div className="flex justify-between px-5 pt-4 pb-3">
               <div className="flex items-start w-3/4">
@@ -117,7 +118,7 @@ const CheckList: FC = () => {
                 <span className="ml-2 text-[13px]">18/12/21</span>
               </div>
             </div>
-            <div className="w-full h-0.5 bg-gray-200" />
+            <div className="w-full h-px bg-gray-200" />
           </div>
 
           <div className="w-full">
@@ -144,7 +145,7 @@ const CheckList: FC = () => {
                 <span className="ml-2 text-[13px]">18/12/21</span>
               </div>
             </div>
-            <div className="w-full h-0.5 bg-gray-200" />
+            <div className="w-full h-px bg-gray-200" />
           </div>
 
           <div className="w-full">
@@ -187,7 +188,7 @@ const CheckList: FC = () => {
                 </button>
               </div>
             </div>
-            <div className="w-full h-0.5 bg-gray-200" />
+            <div className="w-full h-px bg-gray-200" />
           </div>
         </div>
 
@@ -195,7 +196,7 @@ const CheckList: FC = () => {
           <div className="w-full flex justify-center my-5">
             <span className="text-primary">Xem thêm (125)</span>
           </div>
-          <div className="w-full h-0.5 bg-gray-200 " />
+          <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (
             <div className="shadow-lg p-5">

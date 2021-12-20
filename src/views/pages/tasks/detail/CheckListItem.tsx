@@ -54,7 +54,7 @@ const CheckListItem: FC = () => {
           </div>
         )}
       </div>
-      <div className="w-full h-0.5 bg-gray-200" />
+      <div className="w-full h-px bg-gray-200" />
     </div>
   );
 };

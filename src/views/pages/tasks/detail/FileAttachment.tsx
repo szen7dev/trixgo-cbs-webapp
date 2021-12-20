@@ -8,7 +8,7 @@ import ExcelIcon from "assets/images/icons8-microsoft-excel-2019-48.png";
 const FileAttachment: FC = () => {
   return (
     <div className="grid grid-cols-2 gap-1">
-      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border-2 border-slate-400">
+      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
         <a href="/">
           <div className="flex">
             <div>
@@ -28,7 +28,7 @@ const FileAttachment: FC = () => {
           </div>
         </a>
       </div>
-      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border-2 border-slate-400">
+      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
         <a href="/">
           <div className="flex">
             <div>
@@ -48,7 +48,7 @@ const FileAttachment: FC = () => {
           </div>
         </a>
       </div>
-      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border-2 border-slate-400">
+      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
         <a href="/">
           <div className="flex">
             <div>
@@ -68,7 +68,7 @@ const FileAttachment: FC = () => {
           </div>
         </a>
       </div>
-      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border-2 border-slate-400">
+      <div className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
         <a href="/">
           <div className="flex">
             <div>
