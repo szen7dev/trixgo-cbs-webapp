@@ -81502,7 +81502,6 @@ button {
 
 .t-leftsidebar-navigation-container {
   height: 100%;
-  overflow: auto;
   padding: 15px 10px 10px;
   background-color: #f5f6f9;
 }
@@ -81551,6 +81550,16 @@ button {
   filter: invert(56%) sepia(50%) saturate(6891%) hue-rotate(196deg)
     brightness(98%) contrast(89%);
   padding: 6px;
+}
+
+.t-leftsidebar-navigation-type2 .t-leftsidebar-navigation-container {
+  padding: 0;
+}
+
+.t-link-menu-item:hover, .t-link-menu-item.active {
+  color: #0060E1;
+  font-weight: bold;
+  background-color: #E6F1FF;
 }
 
 .tm-right-sidebar {
