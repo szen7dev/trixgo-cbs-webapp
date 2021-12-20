@@ -76,7 +76,7 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="flex flex-col items-center w-full h-full px-28 pb-5 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center pb-5 bg-gray-100 task-management-content overflow-auto">
         {/*_____________task title______________*/}
         <div
           className="bg-white p-5 flex flex-col space-y-2"
