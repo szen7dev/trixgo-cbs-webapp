@@ -43,7 +43,6 @@ const getType = (key: number) => {
 }
 
 const getDate = (time: number): number => {
-	// console.log(new Date((new Date()).setDate((new Date()).getDate() - 1 * time)))
 	return (new Date()).setDate((new Date()).getDate() - 1 * time);
 }
 const getClass = (date: number) => {

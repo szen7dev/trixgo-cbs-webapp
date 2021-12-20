@@ -1,10 +1,10 @@
-import { FC, Fragment, useState } from "react";
-
 import { Route, RouteComponentProps } from "react-router-dom";
 import TabsList from "../components/common/TabsList";
 import DocumentFolderPage from "../screens/DocumentFolderPage";
+import DocumentHistoryPage from "../screens/DocumentHistoryPage";
 import DocumentProfilePage from "../screens/DocumentProfilePage";
 import DocumentProjectPage from "../screens/DocumentProjectPage";
+import DocumentReportPage from "../screens/DocumentReportPage";
 
 const tabs = [
 	{ id: "list", title: "List", path: '/' },
@@ -30,7 +30,8 @@ const DocumentLayout: React.FC<RouteComponentProps> = ({ match }) => {
 				<Route path={match.url + '/'} exact component={DocumentProjectPage} />
 				<Route path={match.url + '/1'} component={DocumentProfilePage} />
 				<Route path={match.url + '/2'} component={DocumentFolderPage} />
-				<Route path={match.url + '/3'} component={DocumentProfilePage} />
+				<Route path={match.url + '/3'} component={DocumentReportPage} />
+				<Route path={match.url + '/4'} component={DocumentHistoryPage} />
 			</div>
 		</div>
 	);
