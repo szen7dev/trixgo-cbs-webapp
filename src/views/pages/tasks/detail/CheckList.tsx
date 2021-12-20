@@ -6,42 +6,83 @@ import IconPlus from "assets/images/icons8-plus-math-100.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
+import DotsVerticalIcon from "assets/icons/DotsVertical";
 import CheckListItem from "./CheckListItem";
 
 const CheckList: FC = () => {
   const [visibleForm, setVisibleForm] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+  };
+
   return (
     <div>
       {/* Check list header */}
-      <div className="flex px-5 items-end justify-between mb-5">
-        <div>
-          <input type="checkbox" />
-          <span className="ml-2 text-x-large">Việc con</span>
+      <div
+        className={`${
+          selectAll ? "mb-1" : "mb-5"
+        } flex px-5 items-center justify-between`}
+      >
+        <div className={`${selectAll ? "" : "w-1/6"} `}>
+          <input
+            type="checkbox"
+            checked={selectAll}
+            onChange={handleSelectAll}
+          />
+          {!selectAll && <span className="ml-2 text-x-large">Việc con</span>}
         </div>
-        <button className="border-b-2 border-primary px-2">
-          <span className="font-bold">Tất cả (12)</span>
-        </button>
-        <button className="px-2">
-          <span className="text-primary-gray text-xs">Triển khai</span>
-        </button>
-        <button className="px-2">
-          <span className="text-primary-gray text-xs">Hoàn thành</span>
-        </button>
 
-        <span>|</span>
+        {selectAll ? (
+          <div className="flex justify-between w-full ml-5">
+            <div className="flex items-center">
+              <button className="mx-2">
+                <img
+                  className="w-6"
+                  src={SendEmailIcon}
+                  alt="Send email icon"
+                />
+              </button>
+              <button className="mx-2">
+                <img className="w-6" src={IconPencil} alt="Pencil icon" />
+              </button>
+              <button className="mx-2">
+                <img className="w-6" src={LinkIcon} alt="Link icon" />
+              </button>
+            </div>
+            <button className="text-[13px] w-10 h-10 flex justify-center items-center rounded-full bg-lighter-gray">
+              <DotsVerticalIcon />
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-between w-5/6">
+            <button className="border-b-2 border-primary px-2">
+              <span className="font-bold">Tất cả (12)</span>
+            </button>
+            <button className="px-2">
+              <span className="text-primary-gray text-xs">Triển khai</span>
+            </button>
+            <button className="px-2">
+              <span className="text-primary-gray text-xs">Hoàn thành</span>
+            </button>
 
-        <div className="flex items-center">
-          <div className="w-3 h-3 bg-red-500" />
-          <span className="ml-1 text-primary-gray">Quá hạn</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-3 h-3 bg-yellow-500" />
-          <span className="ml-1 text-primary-gray">Tuần tới</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-3 h-3 bg-green-500" />
-          <span className="ml-1 text-primary-gray"> {">7 ngày"}</span>
-        </div>
+            <span>|</span>
+
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-red-500" />
+              <span className="ml-1 text-primary-gray">Quá hạn</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-yellow-500" />
+              <span className="ml-1 text-primary-gray">Tuần tới</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-green-500" />
+              <span className="ml-1 text-primary-gray"> {">7 ngày"}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="rounded-sm border-2 border-slate-400">
