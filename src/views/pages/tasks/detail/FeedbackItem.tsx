@@ -57,7 +57,7 @@ const FeedbackItem: FC<Props> = ({ expanded, showImageTest }) => {
               {/* List file */}
               {!showImageTest ? (
                 <div className="flex w-full my-2">
-                  <div className="w-5/8 bg-gray-100 p-2 rounded-sm border-2 border-slate-400">
+                  <div className="w-5/8 bg-gray-100 p-2 rounded-sm border border-slate-400">
                     <a href="/">
                       <div className="flex">
                         <div>
