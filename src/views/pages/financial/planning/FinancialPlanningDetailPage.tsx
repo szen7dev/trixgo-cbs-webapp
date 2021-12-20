@@ -8,20 +8,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {RootState} from "../../../../redux/reducer";
 import {setMainRowCollapsed} from "../../../../redux/reducer/FinancialPlanningDetailSlice";
+import InputWidthAdjust from "./components/FinancialCashFlowDetail/InputWidthAdjust";
+import AccessingUsers from "./components/FinancialCashFlowDetail/AccessingUsers";
+import ShareButton from "./components/FinancialCashFlowDetail/ShareButton";
 
 const FinancialPlanningDetailPage:FC = () => {
-    const [valueHeading, setValueHeading] = useState("Kế hoạch dòng tiền T12.21");
-    const [headingWidthInput, setHeadingWidthInput] = useState(0);
-
     const params = useParams<{ id: string }>();
     const id = params['id'];
     const mapData = useSelector((state: RootState) => state.financialPlanningDetails.data[id]??[])
 
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        setHeadingWidthInput((valueHeading.length + 4) * 8);
-    },[valueHeading])
 
     return (
         <div className={"financial-planning-detail"}>
@@ -29,28 +25,41 @@ const FinancialPlanningDetailPage:FC = () => {
                 <FileColorIcon/>
                 <div className="w-auto">
                     <div className={"flex"}>
-                        <input
-                            style={{width: headingWidthInput}}
-                            onChange={(event) => setValueHeading(event.target.value)}
-                            value={valueHeading} className={"text-lg w-auto mr-2"}/>
+                        <InputWidthAdjust className={"text-lg w-auto mr-2"} value={"Kế hoạch dòng tiền T12.21"}/>
                         <img alt={"star-icon"} src={StarIcon}/>
                     </div>
                     <p className={"text-gray-400"}>Chỉnh sửa lần cuối cách đây 2 giờ bởi Nguyễn Hữu Hiệp</p>
                 </div>
                 <div className={"flex-1 flex items-center justify-end"}>
                     <p className={"text-gray-400 mr-2"}>Đang truy cập</p>
-                    <div className={"flex items-center"}>
-                        <img src={fakeThumbnail} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
-                        <img src={fakeThumbnail} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
-                        <img src={fakeThumbnail} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
-                        <img src={fakeThumbnail} alt="Thumbnail" className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1" />
-                        <div className={"rounded-full h-8 w-8 bg-gray-400 text-white text-lg text-center items-center justify-center flex font-thin"}>
-                            <span>9+</span>
-                        </div>
-                        <button className={"bg-blue-500 text-white px-5 py-2 ml-3"}>
-                            Share
-                        </button>
-                    </div>
+                    <AccessingUsers users={[
+                        {
+                            _id: 1,
+                            name: "Trần Thanh Quang",
+                            avatar: fakeThumbnail
+                        },
+                        {
+                            _id: 2,
+                            name: "Trần Thanh Quang 1",
+                            avatar: fakeThumbnail
+                        },
+                        {
+                            _id: 3,
+                            name: "Trần Thanh Quang 2",
+                            avatar: fakeThumbnail
+                        },
+                        {
+                            _id: 4,
+                            name: "Trần Thanh Quang 3",
+                            avatar: fakeThumbnail
+                        },
+                        {
+                            _id: 5,
+                            name: "Trần Thanh Quang 5",
+                            avatar: fakeThumbnail
+                        }
+                    ]}/>
+                    <ShareButton/>
                 </div>
             </div>
             <div className={"financial-planning-table"}>

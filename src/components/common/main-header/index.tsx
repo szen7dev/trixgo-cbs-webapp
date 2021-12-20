@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
-import MainSearchDialog from "components/common/MainSearchDialog";
+import MainSearchDialog from "components/common/main-search-dialog";
 import NotificationsMenu from "./NotificationsMenu";
 import AppsMenu from "./AppsMenu";
 import UserMenu from "./UserMenu";
@@ -65,7 +65,7 @@ const MainHeader: FC = () => {
               className="w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
               onClick={() =>
                 openModal(
-                  <div className="inline-block w-2/5 overflow-hidden align-top transition-all transform bg-primary-light shadow-xl rounded mt-28">
+                  <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
                     <MainSearchDialog />
                   </div>
                 )

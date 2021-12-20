@@ -5,6 +5,7 @@ import { Menu, Transition } from "@headlessui/react";
 import iconGrid from "assets/images/icons8-menu-100.png";
 import iconSearch from "assets/images/icons8-search-50.png";
 import appLogo from "assets/images/trixgo-logo.png";
+import { Link } from 'react-router-dom';
 
 const AppsMenu: FC = () => {
   return (
@@ -30,42 +31,50 @@ const AppsMenu: FC = () => {
             <input className="h-10 border-0 bg-secondary-light w-full pr-3 pl-12 outline-none" type="text" placeholder="Tìm kiếm" />
           </div>
           <div className="flex flex-wrap justify-around">
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+            <Link to={`/support/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Supporter</span>
+						</Link>
+            <Link to={`/pcm/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý công việc</span>
+						</Link>
+            <Link to={`/document/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý hồ sơ văn bản</span>
+						</Link>
+            <Link to={`/cmcs/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý hợp đồng</span>
+						</Link>
+            <Link to={`/fin/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản trị tài chính</span>
+						</Link>
+            <Link to={`/human/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý nhân sự</span>
+						</Link>
+            <Link to={`/ppt/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý dự án</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+						</Link>
+            <Link to={`/social/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">App</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <span className="block">Truyền thông</span>
+						</Link>
+            <Link to={`/accounting/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Trixgo 1234</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <span className="block">Kế toán</span>
+						</Link>
+            <Link to={`/operation/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Quản lý dự án</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
+              <span className="block">Quản lý vận hành</span>
+						</Link>
+            <Link to={`/timesheet/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Trixgo 1234</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Quản lý dự án</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">App</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">App</span>
-            </a>
-            <a className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight" href="/">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Trixgo 1234</span>
-            </a>
+              <span className="block">Quản lý chấm công</span>
+						</Link>
           </div>
         </Menu.Items>
       </Transition>

@@ -2,18 +2,11 @@ import React, {FC, useEffect, useState} from "react";
 import {NavLink, useParams} from "react-router-dom";
 import Paginate from "../../../../components/common/Paginate";
 import TriangleDown from "assets/icons/TriangleDown";
-import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg"
-import SearchIcon from "assets/images/icons8-search-120.png";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
-import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
-import CopyIcon from "assets/images/icons8-copy-96.svg";
-import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
-import PrintIcon from "assets/images/icons8-print-96.svg";
-import ThreeDotsVertical from "../../../../assets/images/icon-3dots-vertical.svg";
+import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
+import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import FinancialCashFlowFilterButton from "./components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import SearchInput from "../../../../components/common/SearchInput";
+import ActionGroupFinancial from "./components/FinancialCashFlow/ActionGroupFinancial";
 
 const FinancialCashFlowPage:FC = () => {
 
@@ -25,27 +18,7 @@ const FinancialCashFlowPage:FC = () => {
                     <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)}/>
                     <FinancialCashFlowFilterButton/>
                     <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"}/>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={ShareIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={CopyIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon}/>
-                    </button>
-                    <button className={"flex items-center mr-3"}>
-                        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon}/>
-                    </button>
+                    <ActionGroupFinancial/>
                 </div>
                 <button className={"bg-green-success h-[32px] text-white rounded px-5"}>
                     Tạo mới

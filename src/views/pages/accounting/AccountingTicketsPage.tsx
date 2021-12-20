@@ -261,7 +261,7 @@ const AccountingTicketsPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </td>
                         <td className={"pt-2 pb-2"}>
-                            <NavLink exact to={"/accounting/accbill/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
+                            <NavLink exact to={"/accounting/home/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
                             <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </td>
                         <td className={"pt-2 pb-2"}>05/11/2021</td>
@@ -280,7 +280,7 @@ const AccountingTicketsPage:FC = () => {
                             <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
                         </td>
                         <td className={"pt-2 pb-2"}>
-                            <NavLink exact to={"/accounting/accbill/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
+                            <NavLink exact to={"/accounting/home/123"} className={"mb-1"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
                             <p className={"text-gray-400"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
                         </td>
                         <td className={"pt-2 pb-2"}>05/11/2021</td>
