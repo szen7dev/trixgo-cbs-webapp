@@ -10,12 +10,17 @@
 import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 import cn from "classnames";
+
+import DropdownFilterButton from "../components/DocumentFilterButton";
+import SearchInput from "components/common/SearchInput";
+import ButtonMore from "../components/common/ButtonMore";
+import ButtonCreate from "../components/common/ButtonCreate";
 
 import iconFilter from 'assets/images/icons8-filter-96.png';
 import projectImage from "assets/images/project.jpg";
 import styles from '../document.module.css';
-import InfiniteScroll from "react-infinite-scroll-component";
 
 interface IData {
 	id: number
@@ -24,21 +29,13 @@ interface IData {
 	count: number
 }
 
-const tabs = [
-	{ id: "projects", title: "Dự án, phòng ban" },
-	{ id: "Manage", title: "Quản trị ứng dụng" },
-]
-
 const DocumentHomePage: FC = () => {
-	const [tab, setTab] = useState<string>(tabs[0].id)
-	const [page] = useState<number>(1);
 	const [data, setData] = useState<IData[]>(Array.from({ length: 20 }).map((_, index) => ({
 		id: index,
 		title: 'CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây',
 		company: 'Công ty Cổ phần Đầu tư và Thương mại Thủ Đô',
 		count: 288
 	})));
-	const [loading, setLoading] = useState<boolean>(true);
 
 	const fetchData = () => {
 		setTimeout(() => {
@@ -54,30 +51,16 @@ const DocumentHomePage: FC = () => {
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 			{/* Header */}
-			<div className="px-4 flex justify-between w-full text-primary-gray bg-white border border-gray-300">
-				<div className="flex flex-1 justify-center text-[14px]">
-					{tabs.map(({ id, title }) => (
-						<button
-							key={id}
-							className={cn("border-b-2 border-transparent mx-2 leading-4", { 'border-primary text-black font-bold': id === tab })}
-							style={{ minWidth: "148px" }}
-							onClick={() => setTab(id)}
-						>
-							{title}
-						</button>
-					))}
+			<div className="px-4 flex items-center w-full text-primary-gray bg-white border border-gray-300 py-1">
+				<div className="flex flex-1 items-center">
+					<span className="text-x-large mr-7 text-black">
+						Danh sách
+					</span>
+					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
+					<DropdownFilterButton />
 				</div>
-				<div className="flex items-center">
-					<div className="rounded-full flex my-2.5 bg-gray-100 mr-5" style={{ minWidth: "284px" }}>
-						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-4 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-						</svg>
-						<input className="bg-transparent focus:outline-none py-3 px-2.5 flex-1 leading-[15px]" placeholder="Tìm kiếm" />
-					</div>
-					<div className="w-10 h-10 rounded bg-gray-100 flex justify-center items-center">
-						<img src={iconFilter} alt="icon filter" />
-					</div>
-				</div>
+				<ButtonCreate />
+				<ButtonMore />
 			</div>
 
 			{/* Content */}
@@ -94,7 +77,7 @@ const DocumentHomePage: FC = () => {
 							<b>Yay! You have seen it all</b>
 						</p>
 					}
-					
+
 					scrollableTarget="scrollable"
 					className="flex flex-wrap w-full px-4 pt-2 pb-20 gap-y-2.5 gap-x-2 text-primary-gray"
 				>
