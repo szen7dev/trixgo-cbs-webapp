@@ -45,28 +45,29 @@ type Props = {
 type Params = {
     [key: string]: string;
 }
-const DropdownSearchable:FC<Props> = ({
-                                          data,
-                                          searchUrl,
-                                          searchParam,
-                                          id,
-                                          placeholder = 'Lựa chọn',
-                                          initialValue,
-                                          onchangeValue,
-                                          className,
-                                          classNameItem,
-                                          classNameInput,
-                                          focusedClass,
-                                          renderItem,
-                                          isMultiple,
-                                          showTriangle,
-                                          allowClearValueSingleInput,
-                                          renderSelectedItem,
-                                          maxWidthInput,
-                                          formatItem,
-                                          inlineSearch,
-                                          maxHeightInput
-                                      }) => {
+const DropdownSearchable:FC<Props>
+    = ({
+       data,
+       searchUrl,
+       searchParam,
+       id,
+       placeholder = 'Lựa chọn',
+       initialValue,
+       onchangeValue,
+       className,
+       classNameItem,
+       classNameInput,
+       focusedClass,
+       renderItem,
+       isMultiple,
+       showTriangle,
+       allowClearValueSingleInput,
+       renderSelectedItem,
+       maxWidthInput,
+       formatItem,
+       inlineSearch,
+       maxHeightInput
+   }) => {
 
     const [value, setValue] = useState<Item>();
     const [values, setValues] = useState<Array<Item>>();
@@ -110,7 +111,7 @@ const DropdownSearchable:FC<Props> = ({
     const readDataValue = (item: Item|undefined, key: string) => {
         if (!item) return undefined;
         if (formatItem) {
-            return item[formatItem[key]]
+            return item[formatItem[key]]??item[key]
         }
         return item[key];
     }
@@ -246,15 +247,15 @@ const DropdownSearchable:FC<Props> = ({
                     inlineSearch&&
                     <input
                         placeholder={placeholder}
-                        className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
+                        className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 }
                 {/*</div>*/}
-                <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
-                    {showTriangle?<TriangleDown/>:null}
-                </div>
+                {showTriangle&&<div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                    <TriangleDown/>
+                </div>}
             </div>
         )
     }
@@ -264,13 +265,13 @@ const DropdownSearchable:FC<Props> = ({
             !value ?
                 (
                     inlineSearch?
-                    <input
-                        placeholder={placeholder}
-                        className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />:
-                    <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                        <input
+                            placeholder={placeholder}
+                            className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />:
+                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
                 ):
                 (
                     <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
@@ -294,7 +295,7 @@ const DropdownSearchable:FC<Props> = ({
                     inlineSearch?
                         <input
                             placeholder={placeholder}
-                            className={"inline-search-dropdown flex-1 ml-1 focus:outline-none"}
+                            className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />:
@@ -326,9 +327,9 @@ const DropdownSearchable:FC<Props> = ({
                         renderSingleSelectedValueWithClearValue():
                         renderSingleSelectedValueWithoutClearValue()
                 }
-                <div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
-                    {showTriangle?<TriangleDown/>:null}
-                </div>
+                {showTriangle&&<div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                    <TriangleDown/>
+                </div>}
             </div>
         )
     }
@@ -347,20 +348,25 @@ const DropdownSearchable:FC<Props> = ({
     return (
         <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${maxHeightClass} ${beingFocusClass}`} data-value={value?.id}>
             {renderSelectedValue()}
-            {showOption?<div className={"shadow-lg rounded select-options-container absolute z-50"}>
-                {!inlineSearch&&<input
-                    className="select-search w-full p-3 pt-5 border-b"
-                    placeholder={"Nhập nội dung"}
-                    type='text'
-                    autoComplete='off'
-                    value={searchTerm}
-                    autoFocus
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />}
-                <div className="select-options-section overflow-auto bg-white">
-                    {renderOptions()}
-                </div>
-            </div>:null}
+            {
+                showOption?
+                    <div className={"shadow-lg rounded select-options-container absolute z-100 w-full left-0"}>
+                        {!inlineSearch&&<input
+                            className="select-search w-full p-3 pt-5 border-b"
+                            placeholder={"Nhập nội dung"}
+                            type='text'
+                            autoComplete='off'
+                            value={searchTerm}
+                            autoFocus
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />}
+                        <div className="select-options-section overflow-auto bg-white">
+                            {renderOptions()}
+                        </div>
+                    </div>
+                    :
+                    null
+            }
         </div>
     )
 };
