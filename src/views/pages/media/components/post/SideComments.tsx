@@ -50,7 +50,7 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 					<div className="react__comments-header ml-4 mr-5 text-[15px] leading-4 pb-2 mb-1.5 font-bold">
 						<span>Xem 152 bình luận trước</span>
 					</div>
-					<RootCommentsList className="px-5" />
+					<RootCommentsList className="px-5" smallImage />
 				</div>
 			</div>
 			{/* Footer */}

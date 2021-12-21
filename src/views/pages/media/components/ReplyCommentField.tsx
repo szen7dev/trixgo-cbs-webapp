@@ -72,7 +72,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		cancelUploadImage(file)
 	}
 
-	const handleAttackFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
 		const [files, images] = modifyUploadedFilesV2({
@@ -204,7 +204,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 								accept="*"
 								multiple
 								className="hidden"
-								onChange={handleAttackFiles} />
+								onChange={handleAttachFiles} />
 						</label>
 					</div>
 				</div>
