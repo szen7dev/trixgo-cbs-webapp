@@ -4,7 +4,11 @@ import CaretDownIcon from "assets/images/icon-caret-down.png";
 import ClassifyProgress from "./ClassifyProgress";
 import ClassifyDrawer from "./ClassifyDrawer";
 
-const ClassifyTable: FC = () => {
+type Props = {
+  title: string;
+};
+
+const ClassifyTable: FC<Props> = ({ title }) => {
   const [visibleDrawer, setVisibleDrawer] = useState(false);
 
   return (
@@ -24,7 +28,7 @@ const ClassifyTable: FC = () => {
             </th>
             <th className="p-2 text-left text-[13px] w-5/12">
               <span className="py-1 px-2 border-l text-[13px] font-normal">
-                Dự án/ phòng ban
+                {title}
               </span>
             </th>
             <th className="p-2">

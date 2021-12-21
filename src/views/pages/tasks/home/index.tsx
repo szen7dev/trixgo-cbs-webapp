@@ -21,7 +21,10 @@ const TaskHomePage: FC = () => {
         {/* Table */}
         <div className={" flex flex-col w-full"}>
           {viewMode === "LIST" && <ListTable />}
-          {viewMode === "PROJECT" && <ClassifyTable />}
+          {viewMode === "PROJECT" && (
+            <ClassifyTable title=" Dự án/ phòng ban" />
+          )}
+          {viewMode === "TYPE" && <ClassifyTable title="Loại công việc" />}
         </div>
       </div>
     </>
