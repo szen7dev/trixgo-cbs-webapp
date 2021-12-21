@@ -16,7 +16,12 @@ const ShareToPerSon:FC = () => {
         <div className="w-full max-h-full overflow-visible rounded shadow-lg py-3 px-4">
             <div className={"flex items-center mb-3"}>
                 <div className={"flex-1 flex items-center"}>
-                    <button className={"w-8 h-8 bg-primary flex items-center justify-center rounded-full"}>
+                    <button
+                        onClick={() => {
+                            setShareUser([]);
+                        }}
+                        className={"w-8 h-8 bg-primary flex items-center justify-center rounded-full"}
+                    >
                         <img src={IconBack} alt="Thumbnail" />
                     </button>
                 </div>
@@ -72,7 +77,6 @@ const ShareToPerSon:FC = () => {
                     }}
                 />
                 <DropdownSearchable
-                    initialValue={shareUser}
                     placeholder={"Thêm người"}
                     className={"ml-3 rounded-md border-b border-gray-200 mb-4 bg-gray-50 py-1 px-3"}
                     maxHeightInput={"max-h-[36px]"}
@@ -100,7 +104,15 @@ const ShareToPerSon:FC = () => {
                     }}
                 />
             </div>
-            <div className={"flex justify-end items-center"}>
+            <div className={"flex"}>
+                <input type="checkbox" className="form-check-input mr-5 ml-4 cursor-pointer" />
+                <span>Thông báo trên hệ thống và qua email</span>
+            </div>
+            <div className={"rounded-lg bg-gray-100 border border-gray-300 mt-4 py-2 px-4"}>
+                <p className={"text-xs text-gray-500 text-left"}>Lời nhắn</p>
+                <textarea rows={5} className={"focus:outline-none border-none bg-transparent w-full"}></textarea>
+            </div>
+            <div className={"flex justify-end items-center mt-4"}>
                 <button
                     onClick={() => closeModal()}
                     className={"rounded h-[32px] w-[95px] font-semibold mr-3"}
