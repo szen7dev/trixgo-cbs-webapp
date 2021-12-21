@@ -7,6 +7,7 @@ export type ListTaskPayload = {
   populates1?: string;
   filter?: string;
   type?: numer;
+  typeStatus?: number;
 };
 
 export type Assignee = {
