@@ -24,8 +24,8 @@ const ListTable: FC<Props> = ({
 }) => {
   const history = useHistory();
 
-  const handleClickTask = () => {
-    history.push("/pcm/detail/12345");
+  const handleClickTask = (id: string) => {
+    history.push(`/pcm/detail/${id}`);
   };
 
   return (
@@ -79,7 +79,7 @@ const ListTable: FC<Props> = ({
             <tr
               key={taskOutDate._id}
               className="cursor-pointer"
-              onClick={handleClickTask}
+              onClick={() => handleClickTask(taskOutDate._id)}
             >
               <td className="p-2 border">{index + 1}</td>
               <td className="p-2 border">{taskOutDate.name}</td>
@@ -87,7 +87,7 @@ const ListTable: FC<Props> = ({
                 {moment(taskOutDate.expiredTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
-                <Executor />
+                <Executor color="bg-red-500" assignee={taskOutDate.assignee} />
               </td>
               <td className="p-2 border">
                 <ListProgress
@@ -138,7 +138,7 @@ const ListTable: FC<Props> = ({
             <tr
               key={tasksNexWeek._id}
               className="cursor-pointer"
-              onClick={handleClickTask}
+              onClick={() => handleClickTask(tasksNexWeek._id)}
             >
               <td className="p-2 border">{index + 1}</td>
               <td className="p-2 border">{tasksNexWeek.name}</td>
@@ -146,7 +146,10 @@ const ListTable: FC<Props> = ({
                 {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
-                <Executor />
+                <Executor
+                  color="bg-yellow-500"
+                  assignee={tasksNexWeek.assignee}
+                />
               </td>
               <td className="p-2 border">
                 <ListProgress
@@ -204,7 +207,7 @@ const ListTable: FC<Props> = ({
             <tr
               key={taskMoreThanSevenDay._id}
               className="cursor-pointer"
-              onClick={handleClickTask}
+              onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
             >
               <td className="p-2 border">{index + 1}</td>
               <td className="p-2 border">{taskMoreThanSevenDay.name}</td>
@@ -212,7 +215,10 @@ const ListTable: FC<Props> = ({
                 {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
-                <Executor />
+                <Executor
+                  color="bg-green-500"
+                  assignee={taskMoreThanSevenDay.assignee}
+                />
               </td>
               <td className="p-2 border">
                 <ListProgress
