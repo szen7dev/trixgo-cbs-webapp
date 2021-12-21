@@ -16,6 +16,10 @@ type IDispatch = (payload: any) => () => void;
 
 type TReducer = (state: ISTATE, action: IAction) => ISTATE;
 
+interface IMethodFileCommon {
+  removeAllFiles: (id?: number | string) => void;
+}
+
 interface IMethodImages {
   setUploadImage: dispatch;
   setIDImageUploaded: dispatch;

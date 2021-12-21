@@ -6,6 +6,7 @@ import ReplyCommentField from './ReplyCommentField';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
+import { objPopulate } from 'views/pages/media/utils';
 
 interface Props {
 	renderNestedComment?: React.ElementType
@@ -28,14 +29,7 @@ const RootComment: FC<Props> = ({smallImage, comment, limit, renderNestedComment
 			lastestID,
 			mediaID: comment.media,
 			parentID: comment._id,
-			populates: JSON.stringify({
-				value: 'comment userCreate lastestReplyID',
-				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
-			}),
-			populates1: JSON.stringify({
-				value: 'files images',
-				select: '_id name url size type'
-			}),
+			...objPopulate
 		});
 		setAmountReply(amountReply - limit);
 

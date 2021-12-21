@@ -2,6 +2,10 @@ import uploadFileTypes from "./upload.types";
 
 import { TAction } from "./upload.d";
 
+interface IFileCommonActions {
+  removeAllFiles: TAction;
+}
+
 interface IImageActions {
   setUploadImage: TAction;
   setUploadImageProgress: TAction;
@@ -117,6 +121,14 @@ interface IFileActions {
 //   },
 // };
 
+const actionsFileCommon: IFileCommonActions = {
+  removeAllFiles: (dispatch) => (id?: string) =>
+    dispatch({
+      type: uploadFileTypes.REMOVE_ALL_FILES,
+      payload: id
+    }),
+}
+
 const actionsImages: IImageActions = {
   setUploadImage: (dispatch) => (payload: File[]) =>
     dispatch({
@@ -194,6 +206,7 @@ const actionsFiles: IFileActions = {
 };
 
 const uploadActions = {
+  ...actionsFileCommon,
   ...actionsImages,
 	...actionsFiles
 };

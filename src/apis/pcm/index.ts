@@ -5,7 +5,7 @@ import { convertObToUrl } from "helpers";
 
 const pcmURL = "/api/subject_pcm";
 
-const SocialRepository = {
+const PCMRepository = {
     async createMedia(payload: MediaPayload): Promise<PostResponse> {
         const { data } = await API.post<PostResponse>(
             `${pcmURL}`,
@@ -40,4 +40,4 @@ const SocialRepository = {
     },
 };
 
-export default SocialRepository;
+export default PCMRepository;
