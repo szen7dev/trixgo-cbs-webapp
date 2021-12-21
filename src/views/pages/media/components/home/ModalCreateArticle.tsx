@@ -225,7 +225,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 										)
 									}
 								>
-									<div className='flex text-black sticky top-0 h-0 w-full justify-between'>
+									<div className='flex text-black sticky top-0 h-0 w-full justify-between items-center'>
 										<div className={cn('text-large', { 'opacity-0': !collapsed })}>
 											File/ảnh đính kèm
 										</div>
@@ -240,7 +240,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 									<PostImage
 										images={toArray(uploads.images)}
 										onRemove={handleRemoveUpload}
-										className={cn("post__files-row py-5 text-black gap-9 flex-wrap transition-opacity", { 'opacity-0': collapsed })}
+										className={cn("post__files-row pt-2 pb-3 text-black gap-9 flex-wrap transition-opacity", { 'opacity-0': collapsed })}
 									/>
 									<PostFile
 										files={toArray(uploads.files)}

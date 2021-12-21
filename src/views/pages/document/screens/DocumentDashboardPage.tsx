@@ -94,7 +94,7 @@ const DocumentDashboardPage: FC = () => {
 
 	return (
 		<>
-			<div className="flex flex-col text-sm text-black overflow-x-hidden h-full bg-gray-100 px-3.5">
+			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5 h-max">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
@@ -135,7 +135,7 @@ const DocumentDashboardPage: FC = () => {
 				</div>
 
 				{/* List */}
-				<div className="bg-white text-cbs-subtext mt-4">
+				<div className="bg-white text-cbs-subtext mt-4 overflow-x-auto">
 					<table className="w-full text-small font-normal border-collapse">
 						<thead className="bg-white sticky top-0 z-10">
 							<tr className="text-left whitespace-nowrap  border-b border-cbs-border">
