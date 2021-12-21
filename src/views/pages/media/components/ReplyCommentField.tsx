@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useRef, useState, useContext, useEffect } from 'react';
 
 import cn from 'classnames';
 import { toast } from "react-toastify";
@@ -28,16 +28,18 @@ interface Props {
 	fileContainerClassName?: string;
 	parentID?: string,
 	mediaID: string,
+	defaultValue?: string,
 }
 
-const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ 
-	fileContainerClassName, 
+const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
+	fileContainerClassName,
 	inputContainerClassName,
 	onSubmit,
 	onTextChange,
 	attachFile,
 	parentID,
 	mediaID,
+	defaultValue,
 	...props
 }) => {
 	const { dispatch } = useContext(CommentContext);
@@ -47,12 +49,16 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		cancelUploadImage,
 		cancelUploadFile
 	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
-
-	const [text, setText] = useState<string>('');
+	const [text, setText] = useState<string>(defaultValue || '');
 	const { createComment } = useCommentSocial({ mediaID, key: `${mediaID}-list-comments` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
+
+	useEffect(()=>{
+		if(defaultValue) setText(defaultValue);
+		// console.log(defaultValue)
+	},[defaultValue])
 
 	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
 		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
@@ -142,7 +148,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 									: setText(e.currentTarget.innerText)
 							}
 							}
-						></span>
+						>{text}</span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
 							<input

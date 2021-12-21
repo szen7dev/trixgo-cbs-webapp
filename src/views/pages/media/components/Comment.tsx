@@ -19,6 +19,7 @@ type OptionsProps = {
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
+	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
 	comment: CommentProps,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+	onClickEdit,
 	comment, small, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
@@ -38,6 +40,11 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 			payload: { _id: comment._id, parent: comment.parent }
 		});
 	}
+
+	const handleEditComment = () => {
+		onClickEdit?.(comment);
+	}
+
 	const images: FileProps[] = useMemo(() => Array.from({ length: 4 }).map((_, index) => ({ _id: index, name: 'da', url: generateImageLink(), size: 100 })), [])
 	const files: FileProps[] = useMemo(() => Array.from({ length: 4 }).map((_, index) => ({ _id: index, name: 'da', url: generateImageLink(), size: 100 })), [])
 
@@ -58,7 +65,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							{comment.comment.content}
 						</p>
 					</div>
-					{Options && <Options className="opacity-0 group-hover:opacity-100" onDelete={handleDeleteComment} />}
+					{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
 				</div>
 				{/* Media */}
 				<div>
