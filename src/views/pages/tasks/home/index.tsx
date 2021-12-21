@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import TaskHomeHeader from "./components/TaskHomeHeader";
 import ListTable from "./components/ListTable";
@@ -6,6 +6,10 @@ import ClassifyTable from "./components/ClassifyTable";
 
 const TaskHomePage: FC = () => {
   const [viewMode, setViewMode] = useState("LIST");
+
+  useEffect(() => {
+    document.title = "Quản lí công việc";
+  }, []);
 
   return (
     <>
