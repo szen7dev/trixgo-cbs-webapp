@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState, useContext, useEffect } from 'react';
 
 import cn from 'classnames';
-import { toast } from "react-toastify";
+import { toArray } from 'lodash';
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -14,9 +14,10 @@ import { IMethodFiles, IMethodImages } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import CommentContext from '../context/comment/comment.context';
 import uploadActions from '../context/upload.actions';
-import { toArray } from 'lodash';
+import { modifyUploadedFilesV2 } from '../context/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
 import { useCommentSocial } from 'services/hooks/useSocial';
+import { useUpload } from 'services/hooks/useUpload';
 
 interface Props {
 	// setUploadFile?: (files: File[]) => unknown;
@@ -44,12 +45,20 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 }) => {
 	const { dispatch } = useContext(CommentContext);
 	const [uploads, {
-		setUploadFile,
+		setUploadImageProgress,
+		setUploadFileProgress,
+		setIDImageUploaded,
+		setIDFileUploaded,
 		setUploadImage,
-		cancelUploadImage,
-		cancelUploadFile
+		setUploadFile,
+		removeUploadedImage,
+		removeUploadedFile,
+		cancelUploadFile,
+		cancelUploadImage
 	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+
 	const [text, setText] = useState<string>(defaultValue || '');
+	const { addFileToUpload } = useUpload('MEDIA');
 	const { createComment } = useCommentSocial({ mediaID, key: `${mediaID}-list-comments` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
@@ -70,30 +79,74 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		cancelUploadImage(file)
 	}
 
-	const handleAttachFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-		// Validate filetype;
+	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
-		const images: File[] = [];
-		const files: File[] = [];
 
-		toast.warn('Tính năng đang phát triển');
+		const [files, images] = modifyUploadedFilesV2({
+			imgLastKey: Object.keys(uploads.images).length || null,
+			fileLastKey: Object.keys(uploads.files).length || null,
+		}, event.target.files);
 
-		for (let i = 0; i < event.target.files.length; i++) {
-			if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
-			// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
-			files.push(event.target.files[i])
+		setUploadImage(images);
+		setUploadFile(files);
+
+		// Upload images
+		for (const [key, { file }] of Object.entries(images)) {
+			const { _id } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					console.log(`${percentCompleted}%`, key);
+					setUploadImageProgress(key, percentCompleted)
+				}
+			})
+			setIDImageUploaded(key, _id);
 		}
 
-		if (files.length) setUploadFile && setUploadFile(files);
-		if (images.length) setUploadImage && setUploadImage(images);
+		// Upload files
+		for (const [key, { file }] of Object.entries(files)) {
+			const { _id } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					console.log(`${percentCompleted}%`, key);
+					setUploadFileProgress(key, percentCompleted)
+				}
+			})
+			setIDFileUploaded(key, _id);
+		}
+
+		// for (let i = 0; i < event.target.files.length; i++) {
+		// 	if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
+		// 	// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
+		// 	files.push(event.target.files[i])
+		// }
+
+		// if (files.length) setUploadFile && setUploadFile(files);
+		// if (images.length) setUploadImage && setUploadImage(images);
 	}
 
 	const handleSubmit = async () => {
+		let images: string[] = [];
+		let files: string[] = [];
+
+		console.log({ IMAGES: uploads.images, FILES: uploads.files });
+
+		// Get list file uploaded
+		for (const [_, { _id }] of Object.entries(uploads.images)) {
+			_id && (images = [...images, _id]);
+		}
+
+		for (const [_, { _id }] of Object.entries(uploads.files)) {
+			_id && (files = [...files, _id]);
+		}
+
 		const dataInsert: CommentPayload = {
 			mediaID,
-			content: text
+			content: text,
+			files,
+			images,
+			...{ parentID }??{}
 		}
-		parentID && (dataInsert.parentID = parentID);
+		console.log({ dataInsert });
 
 		const infoAfterCreate = await createComment(dataInsert);
 		dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
@@ -111,7 +164,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "post__files pt-2 pb-6")
 				}
 			>
-				{/* <PostImage
+				<PostImage
 					images={toArray(uploads.images)}
 					onRemove={handleCancleUploadImage}
 					className="post__files-row pt-5 text-black gap-5 flex-wrap"
@@ -120,7 +173,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 					files={toArray(uploads.files)}
 					onRemove={handleCancleUploadFile}
 					className="text-black w-full mr-4"
-				/> */}
+				/>
 			</div>
 			<div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">

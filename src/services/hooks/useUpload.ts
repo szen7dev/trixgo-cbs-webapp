@@ -21,13 +21,13 @@ export type UploadFileProps = {
     progress?: (percentCompleted: number) => void
 }
 
-type UseFile = {
+type UseUpload = {
     generateLinkS3: (payload: File) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
     addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<AddFileUploadResponse>,
 };
 
-export const useFile = (app?: string) : UseFile => {
+export const useUpload = (app?: string) : UseUpload => {
     const { mutateAsync: generateLinkS3Async } =
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({

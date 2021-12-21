@@ -2,6 +2,7 @@ import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
 import HomeNavigation from "components/common/HomeNavigation";
+// import LinkMenuLeftSideBar from "components/common/LinkMenuLeftSideBar";
 import HomeRightSideBar from "components/common/HomeRightSideBar";
 import MainHeader from "components/common/main-header";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
@@ -45,6 +46,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
 
       {/* Left navigation */}
       <HomeNavigation />
+      {/* <LinkMenuLeftSideBar /> */}
 
       {/* Content area */}
       <main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">

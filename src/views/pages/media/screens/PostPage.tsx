@@ -47,7 +47,7 @@ const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { deleteMedia } = useSocial();
-	const { listComments, totalRecord, limit, nextCursor } = useCommentSocial({
+	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `${mediaID}-list-comments`
 	});
@@ -224,7 +224,7 @@ const SocialPostPage: FC = () => {
 								className="px-5"
 								comments={listComments}
 								totalRecord={totalRecord}
-								limit={limit} nextCursor={nextCursor}
+								limit={limit}
 								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />

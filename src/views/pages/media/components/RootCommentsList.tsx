@@ -10,11 +10,10 @@ type Props = {
 	mediaID?: string,
 	totalRecord?: number,
 	limit?: number,
-	nextCursor?: string,
 	smallImage?: boolean,
 } & HTMLAttributes<HTMLUListElement>
 
-const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
+const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 
@@ -31,8 +30,8 @@ const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecor
 				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
 			}),
 			populates1: JSON.stringify({
-				value: 'comment userCreate',
-				select: '_id fullname image content files images amountCommentReply amountReaction'
+				value: 'files images',
+				select: '_id name url size type'
 			}),
 		});
 		setAmountComment(amountComment - limit);
