@@ -2,7 +2,9 @@ import { FC } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import parse from "html-react-parser";
+import cn from "classnames";
 
+import styles from "../style.module.css";
 import ListProgress from "./Progress";
 import Executor from "./Executor";
 
@@ -95,12 +97,12 @@ const ListTable: FC<Props> = ({
                   checklist={taskOutDate.checklist}
                 />
               </td>
-              <td className="p-2 border">
+              <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {taskOutDate.description ? parse(taskOutDate.description) : ""}
               </td>
               <td className="border p-2">
                 {taskOutDate.lastLog && (
-                  <span>
+                  <span className={cn(styles["dont-break-out"])}>
                     {parse(taskOutDate.lastLog?.content || "")}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
@@ -157,14 +159,14 @@ const ListTable: FC<Props> = ({
                   checklist={tasksNexWeek.checklist}
                 />
               </td>
-              <td className="p-2 border">
+              <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {tasksNexWeek.description
                   ? parse(tasksNexWeek.description)
                   : ""}
               </td>
               <td className="border p-2">
                 {tasksNexWeek.lastLog && (
-                  <span>
+                  <span className={cn(styles["dont-break-out"])}>
                     {parse(tasksNexWeek.lastLog?.content || "")}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
@@ -226,14 +228,14 @@ const ListTable: FC<Props> = ({
                   checklist={taskMoreThanSevenDay.checklist}
                 />
               </td>
-              <td className="p-2 border">
+              <td className={cn(styles["dont-break-out"], "p-2 border")}>
                 {taskMoreThanSevenDay.description
                   ? parse(taskMoreThanSevenDay.description)
                   : ""}
               </td>
               <td className="border p-2">
                 {taskMoreThanSevenDay.lastLog && (
-                  <span>
+                  <span className={cn(styles["dont-break-out"])}>
                     {parse(taskMoreThanSevenDay.lastLog?.content || "")}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
