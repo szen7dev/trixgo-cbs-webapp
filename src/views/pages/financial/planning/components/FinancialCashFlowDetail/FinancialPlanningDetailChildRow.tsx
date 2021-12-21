@@ -42,11 +42,11 @@ const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, i
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white w-1"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0 overflow-y-auto"} onChange={(event) => console.log(event.target.value)} value={rowData.tt}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.tt}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.tt}</p>
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white w-2/12"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.content}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.content}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.content}</p>
             </div>
             <div className={"px-2 py-4 table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 <DatePicker
@@ -60,19 +60,19 @@ const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, i
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.duKienThu}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.duKienThu}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.duKienThu}</p>
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.thucTheThu}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.thucTheThu}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.thucTheThu}</p>
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.duKienChi}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.duKienChi}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.duKienChi}</p>
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.thucTeChi}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.thucTeChi}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.thucTeChi}</p>
             </div>
             <div className={"px-2 py-4 table-cell relative box-border border border-gray-300 align-middle bg-white"}>
                 <DatePicker
@@ -103,7 +103,7 @@ const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, i
             </div>
             <div className={"table-cell relative box-border border border-gray-300 align-middle bg-white w-2/12"}>
                 {/*<input className={"w-full h-full absolute top-0 left-0"} onChange={(event) => console.log(event.target.value)} value={rowData.ghiChu}/>*/}
-                <p contentEditable={"true"} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.ghiChu}</p>
+                <p contentEditable={"true"} suppressContentEditableWarning={true} className={"w-full h-full focus:outline-blue-600 px-2 py-5"}>{rowData.ghiChu}</p>
             </div>
             <RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow/>}/>
         </div>

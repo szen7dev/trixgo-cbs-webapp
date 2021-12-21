@@ -6,14 +6,13 @@ export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
 ): void => {
   useEffect(() => {
     const listener = (event: Event) => {
-      if (!ref.current || ref.current.contains(event.target as Node)) {
-        return;
+      if (ref && ref.current && !ref.current.contains(event.target as Node)) {
+        handler(event);
       }
-      handler(event);
     };
-    document.addEventListener("click", listener);
+    document.addEventListener("mousedown", listener);
     return () => {
-      document.removeEventListener("click", listener);
+      document.removeEventListener("mousedown", listener);
     };
   }, [ref, handler]);
 };
