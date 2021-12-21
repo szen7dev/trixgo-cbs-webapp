@@ -1,9 +1,16 @@
 import { FC } from "react";
+import { useHistory } from "react-router-dom";
 
 import ListProgress from "./Progress";
 import Executor from "./Executor";
 
 const ListTable: FC = () => {
+  const history = useHistory();
+
+  const handleClickTask = () => {
+    history.push("/pcm/detail/12345");
+  };
+
   return (
     <table className="relative">
       <thead className="bg-gray-50 sticky top-0 z-10">
@@ -45,7 +52,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -60,7 +67,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -76,7 +83,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -105,7 +112,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -120,7 +127,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -136,7 +143,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -167,7 +174,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -182,7 +189,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -198,7 +205,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -213,7 +220,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -228,7 +235,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -244,7 +251,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr>
+        <tr onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>

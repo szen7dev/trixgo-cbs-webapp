@@ -1,20 +1,23 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import TaskHomeHeader from "./components/TaskHomeHeader";
 import ListTable from "./components/ListTable";
 import ClassifyTable from "./components/ClassifyTable";
 
 const TaskHomePage: FC = () => {
+  const [viewMode, setViewMode] = useState("LIST");
+
   return (
     <>
       <div>
-        <TaskHomeHeader />
+        <TaskHomeHeader viewMode={viewMode} onChangeMode={setViewMode} />
       </div>
-      {/* Table */}
+
       <div className="task-management-content overflow-auto">
-        {/* Table Header */}
+        {/* Table */}
         <div className={" flex flex-col w-full"}>
-          <ClassifyTable />
+          {viewMode === "LIST" && <ListTable />}
+          {viewMode === "PROJECT" && <ClassifyTable />}
         </div>
       </div>
     </>

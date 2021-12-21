@@ -7,9 +7,11 @@ import BulletedIcon from "assets/images/icons8-bulleted-list-96 1.png";
 
 type Props = {
   currentTab?: number;
+  viewMode?: string;
+  onChangeMode: (mode: string) => void;
 };
 
-const TaskHomeHeader: FC<Props> = ({ currentTab }) => {
+const TaskHomeHeader: FC<Props> = ({ currentTab, viewMode, onChangeMode }) => {
   const tabs = [
     {
       id: 1,
@@ -56,9 +58,10 @@ const TaskHomeHeader: FC<Props> = ({ currentTab }) => {
           <button
             className={cn(
               styles["task-header-btn-group"],
-              { [styles.active]: true },
+              { [styles.active]: viewMode === "LIST" },
               "flex items-center px-2 p-1 rounded-l-xl"
             )}
+            onClick={() => onChangeMode("LIST")}
           >
             <img
               src={BulletedIcon}
@@ -70,9 +73,10 @@ const TaskHomeHeader: FC<Props> = ({ currentTab }) => {
           <button
             className={cn(
               styles["task-header-btn-group"],
-              { [styles.active]: false },
+              { [styles.active]: viewMode === "PROJECT" },
               "flex items-center px-2 p-1"
             )}
+            onClick={() => onChangeMode("PROJECT")}
           >
             <img
               src={BulletedIcon}
@@ -84,9 +88,10 @@ const TaskHomeHeader: FC<Props> = ({ currentTab }) => {
           <button
             className={cn(
               styles["task-header-btn-group"],
-              { [styles.active]: false },
+              { [styles.active]: viewMode === "TYPE" },
               "flex items-center px-2 p-1 rounded-r-xl"
             )}
+            onClick={() => onChangeMode("TYPE")}
           >
             <img
               src={BulletedIcon}
@@ -103,5 +108,6 @@ const TaskHomeHeader: FC<Props> = ({ currentTab }) => {
 
 TaskHomeHeader.defaultProps = {
   currentTab: 1,
+  viewMode: "LIST",
 };
 export default TaskHomeHeader;
