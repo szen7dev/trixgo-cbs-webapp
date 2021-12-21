@@ -18,6 +18,7 @@ import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
+import PcmLayout from "views/layouts/PcmLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -241,12 +242,12 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/pcm/:path?">
-                  <HomeLayout>
+                  <PcmLayout>
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
-                  </HomeLayout>
+                  </PcmLayout>
                 </Route>
 
                 <Route path="/teaser">
