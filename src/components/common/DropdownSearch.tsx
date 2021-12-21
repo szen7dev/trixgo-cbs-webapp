@@ -42,6 +42,7 @@ type Props = {
     formatItem?: FormatItem;
     inlineSearch?: boolean;
     disableSearch?: boolean;
+    onClearData?: () => void;
 }
 
 type Params = {
@@ -69,7 +70,8 @@ const DropdownSearchable:FC<Props>
        formatItem,
        inlineSearch,
        maxHeightInput,
-       disableSearch
+       disableSearch,
+       onClearData
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -181,11 +183,16 @@ const DropdownSearchable:FC<Props>
     }
 
     const handleRemoveItem = (id:string|number) => {
-        setValues(values?.filter(item => readDataValue(item,"id") !== id));
+        const valuesWillUpdate = values?.filter(item => readDataValue(item,"id") !== id);
+        setValues(valuesWillUpdate);
+        if (!valuesWillUpdate || valuesWillUpdate?.length <= 0) {
+            onClearData&&onClearData();
+        }
     };
 
     const handleRemoveItemSingle = () => {
         setValue(undefined);
+        onClearData&&onClearData();
     };
 
     const renderOptions = () => {

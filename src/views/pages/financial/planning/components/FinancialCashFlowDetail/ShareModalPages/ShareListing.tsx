@@ -4,8 +4,11 @@ import Close from "assets/icons/Close";
 import DropdownSearchable, {Item} from "../../../../../../../components/common/DropdownSearch";
 import {ShareContext} from "../ShareModal";
 import {map as _map} from "lodash"
+import {useModal} from "../../../../../../../services/hooks/useModal";
 const ShareListing:FC = () => {
     const {setShareUser} = useContext(ShareContext);
+    const {closeModal} = useModal();
+
     const handleChange = (item: Item) => {
         setShareUser(oldValues => [...oldValues??[], item.id])
     }
@@ -39,7 +42,9 @@ const ShareListing:FC = () => {
                         <img src={fakeThumbnail} alt="Thumbnail" className="w-8 h-8 rounded-full mr-1" />
                         <p className={"text-lg ml-2"}>Chia sẻ với mọi người</p>
                     </div>
-                    <button className={"w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"}>
+                    <button
+                        onClick={() => closeModal()}
+                        className={"w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"}>
                         <Close/>
                     </button>
                 </div>
@@ -65,6 +70,9 @@ const ShareListing:FC = () => {
                     inlineSearch={true}
                     onchangeValue={(item) => {
                         handleChange(item);
+                    }}
+                    onClearData={() => {
+                        setShareUser([])
                     }}
                 />
             </div>

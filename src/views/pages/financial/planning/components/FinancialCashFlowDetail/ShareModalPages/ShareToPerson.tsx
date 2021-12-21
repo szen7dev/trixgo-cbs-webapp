@@ -24,8 +24,11 @@ const ShareToPerSon:FC = () => {
                     >
                         <img src={IconBack} alt="Thumbnail" />
                     </button>
+                    <p className={"text-lg ml-2"}>Chia sẻ với mọi người</p>
                 </div>
-                <button className={"w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"}>
+                <button
+                    onClick={() => closeModal()}
+                    className={"w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"}>
                     <Close/>
                 </button>
             </div>
@@ -75,6 +78,9 @@ const ShareToPerSon:FC = () => {
                     onchangeValue={(item) => {
                         handleChange(item);
                     }}
+                    onClearData={() => {
+                        setShareUser([])
+                    }}
                 />
                 <DropdownSearchable
                     placeholder={"Thêm người"}
@@ -105,8 +111,8 @@ const ShareToPerSon:FC = () => {
                 />
             </div>
             <div className={"flex"}>
-                <input type="checkbox" className="form-check-input mr-5 ml-4 cursor-pointer" />
-                <span>Thông báo trên hệ thống và qua email</span>
+                <input id="notice" type="checkbox" className="form-check-input mr-5 ml-4 cursor-pointer" />
+                <label htmlFor="notice">Thông báo trên hệ thống và qua email</label>
             </div>
             <div className={"rounded-lg bg-gray-100 border border-gray-300 mt-4 py-2 px-4"}>
                 <p className={"text-xs text-gray-500 text-left"}>Lời nhắn</p>
