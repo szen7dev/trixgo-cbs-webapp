@@ -3,15 +3,15 @@ import ShareToPerSon from "./ShareModalPages/ShareToPerson";
 import ShareListing from "./ShareModalPages/ShareListing";
 
 export const ShareContext = createContext<{
-    shareUser: Array<string|number>;
-    setShareUser: React.Dispatch<React.SetStateAction<never[]>>;
+    shareUser: Array<string|number|undefined>;
+    setShareUser: React.Dispatch<React.SetStateAction<Array<string|number|undefined>>>;
 }>({
     shareUser: [],
     setShareUser: () => undefined,
 });
 
 const ShareModal:FC = () => {
-    const [shareUser, setShareUser] = useState([]);
+    const [shareUser, setShareUser] = useState<Array<string|number|undefined>>([]);
     const value = useMemo(
         () => ({ shareUser, setShareUser }),
         [shareUser]
