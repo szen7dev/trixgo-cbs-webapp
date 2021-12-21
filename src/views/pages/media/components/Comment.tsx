@@ -45,8 +45,8 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		onClickEdit?.(comment);
 	}
 
-	const images = comment.comment.images || [];
-	const files = comment.comment.files || [];
+	const images = comment?.comment?.images || [];
+	const files = comment?.comment?.files || [];
 
 	return (
 		<>
@@ -63,7 +63,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
 							<p className="font-bold text-medium">{comment.userCreate?.fullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
-								{comment.comment.content}
+								{comment?.comment?.content}
 							</p>
 						</div>
 					{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}

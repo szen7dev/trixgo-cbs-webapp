@@ -1,0 +1,113 @@
+:root {
+  --border-color: #cccccc;
+  --background-gray: #F0F0F0;
+}
+
+/*______________________________DOCUMENT HOME______________________________*/
+/* Not cllapse */
+.document__card-container {
+  width: 100%;
+  padding: 0 8px;
+}
+
+.document__home-card {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 16px 14px 21px 15px;
+  border-radius: 10px;
+  height: 204px;
+}
+
+@media (min-width: 640px) {
+  .document__card-container {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .document__card-container {
+    width: 33.3333%;
+  }
+}
+
+@media (min-width: 1500px) {
+  .document__card-container {
+    width: 25%;
+  }
+}
+
+@media (min-width: 1850px) {
+  .document__card-container {
+    width: 20%;
+  }
+}
+
+/* Collapse left */
+@media (min-width: 640px) {
+  .collapse-left .document__card-container {
+    width: 50%;
+  }
+}
+
+@media (min-width: 860px) {
+  .collapse-left .document__card-container {
+    width: 33.3333%;
+  }
+}
+
+@media (min-width: 1400px) {
+  .collapse-left .document__card-container {
+    width: 25%;
+  }
+}
+
+@media (min-width: 1600px) {
+  .collapse-left .document__card-container {
+    width: 20%;
+  }
+}
+
+/* END RESPONSIVE  */
+
+.document__line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.document__line-min {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.text__base {
+  font-size: 16px;
+  line-height: 18px;
+}
+
+.text__small {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.text__large {
+  font-size: 18px;
+  line-height: 20.7px;
+}
+
+.dropdown {
+  box-shadow: 0px 8px 20px rgba(155, 155, 155, 0.65);
+}
+
+.button__green {
+  --tw-bg-opacity: 1;
+  --tw-border-opacity: 1;
+  background-color: rgba(0, 198, 20, var(--tw-bg-opacity));
+  border-color: rgba(0, 198, 20, var(--tw-border-opacity));
+}
+
+/*______________________________Table______________________________*/

@@ -64,10 +64,9 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
-	useEffect(()=>{
-		if(defaultValue) setText(defaultValue);
-		// console.log(defaultValue)
-	},[defaultValue])
+	useEffect(() => {
+		if (refInputComment.current) refInputComment.current.innerText = defaultValue || '';
+	}, [defaultValue])
 
 	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
 		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
@@ -144,7 +143,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			content: text,
 			files,
 			images,
-			...{ parentID }??{}
+			...{ parentID } ?? {}
 		}
 		console.log({ dataInsert });
 
@@ -201,7 +200,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 									: setText(e.currentTarget.innerText)
 							}
 							}
-						>{text}</span>
+						></span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
 							<input
