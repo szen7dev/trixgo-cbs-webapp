@@ -64,7 +64,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		cancelUploadImage(file)
 	}
 
-	const handleAttackFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleAttachFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
 		// Validate filetype;
 		if (!event.target.files) return;
 		const images: File[] = [];
@@ -153,7 +153,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 								accept="*"
 								multiple
 								className="hidden"
-								onChange={handleAttackFiles} />
+								onChange={handleAttachFiles} />
 						</label>
 					</div>
 				</div>

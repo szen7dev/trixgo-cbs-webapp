@@ -10,19 +10,20 @@ type Props = {
 	mediaID?: string,
 	totalRecord?: number,
 	limit?: number,
-	nextCursor?: string
+	nextCursor?: string,
+	smallImage?: boolean,
 } & HTMLAttributes<HTMLUListElement>
 
-const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
+const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
-	
+
 	useEffect(() => {
 		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
 	}, [comments?.length])
 
 	const handleClickViewMore = async () => {
-		const { error, data } = await SocialRepository.listComments({ 
+		const { error, data } = await SocialRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
 			populates: JSON.stringify({
@@ -36,7 +37,7 @@ const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit
 		});
 		setAmountComment(amountComment - limit);
 
-		if(!error && data.listRecords.length){
+		if (!error && data.listRecords.length) {
 			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
 		}
 	}
@@ -58,6 +59,7 @@ const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit
 						<RootComment
 							comment={comment}
 							limit={limit}
+							smallImage={smallImage}
 							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
 							renderNestedComment={Comment}
 						/>
