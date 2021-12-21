@@ -14,8 +14,8 @@ const TaskHomePage: FC = () => {
       <div className="task-management-content overflow-auto">
         {/* Table Header */}
         <div className={" flex flex-col w-full"}>
-          <table>
-            <thead className="bg-gray-50 header sticky z-10">
+          <table className="relative">
+            <thead className="bg-gray-50 sticky top-0 z-10">
               <tr>
                 <th className="px-2 py-2 text-[13px] border w-[41px]">TT</th>
                 <th className="px-2 py-2 text-[13px] border w-[229px] text-left">
