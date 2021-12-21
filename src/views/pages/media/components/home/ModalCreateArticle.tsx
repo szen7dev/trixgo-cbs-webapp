@@ -140,7 +140,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		// Handle api here!
 		switch (modalType) {
 			case 'create':
-				values.companyID = user?.company;
+				values.companyID = user?.company._id;
 				await createMedia(values);
 				break;
 			case 'update':

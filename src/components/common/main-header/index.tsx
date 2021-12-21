@@ -12,8 +12,10 @@ import iconFilter from "assets/images/icons8-filter-96.png";
 import { useModal } from "services/hooks/useModal";
 import { useSocket } from "services/hooks/useSocket";
 import { useNotification } from 'services/hooks/useNotification';
+import { useAuth } from "services/hooks/useAuth";
 
 const MainHeader: FC = () => {
+  const { user } = useAuth();
   const { openModal } = useModal();
   const { listNotifications, refetchListNotification } = useNotification();
   const socketRef: any = useSocket();
@@ -34,10 +36,10 @@ const MainHeader: FC = () => {
           {/* Header: Left side */}
           <div className="flex items-center whitespace-nowrap">
             <div className="t-header-company-name flex items-center">
-              <img src={fakeThumbnail} alt="Company avatar" className="w-10 h-10 rounded-full" />
+              <img src={user?.company?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${user?.company.image}` : fakeThumbnail} alt="Company avatar" className="w-10 h-10 rounded-full" />
               <div className="flex items-center truncate">
                 <span className="truncate ml-2 font-bold">
-                  Name of your company
+                  {user?.company?.name}
                 </span>
               </div>
             </div>
