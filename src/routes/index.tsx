@@ -49,7 +49,7 @@ import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-import TasksPage from "views/pages/tasks";
+import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 
 // Teaser Pages
@@ -90,6 +90,7 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
 import DocumentHomePage from "views/pages/document/screens/DocumentHomePage";
 import DocumentDashboardPage from "views/pages/document/screens/DocumentDashboardPage";
+import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 //Financial
@@ -98,6 +99,9 @@ import FinancialPlanningDetailPage from "views/pages/financial/planning/Financia
 import CmcsPage from "views/pages/cmcs";
 import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
+
+// Support pages
+import SupportPage from "views/pages/support";
 
 const Routes: FC = () => {
 
@@ -239,7 +243,7 @@ const Routes: FC = () => {
                 <Route path="/pcm/:path?">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path={"/pcm/home"} component={TasksPage} />
+                      <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
                   </HomeLayout>
@@ -296,7 +300,7 @@ const Routes: FC = () => {
                         <Switch>
                           <Route
                             exact
-                            path="/ppt"
+                            path="/ppt/home"
                             component={ProjectCategoryPage}
                           />
                           <Route
@@ -352,7 +356,7 @@ const Routes: FC = () => {
                     <Switch>
                       <Route exact path="/document/home" component={DocumentHomePage} />
                       <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
-                      <Route exact path="/document/project/:id/document" component={DocumentProjectPage} />
+                      <Route path="/document/project/:id/document" component={DocumentLayout} />
                       <Route path="/document/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
@@ -362,10 +366,10 @@ const Routes: FC = () => {
                   <HomeLayout>
                     <Switch>
                       <Route exact path="/accounting">
-                        <Redirect to="/accounting/accbill" />
+                        <Redirect to="/accounting/home" />
                       </Route>
-                      <ProtectedRoute exact path="/accounting/accbill" component={AccountingTicketsPage} />
-                      <ProtectedRoute exact path="/accounting/accbill/:id" component={AccountingTicketDetailPage} />
+                      <ProtectedRoute exact path="/accounting/home" component={AccountingTicketsPage} />
+                      <ProtectedRoute exact path="/accounting/home/:id" component={AccountingTicketDetailPage} />
                       <ProtectedRoute exact path="/accounting/detail" component={AccountingDetailPage} />
                       <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage} />
                       <ProtectedRoute exact path="/accounting/in-out" component={AccountingInOutPage} />
@@ -394,24 +398,31 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/cmcs/home" component={CmcsPage} />
-                      <Route exact path="/cmcs/management-report" component={CmcManagementReport} />
-                      <Route path="/cmcs/*" component={ErrorPage} />
+                      <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
+                      <ProtectedRoute exact path="/cmcs/management-report" component={CmcManagementReport} />
                     </Switch>
 									</HomeLayout>
                 </Route>
 
-                  <Route path="*">
-                    <FullPageLayout>
-                      <Route path="/*" component={ErrorPage} />
-                    </FullPageLayout>
-                  </Route>
-                </Switch>
-              </ModalProvider>
-            </ChatProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </Router>
+                <Route path="/support">
+                  <HomeLayout>
+                    <Switch>
+                      <ProtectedRoute exact path="/support/home" component={SupportPage} />
+                    </Switch>
+									</HomeLayout>
+                </Route>
+
+                <Route path="*">
+                  <FullPageLayout>
+                    <Route path="/*" component={ErrorPage} />
+                  </FullPageLayout>
+                </Route>
+              </Switch>
+            </ModalProvider>
+          </ChatProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

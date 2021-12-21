@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
 import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload } from "typings/social";
 import { CommentProps } from 'typings/common';
+import { objPopulate } from 'views/pages/media/utils';
 
 type UseSocial = {
     listMedias: Array<MediaProps>,
@@ -176,14 +177,7 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             async ({ pageParams }: any) => 
             SocialRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
-                populates: JSON.stringify({
-                    value: 'comment userCreate lastestReplyID',
-                    select: '_id fullname image content files images amountCommentReply amountReaction'
-                }),
-                populates1: JSON.stringify({
-                    value: 'comment userCreate',
-                    select: '_id fullname image content files images'
-                }),
+                ...objPopulate,
                 ...payload
             }),
             {

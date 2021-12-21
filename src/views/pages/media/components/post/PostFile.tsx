@@ -7,7 +7,7 @@ import downloadIcon from 'assets/images/icons8-download-48.png';
 
 import { FileProps, PostFileProps } from 'typings/social';
 
-const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ files, onRemove, ...props }) => {
+const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ files, onRemove, isRemove, ...props }) => {
 	if (!files?.length) return null;
 
 	const handleDownload = (file: FileProps | File) => {
@@ -44,15 +44,17 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 										: <img src={downloadIcon} alt="download icon" />
 								}
 							</button>
-							<button
-								type="button"
-								className={cn("close-btn absolute top -top-3.5 -right-3 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", { "hidden": !onRemove })}
-								onClick={() => onRemove && onRemove(d, 'FILE')}
-							>
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-								</svg>
-							</button>
+							{isRemove ? (
+								<button
+									type="button"
+									className={cn("close-btn absolute top -top-3.5 -right-3 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", { "hidden": !onRemove })}
+									onClick={() => onRemove && onRemove(d, 'FILE')}
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+									</svg>
+								</button>
+							) : ''}
 						</div>
 					)
 				})

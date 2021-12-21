@@ -4,39 +4,33 @@ import RootComment from './RootComment';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
+import { objPopulate } from 'views/pages/media/utils';
 
 type Props = {
 	comments?: CommentProps[],
 	mediaID?: string,
 	totalRecord?: number,
 	limit?: number,
-	nextCursor?: string
+	smallImage?: boolean,
 } & HTMLAttributes<HTMLUListElement>
 
-const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit = 5, nextCursor = '', ...props }) => {
+const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
-	
+
 	useEffect(() => {
 		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
 	}, [comments?.length])
 
 	const handleClickViewMore = async () => {
-		const { error, data } = await SocialRepository.listComments({ 
+		const { error, data } = await SocialRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
-			populates: JSON.stringify({
-				value: 'comment userCreate lastestReplyID',
-				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
-			}),
-			populates1: JSON.stringify({
-				value: 'comment userCreate',
-				select: '_id fullname image content files images amountCommentReply amountReaction'
-			}),
+			...objPopulate
 		});
 		setAmountComment(amountComment - limit);
 
-		if(!error && data.listRecords.length){
+		if (!error && data.listRecords.length) {
 			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
 		}
 	}
@@ -58,6 +52,7 @@ const RootCommentsList: FC<Props> = ({ comments, mediaID, totalRecord = 0, limit
 						<RootComment
 							comment={comment}
 							limit={limit}
+							smallImage={smallImage}
 							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
 							renderNestedComment={Comment}
 						/>

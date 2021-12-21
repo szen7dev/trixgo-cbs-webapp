@@ -6,15 +6,17 @@ import ReplyCommentField from './ReplyCommentField';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
+import { objPopulate } from 'views/pages/media/utils';
 
 interface Props {
 	renderNestedComment?: React.ElementType
 	onClickReply?: () => unknown;
 	comment: CommentProps,
 	limit: number,
+	smallImage?: boolean
 }
 
-const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedComment }) => {
+const RootComment: FC<Props> = ({smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment.comment.amountCommentReply - 1);
@@ -23,29 +25,22 @@ const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedCom
 	const handleClickViewMore = async () => {
 		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
 
-		const { error, data } = await SocialRepository.listComments({ 
+		const { error, data } = await SocialRepository.listComments({
 			lastestID,
 			mediaID: comment.media,
 			parentID: comment._id,
-			populates: JSON.stringify({
-				value: 'comment userCreate lastestReplyID',
-				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
-			}),
-			populates1: JSON.stringify({
-				value: 'comment userCreate',
-				select: '_id fullname image content files images amountCommentReply amountReaction'
-			}),
+			...objPopulate
 		});
 		setAmountReply(amountReply - limit);
 
-		if(!error && data.listRecords.length){
+		if (!error && data.listRecords.length) {
 			dispatch({ type: 'VIEW_MORE_COMMENTS_REPLY', payload: data.listRecords });
 		}
 	}
 
 	return (
 		<>
-			<Comment comment={comment} onClickReply={() => setIsReply(true)} renderOptions={EditButton} />
+			<Comment small={smallImage} comment={comment} onClickReply={() => setIsReply(true)} renderOptions={EditButton} />
 			<div>
 				{amountReply > 0 ? (
 					<div className="react__comments-header">
@@ -60,7 +55,7 @@ const RootComment: FC<Props> = ({ comment, limit, renderNestedComment: NestedCom
 				<ul>
 					{commentsReply.length ? commentsReply.map(commentReply => (
 						<li key={commentReply._id}>
-							<div className="pl-11">{NestedComment ? <NestedComment comment={commentReply} onClickReply={() => setIsReply(true)} renderOptions={EditButton} /> : null}</div>
+							<div className="pl-11">{NestedComment ? <NestedComment small={smallImage} comment={commentReply} onClickReply={() => setIsReply(true)} renderOptions={EditButton} /> : null}</div>
 						</li>
 					)) : ''}
 				</ul>

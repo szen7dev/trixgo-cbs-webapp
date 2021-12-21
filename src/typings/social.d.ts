@@ -22,11 +22,13 @@ export type infoMediaResponse = APIResponse & {
 
 export type PostFileProps = {
   files?: Array<FileProps | FilePropsUpload>;
+  isRemove?: boolean;
   onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
 export type PostImageProps = {
   images?: Array<FileProps | FilePropsUpload>;
+  isRemove?: boolean;
   onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
 };
 
@@ -148,7 +150,8 @@ export type ListCommentsPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-  populates1?: string
+  populates1?: string;
+  populates2?: string
 };
 
 export type CommentPayload = {
@@ -156,6 +159,6 @@ export type CommentPayload = {
   commentID?: string;
   parentID?: string;
   content: string;
-  files?: Array<FileProps>;
-  images?: Array<FileProps>;
+  files?: string[];
+  images?: string[];
 };

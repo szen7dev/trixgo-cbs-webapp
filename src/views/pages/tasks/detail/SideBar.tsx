@@ -13,7 +13,7 @@ const SideBar: FC = () => {
           <span className="font-bold text-[13px] leading-4">
             Đệ trình và phê duyệt
           </span>
-          <button title="Toggle header" className="">
+          <button title="Toggle header" className="p-1 rounded bg-gray-200">
             <img className="w-3" src={ChevronUpIcon} alt="Toggle button" />
           </button>
         </div>

@@ -1,4 +1,19 @@
-export const typeTextSelected = (key: string) => {
+export const objPopulate = {
+	populates: JSON.stringify({
+		value: 'comment userCreate lastestReplyID',
+		select: '_id fullname image content files images amountCommentReply amountReaction'
+	}),
+	populates1: JSON.stringify({
+		value: 'files images comment userCreate lastestReplyID',
+		select: '_id name url size type fullname image content files images amountCommentReply amountReaction'
+	}),
+	populates2: JSON.stringify({
+		value: 'files images',
+		select: '_id name url size type'
+	}),
+}
+
+export const typeTextSelected = (key: string) : string => {
 	switch (key) {
 		case 'company':
 			return "Thành viên trong công ty";
@@ -40,7 +55,7 @@ export const abbreviateNumber = (number = 0) : string => {
     const tier = Math.log10(Math.abs(number)) / 3 | 0;
 
     // if zero, we don't need a suffix
-    if(tier == 0) return `${number}`;
+    if(+tier === 0) return `${number}`;
 
     // get suffix and determine scale
     const suffix = SI_SYMBOL[tier];
