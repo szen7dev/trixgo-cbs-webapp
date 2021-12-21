@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useHistory } from "react-router-dom";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -11,7 +12,7 @@ import IconPrint from "assets/images/icons8-print-32.png";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import IconStar from "assets/images/icons8-star-96.png";
-import MoveStockIcon from "assets/images/icons8-move-stock-96.svg"
+import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
@@ -19,12 +20,14 @@ import PriceApprovalInfo from "./PriceApprovalInfo";
 import RelatedFeedback from "./RelatedFeedback";
 
 const TaskDetailPage: FC = () => {
+  const history = useHistory();
+
   return (
     <>
       {/*_____________header______________*/}
       <div className="task-management-header flex items-center justify-between pt-2 pb-2 pl-5 pr-5 border-b border-secondary-light shadow-lg">
         <div className="task-management-header-left-block flex items-center">
-          <button>
+          <button onClick={() => history.goBack()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -108,7 +111,11 @@ const TaskDetailPage: FC = () => {
                   CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
                 </span>
                 <div>
-                  <img className="h-6 w-6" src={MoveStockIcon} alt="Move stock icon" />
+                  <img
+                    className="h-6 w-6"
+                    src={MoveStockIcon}
+                    alt="Move stock icon"
+                  />
                 </div>
               </div>
               <div className="flex items-end">

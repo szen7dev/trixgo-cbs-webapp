@@ -5,7 +5,12 @@ export type User = {
   email: string,
   phone: string,
   fullname: string,
-  company: string,
+  company: {
+    _id: string,
+    name: string,
+    sign: string,
+    image: string
+  },
   signature: string,
   status: number,
   level: number,

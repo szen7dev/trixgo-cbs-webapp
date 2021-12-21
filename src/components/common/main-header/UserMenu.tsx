@@ -18,7 +18,7 @@ const UserMenu: FC = () => {
       <div className="flex items-center justify-center ml-6">
         <Menu.Button className="flex justify-center items-center group focus:outline-none">
           <img
-            src={"https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg"}
+            src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
             alt="User Avatar"
             className="w-8 h-8 rounded-full"
           />
@@ -39,7 +39,7 @@ const UserMenu: FC = () => {
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-3">
               <div className="relative">
                 <img
-                  src={"https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg"}
+                  src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
                   alt="User Avatar"
                   className="w-14 h-14 rounded-full"
                 />
