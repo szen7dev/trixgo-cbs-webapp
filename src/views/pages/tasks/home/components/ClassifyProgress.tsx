@@ -7,7 +7,7 @@ type Props = {
 const ClassifyProgress: FC<Props> = ({ onClickBar }) => {
   const outDatePercent = (8 / 50) * 100;
   const nextWeekPercent = (12 / 50) * 100;
-  const greatThanSevenDayPercent = (30 / 50) * 100;
+  const moreThanSevenDaysPercent = (30 / 50) * 100;
 
   return (
     <div className="flex w-full h-[12px] mt-1">
@@ -31,8 +31,8 @@ const ClassifyProgress: FC<Props> = ({ onClickBar }) => {
       </button>
       <button
         className="flex items-center justify-center bg-green-500"
-        style={{ width: `${greatThanSevenDayPercent}%` }}
-        onClick={() => onClickBar("GREAT_THAN_SEVEN_DAY")}
+        style={{ width: `${moreThanSevenDaysPercent}%` }}
+        onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
       >
         <span className="text-white" style={{ fontSize: 10 }}>
           30
