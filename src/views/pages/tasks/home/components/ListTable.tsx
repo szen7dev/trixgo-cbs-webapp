@@ -52,7 +52,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -67,7 +67,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -83,7 +83,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -112,7 +112,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -127,7 +127,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -143,7 +143,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -174,7 +174,7 @@ const ListTable: FC = () => {
             </div>
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -189,7 +189,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -205,7 +205,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -220,7 +220,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">1</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -235,7 +235,7 @@ const ListTable: FC = () => {
           </td>
           <td className="border p-2"></td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">2</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
@@ -251,7 +251,7 @@ const ListTable: FC = () => {
             Hiệp-PGI 8h ago
           </td>
         </tr>
-        <tr onClick={handleClickTask}>
+        <tr className="cursor-pointer" onClick={handleClickTask}>
           <td className="p-2 border">3</td>
           <td className="p-2 border">CHG.THT.Chào giá dự án Sunrise Resort</td>
           <td className="p-2 border">25/12/2021</td>
