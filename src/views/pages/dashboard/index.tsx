@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
+import moment from "moment";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -19,12 +20,20 @@ import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import iconBirthday from "assets/images/icons8-event-64.png";
 
-import { useSocial } from 'services/hooks/usePcm';
-import moment from "moment";
+import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
+import { usePcm } from 'services/hooks/usePcm';
+import PcmRepository from 'apis/pcm';
 
 const HomePage: FC = () => {
-  const { listMedias } = useSocial()
-  console.log(listMedias)
+  const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
+  const { listTasks } = usePcm();
+
+  useEffect(() => {
+    (async () => {
+      const response = await PcmRepository.listTotalAnalysis();
+      setTaskAnalysis(response.data);
+    })();
+  }, [])
 
   const settings = {
     dots: false,
@@ -45,29 +54,29 @@ const HomePage: FC = () => {
           <div className="t-home-summary flex flex-wrap items-center justify-center">
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">25</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">{taskAnalysis?.amountTask || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Công việc</p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">205</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">{taskAnalysis?.amountTaskIsRFa || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Phê duyệt</p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">5</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">{taskAnalysis?.amountTaskIsRFis || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Yêu cầu thông tin</p>
               </div>
             </div>
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">22</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{taskAnalysis?.amountTaskIsFlags || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Quan tâm</p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">250</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{taskAnalysis?.amountTaskIsAssignee || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Việc đã giao</p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">2</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{taskAnalysis?.amountTaskIsDraft || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Việc nháp</p>
               </div>
             </div>
@@ -190,18 +199,18 @@ const HomePage: FC = () => {
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
-              {listMedias?.length ? listMedias?.map((media: any) => (
-                <div key={media?._id} className="flex mb-4">
-                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${media?.assignee?.image}`} alt="Thumbnail" />
+              {listTasks.length ? listTasks.map((task: PcmPlanTaskProps) => (
+                <div key={task?._id} className="flex mb-4">
+                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${task?.lastLog?.author?.image || task?.assignee?.image}`} alt="Thumbnail" />
                   <div className="t-home-actions-text text-secondary-gray">
                     <div className="flex justify-between mb-1">
                       <span className="t-home-actions-title-content text-dark">
-                        {media?.name}
+                        {task?.name}
                       </span>
-                      <span className="ml-2">{moment(media?.actualFinishTime).format('L')}</span>
+                      <span className="ml-2">{moment(task?.lastLog?.createAt).format('L')}</span>
                     </div>
                   <div>
-                      Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
+                      {task?.lastLog?.content}
                     </div>
                   </div>
                 </div>

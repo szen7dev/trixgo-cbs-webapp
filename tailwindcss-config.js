@@ -109,7 +109,10 @@ module.exports = {
       },
       paddingRight: {
         "[100px]": "100px"
-      }
+      },
+        zIndex: {
+          "100" : 100
+        }
     },
   },
   variants: {

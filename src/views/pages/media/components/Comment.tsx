@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useContext, useMemo } from 'react'
+import { FC, HTMLAttributes, useContext } from 'react'
 
 import cn from "classnames";
 import moment from "moment";
@@ -8,8 +8,8 @@ import PostFile from './post/PostFile';
 import { CommentProps } from 'typings/common';
 import CommentContext from '../context/comment/comment.context';
 import { useCommentSocial } from 'services/hooks/useSocial';
-import { FileProps } from 'typings/social';
-import generateImageLink from '../utils/images';
+// import { FileProps } from 'typings/social';
+// import generateImageLink from '../utils/images';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,
@@ -19,6 +19,7 @@ type OptionsProps = {
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
+	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
 	comment: CommentProps,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+	onClickEdit,
 	comment, small, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
@@ -38,8 +40,13 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 			payload: { _id: comment._id, parent: comment.parent }
 		});
 	}
-	const images = comment.comment.images || [];
-	const files = comment.comment.files || [];
+
+	const handleEditComment = () => {
+		onClickEdit?.(comment)
+	}
+
+	const images = comment.comment?.images || [];
+	const files = comment.comment?.files || [];
 
 	return (
 		<>
@@ -56,10 +63,10 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
 							<p className="font-bold text-medium">{comment.userCreate?.fullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
-								{comment.comment.content}
+								{comment.comment?.content}
 							</p>
 						</div>
-						{Options && <Options className="opacity-0 group-hover:opacity-100" onDelete={handleDeleteComment} />}
+						{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
 					</div>
 					<div>
 						<div className="flex flex-wrap gap-x-2">

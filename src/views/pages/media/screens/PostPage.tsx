@@ -49,7 +49,7 @@ const SocialPostPage: FC = () => {
 	const { deleteMedia } = useSocial();
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
-		key: `${mediaID}-list-comments`
+		key: `list_comments.${mediaID}`
 	});
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);

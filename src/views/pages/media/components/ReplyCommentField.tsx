@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useRef, useState, useContext, useEffect } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -10,7 +10,7 @@ import PostImage from './post/PostImage';
 import PostFile from './post/PostFile';
 
 import useCustomReducer from '../context/useCustomReducer';
-import { IMethodFiles, IMethodImages } from '../context/upload';
+import { IMethodFiles, IMethodImages, IMethodFileCommon } from '../context/upload';
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import CommentContext from '../context/comment/comment.context';
 import uploadActions from '../context/upload.actions';
@@ -29,16 +29,18 @@ interface Props {
 	fileContainerClassName?: string;
 	parentID?: string,
 	mediaID: string,
+	defaultValue?: string,
 }
 
-const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ 
-	fileContainerClassName, 
+const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
+	fileContainerClassName,
 	inputContainerClassName,
 	onSubmit,
 	onTextChange,
 	attachFile,
 	parentID,
 	mediaID,
+	defaultValue,
 	...props
 }) => {
 	const { dispatch } = useContext(CommentContext);
@@ -51,26 +53,26 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		setUploadFile,
 		removeUploadedImage,
 		removeUploadedFile,
-		cancelUploadFile,
-		cancelUploadImage
-	}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, INITIAL_STATE);
+		removeAllFiles
+	}] = useCustomReducer<IMethodFiles & IMethodImages & IMethodFileCommon>(fileUploadReducer, uploadActions, INITIAL_STATE);
 
-	const [text, setText] = useState<string>('');
+	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');
-	const { createComment } = useCommentSocial({ mediaID, key: `${mediaID}-list-comments` });
+	const { createComment } = useCommentSocial({ mediaID, key: `list_comments.${mediaID}` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
-	const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
-	const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
+	const refDivFile = useRef<HTMLDivElement | null>(null);
+	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
+	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
-	const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
-		if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
-		cancelUploadFile(file)
-	}
+	// const handleCancleUploadFile = (file: FileProps | FilePropsUpload) => {
+	// 	if ('id' in file && refsFiles.current[file.id]) clearInterval(refsFiles.current[file.id])
+	// 	cancelUploadFile(file)
+	// }
 
-	const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
-		if ('id' in file && refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
-		cancelUploadImage(file)
-	}
+	// const handleCancleUploadImage = (file: FileProps | FilePropsUpload) => {
+	// 	if ('id' in file && refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
+	// 	cancelUploadImage(file)
+	// }
 
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
@@ -106,29 +108,18 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			})
 			setIDFileUploaded(key, _id);
 		}
-
-		// for (let i = 0; i < event.target.files.length; i++) {
-		// 	if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
-		// 	// if (event.target.files[i].type.indexOf('image') !== -1) { images.push(event.target.files[i]); continue; }
-		// 	files.push(event.target.files[i])
-		// }
-
-		// if (files.length) setUploadFile && setUploadFile(files);
-		// if (images.length) setUploadImage && setUploadImage(images);
 	}
 
 	const handleSubmit = async () => {
 		let images: string[] = [];
 		let files: string[] = [];
 
-		console.log({ IMAGES: uploads.images, FILES: uploads.files });
-
 		// Get list file uploaded
-		for (const [_, { _id }] of Object.entries(uploads.images)) {
+		for (const [, { _id }] of Object.entries(uploads.images)) {
 			_id && (images = [...images, _id]);
 		}
 
-		for (const [_, { _id }] of Object.entries(uploads.files)) {
+		for (const [, { _id }] of Object.entries(uploads.files)) {
 			_id && (files = [...files, _id]);
 		}
 
@@ -137,15 +128,29 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			content: text,
 			files,
 			images,
-			...{ parentID }??{}
+			...{ parentID } ?? {}
 		}
-		console.log({ dataInsert });
 
 		const infoAfterCreate = await createComment(dataInsert);
 		dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
 
-		// Clear text input comment
+		// Clear text input comment, reset something...
+		removeAllFiles();
 		refInputComment.current && (refInputComment.current.innerText = '');
+
+		if(refDivFile.current){
+			refDivFile.current.innerHTML = '';
+			refDivFile.current.classList.add('h-0');
+			refDivFile.current.classList.remove('post__files', 'pt-2', 'pb-6');
+		}
+	}
+
+	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
+		if ('id' in file){
+			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+		} else{
+			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
+		}
 	}
 
 	return (
@@ -156,15 +161,16 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 						fileContainerClassName,
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "post__files pt-2 pb-6")
 				}
+				ref={refDivFile}
 			>
 				<PostImage
 					images={toArray(uploads.images)}
-					onRemove={handleCancleUploadImage}
+					onRemove={handleRemoveUpload}
 					className="post__files-row pt-5 text-black gap-5 flex-wrap"
 				/>
 				<PostFile
 					files={toArray(uploads.files)}
-					onRemove={handleCancleUploadFile}
+					onRemove={handleRemoveUpload}
 					className="text-black w-full mr-4"
 				/>
 			</div>
@@ -192,7 +198,8 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 								onTextChange
 									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
-							}}
+							}
+							}
 						></span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />

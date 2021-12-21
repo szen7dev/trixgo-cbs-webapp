@@ -4,6 +4,7 @@ import RootComment from './RootComment';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
+import { objPopulate } from 'views/pages/media/utils';
 
 type Props = {
 	comments?: CommentProps[],
@@ -25,14 +26,7 @@ const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecor
 		const { error, data } = await SocialRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
-			populates: JSON.stringify({
-				value: 'comment userCreate lastestReplyID',
-				select: '_id fullname image content files images amountCommentReply amountReaction createAt'
-			}),
-			populates1: JSON.stringify({
-				value: 'files images',
-				select: '_id name url size type'
-			}),
+			...objPopulate
 		});
 		setAmountComment(amountComment - limit);
 
@@ -59,6 +53,7 @@ const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecor
 							comment={comment}
 							limit={limit}
 							smallImage={smallImage}
+							onClickEdit={() => console.log('edit')}
 							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
 							renderNestedComment={Comment}
 						/>

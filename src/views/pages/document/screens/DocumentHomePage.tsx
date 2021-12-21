@@ -7,7 +7,7 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -18,9 +18,8 @@ import SearchInput from "components/common/SearchInput";
 import ButtonMore from "../components/common/ButtonMore";
 import ButtonCreate from "../components/common/ButtonCreate";
 
-import iconFilter from 'assets/images/icons8-filter-96.png';
 import projectImage from "assets/images/project.jpg";
-import styles from '../document.module.css';
+import '../document.css';
 
 interface IData {
 	id: number
@@ -79,30 +78,28 @@ const DocumentHomePage: FC = () => {
 					}
 
 					scrollableTarget="scrollable"
-					className="flex flex-wrap w-full px-4 pt-2 pb-20 gap-y-2.5 gap-x-2 text-primary-gray"
+					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
 				>
 					{data.map((item, index) => {
 						return (
+							<div key={index} className="document__card-container">
 							<div
-								key={index}
-								className={cn(
-									styles.card,
-									"relative mt-2"
-								)}
+								className="document__home-card relative mt-2 border-cbs-border box-border border"
 							>
 								<div className="flex mb-5">
-									<img src={projectImage} alt="Avatar" className={styles.project__image} />
+									<img src={projectImage} alt="Avatar" className="h-[90px] w-[90px] object-cover" />
 									<div className="flex flex-1 justify-center items-center">
-										<div className={cn(styles.project__circle, "rounded-full flex flex-col justify-center items-center")}>
-											<p className={cn(styles.text__large, "text-black")}>{item.count}</p>
+										<div className="rounded-full flex flex-col justify-center items-center w-[75px] h-[75px] border-cbs-border border-b bg-cbs-gray">
+											<p className="text-x-large text-black">{item.count}</p>
 											<p>Hồ sơ</p>
 										</div>
 									</div>
 								</div>
-								<Link className={cn(styles.line, styles.text__base, "text-black")} to="/document/project/id/document">{item.title}</Link>
-								<p className={cn(styles.text__small, styles.line__min, "mt-1.5")}>
+								<Link className="document__line text-large text-black" to="/document/project/id/document">{item.title}</Link>
+								<p className="text-x-small document__line-min mt-1.5">
 									{item.company}
 								</p>
+							</div>
 							</div>
 						);
 					})}

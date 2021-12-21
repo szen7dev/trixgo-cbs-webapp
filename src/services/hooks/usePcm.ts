@@ -1,54 +1,47 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation } from "react-query";
-import { toast } from "react-toastify";
-import SocialRepository from "apis/pcm";
-import { MediaProps, MediaPayload } from "typings/pcm";
+import { useInfiniteQuery } from "react-query";
+import PcmRepository from "apis/pcm";
+import { PcmPlanTaskProps } from "typings/pcm";
 
-type UseSocial = {
-    listMedias: Array<MediaProps>,
-    isLoadingListMedias: boolean,
-    createMedia: (payload: MediaPayload) => Promise<void>,
-    updateMedia: (payload: MediaPayload) => Promise<void>,
-    deleteMedia: (id: string) => Promise<void>,
-    refetchListMedias: () => void,
-    nextPageListMedias: () => void,
-    prevPageListMedias: () => void,
+type UsePcm = {
+    listTasks: Array<PcmPlanTaskProps>,
+    isLoadingListTasks: boolean,
+    refetchListTasks: () => void,
+    nextPageListTasks: () => void,
+    prevPageListTasks: () => void,
     totalRecord: number | undefined,
     totalPages: number | undefined,
     hasNextPage: boolean | undefined
 };
 
-export const useSocial = () : UseSocial => {
-    const { mutateAsync: createMediaAsync } =
-        useMutation((payload: MediaPayload) =>
-            SocialRepository.createMedia(payload)
-        );
-
-    const { mutateAsync: updateMediaAsync } =
-        useMutation((payload: MediaPayload) =>
-            SocialRepository.updateMedia(payload)
-        );
-        
-    const { mutateAsync: deleteMediaAsync } =
-        useMutation((id: string) =>
-            SocialRepository.deleteMedia(id)
-        );
-
+export const usePcm = () : UsePcm => {
     const {
-        isLoading: isLoadingListMedias,
-        refetch: refetchListMedias,
-        data: dataListMedias,
-        fetchNextPage: nextPageListMedias,
-        fetchPreviousPage: prevPageListMedias,
+        isLoading: isLoadingListTasks,
+        refetch: refetchListTasks,
+        data: dataListTasks,
+        fetchNextPage: nextPageListTasks,
+        fetchPreviousPage: prevPageListTasks,
         hasNextPage: hasNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_medias",
+            "list_tasks",
             async ({ pageParams }: any) => 
-            SocialRepository.listMedias({ 
+            PcmRepository.listTasks({ 
                 lastestID: pageParams ? pageParams : "",
-                filter: JSON.stringify({name: 1, assignee: 1, actualFinishTime: 1}),
-                populates: JSON.stringify({value: "assignee author project group", select: "name fullname image sign"})
+                filter: JSON.stringify({ 
+                    _id: 1,
+                    name: 1,
+                    assignee: 1, 
+                    lastLog: 1,
+                }),
+                populates: JSON.stringify({
+                    value: "assignee lastLog",
+                    select: "name fullname image content author createAt",
+                }),
+                populates1: JSON.stringify({
+                    value: "author",
+                    select: "_id fullname image"
+                }),
             }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
@@ -59,75 +52,16 @@ export const useSocial = () : UseSocial => {
             }
         );
 
-    const createMedia = async (payload: MediaPayload) => {
-        try {
-            const { error, data, message } = await createMediaAsync(payload);
-            console.log({ error, data, message });
-
-            if (!error) {
-                toast.success('Tạo bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const updateMedia = async (payload: MediaPayload) => {
-        try {
-            const { error, data, message } = await updateMediaAsync(payload);
-            console.log({ error, data, message });
-            if (!error) {
-                toast.success('Cập nhật bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const deleteMedia = async (id: string) => {
-        try {
-            const { error, data, message } = await deleteMediaAsync(id);
-            console.log({ error, data, message });
-
-            if (!error) {
-                toast.success('Xóa bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords));
-    const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
+    const listTasks = [].concat(...(dataListTasks?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataListTasks?.pages[0]?.data?.totalRecord;
+    const totalPages = dataListTasks?.pages[0]?.data?.totalPages;
 
     return {
-        createMedia,
-        updateMedia,
-        deleteMedia,
-        listMedias,
-        isLoadingListMedias,
-        refetchListMedias,
-        nextPageListMedias,
-        prevPageListMedias,
+        listTasks,
+        isLoadingListTasks,
+        refetchListTasks,
+        nextPageListTasks,
+        prevPageListTasks,
         totalRecord,
         totalPages,
         hasNextPage

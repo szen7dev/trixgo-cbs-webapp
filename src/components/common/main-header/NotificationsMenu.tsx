@@ -44,7 +44,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
             <span className="font-bold text-lg text-dark">
               Mới
             </span>
-            <a className="text-primary" href="javascript:void(0)">Xem tất cả</a>
+            <a className="text-primary" href="/">Xem tất cả</a>
           </div>
 
           <div className="t-header-notification-item-container overflow-auto">
