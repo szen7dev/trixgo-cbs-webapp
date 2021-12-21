@@ -88,7 +88,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							}) : ''}
 						</div>
 						<div >
-							<PostFile files={files} isRemove={false} className='px-0' />
+							<PostFile files={files} className='px-0' />
 						</div>
 					</div>
 					{EndComment
