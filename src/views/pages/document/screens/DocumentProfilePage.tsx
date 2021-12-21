@@ -22,7 +22,7 @@ interface IProfile {
 	value: number,
 }
 
-const data: Array<IProfile> = Array.from(Array(30).keys()).map((_, i) => ({
+const data: Array<IProfile> = Array.from(Array(28).keys()).map((_, i) => ({
 	id: i,
 	total: 123123,
 	title: 'Quyết định',
@@ -51,33 +51,37 @@ const DocumentProfilePage: FC = () => {
 					<ButtonCreate />
 					<ButtonMore />
 				</div>
-				<div className="flex flex-wrap gap-x-3 gap-y-3.5 flex-1 overflow-y-auto px-5 py-2.5">
+				<div className="flex flex-wrap gap-y-3.5 flex-1 overflow-y-auto px-5 py-2.5">
 					{data.map((d, i) => (
 						i % 2
-							? <div className="bg-white rounded-lg w-[300px] h-[150px] px-3.5 py-4 flex flex-col justify-between">
-								<div className="flex justify-between">
-									<h4 className="text-x-large">Quyết định</h4>
-									<div>
-										<div className="bg-cbs-secondary rounded-md px-2.5 py-0.5 text-x-small text-white">weekly</div>
+							? <div className="document__card-container">
+								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
+									<div className="flex justify-between">
+										<h4 className="text-x-large">Quyết định</h4>
+										<div>
+											<div className="bg-cbs-secondary rounded-md px-2.5 py-0.5 text-x-small text-white">weekly</div>
+										</div>
 									</div>
-								</div>
-								<p className="text-3x-large">24.532</p>
-								<div>
-									<span className="bg-cbs-up text-cbs-up-text py-0.5 px-1 rounded-sm mr-2.5 text-small">+355</span>
-									<span className="text-medium">Tuần này</span>
+									<p className="text-3x-large">24.532</p>
+									<div>
+										<span className="bg-cbs-up text-cbs-up-text py-0.5 px-1 rounded-sm mr-2.5 text-small">+355</span>
+										<span className="text-medium">Tuần này</span>
+									</div>
 								</div>
 							</div>
-							: <div className="bg-white rounded-lg w-[300px] h-[150px] px-3.5 py-4 flex flex-col justify-between">
-								<div className="flex justify-between">
-									<h4 className="text-x-large">Hợp đồng kinh tế</h4>
-									<div>
-										<div className="bg-cbs-secondary rounded-md px-2.5 py-0.5 text-x-small text-white">weekly</div>
+							: <div className="document__card-container">
+								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
+									<div className="flex justify-between">
+										<h4 className="text-x-large">Hợp đồng kinh tế</h4>
+										<div>
+											<div className="bg-cbs-secondary rounded-md px-2.5 py-0.5 text-x-small text-white">weekly</div>
+										</div>
 									</div>
-								</div>
-								<p className="text-3x-large">24.532</p>
-								<div>
-									<span className="bg-cbs-down text-cbs-down-text py-0.5 px-1 rounded-sm mr-2.5 text-small">-355</span>
-									<span className="text-medium">Tuần này</span>
+									<p className="text-3x-large">24.532</p>
+									<div>
+										<span className="bg-cbs-down text-cbs-down-text py-0.5 px-1 rounded-sm mr-2.5 text-small">-355</span>
+										<span className="text-medium">Tuần này</span>
+									</div>
 								</div>
 							</div>
 					))}

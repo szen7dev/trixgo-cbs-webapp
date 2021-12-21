@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useRef, useState, useContext, useEffect } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -29,16 +29,18 @@ interface Props {
 	fileContainerClassName?: string;
 	parentID?: string,
 	mediaID: string,
+	defaultValue?: string,
 }
 
-const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({ 
-	fileContainerClassName, 
+const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
+	fileContainerClassName,
 	inputContainerClassName,
 	onSubmit,
 	onTextChange,
 	attachFile,
 	parentID,
 	mediaID,
+	defaultValue,
 	...props
 }) => {
 	const { dispatch } = useContext(CommentContext);
@@ -54,7 +56,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		removeAllFiles
 	}] = useCustomReducer<IMethodFiles & IMethodImages & IMethodFileCommon>(fileUploadReducer, uploadActions, INITIAL_STATE);
 
-	const [text, setText] = useState<string>('');
+	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');
 	const { createComment } = useCommentSocial({ mediaID, key: `list_comments.${mediaID}` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
@@ -126,7 +128,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			content: text,
 			files,
 			images,
-			...{ parentID }??{}
+			...{ parentID } ?? {}
 		}
 
 		const infoAfterCreate = await createComment(dataInsert);
@@ -196,7 +198,8 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 								onTextChange
 									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
-							}}
+							}
+							}
 						></span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />

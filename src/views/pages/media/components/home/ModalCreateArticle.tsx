@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 /**
  * LIBRARIES
  */
-import { Dialog } from '@headlessui/react';
+import { Dialog, Disclosure } from '@headlessui/react';
 import { Form, Formik, ErrorMessage, FormikProps } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
@@ -20,6 +20,7 @@ import TabsClassifyArticle from './TabsClassifyArticle';
 import TabsClassifyArticleCommunity from './TabsClassifyArticleCommunity';
 import TabsClassifyDepartment from './TabsClassifyDepartment';
 import TabsOverlay from './TabsOverlay';
+import ChevronDownIcon from 'assets/icons/ChevronDown';
 import iconDown from 'assets/images/Frame 1745.png';
 
 /**
@@ -66,6 +67,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
 	const [showClassifyArticleCommunity, setShowClassifyArticleCommunity] = useState(false);
+	const [collapsed, setCollapsed] = useState(false);
 
 	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
@@ -158,9 +160,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 	};
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
-		if ('id' in file){
+		if ('id' in file) {
 			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
-		} else{
+		} else {
 			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
 		}
 	}
@@ -175,7 +177,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 				formik => {
 					const { values } = formik;
 					return (
-						<Form autoComplete="off" >
+						<Form autoComplete="off">
 							<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 								<Dialog.Title
 									as="h3"
@@ -197,7 +199,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 									<img src={iconDown} alt="icon down" className="inline-block" />
 								</button>
 							</div>
-							<div className="px-6 mt-2 pt-3.5 flex-1">
+							<div className="px-6 mt-2 pt-3.5 flex-1 md:h-[568px] flex flex-col">
 								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
 								<ErrorMessage
 									name="title"
@@ -207,7 +209,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
-									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5"
+									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5 flex-grow"
 									{...formik.getFieldProps('content')}
 								></textarea>
 								<ErrorMessage
@@ -217,19 +219,33 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 								/>
 								<div
 									className={
-										cn("flex flex-wrap border custom-scroll overflow-x-hidden overflow-y-auto",
-											(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0 border-none" : "post__files pt-2 pb-6 px-9")
+										cn("flex flex-wrap border custom-scroll overflow-x-hidden relative rounded-md",
+											(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0 border-none" : "post__files pt-4 pb-4 px-9",
+											collapsed ? 'overflow-y-hidden max-h-0' : 'overflow-y-auto'
+										)
 									}
 								>
+									<div className='flex text-black sticky top-0 h-0 w-full justify-between'>
+										<div className={cn('text-large', { 'opacity-0': !collapsed })}>
+											File/ảnh đính kèm
+										</div>
+										<button
+											type='button'
+											className='h-6 w-6 -mr-4 text-center rounded-md bg-cbs-left-menu'
+											onClick={() => setCollapsed(!collapsed)}
+										>
+											<ChevronDownIcon className={cn('h-4 w-4 text-cbs-subtext inline transition-transform', { 'transform rotate-180': collapsed })} />
+										</button>
+									</div>
 									<PostImage
 										images={toArray(uploads.images)}
 										onRemove={handleRemoveUpload}
-										className="post__files-row pt-5 text-black gap-9 flex-wrap"
+										className={cn("post__files-row py-5 text-black gap-9 flex-wrap transition-opacity", { 'opacity-0': collapsed })}
 									/>
 									<PostFile
 										files={toArray(uploads.files)}
 										onRemove={handleRemoveUpload}
-										className="w-full mx-2.5 text-black"
+										className={cn("w-full mx-2.5 text-black transition-opacity", { 'opacity-0': collapsed })}
 									/>
 								</div>
 							</div>

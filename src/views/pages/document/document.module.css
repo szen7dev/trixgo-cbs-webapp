@@ -3,9 +3,7 @@
   --background-gray: #F0F0F0;
 }
 
-.card {
-  border: 0.5px solid var(--border-color);
-  box-sizing: border-box;
+.document__home-card {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 291px;
   padding: 16px 14px 21px 15px;
@@ -13,7 +11,7 @@
   height: 204px;
 }
 
-.line {
+.document__line {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -21,7 +19,7 @@
   -webkit-box-orient: vertical;
 }
 
-.line__min {
+.document__line-min {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -42,19 +40,6 @@
 .text__large {
   font-size: 18px;
   line-height: 20.7px;
-}
-
-.project__image {
-  height: 90px;
-  width: 90px;
-  object-fit: cover;
-}
-
-.project__circle {
-  width: 75px;
-  height: 75px;
-  background-color: var(--background-gray);
-  border: 1px solid var(--border-color);
 }
 
 .dropdown {

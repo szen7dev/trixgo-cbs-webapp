@@ -53,6 +53,7 @@ const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecor
 							comment={comment}
 							limit={limit}
 							smallImage={smallImage}
+							onClickEdit={() => console.log('edit')}
 							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
 							renderNestedComment={Comment}
 						/>
