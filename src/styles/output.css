@@ -3844,6 +3844,10 @@ body {
   z-index: 50;
 }
 
+.z-100 {
+  z-index: 100;
+}
+
 .z-auto {
   z-index: auto;
 }
@@ -3872,6 +3876,10 @@ body {
   z-index: 50;
 }
 
+.focus-within\:z-100:focus-within {
+  z-index: 100;
+}
+
 .focus-within\:z-auto:focus-within {
   z-index: auto;
 }
@@ -3898,6 +3906,10 @@ body {
 
 .focus\:z-50:focus {
   z-index: 50;
+}
+
+.focus\:z-100:focus {
+  z-index: 100;
 }
 
 .focus\:z-auto:focus {
@@ -82435,7 +82447,7 @@ button {
 }
 
 .select-dropdown .select-options-container {
-  min-width: 240px;
+  /*min-width: 240px;*/
   top: calc(100% + 5px);
 }
 
@@ -85595,6 +85607,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .sm\:z-100 {
+    z-index: 100;
+  }
+
   .sm\:z-auto {
     z-index: auto;
   }
@@ -85623,6 +85639,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .sm\:focus-within\:z-100:focus-within {
+    z-index: 100;
+  }
+
   .sm\:focus-within\:z-auto:focus-within {
     z-index: auto;
   }
@@ -85649,6 +85669,10 @@ input[type="text"] {
 
   .sm\:focus\:z-50:focus {
     z-index: 50;
+  }
+
+  .sm\:focus\:z-100:focus {
+    z-index: 100;
   }
 
   .sm\:focus\:z-auto:focus {
@@ -166139,6 +166163,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .md\:z-100 {
+    z-index: 100;
+  }
+
   .md\:z-auto {
     z-index: auto;
   }
@@ -166167,6 +166195,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .md\:focus-within\:z-100:focus-within {
+    z-index: 100;
+  }
+
   .md\:focus-within\:z-auto:focus-within {
     z-index: auto;
   }
@@ -166193,6 +166225,10 @@ input[type="text"] {
 
   .md\:focus\:z-50:focus {
     z-index: 50;
+  }
+
+  .md\:focus\:z-100:focus {
+    z-index: 100;
   }
 
   .md\:focus\:z-auto:focus {
@@ -246683,6 +246719,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .lg\:z-100 {
+    z-index: 100;
+  }
+
   .lg\:z-auto {
     z-index: auto;
   }
@@ -246711,6 +246751,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .lg\:focus-within\:z-100:focus-within {
+    z-index: 100;
+  }
+
   .lg\:focus-within\:z-auto:focus-within {
     z-index: auto;
   }
@@ -246737,6 +246781,10 @@ input[type="text"] {
 
   .lg\:focus\:z-50:focus {
     z-index: 50;
+  }
+
+  .lg\:focus\:z-100:focus {
+    z-index: 100;
   }
 
   .lg\:focus\:z-auto:focus {
@@ -327227,6 +327275,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .xl\:z-100 {
+    z-index: 100;
+  }
+
   .xl\:z-auto {
     z-index: auto;
   }
@@ -327255,6 +327307,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .xl\:focus-within\:z-100:focus-within {
+    z-index: 100;
+  }
+
   .xl\:focus-within\:z-auto:focus-within {
     z-index: auto;
   }
@@ -327281,6 +327337,10 @@ input[type="text"] {
 
   .xl\:focus\:z-50:focus {
     z-index: 50;
+  }
+
+  .xl\:focus\:z-100:focus {
+    z-index: 100;
   }
 
   .xl\:focus\:z-auto:focus {
@@ -407771,6 +407831,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .\32xl\:z-100 {
+    z-index: 100;
+  }
+
   .\32xl\:z-auto {
     z-index: auto;
   }
@@ -407799,6 +407863,10 @@ input[type="text"] {
     z-index: 50;
   }
 
+  .\32xl\:focus-within\:z-100:focus-within {
+    z-index: 100;
+  }
+
   .\32xl\:focus-within\:z-auto:focus-within {
     z-index: auto;
   }
@@ -407825,6 +407893,10 @@ input[type="text"] {
 
   .\32xl\:focus\:z-50:focus {
     z-index: 50;
+  }
+
+  .\32xl\:focus\:z-100:focus {
+    z-index: 100;
   }
 
   .\32xl\:focus\:z-auto:focus {
