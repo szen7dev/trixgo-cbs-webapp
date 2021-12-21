@@ -3,7 +3,8 @@ import {map as _map} from "lodash";
 import API from "../../apis/repository";
 import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
-import Close from "../../assets/icons/Close";
+import Close from "assets/icons/Close";
+import BlueCheck from "assets/images/blue-check.svg";
 import TriangleDown from "../../assets/icons/TriangleDown";
 
 export type Item = {
@@ -25,7 +26,7 @@ type Props = {
     placeholder?: string;
     searchUrl?: string;
     searchParam?: string;
-    initialValue?: string | number | Array<string|number>;
+    initialValue?: string | number | undefined | Array<string|number|undefined>;
     onchangeValue?: (item: Item) => void;
     className?: string;
     classNameItem?: string;
@@ -40,6 +41,7 @@ type Props = {
     maxHeightInput?: string;
     formatItem?: FormatItem;
     inlineSearch?: boolean;
+    disableSearch?: boolean;
 }
 
 type Params = {
@@ -66,7 +68,8 @@ const DropdownSearchable:FC<Props>
        maxWidthInput,
        formatItem,
        inlineSearch,
-       maxHeightInput
+       maxHeightInput,
+       disableSearch
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -138,7 +141,7 @@ const DropdownSearchable:FC<Props>
             setValue(item);
         }
         if (onchangeValue) {
-            onchangeValue(item);
+            onchangeValue(modifyItem(item));
         }
     };
 
@@ -196,19 +199,20 @@ const DropdownSearchable:FC<Props>
                 key={readDataValue(option,"id")}
                 className={
                     (classNameItem ?? '') +
-                    " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 " +
-                    (
-                        isMultiple ?
-                            (values?.find(v => readDataValue(v,"id") === readDataValue(option,"id")) ? 'bg-blue-100':'') :
-                            (readDataValue(option,"id")=== readDataValue(value,"id") ? 'bg-blue-100':''))
+                    " select-option hover:bg-gray-100 transition duration-150 flex cursor-pointer py-3 px-4 "
                 }
                 onClick={() => handleSetValue(option)}
                 data-option-value={option.id}
             >
                 {
+                    ((isMultiple&& values?.find(v => readDataValue(v,"id") === readDataValue(option,"id"))) ||
+                        readDataValue(option,"id")=== readDataValue(value,"id")) ?
+                    <img src={BlueCheck} alt={'checked'} className={"w-[15px] mr-3"}/>:<div className={"w-[15px] mr-3"}/>
+                }
+                {
                     renderItem?
                         renderItem(modifyItem(option)):
-                        <div className={"flex align-items-center"}>
+                        <div className={"flex align-items-center text-left"}>
                             {readDataValue(option,"imageUrl")?<img alt={"Avt"} src={readDataValue(option,"imageUrl")} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{readDataValue(option,"text")}</span>
                         </div>
                 }
@@ -232,7 +236,7 @@ const DropdownSearchable:FC<Props>
                         null
                 }
                 {_map(values, (option) => (
-                    <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1"}>
+                    <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white"}>
                         {
                             renderSelectedItem?
                                 renderSelectedItem(modifyItem(option)):
@@ -274,7 +278,7 @@ const DropdownSearchable:FC<Props>
                         <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
                 ):
                 (
-                    <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 " + (!value ? "text-gray-300":'')}>
+                    <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white " + (!value ? "text-gray-300":'')}>
                         {
                             renderSelectedItem?
                                 renderSelectedItem(modifyItem(value)):
@@ -342,7 +346,7 @@ const DropdownSearchable:FC<Props>
     }
 
     const maxWidthClass = isMultiple?(maxWidthInput?maxWidthInput:"max-w-[250px]"):"";
-    const maxHeightClass = isMultiple?(maxHeightInput??""):"";
+    const maxHeightClass = maxHeightInput??"";
     const beingFocusClass = (showOption?(focusedClass??""):"");
     const extraClassName = (className??'');
     return (
@@ -350,8 +354,8 @@ const DropdownSearchable:FC<Props>
             {renderSelectedValue()}
             {
                 showOption?
-                    <div className={"shadow-lg rounded select-options-container absolute z-100 w-full left-0"}>
-                        {!inlineSearch&&<input
+                    <div className={"shadow-lg rounded select-options-container absolute z-100 w-full min-w-[230px] rounded-md overflow-hidden left-0"}>
+                        {!inlineSearch&&!disableSearch&&<input
                             className="select-search w-full p-3 pt-5 border-b"
                             placeholder={"Nhập nội dung"}
                             type='text'
@@ -373,6 +377,7 @@ const DropdownSearchable:FC<Props>
 const defaultProps: Props = {
     isMultiple: false,
     showTriangle: true,
+    disableSearch: false
 }
 DropdownSearchable.defaultProps = defaultProps;
 export default DropdownSearchable;

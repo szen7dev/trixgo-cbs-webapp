@@ -1,9 +1,14 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import Close from "assets/icons/Close";
-import DropdownSearchable from "../../../../../../../components/common/DropdownSearch";
+import DropdownSearchable, {Item} from "../../../../../../../components/common/DropdownSearch";
+import {ShareContext} from "../ShareModal";
 
 const ShareListing:FC = () => {
+    const {setShareUser} = useContext(ShareContext);
+    const handleChange = (item: Item) => {
+        setShareUser(oldValues => [...oldValues??[], item.id])
+    }
     return (
         <div className="w-full max-h-full overflow-visible rounded shadow-lg py-3 px-4">
             <div className={"flex items-center mb-3"}>
@@ -24,7 +29,7 @@ const ShareListing:FC = () => {
                 showTriangle={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
-                    <div className={"flex items-center py-1"}>
+                    <div className={"flex items-center py-1 bg-white"}>
                         <img className={"w-4 h-4 rounded-full mr-2"} alt={"tag icon"} src={item.imageUrl}/>
                         <span>{item.text}</span>
                     </div>
@@ -57,7 +62,7 @@ const ShareListing:FC = () => {
                 }}
                 inlineSearch={true}
                 onchangeValue={(item) => {
-                    console.log(item)
+                    handleChange(item);
                 }}
             />
             <div className={"flex justify-end items-center mt-4"}>
