@@ -129,18 +129,18 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		values.files = [];
 
 		// Get list file uploaded
-		for (const [_, { _id }] of Object.entries(uploads.images)) {
+		for (const [, { _id }] of Object.entries(uploads.images)) {
 			_id && (values.images = [...values.images || [], _id]);
 		}
 
-		for (const [_, { _id }] of Object.entries(uploads.files)) {
+		for (const [, { _id }] of Object.entries(uploads.files)) {
 			_id && (values.files = [...values.files || [], _id]);
 		}
 
 		// Handle api here!
 		switch (modalType) {
 			case 'create':
-				values.companyID = user?.company;
+				values.companyID = user?.company._id;
 				await createMedia(values);
 				break;
 			case 'update':

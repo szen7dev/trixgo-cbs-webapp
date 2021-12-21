@@ -150,7 +150,8 @@ export type ListCommentsPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-  populates1?: string
+  populates1?: string;
+  populates2?: string
 };
 
 export type CommentPayload = {

@@ -152,7 +152,12 @@ const fileUploadReducer: TReducer = (state, action) => {
         ...state,
         images: cloneImages,
       };
-
+    case uploadFileTypes.REMOVE_ALL_FILES:
+        return {
+          ...state,
+          images: [],
+          files: [],
+        };
     default:
       return state;
   }
