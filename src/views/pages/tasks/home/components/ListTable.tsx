@@ -80,7 +80,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr className="cursor-pointer" onClick={handleClickTask}>
@@ -140,7 +141,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr className="cursor-pointer" onClick={handleClickTask}>
@@ -202,7 +204,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr className="cursor-pointer" onClick={handleClickTask}>
@@ -248,7 +251,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr className="cursor-pointer" onClick={handleClickTask}>
@@ -294,7 +298,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr>
@@ -340,7 +345,8 @@ const ListTable: FC = () => {
           <td className="p-2 border"></td>
           <td className="border p-2">
             Gửi anh Hiển, anh xem công việc này đã xong và đóng lại giúp em -
-            Hiệp-PGI 8h ago
+            <span className="text-primary mx-2">Hiệp-PGI</span>{" "}
+            <span className="text-primary-gray">8h ago</span>
           </td>
         </tr>
         <tr>
