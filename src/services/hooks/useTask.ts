@@ -11,7 +11,7 @@ type UseTask = {
 export const useTask = (typeStatus?: number, type?: number): UseTask => {
   const { isLoading: isLoadingListTask, data: dataListTask } = useInfiniteQuery(
     // https://react-query.tanstack.com/reference/useInfiniteQuery
-    ["list_tasks", type],
+    ["list_tasks", type, typeStatus],
     async ({ pageParams }: any) =>
       TaskRepository.listTask({
         lastestID: pageParams ? pageParams : "",
