@@ -1,0 +1,38 @@
+import { FC } from "react";
+
+const ClassifyProgress: FC = () => {
+  const outDatePercent = (8 / 50) * 100;
+  const nextWeekPercent = (12 / 50) * 100;
+  const greatThanSevenDayPercent = (30 / 50) * 100;
+
+  return (
+    <div className="flex w-full h-[12px] mt-1">
+      <button
+        className="flex items-center justify-center bg-red-500"
+        style={{ width: `${outDatePercent}%` }}
+      >
+        <span className="text-white" style={{ fontSize: 10 }}>
+          8
+        </span>
+      </button>
+      <button
+        className="flex items-center justify-center bg-yellow-500"
+        style={{ width: `${nextWeekPercent}%` }}
+      >
+        <span className="text-white" style={{ fontSize: 10 }}>
+          12
+        </span>
+      </button>
+      <button
+        className="flex items-center justify-center bg-green-500"
+        style={{ width: `${greatThanSevenDayPercent}%` }}
+      >
+        <span className="text-white" style={{ fontSize: 10 }}>
+          30
+        </span>
+      </button>
+    </div>
+  );
+};
+
+export default ClassifyProgress;

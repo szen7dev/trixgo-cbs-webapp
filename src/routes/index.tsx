@@ -49,7 +49,7 @@ import MessagesHomePage from "views/pages/messages/home";
 import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
-import TasksPage from "views/pages/tasks";
+import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 
 // Teaser Pages
@@ -243,7 +243,7 @@ const Routes: FC = () => {
                 <Route path="/pcm/:path?">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path={"/pcm/home"} component={TasksPage} />
+                      <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
                   </HomeLayout>

@@ -1,0 +1,8 @@
+.task-header-btn-group {
+	background-color: #F7F6FC;
+}
+
+.task-header-btn-group.active {
+	color: var(--blue);
+	background-color: #EAF2FE;
+}
