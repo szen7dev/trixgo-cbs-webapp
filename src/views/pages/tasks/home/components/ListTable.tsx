@@ -100,13 +100,14 @@ const ListTable: FC<Props> = ({
         </tr>
         {outDateData.data &&
           outDateData.data.map((taskOutDate, index) => (
-            <tr
-              key={taskOutDate._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(taskOutDate._id)}
-            >
+            <tr key={taskOutDate._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{taskOutDate.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(taskOutDate._id)}
+              >
+                {taskOutDate.name}
+              </td>
               <td className="p-2 border">
                 {moment(taskOutDate.expiredTime).format("DD/MM/YYYY")}
               </td>
@@ -152,13 +153,14 @@ const ListTable: FC<Props> = ({
         </tr>
         {nextWeekData.data &&
           nextWeekData.data.map((tasksNexWeek, index) => (
-            <tr
-              key={tasksNexWeek._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(tasksNexWeek._id)}
-            >
+            <tr key={tasksNexWeek._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{tasksNexWeek.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(tasksNexWeek._id)}
+              >
+                {tasksNexWeek.name}
+              </td>
               <td className="p-2 border">
                 {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
               </td>
@@ -209,13 +211,14 @@ const ListTable: FC<Props> = ({
         </tr>
         {moreThanSevenDayData.data &&
           moreThanSevenDayData.data.map((taskMoreThanSevenDay, index) => (
-            <tr
-              key={taskMoreThanSevenDay._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
-            >
+            <tr key={taskMoreThanSevenDay._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{taskMoreThanSevenDay.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
+              >
+                {taskMoreThanSevenDay.name}
+              </td>
               <td className="p-2 border">
                 {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
               </td>
