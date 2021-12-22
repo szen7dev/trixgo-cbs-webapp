@@ -15,30 +15,33 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
         ...state,
         comments: action.payload
       }
-    case "SET_COMMENTS_REPLY":
-      return {
-        ...state,
-        commentsReply: {
-          [action.payload[0].parent]: action.payload
-        }
-      }
+    // case "SET_COMMENTS_REPLY":
+    //   return {
+    //     ...state,
+    //     commentsReply: {
+    //       [action.payload[0].parent]: action.payload
+    //     }
+    //   }
     case "VIEW_MORE_COMMENTS":
       return {
         ...state,
         comments: [...action.payload, ...state.comments]
       }
     case "VIEW_MORE_COMMENTS_REPLY":
+      console.log({ ['PAYLOAD_VIEW_MORE_COMMENTS_REPLY']: action.payload });
       return {
         ...state,
         commentsReply: {
           ...state.commentsReply,
-          [action.payload[0].parent]: [
-            ...action.payload,
-            ...state.commentsReply[action.payload[0].parent] || []
+          [action.payload.parent]: [
+            ...action.payload.comments,
+            ...state.commentsReply[action.payload.parent] || []
           ]
         }
       }
     case "ADD_COMMENT": {
+      console.log({ ['PAYLOAD_ADD_COMMENT']: action.payload });
+      
       const key = action.payload.parent ? 'commentsReply' : 'comments';
       let newComment = {};
 

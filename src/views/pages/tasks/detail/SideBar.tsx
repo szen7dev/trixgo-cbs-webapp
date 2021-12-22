@@ -1,11 +1,21 @@
 import { FC } from "react";
+import moment from "moment";
 
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 
-const SideBar: FC = () => {
+import { Author, Assignee, User } from "typings/task";
+
+type Props = {
+  author: Author;
+  assignee: Assignee;
+  createAt: string;
+  related?: Array<User>;
+};
+
+const SideBar: FC<Props> = ({ author, assignee, createAt, related }) => {
   return (
     <div>
       <div>
@@ -20,7 +30,11 @@ const SideBar: FC = () => {
         <div className="flex">
           <div className="w-1/2">
             <div className="flex">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+              <img
+                src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
+                alt="Avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
               <div className="flex items-center">
                 <img
                   className="px-2 w-auto h-6"
@@ -30,18 +44,24 @@ const SideBar: FC = () => {
               </div>
             </div>
             <span className="mt-2 text-[13px] leading-4">
-              Cao Hoàng Thùy Linh-112
+              {author.fullname}
             </span>
           </div>
           <div className="w-1/2">
-            <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+            <img
+              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full object-cover"
+            />
             <span className="mt-2 text-[13px] leading-4">
-              Nguyễn Trần Anh-CPMI
+              {assignee.fullname}
             </span>
           </div>
         </div>
         <span className="text-xs text-primary-gray">
-          13:37 6/7/21 - 18 giờ trước
+          {`${moment(createAt).format("HH:mm DD/MM/YY")} - ${moment(
+            createAt
+          ).fromNow()}`}
         </span>
       </div>
 
@@ -57,10 +77,14 @@ const SideBar: FC = () => {
           </button>
         </div>
         <div className="flex overflow-hidden space-x-3">
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+          {(related || []).map((user) => (
+            <img
+              key={user._id}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full"
+            />
+          ))}
         </div>
       </div>
 
@@ -223,6 +247,10 @@ const SideBar: FC = () => {
       </div>
     </div>
   );
+};
+
+SideBar.defaultProps = {
+  related: [],
 };
 
 export default SideBar;

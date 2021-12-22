@@ -287,7 +287,7 @@ const HomePage: FC = () => {
             <img src={imgProcess2} alt="Process management" />
             <div className="t-home-operation-text pl-4 text-dark">
               <div className="mb-5">
-                Trixgo chính thức cho ra mắt ứng dụng Quản lý vận hành công trình. Với tính năng này, Chủ đầu tư bàn giao dữ liệu cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Dữ liệu được trang bị tới tận tay cư dân
+                Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Dữ liệu được trang bị tới tận tay cư dân
               </div>
               <a className="flex items-center text-primary-gray" href="/">
                 Xem ngay

@@ -1,6 +1,11 @@
 import { FC } from "react";
+import moment from "moment";
 
-const PriceApprovalInfo: FC = () => {
+type Props = {
+  valueApproved: number;
+  timeApproved?: string;
+};
+const PriceApprovalInfo: FC<Props> = ({ valueApproved, timeApproved }) => {
   return (
     <>
       <p className="text-x-large my-5">Giá trị đệ trình/phê duyệt</p>
@@ -10,17 +15,23 @@ const PriceApprovalInfo: FC = () => {
             <span className="text-[13px] text-primary-gray">
               Giá trị đệ trình:
             </span>
-            <span className="text-[13px] ml-2">125.000.000</span>
+            <span className="text-[13px] ml-2">0</span>
           </div>
           <div>
             <span className="text-primary-gray">Giá trị phê duyệt:</span>
-            <span className="ml-2 text-[13px] text-green-600">125.000.000</span>
+            <span className="ml-2 text-[13px] text-green-600">
+              {valueApproved}
+            </span>
           </div>
           <div>
             <span className="text-[13px] text-primary-gray">
               Thời gian phê duyệt:
             </span>
-            <span className="ml-2 text[13px]">15:30 21/12/21</span>
+            <span className="ml-2 text[13px]">
+              {timeApproved
+                ? moment(timeApproved).format("HH:mm DD/MM/YYYY")
+                : ""}
+            </span>
           </div>
           <div>
             <span className="text-[13px] text-primary-gray">
@@ -30,7 +41,9 @@ const PriceApprovalInfo: FC = () => {
           </div>
         </div>
         <div className="w-1/4 flex justify-end">
-          <button className="text-white rounded bg-green-600 px-3 py-2">Đồng ý</button>
+          <button className="text-white rounded bg-green-600 px-3 py-2">
+            Đồng ý
+          </button>
         </div>
       </div>
     </>

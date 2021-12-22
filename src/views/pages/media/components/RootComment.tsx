@@ -1,4 +1,4 @@
-import { FC, useState, useContext } from 'react';
+import { FC, useState, useContext, useEffect } from 'react';
 
 import Comment from './Comment'
 import EditButton from './EditButton';
@@ -21,8 +21,17 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 	const { state, dispatch } = useContext(CommentContext);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [message, setMessage] = useState<string>('');
-	const [amountReply, setAmountReply] = useState<number>(comment.comment.amountCommentReply - 1);
-	const commentsReply = [comment.lastestReplyID, ...(state.commentsReply[comment._id] || [])].filter(Boolean);
+	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);
+	const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
+
+	useEffect(() => {
+		if(commentsReply.length === 0 && comment.lastestReplyID){
+			dispatch({ 
+				type: 'ADD_COMMENT',
+				payload: comment.lastestReplyID
+			});
+		}
+	}, [])
 
 	const handleClickViewMore = async () => {
 		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
@@ -36,7 +45,13 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 		setAmountReply(amountReply - limit);
 
 		if (!error && data.listRecords.length) {
-			dispatch({ type: 'VIEW_MORE_COMMENTS_REPLY', payload: data.listRecords });
+			dispatch({ 
+				type: 'VIEW_MORE_COMMENTS_REPLY',
+				payload: {
+					parent: comment._id,
+					comments: data.listRecords
+				}
+			});
 		}
 	}
 
@@ -49,7 +64,7 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 	// Use context instead this way if you don't want use callback to handle Update message :)
 	const handleClickUpdateChild = (comment: any) => {
 		if (!isReply) setIsReply(true);
-		setMessage(comment.comment.content)
+		setMessage(comment.comment?.content);
 	}
 
 	return (

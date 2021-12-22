@@ -37,7 +37,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		deleteComment(comment._id);
 		dispatch({
 			type: "DELETE_COMMENT",
-			payload: { _id: comment._id, parent: comment.parent }
+			payload: { _id: comment._id, parent: comment?.parent }
 		});
 	}
 
@@ -88,7 +88,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							}) : ''}
 						</div>
 						<div >
-							<PostFile files={files} isRemove={false} className='px-0' />
+							<PostFile files={files} className='px-0' />
 						</div>
 					</div>
 					{EndComment

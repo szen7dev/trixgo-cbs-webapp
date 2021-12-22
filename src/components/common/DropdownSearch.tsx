@@ -42,6 +42,7 @@ type Props = {
     formatItem?: FormatItem;
     inlineSearch?: boolean;
     disableSearch?: boolean;
+    onClearData?: () => void;
 }
 
 type Params = {
@@ -69,7 +70,8 @@ const DropdownSearchable:FC<Props>
        formatItem,
        inlineSearch,
        maxHeightInput,
-       disableSearch
+       disableSearch,
+       onClearData
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -181,11 +183,16 @@ const DropdownSearchable:FC<Props>
     }
 
     const handleRemoveItem = (id:string|number) => {
-        setValues(values?.filter(item => readDataValue(item,"id") !== id));
+        const valuesWillUpdate = values?.filter(item => readDataValue(item,"id") !== id);
+        setValues(valuesWillUpdate);
+        if (!valuesWillUpdate || valuesWillUpdate?.length <= 0) {
+            onClearData&&onClearData();
+        }
     };
 
     const handleRemoveItemSingle = () => {
         setValue(undefined);
+        onClearData&&onClearData();
     };
 
     const renderOptions = () => {
@@ -224,7 +231,7 @@ const DropdownSearchable:FC<Props>
         return (
             <div
                 onClick={() => toggleShowOption()}
-                className={(classNameInput??'') + " flex p-1 pl-2 pr-7 cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+                className={(classNameInput??'') + " flex p-1 pl-2 " + (showTriangle?"pr-7":"pl-2") + " cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
             >
                 {/*<div className={"flex flex-wrap"}>*/}
                 {
@@ -325,7 +332,7 @@ const DropdownSearchable:FC<Props>
 
     const renderSingleSelectedValue = () => {
         return (
-            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 pr-7 cursor-pointer align-items-center"}>
+            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 "+(showTriangle?"pr-7":"pl-2")+" cursor-pointer align-items-center"}>
                 {
                     allowClearValueSingleInput?
                         renderSingleSelectedValueWithClearValue():
