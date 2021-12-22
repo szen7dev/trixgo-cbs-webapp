@@ -1,6 +1,11 @@
 import API from "../repository";
 
-import { ListTaskPayload, ListTaskResponse } from "typings/task";
+import {
+  ListTaskPayload,
+  ListTaskResponse,
+  ListCheckListPayload,
+  ListCheckListResponse,
+} from "typings/task";
 import { convertObToUrl } from "helpers";
 
 const pcmURL = "/api/subject_pcm";
@@ -8,6 +13,15 @@ const pcmURL = "/api/subject_pcm";
 const TaskRepository = {
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
+
+  async listCheckList(
+    payload: ListCheckListPayload
+  ): Promise<ListCheckListResponse> {
+    const { data } = await API.get<ListCheckListResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
     );
     return data;

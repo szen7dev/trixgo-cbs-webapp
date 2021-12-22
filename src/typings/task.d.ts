@@ -30,6 +30,7 @@ export type LastLog = {
 };
 
 export type Task = {
+  _id: string;
   name: string;
   expiredTime: string;
   typeStatus: number;
@@ -42,6 +43,35 @@ export type Task = {
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
+    totalRecord: number;
+    totalPages?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+export type CheckList = {
+  _id: string;
+  name: string;
+  expiredTime: string;
+  typeStatus: number;
+  checklist: string;
+  assignee: Assignee;
+};
+
+export type ListCheckListPayload = {
+  lastestID?: string;
+  limit?: number;
+  populates?: string;
+  filter?: string;
+  type?: numer;
+  typeStatus?: number;
+  parentID?: string;
+};
+
+export type ListCheckListResponse = APIResponse & {
+  data: {
+    listRecords: Array<CheckList>;
     totalRecord: number;
     totalPages?: number;
     nextCursor: string;

@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "react-query";
 import TaskRepository from "apis/task";
-import { Task } from "typings/task";
+import { Task, CheckList } from "typings/task";
 
 type UseTask = {
   listTasks: Array<Task>;
@@ -72,5 +72,74 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
     refetchListTask,
     nextPageListTask,
     prevPageListTask,
+  };
+};
+
+type UseCheckList = {
+  listCheckList: Array<CheckList>;
+  isLoadingListCheckList: boolean;
+  totalRecord: number | undefined;
+  totalPages: number | undefined;
+  hasNextPage: boolean | undefined;
+  refetchListCheckList: () => void;
+  nextPageListCheckList: () => void;
+  prevPageListCheckList: () => void;
+};
+
+export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
+  const {
+    isLoading: isLoadingListCheckList,
+    data: dataListCheckList,
+    refetch: refetchListCheckList,
+    fetchNextPage: nextPageListCheckList,
+    fetchPreviousPage: prevPageListCheckList,
+    hasNextPage,
+  } = useInfiniteQuery(
+    // https://react-query.tanstack.com/reference/useInfiniteQuery
+    ["list_checkList", parentID, limit],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listCheckList({
+        limit,
+        lastestID: pageParam || "",
+        parentID: parentID || "",
+        filter: JSON.stringify({
+          assignee: 1,
+          checklist: 1,
+          name: 1,
+          expiredTime: 1,
+          typeStatus: 1,
+        }),
+        populates: JSON.stringify({
+          value: "assignee",
+          select: "name fullname image",
+        }),
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+    }
+  );
+
+  const listCheckList = []
+    .concat(
+      ...(dataListCheckList?.pages || []).map((d: any) => d.data?.listRecords)
+    )
+    .filter(Boolean);
+  const totalRecord = dataListCheckList?.pages[0]?.data?.totalRecord;
+  const totalPages = dataListCheckList?.pages[0]?.data?.totalPages;
+
+  return {
+    listCheckList,
+    isLoadingListCheckList,
+    totalRecord,
+    hasNextPage,
+    totalPages,
+    refetchListCheckList,
+    nextPageListCheckList,
+    prevPageListCheckList,
   };
 };
