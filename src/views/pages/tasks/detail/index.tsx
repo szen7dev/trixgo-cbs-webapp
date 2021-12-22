@@ -36,7 +36,8 @@ const TaskDetailPage: FC = () => {
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
   );
-  const { listCheckList } = useCheckList(id);
+  const { listCheckList, totalRecord, nextPageListCheckList } =
+    useCheckList(id);
 
   useEffect(() => {
     if (data?.data) {
@@ -204,7 +205,11 @@ const TaskDetailPage: FC = () => {
               <FileAttachment />
             </div>
             <div className="mt-8 pr-3">
-              <CheckList data={listCheckList} />
+              <CheckList
+                data={listCheckList}
+                totalRecord={totalRecord}
+                onSeeMore={nextPageListCheckList}
+              />
             </div>
             <div className="px-5 mt-10">
               <PriceApprovalInfo />
