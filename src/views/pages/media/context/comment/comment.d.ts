@@ -8,8 +8,16 @@ export type CommentsState = {
 export type CommentState = CommentProps;
 
 export type SetComments = {
-    type: 'SET_COMMENTS' | 'SET_COMMENTS_REPLY' | 'VIEW_MORE_COMMENTS' | 'VIEW_MORE_COMMENTS_REPLY',
+    type: 'SET_COMMENTS' | 'SET_COMMENTS_REPLY' | 'VIEW_MORE_COMMENTS',
     payload: CommentProps[]
+}
+
+export type SetCommentsReply = {
+    type: 'VIEW_MORE_COMMENTS_REPLY',
+    payload: {
+        parent: string,
+        comments: CommentProps[]
+    }
 }
 
 export type AddComment = {
@@ -32,6 +40,7 @@ export type UpdateComment = {
 
 export type CommentActions =
   | SetComments
+  | SetCommentsReply
   | AddComment
   | DeleteComment
   | UpdateComment
