@@ -223,7 +223,10 @@ const TaskDetailPage: FC = () => {
               />
             </div>
             <div className="px-5 mt-10">
-              <PriceApprovalInfo />
+              <PriceApprovalInfo
+                timeApproved={data.data.timeApproved}
+                valueApproved={data.data.valueApproved}
+              />
             </div>
             <div className="px-5 my-10">
               <RelatedFeedback />
