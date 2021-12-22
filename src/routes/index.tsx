@@ -19,6 +19,7 @@ import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import PcmLayout from "views/layouts/PcmLayout";
+import CmcsLayout from "views/layouts/CmcsLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -397,12 +398,12 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/cmcs">
-                  <HomeLayout>
+                  <CmcsLayout>
                     <Switch>
                       <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
-                      <ProtectedRoute exact path="/cmcs/management-report" component={CmcManagementReport} />
+                      <ProtectedRoute exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
-									</HomeLayout>
+									</CmcsLayout>
                 </Route>
 
                 <Route path="/support">
