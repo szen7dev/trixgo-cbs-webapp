@@ -6,7 +6,7 @@ const CreateNewTicketForm:FC = () => {
     return (
         <div className={"px-6 pb-2 border-b border-gray-800"}>
             <div className={"flex py-1 border-b"}>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Loại phiếu (*)</div>
                     <DropdownSearchable
                         className={"flex-1"}
@@ -17,7 +17,7 @@ const CreateNewTicketForm:FC = () => {
                         // searchParam={"search"}
                     />
                 </div>
-                <div className={"w-1/4 flex item-center flex"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"w-1/3 flex items-center"}>
                         <input type="radio" id="vat-type-1" name={"vat-type"} className={"form-check-input mt-0"}/>
                         <label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT mua vào</label>
@@ -31,7 +31,7 @@ const CreateNewTicketForm:FC = () => {
                         <label htmlFor="vat-type-3" className={"text-left ml-3"}>Hủy chọn</label>
                     </div>
                 </div>
-                <div className={"w-1/2 flex item-center"}>
+                <div className={"w-1/2 flex items-center"}>
                     <div className={"w-1/4 flex items-center"}>
                         <input type="checkbox" id="ticket-type-1" name={"ticket-type"} className={"form-check-input mt-0"}/>
                         <label htmlFor="ticket-type-1" className={"text-left ml-3"}>Tạm ứng</label>
@@ -51,7 +51,7 @@ const CreateNewTicketForm:FC = () => {
                 </div>
             </div>
             <div className={"flex py-1 border-b"}>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Mã khách (*)</div>
                     <DropdownSearchable
                         className={"flex-1"}
@@ -62,7 +62,7 @@ const CreateNewTicketForm:FC = () => {
                         // searchParam={"search"}
                     />
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Hợp đồng</div>
                     <DropdownSearchable
                         className={"flex-1"}
@@ -73,7 +73,7 @@ const CreateNewTicketForm:FC = () => {
                         // searchParam={"search"}
                     />
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ thanh toán</div>
                     <DropdownSearchable
                         className={"flex-1"}
@@ -84,7 +84,7 @@ const CreateNewTicketForm:FC = () => {
                         // searchParam={"search"}
                     />
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Phân loại khác</div>
                     <DropdownSearchable
                         className={"flex-1"}
@@ -97,7 +97,7 @@ const CreateNewTicketForm:FC = () => {
                 </div>
             </div>
             <div className={"flex py-1 border-b"}>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Ngày hạch toán (*)</div>
                     <DatePicker
                         wrapperClassName={"w-auto"}
@@ -120,11 +120,11 @@ const CreateNewTicketForm:FC = () => {
                         timeIntervals={1}
                     />
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Số hóa đơn</div>
                     <input type="text" className={"focus:outline-none placeholder:text-gray-500"} placeholder={"Số hóa đơn"}/>
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Ngày hóa đơn</div>
                     <DatePicker
                         wrapperClassName={"w-auto"}
@@ -145,25 +145,25 @@ const CreateNewTicketForm:FC = () => {
                         }
                     />
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Người nộp tiền</div>
                     <input type="text" className={"focus:outline-none"} placeholder={"Người nộp tiền"}/>
                 </div>
             </div>
             <div className={"flex py-1"}>
-                <div className={"w-1/4 flex item-center"}>
-                    <div className={"text-left text-gray-500 flex item-center mr-2"}>Nội dung (*)</div>
+                <div className={"w-1/4 flex items-center"}>
+                    <div className={"text-left text-gray-500 flex items-center mr-2"}>Nội dung (*)</div>
                     <textarea rows={2} className={"focus:outline-none flex-1"} placeholder={"Nội dung"}/>
                 </div>
-                <div className={"w-1/4 flex item-center"}>
-                    <div className={"text-left text-gray-500 flex item-center mr-2"}>Ghi chú</div>
+                <div className={"w-1/4 flex items-center"}>
+                    <div className={"text-left text-gray-500 flex items-center mr-2"}>Ghi chú</div>
                     <textarea rows={2} className={"focus:outline-none flex-1"} placeholder={"Ghi chú"}/>
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Mã hiệu</div>
                     <input type="text" className={"focus:outline-none"} placeholder={"Mã hiệu"}/>
                 </div>
-                <div className={"w-1/4 flex item-center"}>
+                <div className={"w-1/4 flex items-center"}>
                     <div className={"text-left text-gray-500 flex items-center mr-2"}>Tỷ giá USD</div>
                     <input type="text" className={"focus:outline-none"} placeholder={"Tỷ giá USD"}/>
                 </div>
