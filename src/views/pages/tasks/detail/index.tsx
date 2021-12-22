@@ -140,7 +140,8 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
+                  {data?.data.project.sign} {">"} {data?.data.group.name} {">"}{" "}
+                  Hồ sơ thanh toán
                 </span>
                 <div>
                   <img
