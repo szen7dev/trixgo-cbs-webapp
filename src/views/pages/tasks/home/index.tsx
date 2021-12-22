@@ -41,7 +41,7 @@ const TaskHomePage: FC = () => {
   };
 
   useEffect(() => {
-    document.title = "Quản lí công việc";
+    document.title = "Quản lý công việc";
   }, []);
 
   if (isLoadingListTask) {
