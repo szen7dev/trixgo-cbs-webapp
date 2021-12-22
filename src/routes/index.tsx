@@ -101,7 +101,8 @@ import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 // Support pages
-import SupportPage from "views/pages/support";
+import SupportPage from "views/pages/support/components/home";
+import RegisterDashboardPage from "views/pages/support/components/register";
 
 const Routes: FC = () => {
 
@@ -215,9 +216,8 @@ const Routes: FC = () => {
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/human/home" component={HumansPage} />
-                      <Route path="/human/home/hid=:id" component={HumanInfo} />
-                      <Route path="/human/home/*" component={ErrorPage} />
+                      <ProtectedRoute exact path="/human/home" component={HumansPage} />
+                      <ProtectedRoute path="/human/home/hid=:id" component={HumanInfo} />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -407,7 +407,8 @@ const Routes: FC = () => {
                 <Route path="/support">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/register" component={RegisterDashboardPage} />
                     </Switch>
 									</HomeLayout>
                 </Route>

@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 
 import cn from "classnames";
 
@@ -18,10 +18,6 @@ import QuickReport from "./views/QuickReport";
 import StatusReport from "./views/StatusReport";
 
 const CmcManagementReport: FC = () => {
-  useEffect(() => {
-    document.title = "Trixgo - Quản lý hợp đồng";
-  }, []);
-
   return (
     <main className={cn("flex w-full h-screen")}>
       <div className="w-3/4 h-full bg-primary-light">
