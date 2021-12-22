@@ -1,5 +1,7 @@
 import { FC } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import moment from "moment";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -13,14 +15,27 @@ import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
+
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
 import RelatedFeedback from "./RelatedFeedback";
+import Loader from "components/shared/Loader";
+
+import TaskRepository from "apis/task";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+
+  const { data, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id)
+  );
+
+  if (isLoading) {
+    return <Loader className="border-primary" />;
+  }
 
   return (
     <>
@@ -86,8 +101,7 @@ const TaskDetailPage: FC = () => {
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
-            dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
+            {data?.data.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -133,7 +147,9 @@ const TaskDetailPage: FC = () => {
             <div className="w-48">
               <div className="flex justify-between">
                 <div>
-                  <span className="text-lg leading-5">19/5/2021</span>
+                  <span className="text-lg leading-5">
+                    {moment(data.data.expiredTime).format("DD/MM/YYYY")}
+                  </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
                     15:03
                   </span>
@@ -160,13 +176,7 @@ const TaskDetailPage: FC = () => {
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
               <div>
-                <p className="text-[13px]">
-                  Kính gửi Chủ Đầu Tư và Ban QLDA,
-                  <br /> Tư vấn thiết kế 112 đệ trình hồ sơ thanh toán đợt 03
-                  của Hợp đồng thiết kế số 34A/2020/HĐTV/TĐ- 1+1. Kính đề nghị
-                  Chủ đầu tư và Tư vấn QLDA xem xét và phê duyệt.
-                  <br /> Thông tin chi tiết vui lòng xem trong file đính...
-                </p>
+                <p className="text-[13px]">{data?.data.description}</p>
                 <p className="text-[13px] text-primary mt-2.5 mb-4">
                   Xem thêm/Thu gọn
                 </p>
@@ -187,7 +197,11 @@ const TaskDetailPage: FC = () => {
 
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
-            <SideBar />
+            <SideBar
+              author={data.data.author}
+              assignee={data.data.assignee}
+              createAt={data.data.createAt}
+            />
           </div>
         </div>
       </div>

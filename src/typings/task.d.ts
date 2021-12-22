@@ -10,11 +10,14 @@ export type ListTaskPayload = {
   typeStatus?: number;
 };
 
-export type Assignee = {
+export type User = {
   _id: string;
   image: string;
   fullname: string;
 };
+
+export type Assignee = User;
+export type Author = User;
 
 export type LastLog = {
   _id: string;

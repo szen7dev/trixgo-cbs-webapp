@@ -12,6 +12,22 @@ const TaskRepository = {
     );
     return data;
   },
+
+  async taskInfo(taskID: string): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
+        taskID,
+        select:
+          "name description checklists bidPrice bidPriceAdjustment bidPriceDiscount createAt parent group author assignee related expiredTime  suid actualStartTime parent comments responses assigneeAttachs authorAttachs",
+        populates: JSON.stringify({
+          value: "group author assignee related",
+          select: "_id name fullname image",
+        }),
+      })}`
+    );
+
+    return data;
+  },
 };
 
 export default TaskRepository;
