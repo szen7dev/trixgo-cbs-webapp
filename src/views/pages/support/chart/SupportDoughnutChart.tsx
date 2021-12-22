@@ -21,6 +21,7 @@ interface Props {
   };
   title?: string;
   rotation?: number;
+  cutout?: number;
 }
 
 ChartJS.register(
@@ -34,7 +35,6 @@ ChartJS.register(
 );
 
 const options = {
-  cutout: 36,
   responsive: true,
   maintainAspectRatio: true,
 };
@@ -43,6 +43,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
   _data,
   title = "",
   rotation,
+  cutout = 36,
 }) => {
   const plugins = React.useMemo(
     () =>
@@ -59,6 +60,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
       options={{
         ...options,
         rotation,
+        cutout,
         plugins: {
           datalabels: { display: false },
           tooltip: { enabled: false },
