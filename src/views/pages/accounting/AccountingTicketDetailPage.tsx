@@ -14,7 +14,7 @@ const AccountingTicketDetailPage:FC = () => {
             <div className="shadow-lg flex border-b border-gray-200 align-items-center px-6 py-2 sticky top-0 bg-white z-10">
                 <NavLink
                     exact
-                    to={"/accounting/accbill"}
+                    to={"/accounting/home"}
                 >
                     <Back/>
                 </NavLink>
