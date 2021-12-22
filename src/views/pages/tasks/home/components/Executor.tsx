@@ -1,12 +1,21 @@
 import { FC } from "react";
-import Avatar from "assets/images/thumbnail2.png";
+import { Assignee } from "typings/task";
 
-const Executor: FC = () => {
+type Props = {
+  assignee: Assignee;
+  color: string;
+};
+
+const Executor: FC<Props> = ({ color, assignee }) => {
   return (
     <div className="flex items-center space-x-1">
-      <div className="w-2 h-2 rounded-full bg-red-500" />
-      <img src={Avatar} alt="Thumbnail" className="w-4 h-4 rounded-full" />
-      <span className="text-[13px]">Phùng Thị Hà-TRX</span>
+      <div className={`w-2 h-2 rounded-full ${color}`} />
+      <img
+        src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
+        alt="Thumbnail"
+        className="w-4 h-4 rounded-full"
+      />
+      <span className="text-[13px]">{assignee.fullname}</span>
     </div>
   );
 };
