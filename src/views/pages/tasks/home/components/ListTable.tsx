@@ -54,7 +54,7 @@ const ListTable: FC<Props> = ({
           <th className="px-2 py-2 text-[13px] font-normal border w-[41px]">
             TT
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border w-[229px] text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border w-1/5 text-left">
             Nội dung công việc
           </th>
           <th className="px-2 py-2 text-[13px] font-normal border w-[90px] text-left">
@@ -66,10 +66,10 @@ const ListTable: FC<Props> = ({
           <th className="px-2 py-2 text-[13px]  font-normal border w-[143px] text-left">
             Tiến trình
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border w-[181px] text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
             Mô tả/ghi chú
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
             Thảo luận
           </th>
         </tr>
