@@ -25,6 +25,7 @@ import RelatedFeedback from "./RelatedFeedback";
 import Loader from "components/shared/Loader";
 
 import TaskRepository from "apis/task";
+import { useCheckList } from "services/hooks/useTask";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
@@ -33,6 +34,7 @@ const TaskDetailPage: FC = () => {
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
   );
+  const { listCheckList } = useCheckList(id);
 
   if (isLoading) {
     return <Loader className="border-primary" />;
@@ -188,7 +190,7 @@ const TaskDetailPage: FC = () => {
               <FileAttachment />
             </div>
             <div className="mt-8 pr-3">
-              <CheckList />
+              <CheckList data={listCheckList} />
             </div>
             <div className="px-5 mt-10">
               <PriceApprovalInfo />
