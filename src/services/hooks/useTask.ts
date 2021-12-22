@@ -6,10 +6,22 @@ type UseTask = {
   listTasks: Array<Task>;
   isLoadingListTask: boolean;
   totalRecord: number | undefined;
+  totalPages: number | undefined;
+  hasNextPage: boolean | undefined;
+  refetchListTask: () => void;
+  nextPageListTask: () => void;
+  prevPageListTask: () => void;
 };
 
 export const useTask = (typeStatus?: number, type?: number): UseTask => {
-  const { isLoading: isLoadingListTask, data: dataListTask } = useInfiniteQuery(
+  const {
+    isLoading: isLoadingListTask,
+    data: dataListTask,
+    refetch: refetchListTask,
+    fetchNextPage: nextPageListTask,
+    fetchPreviousPage: prevPageListTask,
+    hasNextPage,
+  } = useInfiniteQuery(
     // https://react-query.tanstack.com/reference/useInfiniteQuery
     ["list_tasks", type, typeStatus],
     async ({ pageParams }: any) =>
@@ -48,10 +60,16 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
     .concat(...(dataListTask?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
+  const totalPages = dataListTask?.pages[0]?.data?.totalPages;
 
   return {
     listTasks,
     isLoadingListTask,
     totalRecord,
+    hasNextPage,
+    totalPages,
+    refetchListTask,
+    nextPageListTask,
+    prevPageListTask,
   };
 };
