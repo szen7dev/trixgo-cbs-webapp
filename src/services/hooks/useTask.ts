@@ -24,9 +24,9 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
   } = useInfiniteQuery(
     // https://react-query.tanstack.com/reference/useInfiniteQuery
     ["list_tasks", type, typeStatus],
-    async ({ pageParams }: any) =>
-      TaskRepository.listTask({
-        lastestID: pageParams ? pageParams : "",
+    async ({ pageParam }: any) => {
+      return TaskRepository.listTask({
+        lastestID: pageParam || "",
         type: type || 1,
         typeStatus: typeStatus || 4,
         filter: JSON.stringify({
@@ -46,10 +46,11 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
           value: "author",
           select: "name fullname",
         }),
-      }),
+      });
+    },
     {
-      getNextPageParam: ({ nextCursor }: any) => {
-        return nextCursor || undefined;
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
       enabled: true, // https://react-query.tanstack.com/guides/disabling-queries

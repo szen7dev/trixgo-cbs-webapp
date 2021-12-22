@@ -17,12 +17,14 @@ type Props = {
   outDateData: Task;
   nextWeekData: Task;
   moreThanSevenDayData: Task;
+  onClickMore: (typeStatus: string) => void;
 };
 
 const ListTable: FC<Props> = ({
   outDateData,
   nextWeekData,
   moreThanSevenDayData,
+  onClickMore,
 }) => {
   const history = useHistory();
 
@@ -65,14 +67,17 @@ const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC QUÁ HẠN</span>
-              <button className="text-primary text-[13px]">
-                {outDateData.totalRecord &&
-                outDateData.totalRecord - outDateData.data.length > 0
-                  ? `Xem thêm (${
+              {outDateData.totalRecord &&
+                outDateData.totalRecord - outDateData.data.length > 0 && (
+                  <button
+                    className="text-primary text-[13px]"
+                    onClick={() => onClickMore("OUT_DATE")}
+                  >
+                    {`Xem thêm (${
                       outDateData.totalRecord - outDateData.data.length
-                    })`
-                  : ""}
-              </button>
+                    })`}
+                  </button>
+                )}
             </div>
           </td>
         </tr>
@@ -124,14 +129,17 @@ const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC TUẦN TỚI</span>
-              <button className="text-primary text-[13px]">
-                {nextWeekData.totalRecord &&
-                nextWeekData.totalRecord - nextWeekData.data.length > 0
-                  ? `Xem thêm (${
+              {nextWeekData.totalRecord &&
+                nextWeekData.totalRecord - nextWeekData.data.length > 0 && (
+                  <button
+                    className="text-primary text-[13px]"
+                    onClick={() => onClickMore("NEXT_WEEK")}
+                  >
+                    {`Xem thêm (${
                       nextWeekData.totalRecord - nextWeekData.data.length
-                    })`
-                  : ""}
-              </button>
+                    })`}
+                  </button>
+                )}
             </div>
           </td>
         </tr>
@@ -190,17 +198,20 @@ const ListTable: FC<Props> = ({
               <span className="text-[13px] font-bold">
                 {"VIỆC > 7 NGÀY TIẾP THEO"}
               </span>
-              <button className="text-primary text-[13px]">
-                {moreThanSevenDayData.totalRecord &&
+              {moreThanSevenDayData.totalRecord &&
                 moreThanSevenDayData.totalRecord -
                   moreThanSevenDayData.data.length >
-                  0
-                  ? `Xem thêm (${
+                  0 && (
+                  <button
+                    className="text-primary text-[13px]"
+                    onClick={() => onClickMore("MORE_THAN_SEVEN_DAY")}
+                  >
+                    {`Xem thêm (${
                       moreThanSevenDayData.totalRecord -
                       moreThanSevenDayData.data.length
-                    })`
-                  : ""}
-              </button>
+                    })`}
+                  </button>
+                )}
             </div>
           </td>
         </tr>

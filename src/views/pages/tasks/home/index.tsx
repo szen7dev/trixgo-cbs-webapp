@@ -8,14 +8,37 @@ import Loader from "components/shared/Loader";
 
 const TaskHomePage: FC = () => {
   const [viewMode, setViewMode] = useState("LIST");
-  const { listTasks: tasksOutDate, totalRecord: outDateRecords } = useTask();
+  const {
+    listTasks: tasksOutDate,
+    totalRecord: outDateRecords,
+    nextPageListTask: nextPageTaskOutDate,
+  } = useTask();
   const {
     listTasks: tasksNextWeek,
     isLoadingListTask,
     totalRecord: nextWeekRecords,
+    nextPageListTask: nextPageTaskNextWeek,
   } = useTask(2);
-  const { listTasks: tasksMoreThanSevenDay, totalRecord: moreSevenDayRecord } =
-    useTask(3);
+  const {
+    listTasks: tasksMoreThanSevenDay,
+    totalRecord: moreSevenDayRecord,
+    nextPageListTask: nextPageTaskMore,
+  } = useTask(3);
+
+  const handleSeeMore = (typeStatus: string) => {
+    switch (typeStatus) {
+      case "OUT_DATE":
+        nextPageTaskOutDate();
+        break;
+      case "NEXT_WEEK":
+        nextPageTaskNextWeek();
+        break;
+      case "MORE_THAN_SEVEN_DAY":
+        nextPageTaskMore();
+        break;
+      default:
+    }
+  };
 
   useEffect(() => {
     document.title = "Quản lí công việc";
@@ -42,6 +65,7 @@ const TaskHomePage: FC = () => {
                 data: tasksMoreThanSevenDay,
                 totalRecord: moreSevenDayRecord,
               }}
+              onClickMore={handleSeeMore}
             />
           )}
           {viewMode === "PROJECT" && (
