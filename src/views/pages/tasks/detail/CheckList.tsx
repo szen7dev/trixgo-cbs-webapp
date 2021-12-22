@@ -1,15 +1,23 @@
 import { FC, useState } from "react";
 import DatePicker from "react-datepicker";
 
-import HumanAvatar from "assets/images/human-avatar.svg";
 import IconPlus from "assets/images/icons8-plus-math-100.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
+
 import CheckListItem from "./CheckListItem";
 
-const CheckList: FC = () => {
+import { CheckList as CheckListType } from "typings/task";
+
+type Props = {
+  data: Array<CheckListType>;
+  totalRecord?: number;
+  onSeeMore: () => void;
+};
+
+const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -89,113 +97,24 @@ const CheckList: FC = () => {
         {/* Check list items */}
         <div className="shadow-lg">
           <div className="w-full">
-            <CheckListItem />
-            <CheckListItem />
-            <div className="flex justify-between px-5 pt-4 pb-3">
-              <div className="flex items-start w-3/4">
-                <input type="checkbox" />
-                <div className="ml-2 truncate">
-                  <span className="text-[13px]">
-                    Cán bộ kỹ thuật kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn
-                    B.I.M đợt 4)
-                  </span>
-
-                  <div className="flex">
-                    <img src={HumanAvatar} alt="Avatar" className="w-5 h-5" />
-                    <span className="text-primary-gray text-[13px] ml-2">
-                      Đỗ Hữu Khu-CHG
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end w-1/4">
-                <div>
-                  <span className="px-3 py-1 rounded-xl bg-green-200 text-green-500">
-                    Tuần tới
-                  </span>
-                </div>
-                <span className="ml-2 text-[13px]">18/12/21</span>
-              </div>
-            </div>
-            <div className="w-full h-px bg-gray-200" />
-          </div>
-
-          <div className="w-full">
-            <div className="flex justify-between px-5 pt-4 pb-3">
-              <div className="flex items-start w-3/4">
-                <input type="checkbox" />
-                <div className="ml-2 truncate">
-                  <p className="text-[13px]">
-                    Cán bộ kỹ thuật kiểm tra hồ sơ thanh toán đợt 9 (Tư vấn
-                    B.I.M đợt 4)
-                  </p>
-                  <div className="flex">
-                    <img src={HumanAvatar} alt="Avatar" className="w-5 h-5" />
-                    <span className="text-primary-gray text-[13px] ml-2">
-                      Vũ Thị Lan-CHG
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-end w-1/4">
-                {/* <span className="px-3 py-1 rounded-xl bg-green-200 text-green-500">
-                Tuần tới
-              </span> */}
-                <span className="ml-2 text-[13px]">18/12/21</span>
-              </div>
-            </div>
-            <div className="w-full h-px bg-gray-200" />
-          </div>
-
-          <div className="w-full">
-            <div className="flex justify-between px-5 pt-4 pb-3">
-              <div className="flex items-start w-3/4">
-                <input type="checkbox" />
-                <div className="ml-2 truncate">
-                  <span className="text-[13px]">
-                    Hover vào công việc/checklist sẽ hiển thị menu chức năng
-                    (cập nhật, truy cập màn hình hien thị dai hon xem sao)
-                  </span>
-
-                  <div className="flex">
-                    <img src={HumanAvatar} alt="Avatar" className="w-5 h-5" />
-                    <span className="text-primary-gray text-[13px] ml-2">
-                      Vũ Thị Lan-CHG
-                    </span>
-                  </div>
-                </div>
-              </div>
-              {/* <div>
-              <span className="px-3 py-1 rounded-xl bg-green-200 text-green-500">
-                Tuần tới
-              </span>
-              <span className="ml-2 text-[13px]">18/12/21</span>
-            </div> */}
-              <div className="flex w-1/4 justify-end">
-                <button className="mx-2">
-                  <img
-                    className="w-6"
-                    src={SendEmailIcon}
-                    alt="Send email icon"
-                  />
-                </button>
-                <button className="mx-2">
-                  <img className="w-6" src={IconPencil} alt="Pencil icon" />
-                </button>
-                <button className="mx-2">
-                  <img className="w-6" src={LinkIcon} alt="Link icon" />
-                </button>
-              </div>
-            </div>
-            <div className="w-full h-px bg-gray-200" />
+            {(data || []).map((checkList) => (
+              <CheckListItem key={checkList._id} data={checkList} />
+            ))}
           </div>
         </div>
 
         <div>
-          <div className="w-full flex justify-center my-5">
-            <span className="text-primary">Xem thêm (125)</span>
-          </div>
+          {totalRecord && totalRecord - data.length > 0 ? (
+            <div className="w-full flex justify-center my-5">
+              <button onClick={() => onSeeMore()}>
+                <span className="text-primary">{`Xem thêm (${
+                  totalRecord - data.length
+                })`}</span>
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (

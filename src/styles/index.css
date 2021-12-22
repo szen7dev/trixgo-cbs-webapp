@@ -1017,7 +1017,7 @@ button {
   height: auto;
 }
 .select-dropdown .select-options-container {
-  min-width: 240px;
+  /*min-width: 240px;*/
   top: calc(100% + 5px);
 }
 .select-dropdown .select-options-container .select-options-section {

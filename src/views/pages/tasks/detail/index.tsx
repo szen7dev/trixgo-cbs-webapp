@@ -1,4 +1,9 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import moment from "moment";
+import parse from "html-react-parser";
+import _truncate from "lodash/truncate";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -11,20 +16,51 @@ import IconPrint from "assets/images/icons8-print-32.png";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import IconStar from "assets/images/icons8-star-96.png";
-import MoveStockIcon from "assets/images/icons8-move-stock-96.svg"
+import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
+
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
 import RelatedFeedback from "./RelatedFeedback";
+import Loader from "components/shared/Loader";
+
+import TaskRepository from "apis/task";
+import { useCheckList } from "services/hooks/useTask";
 
 const TaskDetailPage: FC = () => {
+  const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+
+  const [percentComplete, setPercentComplete] = useState("0%");
+  const [isTruncate, setIsTruncate] = useState(true);
+
+  const { data, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id)
+  );
+  const { listCheckList, totalRecord, nextPageListCheckList } =
+    useCheckList(id);
+
+  useEffect(() => {
+    if (data?.data) {
+      const [complete, total] = data.data.checklist.split("/");
+      const percent = Number(total)
+        ? Math.round((Number(complete) / Number(total)) * 100)
+        : 0;
+      setPercentComplete(`${percent}%`);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Loader className="border-primary" />;
+  }
+
   return (
     <>
       {/*_____________header______________*/}
       <div className="task-management-header flex items-center justify-between pt-2 pb-2 pl-5 pr-5 border-b border-secondary-light shadow-lg">
         <div className="task-management-header-left-block flex items-center">
-          <button>
+          <button onClick={() => history.goBack()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -76,15 +112,14 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="flex flex-col items-center pb-5 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center pb-5 bg-cbs-gray task-management-content overflow-auto">
         {/*_____________task title______________*/}
         <div
           className="bg-white p-5 flex flex-col space-y-2"
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
-            dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
+            {data?.data.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -105,20 +140,25 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
+                  {data?.data.project.sign} {">"} {data?.data.group.name} {">"}{" "}
+                  Hồ sơ thanh toán
                 </span>
                 <div>
-                  <img className="h-6 w-6" src={MoveStockIcon} alt="Move stock icon" />
+                  <img
+                    className="h-6 w-6"
+                    src={MoveStockIcon}
+                    alt="Move stock icon"
+                  />
                 </div>
               </div>
-              <div className="flex items-end">
+              <div className="flex items-end pr-2">
                 <img
                   className="w-6"
                   src={StackedOrganizationIcon}
                   alt="Organizational icon"
                 />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  Việc cha: Hồ sơ thanh toán của công ty tư vấn thiết kế 112
+                  {`Việc cha: ${data.data?.parent?.name || ""}`}
                 </span>
               </div>
             </div>
@@ -126,19 +166,23 @@ const TaskDetailPage: FC = () => {
             <div className="w-48">
               <div className="flex justify-between">
                 <div>
-                  <span className="text-lg leading-5">19/5/2021</span>
+                  <span className="text-lg leading-5">
+                    {moment(data.data.expiredTime).format("DD/MM/YYYY")}
+                  </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    15:03
+                    {moment(data.data.expiredTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[13px] text-primary-gray">48%</span>
+                  <span className="text-[13px] text-primary-gray">
+                    {percentComplete}
+                  </span>
                 </div>
               </div>
               <div className="relative pt-1">
-                <div className="overflow-hidden h-1 text-[13px] flex rounded bg-green-200">
+                <div className="overflow-hidden h-1.5 text-[13px] flex rounded border">
                   <div
-                    style={{ width: "48%" }}
+                    style={{ width: percentComplete }}
                     className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
                   ></div>
                 </div>
@@ -154,24 +198,35 @@ const TaskDetailPage: FC = () => {
             <div className="pl-5 pr-8 pt-5">
               <div>
                 <p className="text-[13px]">
-                  Kính gửi Chủ Đầu Tư và Ban QLDA,
-                  <br /> Tư vấn thiết kế 112 đệ trình hồ sơ thanh toán đợt 03
-                  của Hợp đồng thiết kế số 34A/2020/HĐTV/TĐ- 1+1. Kính đề nghị
-                  Chủ đầu tư và Tư vấn QLDA xem xét và phê duyệt.
-                  <br /> Thông tin chi tiết vui lòng xem trong file đính...
+                  {parse(
+                    isTruncate
+                      ? _truncate(data?.data.description || "", { length: 300 })
+                      : data?.data.description || ""
+                  )}
                 </p>
-                <p className="text-[13px] text-primary mt-2.5 mb-4">
-                  Xem thêm/Thu gọn
-                </p>
+                {data?.data.description && (
+                  <button onClick={() => setIsTruncate(!isTruncate)}>
+                    <p className="text-[13px] text-primary mt-2.5 mb-4">
+                      Xem thêm/Thu gọn
+                    </p>
+                  </button>
+                )}
               </div>
 
               <FileAttachment />
             </div>
             <div className="mt-8 pr-3">
-              <CheckList />
+              <CheckList
+                data={listCheckList}
+                totalRecord={totalRecord}
+                onSeeMore={nextPageListCheckList}
+              />
             </div>
             <div className="px-5 mt-10">
-              <PriceApprovalInfo />
+              <PriceApprovalInfo
+                timeApproved={data.data.timeApproved}
+                valueApproved={data.data.valueApproved}
+              />
             </div>
             <div className="px-5 my-10">
               <RelatedFeedback />
@@ -180,7 +235,12 @@ const TaskDetailPage: FC = () => {
 
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
-            <SideBar />
+            <SideBar
+              author={data.data.author}
+              assignee={data.data.assignee}
+              createAt={data.data.createAt}
+              related={data.data.related}
+            />
           </div>
         </div>
       </div>

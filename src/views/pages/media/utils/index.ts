@@ -1,7 +1,7 @@
 export const objPopulate = {
 	populates: JSON.stringify({
 		value: 'comment userCreate lastestReplyID',
-		select: '_id fullname image content files images amountCommentReply amountReaction'
+		select: '_id fullname image parent content files images amountCommentReply amountReaction createAt'
 	}),
 	populates1: JSON.stringify({
 		value: 'files images comment userCreate lastestReplyID',

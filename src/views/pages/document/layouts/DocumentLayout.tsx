@@ -6,6 +6,8 @@ import DocumentProfilePage from "../screens/DocumentProfilePage";
 import DocumentProjectPage from "../screens/DocumentProjectPage";
 import DocumentReportPage from "../screens/DocumentReportPage";
 
+import '../document.css';
+
 const tabs = [
 	{ id: "list", title: "List", path: '/' },
 	{ id: "x", title: "Phân loại", path: '/1' },

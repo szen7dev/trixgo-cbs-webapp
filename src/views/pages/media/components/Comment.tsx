@@ -19,6 +19,7 @@ type OptionsProps = {
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
+	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
 	comment: CommentProps,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
+	onClickEdit,
 	comment, small, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
@@ -35,9 +37,14 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		deleteComment(comment._id);
 		dispatch({
 			type: "DELETE_COMMENT",
-			payload: { _id: comment._id, parent: comment.parent }
+			payload: { _id: comment._id, parent: comment?.parent }
 		});
 	}
+
+	const handleEditComment = () => {
+		onClickEdit?.(comment)
+	}
+
 	const images = comment.comment?.images || [];
 	const files = comment.comment?.files || [];
 
@@ -59,7 +66,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								{comment.comment?.content}
 							</p>
 						</div>
-						{Options && <Options className="opacity-0 group-hover:opacity-100" onDelete={handleDeleteComment} />}
+						{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
 					</div>
 					<div>
 						<div className="flex flex-wrap gap-x-2">
@@ -81,7 +88,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							}) : ''}
 						</div>
 						<div >
-							<PostFile files={files} isRemove={false} className='px-0' />
+							<PostFile files={files} className='px-0' />
 						</div>
 					</div>
 					{EndComment

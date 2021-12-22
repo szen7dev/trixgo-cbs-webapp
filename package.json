@@ -24,6 +24,7 @@
     "chartjs-plugin-datalabels": "^2.0.0",
     "classnames": "^2.3.1",
     "formik": "^2.2.9",
+    "html-react-parser": "^1.4.4",
     "i18next": "^20.3.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -169,6 +170,5 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md} !src/styles/output.css": [
       "prettier --write"
     ]
-  },
-  "proxy": "http://localhost:3003/"
+  }
 }
