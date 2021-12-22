@@ -13,9 +13,11 @@ import { CheckList as CheckListType } from "typings/task";
 
 type Props = {
   data: Array<CheckListType>;
+  totalRecord?: number;
+  onSeeMore: () => void;
 };
 
-const CheckList: FC<Props> = ({ data }) => {
+const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -103,9 +105,15 @@ const CheckList: FC<Props> = ({ data }) => {
 
         <div>
           <div className="w-full flex justify-center my-5">
-            <button>
-              <span className="text-primary">Xem thêm (125)</span>
-            </button>
+            {totalRecord && totalRecord - data.length > 0 ? (
+              <button onClick={() => onSeeMore()}>
+                <span className="text-primary">{`Xem thêm (${
+                  totalRecord - data.length
+                })`}</span>
+              </button>
+            ) : (
+              ""
+            )}
           </div>
           <div className="w-full h-px bg-gray-200 " />
 

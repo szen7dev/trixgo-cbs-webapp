@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
@@ -31,10 +31,23 @@ const TaskDetailPage: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
 
+  const [percentComplete, setPercentComplete] = useState("0%");
+
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
   );
-  const { listCheckList } = useCheckList(id);
+  const { listCheckList, totalRecord, nextPageListCheckList } =
+    useCheckList(id);
+
+  useEffect(() => {
+    if (data?.data) {
+      const [complete, total] = data.data.checklist.split("/");
+      const percent = Number(total)
+        ? Math.round((Number(complete) / Number(total)) * 100)
+        : 0;
+      setPercentComplete(`${percent}%`);
+    }
+  }, [data]);
 
   if (isLoading) {
     return <Loader className="border-primary" />;
@@ -158,13 +171,15 @@ const TaskDetailPage: FC = () => {
                   </span>
                 </div>
                 <div>
-                  <span className="text-[13px] text-primary-gray">48%</span>
+                  <span className="text-[13px] text-primary-gray">
+                    {percentComplete}
+                  </span>
                 </div>
               </div>
               <div className="relative pt-1">
-                <div className="overflow-hidden h-1 text-[13px] flex rounded bg-green-200">
+                <div className="overflow-hidden h-1.5 text-[13px] flex rounded border">
                   <div
-                    style={{ width: "48%" }}
+                    style={{ width: percentComplete }}
                     className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
                   ></div>
                 </div>
@@ -190,7 +205,11 @@ const TaskDetailPage: FC = () => {
               <FileAttachment />
             </div>
             <div className="mt-8 pr-3">
-              <CheckList data={listCheckList} />
+              <CheckList
+                data={listCheckList}
+                totalRecord={totalRecord}
+                onSeeMore={nextPageListCheckList}
+              />
             </div>
             <div className="px-5 mt-10">
               <PriceApprovalInfo />
