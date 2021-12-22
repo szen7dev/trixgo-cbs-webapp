@@ -104,17 +104,17 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
         </div>
 
         <div>
-          <div className="w-full flex justify-center my-5">
-            {totalRecord && totalRecord - data.length > 0 ? (
+          {totalRecord && totalRecord - data.length > 0 ? (
+            <div className="w-full flex justify-center my-5">
               <button onClick={() => onSeeMore()}>
                 <span className="text-primary">{`Xem thêm (${
                   totalRecord - data.length
                 })`}</span>
               </button>
-            ) : (
-              ""
-            )}
-          </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (

@@ -3,6 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
+import _truncate from "lodash/truncate";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -32,6 +33,7 @@ const TaskDetailPage: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const [percentComplete, setPercentComplete] = useState("0%");
+  const [isTruncate, setIsTruncate] = useState(true);
 
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
@@ -195,11 +197,19 @@ const TaskDetailPage: FC = () => {
             <div className="pl-5 pr-8 pt-5">
               <div>
                 <p className="text-[13px]">
-                  {parse(data?.data.description || "")}
+                  {parse(
+                    isTruncate
+                      ? _truncate(data?.data.description || "", { length: 300 })
+                      : data?.data.description || ""
+                  )}
                 </p>
-                <p className="text-[13px] text-primary mt-2.5 mb-4">
-                  Xem thêm/Thu gọn
-                </p>
+                {data?.data.description && (
+                  <button onClick={() => setIsTruncate(!isTruncate)}>
+                    <p className="text-[13px] text-primary mt-2.5 mb-4">
+                      Xem thêm/Thu gọn
+                    </p>
+                  </button>
+                )}
               </div>
 
               <FileAttachment />
