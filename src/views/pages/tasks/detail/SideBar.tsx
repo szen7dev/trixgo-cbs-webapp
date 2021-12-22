@@ -6,15 +6,16 @@ import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 
-import { Author, Assignee } from "typings/task";
+import { Author, Assignee, User } from "typings/task";
 
 type Props = {
   author: Author;
   assignee: Assignee;
   createAt: string;
+  related?: Array<User>;
 };
 
-const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
+const SideBar: FC<Props> = ({ author, assignee, createAt, related }) => {
   return (
     <div>
       <div>
@@ -32,7 +33,7 @@ const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
               <img
                 src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
                 alt="Avatar"
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10 rounded-full object-cover"
               />
               <div className="flex items-center">
                 <img
@@ -50,7 +51,7 @@ const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
             <img
               src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
               alt="Avatar"
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 rounded-full object-cover"
             />
             <span className="mt-2 text-[13px] leading-4">
               {assignee.fullname}
@@ -58,7 +59,7 @@ const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
           </div>
         </div>
         <span className="text-xs text-primary-gray">
-          {`${moment(createAt).format("hh:mm DD/MM/YY")} - ${moment(
+          {`${moment(createAt).format("HH:mm DD/MM/YY")} - ${moment(
             createAt
           ).fromNow()}`}
         </span>
@@ -76,10 +77,14 @@ const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
           </button>
         </div>
         <div className="flex overflow-hidden space-x-3">
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+          {(related || []).map((user) => (
+            <img
+              key={user._id}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full"
+            />
+          ))}
         </div>
       </div>
 
@@ -242,6 +247,10 @@ const SideBar: FC<Props> = ({ author, assignee, createAt }) => {
       </div>
     </div>
   );
+};
+
+SideBar.defaultProps = {
+  related: [],
 };
 
 export default SideBar;

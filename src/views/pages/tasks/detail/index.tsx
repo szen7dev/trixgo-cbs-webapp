@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
+import parse from "html-react-parser";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -94,7 +95,7 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="flex flex-col items-center pb-5 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center pb-5 bg-cbs-gray task-management-content overflow-auto">
         {/*_____________task title______________*/}
         <div
           className="bg-white p-5 flex flex-col space-y-2"
@@ -132,14 +133,14 @@ const TaskDetailPage: FC = () => {
                   />
                 </div>
               </div>
-              <div className="flex items-end">
+              <div className="flex items-end pr-2">
                 <img
                   className="w-6"
                   src={StackedOrganizationIcon}
                   alt="Organizational icon"
                 />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  Việc cha: Hồ sơ thanh toán của công ty tư vấn thiết kế 112
+                  {`Việc cha: ${data.data?.parent?.name || ""}`}
                 </span>
               </div>
             </div>
@@ -151,7 +152,7 @@ const TaskDetailPage: FC = () => {
                     {moment(data.data.expiredTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    15:03
+                    {moment(data.data.expiredTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
@@ -176,7 +177,9 @@ const TaskDetailPage: FC = () => {
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
               <div>
-                <p className="text-[13px]">{data?.data.description}</p>
+                <p className="text-[13px]">
+                  {parse(data?.data.description || "")}
+                </p>
                 <p className="text-[13px] text-primary mt-2.5 mb-4">
                   Xem thêm/Thu gọn
                 </p>
@@ -201,6 +204,7 @@ const TaskDetailPage: FC = () => {
               author={data.data.author}
               assignee={data.data.assignee}
               createAt={data.data.createAt}
+              related={data.data.related}
             />
           </div>
         </div>
