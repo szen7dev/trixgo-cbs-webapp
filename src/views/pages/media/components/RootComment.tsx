@@ -25,8 +25,11 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 	const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
 
 	useEffect(() => {
-		if(commentsReply.length === 0){
-			dispatch({ type: 'ADD_COMMENT', payload: comment.lastestReplyID });
+		if(commentsReply.length === 0 && comment.lastestReplyID){
+			dispatch({ 
+				type: 'ADD_COMMENT',
+				payload: comment.lastestReplyID
+			});
 		}
 	}, [])
 
@@ -42,7 +45,13 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 		setAmountReply(amountReply - limit);
 
 		if (!error && data.listRecords.length) {
-			dispatch({ type: 'VIEW_MORE_COMMENTS_REPLY', payload: data.listRecords });
+			dispatch({ 
+				type: 'VIEW_MORE_COMMENTS_REPLY',
+				payload: {
+					parent: comment._id,
+					comments: data.listRecords
+				}
+			});
 		}
 	}
 
