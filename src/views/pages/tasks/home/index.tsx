@@ -44,12 +44,15 @@ const TaskHomePage: FC = () => {
     document.title = "Quản lí công việc";
   }, []);
 
+  if (isLoadingListTask) {
+    return <Loader className="border-primary" />;
+  }
+
   return (
     <>
       <div>
         <TaskHomeHeader viewMode={viewMode} onChangeMode={setViewMode} />
       </div>
-      {isLoadingListTask && <Loader className="border-primary" />}
 
       <div className="task-management-content overflow-auto">
         {/* Table */}
