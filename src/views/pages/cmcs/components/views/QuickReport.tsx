@@ -4,7 +4,7 @@ const QuickReport: FC = () => {
   return (
     <>
       <p className="font-bold text-lg py-2 text-primary-gray">Báo cáo nhanh</p>
-      <div className="text-[13px]">
+      <div>
         <p className="underline font-bold uppercase">HỢP ĐỒNG 1</p>
         <p>
           Đã có cấp phép xây dựng và thông báo khởi công đã gửi ra phường. Hồ sơ
@@ -12,7 +12,7 @@ const QuickReport: FC = () => {
           toán và khối lượng ban đầu
         </p>
       </div>
-      <div className="text-[13px]">
+      <div>
         <p className="underline font-bold uppercase">HỢP ĐỒNG 2</p>
         <p>Đã có cấp phép xây dựng và thông báo khởi công đã gửi ra phường.</p>
       </div>

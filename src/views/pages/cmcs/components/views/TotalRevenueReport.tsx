@@ -5,7 +5,7 @@ import MushroomIcon from "assets/images/icons8-mushroom.svg";
 
 const TotalRevenueReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light h-full">
       <div className="px-6 py-4">
         <p className="font-bold text-primary-gray text-lg">
           Tổng doanh thu 2021
@@ -21,20 +21,20 @@ const TotalRevenueReport: FC = () => {
             </div>
             <div className="text-xs">
               <span className="text-primary-gray">Mục tiêu: </span>
-              <span className="text-primary">100 tỷ</span>
+              <span className="text-primary font-bold">100 tỷ</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="h-12 bg-secondary-light flex items-center">
+      <div className="h-12 bg-secondary-light flex items-center mt-1">
         <p className="w-1/2 px-5 text-primary-gray">So với cùng kỳ năm trước</p>
         <div className="w-1/2 flex justify-center items-center">
           <img src={ArrowUpBoldIcon} alt="Arrow Up" />
-          <span className="text-sm text-primary-gray">+2.86%</span>
+          <span className="text-sm text-primary-gray ml-1">+2.86%</span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

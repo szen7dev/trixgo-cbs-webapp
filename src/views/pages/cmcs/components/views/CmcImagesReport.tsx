@@ -12,15 +12,7 @@ import image4 from "assets/images/ProjectPage/image 164.jpg";
 
 const CmcImagesReport: FC = () => {
   return (
-    <div
-      className={cn(
-        styles.cell,
-        styles.borderLeft,
-        styles.borderBottom,
-        styles.borderRight,
-        "w-full py-2 flex"
-      )}
-    >
+    <div className="w-full py-2 flex bg-primary-light">
       <div className="flex items-center">
         <button
           className={cn(

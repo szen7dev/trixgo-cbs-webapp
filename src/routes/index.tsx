@@ -400,8 +400,8 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <CmcsLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
-                      <ProtectedRoute exact path="/cmcs/dashboard" component={CmcManagementReport} />
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
 									</CmcsLayout>
                 </Route>
