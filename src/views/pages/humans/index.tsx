@@ -1,133 +1,104 @@
 import { FC, useState } from "react";
 
-import Tabs from "./tabs/TabsList";
+import { Link } from "react-router-dom";
 
-import SearchIcon from "assets/images/icons8-search-120.png";
-import ListIcon from "assets/images/icon-bulleted-list.svg";
-import AddIcon from "assets/images/icon-add.svg";
-import NewHumanModal from "./components/NewHumanModal";
 import { useModal } from "services/hooks/useModal";
+import NewHumanModal from "./components/NewHumanModal";
+
+import SearchIcon from "assets/images/icons8-search.svg";
+import ThreeDotIcon from "assets/images/icon-3dots.png";
+import HumanAvatar from "assets/images/human-avatar.svg";
+import SortIcon from "assets/images/icons8-sorting.svg";
+
+type Item = {
+  id: number;
+  name: string;
+  role: string;
+};
 
 const HumansPage: FC = () => {
-  const [toggleTab, setToggleTab] = useState(1);
-
+  const name = "Nguyễn Phan Thanh Hương";
+  const role = "Cán bộ kế toán";
+  const data = [];
+  for (let i = 0; i <= 12; i++) {
+    data.push({ name, role, id: i });
+  }
   const { openModal } = useModal();
-
-  const handleToggleTab = (index: number) => {
-    setToggleTab(index);
-  };
 
   return (
     <section className="w-full">
-      <div className="sticky top-0 bg-primary-light z-10 flex justify-between h-12 px-6 border border-gray-200">
+      <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
         <div className="flex items-center">
-          <button
-            className={
-              toggleTab === 1
-                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
-                : "w-auto h-full p-2 text-sm text-primary-gray"
-            }
-            onClick={() => handleToggleTab(1)}
-          >
-            Danh sách
-          </button>
-          <button
-            className={
-              toggleTab === 2
-                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
-                : "w-auto h-full p-2 text-sm text-primary-gray"
-            }
-            onClick={() => handleToggleTab(2)}
-          >
-            Theo dõi thời hạn
-          </button>
-          <button
-            className={
-              toggleTab === 3
-                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
-                : "w-auto h-full p-2 text-sm text-primary-gray"
-            }
-            onClick={() => handleToggleTab(3)}
-          >
-            Tra cứu năng lực
-          </button>
-          <button
-            className={
-              toggleTab === 4
-                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
-                : "w-auto h-full p-2 text-sm text-primary-gray"
-            }
-            onClick={() => handleToggleTab(4)}
-          >
-            Tra cứu văn bằng
-          </button>
-          <button
-            className={
-              toggleTab === 5
-                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
-                : "w-auto h-full p-2 text-sm text-primary-gray"
-            }
-            onClick={() => handleToggleTab(5)}
-          >
-            Tra cứu khác
-          </button>
-        </div>
-
-        <div className="flex items-center">
-          <div className="relative px-4 border-r-2 border-accent-light">
+          <p className="text-lg">Danh sách</p>
+          <div className="relative px-4">
             <span>
               <img
                 src={SearchIcon}
                 alt="Search"
-                className="absolute top-2 left-8"
+                className="absolute top-2 left-7 w-4 h-4"
               />
             </span>
             <input
               type="text"
-              placeholder="Tìm kiếm"
-              className="w-64 h-10 rounded-2xl pl-14 outline-none bg-secondary-light"
+              placeholder="Nhập từ khóa tìm kiếm"
+              className="w-[296px] h-[30px] pl-10 outline-none bg-cbs-table-header"
             />
           </div>
-
-          <div className="flex px-4">
-            <div
-              className="flex  items-center justify-around rounded-l-xl cursor-pointer w-[74px] h-[34px]"
-              style={{
-                background: "#eaf2fe",
-              }}
-            >
-              <img src={ListIcon} alt="List" className="w-6 h-6" />
-              <span className="text-primary text-[13px]">Grid</span>
-            </div>
-            <div className="flex items-center justify-around rounded-r-xl cursor-pointer w-[74px] h-[34px] bg-secondary-light">
-              <img src={ListIcon} alt="List" className="w-6 h-6" />
-              <span className="text-[13px]">List</span>
-            </div>
-          </div>
-
-          <button
-            className="flex items-center"
-            onClick={() =>
-              openModal(
-                <div
-                  className={
-                    "bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-                  }
-                >
-                  <NewHumanModal />
-                </div>
-              )
-            }
-          >
-            <img src={AddIcon} alt="Add" />
-            <span className="ml-2 uppercase text-primary text-[13px]">
-              Nhân sự mới
-            </span>
+          <button className="w-[78px] h-[30px] flex items-center justify-around bg-cbs-table-header rounded text-primary-gray">
+            <img src={SortIcon} alt="Sort" />
+            <span>Filter</span>
           </button>
         </div>
+        <button
+          className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+          onClick={() =>
+            openModal(
+              <div
+                className={
+                  "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+                }
+              >
+                <NewHumanModal />
+              </div>
+            )
+          }
+        >
+          Tạo mới
+        </button>
       </div>
 
-      <Tabs toggleTab={toggleTab} />
+      <div className="px-6 py-4 grid grid-cols-5 gap-3">
+        {data.map((item: Item) => {
+          return (
+            <div
+              key={item.id}
+              className="relative flex flex-col justify-around items-center h-[375px] rounded-lg"
+              style={{
+                boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                border: "1px solid #cccccc",
+              }}
+            >
+              <img
+                src={ThreeDotIcon}
+                alt="Three Dot"
+                className="absolute top-6 right-6 cursor-pointer"
+              />
+              <div className="text-center ml-2 mr-2">
+                <div className="flex justify-center mb-6">
+                  <img src={HumanAvatar} alt="Avatar" className="w-20 h-20" />
+                </div>
+                <p className="text-2xl">{item.name}</p>
+                <p className="text-sm pt-2 text-secondary-gray">{item.role}</p>
+              </div>
+              <Link to={`/human/home/hid=${item.id}`}>
+                <button className="text-sm w-32 h-10 rounded-lg border border-primary-gray">
+                  Xem chi tiết
+                </button>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 };

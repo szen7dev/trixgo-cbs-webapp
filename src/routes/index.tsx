@@ -218,8 +218,8 @@ const Routes: FC = () => {
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/human/home" component={HumansPage} />
-                      <ProtectedRoute path="/human/home/hid=:id" component={HumanInfo} />
+                      <Route exact path="/human/home" component={HumansPage} />
+                      <Route path="/human/home/hid=:id" component={HumanInfo} />
                     </Switch>
                   </HomeLayout>
                 </Route>
