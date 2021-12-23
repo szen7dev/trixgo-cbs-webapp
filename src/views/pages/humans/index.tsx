@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import Tabs from "./tabs/TabsList";
 
@@ -10,17 +10,12 @@ import { useModal } from "services/hooks/useModal";
 
 const HumansPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
-  // const [openModal, setOpenModal] = useState(false);
 
   const { openModal } = useModal();
 
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
-
-  useEffect(() => {
-    document.title = "Human - Quản lý nhân sự";
-  }, []);
 
   return (
     <section className="w-full">

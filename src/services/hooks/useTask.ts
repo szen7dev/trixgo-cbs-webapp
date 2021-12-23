@@ -37,10 +37,12 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
           name: 1,
           expiredTime: 1,
           typeStatus: 1,
+          percentage: 1,
+          project: 1
         }),
         populates: JSON.stringify({
-          value: "assignee lastLog",
-          select: "name fullname image author content createAt",
+          value: "assignee lastLog project",
+          select: "name fullname image author content createAt sign",
         }),
         populates1: JSON.stringify({
           value: "author",

@@ -90,13 +90,10 @@ import SocialPostPage from "views/pages/media/screens/PostPage";
 import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 
 // Document pages
-import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
-import DocumentHomePage from "views/pages/document/screens/DocumentHomePage";
-import DocumentDashboardPage from "views/pages/document/screens/DocumentDashboardPage";
-import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
-import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
+import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
 //Financial
+import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmc pages
 import CmcsPage from "views/pages/cmcs";
@@ -104,7 +101,8 @@ import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 // Support pages
-import SupportPage from "views/pages/support";
+import SupportPage from "views/pages/support/components/home";
+import RegisterDashboardPage from "views/pages/support/components/register";
 
 const Routes: FC = () => {
 
@@ -218,9 +216,8 @@ const Routes: FC = () => {
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/human/home" component={HumansPage} />
-                      <Route path="/human/home/hid=:id" component={HumanInfo} />
-                      <Route path="/human/home/*" component={ErrorPage} />
+                      <ProtectedRoute exact path="/human/home" component={HumansPage} />
+                      <ProtectedRoute path="/human/home/hid=:id" component={HumanInfo} />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -356,14 +353,7 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/document">
-                  <HomeLayout>
-                    <Switch>
-                      <Route exact path="/document/home" component={DocumentHomePage} />
-                      <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
-                      <Route path="/document/project/:id/document" component={DocumentLayout} />
-                      <Route path="/document/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
+									<DocumentLayoutContainer />
                 </Route>
 
                 <Route path="/accounting/:path?">
@@ -402,8 +392,8 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <CmcsLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
-                      <ProtectedRoute exact path="/cmcs/dashboard" component={CmcManagementReport} />
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
 									</CmcsLayout>
                 </Route>
@@ -411,7 +401,8 @@ const Routes: FC = () => {
                 <Route path="/support">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/register" component={RegisterDashboardPage} />
                     </Switch>
 									</HomeLayout>
                 </Route>

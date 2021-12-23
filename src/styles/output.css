@@ -131403,7 +131403,7 @@ button {
   background-color: #F0F0F0;
 }
 
-/*__________________________header search________________________*/
+/*__________________________common dialog________________________*/
 
 .t-main-search {
   width: 900px;
@@ -131441,6 +131441,39 @@ button {
 
 .t-main-search-filter-item-dropdown, .t-main-search-filter-item .react-datepicker-wrapper {
   width: calc(100% - 150px);
+}
+
+.t-add-new-task-dialog {
+  width: 1570px;
+  max-width: calc(100% - 30px);
+  border: 1px solid #ccc;
+}
+
+.t-add-new-task-dialog-content {
+  flex-grow: 2;
+  height: 50vh;
+  overflow: auto;
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  pointer-events: none;
+  display: block; /* For Firefox */
+}
+
+.t-add-new-task-dialog-attachment-item {
+  background-color: #EDEBEB;
+  width: 415px;
+}
+
+.t-add-new-task-dialog-attachment-title {
+  width: 45%;
+}
+
+.t-add-new-task-dialog-attachment-item .t-home-training-progress-bar {
+  background-color: #FFFFFF;
+  border: 1px solid #1155CC;
+  padding: 2px;
 }
 
 /*______________________________chatbox______________________________*/

@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
 import _truncate from "lodash/truncate";
+import cn from "classnames";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -22,11 +23,13 @@ import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
-import RelatedFeedback from "./RelatedFeedback";
+import RelatedResponse from "./RelatedResponse";
 import Loader from "components/shared/Loader";
+import styles from "../style.module.css";
 
 import TaskRepository from "apis/task";
 import { useCheckList } from "services/hooks/useTask";
+import { User } from "typings/task";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
@@ -34,6 +37,7 @@ const TaskDetailPage: FC = () => {
 
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
+  const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
@@ -41,13 +45,26 @@ const TaskDetailPage: FC = () => {
   const { listCheckList, totalRecord, nextPageListCheckList } =
     useCheckList(id);
 
+  const getGroupTitle = (group: any) => {
+    let title = "";
+    if (group.parent) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const name = getGroupTitle(group.parent);
+      title = title ? `${name} > ${title}` : name;
+    }
+
+    return title ? `${title} > ${group.name}` : group.name;
+  };
+
   useEffect(() => {
     if (data?.data) {
-      const [complete, total] = data.data.checklist.split("/");
-      const percent = Number(total)
-        ? Math.round((Number(complete) / Number(total)) * 100)
-        : 0;
-      setPercentComplete(`${percent}%`);
+      setPercentComplete(`${data.data.percentage}%`);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setConfirmUsers([data.data.author, data.data.assignee]);
     }
   }, [data]);
 
@@ -140,8 +157,8 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {data?.data.project.sign} {">"} {data?.data.group.name} {">"}{" "}
-                  Hồ sơ thanh toán
+                  {data?.data.project.sign} {">"}{" "}
+                  {getGroupTitle(data?.data.group)}
                 </span>
                 <div>
                   <img
@@ -151,16 +168,18 @@ const TaskDetailPage: FC = () => {
                   />
                 </div>
               </div>
-              <div className="flex items-end pr-2">
-                <img
-                  className="w-6"
-                  src={StackedOrganizationIcon}
-                  alt="Organizational icon"
-                />
-                <span className="text-[13px] text-primary-gray mx-2">
-                  {`Việc cha: ${data.data?.parent?.name || ""}`}
-                </span>
-              </div>
+              {data.data?.parent && (
+                <div className="flex items-end pr-2">
+                  <img
+                    className="w-6"
+                    src={StackedOrganizationIcon}
+                    alt="Organizational icon"
+                  />
+                  <span className="text-[13px] text-primary-gray mx-2">
+                    {`Việc cha: ${data.data.parent.name}`}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="w-48">
@@ -196,14 +215,16 @@ const TaskDetailPage: FC = () => {
           {/*_____________task content______________*/}
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
-              <div>
-                <p className="text-[13px]">
+              <div className={cn(styles["dont-break-out"])}>
+                <div
+                  className={cn(styles["t-task-detail-content"], "text-[13px]")}
+                >
                   {parse(
                     isTruncate
                       ? _truncate(data?.data.description || "", { length: 300 })
                       : data?.data.description || ""
                   )}
-                </p>
+                </div>
                 {data?.data.description && (
                   <button onClick={() => setIsTruncate(!isTruncate)}>
                     <p className="text-[13px] text-primary mt-2.5 mb-4">
@@ -229,7 +250,7 @@ const TaskDetailPage: FC = () => {
               />
             </div>
             <div className="px-5 my-10">
-              <RelatedFeedback />
+              <RelatedResponse />
             </div>
           </div>
 
@@ -240,6 +261,7 @@ const TaskDetailPage: FC = () => {
               assignee={data.data.assignee}
               createAt={data.data.createAt}
               related={data.data.related}
+              confirmUsers={confirmUsers}
             />
           </div>
         </div>

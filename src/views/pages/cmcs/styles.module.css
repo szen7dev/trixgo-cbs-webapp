@@ -1,45 +1,9 @@
-:root {
-  --border-gray: #f0f0f0;
-}
-
-.border {
-  border: 12px solid var(--border-gray);
-}
-
-.borderTop {
-  border-top: 12px solid var(--border-gray);
-}
-
-.borderRight {
-  border-right: 12px solid var(--border-gray);
-}
-
-.borderBottom {
-  border-bottom: 12px solid var(--border-gray);
-}
-
-.borderLeft {
-  border-left: 12px solid var(--border-gray);
-}
-
-.topDiv {
-  height: 670px;
-}
-
-.bottomDiv {
-  height: calc(100% - 144px - 240px - 192px - 80px);
-}
-
 .bgMonth {
   background: #eaf2fe;
 }
 
 .bgQuarter {
   background: #f7f6fc;
-}
-
-.backgroundGray {
-  background: #f0f0f0;
 }
 
 .barChart {
@@ -58,32 +22,4 @@
   box-sizing: border-box;
   border-radius: 10px;
   margin: 0px 2px 0px 2px;
-}
-
-.cell {
-  background: #ffffff;
-  box-sizing: border-box;
-}
-
-.cell.border {
-  border: 0.5px solid #cccccc;
-}
-
-.cell ul > li {
-  line-height: 16.1px;
-  font-size: 14px;
-}
-
-.cell ul > li:not(:first-child) {
-  margin-top: 17px;
-}
-
-.cell ul > li > a > div {
-  display: inline-block;
-  background-color: currentColor;
-  margin-right: 14px;
-}
-
-.chart {
-  width: 110px;
 }
