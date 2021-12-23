@@ -287,7 +287,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {touched.content && errors.content}
+                            {errors.content}
                           </span>
                         </div>
                         <div className="w-2/6 mx-3 ">
@@ -295,8 +295,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {getIn(touched, "assignee.name") &&
-                              getIn(errors, "assignee.name")}
+                            {getIn(errors, "assignee.name")}
                           </span>
                         </div>
                         <div className="w-1/6 ">
@@ -304,7 +303,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {touched.expiredTime && errors.expiredTime}
+                            {errors.expiredTime}
                           </span>
                         </div>
                       </div>
