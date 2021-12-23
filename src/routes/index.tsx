@@ -53,6 +53,7 @@ import MessagesDetailPage from "views/pages/messages/detail";
 // Tasks Pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
+import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
@@ -73,15 +74,15 @@ import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
 import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 // Accounting pages
-import AccountingTicketsPage from "../views/pages/accounting/AccountingTicketsPage";
-import AccountingDetailPage from "../views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "../views/pages/accounting/AccountingDiaryPage";
-import AccountingInOutPage from "../views/pages/accounting/AccountingInOutPage";
-import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
-import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
-import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
-import AccountingTicketDetailPage from "../views/pages/accounting/AccountingTicketDetailPage";
+import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
+import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
+import AccountingDiaryPage from "views/pages/accounting/AccountingDiaryPage";
+import AccountingInOutPage from "views/pages/accounting/AccountingInOutPage";
+import AccountingDebtPage from "views/pages/accounting/AccountingDebtPage";
+import AccountingVatPage from "views/pages/accounting/AccountingVatPage";
+import AccountingReportFinancePage from "views/pages/accounting/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/pages/accounting/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -244,6 +245,7 @@ const Routes: FC = () => {
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
+                      <ProtectedRoute exact path={"/pcm/dashboard/type=2"} component={TaskDashboardType2} />
                     </Switch>
                   </PcmLayout>
                 </Route>

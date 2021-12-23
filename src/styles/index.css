@@ -960,7 +960,6 @@ button {
   color: #666666;
 }
 .nav li.acc-tab {
-  min-height: 62px;
   align-items: center;
 }
 .btn {
