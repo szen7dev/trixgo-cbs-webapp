@@ -13,7 +13,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-import styles from "../../styles.module.css";
+import styles from "../../../styles.module.css";
 
 import ListIcon from "assets/images/icon-bulleted-list.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
@@ -115,14 +115,7 @@ const options = {
 
 const ByTimeSupport: FC = () => {
   return (
-    <section
-      className={cn(
-        "w-3/5 h-60 px-6 py-4 flex flex-col justify-between",
-        styles.borderTop,
-        styles.borderBottom,
-        styles.borderLeft
-      )}
-    >
+    <section className="w-3/5 h-[222px] px-6 py-4 flex flex-col justify-between bg-primary-light">
       <div className="flex items-center justify-between">
         <p className="font-bold text-primary-gray text-lg">
           Doanh thu theo thời gian

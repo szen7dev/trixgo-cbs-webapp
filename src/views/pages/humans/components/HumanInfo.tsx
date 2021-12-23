@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef } from "react";
 
 import { useHistory } from "react-router-dom";
 
@@ -25,10 +25,6 @@ const HumanInfo: FC = () => {
   const history = useHistory();
 
   useOnClickOutside(ref, () => setOpenHumanOption(!openHumanOption));
-
-  useEffect(() => {
-    document.title = "Human - Chi tiết nhân sự";
-  }, []);
 
   return (
     <main className="mb-4">
