@@ -18,6 +18,8 @@ import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
+import PcmLayout from "views/layouts/PcmLayout";
+import CmcsLayout from "views/layouts/CmcsLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -98,7 +100,8 @@ import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 // Support pages
-import SupportPage from "views/pages/support";
+import SupportPage from "views/pages/support/components/home";
+import RegisterDashboardPage from "views/pages/support/components/register";
 
 const Routes: FC = () => {
 
@@ -212,9 +215,8 @@ const Routes: FC = () => {
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/human/home" component={HumansPage} />
-                      <Route path="/human/home/hid=:id" component={HumanInfo} />
-                      <Route path="/human/home/*" component={ErrorPage} />
+                      <ProtectedRoute exact path="/human/home" component={HumansPage} />
+                      <ProtectedRoute path="/human/home/hid=:id" component={HumanInfo} />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -238,12 +240,12 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/pcm/:path?">
-                  <HomeLayout>
+                  <PcmLayout>
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                     </Switch>
-                  </HomeLayout>
+                  </PcmLayout>
                 </Route>
 
                 <Route path="/teaser">
@@ -386,18 +388,19 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/cmcs">
-                  <HomeLayout>
+                  <CmcsLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
-                      <ProtectedRoute exact path="/cmcs/management-report" component={CmcManagementReport} />
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
-									</HomeLayout>
+									</CmcsLayout>
                 </Route>
 
                 <Route path="/support">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/register" component={RegisterDashboardPage} />
                     </Switch>
 									</HomeLayout>
                 </Route>

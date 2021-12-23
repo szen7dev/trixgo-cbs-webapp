@@ -31,13 +31,13 @@ const FinancialCashFlowPage:FC = () => {
                 <div className={"relative table border-collapse w-full"}>
                     <div className={"header flex table-row sticky z-10"}>
                         <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                            <div className={"flex items-center"}>
+                                <input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault"/>
+                                <TriangleDown/>
+                            </div>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"}>
-                            <div className={"flex items-center"}>
-                                <TriangleDown/>
-                                <span className={"ml-2"}>Nội dung</span>
-                            </div>
+                            Nội dung
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
                             Phân loại

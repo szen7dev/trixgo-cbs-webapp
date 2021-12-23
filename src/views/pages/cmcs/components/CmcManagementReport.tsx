@@ -1,8 +1,4 @@
-import { FC, useEffect } from "react";
-
-import cn from "classnames";
-
-import styles from "../styles.module.css";
+import { FC } from "react";
 
 import ReceivableReport from "./views/ReceivableReport";
 import RevenueBySectorReport from "./views/RevenueBySectorReport";
@@ -18,96 +14,61 @@ import QuickReport from "./views/QuickReport";
 import StatusReport from "./views/StatusReport";
 
 const CmcManagementReport: FC = () => {
-  useEffect(() => {
-    document.title = "Trixgo - Quản lý hợp đồng";
-  }, []);
-
   return (
-    <main className={cn("flex w-full h-screen")}>
-      <div className="w-3/4 h-full bg-primary-light">
+    <main className="flex w-full bg-cbs-gray h-max p-3">
+      <div className="w-2/3 h-full mr-">
         <CompanyPreviewReport />
 
-        <div
-          className={cn(
-            "h-48 w-full flex",
-            styles.borderLeft,
-            styles.borderBottom
-          )}
-        >
-          <div className="w-3/5 flex">
-            <div
-              className={cn(
-                "w-1/2 flex flex-col justify-between",
-                styles.borderRight
-              )}
-            >
+        <div className="h-[176px] w-full flex mb-3">
+          <div className="w-3/5 flex gap-3">
+            <div className="w-1/2 flex flex-col justify-between">
               <TotalRevenueReport />
             </div>
 
-            <div
-              className={cn(
-                "w-1/2 flex flex-col justify-between",
-                styles.borderRight
-              )}
-            >
+            <div className="w-1/2 flex flex-col justify-between">
               <MoneyBackReport />
             </div>
           </div>
 
-          <div className={cn("w-2/5 px-6 py-4", styles.borderRight)}>
+          <div className="w-2/5 mr-3 ml-3">
             <PaymentPlanReport />
           </div>
         </div>
 
-        <div
-          className={cn(
-            "h-60 w-full flex",
-            styles.borderLeft,
-            styles.borderBottom
-          )}
-        >
-          <div className={cn("w-2/5 py-4 px-6", styles.borderRight)}>
+        <div className="h-[222px] w-full flex mb-3">
+          <div className="w-2/5 mr-3">
             <RevenueBySectorReport />
           </div>
-          <div className={cn("w-3/5 py-4 px-6", styles.borderRight)}>
+          <div className="w-3/5 mr-3">
             <RevenueOverTimeReport />
           </div>
         </div>
 
-        <CmcImagesReport />
+        <div className="mr-3 mb-3">
+          <CmcImagesReport />
+        </div>
 
-        <div
-          className={cn(
-            "w-full h-64 flex",
-            styles.borderLeft,
-            styles.borderBottom,
-            styles.borderRight
-          )}
-        >
-          <div className={cn("w-3/5 py-4 px-6", styles.borderRight)}>
+        <div className="w-full h-64 flex">
+          <div className="w-3/5 mr-3">
             <CashFlowManagementReport />
           </div>
 
-          <div className={cn("w-1/5 py-4 px-6", styles.borderRight)}>
+          <div className="w-1/5 mr-3">
             <ReceivableReport />
           </div>
 
-          <div className="w-1/5 py-4 px-6 text-center">
+          <div className="w-1/5 mr-3">
             <ProfileAndProductReport />
           </div>
         </div>
       </div>
 
-      <div className="w-1/4 h-full">
-        <StatusReport />
+      <div className="w-1/3 h-full">
+        <div className="h-[640px] mb-3">
+          <StatusReport />
+        </div>
 
-        <div
-          className={cn(
-            "bg-primary-light px-6 h-64",
-            styles.borderRight,
-            styles.borderBottom
-          )}
-        >
+        <div className="bg-primary-light px-6 h-64">
           <QuickReport />
         </div>
       </div>

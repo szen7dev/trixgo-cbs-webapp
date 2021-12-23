@@ -8,7 +8,7 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 
 const PaymentPlanReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light px-6 py-4">
       <div className="flex items-center justify-between">
         <p className="font-bold text-primary-gray text-lg">
           Kế hoạch thanh toán
@@ -201,7 +201,7 @@ const PaymentPlanReport: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,12 +1,8 @@
 import { FC } from "react";
 
-import cn from "classnames";
-
-import styles from "../../styles.module.css";
-
 const ByUniversitySupport: FC = () => {
   return (
-    <section className={cn("h-full px-6 py-4", styles.border)}>
+    <section className="h-[830px] bg-primary-light px-6 py-4">
       <p className="text-primary-gray text-lg font-bold">Theo trường đại học</p>
 
       <div className="mt-6 text-primary-gray">
