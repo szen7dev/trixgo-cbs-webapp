@@ -1,5 +1,8 @@
 import { FC, useState } from "react";
 import DatePicker from "react-datepicker";
+import { Formik, getIn } from "formik";
+import { object, string, date } from "yup";
+import moment from "moment";
 
 import IconPlus from "assets/images/icons8-plus-math-100.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
@@ -16,15 +19,15 @@ import { CheckList as CheckListType } from "typings/task";
 const tempData = [
   {
     _id: 1,
-    content: "Vũ Thị Lan-CHG",
+    name: "Vũ Thị Lan-CHG",
   },
   {
     _id: 2,
-    content: "Nguyễn Phan Thanh Hương",
+    name: "Nguyễn Phan Thanh Hương",
   },
   {
     _id: 3,
-    content: "Tô Ngọc An-CDC",
+    name: "Tô Ngọc An-CDC",
   },
 ];
 
@@ -58,6 +61,26 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
       ? "border-b-2 border-primary font-bold"
       : "text-primary-gray";
   };
+
+  const initialValues = {
+    content: "",
+    assignee: {
+      id: null,
+      name: "",
+    },
+    expiredTime: null,
+  };
+
+  const checkListSchema = object().shape({
+    content: string().required("Bạn cần nhập nội dung công việc"),
+    expiredTime: date()
+      .required("Bạn cần nhập thời hạn")
+      .typeError("Bạn cần nhập thời hạn"),
+    assignee: object().shape({
+      _id: string().required(),
+      name: string().required("Bạn cần chọn người thực hiện"),
+    }),
+  });
 
   return (
     <div>
@@ -177,54 +200,118 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
 
           {visibleForm && (
             <div className="shadow-lg p-5">
-              <div className="flex">
-                <div className="w-3/6 border-b-2">
-                  <input
-                    className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                    placeholder="Nội dung công việc"
-                  />
-                </div>
-                <div className="w-2/6 mx-3 border-b-2">
-                  <DropdownSearchable
-                    placeholder={"Người thực hiện"}
-                    className={"w-full flex-1"}
-                    showTriangle={false}
-                    maxWidthInput={"max-w-none"}
-                    isMultiple={false}
-                    allowClearValueSingleInput={true}
-                    renderSelectedItem={(item) => (
-                      <div className={"flex items-center"}>
-                        <img alt={"tag icon"} src={TagIcon} />
-                        <span>{item.text}</span>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={checkListSchema}
+                onSubmit={(values) => console.log(values)}
+              >
+                {({
+                  values,
+                  touched,
+                  errors,
+                  handleBlur,
+                  handleChange,
+                  setFieldValue,
+                }) => {
+                  return (
+                    <>
+                      <div className="flex w-full">
+                        <div className="w-3/6 border-b">
+                          <input
+                            name="content"
+                            className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                            placeholder="Nội dung công việc"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </div>
+                        <div className="w-2/6 mx-3 border-b">
+                          <DropdownSearchable
+                            placeholder={"Người thực hiện"}
+                            className={"w-full flex-1"}
+                            showTriangle={false}
+                            maxWidthInput={"max-w-none"}
+                            isMultiple={false}
+                            allowClearValueSingleInput={true}
+                            renderSelectedItem={(item) => (
+                              <div className={"flex items-center"}>
+                                <img alt={"tag icon"} src={TagIcon} />
+                                <span>{item.text}</span>
+                              </div>
+                            )}
+                            data={tempData}
+                            formatItem={{
+                              id: "_id",
+                              text: "name",
+                            }}
+                            inlineSearch={true}
+                            onchangeValue={(item) =>
+                              setFieldValue("assignee", item)
+                            }
+                            onClearData={() =>
+                              setFieldValue("assignee", { id: null, name: "" })
+                            }
+                          />
+                        </div>
+                        <div className="w-1/6 border-b">
+                          <DatePicker
+                            wrapperClassName={"w-auto"}
+                            selected={values.expiredTime}
+                            customInput={
+                              <div className={"relative w-auto ml-2 min-h-fit"}>
+                                <input
+                                  name="expiredTime"
+                                  placeholder="Thời hạn"
+                                  className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                                  value={
+                                    values.expiredTime
+                                      ? moment(values.expiredTime).format(
+                                          "DD/MM/YYYY"
+                                        )
+                                      : ""
+                                  }
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                            }
+                            onChange={(date: Date | null) =>
+                              setFieldValue("expiredTime", date)
+                            }
+                          />
+                        </div>
                       </div>
-                    )}
-                    data={tempData}
-                    formatItem={{
-                      id: "_id",
-                      text: "content",
-                    }}
-                    inlineSearch={true}
-                  />
-                </div>
-                <div className="w-1/6 border-b-2">
-                  <DatePicker
-                    wrapperClassName={"w-auto"}
-                    name="dealine"
-                    selected={null}
-                    customInput={
-                      <div className={"relative w-auto ml-2 min-h-fit"}>
-                        <input
-                          placeholder="Thời hạn"
-                          className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                        />
+                      <div className="flex w-full mt-1">
+                        <div className="w-3/6">
+                          <span
+                            className="text-red-500"
+                            style={{ fontSize: 11 }}
+                          >
+                            {touched.content && errors.content}
+                          </span>
+                        </div>
+                        <div className="w-2/6 mx-3 ">
+                          <span
+                            className="text-red-500"
+                            style={{ fontSize: 11 }}
+                          >
+                            {getIn(touched, "assignee.name") &&
+                              getIn(errors, "assignee.name")}
+                          </span>
+                        </div>
+                        <div className="w-1/6 ">
+                          <span
+                            className="text-red-500"
+                            style={{ fontSize: 11 }}
+                          >
+                            {touched.expiredTime && errors.expiredTime}
+                          </span>
+                        </div>
                       </div>
-                    }
-                    onChange={(date: Date | null) =>
-                      console.log("dealine", date)
-                    }
-                  />
-                </div>
-              </div>
+                    </>
+                  );
+                }}
+              </Formik>
 
               <div className="flex justify-end mt-3">
                 <button

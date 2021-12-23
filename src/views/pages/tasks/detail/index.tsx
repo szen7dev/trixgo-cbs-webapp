@@ -215,19 +215,16 @@ const TaskDetailPage: FC = () => {
           {/*_____________task content______________*/}
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
-              <div
-                className={cn(
-                  styles["dont-break-out"],
-                  "t-task-detail-content"
-                )}
-              >
-                <p className="text-[13px] t-task-detail-content">
+              <div className={cn(styles["dont-break-out"])}>
+                <div
+                  className={cn(styles["t-task-detail-content"], "text-[13px]")}
+                >
                   {parse(
                     isTruncate
                       ? _truncate(data?.data.description || "", { length: 300 })
                       : data?.data.description || ""
                   )}
-                </p>
+                </div>
                 {data?.data.description && (
                   <button onClick={() => setIsTruncate(!isTruncate)}>
                     <p className="text-[13px] text-primary mt-2.5 mb-4">
