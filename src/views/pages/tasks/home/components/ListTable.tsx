@@ -118,6 +118,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-red-500"
                   checklist={taskOutDate.checklist}
+                  percentage={taskOutDate.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
@@ -174,6 +175,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-yellow-500"
                   checklist={tasksNexWeek.checklist}
+                  percentage={tasksNexWeek.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
@@ -232,6 +234,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-green-500"
                   checklist={taskMoreThanSevenDay.checklist}
+                  percentage={taskMoreThanSevenDay.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
