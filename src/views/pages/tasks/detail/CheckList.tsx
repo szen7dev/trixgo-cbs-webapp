@@ -219,7 +219,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                         <div className="w-3/6 border-b">
                           <input
                             name="content"
-                            className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                            className="w-full h-8 placeholder-gray-300 focus:outline-none"
                             placeholder="Nội dung công việc"
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -262,7 +262,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                                 <input
                                   name="expiredTime"
                                   placeholder="Thời hạn"
-                                  className="w-full h-8 placeholder-primary-gray focus:outline-none"
+                                  className="w-full h-8 placeholder-gray-300 focus:outline-none"
                                   value={
                                     values.expiredTime
                                       ? moment(values.expiredTime).format(
@@ -287,7 +287,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {errors.content}
+                            {touched.content && errors.content}
                           </span>
                         </div>
                         <div className="w-2/6 mx-3 ">
@@ -295,7 +295,8 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {getIn(errors, "assignee.name")}
+                            {getIn(touched, "assignee.name") &&
+                              getIn(errors, "assignee.name")}
                           </span>
                         </div>
                         <div className="w-1/6 ">
@@ -303,7 +304,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {errors.expiredTime}
+                            {touched.expiredTime && errors.expiredTime}
                           </span>
                         </div>
                       </div>
