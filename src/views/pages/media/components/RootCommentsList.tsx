@@ -1,10 +1,12 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
+
 import Comment from './Comment';
 import RootComment from './RootComment';
+
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
-import { objPopulate } from 'views/pages/media/utils';
+import { objPopulate } from '../utils';
 
 type Props = {
 	comments?: CommentProps[],
@@ -12,9 +14,11 @@ type Props = {
 	totalRecord?: number,
 	limit?: number,
 	smallImage?: boolean,
-} & HTMLAttributes<HTMLUListElement>
+}
 
-const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props }) => {
+const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({ 
+	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
+}) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 
@@ -53,8 +57,6 @@ const RootCommentsList: FC<Props> = ({ smallImage, comments, mediaID, totalRecor
 							comment={comment}
 							limit={limit}
 							smallImage={smallImage}
-							onClickEdit={() => console.log('edit')}
-							// renderNestedComment={(props) => <RootComment comment={comment} renderNestedComment={Comment} />}
 							renderNestedComment={Comment}
 						/>
 					</li>

@@ -34,6 +34,7 @@ export type CommentProps = {
   _id: string;
   media: string;
   comment: {
+    _id: string;
     content: string,
     files: FileProps[] | undefined;
     images: FileProps[] | undefined;

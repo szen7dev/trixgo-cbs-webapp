@@ -15,13 +15,6 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
         ...state,
         comments: action.payload
       }
-    // case "SET_COMMENTS_REPLY":
-    //   return {
-    //     ...state,
-    //     commentsReply: {
-    //       [action.payload[0].parent]: action.payload
-    //     }
-    //   }
     case "VIEW_MORE_COMMENTS":
       return {
         ...state,
@@ -41,7 +34,6 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
       }
     case "ADD_COMMENT": {
       console.log({ ['PAYLOAD_ADD_COMMENT']: action.payload });
-      
       const key = action.payload.parent ? 'commentsReply' : 'comments';
       let newComment = {};
 
@@ -70,6 +62,24 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
         ...state,
         ...newComment
       };
+    }
+    case "UPDATE_COMMENT": {
+      console.log({ ['PAYLOAD_UPDATE_COMMENT']: action.payload, state });
+
+      const key = action.payload.parent ? 'commentsReply' : 'comments';
+      const cloneState = { ...state };
+
+      if(key === 'commentsReply' && action.payload.parent) {
+        const index = state[key][action.payload.parent]?.findIndex(val => val.comment?._id === action.payload.commentID);
+        index !== -1 && (cloneState[key][action.payload.parent][index].comment = action.payload.body);
+      }
+
+      if(key === 'comments'){
+        const index = state[key].findIndex(val => val.comment?._id === action.payload.commentID);
+        index !== -1 && (cloneState[key][index].comment = action.payload.body);
+      }
+
+      return cloneState;
     }
     case "DELETE_COMMENT": {
       const newState = { ...state };

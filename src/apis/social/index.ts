@@ -13,6 +13,7 @@ import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "helpers";
 
 const mediaURL = "/api/medias";
+const commentURL = "/api/reaction";
 
 const SocialRepository = {
     /**
@@ -65,13 +66,13 @@ const SocialRepository = {
         );
         return data;
     },
-    // async updateComment(payload: CommentPayload): Promise<CommentResponse> {
-    //     const { data } = await API.put<CommentResponse>(
-    //         `${mediaURL}/comment`,
-    //         payload
-    //     );
-    //     return data;
-    // },
+    async updateComment(payload: CommentPayload): Promise<CommentResponse> {
+        const { data } = await API.put<CommentResponse>(
+            `${commentURL}/comment_cores`,
+            payload
+        );
+        return data;
+    },
     async deleteComment(id: string): Promise<{ error: boolean, message: string }> {
         const { data } = await API.delete<{ error: boolean, message: string }>(
             `${mediaURL}/comments?commentID=${id}`
