@@ -6,10 +6,27 @@ import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
+import TagIcon from "assets/images/icons8-price-tag-96.svg";
 
 import CheckListItem from "./CheckListItem";
+import DropdownSearchable from "components/common/DropdownSearch";
 
 import { CheckList as CheckListType } from "typings/task";
+
+const tempData = [
+  {
+    _id: 1,
+    content: "Vũ Thị Lan-CHG",
+  },
+  {
+    _id: 2,
+    content: "Nguyễn Phan Thanh Hương",
+  },
+  {
+    _id: 3,
+    content: "Tô Ngọc An-CDC",
+  },
+];
 
 type Props = {
   data: Array<CheckListType>;
@@ -127,9 +144,25 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                   />
                 </div>
                 <div className="w-2/6 mx-3 border-b-2">
-                  <input
-                    className="w-full h-8 placeholder-primary-gray focus:outline-none"
-                    placeholder="Người thực hiện"
+                  <DropdownSearchable
+                    placeholder={"Người thực hiện"}
+                    className={"w-full flex-1"}
+                    showTriangle={false}
+                    maxWidthInput={"max-w-none"}
+                    isMultiple={false}
+                    allowClearValueSingleInput={true}
+                    renderSelectedItem={(item) => (
+                      <div className={"flex items-center"}>
+                        <img alt={"tag icon"} src={TagIcon} />
+                        <span>{item.text}</span>
+                      </div>
+                    )}
+                    data={tempData}
+                    formatItem={{
+                      id: "_id",
+                      text: "content",
+                    }}
+                    inlineSearch={true}
                   />
                 </div>
                 <div className="w-1/6 border-b-2">

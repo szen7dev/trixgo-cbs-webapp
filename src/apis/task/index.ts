@@ -32,9 +32,9 @@ const TaskRepository = {
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
         select:
-          "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved",
+          "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments",
         populates: JSON.stringify({
-          value: "group author assignee related parent project",
+          value: "group author assignee related parent project approver",
           select: "_id name fullname image sign",
         }),
       })}`
