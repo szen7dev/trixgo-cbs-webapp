@@ -104,8 +104,8 @@ const SideBar: FC<Props> = ({
         <div>
           {/* TODO: user signatures to get confirm progress */}
           {confirmUsers.map((user, index) => (
-            <>
-              <div key={user._id} className="flex justify-between">
+            <div key={user._id}>
+              <div className="flex justify-between">
                 <div className="flex items-start">
                   <img
                     src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
@@ -130,23 +130,8 @@ const SideBar: FC<Props> = ({
                   alt="Timeline icon"
                 />
               )}
-            </>
-          ))}
-
-          {/* <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Vũ Thị Lan-CHG</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
             </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
-              Pending
-            </button>
-          </div> */}
+          ))}
         </div>
       </div>
 

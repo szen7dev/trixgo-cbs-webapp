@@ -45,6 +45,17 @@ const TaskDetailPage: FC = () => {
   const { listCheckList, totalRecord, nextPageListCheckList } =
     useCheckList(id);
 
+  const getGroupTitle = (group: any) => {
+    let title = "";
+    if (group.parent) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const name = getGroupTitle(group.parent);
+      title = title ? `${name} > ${title}` : name;
+    }
+
+    return title ? `${title} > ${group.name}` : group.name;
+  };
+
   useEffect(() => {
     if (data?.data) {
       setPercentComplete(`${data.data.percentage}%`);
@@ -146,8 +157,8 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {data?.data.project.sign} {">"} {data?.data.group.name} {">"}{" "}
-                  Hồ sơ thanh toán
+                  {data?.data.project.sign} {">"}{" "}
+                  {getGroupTitle(data?.data.group)}
                 </span>
                 <div>
                   <img
