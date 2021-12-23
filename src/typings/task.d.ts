@@ -38,7 +38,7 @@ export type Task = {
   description: string;
   lastLog?: LastLog;
   assignee: Assignee;
-  percentage: number
+  percentage: number;
 };
 
 export type ListTaskResponse = APIResponse & {

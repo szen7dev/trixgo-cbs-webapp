@@ -34,7 +34,7 @@ type Props = {
   onSeeMore: () => void;
 };
 
-enum HeaderTab {
+enum CheckListTab {
   ALL = "ALL",
   PROGRESS = "PROGRRESS",
   DONE = "DONE",
@@ -47,15 +47,15 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
-  const [currentTab, setCurrentTab] = useState(HeaderTab.ALL);
+  const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
   };
 
-  const getClassTab = (tab: HeaderTab) => {
+  const getClassTab = (tab: CheckListTab) => {
     return currentTab === tab
-      ? "border-b-2 border-primary"
+      ? "border-b-2 border-primary font-bold"
       : "text-primary-gray";
   };
 
@@ -100,52 +100,52 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
         ) : (
           <div className="flex justify-between w-5/6">
             <button
-              className={`px-2 ${getClassTab(HeaderTab.ALL)}`}
-              onClick={() => setCurrentTab(HeaderTab.ALL)}
+              className={`px-2 ${getClassTab(CheckListTab.ALL)}`}
+              onClick={() => setCurrentTab(CheckListTab.ALL)}
             >
-              <span className="font-bold">Tất cả (12)</span>
+              <span className="text-xs">Tất cả (12)</span>
             </button>
             <button
-              className={`px-2 ${getClassTab(HeaderTab.PROGRESS)}`}
-              onClick={() => setCurrentTab(HeaderTab.PROGRESS)}
+              className={`px-2 ${getClassTab(CheckListTab.PROGRESS)}`}
+              onClick={() => setCurrentTab(CheckListTab.PROGRESS)}
             >
               <span className="text-xs">Triển khai</span>
             </button>
             <button
-              className={`px-2 ${getClassTab(HeaderTab.DONE)}`}
-              onClick={() => setCurrentTab(HeaderTab.DONE)}
+              className={`px-2 ${getClassTab(CheckListTab.DONE)}`}
+              onClick={() => setCurrentTab(CheckListTab.DONE)}
             >
-              <span className="text-primary-gray text-xs">Hoàn thành</span>
+              <span className="text-xs">Hoàn thành</span>
             </button>
 
             <span>|</span>
 
             <button
               className={`flex items-center px-2 ${getClassTab(
-                HeaderTab.OUT_DATE
+                CheckListTab.OUT_DATE
               )}`}
-              onClick={() => setCurrentTab(HeaderTab.OUT_DATE)}
+              onClick={() => setCurrentTab(CheckListTab.OUT_DATE)}
             >
               <div className="w-3 h-3 bg-red-500" />
-              <span className="ml-1 text-primary-gray">Quá hạn</span>
+              <span className="ml-1">Quá hạn</span>
             </button>
             <button
               className={`flex items-center px-2 ${getClassTab(
-                HeaderTab.NEXT_WEEK
+                CheckListTab.NEXT_WEEK
               )}`}
-              onClick={() => setCurrentTab(HeaderTab.NEXT_WEEK)}
+              onClick={() => setCurrentTab(CheckListTab.NEXT_WEEK)}
             >
               <div className="w-3 h-3 bg-yellow-500" />
-              <span className="ml-1 text-primary-gray">Tuần tới</span>
+              <span className="ml-1">Tuần tới</span>
             </button>
             <button
               className={`flex items-center px-2 ${getClassTab(
-                HeaderTab.MORE_SEVEN_DAYS
+                CheckListTab.MORE_SEVEN_DAYS
               )}`}
-              onClick={() => setCurrentTab(HeaderTab.MORE_SEVEN_DAYS)}
+              onClick={() => setCurrentTab(CheckListTab.MORE_SEVEN_DAYS)}
             >
               <div className="w-3 h-3 bg-green-500" />
-              <span className="ml-1 text-primary-gray"> {">7 ngày"}</span>
+              <span className="ml-1"> {">7 ngày"}</span>
             </button>
           </div>
         )}

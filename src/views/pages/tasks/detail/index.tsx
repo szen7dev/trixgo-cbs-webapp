@@ -23,7 +23,7 @@ import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
-import RelatedFeedback from "./RelatedFeedback";
+import RelatedResponse from "./RelatedResponse";
 import Loader from "components/shared/Loader";
 import styles from "../style.module.css";
 
@@ -242,7 +242,7 @@ const TaskDetailPage: FC = () => {
               />
             </div>
             <div className="px-5 my-10">
-              <RelatedFeedback />
+              <RelatedResponse />
             </div>
           </div>
 

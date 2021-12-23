@@ -37,6 +37,22 @@ const TaskRepository = {
           value: "group author assignee related parent project approver",
           select: "_id name fullname image sign",
         }),
+        populates1: JSON.stringify({
+          value: "parent",
+          select: "sign name",
+        }),
+        populates2: JSON.stringify({
+          value: "parent",
+          select: "sign name",
+        }),
+        populates3: JSON.stringify({
+          value: "parent",
+          select: "sign name",
+        }),
+        populates4: JSON.stringify({
+          value: "parent",
+          select: "sign name",
+        }),
       })}`
     );
 
