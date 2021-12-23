@@ -70,19 +70,39 @@ export const useAuth = (): UseAuth => {
       allowLocalhostAsSecureOrigin: true,
     })
     .then(e => {
-      console.log({ e });
-      
       OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-        console.log({ oneSignalWebPushID });
-        
-        await AuthenticationRepository.updateDevice({
-          platform: 'BROWSER',
-          deviceID: 'BROWSER',
-          deviceName: 'BROWSER',
-          registrationID: oneSignalWebPushID || '',
-          oneSignalID: oneSignalWebPushID || '',
-        });
+        console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+        if (!oneSignalWebPushID) { 
+          OneSignalReact.on('subscriptionChange', async function(isSubscribed: string | null) {
+            console.log("🚀 ~ file: useAuth.ts ~ line 77 ~ OneSignalReact.on ~ isSubscribed", isSubscribed)
+            if (isSubscribed) {
+              OneSignalReact.getUserId(async function(oneSignalWebPushIDAfterSubscribeFirstTime) {
+                console.log("🚀 ~ file: useAuth.ts ~ line 80 ~ OneSignalReact.getUserId ~ oneSignalWebPushIDAfterSubscribeFirstTime", oneSignalWebPushIDAfterSubscribeFirstTime)
+                if (oneSignalWebPushIDAfterSubscribeFirstTime) {
+                  await AuthenticationRepository.updateDevice({
+                    platform: "1",
+                    deviceID: 'BROWSER',
+                    deviceName: 'BROWSER',  
+                    registrationID: isSubscribed || '',
+                    oneSignalID: isSubscribed || '',
+                  });
+                }
+              })
+            }
+           
+          });
+        } else {
+          await AuthenticationRepository.updateDevice({
+            platform: "1",
+            deviceID: 'BROWSER',
+            deviceName: 'BROWSER',  
+            registrationID: oneSignalWebPushID || '',
+            oneSignalID: oneSignalWebPushID || '',
+          });
+        }
+      
       });
+      
     })
     .catch(e => console.error(e));
   }
