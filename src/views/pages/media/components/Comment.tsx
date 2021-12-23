@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useContext } from 'react'
+import { FC, HTMLAttributes, useContext } from 'react';
 
 import cn from "classnames";
 import moment from "moment";
@@ -27,8 +27,7 @@ interface Props {
 }
 
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-	onClickEdit,
-	comment, small, onClickReply, renderEndComment: EndComment, renderOptions: Options, ...props
+	comment, small, onClickReply, onClickEdit, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
 	const { dispatch } = useContext(CommentContext);
