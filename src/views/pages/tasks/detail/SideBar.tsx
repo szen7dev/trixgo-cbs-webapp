@@ -1,11 +1,28 @@
 import { FC } from "react";
+import moment from "moment";
 
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 
-const SideBar: FC = () => {
+import { Author, Assignee, User } from "typings/task";
+
+type Props = {
+  author: Author;
+  assignee: Assignee;
+  createAt: string;
+  related?: Array<User>;
+  confirmUsers: Array<User>;
+};
+
+const SideBar: FC<Props> = ({
+  author,
+  assignee,
+  createAt,
+  related,
+  confirmUsers,
+}) => {
   return (
     <div>
       <div>
@@ -20,7 +37,11 @@ const SideBar: FC = () => {
         <div className="flex">
           <div className="w-1/2">
             <div className="flex">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+              <img
+                src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
+                alt="Avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
               <div className="flex items-center">
                 <img
                   className="px-2 w-auto h-6"
@@ -30,18 +51,24 @@ const SideBar: FC = () => {
               </div>
             </div>
             <span className="mt-2 text-[13px] leading-4">
-              Cao Hoàng Thùy Linh-112
+              {author.fullname}
             </span>
           </div>
           <div className="w-1/2">
-            <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+            <img
+              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full object-cover"
+            />
             <span className="mt-2 text-[13px] leading-4">
-              Nguyễn Trần Anh-CPMI
+              {assignee.fullname}
             </span>
           </div>
         </div>
         <span className="text-xs text-primary-gray">
-          13:37 6/7/21 - 18 giờ trước
+          {`${moment(createAt).format("HH:mm DD/MM/YY")} - ${moment(
+            createAt
+          ).fromNow()}`}
         </span>
       </div>
 
@@ -57,10 +84,14 @@ const SideBar: FC = () => {
           </button>
         </div>
         <div className="flex overflow-hidden space-x-3">
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-          <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
+          {(related || []).map((user) => (
+            <img
+              key={user._id}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+              alt="Avatar"
+              className="w-10 h-10 rounded-full"
+            />
+          ))}
         </div>
       </div>
 
@@ -71,78 +102,36 @@ const SideBar: FC = () => {
           </span>
         </div>
         <div>
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Lê Trọng Quyền-CPMI</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
+          {/* TODO: user signatures to get confirm progress */}
+          {confirmUsers.map((user, index) => (
+            <div key={user._id}>
+              <div className="flex justify-between">
+                <div className="flex items-start">
+                  <img
+                    src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+                    alt="Avatar"
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div className="ml-2">
+                    <p className="text-[13px]">{user.fullname}</p>
+                    <p className="text-xs text-primary-gray">
+                      13:15 28/2/21 - 2h ago
+                    </p>
+                  </div>
+                </div>
+                <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
+                  Đã đồng ý
+                </span>
               </div>
+              {index !== confirmUsers?.length - 1 && (
+                <img
+                  className="w-10 h-6"
+                  src={LineConnector}
+                  alt="Timeline icon"
+                />
+              )}
             </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã đồng ý
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Trần Tiến Tùng-PGI</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-8 rounded min-w-max text-primary-light text-[13px] bg-green-600">
-              Đồng ý
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Hà Tiến Dũng-CHG</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã đồng ý
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Đỗ Hữu Khu-CHG</p>
-                <p className="text-xs text-primary-gray">Cán bộ thanh toán</p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
-              Pending
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Vũ Thị Lan-CHG</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
-              Pending
-            </button>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -223,6 +212,10 @@ const SideBar: FC = () => {
       </div>
     </div>
   );
+};
+
+SideBar.defaultProps = {
+  related: [],
 };
 
 export default SideBar;

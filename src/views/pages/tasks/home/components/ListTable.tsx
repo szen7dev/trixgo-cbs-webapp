@@ -4,7 +4,7 @@ import moment from "moment";
 import parse from "html-react-parser";
 import cn from "classnames";
 
-import styles from "../style.module.css";
+import styles from "../../style.module.css";
 import ListProgress from "./Progress";
 import Executor from "./Executor";
 
@@ -17,17 +17,46 @@ type Props = {
   outDateData: Task;
   nextWeekData: Task;
   moreThanSevenDayData: Task;
+  onClickMore: (typeStatus: string) => void;
 };
 
 const ListTable: FC<Props> = ({
   outDateData,
   nextWeekData,
   moreThanSevenDayData,
+  onClickMore,
 }) => {
   const history = useHistory();
 
   const handleClickTask = (id: string) => {
     history.push(`/pcm/detail/${id}`);
+  };
+
+  const renderSeeMoreButton = (taskData: Task) => {
+    const condition =
+      taskData.totalRecord && taskData.totalRecord - taskData.data.length > 0;
+    return condition ? (
+      <button
+        className="text-primary text-[13px]"
+        onClick={() => onClickMore("OUT_DATE")}
+      >
+        {`Xem thêm (${Number(taskData.totalRecord) - taskData.data.length})`}
+      </button>
+    ) : (
+      ""
+    );
+  };
+
+  const subContentHtml = (html?: string) => {
+    const removeHtmlTag = parse(
+      (html || "").replace(/<[^>]*>?/gm, " ")
+    ).toString();
+
+    const result =
+      removeHtmlTag.length > 100
+        ? `${removeHtmlTag.slice(0, 100)}...`
+        : removeHtmlTag;
+    return result;
   };
 
   return (
@@ -37,7 +66,7 @@ const ListTable: FC<Props> = ({
           <th className="px-2 py-2 text-[13px] font-normal border w-[41px]">
             TT
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border w-[229px] text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border w-1/5 text-left">
             Nội dung công việc
           </th>
           <th className="px-2 py-2 text-[13px] font-normal border w-[90px] text-left">
@@ -49,10 +78,10 @@ const ListTable: FC<Props> = ({
           <th className="px-2 py-2 text-[13px]  font-normal border w-[143px] text-left">
             Tiến trình
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border w-[181px] text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
             Mô tả/ghi chú
           </th>
-          <th className="px-2 py-2 text-[13px] font-normal border text-left">
+          <th className="px-2 py-2 text-[13px] font-normal border text-left w-1/4">
             Thảo luận
           </th>
         </tr>
@@ -65,26 +94,20 @@ const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC QUÁ HẠN</span>
-              <button className="text-primary text-[13px]">
-                {outDateData.totalRecord &&
-                outDateData.totalRecord - outDateData.data.length > 0
-                  ? `Xem thêm (${
-                      outDateData.totalRecord - outDateData.data.length
-                    })`
-                  : ""}
-              </button>
+              {renderSeeMoreButton(outDateData)}
             </div>
           </td>
         </tr>
         {outDateData.data &&
           outDateData.data.map((taskOutDate, index) => (
-            <tr
-              key={taskOutDate._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(taskOutDate._id)}
-            >
+            <tr key={taskOutDate._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{taskOutDate.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(taskOutDate._id)}
+              >
+                {`${taskOutDate.project.sign}.${taskOutDate.name}`}
+              </td>
               <td className="p-2 border">
                 {moment(taskOutDate.expiredTime).format("DD/MM/YYYY")}
               </td>
@@ -95,15 +118,16 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-red-500"
                   checklist={taskOutDate.checklist}
+                  percentage={taskOutDate.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
-                {taskOutDate.description ? parse(taskOutDate.description) : ""}
+                {subContentHtml(taskOutDate.description)}
               </td>
               <td className="border p-2">
                 {taskOutDate.lastLog && (
                   <span className={cn(styles["dont-break-out"])}>
-                    {parse(taskOutDate.lastLog?.content || "")}
+                    {subContentHtml(taskOutDate.lastLog?.content)}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
                       {taskOutDate.lastLog?.author.fullname}
@@ -124,26 +148,20 @@ const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC TUẦN TỚI</span>
-              <button className="text-primary text-[13px]">
-                {nextWeekData.totalRecord &&
-                nextWeekData.totalRecord - nextWeekData.data.length > 0
-                  ? `Xem thêm (${
-                      nextWeekData.totalRecord - nextWeekData.data.length
-                    })`
-                  : ""}
-              </button>
+              {renderSeeMoreButton(nextWeekData)}
             </div>
           </td>
         </tr>
         {nextWeekData.data &&
           nextWeekData.data.map((tasksNexWeek, index) => (
-            <tr
-              key={tasksNexWeek._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(tasksNexWeek._id)}
-            >
+            <tr key={tasksNexWeek._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{tasksNexWeek.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(tasksNexWeek._id)}
+              >
+                {`${tasksNexWeek.project.sign}.${tasksNexWeek.name}`}
+              </td>
               <td className="p-2 border">
                 {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
               </td>
@@ -157,17 +175,16 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-yellow-500"
                   checklist={tasksNexWeek.checklist}
+                  percentage={tasksNexWeek.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
-                {tasksNexWeek.description
-                  ? parse(tasksNexWeek.description)
-                  : ""}
+                {subContentHtml(tasksNexWeek.description)}
               </td>
               <td className="border p-2">
                 {tasksNexWeek.lastLog && (
                   <span className={cn(styles["dont-break-out"])}>
-                    {parse(tasksNexWeek.lastLog?.content || "")}
+                    {subContentHtml(tasksNexWeek.lastLog?.content)}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
                       {tasksNexWeek.lastLog?.author.fullname}
@@ -190,29 +207,20 @@ const ListTable: FC<Props> = ({
               <span className="text-[13px] font-bold">
                 {"VIỆC > 7 NGÀY TIẾP THEO"}
               </span>
-              <button className="text-primary text-[13px]">
-                {moreThanSevenDayData.totalRecord &&
-                moreThanSevenDayData.totalRecord -
-                  moreThanSevenDayData.data.length >
-                  0
-                  ? `Xem thêm (${
-                      moreThanSevenDayData.totalRecord -
-                      moreThanSevenDayData.data.length
-                    })`
-                  : ""}
-              </button>
+              {renderSeeMoreButton(moreThanSevenDayData)}
             </div>
           </td>
         </tr>
         {moreThanSevenDayData.data &&
           moreThanSevenDayData.data.map((taskMoreThanSevenDay, index) => (
-            <tr
-              key={taskMoreThanSevenDay._id}
-              className="cursor-pointer"
-              onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
-            >
+            <tr key={taskMoreThanSevenDay._id}>
               <td className="p-2 border">{index + 1}</td>
-              <td className="p-2 border">{taskMoreThanSevenDay.name}</td>
+              <td
+                className="p-2 border cursor-pointer"
+                onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
+              >
+                {`${taskMoreThanSevenDay.project.sign}.${taskMoreThanSevenDay.name}`}
+              </td>
               <td className="p-2 border">
                 {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
               </td>
@@ -226,17 +234,16 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-green-500"
                   checklist={taskMoreThanSevenDay.checklist}
+                  percentage={taskMoreThanSevenDay.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
-                {taskMoreThanSevenDay.description
-                  ? parse(taskMoreThanSevenDay.description)
-                  : ""}
+                {subContentHtml(taskMoreThanSevenDay.description)}
               </td>
               <td className="border p-2">
                 {taskMoreThanSevenDay.lastLog && (
                   <span className={cn(styles["dont-break-out"])}>
-                    {parse(taskMoreThanSevenDay.lastLog?.content || "")}
+                    {subContentHtml(taskMoreThanSevenDay.lastLog?.content)}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
                       {taskMoreThanSevenDay.lastLog?.author.fullname}

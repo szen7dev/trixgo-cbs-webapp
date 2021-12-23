@@ -10,26 +10,26 @@ import PrintIcon from "assets/images/icons8-print-96.svg";
 const GroupActions:FC<HTMLAttributes<HTMLDivElement>> = ({...props}) => {
     return (
         <div {...props}>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={DownloadIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={ShareIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={ShareIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={CopyIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={CopyIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={SendEmailIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={PencilIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={TrashIcon}/>
             </button>
-            <button className={"flex items-center mr-3"}>
-                <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon}/>
+            <button className="flex items-center mr-3 min-w-max">
+                <img className="w-[24px] h-[24px]" alt="icon" src={PrintIcon}/>
             </button>
         </div>
     )

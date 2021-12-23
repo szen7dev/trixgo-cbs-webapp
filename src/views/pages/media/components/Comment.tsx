@@ -44,8 +44,8 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		onClickEdit?.(comment)
 	}
 
-	const images = comment.comment?.images || [];
-	const files = comment.comment?.files || [];
+	const images = comment?.comment?.images || [];
+	const files = comment?.comment?.files || [];
 
 	return (
 		<>

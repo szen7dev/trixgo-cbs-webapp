@@ -53,6 +53,7 @@ import MessagesDetailPage from "views/pages/messages/detail";
 // Tasks Pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
+import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
@@ -73,15 +74,15 @@ import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
 import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 // Accounting pages
-import AccountingTicketsPage from "../views/pages/accounting/AccountingTicketsPage";
-import AccountingDetailPage from "../views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "../views/pages/accounting/AccountingDiaryPage";
-import AccountingInOutPage from "../views/pages/accounting/AccountingInOutPage";
-import AccountingDebtPage from "../views/pages/accounting/AccountingDebtPage";
-import AccountingVatPage from "../views/pages/accounting/AccountingVatPage";
-import AccountingReportFinancePage from "../views/pages/accounting/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "../views/pages/accounting/AccountingSupportToolsPage";
-import AccountingTicketDetailPage from "../views/pages/accounting/AccountingTicketDetailPage";
+import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
+import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
+import AccountingDiaryPage from "views/pages/accounting/AccountingDiaryPage";
+import AccountingInOutPage from "views/pages/accounting/AccountingInOutPage";
+import AccountingDebtPage from "views/pages/accounting/AccountingDebtPage";
+import AccountingVatPage from "views/pages/accounting/AccountingVatPage";
+import AccountingReportFinancePage from "views/pages/accounting/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/pages/accounting/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -89,13 +90,10 @@ import SocialPostPage from "views/pages/media/screens/PostPage";
 import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 
 // Document pages
-import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
-import DocumentHomePage from "views/pages/document/screens/DocumentHomePage";
-import DocumentDashboardPage from "views/pages/document/screens/DocumentDashboardPage";
-import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
-import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
+import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
 //Financial
+import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmc pages
 import CmcsPage from "views/pages/cmcs";
@@ -103,7 +101,8 @@ import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 // Support pages
-import SupportPage from "views/pages/support";
+import SupportPage from "views/pages/support/components/home";
+import RegisterDashboardPage from "views/pages/support/components/register";
 
 const Routes: FC = () => {
 
@@ -217,9 +216,8 @@ const Routes: FC = () => {
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/human/home" component={HumansPage} />
-                      <Route path="/human/home/hid=:id" component={HumanInfo} />
-                      <Route path="/human/home/*" component={ErrorPage} />
+                      <ProtectedRoute exact path="/human/home" component={HumansPage} />
+                      <ProtectedRoute path="/human/home/hid=:id" component={HumanInfo} />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -247,6 +245,7 @@ const Routes: FC = () => {
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
+                      <ProtectedRoute exact path={"/pcm/dashboard/type=2"} component={TaskDashboardType2} />
                     </Switch>
                   </PcmLayout>
                 </Route>
@@ -354,14 +353,7 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/document">
-                  <HomeLayout>
-                    <Switch>
-                      <Route exact path="/document/home" component={DocumentHomePage} />
-                      <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
-                      <Route path="/document/project/:id/document" component={DocumentLayout} />
-                      <Route path="/document/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
+									<DocumentLayoutContainer />
                 </Route>
 
                 <Route path="/accounting/:path?">
@@ -400,8 +392,8 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <CmcsLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/cmcs/home" component={CmcsPage} />
-                      <ProtectedRoute exact path="/cmcs/dashboard" component={CmcManagementReport} />
+                      <Route exact path="/cmcs/home" component={CmcsPage} />
+                      <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
 									</CmcsLayout>
                 </Route>
@@ -409,7 +401,8 @@ const Routes: FC = () => {
                 <Route path="/support">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/register" component={RegisterDashboardPage} />
                     </Switch>
 									</HomeLayout>
                 </Route>

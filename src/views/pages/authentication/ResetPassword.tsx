@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -62,10 +62,6 @@ const ResetPasswordPage: FC = () => {
             .oneOf([Yup.ref("password")], "The two passwords do not match")
             .required("Confirm password required!"),
         });
-
-  useEffect(() => {
-    document.title = `Trixgo - ${t("resetPassword:resetPassword")}`;
-  }, [t]);
 
   return (
     <section className="flex h-full w-full">

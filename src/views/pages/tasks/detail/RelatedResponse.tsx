@@ -1,13 +1,26 @@
 import { FC, useState } from "react";
 
-import FeedbackItem from "./FeedbackItem";
+import RelatedResponseItem from "./RelatedResponseItem";
 import IconDownload from "assets/images/icons8-reply-arrow-96.svg";
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 import AttachIcon from "assets/images/icons8-attach-50.png";
 
-const RelatedFeedback: FC = () => {
+enum RelatedResponseTab {
+  ALL = "ALL",
+  MARKED = "MARKED",
+}
+
+const RelatedResponse: FC = () => {
   const [isExpand, setIsExpand] = useState(true);
   const [visibleForm, setVisibleForm] = useState(false);
+
+  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
+
+  const getClassTab = (tab: RelatedResponseTab) => {
+    return currentTab === tab
+      ? "border-b-2 border-primary font-bold"
+      : "text-primary-gray";
+  };
 
   return (
     <div>
@@ -17,14 +30,18 @@ const RelatedFeedback: FC = () => {
           <div>
             <p className="text-x-large">Phản hồi liên quan</p>
           </div>
-          <div className="border-b-2 border-primary">
-            <span className="text-[13px] font-bold">Tất cả (12)</span>
-          </div>
-          <div>
-            <span className="text-[13px] text-primary-gray">
-              Đã đánh dấu (3)
-            </span>
-          </div>
+          <button
+            className={getClassTab(RelatedResponseTab.ALL)}
+            onClick={() => setCurrentTab(RelatedResponseTab.ALL)}
+          >
+            <span className="text-[13px]">Tất cả (12)</span>
+          </button>
+          <button
+            className={getClassTab(RelatedResponseTab.MARKED)}
+            onClick={() => setCurrentTab(RelatedResponseTab.MARKED)}
+          >
+            <span className="text-[13px]">Đã đánh dấu (3)</span>
+          </button>
         </div>
         <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
           <button onClick={() => setIsExpand(!isExpand)}>
@@ -47,11 +64,11 @@ const RelatedFeedback: FC = () => {
           </button>
         </div>
       </div>
-      <p className="my-5 text-sm text-primary">Xem 152 phản hồi trước</p>
+      <p className="mb-5 text-sm text-primary">Xem 152 phản hồi trước</p>
       <div>
-        <FeedbackItem expanded={isExpand} />
-        <FeedbackItem expanded={isExpand} />
-        <FeedbackItem expanded={isExpand} showImageTest={true} />
+        <RelatedResponseItem expanded={isExpand} />
+        <RelatedResponseItem expanded={isExpand} />
+        <RelatedResponseItem expanded={isExpand} showImageTest={true} />
       </div>
 
       {visibleForm ? (
@@ -111,4 +128,4 @@ const RelatedFeedback: FC = () => {
   );
 };
 
-export default RelatedFeedback;
+export default RelatedResponse;

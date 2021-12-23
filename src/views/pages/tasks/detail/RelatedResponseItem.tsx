@@ -12,7 +12,7 @@ type Props = {
   showImageTest?: boolean;
 };
 
-const FeedbackItem: FC<Props> = ({ expanded, showImageTest }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest }) => {
   return (
     <>
       <div className="flex">
@@ -131,8 +131,8 @@ const FeedbackItem: FC<Props> = ({ expanded, showImageTest }) => {
   );
 };
 
-FeedbackItem.defaultProps = {
+RelatedResponseItem.defaultProps = {
   expanded: true,
   showImageTest: false,
 };
-export default FeedbackItem;
+export default RelatedResponseItem;

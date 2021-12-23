@@ -182,7 +182,7 @@ const SocialPostPage: FC = () => {
 									const url = image.file ? image.file.url : image.url;
 
 									return (
-										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openModalImage(i)} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />
 											{i === 2 && images.length > 3 && (
 												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">

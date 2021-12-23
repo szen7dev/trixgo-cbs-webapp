@@ -1,13 +1,14 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useContext, useState } from "react";
 
-import DocumentDropdown from "../components/DocumentDropdown";
+import { Context as ContextModal } from "views/pages/document/contexts/contextModal";
+import DocumentDropdown from "views/pages/document/components/DocumentDropdown";
 
-import { IPackage, IProjects } from "typings/document";
-import ButtonCreate from "../components/common/ButtonCreate";
-import ButtonMore from "../components/common/ButtonMore";
+import { IPackage } from "typings/document";
+import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
+import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import SearchInput from "components/common/SearchInput";
-import DropdownFilterButton from "../components/DocumentFilterButton";
-import GroupActions from "../components/projects/GroupActions";
+import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
+import GroupActions from "views/pages/document/components/projects/GroupActions";
 
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i,
@@ -31,6 +32,7 @@ const data: Array<IProfile> = Array.from(Array(28).keys()).map((_, i) => ({
 }))
 
 const DocumentProfilePage: FC = () => {
+	const { toggleModal } = useContext(ContextModal);
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0])
 
 	return (
@@ -48,13 +50,13 @@ const DocumentProfilePage: FC = () => {
 					<DropdownFilterButton />
 					<GroupActions className="flex items-center flex-1" />
 
-					<ButtonCreate />
+					<ButtonCreate onClick={toggleModal} />
 					<ButtonMore />
 				</div>
 				<div className="flex flex-wrap gap-y-3.5 flex-1 overflow-y-auto px-5 py-2.5">
 					{data.map((d, i) => (
 						i % 2
-							? <div className="document__card-container">
+							? <div key={i} className="document__card-container">
 								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">Quyết định</h4>
@@ -69,7 +71,7 @@ const DocumentProfilePage: FC = () => {
 									</div>
 								</div>
 							</div>
-							: <div className="document__card-container">
+							: <div key={i} className="document__card-container">
 								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">Hợp đồng kinh tế</h4>

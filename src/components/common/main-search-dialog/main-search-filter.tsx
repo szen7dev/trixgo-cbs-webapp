@@ -1,7 +1,7 @@
 import { FC } from "react";
 import DatePicker from "react-datepicker";
 
-import DropdownSearchable from "./../../common/DropdownSearch";
+import DropdownSearchable from "components/common/DropdownSearch";
 
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 

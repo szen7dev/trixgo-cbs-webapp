@@ -1,5 +1,10 @@
-import { FC } from "react";
-import { useHistory } from "react-router-dom";
+import { FC, useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import moment from "moment";
+import parse from "html-react-parser";
+import _truncate from "lodash/truncate";
+import cn from "classnames";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -13,14 +18,59 @@ import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
+
 import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
-import RelatedFeedback from "./RelatedFeedback";
+import RelatedResponse from "./RelatedResponse";
+import Loader from "components/shared/Loader";
+import styles from "../style.module.css";
+
+import TaskRepository from "apis/task";
+import { useCheckList } from "services/hooks/useTask";
+import { User } from "typings/task";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+
+  const [percentComplete, setPercentComplete] = useState("0%");
+  const [isTruncate, setIsTruncate] = useState(true);
+  const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
+
+  const { data, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id)
+  );
+  const { listCheckList, totalRecord, nextPageListCheckList } =
+    useCheckList(id);
+
+  const getGroupTitle = (group: any) => {
+    let title = "";
+    if (group.parent) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const name = getGroupTitle(group.parent);
+      title = title ? `${name} > ${title}` : name;
+    }
+
+    return title ? `${title} > ${group.name}` : group.name;
+  };
+
+  useEffect(() => {
+    if (data?.data) {
+      setPercentComplete(`${data.data.percentage}%`);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setConfirmUsers([data.data.author, data.data.assignee]);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Loader className="border-primary" />;
+  }
 
   return (
     <>
@@ -79,15 +129,14 @@ const TaskDetailPage: FC = () => {
       </div>
 
       {/*_____________main content______________*/}
-      <div className="flex flex-col items-center pb-5 bg-gray-100 task-management-content overflow-auto">
+      <div className="flex flex-col items-center pb-5 bg-cbs-gray task-management-content overflow-auto">
         {/*_____________task title______________*/}
         <div
           className="bg-white p-5 flex flex-col space-y-2"
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112 - Dự án Xây
-            dựng cụm trường tiểu học và trung học cơ sở Tây Hồ Tây
+            {data?.data.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -108,7 +157,8 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
+                  {data?.data.project.sign} {">"}{" "}
+                  {getGroupTitle(data?.data.group)}
                 </span>
                 <div>
                   <img
@@ -118,34 +168,40 @@ const TaskDetailPage: FC = () => {
                   />
                 </div>
               </div>
-              <div className="flex items-end">
-                <img
-                  className="w-6"
-                  src={StackedOrganizationIcon}
-                  alt="Organizational icon"
-                />
-                <span className="text-[13px] text-primary-gray mx-2">
-                  Việc cha: Hồ sơ thanh toán của công ty tư vấn thiết kế 112
-                </span>
-              </div>
+              {data.data?.parent && (
+                <div className="flex items-end pr-2">
+                  <img
+                    className="w-6"
+                    src={StackedOrganizationIcon}
+                    alt="Organizational icon"
+                  />
+                  <span className="text-[13px] text-primary-gray mx-2">
+                    {`Việc cha: ${data.data.parent.name}`}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="w-48">
               <div className="flex justify-between">
                 <div>
-                  <span className="text-lg leading-5">19/5/2021</span>
+                  <span className="text-lg leading-5">
+                    {moment(data.data.expiredTime).format("DD/MM/YYYY")}
+                  </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    15:03
+                    {moment(data.data.expiredTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[13px] text-primary-gray">48%</span>
+                  <span className="text-[13px] text-primary-gray">
+                    {percentComplete}
+                  </span>
                 </div>
               </div>
               <div className="relative pt-1">
-                <div className="overflow-hidden h-1 text-[13px] flex rounded bg-green-200">
+                <div className="overflow-hidden h-1.5 text-[13px] flex rounded border">
                   <div
-                    style={{ width: "48%" }}
+                    style={{ width: percentComplete }}
                     className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
                   ></div>
                 </div>
@@ -159,35 +215,54 @@ const TaskDetailPage: FC = () => {
           {/*_____________task content______________*/}
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
-              <div>
-                <p className="text-[13px]">
-                  Kính gửi Chủ Đầu Tư và Ban QLDA,
-                  <br /> Tư vấn thiết kế 112 đệ trình hồ sơ thanh toán đợt 03
-                  của Hợp đồng thiết kế số 34A/2020/HĐTV/TĐ- 1+1. Kính đề nghị
-                  Chủ đầu tư và Tư vấn QLDA xem xét và phê duyệt.
-                  <br /> Thông tin chi tiết vui lòng xem trong file đính...
-                </p>
-                <p className="text-[13px] text-primary mt-2.5 mb-4">
-                  Xem thêm/Thu gọn
-                </p>
+              <div className={cn(styles["dont-break-out"])}>
+                <div
+                  className={cn(styles["t-task-detail-content"], "text-[13px]")}
+                >
+                  {parse(
+                    isTruncate
+                      ? _truncate(data?.data.description || "", { length: 300 })
+                      : data?.data.description || ""
+                  )}
+                </div>
+                {data?.data.description && (
+                  <button onClick={() => setIsTruncate(!isTruncate)}>
+                    <p className="text-[13px] text-primary mt-2.5 mb-4">
+                      Xem thêm/Thu gọn
+                    </p>
+                  </button>
+                )}
               </div>
 
               <FileAttachment />
             </div>
             <div className="mt-8 pr-3">
-              <CheckList />
+              <CheckList
+                data={listCheckList}
+                totalRecord={totalRecord}
+                onSeeMore={nextPageListCheckList}
+              />
             </div>
             <div className="px-5 mt-10">
-              <PriceApprovalInfo />
+              <PriceApprovalInfo
+                timeApproved={data.data.timeApproved}
+                valueApproved={data.data.valueApproved}
+              />
             </div>
             <div className="px-5 my-10">
-              <RelatedFeedback />
+              <RelatedResponse />
             </div>
           </div>
 
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
-            <SideBar />
+            <SideBar
+              author={data.data.author}
+              assignee={data.data.assignee}
+              createAt={data.data.createAt}
+              related={data.data.related}
+              confirmUsers={confirmUsers}
+            />
           </div>
         </div>
       </div>

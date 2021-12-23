@@ -10,11 +10,14 @@ export type ListTaskPayload = {
   typeStatus?: number;
 };
 
-export type Assignee = {
+export type User = {
   _id: string;
   image: string;
   fullname: string;
 };
+
+export type Assignee = User;
+export type Author = User;
 
 export type LastLog = {
   _id: string;
@@ -26,7 +29,14 @@ export type LastLog = {
   };
 };
 
+export type Project = {
+  _id: string;
+  name: string;
+  sign: string;
+};
+
 export type Task = {
+  _id: string;
   name: string;
   expiredTime: string;
   typeStatus: number;
@@ -34,11 +44,42 @@ export type Task = {
   description: string;
   lastLog?: LastLog;
   assignee: Assignee;
+  percentage: number;
+  project: Project;
 };
 
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
+    totalRecord: number;
+    totalPages?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+export type CheckList = {
+  _id: string;
+  name: string;
+  expiredTime: string;
+  typeStatus: number;
+  checklist: string;
+  assignee: Assignee;
+};
+
+export type ListCheckListPayload = {
+  lastestID?: string;
+  limit?: number;
+  populates?: string;
+  filter?: string;
+  type?: numer;
+  typeStatus?: number;
+  parentID?: string;
+};
+
+export type ListCheckListResponse = APIResponse & {
+  data: {
+    listRecords: Array<CheckList>;
     totalRecord: number;
     totalPages?: number;
     nextCursor: string;

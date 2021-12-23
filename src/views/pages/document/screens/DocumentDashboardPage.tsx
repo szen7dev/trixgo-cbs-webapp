@@ -13,10 +13,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import cn from "classnames";
 
-import StatisticalChart from "../components/StatisticalChart";
+import StatisticalChart from "views/pages/document/components/StatisticalChart";
 
 import iconComment from 'assets/images/icon-chat-project.png';
-import SliderOver from "../components/common/SliderOver";
+import SliderOver from "views/pages/document/components/common/SliderOver";
 
 interface IData {
 	id: number,

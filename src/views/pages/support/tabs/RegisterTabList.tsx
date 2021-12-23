@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-import RegisterList from "../components/registerList";
-import SupportDashboard from "./SupportDashboard";
+import RegisterList from "../components/register/registerList";
+import SupportRegisterDashboard from "../components/register/dashboard/SupportRegisterDashboard";
 
 type Props = {
   toggleTab: number;
@@ -13,7 +13,7 @@ const TabsList: FC<Props> = (props) => {
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>
-        <SupportDashboard />
+        <SupportRegisterDashboard />
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>
