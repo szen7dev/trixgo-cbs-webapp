@@ -212,6 +212,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                   handleBlur,
                   handleChange,
                   setFieldValue,
+                  handleSubmit,
                 }) => {
                   return (
                     <>
@@ -308,25 +309,26 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                           </span>
                         </div>
                       </div>
+
+                      <div className="flex justify-end mt-3">
+                        <button
+                          className="px-3 py-2 rounded bg-gray-300 text-primary-gray"
+                          onClick={() => setVisibleForm(false)}
+                        >
+                          Bỏ qua
+                        </button>
+                        <button
+                          type="submit"
+                          className="mx-3 px-3 py-2 rounded bg-primary text-white"
+                          onClick={() =>handleSubmit()}
+                        >
+                          Xác nhận
+                        </button>
+                      </div>
                     </>
                   );
                 }}
               </Formik>
-
-              <div className="flex justify-end mt-3">
-                <button
-                  className="px-3 py-2 rounded bg-gray-300 text-primary-gray"
-                  onClick={() => setVisibleForm(false)}
-                >
-                  Bỏ qua
-                </button>
-                <button
-                  className="mx-3 px-3 py-2 rounded bg-primary text-white"
-                  onClick={() => setVisibleForm(false)}
-                >
-                  Xác nhận
-                </button>
-              </div>
             </div>
           )}
 
