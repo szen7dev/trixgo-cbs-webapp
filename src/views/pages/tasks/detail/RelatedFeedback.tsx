@@ -47,7 +47,7 @@ const RelatedFeedback: FC = () => {
           </button>
         </div>
       </div>
-      <p className="my-5 text-sm text-primary">Xem 152 phản hồi trước</p>
+      <p className="mb-5 text-sm text-primary">Xem 152 phản hồi trước</p>
       <div>
         <FeedbackItem expanded={isExpand} />
         <FeedbackItem expanded={isExpand} />

@@ -18,16 +18,16 @@ const data = {
 
 const RevenueBySectorReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light py-4 px-6 h-full">
       <p className="font-bold text-primary-gray text-lg">
         Doanh thu theo lĩnh vực
       </p>
       <div className="flex gap-9 h-full">
-        <div className="w-28">
+        <div className="w-[110px]">
           <ChartDoughnutSmall
             _data={data}
             rotation={-50}
-            title="68"
+            title="100"
             subtitle="TỶ"
           />
         </div>
@@ -75,7 +75,7 @@ const RevenueBySectorReport: FC = () => {
           <p className="text-primary mt-2">Xem tất cả</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

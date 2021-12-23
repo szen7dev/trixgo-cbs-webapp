@@ -1,10 +1,6 @@
 import { FC } from "react";
 
-import cn from "classnames";
-
-import styles from "../../styles.module.css";
-
-import SupportDoughnutChart from "../../chart/SupportDoughnutChart";
+import SupportDoughnutChart from "../../../chart/SupportDoughnutChart";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
@@ -21,14 +17,7 @@ const data = {
 
 const ByOrganizationSupport: FC = () => {
   return (
-    <section
-      className={cn(
-        "w-2/5 h-60 px-6 py-4",
-        styles.borderTop,
-        styles.borderBottom,
-        styles.borderLeft
-      )}
-    >
+    <section className="w-2/5 h-[222px] px-6 py-4 bg-primary-light mr-3 mb-3">
       <div className="flex justify-between">
         <p className="text-primary-gray text-lg font-bold">Theo tổ chức</p>
 
@@ -40,7 +29,7 @@ const ByOrganizationSupport: FC = () => {
 
       <div className="flex justify-around mt-3">
         <div className="w-28">
-          <SupportDoughnutChart _data={data} title="9.272" />
+          <SupportDoughnutChart _data={data} title="9.272" cutout={38} />
         </div>
 
         <div className=" flex flex-col justify-around text-primary-gray">

@@ -115,7 +115,7 @@ const options = {
 
 const RevenueOverTimeReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light px-6 py-4 h-full">
       <div className="flex items-center justify-between">
         <p className="font-bold text-primary-gray text-lg">
           Doanh thu theo thời gian
@@ -153,7 +153,7 @@ const RevenueOverTimeReport: FC = () => {
       <div className={styles.barChart}>
         <Bar options={options} data={data} />
       </div>
-    </>
+    </div>
   );
 };
 

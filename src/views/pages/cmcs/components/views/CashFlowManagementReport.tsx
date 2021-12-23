@@ -2,13 +2,13 @@ import { FC } from "react";
 
 const CashFlowManagementReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light px-6 py-4 h-full">
       <p className="font-bold text-primary-gray text-lg">
         Quản lý dòng tiền (tỷ VND)
       </p>
       <div className="mt-4">
-        <div className="flex items-center justify-between mb-4">
-          <span className="w-32">Kế hoạch tiền về</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="w-32 text-primary-gray">Kế hoạch tiền về</span>
           <div className="w-80 border h-2">
             <div
               style={{
@@ -19,11 +19,11 @@ const CashFlowManagementReport: FC = () => {
               }}
             />
           </div>
-          <span>1000</span>
+          <span className="text-base">1000</span>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <span className="w-32">Ký hợp đồng</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="w-32 text-primary-gray">Ký hợp đồng</span>
           <div className="relative w-80 border h-2">
             <div
               className="bg-accent"
@@ -33,11 +33,11 @@ const CashFlowManagementReport: FC = () => {
               70%
             </span>
           </div>
-          <span>700</span>
+          <span className="text-base">700</span>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <span className="w-32">Sản lượng</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="w-32 text-primary-gray">Sản lượng</span>
           <div className="relative w-80 border h-2">
             <div
               className="bg-primary"
@@ -47,11 +47,11 @@ const CashFlowManagementReport: FC = () => {
               35%
             </span>
           </div>
-          <span>350</span>
+          <span className="text-base">350</span>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <span className="w-32">Nghiệm thu</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="w-32 text-primary-gray">Nghiệm thu</span>
           <div className="relative w-80 border h-2">
             <div
               className="bg-positive"
@@ -61,11 +61,11 @@ const CashFlowManagementReport: FC = () => {
               30%
             </span>
           </div>
-          <span>300</span>
+          <span className="text-base">300</span>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <span className="w-32">Nghiệm thu</span>
+        <div className="flex items-center justify-between mb-3">
+          <span className="w-32 text-primary-gray">Tiền về</span>
           <div className="relative w-80 border h-2">
             <div
               className="bg-warning"
@@ -75,10 +75,10 @@ const CashFlowManagementReport: FC = () => {
               15%
             </span>
           </div>
-          <span>150</span>
+          <span className="text-base">150</span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

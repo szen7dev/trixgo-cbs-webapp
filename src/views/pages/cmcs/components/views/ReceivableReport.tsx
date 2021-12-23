@@ -19,12 +19,12 @@ const data = {
 
 const ReceivableReport: FC = () => {
   return (
-    <>
+    <div className="bg-primary-light px-5 py-4 h-full">
       <p className="text-center font-bold text-lg text-primary-gray">
         Công nợ phải thu
       </p>
 
-      <div className={cn("mx-auto", styles.chart)}>
+      <div className="mx-auto w-[110px]">
         <ChartDoughnutSmall _data={data} rotation={-30} title="518" />
       </div>
 
@@ -53,7 +53,7 @@ const ReceivableReport: FC = () => {
           <p>95</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
