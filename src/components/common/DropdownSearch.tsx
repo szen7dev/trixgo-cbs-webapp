@@ -43,6 +43,8 @@ type Props = {
     inlineSearch?: boolean;
     disableSearch?: boolean;
     onClearData?: () => void;
+    disabled?: boolean;
+    disableClass?: string;
 }
 
 type Params = {
@@ -71,7 +73,9 @@ const DropdownSearchable:FC<Props>
        inlineSearch,
        maxHeightInput,
        disableSearch,
-       onClearData
+       onClearData,
+       disabled,
+       disableClass
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -148,6 +152,7 @@ const DropdownSearchable:FC<Props>
     };
 
     const toggleShowOption = () => {
+        if (disabled)return;
         setShowOption(!showOption)
     };
 
@@ -257,6 +262,7 @@ const DropdownSearchable:FC<Props>
                 {
                     inlineSearch&&
                     <input
+                        disabled={disabled}
                         placeholder={placeholder}
                         className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                         value={searchTerm}
@@ -277,6 +283,7 @@ const DropdownSearchable:FC<Props>
                 (
                     inlineSearch?
                         <input
+                            disabled={disabled}
                             placeholder={placeholder}
                             className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                             value={searchTerm}
@@ -305,6 +312,7 @@ const DropdownSearchable:FC<Props>
                 (
                     inlineSearch?
                         <input
+                            disabled={disabled}
                             placeholder={placeholder}
                             className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                             value={searchTerm}
@@ -356,13 +364,16 @@ const DropdownSearchable:FC<Props>
     const maxHeightClass = maxHeightInput??"";
     const beingFocusClass = (showOption?(focusedClass??""):"");
     const extraClassName = (className??'');
+    const disableClassCustom = (disableClass??'bg-gray-100');
+    const disabledClass = disabled?`cursor-not-allowed ${disableClassCustom}`:"";
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${maxHeightClass} ${beingFocusClass}`} data-value={value?.id}>
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${maxHeightClass} ${beingFocusClass} ${disabledClass}`} data-value={value?.id}>
             {renderSelectedValue()}
             {
                 showOption?
                     <div className={"shadow-lg rounded select-options-container absolute z-100 w-full min-w-[230px] rounded-md overflow-hidden left-0"}>
                         {!inlineSearch&&!disableSearch&&<input
+                            disabled={disabled}
                             className="select-search w-full p-3 pt-5 border-b"
                             placeholder={"Nhập nội dung"}
                             type='text'
@@ -384,7 +395,8 @@ const DropdownSearchable:FC<Props>
 const defaultProps: Props = {
     isMultiple: false,
     showTriangle: true,
-    disableSearch: false
+    disableSearch: false,
+    disabled: false
 }
 DropdownSearchable.defaultProps = defaultProps;
 export default DropdownSearchable;
