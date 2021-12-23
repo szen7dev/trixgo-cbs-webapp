@@ -1,73 +1,75 @@
 import React, { FC, useEffect, useState } from "react";
 
 import cn from "classnames";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import projectImage from "assets/images/project.jpg";
-import iconSort from "assets/images/icon-sort-gray.png";
-import iconSorted from "assets/images/icon-sort-blue.png";
 import styles from "./style.module.css";
-import Paginate from "../../../components/common/Paginate";
 
-const listSort = [
-	{ id: 'job', title: 'Công việc', type: 'asc' },
-	{ id: 'profile', title: 'Hồ sơ văn bản', type: 'asc' },
-	{ id: 'expire', title: 'Ngày hết hạn', type: 'asc' },
-	{ id: 'status', title: 'Trạng thái', type: 'asc' },
-]
-
-const data: Array<number> = Array.from(Array(4).keys());
+import SearchInput from "components/common/SearchInput";
+import DropdownFilterButton from "../document/components/DocumentFilterButton";
+import ButtonCreate from "../document/components/common/ButtonCreate";
+import ButtonMore from "../document/components/common/ButtonMore";
 
 const ProjectCategoryPage: FC = () => {
-	const [sorts, setSorting] = useState(listSort);
+	// const [sorts, setSorting] = useState(listSort);
+	const [data, setData] = useState<number[]>(Array.from({ length: 20 }));
 
 	useEffect(() => {
 		document.title = "PPT - Danh mục dự án"
 	}, []);
-
-	const handleSort = (item: { id: string, type: string }, index: number) => {
-		const currentSort = [...sorts];
-		currentSort[index].type = currentSort[index].type === 'asc' ? 'desc' : 'asc';
-		setSorting(currentSort)
-	};
-
-	const nextPage = () => {
-		console.log('1')
+	
+	const fetchData = () => {
+		setTimeout(() => {
+			setData(data.concat(Array.from({ length: 20 })));
+		}, 1500);
 	}
-	const prevPage = () => {
-		console.log('1')
-	}
+	// const handleSort = (item: { id: string, type: string }, index: number) => {
+	// 	const currentSort = [...sorts];
+	// 	currentSort[index].type = currentSort[index].type === 'asc' ? 'desc' : 'asc';
+	// 	setSorting(currentSort)
+	// };
+
+	// const nextPage = () => {
+	// 	console.log('1')
+	// }
+	// const prevPage = () => {
+	// 	console.log('1')
+	// }
 
 	return (
-		<div className={styles.content}>
-			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center sticky top-0')}>
-				<div className="flex flex-wrap items-center">
-					<div className={styles['item-sort']}>
-						<span>
-							Danh mục dự án
-						</span>
-					</div>
-					{sorts.map((item, index) => (
-						<div key={item.id} className={cn(styles['item-sort'], { [styles.active]: item.type === 'desc' })}>
-							<button className="font-bold" onClick={() => handleSort(item, index)}>
-								{
-									item.type === 'asc'
-										? <img src={iconSort} alt="asc" className="inline mr-2" />
-										: <img src={iconSorted} alt="desc" className="inline mr-2" />
-								}
-								{item.title}
-							</button>
-						</div>
-					))}
+		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
+			{/* Header */}
+			<div className="px-4 flex items-center w-full text-primary-gray bg-white border border-gray-300 py-1">
+				<div className="flex flex-1 items-center">
+					<span className="text-x-large mr-7 text-black">
+						Danh sách
+					</span>
+					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
+					<DropdownFilterButton />
 				</div>
-				<div className={cn(styles['input-container'], 'rounded-full flex my-2.5')}>
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-					</svg>
-					<input className="bg-transparent focus:outline-none flex-1" placeholder="Tìm kiếm" />
-				</div>
+				<ButtonCreate />
+				<ButtonMore />
 			</div>
 
-			<div className={cn(styles.scroll, 'flex flex-wrap w-full pl-2 pr-2 pb-20 flex-1 overflow-y-auto')}>
+			{/* Content */}
+			<div id="scrollable" className="flex-1 overflow-y-auto">
+				<InfiniteScroll
+					dataLength={data.length} //This is important field to render the next data
+					next={fetchData}
+					hasMore={true}
+					loader={<div className="w-full pt-2 text-center">
+						Loading...
+					</div>}
+					endMessage={
+						<p style={{ textAlign: 'center' }}>
+							<b>Yay! You have seen it all</b>
+						</p>
+					}
+
+					scrollableTarget="scrollable"
+					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
+				>
 				{
 					data.map((_item: number, index: number) => {
 						return (
@@ -110,8 +112,9 @@ const ProjectCategoryPage: FC = () => {
 						)
 					})
 				}
+				</InfiniteScroll>
 			</div>
-			<Paginate nextPageAction={() => nextPage()} prevPageAction={() => prevPage()}/>
+			{/* <Paginate nextPageAction={() => nextPage()} prevPageAction={() => prevPage()}/> */}
 		</div>
 	);
 };

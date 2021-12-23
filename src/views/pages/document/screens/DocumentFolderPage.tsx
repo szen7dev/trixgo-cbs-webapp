@@ -1,13 +1,4 @@
-import { FC, Fragment, useState } from "react";
-
-import { Transition } from "@headlessui/react";
-import cn from "classnames";
-
-import DocumentDropdown from "../components/DocumentDropdown";
-
-import styles from '../document.module.css';
-
-import { IProjects } from "typings/document";
+import { FC } from "react";
 
 interface IData {
 	id: number,
@@ -40,7 +31,7 @@ const DocumentFolderPage: FC = () => {
 		<>
 			{/* Content */}
 			<div className="flex flex-1 flex-col overflow-hidden">
-				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1.5">
+				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
 					<span className="">CHG.THT</span>
 					<IconArrowRight />
 					<button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">

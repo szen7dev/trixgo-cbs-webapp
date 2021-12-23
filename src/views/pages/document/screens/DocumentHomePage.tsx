@@ -1,25 +1,18 @@
-/**
- * ? Import orders:
- * ? 1. react importation
- * ? 2. third party libraries importation
- * ? 3. libs, services, data, api importation
- * ? 4. components, assets importation
- * ? 5. helpers, util importation
- * ? 6. typings importation
- */
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-import cn from "classnames";
 
-import DropdownFilterButton from "../components/DocumentFilterButton";
+// Context
+import { Context } from "views/pages/document/contexts/contextModal";
+
+import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import SearchInput from "components/common/SearchInput";
-import ButtonMore from "../components/common/ButtonMore";
-import ButtonCreate from "../components/common/ButtonCreate";
+import ButtonMore from "views/pages/document/components/common/ButtonMore";
+import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
 
 import projectImage from "assets/images/project.jpg";
-import '../document.css';
+import 'views/pages/document/document.css';
 
 interface IData {
 	id: number
@@ -29,6 +22,7 @@ interface IData {
 }
 
 const DocumentHomePage: FC = () => {
+	const { toggleModal } = useContext(Context);
 	const [data, setData] = useState<IData[]>(Array.from({ length: 20 }).map((_, index) => ({
 		id: index,
 		title: 'CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây',
@@ -58,7 +52,7 @@ const DocumentHomePage: FC = () => {
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
 					<DropdownFilterButton />
 				</div>
-				<ButtonCreate />
+				<ButtonCreate onClick={toggleModal} />
 				<ButtonMore />
 			</div>
 

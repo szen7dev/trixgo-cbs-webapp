@@ -89,13 +89,10 @@ import SocialPostPage from "views/pages/media/screens/PostPage";
 import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 
 // Document pages
-import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
-import DocumentHomePage from "views/pages/document/screens/DocumentHomePage";
-import DocumentDashboardPage from "views/pages/document/screens/DocumentDashboardPage";
-import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
-import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
+import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
 //Financial
+import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmc pages
 import CmcsPage from "views/pages/cmcs";
@@ -354,14 +351,7 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/document">
-                  <HomeLayout>
-                    <Switch>
-                      <Route exact path="/document/home" component={DocumentHomePage} />
-                      <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
-                      <Route path="/document/project/:id/document" component={DocumentLayout} />
-                      <Route path="/document/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
+									<DocumentLayoutContainer />
                 </Route>
 
                 <Route path="/accounting/:path?">
