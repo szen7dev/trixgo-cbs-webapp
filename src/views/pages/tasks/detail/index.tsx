@@ -43,11 +43,7 @@ const TaskDetailPage: FC = () => {
 
   useEffect(() => {
     if (data?.data) {
-      const [complete, total] = data.data.checklist.split("/");
-      const percent = Number(total)
-        ? Math.round((Number(complete) / Number(total)) * 100)
-        : 0;
-      setPercentComplete(`${percent}%`);
+      setPercentComplete(`${data.data.percentage}%`);
     }
   }, [data]);
 
