@@ -1,11 +1,18 @@
 import { FC } from "react";
 import moment from "moment";
+import { User } from "typings/task";
 
 type Props = {
   valueApproved: number;
   timeApproved?: string;
+  approver?: User;
 };
-const PriceApprovalInfo: FC<Props> = ({ valueApproved, timeApproved }) => {
+
+const PriceApprovalInfo: FC<Props> = ({
+  valueApproved,
+  timeApproved,
+  approver,
+}) => {
   return (
     <>
       <p className="text-x-large my-5">Giá trị đệ trình/phê duyệt</p>
@@ -37,7 +44,9 @@ const PriceApprovalInfo: FC<Props> = ({ valueApproved, timeApproved }) => {
             <span className="text-[13px] text-primary-gray">
               Người phê duyệt:
             </span>
-            <span className="ml-2 text[13px]">Nguyễn Trung Kiên-PGI</span>
+            {approver && (
+              <span className="ml-2 text[13px]">{approver.fullname}</span>
+            )}
           </div>
         </div>
         <div className="w-1/4 flex justify-end">
