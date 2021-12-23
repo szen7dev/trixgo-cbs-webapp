@@ -143,9 +143,18 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 							files={infoComment.files} 
 							images={infoComment.images} 
 							commentID={infoComment.commentID}
-							parentID={infoComment.parentID} 
+							parentID={infoComment.parentID || comment._id} 
 							mediaID={comment.media} 
-							onSubmit={() => setIsReply(false)}
+							onSubmit={() => {
+								setIsReply(false);
+								setInfoComment({
+									parentID: '',
+									commentID: '',
+									content: '',
+									files: [],
+									images: []
+								})
+							}}
 						/>
 					) 
 					: null}
@@ -160,7 +169,16 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 						commentID={infoCommentParent.commentID}
 						parentID={infoCommentParent.parentID} 
 						mediaID={comment.media} 
-						onSubmit={() => setIsReplyParent(false)}
+						onSubmit={() => {
+							setIsReplyParent(false);
+							setInfoCommentParent({
+								parentID: '',
+								commentID: '',
+								content: '',
+								files: [],
+								images: []
+							})
+						}}
 					/>
 				) 
 				: null}

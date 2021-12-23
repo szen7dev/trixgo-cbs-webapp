@@ -138,7 +138,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 		let infoAfterCreateOrUpdate;
 
-		console.log({ uploads, dataInsertOrUpdate })
+		console.log({ defaultValue, uploads, dataInsertOrUpdate })
 
 		if(defaultValue){
 			infoAfterCreateOrUpdate = await updateComment(dataInsertOrUpdate);
