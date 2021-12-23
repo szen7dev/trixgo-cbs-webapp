@@ -4,7 +4,7 @@ import moment from "moment";
 import parse from "html-react-parser";
 import cn from "classnames";
 
-import styles from "../style.module.css";
+import styles from "../../style.module.css";
 import ListProgress from "./Progress";
 import Executor from "./Executor";
 

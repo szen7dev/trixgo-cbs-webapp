@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
 import _truncate from "lodash/truncate";
+import cn from "classnames";
 
 import DownloadIcon from "assets/images/icons8-download-48_2.png";
 import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -24,6 +25,7 @@ import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
 import RelatedFeedback from "./RelatedFeedback";
 import Loader from "components/shared/Loader";
+import styles from "../style.module.css";
 
 import TaskRepository from "apis/task";
 import { useCheckList } from "services/hooks/useTask";
@@ -202,8 +204,13 @@ const TaskDetailPage: FC = () => {
           {/*_____________task content______________*/}
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
-              <div>
-                <p className="text-[13px]">
+              <div
+                className={cn(
+                  styles["dont-break-out"],
+                  "t-task-detail-content"
+                )}
+              >
+                <p className="text-[13px] t-task-detail-content">
                   {parse(
                     isTruncate
                       ? _truncate(data?.data.description || "", { length: 300 })

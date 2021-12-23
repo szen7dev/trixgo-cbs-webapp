@@ -8,7 +8,6 @@
 }
 
 .dont-break-out {
-
 	/* These are technically the same, but use both */
 	overflow-wrap: break-word;
 	word-wrap: break-word;
@@ -25,4 +24,8 @@
 	-webkit-hyphens: auto;
 	hyphens: auto;
   
-  }
+}
+
+.t-task-detail-content > a {
+	color: blue !important
+}

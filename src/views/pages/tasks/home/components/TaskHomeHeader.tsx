@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import cn from "classnames";
 
-import styles from "../style.module.css";
+import styles from "../../style.module.css";
 import BulletedIcon from "assets/images/icons8-bulleted-list-96 1.png";
 
 type Props = {

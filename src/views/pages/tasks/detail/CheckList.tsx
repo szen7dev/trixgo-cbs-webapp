@@ -34,12 +34,29 @@ type Props = {
   onSeeMore: () => void;
 };
 
+enum HeaderTab {
+  ALL = "ALL",
+  PROGRESS = "PROGRRESS",
+  DONE = "DONE",
+  OUT_DATE = "OUT_DATE",
+  NEXT_WEEK = "NEXT_WEEK",
+  MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
+}
+
 const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [currentTab, setCurrentTab] = useState(HeaderTab.ALL);
+
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
+  };
+
+  const getClassTab = (tab: HeaderTab) => {
+    return currentTab === tab
+      ? "border-b-2 border-primary"
+      : "text-primary-gray";
   };
 
   return (
@@ -82,30 +99,54 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
           </div>
         ) : (
           <div className="flex justify-between w-5/6">
-            <button className="border-b-2 border-primary px-2">
+            <button
+              className={`px-2 ${getClassTab(HeaderTab.ALL)}`}
+              onClick={() => setCurrentTab(HeaderTab.ALL)}
+            >
               <span className="font-bold">Tất cả (12)</span>
             </button>
-            <button className="px-2">
-              <span className="text-primary-gray text-xs">Triển khai</span>
+            <button
+              className={`px-2 ${getClassTab(HeaderTab.PROGRESS)}`}
+              onClick={() => setCurrentTab(HeaderTab.PROGRESS)}
+            >
+              <span className="text-xs">Triển khai</span>
             </button>
-            <button className="px-2">
+            <button
+              className={`px-2 ${getClassTab(HeaderTab.DONE)}`}
+              onClick={() => setCurrentTab(HeaderTab.DONE)}
+            >
               <span className="text-primary-gray text-xs">Hoàn thành</span>
             </button>
 
             <span>|</span>
 
-            <div className="flex items-center">
+            <button
+              className={`flex items-center px-2 ${getClassTab(
+                HeaderTab.OUT_DATE
+              )}`}
+              onClick={() => setCurrentTab(HeaderTab.OUT_DATE)}
+            >
               <div className="w-3 h-3 bg-red-500" />
               <span className="ml-1 text-primary-gray">Quá hạn</span>
-            </div>
-            <div className="flex items-center">
+            </button>
+            <button
+              className={`flex items-center px-2 ${getClassTab(
+                HeaderTab.NEXT_WEEK
+              )}`}
+              onClick={() => setCurrentTab(HeaderTab.NEXT_WEEK)}
+            >
               <div className="w-3 h-3 bg-yellow-500" />
               <span className="ml-1 text-primary-gray">Tuần tới</span>
-            </div>
-            <div className="flex items-center">
+            </button>
+            <button
+              className={`flex items-center px-2 ${getClassTab(
+                HeaderTab.MORE_SEVEN_DAYS
+              )}`}
+              onClick={() => setCurrentTab(HeaderTab.MORE_SEVEN_DAYS)}
+            >
               <div className="w-3 h-3 bg-green-500" />
               <span className="ml-1 text-primary-gray"> {">7 ngày"}</span>
-            </div>
+            </button>
           </div>
         )}
       </div>
