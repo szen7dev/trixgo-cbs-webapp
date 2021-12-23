@@ -13,9 +13,16 @@ type Props = {
   assignee: Assignee;
   createAt: string;
   related?: Array<User>;
+  confirmUsers: Array<User>;
 };
 
-const SideBar: FC<Props> = ({ author, assignee, createAt, related }) => {
+const SideBar: FC<Props> = ({
+  author,
+  assignee,
+  createAt,
+  related,
+  confirmUsers,
+}) => {
   return (
     <div>
       <div>
@@ -95,65 +102,38 @@ const SideBar: FC<Props> = ({ author, assignee, createAt, related }) => {
           </span>
         </div>
         <div>
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Lê Trọng Quyền-CPMI</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
+          {/* TODO: user signatures to get confirm progress */}
+          {confirmUsers.map((user, index) => (
+            <>
+              <div key={user._id} className="flex justify-between">
+                <div className="flex items-start">
+                  <img
+                    src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+                    alt="Avatar"
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div className="ml-2">
+                    <p className="text-[13px]">{user.fullname}</p>
+                    <p className="text-xs text-primary-gray">
+                      13:15 28/2/21 - 2h ago
+                    </p>
+                  </div>
+                </div>
+                <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
+                  Đã đồng ý
+                </span>
               </div>
-            </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã đồng ý
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Trần Tiến Tùng-PGI</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-8 rounded min-w-max text-primary-light text-[13px] bg-green-600">
-              Đồng ý
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Hà Tiến Dũng-CHG</p>
-                <p className="text-xs text-primary-gray">
-                  13:15 28/2/21 - 2h ago
-                </p>
-              </div>
-            </div>
-            <span className="font-bold rounded min-w-max text-green-600 text-[13px]">
-              Đã đồng ý
-            </span>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
-            <div className="flex items-start">
-              <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
-              <div className="ml-2">
-                <p className="text-[13px]">Đỗ Hữu Khu-CHG</p>
-                <p className="text-xs text-primary-gray">Cán bộ thanh toán</p>
-              </div>
-            </div>
-            <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
-              Pending
-            </button>
-          </div>
-          <img className="w-10 h-6" src={LineConnector} alt="Timeline icon" />
-          <div className="flex justify-between">
+              {index !== confirmUsers?.length - 1 && (
+                <img
+                  className="w-10 h-6"
+                  src={LineConnector}
+                  alt="Timeline icon"
+                />
+              )}
+            </>
+          ))}
+
+          {/* <div className="flex justify-between">
             <div className="flex items-start">
               <img src={HumanAvatar} alt="Avatar" className="w-10 h-10" />
               <div className="ml-2">
@@ -166,7 +146,7 @@ const SideBar: FC<Props> = ({ author, assignee, createAt, related }) => {
             <button className="font-bold px-4 h-6 rounded-xl min-w-max text-green-600 text-[13px] bg-green-100">
               Pending
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 

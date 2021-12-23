@@ -27,6 +27,7 @@ import Loader from "components/shared/Loader";
 
 import TaskRepository from "apis/task";
 import { useCheckList } from "services/hooks/useTask";
+import { User } from "typings/task";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
@@ -34,6 +35,7 @@ const TaskDetailPage: FC = () => {
 
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
+  const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
   const { data, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
@@ -44,6 +46,12 @@ const TaskDetailPage: FC = () => {
   useEffect(() => {
     if (data?.data) {
       setPercentComplete(`${data.data.percentage}%`);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setConfirmUsers([data.data.author, data.data.assignee]);
     }
   }, [data]);
 
@@ -147,16 +155,18 @@ const TaskDetailPage: FC = () => {
                   />
                 </div>
               </div>
-              <div className="flex items-end pr-2">
-                <img
-                  className="w-6"
-                  src={StackedOrganizationIcon}
-                  alt="Organizational icon"
-                />
-                <span className="text-[13px] text-primary-gray mx-2">
-                  {`Việc cha: ${data.data?.parent?.name || ""}`}
-                </span>
-              </div>
+              {data.data?.parent && (
+                <div className="flex items-end pr-2">
+                  <img
+                    className="w-6"
+                    src={StackedOrganizationIcon}
+                    alt="Organizational icon"
+                  />
+                  <span className="text-[13px] text-primary-gray mx-2">
+                    {`Việc cha: ${data.data.parent.name}`}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="w-48">
@@ -236,6 +246,7 @@ const TaskDetailPage: FC = () => {
               assignee={data.data.assignee}
               createAt={data.data.createAt}
               related={data.data.related}
+              confirmUsers={confirmUsers}
             />
           </div>
         </div>
