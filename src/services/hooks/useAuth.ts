@@ -64,44 +64,52 @@ export const useAuth = (): UseAuth => {
       notifyButton: {
         enable: true,
       },
-      notificationClickHandlerMatch: 'origin',
-      notificationClickHandlerAction: 'focus',
-  
-      allowLocalhostAsSecureOrigin: true,
+      autoResubscribe: true,
+      // notificationClickHandlerMatch: 'origin',
+      // notificationClickHandlerAction: 'focus',
+      // allowLocalhostAsSecureOrigin: true,
     })
     .then(e => {
+      OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
+        if (isEnabled)
+          console.log("Push notifications are enabled!");
+        else {
+          console.log("Push notifications are not enabled yet.");      
+          OneSignalReact.showSlidedownPrompt();
+        }
+      });
+
+      // case 2: chờ submit allow subscribe tại màn hình hiện tại
+      OneSignalReact.on('popoverAllowClick', function() {
+        console.log('Slide ALLOW CLICK');
+        
+        OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+          console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+          if (oneSignalWebPushID) { 
+              await AuthenticationRepository.updateDevice({
+                platform: "1",
+                deviceID: 'BROWSER',
+                deviceName: 'BROWSER',  
+                registrationID: oneSignalWebPushID || '',
+                oneSignalID: oneSignalWebPushID || '',
+              });
+          }
+        })
+      });
+
+      // case 1: đã subscribe page trước đó
       OneSignalReact.getUserId(async function(oneSignalWebPushID) {
         console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
-        if (!oneSignalWebPushID) { 
-          OneSignalReact.on('subscriptionChange', async function(isSubscribed: string | null) {
-            console.log("🚀 ~ file: useAuth.ts ~ line 77 ~ OneSignalReact.on ~ isSubscribed", isSubscribed)
-            if (isSubscribed) {
-              OneSignalReact.getUserId(async function(oneSignalWebPushIDAfterSubscribeFirstTime) {
-                console.log("🚀 ~ file: useAuth.ts ~ line 80 ~ OneSignalReact.getUserId ~ oneSignalWebPushIDAfterSubscribeFirstTime", oneSignalWebPushIDAfterSubscribeFirstTime)
-                if (oneSignalWebPushIDAfterSubscribeFirstTime) {
-                  await AuthenticationRepository.updateDevice({
-                    platform: "1",
-                    deviceID: 'BROWSER',
-                    deviceName: 'BROWSER',  
-                    registrationID: isSubscribed || '',
-                    oneSignalID: isSubscribed || '',
-                  });
-                }
-              })
-            }
-           
-          });
-        } else {
-          await AuthenticationRepository.updateDevice({
-            platform: "1",
-            deviceID: 'BROWSER',
-            deviceName: 'BROWSER',  
-            registrationID: oneSignalWebPushID || '',
-            oneSignalID: oneSignalWebPushID || '',
-          });
+        if (oneSignalWebPushID) { 
+            await AuthenticationRepository.updateDevice({
+              platform: "1",
+              deviceID: 'BROWSER',
+              deviceName: 'BROWSER',  
+              registrationID: oneSignalWebPushID || '',
+              oneSignalID: oneSignalWebPushID || '',
+            });
         }
-      
-      });
+      })
       
     })
     .catch(e => console.error(e));
