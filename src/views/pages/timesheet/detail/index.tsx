@@ -8,7 +8,7 @@ import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
 import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
-import AccessingUsers from "../../financial/planning/components/FinancialCashFlowDetail/AccessingUsers";
+import AccessingUsers from "../components/AccessingUsers";
 import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
 import DetailMainRow from "../components/DetailMainRow";
 
@@ -113,21 +113,21 @@ const TimeSheetDetailPage: FC = () => {
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-3"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               TT
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-2/12"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-[86px]"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Ngày tháng
@@ -169,7 +169,7 @@ const TimeSheetDetailPage: FC = () => {
             </div>
             <div
               className={
-                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-4/12"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Mô tả/ghi chú

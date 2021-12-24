@@ -26,10 +26,10 @@ const AccessingUsers: FC<Props> = ({ users }) => {
       {userLeft > 0 ? (
         <div
           className={
-            "rounded-full h-8 w-8 bg-gray-400 text-white text-lg text-center items-center justify-center flex font-thin"
+            "rounded-full h-8 w-8 bg-gray-300 text-white text-lg text-center items-center justify-center flex font-thin"
           }
         >
-          <span>{userLeft}+</span>
+          <span>+{userLeft}</span>
         </div>
       ) : null}
     </div>

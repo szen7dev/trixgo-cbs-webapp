@@ -46,7 +46,7 @@ const DetailChildRow: FC<Props> = ({
       ></div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white w-1"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
@@ -59,7 +59,7 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white w-2/12"
+          "table-cell relative box-border border border-gray-300 align-middle bg-white"
         }
       >
         <p
@@ -72,10 +72,11 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "p-2 table-cell relative box-border border border-gray-300 align-middle bg-white w-5"
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <DatePicker
+          className="w-16"
           value={rowData.date}
           selected={null}
           onChange={(date: Date | null) => console.log(date)}
@@ -107,20 +108,20 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
         }
       >
         <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 p-2"}
+          className={"w-full h-full focus:outline-blue-600 p-2 flex justify-end"}
         >
           {rowData.price}
         </p>
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white"
+          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
         }
       >
         <p
@@ -135,7 +136,7 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "p-2 table-cell relative box-border border border-gray-300 align-middle bg-white"
+          "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <DropdownSearchable
@@ -156,7 +157,7 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "table-cell relative box-border border border-gray-300 align-middle bg-white w-2/12"
+          "table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <p

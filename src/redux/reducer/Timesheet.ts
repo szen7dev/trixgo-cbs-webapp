@@ -15,7 +15,7 @@ const initialState: any = {
           {
             _id: "121",
             tt: "1",
-            content: "Triển khai công tác đánh giá nhân sụ thực hiện công việc",
+            content: "Triển khai công tác đánh giá nhân sự thực hiện công việc",
             date: "25/12/2021",
             done: true,
             totalHour: "10",
@@ -27,7 +27,7 @@ const initialState: any = {
           {
             _id: "122",
             tt: "2",
-            content: "Triển khai công tác đánh giá nhân sụ thực hiện công việc",
+            content: "Triển khai công tác đánh giá nhân sự thực hiện công việc",
             date: "25/12/2021",
             done: false,
             totalHour: "10",
@@ -39,7 +39,7 @@ const initialState: any = {
           {
             _id: "123",
             tt: "3",
-            content: "Triển khai công tác đánh giá nhân sụ thực hiện công việc",
+            content: "Triển khai công tác đánh giá nhân sự thực hiện công việc",
             date: "25/12/2021",
             done: false,
             totalHour: "10",
