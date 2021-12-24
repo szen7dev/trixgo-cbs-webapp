@@ -104,6 +104,9 @@ import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCa
 import SupportPage from "views/pages/support/components/home";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
+// Timesheet pages
+import TimesheetHomePage from 'views/pages/timesheet/home'
+
 const Routes: FC = () => {
 
   useEffect(() => {
@@ -406,6 +409,14 @@ const Routes: FC = () => {
                       <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
 									</CmcsLayout>
+                </Route>
+
+                <Route path="/timesheet/home">
+                  <HomeLayout>
+                    <Switch>
+                      <ProtectedRoute exact path="/timesheet/home" component={TimesheetHomePage} />
+                    </Switch>
+                  </HomeLayout>
                 </Route>
 
                 <Route path="*">
