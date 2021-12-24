@@ -1,10 +1,6 @@
 import { FC } from "react";
 
-import cn from "classnames";
-
-import styles from "../../styles.module.css";
-
-import ChartDoughnutSmall from "../../../support/chart/SupportDoughnutChart";
+import ChartDoughnutSmall from "../../../../support/chart/SupportDoughnutChart";
 
 const data = {
   labels: [],

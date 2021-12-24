@@ -1,17 +1,17 @@
 import { FC } from "react";
 
-import ReceivableReport from "./views/ReceivableReport";
-import RevenueBySectorReport from "./views/RevenueBySectorReport";
-import RevenueOverTimeReport from "./views/RevenueOverTimeReport";
-import CashFlowManagementReport from "./views/CashFlowManagementReport";
-import ProfileAndProductReport from "./views/ProfileAndProductReport";
-import CmcImagesReport from "./views/CmcImagesReport";
-import PaymentPlanReport from "./views/PaymentPlanReport";
-import TotalRevenueReport from "./views/TotalRevenueReport";
-import MoneyBackReport from "./views/MoneyBackReport";
-import CompanyPreviewReport from "./views/CompanyPreviewReport";
-import QuickReport from "./views/QuickReport";
-import StatusReport from "./views/StatusReport";
+import ReceivableReport from "./views/dashboard/ReceivableReport";
+import RevenueBySectorReport from "./views/dashboard/RevenueBySectorReport";
+import RevenueOverTimeReport from "./views/dashboard/RevenueOverTimeReport";
+import CashFlowManagementReport from "./views/dashboard/CashFlowManagementReport";
+import ProfileAndProductReport from "./views/dashboard/ProfileAndProductReport";
+import CmcImagesReport from "./views/dashboard/CmcImagesReport";
+import PaymentPlanReport from "./views/dashboard/PaymentPlanReport";
+import TotalRevenueReport from "./views/dashboard/TotalRevenueReport";
+import MoneyBackReport from "./views/dashboard/MoneyBackReport";
+import CompanyPreviewReport from "./views/dashboard/CompanyPreviewReport";
+import QuickReport from "./views/dashboard/QuickReport";
+import StatusReport from "./views/dashboard/StatusReport";
 
 const CmcManagementReport: FC = () => {
   return (

@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import N04BT1 from "assets/images/N04B.T1-C2605.svg";
 
-const CmcsPage: FC = () => {
+const CmcHome: FC = () => {
   return (
     <main className="w-full h-full flex flex-col items-center justify-center">
       <div className="text-2xl mb-4">
@@ -36,4 +36,4 @@ const CmcsPage: FC = () => {
   );
 };
 
-export default CmcsPage;
+export default CmcHome;

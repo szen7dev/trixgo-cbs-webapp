@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import cn from "classnames";
 
-import styles from "../../styles.module.css";
+import styles from "../../../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 

@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import cn from "classnames";
 
-import styles from "../../styles.module.css";
+import styles from "../../../styles.module.css";
 
 import image1 from "assets/images/ProjectPage/image 161.jpg";
 import image2 from "assets/images/ProjectPage/image 162.jpg";

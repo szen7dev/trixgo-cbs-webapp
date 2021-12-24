@@ -13,7 +13,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-import styles from "../../styles.module.css";
+import styles from "../../../styles.module.css";
 
 import ListIcon from "assets/images/icon-bulleted-list.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";

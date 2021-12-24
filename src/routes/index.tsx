@@ -96,11 +96,13 @@ import DocumentLayout from "views/pages/document/layouts/DocumentLayout";
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 //Financial
+import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 
 // Cmc pages
-import CmcsPage from "views/pages/cmcs";
-import CmcManagementReport from "views/pages/cmcs/components/CmcManagementReport";
-import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
+import CmcHome from "views/pages/cmcs/CmcHome";
+import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
+import CmcIncome from "views/pages/cmcs/components/CmcIncome";
+import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
@@ -400,8 +402,10 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <CmcsLayout>
                     <Switch>
-                      <Route exact path="/cmcs/home" component={CmcsPage} />
-                      <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
+                      <Route exact path="/cmcs/home" component={CmcHome} />
+                      <Route exact path="/cmcs/dashboard" component={CmcDashboard} />
+                      <Route exact path="/cmcs/income" component={CmcIncome} />
+                      <Route exact path="/cmcs/guarantee" component={CmcGuarantee} />
                     </Switch>
 									</CmcsLayout>
                 </Route>
