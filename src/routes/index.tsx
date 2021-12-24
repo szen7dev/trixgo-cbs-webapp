@@ -20,6 +20,7 @@ import HomeLayout from "views/layouts/HomeLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import PcmLayout from "views/layouts/PcmLayout";
 import CmcsLayout from "views/layouts/CmcsLayout";
+import ProjectLayout from "views/layouts/ProjectLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -54,13 +55,10 @@ import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 // Teaser Pages
 import TeaserPage from "views/pages/teaser";
 
-// Applications Pages
-import ApplicationsPage from "views/pages/applications";
-
 // Settings Pages
 import SettingsPage from "views/pages/settings";
 
-// Project pages
+// Project pages (Project and Construction Management)
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
@@ -166,25 +164,48 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route exact path="/">
-                  <Redirect to="/ppt/home" />
+                  <Redirect to="/pcm/home" />
                 </Route>
 
-                <Route path="/ppt/:path?">
+                <Route path="/pcm">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path={"/ppt/home"} component={DashboardPage} />
-                      <ProtectedRoute exact path={"/ppt/projects"} component={ProjectCategoryPage} />
-                      <ProtectedRoute exact path={"/ppt/portfolio"} component={ProjectInvestPage} />
-                      <ProtectedRoute exact path={"/ppt/market"} component={ProjectDeployingPage} />
-                      <ProtectedRoute exact path={"/ppt/tasks-dashboard-1"} component={KanbanBoardPage} />
-                      <ProtectedRoute exact path={"/ppt/tasks-dashboard-2"} component={TaskDashboardType2} />
-                      <ProtectedRoute exact path={"/ppt/mine"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/ppt/bookmark"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/ppt/market"} component={TasksHomePage} />
-                      <Route path="/ppt/home/*" component={ErrorPage} />
+                      <ProtectedRoute exact path={"/pcm/home"} component={DashboardPage} />
+                      <ProtectedRoute exact path={"/pcm/projects"} component={ProjectCategoryPage} />
+                      <ProtectedRoute exact path={"/pcm/portfolio"} component={ProjectInvestPage} />
+                      <ProtectedRoute exact path={"/pcm/market"} component={ProjectDeployingPage} />
+                      <ProtectedRoute exact path={"/pcm/tasks-dashboard-1"} component={KanbanBoardPage} />
+                      <ProtectedRoute exact path={"/pcm/tasks-dashboard-2"} component={TaskDashboardType2} />
+                      <ProtectedRoute exact path={"/pcm/mine"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/pcm/bookmark"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/pcm/draft"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} />
+                      <Route path="/pcm/home/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
-                  
+                </Route>
+{/* 
+                <Route path="/pcm/project">
+                  <ProjectLayout>
+                    <Switch>
+                      <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} />
+                    </Switch>
+                  </ProjectLayout>
+                </Route> */}
+
+                <Route path="/social">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/social/home" component={SocialHomePage} />
+                      <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
+                      <Route exact path="/social/comments" component={SocialCommentsPage} />
+                      <Route path="/social/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
+
+                <Route path="/document">
+									<DocumentLayoutContainer />
                 </Route>
 
                 {/* <Route path="/ppt">
@@ -285,11 +306,6 @@ const Routes: FC = () => {
                 <Route path="/applications">
                   <MainLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/applications"
-                        component={ApplicationsPage}
-                      />
                       <Route path="/applications/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
@@ -306,26 +322,6 @@ const Routes: FC = () => {
                       <Route path="/settings/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
-                </Route>
-
-                <Route path="/social">
-                  <HomeLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/applications"
-                        component={ApplicationsPage}
-                      />
-                      <Route exact path="/social/home" component={SocialHomePage} />
-                      <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
-                      <Route exact path="/social/comments" component={SocialCommentsPage} />
-                      <Route path="/social/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
-                </Route>
-
-                <Route path="/document">
-									<DocumentLayoutContainer />
                 </Route>
 
                 <Route path="/accounting/:path?">

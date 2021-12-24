@@ -31,37 +31,37 @@ const HomeNavigation: FC = () => {
         {/* menu block */}
         <div className="t-leftsidebar-menu-block mb-6">
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
-          <Link to={`/ppt/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Danh mục dự án</span>
 					</Link>
-          <Link to={`/ppt/portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Báo cáo đầu tư</span>
 					</Link>
-          <Link to={`/ppt/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Phát triển thị trường</span>
 					</Link>
-          <Link to={`/ppt/tasks-dashboard-1`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/tasks-dashboard-1`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị công việc 1</span>
 					</Link>
-          <Link to={`/ppt/tasks-dashboard-2`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/tasks-dashboard-2`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị công việc 2</span>
 					</Link>
 
           <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
-          <Link to={`/ppt/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc của tôi</span>
 					</Link>
-          <Link to={`/ppt/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc quan tâm</span>
 					</Link>
-          <Link to={`/ppt/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc nháp</span>
 					</Link>
