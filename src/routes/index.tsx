@@ -145,18 +145,18 @@ const Routes: FC = () => {
                 </Route>
 
                   <Route exact path="/">
-                    <Redirect to="/dashboard" />
+                    <Redirect to="/homepage" />
                   </Route>
 
-                  <Route path="/dashboard">
+                  <Route path="/homepage">
                     <HomeLayout>
                       <Switch>
                         <ProtectedRoute
                           exact
-                          path="/dashboard"
+                          path="/homepage"
                           component={DashboardPage}
                         />
-                        <Route path="/dashboard/*" component={ErrorPage} />
+                        <Route path="/homepage/*" component={ErrorPage} />
                       </Switch>
                     </HomeLayout>
                   </Route>
