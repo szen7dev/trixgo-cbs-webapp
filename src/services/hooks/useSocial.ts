@@ -22,6 +22,7 @@ type UseSocial = {
 
 type UseCommentSocial = {
     createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
+    updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
     deleteComment: (id: string) => Promise<void>,
     listComments: Array<CommentProps>,
     totalRecord: number,
@@ -165,6 +166,11 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             SocialRepository.deleteComment(id)
         );
 
+    const { mutateAsync: updateCommentAsync } =
+        useMutation((payload: CommentPayload) =>
+            SocialRepository.updateComment(payload)
+        );
+
     const {
         isLoading: isLoadingListComments,
         refetch: refetchListComments,
@@ -204,6 +210,21 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         }
     };
 
+    const updateComment = async (payload: CommentPayload) => {
+        try {
+            const { error, data, message } = await updateCommentAsync(payload);
+            error && toast.error(message);
+
+            return data;
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const deleteComment = async (id: string) => {
         try {
             const { error, message } = await deleteCommentAsync(id);
@@ -225,6 +246,7 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
     return {
         createComment,
         deleteComment,
+        updateComment,
         listComments,
         limit,
         totalRecord,

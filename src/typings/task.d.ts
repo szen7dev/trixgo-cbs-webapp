@@ -29,6 +29,12 @@ export type LastLog = {
   };
 };
 
+export type Project = {
+  _id: string;
+  name: string;
+  sign: string;
+};
+
 export type Task = {
   _id: string;
   name: string;
@@ -38,7 +44,8 @@ export type Task = {
   description: string;
   lastLog?: LastLog;
   assignee: Assignee;
-  percentage: number
+  percentage: number;
+  project: Project;
 };
 
 export type ListTaskResponse = APIResponse & {

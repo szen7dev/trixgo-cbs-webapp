@@ -26,6 +26,7 @@ const FinancialCashFlowFilterButton:FC = () => {
                 <div className={"flex items-center mt-4"}>
                     <p className={"text-gray-500 mr-4"}>Phân loại 1</p>
                     <DropdownSearchable
+                        disabled={true}
                         placeholder={"Phân loại 1"}
                         className={"w-full flex-1 border-b border-gray-200"}
                         focusedClass={"border-b border-primary"}

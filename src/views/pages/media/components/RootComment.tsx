@@ -1,30 +1,48 @@
 import { FC, useState, useContext, useEffect } from 'react';
 
-import Comment from './Comment'
+import Comment from './Comment';
 import EditButton from './EditButton';
 import ReplyCommentField from './ReplyCommentField';
+
 import { CommentProps } from 'typings/common';
+import { FileProps } from 'typings/social';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
-import { objPopulate } from 'views/pages/media/utils';
+import { objPopulate } from '../utils';
 
 interface Props {
 	renderNestedComment?: React.ElementType
 	onClickReply?: () => unknown;
-	onClickEdit?: (comment: CommentProps) => unknown;
 	comment: CommentProps,
 	limit: number,
 	smallImage?: boolean
 }
 
-const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
+type UpdateCommentProps = {
+	commentID: string,
+	content: string,
+	parentID: string,
+	files: FileProps[] | undefined, 
+	images: FileProps[] | undefined
+}
+
+const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const [isReply, setIsReply] = useState<boolean>(false);
-	const [message, setMessage] = useState<string>('');
+	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);
+
+	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({ 
+		files: [], images: [], commentID: '', content: '', parentID: ''
+	});
+	const [infoComment, setInfoComment] = useState<UpdateCommentProps>({ 
+		files: [], images: [], commentID: '', content: '', parentID: '' 
+	});
+
 	const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
 
 	useEffect(() => {
+		// Add last reply comment in first time render page
 		if(commentsReply.length === 0 && comment.lastestReplyID){
 			dispatch({ 
 				type: 'ADD_COMMENT',
@@ -56,20 +74,41 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 	}
 
 	// This function callback to parent;
-	const handleClickUpdateParent = (comment: any) => {
-		onClickEdit?.(comment)
+	const handleClickUpdateParent = (infoComment: CommentProps) => {
+		setIsReplyParent(!isReplyParent);
+
+		setInfoCommentParent({
+			parentID: '',
+			commentID: infoComment.comment?._id,
+			content: infoComment.comment?.content,
+			files: infoComment.comment?.files,
+			images: infoComment.comment?.images
+		})
 	}
 
 	// Onclick update button, this function will set selected comment or selected message depend on you
 	// Use context instead this way if you don't want use callback to handle Update message :)
-	const handleClickUpdateChild = (comment: any) => {
-		if (!isReply) setIsReply(true);
-		setMessage(comment.comment?.content);
+	const handleClickUpdateChild = (infoComment: CommentProps) => {
+		setIsReply(!isReply);
+
+		setInfoComment({
+			parentID: comment._id,
+			commentID: infoComment.comment?._id,
+			content: infoComment.comment?.content,
+			files: infoComment.comment?.files,
+			images: infoComment.comment?.images
+		})
 	}
 
 	return (
 		<>
-			<Comment small={smallImage} comment={comment} onClickReply={() => setIsReply(true)} onClickEdit={handleClickUpdateParent} renderOptions={EditButton} />
+			<Comment 
+				small={smallImage} 
+				comment={comment} 
+				onClickReply={() => setIsReply(true)} 
+				onClickEdit={handleClickUpdateParent} 
+				renderOptions={EditButton} 
+			/>
 			<div>
 				{amountReply > 0 ? (
 					<div className="react__comments-header">
@@ -95,8 +134,54 @@ const RootComment: FC<Props> = ({ onClickEdit, smallImage, comment, limit, rende
 						</li>
 					)) : ''}
 				</ul>
-				{isReply ? <ReplyCommentField defaultValue={message} className="pl-11" inputContainerClassName="flex w-full p-2" parentID={comment._id} mediaID={comment.media} /> : null}
+				{isReply 
+					? (
+						<ReplyCommentField 
+							className="pl-11" 
+							inputContainerClassName="flex w-full p-2" 
+							defaultValue={infoComment.content} 
+							files={infoComment.files} 
+							images={infoComment.images} 
+							commentID={infoComment.commentID}
+							parentID={infoComment.parentID || comment._id} 
+							mediaID={comment.media} 
+							onSubmit={() => {
+								setIsReply(false);
+								setInfoComment({
+									parentID: '',
+									commentID: '',
+									content: '',
+									files: [],
+									images: []
+								})
+							}}
+						/>
+					) 
+					: null}
 			</div>
+			{isReplyParent 
+				? (
+					<ReplyCommentField 
+						inputContainerClassName="flex w-full p-2" 
+						defaultValue={infoCommentParent.content} 
+						files={infoCommentParent.files} 
+						images={infoCommentParent.images} 
+						commentID={infoCommentParent.commentID}
+						parentID={infoCommentParent.parentID} 
+						mediaID={comment.media} 
+						onSubmit={() => {
+							setIsReplyParent(false);
+							setInfoCommentParent({
+								parentID: '',
+								commentID: '',
+								content: '',
+								files: [],
+								images: []
+							})
+						}}
+					/>
+				) 
+				: null}
 		</>
 	)
 }

@@ -111,3 +111,26 @@
 }
 
 /*______________________________Table______________________________*/
+
+.document__detail-grid {
+  display: grid;
+  grid-template-columns: minmax(min-content, auto) minmax(max-content, 1fr) minmax(min-content, auto) minmax(min-content, 1fr);
+}
+
+.document__detail-grid>div {
+  border-width: 0.5px;
+}
+
+/*______________________________Table Profile create______________________________*/
+.document__profile-create {
+  display: grid;
+  /* grid-template-columns: minmax(min-content, auto) minmax(max-content, 1fr) minmax(min-content, auto) minmax(min-content, 1fr); */
+  grid-template-columns: repeat(4, minmax(min-content, auto) minmax(max-content, 1fr));
+}
+
+.document__profile-create>div:nth-child(n + 4),
+.document__profile-create>input,
+.document__profile-create>label,
+.document__profile-create+div {
+  border-top: 0.5px solid #CFCFCF;
+}

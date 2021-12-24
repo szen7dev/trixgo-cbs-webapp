@@ -16,6 +16,7 @@ interface TabsProps {
 }
 
 const TabsList: React.FC<React.HTMLAttributes<HTMLDivElement> & TabsProps> = ({ url, defaultValue, onSelect, tabs, ...props }) => {
+	const pathname = '/document/project/asd/document'
 	return (
 		<div {...props}>
 			{tabs.map(({ id, title, path }) => (
@@ -25,7 +26,7 @@ const TabsList: React.FC<React.HTMLAttributes<HTMLDivElement> & TabsProps> = ({ 
 					className="border-b-2 border-transparent mx-2 py-2.5 text-center"
 					style={{ minWidth: "64px" }}
 					key={id}
-					to={url + (path === '/' ? '' : path)}
+					to={pathname + (path === '/' ? '' : path)}
 				>
 					{title}
 				</NavLink>
