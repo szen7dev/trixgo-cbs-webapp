@@ -7,13 +7,13 @@ import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
-import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
-import AccessingUsers from "../components/AccessingUsers";
-import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
-import DetailMainRow from "../components/DetailMainRow";
-
 import { RootState } from "redux/reducer";
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
+
+import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
+import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
+import DetailMainRow from "../components/DetailMainRow";
+import AccessingUsers from "../components/AccessingUsers";
 
 const TimeSheetDetailPage: FC = () => {
   const params = useParams<{ id: string }>();
