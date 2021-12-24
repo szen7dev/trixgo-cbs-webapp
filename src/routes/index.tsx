@@ -174,7 +174,8 @@ const Routes: FC = () => {
                     </KanbanBoardLayout>
                   </Route>
 
-                <Route path="/customers">
+                {/*Sample route */}
+                {/* <Route path="/customers">
                   <MainLayout>
                     <Switch>
                       <ProtectedRoute
@@ -185,9 +186,9 @@ const Routes: FC = () => {
                       <Route path="/customers/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
-                </Route>
+                </Route> */}
 
-                <Route path="/orders">
+                {/* <Route path="/orders">
                   <MainLayout>
                     <Switch>
                       <ProtectedRoute
@@ -198,9 +199,9 @@ const Routes: FC = () => {
                       <Route path="/orders/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
-                </Route>
+                </Route> */}
 
-                <Route path="/campaigns">
+                {/* <Route path="/campaigns">
                   <MainLayout>
                     <Switch>
                       <ProtectedRoute
@@ -211,6 +212,15 @@ const Routes: FC = () => {
                       <Route path="/campaigns/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
+                </Route> */}
+
+                <Route path="/support">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/support/home" component={SupportPage} />
+                      <Route exact path="/support/register" component={RegisterDashboardPage} />
+                    </Switch>
+									</HomeLayout>
                 </Route>
 
                 <Route path="/human/home">
@@ -396,15 +406,6 @@ const Routes: FC = () => {
                       <Route exact path="/cmcs/dashboard" component={CmcManagementReport} />
                     </Switch>
 									</CmcsLayout>
-                </Route>
-
-                <Route path="/support">
-                  <HomeLayout>
-                    <Switch>
-                      <Route exact path="/support/home" component={SupportPage} />
-                      <Route exact path="/support/register" component={RegisterDashboardPage} />
-                    </Switch>
-									</HomeLayout>
                 </Route>
 
                 <Route path="*">
