@@ -33,13 +33,9 @@ import DashboardPage from "views/pages/dashboard";
 // KanbanBoardPage Pages
 import KanbanBoardPage from "views/pages/kanbanBoard";
 
-// Customers Pages
+// Customers Pages + Orders Pages + Campaigns Pages
 import CustomersPage from "views/pages/customers";
-
-// Orders Pages
 import OrdersPage from "views/pages/orders";
-
-// Campaigns Pages
 import CampaignsPage from "views/pages/campaigns";
 
 // Team Pages
@@ -106,9 +102,12 @@ import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
 import SupportPage from "views/pages/support/components/home";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
+// Timesheet pages
+import TimesheetHomePage from "views/pages/timesheet/home";
+
 const Routes: FC = () => {
   useEffect(() => {
-    document.title = "Trixgo | Quản trị doanh nghiệp";
+    document.title = "CBS | Quản trị doanh nghiệp";
   }, []);
 
   return (
@@ -118,6 +117,20 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
+                {/*Sample route */}
+                {/* <Route path="/customers">
+                  <MainLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/customers"
+                        component={CustomersPage}
+                      />
+                      <Route path="/customers/*" component={ErrorPage} />
+                    </Switch>
+                  </MainLayout>
+                </Route> */}
+
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>
@@ -144,22 +157,111 @@ const Routes: FC = () => {
                   </FullPageLayout>
                 </Route>
 
-                <Route exact path="/">
-                  <Redirect to="/homepage" />
+                <Route path="/support">
+                  <HomeLayout>
+                    <Switch>
+                      <Route
+                        exact
+                        path="/support/home"
+                        component={SupportPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/register"
+                        component={RegisterDashboardPage}
+                      />
+                    </Switch>
+                  </HomeLayout>
                 </Route>
 
-                <Route path="/homepage">
+                <Route exact path="/">
+                  <Redirect to="/ppt/home" />
+                </Route>
+
+                <Route path="/ppt/:path?">
                   <HomeLayout>
                     <Switch>
                       <ProtectedRoute
                         exact
-                        path="/homepage"
+                        path={"/ppt/home"}
                         component={DashboardPage}
                       />
-                      <Route path="/homepage/*" component={ErrorPage} />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/projects"}
+                        component={ProjectCategoryPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/portfolio"}
+                        component={ProjectInvestPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/market"}
+                        component={ProjectDeployingPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/tasks-dashboard-1"}
+                        component={KanbanBoardPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/tasks-dashboard-2"}
+                        component={TaskDashboardType2}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/mine"}
+                        component={TasksHomePage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/bookmark"}
+                        component={TasksHomePage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/ppt/market"}
+                        component={TasksHomePage}
+                      />
+                      <Route path="/ppt/home/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>
+
+                {/* <Route path="/ppt">
+                  <Switch>
+                    <Route
+                      exact
+                      path="/ppt/page6"
+                      component={ProjectProgressPage}
+                    />
+                    <Router>
+                      <HomeLayout>
+                        <Switch>
+                          <Route
+                            exact
+                            path="/ppt/page4"
+                            component={ProjectHomePage}
+                          />
+                          <Route
+                            exact
+                            path="/ppt/page5"
+                            component={ProjectReportPage}
+                          />
+                          <Route
+                            exact
+                            path="/ppt/page7"
+                            component={ProjectBudgetPage}
+                          />
+                          <Route path="/ppt/*" component={ErrorPage} />
+                        </Switch>
+                      </HomeLayout>
+                    </Router>
+                  </Switch>
+                </Route> */}
 
                 <Route path="/kanban-board">
                   <KanbanBoardLayout>
@@ -172,63 +274,6 @@ const Routes: FC = () => {
                       <Route path="/kanban-board/*" component={ErrorPage} />
                     </Switch>
                   </KanbanBoardLayout>
-                </Route>
-
-                {/*Sample route */}
-                {/* <Route path="/customers">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/customers"
-                        component={CustomersPage}
-                      />
-                      <Route path="/customers/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
-                </Route> */}
-
-                {/* <Route path="/orders">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/orders"
-                        component={OrdersPage}
-                      />
-                      <Route path="/orders/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
-                </Route> */}
-
-                {/* <Route path="/campaigns">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/campaigns"
-                        component={CampaignsPage}
-                      />
-                      <Route path="/campaigns/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
-                </Route> */}
-
-                <Route path="/support">
-                  <HomeLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/support/home"
-                        component={SupportPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/support/register"
-                        component={RegisterDashboardPage}
-                      />
-                    </Switch>
-                  </HomeLayout>
                 </Route>
 
                 <Route path="/human/home">
@@ -324,53 +369,6 @@ const Routes: FC = () => {
                       <Route path="/settings/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
-                </Route>
-
-                <Route path="/ppt">
-                  <Switch>
-                    <Route
-                      exact
-                      path="/ppt/page6"
-                      component={ProjectProgressPage}
-                    />
-                    <Router>
-                      <HomeLayout>
-                        <Switch>
-                          <Route
-                            exact
-                            path="/ppt/home"
-                            component={ProjectCategoryPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page2"
-                            component={ProjectDeployingPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page3"
-                            component={ProjectInvestPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page4"
-                            component={ProjectHomePage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page5"
-                            component={ProjectReportPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page7"
-                            component={ProjectBudgetPage}
-                          />
-                          <Route path="/ppt/*" component={ErrorPage} />
-                        </Switch>
-                      </HomeLayout>
-                    </Router>
-                  </Switch>
                 </Route>
 
                 <Route path="/social">
@@ -511,6 +509,18 @@ const Routes: FC = () => {
                       />
                     </Switch>
                   </CmcsLayout>
+                </Route>
+
+                <Route path="/timesheet/home">
+                  <HomeLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/timesheet/home"
+                        component={TimesheetHomePage}
+                      />
+                    </Switch>
+                  </HomeLayout>
                 </Route>
 
                 <Route path="*">
