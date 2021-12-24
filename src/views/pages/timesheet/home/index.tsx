@@ -8,8 +8,13 @@ import SearchInput from "components/common/SearchInput";
 
 import ActionGroupButton from "../components/ActionGroupButton";
 import FilterButton from "../components/FilterButton";
+import CreateOrEditDialog from "../components/CreateOrEditDialog";
+
+import { useModal } from "services/hooks/useModal";
 
 const TimeSheetHomePage: FC = () => {
+  const { openModal } = useModal();
+
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -27,7 +32,16 @@ const TimeSheetHomePage: FC = () => {
           <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
           <ActionGroupButton />
         </div>
-        <button className={"bg-green-success h-[32px] text-white rounded px-5"}>
+        <button
+          className={"bg-green-success h-[32px] text-white rounded px-5"}
+          onClick={() =>
+            openModal(
+              <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
+                <CreateOrEditDialog />
+              </div>
+            )
+          }
+        >
           Tạo mới
         </button>
         <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
@@ -138,7 +152,9 @@ const TimeSheetHomePage: FC = () => {
             >
               30
             </div>
-            <div className={"px-2 py-4 table-cell box-border border-b text-right"}>
+            <div
+              className={"px-2 py-4 table-cell box-border border-b text-right"}
+            >
               7.500.000
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b"}>
