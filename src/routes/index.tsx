@@ -22,6 +22,7 @@ import PcmLayout from "views/layouts/PcmLayout";
 import CmcsLayout from "views/layouts/CmcsLayout";
 import ProjectLayout from "views/layouts/ProjectLayout";
 import SupportLayout from "views/layouts/SupportLayout";
+import HumanLayout from "views/layouts/HumanLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -266,7 +267,7 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/human/home">
-                  <HomeLayout>
+                  <HumanLayout>
                     <Switch>
                       <ProtectedRoute
                         exact
@@ -278,7 +279,7 @@ const Routes: FC = () => {
                         component={HumanInfo}
                       />
                     </Switch>
-                  </HomeLayout>
+                  </HumanLayout>
                 </Route>
 
                 <Route path="/messages/:path?">
