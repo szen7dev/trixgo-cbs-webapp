@@ -100,6 +100,7 @@ import RegisterDashboardPage from "views/pages/support/components/register";
 
 // Timesheet pages
 import TimesheetHomePage from 'views/pages/timesheet/home'
+import TimesheetDetailPage from 'views/pages/timesheet/detail'
 
 const Routes: FC = () => {
 
@@ -366,10 +367,11 @@ const Routes: FC = () => {
 									</CmcsLayout>
                 </Route>
 
-                <Route path="/timesheet/home">
+                <Route path="/timesheet/:path?">
                   <HomeLayout>
                     <Switch>
                       <ProtectedRoute exact path="/timesheet/home" component={TimesheetHomePage} />
+                      <ProtectedRoute exact path={"/timesheet/home/:id"} component={TimesheetDetailPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>

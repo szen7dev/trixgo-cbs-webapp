@@ -84,6 +84,10 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị tài chính</span>
 						</Link>
+            <Link to={`/timesheet/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Quản lý chấm công </span>
+						</Link>
           </div>
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
