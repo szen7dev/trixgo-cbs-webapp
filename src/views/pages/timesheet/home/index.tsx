@@ -134,7 +134,7 @@ const TimeSheetHomePage: FC = () => {
                 "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
               }
             >
-              <NavLink to={"/fin/cashflow/123"}>
+              <NavLink to={"/timesheet/home/123"}>
                 Bảng chấm công chuyên gia Lưu Đình Thi
               </NavLink>
               <p className={"mt-1 text-gray-500"}>
