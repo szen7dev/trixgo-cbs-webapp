@@ -43,3 +43,7 @@
 .theadTenPercent {
   width: 10%;
 }
+
+.disabledBg {
+  background: #efefef4d;
+}

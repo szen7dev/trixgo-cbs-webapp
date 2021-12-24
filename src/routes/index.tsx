@@ -107,7 +107,6 @@ import SupportPage from "views/pages/support/components/home";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
 const Routes: FC = () => {
-
   useEffect(() => {
     document.title = "Trixgo | Quản trị doanh nghiệp";
   }, []);
@@ -119,7 +118,6 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
-
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>
@@ -146,35 +144,35 @@ const Routes: FC = () => {
                   </FullPageLayout>
                 </Route>
 
-                  <Route exact path="/">
-                    <Redirect to="/homepage" />
-                  </Route>
+                <Route exact path="/">
+                  <Redirect to="/homepage" />
+                </Route>
 
-                  <Route path="/homepage">
-                    <HomeLayout>
-                      <Switch>
-                        <ProtectedRoute
-                          exact
-                          path="/homepage"
-                          component={DashboardPage}
-                        />
-                        <Route path="/homepage/*" component={ErrorPage} />
-                      </Switch>
-                    </HomeLayout>
-                  </Route>
+                <Route path="/homepage">
+                  <HomeLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/homepage"
+                        component={DashboardPage}
+                      />
+                      <Route path="/homepage/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
 
-                  <Route path="/kanban-board">
-                    <KanbanBoardLayout>
-                      <Switch>
-                        <ProtectedRoute
-                          exact
-                          path="/kanban-board"
-                          component={KanbanBoardPage}
-                        />
-                        <Route path="/kanban-board/*" component={ErrorPage} />
-                      </Switch>
-                    </KanbanBoardLayout>
-                  </Route>
+                <Route path="/kanban-board">
+                  <KanbanBoardLayout>
+                    <Switch>
+                      <ProtectedRoute
+                        exact
+                        path="/kanban-board"
+                        component={KanbanBoardPage}
+                      />
+                      <Route path="/kanban-board/*" component={ErrorPage} />
+                    </Switch>
+                  </KanbanBoardLayout>
+                </Route>
 
                 {/*Sample route */}
                 {/* <Route path="/customers">
@@ -219,17 +217,32 @@ const Routes: FC = () => {
                 <Route path="/support">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/support/home" component={SupportPage} />
-                      <Route exact path="/support/register" component={RegisterDashboardPage} />
+                      <ProtectedRoute
+                        exact
+                        path="/support/home"
+                        component={SupportPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/support/register"
+                        component={RegisterDashboardPage}
+                      />
                     </Switch>
-									</HomeLayout>
+                  </HomeLayout>
                 </Route>
 
                 <Route path="/human/home">
                   <HomeLayout>
                     <Switch>
-                      <Route exact path="/human/home" component={HumansPage} />
-                      <Route path="/human/home/hid=:id" component={HumanInfo} />
+                      <ProtectedRoute
+                        exact
+                        path="/human/home"
+                        component={HumansPage}
+                      />
+                      <ProtectedRoute
+                        path="/human/home/hid=:id"
+                        component={HumanInfo}
+                      />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -255,9 +268,21 @@ const Routes: FC = () => {
                 <Route path="/pcm/:path?">
                   <PcmLayout>
                     <Switch>
-                      <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
-                      <ProtectedRoute exact path={"/pcm/dashboard/type=2"} component={TaskDashboardType2} />
+                      <ProtectedRoute
+                        exact
+                        path={"/pcm/home"}
+                        component={TasksHomePage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/pcm/detail/:id"}
+                        component={TaskDetailPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/pcm/dashboard/type=2"}
+                        component={TaskDashboardType2}
+                      />
                     </Switch>
                   </PcmLayout>
                 </Route>
@@ -356,16 +381,28 @@ const Routes: FC = () => {
                         path="/applications"
                         component={ApplicationsPage}
                       />
-                      <Route exact path="/social/home" component={SocialHomePage} />
-                      <Route exact path="/social/post/:mediaID" component={SocialPostPage} />
-                      <Route exact path="/social/comments" component={SocialCommentsPage} />
+                      <Route
+                        exact
+                        path="/social/home"
+                        component={SocialHomePage}
+                      />
+                      <Route
+                        exact
+                        path="/social/post/:mediaID"
+                        component={SocialPostPage}
+                      />
+                      <Route
+                        exact
+                        path="/social/comments"
+                        component={SocialCommentsPage}
+                      />
                       <Route path="/social/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>
 
                 <Route path="/document">
-									<DocumentLayoutContainer />
+                  <DocumentLayoutContainer />
                 </Route>
 
                 <Route path="/accounting/:path?">
@@ -374,29 +411,77 @@ const Routes: FC = () => {
                       <Route exact path="/accounting">
                         <Redirect to="/accounting/home" />
                       </Route>
-                      <ProtectedRoute exact path="/accounting/home" component={AccountingTicketsPage} />
-                      <ProtectedRoute exact path="/accounting/home/:id" component={AccountingTicketDetailPage} />
-                      <ProtectedRoute exact path="/accounting/detail" component={AccountingDetailPage} />
-                      <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage} />
-                      <ProtectedRoute exact path="/accounting/in-out" component={AccountingInOutPage} />
-                      <ProtectedRoute exact path="/accounting/debt" component={AccountingDebtPage} />
-                      <ProtectedRoute exact path="/accounting/diary" component={AccountingDiaryPage} />
-                      <ProtectedRoute exact path="/accounting/vat" component={AccountingVatPage} />
-                      <ProtectedRoute exact path="/accounting/report-finance" component={AccountingReportFinancePage} />
-                      <ProtectedRoute exact path="/accounting/support-tools" component={AccountingSupportToolsPage} />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/home"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/home/:id"
+                        component={AccountingTicketDetailPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/detail"
+                        component={AccountingDetailPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/diary"
+                        component={AccountingDiaryPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/in-out"
+                        component={AccountingInOutPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/debt"
+                        component={AccountingDebtPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/diary"
+                        component={AccountingDiaryPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/vat"
+                        component={AccountingVatPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/report-finance"
+                        component={AccountingReportFinancePage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/support-tools"
+                        component={AccountingSupportToolsPage}
+                      />
                     </Switch>
                   </HomeLayout>
                 </Route>
 
                 <Route exact path="/fin/home">
-                    <Redirect to="/fin/cashflow" />
+                  <Redirect to="/fin/cashflow" />
                 </Route>
 
                 <Route path="/fin/:path?">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute exact path={"/fin/cashflow"} component={FinancialCashFlowPage} />
-                      <ProtectedRoute exact path={"/fin/cashflow/:id"} component={FinancialPlanningDetailPage} />
+                      <ProtectedRoute
+                        exact
+                        path={"/fin/cashflow"}
+                        component={FinancialCashFlowPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/fin/cashflow/:id"}
+                        component={FinancialPlanningDetailPage}
+                      />
                     </Switch>
                   </HomeLayout>
                 </Route>
@@ -404,12 +489,28 @@ const Routes: FC = () => {
                 <Route path="/cmcs">
                   <CmcsLayout>
                     <Switch>
-                      <Route exact path="/cmcs/home" component={CmcHome} />
-                      <Route exact path="/cmcs/dashboard" component={CmcDashboard} />
-                      <Route exact path="/cmcs/income" component={CmcIncome} />
-                      <Route exact path="/cmcs/guarantee" component={CmcGuarantee} />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/home"
+                        component={CmcHome}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/dashboard"
+                        component={CmcDashboard}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/income"
+                        component={CmcIncome}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/guarantee"
+                        component={CmcGuarantee}
+                      />
                     </Switch>
-									</CmcsLayout>
+                  </CmcsLayout>
                 </Route>
 
                 <Route path="*">

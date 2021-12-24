@@ -4,21 +4,16 @@ import cn from "classnames";
 
 import { useModal } from "services/hooks/useModal";
 
+import Paginate from "components/common/Paginate";
+import SearchInput from "components/common/SearchInput";
+import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
+import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
+
 import IncomeFormModal from "./views/income/IncomeFormModal";
 
 import styles from "../styles.module.css";
 
-import SearchIcon from "assets/images/icons8-search.svg";
-import SortIcon from "assets/images/icons8-sorting.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
-import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
-import CopyIcon from "assets/images/icons8-copy-96.svg";
-import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
-import PrintIcon from "assets/images/icons8-print-96.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
-import Paginate from "components/common/Paginate";
 
 const CmcIncome: FC = () => {
   const { openModal } = useModal();
@@ -28,75 +23,15 @@ const CmcIncome: FC = () => {
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Hợp đồng bán ra</p>
-          <div className="relative px-4">
-            <span>
-              <img
-                src={SearchIcon}
-                alt="Search"
-                className="absolute top-2 left-7 w-4 h-4"
-              />
-            </span>
-            <input
-              type="text"
-              placeholder="Nhập từ khóa tìm kiếm"
-              className="w-[296px] h-[30px] pl-10 outline-none bg-cbs-table-header"
-            />
-          </div>
-          <button className="w-[78px] h-[30px] flex items-center justify-around bg-cbs-table-header rounded text-primary-gray">
-            <img src={SortIcon} alt="Sort" />
-            <span>Filter</span>
-          </button>
-
-          <div className="flex items-center border-l-2 border-primary-border ml-5 pl-5">
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={DownloadIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={ShareIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={CopyIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={SendEmailIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={PencilIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={TrashIcon}
-              />
-            </button>
-            <button className={"flex items-center mr-3"}>
-              <img
-                className={"w-[24px] h-[24px]"}
-                alt={"icon"}
-                src={PrintIcon}
-              />
-            </button>
+          <SearchInput
+            classNameWrapper="ml-4"
+            classNameInput="outline-none w-[296px]"
+            // eslint-disable-next-line no-console
+            onChange={(event) => console.log(event.target.value)}
+          />
+          <FinancialCashFlowFilterButton />
+          <div className="border-l-2 border-primary-border ml-5 pl-5">
+            <ActionGroupFinancial />
           </div>
         </div>
         <button
@@ -105,7 +40,7 @@ const CmcIncome: FC = () => {
             openModal(
               <div
                 className={
-                  "inline-block w-[900px] h-[800px] overflow-auto transition-all transform bg-primary-light shadow-xl"
+                  "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                 }
               >
                 <IncomeFormModal />
@@ -185,7 +120,7 @@ const CmcIncome: FC = () => {
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
-                style={{ marginLeft: "-26px" }}
+                style={{ marginLeft: "-23px" }}
               />
             </td>
             <td className="py-1 px-2">{""}</td>
@@ -207,7 +142,7 @@ const CmcIncome: FC = () => {
                 value=""
                 defaultChecked
                 id="flexCheckDefault"
-                style={{ marginLeft: "-26px" }}
+                style={{ marginLeft: "-23px" }}
               />
             </td>
             <td className="py-1 px-2">
@@ -230,7 +165,7 @@ const CmcIncome: FC = () => {
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
-                style={{ marginLeft: "-26px" }}
+                style={{ marginLeft: "-23px" }}
               />
             </td>
             <td className="py-1 px-2">
