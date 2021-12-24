@@ -168,7 +168,7 @@ const Routes: FC = () => {
                   <Redirect to="/pcm/home" />
                 </Route>
 
-                <Route path="/pcm">
+                <Route path="/pcm/:path?">
                   <HomeLayout>
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/home"} component={DashboardPage} />
@@ -180,13 +180,14 @@ const Routes: FC = () => {
                       <ProtectedRoute exact path={"/pcm/mine"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/bookmark"} component={TasksHomePage} />
                       <ProtectedRoute exact path={"/pcm/draft"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
                       <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} />
                       <Route path="/pcm/home/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
                 </Route>
-{/* 
-                <Route path="/pcm/project">
+
+                {/* <Route path="/pcm/project">
                   <ProjectLayout>
                     <Switch>
                       <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} />
@@ -279,16 +280,6 @@ const Routes: FC = () => {
                       <Route path="/messages/*" component={ErrorPage} />
                     </Switch>
                   </MainLayout>
-                </Route>
-
-                <Route path="/pcm/:path?">
-                  <PcmLayout>
-                    <Switch>
-                      <ProtectedRoute exact path={"/pcm/home"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
-                      <ProtectedRoute exact path={"/pcm/dashboard/type=2"} component={TaskDashboardType2} />
-                    </Switch>
-                  </PcmLayout>
                 </Route>
 
                 <Route path="/teaser">
