@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from "react";
 import TaskHomeHeader from "./components/TaskHomeHeader";
 import ListTable from "./components/ListTable";
 import ClassifyTable from "./components/ClassifyTable";
-import { useTask } from "../../../../services/hooks/useTask";
+import { useTask } from "services/hooks/useTask";
 import Loader from "components/shared/Loader";
 
 const TaskHomePage: FC = () => {

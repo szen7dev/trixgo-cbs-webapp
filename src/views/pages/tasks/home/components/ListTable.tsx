@@ -4,7 +4,7 @@ import moment from "moment";
 import parse from "html-react-parser";
 import cn from "classnames";
 
-import styles from "../style.module.css";
+import styles from "../../style.module.css";
 import ListProgress from "./Progress";
 import Executor from "./Executor";
 
@@ -106,7 +106,7 @@ const ListTable: FC<Props> = ({
                 className="p-2 border cursor-pointer"
                 onClick={() => handleClickTask(taskOutDate._id)}
               >
-                {taskOutDate.name}
+                {`${taskOutDate.project.sign}.${taskOutDate.name}`}
               </td>
               <td className="p-2 border">
                 {moment(taskOutDate.expiredTime).format("DD/MM/YYYY")}
@@ -118,6 +118,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-red-500"
                   checklist={taskOutDate.checklist}
+                  percentage={taskOutDate.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
@@ -159,7 +160,7 @@ const ListTable: FC<Props> = ({
                 className="p-2 border cursor-pointer"
                 onClick={() => handleClickTask(tasksNexWeek._id)}
               >
-                {tasksNexWeek.name}
+                {`${tasksNexWeek.project.sign}.${tasksNexWeek.name}`}
               </td>
               <td className="p-2 border">
                 {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
@@ -174,6 +175,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-yellow-500"
                   checklist={tasksNexWeek.checklist}
+                  percentage={tasksNexWeek.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>
@@ -217,7 +219,7 @@ const ListTable: FC<Props> = ({
                 className="p-2 border cursor-pointer"
                 onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
               >
-                {taskMoreThanSevenDay.name}
+                {`${taskMoreThanSevenDay.project.sign}.${taskMoreThanSevenDay.name}`}
               </td>
               <td className="p-2 border">
                 {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
@@ -232,6 +234,7 @@ const ListTable: FC<Props> = ({
                 <ListProgress
                   color="bg-green-500"
                   checklist={taskMoreThanSevenDay.checklist}
+                  percentage={taskMoreThanSevenDay.percentage}
                 />
               </td>
               <td className={cn(styles["dont-break-out"], "p-2 border")}>

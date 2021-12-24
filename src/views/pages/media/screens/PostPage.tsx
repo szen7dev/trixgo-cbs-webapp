@@ -182,7 +182,7 @@ const SocialPostPage: FC = () => {
 									const url = image.file ? image.file.url : image.url;
 
 									return (
-										<div key={id} className="mt-4 cursor-pointer relative" onClick={() => openModalImage(i)} >
+										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openModalImage(i)} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />
 											{i === 2 && images.length > 3 && (
 												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
@@ -227,7 +227,11 @@ const SocialPostPage: FC = () => {
 								limit={limit}
 								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />
+								<ReplyCommentField 
+									attachFile 
+									inputContainerClassName="flex w-full p-2" 
+									fileContainerClassName="border-t" 
+									mediaID={mediaID} />
 							</div>
 						</div>
 						{/* Post Suggest */}
@@ -257,7 +261,13 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={media.files} images={media.images} />
+					<ModalCreateArticle 
+						modalType="update" 
+						show={modalEditMedia} 
+						toggle={toggleModalEditMedia} 
+						initialValues={initialState} 
+						files={media.files} 
+						images={media.images} />
 				</div>
 			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>

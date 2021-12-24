@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import React, { Fragment, HTMLAttributes } from 'react'
+import { Menu, Transition } from '@headlessui/react';
+import cn from 'classnames';
 
 /**
  * ASSETS
@@ -16,9 +17,9 @@ interface Props {
 	onClickPrint?: () => unknown;
 }
 
-const ButtonMore: React.FC<Props> = ({ onClickCopy, onClickPrint, onClickRemove, onClickUpdate }) => {
+const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickCopy, onClickPrint, onClickRemove, onClickUpdate, ...props }) => {
 	return (
-		<Menu as="div" className="relative inline-block">
+		<Menu as="div" {...props} className={cn("relative inline-block", props.className)}>
 			<Menu.Button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center">
 				<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -46,7 +47,7 @@ const ButtonMore: React.FC<Props> = ({ onClickCopy, onClickPrint, onClickRemove,
 							Copy link
 						</button>
 					</Menu.Item>
-					<Menu.Item  onClick={() => onClickUpdate?.apply(null)}>
+					<Menu.Item onClick={() => onClickUpdate?.apply(null)}>
 						<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 							<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
 							Cập nhật

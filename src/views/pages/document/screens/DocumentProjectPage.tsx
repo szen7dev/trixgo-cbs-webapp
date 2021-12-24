@@ -1,18 +1,16 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useContext, useState } from "react";
 
 import { Transition } from "@headlessui/react";
-import cn from "classnames";
 
-import DocumentDropdown from "../components/DocumentDropdown";
-
-import styles from '../document.module.css';
+import DocumentDropdown from "views/pages/document/components/DocumentDropdown";
 
 import { IPackage, IProjects } from "typings/document";
-import ButtonCreate from "../components/common/ButtonCreate";
-import ButtonMore from "../components/common/ButtonMore";
+import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
+import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import SearchInput from "components/common/SearchInput";
-import DropdownFilterButton from "../components/DocumentFilterButton";
-import GroupActions from "../components/projects/GroupActions";
+import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
+import GroupActions from "views/pages/document/components/projects/GroupActions";
+import { Context as ContextModal } from "views/pages/document/contexts/contextModal";
 
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i,
@@ -34,7 +32,8 @@ const data: Array<IProjects> = Array.from(Array(30).keys()).map((_, i) => ({
 }))
 
 const DocumentProjectPage: FC = () => {
-	const [pkg, setPkg] = useState<IPackage>(pkgs[0])
+	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
+	const { toggleModal } = useContext(ContextModal);
 
 	const [isShow, setIsShow] = useState<boolean>(false);
 
@@ -46,7 +45,7 @@ const DocumentProjectPage: FC = () => {
 		<>
 			{/* Content */}
 			<div className="flex flex-1 flex-col overflow-hidden">
-				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black">
+				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black py-1">
 					<span className="text-x-large mr-7">Danh sách</span>
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
 					<DocumentDropdown
@@ -57,7 +56,7 @@ const DocumentProjectPage: FC = () => {
 					<DropdownFilterButton />
 					<GroupActions className="flex items-center flex-1" />
 
-					<ButtonCreate />
+					<ButtonCreate onClick={toggleModal} />
 					<ButtonMore />
 				</div>
 				<div className="flex-1 overflow-y-auto">
