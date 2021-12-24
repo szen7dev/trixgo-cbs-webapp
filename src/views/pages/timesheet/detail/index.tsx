@@ -1,14 +1,30 @@
 import { FC } from "react";
+import { map as _map } from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
-import InputWidthAdjust from "../components/InputWidthAdjust";
-import AccessingUsers from "../components/AccessingUsers";
-import ShareButton from "../components/ShareButton";
+import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
+import AccessingUsers from "../../financial/planning/components/FinancialCashFlowDetail/AccessingUsers";
+import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
+import DetailMainRow from "../components/DetailMainRow";
+
+import { RootState } from "redux/reducer";
+import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 
 const TimeSheetDetailPage: FC = () => {
+  const params = useParams<{ id: string }>();
+  const id = params["id"];
+
+  const mapData = useSelector(
+    (state: RootState) => state.timesheetDetail.data[id] ?? []
+  );
+
+  const dispatch = useDispatch();
+
   return (
     <div className={"financial-planning-detail"}>
       <div
@@ -77,78 +93,96 @@ const TimeSheetDetailPage: FC = () => {
               }
             >
               <div className={"flex flex-col items-center justify-center"}>
-                <button className={"rounded bg-gray-600 mb-1 block w-5 h-5"}>
+                <button
+                  className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
+                  onClick={() =>
+                    dispatch(setMainRowCollapsed({ _id: id, collapsed: true }))
+                  }
+                >
                   1
                 </button>
-                <button className={"rounded bg-gray-600 mb-1 block w-5 h-5"}>
+                <button
+                  className={"rounded bg-gray-600 mb-1 block w-5 h-5"}
+                  onClick={() =>
+                    dispatch(setMainRowCollapsed({ _id: id, collapsed: false }))
+                  }
+                >
                   2
                 </button>
               </div>
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-3"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-3"
               }
             >
               TT
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-2/12"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-2/12"
               }
             >
               Nội dung
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-[86px]"
               }
             >
               Ngày tháng
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Hoàn thành
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Số giờ thực hiện
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Đơn giá
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Thành tiền
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
               Người thực hiện
             </div>
             <div
               className={
-                "px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-2/12"
+                "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100 w-4/12"
               }
             >
               Mô tả/ghi chú
             </div>
           </div>
+          {_map(mapData, (row, index) => (
+            <DetailMainRow
+              key={row._id}
+              idDetail={id}
+              rowData={row}
+              index={index}
+            />
+          ))}
         </div>
       </div>
     </div>
