@@ -180,22 +180,75 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/pcm/:path?">
-                  <HomeLayout>
-                    <Switch>
-                      <ProtectedRoute exact path={"/pcm/home"} component={DashboardPage} />
-                      <ProtectedRoute exact path={"/pcm/projects"} component={ProjectCategoryPage} />
-                      <ProtectedRoute exact path={"/pcm/portfolio"} component={ProjectInvestPage} />
-                      <ProtectedRoute exact path={"/pcm/market"} component={ProjectDeployingPage} />
-                      <ProtectedRoute exact path={"/pcm/tasks-dashboard-1"} component={KanbanBoardPage} />
-                      <ProtectedRoute exact path={"/pcm/tasks-dashboard-2"} component={TaskDashboardType2} />
-                      <ProtectedRoute exact path={"/pcm/mine"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/pcm/bookmark"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/pcm/draft"} component={TasksHomePage} />
-                      <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
-                      <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} />
-                      <Route path="/pcm/home/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
+                  <Switch>
+                    <ProtectedRoute exact path={"/pcm/home"} component={()=>(
+                      <HomeLayout>
+                        <DashboardPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/projects"} component={()=>(
+                      <HomeLayout>
+                        <ProjectCategoryPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/portfolio"} component={()=>(
+                      <HomeLayout>
+                        <ProjectInvestPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/market"} component={()=>(
+                      <HomeLayout>
+                        <ProjectDeployingPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/tasks-dashboard-1"} component={()=>(
+                      <HomeLayout>
+                        <KanbanBoardPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/tasks-dashboard-2"} component={()=>(
+                      <HomeLayout>
+                        <TaskDashboardType2/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/mine"} component={()=>(
+                      <HomeLayout>
+                        <TasksHomePage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/bookmark"} component={()=>(
+                      <HomeLayout>
+                        <TasksHomePage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/draft"} component={()=>(
+                      <HomeLayout>
+                        <TasksHomePage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/detail/:id"} component={()=>(
+                      <HomeLayout>
+                        <TaskDetailPage/>
+                      </HomeLayout>
+                    )} />
+                    <ProtectedRoute exact path={"/pcm/project/:id/home"} component={()=>(
+                      <ProjectLayout>
+                        <ProjectHomePage/>
+                      </ProjectLayout>
+                    )} />
+                    {/* <ProtectedRoute exact path={"/pcm/projects"} component={ProjectCategoryPage} />
+                    <ProtectedRoute exact path={"/pcm/portfolio"} component={ProjectInvestPage} />
+                    <ProtectedRoute exact path={"/pcm/market"} component={ProjectDeployingPage} />
+                    <ProtectedRoute exact path={"/pcm/tasks-dashboard-1"} component={KanbanBoardPage} />
+                    <ProtectedRoute exact path={"/pcm/tasks-dashboard-2"} component={TaskDashboardType2} />
+                    <ProtectedRoute exact path={"/pcm/mine"} component={TasksHomePage} />
+                    <ProtectedRoute exact path={"/pcm/bookmark"} component={TasksHomePage} />
+                    <ProtectedRoute exact path={"/pcm/draft"} component={TasksHomePage} />
+                    <ProtectedRoute exact path={"/pcm/detail/:id"} component={TaskDetailPage} />
+                    <ProtectedRoute exact path={"/pcm/project/:id/home"} component={ProjectHomePage} /> */}
+                    <Route path="/pcm/home/*" component={ErrorPage} />
+                  </Switch>
+
                 </Route>
 
                 {/* <Route path="/pcm/project">
