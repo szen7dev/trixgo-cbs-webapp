@@ -166,18 +166,55 @@ const Routes: FC = () => {
                   <Redirect to="/ppt/home" />
                 </Route>
 
-                <Route path="/ppt">
+                <Route path="/ppt/:path?">
                   <HomeLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/ppt/home"
-                        component={DashboardPage}
-                      />
+                      <ProtectedRoute exact path={"/ppt/home"} component={DashboardPage} />
+                      <ProtectedRoute exact path={"/ppt/projects"} component={ProjectCategoryPage} />
+                      <ProtectedRoute exact path={"/ppt/portfolio"} component={ProjectInvestPage} />
+                      <ProtectedRoute exact path={"/ppt/market"} component={ProjectDeployingPage} />
+                      <ProtectedRoute exact path={"/ppt/tasks-dashboard-1"} component={KanbanBoardPage} />
+                      <ProtectedRoute exact path={"/ppt/tasks-dashboard-2"} component={TaskDashboardType2} />
+                      <ProtectedRoute exact path={"/ppt/mine"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/ppt/bookmark"} component={TasksHomePage} />
+                      <ProtectedRoute exact path={"/ppt/market"} component={TasksHomePage} />
                       <Route path="/ppt/home/*" component={ErrorPage} />
                     </Switch>
                   </HomeLayout>
+                  
                 </Route>
+
+                {/* <Route path="/ppt">
+                  <Switch>
+                    <Route
+                      exact
+                      path="/ppt/page6"
+                      component={ProjectProgressPage}
+                    />
+                    <Router>
+                      <HomeLayout>
+                        <Switch>
+                          <Route
+                            exact
+                            path="/ppt/page4"
+                            component={ProjectHomePage}
+                          />
+                          <Route
+                            exact
+                            path="/ppt/page5"
+                            component={ProjectReportPage}
+                          />
+                          <Route
+                            exact
+                            path="/ppt/page7"
+                            component={ProjectBudgetPage}
+                          />
+                          <Route path="/ppt/*" component={ErrorPage} />
+                        </Switch>
+                      </HomeLayout>
+                    </Router>
+                  </Switch>
+                </Route> */}
 
                 <Route path="/kanban-board">
                   <KanbanBoardLayout>
@@ -268,53 +305,6 @@ const Routes: FC = () => {
                   </MainLayout>
                 </Route>
 
-                <Route path="/ppt">
-                  <Switch>
-                    <Route
-                      exact
-                      path="/ppt/page6"
-                      component={ProjectProgressPage}
-                    />
-                    <Router>
-                      <HomeLayout>
-                        <Switch>
-                          <Route
-                            exact
-                            path="/ppt/home"
-                            component={ProjectCategoryPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page2"
-                            component={ProjectDeployingPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page3"
-                            component={ProjectInvestPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page4"
-                            component={ProjectHomePage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page5"
-                            component={ProjectReportPage}
-                          />
-                          <Route
-                            exact
-                            path="/ppt/page7"
-                            component={ProjectBudgetPage}
-                          />
-                          <Route path="/ppt/*" component={ErrorPage} />
-                        </Switch>
-                      </HomeLayout>
-                    </Router>
-                  </Switch>
-                </Route>
-
                 <Route path="/social">
                   <HomeLayout>
                     <Switch>
@@ -382,6 +372,7 @@ const Routes: FC = () => {
                     <Route path="/*" component={ErrorPage} />
                   </FullPageLayout>
                 </Route>
+
               </Switch>
             </ModalProvider>
           </ChatProvider>
