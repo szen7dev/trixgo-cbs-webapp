@@ -23,3 +23,27 @@
   border-radius: 10px;
   margin: 0px 2px 0px 2px;
 }
+
+.theadInput {
+  width: 3.5%;
+}
+
+.theadContact {
+  width: 27%;
+}
+
+.theadSignDate {
+  width: 6.5%;
+}
+
+.theadSignDateLonger {
+  width: 9.5%;
+}
+
+.theadTenPercent {
+  width: 10%;
+}
+
+.disabledBg {
+  background: #efefef4d;
+}

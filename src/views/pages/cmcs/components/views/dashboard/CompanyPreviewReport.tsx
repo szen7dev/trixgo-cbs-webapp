@@ -1,9 +1,5 @@
 import { FC } from "react";
 
-import cn from "classnames";
-
-import styles from "../../styles.module.css";
-
 import FilterIcon from "assets/images/icons8-filter.svg";
 
 const CompanyPreviewReport: FC = () => {
