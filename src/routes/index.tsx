@@ -236,6 +236,11 @@ const Routes: FC = () => {
                         <ProjectHomePage/>
                       </ProjectLayout>
                     )} />
+                     <ProtectedRoute exact path={"/pcm/project/:id/document"} component={()=>(
+                      <ProjectLayout>
+                        <ProjectHomePage/>
+                      </ProjectLayout>
+                    )} />
                     {/* <ProtectedRoute exact path={"/pcm/projects"} component={ProjectCategoryPage} />
                     <ProtectedRoute exact path={"/pcm/portfolio"} component={ProjectInvestPage} />
                     <ProtectedRoute exact path={"/pcm/market"} component={ProjectDeployingPage} />
