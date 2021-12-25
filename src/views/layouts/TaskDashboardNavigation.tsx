@@ -17,7 +17,7 @@ const TaskDashboardNavigation: FC = () => {
                 {_map(NavLinksTaskDashboard, (link, index) => (
                     <li
                         key={link.id}
-                        className={cn("flex px-3 last:mb-0 acc-tab min-w-[130px] justify-center sticky left-"+(index*130+16)+"px", {
+                        className={cn("flex px-3 bg-white last:mb-0 acc-tab min-w-[130px] justify-center sticky left-"+(index*130+16)+"px", {
                             "acc-active-tab": page === link.pathname,
                         })}
                     >
