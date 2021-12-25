@@ -9,7 +9,7 @@ import Routes from "routes";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
-
+import OneSignalController from "components/OneSignalController";
 const queryClient = new QueryClient();
 
 const App: FC = () => {
@@ -27,6 +27,7 @@ const App: FC = () => {
         draggable
         pauseOnHover
       />
+      <OneSignalController/>
     </QueryClientProvider>
   );
 };
