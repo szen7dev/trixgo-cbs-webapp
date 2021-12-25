@@ -79,4 +79,5 @@ export type UpdateDevicePayload = {
   registrationID: string,
   oneSignalID: string,
   userID?: string,
+  env?: string
 }
