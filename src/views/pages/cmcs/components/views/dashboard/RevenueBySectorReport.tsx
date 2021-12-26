@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import ChartDoughnutSmall from "../../charts/CmcChartDoughnutSmall";
+import ChartDoughnutSmall from "../../../charts/CmcChartDoughnutSmall";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

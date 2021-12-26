@@ -16,7 +16,7 @@ import iconPlus from "assets/images/icons8-plus-math-24.png";
 const HomeRightSideBar: FC = () => {
   const { openModal } = useModal();
   return (
-    <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light">
+    <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light z-5">
       <div className="flex items-center flex-col">
         <button
           onClick={() =>

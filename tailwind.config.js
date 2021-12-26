@@ -122,6 +122,12 @@ module.exports = {
             zIndex: {
                 ...autoGenerateIndex
             },
+            margin: {
+                ...autoGeneratePx
+            },
+            padding: {
+                ...autoGeneratePx
+            }
         },
     },
     variants: {

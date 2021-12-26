@@ -17,7 +17,7 @@ const tabs = [
 	{ id: "history", title: "Lịch sử upload file", path: '/4' },
 ]
 
-const DocumentLayout: React.FC<RouteComponentProps> = ({ match }) => {
+const DocumentNav: React.FC<RouteComponentProps> = ({ match }) => {
 	return (
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
@@ -45,4 +45,4 @@ const DocumentLayout: React.FC<RouteComponentProps> = ({ match }) => {
 	);
 }
 
-export default DocumentLayout
+export default DocumentNav

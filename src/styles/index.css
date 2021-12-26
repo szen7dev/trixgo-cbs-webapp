@@ -322,9 +322,9 @@ button {
   top: -56px;
 }
 .home-main-content {
-  width: calc(100% - 55px);
+  width: calc(100% - 295px);
   height: calc(100vh - 55px);
-  padding-left: 240px;
+  margin-left: 240px;
   top: 0;
 }
 .home-layout.active-right .home-main-content {
@@ -415,7 +415,8 @@ button {
   left: -240px;
 }
 .home-layout.collapse-left .home-main-content {
-  padding-left: 0;
+  width: calc(100% - 55px);
+  margin-left: 0;
 }
 .kanban-board-layout.collapse-header .home-header {
   top: -80px;
@@ -434,7 +435,8 @@ button {
 }
 .kanban-board-layout .home-main-content {
   height: calc(100vh - 80px);
-  padding-left: 0;
+  width: calc(100% - 55px);
+  margin-left: 0;
 }
 .kanban-board-layout.collapse-header .home-main-content {
   height: 100vh;

@@ -258,19 +258,19 @@ export const NavLinksTaskDashboard: NavLinkTaskDashboard[] = [
   {
     id: "nav-link-tasks-dashboard-type2",
     label: "Quản trị DA",
-    url: "/pcm/dashboard/type=2",
-    pathname: "type=2"
+    url: "/pcm/tasks-dashboard-2",
+    pathname: "tasks-dashboard-2"
   },
   {
     id: "nav-link-tasks-dashboard-type3",
     label: "Tab",
-    url: "/pcm/dashboard/type=3",
-    pathname: "type=3",
+    url: "/pcm/tasks-dashboard-3",
+    pathname: "tasks-dashboard-3",
   },
   {
     id: "nav-link-tasks-dashboard-type4",
     label: "Tab",
-    url: "/pcm/dashboard/type=4",
-    pathname: "type=4",
+    url: "/pcm/tasks-dashboard-4",
+    pathname: "tasks-dashboard-4",
   },
 ];

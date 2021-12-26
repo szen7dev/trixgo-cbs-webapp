@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 
 import cn from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 
 import projectImage from "assets/images/project.jpg";
 import styles from "./style.module.css";
@@ -89,7 +90,7 @@ const ProjectCategoryPage: FC = () => {
 									</div>
 								</div>
 								<h3 className={styles['line-clamp-2']}>
-									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
+									<Link className="" to="/pcm/project/:id/home">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</Link>
 								</h3>
 								<p className="truncate">
 									Công ty Cổ phần Đầu tư và Thương mại Thủ Đô
