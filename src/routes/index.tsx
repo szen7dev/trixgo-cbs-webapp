@@ -97,6 +97,8 @@ import CmcHome from "views/pages/cmcs/CmcHome";
 import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
 import CmcIncome from "views/pages/cmcs/components/CmcIncome";
 import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
+import ContactProduce from "views/pages/cmcs/components/ContactProduce";
+import ContactIpc from "views/pages/cmcs/components/ContactIpc";
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
@@ -495,6 +497,16 @@ const Routes: FC = () => {
                         exact
                         path="/cmcs/guarantee"
                         component={CmcGuarantee}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/contact/:id/produce"
+                        component={ContactProduce}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/cmcs/contact/:id/ipc"
+                        component={ContactIpc}
                       />
                     </Switch>
                   </CmcsLayout>
