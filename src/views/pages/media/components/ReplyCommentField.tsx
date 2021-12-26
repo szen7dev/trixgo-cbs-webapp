@@ -169,6 +169,12 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 	}
 
+	const handleKeyPressInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+		if(event.key === "Enter"){
+			handleSubmit();
+		}
+	}
+
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
 		if ('id' in file){
 			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
@@ -218,6 +224,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 							ref={refInputComment}
 							style={{ color: 'black' }}
 							suppressContentEditableWarning={true}
+							onKeyPress={handleKeyPressInput}
 							// Handle change text
 							onInput={e => 
 								onTextChange
