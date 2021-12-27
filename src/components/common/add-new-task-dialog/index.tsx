@@ -47,7 +47,7 @@ const AddNewTaskDialog: FC = () => {
                 className={"w-full flex-1"}
                 showTriangle={false}
                 maxWidthInput={"max-w-none"}
-                isMultiple={true}
+                isMultiple={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
                   <div className={"flex items-center"}>
@@ -70,7 +70,7 @@ const AddNewTaskDialog: FC = () => {
                 className={"w-full flex-11"}
                 showTriangle={false}
                 maxWidthInput={"max-w-none"}
-                isMultiple={true}
+                isMultiple={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
                   <div className={"flex items-center"}>
@@ -93,7 +93,7 @@ const AddNewTaskDialog: FC = () => {
                 className={"w-full flex-1"}
                 showTriangle={false}
                 maxWidthInput={"max-w-none"}
-                isMultiple={true}
+                isMultiple={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
                   <div className={"flex items-center"}>
@@ -116,7 +116,7 @@ const AddNewTaskDialog: FC = () => {
                 className={"w-full flex-1"}
                 showTriangle={false}
                 maxWidthInput={"max-w-none"}
-                isMultiple={true}
+                isMultiple={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
                   <div className={"flex items-center"}>
@@ -141,7 +141,7 @@ const AddNewTaskDialog: FC = () => {
                 className={"w-full flex-1"}
                 showTriangle={false}
                 maxWidthInput={"max-w-none"}
-                isMultiple={true}
+                isMultiple={false}
                 allowClearValueSingleInput={true}
                 renderSelectedItem={item => (
                   <div className={"flex items-center"}>
@@ -186,26 +186,7 @@ const AddNewTaskDialog: FC = () => {
           <div className={"flex pb-1 pt-2 border-b"}>
             <div className={"w-3/4 flex items-start"}>
               <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề</div>
-              <DropdownSearchable
-                placeholder={"Tiêu đề"}
-                className={"w-full flex-1"}
-                showTriangle={false}
-                maxWidthInput={"max-w-none"}
-                isMultiple={true}
-                allowClearValueSingleInput={true}
-                renderSelectedItem={item => (
-                  <div className={"flex items-center"}>
-                    <img alt={"tag icon"} src={TagIcon}/>
-                    <span>{item.text}</span>
-                  </div>
-                )}
-                data={tempData}
-                formatItem={{
-                    id : "_id",
-                    text : "content"
-                }}
-                inlineSearch={true}
-              />
+              <input type="text" className="border-0 flex-grow outline-none px-3 mt-0.5" />
             </div>
             <div className={"w-1/4 flex items-start"}>
               <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn</div>
