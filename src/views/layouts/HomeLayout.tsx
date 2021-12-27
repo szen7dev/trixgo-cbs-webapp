@@ -5,10 +5,12 @@ import HomeNavigation from "components/common/HomeNavigation";
 // import LinkMenuLeftSideBar from "components/common/LinkMenuLeftSideBar";
 import HomeRightSideBar from "components/common/HomeRightSideBar";
 import MainHeader from "components/common/main-header";
-import menuIcon from "assets/images/icon-mobile-menu-black.png";
+import MiniChatbox from "components/common/mini-chatbox";
 
+import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
+import iconChat from "assets/images/icons8-chat-96.png";
 
 type Props = {
   children: ReactNode;
@@ -18,6 +20,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
+  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -27,6 +30,9 @@ const HomeLayout: FC<Props> = ({ children }) => {
   };
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
+  };
+  const toggleMiniChatbox = () => {
+    setIsChatboxVisible(!isChatboxVisible);
   };
   return (
     <section
@@ -65,6 +71,23 @@ const HomeLayout: FC<Props> = ({ children }) => {
           alt="Header toggle button"
         />
       </button>
+
+      {/* Mini chatbox */}
+      {!isChatboxVisible ? 
+        <button
+          onClick={toggleMiniChatbox}
+          className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border"
+        >
+          <img
+            className="w-6 h-6 object-contain"
+            src={iconChat}
+            alt="Chat"
+          />
+          <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span>
+        </button>
+        : 
+        <MiniChatbox closeMiniChatbox={toggleMiniChatbox} />
+      }
 
       {/* Right side bar */}
       <HomeRightSideBar />
