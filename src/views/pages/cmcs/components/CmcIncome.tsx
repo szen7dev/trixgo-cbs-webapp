@@ -14,6 +14,7 @@ import IncomeFormModal from "./views/income/IncomeFormModal";
 import styles from "../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
+import { Link } from "react-router-dom";
 
 const CmcIncome: FC = () => {
   const { openModal } = useModal();
@@ -145,9 +146,11 @@ const CmcIncome: FC = () => {
                 style={{ marginLeft: "-23px" }}
               />
             </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
+            <Link to="/cmcs/contract/:id/home">
+              <td className="py-1 px-2">
+                Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
+              </td>
+            </Link>
             <td className="py-1 px-2">05/11/2021</td>
             <td className="py-1 px-2">15.332.000.000</td>
             <td className="py-1 px-2">15.332.000.000</td>

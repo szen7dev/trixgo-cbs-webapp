@@ -8,7 +8,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 
-const ContactProduceModal: FC = () => {
+const ContractProduceModal: FC = () => {
   const [openGeneralInfo, setOpenGeneralInfo] = useState(false);
   const [openRealizedOutput, setOpenRealizedOutput] = useState(false);
 
@@ -296,4 +296,4 @@ const ContactProduceModal: FC = () => {
   );
 };
 
-export default ContactProduceModal;
+export default ContractProduceModal;

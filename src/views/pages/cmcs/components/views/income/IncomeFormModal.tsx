@@ -22,7 +22,7 @@ const IncomeFormModal: FC = () => {
   const { closeModal } = useModal();
 
   const initialValues = {
-    contactName: "",
+    contractName: "",
     code: "",
     buyerBank: "",
     internalCode: "",
@@ -37,7 +37,7 @@ const IncomeFormModal: FC = () => {
     valueBeforeVAT: "",
     incurredBeforeVAT: "",
     vatValue: "",
-    advanceContact: "",
+    advanceContract: "",
     outputBeforeVAT: "",
     advanceOutputBeforeVAT: "",
     vatOutput: "",
@@ -53,7 +53,7 @@ const IncomeFormModal: FC = () => {
     paymentRemaining: "",
     surplus: "",
     valueSettlement: "",
-    contactLock: "",
+    contractLock: "",
     endMakingDate: "",
     budget: "",
     managementFee: "",
@@ -63,9 +63,9 @@ const IncomeFormModal: FC = () => {
     cost: "",
     vatForecast: "",
     profit: "",
-    contactGuarantee: "",
+    contractGuarantee: "",
     advanceGuarantee: "",
-    contactGuaranteeTime: "",
+    contractGuaranteeTime: "",
     advanceGuaranteeTime: "",
   };
 
@@ -594,7 +594,7 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <Field
                       type="text"
-                      name="contactName"
+                      name="contractName"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tên hợp đồng..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -995,7 +995,7 @@ const IncomeFormModal: FC = () => {
                     <div className="grid grid-cols-2 gap-x-11">
                       <Field
                         type="text"
-                        name="advanceContact"
+                        name="advanceContract"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                         placeholder="Tạm ứng theo hợp đồng..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -1004,7 +1004,7 @@ const IncomeFormModal: FC = () => {
                       />
                       <Field
                         type="text"
-                        name="advanceContact"
+                        name="advanceContract"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                         placeholder="Tạm ứng theo hợp đồng..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -1517,7 +1517,7 @@ const IncomeFormModal: FC = () => {
                     <p className="text-primary-gray text-xs mb-2">Lợi nhuận</p>
                     <Field
                       type="text"
-                      name="contactGuarantee"
+                      name="contractGuarantee"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Lợi nhuận..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -1546,7 +1546,7 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <Field
                       type="text"
-                      name="contactGuarantee"
+                      name="contractGuarantee"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bảo lãnh hợp đồng..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -1572,7 +1572,7 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <input
                       type="text"
-                      name="contactGuaranteeTime"
+                      name="contractGuaranteeTime"
                       className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bảo lãnh tạm ứng..."
                       defaultValue="15/12/2021"

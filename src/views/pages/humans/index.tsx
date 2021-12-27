@@ -1,4 +1,4 @@
-import { FC} from "react";
+import { FC } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -72,7 +72,7 @@ const HumansPage: FC = () => {
           return (
             <div
               key={item.id}
-              className="relative flex flex-col justify-around items-center h-[375px] rounded-lg"
+              className="relative flex flex-col justify-around items-center h-[375px] rounded-lg hover:bg-primary-gray"
               style={{
                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                 border: "1px solid #cccccc",
@@ -91,7 +91,7 @@ const HumansPage: FC = () => {
                 <p className="text-sm pt-2 text-secondary-gray">{item.role}</p>
               </div>
               <Link to={`/human/home/hid=${item.id}`}>
-                <button className="text-sm w-32 h-10 rounded-lg border border-primary-gray">
+                <button className="text-sm w-32 h-10 rounded-lg border border-primary-gray hover:bg-primary hover:text-primary-light">
                   Xem chi tiết
                 </button>
               </Link>

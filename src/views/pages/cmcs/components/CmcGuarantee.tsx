@@ -48,7 +48,7 @@ const CmcGuarantee: FC = () => {
                 <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
-            <th className={cn("pb-1 pt-1", styles.theadContact)}>
+            <th className={cn("pb-1 pt-1", styles.theadContract)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Hợp đồng
               </div>

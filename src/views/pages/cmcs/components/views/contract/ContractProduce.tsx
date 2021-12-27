@@ -8,23 +8,23 @@ import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-import ContactIpcModal from "./views/contact/ContactIpcModal";
+import ContractProduceModal from "./ContractProduceModal";
 
-import styles from "../styles.module.css";
+import styles from "../../../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 
-const ContactIpc: FC = () => {
+const ContractProduce: FC = () => {
   const { openModal } = useModal();
 
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
-          <p className="text-lg">Nghiệm thu hoàn thành</p>
+          <p className="text-lg">Sản lượng</p>
           <SearchInput
-            classNameWrapper="ml-4"
+            classNameWrapper="ml-20"
             classNameInput="outline-none w-[296px]"
             // eslint-disable-next-line no-console
             onChange={(event) => console.log(event.target.value)}
@@ -44,7 +44,7 @@ const ContactIpc: FC = () => {
                     "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                   }
                 >
-                  <ContactIpcModal />
+                  <ContractProduceModal />
                 </div>
               )
             }
@@ -81,32 +81,32 @@ const ContactIpc: FC = () => {
                 Ngày tháng
               </div>
             </th>
-            <th className={cn("pb-1 pt-1 font-normal", styles.theadSignDate)}>
+            <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Mã hiệu
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Đề nghị tạm ứng/thanh toán (1)
+                Sản lượng trước VAT
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Thời hạn thanh toán
+                Sản lượng phần VAT
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Đã thanh toán (2)
+                Sản lượng phát sinh trước VAT
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Còn lại chưa thanh toán (3=1-2)
+                Còn lại phải thanh toán
               </div>
             </th>
-            <th className={cn("pb-1 pt-1 font-normal w-1/6")}>
+            <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="font-normal pl-2">Ghi chú</div>
             </th>
           </tr>
@@ -127,9 +127,9 @@ const ContactIpc: FC = () => {
             <td className="py-1 px-2">{""}</td>
             <td className="py-1 px-2">{""}</td>
             <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">30.000.000</td>
-            <td className="py-1 px-2">270.000.000</td>
+            <td className="py-1 px-2">300.000.000</td>
+            <td className="py-1 px-2">300.000.000</td>
+            <td className="py-1 px-2">300.000.000</td>
             <td className="py-1 px-2">{""}</td>
           </tr>
 
@@ -150,12 +150,10 @@ const ContactIpc: FC = () => {
             <td className="py-1 px-2">05/11/2021</td>
             <td className="py-1 px-2">P15008</td>
             <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">10.000.000</td>
-            <td className="py-1 px-2">90.000.000</td>
-            <td className="py-1 px-2">
-              Đệ trình phê duyệt Hồ sơ thanh toán Đợt 6 PGI-PMI Dự án CHG
-            </td>
+            <td className="py-1 px-2">100.000.000</td>
+            <td className="py-1 px-2">100.000.000</td>
+            <td className="py-1 px-2">100.000.000</td>
+            <td className="py-1 px-2">Đang triển khai</td>
           </tr>
 
           <tr className="border-b border-primary-border h-[50px]">
@@ -174,9 +172,9 @@ const ContactIpc: FC = () => {
             <td className="py-1 px-2">05/11/2021</td>
             <td className="py-1 px-2">P15008</td>
             <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">10.000.000</td>
-            <td className="py-1 px-2">90.000.000</td>
+            <td className="py-1 px-2">100.000.000</td>
+            <td className="py-1 px-2">100.000.000</td>
+            <td className="py-1 px-2">100.000.000</td>
             <td className="py-1 px-2">Đang triển khai</td>
           </tr>
         </tbody>
@@ -187,4 +185,4 @@ const ContactIpc: FC = () => {
   );
 };
 
-export default ContactIpc;
+export default ContractProduce;
