@@ -8,14 +8,14 @@ import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-import ContactProduceModal from "./views/contact/ContactProduceModal";
+import ContractProduceModal from "./views/contract/ContractProduceModal";
 
 import styles from "../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 
-const ContactProduce: FC = () => {
+const ContractProduce: FC = () => {
   const { openModal } = useModal();
 
   return (
@@ -44,7 +44,7 @@ const ContactProduce: FC = () => {
                     "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                   }
                 >
-                  <ContactProduceModal />
+                  <ContractProduceModal />
                 </div>
               )
             }
@@ -185,4 +185,4 @@ const ContactProduce: FC = () => {
   );
 };
 
-export default ContactProduce;
+export default ContractProduce;

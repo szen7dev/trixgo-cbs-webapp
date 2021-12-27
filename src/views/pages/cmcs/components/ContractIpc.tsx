@@ -8,14 +8,14 @@ import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-import ContactIpcModal from "./views/contact/ContactIpcModal";
+import ContractIpcModal from "./views/contract/ContractIpcModal";
 
 import styles from "../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 
-const ContactIpc: FC = () => {
+const ContractIpc: FC = () => {
   const { openModal } = useModal();
 
   return (
@@ -44,7 +44,7 @@ const ContactIpc: FC = () => {
                     "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                   }
                 >
-                  <ContactIpcModal />
+                  <ContractIpcModal />
                 </div>
               )
             }
@@ -187,4 +187,4 @@ const ContactIpc: FC = () => {
   );
 };
 
-export default ContactIpc;
+export default ContractIpc;
