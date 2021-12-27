@@ -97,8 +97,8 @@ import CmcHome from "views/pages/cmcs/CmcHome";
 import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
 import CmcIncome from "views/pages/cmcs/components/CmcIncome";
 import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
-import ContractProduce from "views/pages/cmcs/components/ContractProduce";
-import ContractIpc from "views/pages/cmcs/components/ContractIpc";
+import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
+import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 
 // Support pages
@@ -108,6 +108,7 @@ import RegisterDashboardPage from "views/pages/support/components/register";
 // Timesheet pages
 import TimesheetHomePage from "views/pages/timesheet/home";
 import TimesheetDetailPage from "views/pages/timesheet/detail";
+import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
 
 const Routes: FC = () => {
   useEffect(() => {
@@ -507,6 +508,15 @@ const Routes: FC = () => {
                         <CmcsLayout>
                           <CmcGuarantee />
                         </CmcsLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/home"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractHome />
+                        </CmcsContractLayout>
                       )}
                     />
                     <Route

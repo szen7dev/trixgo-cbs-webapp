@@ -12,7 +12,7 @@ const CmcsContractLeftSideBar: FC = () => {
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* title */}
-        <Link to="cmcs/home">
+        <Link to="/cmcs/home">
           <div className="t-leftsidebar-title flex items-center py-5 pl-8 pr-3 text-[14px] font-bold">
             <img
               src={
