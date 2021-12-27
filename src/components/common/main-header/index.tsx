@@ -45,8 +45,17 @@ const MainHeader: FC = () => {
             </div>
 
             <div className="t-header-menu flex items-center flex-wrap">
-            <Link to={`/`} className="font-bold ml-5 mr-5">
+            <Link to={`/`} className="font-bold ml-3 mr-3">
               Home
+						</Link>
+            <Link to={`/messages`} className="font-bold ml-3 mr-3">
+              Chatting
+						</Link>
+            <Link to={`/social/home`} className="font-bold ml-3 mr-3">
+              Truyền thông
+						</Link>
+            <Link to={`/cmcs/dashboard`} className="font-bold ml-3 mr-3">
+              Hợp đồng
 						</Link>
               {/* <a className="font-bold ml-5 mr-5 active" href="/">Home</a> */}
               {/* <a className="font-bold ml-5 mr-5" href="/">Công việc</a>

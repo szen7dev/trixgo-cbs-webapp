@@ -1168,3 +1168,15 @@ input[type="text"] {
   content: attr(placeholder);
   color: #cccccc;
 }
+.full-height-app {
+  max-height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
+}
+.messages-left-bar {
+}
+.no-webkit-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.bg-chat-app {
+  background: linear-gradient(180deg, rgba(71, 129, 207, 0.74) 0%, #4781CF 100%);
+}

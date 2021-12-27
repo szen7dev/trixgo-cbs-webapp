@@ -9,7 +9,7 @@ import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import DropdownSearchable from "components/common/DropdownSearch";
 
-const ContactIpcModal: FC = () => {
+const ContractIpcModal: FC = () => {
   const [openGeneralInfo, setOpenGeneralInfo] = useState(false);
   const [openRealizedOutput, setOpenRealizedOutput] = useState(false);
   const [openPaymentSatus, setOpenPaymentStatus] = useState(false);
@@ -532,4 +532,4 @@ const ContactIpcModal: FC = () => {
   );
 };
 
-export default ContactIpcModal;
+export default ContractIpcModal;
