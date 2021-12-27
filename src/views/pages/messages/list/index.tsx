@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import HamMenu from "assets/images/icons8-menu-96.svg"
 import SearchInput from "components/common/SearchInput";
 import iconNotification from "assets/images/icons8-notification-64.svg";
