@@ -117,20 +117,21 @@ module.exports = {
             transformOrigin: {
                 'top-left-1/2-0' : "50% 0"
             },
-            paddingRight: {
-                "[100px]": "100px"
-            },
             zIndex: {
                 ...autoGenerateIndex
             },
+            padding: {
+                ...autoGeneratePx
+            },
             margin: {
                 ...autoGeneratePx
-            }
+            },
         },
     },
     variants: {
         extend: {
-            opacity: ['disabled']
+            opacity: ['disabled'],
+            textColor: ['group-focus'],
         },
     },
     plugins: [],
