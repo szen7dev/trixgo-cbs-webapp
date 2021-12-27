@@ -48,6 +48,9 @@ const MainHeader: FC = () => {
             <Link to={`/`} className="font-bold ml-3 mr-3">
               Home
 						</Link>
+            <Link to={`/messages`} className="font-bold ml-3 mr-3">
+              Chatting
+						</Link>
             <Link to={`/social/home`} className="font-bold ml-3 mr-3">
               Truyền thông
 						</Link>
