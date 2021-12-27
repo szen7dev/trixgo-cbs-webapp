@@ -1151,8 +1151,10 @@ input[type="text"] {
   min-height: calc(100vh - 56px);
 }
 .messages-left-bar {
-  width: 480px;
 }
 .no-webkit-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.bg-chat-app {
+  background: linear-gradient(180deg, rgba(71, 129, 207, 0.74) 0%, #4781CF 100%);
 }
