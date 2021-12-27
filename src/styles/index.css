@@ -795,7 +795,7 @@ button {
 }
 .t-add-new-task-dialog-content {
   flex-grow: 2;
-  height: 50vh;
+  height: 40vh;
   overflow: auto;
 }
 [contenteditable=true]:empty:before{
