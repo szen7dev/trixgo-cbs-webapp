@@ -97,6 +97,7 @@ import CmcHome from "views/pages/cmcs/CmcHome";
 import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
 import CmcIncome from "views/pages/cmcs/components/CmcIncome";
 import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
+import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
 import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
 import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
@@ -106,9 +107,10 @@ import SupportPage from "views/pages/support/components/home";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
 // Timesheet pages
-import TimesheetHomePage from "views/pages/timesheet/home";
-import TimesheetDetailPage from "views/pages/timesheet/detail";
-import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
+import TimesheetHomePage from 'views/pages/timesheet/home'
+import TimesheetDetailPage from 'views/pages/timesheet/detail'
+import MessageList from "../views/pages/messages/list";
+import MessagesHome from "../views/pages/messages/home/index_v2";
 
 const Routes: FC = () => {
   useEffect(() => {
@@ -340,21 +342,21 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/messages/:path?">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/messages"
-                        component={MessagesHomePage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/messages/detail"
-                        component={MessagesDetailPage}
-                      />
-                      <Route path="/messages/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
+                  <Switch>
+                    {/*<ProtectedRoute*/}
+                    {/*  exact*/}
+                    {/*  path="/messages"*/}
+                    {/*  component={MessagesHomePage}*/}
+                    {/*/>*/}
+                    {/*<ProtectedRoute*/}
+                    {/*  exact*/}
+                    {/*  path="/messages/detail"*/}
+                    {/*  component={MessagesDetailPage}*/}
+                    {/*/>*/}
+                    {/*<Route path="/messages/*" component={ErrorPage} />*/}
+
+                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                  </Switch>
                 </Route>
 
                 <Route path="/teaser">

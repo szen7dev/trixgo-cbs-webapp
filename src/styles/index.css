@@ -1146,3 +1146,13 @@ input[type="text"] {
   content: attr(placeholder);
   color: #cccccc;
 }
+.full-height-app {
+  max-height: calc(100vh - 56px);
+  min-height: calc(100vh - 56px);
+}
+.messages-left-bar {
+  width: 480px;
+}
+.no-webkit-scrollbar::-webkit-scrollbar {
+  display: none;
+}
