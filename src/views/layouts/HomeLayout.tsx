@@ -21,6 +21,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
   const [isChatboxVisible, setIsChatboxVisible] = useState(false);
+  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -31,9 +32,19 @@ const HomeLayout: FC<Props> = ({ children }) => {
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
   };
-  const toggleMiniChatbox = () => {
-    setIsChatboxVisible(!isChatboxVisible);
+  const closeMiniChatbox = () => {
+    setIsChatboxVisible(false);
   };
+  const openMiniChatbox = () => {
+    setIsChatboxVisible(true);
+  };
+  const handleOpenNewChatbox = () => {
+    setIsNewChatboxVisible(true);
+  };
+  const handleCloseNewChatbox = () => {
+    setIsNewChatboxVisible(false);
+  };
+
   return (
     <section
       className={cn("home-layout relative bg-primary-light", {
@@ -73,10 +84,10 @@ const HomeLayout: FC<Props> = ({ children }) => {
       </button>
 
       {/* Mini chatbox */}
-      {!isChatboxVisible ? 
+      {!isChatboxVisible && 
         <button
-          onClick={toggleMiniChatbox}
-          className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border"
+          onClick={openMiniChatbox}
+          className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border transition-all duration-500 ease-out"
         >
           <img
             className="w-6 h-6 object-contain"
@@ -85,12 +96,18 @@ const HomeLayout: FC<Props> = ({ children }) => {
           />
           <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span>
         </button>
-        : 
-        <MiniChatbox closeMiniChatbox={toggleMiniChatbox} />
       }
 
+      <MiniChatbox 
+        closeMiniChatbox={closeMiniChatbox} 
+        openMiniChatbox={openMiniChatbox} 
+        closeNewChatbox={handleCloseNewChatbox}
+        isNewChatboxVisible={isNewChatboxVisible} 
+        isChatboxVisible={isChatboxVisible} 
+      />
+
       {/* Right side bar */}
-      <HomeRightSideBar />
+      <HomeRightSideBar openNewChatbox={handleOpenNewChatbox} />
 
       {/* Collapse right side bar button */}
       <button
