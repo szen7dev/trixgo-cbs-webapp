@@ -130,7 +130,7 @@ module.exports = {
     },
     variants: {
         extend: {
-            opacity: ['disabled'],
+            opacity: ['disabled','group-hover'],
             textColor: ['group-focus'],
         },
     },
