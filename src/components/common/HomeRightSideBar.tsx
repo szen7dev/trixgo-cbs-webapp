@@ -13,7 +13,11 @@ import chatIcon from "assets/images/icons8-create-48.png";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
 
-const HomeRightSideBar: FC = () => {
+type Props = {
+  openNewChatbox: () => void,
+}
+
+const HomeRightSideBar: FC<Props> = (props: Props) => {
   const { openModal } = useModal();
   return (
     <div className="tm-right-sidebar transition-all duration-500 ease-out fixed top-16 bottom-0 right-0 border-l border-secondary-light z-5">
@@ -88,7 +92,7 @@ const HomeRightSideBar: FC = () => {
             <img className="w-10 h-10 rounded-full" src={fakeThumbnail} alt="Avartar" />
           </button>
         </div>
-        <button className="block ml-auto mr-auto tm-right-sidebar-chat-btn w-10 h-10 rounded-full">
+        <button onClick={() => props.openNewChatbox()} className="block ml-auto mr-auto tm-right-sidebar-chat-btn w-10 h-10 rounded-full">
           <img
             className="w-6 block ml-auto mr-auto"
             src={chatIcon}

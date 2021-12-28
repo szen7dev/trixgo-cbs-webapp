@@ -65,7 +65,7 @@ const HomeLayout: FC<Props> = ({ children }) => {
       </button>
 
       {/* Right side bar */}
-      <HomeRightSideBar />
+      <HomeRightSideBar openNewChatbox={() => console.log("Open chatbox!")} />
 
       {/* Collapse right side bar button */}
       <button
