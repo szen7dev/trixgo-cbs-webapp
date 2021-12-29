@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment';
+import { useAuth } from "services/hooks/useAuth";
 import { useSocial } from "services/hooks/useSocial";
 import { Link } from 'react-router-dom';
 
@@ -7,8 +8,9 @@ import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/social';
 
 const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { listMedias } = useSocial('list_medias_internal_company');
-	
+	const { user } = useAuth();
+	const { listMedias } = useSocial('list_medias_internal_company', { type: 'company', companyID: user?.company._id });
+
 	return (
 		<div {...props}>
 			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
@@ -33,10 +35,10 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 										{media.author.fullname}
 									</Link>
 									<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
-									{/* <Link to="/">
-										Phòng kế toán
+									<Link to="/">
+										{media.author?.department?.name}
 									</Link>
-									<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span> */}
+									<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
 									{moment(media.createAt).fromNow()}
 								</p>
 							</div>

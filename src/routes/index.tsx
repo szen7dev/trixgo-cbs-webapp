@@ -124,6 +124,7 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
+                
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>

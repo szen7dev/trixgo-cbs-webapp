@@ -21,7 +21,6 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
         comments: [...action.payload, ...state.comments]
       }
     case "VIEW_MORE_COMMENTS_REPLY":
-      console.log({ ['PAYLOAD_VIEW_MORE_COMMENTS_REPLY']: action.payload });
       return {
         ...state,
         commentsReply: {
@@ -33,7 +32,6 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
         }
       }
     case "ADD_COMMENT": {
-      console.log({ ['PAYLOAD_ADD_COMMENT']: action.payload });
       const key = action.payload.parent ? 'commentsReply' : 'comments';
       let newComment = {};
 
@@ -64,8 +62,6 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
       };
     }
     case "UPDATE_COMMENT": {
-      console.log({ ['PAYLOAD_UPDATE_COMMENT']: action.payload, state });
-
       const key = action.payload.parent ? 'commentsReply' : 'comments';
       const cloneState = { ...state };
 

@@ -14,6 +14,9 @@ import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
+import { useAuth } from "services/hooks/useAuth";
+import { useSocial } from 'services/hooks/useSocial';
+
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
 	// { id: "1", title: 'Bài viết của tôi' },
@@ -23,6 +26,10 @@ const pages = [
 ]
 
 const SocialHomePage: FC = () => {
+	const { user } = useAuth();
+	const { listMedias: listMediasCompany } = useSocial('list_medias_internal_company', {
+		limit: 1, type: 'company', companyID: user?.company._id
+	});
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
@@ -55,19 +62,22 @@ const SocialHomePage: FC = () => {
 						{/* Top content */}
 						<div className="text-black flex flex-wrap xl:flex-nowrap mb-7">
 							{/* Main Article */}
-							<SocialMainArticle className="flex bg-secondary-gray bg-opacity-10 mt-4 mx-3.5 w-full flex-wrap lg:flex-nowrap" />
-							{/* Advertisement  */}
+							<SocialMainArticle 
+								className="flex bg-secondary-gray bg-opacity-10 mt-4 mx-3.5 w-full flex-wrap lg:flex-nowrap" 
+								media={listMediasCompany[0]}
+							/>
+							{/* Advertisement */}
 							<SocialAdvertisement className="social__ad hidden xl:block flex-1 mt-4 w-full lg:w-min px-3.5" style={{ minWidth: "406px" }} />
 						</div>
 						{/* Divide */}
 						<div className="border-gray-300 border-t mx-3.5"></div>
 						{/* Bottom content */}
 						<div className="flex flex-wrap 2xl:flex-nowrap mx-3.5 text-black">
-							{/* Company internal articles  */}
+							{/* Company internal articles */}
 							<SocialInternalArticles className="w-full mt-3.5" />
 							{/* Specialized topics */}
 							<SocialSpecializedTopics className="w-1/2 2xl:w-min px-5 mt-3.5 box-content" style={{ minWidth: "287px" }} />
-							{/* Community Posts  */}
+							{/* Community Posts */}
 							<SocialCommunityPost className="flex-1 py-3.5 w-1/2 lg:w-min px-3.5" style={{ minWidth: "406px" }} />
 						</div>
 					</div>
