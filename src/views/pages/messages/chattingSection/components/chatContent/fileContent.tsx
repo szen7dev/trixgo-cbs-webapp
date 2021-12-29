@@ -2,29 +2,44 @@ import React, {FC} from "react";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {map as _map} from "lodash";
+import TextReply from "./replyContent/textReply";
+import FileReply from "./replyContent/fileReply";
+import ImageReply from "./replyContent/imageReply";
 type Props = {
     message: any;
     className?: string;
+    showSenderName?: boolean;
 }
-const FileChatContent:FC<Props> = ({message, className}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
     const renderFileTypeImage = (file:any) => {
         switch (file.fileType){
             case "pdf":
                 return <img className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
         }
     }
+
+    const renderReply = () => {
+        switch (message.replyTo.type) {
+            case "text":
+                return <TextReply message={message.replyTo}/>;
+            case "file":
+                return <FileReply message={message.replyTo}/>;
+            case "images":
+                return <ImageReply message={message.replyTo}/>;
+        }
+    }
+
     return (
         <div className={"max-w-[466px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
             {
-                message.replyTo&&
-                <div className={"reply-content border-l-2 border-primary pl-[7px]"}>
-                    <div className={"reply-user-name"} style={{color: message.replyTo.themeColor}}>
-                        {message.replyTo.userName}
-                    </div>
-                    <div className={"truncate text-gray-400"}>
-                        {message.replyTo.content}
-                    </div>
+                showSenderName&&
+                <div className={"reply-user-name"} style={{color: message.themeColor}}>
+                    {message.userName}
                 </div>
+            }
+            {
+                message.replyTo&&
+                renderReply()
             }
             <div className={"pr-[20px] pb-[5px]"}>
                 {
