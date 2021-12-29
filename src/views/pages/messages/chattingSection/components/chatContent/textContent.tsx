@@ -20,7 +20,7 @@ const TextChatContent:FC<Props> = ({message,className}) => {
                         {message.replyTo.userName}
                     </div>
                     <div className={"truncate text-gray-400"}>
-                        {message.replyTo.text}
+                        {message.replyTo.content}
                     </div>
                 </div>
             }
@@ -29,8 +29,8 @@ const TextChatContent:FC<Props> = ({message,className}) => {
                     <div ref={textContentRef} className={"flex-1 py-[4px]"}>
                     </div>
                 </div>
-                <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>
-                    {message.date}<img src={DoubleTickIcon} alt={"tick"}/>
+                <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
+                    {message.date}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>

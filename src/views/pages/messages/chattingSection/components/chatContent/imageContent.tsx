@@ -62,7 +62,7 @@ const ImagesContent:FC<Props> = ({message, className}) => {
                         {message.replyTo.userName}
                     </div>
                     <div className={"truncate text-gray-400"}>
-                        {message.replyTo.text}
+                        {message.replyTo.content}
                     </div>
                 </div>
             }
@@ -70,7 +70,7 @@ const ImagesContent:FC<Props> = ({message, className}) => {
                 {renderImageDisplay()}
             </div>
             <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
-                {message.date}<img src={DoubleTickIcon} alt={"tick"}/>
+                {message.date}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
         </div>
     )
