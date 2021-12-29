@@ -16,17 +16,17 @@ export const objPopulate = {
 export const typeTextSelected = (key: string) : string => {
 	switch (key) {
 		case 'company':
-			return "Thành viên trong công ty";
+			return "Nội bộ công ty";
 		case 'just-me':
-			return "Chỉ mình tôi";
+			return "Lưu trữ cá nhân";
 		case 'departments':
-			return "Dự án, phòng ban";
+			return "Dự án phòng ban";
 		case 'community':
-			return "Cộng đồng";
+			return "Chuyển đổi số";
 		case 'system':
 			return "Hệ thống";
 		default:
-			return "Thành viên trong công ty";
+			return "Nội bộ công ty";
 	}
 }
 

@@ -19,10 +19,10 @@ import { useSocial } from 'services/hooks/useSocial';
 
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	// { id: "1", title: 'Bài viết của tôi' },
-	// { id: "2", title: 'Phòng ban' },
-	// { id: "3", title: 'Cộng đồng' },
-	// { id: "4", title: 'Hệ thống' },
+	{ id: "1", title: 'Dự án phòng ban' },
+	{ id: "2", title: 'Chuyển đổi số' },
+	{ id: "3", title: 'Tin hệ thống' },
+	{ id: "4", title: 'Lưu trữ cá nhân' },
 ]
 
 const SocialHomePage: FC = () => {
@@ -38,7 +38,7 @@ const SocialHomePage: FC = () => {
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
-				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border border-gray-300">
+				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border-primary-gray border-gray-300">
 					<div className="flex flex-1 text-[14px]">
 						{pages.map(page => <button key={page.id} className={cn("border-b-2 border-transparent mx-2 leading-4", { 'border-primary text-black font-bold': page.id === '0' })} style={{ minWidth: "110px" }}>
 							{page.title}

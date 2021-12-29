@@ -111,7 +111,7 @@ const HomePage: FC = () => {
           {/* outstanding news */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Cộng đồng doanh nghiệp</span>
+              <span>Chuyển đổi số</span>
               <a href="/">Xem tất cả</a>
             </div>
             <div className="t-home-slider w-full">
@@ -154,7 +154,7 @@ const HomePage: FC = () => {
           {/* media */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Truyền thông</span>
+              <span>Truyền thông công ty</span>
               <a href="/">Xem tất cả</a>
             </div>
             {listMediasCompany.length ? (
