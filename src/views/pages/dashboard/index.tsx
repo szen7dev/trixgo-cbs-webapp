@@ -111,7 +111,7 @@ const HomePage: FC = () => {
           {/* outstanding news */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Tin nổi bật</span>
+              <span>Cộng đồng doanh nghiệp</span>
               <a href="/">Xem tất cả</a>
             </div>
             <div className="t-home-slider w-full">
