@@ -25,7 +25,7 @@ const MessagesHome:FC = () => {
                 <div className={"messages-left-bar max-w-[480px] min-w-[240px] min-h-screen border-r"}>
                     <MessageList/>
                 </div>
-                <div className={"flex-1 overflow-auto min-h-screen"}>
+                <div className={"flex-1 min-h-screen"}>
                     <ChattingSection/>
                 </div>
             </div>
