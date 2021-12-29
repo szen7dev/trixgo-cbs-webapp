@@ -95,6 +95,10 @@ export type MediaProps = {
       name: string;
     }>;
     fullname: string;
+    department: {
+      name: string,
+      sign: string
+    };
   };
   location: {
     type: string;
@@ -110,9 +114,9 @@ export type MediaProps = {
   createdAt: string;
   updatedAt: string;
   receivers?: string[],
+  totalReactions?: number,
   totalComments?: number,
   totalWatched?: number,
-  totalReactions?: number,
 };
 
 export type FilePropsUpload = {

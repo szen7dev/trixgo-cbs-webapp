@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import {FC} from "react";
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
@@ -14,7 +14,6 @@ import TriangleDown from "../../../assets/icons/TriangleDown";
 const AccountingTicketsPage:FC = () => {
     const { openModal } = useModal();
     const {
-        listMedias,
         isLoadingListMedias,
         nextPageListMedias,
         prevPageListMedias,

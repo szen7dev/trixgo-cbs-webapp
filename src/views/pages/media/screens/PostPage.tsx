@@ -39,7 +39,8 @@ import '../style.css';
  */
 import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
-import { typePostSelected, abbreviateNumber } from '../utils';
+import { typePostSelected } from '../utils';
+import { abbreviateNumber } from 'utils';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import CommentProvider from '../context/comment/comment.provider';
 
@@ -66,9 +67,7 @@ const SocialPostPage: FC = () => {
 		refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
-	const toggleModalEditMediaEdit = () => {
-		setModalEditMedia(!modalEditMedia);
-	}
+	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
