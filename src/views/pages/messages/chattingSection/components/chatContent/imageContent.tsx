@@ -3,15 +3,19 @@ import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import ModalFullContainer from "../../../../media/components/ModalFullContainer";
 import ViewImage from "./ViewImage";
+import TextReply from "./replyContent/textReply";
+import FileReply from "./replyContent/fileReply";
+import ImageReply from "./replyContent/imageReply";
 
 type Props = {
-    message:any,
-    className?: string
+    message:any;
+    className?: string;
+    showSenderName?: boolean;
 }
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-const ImagesContent:FC<Props> = ({message, className}) => {
+const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -60,18 +64,23 @@ const ImagesContent:FC<Props> = ({message, className}) => {
             </div>
         ))
     }
+
+    const renderReply = () => {
+        switch (message.replyTo.type) {
+            case "text":
+                return <TextReply message={message.replyTo}/>;
+            case "file":
+                return <FileReply message={message.replyTo}/>;
+            case "images":
+                return <ImageReply message={message.replyTo}/>;
+        }
+    }
+
     return (
         <div className={"max-w-[466px] rounded-lg relative " + (className??"")}>
             {
                 message.replyTo&&
-                <div className={"reply-content border-l-2 border-primary pl-[7px]"}>
-                    <div className={"reply-user-name"} style={{color: message.replyTo.themeColor}}>
-                        {message.replyTo.userName}
-                    </div>
-                    <div className={"truncate text-gray-400"}>
-                        {message.replyTo.content}
-                    </div>
-                </div>
+                renderReply()
             }
             <div className={"flex flex-wrap bg-white"}>
                 {renderImageDisplay()}

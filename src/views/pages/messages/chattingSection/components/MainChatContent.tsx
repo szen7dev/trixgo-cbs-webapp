@@ -35,7 +35,9 @@ const MainChatContent:FC = () => {
                 replyTo: {
                     userName: "Toan TRX",
                     themeColor: "#0060E1",
-                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm"
+                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm",
+                    date: "07:04",
+                    type: "text",
                 }
             }
         },
@@ -107,7 +109,9 @@ const MainChatContent:FC = () => {
                 replyTo: {
                     userName: "Toan TRX",
                     themeColor: "#0060E1",
-                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm"
+                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm",
+                    date: "07:04",
+                    type: "text",
                 }
             }
         },
@@ -150,6 +154,122 @@ const MainChatContent:FC = () => {
                     }
                 ]
             }
+        },
+        {
+            _id: 8,
+            type: "my",
+            content: {
+                avt: SampleAvatar,
+                userName: "Thu PGI",
+                themeColor: "#FCC7A7",
+                date: "07:04",
+                type: "text",
+                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
+                replyTo: {
+                    userName: "Toan TRX",
+                    themeColor: "#0060E1",
+                    date: "07:04",
+                    type: "images",
+                    content: [
+                        {
+                            _id: 123,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        },
+                        {
+                            _id: 124,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        },
+                        {
+                            _id: 125,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        },
+                        {
+                            _id: 126,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        },
+                        {
+                            _id: 127,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        },
+                        {
+                            _id: 128,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: SampleImage,
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            _id: 9,
+            type: "my",
+            content: {
+                avt: SampleAvatar,
+                userName: "Thu PGI",
+                themeColor: "#FCC7A7",
+                date: "07:04",
+                type: "text",
+                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
+                replyTo: {
+                    userName: "Toan TRX",
+                    themeColor: "#0060E1",
+                    date: "07:04",
+                    type: "file",
+                    content: [
+                        {
+                            _id: 123,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: '#',
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            _id: 10,
+            type: "other",
+            content: {
+                avt: SampleAvatar,
+                userName: "Thu PGI",
+                themeColor: "#FCC7A7",
+                date: "07:04",
+                type: "text",
+                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
+                replyTo: {
+                    userName: "Toan TRX",
+                    themeColor: "#0060E1",
+                    date: "07:04",
+                    type: "file",
+                    content: [
+                        {
+                            _id: 123,
+                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
+                            fileUrl: '#',
+                            fileSize: '440.8 KB',
+                            fileType: 'pdf'
+                        }
+                    ]
+                }
+            }
         }
     ]
 
@@ -165,7 +285,7 @@ const MainChatContent:FC = () => {
     }
     return (
         <div className={"full-height-app bg-chat-app items-center flex flex-col relative overflow-auto transition duration-150"}>
-            <div className={"min-w-full max-w-[645px] pt-[20px] px-[20px] pb-[100px]"}>
+            <div className={"w-full max-w-[645px] pt-[20px] px-[20px] pb-[100px]"}>
                 {
                     _map(messages, message => renderMessage(message))
                 }

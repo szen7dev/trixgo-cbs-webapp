@@ -26,7 +26,7 @@
     @apply w-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-gray border-2 border-solid border-primary-light bg-clip-padding rounded-full;
+    @apply bg-secondary-gray bg-clip-padding rounded-full;
   }
 
   .t-scrollbar-horizontal::-webkit-scrollbar {
