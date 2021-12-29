@@ -35,7 +35,7 @@ const MainChatContent:FC = () => {
                 replyTo: {
                     userName: "Toan TRX",
                     themeColor: "#0060E1",
-                    text: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm"
+                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm"
                 }
             }
         },
