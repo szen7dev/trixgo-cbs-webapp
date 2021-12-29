@@ -1,6 +1,8 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
+import ModalFullContainer from "../../../../media/components/ModalFullContainer";
+import ViewImage from "./ViewImage";
 
 type Props = {
     message:any,
@@ -10,6 +12,9 @@ type ClassMatrix = {
     [key: string]: Array<any>;
 }
 const ImagesContent:FC<Props> = ({message, className}) => {
+    const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
+    const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
+
     const classMapping: ClassMatrix ={
         "map_1": [
             {wrapper: "w-full", img: ""}
@@ -42,7 +47,9 @@ const ImagesContent:FC<Props> = ({message, className}) => {
         const map = (message.content.length>=5)?"map_more":("map_"+message.content.length);
         const classNameMap = classMapping[map];
         return _map(message.content.slice(0,5), (image,index:number)=> (
-            <div key={image._id} className={"relative " + classNameMap[index]["wrapper"]}>
+            <div
+                onClick={() => setModalShowImage({show: true, index: index})}
+                key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
                 <img className={"w-full h-full " + classNameMap[index]["img"]} src={image.fileUrl} alt={"image"}/>
                 {
                     (index === 4 &&message.content.length > 5) &&
@@ -72,6 +79,11 @@ const ImagesContent:FC<Props> = ({message, className}) => {
             <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
                 {message.date}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
+            <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
+                <div className="flex overflow-hidden transition-all transform w-full h-full">
+                    <ViewImage show={modalShowImage.show} toggle={closeModalImage} images={message.content} index={modalShowImage.index} />
+                </div>
+            </ModalFullContainer>
         </div>
     )
 }
