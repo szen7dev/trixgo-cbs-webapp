@@ -138,8 +138,6 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 		let infoAfterCreateOrUpdate;
 
-		console.log({ defaultValue, uploads, dataInsertOrUpdate })
-
 		if(defaultValue){
 			infoAfterCreateOrUpdate = await updateComment(dataInsertOrUpdate);
 			dispatch({ 
@@ -155,13 +153,12 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreateOrUpdate });
 		}
 
-		console.log({ infoAfterCreateOrUpdate });
-
-		// // Clear text input comment, reset something...
+		// Clear text input
 		removeAllFiles();
 		onSubmit && onSubmit();
 		refInputComment.current && (refInputComment.current.innerText = '');
 
+		// Clear files, images
 		if(refDivFile.current){
 			refDivFile.current.innerHTML = '';
 			refDivFile.current.classList.add('h-0');
@@ -170,9 +167,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleKeyPressInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-		if(event.key === "Enter"){
-			handleSubmit();
-		}
+		event.key === "Enter" && handleSubmit();
 	}
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {

@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 import iconComment from 'assets/images/icon-chat-project.png';
 import { useSocial } from "services/hooks/useSocial";
 import { MediaProps } from 'typings/social';
-import { abbreviateNumber } from '../../utils';
+import { abbreviateNumber } from 'utils';
 
 const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { listMedias } = useSocial('list_medias_community', 'community');
+	const { listMedias } = useSocial('list_medias_community', { type: 'community' });
 
 	return (
 		<div {...props}>

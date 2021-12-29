@@ -54,6 +54,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
                   avatar={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender.image}`}
                   author={notification.sender.fullname}
                   content={notification.title}
+                  path={notification.path}
                   lastActive={moment(notification.createdAt).fromNow()}
                 />
               </Menu.Item>
