@@ -46,8 +46,6 @@ import HumansPage from "views/pages/humans";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
 // Messages pages
-import MessagesHomePage from "views/pages/messages/home";
-import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
 import TasksHomePage from "views/pages/tasks/home";
@@ -124,7 +122,7 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
-                
+
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>
