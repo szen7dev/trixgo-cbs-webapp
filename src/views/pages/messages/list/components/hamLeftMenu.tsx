@@ -2,6 +2,7 @@ import React, {FC, useRef, useState} from "react";
 import HamMenu from "assets/images/icons8-menu-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import AddFolderIcon from "assets/images/icons8-add-folder-96.svg";
+import SettingIcon from "assets/images/icons8-setting-100.svg";
 import {useOnClickOutside} from "../../../../../services/hooks/useOnclickOutside";
 
 const HamLeftMenu:FC = () => {
@@ -12,7 +13,7 @@ const HamLeftMenu:FC = () => {
     return (
         <div ref={el} className={"relative"}>
             <button onClick={() => setShowOption(oldValue => !oldValue)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                <img src={HamMenu} alt={"ham"}/>
+                <img src={SettingIcon} alt={"ham"}/>
             </button>
             {
                 showOption&&

@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import HamMenu from "assets/images/icons8-menu-96.svg"
 import SearchInput from "components/common/SearchInput";
 import iconNotification from "assets/images/icons8-notification-64.svg";
@@ -90,15 +90,11 @@ const MessageList:FC = () => {
     ]
 
     return (
-        <div className={"overflow-auto relative h-full"}>
+        <div className={"overflow-auto relative h-full group"}>
             <div className={"sticky top-0"}>
                 <div className={"p-2 flex"}>
                     <HamLeftMenu/>
                     <SearchInput classNameWrapper={"flex-1"} classNameInput={"rounded-full"} onChange={value => console.log(value)}/>
-                    <div className={"w-[40px] h-[40px] relative flex items-center justify-center "}>
-                        <span className={"bg-negative rounded-full text-white absolute -top-0.5 text-xs -right-0.5 pl-[5px] pr-[5px] pt-[1px] pb-[1px]"}>25</span>
-                        <img src={iconNotification} alt={"Thông báo"}/>
-                    </div>
                 </div>
                 <div className={"flex overflow-auto max-w-full border-b border-gray-100 no-webkit-scrollbar"}>
                     {_map(listTab, tab => (
@@ -124,7 +120,7 @@ const MessageList:FC = () => {
                 ))}
             </div>
 
-            <button className={"w-[56px] h-[56px] rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center"}>
+            <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center"}>
                 <img src={iconPencilWhite} alt={"Pencil icon"}/>
             </button>
         </div>

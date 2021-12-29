@@ -192,6 +192,10 @@
   filter: invert(47%) sepia(64%) saturate(4533%) hue-rotate(338deg)
     brightness(94%) contrast(92%);
 }
+.filter-white {
+  filter: invert(98%) sepia(2%) saturate(7%) hue-rotate(46deg)
+    brightness(104%) contrast(102%);
+}
 .filter-blue {
   filter: invert(28%) sepia(68%) saturate(5577%) hue-rotate(207deg)
     brightness(92%) contrast(102%);
@@ -328,7 +332,7 @@ button {
   top: 0;
 }
 .home-layout.active-right .home-main-content {
-  width: 100%;
+  width: calc(100% - 240px);
 }
 .home-layout.collapse-header .home-main-content {
   height: 100vh;
@@ -417,6 +421,9 @@ button {
 .home-layout.collapse-left .home-main-content {
   width: calc(100% - 55px);
   margin-left: 0;
+}
+.home-layout.active-right.collapse-left .home-main-content {
+  width: 100%;
 }
 .kanban-board-layout.collapse-header .home-header {
   top: -80px;
@@ -816,6 +823,38 @@ button {
   padding: 2px;
 }
 
+/*______________________________mini chatbox______________________________*/
+.t-mini-chat-container {
+  right: 55px;
+}
+.home-layout.active-right .t-mini-chat-container {
+  right: 0;
+}
+.t-mini-chat {
+  width: 330px;
+}
+.btn-chat-now {
+  width: 170px;
+  border-radius: 20px 20px 0px 0px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: #F0F0F0;
+  left: 240px;
+}
+.home-layout.collapse-left .btn-chat-now {
+  left: 0;
+}
+.btn-chat-now:hover {
+  background: #E9EAEF;
+}
+.t-mini-chat-add-new {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px 10px 0px 0px;
+  width: 310px;
+}
+.t-mini-chat-add-new-header img {
+  filter: invert(72%) sepia(9%) saturate(1141%) hue-rotate(180deg) brightness(88%) contrast(95%);
+}
+
 /*______________________________chatbox______________________________*/
 .chatbox-container {
   height: 100%;
@@ -1151,8 +1190,10 @@ input[type="text"] {
   min-height: calc(100vh - 56px);
 }
 .messages-left-bar {
-  width: 480px;
 }
 .no-webkit-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.bg-chat-app {
+  background: linear-gradient(180deg, rgba(71, 129, 207, 0.74) 0%, #4781CF 100%);
 }
