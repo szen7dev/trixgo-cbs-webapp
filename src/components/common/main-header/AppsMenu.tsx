@@ -40,6 +40,10 @@ const AppsMenu: FC = () => {
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Supporter</span>
             </Link>
+            <Link to={`/ppt/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Quản lý dự án</span>
+            </Link>
             <Link to={`/pcm/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý công việc</span>
@@ -60,10 +64,6 @@ const AppsMenu: FC = () => {
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý nhân sự</span>
             </Link>
-            <Link to={`/ppt/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Quản lý dự án</span>
-            </Link>
             <Link to={`/social/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Truyền thông</span>
@@ -79,6 +79,10 @@ const AppsMenu: FC = () => {
             <Link to={`/timesheet/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý chấm công</span>
+            </Link>
+            <Link to={`/pcm/market`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Phát triển thị trường</span>
             </Link>
           </div>
         </Menu.Items>

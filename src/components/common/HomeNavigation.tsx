@@ -39,17 +39,13 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Báo cáo đầu tư</span>
 					</Link>
-          <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Phát triển thị trường</span>
-					</Link>
           <Link to={`/pcm/tasks-dashboard-1`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản trị công việc 1</span>
+              <span className="truncate">Báo cáo quản trị công việc</span>
 					</Link>
           <Link to={`/pcm/tasks-dashboard-2`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản trị công việc 2</span>
+              <span className="truncate">Báo cáo quản trị hồ sơ</span>
 					</Link>
 
           <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
@@ -83,10 +79,6 @@ const HomeNavigation: FC = () => {
             <Link to={`/fin/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị tài chính</span>
-						</Link>
-            <Link to={`/timesheet/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý chấm công </span>
 						</Link>
           </div>
           {/* <div className="t-leftsidebar-menu-showmore">
@@ -124,7 +116,7 @@ const HomeNavigation: FC = () => {
         <div className="t-leftsidebar-customize-data text-center">
           <img className="block ml-auto mr-auto mb-4 w-16 h-16" src={iconBigFolder} alt="Folder" />
           <div className="font-bold text-2xl text-dark mb-4" role="none">Tùy chỉnh dữ liệu?</div>
-          <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu được quyền truy cập theo cách mà bạn mong muốn</p>
+          <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu theo cách mà bạn mong muốn</p>
           <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
         </div>
 
