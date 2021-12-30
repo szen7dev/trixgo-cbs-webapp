@@ -1,4 +1,5 @@
-import {FC, useEffect, useState} from "react";
+import { FC } from "react";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,8 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useSupport } from 'services/hooks/useSupport';
-import { ListDevicePayload, ListDeviceResponse, ListDeviceProps, SupportProps } from 'typings/support';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,6 +19,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 const data = {
   labels: [
     "Jan",
@@ -115,7 +116,6 @@ const options = {
 };
 
 const StatisticsByDeviceSupport: FC = () => {
-  const { listDevices } = useSupport();
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
