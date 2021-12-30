@@ -63,9 +63,28 @@ import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
 import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
-import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
+import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
+import ProjectSchedulePage from "views/pages/ppt/ProjectSchedulePage";
 import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
-import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
+import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
+import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
+import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
+import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
+import ProjectDrawingPage from "views/pages/ppt/ProjectDrawingPage";
+import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
+import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
+import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
+import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
+import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
+import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
+import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
+import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
+
+// import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+// import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
+// import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
 
 // Accounting pages
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
@@ -192,15 +211,6 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/portfolio"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectInvestPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
                       path={"/pcm/market"}
                       component={() => (
                         <HomeLayout>
@@ -210,7 +220,16 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/tasks-dashboard-1"}
+                      path={"/pcm/dashboard-portfolio"}
+                      component={() => (
+                        <HomeLayout>
+                          <ProjectInvestPage />
+                        </HomeLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/dashboard-task"}
                       component={() => (
                         <HomeLayout>
                           <KanbanBoardPage />
@@ -219,7 +238,7 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/tasks-dashboard-2"}
+                      path={"/pcm/dashboard-document"}
                       component={() => (
                         <HomeLayout>
                           <TaskDashboardType2 />
@@ -273,10 +292,163 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
+                      path={"/pcm/project/:id/dashboard"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDashBoardPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/folder"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectFolderPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/schedule"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectSchedulePage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/budget"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectBudgetPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/bidding"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectBiddingPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/payment"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPaymentPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
                       path={"/pcm/project/:id/document"}
                       component={() => (
                         <ProjectLayout>
-                          <ProjectHomePage />
+                          <ProjectDocumentPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/photo"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPhotoPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/drawing"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDrawingPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/rfi"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectRfiPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/rfa"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectRfaPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/inspection"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectInspectionPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/punch"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPunchPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/resource"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectResourcePage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/mom"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectMomPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/report"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectReportPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/directory"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDirectoryPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/admin"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectAdminPage />
                         </ProjectLayout>
                       )}
                     />
