@@ -18,4 +18,7 @@ export type ListDeviceProps = APIResponse & {
         amountAccesses: number
     };
 };
+export type SupportProps = {
+    checklist: string,
+};
 
