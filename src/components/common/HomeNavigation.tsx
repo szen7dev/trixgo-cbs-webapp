@@ -33,11 +33,11 @@ const HomeNavigation: FC = () => {
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
           <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Dự án triển khai</span>
+              <span className="truncate">Dự án đang triển khai</span>
 					</Link>
           <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Dự án đang phát triển</span>
+              <span className="truncate">Phát triển dự án</span>
 					</Link>
           <Link to={`/pcm/dashboard-portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
