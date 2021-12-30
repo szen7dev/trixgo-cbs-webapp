@@ -118,8 +118,13 @@ import CmcIncomePage from "views/pages/cmcs/CmcIncomePage";
 import CmcExpensePage from "views/pages/cmcs/CmcExpensePage";
 import CmcGuaranteePage from "views/pages/cmcs/CmcGuaranteePage";
 import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
+import ContractDashBoard from "views/pages/cmcs/components/views/contract/ContractDashBoard";
+import ContractEditor from "views/pages/cmcs/components/views/contract/ContractEditor";
+import ContractBill from "views/pages/cmcs/components/views/contract/ContractBill";
+import ContractBudget from "views/pages/cmcs/components/views/contract/ContractBudget";
 import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
 import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
+import ContractProduct from "views/pages/cmcs/components/views/contract/ContractProduct";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 
 // Support pages
@@ -714,6 +719,42 @@ const Routes: FC = () => {
                     />
                     <Route
                       exact
+                      path="/cmcs/contract/:id/dashboard"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractDashBoard />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/editor"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractEditor />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/bill"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractBill />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/budget"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractBudget />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
                       path="/cmcs/contract/:id/produce"
                       component={() => (
                         <CmcsContractLayout>
@@ -727,6 +768,15 @@ const Routes: FC = () => {
                       component={() => (
                         <CmcsContractLayout>
                           <ContractIpc />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/product"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractProduct />
                         </CmcsContractLayout>
                       )}
                     />
