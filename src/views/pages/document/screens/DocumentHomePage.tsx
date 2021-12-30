@@ -89,7 +89,7 @@ const DocumentHomePage: FC = () => {
 										</div>
 									</div>
 								</div>
-								<Link className="document__line text-large text-black" to="/pcm/project/:id/home">{item.title}</Link>
+								<Link className="document__line text-large text-black" to="/pcm/project/12345/document">{item.title}</Link>
 								<p className="text-x-small document__line-min mt-1.5">
 									{item.company}
 								</p>
