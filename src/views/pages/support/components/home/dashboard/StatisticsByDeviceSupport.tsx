@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useEffect, useState} from "react";
 
 import {
   Chart as ChartJS,
@@ -10,6 +10,9 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { ListDevicePayload, ListDeviceResponse, ListDeviceProps } from 'typings/support';
+import SupportRepository from "../../../../../../apis/support";
+
 
 ChartJS.register(
   CategoryScale,
@@ -116,6 +119,15 @@ const options = {
 };
 
 const StatisticsByDeviceSupport: FC = () => {
+  const [deviceAccess, setDeviceAccess] = useState<ListDeviceProps>();
+  useEffect(() => {
+    (async () => {
+      const response = await SupportRepository.listDeviceAccess(
+          {fromDate: '2021-12-30', toDate: '2021-12-30'}
+      );
+      setDeviceAccess(response.data);
+    })();
+  }, [])
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
