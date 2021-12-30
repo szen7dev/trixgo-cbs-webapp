@@ -77,7 +77,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
     }
 
     return (
-        <div className={"max-w-[466px] rounded-lg relative " + (className??"")}>
+        <div className={"max-w-[366px] rounded-lg relative " + (className??"")}>
             {
                 message.replyTo&&
                 renderReply()

@@ -4,6 +4,7 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import {map as _map} from "lodash";
+import OnlineUserInChatItem from "./components/OnlineUserInChatItem";
 const SettingMessageDetail:FC = () => {
     const listTab = [
         {
@@ -28,52 +29,87 @@ const SettingMessageDetail:FC = () => {
         },
     ]
 
+    const listUserInMessage = [
+        {
+            _id: 1,
+            userName: "Khanh TRX",
+            status: "online"
+        },
+        {
+            _id: 2,
+            userName: "Thanh CTV",
+            status: "last seen 9 minutes ago"
+        },
+        {
+            _id: 3,
+            userName: "Tuấn Minh",
+            status: "last seen 2 hours ago"
+        },
+        {
+            _id: 4,
+            userName: "Doan ReactJS",
+            status: "last seen 1 hours ago"
+        },
+        {
+            _id: 5,
+            userName: "Quang Đẹp trai",
+            status: "last seen 1 hours ago"
+        },
+    ]
+
     return (
-        <div className={"relative max-h-full group bg-gray-100 group"}>
-            <div className={"h-[56px] bg-white flex justify-between p-[17px]"}>
-                <button>
-                    <Close/>
-                </button>
-                <button>
-                    <img src={PencilIcon} alt={'--'}/>
-                </button>
-            </div>
-            <div className={"w-full min-h-[480px] text-white flex flex-col"} style={{background:"#FCC4A2"}}>
-                <div className={"text-center flex items-center justify-center flex-1"} style={{fontSize: "230px"}}>
-                    T
+        <div className={"messages-right-bar w-[480px] border-l transition duration-500 relative group"}>
+            <div className={"h-full group bg-gray-100 overflow-auto"}>
+                <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
+                    <button>
+                        <Close/>
+                    </button>
+                    <button>
+                        <img src={PencilIcon} alt={'--'}/>
+                    </button>
                 </div>
-                <div className={"flex flex-col justify-start px-[25px] pb-[15px] w-full"}>
-                    <div className={"text-xl"}>
-                        CBS | WEB CLIENT
+                <div className={"w-full min-h-[480px] text-white flex flex-col"} style={{background:"#FCC4A2"}}>
+                    <div className={"text-center flex items-center justify-center flex-1"} style={{fontSize: "230px"}}>
+                        T
                     </div>
-                    <div>
-                        6 members
+                    <div className={"flex flex-col justify-start px-[25px] pb-[15px] w-full"}>
+                        <div className={"text-xl"}>
+                            CBS | WEB CLIENT
+                        </div>
+                        <div>
+                            6 members
+                        </div>
+                    </div>
+                </div>
+                <div className={"flex justify-between items-center p-[17px] bg-white"}>
+                    <img src={BellIcon} alt={"...."}/>
+                    <div className={"flex-1 text-left ml-4"}>Notifications</div>
+                    <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
+                </div>
+                <div className={"h-full bg-white relative flex flex-col mt-[10px]"}>
+                    <div className={"flex max-w-full border-b border-gray-100 no-webkit-scrollbar mt-3 bg-white h-[55px] sticky top-55px z-5"}>
+                        {_map(listTab, (tab,index) => (
+                            <div
+                                className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
+                                key={tab.tabId}
+                            >
+                                <button
+                                    className={"whitespace-nowrap h-full text-center block p-2 " + (index===0?"border-b-2 border-primary text-primary":"text-primary-gray")}
+                                >
+                                    {tab.text}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <div className={"bg-white overflow-auto flex-1"}>
+                        {
+                            _map(listUserInMessage, (user,index) => (
+                                <OnlineUserInChatItem key={user._id} user={user} index={index}/>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
-            <div className={"flex justify-between items-center p-[17px] bg-white"}>
-                <img src={BellIcon} alt={"...."}/>
-                <div className={"flex-1 text-left ml-4"}>Notifications</div>
-                <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
-            </div>
-            <div className={"flex overflow-auto max-w-full border-b border-gray-100 no-webkit-scrollbar mt-3 bg-white h-[55px]"}>
-                {_map(listTab, (tab,index) => (
-                    <div
-                        className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
-                        key={tab.tabId}
-                    >
-                        <button
-                            className={"whitespace-nowrap h-full text-center block p-2 " + (index===0?"border-b-2 border-primary text-primary":"text-primary-gray")}
-                        >
-                            {tab.text}
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div className={"bg-white overflow-auto max-h-full"}>
-
-            </div>
-
             <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
                 <img src={AddUserToGroup} alt={"Pencil icon"}/>
             </button>
