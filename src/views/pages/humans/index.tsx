@@ -1,6 +1,6 @@
 import { FC } from "react";
-
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { useModal } from "services/hooks/useModal";
 import NewHumanModal from "./components/NewHumanModal";
@@ -17,6 +17,8 @@ type Item = {
 };
 
 const HumansPage: FC = () => {
+  const { t } = useTranslation(["human"]);
+
   const name = "Nguyễn Phan Thanh Hương";
   const role = "Cán bộ kế toán";
   const data = [];
@@ -67,33 +69,35 @@ const HumansPage: FC = () => {
         </button>
       </div>
 
-      <div className="px-6 py-4 grid grid-cols-5 gap-3">
+      <div className="px-6 py-4 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 gap-3">
         {data.map((item: Item) => {
           return (
             <div
               key={item.id}
-              className="relative flex flex-col justify-around items-center h-[375px] rounded-lg hover:bg-primary-gray"
+              className="relative flex flex-col justify-between items-center rounded-lg"
               style={{
                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                 border: "1px solid #cccccc",
               }}
             >
-              <img
-                src={ThreeDotIcon}
-                alt="Three Dot"
-                className="absolute top-6 right-6 cursor-pointer"
-              />
-              <div className="text-center ml-2 mr-2">
+              <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
+                <img
+                  src={ThreeDotIcon}
+                  alt="Three Dot"
+                  style={{margin: 0}}
+                />
+              </div>
+              <div className="w-[244px] text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
                   <img src={HumanAvatar} alt="Avatar" className="w-20 h-20" />
                 </div>
-                <p className="text-2xl">{item.name}</p>
+                <p className="text-xl font-normal">{item.name}</p>
                 <p className="text-sm pt-2 text-secondary-gray">{item.role}</p>
               </div>
-              <Link to={`/human/home/hid=${item.id}`}>
-                <button className="text-sm w-32 h-10 rounded-lg border border-primary-gray hover:bg-primary hover:text-primary-light">
-                  Xem chi tiết
-                </button>
+              <Link to={`/human/home/hid=${item.id}`} className='w-full text-center'>
+                <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
+                  {t('view-info')}
+                </div>
               </Link>
             </div>
           );
