@@ -33,17 +33,21 @@ const HomeNavigation: FC = () => {
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
           <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Danh mục dự án</span>
+              <span className="truncate">Dự án triển khai</span>
 					</Link>
-          <Link to={`/pcm/portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Dự án đang phát triển</span>
+					</Link>
+          <Link to={`/pcm/dashboard-portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Báo cáo đầu tư</span>
 					</Link>
-          <Link to={`/pcm/tasks-dashboard-1`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/dashboard-task`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Báo cáo quản trị công việc</span>
 					</Link>
-          <Link to={`/pcm/tasks-dashboard-2`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/dashboard-document`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Báo cáo quản trị hồ sơ</span>
 					</Link>
@@ -76,10 +80,6 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hợp đồng</span>
 						</Link>
-            <Link to={`/fin/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản trị tài chính</span>
-						</Link>
           </div>
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
@@ -95,14 +95,6 @@ const HomeNavigation: FC = () => {
             <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/">
               <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
               <span className="truncate">CHG.THT.Xây dựng cụmm thông tin truyền thông và thiết bị</span>
-            </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray5" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">ARM.CAL.Apartmetn Quy</span>
-            </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">HAR.MAR.Court Yard By</span>
             </a>
           </div>
           <div className="t-leftsidebar-menu-showmore">

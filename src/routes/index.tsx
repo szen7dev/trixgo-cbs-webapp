@@ -81,10 +81,7 @@ import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
 import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
 import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
 import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
-
-// import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
-// import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
-// import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
+import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 
 // Accounting pages
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
@@ -241,7 +238,7 @@ const Routes: FC = () => {
                       path={"/pcm/dashboard-document"}
                       component={() => (
                         <HomeLayout>
-                          <TaskDashboardType2 />
+                          <DocumentDashboardPage />
                         </HomeLayout>
                       )}
                     />
