@@ -4,7 +4,7 @@ import AddNewTaskDialog from "components/common/add-new-task-dialog";
 import { useModal } from "services/hooks/useModal";
 
 import icon1 from "assets/images/icons8-star-96.png";
-import icon2 from "assets/images/icons8-checklist-96.png";
+import icon2 from "assets/images/icons8-inbox-100.png";
 import icon3 from "assets/images/icons8-note-100.png";
 import icon4 from "assets/images/icons8-user-manual-64.png";
 import icon5 from "assets/images/icons8-bill-96.png";
@@ -36,7 +36,7 @@ const HomeRightSideBar: FC<Props> = (props: Props) => {
         >
           <img src={iconPlus} alt="Thumbnail" className="w-6 h-6 mr-auto ml-auto rounded-full filter-blue" />
         </button>
-        <Link to={`/`} className="mt-4">
+        <Link to={`/personal/notification`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon6}
@@ -57,24 +57,24 @@ const HomeRightSideBar: FC<Props> = (props: Props) => {
               alt="Left side bar"
             />
 				</Link>
-        <Link to={`/`} className="mt-4">
+        <Link to={`/personal/note`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon3}
               alt="Left side bar"
             />
 				</Link>
-        <Link to={`/`} className="mt-4">
-            <img
-              className="w-6 h-6 object-contain"
-              src={icon4}
-              alt="Left side bar"
-            />
-				</Link>
-        <Link to={`/`} className="mt-4">
+        <Link to={`/personal/bill`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon5}
+              alt="Left side bar"
+            />
+				</Link>
+        <Link to={`/help`} className="mt-4">
+            <img
+              className="w-6 h-6 object-contain"
+              src={icon4}
               alt="Left side bar"
             />
 				</Link>

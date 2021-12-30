@@ -39,7 +39,6 @@ import KanbanBoardPage from "views/pages/kanbanBoard";
 // Customers Pages + Orders Pages + Campaigns Pages
 import CustomersPage from "views/pages/customers";
 import OrdersPage from "views/pages/orders";
-import CampaignsPage from "views/pages/campaigns";
 
 // Team Pages
 import HumansPage from "views/pages/humans";
@@ -57,6 +56,14 @@ import TeaserPage from "views/pages/teaser";
 
 // Settings Pages
 import SettingsPage from "views/pages/settings";
+
+// Personal data
+import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
+import PersonalNotePage from "views/pages/personal/PersonalNotePage";
+import PersonalBillPage from "views/pages/personal/PersonalBillPage";
+
+// Help
+import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
@@ -180,6 +187,26 @@ const Routes: FC = () => {
                       />
                     </Switch>
                   </SupportLayout>
+                </Route>
+
+                <Route path="/help">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/help" component={HelpCenterPage}/>
+                      <Route path="/help/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
+
+                <Route path="/personal">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/personal/notification" component={PersonalNotificationPage}/>
+                      <Route exact path="/personal/note" component={PersonalNotePage}/>
+                      <Route exact path="/personal/bill" component={PersonalBillPage}/>
+                      <Route path="/personal/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
                 </Route>
 
                 <Route exact path="/">
