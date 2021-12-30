@@ -51,9 +51,6 @@ import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
-// Teaser Pages
-import TeaserPage from "views/pages/teaser";
-
 // Settings Pages
 import SettingsPage from "views/pages/settings";
 
@@ -114,10 +111,12 @@ import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCa
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmc pages
-import CmcHome from "views/pages/cmcs/CmcHome";
-import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
-import CmcIncome from "views/pages/cmcs/components/CmcIncome";
-import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
+import CmcHomePage from "views/pages/cmcs/CmcHomePage";
+import CmcDashboardPage from "views/pages/cmcs/CmcDashboardPage";
+import CmcPortfolioPage from "views/pages/cmcs/CmcPortfolioPage";
+import CmcIncomePage from "views/pages/cmcs/CmcIncomePage";
+import CmcExpensePage from "views/pages/cmcs/CmcExpensePage";
+import CmcGuaranteePage from "views/pages/cmcs/CmcGuaranteePage";
 import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
 import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
 import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
@@ -507,7 +506,7 @@ const Routes: FC = () => {
                   <DocumentLayoutContainer />
                 </Route>
 
-                <Route path="/kanban-board">
+                {/* <Route path="/kanban-board">
                   <KanbanBoardLayout>
                     <Switch>
                       <ProtectedRoute
@@ -518,7 +517,7 @@ const Routes: FC = () => {
                       <Route path="/kanban-board/*" component={ErrorPage} />
                     </Switch>
                   </KanbanBoardLayout>
-                </Route>
+                </Route> */}
 
                 <Route path="/human/home">
                   <HumanLayout>
@@ -552,27 +551,6 @@ const Routes: FC = () => {
 
                     <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
                   </Switch>
-                </Route>
-
-                <Route path="/teaser">
-                  <HomeLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/teaser"
-                        component={TeaserPage}
-                      />
-                      <Route path="/applications/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
-                </Route>
-
-                <Route path="/applications">
-                  <MainLayout>
-                    <Switch>
-                      <Route path="/applications/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
                 </Route>
 
                 <Route path="/settings">
@@ -676,7 +654,7 @@ const Routes: FC = () => {
                       path="/cmcs/home"
                       component={() => (
                         <CmcsLayout>
-                          <CmcHome />
+                          <CmcHomePage />
                         </CmcsLayout>
                       )}
                     />
@@ -685,7 +663,16 @@ const Routes: FC = () => {
                       path="/cmcs/dashboard"
                       component={() => (
                         <CmcsLayout>
-                          <CmcDashboard />
+                          <CmcDashboardPage />
+                        </CmcsLayout>
+                      )}
+                    />
+                     <Route
+                      exact
+                      path="/cmcs/portfolio"
+                      component={() => (
+                        <CmcsLayout>
+                          <CmcPortfolioPage />
                         </CmcsLayout>
                       )}
                     />
@@ -694,7 +681,16 @@ const Routes: FC = () => {
                       path="/cmcs/income"
                       component={() => (
                         <CmcsLayout>
-                          <CmcIncome />
+                          <CmcIncomePage />
+                        </CmcsLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/expenses"
+                      component={() => (
+                        <CmcsLayout>
+                          <CmcExpensePage />
                         </CmcsLayout>
                       )}
                     />
@@ -703,7 +699,7 @@ const Routes: FC = () => {
                       path="/cmcs/guarantee"
                       component={() => (
                         <CmcsLayout>
-                          <CmcGuarantee />
+                          <CmcGuaranteePage />
                         </CmcsLayout>
                       )}
                     />

@@ -1,17 +1,17 @@
 import { FC } from "react";
 
-import ReceivableReport from "./views/dashboard/ReceivableReport";
-import RevenueBySectorReport from "./views/dashboard/RevenueBySectorReport";
-import RevenueOverTimeReport from "./views/dashboard/RevenueOverTimeReport";
-import CashFlowManagementReport from "./views/dashboard/CashFlowManagementReport";
-import ProfileAndProductReport from "./views/dashboard/ProfileAndProductReport";
-import CmcImagesReport from "./views/dashboard/CmcImagesReport";
-import PaymentPlanReport from "./views/dashboard/PaymentPlanReport";
-import TotalRevenueReport from "./views/dashboard/TotalRevenueReport";
-import MoneyBackReport from "./views/dashboard/MoneyBackReport";
-import CompanyPreviewReport from "./views/dashboard/CompanyPreviewReport";
-import QuickReport from "./views/dashboard/QuickReport";
-import StatusReport from "./views/dashboard/StatusReport";
+import ReceivableReport from "./components/views/dashboard/ReceivableReport";
+import RevenueBySectorReport from "./components/views/dashboard/RevenueBySectorReport";
+import RevenueOverTimeReport from "./components/views/dashboard/RevenueOverTimeReport";
+import CashFlowManagementReport from "./components/views/dashboard/CashFlowManagementReport";
+import ProfileAndProductReport from "./components/views/dashboard/ProfileAndProductReport";
+import CmcImagesReport from "./components/views/dashboard/CmcImagesReport";
+import PaymentPlanReport from "./components/views/dashboard/PaymentPlanReport";
+import TotalRevenueReport from "./components/views/dashboard/TotalRevenueReport";
+import MoneyBackReport from "./components/views/dashboard/MoneyBackReport";
+import CompanyPreviewReport from "./components/views/dashboard/CompanyPreviewReport";
+import QuickReport from "./components/views/dashboard/QuickReport";
+import StatusReport from "./components/views/dashboard/StatusReport";
 
 const CmcManagementReport: FC = () => {
   return (
