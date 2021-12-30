@@ -41,7 +41,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Trang chủ hợp đồng</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/dashboard"
+            to="/cmcs/contract/12345/dashboard"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -52,7 +52,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Báo cáo quản trị</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/editor"
+            to="/cmcs/contract/12345/editor"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -63,7 +63,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Biên soạn hợp đồng</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/bill"
+            to="/cmcs/contract/12345/bill"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -74,7 +74,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Biểu khối lượng</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/budget"
+            to="/cmcs/contract/12345/budget"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -85,7 +85,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Ngân sách</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/produce"
+            to="/cmcs/contract/12345/produce"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -96,7 +96,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Sản lượng</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/ipc"
+            to="/cmcs/contract/12345/ipc"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -107,7 +107,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Nghiệm thu hoàn thành</span>
           </Link>
           <Link
-            to="/cmcs/contract/:id/product"
+            to="/cmcs/contract/12345/product"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img

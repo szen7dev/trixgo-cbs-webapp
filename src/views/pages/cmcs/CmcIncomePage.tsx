@@ -9,9 +9,9 @@ import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
 
-import IncomeFormModal from "./views/income/IncomeFormModal";
+import IncomeFormModal from "./components/views/income/IncomeFormModal";
 
-import styles from "../styles.module.css";
+import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import { Link } from "react-router-dom";
@@ -146,7 +146,7 @@ const CmcIncome: FC = () => {
                 style={{ marginLeft: "-23px" }}
               />
             </td>
-            <Link to="/cmcs/contract/:id/home">
+            <Link to="/cmcs/contract/12345/home">
               <td className="py-1 px-2">
                 Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
               </td>
@@ -171,9 +171,11 @@ const CmcIncome: FC = () => {
                 style={{ marginLeft: "-23px" }}
               />
             </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
+            <Link to="/cmcs/contract/12345/home">
+              <td className="py-1 px-2">
+                Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
+              </td>
+            </Link>
             <td className="py-1 px-2">05/11/2021</td>
             <td className="py-1 px-2">15.332.000.000</td>
             <td className="py-1 px-2">15.332.000.000</td>

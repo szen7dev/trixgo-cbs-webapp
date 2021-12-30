@@ -7,7 +7,7 @@ import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
 
-import styles from "../styles.module.css";
+import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 

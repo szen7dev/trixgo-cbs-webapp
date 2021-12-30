@@ -11,10 +11,10 @@ import avatar from 'assets/images/avatar.jpg';
 
 SwiperCore.use([Pagination]);
 
-const ProjectProgressPage: FC = () => {
+const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
 	useEffect(() => {
-		document.title = "TIẾN ĐỘ DỰ ÁN"
+		document.title = "CHG.THT-Quản lý tiến độ"
 	}, []);
 
 	function handleClick() {
@@ -48,4 +48,4 @@ const ProjectProgressPage: FC = () => {
 		</div>
 	);
 };
-export default ProjectProgressPage;
+export default ProjectSchedulePage;
