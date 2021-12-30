@@ -22,16 +22,10 @@ const MessagesHome:FC = () => {
 
     return (
         <MessageContext.Provider value={value}>
-            <div className={"flex"}>
-                <div className={"messages-left-bar w-[480px] min-h-screen border-r transition duration-500"}>
-                    <MessageList/>
-                </div>
-                <div className={"flex-1 min-h-screen transition duration-500"}>
-                    <ChattingSection/>
-                </div>
-                <div className={"messages-right-bar w-[480px] min-h-screen border-r transition duration-500"}>
-                    <SettingMessageDetail/>
-                </div>
+            <div className={"flex h-screen w-screen overflow-hidden"}>
+                <MessageList/>
+                <ChattingSection/>
+                <SettingMessageDetail/>
             </div>
         </MessageContext.Provider>
     )

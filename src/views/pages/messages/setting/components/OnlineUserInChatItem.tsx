@@ -3,10 +3,10 @@ import IconPinned from "assets/icons/Pinned";
 import { NavLink } from "react-router-dom";
 
 type Props = {
-    chat: any,
+    user: any,
     index: number
 }
-const OnlineUserInChatItem:FC<Props> = ({chat,index}) => {
+const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
     const backGround = [
         "#84BBE4",
         "#8DD4D6",
@@ -17,7 +17,7 @@ const OnlineUserInChatItem:FC<Props> = ({chat,index}) => {
         "#F089B7",
     ]
     const getPresentGroupName = () => {
-        return chat.chatName.split(' ').slice(0, 2).map((text: string) => {
+        return user.userName.split(' ').slice(0, 2).map((text: string) => {
             return text.charAt(0)
         });
     }
@@ -28,21 +28,19 @@ const OnlineUserInChatItem:FC<Props> = ({chat,index}) => {
 
     return (
         <div
-            className={"group flex p-[10px] hover:bg-gray-100 cursor-pointer rounded-md"}>
+            className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md"}>
             {
-                chat.chatAvatar?
-                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.chatAvatar} alt={chat.chatName}/>:
+                user.userAvatar?
+                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={user.userAvatar} alt={user.userName}/>:
                     <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: getColor()}}>
                         {getPresentGroupName()}
                     </div>
             }
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
-                <div className={"flex-1 font-bold"}>
-                    {chat.chatName}
-                </div>
-                <div className={"flex mt-1"}>
-                    <div className={"flex-1 truncate text-gray-400"}>{chat.text}</div>
-                </div>
+                <span className={"font-bold"}>
+                    {user.userName}
+                </span>
+                <span className={"truncate "+(user.status==="online"?"text-primary":"text-gray-400")}>{user.status}</span>
             </div>
         </div>
     )
