@@ -30,10 +30,19 @@ export type NavLinkAccounting = {
   icon?: ReactNode;
 }
 
+export type NavLinkTaskDashboard = {
+  id: string;
+  label: string;
+  url: string;
+  pathname: string;
+  icon?: ReactNode;
+}
+
 export type CommentProps = {
   _id: string;
   media: string;
   comment: {
+    _id: string;
     content: string,
     files: FileProps[] | undefined;
     images: FileProps[] | undefined;

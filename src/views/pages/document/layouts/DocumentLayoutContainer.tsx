@@ -4,32 +4,30 @@ import { Route, Switch } from 'react-router-dom'
 // Context
 import { Provider } from '../contexts/contextModal'
 
-import HomeLayout from 'views/layouts/HomeLayout'
+import DocumentLayout from 'views/layouts/DocumentLayout'
 import ErrorPage from 'views/pages/authentication/Error'
 
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage'
 import DocumentDetailPage from 'views/pages/document/screens/DocumentDetailPage'
 import DocumentHomePage from 'views/pages/document/screens/DocumentHomePage'
-import DocumentLayout from './DocumentLayout'
+import DocumentNav from './DocumentNav'
 import ModalCreateDocument from '../components/common/ModalCreateDocument'
 
 const DocumentLayoutContainer: FC = () => {
 	return (
 		<>
-			<HomeLayout>
+			<DocumentLayout>
 				<Switch>
 					<Route exact path="/document/dashboard" component={DocumentDashboardPage} />
 					<Provider>
-						<Switch>
-							<Route exact path="/document/home" component={DocumentHomePage} />
-							<Route path='/document/project/:id/document/doc' component={DocumentDetailPage} />
-							<Route strict path="/document/project/:id/document" component={DocumentLayout} />
-						</Switch>
-						<ModalCreateDocument />
+						<Route exact path="/document/home" component={DocumentHomePage} />
+						<Route path='/document/project/:id/document/doc' component={DocumentDetailPage} />
+						<Route strict path="/document/project/:id/document" component={DocumentNav} />
+						<ModalCreateDocument/>
 					</Provider>
 					<Route path="/document/*" component={ErrorPage} />
 				</Switch>
-			</HomeLayout>
+			</DocumentLayout>
 		</>
 	)
 }

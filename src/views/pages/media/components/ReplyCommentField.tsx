@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext, useEffect } from 'react';
+import React, { FC, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -14,21 +14,22 @@ import { IMethodFiles, IMethodImages, IMethodFileCommon } from '../context/uploa
 import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import CommentContext from '../context/comment/comment.context';
 import uploadActions from '../context/upload.actions';
-import { modifyUploadedFilesV2 } from '../context/upload.utils';
+import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../context/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
 import { useCommentSocial } from 'services/hooks/useSocial';
 import { useUpload } from 'services/hooks/useUpload';
 
 interface Props {
-	// setUploadFile?: (files: File[]) => unknown;
-	// setUploadImage?: (files: File[]) => unknown;
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
+	onSubmit?: () => unknown;
 	attachFile?: boolean;
-	onSubmit?: (input: string, parentID?: string) => void;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
+	commentID?: string,
 	parentID?: string,
 	mediaID: string,
+	files?: FileProps[],
+	images?: FileProps[],
 	defaultValue?: string,
 }
 
@@ -38,8 +39,11 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	onSubmit,
 	onTextChange,
 	attachFile,
+	commentID,
 	parentID,
 	mediaID,
+	files,
+	images,
 	defaultValue,
 	...props
 }) => {
@@ -54,13 +58,14 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		removeUploadedImage,
 		removeUploadedFile,
 		removeAllFiles
-	}] = useCustomReducer<IMethodFiles & IMethodImages & IMethodFileCommon>(fileUploadReducer, uploadActions, INITIAL_STATE);
+	}] = useCustomReducer<IMethodFiles & IMethodImages & IMethodFileCommon>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images));
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');
-	const { createComment } = useCommentSocial({ mediaID, key: `list_comments.${mediaID}` });
+	const { createComment, updateComment } = useCommentSocial({ mediaID, key: `list_comments.${mediaID}` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
+
 	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
 	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
@@ -123,26 +128,46 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 			_id && (files = [...files, _id]);
 		}
 
-		const dataInsert: CommentPayload = {
+		const dataInsertOrUpdate: CommentPayload = {
 			mediaID,
 			content: text,
 			files,
 			images,
+			...{ commentID } ?? {},
 			...{ parentID } ?? {}
 		}
+		let infoAfterCreateOrUpdate;
 
-		const infoAfterCreate = await createComment(dataInsert);
-		dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
+		if(defaultValue){
+			infoAfterCreateOrUpdate = await updateComment(dataInsertOrUpdate);
+			dispatch({ 
+				type: 'UPDATE_COMMENT', 
+				payload: {
+					commentID,
+					parent: parentID,
+					body: infoAfterCreateOrUpdate,
+				}
+			});
+		} else{
+			infoAfterCreateOrUpdate = await createComment(dataInsertOrUpdate);
+			dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreateOrUpdate });
+		}
 
-		// Clear text input comment, reset something...
+		// Clear text input
 		removeAllFiles();
+		onSubmit && onSubmit();
 		refInputComment.current && (refInputComment.current.innerText = '');
 
+		// Clear files, images
 		if(refDivFile.current){
 			refDivFile.current.innerHTML = '';
 			refDivFile.current.classList.add('h-0');
 			refDivFile.current.classList.remove('post__files', 'pt-2', 'pb-6');
 		}
+	}
+
+	const handleKeyPressInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+		event.key === "Enter" && handleSubmit();
 	}
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
@@ -193,14 +218,15 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 							}}
 							ref={refInputComment}
 							style={{ color: 'black' }}
+							suppressContentEditableWarning={true}
+							onKeyPress={handleKeyPressInput}
 							// Handle change text
-							onInput={e => {
+							onInput={e => 
 								onTextChange
 									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
-							}
-							}
-						></span>
+								}
+						>{defaultValue}</span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
 							<input

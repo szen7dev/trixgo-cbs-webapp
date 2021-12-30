@@ -16,17 +16,17 @@ export const objPopulate = {
 export const typeTextSelected = (key: string) : string => {
 	switch (key) {
 		case 'company':
-			return "Thành viên trong công ty";
+			return "Nội bộ công ty";
 		case 'just-me':
-			return "Chỉ mình tôi";
+			return "Lưu trữ cá nhân";
 		case 'departments':
-			return "Dự án, phòng ban";
+			return "Dự án phòng ban";
 		case 'community':
-			return "Cộng đồng";
+			return "Chuyển đổi số";
 		case 'system':
 			return "Hệ thống";
 		default:
-			return "Thành viên trong công ty";
+			return "Nội bộ công ty";
 	}
 }
 
@@ -45,25 +45,4 @@ export const typePostSelected = (key: number) : string => {
 		default:
 			return '';
 	}
-}
-
-const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
-
-export const abbreviateNumber = (number = 0) : string => {
-
-    // what tier? (determines SI symbol)
-    const tier = Math.log10(Math.abs(number)) / 3 | 0;
-
-    // if zero, we don't need a suffix
-    if(+tier === 0) return `${number}`;
-
-    // get suffix and determine scale
-    const suffix = SI_SYMBOL[tier];
-    const scale = Math.pow(10, tier * 3);
-
-    // scale the number
-    const scaled = number / scale;
-
-    // format number and add suffix
-    return scaled.toFixed(1) + suffix;
 }

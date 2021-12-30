@@ -45,8 +45,17 @@ const MainHeader: FC = () => {
             </div>
 
             <div className="t-header-menu flex items-center flex-wrap">
-            <Link to={`/`} className="font-bold ml-5 mr-5">
+            <Link to={`/`} className="font-bold ml-3 mr-3">
               Home
+						</Link>
+            <Link to={`/messages`} className="font-bold ml-3 mr-3">
+              Chatting
+						</Link>
+            <Link to={`/social/home`} className="font-bold ml-3 mr-3">
+              Truyền thông
+						</Link>
+            <Link to={`/cmcs/home`} className="font-bold ml-3 mr-3">
+              Hợp đồng
 						</Link>
               {/* <a className="font-bold ml-5 mr-5 active" href="/">Home</a> */}
               {/* <a className="font-bold ml-5 mr-5" href="/">Công việc</a>
@@ -64,7 +73,7 @@ const MainHeader: FC = () => {
             {/* Search menu */}
             <button
               aria-controls="search-modal"
-              className="w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
+              className="w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6"
               onClick={() =>
                 openModal(
                   <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
@@ -76,7 +85,7 @@ const MainHeader: FC = () => {
               <SearchIcon className="w-4 h-4" />
             </button>
 
-            <button className="relative w-10 h-10 flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
+            <button className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
               <img src={iconFilter} alt="Filter" className="w-6 h-6" />
             </button>
 

@@ -22,7 +22,7 @@ const HomeNavigation: FC = () => {
             <p className="t-leftsidebar-user-text-name font-bold mb-1">{user?.fullname}</p>
             <div className="t-leftsidebar-user-text-price flex items-center">
               <img className="t-leftsidebar-user-text-price-currency mr-3 h-6 w-6" src={dollarIcon} alt="Dollar" />
-              <span>đ 125.001.200 </span>
+              <span>đ 0.000 </span>
               <img className="t-leftsidebar-user-text-price-arrow h-3 ml-2" src={chevronRight} alt="Dollar" />
             </div>
           </div>
@@ -30,20 +30,48 @@ const HomeNavigation: FC = () => {
 
         {/* menu block */}
         <div className="t-leftsidebar-menu-block mb-6">
+          <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
+          <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Dự án đang triển khai</span>
+					</Link>
+          <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Phát triển dự án</span>
+					</Link>
+          <Link to={`/pcm/dashboard-portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Báo cáo đầu tư</span>
+					</Link>
+          <Link to={`/pcm/dashboard-task`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Báo cáo quản trị công việc</span>
+					</Link>
+          <Link to={`/pcm/dashboard-document`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Báo cáo quản trị hồ sơ</span>
+					</Link>
+
+          <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
+          <Link to={`/pcm/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Việc của tôi</span>
+					</Link>
+          <Link to={`/pcm/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Việc quan tâm</span>
+					</Link>
+          <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Việc nháp</span>
+					</Link>
+
           <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
           <div className="t-leftsidebar-menu-container">
             {/* <a className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" href="/pcm/home" >
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý công việc</span>
             </a> */}
-            <Link to={`/support/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Supporter</span>
-						</Link>
-            <Link to={`/pcm/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý công việc</span>
-						</Link>
             <Link to={`/document/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hồ sơ văn bản</span>
@@ -51,30 +79,6 @@ const HomeNavigation: FC = () => {
             <Link to={`/cmcs/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" title="Contract Management Control System">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hợp đồng</span>
-						</Link>
-            <Link to={`/fin/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản trị tài chính</span>
-						</Link>
-            <Link to={`/human/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý nhân sự</span>
-						</Link>
-            <Link to={`/ppt/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý dự án</span>
-						</Link>
-            {/* <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/social/home">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý truyền thông</span>
-            </a> */}
-            <Link to={`/social/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Truyền thông</span>
-						</Link>
-            <Link to={`/accounting/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Kế toán</span>
 						</Link>
           </div>
           {/* <div className="t-leftsidebar-menu-showmore">
@@ -92,14 +96,6 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
               <span className="truncate">CHG.THT.Xây dựng cụmm thông tin truyền thông và thiết bị</span>
             </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray5" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">ARM.CAL.Apartmetn Quy</span>
-            </a>
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">HAR.MAR.Court Yard By</span>
-            </a>
           </div>
           <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
@@ -112,7 +108,7 @@ const HomeNavigation: FC = () => {
         <div className="t-leftsidebar-customize-data text-center">
           <img className="block ml-auto mr-auto mb-4 w-16 h-16" src={iconBigFolder} alt="Folder" />
           <div className="font-bold text-2xl text-dark mb-4" role="none">Tùy chỉnh dữ liệu?</div>
-          <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu được quyền truy cập theo cách mà bạn mong muốn</p>
+          <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu theo cách mà bạn mong muốn</p>
           <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
         </div>
 

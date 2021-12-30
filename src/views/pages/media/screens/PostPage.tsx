@@ -39,7 +39,8 @@ import '../style.css';
  */
 import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
-import { typePostSelected, abbreviateNumber } from '../utils';
+import { typePostSelected } from '../utils';
+import { abbreviateNumber } from 'utils';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import CommentProvider from '../context/comment/comment.provider';
 
@@ -66,9 +67,7 @@ const SocialPostPage: FC = () => {
 		refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
-	const toggleModalEditMediaEdit = () => {
-		setModalEditMedia(!modalEditMedia);
-	}
+	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
 	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
@@ -227,7 +226,11 @@ const SocialPostPage: FC = () => {
 								limit={limit}
 								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID={mediaID} />
+								<ReplyCommentField 
+									attachFile 
+									inputContainerClassName="flex w-full p-2" 
+									fileContainerClassName="border-t" 
+									mediaID={mediaID} />
 							</div>
 						</div>
 						{/* Post Suggest */}
@@ -257,7 +260,13 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle modalType="update" show={modalEditMedia} toggle={toggleModalEditMedia} initialValues={initialState} files={media.files} images={media.images} />
+					<ModalCreateArticle 
+						modalType="update" 
+						show={modalEditMedia} 
+						toggle={toggleModalEditMedia} 
+						initialValues={initialState} 
+						files={media.files} 
+						images={media.images} />
 				</div>
 			</ModalContainer>
 			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>

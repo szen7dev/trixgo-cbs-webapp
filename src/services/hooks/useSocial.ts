@@ -1,8 +1,8 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
 import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
-import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload } from "typings/social";
+import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload, ListMediasPayload } from "typings/social";
 import { CommentProps } from 'typings/common';
 import { objPopulate } from 'views/pages/media/utils';
 
@@ -13,7 +13,7 @@ type UseSocial = {
     deleteMedia: (id: string) => Promise<void>,
     isLoadingListMedias: boolean,
     refetchListMedias: () => void,
-    nextPageListMedias: () => void,
+    nextPageListMedias: (options?: FetchNextPageOptions | undefined) => void,
     prevPageListMedias: () => void,
     totalRecord: number | undefined,
     totalPages: number | undefined,
@@ -22,6 +22,7 @@ type UseSocial = {
 
 type UseCommentSocial = {
     createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
+    updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
     deleteComment: (id: string) => Promise<void>,
     listComments: Array<CommentProps>,
     totalRecord: number,
@@ -33,7 +34,7 @@ type UseCommentSocial = {
     prevPageListComments: () => void,
 }
 
-export const useSocial = (key?: string, type?: string) : UseSocial => {
+export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial => {
     const { current: socket }: any = useSocket();
 
     const { mutateAsync: createMediaAsync } =
@@ -61,13 +62,14 @@ export const useSocial = (key?: string, type?: string) : UseSocial => {
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
             key || "list_medias",
-            async ({ pageParams }: any) => 
-            SocialRepository.listMedias({ 
-                lastestID: pageParams ? pageParams : "",
-                type: type || 'company'
-            }),
+            async ({ pageParam }: any) =>
+                SocialRepository.listMedias({ 
+                    lastestID: pageParam ? pageParam : "",
+                    ...params,
+                }),
             {
-                getNextPageParam: ({ nextCursor }: any) => {
+                getNextPageParam: (params: any) => {
+                    const nextCursor = params?.data?.nextCursor;
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
@@ -165,6 +167,11 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             SocialRepository.deleteComment(id)
         );
 
+    const { mutateAsync: updateCommentAsync } =
+        useMutation((payload: CommentPayload) =>
+            SocialRepository.updateComment(payload)
+        );
+
     const {
         isLoading: isLoadingListComments,
         refetch: refetchListComments,
@@ -204,6 +211,21 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         }
     };
 
+    const updateComment = async (payload: CommentPayload) => {
+        try {
+            const { error, data, message } = await updateCommentAsync(payload);
+            error && toast.error(message);
+
+            return data;
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const deleteComment = async (id: string) => {
         try {
             const { error, message } = await deleteCommentAsync(id);
@@ -225,6 +247,7 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
     return {
         createComment,
         deleteComment,
+        updateComment,
         listComments,
         limit,
         totalRecord,

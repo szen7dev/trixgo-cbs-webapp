@@ -16,7 +16,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-lighter-gray hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
+        <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
           {notifications.length ? (
             <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
               {notifications.length}
@@ -54,6 +54,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
                   avatar={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender.image}`}
                   author={notification.sender.fullname}
                   content={notification.title}
+                  path={notification.path}
                   lastActive={moment(notification.createdAt).fromNow()}
                 />
               </Menu.Item>

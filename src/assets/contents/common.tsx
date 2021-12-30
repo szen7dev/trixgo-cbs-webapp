@@ -1,4 +1,4 @@
-import { NavLink, TaskManagementNavLink, NavLinkAccounting } from "typings/common";
+import {NavLink, TaskManagementNavLink, NavLinkAccounting, NavLinkTaskDashboard} from "typings/common";
 
 import DashboardNavIcon from "assets/icons/DashboardNav";
 import SwitchVerticalIcon from "assets/icons/SwitchVertical";
@@ -251,5 +251,26 @@ export const NavLinksAccounting: NavLinkAccounting[] = [
     label: "Công cụ hỗ trợ",
     url: "/accounting/support-tools",
     pathname: "support-tools",
+  },
+];
+
+export const NavLinksTaskDashboard: NavLinkTaskDashboard[] = [
+  {
+    id: "nav-link-tasks-dashboard-type2",
+    label: "Quản trị DA",
+    url: "/pcm/tasks-dashboard-2",
+    pathname: "tasks-dashboard-2"
+  },
+  {
+    id: "nav-link-tasks-dashboard-type3",
+    label: "Tab",
+    url: "/pcm/tasks-dashboard-3",
+    pathname: "tasks-dashboard-3",
+  },
+  {
+    id: "nav-link-tasks-dashboard-type4",
+    label: "Tab",
+    url: "/pcm/tasks-dashboard-4",
+    pathname: "tasks-dashboard-4",
   },
 ];

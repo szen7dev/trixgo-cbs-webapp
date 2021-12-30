@@ -85,7 +85,6 @@ const NewHumanModal: FC = () => {
             {(formik) => {
               const { handleBlur, setFieldValue, values } = formik;
               const {
-                type,
                 birthDate,
                 issuedDate,
                 insuranceDate,
