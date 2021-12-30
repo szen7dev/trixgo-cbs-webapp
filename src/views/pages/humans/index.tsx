@@ -7,17 +7,22 @@ import NewHumanModal from "./components/NewHumanModal";
 
 import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
-import HumanAvatar from "assets/images/human-avatar.svg";
+// import HumanAvatar from "assets/images/human-avatar.svg";
 import SortIcon from "assets/images/icons8-sorting.svg";
 
-type Item = {
-  id: number;
-  name: string;
-  role: string;
-};
+import { useFetchListHuman } from "services/hooks/useHuman";
+import type { Human } from "typings/human";
+
+const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
+// type Item = {
+//   id: number;
+//   name: string;
+//   role: string;
+// };
 
 const HumansPage: FC = () => {
   const { t } = useTranslation(["human"]);
+  const humans = useFetchListHuman();
 
   const name = "Nguyễn Phan Thanh Hương";
   const role = "Cán bộ kế toán";
@@ -70,10 +75,10 @@ const HumansPage: FC = () => {
       </div>
 
       <div className="px-6 py-4 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 gap-3">
-        {data.map((item: Item) => {
+        {humans.listHuman.map((item: Human) => {
           return (
             <div
-              key={item.id}
+              key={item._id}
               className="relative flex flex-col justify-between items-center rounded-lg"
               style={{
                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
@@ -81,28 +86,36 @@ const HumansPage: FC = () => {
               }}
             >
               <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
-                <img
-                  src={ThreeDotIcon}
-                  alt="Three Dot"
-                  style={{margin: 0}}
-                />
+                <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
               </div>
-              <div className="w-[244px] text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
+              <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
-                  <img src={HumanAvatar} alt="Avatar" className="w-20 h-20" />
+                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20" />
                 </div>
-                <p className="text-xl font-normal">{item.name}</p>
-                <p className="text-sm pt-2 text-secondary-gray">{item.role}</p>
+                <span className="text-xl font-normal">{`${item.name}`}</span>
+                <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>
               </div>
-              <Link to={`/human/home/hid=${item.id}`} className='w-full text-center'>
+              <Link
+                to={`/human/home/hid=${item._id}`}
+                className="w-full text-center"
+              >
                 <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
-                  {t('view-info')}
+                  {t("view-info")}
                 </div>
               </Link>
             </div>
           );
         })}
       </div>
+      {humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
+          <div className="w-full flex justify-center my-5">
+            <button onClick={() => humans.fetchNextPageHuman()}>
+              <span className="text-primary">{`Xem thêm (${
+                humans.totalRecord - humans.listHuman.length
+              })`}</span>
+            </button>
+          </div>
+        )}
     </section>
   );
 };
