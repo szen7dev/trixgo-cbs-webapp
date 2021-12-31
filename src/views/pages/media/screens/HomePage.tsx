@@ -14,15 +14,22 @@ import SocialInternalArticles from "../components/home/SocialInternalArticles";
 import SocialCommunityPost from "../components/home/SocialCommunityPost";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
+import { useAuth } from "services/hooks/useAuth";
+import { useSocial } from 'services/hooks/useSocial';
+
 const pages = [
 	{ id: "0", title: 'Nội bộ công ty' },
-	// { id: "1", title: 'Bài viết của tôi' },
-	// { id: "2", title: 'Phòng ban' },
-	// { id: "3", title: 'Cộng đồng' },
-	// { id: "4", title: 'Hệ thống' },
+	{ id: "1", title: 'Dự án phòng ban' },
+	{ id: "2", title: 'Chuyển đổi số' },
+	{ id: "3", title: 'Tin hệ thống' },
+	{ id: "4", title: 'Lưu trữ cá nhân' },
 ]
 
 const SocialHomePage: FC = () => {
+	const { user } = useAuth();
+	const { listMedias: listMediasCompany } = useSocial('list_medias_internal_company', {
+		limit: 1, type: 'company', companyID: user?.company._id
+	});
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
@@ -31,7 +38,7 @@ const SocialHomePage: FC = () => {
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
-				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border border-gray-300">
+				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border-primary-gray border-gray-300">
 					<div className="flex flex-1 text-[14px]">
 						{pages.map(page => <button key={page.id} className={cn("border-b-2 border-transparent mx-2 leading-4", { 'border-primary text-black font-bold': page.id === '0' })} style={{ minWidth: "110px" }}>
 							{page.title}
@@ -55,19 +62,22 @@ const SocialHomePage: FC = () => {
 						{/* Top content */}
 						<div className="text-black flex flex-wrap xl:flex-nowrap mb-7">
 							{/* Main Article */}
-							<SocialMainArticle className="flex bg-secondary-gray bg-opacity-10 mt-4 mx-3.5 w-full flex-wrap lg:flex-nowrap" />
-							{/* Advertisement  */}
+							<SocialMainArticle 
+								className="flex bg-secondary-gray bg-opacity-10 mt-4 mx-3.5 w-full flex-wrap lg:flex-nowrap" 
+								media={listMediasCompany[0]}
+							/>
+							{/* Advertisement */}
 							<SocialAdvertisement className="social__ad hidden xl:block flex-1 mt-4 w-full lg:w-min px-3.5" style={{ minWidth: "406px" }} />
 						</div>
 						{/* Divide */}
 						<div className="border-gray-300 border-t mx-3.5"></div>
 						{/* Bottom content */}
 						<div className="flex flex-wrap 2xl:flex-nowrap mx-3.5 text-black">
-							{/* Company internal articles  */}
+							{/* Company internal articles */}
 							<SocialInternalArticles className="w-full mt-3.5" />
 							{/* Specialized topics */}
 							<SocialSpecializedTopics className="w-1/2 2xl:w-min px-5 mt-3.5 box-content" style={{ minWidth: "287px" }} />
-							{/* Community Posts  */}
+							{/* Community Posts */}
 							<SocialCommunityPost className="flex-1 py-3.5 w-1/2 lg:w-min px-3.5" style={{ minWidth: "406px" }} />
 						</div>
 					</div>

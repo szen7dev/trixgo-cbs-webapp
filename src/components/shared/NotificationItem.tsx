@@ -1,9 +1,11 @@
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 type Props = {
   avatar: string;
   author: string;
   content: string;
+  path: string;
   lastActive: string;
 };
 
@@ -11,10 +13,11 @@ const NotificationItem: FC<Props> = ({
   avatar,
   author,
   content,
+  path,
   lastActive,
 }) => {
   return (
-    <div className="t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent">
+    <Link to={path} className="t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent">
       <div className="relative">
         <img
           src={avatar}
@@ -35,7 +38,7 @@ const NotificationItem: FC<Props> = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

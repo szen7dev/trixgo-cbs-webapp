@@ -1,22 +1,29 @@
 import { FC } from "react";
-
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { useModal } from "services/hooks/useModal";
 import NewHumanModal from "./components/NewHumanModal";
 
 import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
-import HumanAvatar from "assets/images/human-avatar.svg";
+// import HumanAvatar from "assets/images/human-avatar.svg";
 import SortIcon from "assets/images/icons8-sorting.svg";
 
-type Item = {
-  id: number;
-  name: string;
-  role: string;
-};
+import { useFetchListHuman } from "services/hooks/useHuman";
+import type { Human } from "typings/human";
+
+const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
+// type Item = {
+//   id: number;
+//   name: string;
+//   role: string;
+// };
 
 const HumansPage: FC = () => {
+  const { t } = useTranslation(["human"]);
+  const humans = useFetchListHuman();
+
   const name = "Nguyễn Phan Thanh Hương";
   const role = "Cán bộ kế toán";
   const data = [];
@@ -67,38 +74,48 @@ const HumansPage: FC = () => {
         </button>
       </div>
 
-      <div className="px-6 py-4 grid grid-cols-5 gap-3">
-        {data.map((item: Item) => {
+      <div className="px-6 py-4 grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 xs:grid-cols-2 gap-3">
+        {humans.listHuman.map((item: Human) => {
           return (
             <div
-              key={item.id}
-              className="relative flex flex-col justify-around items-center h-[375px] rounded-lg hover:bg-primary-gray"
+              key={item._id}
+              className="relative flex flex-col justify-between items-center rounded-lg"
               style={{
                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
                 border: "1px solid #cccccc",
               }}
             >
-              <img
-                src={ThreeDotIcon}
-                alt="Three Dot"
-                className="absolute top-6 right-6 cursor-pointer"
-              />
-              <div className="text-center ml-2 mr-2">
-                <div className="flex justify-center mb-6">
-                  <img src={HumanAvatar} alt="Avatar" className="w-20 h-20" />
-                </div>
-                <p className="text-2xl">{item.name}</p>
-                <p className="text-sm pt-2 text-secondary-gray">{item.role}</p>
+              <div className="absolute top-2 right-2 w-[32px] h-[32px] cursor-pointer flex justify-center items-center bg-cbs-gray rounded-full">
+                <img src={ThreeDotIcon} alt="Three Dot" style={{ margin: 0 }} />
               </div>
-              <Link to={`/human/home/hid=${item.id}`}>
-                <button className="text-sm w-32 h-10 rounded-lg border border-primary-gray hover:bg-primary hover:text-primary-light">
-                  Xem chi tiết
-                </button>
+              <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
+                <div className="flex justify-center mb-6">
+                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20" />
+                </div>
+                <span className="text-xl font-normal">{`${item.name}`}</span>
+                <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>
+              </div>
+              <Link
+                to={`/human/home/hid=${item._id}`}
+                className="w-full text-center"
+              >
+                <div className="py-3 text-sm w-full rounded-bl-lg rounded-br-lg border border-primary-gray bg-primary text-primary-light">
+                  {t("view-info")}
+                </div>
               </Link>
             </div>
           );
         })}
       </div>
+      {humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
+          <div className="w-full flex justify-center my-5">
+            <button onClick={() => humans.fetchNextPageHuman()}>
+              <span className="text-primary">{`Xem thêm (${
+                humans.totalRecord - humans.listHuman.length
+              })`}</span>
+            </button>
+          </div>
+        )}
     </section>
   );
 };

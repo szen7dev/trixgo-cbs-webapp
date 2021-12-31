@@ -39,35 +39,53 @@ import KanbanBoardPage from "views/pages/kanbanBoard";
 // Customers Pages + Orders Pages + Campaigns Pages
 import CustomersPage from "views/pages/customers";
 import OrdersPage from "views/pages/orders";
-import CampaignsPage from "views/pages/campaigns";
 
 // Team Pages
 import HumansPage from "views/pages/humans";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
 // Messages pages
-import MessagesHomePage from "views/pages/messages/home";
-import MessagesDetailPage from "views/pages/messages/detail";
 
 // Tasks Pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
-// Teaser Pages
-import TeaserPage from "views/pages/teaser";
-
 // Settings Pages
 import SettingsPage from "views/pages/settings";
+
+// Personal data
+import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
+import PersonalNotePage from "views/pages/personal/PersonalNotePage";
+import PersonalBillPage from "views/pages/personal/PersonalBillPage";
+
+// Help
+import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
 import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
-import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
+import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
+import ProjectSchedulePage from "views/pages/ppt/ProjectSchedulePage";
 import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
-import ProjectProgressPage from "views/pages/ppt/ProjectProgressPage";
+import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
+import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
+import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
+import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
+import ProjectDrawingPage from "views/pages/ppt/ProjectDrawingPage";
+import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
+import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
+import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
+import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
+import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
+import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
+import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
+import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
+import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
+import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 
 // Accounting pages
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
@@ -93,12 +111,20 @@ import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCa
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmc pages
-import CmcHome from "views/pages/cmcs/CmcHome";
-import CmcDashboard from "views/pages/cmcs/components/CmcDashboard";
-import CmcIncome from "views/pages/cmcs/components/CmcIncome";
-import CmcGuarantee from "views/pages/cmcs/components/CmcGuarantee";
+import CmcHomePage from "views/pages/cmcs/CmcHomePage";
+import CmcDashboardPage from "views/pages/cmcs/CmcDashboardPage";
+import CmcPortfolioPage from "views/pages/cmcs/CmcPortfolioPage";
+import CmcIncomePage from "views/pages/cmcs/CmcIncomePage";
+import CmcExpensePage from "views/pages/cmcs/CmcExpensePage";
+import CmcGuaranteePage from "views/pages/cmcs/CmcGuaranteePage";
+import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
+import ContractDashBoard from "views/pages/cmcs/components/views/contract/ContractDashBoard";
+import ContractEditor from "views/pages/cmcs/components/views/contract/ContractEditor";
+import ContractBill from "views/pages/cmcs/components/views/contract/ContractBill";
+import ContractBudget from "views/pages/cmcs/components/views/contract/ContractBudget";
 import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
 import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
+import ContractProduct from "views/pages/cmcs/components/views/contract/ContractProduct";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 
 // Support pages
@@ -106,9 +132,10 @@ import SupportPage from "views/pages/support/components/home";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
 // Timesheet pages
-import TimesheetHomePage from "views/pages/timesheet/home";
-import TimesheetDetailPage from "views/pages/timesheet/detail";
-import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
+import TimesheetHomePage from 'views/pages/timesheet/home'
+import TimesheetDetailPage from 'views/pages/timesheet/detail'
+import MessageList from "../views/pages/messages/list";
+import MessagesHome from "../views/pages/messages/home/index_v2";
 
 const Routes: FC = () => {
   useEffect(() => {
@@ -122,6 +149,7 @@ const Routes: FC = () => {
           <ChatProvider>
             <ModalProvider>
               <Switch>
+
                 <Route path="/authentication/:path?">
                   <FullPageLayout isAuthentication>
                     <Switch>
@@ -165,6 +193,26 @@ const Routes: FC = () => {
                   </SupportLayout>
                 </Route>
 
+                <Route path="/help">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/help" component={HelpCenterPage}/>
+                      <Route path="/help/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
+
+                <Route path="/personal">
+                  <HomeLayout>
+                    <Switch>
+                      <Route exact path="/personal/notification" component={PersonalNotificationPage}/>
+                      <Route exact path="/personal/note" component={PersonalNotePage}/>
+                      <Route exact path="/personal/bill" component={PersonalBillPage}/>
+                      <Route path="/personal/*" component={ErrorPage} />
+                    </Switch>
+                  </HomeLayout>
+                </Route>
+
                 <Route exact path="/">
                   <Redirect to="/pcm/home" />
                 </Route>
@@ -191,15 +239,6 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/portfolio"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectInvestPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
                       path={"/pcm/market"}
                       component={() => (
                         <HomeLayout>
@@ -209,7 +248,16 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/tasks-dashboard-1"}
+                      path={"/pcm/dashboard-portfolio"}
+                      component={() => (
+                        <HomeLayout>
+                          <ProjectInvestPage />
+                        </HomeLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/dashboard-task"}
                       component={() => (
                         <HomeLayout>
                           <KanbanBoardPage />
@@ -218,10 +266,10 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
-                      path={"/pcm/tasks-dashboard-2"}
+                      path={"/pcm/dashboard-document"}
                       component={() => (
                         <HomeLayout>
-                          <TaskDashboardType2 />
+                          <DocumentDashboardPage />
                         </HomeLayout>
                       )}
                     />
@@ -272,10 +320,163 @@ const Routes: FC = () => {
                     />
                     <ProtectedRoute
                       exact
+                      path={"/pcm/project/:id/dashboard"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDashBoardPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/folder"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectFolderPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/schedule"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectSchedulePage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/budget"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectBudgetPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/bidding"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectBiddingPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/payment"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPaymentPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
                       path={"/pcm/project/:id/document"}
                       component={() => (
                         <ProjectLayout>
-                          <ProjectHomePage />
+                          <ProjectDocumentPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/photo"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPhotoPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/drawing"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDrawingPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/rfi"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectRfiPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/rfa"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectRfaPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/inspection"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectInspectionPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/punch"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectPunchPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/resource"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectResourcePage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/mom"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectMomPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/report"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectReportPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/directory"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectDirectoryPage />
+                        </ProjectLayout>
+                      )}
+                    />
+                    <ProtectedRoute
+                      exact
+                      path={"/pcm/project/:id/admin"}
+                      component={() => (
+                        <ProjectLayout>
+                          <ProjectAdminPage />
                         </ProjectLayout>
                       )}
                     />
@@ -310,7 +511,7 @@ const Routes: FC = () => {
                   <DocumentLayoutContainer />
                 </Route>
 
-                <Route path="/kanban-board">
+                {/* <Route path="/kanban-board">
                   <KanbanBoardLayout>
                     <Switch>
                       <ProtectedRoute
@@ -321,7 +522,7 @@ const Routes: FC = () => {
                       <Route path="/kanban-board/*" component={ErrorPage} />
                     </Switch>
                   </KanbanBoardLayout>
-                </Route>
+                </Route> */}
 
                 <Route path="/human/home">
                   <HumanLayout>
@@ -340,42 +541,21 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/messages/:path?">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/messages"
-                        component={MessagesHomePage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/messages/detail"
-                        component={MessagesDetailPage}
-                      />
-                      <Route path="/messages/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
-                </Route>
+                  <Switch>
+                    {/*<ProtectedRoute*/}
+                    {/*  exact*/}
+                    {/*  path="/messages"*/}
+                    {/*  component={MessagesHomePage}*/}
+                    {/*/>*/}
+                    {/*<ProtectedRoute*/}
+                    {/*  exact*/}
+                    {/*  path="/messages/detail"*/}
+                    {/*  component={MessagesDetailPage}*/}
+                    {/*/>*/}
+                    {/*<Route path="/messages/*" component={ErrorPage} />*/}
 
-                <Route path="/teaser">
-                  <HomeLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/teaser"
-                        component={TeaserPage}
-                      />
-                      <Route path="/applications/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
-                </Route>
-
-                <Route path="/applications">
-                  <MainLayout>
-                    <Switch>
-                      <Route path="/applications/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
+                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                  </Switch>
                 </Route>
 
                 <Route path="/settings">
@@ -479,7 +659,7 @@ const Routes: FC = () => {
                       path="/cmcs/home"
                       component={() => (
                         <CmcsLayout>
-                          <CmcHome />
+                          <CmcHomePage />
                         </CmcsLayout>
                       )}
                     />
@@ -488,7 +668,16 @@ const Routes: FC = () => {
                       path="/cmcs/dashboard"
                       component={() => (
                         <CmcsLayout>
-                          <CmcDashboard />
+                          <CmcDashboardPage />
+                        </CmcsLayout>
+                      )}
+                    />
+                     <Route
+                      exact
+                      path="/cmcs/portfolio"
+                      component={() => (
+                        <CmcsLayout>
+                          <CmcPortfolioPage />
                         </CmcsLayout>
                       )}
                     />
@@ -497,7 +686,16 @@ const Routes: FC = () => {
                       path="/cmcs/income"
                       component={() => (
                         <CmcsLayout>
-                          <CmcIncome />
+                          <CmcIncomePage />
+                        </CmcsLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/expenses"
+                      component={() => (
+                        <CmcsLayout>
+                          <CmcExpensePage />
                         </CmcsLayout>
                       )}
                     />
@@ -506,7 +704,7 @@ const Routes: FC = () => {
                       path="/cmcs/guarantee"
                       component={() => (
                         <CmcsLayout>
-                          <CmcGuarantee />
+                          <CmcGuaranteePage />
                         </CmcsLayout>
                       )}
                     />
@@ -516,6 +714,42 @@ const Routes: FC = () => {
                       component={() => (
                         <CmcsContractLayout>
                           <ContractHome />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/dashboard"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractDashBoard />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/editor"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractEditor />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/bill"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractBill />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/budget"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractBudget />
                         </CmcsContractLayout>
                       )}
                     />
@@ -534,6 +768,15 @@ const Routes: FC = () => {
                       component={() => (
                         <CmcsContractLayout>
                           <ContractIpc />
+                        </CmcsContractLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/product"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractProduct />
                         </CmcsContractLayout>
                       )}
                     />

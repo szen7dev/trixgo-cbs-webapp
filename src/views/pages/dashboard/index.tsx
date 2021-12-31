@@ -1,11 +1,12 @@
 import { FC, useState, useEffect } from "react";
 import moment from "moment";
 import Slider from "react-slick";
+import { Link } from 'react-router-dom';
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import newsImg1 from "assets/images/home-slide-img1.jpg";
-import newsImg2 from "assets/images/home-slide-img2.jpg";
 import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
 import iconComments from "assets/images/icons8-comments-48.png";
 import iconEye from "assets/images/icons8-eye-48.png";
@@ -20,29 +21,54 @@ import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import iconBirthday from "assets/images/icons8-event-64.png";
 
+import { abbreviateNumber } from 'utils';
 import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from "services/hooks/useAuth";
 import { usePcm } from 'services/hooks/usePcm';
+import { useSocial } from 'services/hooks/useSocial';
 import PcmRepository from 'apis/pcm';
 
 const HomePage: FC = () => {
   const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
+  const { user } = useAuth();
   const { listTasks } = usePcm();
+  const socketRef: any = useSocket();
+
+  const { listMedias: listMediasCommunity, nextPageListMedias } = useSocial('list_medias_community', { 
+    limit: 6, type: 'community'
+  });
+  const { listMedias: listMediasCompany, refetchListMedias } = useSocial('list_medias_internal_company', {
+    limit: 1, type: 'company', companyID: user?.company._id
+  });
 
   useEffect(() => {
     (async () => {
       const response = await PcmRepository.listTotalAnalysis();
       setTaskAnalysis(response.data);
     })();
+
+    const socket = socketRef.current;
+    if (!socket) return;
+
+		socket.on('NOTIFICATION_SSC_ADD_MEDIA', () => {
+      refetchListMedias();
+		});
   }, [])
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     autoPlay: true,
     autoPlaySpeed: 5000,
     slidesToShow: 3,
-    slidesToScroll: 1
+    slidesToScroll: 1,
+    beforeChange: (previousIndex: number, index: number) => {
+      if(previousIndex < index){
+        (index % 3) === 0 && nextPageListMedias();
+      }
+    }
   };
 
   return (
@@ -85,23 +111,34 @@ const HomePage: FC = () => {
           {/* outstanding news */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Tin nổi bật</span>
+              <span>Chuyển đổi số</span>
               <a href="/">Xem tất cả</a>
             </div>
             <div className="t-home-slider w-full">
               <Slider {...settings}>
                 {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg1} alt="News" />
-                    <div className="t-home-slider-item-text">
-                      <p className="text-lg font-bold">Cộng đồng game</p>
-                      <div className="text-[14px]">Thí điểm tính năng Auto count number two...</div>
+                {listMediasCommunity.length ? 
+                  listMediasCommunity.map(media => (
+                    <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
+                      <div className="t-home-slider-item-warpper relative flex items-end p-2">
+                        <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={(media.images && media.images.length) ? media.images[0].url : newsImg1} alt="News" />
+                        <div className="t-home-slider-item-text">
+                          <Link to={`/social/post/${media._id}`}>
+                            <p className="text-lg font-bold" title={media.title}>
+                              {media.title?.length > 20 ? `${media.title?.substring(0, 20)}...` : media.title}
+                            </p>
+                          </Link>
+                          <div className="text-[14px]">
+                            {media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  ))
+                 : ''}
+                
                 {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
+                {/* <div className="t-home-slider-item w-1/3 pr-2 pl-2">
                   <div className="t-home-slider-item-warpper relative flex items-end p-2">
                     <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg2} alt="News" />
                     <div className="t-home-slider-item-text">
@@ -109,47 +146,7 @@ const HomePage: FC = () => {
                       <div className="text-[14px]">Lãnh đạo các nước tổ chức họp G7</div>
                     </div>
                   </div>
-                </div>
-                {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg1} alt="News" />
-                    <div className="t-home-slider-item-text">
-                      <p className="text-lg font-bold">Covid 19</p>
-                      <div className="text-[14px]">Biến thể mới của covid 19 đã bùng phát</div>
-                    </div>
-                  </div>
-                </div>
-                {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg1} alt="News" />
-                    <div className="t-home-slider-item-text">
-                      <p className="text-lg font-bold">Cộng đồng game</p>
-                      <div className="text-[14px]">Thí điểm tính năng Auto count number two...</div>
-                    </div>
-                  </div>
-                </div>
-                {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg2} alt="News" />
-                    <div className="t-home-slider-item-text">
-                      <p className="text-lg font-bold">Tin thế giới</p>
-                      <div className="text-[14px]">Lãnh đạo các nước tổ chức họp G7</div>
-                    </div>
-                  </div>
-                </div>
-                {/* outstanding news slider item */}
-                <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg1} alt="News" />
-                    <div className="t-home-slider-item-text">
-                      <p className="text-lg font-bold">Covid 19</p>
-                      <div className="text-[14px]">Biến thể mới của covid 19 đã bùng phát</div>
-                    </div>
-                  </div>
-                </div>
+                </div> */}
               </Slider>
             </div>
           </div>
@@ -157,38 +154,45 @@ const HomePage: FC = () => {
           {/* media */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Truyền thông</span>
+              <span>Truyền thông công ty</span>
               <a href="/">Xem tất cả</a>
             </div>
-            <div className="flex items-center">
-              <div className="t-home-media-img pr-7">
-                <img className="w-full" src={imgMedia} alt="Media" />
+            {listMediasCompany.length ? (
+              <div className="flex items-center">
+                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="t-home-media-img pr-7">
+                  <img className="w-full" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
+                </Link>
+                <div className="t-home-media-text text-dark">
+                  <Link to={`/social/post/${listMediasCompany[0]._id}`}>
+                    <p className="t-home-media-title font-bold"> {listMediasCompany[0].title} </p>
+                  </Link>
+                  <div className="t-home-media-description mb-4">
+                    {listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content}
+                  </div>
+                  <div className="t-home-media-info text-secondary-gray">
+                    {listMediasCompany[0].author.fullname}
+                    <span className="t-home-media-info-dot"></span>
+                    {listMediasCompany[0].author?.department?.name}
+                    <span className="t-home-media-info-dot"></span>
+                    {moment(listMediasCompany[0].createAt).fromNow()}
+                  </div>
+                  <div className="t-home-media-parameter flex justify-between text-primary-gray">
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconThumbsUp} alt="Like" /> 
+                      {abbreviateNumber(listMediasCompany[0].totalReactions)}
+                    </div>
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconComments} alt="Comment" />
+                      {abbreviateNumber(listMediasCompany[0].totalComments)}
+                    </div>
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconEye} alt="Seen" />
+                      {abbreviateNumber(listMediasCompany[0].totalWatched)}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="t-home-media-text text-dark">
-                <p className="t-home-media-title font-bold">PGI Partners tổ chức buổi workshop về thanh toán các gói thầu xây lắp</p>
-                <div className="t-home-media-description mb-4">
-                  Sở Y tế Hà Nội vừa đồng ý với đề xuất của Trung tâm Kiểm soát Bệnh tật phương án rút khoảng cách giữa 2 mũi vaccine AstraZeneca về còn tối thiểu 4 tuần nhằm tăng tốc độ tiêm chủng toàn quốc.
-                </div>
-                <div className="t-home-media-info text-secondary-gray">
-                  Nguyễn Văn Tuấn-CBS
-                  <span className="t-home-media-info-dot"></span>
-                  Phòng kế toán
-                  <span className="t-home-media-info-dot"></span>
-                  6h
-                </div>
-                <div className="t-home-media-parameter flex justify-between text-primary-gray">
-                  <div className="t-home-media-parameter-item flex items-center">
-                    <img className="w-6 h-6 object-contain" src={iconThumbsUp} alt="Like" /> 28.7k
-                  </div>
-                  <div className="t-home-media-parameter-item flex items-center">
-                    <img className="w-6 h-6 object-contain" src={iconComments} alt="Comment" /> 11.7k
-                  </div>
-                  <div className="t-home-media-parameter-item flex items-center">
-                    <img className="w-6 h-6 object-contain" src={iconEye} alt="Seen" /> 2.7k
-                  </div>
-                </div>
-              </div>
-            </div>
+            ) : ''}
           </div>
 
           {/* recent actions */}

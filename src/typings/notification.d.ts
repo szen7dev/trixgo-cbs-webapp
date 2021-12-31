@@ -31,5 +31,6 @@ export type NotificationProps = {
   receiver: string,
   title: string,
   content: string,
+  path: string,
   createdAt: string
 };

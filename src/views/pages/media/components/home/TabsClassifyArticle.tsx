@@ -47,18 +47,8 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
 					<div>
-						<p className="text-black text-base leading-5">Thành viên trong công ty</p>
-						<p className="text-secondary-gray text-sm leading-4">Thành viên trong công ty</p>
-					</div>
-				</label>
-				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="just-me" name="type" className="post__classify-type" />
-					<div className="mr-3">
-						<img src={iconChecked} alt="icon Checked" />
-					</div>
-					<div>
-						<p className="text-black text-base leading-5">Chỉ mình tôi</p>
-						<p className="text-secondary-gray text-sm leading-4">Chỉ mình tôi</p>
+						<p className="text-black text-base leading-5">Nội bộ công ty</p>
+						<p className="text-secondary-gray text-sm leading-4">Nội bộ công ty</p>
 					</div>
 				</label>
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
@@ -68,7 +58,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 					</div>
 					<div>
 						<p className="text-black text-base leading-5">Dự án, phòng ban</p>
-						<p className="text-secondary-gray text-sm leading-4">Dự án, phòng ban mà bạ là thành viên</p>
+						<p className="text-secondary-gray text-sm leading-4">Dự án, phòng ban mà bạn là thành viên</p>
 					</div>
 					<div className="ml-auto text-primary-gray">
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,8 +72,8 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
 					<div>
-						<p className="text-black text-base leading-5">Cộng đồng</p>
-						<p className="text-secondary-gray text-sm leading-4">Cộng đồng doanh nghiệp</p>
+						<p className="text-black text-base leading-5">Chuyển đổi số</p>
+						<p className="text-secondary-gray text-sm leading-4">Chuyển đổi số</p>
 					</div>
 					<div className="ml-auto text-primary-gray">
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,8 +87,18 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
 					<div>
-						<p className="text-black text-base leading-5">Hệ thống</p>
+						<p className="text-black text-base leading-5">Tin hệ thống</p>
 						<p className="text-secondary-gray text-sm leading-4">Thông báo từ hệ thống</p>
+					</div>
+				</label>
+				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
+					<Field type="radio" value="just-me" name="type" className="post__classify-type" />
+					<div className="mr-3">
+						<img src={iconChecked} alt="icon Checked" />
+					</div>
+					<div>
+						<p className="text-black text-base leading-5">Lưu trữ cá nhân</p>
+						<p className="text-secondary-gray text-sm leading-4">Lưu trữ cá nhân</p>
 					</div>
 				</label>
 			</div>
