@@ -8,6 +8,7 @@ import { useMutation } from "react-query";
  */
 import FileRepository from "apis/upload";
 import { UploadPayload, FileProps, AddFileUploadResponse } from "typings/file";
+import Compressor from 'compressorjs';
 
 type GenerateLinkResponse = {
     signedUrl: string,
@@ -15,16 +16,20 @@ type GenerateLinkResponse = {
     file: File,
     result?: FileProps
 }
-
+type CompressConfig = {
+    useCompress: boolean;
+    quality?: number;
+}
 export type UploadFileProps = {
     files: File,
-    progress?: (percentCompleted: number) => void
+    progress?: (percentCompleted: number) => void,
+    compressConfig?: CompressConfig;
 }
 
 type UseUpload = {
     generateLinkS3: (payload: File) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, progress }: UploadFileProps) => Promise<AddFileUploadResponse>,
+    addFileToUpload: ({ files, progress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
 };
 
 export const useUpload = (app?: string) : UseUpload => {
@@ -69,7 +74,14 @@ export const useUpload = (app?: string) : UseUpload => {
         }
     };
 
-    const addFileToUpload = async ({ files, progress }: UploadFileProps) => {
+    const addFileToUpload = async ({
+           files,
+           progress,
+           compressConfig = {
+               useCompress: true,
+               quality: 0.8
+           },
+       }: UploadFileProps) => {
         // let urlsPromise: Promise<GenerateLinkResponse>[] = [];
 
         // if(!files.length) return;
@@ -93,9 +105,38 @@ export const useUpload = (app?: string) : UseUpload => {
         // })
 
         const { signedUrl, file, fileName, result } = await generateLinkS3(files);
-        await uploadFileToS3({ signedUrl, file, progress });
 
+        //Handle images
+        if (file.type.includes("image/") && compressConfig?.useCompress) {
+            new Compressor(file, {
+                quality: compressConfig.quality,
+
+                // The compression process is asynchronous,
+                // which means you have to access the `result` in the `success` hook function.
+                success(result) {
+                    const compressFile = blobToFile(result, file.name);
+                    console.log('Sending in compress mode with quality: ' + compressConfig.quality);
+                    uploadFileToS3({signedUrl, file: compressFile, progress});
+                },
+                error(err) {
+                    console.log(err.message);
+                },
+            });
+        } else {
+            console.log('Sending in HD mode');
+            await uploadFileToS3({signedUrl, file, progress});
+        }
         return { _id: result?._id, name: fileName };
+    }
+
+    const blobToFile = (theBlob: Blob, fileName:string): File => {
+        const b: any = theBlob;
+        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        b._lastModifiedDate = new Date();
+        b._name = fileName;
+
+        //Cast to a File() type
+        return <File>theBlob;
     }
 
     return {

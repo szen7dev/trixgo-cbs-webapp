@@ -58,7 +58,7 @@ const SettingMessageDetail:FC = () => {
     ]
 
     return (
-        <div className={"messages-right-bar w-[480px] border-l transition duration-500 relative group"}>
+        <div className={"messages-right-bar w-[480px] border-l transition duration-150 relative group"}>
             <div className={"h-full group bg-gray-100 overflow-auto"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button>

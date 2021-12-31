@@ -1,17 +1,11 @@
-import React, {FC, useContext} from "react";
-import HamMenu from "assets/images/icons8-menu-96.svg"
+import React, {FC} from "react";
 import SearchInput from "components/common/SearchInput";
-import iconNotification from "assets/images/icons8-notification-64.svg";
-import iconPencilWhite from "assets/images/icons8-pencil-64.svg";
 import {map as _map} from "lodash";
-import {useParams,NavLink} from "react-router-dom";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
+import AddNewChatGroup from "./components/AddNewChatGroup";
 
 const MessageList:FC = () => {
-    const {tab} = useParams<{ tab: string }>();
-    const tabID = tab??"all";
-
     const listTab = [
         {
             text: "All",
@@ -164,7 +158,7 @@ const MessageList:FC = () => {
     ]
 
     return (
-        <div className={"messages-left-bar w-[480px] border-r transition duration-500 group relative"}>
+        <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
             <div className={"overflow-auto h-full"}>
                 <div className={"sticky top-0 bg-white z-5"}>
                     <div className={"p-2 flex"}>
@@ -177,12 +171,11 @@ const MessageList:FC = () => {
                                 className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
                                 key={tab.tabId}
                             >
-                                <NavLink
-                                    className={"whitespace-nowrap text-center block p-2 " + (tab.tabId===tabID?"border-b-2 border-primary text-primary":"text-primary-gray")}
-                                    to={"/messages/list/"+tab.tabId}
+                                <button
+                                    className={"whitespace-nowrap text-center block p-2 " + (tab.tabId==="all"?"border-b-2 border-primary text-primary":"text-primary-gray")}
                                 >
                                     {tab.text}
-                                </NavLink>
+                                </button>
                                 {tab.unread>0&&<span className={"rounded-full bg-primary text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{tab.unread}</span>}
                             </div>
                         ))}
@@ -196,9 +189,7 @@ const MessageList:FC = () => {
                 </div>
 
             </div>
-            <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center"}>
-                <img src={iconPencilWhite} alt={"Pencil icon"}/>
-            </button>
+            <AddNewChatGroup/>
         </div>
     )
 }
