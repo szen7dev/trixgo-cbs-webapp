@@ -20,6 +20,12 @@ type ActionsProps<A> = {
 	[key in keyof A]: TAction
 }
 
+interface ProviderState {
+	initialValue?: {
+		[key: string]: any;
+	};
+}
+
 type IR<S, A> = (state: S, action: A) => S
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,14 +33,11 @@ function createDataContext<_R, A, S>(
 	reducer: IR<S, ReducerActionsProps>,
 	action: ActionsProps<A>,
 	defaultValues: S
-): { Context: Context<{ state: S } & IActions<A>>, Provider: FC } {
-	// const actions: { [key in keyof typeof action]: IAction } = {};
-	// Object.keys(action).forEach(key => actions[key] = () => true)
-
+): { Context: Context<{ state: S } & IActions<A>>, Provider: FC<ProviderState> } {
 	const Context = createContext<{ state: S } & IActions<A>>(Object.assign({ state: defaultValues }));
 
-	const Provider: FC = ({ children }) => {
-		const [state, dispatch] = useReducer(reducer, defaultValues);
+	const Provider: FC<ProviderState> = ({ children, initialValue }) => {
+		const [state, dispatch] = useReducer(reducer, Object.assign(defaultValues, initialValue));
 
 		const boundActions: { [key: string]: unknown } = {}
 

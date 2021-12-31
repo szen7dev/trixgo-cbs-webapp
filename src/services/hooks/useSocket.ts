@@ -29,10 +29,10 @@ export const useSocket = (): UseSocket => {
             });
 
             socket.on('error', (error: any) => {
-                console.log("--------error to socket server-------", error);
+                // console.log("--------error to socket server-------", error);
             });
             socket.on('connect_error', (con_error: any) => {
-                console.log("--------connect_error to socket server-------", con_error);
+                // console.log("--------connect_error to socket server-------", con_error);
             });
 
             socketRef.current = socket;
