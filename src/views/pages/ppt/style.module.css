@@ -365,15 +365,6 @@ td {
   vertical-align: top;
 }
 
-.table-project thead tr th:last-child {
-  width: 1%;
-  min-width: 89px;
-}
-
-.table-project tbody tr td:last-child {
-  background-color: #F55F5F;
-}
-
 .table tbody tr th {
   background: #EAF2FE;
   padding: 10px 8px 5px 8px;

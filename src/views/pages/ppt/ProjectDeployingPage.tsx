@@ -1,5 +1,4 @@
-import { FC, useContext, useEffect, useMemo } from "react";
-import cn from "classnames";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 
 import { Provider, Context as ContextModal } from "views/pages/document/contexts/contextModal";
 
@@ -9,12 +8,22 @@ import DropdownFilterButton from "views/pages/document/components/DocumentFilter
 import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
 import ButtonMore from "views/pages/document/components/common/ButtonMore";
 
-import styles from "./style.module.css";
+import "./style.css";
+import MarketRowGroup from "./components/market/MarketRowGroup";
 
 const ProjectDeploying: FC = () => {
+	const [show, setShow] = useState<boolean>(true)
 	const { toggleModal } = useContext(ContextModal);
 
-	const data = useMemo(() => [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], []);
+	const data = useMemo(() => Array.from({ length: 3 }).map((_, index) => ({
+		_id: index,
+		project: { sign: 'test' },
+		name: 'asd',
+		expiredTime: Date.now(),
+		description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi, rem?",
+		data: Array.from({ length: Math.ceil(Math.random() * 10) }).map((_d, i) => ({ _id: i }))
+	})), []);
+	// const data = useMemo(() => Array.from({length:10}), []);
 
 	useEffect(() => {
 		document.title = "PPT - Dự án đang phát triển"
@@ -22,7 +31,7 @@ const ProjectDeploying: FC = () => {
 
 	return (
 		<>
-			<div className={cn(styles.content, "flex flex-col overflow-hidden h-full")}>
+			<div className="text-cbs-subtext flex flex-col overflow-hidden h-full">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black py-1">
 					<span className="text-x-large mr-7">Danh sách</span>
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
@@ -32,45 +41,27 @@ const ProjectDeploying: FC = () => {
 					<ButtonCreate onClick={toggleModal} />
 					<ButtonMore />
 				</div>
-				<div className={cn(styles.scroll, "flex-1 overflow-y-auto px-2")}>
-					<table className={cn(styles['table-project'], styles.table, styles['text-normal'], 'mt-2')}>
-						<thead className={styles.black}>
+				<div className="custom-scroll flex-1 overflow-y-auto px-2">
+					<table className='table w-full border-separate text-center text-small mt-2'>
+						<thead className="text-black">
 							<tr>
+								<th className="align-middle px-1 z-10">
+									<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
+								</th>
 								<th>TT</th>
 								<th style={{ minWidth: "240px" }}>Nội dung</th>
-								<th>Tổng mức đầu tư</th>
+								<th style={{ minWidth: "120px" }}>Tổng mức đầu tư</th>
 								<th style={{ minWidth: "264px" }}>Tình trạng hiện tại</th>
 								<th style={{ minWidth: "100px" }}>Ngày liên hệ gần nhất</th>
 								<th style={{ minWidth: "74px" }}>Đầu mối kết nối</th>
 								<th style={{ minWidth: "92px" }}>Khả năng thành công</th>
 								<th style={{ minWidth: "400px" }}>Ghi chú tiến trình</th>
-								<th>Số ngày cách đây</th>
+								<th style={{ minWidth: "90px" }}>Số ngày cách đây</th>
 							</tr>
 						</thead>
-						<tbody className={styles.black}>
-							{
-								data.map((_item, index) => {
-									return (
-										index % 5 === 0
-											? (<tr key={index}>
-												<th>A1</th>
-												<th colSpan={9} className="text-left">DỰ ÁN VỀ DÂN DỤNG</th>
-											</tr>)
-											: (<tr key={index}>
-												<td className="px-4">{index}</td>
-												<td className="text-left">Dự án trường Newton tại Ciputra</td>
-												<td>5.000.000.000.000</td>
-												<td className="text-left">A Dương đã báo Hiếu NBK kiểm tra, hỏi lại CĐT</td>
-												<td>28/09/2021</td>
-												<td>Mr. Long CDC</td>
-												<td className="text-center">Cao</td>
-												<td className="text-left">Đã thuyết trình với Ms. Oanh. Chờ trao đổi với Ban lãnh đạo CĐT. Dịch vụ cung cấp (BIM, Tư vấn giá, nền tảng công nghệ, thầu)</td>
-												<td className="align-middle">12</td>
-											</tr>)
-									)
-								})
-							}
-						</tbody>
+						{
+							data.map((_item, index) => <MarketRowGroup row={_item} key={index} show={show} />)
+						}
 					</table>
 				</div>
 			</div>
