@@ -1,13 +1,11 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC} from "react";
 import SearchInput from "components/common/SearchInput";
-import iconPencilWhite from "assets/images/icons8-pencil-64.svg";
-import iconArrowRightWhite from "assets/images/icon-arrow-right-white.svg";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
+import AddNewChatGroup from "./components/AddNewChatGroup";
 
 const MessageList:FC = () => {
-    const [showAddNew, setShowAddNew] = useState(false);
     const listTab = [
         {
             text: "All",
@@ -159,16 +157,8 @@ const MessageList:FC = () => {
         }
     ]
 
-    const buttonFloatingAction = () => {
-        if (showAddNew) {
-            console.log('adssdads')
-        } else {
-            setShowAddNew(true)
-        }
-    }
-
     return (
-        <div className={"messages-left-bar w-[480px] border-r transition duration-500 group relative"}>
+        <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
             <div className={"overflow-auto h-full"}>
                 <div className={"sticky top-0 bg-white z-5"}>
                     <div className={"p-2 flex"}>
@@ -199,20 +189,7 @@ const MessageList:FC = () => {
                 </div>
 
             </div>
-            <button onClick={() => buttonFloatingAction()} className={"w-[56px] h-[56px] rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center z-15 " + (showAddNew?"":"group-hover:opacity-100 opacity-0")}>
-                {
-                    showAddNew?
-                    <img src={iconArrowRightWhite} alt={"Pencil icon"}/>:
-                    <img src={iconPencilWhite} alt={"Pencil icon"}/>
-                }
-            </button>
-
-            {
-                showAddNew&&
-                <div className={"absolute top-0 w-full h-full bg-white z-10"}>
-                    asdsd
-                </div>
-            }
+            <AddNewChatGroup/>
         </div>
     )
 }

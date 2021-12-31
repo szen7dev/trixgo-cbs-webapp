@@ -17,7 +17,7 @@ const ChattingSection:FC = () => {
     };
 
     return (
-        <div className={"flex-1 transition duration-500"}>
+        <div className={"flex-1 transition duration-150"}>
             <div className={"relative flex flex-col bg-chat-app h-full"}>
                 <MainChatHeading chat={chat}/>
                 <MainChatContent/>
