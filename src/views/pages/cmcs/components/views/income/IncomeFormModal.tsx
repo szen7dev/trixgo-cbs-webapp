@@ -22,51 +22,67 @@ const IncomeFormModal: FC = () => {
   const { closeModal } = useModal();
 
   const initialValues = {
-    contractName: "",
-    code: "",
-    buyerBank: "",
-    internalCode: "",
-    seller: "",
+    company: "",
+    project: "",
+    parent: "",
+    level: "",
+    admins: "",
+    members: "",
+    draft: 1,
+    outIn: 1,
+    status: 1,
+    real: 1,
+    subType: 1,
+    type: 1,
+    name: "",
+    sign: "",
+    storeSign: "",
     description: "",
-    sellerBank: "",
     note: "",
-    biddingPackageName: "",
-    signDate: "",
-    otherNote: "",
-    startMakingDate: "",
-    valueBeforeVAT: "",
-    incurredBeforeVAT: "",
-    vatValue: "",
-    advanceContract: "",
-    outputBeforeVAT: "",
-    advanceOutputBeforeVAT: "",
-    vatOutput: "",
-    acceptanceBeforeVAT: "",
-    acceptanceArisingBeforeVAT: "",
-    vatAcceptance: "",
-    retentionValue: "",
-    advanceWithdrawal: "",
-    otherDeductions: "",
-    requestAdvancePayment: "",
-    disbursedAdvance: "",
-    disbursedPayment: "",
-    paymentRemaining: "",
-    surplus: "",
-    valueSettlement: "",
-    contractLock: "",
-    endMakingDate: "",
-    budget: "",
-    managementFee: "",
-    vatBudget: "",
-    contractingRate: "",
-    budgetForecast: "",
-    cost: "",
-    vatForecast: "",
-    profit: "",
-    contractGuarantee: "",
-    advanceGuarantee: "",
-    contractGuaranteeTime: "",
-    advanceGuaranteeTime: "",
+    note1: "",
+    date: null,
+    startTime: null,
+    endTime: null,
+    buyerInfo: "",
+    buyerBank: "",
+    sellerInfo: "",
+    sellerBank: "",
+    packageName: "",
+    lock: 1,
+    value: 0,
+    vatValue: 0,
+    plus: 0,
+    vatPlus: 0,
+    advancePayment: 0,
+    produce: 0,
+    vatProduce: 0,
+    plusProduce: 0,
+    vatPlusProduce: 0,
+    acceptance: 0,
+    vatAcceptance: 0,
+    plusAcceptance: 0,
+    vatPlusAcceptance: 0,
+    retainedValue: 0,
+    advancePaymentDeduction: 0,
+    otherDeduction: 0,
+    recommendedPayment: 0,
+    advancePaymentPaid: 0,
+    amountPaid: 0,
+    remainingPayment: 0,
+    advancePaymentOverage: 0,
+    finalValue: 0,
+    budget: 0,
+    budgetVAT: 0,
+    forecastBudget: 0,
+    forecastBudgetVAT: 0,
+    managementFee: 0,
+    subcontractFee: 0,
+    expenses: 0,
+    profit: 0,
+    cgValue: 0,
+    expiredCg: null,
+    agValue: 0,
+    expiredAg: null,
   };
 
   return (
@@ -88,11 +104,11 @@ const IncomeFormModal: FC = () => {
           return (
             <Form className="max-h-[690px] py-5 overflow-y-auto">
               <div>
-                <div className="flex items-center px-7 mb-8">
-                  <div
-                    className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                    onClick={() => setOpenManagementInfo(!openManagementInfo)}
-                  >
+                <div
+                  className="flex items-center px-7 mb-8 select-none cursor-pointer"
+                  onClick={() => setOpenManagementInfo(!openManagementInfo)}
+                >
+                  <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                     <img
                       src={
                         openManagementInfo
@@ -114,7 +130,7 @@ const IncomeFormModal: FC = () => {
                       </p>
                       <DropdownSearchable
                         placeholder="Thuộc dự án..."
-                        className="w-full pl-0 -mb-1 outline-none"
+                        className="w-full pl-0 -mb-1"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={false}
@@ -193,7 +209,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -233,7 +248,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -273,7 +287,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -313,7 +326,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -423,7 +435,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -463,7 +474,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -503,7 +513,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -543,7 +552,6 @@ const IncomeFormModal: FC = () => {
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        disabled
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
@@ -574,11 +582,11 @@ const IncomeFormModal: FC = () => {
                 )}
               </div>
 
-              <div className="flex items-center px-7 mb-8">
-                <div
-                  className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                  onClick={() => setOpenGeneralInfo(!openGeneralInfo)}
-                >
+              <div
+                className="flex items-center px-7 mb-8 cursor-pointer select-none"
+                onClick={() => setOpenGeneralInfo(!openGeneralInfo)}
+              >
+                <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                   <img
                     src={openGeneralInfo ? CollapseVertiIcon : CollapseHoriIcon}
                     alt="Collapse"
@@ -641,10 +649,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="code"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Mã hiệu..."
                       defaultValue="2906/2011/HDKT"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -656,10 +663,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="buyerBank"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ngân hàng bên mua..."
                       defaultValue="102253566-VCB Chi nhánh Hà Nội"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -671,10 +677,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="internalCode"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Mã hiệu nội bộ..."
                       defaultValue="2906/2011/HDKT"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -689,7 +694,6 @@ const IncomeFormModal: FC = () => {
                       allowClearValueSingleInput={false}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
-                      disabled
                       disableClass={cn(
                         "cursor-not-allowed rounded",
                         styles.disabledBg
@@ -746,10 +750,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="note"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ghi chú..."
                       defaultValue="Đã chính thức ký kết"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -761,10 +764,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="biddingPackageName"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tên gói thầu..."
                       defaultValue="Tư vấn quản lý dự án cụm 2 trường Tây Hồ Tây"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -776,10 +778,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="signDate"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ngày ký..."
                       defaultValue="29/6/2011"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -791,10 +792,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="otherNote"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ghi chú khác..."
                       defaultValue="Dự kiến khả thi"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -806,10 +806,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="startMakingDate"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bắt đầu thực hiện..."
                       defaultValue="29/6/2011"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -826,7 +825,6 @@ const IncomeFormModal: FC = () => {
                       allowClearValueSingleInput={false}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
-                      disabled
                       disableClass={cn(
                         "cursor-not-allowed rounded",
                         styles.disabledBg
@@ -861,24 +859,21 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="endMakingDate"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Kết thúc thực hiện..."
                       defaultValue="29/6/2011"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 px-7 gap-x-11 mb-8">
+              <div
+                className="grid grid-cols-2 px-7 gap-x-11 mb-8 cursor-pointer select-none"
+                onClick={() => setOpenAcceptancePayment(!openAcceptancePayment)}
+              >
                 <div className="flex items-center">
-                  <div
-                    className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                    onClick={() =>
-                      setOpenAcceptancePayment(!openAcceptancePayment)
-                    }
-                  >
+                  <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                     <img
                       src={
                         openAcceptancePayment
@@ -1406,11 +1401,11 @@ const IncomeFormModal: FC = () => {
                 </div>
               )}
 
-              <div className="flex items-center px-7 mb-8">
-                <div
-                  className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                  onClick={() => setOpenBudget(!openBudget)}
-                >
+              <div
+                className="flex items-center px-7 mb-8 cursor-pointer select-none"
+                onClick={() => setOpenBudget(!openBudget)}
+              >
+                <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                   <img
                     src={openBudget ? CollapseVertiIcon : CollapseHoriIcon}
                     alt="Collapse"
@@ -1451,10 +1446,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="vatBudget"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="VAT ngân sách..."
                       defaultValue="10.000.000"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1466,10 +1460,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="contractingRate"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tỷ lệ giao khoán..."
                       defaultValue="10.000.000"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1481,10 +1474,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="budgetForecast"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Dự báo ngân sách..."
                       defaultValue="10.000.000"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1494,10 +1486,9 @@ const IncomeFormModal: FC = () => {
                     <input
                       type="text"
                       name="cost"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Chi phí..."
                       defaultValue="10.000.000"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1526,11 +1517,11 @@ const IncomeFormModal: FC = () => {
                 </div>
               )}
 
-              <div className="flex items-center px-7 mb-8">
-                <div
-                  className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                  onClick={() => setOpenGuarantee(!openGuarantee)}
-                >
+              <div
+                className="flex items-center px-7 mb-8 cursor-pointer select-none"
+                onClick={() => setOpenGuarantee(!openGuarantee)}
+              >
+                <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                   <img
                     src={openGuarantee ? CollapseVertiIcon : CollapseHoriIcon}
                     alt="Collapse"
@@ -1546,7 +1537,7 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <Field
                       type="text"
-                      name="contractGuarantee"
+                      name="cgValue"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bảo lãnh hợp đồng..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -1559,7 +1550,7 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <input
                       type="text"
-                      name="advanceGuarantee"
+                      name="agValue"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bảo lãnh tạm ứng..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
@@ -1572,11 +1563,10 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <input
                       type="text"
-                      name="contractGuaranteeTime"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      name="expiredCg"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Bảo lãnh tạm ứng..."
                       defaultValue="15/12/2021"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1587,11 +1577,10 @@ const IncomeFormModal: FC = () => {
                     </p>
                     <input
                       type="text"
-                      name="advanceGuarantee"
-                      className="pl-3 cursor-not-allowed border border-primary-border rounded w-full h-[32px] outline-none"
+                      name="expiredAg"
+                      className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Thời hạn bảo lãnh tạm ứng..."
                       defaultValue="15/12/2021"
-                      disabled
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
