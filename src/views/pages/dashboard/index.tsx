@@ -159,8 +159,8 @@ const HomePage: FC = () => {
             </div>
             {listMediasCompany.length ? (
               <div className="flex items-center">
-                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="t-home-media-img pr-7">
-                  <img className="w-full" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
+                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
                 </Link>
                 <div className="t-home-media-text text-dark">
                   <Link to={`/social/post/${listMediasCompany[0]._id}`}>
