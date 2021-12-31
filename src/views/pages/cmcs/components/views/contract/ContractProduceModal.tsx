@@ -44,11 +44,11 @@ const ContractProduceModal: FC = () => {
           return (
             <Form className="max-h-[690px] py-5 overflow-y-auto">
               <div>
-                <div className="flex items-center px-7 mb-4">
-                  <div
-                    className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                    onClick={() => setOpenGeneralInfo(!openGeneralInfo)}
-                  >
+                <div
+                  className="flex items-center px-7 mb-4 cursor-pointer select-none"
+                  onClick={() => setOpenGeneralInfo(!openGeneralInfo)}
+                >
+                  <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                     <img
                       src={
                         openGeneralInfo ? CollapseVertiIcon : CollapseHoriIcon
@@ -67,10 +67,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="dateTime"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Ngày tháng..."
                         defaultValue="15/12/2021"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -84,10 +83,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="content"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Nội dung..."
                         defaultValue="Tạm ứng cho hợp đồng (30%)"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -114,7 +112,6 @@ const ContractProduceModal: FC = () => {
                         name="description"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Mô tả..."
-                        disabled
                         defaultValue="Đệ trình phê duyệt Hồ sơ thanh toán Đợt 6 PGI-PMI Dự án CHG"
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
@@ -126,11 +123,11 @@ const ContractProduceModal: FC = () => {
               </div>
 
               <div className="mx-7 mb-4 w-2/3 flex justify-between gap-x-2">
-                <div className="flex items-center">
-                  <div
-                    className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3 cursor-pointer select-none"
-                    onClick={() => setOpenRealizedOutput(!openRealizedOutput)}
-                  >
+                <div
+                  className="flex items-center cursor-pointer select-none"
+                  onClick={() => setOpenRealizedOutput(!openRealizedOutput)}
+                >
+                  <div className="h-5 w-5 bg-lighter-gray flex items-center justify-center rounded-full mr-3">
                     <img
                       src={
                         openRealizedOutput
@@ -167,10 +164,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="outputBeforeVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-3/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="200.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -178,10 +174,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="outputBeforeVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="Nhập giá trị USD"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -197,10 +192,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="productionPartVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-3/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="200.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -208,10 +202,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="productionPartVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="200.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -227,10 +220,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="outputArisingVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-3/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="200.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -238,10 +230,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="outputArisingVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Sản lượng trước VAT..."
                         defaultValue="200.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -257,10 +248,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="productionOfVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-3/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
                         placeholder="Sản lượng phát sinh phần VAT..."
                         defaultValue="1.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
@@ -268,10 +258,9 @@ const ContractProduceModal: FC = () => {
                       <input
                         type="text"
                         name="productionOfVAT"
-                        className="pl-3 cursor-not-allowed border border-primary-border rounded w-2/5 h-[32px] outline-none"
+                        className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Sản lượng phát sinh phần VAT..."
                         defaultValue="1.000.000"
-                        disabled
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }
