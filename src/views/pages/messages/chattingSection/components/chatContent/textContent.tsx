@@ -27,7 +27,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
         }
     }
     return (
-        <div className={"max-w-[466px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
+        <div className={"max-w-[366px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
             {
                 showSenderName&&
                 <div className={"reply-user-name"} style={{color: message.themeColor}}>

@@ -284,7 +284,7 @@ const MainChatContent:FC = () => {
         }
     }
     return (
-        <div className={"full-height-app bg-chat-app items-center flex flex-col relative overflow-auto transition duration-150"}>
+        <div className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition duration-150"}>
             <div className={"w-full max-w-[645px] pt-[20px] px-[20px] pb-[100px]"}>
                 {
                     _map(messages, message => renderMessage(message))
