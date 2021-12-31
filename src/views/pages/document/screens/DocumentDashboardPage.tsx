@@ -31,7 +31,8 @@ interface IData {
 	comment: {
 		user: string
 		message: string
-	}
+	},
+	mediaId: string
 }
 
 const getType = (key: number) => {
@@ -71,7 +72,7 @@ const getClass = (date: number) => {
 
 const DocumentDashboardPage: FC = () => {
 	const [type, setType] = useState<string>('all');
-	const [open, setOpen] = useState<boolean>(false);
+	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
 
 	const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
 		id: i,
@@ -86,11 +87,13 @@ const DocumentDashboardPage: FC = () => {
 		comment: {
 			user: 'Phùng Thị Hà-PGI',
 			message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
-		}
+		},
+		mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
 	}))
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handleChange = (e: any) => { setType(e.target.value) };
+	const handleClose = () => setOpen({ ...open, show: false });
 
 	return (
 		<>
@@ -219,7 +222,7 @@ const DocumentDashboardPage: FC = () => {
 										</div>
 										<div className="whitespace-nowrap" style={{ width: "75px" }}>10:22 AM</div>
 									</div>
-									<button className="absolute bottom-0 right-0 whitespace-nowrap w-max bg-cbs-table-header rounded-tl-md px-3 py-1.5 text-x-small" onClick={() => setOpen(true)}>
+									<button className="absolute bottom-0 right-0 whitespace-nowrap w-max bg-cbs-table-header rounded-tl-md px-3 py-1.5 text-x-small" onClick={() => setOpen({ show: true, mediaId: d.mediaId })}>
 										<img src={iconComment} alt="Comment" className="inline-block w-4 h-4 mr-1" />
 										<span className="align-middle">
 											21.3k
@@ -232,7 +235,7 @@ const DocumentDashboardPage: FC = () => {
 					</table>
 				</div>
 			</div>
-			<SliderOver open={open} onClose={setOpen} />
+			<SliderOver open={open.show ? true : false} onClose={handleClose} mediaID={open.mediaId} />
 		</>
 	);
 };

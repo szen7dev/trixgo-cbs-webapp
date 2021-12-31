@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
 
-import cn from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 
 import projectImage from "assets/images/project.jpg";
-import styles from "./style.module.css";
 
 import SearchInput from "components/common/SearchInput";
 import DropdownFilterButton from "../document/components/DocumentFilterButton";
 import ButtonCreate from "../document/components/common/ButtonCreate";
 import ButtonMore from "../document/components/common/ButtonMore";
+
+import 'views/pages/document/document.css'
 
 const ProjectCategoryPage: FC = () => {
 	// const [sorts, setSorting] = useState(listSort);
@@ -19,10 +19,10 @@ const ProjectCategoryPage: FC = () => {
 	useEffect(() => {
 		document.title = "PPT - Danh mục dự án"
 	}, []);
-	
+
 	const fetchData = () => {
 		setTimeout(() => {
-			setData(data.concat(Array.from({ length: 20 })));
+			setData(data.concat(Array.from({ length: 14 })));
 		}, 1500);
 	}
 	// const handleSort = (item: { id: string, type: string }, index: number) => {
@@ -41,7 +41,7 @@ const ProjectCategoryPage: FC = () => {
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 			{/* Header */}
-			<div className="px-4 flex items-center w-full text-primary-gray bg-white border border-gray-300 py-1">
+			<div className="px-4 flex items-center w-full text-primary-gray bg-white border-b border-cbs-border py-1">
 				<div className="flex flex-1 items-center">
 					<span className="text-x-large mr-7 text-black">
 						Danh sách
@@ -69,50 +69,40 @@ const ProjectCategoryPage: FC = () => {
 					}
 
 					scrollableTarget="scrollable"
-					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
+					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-4 text-primary-gray"
 				>
-				{
-					data.map((_item: number, index: number) => {
-						return (
-							<div key={index} className={cn(styles.item)}>
-								<div className={styles.image}>
-									<img width="130" height="130" src={projectImage} alt="project" />
-									<div>
-										<div className={cn(styles.progress, "w-full h-1.5")} style={{ '--width': `${Math.floor(Math.random() * 100)}%` } as React.CSSProperties} />
-										<div className={cn(styles.date, "flex justify-between mt-3")} style={{ color: 'black' }}>
-											<span>15/12/20</span>
-											<span>26/3/23</span>
+					{
+						data.map((_item: number, index: number) => {
+							return (
+								<div key={index} className="document__card-container">
+									<div className="rounded-cbs-md border-cbs-border border pt-4 px-4 pb-7">
+										<div className="flex gap-x-3.5">
+											<img width="90" height="90" src={projectImage} alt="project" />
+											<div className="flex-1">
+												<div className="flex justify-between text-xs">
+													<span>15/12/20</span>
+													<span>26/3/23</span>
+												</div>
+												<div className="w-full h-1.5 mt-1.5 border border-cbs-border box-content">
+													<div className="h-full bg-cbs-subtext"  style={{ 'width': `${Math.floor(Math.random() * 100)}%` } as React.CSSProperties}></div>
+												</div>
+												<ul className="mt-3 text-medium">
+													<li><span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" /> Cột mốc: <b>3/12</b></li>
+													<li className="mt-2.5"><span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn: <span className="text-cbs-primary">Đấu thầu</span></li>
+												</ul>
+											</div>
 										</div>
-										<ul className="mt-4">
-											<li><span /> Cột mốc: <b>3/12</b></li>
-											<li className="mt-5"><span /> ĐẤU THẦU</li>
-										</ul>
+										<h3 className="line-clamp-2 text-large text-black">
+											<Link className="" to="/pcm/project/:id/home">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</Link>
+										</h3>
+										<p className="text-x-small mt-1.5 truncate">
+											Công ty Cổ phần Đầu tư và Thương mại Thủ Đô
+										</p>
 									</div>
 								</div>
-								<h3 className={styles['line-clamp-2']}>
-									<Link className="" to="/pcm/project/:id/home">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</Link>
-								</h3>
-								<p className="truncate">
-									Công ty Cổ phần Đầu tư và Thương mại Thủ Đô
-								</p>
-								<div className={cn(styles.tag, "grid gap-6 justify-center text-center mt-6 whitespace-nowrap")}>
-									<div>
-										<h4>
-											90/148
-										</h4>
-										<p>Việc hoàn thành</p>
-									</div>
-									<div>
-										<h4>
-											288
-										</h4>
-										<p>Hồ sơ văn bản</p>
-									</div>
-								</div>
-							</div>
-						)
-					})
-				}
+							)
+						})
+					}
 				</InfiniteScroll>
 			</div>
 			{/* <Paginate nextPageAction={() => nextPage()} prevPageAction={() => prevPage()}/> */}

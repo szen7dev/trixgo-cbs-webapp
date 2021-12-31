@@ -1,10 +1,14 @@
-import { FC } from 'react'
+import { FC, useContext } from 'react'
+
+import { useHistory } from 'react-router-dom';
+
+// Context
+import { Context as ContextModal } from '../contexts/contextModal';
 
 import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
 import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import GroupActions from "views/pages/document/components/projects/GroupActions";
-import { useHistory } from 'react-router-dom';
 
 import 'views/pages/document/document.css'
 import TableGeneralInformation from 'views/pages/document/components/details/TableGeneralInformation';
@@ -23,6 +27,7 @@ interface Props {
 }
 
 const DocumentDetailPage: FC<Props> = () => {
+	const { toggleModal } = useContext(ContextModal);
 	const history = useHistory();
 	return (
 		<div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
@@ -35,7 +40,7 @@ const DocumentDetailPage: FC<Props> = () => {
 				<DropdownFilterButton />
 				<GroupActions className="flex items-center flex-1" />
 
-				<ButtonCreate />
+				<ButtonCreate onClick={toggleModal} />
 				<ButtonMore />
 			</div>
 			<div className='text-cbs-subtext flex-1 overflow-y-auto pb-2'>

@@ -108,7 +108,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
-				}
+				},
+				// compressConfig: {
+				// 	useCompress: false
+				// }
 			})
 			setIDImageUploaded(key, _id);
 		}

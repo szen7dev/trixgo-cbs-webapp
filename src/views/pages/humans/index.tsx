@@ -23,13 +23,7 @@ const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
 const HumansPage: FC = () => {
   const { t } = useTranslation(["human"]);
   const humans = useFetchListHuman();
-
-  const name = "Nguyễn Phan Thanh Hương";
-  const role = "Cán bộ kế toán";
-  const data = [];
-  for (let i = 0; i <= 12; i++) {
-    data.push({ name, role, id: i });
-  }
+  
   const { openModal } = useModal();
 
   return (

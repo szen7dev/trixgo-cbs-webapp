@@ -27,18 +27,19 @@ const pages = [
 
 const SocialHomePage: FC = () => {
 	const { user } = useAuth();
-	const { listMedias: listMediasCompany } = useSocial('list_medias_internal_company', {
+	const { listMedias: listMediasCompany, isLoadingListMedias } = useSocial('list_medias_internal_company', {
 		limit: 1, type: 'company', companyID: user?.company._id
 	});
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
 
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
+	if(isLoadingListMedias) return null;
 	return (
 		<>
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
-				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border-primary-gray border-gray-300">
+				<div className="px-4 flex justify-between w-full text-primary-gray bg-white border-gray-300">
 					<div className="flex flex-1 text-[14px]">
 						{pages.map(page => <button key={page.id} className={cn("border-b-2 border-transparent mx-2 leading-4", { 'border-primary text-black font-bold': page.id === '0' })} style={{ minWidth: "110px" }}>
 							{page.title}

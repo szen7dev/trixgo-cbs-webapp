@@ -4,10 +4,7 @@ interface StateProps {
   isShow: boolean;
 }
 
-type Keys = keyof typeof modalTypes;
-
 interface ActionProps {
-  // type: Keys;
   type: string;
 }
 

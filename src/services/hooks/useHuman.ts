@@ -1,9 +1,9 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import HumanRepository from 'apis/human';
 
 import type { Human } from 'typings/human';
 
-type UseListHuman = {
+interface UseListHuman {
     listHuman: Array<Human>;
     isLoading: boolean;
     totalRecord: number | undefined;
@@ -12,7 +12,6 @@ type UseListHuman = {
     refetchListHuman: () => void;
     fetchNextPageHuman: () => void;
 };
-
 export const useFetchListHuman = (limit = 10): UseListHuman => {
     const infinityQuery = useInfiniteQuery(
         ['list_human', limit],
@@ -54,5 +53,30 @@ export const useFetchListHuman = (limit = 10): UseListHuman => {
         hasNextPage,
         refetchListHuman,
         fetchNextPageHuman
+    }
+}
+
+interface UseDetailHuman {
+    detailHuman: Human;
+    message: string;
+    loading: boolean;
+}
+export const useFetchDetailHuman = (id: string): UseDetailHuman => {
+    const res = useQuery(`human_detail.${id}`, () =>
+        HumanRepository.fetchDetailHuman({
+            contactID: id,
+        })
+    );
+    if (Array.isArray(res.data?.data)) {
+        return {
+            detailHuman: {},
+            message: res.data?.data[0].message,
+            loading: res.isLoading,
+        }
+    }
+    return {
+        detailHuman: res.data?.data || {},
+        message: 'Ok',
+        loading: res.isLoading,
     }
 }

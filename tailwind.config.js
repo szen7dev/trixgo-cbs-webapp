@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const plugin = require('tailwindcss/plugin');
+
 /* eslint-disable */
 let autoGeneratePx = {}
 for (let i=1; i <= 1000; i++) {
@@ -68,7 +71,7 @@ module.exports = {
                 "[13px]": "13px",
                 "[14px]": "14px",
                 "[15px]": "15px",
-                "x-small": ["12px"],
+                "x-small": ["12px", "14px"],
                 "small": ["13px", "15px"],
                 "medium": ["14px", "16px"],
                 "large": ["16px", "24px"],
@@ -109,6 +112,15 @@ module.exports = {
             borderWidth: {
                 6: "6px",
             },
+						borderRadius: {
+							"cbs-sm": "3px",
+							"cbs": "5px",
+							"cbs-md": "10px",
+							"cbs-lg": "15px"
+						},
+						boxShadow: {
+							"cbs-md": "0px 4px 4px rgba(0, 0, 0, 0.25)"
+						},
             lineHeight: {
                 "[15px]": "14.95px",
 
@@ -135,5 +147,45 @@ module.exports = {
             opacity: ['disabled']
         },
     },
-    plugins: [],
+    plugins: [
+			plugin(function ({ addUtilities, theme, variants, e }) {
+				const values = theme('lineClamp')
+		
+				addUtilities(
+					[
+						Object.entries(values).map(([key, value]) => {
+							return {
+								[`.${e(`line-clamp-${key}`)}`]: {
+									overflow: 'hidden',
+									display: '-webkit-box',
+									'-webkit-box-orient': 'vertical',
+									'-webkit-line-clamp': `${value}`,
+								},
+							}
+						}),
+						{
+							'.line-clamp-none': {
+								'-webkit-line-clamp': 'unset',
+							},
+						},
+					],
+					variants('lineClamp')
+				)
+			},
+			{
+				theme: {
+					lineClamp: {
+						1: '1',
+						2: '2',
+						3: '3',
+						4: '4',
+						5: '5',
+						6: '6',
+					},
+				},
+				variants: {
+					lineClamp: ['responsive'],
+				},
+			})
+		],
 };
