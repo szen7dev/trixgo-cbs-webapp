@@ -1,5 +1,6 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
+import { Link } from "react-router-dom";
 import cn from "classnames";
 
 import { useModal } from "services/hooks/useModal";
@@ -8,15 +9,15 @@ import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-
 import IncomeFormModal from "./views/income/IncomeFormModal";
 
 import styles from "../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
-import { Link } from "react-router-dom";
 
 const CmcIncome: FC = () => {
+  const [itemChecked, setItemChecked] = useState(true);
+
   const { openModal } = useModal();
 
   return (
@@ -31,9 +32,11 @@ const CmcIncome: FC = () => {
             onChange={(event) => console.log(event.target.value)}
           />
           <FinancialCashFlowFilterButton />
-          <div className="border-l-2 border-primary-border ml-5 pl-5">
-            <ActionGroupFinancial />
-          </div>
+          {itemChecked && (
+            <div className="border-l-2 border-primary-border ml-5 pl-5">
+              <ActionGroupFinancial />
+            </div>
+          )}
         </div>
         <button
           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
@@ -141,8 +144,9 @@ const CmcIncome: FC = () => {
                 className="form-check-input"
                 type="checkbox"
                 value=""
-                defaultChecked
                 id="flexCheckDefault"
+                checked={itemChecked}
+                onChange={() => setItemChecked(!itemChecked)}
                 style={{ marginLeft: "-23px" }}
               />
             </td>
