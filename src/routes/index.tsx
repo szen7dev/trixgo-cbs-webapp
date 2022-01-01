@@ -17,12 +17,21 @@ import ChatProvider from "services/providers/Chat";
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
-import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
-import PcmLayout from "views/layouts/PcmLayout";
+import AccountingLayout from "views/layouts/AccountingLayout";
+import BiddingLayout from "views/layouts/BiddingLayout";
 import CmcsLayout from "views/layouts/CmcsLayout";
-import ProjectLayout from "views/layouts/ProjectLayout";
-import SupportLayout from "views/layouts/SupportLayout";
+import DocumentLayout from "views/layouts/DocumentLayout";
+import FinLayout from "views/layouts/FinLayout";
 import HumanLayout from "views/layouts/HumanLayout";
+import OperationLayout from "views/layouts/OperationLayout";
+import PcmLayout from "views/layouts/PcmLayout";
+import PersonalLayout from "views/layouts/PersonalLayout";
+import ReeLayout from "views/layouts/ReeLayout";
+import SupportLayout from "views/layouts/SupportLayout";
+import TimesheetLayout from "views/layouts/TimesheetLayout";
+import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
+import CmcsContractLayout from "views/layouts/CmcsContractLayout";
+import ProjectLayout from "views/layouts/ProjectLayout";
 
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
@@ -40,7 +49,7 @@ import KanbanBoardPage from "views/pages/kanbanBoard";
 import CustomersPage from "views/pages/customers";
 import OrdersPage from "views/pages/orders";
 
-// Team Pages
+// Human Pages
 import HumansPage from "views/pages/humans";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
@@ -125,7 +134,6 @@ import ContractBudget from "views/pages/cmcs/components/views/contract/ContractB
 import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
 import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
 import ContractProduct from "views/pages/cmcs/components/views/contract/ContractProduct";
-import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
@@ -784,7 +792,7 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/timesheet/:path?">
-                  <HomeLayout>
+                  <TimesheetLayout>
                     <Switch>
                       <ProtectedRoute
                         exact
@@ -797,7 +805,7 @@ const Routes: FC = () => {
                         component={TimesheetDetailPage}
                       />
                     </Switch>
-                  </HomeLayout>
+                  </TimesheetLayout>
                 </Route>
 
                 <Route path="*">
