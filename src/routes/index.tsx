@@ -239,7 +239,7 @@ const Routes: FC = () => {
                     <Switch>
                     <Route exact path="/ree/home" component={PersonalNotificationPage}/>
                       <Route exact path="/ree/other" component={PersonalNotePage}/>
-                      <Route path="/ree/*" component={ErrorPage} />
+                      <Route path="/ree /*" component={ErrorPage} />
                     </Switch>
                   </ReeLayout>
                 </Route>
