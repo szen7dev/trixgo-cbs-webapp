@@ -18,15 +18,15 @@ import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
 import AccountingLayout from "views/layouts/AccountingLayout";
-import BiddingLayout from "views/layouts/BiddingLayout";
+import BiddingLayout from "views/layouts/BiddingLayout"; //*** */
 import CmcsLayout from "views/layouts/CmcsLayout";
 import DocumentLayout from "views/layouts/DocumentLayout";
 import FinLayout from "views/layouts/FinLayout";
 import HumanLayout from "views/layouts/HumanLayout";
-import OperationLayout from "views/layouts/OperationLayout";
+import OperationLayout from "views/layouts/OperationLayout"; //*** */
 import PcmLayout from "views/layouts/PcmLayout";
 import PersonalLayout from "views/layouts/PersonalLayout";
-import ReeLayout from "views/layouts/ReeLayout";
+import ReeLayout from "views/layouts/ReeLayout"; //*** */
 import SupportLayout from "views/layouts/SupportLayout";
 import TimesheetLayout from "views/layouts/TimesheetLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
@@ -45,30 +45,23 @@ import DashboardPage from "views/pages/dashboard";
 // KanbanBoardPage Pages
 import KanbanBoardPage from "views/pages/kanbanBoard";
 
-// Customers Pages + Orders Pages + Campaigns Pages
-import CustomersPage from "views/pages/customers";
-import OrdersPage from "views/pages/orders";
-
-// Human Pages
+// Human pages
 import HumansPage from "views/pages/humans";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
 // Messages pages
 
-// Tasks Pages
+// Tasks pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
-// Settings Pages
-import SettingsPage from "views/pages/settings";
-
-// Personal data
+// Personal pages
 import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
 import PersonalNotePage from "views/pages/personal/PersonalNotePage";
 import PersonalBillPage from "views/pages/personal/PersonalBillPage";
 
-// Help
+// Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
@@ -115,11 +108,11 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 // Document pages
 import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
-//Financial
+// Financial pages
 import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
-// Cmc pages
+// Cmcs pages
 import CmcHomePage from "views/pages/cmcs/CmcHomePage";
 import CmcDashboardPage from "views/pages/cmcs/CmcDashboardPage";
 import CmcPortfolioPage from "views/pages/cmcs/CmcPortfolioPage";
@@ -211,14 +204,44 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/personal">
-                  <HomeLayout>
+                  <PersonalLayout>
                     <Switch>
                       <Route exact path="/personal/notification" component={PersonalNotificationPage}/>
                       <Route exact path="/personal/note" component={PersonalNotePage}/>
                       <Route exact path="/personal/bill" component={PersonalBillPage}/>
                       <Route path="/personal/*" component={ErrorPage} />
                     </Switch>
-                  </HomeLayout>
+                  </PersonalLayout>
+                </Route>
+
+                <Route path="/bidding">
+                  <BiddingLayout>
+                    <Switch>
+                      <Route exact path="/bidding/home" component={PersonalNotificationPage}/>
+                      <Route exact path="/bidding/other" component={PersonalNotePage}/>
+                      <Route path="/bidding/*" component={ErrorPage} />
+                    </Switch>
+                  </BiddingLayout>
+                </Route>
+
+                <Route path="/operation">
+                  <OperationLayout>
+                    <Switch>
+                    <Route exact path="/operation/home" component={PersonalNotificationPage}/>
+                      <Route exact path="/operation/other" component={PersonalNotePage}/>
+                      <Route path="/operation/*" component={ErrorPage} />
+                    </Switch>
+                  </OperationLayout>
+                </Route>
+
+                <Route path="/ree">
+                  <ReeLayout>
+                    <Switch>
+                    <Route exact path="/ree/home" component={PersonalNotificationPage}/>
+                      <Route exact path="/ree/other" component={PersonalNotePage}/>
+                      <Route path="/ree/*" component={ErrorPage} />
+                    </Switch>
+                  </ReeLayout>
                 </Route>
 
                 <Route exact path="/">
@@ -566,21 +589,8 @@ const Routes: FC = () => {
                   </Switch>
                 </Route>
 
-                <Route path="/settings">
-                  <MainLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/settings"
-                        component={SettingsPage}
-                      />
-                      <Route path="/settings/*" component={ErrorPage} />
-                    </Switch>
-                  </MainLayout>
-                </Route>
-
                 <Route path="/accounting/:path?">
-                  <HomeLayout>
+                  <AccountingLayout>
                     <Switch>
                       <Route exact path="/accounting">
                         <Redirect to="/accounting/home" />
@@ -636,15 +646,14 @@ const Routes: FC = () => {
                         component={AccountingSupportToolsPage}
                       />
                     </Switch>
-                  </HomeLayout>
+                  </AccountingLayout>
                 </Route>
 
                 <Route exact path="/fin/home">
                   <Redirect to="/fin/cashflow" />
                 </Route>
-
                 <Route path="/fin/:path?">
-                  <HomeLayout>
+                  <FinLayout>
                     <Switch>
                       <ProtectedRoute
                         exact
@@ -657,7 +666,7 @@ const Routes: FC = () => {
                         component={FinancialPlanningDetailPage}
                       />
                     </Switch>
-                  </HomeLayout>
+                  </FinLayout>
                 </Route>
 
                 <Route path="/cmcs/:path">

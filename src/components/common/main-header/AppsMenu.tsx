@@ -72,6 +72,10 @@ const AppsMenu: FC = () => {
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Kế toán</span>
             </Link>
+            <Link to={`/ree/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Real Estate Exchangeh</span>
+            </Link>
             <Link to={`/operation/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý vận hành</span>
