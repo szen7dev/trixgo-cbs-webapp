@@ -60,6 +60,10 @@ import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
 import PersonalNotePage from "views/pages/personal/PersonalNotePage";
 import PersonalBillPage from "views/pages/personal/PersonalBillPage";
+import PersonalHomePage from "views/pages/personal/PersonalHomePage";
+import PersonalConfigPage from "views/pages/personal/PersonalConfigPage";
+import PersonalFriendPage from "views/pages/personal/PersonalFriendPage";
+import PersonalHistoryPage from "views/pages/personal/PersonalHistoryPage";
 
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
@@ -209,6 +213,10 @@ const Routes: FC = () => {
                       <Route exact path="/personal/notification" component={PersonalNotificationPage}/>
                       <Route exact path="/personal/note" component={PersonalNotePage}/>
                       <Route exact path="/personal/bill" component={PersonalBillPage}/>
+                      <Route exact path="/personal/home" component={PersonalHomePage}/>
+                      <Route exact path="/personal/friend" component={PersonalFriendPage}/>
+                      <Route exact path="/personal/history" component={PersonalHistoryPage}/>
+                      <Route exact path="/personal/config" component={PersonalConfigPage}/>
                       <Route path="/personal/*" component={ErrorPage} />
                     </Switch>
                   </PersonalLayout>
