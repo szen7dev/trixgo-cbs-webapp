@@ -23,32 +23,31 @@ const LinkMenuLeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Trang chủ</span>
           </Link>
-          <Link to={`/personal/note`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Ghi chú</span>
-          </Link>
           <Link to={`/personal/friend`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Bạn bè</span>
-          </Link>
-          <Link to={`/personal/bill`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tài chính cá nhân</span>
+            <span className="truncate">Quản lý bạn bè</span>
           </Link>
           <Link to={`/personal/notification`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Quản lý thông báo</span>
           </Link>
-          <Link to={`/personal/history`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/personal/bill`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Lịch sử truy cập</span>
+            <span className="truncate">Quản lý hóa đơn</span>
+          </Link>
+          <Link to={`/personal/note`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Quản lý ghi chú</span>
           </Link>
           <Link to={`/personal/config`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Cấu hình dữ liệu</span>
           </Link>
+          <Link to={`/personal/history`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Lịch sử truy cập</span>
+          </Link>
         </div>
-
       </div>
     </div>
   );

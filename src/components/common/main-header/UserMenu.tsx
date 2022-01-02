@@ -60,7 +60,7 @@ const UserMenu: FC = () => {
           </Menu.Item>
 
           {/*  Divider */}
-          <hr className="h-px border-secondary-gray my-1 mx-3" />
+          {/* <hr className="h-px border-secondary-gray my-1 mx-3" />
 
           <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
@@ -80,7 +80,7 @@ const UserMenu: FC = () => {
                 </Link>
               </div>
             </div>
-          </Menu.Item>
+          </Menu.Item> */}
 
           {/*  Divider */}
           <hr className="h-px border-secondary-gray my-1 mx-3" />

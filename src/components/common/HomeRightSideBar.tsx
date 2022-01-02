@@ -71,7 +71,7 @@ const HomeRightSideBar: FC<Props> = (props: Props) => {
               alt="Left side bar"
             />
 				</Link>
-        <Link to={`/help`} className="mt-4">
+        <Link to={`/help/home`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon4}

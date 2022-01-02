@@ -14,11 +14,6 @@ import { useFetchListHuman } from "services/hooks/useHuman";
 import type { Human } from "typings/human";
 
 const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
-// type Item = {
-//   id: number;
-//   name: string;
-//   role: string;
-// };
 
 const HumansPage: FC = () => {
   const { t } = useTranslation(["human"]);

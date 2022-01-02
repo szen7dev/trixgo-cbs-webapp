@@ -13,10 +13,11 @@ import ThemeProvider from "services/providers/Theme";
 import ModalProvider from "services/providers/Modal";
 import ChatProvider from "services/providers/Chat";
 
-// Layouts
+/*=====LAYOUTS=====*/
 import FullPageLayout from "views/layouts/FullPage";
 import MainLayout from "views/layouts/Main";
 import HomeLayout from "views/layouts/HomeLayout";
+import HelpCenterLayout from "views/layouts/HelpCenterLayout";
 import AccountingLayout from "views/layouts/AccountingLayout";
 import BiddingLayout from "views/layouts/BiddingLayout"; //*** */
 import CmcsLayout from "views/layouts/CmcsLayout";
@@ -33,6 +34,7 @@ import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 import ProjectLayout from "views/layouts/ProjectLayout";
 
+/*=====PAGES=====*/
 // Authentication Pages
 import SignInPage from "views/pages/authentication/SignIn";
 import RegisterPage from "views/pages/authentication/Register";
@@ -46,7 +48,10 @@ import DashboardPage from "views/pages/dashboard";
 import KanbanBoardPage from "views/pages/kanbanBoard";
 
 // Human pages
-import HumansPage from "views/pages/humans";
+import HumanHomePage from "views/pages/humans/HumanHomePage";
+import HumanCetificateFilterPage from "views/pages/humans/HumanCetificateFilterPage";
+import HumanOtherFilterPage from "views/pages/humans/HumanOtherFilterPage";
+import HumanExpiredPage from "views/pages/humans/HumanExpiredPage";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
 // Messages pages
@@ -103,6 +108,10 @@ import AccountingVatPage from "views/pages/accounting/AccountingVatPage";
 import AccountingReportFinancePage from "views/pages/accounting/AccountingReportFinancePage";
 import AccountingSupportToolsPage from "views/pages/accounting/AccountingSupportToolsPage";
 import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
+
+// Bidding pages
+import BiddingHomePage from "views/pages/bidding/BiddingHomePage";
+import BiddingOtherPage from "views/pages/bidding/BiddingOtherPage";
 
 // Social pages
 import SocialHomePage from "views/pages/media/screens/HomePage";
@@ -199,12 +208,12 @@ const Routes: FC = () => {
                 </Route>
 
                 <Route path="/help">
-                  <HomeLayout>
+                  <HelpCenterLayout>
                     <Switch>
-                      <Route exact path="/help" component={HelpCenterPage}/>
+                      <Route exact path="/help/home" component={HelpCenterPage}/>
                       <Route path="/help/*" component={ErrorPage} />
                     </Switch>
-                  </HomeLayout>
+                  </HelpCenterLayout>
                 </Route>
 
                 <Route path="/personal">
@@ -225,8 +234,8 @@ const Routes: FC = () => {
                 <Route path="/bidding">
                   <BiddingLayout>
                     <Switch>
-                      <Route exact path="/bidding/home" component={PersonalNotificationPage}/>
-                      <Route exact path="/bidding/other" component={PersonalNotePage}/>
+                      <Route exact path="/bidding/home" component={BiddingHomePage}/>
+                      <Route exact path="/bidding/other" component={BiddingOtherPage}/>
                       <Route path="/bidding/*" component={ErrorPage} />
                     </Switch>
                   </BiddingLayout>
@@ -563,18 +572,15 @@ const Routes: FC = () => {
                   </KanbanBoardLayout>
                 </Route> */}
 
-                <Route path="/human/home">
+                <Route path="/human">
                   <HumanLayout>
                     <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/human/home"
-                        component={HumansPage}
-                      />
-                      <ProtectedRoute
-                        path="/human/home/hid=:id"
-                        component={HumanInfo}
-                      />
+                      <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+                      <ProtectedRoute exact path="/human/cetificate" component={HumanCetificateFilterPage} />
+                      <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
+                      <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} />
+                      <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
+                      <Route path="/human/*" component={ErrorPage} />
                     </Switch>
                   </HumanLayout>
                 </Route>

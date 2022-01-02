@@ -23,17 +23,17 @@ const LinkMenuLeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Trang chủ</span>
           </Link>
-          <Link to={`/human/report1`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 1</span>
+            <span className="truncate">Tra cứu chứng chỉ</span>
           </Link>
-          <Link to={`/human/report2`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/other`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 2</span>
+            <span className="truncate">Tra cứu khác</span>
           </Link>
-          <Link to={`/human/report3`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/expired`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 3</span>
+            <span className="truncate">Theo dõi thời hạn</span>
           </Link>
         </div>
       </div>
