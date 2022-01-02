@@ -9,6 +9,7 @@ import CogIcon from "assets/icons/Cog";
 import QuestionMarkCircleIcon from "assets/icons/QuestionMarkCircle";
 import MoonIcon from "assets/icons/Moon";
 import LogoutIcon from "assets/icons/Logout";
+import { Link } from 'react-router-dom';
 
 const UserMenu: FC = () => {
   const { user, signOut } = useAuth();
@@ -46,20 +47,20 @@ const UserMenu: FC = () => {
               </div>
 
               <div className="flex flex-1 justify-between items-center pl-3">
-                <div className="flex flex-col">
+                <Link to={`/pcm/mine`} className="flex flex-col">
                   <span className="font-bold">
                     {user?.fullname}
                   </span>
                   <span className="font-normal text-sm leading-4">
                     Xem công việc của bạn
                   </span>
-                </div>
+                </Link>
               </div>
             </div>
           </Menu.Item>
 
           {/*  Divider */}
-          <hr className="h-px border-secondary-gray my-1 mx-3" />
+          {/* <hr className="h-px border-secondary-gray my-1 mx-3" />
 
           <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
@@ -71,15 +72,15 @@ const UserMenu: FC = () => {
               </Menu.Button>
 
               <div className="flex flex-1 justify-between items-center pl-3">
-                <div className="flex flex-col">
+                <Link to={`/help`} className="flex flex-col">
                   <span className="font-bold">Đóng góp ý kiến</span>
                   <span className="font-normal text-sm leading-4">
-                    Góp phần cải thiện phiên bản CBS mới
+                    Góp phần cải thiện phiên bản mới
                   </span>
-                </div>
+                </Link>
               </div>
             </div>
-          </Menu.Item>
+          </Menu.Item> */}
 
           {/*  Divider */}
           <hr className="h-px border-secondary-gray my-1 mx-3" />
@@ -92,9 +93,9 @@ const UserMenu: FC = () => {
 
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
-                  <span className="font-bold">
+                  <Link to={`/personal/home`} className="font-bold">
                     Cài đặt &amp; quyền riêng tư
-                  </span>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -108,13 +109,15 @@ const UserMenu: FC = () => {
 
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
-                  <span className="font-bold">Trợ giúp &amp; hỗ trợ</span>
+                  <Link to={`/help`} className="font-bold">
+                    Trợ giúp &amp; hỗ trợ
+                  </Link>
                 </div>
               </div>
             </div>
           </Menu.Item>
 
-          <Menu.Item>
+          {/* <Menu.Item>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
               <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
                 <MoonIcon className="w-5 h-5 text-primary-gray" />
@@ -126,7 +129,7 @@ const UserMenu: FC = () => {
                 </div>
               </div>
             </div>
-          </Menu.Item>
+          </Menu.Item> */}
 
           <Menu.Item onClick={() => signOut()}>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">

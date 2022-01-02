@@ -92,7 +92,7 @@ const ProjectCategoryPage: FC = () => {
 												</ul>
 											</div>
 										</div>
-										<h3 className="line-clamp-2 text-large text-black">
+										<h3 className="line-clamp-2 text-large text-black pt-2">
 											<Link className="" to="/pcm/project/:id/home">CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây</Link>
 										</h3>
 										<p className="text-x-small mt-1.5 truncate">
