@@ -17,7 +17,7 @@ const BiddingOtherPage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Quản lý khác</h2>
+			<h2>Năng lực nhà thầu</h2>
 		</div>
 	);
 };

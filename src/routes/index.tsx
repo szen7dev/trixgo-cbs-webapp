@@ -54,8 +54,6 @@ import HumanOtherFilterPage from "views/pages/humans/HumanOtherFilterPage";
 import HumanExpiredPage from "views/pages/humans/HumanExpiredPage";
 import HumanInfo from "views/pages/humans/components/HumanInfo";
 
-// Messages pages
-
 // Tasks pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
@@ -99,6 +97,7 @@ import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 
 // Accounting pages
+import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
 import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
 import AccountingDiaryPage from "views/pages/accounting/AccountingDiaryPage";
@@ -122,7 +121,10 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
 // Financial pages
-import FinancialCashFlowPage from "../views/pages/financial/planning/FinancialCashFlowPage";
+import FinHomePage from "views/pages/financial/FinHomePage";
+import FinDashboardPage from "views/pages/financial/FinDashboardPage";
+import FinCashbookPage from "views/pages/financial/FinCashbookPage";
+import FinancialCashFlowPage from "views/pages/financial/planning/FinancialCashFlowPage";
 import FinancialPlanningDetailPage from "views/pages/financial/planning/FinancialPlanningDetailPage";
 
 // Cmcs pages
@@ -143,13 +145,23 @@ import ContractProduct from "views/pages/cmcs/components/views/contract/Contract
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
+import SupportItemPage from "views/pages/support/SupportItemPage";
 import RegisterDashboardPage from "views/pages/support/components/register";
 
 // Timesheet pages
-import TimesheetHomePage from 'views/pages/timesheet/home'
-import TimesheetDetailPage from 'views/pages/timesheet/detail'
+import TimesheetHomePage from 'views/pages/timesheet/home';
+import TimesheetDetailPage from 'views/pages/timesheet/detail';
 import MessageList from "../views/pages/messages/list";
 import MessagesHome from "../views/pages/messages/home/index_v2";
+
+// Ree pages
+import ReeHomePage from 'views/pages/ree/ReeHomePage';
+
+// Operation pages
+import OperationHomePage from 'views/pages/operation/OperationHomePage';
+import OperationNewsPage from 'views/pages/operation/OperationNewsPage';
+import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
+import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 
 const Routes: FC = () => {
   useEffect(() => {
@@ -203,6 +215,11 @@ const Routes: FC = () => {
                         path="/support/register"
                         component={RegisterDashboardPage}
                       />
+                      <Route
+                        exact
+                        path="/support/item"
+                        component={SupportItemPage}
+                      />
                     </Switch>
                   </SupportLayout>
                 </Route>
@@ -235,7 +252,7 @@ const Routes: FC = () => {
                   <BiddingLayout>
                     <Switch>
                       <Route exact path="/bidding/home" component={BiddingHomePage}/>
-                      <Route exact path="/bidding/other" component={BiddingOtherPage}/>
+                      <Route exact path="/bidding/exp" component={BiddingOtherPage}/>
                       <Route path="/bidding/*" component={ErrorPage} />
                     </Switch>
                   </BiddingLayout>
@@ -244,8 +261,10 @@ const Routes: FC = () => {
                 <Route path="/operation">
                   <OperationLayout>
                     <Switch>
-                    <Route exact path="/operation/home" component={PersonalNotificationPage}/>
-                      <Route exact path="/operation/other" component={PersonalNotePage}/>
+                      <Route exact path="/operation/home" component={OperationHomePage}/>
+                      <Route exact path="/operation/news" component={OperationNewsPage}/>
+                      <Route exact path="/operation/rfs" component={OperationRfsPage}/>
+                      <Route exact path="/operation/project" component={OperationProjectPage}/>
                       <Route path="/operation/*" component={ErrorPage} />
                     </Switch>
                   </OperationLayout>
@@ -254,8 +273,8 @@ const Routes: FC = () => {
                 <Route path="/ree">
                   <ReeLayout>
                     <Switch>
-                    <Route exact path="/ree/home" component={PersonalNotificationPage}/>
-                      <Route exact path="/ree/other" component={PersonalNotePage}/>
+                      <Route exact path="/ree/home" component={ReeHomePage}/>
+                      <Route exact path="/ree/other" component={ReeHomePage}/>
                       <Route path="/ree /*" component={ErrorPage} />
                     </Switch>
                   </ReeLayout>
@@ -614,6 +633,51 @@ const Routes: FC = () => {
                         path="/accounting/home"
                         component={AccountingTicketsPage}
                       />
+                       <ProtectedRoute
+                        exact
+                        path="/accounting/dashboard"
+                        component={AccountingDashboardPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/accbill"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/receipt"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/payment"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/goods-import"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/goods-export"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/invoices"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/debit-note"
+                        component={AccountingTicketsPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path="/accounting/credit-note"
+                        component={AccountingTicketsPage}
+                      />
                       <ProtectedRoute
                         exact
                         path="/accounting/home/:id"
@@ -631,18 +695,13 @@ const Routes: FC = () => {
                       />
                       <ProtectedRoute
                         exact
-                        path="/accounting/in-out"
+                        path="/accounting/import-export"
                         component={AccountingInOutPage}
                       />
                       <ProtectedRoute
                         exact
-                        path="/accounting/debt"
+                        path="/accounting/debt-tracking"
                         component={AccountingDebtPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/diary"
-                        component={AccountingDiaryPage}
                       />
                       <ProtectedRoute
                         exact
@@ -651,7 +710,7 @@ const Routes: FC = () => {
                       />
                       <ProtectedRoute
                         exact
-                        path="/accounting/report-finance"
+                        path="/accounting/financial-report"
                         component={AccountingReportFinancePage}
                       />
                       <ProtectedRoute
@@ -663,12 +722,24 @@ const Routes: FC = () => {
                   </AccountingLayout>
                 </Route>
 
-                <Route exact path="/fin/home">
-                  <Redirect to="/fin/cashflow" />
-                </Route>
                 <Route path="/fin/:path?">
                   <FinLayout>
                     <Switch>
+                      <ProtectedRoute
+                        exact
+                        path={"/fin/home"}
+                        component={FinHomePage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/fin/dashboard"}
+                        component={FinDashboardPage}
+                      />
+                      <ProtectedRoute
+                        exact
+                        path={"/fin/cashbook"}
+                        component={FinCashbookPage}
+                      />
                       <ProtectedRoute
                         exact
                         path={"/fin/cashflow"}
