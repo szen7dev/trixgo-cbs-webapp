@@ -11,6 +11,9 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
+import { useFetchSupport } from 'services/hooks/useSupport';
+import { ListDevicePayload, ListDeviceResponse, ListDeviceProps, SupportProps } from 'typings/support';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -38,27 +41,28 @@ const data = {
   datasets: [
     {
       data: [
-        2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
       ],
       backgroundColor: "#2a90fb",
       barThickness: 8,
     },
     {
       data: [
-        3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
       ],
       backgroundColor: "#0060E1",
       barThickness: 8,
     },
     {
       data: [
-        2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
       ],
       backgroundColor: "#10b981",
       barThickness: 8,
     },
   ],
 };
+console.log('data', data);
 
 const options = {
   responsive: true,
@@ -116,6 +120,8 @@ const options = {
 };
 
 const StatisticsByDeviceSupport: FC = () => {
+  const listDevice = useFetchSupport();
+  console.log('listDevice',listDevice);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
