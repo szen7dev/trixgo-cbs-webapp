@@ -162,7 +162,7 @@ const DocumentDashboardPage: FC = () => {
 						</thead>
 						<tbody>
 							{data.map((d, index) => <tr key={index}>
-								<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+								<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
 									<div>
 										<p className="text-black">MAR.HAR.Court Yard By Marriott Ha Long Bay</p>
 										<div className="flex justify-between mt-2.5">
