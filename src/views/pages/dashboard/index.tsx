@@ -198,7 +198,7 @@ const HomePage: FC = () => {
           {/* recent actions */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Hoạt động gần đây</span>
+              <span>Thông báo gần đây</span>
               <a href="/">Xem tất cả</a>
             </div>
             <div className="t-home-actions">

@@ -1,6 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
+// Định nghĩa các kiểu dữ liệu
 export type MediaPayload = {
   mediaID?: string;
   companyID?: string;
