@@ -12,8 +12,8 @@ const LinkMenuLeftSideBar: FC = () => {
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* title */}
-        <div className="t-leftsidebar-title flex items-center py-5 pl-8 pr-3 text-[14px] font-bold">
-        <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+        <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
+          <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <span>Quản lý nhân sự</span>
         </div>
 
@@ -23,17 +23,17 @@ const LinkMenuLeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Trang chủ</span>
           </Link>
-          <Link to={`/human/report1`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 1</span>
+            <span className="truncate">Tra cứu chứng chỉ</span>
           </Link>
-          <Link to={`/human/report2`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/other`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 2</span>
+            <span className="truncate">Tra cứu khác</span>
           </Link>
-          <Link to={`/human/report3`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/human/expired`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Tra cứu 3</span>
+            <span className="truncate">Theo dõi thời hạn</span>
           </Link>
         </div>
       </div>
