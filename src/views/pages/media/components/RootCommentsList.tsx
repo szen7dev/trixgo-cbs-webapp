@@ -7,6 +7,7 @@ import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
 import { objPopulate } from '../utils';
+import { ContextModalPost } from '../context/post';
 
 type Props = {
 	comments?: CommentProps[],
@@ -16,10 +17,11 @@ type Props = {
 	smallImage?: boolean,
 }
 
-const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({ 
+const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
 }) => {
 	const { state, dispatch } = useContext(CommentContext);
+	const { state: statePost } = useContext(ContextModalPost);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 
 	useEffect(() => {
@@ -39,6 +41,13 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		}
 	}
 
+	let _comments: CommentProps[] = [];
+	if (!statePost.isShow || statePost.isPost) {
+		_comments = (state.comments && state.comments.length) ? state.comments : []
+	} else if (statePost.isComment) {
+		_comments = (state.commentsReply[statePost.mediaID] || []).filter(Boolean);
+	}
+
 	return (
 		<>
 			{amountComment > 0 ? (
@@ -51,16 +60,18 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 				</div>
 			) : ''}
 			<ul {...props}>
-				{(state.comments && state.comments.length) ? state.comments.map((comment: CommentProps) => (
-					<li key={comment._id} className='mt-2.5'>
-						<RootComment
-							comment={comment}
-							limit={limit}
-							smallImage={smallImage}
-							renderNestedComment={Comment}
-						/>
-					</li>
-				)) : ''}
+				{
+					_comments.map((comment: CommentProps) => (
+						<li key={comment._id} className='mt-2.5'>
+							<RootComment
+								comment={comment}
+								limit={limit}
+								smallImage={smallImage}
+								renderNestedComment={Comment}
+								disableReply={statePost.isShow && statePost.isReply}
+							/>
+						</li>
+					))}
 			</ul>
 		</>
 	)

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, HTMLAttributes, useEffect, useState} from "react";
 
 type Props = {
     prevPageAction?: () => void;
@@ -9,7 +9,7 @@ type Props = {
     hasNextPage?:boolean;
 }
 
-const Paginate:FC<Props> = ({prevPageAction,nextPageAction,totalRecord, totalPages, isFetching, hasNextPage}) => {
+const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nextPageAction,totalRecord, totalPages, isFetching, hasNextPage, ...props}) => {
     const [isNavigating, setNavigating] = useState('');
     const [currentIndex, setCurrentIndex] = useState(1);
 
@@ -31,7 +31,7 @@ const Paginate:FC<Props> = ({prevPageAction,nextPageAction,totalRecord, totalPag
     }
 
     return (
-        <div className={'min-w-24 min-h-24 absolute bottom-0 w-full border-t z-10 flex items-center justify-center py-2 bg-white'}>
+        <div className={'min-w-24 min-h-24 absolute bottom-0 w-full border-t z-10 flex items-center justify-center py-2 bg-white'} {...props}>
             <div className="bg-white px-4 items-center flex items-center justify-center relative">
                 <div className={'inline-flex'}>
                     <button

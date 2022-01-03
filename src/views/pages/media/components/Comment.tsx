@@ -19,15 +19,17 @@ type OptionsProps = {
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
+	onClickImage?: (index: number, images: any, commentId: string) => unknown;
 	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
 	comment: CommentProps,
 	small?: boolean,
+	disableReply?: boolean
 }
 
 const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-	comment, small, onClickReply, onClickEdit, renderEndComment: EndComment, renderOptions: Options, ...props
+	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteComment } = useCommentSocial();
 	const { dispatch } = useContext(CommentContext);
@@ -42,6 +44,11 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	const handleEditComment = () => {
 		onClickEdit?.(comment)
+	}
+
+	const handleClickImage = (index: number) => {
+		console.log(comment)
+		onClickImage?.(index, images, comment._id)
 	}
 
 	const images = comment?.comment?.images || [];
@@ -75,7 +82,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								const url = image.file ? image.file.url : image.url;
 
 								return (
-									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => 1} >
+									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => handleClickImage(i)} >
 										<img src={url} alt={name} className={cn("object-cover", small ? "w-24 h-24" : "w-[156px] h-[156px]")} />
 										{i === 2 && images.length > 3 && (
 											<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
@@ -99,7 +106,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 									<a href="/">{moment(comment.createAt).format('DD/MM/YYYY HH:mm')}</a>
 								</li>
 								{/* <li className="inline-block mr-2"><button className="font-bold">Thích</button></li> */}
-								<li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>
+								{!disableReply && <li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>}
 							</ul>
 							{/* <div>
 								<span className='align-middle text-secondary-gray mr-0.5'>215</span>
