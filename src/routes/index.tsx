@@ -33,18 +33,23 @@ import TimesheetLayout from "views/layouts/TimesheetLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 import ProjectLayout from "views/layouts/ProjectLayout";
+import OwnerLayout from "views/layouts/OwnerLayout";
 
 /*=====PAGES=====*/
-// Authentication Pages
+// Authentication pages
 import SignInPage from "views/pages/authentication/SignIn";
 import RegisterPage from "views/pages/authentication/Register";
 import ResetPasswordPage from "views/pages/authentication/ResetPassword";
 import ErrorPage from "views/pages/authentication/Error";
 
-// Dashboard Pages
+// Owner pages
+import OwnerHomePage from "views/pages/owner/OwnerHomePage";
+import OwnerGrantPage from "views/pages/owner/OwnerGrantPage";
+
+// Dashboard pages
 import DashboardPage from "views/pages/dashboard";
 
-// KanbanBoardPage Pages
+// KanbanBoardPage pages
 import KanbanBoardPage from "views/pages/kanbanBoard";
 
 // Human pages
@@ -72,6 +77,7 @@ import PersonalHistoryPage from "views/pages/personal/PersonalHistoryPage";
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
+import ProjectAppAdminPage from "views/pages/ppt/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
@@ -134,6 +140,7 @@ import CmcPortfolioPage from "views/pages/cmcs/CmcPortfolioPage";
 import CmcIncomePage from "views/pages/cmcs/CmcIncomePage";
 import CmcExpensePage from "views/pages/cmcs/CmcExpensePage";
 import CmcGuaranteePage from "views/pages/cmcs/CmcGuaranteePage";
+import ContractAdminPage from "views/pages/cmcs/components/views/contract/ContractAdminPage";
 import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
 import ContractDashBoard from "views/pages/cmcs/components/views/contract/ContractDashBoard";
 import ContractEditor from "views/pages/cmcs/components/views/contract/ContractEditor";
@@ -224,6 +231,16 @@ const Routes: FC = () => {
                   </SupportLayout>
                 </Route>
 
+                <Route path="/owner">
+                  <OwnerLayout>
+                    <Switch>
+                      <Route exact path="/owner/home" component={OwnerHomePage}/>
+                      <Route exact path="/owner/grant-permission" component={OwnerGrantPage}/>
+                      <Route path="/owner /*" component={ErrorPage} />
+                    </Switch>
+                  </OwnerLayout>
+                </Route>
+
                 <Route path="/help">
                   <HelpCenterLayout>
                     <Switch>
@@ -286,6 +303,15 @@ const Routes: FC = () => {
 
                 <Route path="/pcm/:path?">
                   <Switch>
+                  <ProtectedRoute
+                      exact
+                      path={"/pcm/admin"}
+                      component={() => (
+                        <HomeLayout>
+                          <ProjectAppAdminPage />
+                        </HomeLayout>
+                      )}
+                    />
                     <ProtectedRoute
                       exact
                       path={"/pcm/home"}
@@ -808,6 +834,15 @@ const Routes: FC = () => {
                         <CmcsLayout>
                           <CmcGuaranteePage />
                         </CmcsLayout>
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/cmcs/contract/:id/admin"
+                      component={() => (
+                        <CmcsContractLayout>
+                          <ContractAdminPage />
+                        </CmcsContractLayout>
                       )}
                     />
                     <Route

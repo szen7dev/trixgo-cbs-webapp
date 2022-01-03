@@ -25,18 +25,6 @@ const ProjectCategoryPage: FC = () => {
 			setData(data.concat(Array.from({ length: 14 })));
 		}, 1500);
 	}
-	// const handleSort = (item: { id: string, type: string }, index: number) => {
-	// 	const currentSort = [...sorts];
-	// 	currentSort[index].type = currentSort[index].type === 'asc' ? 'desc' : 'asc';
-	// 	setSorting(currentSort)
-	// };
-
-	// const nextPage = () => {
-	// 	console.log('1')
-	// }
-	// const prevPage = () => {
-	// 	console.log('1')
-	// }
 
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">

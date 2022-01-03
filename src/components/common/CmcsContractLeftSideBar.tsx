@@ -31,6 +31,17 @@ const CmcsContractLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
+        <NavLink
+            to="/cmcs/contract/:id/admin"
+            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+          >
+            <img
+              className="w-6 h-6 object-contain mr-3"
+              src={iconFolder}
+              alt="Menu item"
+            />
+            <span className="truncate">Quản trị hợp đồng</span>
+          </NavLink>
           <NavLink
             to="/cmcs/contract/:id/home"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"

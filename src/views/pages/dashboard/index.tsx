@@ -259,7 +259,7 @@ const HomePage: FC = () => {
         <div className="t-home-solution pt-1 pb-1 pl-3 pr-3 mb-4 flex items-center">
           <div className="t-home-solution-text text-[12px] text-primary-light">
             <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề Quản lý giá</div>
-            <div className="t-home-solution-description">Tất cả các vấn đề quan trọng liên quan tới kiểm soát ngân sách, giá</div>
+            <div className="t-home-solution-description">Giải quyết tất cả các vấn đề liên quan tới kiểm soát giá cho Chủ đầu tư</div>
             <div className="t-home-solution-link">
               <a href="/" className="flex items-center text-primary-light">
                 Xem ngay
@@ -275,8 +275,8 @@ const HomePage: FC = () => {
         <div className="t-home-right-block t-home-right-block-common">
           <img src={imgBidding} alt="Bidding" />
           <div className="t-home-right-block-common-text">
-            <div className="t-home-right-block-common-title">Tổ chức đấu thầu online</div>
-            <div className="t-home-right-block-common-description">Đấu thầu các dự án tư nhân với quy mô lớn, hoàn toàn minh bạch</div>
+            <div className="t-home-right-block-common-title">Nền tảng đấu thầu online quy mô lớn</div>
+            <div className="t-home-right-block-common-description">Đấu thầu gói thầu quy mô lớn, minh bạch/bảo mật thông tin suốt quá trình</div>
           </div>
         </div>
 
@@ -308,11 +308,12 @@ const HomePage: FC = () => {
             <img src={iconNew} alt="New" />
             <div className="t-home-right-block-common-text">
               <div className="t-home-right-block-common-description">
-                <span>Trixgo ra mắt phiên bản mới v7.9.1 (2387)</span>
+                <span>Trixgo ra mắt phiên bản mới v3.7.1 (152)</span>
                 <ul>
                   <li>Hoàn thiện các bug nhỏ</li>
                   <li>Cải thiện tính năng</li>
                   <li>Nâng cao trải nghiệm người dùng</li>
+                  <li>Đồng bộ hóa Mobile và Tablet app</li>
                 </ul>
               </div>
             </div>
@@ -322,7 +323,7 @@ const HomePage: FC = () => {
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Đào tạo tân kỹ sư</div>
+              <div className="t-home-right-block-common-title">Kỹ sư thực chiến</div>
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
@@ -337,13 +338,13 @@ const HomePage: FC = () => {
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "40%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc thực tế</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc dự án thực tế</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "100%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Workshop chia sẻ kinh nghiệm </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Định kỳ Workshop chia sẻ kinh nghiệm </div>
               </div>
             </div>
             <button className="t-home-training-btn flex-grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5 rounded-md">Tham gia</button>
@@ -351,14 +352,14 @@ const HomePage: FC = () => {
 
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Cộng đồng doanh nghiệp</div>
+              <div className="t-home-right-block-common-title">Cộng đồng chuyển đổi số</div>
             </div>
           </div>
           <div className="flex items-center t-home-operation t-home-business-group">
             <img src={imgBusiness} alt="Business group" />
             <div className="t-home-operation-text">
               <div>
-                Hãy để cộng đồng biết tới dịch vụ và lợi ích mà Doanh nghiệp bạn mang lại
+               Nơi chia sẻ kinh nghiệm sống còn trong việc chuyển đổi số của các doanh nghiệp
               </div>
               <a className="flex items-center text-primary-gray" href="/">
                 Xem ngay
@@ -370,37 +371,38 @@ const HomePage: FC = () => {
           </div>
         </div>
 
-        <div className="t-home-right-block">
-          <div className="t-home-block-title">
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
             <span>Sự kiện</span>
             <a href="/">Xem tất cả</a>
-          </div>
-          <div className="t-home-event">
+          </div> */}
+          {/* <div className="t-home-event"> */}
             {/* event item */}
-            <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-home-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
               <div className="t-home-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
-            </div>
+            </div> */}
             {/* event item */}
-            <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-home-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
               <div className="t-home-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
 
-        <div className="t-home-right-block">
-          <div className="t-home-block-title">
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
             <span>Yêu cầu kết bạn</span>
             <a href="/">Xem tất cả</a>
-          </div>
-          <div className="t-home-actions">
+          </div> */}
+          {/* <div className="t-home-actions"> */}
+
             {/* friend request item */}
-            <div className="flex mb-4">
+            {/* <div className="flex mb-4">
               <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
               <div className="t-home-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
@@ -413,9 +415,10 @@ const HomePage: FC = () => {
                   <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
-            </div>
+            </div> */}
+
             {/* friend request item */}
-            <div className="flex mb-4">
+            {/* <div className="flex mb-4">
               <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
               <div className="t-home-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
@@ -428,9 +431,10 @@ const HomePage: FC = () => {
                   <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+        
       </div>
     </div>
   );
