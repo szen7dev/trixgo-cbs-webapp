@@ -19,7 +19,10 @@ import DeleteIcon from "assets/images/icons8-remove.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import Loader from "components/shared/Loader";
-import { useFetchDetailHuman } from "services/hooks/useHuman";
+import {
+  useFetchDetailHuman,
+  useFetchListContactDocuments,
+} from "services/hooks/useHuman";
 
 import Certificate from "./views/Certificate";
 
@@ -36,14 +39,40 @@ const HumanInfo: FC = () => {
   );
 
   const { detailHuman, loading } = useFetchDetailHuman(id);
+  const {
+    listContactDocument: workSideHistory,
+    loading: isWorkSideHistoryLoading,
+    fetchNextPageContactDocument: fetchNextPageWorkSideHistory,
+    totalRecord: totalRecordWorkSideHistory,
+  } = useFetchListContactDocuments(id, { type: 1 });
+  const {
+    listContactDocument: workExperience,
+    loading: isWorkExperienceLoading,
+    fetchNextPageContactDocument: fetchNextPageWorkExperience,
+    totalRecord: totalRecordWorkExperience,
+  } = useFetchListContactDocuments(id, { type: 2 });
+  const {
+    listContactDocument: experienceAppointment,
+    loading: isExperienceAppointmentLoading,
+    fetchNextPageContactDocument: fetchNextPageExperienceAppointment,
+    totalRecord: totalRecordExperienceAppointment,
+  } = useFetchListContactDocuments(id, { type: 3 });
+  const {
+    listContactDocument: education,
+    loading: isEducationLoading,
+    fetchNextPageContactDocument: fetchNextPageEducation,
+    totalRecord: totalRecordEducation,
+  } = useFetchListContactDocuments(id, { type: 4 });
+  const {
+    listContactDocument: certificateGrade,
+    loading: isCertificateGradeLoading,
+    fetchNextPageContactDocument: fetchNextPageCertificateGrade,
+    totalRecord: totalRecordCertificateGrade
+  } = useFetchListContactDocuments(id, { type: 5});
 
   if (loading) {
-    return <Loader className="border-primary" />
+    return <Loader className="border-primary" />;
   }
-  // console.log({
-  //   detailHuman,
-  //   name: detailHuman.taxid
-  // });
 
   return (
     <main className="mb-4">
@@ -129,7 +158,9 @@ const HumanInfo: FC = () => {
           <p className="text-bold text-2xl text-primary-light">
             {detailHuman.name}
           </p>
-          <p className="text-primary-light text-lg">{detailHuman?.position?.name}</p>
+          <p className="text-primary-light text-lg">
+            {detailHuman?.position?.name}
+          </p>
         </div>
       </div>
 
@@ -177,11 +208,36 @@ const HumanInfo: FC = () => {
             signerOut: detailHuman.signerOut,
           }}
         />
-        <WorkHistory />
-        <WorkExperience />
-        <ExperienceAppointment />
-        <Education />
-        <Certificate />
+        <WorkHistory
+          loading={isWorkSideHistoryLoading}
+          info={workSideHistory}
+          fetchNextPageDocument={fetchNextPageWorkSideHistory}
+          totalRecord={totalRecordWorkSideHistory || 0}
+        />
+        <WorkExperience
+          info={workExperience}
+          loading={isWorkExperienceLoading}
+          fetchNextPageDocument={fetchNextPageWorkExperience}
+          totalRecord={totalRecordWorkExperience || 0}
+        />
+        <ExperienceAppointment
+          info={experienceAppointment}
+          loading={isExperienceAppointmentLoading}
+          fetchNextPageDocument={fetchNextPageExperienceAppointment}
+          totalRecord={totalRecordExperienceAppointment || 0}
+        />
+        <Education
+          info={education}
+          loading={isEducationLoading}
+          fetchNextPageDocument={fetchNextPageEducation}
+          totalRecord={totalRecordEducation || 0}
+        />
+        <Certificate
+          info={certificateGrade}
+          loading={isCertificateGradeLoading}
+          fetchNextPageDocument={fetchNextPageCertificateGrade}
+          totalRecord={totalRecordCertificateGrade || 0}
+        />
       </section>
     </main>
   );
