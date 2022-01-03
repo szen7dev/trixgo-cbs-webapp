@@ -97,7 +97,7 @@ const DocumentDashboardPage: FC = () => {
 
 	return (
 		<>
-			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5 h-max">
+			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
