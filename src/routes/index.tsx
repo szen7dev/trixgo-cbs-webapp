@@ -6,6 +6,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import { RouteComponentProps } from 'react-router';
 
 import AuthProvider from "services/providers/Auth";
 import ProtectedRoute from "components/common/ProtectedRoute";
@@ -421,11 +422,10 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
                       path={"/pcm/project/:id/folder"}
-                      component={() => (
+                      component={({ ...props }: RouteComponentProps ) => (
                         <ProjectLayout>
-                          <ProjectFolderPage />
+                          <ProjectFolderPage {...props} />
                         </ProjectLayout>
                       )}
                     />

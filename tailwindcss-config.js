@@ -111,6 +111,7 @@ module.exports = {
                 "authentication-img": "url('../assets/images/authentication-img.png')",
             },
             borderWidth: {
+								'0.5': '0.5px',
                 6: "6px",
             },
 						borderRadius: {
