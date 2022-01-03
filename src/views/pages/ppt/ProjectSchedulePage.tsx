@@ -1,7 +1,6 @@
 import { FC, useEffect } from "react";
 import SwiperCore, { Pagination } from 'swiper';
-import { useHistory } from "react-router";
-
+import {useHistory} from "react-router-dom"
 import cn from "classnames";
 
 import styles from "./style.module.css";

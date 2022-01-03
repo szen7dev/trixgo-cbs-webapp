@@ -97,7 +97,7 @@ const DocumentDashboardPage: FC = () => {
 
 	return (
 		<>
-			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5 h-max">
+			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
@@ -162,7 +162,7 @@ const DocumentDashboardPage: FC = () => {
 						</thead>
 						<tbody>
 							{data.map((d, index) => <tr key={index}>
-								<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+								<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
 									<div>
 										<p className="text-black">MAR.HAR.Court Yard By Marriott Ha Long Bay</p>
 										<div className="flex justify-between mt-2.5">

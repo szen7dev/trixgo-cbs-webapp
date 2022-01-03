@@ -58,7 +58,7 @@ const SocialHomePage: FC = () => {
 					</div>
 				</div>
 				{/* Content */}
-				<div className="custom-scroll overflow-y-auto flex-1 z-0">
+				<div className="custom-scroll overflow-y-auto flex-1 z-0 pb-20">
 					<div className="mx-auto" style={{ maxWidth: "1400px" }}>
 						{/* Top content */}
 						<div className="text-black flex flex-wrap xl:flex-nowrap mb-7">

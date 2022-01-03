@@ -1,13 +1,18 @@
-import React, { FC, HTMLAttributes, useState } from 'react'
+import React, { FC, HTMLAttributes, useContext, useState } from 'react'
 
 import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 import ReplyCommentField from '../ReplyCommentField';
 import RootCommentsList from '../RootCommentsList';
+import CommentContext from '../../context/comment/comment.context';
+import { ContextModalPost } from '../../context/post';
 
-const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [reply, setReply] = useState<boolean>(false);
+	const { state } = useContext(CommentContext);
+	const { state: statePost } = useContext(ContextModalPost);
+	// console.log(statePost);
 
 	return (
 		<div {...props}>
@@ -56,7 +61,12 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 			{/* Footer */}
 			<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 				{/* File upload */}
-				<ReplyCommentField fileContainerClassName='border-t' inputContainerClassName="flex w-full p-2" mediaID="" />
+				<ReplyCommentField
+					fileContainerClassName='border-t'
+					inputContainerClassName="flex w-full p-2"
+					mediaID={mediaID}
+					parentID={statePost.isComment ? statePost.mediaID : undefined}
+				/>
 			</div>
 			{/* </div> */}
 		</div>

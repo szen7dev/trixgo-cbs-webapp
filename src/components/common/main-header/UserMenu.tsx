@@ -94,7 +94,23 @@ const UserMenu: FC = () => {
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
                   <Link to={`/personal/home`} className="font-bold">
-                    Cài đặt &amp; quyền riêng tư
+                    Cài đặt tài khoản
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Menu.Item>
+
+          <Menu.Item>
+            <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
+              <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
+                <CogIcon isFill className="w-5 h-5 text-primary-gray" />
+              </Menu.Button>
+
+              <div className="flex flex-1 justify-between items-center pl-3">
+                <div className="flex flex-col">
+                  <Link to={`/owner/home`} className="font-bold">
+                    Quản trị viên doanh nghiệp
                   </Link>
                 </div>
               </div>
@@ -110,26 +126,12 @@ const UserMenu: FC = () => {
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
                   <Link to={`/help`} className="font-bold">
-                    Trợ giúp &amp; hỗ trợ
+                    Trung tâm Trợ giúp
                   </Link>
                 </div>
               </div>
             </div>
           </Menu.Item>
-
-          {/* <Menu.Item>
-            <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
-              <Menu.Button className="w-9 h-9 inline-flex items-center justify-center bg-secondary-light transition duration-150 rounded-full focus:outline-none">
-                <MoonIcon className="w-5 h-5 text-primary-gray" />
-              </Menu.Button>
-
-              <div className="flex flex-1 justify-between items-center pl-3">
-                <div className="flex flex-col">
-                  <span className="font-bold">Màn hình &amp; trợ năng</span>
-                </div>
-              </div>
-            </div>
-          </Menu.Item> */}
 
           <Menu.Item onClick={() => signOut()}>
             <div className="flex items-center rounded-lg cursor-pointer hover:bg-lighter-gray p-2 pl-3">
