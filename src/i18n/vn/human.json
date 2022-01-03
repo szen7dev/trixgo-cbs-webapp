@@ -76,5 +76,8 @@
   "sign2": "Số hiệu/Ngày tháng",
   "place2": "Nội dung/Nơi cấp",
   "workplace2": "Nơi đào tạo",
-  "Graduation-year": "Năm tốt nghiệp"
+  "Graduation-year": "Năm tốt nghiệp",
+
+  "modal.add-new.title": "Nhân sự mới",
+  "form.classify": "Phân loại",
 }

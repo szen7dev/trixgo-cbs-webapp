@@ -20,6 +20,13 @@ interface CertificateProps {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
+enum CONTACT_DOCUMENT_GRADES {
+  'Hạng 1' = 1,
+  'Hạng 2' = 2,
+  'Hạng 3' = 3,
+  'Hạng 4' = 4,
+}
+
 const Certificate: FC<CertificateProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
@@ -74,7 +81,7 @@ const Certificate: FC<CertificateProps> = (props) => {
                 )}
                 {/* cần kiểm tra value là gì và hiển thị theo type của CONTACT_DOCUMENT_GRADES */}
                 {contactDocument.certificateGrade && (
-                  <span>{contactDocument.certificateGrade}</span>
+                  <span>{CONTACT_DOCUMENT_GRADES[contactDocument.certificateGrade]}</span>
                 )}
               </p>
             </div>

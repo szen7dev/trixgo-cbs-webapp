@@ -74,8 +74,8 @@ type ContractType = {
     _id: string;
     sign?: string;
     project?: {
-        projectType: string;
-        buildingGrade: string;
+        projectType: number;
+        buildingGrade: number;
     };
 }
 

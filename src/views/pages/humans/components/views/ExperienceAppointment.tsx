@@ -21,6 +21,22 @@ interface WorkExperienceProps {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
+enum PROJECT_TYPES {
+  'Quan trọng quốc gia' = 1,
+  'Loại A' = 2,
+  'Loại B' = 3,
+  'Loại C' = 4,
+}
+
+enum BUILDING_TYPES {
+  'Công trình dân dụng' = 1,
+  'Công trình công nghiệp' = 2,
+  'Công trình giao thông' = 3,
+  'Công trình nông nghiệp và phát triển nông thôn' = 4,
+  'Công trình hạ tầng kỹ thuật' = 5,
+  'Công trình quốc phòng, an ninh' = 6,
+}
+
 const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
@@ -77,12 +93,12 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
               )}
               {contactDocument.contract?.project?.projectType && (
                 <span className="t-human-spread">
-                  {contactDocument.contract.project.projectType}
+                  {PROJECT_TYPES[contactDocument.contract.project.projectType]}
                 </span>
               )}
               {contactDocument.contract?.project?.buildingGrade && (
                 <span>
-                  {contactDocument.contract.project.buildingGrade}
+                  {BUILDING_TYPES[contactDocument.contract.project.buildingGrade]}
                 </span>
               )}
             </p>
