@@ -101,35 +101,53 @@ const data = {
     },
   ],
 };
-interface Props {
-  chartData: {
-    labels: string[],
-    datasets: {
-      data: number[],
-      backgroundColor: string,
-      barThickness: number
-    }[]
-  }
-}
 const StatisticsByDeviceSupport: FC = () => {
-  const listDevice = useFetchSupport();
-  const [chartData, setChartData] = useState({});
+  const [chartData, setChartData] = useState({
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+    datasets: [
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#2a90fb",
+        barThickness: 8,
+      },
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#0060E1",
+        barThickness: 8,
+      },
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#10b981",
+        barThickness: 8,
+      },
+    ]
+  });
+  const { listDevice } = useFetchSupport();
   const chart = () => {
     const emDevice = [];
     for (const dataOject of listDevice) {
-      emDevice.push(dataOject);
+      emDevice.push(dataOject.data);
     }
     setChartData({
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
       datasets: [
         {
           data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,],
-          backgroundColor: ["#2a90fb", "#0060E1", "#10b981",],
-          borderWidth: 8,
-        }
+          backgroundColor: "#2a90fb",
+          barThickness: 8,
+        },
+        {
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,],
+          backgroundColor: "#0060E1",
+          barThickness: 8,
+        },
+        {
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,],
+          backgroundColor: "#10b981",
+          barThickness: 8,
+        },
       ]
     });
-    console.log('emDevice',emDevice)
   }
   useEffect(() => {
     chart();
@@ -142,7 +160,7 @@ const StatisticsByDeviceSupport: FC = () => {
 
       <div className="flex items-center relative">
         <div className="w-11/12 h-[320px]">
-          <Bar options={options} data={data} />
+          <Bar options={options} data={chartData} />
         </div>
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">

@@ -4,46 +4,30 @@ import SupportRepository from "apis/support";
 import { Device, ListDevicePayload } from 'typings/support';
 
 interface UseSupport {
-    listDevices:  Array<Device>,
+    listDevice: Array<Device>,
     isLoading: boolean;
-    totalRecord: number | undefined;
-    totalPages: number | undefined;
-    hasNextPage: boolean | undefined;
-    refetchListHuman: () => void;
-    fetchNextPageHuman: () => void;
-    _id: {
-        month: number
-    },
-    data: [
-        {
-            data: [
-                {
-                    type: number;
-                    amountAccesses: number
-                }
-            ]
-        }
-    ];
-}
-export const useFetchSupport = (params?: ListDevicePayload) : UseSupport[] => {
-    const {
-      data: dataListTask,
-    } = useInfiniteQuery(
-      ["list_device", params],
+};
+export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
+    const infinityQuery = useInfiniteQuery(
+      ["list_device", payload],
       async ({ data }: any) => {
         return SupportRepository.listDeviceAccess({
-            year: 2021
-        });
+            year: new Date().getFullYear()
+        }),
+            {
+                getNextPageParam: ({ data }: any) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
       },
-      {
-        getNextPageParam: ({ params }: any) => {
-          return params?.nextCursor || undefined;
-        },
-        refetchOnWindowFocus: false,
-        enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-      }
     );
-  
-    const listDevices = [].concat(...(dataListTask?.pages || []).map((d: any) => d.data)).filter(Boolean);
-    return listDevices
+    const { data, isLoading } = infinityQuery;
+    console.log('data11',data)
+    const listDevice = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    return {
+        isLoading,
+        listDevice,
+    }
   };
