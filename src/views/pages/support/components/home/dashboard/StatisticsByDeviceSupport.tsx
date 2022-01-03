@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useState, useEffect} from "react";
 
 import {
   Chart as ChartJS,
@@ -12,7 +12,6 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
-import { ListDevicePayload, ListDeviceResponse, ListDeviceProps, SupportProps } from 'typings/support';
 
 ChartJS.register(
   CategoryScale,
@@ -22,48 +21,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const data = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
-      ],
-      backgroundColor: "#2a90fb",
-      barThickness: 8,
-    },
-    {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
-      ],
-      backgroundColor: "#0060E1",
-      barThickness: 8,
-    },
-    {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-      ],
-      backgroundColor: "#10b981",
-      barThickness: 8,
-    },
-  ],
-};
-console.log('data', data);
-
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -118,10 +75,65 @@ const options = {
     },
   },
 };
-
+const data = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+  datasets: [
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
+      ],
+      backgroundColor: "#2a90fb",
+      barThickness: 8,
+    },
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
+      ],
+      backgroundColor: "#0060E1",
+      barThickness: 8,
+    },
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
+      ],
+      backgroundColor: "#10b981",
+      barThickness: 8,
+    },
+  ],
+};
+interface Props {
+  chartData: {
+    labels: string[],
+    datasets: {
+      data: number[],
+      backgroundColor: string,
+      barThickness: number
+    }[]
+  }
+}
 const StatisticsByDeviceSupport: FC = () => {
   const listDevice = useFetchSupport();
-  console.log('listDevice',listDevice);
+  const [chartData, setChartData] = useState({});
+  const chart = () => {
+    const emDevice = [];
+    for (const dataOject of listDevice) {
+      emDevice.push(dataOject);
+    }
+    setChartData({
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+      datasets: [
+        {
+          data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,],
+          backgroundColor: ["#2a90fb", "#0060E1", "#10b981",],
+          borderWidth: 8,
+        }
+      ]
+    });
+    console.log('emDevice',emDevice)
+  }
+  useEffect(() => {
+    chart();
+  }, []);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">

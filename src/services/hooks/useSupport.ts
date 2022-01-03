@@ -11,6 +11,19 @@ interface UseSupport {
     hasNextPage: boolean | undefined;
     refetchListHuman: () => void;
     fetchNextPageHuman: () => void;
+    _id: {
+        month: number
+    },
+    data: [
+        {
+            data: [
+                {
+                    type: number;
+                    amountAccesses: number
+                }
+            ]
+        }
+    ];
 }
 export const useFetchSupport = (params?: ListDevicePayload) : UseSupport[] => {
     const {

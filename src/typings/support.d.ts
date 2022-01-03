@@ -25,7 +25,8 @@ export type Device = {
     _id?: {
         type: number
     },
-    amountAccesses: number
+    amountAccesses: number;
+    data: []
 };
 
 export type CheckList = {
