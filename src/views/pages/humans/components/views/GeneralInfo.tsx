@@ -213,7 +213,7 @@ const RenderGeneralInfo: FC<Props> = (props) => {
                 {i18n("contractType")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.contractType}
+                {info?.contractType?.name}
               </td>
             </tr>
 
@@ -252,7 +252,7 @@ const RenderGeneralInfo: FC<Props> = (props) => {
                 {i18n("workingStatus")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.workingStatus}
+                {info?.workingStatus?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("contractValid")}
