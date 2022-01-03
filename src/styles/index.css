@@ -1220,3 +1220,8 @@ input[type="text"] {
   border-radius: 2em;
   transition: background-position .15s ease-in-out;
 }
+/*______________________________Human page___________________________*/
+.t-human-spread::after {
+  content: '|';
+  letter-spacing: 3px;
+}
