@@ -145,6 +145,8 @@ module.exports = {
         extend: {
             opacity: ['disabled','group-hover'],
             textColor: ['group-focus'],
+						height: ['last'],
+						width: ['last'],
         },
     },
     plugins: [
@@ -171,6 +173,8 @@ module.exports = {
 					],
 					variants('lineClamp')
 				)
+				
+				addUtilities([{ '.border-spacing-0': { 'border-spacing': '0' } }])
 			},
 			{
 				theme: {
