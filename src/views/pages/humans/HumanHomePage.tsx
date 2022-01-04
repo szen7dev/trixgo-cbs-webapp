@@ -79,7 +79,7 @@ const HumansPage: FC = () => {
               </div>
               <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
-                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20" />
+                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
                 </div>
                 <span className="text-xl font-normal">{`${item.name}`}</span>
                 <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>
