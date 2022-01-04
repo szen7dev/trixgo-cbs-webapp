@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./style.css";
 
 import newsImg1 from "assets/images/home-slide-img1.jpg";
 import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
@@ -64,6 +65,8 @@ const HomePage: FC = () => {
     autoPlaySpeed: 5000,
     slidesToShow: 3,
     slidesToScroll: 1,
+    className: '',
+    centerPadding: '10px',
     beforeChange: (previousIndex: number, index: number) => {
       if(previousIndex < index){
         (index % 3) === 0 && nextPageListMedias();
@@ -187,7 +190,7 @@ const HomePage: FC = () => {
                     </div>
                     <div className="t-home-media-parameter-item flex items-center">
                       <img className="w-6 h-6 object-contain" src={iconEye} alt="Seen" />
-                      {abbreviateNumber(listMediasCompany[0].totalWatched)}
+                      {abbreviateNumber(listMediasCompany[0].totalView)}
                     </div>
                   </div>
                 </div>

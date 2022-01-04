@@ -11,6 +11,11 @@ export type User = {
     sign: string,
     image: string
   },
+  department: {
+    _id: string,
+    name: string,
+    sign: string
+  },
   signature: string,
   status: number,
   level: number,

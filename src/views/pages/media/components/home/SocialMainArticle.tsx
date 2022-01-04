@@ -15,6 +15,8 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const SocialMainArticle: FC<Props> = ({ media, ...props}) => {
+	if(!media) return <></>;
+
 	return (
 		<div {...props}>
 			<div className="w-full">
@@ -49,7 +51,7 @@ const SocialMainArticle: FC<Props> = ({ media, ...props}) => {
 					</span>
 					<span>
 						<img src={iconEye} alt="View" className="inline-block mr-2" />
-						{abbreviateNumber(media.totalWatched)}
+						{abbreviateNumber(media.totalView)}
 					</span>
 				</p>
 			</div>

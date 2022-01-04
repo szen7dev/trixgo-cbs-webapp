@@ -9,7 +9,10 @@ import { MediaProps } from 'typings/social';
 
 const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 	const { user } = useAuth();
-	const { listMedias } = useSocial('list_medias_internal_company', { type: 'company', companyID: user?.company._id });
+	const { listMedias } = useSocial('list_medias_internal_company', { 
+		type: 'internal-company', 
+		companyID: user?.company._id 
+	});
 
 	return (
 		<div {...props}>

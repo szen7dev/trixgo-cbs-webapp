@@ -41,27 +41,43 @@ import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { abbreviateNumber } from 'utils';
+import { useAuth } from 'services/hooks/useAuth';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import CommentProvider from '../context/comment/comment.provider';
 
 const SocialPostPage: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia } = useSocial();
+	const { user } = useAuth();
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
+	const media = data?.data;
+
+	const conditionListMedia: any = {
+		type: typePostSelected(media?.type || 0),
+		mediaID,
+		isRelated: true
+	}
+
+	switch (conditionListMedia.type) {
+		case 'company':
+			conditionListMedia.companyID = user?.company._id;
+			break;
+		case 'departments':
+			conditionListMedia.departmentID = user?.department._id;
+			break;
+		default:
+			break;
+	}
+
+	const { deleteMedia, listMedias } = useSocial(`list_medias_related.${mediaID}`, conditionListMedia);
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `list_comments.${mediaID}`
 	});
+
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
-
-	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
-	const media = data?.data;
-
-	if (!media) {
-		return <Loader className="border-primary" />;
-	}
 
 	const toggleModalEditMedia = () => {
 		refetch();
@@ -77,6 +93,10 @@ const SocialPostPage: FC = () => {
 		history.push('/social/home');
 	}
 
+	if (!media) {
+		return <Loader className="border-primary" />;
+	}
+
 	const initialState = {
 		mediaID,
 		title: media.title,
@@ -85,6 +105,8 @@ const SocialPostPage: FC = () => {
 	}
 	const images: FileProps[] = media.images || [];
 	const files: FileProps[] = media.files || [];
+
+	console.log({ media })
 
 	return (
 		<CommentProvider>
@@ -155,11 +177,11 @@ const SocialPostPage: FC = () => {
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
 										<Link to="/">
-											Kiến trúc sư giải pháp, Google
+											{media.author?.department?.name}
 										</Link>
 										<span className="mx-2">•</span>
 										<Link to="/">
-											Phòng kế toán
+											{media.author?.position?.name}
 										</Link>
 									</p>
 								</div>
@@ -237,7 +259,16 @@ const SocialPostPage: FC = () => {
 						<div className="post__suggest flex-shrink-0">
 							<p>Liên quan</p>
 							<div>
-								<Link to="/"><div>21,3k</div></Link>
+								{listMedias.length ? listMedias.map(media => (
+									<>
+										<Link to="/"><div>{abbreviateNumber(media.totalView)}</div></Link>
+										<Link to={`/social/post/${media._id}`}>
+											{media.title}
+										</Link>
+									</>
+								)) : ''}
+								
+								{/* <Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
 								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
@@ -250,9 +281,7 @@ const SocialPostPage: FC = () => {
 								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
 								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
+								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link> */}
 							</div>
 						</div>
 					</div>
