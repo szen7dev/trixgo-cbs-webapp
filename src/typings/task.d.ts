@@ -4,8 +4,7 @@ export type ListTaskPayload = {
   lastestID?: string;
   limit?: number;
   populates?: string;
-  populates1?: string;
-  filter?: string;
+  select?: string;
   type?: numer;
   typeStatus?: number;
 };
@@ -71,7 +70,7 @@ export type ListCheckListPayload = {
   lastestID?: string;
   limit?: number;
   populates?: string;
-  filter?: string;
+  select?: string;
   type?: numer;
   typeStatus?: number;
   parentID?: string;

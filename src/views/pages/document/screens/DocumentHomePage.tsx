@@ -77,23 +77,23 @@ const DocumentHomePage: FC = () => {
 					{data.map((item, index) => {
 						return (
 							<div key={index} className="document__card-container">
-							<div
-								className="document__home-card relative mt-2 border-cbs-border box-border border"
-							>
-								<div className="flex mb-5">
-									<img src={projectImage} alt="Avatar" className="h-[90px] w-[90px] object-cover" />
-									<div className="flex flex-1 justify-center items-center">
-										<div className="rounded-full flex flex-col justify-center items-center w-[75px] h-[75px] border-cbs-border border-b bg-cbs-gray">
-											<p className="text-x-large text-black">{item.count}</p>
-											<p>Hồ sơ</p>
+								<div
+									className="document__home-card relative mt-2 border-cbs-border box-border border"
+								>
+									<div className="flex mb-5">
+										<img src={projectImage} alt="Avatar" className="h-[90px] w-[90px] object-cover" />
+										<div className="flex flex-1 justify-center items-center">
+											<div className="rounded-full flex flex-col justify-center items-center w-[75px] h-[75px] border-cbs-border border-b bg-cbs-gray">
+												<p className="text-x-large text-black">{item.count}</p>
+												<p>Hồ sơ</p>
+											</div>
 										</div>
 									</div>
+									<Link className="document__line text-large text-black" to="/pcm/project/12345/document">{item.title}</Link>
+									<p className="text-x-small document__line-min mt-1.5">
+										{item.company}
+									</p>
 								</div>
-								<Link className="document__line text-large text-black" to="/pcm/project/:id/home">{item.title}</Link>
-								<p className="text-x-small document__line-min mt-1.5">
-									{item.company}
-								</p>
-							</div>
 							</div>
 						);
 					})}

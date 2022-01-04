@@ -36,8 +36,8 @@ const ProjectInvestPage: FC = () => {
 
 	return (
 		// <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
-		<div className={cn(styles.content, styles['bg-gray'])}>
-			<div className={cn(styles.header, 'px-4 flex justify-between w-full')}>
+		<div className={cn(styles.content, "bg-cbs-gray")}>
+			<div className='text-cbs-subtext bg-white border border-cbs-border px-4 flex justify-between w-full'>
 				<div className="flex justify-center flex-1">
 					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'dashboard' })}>
 						<button>
@@ -56,8 +56,8 @@ const ProjectInvestPage: FC = () => {
 				{/* Content */}
 				<div className="flex flex-wrap -mx-2">
 					<div className={cn("px-2 mt-4  flex-auto")}>
-						<div className={cn(styles.cell, styles.border, 'h-full pl-5 pr-12 pt-7 pb-8')}>
-							<div className={cn(styles['finance-progress'], styles['text-xxl'])}>
+						<div className={cn(styles.cell, 'border border-cbs-border h-full px-5 pt-7 pb-8')}>
+							<div className={cn(styles['finance-progress'], "text-3x-large")}>
 								<Link to="/">
 									<div className={styles.warn}>7</div>
 								</Link>
@@ -71,27 +71,19 @@ const ProjectInvestPage: FC = () => {
 									<div className={styles.danger}>6</div>
 								</Link>
 							</div>
-							<div className={cn(styles['text-normal'], "grid grid-cols-2 gap-y-5 gap-x-8 mt-8")}>
-								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<Link to="/">
-										<div className={cn(styles.success, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
-									</Link>
-								</div>
-								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<Link to="/">
-										<div className={cn(styles.purple, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
-									</Link>
-								</div>
-								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<Link to="/">
-										<div className={cn(styles.warn, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
-									</Link>
-								</div>
-								<div className="flex items-center" style={{ minWidth: '263px' }}>
-									<Link to="/">
-										<div className={cn(styles.danger, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, VƯỢT NGÂN SÁCH
-									</Link>
-								</div>
+							<div className="text-small grid grid-cols-2 gap-y-5 gap-x-8 mt-8">
+								<Link to="/">
+									<div className={cn(styles.success, 'inline-block bg-current w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+								</Link>
+								<Link to="/">
+									<div className={cn(styles.purple, 'inline-block bg-current w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+								</Link>
+								<Link to="/">
+									<div className={cn(styles.warn, 'inline-block bg-current w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+								</Link>
+								<Link to="/">
+									<div className={cn(styles.danger, 'inline-block bg-current w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -100,36 +92,36 @@ const ProjectInvestPage: FC = () => {
 							<div className="px-3.5">
 								<div>
 									<Link to="/">
-										<p className={cn(styles['text-small'], 'mt-5')}>Ngân sách (100%)</p>
+										<p className='text-x-small mt-5'>Ngân sách (100%)</p>
 									</Link>
-									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
+									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.success, 'mr-2')} style={{ width: "299px", height: '12px' }}></div>
 										<div>$696.8 MM</div>
 									</div>
 								</div>
 								<div>
 									<Link to="/">
-										<p className={cn(styles['text-small'], 'mt-5')}>Dự báo (98%)</p>
+										<p className='text-x-small mt-5'>Dự báo (98%)</p>
 									</Link>
-									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
+									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.purple, 'mr-2')} style={{ width: "266px", height: '12px' }}></div>
 										<div>$547.6 MM</div>
 									</div>
 								</div>
 								<div>
 									<Link to="/">
-										<p className={cn(styles['text-small'], 'mt-5')}>Đã ký hợp đồng (82%)</p>
+										<p className='text-x-small mt-5'>Đã ký hợp đồng (82%)</p>
 									</Link>
-									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
+									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.info, 'mr-2')} style={{ width: "213px", height: '12px' }}></div>
 										<div>$373.5 MM</div>
 									</div>
 								</div>
 								<div>
 									<Link to="/">
-										<p className={cn(styles['text-small'], 'mt-5')}>Đã giải ngân (57%)</p>
+										<p className='text-x-small mt-5'>Đã giải ngân (57%)</p>
 									</Link>
-									<div className={cn(styles['text-small'], "flex items-center whitespace-nowrap")} style={{ marginTop: '5px' }}>
+									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
 										<div className={cn(styles['finance-total'], styles.warn, 'mr-2')} style={{ width: "153px", height: '12px' }}></div>
 										<div>$65.2 MM</div>
 									</div>
@@ -145,7 +137,7 @@ const ProjectInvestPage: FC = () => {
 							<div>
 								<ul>
 									<li className="whitespace-nowrap">
-										<Link to="/" className="flex items-center"><div className={cn(styles.info, styles.circle, 'w-3 h-3 rounded-lg')}></div>Chưa bắt đầu (100)</Link>
+										<Link to="/" className="flex items-center"><div className={cn(styles.info, 'bg-current w-3 h-3 rounded-lg')}></div>Chưa bắt đầu (100)</Link>
 									</li>
 									<li className="flex items-center whitespace-nowrap">
 										<Link to="/" className="flex items-center"><div className={cn(styles.warn, 'w-3 h-3 rounded-lg')}></div>Lập kế hoạch (80)</Link>
@@ -170,7 +162,7 @@ const ProjectInvestPage: FC = () => {
 				<div className="flex flex-wrap -mx-2 mt-4">
 					<div className="px-2 w-full">
 						<div className={cn(styles.cell, styles.border, 'h-full')}>
-							<table className={cn(styles['finance-table'], styles.invest, styles['text-small'], 'w-full')}>
+							<table className={cn(styles['finance-table'], styles.invest, 'text-x-small w-full')}>
 								<thead>
 									<tr>
 										<th>DỰ ÁN</th>

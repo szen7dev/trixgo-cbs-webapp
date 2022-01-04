@@ -34,24 +34,8 @@ const TaskRepository = {
         select:
           "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments",
         populates: JSON.stringify({
-          value: "group author assignee related parent project approver",
+          path: "group author assignee related parent project approver",
           select: "_id name fullname image sign",
-        }),
-        populates1: JSON.stringify({
-          value: "parent",
-          select: "sign name",
-        }),
-        populates2: JSON.stringify({
-          value: "parent",
-          select: "sign name",
-        }),
-        populates3: JSON.stringify({
-          value: "parent",
-          select: "sign name",
-        }),
-        populates4: JSON.stringify({
-          value: "parent",
-          select: "sign name",
         }),
       })}`
     );

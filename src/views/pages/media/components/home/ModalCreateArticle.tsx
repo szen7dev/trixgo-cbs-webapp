@@ -104,7 +104,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
-				}
+				},
+				// compressConfig: {
+				// 	useCompress: false
+				// }
 			})
 			setIDImageUploaded(key, _id);
 		}
@@ -122,6 +125,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}
 	}
 
+	// Xử lý hứng giá trị các biến từ Client truyền lên sau khi Submit
 	const handleSubmit = async (values: MediaPayload) => {
 		values.images = [];
 		values.files = [];
@@ -139,7 +143,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		switch (modalType) {
 			case 'create':
 				values.companyID = user?.company._id;
+
+				// API tạo bài viết
 				await createMedia(values);
+
 				break;
 			case 'update':
 				values.mediaID = initialValues.mediaID;

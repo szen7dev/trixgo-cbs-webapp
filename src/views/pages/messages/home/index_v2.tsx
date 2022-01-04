@@ -2,6 +2,7 @@ import React, {createContext, FC, useMemo, useState} from "react";
 import MessageList from "../list";
 import { useLocation } from 'react-router-dom';
 import ChattingSection from "../chattingSection";
+import SettingMessageDetail from "../setting";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -21,13 +22,10 @@ const MessagesHome:FC = () => {
 
     return (
         <MessageContext.Provider value={value}>
-            <div className={"flex"}>
-                <div className={"messages-left-bar max-w-[480px] min-w-[240px] min-h-screen border-r"}>
-                    <MessageList/>
-                </div>
-                <div className={"flex-1 overflow-auto min-h-screen"}>
-                    <ChattingSection/>
-                </div>
+            <div className={"flex h-screen w-screen overflow-hidden"}>
+                <MessageList/>
+                <ChattingSection/>
+                <SettingMessageDetail/>
             </div>
         </MessageContext.Provider>
     )

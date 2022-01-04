@@ -26,7 +26,7 @@
     @apply w-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-gray border-2 border-solid border-primary-light bg-clip-padding rounded-full;
+    @apply bg-secondary-gray bg-clip-padding rounded-full;
   }
 
   .t-scrollbar-horizontal::-webkit-scrollbar {
@@ -1196,4 +1196,32 @@ input[type="text"] {
 }
 .bg-chat-app {
   background: linear-gradient(180deg, rgba(71, 129, 207, 0.74) 0%, #4781CF 100%);
+}
+.form-switch.form-check-input:checked {
+  background-position: right center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+.form-switch.form-check-input {
+  width: 2em;
+  margin-left: -2.5em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  background-position: left center;
+  border-radius: 2em;
+  transition: background-position .15s ease-in-out;
+}
+.form-switch.form-check-input:focus {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2386b7fe'/%3e%3c/svg%3e");
+}
+.form-switch.form-check-input {
+  width: 2em;
+  margin-left: -2.5em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  background-position: left center;
+  border-radius: 2em;
+  transition: background-position .15s ease-in-out;
+}
+/*______________________________Human page___________________________*/
+.t-human-spread::after {
+  content: '|';
+  letter-spacing: 3px;
 }

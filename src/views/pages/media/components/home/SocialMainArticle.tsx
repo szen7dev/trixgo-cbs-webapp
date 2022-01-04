@@ -14,12 +14,11 @@ type Props = {
 	media: MediaProps
 } & React.HTMLAttributes<HTMLDivElement>
 
-const SocialMainArticle: FC<Props> = ({ media, ...props}) => {
-	if(!media) return <></>;
-
+const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
+	if (!media) return null;
 	return (
 		<div {...props}>
-			<div className="w-full">
+			<div className="w-full max-h-80 md:max-h-[384px]">
 				<img src={(media.images && media.images.length) ? media.images[0].url : image} alt="" className="w-full h-full object-cover" />
 			</div>
 			<div className="inline-flex flex-col px-5 pt-4 pb-3 w-full lg:w-min box-content" style={{ minWidth: "287px", minHeight: "363px" }}>

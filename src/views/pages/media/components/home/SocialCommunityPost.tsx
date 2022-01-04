@@ -12,7 +12,7 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 
 	return (
 		<div {...props}>
-			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Cộng đồng</span>
+			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Dự án phòng ban</span>
 			<ul>
 				{listMedias.length ? listMedias.map((media: MediaProps) => (
 					<li key={media._id} className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>

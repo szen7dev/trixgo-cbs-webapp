@@ -11,8 +11,11 @@ const SocialSpecializedTopics: React.FC<React.HTMLAttributes<HTMLDivElement>> = 
 
 	return (
 		<div {...props}>
-			<span className="text-24px font-bold inline-block border-b border-black text-primary pb-3 mt-3">Chủ đề chuyên ngành</span>
+			<span className="text-24px font-bold inline-block border-b border-black text-primary pb-3 mt-3">Chuyển đổi số</span>
 			<ul>
+				<li className="mt-4 5 mb-1">
+					<Link to="/">Chuyển đổi số toàn diện</Link>
+				</li>
 				<li className="mt-4 5 mb-1">
 					<Link to="/">Quản lý dự án</Link>
 				</li>
@@ -32,7 +35,7 @@ const SocialSpecializedTopics: React.FC<React.HTMLAttributes<HTMLDivElement>> = 
 					<Link to="/">Hồ sơ thanh quyết toán</Link>
 				</li>
 			</ul>
-			<span className="text-24px font-bold inline-block border-b border-black text-primary pb-3 mt-3">Hệ thống</span>
+			{/* <span className="text-24px font-bold inline-block border-b border-black text-primary pb-3 mt-3">Hệ thống</span>
 			<ul>
 				{listMedias.length ? listMedias.map((media: MediaProps) => (
 					<li className="mt-4 5 mb-1" key={media._id}>
@@ -47,7 +50,7 @@ const SocialSpecializedTopics: React.FC<React.HTMLAttributes<HTMLDivElement>> = 
 						</Link>
 					</li>
 				)) : ''}
-			</ul>
+			</ul> */}
 		</div>
 	)
 }

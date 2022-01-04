@@ -35,6 +35,7 @@ const HomePage: FC = () => {
   const { user } = useAuth();
   const { listTasks } = usePcm();
   const socketRef: any = useSocket();
+  const [count, setCount] = useState(0);
 
   const { listMedias: listMediasCommunity, nextPageListMedias } = useSocial('list_medias_community', { 
     limit: 6, type: 'community'
@@ -43,6 +44,7 @@ const HomePage: FC = () => {
     limit: 1, type: 'company', companyID: user?.company._id
   });
 
+  // Kiểm soát lifeCicle của Data
   useEffect(() => {
     (async () => {
       const response = await PcmRepository.listTotalAnalysis();
@@ -84,29 +86,41 @@ const HomePage: FC = () => {
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">{taskAnalysis?.amountTask || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Công việc</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Công việc</Link>
+                </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">{taskAnalysis?.amountTaskIsRFa || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Phê duyệt</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Phê duyệt</Link>
+                </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">{taskAnalysis?.amountTaskIsRFis || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Yêu cầu thông tin</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Yêu cầu thông tin</Link>
+                </p>
               </div>
             </div>
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{taskAnalysis?.amountTaskIsFlags || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Quan tâm</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/bookmark">Việc quan tâm</Link>
+                </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{taskAnalysis?.amountTaskIsAssignee || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Việc đã giao</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                <Link to="/pcm/mine">Việc đã giao</Link>
+                </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{taskAnalysis?.amountTaskIsDraft || 0}</div>
-                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">Việc nháp</p>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/draft">Việc nháp</Link>
+                </p>
               </div>
             </div>
           </div>
@@ -114,8 +128,8 @@ const HomePage: FC = () => {
           {/* outstanding news */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Tin nổi bật</span>
-              <a href="/">Xem tất cả</a>
+              <span>Chuyển đổi số</span>
+              <Link to={`/social/home/3`}>Xem tất cả</Link>
             </div>
             <div className="t-home-slider w-full">
               <Slider {...settings}>
@@ -157,13 +171,13 @@ const HomePage: FC = () => {
           {/* media */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Truyền thông</span>
-              <a href="/">Xem tất cả</a>
+              <span>Truyền thông công ty</span>
+              <Link to={`/social/home/1`}>Xem tất cả</Link>
             </div>
             {listMediasCompany.length ? (
               <div className="flex items-center">
-                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="t-home-media-img pr-7">
-                  <img className="w-full" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
+                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
                 </Link>
                 <div className="t-home-media-text text-dark">
                   <Link to={`/social/post/${listMediasCompany[0]._id}`}>
@@ -201,8 +215,8 @@ const HomePage: FC = () => {
           {/* recent actions */}
           <div className="t-home-block">
             <div className="t-home-block-title">
-              <span>Hoạt động gần đây</span>
-              <a href="/">Xem tất cả</a>
+              <span>Thông báo gần đây</span>
+              <Link to={`/personal/notification`}>Xem tất cả</Link>
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
@@ -222,20 +236,7 @@ const HomePage: FC = () => {
                   </div>
                 </div>
               )) : ''}
-              {/* <div className="flex mb-4">
-                <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
-                <div className="t-home-actions-text text-secondary-gray">
-                  <div className="flex justify-between mb-1">
-                    <span className="t-home-actions-title-content text-dark">
-                      PKT đồng ý với HSTT đợt 4, giá trị được TT lần này: 554.101.100. Kính trình ban lãnh đạo...
-                    </span>
-                    <span className="ml-2">11:34</span>
-                  </div>
-                  <div>
-                    Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
-                  </div>
-                </div>
-              </div> */}
+
               {/* recent actions item */}
               {/* <div className="flex mb-4">
                 <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
@@ -262,7 +263,7 @@ const HomePage: FC = () => {
         <div className="t-home-solution pt-1 pb-1 pl-3 pr-3 mb-4 flex items-center">
           <div className="t-home-solution-text text-[12px] text-primary-light">
             <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề Quản lý giá</div>
-            <div className="t-home-solution-description">Tất cả các vấn đề quan trọng liên quan tới kiểm soát ngân sách, giá</div>
+            <div className="t-home-solution-description">Giải quyết tất cả các vấn đề liên quan tới kiểm soát giá cho Chủ đầu tư</div>
             <div className="t-home-solution-link">
               <a href="/" className="flex items-center text-primary-light">
                 Xem ngay
@@ -278,8 +279,8 @@ const HomePage: FC = () => {
         <div className="t-home-right-block t-home-right-block-common">
           <img src={imgBidding} alt="Bidding" />
           <div className="t-home-right-block-common-text">
-            <div className="t-home-right-block-common-title">Tổ chức đấu thầu online</div>
-            <div className="t-home-right-block-common-description">Đấu thầu các dự án tư nhân với quy mô lớn, hoàn toàn minh bạch</div>
+            <div className="t-home-right-block-common-title">Nền tảng đấu thầu online quy mô lớn</div>
+            <div className="t-home-right-block-common-description">Đấu thầu gói thầu quy mô lớn, minh bạch/bảo mật thông tin suốt quá trình</div>
           </div>
         </div>
 
@@ -294,7 +295,7 @@ const HomePage: FC = () => {
             <img src={imgProcess2} alt="Process management" />
             <div className="t-home-operation-text pl-4 text-dark">
               <div className="mb-5">
-                Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Dữ liệu được trang bị tới tận tay cư dân
+                Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Thông tin về căn hộ được cung cấp tới tận tay cư dân
               </div>
               <a className="flex items-center text-primary-gray" href="/">
                 Xem ngay
@@ -311,11 +312,12 @@ const HomePage: FC = () => {
             <img src={iconNew} alt="New" />
             <div className="t-home-right-block-common-text">
               <div className="t-home-right-block-common-description">
-                <span>Trixgo ra mắt phiên bản mới v7.9.1 (2387)</span>
+                <span>Trixgo ra mắt phiên bản mới v2.7.1</span>
                 <ul>
-                  <li>Hoàn thiện các bug nhỏ</li>
+                  <li>Nâng cấp hoàn toàn trải nghiệm mới trên nền tảng Web</li>
+                  <li>Đồng bộ hóa Mobile và Tablet app</li>
                   <li>Cải thiện tính năng</li>
-                  <li>Nâng cao trải nghiệm người dùng</li>
+                  <li>Hoàn thiện các bug nhỏ</li>
                 </ul>
               </div>
             </div>
@@ -325,7 +327,7 @@ const HomePage: FC = () => {
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Đào tạo tân kỹ sư</div>
+              <div className="t-home-right-block-common-title">Kỹ sư thực chiến</div>
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
@@ -340,13 +342,13 @@ const HomePage: FC = () => {
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "40%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc thực tế</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc dự án thực tế</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "100%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Workshop chia sẻ kinh nghiệm </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Định kỳ Workshop chia sẻ kinh nghiệm </div>
               </div>
             </div>
             <button className="t-home-training-btn flex-grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5 rounded-md">Tham gia</button>
@@ -354,56 +356,57 @@ const HomePage: FC = () => {
 
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Cộng đồng doanh nghiệp</div>
+              <div className="t-home-right-block-common-title">Cộng đồng chuyển đổi số</div>
             </div>
           </div>
           <div className="flex items-center t-home-operation t-home-business-group">
             <img src={imgBusiness} alt="Business group" />
             <div className="t-home-operation-text">
               <div>
-                Hãy để cộng đồng biết tới dịch vụ và lợi ích mà Doanh nghiệp bạn mang lại
+                Chia sẻ kinh nghiệm quan trọng quyết định thành công việc chuyển đổi số của doanh nghiệp
               </div>
-              <a className="flex items-center text-primary-gray" href="/">
+              <Link className="flex items-center text-primary-gray" to="/social/home/3">
                 Xem ngay
                 <span className="ml-2 rounded-full p-1 inline-block">
                   <img src={iconArrowRight} alt="Arrow" />
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
 
-        <div className="t-home-right-block">
-          <div className="t-home-block-title">
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
             <span>Sự kiện</span>
             <a href="/">Xem tất cả</a>
-          </div>
-          <div className="t-home-event">
+          </div> */}
+          {/* <div className="t-home-event"> */}
             {/* event item */}
-            <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-home-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
               <div className="t-home-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
-            </div>
+            </div> */}
             {/* event item */}
-            <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-home-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
               <div className="t-home-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
 
-        <div className="t-home-right-block">
-          <div className="t-home-block-title">
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
             <span>Yêu cầu kết bạn</span>
             <a href="/">Xem tất cả</a>
-          </div>
-          <div className="t-home-actions">
+          </div> */}
+          {/* <div className="t-home-actions"> */}
+
             {/* friend request item */}
-            <div className="flex mb-4">
+            {/* <div className="flex mb-4">
               <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
               <div className="t-home-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
@@ -416,9 +419,10 @@ const HomePage: FC = () => {
                   <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
-            </div>
+            </div> */}
+
             {/* friend request item */}
-            <div className="flex mb-4">
+            {/* <div className="flex mb-4">
               <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
               <div className="t-home-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
@@ -431,9 +435,10 @@ const HomePage: FC = () => {
                   <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+        
       </div>
     </div>
   );

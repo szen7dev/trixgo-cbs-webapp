@@ -49,12 +49,15 @@ const MainHeader: FC = () => {
               Home
 						</Link>
             <Link to={`/messages`} className="font-bold ml-3 mr-3">
-              Chatting
+              Nhắn tin
 						</Link>
             <Link to={`/social/home`} className="font-bold ml-3 mr-3">
               Truyền thông
 						</Link>
-            <Link to={`/cmcs/dashboard`} className="font-bold ml-3 mr-3">
+            <Link to={`/bidding/home`} className="font-bold ml-3 mr-3">
+              Đấu thầu
+						</Link>
+            <Link to={`/cmcs/home`} className="font-bold ml-3 mr-3">
               Hợp đồng
 						</Link>
               {/* <a className="font-bold ml-5 mr-5 active" href="/">Home</a> */}
