@@ -109,8 +109,6 @@ const SocialPost: FC = () => {
 	const images: FileProps[] = media.images || [];
 	const files: FileProps[] = media.files || [];
 
-	console.log({ media })
-
 	return (
 		<CommentProvider>
 			<div className="page__post text-sm custom-scroll">
