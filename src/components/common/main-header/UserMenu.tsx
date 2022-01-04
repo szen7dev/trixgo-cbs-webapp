@@ -125,7 +125,7 @@ const UserMenu: FC = () => {
 
               <div className="flex flex-1 justify-between items-center pl-3">
                 <div className="flex flex-col">
-                  <Link to={`/help`} className="font-bold">
+                  <Link to={`/help/home`} className="font-bold">
                     Trung tâm Trợ giúp
                   </Link>
                 </div>

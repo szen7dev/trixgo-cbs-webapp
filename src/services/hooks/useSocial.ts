@@ -6,6 +6,7 @@ import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload, ListMedi
 import { CommentProps } from 'typings/common';
 import { objPopulate } from 'views/pages/media/utils';
 
+// Định nghĩa toàn bộ các Hook (đóng gói lại) để làm việc với API
 type UseSocial = {
     listMedias: Array<MediaProps>,
     createMedia: (payload: MediaPayload) => Promise<void>,
@@ -37,6 +38,7 @@ type UseCommentSocial = {
 export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial => {
     const { current: socket }: any = useSocket();
 
+    // Phương thức thêm
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
@@ -51,7 +53,8 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useMutation((id: string) =>
             SocialRepository.deleteMedia(id)
         );
-
+    
+    // Get danh sách
     const {
         isLoading: isLoadingListMedias,
         refetch: refetchListMedias,
@@ -77,6 +80,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
             }
         );
 
+    // Nội dung hàm/API viết bài
     const createMedia = async (payload: MediaPayload) => {
         try {
             const { error, data, message } = await createMediaAsync(payload);

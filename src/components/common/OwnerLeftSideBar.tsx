@@ -25,7 +25,11 @@ const LinkMenuLeftSideBar: FC = () => {
           </Link>
           <Link to={`/owner/grant-permission`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Cấp quyền truy cập</span>
+            <span className="truncate">Phân quyền ứng dụng</span>
+          </Link>
+          <Link to={`/owner/traffic`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Báo cáo truy cập</span>
           </Link>
         </div>
       </div>

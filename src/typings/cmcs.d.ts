@@ -1,16 +1,40 @@
+// Khai báo kiểu dữ liệu chung trả về từ tất cả các API
 import { APIResponse } from "./apis/response";
 
-export type GetContractListPayload = {
-  filter: string;
-  populates: string;
-  limit: number;
-  outin: number;
-  keyword: string;
-  departmentID: string;
-  companyID: string;
-  lastestID: string;
+// Kiểu dữ liệu từ client truyền lên server để lấy data API
+export type ListContractsPayload = {
+  filter?: string; // Sau thay bằng Select (tương đương với kiểu Select)
+  populates?: string;
+  limit?: number; // Sau bỏ => Khống chế ở Backend
+  outin?: number;
+  keyword?: string;
+  departmentID?: string;
+  companyID?: string;
+  lastestID?: string;
 };
 
+// Thuộc tính 1 mẩu tin
+export type ContractProps = {
+  _id: string;
+  name: string,
+  company: string,
+  project: {
+    _id: string,
+    name: string,
+    sign: string
+  }
+};
+
+// Kiểu dữ liệu trả về
+export type ListContractsResponse = APIResponse & {
+  data: {
+    listRecords: Array<ContractProps>;
+    totalRecord: number;
+    totalPages?: number;
+  };
+};
+
+// Kiểu dữ liệu Info
 export type GetInfoContractPayload = {
   contractID: string;
   populates: string;

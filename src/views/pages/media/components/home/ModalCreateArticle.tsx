@@ -61,6 +61,8 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { user } = useAuth();
+
+	// Các Hook (để xử lý API)
 	const { createMedia, updateMedia, refetchListMedias } = useSocial('list_medias_internal_company');
 	const { addFileToUpload } = useUpload('MEDIA');
 
@@ -129,6 +131,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}
 	}
 
+	// Xử lý hứng giá trị các biến từ Client truyền lên sau khi Submit
 	const handleSubmit = async (values: MediaPayload) => {
 		values.images = [];
 		values.files = [];
@@ -146,7 +149,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		switch (modalType) {
 			case 'create':
 				values.companyID = user?.company._id;
+
+				// API tạo bài viết
 				await createMedia(values);
+
 				break;
 			case 'update':
 				values.mediaID = initialValues.mediaID;
@@ -157,7 +163,10 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}
 		console.log({ values, uploads });
 
+		// Làm mới danh sách bài viết (Thay bằng toàn bộ bài viết mới)
 		refetchListMedias();
+
+		// Tắt Modal
 		toggle();
 		return [values, uploads];
 	};

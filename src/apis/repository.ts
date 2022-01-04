@@ -10,6 +10,7 @@ const API = Axios.create({
     "Accept": "application/json",
     "Content-Type": "application/json",
   },
+  data: {}
 });
 
 // Add a response interceptor

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useState, useEffect} from "react";
 
 import {
   Chart as ChartJS,
@@ -11,6 +11,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
+import { useFetchSupport } from 'services/hooks/useSupport';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,47 +21,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const data = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      data: [
-        2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500,
-      ],
-      backgroundColor: "#2a90fb",
-      barThickness: 8,
-    },
-    {
-      data: [
-        3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500, 3500,
-      ],
-      backgroundColor: "#0060E1",
-      barThickness: 8,
-    },
-    {
-      data: [
-        2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000,
-      ],
-      backgroundColor: "#10b981",
-      barThickness: 8,
-    },
-  ],
-};
-
 const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -114,8 +75,83 @@ const options = {
     },
   },
 };
-
+const data = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+  datasets: [
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
+      ],
+      backgroundColor: "#2a90fb",
+      barThickness: 8,
+    },
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
+      ],
+      backgroundColor: "#0060E1",
+      barThickness: 8,
+    },
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
+      ],
+      backgroundColor: "#10b981",
+      barThickness: 8,
+    },
+  ],
+};
 const StatisticsByDeviceSupport: FC = () => {
+  const [chartData, setChartData] = useState({
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+    datasets: [
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#2a90fb",
+        barThickness: 8,
+      },
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#0060E1",
+        barThickness: 8,
+      },
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        backgroundColor: "#10b981",
+        barThickness: 8,
+      },
+    ]
+  });
+  const { listDevice } = useFetchSupport();
+  const chart = () => {
+    const emDevice = [];
+    for (const dataOject of listDevice) {
+      emDevice.push(dataOject.data);
+    }
+    setChartData({
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
+      datasets: [
+        {
+          data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,],
+          backgroundColor: "#2a90fb",
+          barThickness: 8,
+        },
+        {
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,],
+          backgroundColor: "#0060E1",
+          barThickness: 8,
+        },
+        {
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,],
+          backgroundColor: "#10b981",
+          barThickness: 8,
+        },
+      ]
+    });
+  }
+  useEffect(() => {
+    chart();
+  }, []);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
@@ -124,7 +160,7 @@ const StatisticsByDeviceSupport: FC = () => {
 
       <div className="flex items-center relative">
         <div className="w-11/12 h-[320px]">
-          <Bar options={options} data={data} />
+          <Bar options={options} data={chartData} />
         </div>
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">
