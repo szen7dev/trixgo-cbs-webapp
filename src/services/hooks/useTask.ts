@@ -29,24 +29,10 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
         lastestID: pageParam || "",
         type: type || 1,
         typeStatus: typeStatus || 4,
-        filter: JSON.stringify({
-          assignee: 1,
-          lastLog: 1,
-          checklist: 1,
-          description: 1,
-          name: 1,
-          expiredTime: 1,
-          typeStatus: 1,
-          percentage: 1,
-          project: 1
-        }),
+        select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({
-          value: "assignee lastLog project",
+          path: "assignee lastLog project",
           select: "name fullname image author content createAt sign",
-        }),
-        populates1: JSON.stringify({
-          value: "author",
-          select: "name fullname",
         }),
       });
     },
@@ -62,6 +48,10 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
   const listTasks = []
     .concat(...(dataListTask?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
+  // console.log('============12333')
+  // console.log(listTasks)
+
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPages;
 
@@ -104,15 +94,9 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         limit,
         lastestID: pageParam || "",
         parentID: parentID || "",
-        filter: JSON.stringify({
-          assignee: 1,
-          checklist: 1,
-          name: 1,
-          expiredTime: 1,
-          typeStatus: 1,
-        }),
+        select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({
-          value: "assignee",
+          path: "assignee",
           select: "name fullname image",
         }),
       });

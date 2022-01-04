@@ -50,7 +50,7 @@ const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 					</span>
 					<span>
 						<img src={iconEye} alt="View" className="inline-block mr-2" />
-						{abbreviateNumber(media.totalWatched)}
+						{abbreviateNumber(media.totalView)}
 					</span>
 				</p>
 			</div>

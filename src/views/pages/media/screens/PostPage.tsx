@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useContext, useState } from "react";
 
 /**
  * LIBRARIES
@@ -41,27 +41,46 @@ import { FileProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { abbreviateNumber } from 'utils';
+import { useAuth } from 'services/hooks/useAuth';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
 import CommentProvider from '../context/comment/comment.provider';
+import ModalViewPost from "../components/post/ModalViewPost";
+import { ContextModalPost, ProviderModalPost } from "../context/post";
 
-const SocialPostPage: FC = () => {
+const SocialPost: FC = () => {
 	const history = useHistory();
 	const { mediaID } = useParams<{ mediaID: string }>();
-	const { deleteMedia } = useSocial();
+	const { user } = useAuth();
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
+	const media = data?.data;
+
+	const conditionListMedia: any = {
+		type: typePostSelected(media?.type || 0),
+		mediaID,
+		isRelated: true
+	}
+
+	switch (conditionListMedia.type) {
+		case 'company':
+			conditionListMedia.companyID = user?.company._id;
+			break;
+		case 'departments':
+			conditionListMedia.departmentID = user?.department._id;
+			break;
+		default:
+			break;
+	}
+
+	const { deleteMedia, listMedias } = useSocial(`list_medias_related.${mediaID}`, conditionListMedia);
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `list_comments.${mediaID}`
 	});
+
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
-
-	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
-	const media = data?.data;
-
-	if (!media) {
-		return <Loader className="border-primary" />;
-	}
+	const { openPost } = useContext(ContextModalPost);
 
 	const toggleModalEditMedia = () => {
 		refetch();
@@ -75,6 +94,10 @@ const SocialPostPage: FC = () => {
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
+	}
+
+	if (!media) {
+		return <Loader className="border-primary" />;
 	}
 
 	const initialState = {
@@ -155,11 +178,11 @@ const SocialPostPage: FC = () => {
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
 										<Link to="/">
-											Kiến trúc sư giải pháp, Google
+											{media.author?.department?.name}
 										</Link>
 										<span className="mx-2">•</span>
 										<Link to="/">
-											Phòng kế toán
+											{media.author?.position?.name}
 										</Link>
 									</p>
 								</div>
@@ -181,7 +204,7 @@ const SocialPostPage: FC = () => {
 									const url = image.file ? image.file.url : image.url;
 
 									return (
-										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openModalImage(i)} >
+										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openPost({ mediaId: mediaID, images, index: i })} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />
 											{i === 2 && images.length > 3 && (
 												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
@@ -226,18 +249,28 @@ const SocialPostPage: FC = () => {
 								limit={limit}
 								mediaID={mediaID} />
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
-								<ReplyCommentField 
-									attachFile 
-									inputContainerClassName="flex w-full p-2" 
-									fileContainerClassName="border-t" 
+								<ReplyCommentField
+									attachFile
+									inputContainerClassName="flex w-full p-2"
+									fileContainerClassName="border-t"
 									mediaID={mediaID} />
 							</div>
+
 						</div>
 						{/* Post Suggest */}
 						<div className="post__suggest flex-shrink-0">
 							<p>Liên quan</p>
 							<div>
-								<Link to="/"><div>21,3k</div></Link>
+								{listMedias.length ? listMedias.map(media => (
+									<>
+										<Link to="/"><div>{abbreviateNumber(media.totalView)}</div></Link>
+										<Link to={`/social/post/${media._id}`}>
+											{media.title}
+										</Link>
+									</>
+								)) : ''}
+								
+								{/* <Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
 								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
@@ -250,9 +283,7 @@ const SocialPostPage: FC = () => {
 								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
 								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
+								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link> */}
 							</div>
 						</div>
 					</div>
@@ -260,12 +291,12 @@ const SocialPostPage: FC = () => {
 			</div>
 			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<ModalCreateArticle 
-						modalType="update" 
-						show={modalEditMedia} 
-						toggle={toggleModalEditMedia} 
-						initialValues={initialState} 
-						files={media.files} 
+					<ModalCreateArticle
+						modalType="update"
+						show={modalEditMedia}
+						toggle={toggleModalEditMedia}
+						initialValues={initialState}
+						files={media.files}
 						images={media.images} />
 				</div>
 			</ModalContainer>
@@ -307,13 +338,17 @@ const SocialPostPage: FC = () => {
 					</ul>
 				</div>
 			</ModalContainer>
-			<ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
-				<div className="flex overflow-hidden transition-all transform w-full h-full">
-					<ViewPost show={modalShowImage.show} toggle={closeModalImage} images={images} index={modalShowImage.index} />
-				</div>
-			</ModalFullContainer>
+			<ModalViewPost listComments={listComments} mediaID={mediaID} />
 		</CommentProvider>
 	);
 };
+
+const SocialPostPage: FC = () => {
+	return (
+		<ProviderModalPost>
+			<SocialPost />
+		</ProviderModalPost>
+	)
+}
 
 export default SocialPostPage;

@@ -13,7 +13,17 @@ import CompanyPreviewReport from "./components/views/dashboard/CompanyPreviewRep
 import QuickReport from "./components/views/dashboard/QuickReport";
 import StatusReport from "./components/views/dashboard/StatusReport";
 
+// Import data từ API
+import { useCmcs } from 'services/hooks/useCmcs';
+import { useAuth } from "services/hooks/useAuth";
+
 const CmcManagementReport: FC = () => {
+  const { user } = useAuth();
+  const { listContracts } = useCmcs({ companyID: user?.company._id });
+  // console.log('============>>>>>>>>>>>>>>')
+  // console.log(user)
+  // console.log(listContracts)
+
   return (
     <main className="flex w-full bg-cbs-gray h-max p-3">
       <div className="w-2/3 h-full mr-">
@@ -65,7 +75,7 @@ const CmcManagementReport: FC = () => {
 
       <div className="w-1/3 h-full">
         <div className="h-[640px] mb-3">
-          <StatusReport />
+          <StatusReport listContracts={listContracts} />
         </div>
 
         <div className="bg-primary-light px-6 h-64">

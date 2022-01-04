@@ -110,6 +110,7 @@ module.exports = {
                 "authentication-img": "url('../assets/images/authentication-img.png')",
             },
             borderWidth: {
+								'0.5': '0.5px',
                 6: "6px",
             },
 						borderRadius: {
@@ -144,7 +145,10 @@ module.exports = {
     },
     variants: {
         extend: {
-            opacity: ['disabled']
+            opacity: ['disabled','group-hover'],
+            textColor: ['group-focus'],
+						height: ['last'],
+						width: ['last'],
         },
     },
     plugins: [
@@ -171,6 +175,8 @@ module.exports = {
 					],
 					variants('lineClamp')
 				)
+
+				addUtilities([{ '.border-spacing-0': { 'border-spacing': '0' } }])
 			},
 			{
 				theme: {
@@ -186,6 +192,6 @@ module.exports = {
 				variants: {
 					lineClamp: ['responsive'],
 				},
-			})
+			}),
 		],
 };

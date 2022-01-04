@@ -11,10 +11,11 @@ import SideComments from './SideComments';
 
 interface Props {
 	images: ImageProps[]
-	index?: number
+	index?: number,
+	mediaID: string
 }
 
-const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index }) => {
+const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) => {
 	const [collapsed, setCollapsed] = useState<boolean>(false);
 	const [imageIndex, setImageIndex] = useState<number>(index || 0);
 	const toggleCollapse = () => setCollapsed(!collapsed);
@@ -81,7 +82,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index }) => {
 				</div>
 			</div>
 
-			<SideComments className={cn("react__comments-wrapper transition-all flex flex-col text-black bg-white h-full overflow-hidden", { collapsed })}/>
+			<SideComments mediaID={mediaID} className={cn("react__comments-wrapper transition-all flex flex-col text-black bg-white h-full overflow-hidden", { collapsed })} />
 		</>
 	)
 }

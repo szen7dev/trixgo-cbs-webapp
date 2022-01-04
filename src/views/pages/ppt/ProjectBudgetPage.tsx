@@ -1,98 +1,96 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 
-import cn from "classnames";
-
-import styles from "./style.module.css";
-
-import icon from 'assets/images/icons8-bulleted-list-96 1.png';
+import LayoutPrimary from "../media/layouts/LayoutPrimary";
+import BugetRowGroup from "./components/budget/BudgetRowGroup";
 
 const pages = [
-	{ id: 'budget', title: 'Ngân sách' },
-	{ id: 'wattage', title: 'Kế hoạch tài chính' },
+	{ id: 'budget', title: 'Ngân sách', path: '/pcm/project/1/budget' },
+	{ id: 'wattage', title: 'Kế hoạch tài chính', path: '/pcm/project/2/budget' },
 ]
 
 const ProjectBudgetPage: FC = () => {
-	const data = useMemo(() => [null, null], []);
+	const [show, setShow] = useState<boolean>(true)
+	const data = useMemo(() => Array.from({ length: 3 }).map((_, index) => ({
+		_id: index,
+		project: { sign: 'test' },
+		name: 'San lấp mặt bằng toàn bộ công trình',
+		expiredTime: Date.now(),
+		description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi, rem?",
+		data: Array.from({ length: Math.ceil(Math.random() * 10) }).map((_d, i) => ({
+			_id: i,
+			budget: 10000000 * Math.ceil(Math.random() * 3),
+			predict: 100000000 * Math.ceil(Math.random() * 3),
+			signed: 100000000 * Math.ceil(Math.random() * 3),
+			advance: 100000000 * Math.ceil(Math.random() * 3),
+			volume: 100000000 * Math.ceil(Math.random() * 3),
+			finish: 100000000 * Math.ceil(Math.random() * 3),
+			pay: 100000000 * Math.ceil(Math.random() * 3),
+			rest: 100000000 * Math.ceil(Math.random() * 3),
+			note: 'Xây dựng mẫu BoQ cho công tác preliminaries'
+		}))
+	})), []);
+	// const data = useMemo(() => Array.from({length:10}), []);
+
+	useEffect(() => {
+		document.title = "PPT - Dự án đang phát triển"
+	}, []);
 
 	useEffect(() => {
 		document.title = "PPT - Ngân sách"
 	}, []);
 
 	return (
-		<div className={cn(styles.content, styles.col)}>
-			<div className={cn(styles.header, 'px-4 flex justify-between w-full items-center')}>
-				<div className="flex flex-wrap h-full justify-center flex-auto">
-					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'budget' })}>
-						<button>
-							{page.title}
-						</button>
-					</div>)}
-				</div>
-				<div className={cn(styles['header-list-sort'], 'my-1.5 flex whitespace-nowrap')}>
-					<button className={cn(styles['header-item-sort'], { [styles.active]: true })}>
-						<img src={icon} alt="list" className='inline-block mr-1.5' />
-						List
-					</button>
-					<button className={cn(styles['header-item-sort'], { [styles.active]: false })}>
-						<img src={icon} alt="list" className='inline-block mr-1.5' />
-						Other
-					</button>
-					<button className={cn(styles['header-item-sort'], { [styles.active]: false })}>
-						<img src={icon} alt="list" className='inline-block mr-1.5' />
-						Other
-					</button>
-				</div>
-			</div>
-			<div className="flex-1 overflow-y-auto px-2">
-				<table className={cn(styles.table, styles.black, styles['text-normal'], 'mt-2')}>
-					<thead>
+		<LayoutPrimary
+			pages={pages}
+		>
+			<div className="flex-1 overflow-y-auto pb-8">
+				<table className='text-medium w-full border-separate border-spacing-0 text-center'>
+					<thead className="text-left">
 						<tr>
-							<th>TT</th>
-							<th style={{ minWidth: '240px' }}>Nội dung (không gồm VAT)</th>
-							<th style={{ minWidth: '122px' }}>Ngân sách</th>
-							<th style={{ minWidth: '122px' }}>Dự báo (phát sinh)</th>
-							<th style={{ minWidth: '122px' }}>Ký hợp đồng</th>
-							<th style={{ minWidth: '122px' }}>Tạm ứng</th>
-							<th style={{ minWidth: '125px' }}>Sản lượng</th>
-							<th style={{ minWidth: '132px' }}>Nghiệm thu hoàn thành</th>
-							<th style={{ minWidth: '123px' }}>Thanh toán</th>
-							<th style={{ minWidth: '124px' }}>Còn lại</th>
-							<th style={{ minWidth: '246px' }}>Ghi chú</th>
+							<th className="sticky top-0 bg-gray-300 px-1.5 z-10">
+								<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
+							</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2">
+								TT
+							</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '240px' }}>Nội dung (không gồm VAT)</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Ngân sách</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Dự báo (phát sinh)</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Ký hợp đồng</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Tạm ứng</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '125px' }}>Sản lượng</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '132px' }}>Nghiệm thu hoàn thành</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '123px' }}>Thanh toán</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '124px' }}>Còn lại</th>
+							<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '246px' }}>Ghi chú</th>
 						</tr>
 					</thead>
-					<tbody>
-						{
-							data.map((_item, index) => {
-								return (
-									index % 5 === 0
-										? (<tr key={index}>
-											<th>A1</th>
-											<th className="text-left">GÓI THẦU XÂY DỰNG VÀ THIẾT BỊ</th>
-											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
-											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
-											<th className="text-right" style={{ width: '1%' }}>15.000.000.000</th>
-											<th colSpan={6} className="text-left"></th>
-										</tr>)
-										: (<tr key={index}>
-											<td className="px-4">{index}</td>
-											<td className="text-left">Thi công san lấp mặt bằng</td>
-											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
-											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
-											<td className="text-right" style={{ width: '1%' }}>5.000.000.000</td>
-											<td></td>
-											<td className="text-center"></td>
-											<td className="text-left"></td>
-											<td className="text-left"></td>
-											<td className="text-left"></td>
-											<td className="text-justify"></td>
-										</tr>)
-								)
-							})
-						}
-					</tbody>
+					{
+						data.map((_item, index) => <BugetRowGroup row={_item} key={index} show={show} />)
+					}
+					<tfoot>
+						<tr className="text-right">
+							<th className="bg-gray-300 px-1.5 z-10">
+							</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
+							</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2 text-left">Tổng</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.budget, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.predict, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.signed, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.advance, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.volume, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.finish, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.pay, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.rest, 0), 0).toLocaleString()}</th>
+							<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2"></th>
+						</tr>
+					</tfoot>
 				</table>
-			</div>
-		</div>
+			</div >
+
+		</LayoutPrimary>
+
 	);
 };
 

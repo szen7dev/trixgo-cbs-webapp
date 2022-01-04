@@ -15,6 +15,8 @@ type UsePcm = {
 };
 
 export const usePcm = () : UsePcm => {
+
+    // Get danh sách
     const {
         isLoading: isLoadingListTasks,
         refetch: refetchListTasks,
@@ -51,6 +53,10 @@ export const usePcm = () : UsePcm => {
                 enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
+    
+    // console.log('==============>>>>>')
+    // console.log(dataListTasks)
+    console.log(PcmRepository)
 
     const listTasks = [].concat(...(dataListTasks?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListTasks?.pages[0]?.data?.totalRecord;

@@ -9,6 +9,7 @@ import { FileProps } from 'typings/social';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
 import { objPopulate } from '../utils';
+import { ContextModalPost } from '../context/post';
 
 interface Props {
 	renderNestedComment?: React.ElementType
@@ -16,35 +17,37 @@ interface Props {
 	comment: CommentProps,
 	limit: number,
 	smallImage?: boolean
+	disableReply?: boolean
 }
 
 type UpdateCommentProps = {
 	commentID: string,
 	content: string,
 	parentID: string,
-	files: FileProps[] | undefined, 
-	images: FileProps[] | undefined
+	files: FileProps[] | undefined,
+	images: FileProps[] | undefined,
 }
 
-const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedComment: NestedComment }) => {
+const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
+	const { openComment, openReply } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);
 
-	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({ 
+	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({
 		files: [], images: [], commentID: '', content: '', parentID: ''
 	});
-	const [infoComment, setInfoComment] = useState<UpdateCommentProps>({ 
-		files: [], images: [], commentID: '', content: '', parentID: '' 
+	const [infoComment, setInfoComment] = useState<UpdateCommentProps>({
+		files: [], images: [], commentID: '', content: '', parentID: ''
 	});
 
 	const commentsReply = (state.commentsReply[comment._id] || []).filter(Boolean);
 
 	useEffect(() => {
 		// Add last reply comment in first time render page
-		if(commentsReply.length === 0 && comment.lastestReplyID){
-			dispatch({ 
+		if (commentsReply.length === 0 && comment.lastestReplyID) {
+			dispatch({
 				type: 'ADD_COMMENT',
 				payload: comment.lastestReplyID
 			});
@@ -63,7 +66,7 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 		setAmountReply(amountReply - limit);
 
 		if (!error && data.listRecords.length) {
-			dispatch({ 
+			dispatch({
 				type: 'VIEW_MORE_COMMENTS_REPLY',
 				payload: {
 					parent: comment._id,
@@ -102,12 +105,13 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 
 	return (
 		<>
-			<Comment 
-				small={smallImage} 
-				comment={comment} 
-				onClickReply={() => setIsReply(true)} 
-				onClickEdit={handleClickUpdateParent} 
-				renderOptions={EditButton} 
+			<Comment
+				small={smallImage}
+				comment={comment}
+				onClickReply={() => setIsReply(true)}
+				onClickEdit={handleClickUpdateParent}
+				onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index })}
+				renderOptions={EditButton}
 			/>
 			<div>
 				{amountReply > 0 ? (
@@ -127,24 +131,28 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 								small={smallImage}
 								comment={commentReply}
 								onClickReply={() => setIsReply(true)}
+								onClickImage={(index: number) => console.log(index)}
 								// Callback onClickupdate
 								onClickEdit={handleClickUpdateChild}
-								renderOptions={EditButton} /> : null}
+								renderOptions={EditButton}
+								disableReply={disableReply}
+							/> : null}
+
 							</div>
 						</li>
 					)) : ''}
 				</ul>
-				{isReply 
+				{isReply
 					? (
-						<ReplyCommentField 
-							className="pl-11" 
-							inputContainerClassName="flex w-full p-2" 
-							defaultValue={infoComment.content} 
-							files={infoComment.files} 
-							images={infoComment.images} 
+						<ReplyCommentField
+							className="pl-11"
+							inputContainerClassName="flex w-full p-2"
+							defaultValue={infoComment.content}
+							files={infoComment.files}
+							images={infoComment.images}
 							commentID={infoComment.commentID}
-							parentID={infoComment.parentID || comment._id} 
-							mediaID={comment.media} 
+							parentID={infoComment.parentID || comment._id}
+							mediaID={comment.media}
 							onSubmit={() => {
 								setIsReply(false);
 								setInfoComment({
@@ -156,19 +164,19 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 								})
 							}}
 						/>
-					) 
+					)
 					: null}
 			</div>
-			{isReplyParent 
+			{isReplyParent
 				? (
-					<ReplyCommentField 
-						inputContainerClassName="flex w-full p-2" 
-						defaultValue={infoCommentParent.content} 
-						files={infoCommentParent.files} 
-						images={infoCommentParent.images} 
+					<ReplyCommentField
+						inputContainerClassName="flex w-full p-2"
+						defaultValue={infoCommentParent.content}
+						files={infoCommentParent.files}
+						images={infoCommentParent.images}
 						commentID={infoCommentParent.commentID}
-						parentID={infoCommentParent.parentID} 
-						mediaID={comment.media} 
+						parentID={infoCommentParent.parentID}
+						mediaID={comment.media}
 						onSubmit={() => {
 							setIsReplyParent(false);
 							setInfoCommentParent({
@@ -180,7 +188,7 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 							})
 						}}
 					/>
-				) 
+				)
 				: null}
 		</>
 	)
