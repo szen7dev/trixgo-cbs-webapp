@@ -35,8 +35,7 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
           <div className="border-b -mt-1" key={contract._id}>
             <div className="flex justify-between">
               <div className="max-w-[240px]">
-                <p>{contract.project.sign}.{contract.name}</p>
-                {/* <p>MAR.HAR.Tư vấn Quản lý dự án và nền tảng Trixgo</p> */}
+                <p>{contract.project?.sign}.{contract.name}</p>
               </div>
 
               <div className="flex w-[165px] justify-between">
