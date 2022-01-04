@@ -11,7 +11,7 @@ const CompanyPreviewReport: FC = () => {
             <img src={FilterIcon} alt="Filter" />
           </div>
           <span className="text-primary text-sm">
-            Công ty Cổ phần CONINCO Quản lý dự án và đầu tư...
+            Công ty Cổ phần CONINCO Quản lý dự án và đầu tư..
           </span>
         </div>
 

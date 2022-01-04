@@ -53,7 +53,8 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useMutation((id: string) =>
             SocialRepository.deleteMedia(id)
         );
-
+    
+    // Get danh sách
     const {
         isLoading: isLoadingListMedias,
         refetch: refetchListMedias,

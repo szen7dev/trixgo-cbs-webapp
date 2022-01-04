@@ -1,5 +1,6 @@
 import { APIResponse } from "./apis/response";
 
+// Kiểu dữ liệu từ client truyền lên server để lấy data API
 export type ListTasksPayload = {
   lastestID?: string;
   limit?: number;
@@ -9,27 +10,7 @@ export type ListTasksPayload = {
   filter? : string;
 };
 
-export type ListTasksResponse = APIResponse & {
-  data: {
-    listRecords: Array<PcmPlanTaskProps>;
-    totalRecord: number;
-    totalPages?: number;
-  };
-};
-
-export type listTotalAnalysisProps = {
-  amountTask: number,
-  amountTaskIsRFa: number,
-  amountTaskIsRFis: number,
-  amountTaskIsFlags: number,
-  amountTaskIsAssignee: number,
-  amountTaskIsDraft: number,
-}
-
-export type listTotalAnalysisResponse = APIResponse & {
-  data: listTotalAnalysisProps;
-};
-
+// Thuộc tính 1 mẩu tin
 export type PcmPlanTaskProps = {
   _id: string;
   name: string,
@@ -51,4 +32,26 @@ export type PcmPlanTaskProps = {
     },
     createAt: string,
   }
+};
+
+// Kiểu dữ liệu trả về
+export type ListTasksResponse = APIResponse & {
+  data: {
+    listRecords: Array<PcmPlanTaskProps>;
+    totalRecord: number;
+    totalPages?: number;
+  };
+};
+
+export type listTotalAnalysisProps = {
+  amountTask: number,
+  amountTaskIsRFa: number,
+  amountTaskIsRFis: number,
+  amountTaskIsFlags: number,
+  amountTaskIsAssignee: number,
+  amountTaskIsDraft: number,
+}
+
+export type listTotalAnalysisResponse = APIResponse & {
+  data: listTotalAnalysisProps;
 };
