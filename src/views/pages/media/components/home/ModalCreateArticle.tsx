@@ -3,8 +3,8 @@ import React, { FC, useState } from 'react';
 /**
  * LIBRARIES
  */
-import { Dialog, Disclosure } from '@headlessui/react';
-import { Form, Formik, ErrorMessage, FormikProps } from 'formik';
+import { Dialog } from '@headlessui/react';
+import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import cn from "classnames";
@@ -61,9 +61,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { user } = useAuth();
-
-	// Các Hook (để xử lý API)
-	const { createMedia, updateMedia, refetchListMedias } = useSocial('list_medias_internal_company');
+	const { createMedia, updateMedia, refetchListMedias } = useSocial();
 	const { addFileToUpload } = useUpload('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
@@ -84,11 +82,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		type: string().required("Loại bài viết không hợp lệ"),
 	});
 
-	const handleSetFiles = async (
-		event: React.ChangeEvent<HTMLInputElement>,
-		attribute: 'files' | 'images',
-		formik: FormikProps<MediaPayload>) => {
-
+	const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files || !event.target.files.length) return;
 
 		// const imgLastKey = Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] || null;
@@ -161,12 +155,9 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 			default:
 				break;
 		}
-		console.log({ values, uploads });
 
-		// Làm mới danh sách bài viết (Thay bằng toàn bộ bài viết mới)
-		refetchListMedias();
+		(values.type === 'company') && refetchListMedias();
 
-		// Tắt Modal
 		toggle();
 		return [values, uploads];
 	};
@@ -265,11 +256,11 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event, 'images', formik)} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event, 'files', formik)} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event)} />
 									</label>
 								</div>
 								<div>

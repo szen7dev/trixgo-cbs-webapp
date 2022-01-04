@@ -57,7 +57,8 @@ export type ImageProps = {
 export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
-  type?: string,
+  type?: string;
+  isRelated?: boolean;
   mediaID?: string;
   companyID?: string;
   parentID?: string;
@@ -100,6 +101,10 @@ export type MediaProps = {
       name: string,
       sign: string
     };
+    position: {
+      _id: string,
+      name: string,
+    };
   };
   location: {
     type: string;
@@ -117,7 +122,7 @@ export type MediaProps = {
   receivers?: string[],
   totalReactions?: number,
   totalComments?: number,
-  totalWatched?: number,
+  totalView?: number,
 };
 
 export type FilePropsUpload = {

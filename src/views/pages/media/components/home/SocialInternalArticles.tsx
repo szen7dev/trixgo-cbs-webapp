@@ -13,7 +13,10 @@ interface Props {
 
 const SocialInternalArticles: React.FC<Props & React.HtmlHTMLAttributes<HTMLDivElement>> = ({ headerComponent: Header, ...props }) => {
 	const { user } = useAuth();
-	const { listMedias } = useSocial('list_medias_internal_company', { type: 'company', companyID: user?.company._id });
+	const { listMedias } = useSocial('list_medias_internal_company', { 
+		type: 'internal-company', 
+		companyID: user?.company._id 
+	});
 
 	return (
 		<div {...props}>
