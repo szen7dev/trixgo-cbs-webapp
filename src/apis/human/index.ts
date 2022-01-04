@@ -13,7 +13,9 @@ import type {
     DoctypePayload,
     DoctypeResponse,
     AreaPayload,
-    AreaResponse
+    AreaResponse,
+    CreateContactResponse,
+    MutationContactPayload
 } from "typings/human";
 
 const CONTACT_URL = "/api/item";
@@ -53,6 +55,26 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         }
     }
     );
+    return data;
+}
+
+async function requestCreateContact(formData: MutationContactPayload): Promise<CreateContactResponse> {
+    const { data } = await API.post(
+        `${CONTACT_URL}/contacts`,
+        {
+            ...formData
+        }
+    )
+    return data;
+}
+
+async function requestUpdateContact(formData: MutationContactPayload): Promise<CreateContactResponse> {
+    const { data } = await API.put(
+        `${CONTACT_URL}/contacts`,
+        {
+            ...formData
+        }
+    )
     return data;
 }
 
@@ -134,11 +156,19 @@ async function fetchListArea(params: AreaPayload) {
 const HumanRepository = {
     fetchListHuman: async (params: HumanPayload): Promise<ListHumanResponse> => fetchListHuman<ListHumanResponse>(params),
     fetchDetailHuman: async (params: {
-        contactID: string
+        contactID: string;
     }): Promise<HumanInfo> => fetchListHuman<HumanInfo>({
         populates: {
-            "path": `company contact contractType department workingStatus other educationalBackground major workplace position area1 area2`,
-            "select": "name sign"
+            "path": `company contact contractType department workingStatus other educationalBackground major workplace position area area1 area2`,
+            "select": "name sign parent",
+            "populate": {
+                "path": "parent",
+                "select": "name sign parent level",
+                populate: {
+                    "path": "parent",
+                    "select": "name sign level"
+                }
+            },
         },
         ...params,
     }),
@@ -156,6 +186,9 @@ const HumanRepository = {
 
     fetchListAreas: async (params: AreaPayload): Promise<AreaResponse> =>
         fetchListArea(params),
+
+    requestCreateContact,
+    requestUpdateContact,
 };
 
 export default HumanRepository

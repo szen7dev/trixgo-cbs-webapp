@@ -119,11 +119,13 @@ export type Department = {
 }
 
 export type Human = {
+    type?: number;
     company?: Company;
     position?: Position;
     department?: Department;
     area2?: Area;
     area1?: Area;
+    area?: Area;
     workplace?: Workplace[];
     educationalBackground?: EducationBackground[];
     major?: Major[];
@@ -138,6 +140,7 @@ export type Human = {
     sign?: string;
     email?: string;
     gender?: number;
+    realStatus?: number;
     birthday?: string;
     identity?: string;
     address?: string;
@@ -148,6 +151,8 @@ export type Human = {
     insuranceDate?: string;
     insuranceNumber?: string;
     insuranceStatus?: number;
+    insuranceSign?: number;
+    sallaryBasic?: number;
     sallarySubFactor?: string;
     sallaryFactor?: string;
     workStartDate?: string;
@@ -165,14 +170,17 @@ export type Human = {
     insuanceDate?: string;
 }
 
+type Populate = {
+    path?: string;
+    select?: string;
+    populate?: Populate
+}
+
 export interface HumanPayload {
     lastestID?: string | undefined,
     limit?: number;
     contactID?: string;
-    populates?: {
-        path?: string;
-        select?: string;
-    };
+    populates?: Populate;
 }
 
 export type ListHumanResponse = APIResponse & {
@@ -246,6 +254,7 @@ export type DepartmentPayload = {
     limit: number;
     lastestID: string;
     type: 1 | 2; //  1: "Phòng Ban", 2: "Dự án" 
+    keyword?: string;
 }
 
 export type DepartmentResponse = APIResponse & {
@@ -325,6 +334,27 @@ export type AreaResponse = APIResponse & {
         nextCursor: string | null;
     }
 }
+
+export interface MutationContactPayload {
+    type: string;
+    gender: string;
+    realStatus: string;
+    insuranceStatus: string;
+    familyPolicy: string;
+    appointDate: string;
+    birthday: string;
+    changeSallaryDate: string;
+    contractDate: string;
+    contractExpire: string;
+    contractValid: string;
+    dateProvice: string;
+    dayOff: string;
+    insuranceDate: string;
+    workStartDate: string;
+    department: string;
+}
+
+export type CreateContactResponse = APIResponse;
 
 // "use strict";
 

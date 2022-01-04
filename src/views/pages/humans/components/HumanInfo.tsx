@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState, useRef, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -22,8 +22,11 @@ import Loader from "components/shared/Loader";
 import {
   useFetchDetailHuman,
   useFetchListContactDocuments,
+  useUpdateContactMutation,
 } from "services/hooks/useHuman";
-
+import { useModal } from "services/hooks/useModal";
+import NewHumanModal from "./NewHumanModal";
+import type { Human } from "typings/human";
 import Certificate from "./views/Certificate";
 
 const HumanInfo: FC = () => {
@@ -33,12 +36,14 @@ const HumanInfo: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { t: i18n } = useTranslation(["human"]);
+  const { openModal } = useModal();
+  const { updateContactMutateAsync } = useUpdateContactMutation();
 
   useOnClickOutside(refMenuDropdown, () =>
     setOpenHumanOption(!openHumanOption)
   );
 
-  const { detailHuman, loading } = useFetchDetailHuman(id);
+  const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
   const {
     listContactDocument: workSideHistory,
     loading: isWorkSideHistoryLoading,
@@ -67,8 +72,82 @@ const HumanInfo: FC = () => {
     listContactDocument: certificateGrade,
     loading: isCertificateGradeLoading,
     fetchNextPageContactDocument: fetchNextPageCertificateGrade,
-    totalRecord: totalRecordCertificateGrade
-  } = useFetchListContactDocuments(id, { type: 5});
+    totalRecord: totalRecordCertificateGrade,
+  } = useFetchListContactDocuments(id, { type: 5 });
+
+  const handleFinishForm = useCallback(
+    async (values) => {
+      const res = await updateContactMutateAsync({
+        ...values,
+        contactID: detailHuman._id,
+        province: values?.province?.toString(),
+      });
+      if (!res.error) {
+        refreshDetailHuman();
+        return true;
+      }
+      return false;
+    },
+    [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
+  );
+
+  const handleClickUpdateButton = useCallback(
+    (defaultValues: Human) => () => {
+      openModal(
+        <div
+          className={
+            "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+          }
+        >
+          <NewHumanModal
+            initialValues={{
+              department: defaultValues.department?._id,
+              position: defaultValues?.position?._id,
+              area: defaultValues?.area?._id,
+              area1: defaultValues?.area1?._id,
+              area2: defaultValues?.area2?._id,
+              type: defaultValues.type,
+              gender: defaultValues.gender,
+              workingStatus: defaultValues.workingStatus?._id,
+              realStatus: defaultValues.realStatus,
+              insuranceStatus: defaultValues.insuranceStatus,
+              familyPolicy: defaultValues.familyPolicy,
+              contractType: defaultValues.contractType?._id,
+              contractSign: defaultValues.contractSign,
+              family: defaultValues.family,
+              description: defaultValues.description,
+              name: defaultValues.name,
+              sign: defaultValues.sign,
+              phone: defaultValues.phone,
+              email: defaultValues.email,
+              birthday: defaultValues.birthday,
+              identity: defaultValues.identity,
+              dateProvice: defaultValues.dateProvice,
+              place: defaultValues.place,
+              address: defaultValues.address,
+              taxid: defaultValues.taxid,
+              insuranceSign: defaultValues.insuranceSign,
+              insuranceDate: defaultValues.insuanceDate,
+              sallaryFactor: defaultValues.sallaryFactor?.toString(),
+              sallarySubFactor: defaultValues.sallarySubFactor?.toString(),
+              sallaryBasic: defaultValues.sallaryBasic?.toString(),
+              signerIn: defaultValues.signerIn,
+              signerOut: defaultValues.signerOut,
+              workStartDate: defaultValues.workStartDate,
+              dayOff: defaultValues.dayOff,
+              appointDate: defaultValues.appointDate,
+              changeSallaryDate: defaultValues.changeSallaryDate,
+              contractDate: defaultValues.contractDate,
+              contractValid: defaultValues.contractValid,
+              contractExpire: defaultValues.contractExpire,
+            }}
+            onFinish={handleFinishForm}
+          />
+        </div>
+      );
+    },
+    [handleFinishForm, openModal]
+  );
 
   if (loading) {
     return <Loader className="border-primary" />;
@@ -131,9 +210,16 @@ const HumanInfo: FC = () => {
                   {i18n("menu-dropdown.copy")}
                 </span>
               </div>
-              <div className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light">
-                <img src={PencilIcon} alt="Pencil" className="w-[22px]" />
-                <span className="text-[13px]">
+              <div
+                className="py-2 h-1/4 flex items-center gap-5 pl-8 hover:bg-accent-light"
+                onClick={handleClickUpdateButton(detailHuman)}
+              >
+                <img
+                  src={PencilIcon}
+                  alt="Pencil"
+                  className="w-[22px] select-none"
+                />
+                <span className="text-[13px] select-none">
                   {i18n("menu-dropdown.update")}
                 </span>
               </div>
