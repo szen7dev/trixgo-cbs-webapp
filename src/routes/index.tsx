@@ -452,11 +452,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/bidding"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectBiddingPage />
+                          <ProjectBiddingPage {...props} />
                         </ProjectLayout>
                       )}
                     />
@@ -470,11 +470,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/document"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectDocumentPage />
+                          <ProjectDocumentPage {...props}/>
                         </ProjectLayout>
                       )}
                     />
