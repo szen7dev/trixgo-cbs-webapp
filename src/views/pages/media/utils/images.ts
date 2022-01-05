@@ -16,9 +16,9 @@ const images2 = [
 const generateImageLink = (type?: unknown): string => {
   return !type
     ? images[Math.floor(Math.random() * images.length)]
-    : images2[Math.floor(Math.random() * images.length)];
+    : images2[Math.floor(Math.random() * images2.length)];
 };
 
 export default generateImageLink;
 
-export { images };
+export { images, images2 };

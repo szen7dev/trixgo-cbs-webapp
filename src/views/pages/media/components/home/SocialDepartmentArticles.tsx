@@ -3,12 +3,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import iconComment from 'assets/images/icon-chat-project.png';
-import { useSocial } from "services/hooks/useSocial";
 import { MediaProps } from 'typings/social';
 import { abbreviateNumber } from 'utils';
 
-const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { listMedias } = useSocial('list_medias_community', { type: 'community' });
+import { useSocial } from "services/hooks/useSocial";
+import { useAuth } from "services/hooks/useAuth";
+
+const SocialDepartmentArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+	const { user } = useAuth();
+	const { listMedias } = useSocial('list_media__department', { 
+		type: 'department',
+		companyID: user?.company?._id
+	});
 
 	return (
 		<div {...props}>
@@ -17,7 +23,7 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 				{listMedias.length ? listMedias.map((media: MediaProps) => (
 					<li key={media._id} className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>
 						<div className='max-w-xs'>
-							<Link to="/social/post" className="text-lg leading-5"><b>
+							<Link to={`/social/post/${media._id}`} className="text-lg leading-5"><b>
 								{media.title}
 							</b></Link>
 							<div className="mt-4 text-sm leading-[18px]">
@@ -25,7 +31,7 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 								<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 									<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
 									<span className="text-primary">
-									{abbreviateNumber(media.totalComments)}
+									{abbreviateNumber(media.amountComment)}
 									</span>
 								</div>
 							</div>
@@ -37,4 +43,4 @@ const SocialCommunityPost: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = 
 	)
 }
 
-export default SocialCommunityPost
+export default SocialDepartmentArticles
