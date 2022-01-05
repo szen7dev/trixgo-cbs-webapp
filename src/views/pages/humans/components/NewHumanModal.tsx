@@ -1,5 +1,5 @@
-import { FC, FormEvent, useRef, useState } from "react";
-
+import { FC, FormEvent, useRef, useState, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -12,57 +12,160 @@ import DropdownSearchable from "components/common/DropdownSearch";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
+import { INSURANCE_STATUS, CONTACT_POLICY } from "./views/GeneralInfo";
+import { 
+  useFetchListDepartments,
+  useFetchListPosition,
+  useFetchListDoctype,
+  useFetchListArea,
+} from "services/hooks/useHuman";
+import type {
+  MutationContactPayload
+} from 'typings/human';
 
-const NewHumanModal: FC = () => {
+enum CLASSIFY {
+  "Nhân viên" = 1,
+  "Cộng tác viên",
+  "Chuyên gia",
+}
+
+enum GENDER {
+  "Nam" = 1,
+  "Nữ",
+  "Khác",
+}
+
+enum PERSONAL_STATUS {
+  "T" = 1,
+  "A",
+}
+
+function convertEnumToArray(enumVariable: any) {
+  return Object.values(enumVariable)
+    .filter((value) => typeof value === "string")
+    .map((value, index) => ({
+      label: value,
+      value: index + 1, // value phải có giá trị bắt đầu từ 1.
+    }));
+}
+
+interface NewHumanModalProps {
+  initialValues?: any;
+  onFinish: (values: MutationContactPayload) => Promise<boolean>;
+}
+
+const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
   const [openOption, setOpenOption] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { t: i18n } = useTranslation(["human"]);
 
   const { closeModal } = useModal();
+  const { listDepartments } = useFetchListDepartments({
+    limit: 50,
+    keyword: initialValues?.department?.name || ''
+  });
 
-  const initialValues = {
-    type: "",
-    department: "",
-    role: "",
-    gender: "",
-    workStatus: "",
-    humanStatus: "",
-    sbhStatus: "",
-    family: "",
-    typeContact: "",
-    contactNumber: "",
-    familyInfo: "",
-    otherInfo: "",
-    fullName: "",
-    humanCode: "",
-    phoneNumber: "",
-    email: "",
-    birthDate: "",
-    indentityCard: "",
-    issuedDate: "",
-    issuedBy: "",
-    address: "",
-    resident: "",
-    birthPlace: "",
-    fromPlace: "",
-    taxCode: "",
-    insuranceNumber: "",
-    insuranceDate: "",
-    salaryFactor: "",
-    bonus: "",
-    salaryInsurance: "",
-    signer: "",
-    fireSigner: "",
-    workStartDate: "",
-    workEndDate: "",
-    appointmentDate: "",
-    salaryChangeDate: "",
-    contactDate: "",
-    activeContactDate: "",
-    contactRange: "",
-    insuranceNoteDate: "",
-  };
+  const { listPositions } = useFetchListPosition({
+    limit: 50,
+  });
+
+  const { listDoctypes: listWorkingStatus } = useFetchListDoctype({
+    limit: 50,
+    type: 9
+  });
+
+  const { listDoctypes: listContractType } = useFetchListDoctype({
+    limit: 50,
+    type: 8
+  });
+
+  const { listAreas: area } = useFetchListArea({
+    limit: 100,
+    keyword: initialValues?.area?.name || ''
+  });
+
+  const { listAreas: area1 } = useFetchListArea({
+    limit: 100,
+    keyword: initialValues?.area1?.name || ''
+  });
+  
+  const { listAreas: area2 } = useFetchListArea({
+    limit: 100,
+    keyword: initialValues?.area2?.name || ''
+  });
+
+  const defaultValues = useMemo(() => {
+    console.log({ initialValues})
+    return {
+      type: 1,
+      department: "",
+      position: "",
+      gender: 1,
+      workingStatus: "",
+      realStatus: 1,
+      insuranceStatus: 1,
+      familyPolicy: 1,
+      contractType: "",
+      contractSign: "",
+      family: "",
+      description: "",
+      name: "",
+      sign: "",
+      phone: "",
+      email: "",
+      birthday: "",
+      identity: "",
+      dateProvice: "",
+      place: "",
+      address: "",
+      area: "",
+      area1: "",
+      area2: "",
+      taxid: "",
+      insuranceSign: "",
+      insuranceDate: "",
+      sallaryFactor: "",
+      sallarySubFactor: "",
+      sallaryBasic: "",
+      signerIn: "",
+      signerOut: "",
+      workStartDate: "",
+      dayOff: "",
+      appointDate: "",
+      changeSallaryDate: "",
+      contractDate: "",
+      contractValid: "",
+      contractExpire: "",
+      ...initialValues,
+    };
+  }, [initialValues]);
 
   useOnClickOutside(ref, () => setOpenOption(!openOption));
+
+  const handleSubmit = useCallback(async (values: any) => {
+    const formatData = {
+      ...values,
+      appointDate: moment(values.appointDate).isValid() && moment(values.appointDate).toJSON() || '',
+      birthday: moment(values.birthday).isValid() && moment(values.birthday).toJSON() || '',
+      changeSallaryDate: moment(values.changeSallaryDate).isValid() && moment(values.changeSallaryDate).toJSON() || '',
+      contractDate: moment(values.contractDate).isValid() && moment(values.contractDate).toJSON() || '',
+      contractExpire: moment(values.contractExpire).isValid() && moment(values.contractExpire).toJSON() || '',
+      contractValid: moment(values.contractValid).isValid() && moment(values.contractValid).toJSON() || '',
+      dateProvice: moment(values.dateProvice).isValid() && moment(values.dateProvice).toJSON() || '',
+      dayOff: moment(values.dayOff).isValid() && moment(values.dayOff).toJSON() || '',
+      insuranceDate: moment(values.insuranceDate).isValid() && moment(values.insuranceDate).toJSON() || '',
+      workStartDate: moment(values.workStartDate).isValid() && moment(values.workStartDate).toJSON() || '',
+      type: values?.type?.toString(),
+      gender: values?.gender?.toString(),
+      realStatus: values?.realStatus?.toString(),
+      insuranceStatus: values?.insuranceStatus?.toString() || '',
+      familyPolicy: values?.familyPolicy?.toString() || '',
+    }
+    const isSuccess = await onFinish(formatData);
+    if (isSuccess) {
+      closeModal()
+    }
+  }, [onFinish, closeModal]);
 
   return (
     <main>
@@ -72,7 +175,7 @@ const NewHumanModal: FC = () => {
       >
         <div className="relative w-full h-5/6 bg-primary-light">
           <div className="h-12 flex items-center border-b border-gray-300 px-6">
-            <p className="text-bold text-xl">Nhân sự mới</p>
+            <p className="text-bold text-xl">{i18n("modal.add-new.title")}</p>
             <img
               src={CloseIcon}
               alt="Close"
@@ -81,23 +184,9 @@ const NewHumanModal: FC = () => {
             />
           </div>
 
-          <Formik initialValues={initialValues} onSubmit={() => closeModal()}>
+          <Formik initialValues={defaultValues} onSubmit={handleSubmit}>
             {(formik) => {
-              const { handleBlur, setFieldValue, values } = formik;
-              const {
-                birthDate,
-                issuedDate,
-                insuranceDate,
-                workStartDate,
-                workEndDate,
-                appointmentDate,
-                salaryChangeDate,
-                contactDate,
-                activeContactDate,
-                contactRange,
-                insuranceNoteDate,
-              } = values;
-
+              const { handleBlur, setFieldValue } = formik;
               return (
                 <Form className="px-6 text-left">
                   <div className="flex items-center justify-between h-10 border-b border-gray-200">
@@ -105,10 +194,13 @@ const NewHumanModal: FC = () => {
 
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
-                        Phân loại
+                        {i18n("form.classify")}
                       </span>
                       <DropdownSearchable
-                        placeholder="Phân loại..."
+                        onchangeValue={(value) =>
+                          setFieldValue("type", value.value)
+                        }
+                        placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -120,33 +212,24 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Chính thức",
-                          },
-                          {
-                            _id: 2,
-                            content: "Cộng tác viên",
-                          },
-                          {
-                            _id: 3,
-                            content: "Không xác định thời hạn",
-                          },
-                        ]}
+                        initialValue={defaultValues?.type || 1}
+                        data={convertEnumToArray(CLASSIFY)}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          text: "label",
+                          id: "value",
                         }}
                         inlineSearch={true}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
-                        Phòng ban
+                        {i18n("department")}
                       </span>
                       <DropdownSearchable
-                        placeholder="Phòng ban..."
+                        onchangeValue={(value) =>
+                          setFieldValue("department", value.id)
+                        }
+                        placeholder={i18n("department") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
@@ -158,68 +241,58 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Developer",
-                          },
-                          {
-                            _id: 2,
-                            content: "Sales",
-                          },
-                          {
-                            _id: 3,
-                            content: "Marketing",
-                          },
-                        ]}
+                        initialValue={defaultValues?.department 
+                          && `${defaultValues?.department}`
+                        }
+                        data={listDepartments}
                         formatItem={{
                           id: "_id",
-                          text: "content",
-                        }}
-                        inlineSearch={true}
-                      />
-                    </div>
-                    <div className="w-1/5 flex items-center">
-                      <span className="w-2/12 text-primary-gray">Chức vụ</span>
-                      <DropdownSearchable
-                        placeholder="Chức vụ..."
-                        className="w-full pl-0 -mb-1 outline-none"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => (
-                          <div className="flex items-center">
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
-                            <span>{item.text}</span>
-                          </div>
-                        )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Developer",
-                          },
-                          {
-                            _id: 2,
-                            content: "Sales",
-                          },
-                          {
-                            _id: 3,
-                            content: "Marketing",
-                          },
-                        ]}
-                        formatItem={{
-                          id: "_id",
-                          text: "content",
+                          text: "name",
                         }}
                         inlineSearch={true}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-2/12 text-primary-gray">
-                        Giới tính
+                        {i18n("position")}
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("position", value.id)
+                        }
+                        placeholder={i18n("position") + "..."}
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        initialValue={defaultValues?.position 
+                          && `${defaultValues?.position}`
+                        }
+                        // searchUrl='/api/item/positions'
+                        // searchParam='keyword'
+                        data={listPositions}
+                        formatItem={{
+                          id: "_id",
+                          text: "name",
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                    <div className="w-1/5 flex items-center">
+                      <span className="w-2/12 text-primary-gray">
+                        {i18n("gender")}
+                      </span>
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("gender", value.id)
+                        }
                         placeholder="Giới tính..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -232,23 +305,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.gender || 2}
+                        data={convertEnumToArray(GENDER)}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -260,9 +321,12 @@ const NewHumanModal: FC = () => {
                   <div className="flex items-center justify-between h-10 border-b border-gray-200">
                     <div className="w-1/5 flex items-center">
                       <span className="w-6/12 text-primary-gray">
-                        Tình trạng làm việc
+                        {i18n("workingStatus")}
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("workingStatus", value)
+                        }
                         placeholder="Tình trạng làm việc..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -275,23 +339,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.workingStatus?._id}
+                        data={listWorkingStatus.map(workingStatus => ({...workingStatus}))}
                         formatItem={{
                           id: "_id",
-                          text: "content",
+                          text: "name",
                         }}
                         inlineSearch={true}
                       />
@@ -301,6 +353,9 @@ const NewHumanModal: FC = () => {
                         Tình trạng nhân sự
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("realStatus", value.id)
+                        }
                         placeholder="Tình trạng nhân sự..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -313,23 +368,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.realStatus || 1}
+                        data={convertEnumToArray(PERSONAL_STATUS)}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -339,6 +382,9 @@ const NewHumanModal: FC = () => {
                         Tình trạng SBH
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("insuranceStatus", value.id)
+                        }
                         placeholder="Tình trạng SBH..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -351,23 +397,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.insuranceStatus || 1}
+                        data={convertEnumToArray(INSURANCE_STATUS)}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -377,6 +411,9 @@ const NewHumanModal: FC = () => {
                         Gia đình CS
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("familyPolicy", value.id)
+                        }
                         placeholder="Gia đình CS..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -389,23 +426,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.familyPolicy || 1}
+                        data={convertEnumToArray(CONTACT_POLICY)}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -420,6 +445,9 @@ const NewHumanModal: FC = () => {
                         Loại hợp đồng
                       </span>
                       <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("contractType", value.id)
+                        }
                         placeholder="Loại hợp đồng..."
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -432,23 +460,11 @@ const NewHumanModal: FC = () => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nam",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nữ",
-                          },
-                          {
-                            _id: 3,
-                            content: "Khác",
-                          },
-                        ]}
+                        initialValue={defaultValues?.contractType || 1}
+                        data={listContractType}
                         formatItem={{
                           id: "_id",
-                          text: "content",
+                          text: "name",
                         }}
                         inlineSearch={true}
                       />
@@ -459,7 +475,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="contactNumber"
+                        name="contractSign"
                         placeholder="Số hợp đồng..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -473,7 +489,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="familyInfo"
+                        name="family"
                         placeholder="Thông tin gia đình..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -487,7 +503,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="otherInfo"
+                        name="description"
                         placeholder="Thông tin khác..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -506,7 +522,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="fullName"
+                        name="name"
                         placeholder="Họ và tên"
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -518,7 +534,7 @@ const NewHumanModal: FC = () => {
                       <span className="w-2/12 text-primary-gray">Mã hiệu</span>
                       <Field
                         type="text"
-                        name="humanCode"
+                        name="sign"
                         placeholder="Mã hiệu..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -532,7 +548,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="phoneNumber"
+                        name="phone"
                         placeholder="Điện thoại..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -563,9 +579,9 @@ const NewHumanModal: FC = () => {
                       <span className="mr-4 text-primary-gray">Ngày sinh</span>
                       <DayPickerInput
                         value={
-                          birthDate && moment(birthDate).format("DD/MM/YYYY")
+                          defaultValues.birthday && moment(defaultValues.birthday).format("DD/MM/YYYY")
                         }
-                        onDayChange={(day) => setFieldValue("birthDate", day)}
+                        onDayChange={(day) => setFieldValue("birthday", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Ngày sinh...",
@@ -578,7 +594,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="indentityCard"
+                        name="identity"
                         placeholder="Số định danh..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -592,9 +608,9 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          issuedDate && moment(issuedDate).format("DD/MM/YYYY")
+                          defaultValues.dateProvice && moment(defaultValues.dateProvice).format("DD/MM/YYYY")
                         }
-                        onDayChange={(day) => setFieldValue("issuedDate", day)}
+                        onDayChange={(day) => setFieldValue("dateProvice", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Ngày cấp...",
@@ -605,7 +621,7 @@ const NewHumanModal: FC = () => {
                       <span className="w-2/12 text-primary-gray">Nơi cấp</span>
                       <Field
                         type="text"
-                        name="issuedBy"
+                        name="place"
                         placeholder="Nơi cấp..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -634,40 +650,100 @@ const NewHumanModal: FC = () => {
                       <span className="w-3/12 text-primary-gray">
                         Thường trú
                       </span>
-                      <Field
-                        type="text"
-                        name="resident"
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("area", value.id)
+                        }
                         placeholder="Thường trú..."
-                        className="w-52 h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        initialValue={defaultValues?.area
+                          && `${defaultValues?.area}`
+                        }
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={area.map(elm => ({
+                          label: `${elm.name}-${elm.parent?.name}-${elm.parent?.parent?.name}`,
+                          value: elm._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
                         }}
+                        inlineSearch={true}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="mr-4 text-primary-gray">Nơi sinh</span>
-                      <Field
-                        type="text"
-                        name="birthPlace"
-                        placeholder="Nơi sinh..."
-                        className="w-52 h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("area1", value.id)
+                        }
+                        placeholder="Thường trú..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        initialValue={defaultValues?.area1 
+                          && `${defaultValues?.area1}`
+                        }
+                        data={area1.map(elm => ({
+                          label: `${elm.name}-${elm.parent?.name}-${elm.parent?.parent?.name}`,
+                          value: elm._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
                         }}
+                        inlineSearch={true}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-3/12 text-primary-gray">
                         Nguyên quán
                       </span>
-                      <Field
-                        type="text"
-                        name="fromPlace"
-                        placeholder="Nguyên quán"
-                        className="w-52 h-6 outline-none pl-3"
-                        onBlur={(e: FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("area2", value.id)
+                        }
+                        placeholder="Thường trú..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        initialValue={defaultValues?.area2
+                          && `${defaultValues?.area2}`
+                        }
+                        data={area2.map(elm => ({
+                          label: `${elm.name}-${elm.parent?.name}-${elm.parent?.parent?.name}`,
+                          value: elm._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
                         }}
+                        inlineSearch={true}
                       />
                     </div>
                   </div>
@@ -679,7 +755,7 @@ const NewHumanModal: FC = () => {
                       <span className="w-1/12 text-primary-gray">MST</span>
                       <Field
                         type="text"
-                        name="taxCode"
+                        name="taxid"
                         placeholder="MST..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -693,7 +769,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="insuranceNumber"
+                        name="insuranceSign"
                         placeholder="Số bảo hiểm"
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -707,8 +783,8 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          insuranceDate &&
-                          moment(insuranceDate).format("DD/MM/YYYY")
+                          defaultValues.insuranceDate &&
+                          moment(defaultValues.insuranceDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
                           setFieldValue("insuranceDate", day)
@@ -725,7 +801,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="salaryFactor"
+                        name="sallaryFactor"
                         placeholder="Hệ số lương..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -742,7 +818,7 @@ const NewHumanModal: FC = () => {
                       <span className="w-2/12 text-primary-gray">Phụ cấp</span>
                       <Field
                         type="text"
-                        name="bonus"
+                        name="sallarySubFactor"
                         placeholder="Phụ cấp..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -756,7 +832,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="salaryInsurance"
+                        name="sallaryBasic"
                         placeholder="Mức đóng BH..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -770,7 +846,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="signer"
+                        name="signerIn"
                         placeholder="Người ký nhận..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -784,7 +860,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <Field
                         type="text"
-                        name="fireSigner"
+                        name="signerOut"
                         placeholder="Người ký sa thải..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
@@ -803,8 +879,7 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          workStartDate &&
-                          moment(workStartDate).format("DD/MM/YYYY")
+                          defaultValues.workStartDate && moment(defaultValues.workStartDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
                           setFieldValue("workStartDate", day)
@@ -821,10 +896,9 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          workEndDate &&
-                          moment(workEndDate).format("DD/MM/YYYY")
+                          defaultValues.dayOff && moment(defaultValues.dayOff).format("DD/MM/YYYY")
                         }
-                        onDayChange={(day) => setFieldValue("workEndDate", day)}
+                        onDayChange={(day) => setFieldValue("dayOff", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Ngày chấm dứt...",
@@ -837,11 +911,10 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          appointmentDate &&
-                          moment(appointmentDate).format("DD/MM/YYYY")
+                          defaultValues.appointDate && moment(defaultValues.appointDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
-                          setFieldValue("appointmentDate", day)
+                          setFieldValue("appointDate", day)
                         }
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
@@ -855,11 +928,10 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          salaryChangeDate &&
-                          moment(salaryChangeDate).format("DD/MM/YYYY")
+                          defaultValues.changeSallaryDate && moment(defaultValues.changeSallaryDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
-                          setFieldValue("salaryChangeDate", day)
+                          setFieldValue("changeSallaryDate", day)
                         }
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
@@ -878,10 +950,9 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          contactDate &&
-                          moment(contactDate).format("DD/MM/YYYY")
+                          defaultValues.contractDate && moment(defaultValues.contractDate).format("DD/MM/YYYY")
                         }
-                        onDayChange={(day) => setFieldValue("contactDate", day)}
+                        onDayChange={(day) => setFieldValue("contractDate", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Ngày ký hợp đồng...",
@@ -894,11 +965,10 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          activeContactDate &&
-                          moment(activeContactDate).format("DD/MM/YYYY")
+                          defaultValues.contractValid && moment(defaultValues.contractValid).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
-                          setFieldValue("activeContactDate", day)
+                          setFieldValue("contractValid", day)
                         }
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
@@ -912,11 +982,10 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          contactRange &&
-                          moment(contactRange).format("DD/MM/YYYY")
+                          defaultValues.contractExpire && moment(defaultValues.contractExpire).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
-                          setFieldValue("contactRange", day)
+                          setFieldValue("contractExpire", day)
                         }
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
@@ -930,11 +999,10 @@ const NewHumanModal: FC = () => {
                       </span>
                       <DayPickerInput
                         value={
-                          insuranceNoteDate &&
-                          moment(contactRange).format("DD/MM/YYYY")
+                          defaultValues.insuranceDate && moment(defaultValues.insuranceDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) =>
-                          setFieldValue("insuranceNoteDate", day)
+                          setFieldValue("insuranceDate", day)
                         }
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",

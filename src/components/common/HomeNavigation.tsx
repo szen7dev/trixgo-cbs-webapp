@@ -31,6 +31,10 @@ const HomeNavigation: FC = () => {
         {/* menu block */}
         <div className="t-leftsidebar-menu-block mb-6">
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
+          <Link to={`/pcm/admin`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+              <span className="truncate">Quản trị viên</span>
+					</Link>
           <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Dự án đang triển khai</span>
@@ -61,10 +65,10 @@ const HomeNavigation: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc quan tâm</span>
 					</Link>
-          <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          {/* <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc nháp</span>
-					</Link>
+					</Link> */}
 
           <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
           <div className="t-leftsidebar-menu-container">
@@ -109,7 +113,9 @@ const HomeNavigation: FC = () => {
           <img className="block ml-auto mr-auto mb-4 w-16 h-16" src={iconBigFolder} alt="Folder" />
           <div className="font-bold text-2xl text-dark mb-4" role="none">Tùy chỉnh dữ liệu?</div>
           <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu theo cách mà bạn mong muốn</p>
-          <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
+          <Link to="/personal/config">
+            <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
+          </Link>
         </div>
 
       </div>

@@ -1,0 +1,581 @@
+/*______________________________Variable______________________________*/
+.navigator {
+  border-bottom: solid 2px transparent;
+  padding: 0 8px;
+  margin: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  line-height: 16.1px;
+  font-size: 14px;
+}
+
+.navigator.active {
+  border-bottom-color: #0165BE;
+  color: black;
+  font-weight: bold;
+}
+
+.navigator.active>* {
+  font-weight: bold;
+}
+
+.item-sort {
+  font-size: 13px;
+  line-height: 14.95px;
+  color: rgba(102, 102, 102, 1);
+  font-weight: 700;
+}
+
+.item-sort.active {
+  color: rgba(0, 96, 225, 1);
+}
+
+.item-sort:not(:last-child) {
+  margin-right: 116px;
+}
+
+.item-sort>* {
+  display: flex;
+  align-items: center
+}
+
+.input-container {
+  background-color: #F5F6F9;
+  min-width: 350px;
+}
+
+.input-container svg {
+  margin-left: 15px;
+}
+
+.input-container input {
+  line-height: 15px;
+  font-size: 13px;
+  padding: 12px 11px;
+}
+
+.header-list-sort {
+  border-left: 1px solid #CCCCCC;
+  padding-left: 8px;
+}
+
+.header-item-sort {
+  background-color: #F7F6FC;
+  padding: 6px 6px;
+  display: flex;
+  align-items: center;
+  width: 90px;
+}
+
+.header-item-sort:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.header-item-sort:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.header-item-sort.active {
+  color: var(--blue);
+  background-color: #EAF2FE;
+}
+
+.header-item-sort:first-child,
+.header-item-sort:last-child {
+  width: 75px;
+}
+
+.item {
+  width: 291px;
+  height: 310px;
+  /* border-radius: 10px; */
+  /* border-color: #CCCCCC; */
+  /* margin-top: 16px; */
+  border-width: 0.5px;
+  padding: 14px 13px 18px 18px;
+  /* margin: 16px 15px 0px 0px; */
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: rgba(102, 102, 102, 1);
+}
+
+.item>h3 {
+  font-weight: 700;
+  margin-top: 24px;
+  line-height: 18.4px;
+  /* letter-spacing: -0.1px; */
+}
+
+.item>p {
+  letter-spacing: -0.1px;
+  line-height: 13.8px;
+  margin-top: 7px;
+  font-size: 12px;
+}
+
+.image {
+  display: grid;
+  grid-template-columns: 130px auto;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.item h3 {
+  color: black;
+}
+
+.item ul li {
+  line-height: 16.1px;
+  display: flex;
+  align-items: center;
+}
+
+.tag {
+  grid-template-columns: fit-content(40%) fit-content(40%)
+}
+
+.tag h4 {
+  color: black;
+  line-height: 16.1px;
+}
+
+.tag p {
+  font-size: 12px;
+  line-height: 13.8px;
+  margin-top: 7px;
+}
+
+.progress {
+  border: 0.5px solid #CCCCCC;
+  box-sizing: content-box;
+}
+
+.progress::after {
+  content: '';
+  height: 100%;
+  background-color: currentColor;
+  width: var(--width);
+  display: block;
+}
+
+.pagination {
+  /* sticky bottom-0 w-full bg-white */
+  position: sticky;
+  width: 100%;
+  background-color: white;
+  bottom: 0;
+}
+
+.pagination .button-contain {
+  padding-bottom: 16px;
+  border-bottom: 2px;
+  border-color: transparent;
+  border-style: solid;
+  color: rgba(102, 102, 102, 1);
+}
+
+.pagination button {
+  background-color: #F0F0F0;
+  border-radius: 5px;
+}
+
+.pagination .button-contain.active {
+  border-color: rgba(0, 96, 225, 1);
+  color: rgba(0, 96, 225, 1);
+}
+
+.pagination .button-contain.active button {
+  background-color: #DBE7F2;
+}
+
+.pagination-container {
+  max-width: 1250px;
+}
+
+/*______________________________Table______________________________*/
+.table {
+  border-spacing: 0;
+}
+
+td {
+  vertical-align: top;
+}
+
+.table thead tr th {
+  text-align: left;
+  position: sticky;
+  top: 0;
+  background-color: rgba(71, 129, 207, 1);
+  border-bottom: 4px solid #CCCCCC;
+  border-left: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-right: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+.table thead tr th:not(:first-child) {
+  vertical-align: top;
+  padding: 10px 12px 5px 12px;
+}
+.table tbody tr th:not(:first-child) {
+  background: #EAF2FE;
+}
+
+.table tbody th:not(:first-child),
+.table tbody td:not(:first-child) {
+  border-width: 0.5px 0.5px 0 0;
+  border-style: solid;
+  border-color: #CCCCCC;
+}
+
+.table tbody td:not(:first-child) {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.table tbody td:nth-child(2),
+.table tbody th:nth-child(2) {
+  border-left-width: 0.5px;
+}
+
+.table tbody:last-child tr:last-child td:not(:first-child) {
+  border-bottom-width: 0.5px;
+}
+
+table.table tbody th:not(:first-child),
+table.table tbody td:not(:first-child) {
+  padding: 10px 8px 5px 8px;
+}
+
+table.table tbody tr td:first-child::before {
+	content:'';
+	display: block;
+	width: 1px;
+	height: 100%;
+	background: #000;
+	position: absolute;
+	top: 0;
+	left: 50%;
+}
+.table tbody th:first-child,
+.table tbody td:first-child {
+	position: relative;
+	z-index: 0;
+}
+table.table tbody tr:last-child td:first-child::before {
+	height: 50%;
+}
+.table tbody tr:last-child td:first-child::after {
+	content: '';
+	width: 50%;
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	height: 1px;
+	background: #000;
+}
+
+
+/*______________________________Setting______________________________*/
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/*______________________________Finance______________________________*/
+.cell {
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.cell.border {
+  border: 0.5px solid #CCCCCC;
+}
+
+.cell ul>li {
+  line-height: 16.1px;
+  font-size: 14px;
+}
+
+.cell ul>li:not(:first-child) {
+  margin-top: 17px;
+}
+
+.cell ul>li>a>div {
+  display: inline-block;
+  background-color: currentColor;
+  margin-right: 14px;
+}
+
+.finance-progress {
+  display: flex;
+  justify-content: center;
+}
+
+.finance-progress div {
+  border-color: currentColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 25px;
+  border: 4px solid;
+  border-radius: 999px;
+  width: 75px;
+  height: 75px;
+}
+
+.finance-total {
+  background-color: currentColor;
+}
+
+.finance-total~div {
+  font-size: 14px;
+  line-height: 16.1px;
+}
+
+.finance-pie {
+  width: 154px;
+  margin-right: 54px;
+  height: 100%;
+  display: flex;
+}
+
+.finance-pie>canvas {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+
+.finance-table thead th {
+  font-weight: normal;
+  padding: 11px 24px;
+  line-height: 14.95px;
+  font-size: 13px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.finance-table tbody td {
+  border: 0.5px solid #CCCCCC;
+}
+
+.bar {
+  background-color: currentColor;
+}
+
+/*______________________________Invest______________________________*/
+.invest tr td:nth-child(1) {
+  padding: 16px 18px 12px 15px;
+  width: 1%;
+  min-width: 308px;
+}
+
+.invest tr td:nth-child(2) {
+  padding: 16px 13px 12px 14px;
+  width: 174px;
+}
+
+.invest tr td:nth-child(3) {
+  padding: 16px 19px 12px 22px;
+  width: 170px;
+}
+
+.invest tr td:nth-child(4) {
+  padding: 16px 19px 12px 22px;
+  width: 170px;
+}
+
+.invest tr td:nth-child(5) {
+  padding: 16px 16px 12px 26px;
+  width: 143px;
+}
+
+.invest tr td:nth-child(6) {
+  padding: 16px 17px 12px 15px;
+  width: 100px;
+}
+
+.invest tr td:nth-child(7) {
+  padding: 16px 16px 12px 24px;
+}
+
+
+/*______________________________Report Page______________________________*/
+
+.next,
+.prev {
+  border: 0.5px solid #CCCCCC;
+  background: #F6F7F8;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.report .profile-wrapper {
+  padding: 17px 15px 24px 14px;
+}
+
+.report h3 {
+  font-size: 18px;
+  line-height: 20.7px;
+  font-weight: 700;
+}
+
+.report .profile-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  row-gap: 15px;
+  column-gap: 14px;
+  margin-top: 26px;
+}
+
+.report .profile-container>div {
+  background-color: rgba(240, 240, 240, 1);
+  padding: 10px 14px 3px 15px;
+}
+
+.report .profile-container>div p:nth-child(1) {
+  font-size: 16px;
+  line-height: 18.4px;
+  color: black;
+}
+
+.report .profile-container>div p:nth-child(2) {
+  height: 20px;
+  margin-top: 11px;
+}
+
+.report .contractor-wrapper {
+  padding: 17px 16px 24px 15px;
+}
+
+.report .chart {
+  width: 110px;
+}
+
+.report .budget-wrapper {
+  padding: 17px 20px 22px 25px;
+  min-width: 400px;
+}
+
+.report .budget-wrapper table {
+  width: 100%;
+}
+
+.report .budget-wrapper td {
+  vertical-align: bottom;
+}
+
+.report .budget-wrapper table tr td:first-child {
+  padding-right: 16px;
+}
+
+.report .budget-wrapper table tr td:nth-child(2) {
+  padding-right: 41px;
+  padding-bottom: 5px;
+}
+
+.report .budget-wrapper table tr td:last-child,
+.report .budget-wrapper table tr td:first-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.report .budget-wrapper table tr td:last-child {
+  color: black;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  text-align: right;
+}
+
+.report .quick-report p {
+  margin-top: 4px;
+}
+
+.report .contract-status {
+  display: flex;
+  justify-content: center;
+}
+
+.report .contract-status div {
+  border-color: currentColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 11px 18px;
+  border: 2px solid;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+}
+
+.report .work-wrapper table tr {
+  border-bottom: 0.5px solid #CCCCCC;
+}
+
+.report .work-wrapper table td {
+  padding-bottom: 17px;
+  vertical-align: bottom;
+}
+
+.report .work-wrapper table td:last-child {
+  width: 1%;
+}
+
+.report .work-wrapper table td:nth-child(2),
+.report .work-wrapper table td:nth-child(3) {
+  width: 1%;
+}
+
+
+/*______________________________Home______________________________*/
+.image-home {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.pagination .swiper-pagination-bullet {
+  margin: 0 4px;
+}
+
+/*______________________________Porogress______________________________*/
+.progress-header {
+  position: sticky;
+  top: 0;
+  background-color: #2C2C2C;
+  color: white;
+  padding: 8px;
+}
+
+
+/*______________________________Custom Scroll______________________________*/
+
+.scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 90, 90, 0) transparent;
+  transition: all .3s ease;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+  color: rgba(0, 0, 0, 0);
+}
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 0px solid transparent;
+  box-shadow: inset 0 0 0 10px;
+}
+
+.scroll:hover {
+  scrollbar-color: rgba(90, 90, 90, .3) transparent;
+  color: rgba(8, 5, 5, 0.3);
+}
+
+.scroll>* {
+  color: rgba(102, 102, 102, 1);
+}

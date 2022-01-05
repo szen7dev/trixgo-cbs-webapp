@@ -1,0 +1,175 @@
+// Khai báo kiểu dữ liệu chung trả về từ tất cả các API
+import { APIResponse } from "./apis/response";
+
+// Kiểu dữ liệu từ client truyền lên server để lấy data API
+export type ListContractsPayload = {
+  filter?: string; // Sau thay bằng Select (tương đương với kiểu Select)
+  populates?: string;
+  limit?: number; // Sau bỏ => Khống chế ở Backend
+  outin?: number;
+  keyword?: string;
+  departmentID?: string;
+  companyID?: string;
+  lastestID?: string;
+};
+
+// Thuộc tính 1 mẩu tin
+export type ContractProps = {
+  _id: string;
+  name: string,
+  company: string,
+  project: {
+    _id: string,
+    name: string,
+    sign: string
+  }
+};
+
+// Kiểu dữ liệu trả về
+export type ListContractsResponse = APIResponse & {
+  data: {
+    listRecords: Array<ContractProps>;
+    totalRecord: number;
+    totalPages?: number;
+  };
+};
+
+// Kiểu dữ liệu Info
+export type GetInfoContractPayload = {
+  contractID: string;
+  populates: string;
+  select: string;
+};
+
+export type InsertContractPayload = {
+  company: string;
+  project: string;
+  parent: string;
+  level: string;
+  admins: string;
+  members: string;
+  draft: number;
+  outIn: number;
+  status: number;
+  real: number;
+  subType: number;
+  type: number;
+  name: string;
+  sign: string;
+  storeSign: string;
+  description: string;
+  note: string;
+  notenumber: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+  buyerInfo: string;
+  buyerBank: string;
+  sellerInfo: string;
+  sellerBank: string;
+  packageName: string;
+  lock: number;
+  value: number;
+  vatValue: number;
+  plus: number;
+  vatPlus: number;
+  advancePayment: number;
+  produce: number;
+  vatProduce: number;
+  plusProduce: number;
+  vatPlusProduce: number;
+  acceptance: number;
+  vatAcceptance: number;
+  plusAcceptance: number;
+  vatPlusAcceptance: number;
+  retainedValue: number;
+  advancePaymentDeduction: number;
+  otherDeduction: number;
+  recommendedPayment: number;
+  advancePaymentPaid: number;
+  amountPaid: number;
+  remainingPayment: number;
+  advancePaymentOverage: number;
+  finalValue: number;
+  budget: number;
+  budgetVAT: number;
+  forecastBudget: number;
+  forecastBudgetVAT: number;
+  managementFee: number;
+  subcontractFee: number;
+  expenses: number;
+  profit: number;
+  cgValue: number;
+  expiredCg: Date;
+  agValue: number;
+  expiredAg: Date;
+};
+
+export type UpdateContractPayload = {
+  contractID: string;
+  company: string;
+  project: string;
+  parent: string;
+  level: string;
+  admins: string;
+  members: string;
+  draft: number;
+  outIn: number;
+  status: number;
+  real: number;
+  subType: number;
+  type: number;
+  name: string;
+  sign: string;
+  storeSign: string;
+  description: string;
+  note: string;
+  notenumber: string;
+  date: Date;
+  startTime: Date;
+  endTime: Date;
+  buyerInfo: string;
+  buyerBank: string;
+  sellerInfo: string;
+  sellerBank: string;
+  packageName: string;
+  lock: number;
+  value: number;
+  vatValue: number;
+  plus: number;
+  vatPlus: number;
+  advancePayment: number;
+  produce: number;
+  vatProduce: number;
+  plusProduce: number;
+  vatPlusProduce: number;
+  acceptance: number;
+  vatAcceptance: number;
+  plusAcceptance: number;
+  vatPlusAcceptance: number;
+  retainedValue: number;
+  advancePaymentDeduction: number;
+  otherDeduction: number;
+  recommendedPayment: number;
+  advancePaymentPaid: number;
+  amountPaid: number;
+  remainingPayment: number;
+  advancePaymentOverage: number;
+  finalValue: number;
+  budget: number;
+  budgetVAT: number;
+  forecastBudget: number;
+  forecastBudgetVAT: number;
+  managementFee: number;
+  subcontractFee: number;
+  expenses: number;
+  profit: number;
+  cgValue: number;
+  expiredCg: Date;
+  agValue: number;
+  expiredAg: Date;
+};
+
+export type DeleteContractPayload = {
+  contractID: string;
+};

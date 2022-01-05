@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { Context } from '../../contexts/contextModal';
 import ModalContainer from "views/pages/media/components/ModalContainer";
 import iconAttach from "assets/images/icons8-attach-96.png";
-import itemTag from "assets/images/icons8-price-tag-96.svg"
+import itemTag from "assets/images/icons8-price-tag.svg"
 
 const fakeDataInput = [
 	{ title: 'Số lượng', type: 'text', value: '12' },
@@ -41,7 +41,7 @@ const ModalCreateDocument: React.FC = () => {
 	const { state, toggleModal } = useContext(Context);
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
-			<div className="inline-flex flex-col text-black w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white">
+			<div className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white" style={{ maxWidth: '1569px' }}>
 				<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 					<Dialog.Title
 						as="h3"
@@ -55,8 +55,8 @@ const ModalCreateDocument: React.FC = () => {
 						</svg>
 					</button>
 				</div>
-				<div className="px-5 pb-4">
-					<div className="document__profile-create">
+				<div className="px-5 pb-4 overflow-x-auto">
+					<div className="document__profile-create whitespace-nowrap">
 						{/* Fisrt row */}
 						{
 							fakeDataTag.map(item => {
@@ -91,7 +91,7 @@ const ModalCreateDocument: React.FC = () => {
 										</div>
 										<div className="text-black py-1.5 h-[30px] box-content px-2">
 											<div className="py-1.5">
-											{item.type === 'text' ? item.value : <input type={item.type} value={item.value} checked={item.checked} />}
+												{item.type === 'text' ? item.value : <input type={item.type} value={item.value} checked={item.checked} />}
 											</div>
 										</div>
 									</>
@@ -100,45 +100,45 @@ const ModalCreateDocument: React.FC = () => {
 						}
 						<label htmlFor="title" className="py-1.5 h-[30px] box-content">
 							<p className="py-1.5">
-							Tiêu đề
+								Tiêu đề
 							</p>
 						</label>
 						<input id="title" type="text" name="title" placeholder="Tiêu đề" className="col-span-7 focus:outline-none py-1.5 h-[30px] box-content" />
 						<label htmlFor="description" className="py-1.5 h-[30px] box-content">
 							<p className="py-1.5">
-							Mô tả
+								Mô tả
 							</p>
-							</label>
+						</label>
 						<input id="description" type="text" name="description" placeholder="Mô tả" className="col-span-7 focus:outline-none py-1.5 h-[30px] box-content" />
+						<div className="border-opacity-50 py-1 col-span-8">
+							<p className="py-1.5">Ghi chú</p>
+							<textarea
+								rows={10}
+								placeholder="Biên soạn nội dung"
+								className="w-full focus:outline-none resize-none lex-grow py-2"
+							// {...formik.getFieldProps('content')}
+							></textarea>
+						</div>
+						{/* File uploaded */}
+						{
+							Array.from({ length: 3 }).map((_, index) =>
+								<div key={index} className="col-span-8 py-1 pl-2 pr-1 max-w-md flex mb-3" style={{ backgroundColor: '#EDEBEB' }}>
+									<a className={cn("font-bold whitespace-nowrap flex overflow-hidden", { 'text-cbs-primary': index === 0 })} href='/' target="_blank" rel="noreferrer">
+										<div className="document__line-min inline-block mr-1.5 py-1 align-bottom">Screen Shot 2021-12-22 at 10.15.22.png</div>
+										<div className="inline-block py-1" style={{ color: '#777' }}>(725K)</div>
+									</a>
+									{index !== 0 ? <div className="inline-block w-[124px] min-w-[124px] bg-white border border-cbs-primary p-0.5 h-3 ml-3 my-2">
+										<div className="bg-cbs-primary h-full" style={{ width: 30 + '%' }}></div>
+									</div> : null}
+									<button type="button" className="ml-auto p-1">
+										<svg aria-label="Xóa tệp đính kèm" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+										</svg>
+									</button>
+								</div>
+							)
+						}
 					</div>
-					<div className="border-opacity-50 py-1">
-						<p className="py-1.5">Ghi chú</p>
-						<textarea
-							rows={10}
-							placeholder="Biên soạn nội dung"
-							className="w-full focus:outline-none resize-none lex-grow py-2"
-						// {...formik.getFieldProps('content')}
-						></textarea>
-					</div>
-					{/* File uploaded */}
-					{
-						Array.from({ length: 3 }).map((_, index) =>
-							<div key={index} className="py-1 pl-2 pr-1 max-w-md flex mb-3" style={{ backgroundColor: '#EDEBEB' }}>
-								<a className={cn("font-bold whitespace-nowrap flex overflow-hidden", { 'text-cbs-primary': index === 0 })} href='/' target="_blank" rel="noreferrer">
-									<div className="document__line-min inline-block mr-1.5 py-1 align-bottom">Screen Shot 2021-12-22 at 10.15.22.png</div>
-									<div className="inline-block py-1" style={{ color: '#777' }}>(725K)</div>
-								</a>
-								{index !== 0 ? <div className="inline-block w-[124px] min-w-[124px] bg-white border border-cbs-primary p-0.5 h-3 ml-3 my-2">
-									<div className="bg-cbs-primary h-full" style={{ width: 30 + '%' }}></div>
-								</div> : null}
-								<button type="button" className="ml-auto p-1">
-									<svg aria-label="Xóa tệp đính kèm" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-									</svg>
-								</button>
-							</div>
-						)
-					}
 				</div>
 				<div className="flex justify-between pt-3 px-6 pb-3.5 border-t border-cbs-border">
 					<div className="flex items-center">

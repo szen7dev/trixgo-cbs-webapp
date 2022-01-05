@@ -157,7 +157,7 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {data?.data.project.sign} {">"}{" "}
+                  {data?.data.project?.sign} {">"}{" "}
                   {getGroupTitle(data?.data.group)}
                 </span>
                 <div>

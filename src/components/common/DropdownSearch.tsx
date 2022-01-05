@@ -95,7 +95,7 @@ const DropdownSearchable:FC<Props>
             setDisplayData(data);
             setDefaultValue(data);
         }
-    }, []);
+    }, [data]);
 
     useEffect(() => {
         // in case have to make request for first time and default value id
