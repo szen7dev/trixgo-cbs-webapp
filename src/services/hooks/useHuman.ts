@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 import HumanRepository from 'apis/human';
 
 import type { 
@@ -9,7 +9,9 @@ import type {
     Position,
     DoctypePayload,
     Doctype,
-    Area
+    Area,
+    CreateContactResponse,
+    MutationContactPayload
 } from 'typings/human';
 
 interface UseListHuman {
@@ -71,6 +73,7 @@ interface UseDetailHuman {
     detailHuman: Human;
     message: string;
     loading: boolean;
+    refetch: () => any;
 }
 export const useFetchDetailHuman = (id: string): UseDetailHuman => {
     const res = useQuery(`human_detail.${id}`, () =>
@@ -83,12 +86,14 @@ export const useFetchDetailHuman = (id: string): UseDetailHuman => {
             detailHuman: {},
             message: res.data?.data[0].message,
             loading: res.isLoading,
+            refetch: res.refetch,
         }
     }
     return {
         detailHuman: res.data?.data || {},
         message: 'Ok',
         loading: res.isLoading,
+        refetch: res.refetch,
     }
 }
 
@@ -148,8 +153,12 @@ export const useFetchListContactDocuments = (id: string, typeParam: TypeParam): 
     }
 }
 
-export const useFetchListDepartments = ({limit}: {
-    limit: number
+export const useFetchListDepartments = ({
+    limit,
+    keyword = '',
+}: {
+    limit: number;
+    keyword?: string;
 }): {
     loading: boolean;
     totalRecord: number | undefined;
@@ -160,13 +169,14 @@ export const useFetchListDepartments = ({limit}: {
     fetchNextPageDepartments: () => void;
 } => {
     const res = useInfiniteQuery(
-        [`list_department`, limit],
+        [`list_department.${keyword}`, limit],
         async ({ pageParam }: any) =>
             // mai request BE check lại api này
             HumanRepository.fetchListDepartment({
                 limit: limit || 10,
                 lastestID: pageParam || "",
                 type: 1,
+                keyword
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -259,9 +269,9 @@ export const useFetchListPosition = ({limit}: {
 
 export const useFetchListDoctype = ({
     limit,
-    type
+    type,
 }: Pick<DoctypePayload, 'type'> & {
-    limit: number
+    limit: number;
 }): {
     loading: boolean;
     totalRecord: number | undefined;
@@ -316,8 +326,10 @@ export const useFetchListDoctype = ({
 
 export const useFetchListArea = ({
     limit,
+    keyword = '',
 }: {
-    limit: number
+    limit: number;
+    keyword: string;
 }): {
     loading: boolean;
     totalRecord: number | undefined;
@@ -328,11 +340,12 @@ export const useFetchListArea = ({
     fetchNextPageAreas: () => void;
 } => {
     const res = useInfiniteQuery(
-        [`list_Area`, limit],
+        [`list_Area.${keyword}`, limit],
         async ({ pageParam }: any) =>
             HumanRepository.fetchListAreas({
                 limit: limit || 10,
-                lastestID: pageParam || "",
+                lastestID: pageParam ||  "",
+                keyword
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -366,5 +379,31 @@ export const useFetchListArea = ({
         hasNextPage,
         refetchListAreas,
         fetchNextPageAreas
+    }
+}
+
+export const useCreateContactMutation = (): {
+    createContactMutateAsync: (payload: MutationContactPayload) => Promise<CreateContactResponse>;
+    loading: boolean;
+} => {
+    const { mutateAsync, isLoading } = useMutation((payload: MutationContactPayload) => 
+        HumanRepository.requestCreateContact(payload)
+    );
+    return {
+        createContactMutateAsync: mutateAsync,
+        loading: isLoading,
+    }
+}
+
+export const useUpdateContactMutation = (): {
+    updateContactMutateAsync: (payload: MutationContactPayload) => Promise<CreateContactResponse>;
+    loading: boolean;
+} => {
+    const { mutateAsync, isLoading } = useMutation((payload: MutationContactPayload) => 
+        HumanRepository.requestUpdateContact(payload)
+    );
+    return {
+        updateContactMutateAsync: mutateAsync,
+        loading: isLoading,
     }
 }

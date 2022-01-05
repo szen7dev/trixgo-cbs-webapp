@@ -176,7 +176,14 @@ module.exports = {
 					variants('lineClamp')
 				)
 
-				addUtilities([{ '.border-spacing-0': { 'border-spacing': '0' } }])
+				addUtilities([
+					{ '.border-spacing-0': { 'border-spacing': '0' } },
+					{
+						'.cbs-checkbox:indeterminate': {
+							filter: 'hue-rotate(170deg) brightness(1.8)'
+						}
+					}
+				])
 			},
 			{
 				theme: {
