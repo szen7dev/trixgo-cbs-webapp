@@ -598,7 +598,34 @@ const Routes: FC = () => {
 													path="/social/home/2"
 													component={() =>
 														<SocialLayoutPrimary>
-															<SocialCategoryPage />
+															<SocialCategoryPage type="department" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/3"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="digital-conversion" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/4"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="system" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/5"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="just-me" />
 														</SocialLayoutPrimary>
 													}
 												/>
