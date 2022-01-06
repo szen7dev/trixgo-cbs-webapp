@@ -45,6 +45,7 @@ type Props = {
     onClearData?: () => void;
     disabled?: boolean;
     disableClass?: string;
+    searchInputClassName?: string;
 }
 
 type Params = {
@@ -75,7 +76,8 @@ const DropdownSearchable:FC<Props>
        disableSearch,
        onClearData,
        disabled,
-       disableClass
+       disableClass,
+       searchInputClassName
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -225,7 +227,7 @@ const DropdownSearchable:FC<Props>
                     renderItem?
                         renderItem(modifyItem(option)):
                         <div className={"flex align-items-center text-left"}>
-                            {readDataValue(option,"imageUrl")?<img alt={"Avt"} src={readDataValue(option,"imageUrl")} className={"w-9 h-9 object-cover rounded-full"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{readDataValue(option,"text")}</span>
+                            {readDataValue(option,"imageUrl")?<img alt={"Avt"} src={readDataValue(option,"imageUrl")} className={"w-9 h-9 object-cover rounded-full mr-3"}/>:null}<span className={"flex-1 ml-1 mr-1"}>{readDataValue(option,"text")}</span>
                         </div>
                 }
             </div>
@@ -236,7 +238,7 @@ const DropdownSearchable:FC<Props>
         return (
             <div
                 onClick={() => toggleShowOption()}
-                className={(classNameInput??'') + " flex p-1 pl-2 " + (showTriangle?"pr-7":"pl-2") + " cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
+                className={(classNameInput??'') + " flex w-full p-1 pl-2 " + (showTriangle?"pr-7":"pl-2") + " cursor-pointer align-items-center flex-wrap overflow-y-scroll"}
             >
                 {/*<div className={"flex flex-wrap"}>*/}
                 {
@@ -270,7 +272,7 @@ const DropdownSearchable:FC<Props>
                     />
                 }
                 {/*</div>*/}
-                {showTriangle&&<div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                {showTriangle&&<div className={"absolute inset-y-0 right-1 flex items-center justify-center px-1"}>
                     <TriangleDown/>
                 </div>}
             </div>
@@ -340,13 +342,13 @@ const DropdownSearchable:FC<Props>
 
     const renderSingleSelectedValue = () => {
         return (
-            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative flex p-1 h-full pl-2 "+(showTriangle?"pr-7":"pl-2")+" cursor-pointer align-items-center"}>
+            <div onClick={() => toggleShowOption()} className={(classNameInput??'') + " relative w-full flex p-1 h-full pl-2 "+(showTriangle?"pr-7":"pl-2")+" cursor-pointer align-items-center"}>
                 {
                     allowClearValueSingleInput?
                         renderSingleSelectedValueWithClearValue():
                         renderSingleSelectedValueWithoutClearValue()
                 }
-                {showTriangle&&<div className={"absolute inset-y-0 right-0 flex items-center justify-center px-1"}>
+                {showTriangle&&<div className={"absolute inset-y-0 right-1 flex items-center justify-center px-1"}>
                     <TriangleDown/>
                 </div>}
             </div>
@@ -367,21 +369,23 @@ const DropdownSearchable:FC<Props>
     const disableClassCustom = (disableClass??'bg-gray-100');
     const disabledClass = disabled?`cursor-not-allowed ${disableClassCustom}`:"";
     return (
-        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown ${maxWidthClass} ${maxHeightClass} ${beingFocusClass} ${disabledClass}`} data-value={value?.id}>
+        <div ref={wrapperRef} id={id} placeholder={placeholder} className={`${extraClassName} relative select-dropdown flex items-center ${maxWidthClass} ${maxHeightClass} ${beingFocusClass} ${disabledClass}`} data-value={value?.id}>
             {renderSelectedValue()}
             {
                 showOption?
-                    <div className={"shadow-lg rounded select-options-container absolute z-100 w-full min-w-[230px] rounded-md overflow-hidden left-0"}>
-                        {!inlineSearch&&!disableSearch&&<input
-                            disabled={disabled}
-                            className="select-search w-full p-3 pt-5 border-b"
-                            placeholder={"Nhập nội dung"}
-                            type='text'
-                            autoComplete='off'
-                            value={searchTerm}
-                            autoFocus
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />}
+                    <div className={"shadow-lg bg-white rounded select-options-container absolute z-100 w-full min-w-[230px] rounded-md overflow-hidden left-0"}>
+                        {!inlineSearch&&!disableSearch&&<div className={"w-full py-3 flex"}>
+                            <input
+                                disabled={disabled}
+                                className={"select-search flex-1 px-3 border-b " + (searchInputClassName??"")}
+                                placeholder={"Nhập nội dung"}
+                                type='text'
+                                autoComplete='off'
+                                value={searchTerm}
+                                autoFocus
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>}
                         <div className="select-options-section overflow-auto bg-white">
                             {renderOptions()}
                         </div>
