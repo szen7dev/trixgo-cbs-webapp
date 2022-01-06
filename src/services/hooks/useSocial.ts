@@ -86,7 +86,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
             const { error, data, message } = await createMediaAsync(payload);
 
             if (!error) {
-                refetchListMedias();
+                // refetchListMedias();
 
                 toast.success('Tạo bài viết thành công');
                 socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {

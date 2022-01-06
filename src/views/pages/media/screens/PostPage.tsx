@@ -12,10 +12,10 @@ import cn from 'classnames';
 /**
  * COMPONENTS
  */
-import ModalFullContainer from "../components/ModalFullContainer";
+// import ModalFullContainer from "../components/ModalFullContainer";
 import ModalContainer from "../components/ModalContainer";
 import PostFile from '../components/post/PostFile';
-import ViewPost from "../components/post/ViewPost";
+// import ViewPost from "../components/post/ViewPost";
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
@@ -64,14 +64,11 @@ const SocialPost: FC = () => {
 		case 'company':
 			conditionListMedia.companyID = user?.company._id;
 			break;
-		case 'departments':
-			conditionListMedia.departmentID = user?.department._id;
-			break;
 		default:
 			break;
 	}
 
-	const { deleteMedia, listMedias } = useSocial(`list_medias_related.${mediaID}`, conditionListMedia);
+	const { deleteMedia, listMedias } = useSocial(`list_media__related.${mediaID}`, conditionListMedia);
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `list_comments.${mediaID}`
@@ -79,7 +76,7 @@ const SocialPost: FC = () => {
 
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
-	const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
+	// const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 	const { openPost } = useContext(ContextModalPost);
 
 	const toggleModalEditMedia = () => {
@@ -88,8 +85,8 @@ const SocialPost: FC = () => {
 	};
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
-	const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
-	const openModalImage = (index: number) => setModalShowImage({ show: true, index });
+	// const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
+	// const openModalImage = (index: number) => setModalShowImage({ show: true, index });
 
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
@@ -110,7 +107,7 @@ const SocialPost: FC = () => {
 	const files: FileProps[] = media.files || [];
 
 	return (
-		<CommentProvider>
+		<>
 			<div className="page__post text-sm custom-scroll">
 				<div className="page__post-container">
 					{/* Header */}
@@ -225,20 +222,18 @@ const SocialPost: FC = () => {
 								<span>
 									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
 									<button onClick={toggleModalReact}>
-										0
+										{abbreviateNumber(media.amountReaction)}
 									</button>
 								</span>
 								<span>
 									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
 									<Link to="/social/comments">
-										{abbreviateNumber(totalRecord)}
+										{abbreviateNumber(media.amountComment)}
 									</Link>
 								</span>
 								<span>
 									<img src={iconEye} alt="View" className="inline-block mr-2" />
-									<button onClick={toggleModalReact}>
-										0
-									</button>
+									{abbreviateNumber(media.amountView)}
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
@@ -263,7 +258,7 @@ const SocialPost: FC = () => {
 							<div>
 								{listMedias.length ? listMedias.map(media => (
 									<>
-										<Link to="/"><div>{abbreviateNumber(media.totalView)}</div></Link>
+										<Link to="/"><div>{abbreviateNumber(media.amountView)}</div></Link>
 										<Link to={`/social/post/${media._id}`}>
 											{media.title}
 										</Link>
@@ -271,16 +266,6 @@ const SocialPost: FC = () => {
 								)) : ''}
 								
 								{/* <Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
 								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link> */}
@@ -339,14 +324,16 @@ const SocialPost: FC = () => {
 				</div>
 			</ModalContainer>
 			<ModalViewPost listComments={listComments} mediaID={mediaID} />
-		</CommentProvider>
+		</>
 	);
 };
 
 const SocialPostPage: FC = () => {
 	return (
 		<ProviderModalPost>
-			<SocialPost />
+			<CommentProvider>
+				<SocialPost />
+			</CommentProvider>
 		</ProviderModalPost>
 	)
 }

@@ -7,14 +7,15 @@ import { Link } from 'react-router-dom';
 import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/social';
 
-interface Props {
-	headerComponent?: ElementType
-}
+type Props = {
+	headerComponent?: ElementType,
+	type: string
+} & React.HtmlHTMLAttributes<HTMLDivElement>
 
-const SocialInternalArticles: React.FC<Props & React.HtmlHTMLAttributes<HTMLDivElement>> = ({ headerComponent: Header, ...props }) => {
+const SocialArticles: React.FC<Props> = ({ headerComponent: Header, type, ...props }) => {
 	const { user } = useAuth();
-	const { listMedias } = useSocial('list_medias_internal_company', { 
-		type: 'internal-company', 
+	const { listMedias } = useSocial(`list_media__${type}`, { 
+		type, 
 		companyID: user?.company._id 
 	});
 
@@ -57,4 +58,4 @@ const SocialInternalArticles: React.FC<Props & React.HtmlHTMLAttributes<HTMLDivE
 	)
 }
 
-export default SocialInternalArticles;
+export default SocialArticles;
