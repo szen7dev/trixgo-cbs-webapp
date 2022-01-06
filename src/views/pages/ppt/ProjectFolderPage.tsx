@@ -68,7 +68,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 			count: 12,
 			path: '/123'
 		})))
-	}, [location.pathname]);
+	}, [location?.pathname]);
 
 	return (
 		<>

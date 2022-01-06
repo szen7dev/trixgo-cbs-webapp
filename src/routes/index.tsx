@@ -81,7 +81,7 @@ import HelpCenterPage from "views/pages/help/HelpCenterPage";
 import ProjectAppAdminPage from "views/pages/ppt/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
-import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
+import ProjectPortfolioPage from "views/pages/ppt/ProjectPortfolioPage";
 import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
 import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
 import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
@@ -348,7 +348,7 @@ const Routes: FC = () => {
                       path={"/pcm/dashboard-portfolio"}
                       component={() => (
                         <HomeLayout>
-                          <ProjectInvestPage />
+                          <ProjectPortfolioPage />
                         </HomeLayout>
                       )}
                     />
