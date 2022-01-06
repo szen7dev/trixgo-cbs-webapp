@@ -3,60 +3,7 @@ import Close from "assets/icons/Close";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
-import {map as _map} from "lodash";
-import OnlineUserInChatItem from "./components/OnlineUserInChatItem";
 const SettingMessageDetail:FC = () => {
-    const listTab = [
-        {
-            text: "Members",
-            tabId: "members"
-        },
-        {
-            text: "Media",
-            tabId: "media"
-        },
-        {
-            text: "Files",
-            tabId: "files"
-        },
-        {
-            text: "Links",
-            tabId: "links"
-        },
-        {
-            text: "Groups",
-            tabId: "groups"
-        },
-    ]
-
-    const listUserInMessage = [
-        {
-            _id: 1,
-            userName: "Khanh TRX",
-            status: "online"
-        },
-        {
-            _id: 2,
-            userName: "Thanh CTV",
-            status: "last seen 9 minutes ago"
-        },
-        {
-            _id: 3,
-            userName: "Tuấn Minh",
-            status: "last seen 2 hours ago"
-        },
-        {
-            _id: 4,
-            userName: "Doan ReactJS",
-            status: "last seen 1 hours ago"
-        },
-        {
-            _id: 5,
-            userName: "Quang Đẹp trai",
-            status: "last seen 1 hours ago"
-        },
-    ]
-
     return (
         <div className={"messages-right-bar w-[480px] border-l transition duration-150 relative group"}>
             <div className={"h-full group bg-gray-100 overflow-auto"}>
@@ -86,29 +33,7 @@ const SettingMessageDetail:FC = () => {
                     <div className={"flex-1 text-left ml-4"}>Notifications</div>
                     <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
                 </div>
-                <div className={"h-full bg-white relative flex flex-col mt-[10px]"}>
-                    <div className={"flex max-w-full border-b border-gray-100 no-webkit-scrollbar mt-3 bg-white h-[55px] sticky top-55px z-5"}>
-                        {_map(listTab, (tab,index) => (
-                            <div
-                                className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
-                                key={tab.tabId}
-                            >
-                                <button
-                                    className={"whitespace-nowrap h-full text-center block p-2 " + (index===0?"border-b-2 border-primary text-primary":"text-primary-gray")}
-                                >
-                                    {tab.text}
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    <div className={"bg-white overflow-auto flex-1"}>
-                        {
-                            _map(listUserInMessage, (user,index) => (
-                                <OnlineUserInChatItem key={user._id} user={user} index={index}/>
-                            ))
-                        }
-                    </div>
-                </div>
+                <SettingMessageDetail/>
             </div>
             <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
                 <img src={AddUserToGroup} alt={"Pencil icon"}/>

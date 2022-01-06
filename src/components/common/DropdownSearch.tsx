@@ -248,7 +248,7 @@ const DropdownSearchable:FC<Props>
                         null
                 }
                 {_map(values, (option) => (
-                    <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white"}>
+                    <div key={readDataValue(option, "id")} className={"relative border rounded-full py-0.5 pl-1 mr-1 pr-8 mb-1 bg-white"}>
                         {
                             renderSelectedItem?
                                 renderSelectedItem(modifyItem(option)):
