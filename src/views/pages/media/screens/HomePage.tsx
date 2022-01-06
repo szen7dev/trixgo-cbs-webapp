@@ -1,33 +1,23 @@
 import { FC, useState } from "react";
-import cn from "classnames";
 
 import ModalContainer from "../components/ModalContainer";
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
-import iconFilter from 'assets/images/icons8-filter-96.png';
 import '../style.css';
 
 import SocialMainArticle from "../components/home/SocialMainArticle";
 import SocialAdvertisement from "../components/home/SocialAdvertisement";
 import SocialSpecializedTopics from "../components/home/SocialSpecializedTopics";
-import SocialInternalArticles from "../components/home/SocialInternalArticles";
-import SocialCommunityPost from "../components/home/SocialCommunityPost";
+import SocialArticles from "../components/home/SocialArticles";
+import SocialDepartmentArticles from "../components/home/SocialDepartmentArticles";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
 
 import { useAuth } from "services/hooks/useAuth";
 import { useSocial } from 'services/hooks/useSocial';
 
-const pages = [
-	{ id: "0", title: 'Nội bộ công ty' },
-	{ id: "1", title: 'Dự án phòng ban' },
-	{ id: "2", title: 'Chuyển đổi số' },
-	{ id: "3", title: 'Tin hệ thống' },
-	{ id: "4", title: 'Lưu trữ cá nhân' },
-]
-
 const SocialHomePage: FC = () => {
 	const { user } = useAuth();
-	const { listMedias: listMediasCompany, isLoadingListMedias } = useSocial('list_medias_internal_company', {
+	const { listMedias: listMediasCompany, isLoadingListMedias } = useSocial('list_media__company__mainpage', {
 		limit: 1, type: 'company', companyID: user?.company._id
 	});
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
@@ -35,6 +25,7 @@ const SocialHomePage: FC = () => {
 	const toggleCreateModal = () => setIsShowCreateModal(!isShowCreateModal);
 
 	if (isLoadingListMedias) return null;
+
 	return (
 		<>
 			{/* Content */}
@@ -55,11 +46,11 @@ const SocialHomePage: FC = () => {
 					{/* Bottom content */}
 					<div className="flex flex-wrap 2xl:flex-nowrap mx-3.5 text-black">
 						{/* Company internal articles */}
-						<SocialInternalArticles className="w-full mt-3.5" headerComponent={() => <span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>} />
+						<SocialArticles className="w-full mt-3.5" headerComponent={() => <span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>} type="company" />
 						{/* Specialized topics */}
 						<SocialSpecializedTopics className="w-1/2 2xl:w-min px-5 mt-3.5 box-content" style={{ minWidth: "287px" }} />
 						{/* Community Posts */}
-						<SocialCommunityPost className="flex-1 py-3.5 w-1/2 lg:w-min px-3.5" style={{ minWidth: "406px" }} />
+						<SocialDepartmentArticles className="flex-1 py-3.5 w-1/2 lg:w-min px-3.5" style={{ minWidth: "406px" }} />
 					</div>
 				</div>
 				<button className="button-newpost flex" onClick={() => toggleCreateModal()}>

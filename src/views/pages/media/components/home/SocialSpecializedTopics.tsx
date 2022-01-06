@@ -44,7 +44,7 @@ const SocialSpecializedTopics: React.FC<React.HTMLAttributes<HTMLDivElement>> = 
 							<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 								<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
 								<span className="text-primary">
-									{abbreviateNumber(media.totalComments)}
+									{abbreviateNumber(media.amountComment)}
 								</span>
 							</div>
 						</Link>

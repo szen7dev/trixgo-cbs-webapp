@@ -52,7 +52,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 					</div>
 				</label>
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="departments" name="type" className="post__classify-type" onClick={() => showMore && showMore('')} />
+					<Field type="radio" value="department" name="type" className="post__classify-type" onClick={() => showMore && showMore('')} />
 					<div className="mr-3">
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
@@ -67,7 +67,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 					</div>
 				</label>
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="community" name="type" className="post__classify-type" onClick={() => showMore && showMore('community')} />
+					<Field type="radio" value="digital-conversion" name="type" className="post__classify-type" onClick={() => showMore && showMore('community')} />
 					<div className="mr-3">
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
@@ -82,7 +82,7 @@ const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showM
 					</div>
 				</label>
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="systems" name="type" className="post__classify-type" />
+					<Field type="radio" value="system" name="type" className="post__classify-type" />
 					<div className="mr-3">
 						<img src={iconChecked} alt="icon Checked" />
 					</div>
