@@ -12,6 +12,7 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
+import { number } from "yup";
 
 ChartJS.register(
   CategoryScale,
@@ -124,28 +125,30 @@ const StatisticsByDeviceSupport: FC = () => {
   });
   const { listDevice } = useFetchSupport();
   const chart = () => {
-    const emDevice = [];
-    for (const dataOject of listDevice) {
-      emDevice.push(dataOject.data);
+    const arMonth = [];
+    const arTypeDevice = [];
+    for (const key in listDevice) {
+      arMonth.push(listDevice[key]._id.month);
     }
+    console.log('arMonth',arMonth);
     setChartData({
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
       datasets: [
         {
-          data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,],
+          data: arMonth,
           backgroundColor: "#2a90fb",
           barThickness: 8,
         },
-        {
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,],
-          backgroundColor: "#0060E1",
-          barThickness: 8,
-        },
-        {
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,],
-          backgroundColor: "#10b981",
-          barThickness: 8,
-        },
+        // {
+        //   data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+        //   backgroundColor: "#0060E1",
+        //   barThickness: 8,
+        // },
+        // {
+        //   data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10],
+        //   backgroundColor: "#10b981",
+        //   barThickness: 8,
+        // },
       ]
     });
   }

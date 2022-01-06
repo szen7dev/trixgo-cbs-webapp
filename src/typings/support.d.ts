@@ -1,3 +1,4 @@
+import { type } from "os";
 import { APIResponse } from "./apis/response";
 
 export type ListDevicePayload = {
@@ -14,7 +15,9 @@ export type Device = {
     _id: {
         month: number
     },
-    data: [
+    type: number,
+    amountAccesses: number,
+    data?: [
         {
             type: number,
             amountAccesses: number
@@ -22,3 +25,7 @@ export type Device = {
     ]
 
 };
+
+export type arTypeDevice = {
+    type: number,
+}
