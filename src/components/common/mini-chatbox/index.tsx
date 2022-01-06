@@ -20,7 +20,7 @@ const MiniChatbox: FC<Props> = (props: Props) => {
     props.openMiniChatbox();
   }
   return (
-    <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out">
+    <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out z-50">
       {props.isNewChatboxVisible && (
         <div className="t-mini-chat-add-new text-[15px] ml-3 bg-primary-light border border-primary-border">
           <div className="t-mini-chat-add-new-header flex items-center p-3">
