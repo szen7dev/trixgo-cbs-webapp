@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ElementType } from 'react'
 import moment from 'moment';
 import { useAuth } from "services/hooks/useAuth";
 import { useSocial } from "services/hooks/useSocial";
@@ -7,13 +7,21 @@ import { Link } from 'react-router-dom';
 import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/social';
 
-const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+type Props = {
+	headerComponent?: ElementType,
+	type: string
+} & React.HtmlHTMLAttributes<HTMLDivElement>
+
+const SocialArticles: React.FC<Props> = ({ headerComponent: Header, type, ...props }) => {
 	const { user } = useAuth();
-	const { listMedias } = useSocial('list_medias_internal_company', { type: 'company', companyID: user?.company._id });
+	const { listMedias } = useSocial(`list_media__${type}`, { 
+		type, 
+		companyID: user?.company._id 
+	});
 
 	return (
 		<div {...props}>
-			<span className="text-24px font-bold inline-block border-b border-primary pb-3 mt-3">Nội bộ công ty</span>
+			{Header && <Header />}
 			<ul>
 				{listMedias.length ? listMedias.map((media: MediaProps) => media && (
 					<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }} key={media._id}>
@@ -50,4 +58,4 @@ const SocialInternalArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>>
 	)
 }
 
-export default SocialInternalArticles;
+export default SocialArticles;

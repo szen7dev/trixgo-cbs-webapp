@@ -10,14 +10,13 @@ type Props = {
 
 const DATE_FORMAT = 'DD/MM/YYYY';
 
-enum CONTACT_POLICY {
-  'Không' = 1,
-  'Bộ đội phục viên' = 2,
+export enum CONTACT_POLICY {
+  'Bộ đội phục viên' = 1,
   'Con thương bệnh binh' = 3,
   'Gia đình chính sách' = 4,
 };
 
-enum INSURANCE_STATUS {
+export enum INSURANCE_STATUS {
   'Chưa nộp' = 1,
   'Đã nộp' = 2,
   'Thêm mới' = 3,

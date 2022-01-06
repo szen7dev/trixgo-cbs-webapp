@@ -42,15 +42,15 @@ const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 				<p className="flex justify-between text-primary-gray mt-3 px-1">
 					<span>
 						<img src={iconThumb} alt="Like" className="inline-block mr-2" />
-						{abbreviateNumber(media.totalReactions)}
+						{abbreviateNumber(media.amountReaction)}
 					</span>
 					<span>
 						<img src={iconComment} alt="Comment" className="inline-block mr-2" />
-						{abbreviateNumber(media.totalComments)}
+						{abbreviateNumber(media.amountComment)}
 					</span>
 					<span>
 						<img src={iconEye} alt="View" className="inline-block mr-2" />
-						{abbreviateNumber(media.totalWatched)}
+						{abbreviateNumber(media.amountView)}
 					</span>
 				</p>
 			</div>

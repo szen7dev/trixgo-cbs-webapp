@@ -9,21 +9,23 @@ type Company = {
     _id: string;
 }
 
-type Department = {
-    name: string;
-    sign: string;
-    _id: string;
-}
-
 type Position = {
-    name: string;
     _id: string;
+    name: string;
+    description?: string;
+    parent?: {
+        _id: string;
+        level: number;
+        name: string;
+    };
 }
 
-type Area = {
+export type Area = {
     name: string;
     _id: string;
     sign: string;
+    level: number;
+    parent?: Area
 }
 
 type Workplace = {
@@ -103,12 +105,27 @@ type CertificateGrade = {
     _id: string;
 }
 
+export type Doctype = {
+    _id: string;
+    name: string;
+    type: number;
+}
+
+export type Department = {
+    name: string;
+    sign: string;
+    _id: string;
+    description?: string;
+}
+
 export type Human = {
+    type?: number;
     company?: Company;
     position?: Position;
     department?: Department;
     area2?: Area;
     area1?: Area;
+    area?: Area;
     workplace?: Workplace[];
     educationalBackground?: EducationBackground[];
     major?: Major[];
@@ -123,6 +140,7 @@ export type Human = {
     sign?: string;
     email?: string;
     gender?: number;
+    realStatus?: number;
     birthday?: string;
     identity?: string;
     address?: string;
@@ -133,6 +151,8 @@ export type Human = {
     insuranceDate?: string;
     insuranceNumber?: string;
     insuranceStatus?: number;
+    insuranceSign?: number;
+    sallaryBasic?: number;
     sallarySubFactor?: string;
     sallaryFactor?: string;
     workStartDate?: string;
@@ -150,14 +170,17 @@ export type Human = {
     insuanceDate?: string;
 }
 
+type Populate = {
+    path?: string;
+    select?: string;
+    populate?: Populate
+}
+
 export interface HumanPayload {
     lastestID?: string | undefined,
     limit?: number;
     contactID?: string;
-    populates?: {
-        path?: string;
-        select?: string;
-    };
+    populates?: Populate;
 }
 
 export type ListHumanResponse = APIResponse & {
@@ -226,6 +249,112 @@ export type ContactDocumentPayload = HumanPayload & {
     // * 6. Khác (Bảo hiểm xã hội, tài sản giao nhận, lịch sử tuyển dụng, quá trình làm việc, công tác)
     type: 1 | 2 | 3 | 4 | 5 | 6;
 }
+
+export type DepartmentPayload = {
+    limit: number;
+    lastestID: string;
+    type: 1 | 2; //  1: "Phòng Ban", 2: "Dự án" 
+    keyword?: string;
+}
+
+export type DepartmentResponse = APIResponse & {
+    data: {
+        listRecords: Department[];
+        limit: number;
+        totalRecord: number;
+        totalPages: number;
+        nextCursor: string | null;
+    }
+}
+
+export type PositionPayload = {
+    limit: number;
+    lastestID: string;
+    keyword?: string; // for search query
+}
+
+export type PositionResponse = APIResponse & {
+    data: {
+        listRecords: Position[];
+        limit: number;
+        totalRecord: number;
+        totalPages: number;
+        nextCursor: string | null;
+    }
+}
+
+export type DoctypePayload = {
+    // 1 - Văn Bản Lĩnh vực hồ sơ
+    // 2 - Văn Bản Tính chất hồ sơ
+    // 3 - Lĩnh vực kinh doanh
+    // 4 - Khách hàng phân loại
+    // 5 - Công việc, Phân loại khác
+    // 6 - Nhân sự, Trình độ
+    // 7 - Nhân sự, Chuyên ngành
+    // 8 - Nhận sự, Loại HDLD
+    // 9 - Nhân sự tình trạng làm việc
+    // 10 - Nhân sự Thâm niên
+    // 11 - CRM, Phân loại lao động
+    // 12 - CRM - Hồ sơ chi tiết của giai đoạn
+    // 13 - Nhân sự, chúc vụ
+    // 14 - Nhân sự loại chứng chỉ
+    // 15 - Nhân sự, Nội dung chứng chỉ
+    // 16 - Hợp đồng phân loại công nợ
+    // 17 - Hợp đồng nguyên nhân phát sinh
+    // 18 - Chung - Nguyên nhân thất bại
+    // 20 - Chung các lỗi hay gặp
+    // 21 - Công việc, Đánh giá chất lượng
+    type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19| 20 | 21;
+    limit: number;
+    lastestID: string;
+}
+
+export type DoctypeResponse = APIResponse & {
+    data: {
+        listRecords: Doctype[];
+        limit: number;
+        totalRecord: number;
+        totalPages: number;
+        nextCursor: string | null;
+    }
+}
+
+export type AreaPayload = {
+    limit: number;
+    lastestID: string;
+    keyword?: string;
+}
+
+export type AreaResponse = APIResponse & {
+    data: {
+        listRecords: Area[];
+        limit: number;
+        totalRecord: number;
+        totalPages: number;
+        nextCursor: string | null;
+    }
+}
+
+export interface MutationContactPayload {
+    type: string;
+    gender: string;
+    realStatus: string;
+    insuranceStatus: string;
+    familyPolicy: string;
+    appointDate: string;
+    birthday: string;
+    changeSallaryDate: string;
+    contractDate: string;
+    contractExpire: string;
+    contractValid: string;
+    dateProvice: string;
+    dayOff: string;
+    insuranceDate: string;
+    workStartDate: string;
+    department: string;
+}
+
+export type CreateContactResponse = APIResponse;
 
 // "use strict";
 

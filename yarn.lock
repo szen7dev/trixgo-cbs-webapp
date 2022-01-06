@@ -5416,7 +5416,7 @@ compression@^1.7.4:
 
 compressorjs@^1.1.1:
   version "1.1.1"
-  resolved "https://registry.npmjs.org/compressorjs/-/compressorjs-1.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/compressorjs/-/compressorjs-1.1.1.tgz#54c147cf37fb38828b08c48646d0258d52faf050"
   integrity sha512-SysRuUPfmUNoq+RviE0iMFVUmoX2q/x+7PkEPUmk6NGkd85hDrmvujx0Qtp8UCGA6KMe5kuodsylPQcNaLf60w==
   dependencies:
     blueimp-canvas-to-blob "^3.29.0"

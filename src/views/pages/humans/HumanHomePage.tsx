@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +10,7 @@ import ThreeDotIcon from "assets/images/icon-3dots.png";
 // import HumanAvatar from "assets/images/human-avatar.svg";
 import SortIcon from "assets/images/icons8-sorting.svg";
 
-import { useFetchListHuman } from "services/hooks/useHuman";
+import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
 import type { Human } from "typings/human";
 
 const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
@@ -20,6 +20,16 @@ const HumansPage: FC = () => {
   const humans = useFetchListHuman();
   
   const { openModal } = useModal();
+  const { createContactMutateAsync } = useCreateContactMutation();
+
+  const handleFinishForm = useCallback(async (values) => {
+    const res = await createContactMutateAsync(values);
+    if (!res.error) {
+      humans.refetchListHuman()
+      return true;
+    }
+    return false;
+  }, [createContactMutateAsync, humans]);
 
   return (
     <section className="w-full">
@@ -54,7 +64,9 @@ const HumansPage: FC = () => {
                   "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
                 }
               >
-                <NewHumanModal />
+                <NewHumanModal 
+                  onFinish={handleFinishForm}
+                />
               </div>
             )
           }
@@ -79,7 +91,7 @@ const HumansPage: FC = () => {
               </div>
               <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
-                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20" />
+                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
                 </div>
                 <span className="text-xl font-normal">{`${item.name}`}</span>
                 <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>

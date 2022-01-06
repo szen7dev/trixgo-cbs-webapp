@@ -102,6 +102,7 @@ import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
 import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
 import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
+import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
 
 // Accounting pages
 import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
@@ -123,6 +124,7 @@ import BiddingOtherPage from "views/pages/bidding/BiddingOtherPage";
 import SocialHomePage from "views/pages/media/screens/HomePage";
 import SocialPostPage from "views/pages/media/screens/PostPage";
 import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
+import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 
 // Document pages
 import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
@@ -170,6 +172,7 @@ import OperationHomePage from 'views/pages/operation/OperationHomePage';
 import OperationNewsPage from 'views/pages/operation/OperationNewsPage';
 import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
 import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
+import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 
 const Routes: FC = () => {
   useEffect(() => {
@@ -354,7 +357,8 @@ const Routes: FC = () => {
                       path={"/pcm/dashboard-task"}
                       component={() => (
                         <HomeLayout>
-                          <KanbanBoardPage />
+													<ProjectDashboardTaskPage />
+                          {/* <KanbanBoardPage /> */}
                         </HomeLayout>
                       )}
                     />
@@ -448,11 +452,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/bidding"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectBiddingPage />
+                          <ProjectBiddingPage {...props} />
                         </ProjectLayout>
                       )}
                     />
@@ -466,11 +470,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/document"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectDocumentPage />
+                          <ProjectDocumentPage {...props}/>
                         </ProjectLayout>
                       )}
                     />
@@ -580,11 +584,51 @@ const Routes: FC = () => {
                 <Route path="/social">
                   <HomeLayout>
                     <Switch>
-                      <Route
-                        exact
-                        path="/social/home"
-                        component={SocialHomePage}
-                      />
+												<Route
+													exact
+													path="/social/home"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialHomePage />
+														</SocialLayoutPrimary>
+													}
+												/>
+												<Route
+													exact
+													path="/social/home/2"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="department" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/3"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="digital-conversion" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/4"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="system" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/5"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="just-me" />
+														</SocialLayoutPrimary>
+													}
+												/>
                       <Route
                         exact
                         path="/social/post/:mediaID"

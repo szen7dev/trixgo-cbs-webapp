@@ -1,10 +1,18 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
+export type PostType = 
+  | 'company'
+  | 'department'
+  | 'digital-conversion'
+  | 'system'
+  | 'just-me'
+
 // Định nghĩa các kiểu dữ liệu
 export type MediaPayload = {
   mediaID?: string;
   companyID?: string;
+  departmentID?: string;
   title: string;
   content: string;
   files?: Array<FileProps>;
@@ -57,7 +65,8 @@ export type ImageProps = {
 export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
-  type?: string,
+  type?: string;
+  isRelated?: boolean;
   mediaID?: string;
   companyID?: string;
   parentID?: string;
@@ -100,6 +109,10 @@ export type MediaProps = {
       name: string,
       sign: string
     };
+    position: {
+      _id: string,
+      name: string,
+    };
   };
   location: {
     type: string;
@@ -115,9 +128,9 @@ export type MediaProps = {
   createdAt: string;
   updatedAt: string;
   receivers?: string[],
-  totalReactions?: number,
-  totalComments?: number,
-  totalWatched?: number,
+  amountReaction?: number,
+  amountComment?: number,
+  amountView?: number,
 };
 
 export type FilePropsUpload = {

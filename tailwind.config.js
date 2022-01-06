@@ -145,7 +145,10 @@ module.exports = {
     },
     variants: {
         extend: {
-            opacity: ['disabled']
+            opacity: ['disabled','group-hover'],
+            textColor: ['group-focus'],
+						height: ['last'],
+						width: ['last'],
         },
     },
     plugins: [
@@ -172,6 +175,15 @@ module.exports = {
 					],
 					variants('lineClamp')
 				)
+
+				addUtilities([
+					{ '.border-spacing-0': { 'border-spacing': '0' } },
+					{
+						'.cbs-checkbox:indeterminate': {
+							filter: 'hue-rotate(170deg) brightness(1.8)'
+						}
+					}
+				])
 			},
 			{
 				theme: {
@@ -187,6 +199,6 @@ module.exports = {
 				variants: {
 					lineClamp: ['responsive'],
 				},
-			})
+			}),
 		],
 };

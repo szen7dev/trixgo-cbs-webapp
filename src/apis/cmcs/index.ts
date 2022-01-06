@@ -1,23 +1,31 @@
 import API from "../repository";
+
+// Convert Object sang URL query => khi client truyền lên
+import { convertObToUrl } from "helpers";
+
 import {
-  DeleteContractPayload,
-  GetContractListPayload,
+  ListContractsPayload,
+  ListContractsResponse,
   GetInfoContractPayload,
   InsertContractPayload,
   UpdateContractPayload,
+  DeleteContractPayload,
 } from "typings/cmcs";
 
+// Đường dẫn Endpoint
 const cmcsURL = "/api/item";
 
 const CmcsRepository = {
-  async getListContract(payload: GetContractListPayload): Promise<any> {
-    const { filter, populates, limit, outin } = payload;
 
-    const { data } = await API.get(
-      `${cmcsURL}/contracts?filter=${filter}&limit=${limit}&populates=${populates}&outin=${outin}`
+  // Data 1
+  async getListContract(payload: ListContractsPayload): Promise<ListContractsResponse> {
+    const { data } = await API.get<ListContractsResponse>(
+      `${cmcsURL}/contracts?${convertObToUrl(payload)}`
     );
     return data;
   },
+
+  // Data 2
 
   async getInfoContract(payload: GetInfoContractPayload): Promise<any> {
     const { contractID, populates, select } = payload;
