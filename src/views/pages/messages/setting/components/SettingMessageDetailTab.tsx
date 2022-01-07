@@ -1,7 +1,5 @@
 import React, {FC, useState} from "react";
 import {map as _map} from "lodash";
-import OnlineUserInChatItem from "./OnlineUserInChatItem";
-import set = Reflect.set;
 import ListOnlineUserInMessage from "./ListOnlineUserInMessage";
 import ListMediaInMessage from "./ListMediaInMessage";
 

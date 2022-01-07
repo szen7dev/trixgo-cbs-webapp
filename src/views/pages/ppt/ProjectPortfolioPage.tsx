@@ -19,7 +19,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const plugins = getPlugins('205', 'PROJECTS')
 
-const ProjectInvestPage: FC = () => {
+const ProjectPortfolioPage: FC = () => {
 	const data = useMemo(() => {
 		const _data: Array<{ id: string, progress: number } | null> = [];
 		_data.length = 10;
@@ -87,45 +87,29 @@ const ProjectInvestPage: FC = () => {
 							</div>
 						</div>
 					</div>
-					<div className={cn("px-2 mt-4 flex-1")} style={{ minWidth: "405px" }}>
-						<div className={cn(styles.cell, styles.border, 'h-full pb-4')}>
-							<div className="px-3.5">
-								<div>
-									<Link to="/">
-										<p className='text-x-small mt-5'>Ngân sách (100%)</p>
-									</Link>
-									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
-										<div className={cn(styles['finance-total'], styles.success, 'mr-2')} style={{ width: "299px", height: '12px' }}></div>
-										<div>$696.8 MM</div>
-									</div>
-								</div>
-								<div>
-									<Link to="/">
-										<p className='text-x-small mt-5'>Dự báo (98%)</p>
-									</Link>
-									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
-										<div className={cn(styles['finance-total'], styles.purple, 'mr-2')} style={{ width: "266px", height: '12px' }}></div>
-										<div>$547.6 MM</div>
-									</div>
-								</div>
-								<div>
-									<Link to="/">
-										<p className='text-x-small mt-5'>Đã ký hợp đồng (82%)</p>
-									</Link>
-									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
-										<div className={cn(styles['finance-total'], styles.info, 'mr-2')} style={{ width: "213px", height: '12px' }}></div>
-										<div>$373.5 MM</div>
-									</div>
-								</div>
-								<div>
-									<Link to="/">
-										<p className='text-x-small mt-5'>Đã giải ngân (57%)</p>
-									</Link>
-									<div className="text-x-small flex items-center whitespace-nowrap" style={{ marginTop: '5px' }}>
-										<div className={cn(styles['finance-total'], styles.warn, 'mr-2')} style={{ width: "153px", height: '12px' }}></div>
-										<div>$65.2 MM</div>
-									</div>
-								</div>
+					<div className={cn("px-2 mt-4 flex-1")} style={{ minWidth: "305px" }}>
+						<div className='bg-white border-0.5 border-cbs-border h-full pb-4'>
+							<div className="grid grid-cols-odd-2 px-3.5 gap-x-2">
+								<Link to="/" className="col-span-2">
+									<p className='text-x-small mt-5'>Ngân sách (100%)</p>
+								</Link>
+								<div className={cn(styles['finance-total'], styles.success, 'mt-2 mr-2 h-3 w-full')}></div>
+								<div className="text-x-small w-max mt-2">$696.8 MM</div>
+								<Link to="/" className="col-span-2">
+									<p className='text-x-small mt-5'>Dự báo (98%)</p>
+								</Link>
+								<div className={cn(styles['finance-total'], styles.purple, 'mt-2 h-3')} style={{ width: "98%" }}></div>
+								<div className="text-x-small w-max mt-2">$547.6 MM</div>
+								<Link to="/" className="col-span-2">
+									<p className='text-x-small mt-5'>Đã ký hợp đồng (82%)</p>
+								</Link>
+								<div className={cn(styles['finance-total'], styles.info, 'mt-2 h-3')} style={{ width: "82%" }}></div>
+								<div className="text-x-small w-max mt-2">$373.5 MM</div>
+								<Link to="/" className="col-span-2">
+									<p className='text-x-small mt-5'>Đã giải ngân (57%)</p>
+								</Link>
+								<div className={cn(styles['finance-total'], styles.warn, 'mt-2 h-3')} style={{ width: "57%" }}></div>
+								<div className="text-x-small w-max mt-2">$65.2 MM</div>
 							</div>
 						</div>
 					</div>
@@ -285,4 +269,4 @@ const ProjectInvestPage: FC = () => {
 		</div >
 	);
 };
-export default ProjectInvestPage;
+export default ProjectPortfolioPage;
