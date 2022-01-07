@@ -1,4 +1,14 @@
-import React, {FC, Fragment, ReactNode, RefObject, useCallback, useEffect, useRef, useState} from "react";
+import React, {
+    FC,
+    Fragment,
+    ReactEventHandler,
+    ReactNode,
+    RefObject,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 
 type Props = {
@@ -47,6 +57,7 @@ const RightClickMenu: FC<Props> = ({wrapperRef, menu}) => {
                     top: yPos,
                     left: xPos
                 }}
+                onClick={() => setShowMenu(false)}
                 className={"fixed transition duration-150 right-click-menu z-10"}>
                 {menu}
             </div>

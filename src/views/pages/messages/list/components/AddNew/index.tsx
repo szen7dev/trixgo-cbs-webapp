@@ -48,7 +48,7 @@ const AddNewSection:FC = () => {
                     showTriangle={false}
                     renderSelectedItem={item => (
                         <div className={"flex items-center"}>
-                            <div className={"w-[20px] h-[20px] rounded-full text-white text-center leading-[20px] mr-[5px]"} style={{background: getColor()}}>
+                            <div className={"w-[20px] h-[20px] rounded-full text-white text-center leading-[20px] mr-[5px]"} style={{background: "#8DD4D6"}}>
                                 {getPresentGroupName(item.text)}
                             </div>
                             <span>{item.text}</span>
