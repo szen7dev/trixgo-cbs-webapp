@@ -48,7 +48,7 @@ export type Data = {
   limit: number;
   totalRecord: number;
   totalPage: number;
-  nextCursor: string;
+  nextCursor: string | null;
 };
 
 export type SearchResultResponse = {
