@@ -17,7 +17,7 @@ export type Device = {
     },
     type: number,
     amountAccesses: number,
-    data?: [
+    data: [
         {
             type: number,
             amountAccesses: number
