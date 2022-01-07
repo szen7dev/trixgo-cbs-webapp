@@ -75,7 +75,7 @@ module.exports = {
                 "x-small": ["12px", "14px"],
                 "small": ["13px", "15px"],
                 "medium": ["14px", "16px"],
-                "large": ["16px", "24px"],
+                "large": ["16px", "18.4px"],
                 "x-large": ["18px", "21px"],
                 "2x-large": ["20px", "23px"],
                 "3x-large": ["24px", "27.6px"],
@@ -139,6 +139,12 @@ module.exports = {
             margin: {
                 ...autoGeneratePx
             },
+						gridTemplateColumns: {
+							'odd-2':'repeat(1, auto min-content)',
+							'odd-4':'repeat(2, auto min-content)',
+							'odd-6':'repeat(3, auto min-content)',
+							'odd-8':'repeat(4, auto min-content)',
+						}
         },
     },
     variants: {

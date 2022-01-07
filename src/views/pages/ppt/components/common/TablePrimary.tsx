@@ -41,47 +41,6 @@ const TablePrimary: FC<HTMLAttributes<HTMLTableElement> & Props> = ({ configs, o
 							</th>
 						})
 					}
-					{/* 
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-						<span className="pl-2 border-l border-cbs-border">
-							Chủ thể ban hành
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-						<span className="pl-2 border-l border-cbs-border">
-							Mã hiệu
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-						<span className="pl-2 border-l border-cbs-border">
-							Ngày văn bản
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-						<span className="pl-2 border-l border-cbs-border">
-							Mã hiệu lưu
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-						<span className="pl-2 border-l border-cbs-border">
-							Số lượng
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-						<span className="pl-2 border-l border-cbs-border">
-							Tình trạng
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-						<span className="pl-2 border-l border-cbs-border">
-							Ghi chú
-						</span>
-					</th>
-					<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
-						<span className="pl-2 border-l border-cbs-border">
-							Địa chỉ lưu trữ
-						</span>
-					</th> */}
 				</tr>
 			</thead>
 			<tbody className="text-small">
@@ -92,12 +51,6 @@ const TablePrimary: FC<HTMLAttributes<HTMLTableElement> & Props> = ({ configs, o
 								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 									<input className="" type="checkbox" value="" id="flexCheckDefault" />
 								</td>
-								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{row.project}</td>
-								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{row.joined}</td>
-								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{row.worked}</td>
-								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{row.created_at}</td>
-								<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{row.updated_at}</td>
-								<td className={cn("pt-2.5 pb-3 px-2 border-b border-cbs-border", { "text-cbs-primary": row.status === 1, "text-cbs-completed": row.status === 2 })}>{getStatus(row.status)}</td>
 							</tr>
 						)
 					})

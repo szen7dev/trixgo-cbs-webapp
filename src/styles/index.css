@@ -1228,3 +1228,19 @@ input[type="text"] {
   content: '|';
   letter-spacing: 3px;
 }
+
+.media-item-message:hover input.form-check-input{
+  visibility: visible;
+  opacity: 1;
+}
+.media-item-message input.form-check-input {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #CCCCCC;
+  width: 24px;
+  height: 24px;
+}
+.media-item-message .form-check-input:checked[type=checkbox] {
+  background-color: #0060E1;
+  opacity: 1;
+  visibility: visible;
+}

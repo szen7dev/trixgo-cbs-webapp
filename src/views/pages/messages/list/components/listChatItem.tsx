@@ -40,7 +40,7 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
             {
                 chat.chatAvatar?
                     <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.chatAvatar} alt={chat.chatName}/>:
-                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: getColor()}}>
+                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: "#8DD4D6"}}>
                         {getPresentGroupName()}
                     </div>
             }

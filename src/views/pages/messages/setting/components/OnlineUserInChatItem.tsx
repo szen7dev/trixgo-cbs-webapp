@@ -32,7 +32,7 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
             {
                 user.userAvatar?
                     <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={user.userAvatar} alt={user.userName}/>:
-                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: getColor()}}>
+                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: "#8DD4D6"}}>
                         {getPresentGroupName()}
                     </div>
             }
