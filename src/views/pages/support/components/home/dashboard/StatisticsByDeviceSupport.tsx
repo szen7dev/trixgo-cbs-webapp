@@ -126,11 +126,12 @@ const StatisticsByDeviceSupport: FC = () => {
   const { listDevice } = useFetchSupport();
   const chart = () => {
     const arMonth = [];
-    const arTypeDevice = [];
     for (const key in listDevice) {
+      console.log('111');
+      
       arMonth.push(listDevice[key]._id.month);
     }
-    console.log('arMonth',arMonth);
+    console.log('arMonth11',arMonth);
     setChartData({
       labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
       datasets: [
@@ -154,7 +155,7 @@ const StatisticsByDeviceSupport: FC = () => {
   }
   useEffect(() => {
     chart();
-  }, []);
+  },[]);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
