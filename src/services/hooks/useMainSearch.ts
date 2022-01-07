@@ -1,7 +1,6 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import MainSearchRepository from "apis/main-search";
 import { SearchListRecord, SearchPayload } from "typings/main-search";
-import { toast } from "react-toastify";
 
 type UseMainSearch = {
     searchResultList: Array<SearchListRecord>,
@@ -10,7 +9,7 @@ type UseMainSearch = {
     nextPageSearchResultList: () => void,
     prevPageSearchResultList: () => void,
     totalRecord: number | undefined,
-    nextCursor: string | undefined,
+    nextCursor: string | null,
     hasNextPage: boolean | undefined
 };
 
@@ -36,13 +35,13 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: false, // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
 
     const searchResultList = [].concat(...(dataSearchResultList?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataSearchResultList?.pages[0]?.data?.totalRecord;
-    const nextCursor = dataSearchResultList?.pages[0]?.data?.nextCursor;
+    const nextCursor = dataSearchResultList?.pages[0]?.data?.nextCursor || null;
 
     return {
         searchResultList,
