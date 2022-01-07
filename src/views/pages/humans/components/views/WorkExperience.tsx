@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 
@@ -9,14 +9,10 @@ import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-
-import type { ContactDocument } from "typings/human";
+import { useQueryContactDocument } from "services/hooks/useHuman";
 
 interface WorkExperienceProps {
-  loading: boolean;
-  info: ContactDocument[];
-  totalRecord: number;
-  fetchNextPageDocument: () => void;
+  humanId: string;
 }
 
 const DATE_FORMAT = "DD/MM/YYYY";
@@ -25,26 +21,35 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
 
-  const { info, totalRecord, fetchNextPageDocument} = props;
+  const { humanId } = props;
+
+  // const { createContactDocumentAsync } = useMutationContactDocument();
+
+  const {
+    // createContactDocumentAsync,
+    // updateContractDocumentAsync,
+    // refetchListContactDocument,
+    fetchNextPageContactDocument,
+    totalRecord,
+    listContactDocument,
+  } = useQueryContactDocument(humanId, {
+    type: 2,
+  });
 
   const [openFileOption, setOpenFileOption] = useState(false);
 
   useOnClickOutside(ref, () => setOpenFileOption(!openFileOption));
 
-  // const expertise = "Tư vấn giám sát";
-  // const startDate = "15/2/2008";
-  // const endDate = "15/2/2008";
-  // const belong =
-  //   "Tư vấn giám sát | Tổ hợp cao tầng Z54 | Công ty Cổ phần đầu tư An Thái Xanh";
-  // const role = "Trưởng đoàn TVGS";
-  // const data = [];
-  // for (let i = 0; i <= 1; i++) {
-  //   data.push({ expertise, startDate, endDate, belong, role, id: i });
-  // }
+  const handleClickAddNew = useCallback(() => {
+    console.log("clicked");
+  }, []);
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
-      <HumanInfoHeader title={i18n("work-experience")} />
+      <HumanInfoHeader
+        title={i18n("work-experience")}
+        onClickAddNew={handleClickAddNew}
+      />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
           <p style={{ width: "10%" }}>{i18n("from-date")}</p>
@@ -55,7 +60,7 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
           <p className="w-1/5 ">{i18n("attactment")}</p>
         </div>
 
-        {info.map((contactDocument) => (
+        {listContactDocument.map((contactDocument) => (
           <div className="flex justify-between mt-4 " key={contactDocument._id}>
             <p style={{ width: "10%" }}>
               {moment(contactDocument.fromDate).isValid() &&
@@ -70,7 +75,7 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
               <p style={{ maxWidth: "80%" }}>
                 {contactDocument.contract && (
                   <span className="t-human-spread">
-                    {contactDocument.contract}
+                    {contactDocument.contract.name}
                   </span>
                 )}
                 {contactDocument.project && (
@@ -151,15 +156,17 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
           </div>
         ))}
       </div>
-      {totalRecord && totalRecord - info.length > 0 ? (
+      {totalRecord && totalRecord - listContactDocument.length > 0 ? (
         <div className="w-full flex justify-center my-5">
-          <button onClick={() => fetchNextPageDocument()}>
+          <button onClick={() => fetchNextPageContactDocument()}>
             <span className="text-primary">{`Xem thêm (${
-              totalRecord - info.length
+              totalRecord - listContactDocument.length
             })`}</span>
           </button>
         </div>
-      ): ''}
+      ) : (
+        ""
+      )}
     </div>
   );
 };

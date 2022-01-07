@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 
@@ -9,14 +9,7 @@ import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-
-import type { ContactDocument } from "typings/human";
-interface CertificateProps {
-  loading: boolean;
-  info: ContactDocument[];
-  totalRecord: number;
-  fetchNextPageDocument: () => void;
-}
+import { useQueryContactDocument } from "services/hooks/useHuman";
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
@@ -26,20 +19,38 @@ enum CONTACT_DOCUMENT_GRADES {
   'Hạng 3' = 3,
   'Hạng 4' = 4,
 }
+interface CertificateProps {
+  humanId: string;
+}
 
 const Certificate: FC<CertificateProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
 
-  const { info, totalRecord, fetchNextPageDocument } = props;
+  const { humanId } = props;
+
+  const { 
+    // createContactDocumentAsync,
+    // updateContractDocumentAsync,
+    // refetchListContactDocument,
+    fetchNextPageContactDocument,
+    totalRecord,
+    listContactDocument,
+  } = useQueryContactDocument(humanId, {
+    type: 4
+  });
 
   const [openFileOption, setOpenFileOption] = useState(false);
 
   useOnClickOutside(ref, () => setOpenFileOption(!openFileOption));
 
+  const handleClickAddNew = useCallback(() => {
+    console.log('clicked')
+  }, []);
+
   return (
     <div className="border-accent-light px-4 py-6">
-      <HumanInfoHeader title={i18n("certificate")} />
+      <HumanInfoHeader title={i18n("certificate")} onClickAddNew={handleClickAddNew} />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
           <p style={{ width: "15%" }}>{i18n("place2")}</p>
@@ -54,7 +65,7 @@ const Certificate: FC<CertificateProps> = (props) => {
           <p className="w-1/5">{i18n("attactment")}</p>
         </div>
 
-        {info.map((contactDocument) => (
+        {listContactDocument.map((contactDocument) => (
           <div key={contactDocument._id} className="flex justify-between mt-4">
             <div style={{ width: "15%" }}>
               <p style={{ maxWidth: "90%" }}>{contactDocument.place}</p>
@@ -155,11 +166,11 @@ const Certificate: FC<CertificateProps> = (props) => {
           </div>
         ))}
       </div>
-      {totalRecord && totalRecord - info.length > 0 ? (
+      {totalRecord && totalRecord - listContactDocument.length > 0 ? (
         <div className="w-full flex justify-center my-5">
-          <button onClick={() => fetchNextPageDocument()}>
+          <button onClick={() => fetchNextPageContactDocument()}>
             <span className="text-primary">{`Xem thêm (${
-              totalRecord - info.length
+              totalRecord - listContactDocument.length
             })`}</span>
           </button>
         </div>
