@@ -1,4 +1,4 @@
-import {FC, useState, useEffect} from "react";
+import {FC, useState, useEffect, useCallback} from "react";
 
 import {
   Chart as ChartJS,
@@ -12,6 +12,7 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
+import { number } from "yup";
 
 ChartJS.register(
   CategoryScale,
@@ -102,56 +103,40 @@ const data = {
   ],
 };
 const StatisticsByDeviceSupport: FC = () => {
-  const [chartData, setChartData] = useState({
+const { listDevice } = useFetchSupport();
+console.log('listDevice',listDevice)
+const arMonth : number[] = [];
+for (const element of listDevice) {
+    arMonth.push(element._id.month);
+
+  const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
+      list.reduce((previous, currentItem) => {
+        const group = getKey(currentItem);
+        if (!previous[group]) previous[group] = [];
+        previous[group].push(currentItem);
+        return previous;
+      }, {} as Record<K, T[]>);
+  type ListTypeDevice = {
+    type: number;
+    amountAccesses: number;
+  };
+
+  const people: ListTypeDevice[] = element.data
+  const results = groupBy(people, i => i.type);
+  console.log('results',results)
+
+}
+const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
-    datasets: [
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-        backgroundColor: "#2a90fb",
-        barThickness: 8,
-      },
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-        backgroundColor: "#0060E1",
-        barThickness: 8,
-      },
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-        backgroundColor: "#10b981",
-        barThickness: 8,
-      },
-    ]
-  });
-  const { listDevice } = useFetchSupport();
-  const chart = () => {
-    const emDevice = [];
-    for (const dataOject of listDevice) {
-      emDevice.push(dataOject.data);
-    }
-    setChartData({
-      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
-      datasets: [
-        {
-          data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,],
-          backgroundColor: "#2a90fb",
-          barThickness: 8,
-        },
-        {
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,],
-          backgroundColor: "#0060E1",
-          barThickness: 8,
-        },
-        {
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,],
-          backgroundColor: "#10b981",
-          barThickness: 8,
-        },
-      ]
-    });
-  }
-  useEffect(() => {
-    chart();
-  }, []);
+    datasets: listDevice.map((item, index)=>{
+      return {
+            data: arMonth,
+            backgroundColor: "#2a90fb",
+            barThickness: 8,
+          }
+    })
+}
+console.log('arMonth',arMonth)
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">

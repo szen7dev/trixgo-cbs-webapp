@@ -769,7 +769,9 @@ button {
   width: 900px;
   max-width: 100%;
   border: 1px solid #ccc;
-  min-height: 550px;
+}
+.t-main-search-results {
+  height: 480px;
 }
 .t-main-search-input > input {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -1127,6 +1129,7 @@ button {
   color: #fff;
   background-color: #e3e6ea;
   border-color: #e3e6ea;
+  pointer-events: none;
 }
 input::placeholder {
   font-family: Arial, sans-serif;

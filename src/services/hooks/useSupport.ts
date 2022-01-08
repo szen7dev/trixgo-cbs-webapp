@@ -12,20 +12,19 @@ export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
       ["list_device", payload],
       async ({ data }: any) => {
         return SupportRepository.listDeviceAccess({
-            year: new Date().getFullYear()
-        }),
-            {
-                getNextPageParam: ({ data }: any) => {
-                    return data?.nextCursor || undefined;
-                },
-                refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-            }
+            year: 2021
+        })      
       },
+      {
+        getNextPageParam: ({ data }: any) => {
+            return data?.nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+    }
     );
     const { data, isLoading } = infinityQuery;
-    console.log('data11',data)
-    const listDevice = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const listDevice = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
     return {
         isLoading,
         listDevice,
