@@ -106,25 +106,10 @@ const StatisticsByDeviceSupport: FC = () => {
 const { listDevice } = useFetchSupport();
 console.log('listDevice',listDevice)
 const arMonth : number[] = [];
+const arTypeDevice : number[] = [];
 for (const element of listDevice) {
     arMonth.push(element._id.month);
-
-  const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
-      list.reduce((previous, currentItem) => {
-        const group = getKey(currentItem);
-        if (!previous[group]) previous[group] = [];
-        previous[group].push(currentItem);
-        return previous;
-      }, {} as Record<K, T[]>);
-  type ListTypeDevice = {
-    type: number;
-    amountAccesses: number;
-  };
-
-  const people: ListTypeDevice[] = element.data
-  const results = groupBy(people, i => i.type);
-  console.log('results',results)
-
+    arTypeDevice.push(element.data.type);
 }
 const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],

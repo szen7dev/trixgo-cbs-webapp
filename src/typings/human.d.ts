@@ -214,7 +214,7 @@ export interface ContactDocument {
     userCreate: string;
     workplace: string;
     reference: string;
-    modifyAt: string;
+    modifyAt: string;listRecords
     createAt: string;
     position2: Position;
     contract: ContractType;
