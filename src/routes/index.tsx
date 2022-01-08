@@ -160,6 +160,7 @@ import SupportCompanyPage from "views/pages/support/SupportCompanyPage";
 import SupportGrantPage from "views/pages/support/SupportGrantPage";
 import SupportMemberPage from "views/pages/support/SupportMemberPage";
 import SupportItemPage from "views/pages/support/SupportItemPage";
+import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
 // Timesheet pages
 import TimesheetHomePage from 'views/pages/timesheet/home';
@@ -238,6 +239,11 @@ const Routes: FC = () => {
                         exact
                         path="/support/grant"
                         component={SupportGrantPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/grant/documents-management"
+                        component={DocumentsManagement}
                       />
                       <Route
                         exact
