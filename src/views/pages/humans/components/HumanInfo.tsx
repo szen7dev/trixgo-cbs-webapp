@@ -265,6 +265,7 @@ const HumanInfo: FC = () => {
         <WorkHistory humanId={id} />
         <WorkExperience
           humanId={id}
+          humanInfo={detailHuman}
         />
         <ExperienceAppointment humanId={id} humanInfo={detailHuman} />
         <Education humanId={id} />

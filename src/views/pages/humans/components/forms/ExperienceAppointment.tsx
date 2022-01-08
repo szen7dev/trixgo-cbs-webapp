@@ -10,7 +10,7 @@ import { useModal } from "services/hooks/useModal";
 import DropdownSearchable from "components/common/DropdownSearch";
 import {
   useQueryItemContract,
-  useQueryListPosition,
+  useQueryListDoctype,
 } from "services/hooks/useHuman";
 
 interface ExperienceAppointmentProps {
@@ -39,7 +39,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
   const { listContracts } = useQueryItemContract(companyID);
-  const { listPositions } = useQueryListPosition({ limit: 50 });
+  const { listDoctypes } = useQueryListDoctype({ limit: 50, type: 13 });
 
   const initialValues = React.useMemo(
     () => ({
@@ -164,7 +164,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                           </div>
                         )}
                         initialValue={initialValues?.position2}
-                        data={listPositions.map((position) => ({
+                        data={listDoctypes.map((position) => ({
                           label: position.name,
                           value: position._id,
                         }))}

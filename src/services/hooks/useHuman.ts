@@ -6,7 +6,6 @@ import type {
     ContactDocumentPayload,
     ContactDocument,
     Department,
-    Position,
     DoctypePayload,
     Doctype,
     Area,
@@ -164,79 +163,23 @@ export const useFetchListDepartments = ({
     }
 }
 
-interface UseQueryListPosition {
-    loading: boolean;
-    totalRecord: number | undefined;
-    totalPages: number | undefined;
-    hasNextPage: boolean | undefined;
-    listPositions: Array<Position>;
-    refetchListPositions: () => void;
-    fetchNextPagePositions: () => void;
-}
-
-export const useQueryListPosition = ({ limit }: {
-    limit: number
-}): UseQueryListPosition => {
-    const res = useInfiniteQuery(
-        [`list_position`, limit],
-        async ({ pageParam }: any) =>
-            // mai request BE check lại api này
-            HumanRepository.fetchListPosition({
-                limit: limit || 10,
-                lastestID: pageParam || "",
-            }),
-        {
-            getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor || undefined;
-            },
-            refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-        }
-    );
-    const {
-        isLoading,
-        data,
-        refetch: refetchListPositions,
-        fetchNextPage: fetchNextPagePositions,
-        hasNextPage
-    } = res;
-
-    const listPositions = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
-        .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
-
-    return {
-        loading: isLoading,
-        listPositions,
-        totalRecord,
-        totalPages,
-        hasNextPage,
-        refetchListPositions,
-        fetchNextPagePositions
-    }
-}
-
-export const useFetchListDoctype = ({
-    limit,
-    type,
-}: Pick<DoctypePayload, 'type'> & {
-    limit: number;
-}): {
+interface UseQueryListDoctype {
     loading: boolean;
     totalRecord: number | undefined;
     totalPages: number | undefined;
     hasNextPage: boolean | undefined;
     listDoctypes: Array<Doctype>;
-    refetchListDoctypes: () => void;
-    fetchNextPageDoctypes: () => void;
-} => {
+    refetchListDoctype: () => void;
+    fetchNextPageDoctype: () => void;
+}
+type ParamQueryPayload = Pick<DoctypePayload, 'type'> & {
+    limit: number;
+}
+export const useQueryListDoctype = ({ limit, type }: ParamQueryPayload): UseQueryListDoctype => {
     const res = useInfiniteQuery(
-        [`list_Doctype.${type}`, limit],
+        [`list_doctype,${type}`, limit],
         async ({ pageParam }: any) =>
+            // mai request BE check lại api này
             HumanRepository.fetchListDoctype({
                 limit: limit || 10,
                 lastestID: pageParam || "",
@@ -253,8 +196,8 @@ export const useFetchListDoctype = ({
     const {
         isLoading,
         data,
-        refetch: refetchListDoctypes,
-        fetchNextPage: fetchNextPageDoctypes,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
         hasNextPage
     } = res;
 
@@ -272,10 +215,67 @@ export const useFetchListDoctype = ({
         totalRecord,
         totalPages,
         hasNextPage,
-        refetchListDoctypes,
-        fetchNextPageDoctypes
+        refetchListDoctype,
+        fetchNextPageDoctype
     }
 }
+
+// export const useFetchListDoctype = ({
+//     limit,
+//     type,
+// }: Pick<DoctypePayload, 'type'> & {
+//     limit: number;
+// }): {
+//     loading: boolean;
+//     totalRecord: number | undefined;
+//     totalPages: number | undefined;
+//     hasNextPage: boolean | undefined;
+//     listDoctypes: Array<Doctype>;
+//     refetchListDoctypes: () => void;
+//     fetchNextPageDoctypes: () => void;
+// } => {
+//     const res = useInfiniteQuery(
+//         [`list_Doctype.${type}`, limit],
+//         async ({ pageParam }: any) =>
+//             HumanRepository.fetchListDoctype({
+//                 limit: limit || 10,
+//                 lastestID: pageParam || "",
+//                 type
+//             }),
+//         {
+//             getNextPageParam: ({ data }: any) => {
+//                 return data?.nextCursor || undefined;
+//             },
+//             refetchOnWindowFocus: false,
+//             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+//         }
+//     );
+//     const {
+//         isLoading,
+//         data,
+//         refetch: refetchListDoctypes,
+//         fetchNextPage: fetchNextPageDoctypes,
+//         hasNextPage
+//     } = res;
+
+//     const listDoctypes = []
+//         .concat(
+//             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+//         )
+//         .filter(Boolean);
+//     const totalRecord = data?.pages[0]?.data?.totalRecord;
+//     const totalPages = data?.pages[0]?.data?.totalPages;
+
+//     return {
+//         loading: isLoading,
+//         listDoctypes,
+//         totalRecord,
+//         totalPages,
+//         hasNextPage,
+//         refetchListDoctypes,
+//         fetchNextPageDoctypes
+//     }
+// }
 
 export const useFetchListArea = ({
     limit,
@@ -413,8 +413,8 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
         [`list_human.${humanId}.${typeParam.type}`, typeParam.limit],
         async ({ pageParam }: any) =>
             HumanRepository.fetchListContactDocument({
-                // limit: typeParam.limit || 10,
-                // lastestID: pageParam || "",
+                limit: typeParam.limit || 10,
+                lastestID: pageParam || "",
                 contactID: humanId,
                 type: typeParam.type,
             }),

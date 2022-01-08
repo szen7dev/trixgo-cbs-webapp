@@ -9,15 +9,22 @@ import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-import { useQueryContactDocument } from "services/hooks/useHuman";
+import { useModal } from "services/hooks/useModal";
+import {
+  useQueryContactDocument,
+  useMutationContactDocument,
+} from "services/hooks/useHuman";
+import { FormCertificate } from "../forms";
+
+import type { ContactDocument } from "typings/human";
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
-enum CONTACT_DOCUMENT_GRADES {
-  'Hạng 1' = 1,
-  'Hạng 2' = 2,
-  'Hạng 3' = 3,
-  'Hạng 4' = 4,
+export enum CONTACT_DOCUMENT_GRADES {
+  "Hạng 1" = 1,
+  "Hạng 2" = 2,
+  "Hạng 3" = 3,
+  "Hạng 4" = 4,
 }
 interface CertificateProps {
   humanId: string;
@@ -26,31 +33,134 @@ interface CertificateProps {
 const Certificate: FC<CertificateProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
+  const { openModal, closeModal } = useModal();
 
   const { humanId } = props;
 
-  const { 
-    // createContactDocumentAsync,
-    // updateContractDocumentAsync,
-    // refetchListContactDocument,
+  const {
+    createContactDocumentAsync,
+    updateContractDocumentAsync,
+    deleteContractDocumentAsync,
+  } = useMutationContactDocument();
+
+  const {
+    refetchListContactDocument,
     fetchNextPageContactDocument,
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 4
+    type: 4,
   });
 
-  const [openFileOption, setOpenFileOption] = useState(false);
+  const [openFileOption, setOpenFileOption] = useState("");
 
-  useOnClickOutside(ref, () => setOpenFileOption(!openFileOption));
+  useOnClickOutside(ref, () => setOpenFileOption(""));
+
+  const handleFinishFormCreate = useCallback(
+    async (values) => {
+      const res = await createContactDocumentAsync({
+        ...values,
+        type: "4",
+        contactID: humanId,
+      });
+      if (!res.error) {
+        refetchListContactDocument();
+        closeModal();
+      }
+      return null;
+    },
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      createContactDocumentAsync,
+    ]
+  );
 
   const handleClickAddNew = useCallback(() => {
-    console.log('clicked')
-  }, []);
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+        }
+      >
+        <FormCertificate
+          title="Tạo mới chứng chỉ, hồ sơ khác"
+          onFinish={handleFinishFormCreate}
+        />
+      </div>
+    );
+  }, [handleFinishFormCreate, openModal]);
+
+  const handleFinishFormUpdate = useCallback(
+    async (values) => {
+      const res = await updateContractDocumentAsync({
+        ...values,
+        contactID: humanId,
+      });
+      if (!res.error) {
+        refetchListContactDocument();
+        closeModal();
+      }
+      return null;
+    },
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      updateContractDocumentAsync,
+    ]
+  );
+
+  const handleClickUpdate = useCallback(
+    (contactDocument: ContactDocument) => () => {
+      openModal(
+        <div
+          className={
+            "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+          }
+        >
+          <FormCertificate
+            title="Cập nhật chứng chỉ, hồ sơ khác"
+            onFinish={handleFinishFormUpdate}
+            contactDocumentID={contactDocument._id}
+            defaultValues={{
+              name: contactDocument.name,
+              place: contactDocument.place,
+              sign: contactDocument.sign,
+              fromDate: contactDocument.fromDate,
+              toDate: contactDocument.toDate,
+              certificateType: contactDocument?.certificateType?._id || '',
+              certificateName: contactDocument?.certificateName?._id || '',
+              certificateGrade: contactDocument?.certificateGrade,
+              number: contactDocument.number,
+              store: contactDocument.store,
+              note: contactDocument.note,
+            }}
+          />
+        </div>
+      );
+    },
+    [openModal, handleFinishFormUpdate]
+  );
+
+  const handleClickDeleteContactDocument = useCallback(
+    (contactDocument: ContactDocument) => async () => {
+      const res = await deleteContractDocumentAsync(contactDocument._id);
+      if (res.status === 200) {
+        refetchListContactDocument();
+        setOpenFileOption("");
+      }
+    },
+    [deleteContractDocumentAsync, refetchListContactDocument]
+  );
 
   return (
     <div className="border-accent-light px-4 py-6">
-      <HumanInfoHeader title={i18n("certificate")} onClickAddNew={handleClickAddNew} />
+      <HumanInfoHeader
+        title={i18n("certificate")}
+        onClickAddNew={handleClickAddNew}
+      />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
           <p style={{ width: "15%" }}>{i18n("place2")}</p>
@@ -66,8 +176,12 @@ const Certificate: FC<CertificateProps> = (props) => {
         </div>
 
         {listContactDocument.map((contactDocument) => (
-          <div key={contactDocument._id} className="flex justify-between mt-4">
+          <div
+            key={contactDocument._id}
+            className="flex justify-between mt-4 relative"
+          >
             <div style={{ width: "15%" }}>
+              <p style={{ maxWidth: "90%" }}>{contactDocument.name}</p>
               <p style={{ maxWidth: "90%" }}>{contactDocument.place}</p>
             </div>
             <p style={{ width: "10%" }}>
@@ -85,14 +199,20 @@ const Certificate: FC<CertificateProps> = (props) => {
             <div style={{ width: "13%" }}>
               <p style={{ maxWidth: "90%" }}>
                 {contactDocument.certificateType && (
-                  <span className="t-human-spread">{contactDocument.certificateType.name}</span>
+                  <span className="t-human-spread">
+                    {contactDocument.certificateType.name}
+                  </span>
                 )}
                 {contactDocument.certificateName && (
-                  <span className="t-human-spread">{contactDocument.certificateName.name}</span>
+                  <span className="t-human-spread">
+                    {contactDocument.certificateName.name}
+                  </span>
                 )}
                 {/* cần kiểm tra value là gì và hiển thị theo type của CONTACT_DOCUMENT_GRADES */}
                 {contactDocument.certificateGrade && (
-                  <span>{CONTACT_DOCUMENT_GRADES[contactDocument.certificateGrade]}</span>
+                  <span>
+                    {CONTACT_DOCUMENT_GRADES[contactDocument.certificateGrade]}
+                  </span>
                 )}
               </p>
             </div>
@@ -125,44 +245,54 @@ const Certificate: FC<CertificateProps> = (props) => {
                     </p>
                   </div>
                 </div>
-                <div className="relative">
-                  <div
-                    className="cursor-pointer hover:bg-cbs-gray w-[32px] h-[32px] flex justify-center items-center rounded-full"
-                    onClick={() => setOpenFileOption(!openFileOption)}
-                  >
-                    <img
-                      className="pointer-events-none"
-                      src={ThreeDotIcon}
-                      alt="Three Dot"
-                    />
-                  </div>
-                  {openFileOption && (
-                    <div
-                      className="absolute right-0 mt-1 w-60 h-32 bg-primary-light rounded z-10"
-                      style={{ border: "1px solid #cccccc" }}
-                      ref={ref}
-                    >
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img
-                          src={UploadFileIcon}
-                          alt="Upload"
-                          className="mr-5"
-                        />
-                        <span>Upload file</span>
-                      </div>
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img src={PencilIcon} alt="Pencil" className="mr-5" />
-                        <span>Cập nhật</span>
-                      </div>
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img src={DeleteIcon} alt="Delete" className="mr-5" />
-                        <span>Xóa</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             ))}
+            <div className="absolute inset-y-0 right-0">
+              <div
+                className="cursor-pointer hover:bg-cbs-gray w-[32px] h-[32px] flex justify-center items-center rounded-full"
+                onClick={() => setOpenFileOption(contactDocument._id)}
+              >
+                <img
+                  className="pointer-events-none"
+                  src={ThreeDotIcon}
+                  alt="Three Dot"
+                />
+              </div>
+              {openFileOption === contactDocument._id && (
+                <div
+                  className="absolute right-0 mt-1 w-60 h-32 bg-primary-light rounded z-10"
+                  style={{ border: "1px solid #cccccc" }}
+                  ref={ref}
+                >
+                  <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
+                    <img src={UploadFileIcon} alt="Upload" className="mr-5" />
+                    <span>Upload file</span>
+                  </div>
+                  <div
+                    onClick={handleClickUpdate(contactDocument)}
+                    className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
+                  >
+                    <img
+                      src={PencilIcon}
+                      alt="Pencil"
+                      className="mr-5 pointer-events-none"
+                    />
+                    <span className="pointer-events-none">Cập nhật</span>
+                  </div>
+                  <div
+                    className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
+                    onClick={handleClickDeleteContactDocument(contactDocument)}
+                  >
+                    <img
+                      src={DeleteIcon}
+                      alt="Delete"
+                      className="mr-5 pointer-events-none"
+                    />
+                    <span className="pointer-events-none">Xóa</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -174,7 +304,9 @@ const Certificate: FC<CertificateProps> = (props) => {
             })`}</span>
           </button>
         </div>
-      ): ''}
+      ) : (
+        ""
+      )}
     </div>
   );
 };

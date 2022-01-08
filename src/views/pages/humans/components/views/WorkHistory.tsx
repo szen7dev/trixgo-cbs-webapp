@@ -74,7 +74,10 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
         }
       >
-        <FormWorkHistory onFinish={handleFinishFormCreate} />
+        <FormWorkHistory
+          title='Tạo mới lịch sử làm việc tại các đơn vị'
+          onFinish={handleFinishFormCreate} 
+        />
       </div>
     );
   }, [openModal, handleFinishFormCreate]);
@@ -102,6 +105,7 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
         }
       >
         <FormWorkHistory 
+          title='Cập nhật lịch sử làm việc tại các đơn vị'
           onFinish={handleFinishFormUpdate}
           contactDocumentID={contactDocument._id}
           defaultValues={{

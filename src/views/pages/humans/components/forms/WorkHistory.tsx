@@ -16,12 +16,14 @@ interface WorkHistoryProps {
   };
   onFinish?: (values: any) => void;
   contactDocumentID?: string;
+  title: string;
 }
 
 const WorkHistory: React.FC<WorkHistoryProps> = ({
   defaultValues,
   onFinish,
-  contactDocumentID
+  contactDocumentID,
+  title
 }) => {
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
@@ -54,9 +56,9 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
         className="fixed flex justify-center items-center inset-0 z-auto"
         style={{ background: "rgba(0, 0, 0, 0.5)" }}
       >
-        <div className="relative w-full h-5/6 bg-primary-light">
-          <div className="h-12 flex items-center border-b border-gray-300 px-6">
-            <p className="text-bold text-xl">{i18n("modal.add-new.title")}</p>
+        <div className="relative w-full h-5/6 bg-primary-light px-6">
+          <div className="h-12 flex items-center border-b border-gray-300">
+            <p className="text-bold text-xl">{title}</p>
             <img
               src={CloseIcon}
               alt="Close"

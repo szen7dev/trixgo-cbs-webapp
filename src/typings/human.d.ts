@@ -105,12 +105,6 @@ type CertificateGrade = {
     _id: string;
 }
 
-export type Doctype = {
-    _id: string;
-    name: string;
-    type: number;
-}
-
 export type Department = {
     name: string;
     sign: string;
@@ -281,6 +275,12 @@ export type PositionResponse = APIResponse & {
         totalPages: number;
         nextCursor: string | null;
     }
+}
+
+export type Doctype = {
+    _id: string;
+    name: string;
+    type: number;
 }
 
 export type DoctypePayload = {
