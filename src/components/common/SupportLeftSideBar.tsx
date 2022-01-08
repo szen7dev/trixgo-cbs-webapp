@@ -25,9 +25,21 @@ const LinkMenuLeftSideBar: FC = () => {
           </Link>
           <Link to={`/support/register`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Bảng đăng ký tài khoản</span>
+            <span className="truncate">Đăng ký tài khoản</span>
           </Link>
-          <Link to={`/support/item`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          <Link to={`/support/companies`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Quản lý phân vùng</span>
+          </Link>
+          <Link to={`/support/grant`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Cấp phép ứng dụng</span>
+          </Link>
+          <Link to={`/support/members`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Tài khoản thành viên</span>
+          </Link>
+          <Link to={`/support/items`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Quản lý danh mục</span>
           </Link>

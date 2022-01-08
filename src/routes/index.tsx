@@ -155,8 +155,11 @@ import ContractProduct from "views/pages/cmcs/components/views/contract/Contract
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
-import SupportItemPage from "views/pages/support/SupportItemPage";
 import RegisterDashboardPage from "views/pages/support/components/register";
+import SupportCompanyPage from "views/pages/support/SupportCompanyPage";
+import SupportGrantPage from "views/pages/support/SupportGrantPage";
+import SupportMemberPage from "views/pages/support/SupportMemberPage";
+import SupportItemPage from "views/pages/support/SupportItemPage";
 
 // Timesheet pages
 import TimesheetHomePage from 'views/pages/timesheet/home';
@@ -228,9 +231,25 @@ const Routes: FC = () => {
                       />
                       <Route
                         exact
-                        path="/support/item"
+                        path="/support/companies"
+                        component={SupportCompanyPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/grant"
+                        component={SupportGrantPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/members"
+                        component={SupportMemberPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/items"
                         component={SupportItemPage}
                       />
+                      <Route path="/support/*" component={ErrorPage} />
                     </Switch>
                   </SupportLayout>
                 </Route>
