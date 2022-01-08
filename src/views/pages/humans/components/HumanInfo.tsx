@@ -21,7 +21,6 @@ import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import Loader from "components/shared/Loader";
 import {
   useFetchDetailHuman,
-  useFetchListContactDocuments,
   useUpdateContactMutation,
 } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
@@ -44,37 +43,6 @@ const HumanInfo: FC = () => {
   );
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
-  const {
-    listContactDocument: workSideHistory,
-    loading: isWorkSideHistoryLoading,
-    fetchNextPageContactDocument: fetchNextPageWorkSideHistory,
-    totalRecord: totalRecordWorkSideHistory,
-  } = useFetchListContactDocuments(id, { type: 1 });
-  const {
-    listContactDocument: workExperience,
-    loading: isWorkExperienceLoading,
-    fetchNextPageContactDocument: fetchNextPageWorkExperience,
-    totalRecord: totalRecordWorkExperience,
-  } = useFetchListContactDocuments(id, { type: 2 });
-  const {
-    listContactDocument: experienceAppointment,
-    loading: isExperienceAppointmentLoading,
-    fetchNextPageContactDocument: fetchNextPageExperienceAppointment,
-    totalRecord: totalRecordExperienceAppointment,
-  } = useFetchListContactDocuments(id, { type: 3 });
-  const {
-    listContactDocument: education,
-    loading: isEducationLoading,
-    fetchNextPageContactDocument: fetchNextPageEducation,
-    totalRecord: totalRecordEducation,
-  } = useFetchListContactDocuments(id, { type: 4 });
-  const {
-    listContactDocument: certificateGrade,
-    loading: isCertificateGradeLoading,
-    fetchNextPageContactDocument: fetchNextPageCertificateGrade,
-    totalRecord: totalRecordCertificateGrade,
-  } = useFetchListContactDocuments(id, { type: 5 });
-
   const handleFinishForm = useCallback(
     async (values) => {
       const res = await updateContactMutateAsync({
@@ -294,36 +262,14 @@ const HumanInfo: FC = () => {
             signerOut: detailHuman.signerOut,
           }}
         />
-        <WorkHistory
-          loading={isWorkSideHistoryLoading}
-          info={workSideHistory}
-          fetchNextPageDocument={fetchNextPageWorkSideHistory}
-          totalRecord={totalRecordWorkSideHistory || 0}
-        />
+        <WorkHistory humanId={id} />
         <WorkExperience
-          info={workExperience}
-          loading={isWorkExperienceLoading}
-          fetchNextPageDocument={fetchNextPageWorkExperience}
-          totalRecord={totalRecordWorkExperience || 0}
+          humanId={id}
+          humanInfo={detailHuman}
         />
-        <ExperienceAppointment
-          info={experienceAppointment}
-          loading={isExperienceAppointmentLoading}
-          fetchNextPageDocument={fetchNextPageExperienceAppointment}
-          totalRecord={totalRecordExperienceAppointment || 0}
-        />
-        <Education
-          info={education}
-          loading={isEducationLoading}
-          fetchNextPageDocument={fetchNextPageEducation}
-          totalRecord={totalRecordEducation || 0}
-        />
-        <Certificate
-          info={certificateGrade}
-          loading={isCertificateGradeLoading}
-          fetchNextPageDocument={fetchNextPageCertificateGrade}
-          totalRecord={totalRecordCertificateGrade || 0}
-        />
+        <ExperienceAppointment humanId={id} humanInfo={detailHuman} />
+        <Education humanId={id} />
+        <Certificate humanId={id} />
       </section>
     </main>
   );
