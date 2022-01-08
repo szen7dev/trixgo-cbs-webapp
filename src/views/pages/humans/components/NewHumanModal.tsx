@@ -15,8 +15,7 @@ import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { INSURANCE_STATUS, CONTACT_POLICY } from "./views/GeneralInfo";
 import { 
   useFetchListDepartments,
-  useFetchListPosition,
-  useFetchListDoctype,
+  useQueryListDoctype,
   useFetchListArea,
 } from "services/hooks/useHuman";
 import type {
@@ -40,13 +39,17 @@ enum PERSONAL_STATUS {
   "A",
 }
 
-function convertEnumToArray(enumVariable: any) {
+export function convertEnumToArray(enumVariable: any): Array<{
+  label: string; value: number;
+}> {
   return Object.values(enumVariable)
     .filter((value) => typeof value === "string")
-    .map((value, index) => ({
-      label: value,
-      value: index + 1, // value phải có giá trị bắt đầu từ 1.
-    }));
+    .map((value: any, index: number) => {
+      return {
+        label: value,
+        value: index + 1, // value phải có giá trị bắt đầu từ 1.
+      };
+    });
 }
 
 interface NewHumanModalProps {
@@ -65,16 +68,17 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
     keyword: initialValues?.department?.name || ''
   });
 
-  const { listPositions } = useFetchListPosition({
+  const { listDoctypes: listPositions } = useQueryListDoctype({
     limit: 50,
+    type: 13
   });
 
-  const { listDoctypes: listWorkingStatus } = useFetchListDoctype({
+  const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
     limit: 50,
     type: 9
   });
 
-  const { listDoctypes: listContractType } = useFetchListDoctype({
+  const { listDoctypes: listContractType } = useQueryListDoctype({
     limit: 50,
     type: 8
   });
@@ -95,7 +99,6 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
   });
 
   const defaultValues = useMemo(() => {
-    console.log({ initialValues})
     return {
       type: 1,
       department: "",
@@ -340,7 +343,10 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
                           </div>
                         )}
                         initialValue={defaultValues?.workingStatus?._id}
-                        data={listWorkingStatus.map(workingStatus => ({...workingStatus}))}
+                        data={listWorkingStatus.map(workingStatus => ({
+                          _id: workingStatus._id,
+                          name: workingStatus.name,
+                        }))}
                         formatItem={{
                           id: "_id",
                           text: "name",
