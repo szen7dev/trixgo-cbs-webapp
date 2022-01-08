@@ -45,6 +45,8 @@ const HomePage: FC = () => {
   useEffect(() => {
     (async () => {
       const response = await PcmRepository.listTotalAnalysis();
+      console.log('response',response);
+      
       setTaskAnalysis(response.data);
     })();
 
