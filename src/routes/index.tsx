@@ -81,7 +81,7 @@ import HelpCenterPage from "views/pages/help/HelpCenterPage";
 import ProjectAppAdminPage from "views/pages/ppt/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
-import ProjectInvestPage from "views/pages/ppt/ProjectInvestPage";
+import ProjectPortfolioPage from "views/pages/ppt/ProjectPortfolioPage";
 import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
 import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
 import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
@@ -155,8 +155,12 @@ import ContractProduct from "views/pages/cmcs/components/views/contract/Contract
 
 // Support pages
 import SupportPage from "views/pages/support/components/home";
-import SupportItemPage from "views/pages/support/SupportItemPage";
 import RegisterDashboardPage from "views/pages/support/components/register";
+import SupportCompanyPage from "views/pages/support/SupportCompanyPage";
+import SupportGrantPage from "views/pages/support/SupportGrantPage";
+import SupportMemberPage from "views/pages/support/SupportMemberPage";
+import SupportItemPage from "views/pages/support/SupportItemPage";
+import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
 // Timesheet pages
 import TimesheetHomePage from 'views/pages/timesheet/home';
@@ -228,9 +232,30 @@ const Routes: FC = () => {
                       />
                       <Route
                         exact
-                        path="/support/item"
+                        path="/support/companies"
+                        component={SupportCompanyPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/grant"
+                        component={SupportGrantPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/grant/documents-management"
+                        component={DocumentsManagement}
+                      />
+                      <Route
+                        exact
+                        path="/support/members"
+                        component={SupportMemberPage}
+                      />
+                      <Route
+                        exact
+                        path="/support/items"
                         component={SupportItemPage}
                       />
+                      <Route path="/support/*" component={ErrorPage} />
                     </Switch>
                   </SupportLayout>
                 </Route>
@@ -257,12 +282,12 @@ const Routes: FC = () => {
                 <Route path="/personal">
                   <PersonalLayout>
                     <Switch>
-                      <Route exact path="/personal/notification" component={PersonalNotificationPage}/>
-                      <Route exact path="/personal/note" component={PersonalNotePage}/>
-                      <Route exact path="/personal/bill" component={PersonalBillPage}/>
+                      <Route exact path="/personal/notifications" component={PersonalNotificationPage}/>
+                      <Route exact path="/personal/notes" component={PersonalNotePage}/>
+                      <Route exact path="/personal/bills" component={PersonalBillPage}/>
                       <Route exact path="/personal/home" component={PersonalHomePage}/>
-                      <Route exact path="/personal/friend" component={PersonalFriendPage}/>
-                      <Route exact path="/personal/history" component={PersonalHistoryPage}/>
+                      <Route exact path="/personal/friends" component={PersonalFriendPage}/>
+                      <Route exact path="/personal/histories" component={PersonalHistoryPage}/>
                       <Route exact path="/personal/config" component={PersonalConfigPage}/>
                       <Route path="/personal/*" component={ErrorPage} />
                     </Switch>
@@ -348,7 +373,7 @@ const Routes: FC = () => {
                       path={"/pcm/dashboard-portfolio"}
                       component={() => (
                         <HomeLayout>
-                          <ProjectInvestPage />
+                          <ProjectPortfolioPage />
                         </HomeLayout>
                       )}
                     />
@@ -452,11 +477,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/bidding"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectBiddingPage />
+                          <ProjectBiddingPage {...props} />
                         </ProjectLayout>
                       )}
                     />
@@ -470,11 +495,11 @@ const Routes: FC = () => {
                       )}
                     />
                     <ProtectedRoute
-                      exact
+                      // exact
                       path={"/pcm/project/:id/document"}
-                      component={() => (
+                      component={(props: RouteComponentProps) => (
                         <ProjectLayout>
-                          <ProjectDocumentPage />
+                          <ProjectDocumentPage {...props}/>
                         </ProjectLayout>
                       )}
                     />
@@ -598,7 +623,34 @@ const Routes: FC = () => {
 													path="/social/home/2"
 													component={() =>
 														<SocialLayoutPrimary>
-															<SocialCategoryPage />
+															<SocialCategoryPage type="department" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/3"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="digital-conversion" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/4"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="system" />
+														</SocialLayoutPrimary>
+													}
+												/>
+                        <Route
+													exact
+													path="/social/home/5"
+													component={() =>
+														<SocialLayoutPrimary>
+															<SocialCategoryPage type="just-me" />
 														</SocialLayoutPrimary>
 													}
 												/>

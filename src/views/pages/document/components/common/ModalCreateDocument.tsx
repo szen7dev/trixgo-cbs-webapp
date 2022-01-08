@@ -61,12 +61,12 @@ const ModalCreateDocument: React.FC = () => {
 						{
 							fakeDataTag.map(item => {
 								return (<>
-									<div className="py-1.5 h-[30px] box-content">
+									<div key={item.title} className="py-1.5 h-[30px] box-content">
 										<p className="py-1.5">
 											{item.title}
 										</p>
 									</div>
-									<div className="py-1.5 h-[30px] box-content px-2">
+									<div key={item.title} className="py-1.5 h-[30px] box-content px-2">
 										<div className="flex border border-cbs-border rounded-full w-[209px] px-2.5 py-0.5">
 											<img src={itemTag} alt="" className="h-6 w-6 mr-1.5" />
 											<input className="inline-block" type="text" value="Nội dung dữ liệu" />
