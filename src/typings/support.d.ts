@@ -10,13 +10,16 @@ export type ListDeviceResponse = APIResponse & {
         listDevice?: Device[];
     }
 };
-
+type TypeAccesses = {
+    type: number[];
+    amountAccesses: number[];
+}
 export type Device = {
     _id: {
         month: number
     },
-    type: number,
-    amountAccesses: number,
+    type: number[],
+    amountAccesses: number[],
     data: [
         {
             type: number,
