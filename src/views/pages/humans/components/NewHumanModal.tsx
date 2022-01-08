@@ -15,7 +15,7 @@ import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { INSURANCE_STATUS, CONTACT_POLICY } from "./views/GeneralInfo";
 import { 
   useFetchListDepartments,
-  useFetchListPosition,
+  useQueryListPosition,
   useFetchListDoctype,
   useFetchListArea,
 } from "services/hooks/useHuman";
@@ -65,7 +65,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
     keyword: initialValues?.department?.name || ''
   });
 
-  const { listPositions } = useFetchListPosition({
+  const { listPositions } = useQueryListPosition({
     limit: 50,
   });
 
@@ -95,7 +95,6 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
   });
 
   const defaultValues = useMemo(() => {
-    console.log({ initialValues})
     return {
       type: 1,
       department: "",
