@@ -43,8 +43,8 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
                 </span>
                 <span className={"truncate "+(user.status==="online"?"text-primary":"text-gray-400")}>{user.status}</span>
             </div>
-            <button
-                className={"action-button relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>
+            <div
+                className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>
                 <DotsHorizontalGrayIcon/>
 
                 <div className={"action-menu-button absolute z-10 top-0 right-1 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 opacity-0 invisible transition duration-500"}>
@@ -55,7 +55,7 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
                         <img src={AddAdminIcon} alt={"add folder"}/><div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
                     </button>
                 </div>
-            </button>
+            </div>
         </div>
     )
 }
