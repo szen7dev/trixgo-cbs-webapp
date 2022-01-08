@@ -1241,3 +1241,11 @@ input[type="text"] {
   opacity: 1;
   visibility: visible;
 }
+.online-user-in-message-item:hover .action-button{
+  opacity: 1;
+  visibility: visible;
+}
+.online-user-in-message-item .action-button:hover .action-menu-button {
+  opacity: 1;
+  visibility: visible;
+}
