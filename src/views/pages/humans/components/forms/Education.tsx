@@ -3,33 +3,54 @@ import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { useTranslation } from "react-i18next";
+import debounce from 'lodash/debounce';
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { useModal } from "services/hooks/useModal";
 import DropdownSearchable from "components/common/DropdownSearch";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
+import { useQueryListDoctype } from "services/hooks/useHuman";
 
 interface WorkHistoryProps {
+  title: string;
   defaultValues?: {
-    fromDate: string;
-    toDate: string;
+    workplace: string;
+    toDate: string; 
+    educationalBackground2: string;
+    field2: string;
   };
   onFinish?: (values: any) => void;
+  contactDocumentID?: string;
 }
 
 const WorkHistory: React.FC<WorkHistoryProps> = ({
   defaultValues,
   onFinish,
+  contactDocumentID,
+  title
 }) => {
+  const [searchWorkplace, setSearchWorkplaceValue] = React.useState('');
+  const [searchEducationBackground, setSearchEducationBackground] = React.useState('');
+
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
+  const { listDoctypes: listEducationalBackground } = useQueryListDoctype({
+    limit: 50,
+    type: 6,
+    keyword: searchEducationBackground
+  });
+  const { listDoctypes: listWorkplace } = useQueryListDoctype({
+    limit: 50,
+    type: 7,
+    keyword: searchWorkplace,
+  });
 
   const initialValues = React.useMemo(
     () => ({
-      toDate: "",
-      workplace: "",
-      educationalBackground2: "",
-      field2: "",
+      workplace: "", // nơi đào tạo
+      toDate: "", // năm tốt nghiệp
+      educationalBackground2: "", // trình độ
+      field2: "", // chuyên ngành
       ...defaultValues,
     }),
     [defaultValues]
@@ -47,11 +68,14 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
           (moment(values.toDate).isValid() && moment(values.toDate).toJSON()) ||
           "",
       };
+      if (contactDocumentID) {
+        formatData.contactDocumentID = contactDocumentID;
+      }
       if (onFinish) {
         onFinish(formatData);
       }
     },
-    [onFinish]
+    [contactDocumentID, onFinish]
   );
 
   return (
@@ -60,9 +84,9 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
         className="fixed flex justify-center items-center inset-0 z-auto"
         style={{ background: "rgba(0, 0, 0, 0.5)" }}
       >
-        <div className="relative w-full h-5/6 bg-primary-light">
-          <div className="h-12 flex items-center border-b border-gray-300 px-6">
-            <p className="text-bold text-xl">{i18n("modal.add-new.title")}</p>
+        <div className="relative w-full h-5/6 bg-primary-light px-6">
+          <div className="h-12 flex items-center border-b border-gray-300">
+            <p className="text-bold text-xl">{title}</p>
             <img
               src={CloseIcon}
               alt="Close"
@@ -114,6 +138,7 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
                       onchangeValue={(value) =>
                         setFieldValue("educationalBackground2", value.value)
                       }
+                      onSearchInputChange={debounce(value => setSearchEducationBackground(value), 1000)}
                       placeholder={i18n("form.classify") + "..."}
                       className="w-full pl-0 -mb-1 outline-none"
                       isMultiple={false}
@@ -127,7 +152,10 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
                         </div>
                       )}
                       initialValue={initialValues?.educationalBackground2}
-                      data={[]}
+                      data={listEducationalBackground.map(educationalBackground => ({
+                        label: educationalBackground.name,
+                        value: educationalBackground._id,
+                      }))}
                       formatItem={{
                         text: "label",
                         id: "value",
@@ -137,12 +165,13 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
                   </div>
                   <div className="w-1/4 flex items-center">
                     <span className="w-6/12 text-primary-gray text-left">
-                      {i18n("educationalBackground")}
+                      {i18n("workplace")}
                     </span>
                     <DropdownSearchable
                       onchangeValue={(value) =>
                         setFieldValue("field2", value.value)
                       }
+                      onSearchInputChange={debounce(value => setSearchWorkplaceValue(value), 1000)}
                       placeholder={i18n("form.classify") + "..."}
                       className="w-full pl-0 -mb-1 outline-none"
                       isMultiple={false}
@@ -156,7 +185,10 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
                         </div>
                       )}
                       initialValue={initialValues?.field2}
-                      data={[]}
+                      data={listWorkplace.map(workplace => ({
+                        label: workplace.name,
+                        value: workplace._id,
+                      }))}
                       formatItem={{
                         text: "label",
                         id: "value",

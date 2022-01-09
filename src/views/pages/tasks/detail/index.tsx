@@ -243,13 +243,13 @@ const TaskDetailPage: FC = () => {
                 onSeeMore={nextPageListCheckList}
               />
             </div>
-            <div className="px-5 mt-10">
+            <div className="px-5 mt-5">
               <PriceApprovalInfo
                 timeApproved={data.data.timeApproved}
                 valueApproved={data.data.valueApproved}
               />
             </div>
-            <div className="px-5 my-10">
+            <div className="px-5 my-5">
               <RelatedResponse />
             </div>
           </div>

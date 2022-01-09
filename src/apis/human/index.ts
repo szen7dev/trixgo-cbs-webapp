@@ -1,5 +1,5 @@
 import API from "../repository";
-
+import type { AxiosRequestConfig } from 'axios';
 import type {
     ListHumanResponse,
     HumanPayload,
@@ -52,7 +52,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
         params: {
             populates: {
-                "path": "company contact files contract position2",
+                "path": "company contact files contract position2 educationalBackground2 field2",
                 "select": "name sign size url userCreate createAt",
                 "populate": {
                     "path": "userCreate project",
@@ -94,9 +94,9 @@ async function requestDeleteContactDocument(contactDocumentID: string): Promise<
     return data;
 }
 
-async function requestUpdateFileContractDocument<T>(_data: T): Promise<any> {
+async function requestUpdateFileContractDocument<T>(_data: T, configs?: AxiosRequestConfig): Promise<any> {
     const { data } = await API.put(
-        `${CONTACT_DOCUMENT_URL}/contact_documents`, _data
+        `${CONTACT_DOCUMENT_URL}/contact_documents`, _data, configs
     )
     return data
 }
@@ -236,7 +236,7 @@ const HumanRepository = {
     requestCreateContactDocument: async (body: CreateContactDocumentPayload): Promise<MutationContactDocument> => requestCreateContactDocument(body),
     requestUpdateContactDocument: async (body: UpdateContactDocumentPayload): Promise<MutationContactDocument> => requestUpdateContactDocument(body),
     requestDeleteContactDocument,
-    requestUpdateFileContractDocument: async (body: UpdateFileContactDocumentPayload): Promise<any> => requestUpdateFileContractDocument(body),
+    requestUpdateFileContractDocument: async (body: UpdateFileContactDocumentPayload, configs?: AxiosRequestConfig): Promise<any> => requestUpdateFileContractDocument(body, configs),
     requestRemoveFileContractDocument: async (body: RemoveFileContactDocumentPayload): Promise<any> => requestUpdateFileContractDocument(body),
 
     fetchListDepartment: async (params: DepartmentPayload): Promise<DepartmentResponse> =>

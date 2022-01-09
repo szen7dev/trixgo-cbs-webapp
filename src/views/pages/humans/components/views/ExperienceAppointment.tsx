@@ -15,6 +15,7 @@ import {
   useMutationContactDocument,
 } from "services/hooks/useHuman";
 import { FormExperienceAppointment } from "../forms";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import type { Human, ContactDocument } from "typings/human";
 
@@ -45,6 +46,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId, humanInfo } = props;
 
@@ -145,8 +147,8 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
               name: contactDocument.name,
               sign: contactDocument.sign,
               toDate: contactDocument.toDate,
-              position2: contactDocument.position2?._id,
-              contract: contactDocument.contract?._id,
+              position2: contactDocument?.position2?._id,
+              contract: contactDocument?.contract?._id,
               factor: contactDocument.factor,
               timeMobilize: contactDocument.timeMobilize,
             }}
@@ -158,12 +160,16 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback((contactDocument: ContactDocument) => async () => {
-    const res = await deleteContractDocumentAsync(contactDocument._id);
-    if (res.status === 200) {
-      refetchListContactDocument();
-      setOpenFileOption('')
-    }
-  }, [deleteContractDocumentAsync, refetchListContactDocument]);
+    openDeleteConfirm({
+      deleteAction: async () => {
+        const res = await deleteContractDocumentAsync(contactDocument._id);
+        if (res.status === 200) {
+          refetchListContactDocument();
+          setOpenFileOption('')
+        }
+      }
+    })
+  }, [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]);
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -211,14 +217,14 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
               )}
               {contactDocument.contract?.project?.projectType && (
                 <span className="t-human-spread">
-                  {PROJECT_TYPES[contactDocument.contract.project.projectType]}
+                  {PROJECT_TYPES[contactDocument?.contract?.project?.projectType]}
                 </span>
               )}
               {contactDocument.contract?.project?.buildingGrade && (
                 <span>
                   {
                     BUILDING_TYPES[
-                      contactDocument.contract.project.buildingGrade
+                      contactDocument?.contract?.project?.buildingGrade
                     ]
                   }
                 </span>

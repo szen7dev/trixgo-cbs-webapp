@@ -8,8 +8,16 @@ import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
+import { useModal } from "services/hooks/useModal";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-import { useQueryContactDocument } from "services/hooks/useHuman";
+import {
+  useQueryContactDocument,
+  useMutationContactDocument,
+} from "services/hooks/useHuman";
+import { FormEducation } from "../forms";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+
+import type { ContactDocument } from "typings/human";
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
@@ -20,57 +28,157 @@ interface EducationProps {
 const Education: FC<EducationProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
+  const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId } = props;
 
-  const { 
-    // createContactDocumentAsync,
+  const {
+    createContactDocumentAsync,
+    updateContractDocumentAsync,
+    deleteContractDocumentAsync,
+  } = useMutationContactDocument();
+
+  const {
     // updateContractDocumentAsync,
-    // refetchListContactDocument,
+    refetchListContactDocument,
     fetchNextPageContactDocument,
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 4
+    type: 4,
   });
 
-  const [openFileOption, setOpenFileOption] = useState(false);
+  const [openFileOption, setOpenFileOption] = useState("");
 
-  useOnClickOutside(ref, () => setOpenFileOption(!openFileOption));
+  useOnClickOutside(ref, () => setOpenFileOption(""));
+
+  const handleFinishFormCreate = useCallback(
+    async (values) => {
+      const res = await createContactDocumentAsync({
+        ...values,
+        type: "4",
+        contactID: humanId,
+      });
+      if (!res.error) {
+        refetchListContactDocument();
+        closeModal();
+      }
+      return null;
+    },
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      createContactDocumentAsync,
+    ]
+  );
 
   const handleClickAddNew = useCallback(() => {
-    console.log('clicked')
-  }, []);
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+        }
+      >
+        <FormEducation
+          title='Tạo mới trình độ/học vấn' 
+          onFinish={handleFinishFormCreate}
+        />
+      </div>
+    );
+  }, [handleFinishFormCreate, openModal]);
+
+  const handleFinishFormUpdate = useCallback(
+    async (values) => {
+      const res = await updateContractDocumentAsync({
+        ...values,
+        contactID: humanId,
+      });
+      if (!res.error) {
+        refetchListContactDocument();
+        closeModal();
+      }
+      return null;
+    },
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      updateContractDocumentAsync,
+    ]
+  );
+
+  const handleClickUpdate = useCallback(
+    (contactDocument: ContactDocument) => () => {
+      openModal(
+        <div
+          className={
+            "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+          }
+        >
+          <FormEducation
+            title='Cập nhật trình độ/học vấn' 
+            onFinish={handleFinishFormUpdate}
+            contactDocumentID={contactDocument._id}
+            defaultValues={{
+              toDate: contactDocument.toDate,
+              workplace: contactDocument.workplace,
+              educationalBackground2:
+                contactDocument?.educationalBackground2?._id,
+              field2: contactDocument?.field2?._id,
+            }}
+          />
+        </div>
+      );
+    },
+    [openModal, handleFinishFormUpdate]
+  );
+
+  const handleClickDeleteContactDocument = useCallback(
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOption("");
+          }
+        }
+      })
+    },
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
+  );
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
-      <HumanInfoHeader title={i18n("education")} onClickAddNew={handleClickAddNew} />
+      <HumanInfoHeader
+        title={i18n("education")}
+        onClickAddNew={handleClickAddNew}
+      />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
           <p className="w-1/5">{i18n("educationalBackground")}</p>
           <p className="w-1/5">{i18n("field2.1")}</p>
-          <p className="w-1/5">
-            {i18n("Graduation-year")}
-          </p>
-          <p className="w-1/5">
-            {i18n("workplace2")}
-          </p>
+          <p className="w-1/5">{i18n("Graduation-year")}</p>
+          <p className="w-1/5">{i18n("workplace2")}</p>
           <p className="w-1/5">{i18n("attactment")}</p>
         </div>
 
         {listContactDocument.map((contactDocument) => (
-          <div key={contactDocument._id} className="flex justify-between mt-4">
+          <div
+            key={contactDocument._id}
+            className="flex justify-start mt-4 relative"
+          >
             <p className="w-1/5">
-              {contactDocument.educationalBackground2?.name}
+              {contactDocument?.educationalBackground2?.name}
             </p>
-            <p className="w-1/5">{contactDocument.field2?.name}</p>
+            <p className="w-1/5">{contactDocument?.field2?.name}</p>
             <p className="w-1/5">
               {moment(contactDocument.toDate).isValid() &&
-                moment(contactDocument.toDate).format('YYYY')}
+                moment(contactDocument.toDate).format("YYYY")}
             </p>
-            <p className="w-1/5">
-              {contactDocument.workplace}
-            </p>
+            <p className="w-1/5">{contactDocument.workplace}</p>
 
             {contactDocument.files.map((elm) => (
               <div
@@ -94,44 +202,50 @@ const Education: FC<EducationProps> = (props) => {
                     </p>
                   </div>
                 </div>
-                <div className="relative">
-                  <div
-                    className="cursor-pointer hover:bg-cbs-gray w-[32px] h-[32px] flex justify-center items-center rounded-full"
-                    onClick={() => setOpenFileOption(!openFileOption)}
-                  >
-                    <img
-                      className="pointer-events-none"
-                      src={ThreeDotIcon}
-                      alt="Three Dot"
-                    />
-                  </div>
-                  {openFileOption && (
-                    <div
-                      className="absolute right-0 mt-1 w-60 h-32 bg-primary-light rounded z-10"
-                      style={{ border: "1px solid #cccccc" }}
-                      ref={ref}
-                    >
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img
-                          src={UploadFileIcon}
-                          alt="Upload"
-                          className="mr-5"
-                        />
-                        <span>Upload file</span>
-                      </div>
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img src={PencilIcon} alt="Pencil" className="mr-5" />
-                        <span>Cập nhật</span>
-                      </div>
-                      <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
-                        <img src={DeleteIcon} alt="Delete" className="mr-5" />
-                        <span>Xóa</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             ))}
+            <div className="absolute inset-y-0 right-0">
+              <div
+                className="cursor-pointer hover:bg-cbs-gray w-[32px] h-[32px] flex justify-center items-center rounded-full"
+                onClick={() => setOpenFileOption(contactDocument._id)}
+              >
+                <img
+                  className="pointer-events-none"
+                  src={ThreeDotIcon}
+                  alt="Three Dot"
+                />
+              </div>
+              {openFileOption === contactDocument._id && (
+                <div
+                  className="absolute right-0 mt-1 w-60 h-32 bg-primary-light rounded z-10"
+                  style={{ border: "1px solid #cccccc" }}
+                  ref={ref}
+                >
+                  <div className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer">
+                    <img src={UploadFileIcon} alt="Upload" className="mr-5" />
+                    <span>Upload file</span>
+                  </div>
+                  <div
+                    onClick={handleClickUpdate(contactDocument)}
+                    className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
+                  >
+                    <img
+                      src={PencilIcon}
+                      alt="Pencil"
+                      className="mr-5 pointer-events-none"
+                    />
+                    <span className="pointer-events-none">Cập nhật</span>
+                  </div>
+                  <div 
+                    className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
+                    onClick={handleClickDeleteContactDocument(contactDocument)}
+                  >
+                    <img src={DeleteIcon} alt="Delete" className="mr-5 pointer-events-none" />
+                    <span className="pointer-events-none">Xóa</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -143,7 +257,9 @@ const Education: FC<EducationProps> = (props) => {
             })`}</span>
           </button>
         </div>
-      ): ''}
+      ) : (
+        ""
+      )}
     </div>
   );
 };

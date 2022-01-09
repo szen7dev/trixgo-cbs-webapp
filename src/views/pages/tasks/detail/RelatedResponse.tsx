@@ -11,7 +11,7 @@ enum RelatedResponseTab {
 }
 
 const RelatedResponse: FC = () => {
-  const [isExpand, setIsExpand] = useState(true);
+  const [isExpand, setIsExpand] = useState(false);
   const [visibleForm, setVisibleForm] = useState(false);
 
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
