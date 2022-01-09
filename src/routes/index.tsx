@@ -178,6 +178,7 @@ import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
 import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "../services/providers/DeleteConfirm";
+import MessagesLayout from "../views/layouts/MessagesLayout";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -701,21 +702,11 @@ const Routes: FC = () => {
                                     </Route>
 
                                     <Route path="/messages/:path?">
-                                        <Switch>
-                                            {/*<ProtectedRoute*/}
-                                            {/*  exact*/}
-                                            {/*  path="/messages"*/}
-                                            {/*  component={MessagesHomePage}*/}
-                                            {/*/>*/}
-                                            {/*<ProtectedRoute*/}
-                                            {/*  exact*/}
-                                            {/*  path="/messages/detail"*/}
-                                            {/*  component={MessagesDetailPage}*/}
-                                            {/*/>*/}
-                                            {/*<Route path="/messages/*" component={ErrorPage} />*/}
-
-                                            <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                                        </Switch>
+                                        <MessagesLayout>
+                                            <Switch>
+                                                <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                                            </Switch>
+                                        </MessagesLayout>
                                     </Route>
 
                                     <Route path="/accounting/:path?">
