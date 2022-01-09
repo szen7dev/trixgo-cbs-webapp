@@ -11,7 +11,7 @@ import TriangleDown from "assets/icons/TriangleDown";
 import DatePickerWithRange from "./DatePickerWithRange";
 
 const ListMediaInMessage:FC = () => {
-    const listUserInMessage = [
+    const listMediaInMessage = [
         {
             _id: 1,
             imageUrl: SampleImage,
@@ -88,7 +88,7 @@ const ListMediaInMessage:FC = () => {
 
     return (
         <div className={"bg-white flex-1"}>
-            <div className={"sticky bg-white top-90px w-full z-10 flex items-center p-[10px]"}>
+            <div className={"sticky bg-white top-110px w-full z-10 flex items-center p-[10px]"}>
                 <DropdownSearchable
                     placeholder={"Loại"}
                     className={"bg-gray-100 rounded-full flex-1 mr-2"}
@@ -131,7 +131,7 @@ const ListMediaInMessage:FC = () => {
             </div>
             <div className={"h-full flex flex-wrap"}>
                 {
-                    _map(listUserInMessage, (media,index) => (
+                    _map(listMediaInMessage, (media,index) => (
                         <ItemMediaInMessage key={index} media={media}/>
                     ))
                 }
