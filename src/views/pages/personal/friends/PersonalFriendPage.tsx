@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 
 import FriendsTab from "./tabs/FriendsTab";
 
-const PersonalNotePage: FC = () => {
+const PersonalFriendPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
 
   const handleToggleTab = (index: number) => {
@@ -40,4 +40,5 @@ const PersonalNotePage: FC = () => {
     </main>
   );
 };
-export default PersonalNotePage;
+
+export default PersonalFriendPage;

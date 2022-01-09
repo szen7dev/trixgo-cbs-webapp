@@ -11,7 +11,7 @@ import EyeCloseIcon from "assets/images/icon-eye-close.svg";
 import EyeOpenIcon from "assets/images/icon-eye-open.svg";
 import SignatureLogo from "assets/images/signature-logo.svg";
 
-const PersonalNotePage: FC = () => {
+const PersonalHomePage: FC = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -281,4 +281,4 @@ const PersonalNotePage: FC = () => {
     </main>
   );
 };
-export default PersonalNotePage;
+export default PersonalHomePage;

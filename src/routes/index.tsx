@@ -73,6 +73,7 @@ import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
 import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
 import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
 import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
+import ConfigListDetail from "views/pages/personal/config/components/ConfigListDetail";
 
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
@@ -289,6 +290,7 @@ const Routes: FC = () => {
                       <Route exact path="/personal/friends" component={PersonalFriendPage}/>
                       <Route exact path="/personal/histories" component={PersonalHistoryPage}/>
                       <Route exact path="/personal/config" component={PersonalConfigPage}/>
+                      <Route exact path="/personal/config/:id" component={ConfigListDetail}/>
                       <Route path="/personal/*" component={ErrorPage} />
                     </Switch>
                   </PersonalLayout>
