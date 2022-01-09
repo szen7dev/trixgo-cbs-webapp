@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { useTranslation } from "react-i18next";
+import debounce from 'lodash/debounce';
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -36,11 +37,25 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
   companyID,
   title
 }) => {
+  const [searchPositionValue, setSearchPositionValue] = React.useState('');
+  const [searchFieldValue, setSearchFieldValue] = React.useState('');
+  const [searchContract, setSearchContractValue] = React.useState('');
+  
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
-  const { listDoctypes: listPositions } = useQueryListDoctype({ limit: 50, type: 13 });
-  const { listDoctypes: listField2 } = useQueryListDoctype({ limit: 50, type: 7 });
-  const { listContracts } = useQueryItemContract(companyID)
+  const { listDoctypes: listPositions } = useQueryListDoctype({ 
+    limit: 50,
+    type: 13,
+    keyword: searchPositionValue,
+  });
+  const { listDoctypes: listField2 } = useQueryListDoctype({
+    limit: 50,
+    type: 7,
+    keyword: searchFieldValue,
+  });
+  const { listContracts } = useQueryItemContract(companyID, {
+    keyword: searchContract
+  })
 
   const initialValues = React.useMemo(
     () => ({
@@ -142,6 +157,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("field2", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchFieldValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -174,6 +190,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("position2", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchPositionValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -210,6 +227,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("contract", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchContractValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
