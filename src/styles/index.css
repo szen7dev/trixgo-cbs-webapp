@@ -1244,6 +1244,14 @@ input[type="text"] {
   opacity: 1;
   visibility: visible;
 }
+.content-avoid-header {
+  height: calc(100vh - 55px);
+  max-height: calc(100vh - 55px);
+  min-height: calc(100vh - 55px);
+}
+.messages-layout.collapse-left .t-leftsidebar-navigation {
+  left: -240px;
+}
 .online-user-in-message-item:hover .action-button{
   opacity: 1;
   visibility: visible;

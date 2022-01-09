@@ -47,7 +47,7 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
                 className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>
                 <DotsHorizontalGrayIcon/>
 
-                <div className={"action-menu-button absolute z-10 top-0 right-1 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 opacity-0 invisible transition duration-500"}>
+                <div className={"action-menu-button absolute z-10 top-30px right-1 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 opacity-0 invisible transition duration-500"}>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img src={RemoveIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Remove</div>
                     </button>
