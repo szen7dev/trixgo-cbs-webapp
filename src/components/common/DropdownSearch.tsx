@@ -92,7 +92,7 @@ const DropdownSearchable:FC<Props>
     const [searchTerm, setSearchTerm] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    React.useLayoutEffect(() => {
         setFirstInit(false);
         // in case having default data array and default value id
         if (data) {

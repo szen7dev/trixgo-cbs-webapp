@@ -3,6 +3,19 @@ type APIResponse = {
     status?: number;
 }
 
+type Populate = {
+    path?: string;
+    select?: string;
+    populate?: Populate
+}
+
+type QueryParam = {
+    limit?: number;
+    lastestID?: string;
+    keyword?: string;
+    populates?: Populate;
+}
+
 type Company = {
     name: string;
     sign: string;
@@ -164,17 +177,8 @@ export type Human = {
     insuanceDate?: string;
 }
 
-type Populate = {
-    path?: string;
-    select?: string;
-    populate?: Populate
-}
-
-export interface HumanPayload {
-    lastestID?: string | undefined,
-    limit?: number;
+export interface HumanPayload extends QueryParam {
     contactID?: string;
-    populates?: Populate;
 }
 
 export type ListHumanResponse = APIResponse & {
@@ -244,11 +248,8 @@ export type ContactDocumentPayload = HumanPayload & {
     type: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export type DepartmentPayload = {
-    limit: number;
-    lastestID: string;
+export type DepartmentPayload = QueryParam & {
     type: 1 | 2; //  1: "Phòng Ban", 2: "Dự án" 
-    keyword?: string;
 }
 
 export type DepartmentResponse = APIResponse & {
@@ -261,11 +262,7 @@ export type DepartmentResponse = APIResponse & {
     }
 }
 
-export type PositionPayload = {
-    limit: number;
-    lastestID: string;
-    keyword?: string; // for search query
-}
+export type PositionPayload = QueryParam
 
 export type PositionResponse = APIResponse & {
     data: {
@@ -283,7 +280,7 @@ export type Doctype = {
     type: number;
 }
 
-export type DoctypePayload = {
+export type DoctypePayload = QueryParam & {
     // 1 - Văn Bản Lĩnh vực hồ sơ
     // 2 - Văn Bản Tính chất hồ sơ
     // 3 - Lĩnh vực kinh doanh
@@ -305,8 +302,6 @@ export type DoctypePayload = {
     // 20 - Chung các lỗi hay gặp
     // 21 - Công việc, Đánh giá chất lượng
     type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19| 20 | 21;
-    limit: number;
-    lastestID: string;
 }
 
 export type DoctypeResponse = APIResponse & {
@@ -319,11 +314,7 @@ export type DoctypeResponse = APIResponse & {
     }
 }
 
-export type AreaPayload = {
-    limit: number;
-    lastestID: string;
-    keyword?: string;
-}
+export type AreaPayload = QueryParam
 
 export type AreaResponse = APIResponse & {
     data: {
@@ -388,10 +379,8 @@ export interface Contract {
     sign: string | null
 }
 
-export type QueryContractPayload = Populate & {
-    limit?: number;
+export type QueryContractPayload = QueryParam & {
     companyID: string;
-    lastestID?: string;
 }
 
 export type QueryContractResponse = APIResponse & {

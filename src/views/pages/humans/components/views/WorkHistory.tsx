@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 
 import HumanInfoHeader from "../layouts/HumanInfoHeader";
-
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
@@ -12,7 +11,6 @@ import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "../forms";
-import PostFile from "../forms/PostFile";
 import {
   useQueryContactDocument,
   useMutationContactDocument,
@@ -155,10 +153,10 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   const handleAttachFiles = useCallback(
     (contactDocumentID: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) return;
-      updateFileContractDocumentAsync({
-        contactDocumentID,
-        fileID
-      })
+      // updateFileContractDocumentAsync({
+      //   contactDocumentID,
+      //   fileID
+      // })
       console.log(e.target.files, contactDocumentID);
     },
     [updateFileContractDocumentAsync]
