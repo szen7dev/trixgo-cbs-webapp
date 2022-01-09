@@ -24,8 +24,8 @@ type Props = {
     id?: string;
     data?: Array<Item>;
     placeholder?: string;
-    searchUrl?: string;
-    searchParam?: string;
+    // searchUrl?: string;
+    // searchParam?: string;
     initialValue?: string | number | undefined | Array<string|number|undefined>;
     onchangeValue?: (item: Item) => void;
     className?: string;
@@ -46,16 +46,17 @@ type Props = {
     disabled?: boolean;
     disableClass?: string;
     searchInputClassName?: string;
+    onSearchInputChange?: (valueSearch: string) => void
 }
 
-type Params = {
-    [key: string]: string;
-}
+// type Params = {
+//     [key: string]: string;
+// }
 const DropdownSearchable:FC<Props>
     = ({
        data,
-       searchUrl,
-       searchParam,
+       // searchUrl,
+       // searchParam,
        id,
        placeholder = 'Lựa chọn',
        initialValue,
@@ -77,7 +78,8 @@ const DropdownSearchable:FC<Props>
        onClearData,
        disabled,
        disableClass,
-       searchInputClassName
+       searchInputClassName,
+       onSearchInputChange
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -85,7 +87,7 @@ const DropdownSearchable:FC<Props>
     const [displayData, setDisplayData] = useState<Array<Item>>([]);
     const [showOption, setShowOption] = useState(false);
     const [firstInit, setFirstInit] = useState(true);
-    const [defaultValueHaveBeenChange, setDefaultValueHaveBeenChange] = useState(false);
+    // const [defaultValueHaveBeenChange, setDefaultValueHaveBeenChange] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -95,29 +97,29 @@ const DropdownSearchable:FC<Props>
         // in case having default data array and default value id
         if (data) {
             setDisplayData(data);
-            setDefaultValue(data);
+            firstInit&&setDefaultValue(data);
         }
     }, [data]);
 
-    useEffect(() => {
-        // in case have to make request for first time and default value id
-        if (!data && !defaultValueHaveBeenChange) {
-            setDefaultValue(displayData);
-        }
-    }, [displayData]);
+    // useEffect(() => {
+    //     // in case have to make request for first time and default value id
+    //     if (!data && !defaultValueHaveBeenChange) {
+    //         setDefaultValue(displayData);
+    //     }
+    // }, [displayData]);
 
     useOnClickOutside(wrapperRef, () => setShowOption(false))
 
-    useEffect(() => {
-        //If already have data, dont make request for first time
-        if (firstInit && data) return ;
-        const delayDebounceFn = setTimeout(() => {
-            // Send Axios request here
-            doSearching(searchTerm)
-        }, 1000);
-
-        return () => clearTimeout(delayDebounceFn)
-    }, [searchTerm,data]);
+    // useEffect(() => {
+    //     //If already have data, dont make request for first time
+    //     if (firstInit && data) return ;
+    //     const delayDebounceFn = setTimeout(() => {
+    //         // Send Axios request here
+    //         doSearching(searchTerm)
+    //     }, 1000);
+    //
+    //     return () => clearTimeout(delayDebounceFn)
+    // }, [searchTerm,data]);
 
     const readDataValue = (item: Item|undefined, key: string) => {
         if (!item) return undefined;
@@ -142,7 +144,7 @@ const DropdownSearchable:FC<Props>
     const handleSetValue = (item: Item) => {
         setShowOption(false);
         setSearchTerm('');
-        setDefaultValueHaveBeenChange(true);
+        // setDefaultValueHaveBeenChange(true);
         if (isMultiple) {
             setValues(oldValues => [...oldValues??[], item]);
         } else {
@@ -158,22 +160,22 @@ const DropdownSearchable:FC<Props>
         setShowOption(!showOption)
     };
 
-    const doSearching = async (searchString:string) => {
-        if (!searchUrl||!searchParam) return;
-        const params:Params = {};
-        params[searchParam] = searchString;
-        const {result} = await getSearchResult(searchUrl, params);
-        setDisplayData(result??[]);
-    };
+    // const doSearching = async (searchString:string) => {
+    //     if (!searchUrl||!searchParam) return;
+    //     const params:Params = {};
+    //     params[searchParam] = searchString;
+    //     const {result} = await getSearchResult(searchUrl, params);
+    //     setDisplayData(result??[]);
+    // };
 
-    const getSearchResult = async (url:string, params:Params={}): Promise<GetSearchSelectResponse> => {
-        const { data } = await API.get<GetSearchSelectResponse>(
-            `${url}`,
-            { params }
-        );
-
-        return data;
-    };
+    // const getSearchResult = async (url:string, params:Params={}): Promise<GetSearchSelectResponse> => {
+    //     const { data } = await API.get<GetSearchSelectResponse>(
+    //         `${url}`,
+    //         { params }
+    //     );
+    //
+    //     return data;
+    // };
 
     const setDefaultValue = (checkDataArr:Array<Item>) => {
         if (initialValue) {
@@ -268,7 +270,7 @@ const DropdownSearchable:FC<Props>
                         placeholder={placeholder}
                         className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => handleSearchingValue(e.target.value)}
                     />
                 }
                 {/*</div>*/}
@@ -289,7 +291,7 @@ const DropdownSearchable:FC<Props>
                             placeholder={placeholder}
                             className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
                         <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
@@ -318,7 +320,7 @@ const DropdownSearchable:FC<Props>
                             placeholder={placeholder}
                             className={"inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"}
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
                         <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
@@ -362,6 +364,11 @@ const DropdownSearchable:FC<Props>
         return renderSingleSelectedValue();
     }
 
+    const handleSearchingValue = (value: string) => {
+        setSearchTerm(value)
+        onSearchInputChange&&onSearchInputChange(value);
+    }
+
     const maxWidthClass = isMultiple?(maxWidthInput?maxWidthInput:"max-w-[250px]"):"";
     const maxHeightClass = maxHeightInput??"";
     const beingFocusClass = (showOption?(focusedClass??""):"");
@@ -383,7 +390,7 @@ const DropdownSearchable:FC<Props>
                                 autoComplete='off'
                                 value={searchTerm}
                                 autoFocus
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e) => handleSearchingValue(e.target.value)}
                             />
                         </div>}
                         <div className="select-options-section overflow-auto bg-white">
