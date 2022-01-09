@@ -30,7 +30,7 @@ const SettingMessageDetailTab:FC = () => {
 
     return (
         <div className={"h-full bg-white relative flex flex-col mt-[10px]"}>
-            <div className={"flex max-w-full border-b border-gray-100 no-webkit-scrollbar mt-3 bg-white h-[55px] sticky top-55px z-5"}>
+            <div className={"flex max-w-full border-b border-gray-100 no-webkit-scrollbar mt-3 bg-white h-[55px] sticky top-55px z-5 min-h-[55px]"}>
                 {_map(listTab, (tab) => (
                     <div
                         className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}

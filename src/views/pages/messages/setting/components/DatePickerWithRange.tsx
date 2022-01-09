@@ -23,26 +23,43 @@ const DatePickerWithRange:FC = () => {
         {
             id: 1,
             text: "Trong vòng 24h",
-            startDate: moment().format("dd/MM/yyyy"),
-            endDate: moment().subtract(1, 'days').format("dd/MM/yyyy")
+            startDate: moment().subtract(1, 'days').format("DD/MM/yyyy"),
+            endDate: moment().format("DD/MM/yyyy")
         },
         {
             id: 2,
             text: "Trong vòng 1 tuần",
-            startDate: moment().format("dd/MM/yyyy"),
-            endDate: moment().subtract(1, 'weeks').format("dd/MM/yyyy")
+            startDate: moment().subtract(1, 'weeks').format("DD/MM/yyyy"),
+            endDate: moment().format("DD/MM/yyyy")
         },
         {
             id: 3,
             text: "Trong vòng 1 tháng",
-            startDate: moment().format("dd/MM/yyyy"),
-            endDate: moment().subtract(1, 'months').format("dd/MM/yyyy")
+            startDate: moment().subtract(1, 'months').format("DD/MM/yyyy"),
+            endDate: moment().format("DD/MM/yyyy")
         },
     ]
+
+    const setOptionValue = (value: {
+        id: number,
+        text: string,
+        startDate: string,
+        endDate: string
+    }, hideOptions = true) => {
+        setValue(value)
+        hideOptions&&setShowOption(false);
+    }
+
     return (
         <div ref={wrapperRef} className={"relative flex-1"}>
             <button onClick={() => setShowOption(!showOption)} className={"bg-gray-100 rounded-full h-[32px] flex w-full items-center"}>
-                <div className={"flex-1 text-left pl-[10px]"}>Ngày gửi</div>
+                <div className={"flex-1 text-left pl-[10px] truncate"}>
+                    {
+                        value.id === 0 ?
+                            "Ngày gửi" :
+                            value.text
+                    }
+                </div>
                 <TriangleDown className={"mr-2"}/>
             </button>
             {
@@ -52,7 +69,7 @@ const DatePickerWithRange:FC = () => {
                     {
                         _map(dateOption, option => (
                             <div
-                                onClick={() => setValue(option)}
+                                onClick={() => setOptionValue(option)}
                                 key={option.id}
                                 className={"hover:bg-gray-100 transition duration-500 flex cursor-pointer py-3 px-4"}
                             >
@@ -68,62 +85,86 @@ const DatePickerWithRange:FC = () => {
                             </div>
                         ))
                     }
-                    <div className={"w-full cursor-pointer py-3 px-4"}>
+                    <div
+                        onClick={() => setOptionValue({
+                            id: 4,
+                            text: "Chọn khoảng thời gian",
+                            startDate: moment().format("DD/MM/yyyy"),
+                            endDate: moment().format("DD/MM/yyyy"),
+                        }, false)}
+                        className={"w-full cursor-pointer py-3 px-4"}>
                         <div className={"flex"}>
                             <div className={"w-[15px] mr-3 flex items-center justify-center"}>
                                 <img src={BlueCheck} alt={'checked'} className={cn("w-full mr-3", {
-                                    "opacity-100": true,
-                                    "opacity-0": false,
+                                    "opacity-100": value.id === 4,
+                                    "opacity-0": value.id !== 4,
                                 })}/>
                             </div>
                             <div className={"flex-1"}>Chọn khoảng thời gian</div>
                         </div>
-                        <div className={"flex mt-3"}>
-                            <DatePicker
-                                name="startDate"
-                                selected={null}
-                                onChange={(date: Date | null) =>
-                                    console.log("startDate", date)
-                                }
-                                wrapperClassName={"flex-1 mr-1"}
-                                dateFormat="dd/MM/yyyy"
-                                customInput={
-                                    <div className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
-                                        <div>Từ</div>
-                                        <input
-                                            type="text"
-                                            name="startDate"
-                                            className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
-                                        />
-                                        <div className={"h-full flex align-items-center pr-2"}>
-                                            <img src={DateIcon} alt={"calendar icon"} />
+                        {
+                            value.id === 4 &&
+                            <div className={"flex mt-3"}>
+                                <DatePicker
+                                    name="startDate"
+                                    selected={null}
+                                    onChange={(date: Date | null) =>
+                                        setOptionValue({
+                                            ...value,
+                                            id: 4,
+                                            text: "Chọn khoảng thời gian",
+                                            startDate: moment(date).format("DD/MM/yyyy")
+                                        }, false)
+                                    }
+                                    wrapperClassName={"flex-1 mr-1"}
+                                    dateFormat="DD/MM/yyyy"
+                                    customInput={
+                                        <div
+                                            className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
+                                            <div>Từ</div>
+                                            <input
+                                                value={value.startDate}
+                                                type="text"
+                                                name="startDate"
+                                                className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
+                                            />
+                                            <div className={"h-full flex align-items-center pr-2"}>
+                                                <img src={DateIcon} alt={"calendar icon"}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                            />
-                            <DatePicker
-                                name="endDate"
-                                selected={null}
-                                onChange={(date: Date | null) =>
-                                    console.log("endDate", date)
-                                }
-                                wrapperClassName={"flex-1 ml-1"}
-                                dateFormat="dd/MM/yyyy"
-                                customInput={
-                                    <div className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
-                                        <div>Đến</div>
-                                        <input
-                                            type="text"
-                                            name="startDate"
-                                            className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
-                                        />
-                                        <div className={"h-full flex align-items-center pr-2"}>
-                                            <img src={DateIcon} alt={"calendar icon"} />
+                                    }
+                                />
+                                <DatePicker
+                                    name="endDate"
+                                    selected={null}
+                                    onChange={(date: Date | null) =>
+                                        setOptionValue({
+                                            ...value,
+                                            id: 4,
+                                            text: "Chọn khoảng thời gian",
+                                            endDate: moment(date).format("DD/MM/yyyy")
+                                        }, false)
+                                    }
+                                    wrapperClassName={"flex-1 ml-1"}
+                                    dateFormat="DD/MM/yyyy"
+                                    customInput={
+                                        <div
+                                            className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
+                                            <div>Đến</div>
+                                            <input
+                                                value={value.endDate}
+                                                type="text"
+                                                name="startDate"
+                                                className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
+                                            />
+                                            <div className={"h-full flex align-items-center pr-2"}>
+                                                <img src={DateIcon} alt={"calendar icon"}/>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                            />
-                        </div>
+                                    }
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
             }
