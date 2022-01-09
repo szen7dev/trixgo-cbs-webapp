@@ -2,6 +2,7 @@ import React, {FC, useState} from "react";
 import {map as _map} from "lodash";
 import ListOnlineUserInMessage from "./ListOnlineUserInMessage";
 import ListMediaInMessage from "./ListMediaInMessage";
+import ListFileInMessage from "./ListFileInMessage";
 
 const SettingMessageDetailTab:FC = () => {
     const [activeTab, setActiveTab] = useState("members");
@@ -52,6 +53,10 @@ const SettingMessageDetailTab:FC = () => {
             {
                 activeTab==="media" &&
                 <ListMediaInMessage/>
+            }
+            {
+                activeTab==="files" &&
+                <ListFileInMessage/>
             }
         </div>
     )
