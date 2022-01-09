@@ -1,6 +1,5 @@
 import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 import HumanRepository from 'apis/human';
-
 import type {
     Human,
     ContactDocumentPayload,
@@ -365,7 +364,11 @@ interface UseMutationContactDocument {
     createContactDocumentAsync: (payload: CreateContactDocumentPayload) => Promise<MutationContactDocument>;
     updateContractDocumentAsync: (payload: UpdateContactDocumentPayload) => Promise<MutationContactDocument>;
     deleteContractDocumentAsync: (contactDocumentID: string) => Promise<MutationContactDocument>;
-    updateFileContractDocumentAsync: (payload: UpdateFileContactDocumentPayload) => Promise<any>;
+    updateFileContractDocumentAsync: (
+        payload: UpdateFileContactDocumentPayload & {
+            onUploadProgress?: (progressEvent: any) => void
+        },
+    ) => Promise<any>;
     removeFileContractDocument: (payload: RemoveFileContactDocumentPayload) => Promise<any>;
 }
 type TypeParam = Pick<ContactDocumentPayload, 'type' | 'limit'>;
@@ -379,8 +382,15 @@ export const useMutationContactDocument = ():UseMutationContactDocument  => {
     const { mutateAsync: deleteContractDocumentAsync } = useMutation((contactDocumentID: string) =>
         HumanRepository.requestDeleteContactDocument(contactDocumentID))
 
-    const { mutateAsync: updateFileContractDocumentAsync } = useMutation((payload: UpdateFileContactDocumentPayload) =>
-        HumanRepository.requestUpdateFileContractDocument(payload));
+    const { mutateAsync: updateFileContractDocumentAsync } = useMutation(
+        (payload: UpdateFileContactDocumentPayload & {
+            onUploadProgress?: (progressEvent: any) => void
+        }) => {
+            const { onUploadProgress, ...other } = payload;
+            return  HumanRepository.requestUpdateFileContractDocument(other, {
+                onUploadProgress,
+            })
+        });
 
     const { mutateAsync: removeFileContractDocument } = useMutation((payload: RemoveFileContactDocumentPayload) =>
         HumanRepository.requestRemoveFileContractDocument(payload));
