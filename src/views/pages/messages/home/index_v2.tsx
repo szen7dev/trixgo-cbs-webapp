@@ -22,7 +22,7 @@ const MessagesHome:FC = () => {
 
     return (
         <MessageContext.Provider value={value}>
-            <div className={"flex h-screen w-screen overflow-hidden"}>
+            <div className={"flex content-avoid-header w-screen overflow-hidden"}>
                 <MessageList/>
                 <ChattingSection/>
                 <SettingMessageDetail/>
