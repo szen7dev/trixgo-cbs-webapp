@@ -11,7 +11,7 @@ import styles from "../style.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-const PersonalNotePage: FC = () => {
+const PersonalHistoryPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
 
   return (
@@ -161,4 +161,4 @@ const PersonalNotePage: FC = () => {
     </main>
   );
 };
-export default PersonalNotePage;
+export default PersonalHistoryPage;
