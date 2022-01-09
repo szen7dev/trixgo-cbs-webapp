@@ -8,7 +8,7 @@ import styles from "../style.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-const PersonalNotePage: FC = () => {
+const PersonalBillPage: FC = () => {
   return (
     <main className="h-full">
       <header className="sticky top-0 z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -119,4 +119,4 @@ const PersonalNotePage: FC = () => {
     </main>
   );
 };
-export default PersonalNotePage;
+export default PersonalBillPage;

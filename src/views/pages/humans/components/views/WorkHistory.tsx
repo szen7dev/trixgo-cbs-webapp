@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 
 import HumanInfoHeader from "../layouts/HumanInfoHeader";
-
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
@@ -12,12 +11,13 @@ import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "../forms";
-import { 
+import {
   useQueryContactDocument,
   useMutationContactDocument,
 } from "services/hooks/useHuman";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
-import type {ContactDocument} from 'typings/human';
+import type { ContactDocument } from "typings/human";
 
 interface PropWorkHistory {
   humanId: string;
@@ -29,33 +29,36 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId } = props;
+
+  const [openFileOption, setOpenFileOptionById] = useState("");
 
   const {
     createContactDocumentAsync,
     updateContractDocumentAsync,
     deleteContractDocumentAsync,
+    updateFileContractDocumentAsync,
   } = useMutationContactDocument();
 
-  const { 
+  const {
     fetchNextPageContactDocument,
     refetchListContactDocument,
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 1
+    type: 1,
   });
 
-  const [openFileOption, setOpenFileOptionById] = useState('');
-
-  useOnClickOutside(ref, () => setOpenFileOptionById(''));
+  useOnClickOutside(ref, () => setOpenFileOptionById(""));
 
   const handleFinishFormCreate = useCallback(
     async (values) => {
       const res = await createContactDocumentAsync({
         ...values,
-        type: '1',
+        type: "1",
         contactID: humanId,
       });
       if (!res.error) {
@@ -64,7 +67,12 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
       }
       return null;
     },
-    [closeModal, humanId, refetchListContactDocument, createContactDocumentAsync]
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      createContactDocumentAsync,
+    ]
   );
 
   const handleClickAddNew = useCallback(() => {
@@ -75,8 +83,8 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
         }
       >
         <FormWorkHistory
-          title='Tạo mới lịch sử làm việc tại các đơn vị'
-          onFinish={handleFinishFormCreate} 
+          title="Tạo mới lịch sử làm việc tại các đơn vị"
+          onFinish={handleFinishFormCreate}
         />
       </div>
     );
@@ -94,38 +102,71 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
       }
       return null;
     },
-    [closeModal, humanId, refetchListContactDocument, updateContractDocumentAsync]
+    [
+      closeModal,
+      humanId,
+      refetchListContactDocument,
+      updateContractDocumentAsync,
+    ]
   );
 
-  const handleClickUpdate = useCallback((contactDocument: ContactDocument) => () => {
-    openModal(
-      <div
-        className={
-          "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-        }
-      >
-        <FormWorkHistory 
-          title='Cập nhật lịch sử làm việc tại các đơn vị'
-          onFinish={handleFinishFormUpdate}
-          contactDocumentID={contactDocument._id}
-          defaultValues={{
-            fromDate: contactDocument.fromDate,
-            toDate: contactDocument.toDate,
-            workplace: contactDocument.workplace,
-            reference: contactDocument.reference,
-          }}
-        />
-      </div>
-    );
-  }, [openModal, handleFinishFormUpdate]);
+  const handleClickUpdate = useCallback(
+    (contactDocument: ContactDocument) => () => {
+      openModal(
+        <div
+          className={
+            "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+          }
+        >
+          <FormWorkHistory
+            title="Cập nhật lịch sử làm việc tại các đơn vị"
+            onFinish={handleFinishFormUpdate}
+            contactDocumentID={contactDocument._id}
+            defaultValues={{
+              fromDate: contactDocument.fromDate,
+              toDate: contactDocument.toDate,
+              workplace: contactDocument.workplace,
+              reference: contactDocument.reference,
+            }}
+          />
+        </div>
+      );
+    },
+    [openModal, handleFinishFormUpdate]
+  );
 
-  const handleClickDeleteContactDocument = useCallback((contactDocument: ContactDocument) => async () => {
-    const res = await deleteContractDocumentAsync(contactDocument._id);
-    if (res.status === 200) {
-      refetchListContactDocument();
-      setOpenFileOptionById('')
+  const handleClickDeleteContactDocument = useCallback(
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOptionById("");
+          }
+        },
+      });
+    },
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
+  );
+
+  const handleClickUpload = useCallback(() => {
+    if (inputRef?.current) {
+      inputRef.current.click();
     }
-  }, [deleteContractDocumentAsync, refetchListContactDocument]);
+  }, []);
+
+  const handleAttachFiles = useCallback(
+    (contactDocumentID: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) return;
+      // updateFileContractDocumentAsync({
+      //   contactDocumentID,
+      //   fileID
+      // })
+      console.log(e.target.files, contactDocumentID);
+    },
+    [updateFileContractDocumentAsync]
+  );
 
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
@@ -143,7 +184,10 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
         </div>
         {listContactDocument.map((contactDocument) => {
           return (
-            <div key={contactDocument._id} className="flex justify-start mt-4 relative">
+            <div
+              key={contactDocument._id}
+              className="flex justify-start mt-4 relative"
+            >
               <p style={{ width: "12.5%" }}>
                 {moment(contactDocument.fromDate).isValid() &&
                   moment(contactDocument.fromDate).format(DATE_FORMAT)}
@@ -197,26 +241,51 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
                     style={{ border: "1px solid #cccccc" }}
                     ref={ref}
                   >
-                    <div 
+                    <div
                       className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
-                      // onClick={handleClickUpload(contactDocument)}
+                      onClick={handleClickUpload}
                     >
-                      <img src={UploadFileIcon} alt="Upload" className="mr-5 pointer-events-none" />
+                      <img
+                        src={UploadFileIcon}
+                        alt="Upload"
+                        className="mr-5 pointer-events-none"
+                      />
                       <span className="pointer-events-none">Upload file</span>
+                      <input
+                        ref={inputRef}
+                        type="file"
+                        name="files"
+                        id="file"
+                        // Validate input file
+                        accept="*"
+                        multiple
+                        className="hidden"
+                        onChange={handleAttachFiles(contactDocument._id)}
+                      />
                     </div>
-                    <div 
+                    <div
                       className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
                       onClick={handleClickUpdate(contactDocument)}
                     >
-                      <img src={PencilIcon} alt="Pencil" className="mr-5 pointer-events-none" />
-                      <span className='pointer-events-none'>Cập nhật</span>
+                      <img
+                        src={PencilIcon}
+                        alt="Pencil"
+                        className="mr-5 pointer-events-none"
+                      />
+                      <span className="pointer-events-none">Cập nhật</span>
                     </div>
-                    <div 
+                    <div
                       className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
-                      onClick={handleClickDeleteContactDocument(contactDocument)}
+                      onClick={handleClickDeleteContactDocument(
+                        contactDocument
+                      )}
                     >
-                      <img src={DeleteIcon} alt="Delete" className="mr-5 pointer-events-none" />
-                      <span className='pointer-events-none'>Xóa</span>
+                      <img
+                        src={DeleteIcon}
+                        alt="Delete"
+                        className="mr-5 pointer-events-none"
+                      />
+                      <span className="pointer-events-none">Xóa</span>
                     </div>
                   </div>
                 )}

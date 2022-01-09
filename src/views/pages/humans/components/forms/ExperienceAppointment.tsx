@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { useTranslation } from "react-i18next";
+import debounce from 'lodash/debounce';
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -36,10 +37,19 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
   companyID,
   contactDocumentID
 }) => {
+  const [searchContract, setSearchContractValue] = React.useState('');
+  const [searchDoctype, setSearchDoctypeValue] = React.useState('');
+
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
-  const { listContracts } = useQueryItemContract(companyID);
-  const { listDoctypes } = useQueryListDoctype({ limit: 50, type: 13 });
+  const { listContracts } = useQueryItemContract(companyID, {
+    keyword: searchContract
+  });
+  const { listDoctypes } = useQueryListDoctype({ 
+    limit: 50,
+    type: 13,
+    keyword: searchDoctype,
+  });
 
   const initialValues = React.useMemo(
     () => ({
@@ -151,6 +161,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("position2", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchDoctypeValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -188,6 +199,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("contract", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchContractValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}

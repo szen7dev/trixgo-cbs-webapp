@@ -1,6 +1,5 @@
 import { useInfiniteQuery, useQuery, useMutation } from "react-query";
 import HumanRepository from 'apis/human';
-
 import type {
     Human,
     ContactDocumentPayload,
@@ -18,6 +17,8 @@ import type {
     RemoveFileContactDocumentPayload,
     MutationContactDocument,
     Contract,
+    QueryContractPayload,
+    DepartmentPayload
 } from 'typings/human';
 
 interface UseListHuman {
@@ -103,13 +104,10 @@ export const useFetchDetailHuman = (id: string): UseDetailHuman => {
     }
 }
 
-export const useFetchListDepartments = ({
+export const useQueryListDepartments = ({
     limit,
     keyword = '',
-}: {
-    limit: number;
-    keyword?: string;
-}): {
+}: Pick<DepartmentPayload, 'limit' | 'keyword'>): {
     loading: boolean;
     totalRecord: number | undefined;
     totalPages: number | undefined;
@@ -172,18 +170,19 @@ interface UseQueryListDoctype {
     refetchListDoctype: () => void;
     fetchNextPageDoctype: () => void;
 }
-type ParamQueryPayload = Pick<DoctypePayload, 'type'> & {
+type ParamQueryPayload = Pick<DoctypePayload, 'type' | 'keyword'> & {
     limit: number;
 }
-export const useQueryListDoctype = ({ limit, type }: ParamQueryPayload): UseQueryListDoctype => {
+export const useQueryListDoctype = ({ limit, type, keyword }: ParamQueryPayload): UseQueryListDoctype => {
     const res = useInfiniteQuery(
-        [`list_doctype,${type}`, limit],
+        [`list_doctype,${type}.${keyword}`, type, keyword],
         async ({ pageParam }: any) =>
             // mai request BE check lại api này
             HumanRepository.fetchListDoctype({
                 limit: limit || 10,
                 lastestID: pageParam || "",
-                type
+                type,
+                keyword,
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -365,11 +364,15 @@ interface UseMutationContactDocument {
     createContactDocumentAsync: (payload: CreateContactDocumentPayload) => Promise<MutationContactDocument>;
     updateContractDocumentAsync: (payload: UpdateContactDocumentPayload) => Promise<MutationContactDocument>;
     deleteContractDocumentAsync: (contactDocumentID: string) => Promise<MutationContactDocument>;
-    updateFileContractDocumentAsync: (payload: UpdateFileContactDocumentPayload) => Promise<any>;
+    updateFileContractDocumentAsync: (
+        payload: UpdateFileContactDocumentPayload & {
+            onUploadProgress?: (progressEvent: any) => void
+        },
+    ) => Promise<any>;
     removeFileContractDocument: (payload: RemoveFileContactDocumentPayload) => Promise<any>;
 }
 type TypeParam = Pick<ContactDocumentPayload, 'type' | 'limit'>;
-export const useMutationContactDocument = ():UseMutationContactDocument  => {
+export const useMutationContactDocument = (): UseMutationContactDocument => {
     const { mutateAsync: createContactDocumentAsync } = useMutation((payload: CreateContactDocumentPayload) =>
         HumanRepository.requestCreateContactDocument(payload));
 
@@ -379,8 +382,15 @@ export const useMutationContactDocument = ():UseMutationContactDocument  => {
     const { mutateAsync: deleteContractDocumentAsync } = useMutation((contactDocumentID: string) =>
         HumanRepository.requestDeleteContactDocument(contactDocumentID))
 
-    const { mutateAsync: updateFileContractDocumentAsync } = useMutation((payload: UpdateFileContactDocumentPayload) =>
-        HumanRepository.requestUpdateFileContractDocument(payload));
+    const { mutateAsync: updateFileContractDocumentAsync } = useMutation(
+        (payload: UpdateFileContactDocumentPayload & {
+            onUploadProgress?: (progressEvent: any) => void
+        }) => {
+            const { onUploadProgress, ...other } = payload;
+            return HumanRepository.requestUpdateFileContractDocument(other, {
+                onUploadProgress,
+            })
+        });
 
     const { mutateAsync: removeFileContractDocument } = useMutation((payload: RemoveFileContactDocumentPayload) =>
         HumanRepository.requestRemoveFileContractDocument(payload));
@@ -456,9 +466,7 @@ interface UseQueryItemContract {
     hasNextPage?: boolean;
 }
 
-export const useQueryItemContract = (companyID: string, typeParam?: {
-    limit?: number;
-}): UseQueryItemContract => {
+export const useQueryItemContract = (companyID: string, typeParam?: Pick<QueryContractPayload, 'keyword' | 'limit'>): UseQueryItemContract => {
     const {
         isLoading,
         data,
@@ -466,12 +474,13 @@ export const useQueryItemContract = (companyID: string, typeParam?: {
         fetchNextPage: fetchNextPageContract,
         hasNextPage
     } = useInfiniteQuery(
-        [`list_contract`, typeParam?.limit],
+        [`list_contract.${typeParam?.keyword}`, typeParam?.limit],
         async ({ pageParam }: any) =>
             HumanRepository.fetchListContracts({
                 limit: typeParam?.limit || 10,
                 lastestID: pageParam || "",
                 companyID,
+                keyword: typeParam?.keyword,
             }),
         {
             getNextPageParam: ({ data }: any) => {
