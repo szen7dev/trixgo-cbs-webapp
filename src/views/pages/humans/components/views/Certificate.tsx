@@ -15,6 +15,7 @@ import {
   useMutationContactDocument,
 } from "services/hooks/useHuman";
 import { FormCertificate } from "../forms";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import type { ContactDocument } from "typings/human";
 
@@ -34,6 +35,7 @@ const Certificate: FC<CertificateProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId } = props;
 
@@ -145,14 +147,18 @@ const Certificate: FC<CertificateProps> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => async () => {
-      const res = await deleteContractDocumentAsync(contactDocument._id);
-      if (res.status === 200) {
-        refetchListContactDocument();
-        setOpenFileOption("");
-      }
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOption("");
+          }
+        }
+      })
     },
-    [deleteContractDocumentAsync, refetchListContactDocument]
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
   );
 
   return (
@@ -198,18 +204,18 @@ const Certificate: FC<CertificateProps> = (props) => {
             </p>
             <div style={{ width: "13%" }}>
               <p style={{ maxWidth: "90%" }}>
-                {contactDocument.certificateType && (
+                {contactDocument?.certificateType && (
                   <span className="t-human-spread">
                     {contactDocument.certificateType.name}
                   </span>
                 )}
-                {contactDocument.certificateName && (
+                {contactDocument?.certificateName && (
                   <span className="t-human-spread">
                     {contactDocument.certificateName.name}
                   </span>
                 )}
                 {/* cần kiểm tra value là gì và hiển thị theo type của CONTACT_DOCUMENT_GRADES */}
-                {contactDocument.certificateGrade && (
+                {contactDocument?.certificateGrade && (
                   <span>
                     {CONTACT_DOCUMENT_GRADES[contactDocument.certificateGrade]}
                   </span>

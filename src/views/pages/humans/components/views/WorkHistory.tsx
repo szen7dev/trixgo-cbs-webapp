@@ -15,6 +15,7 @@ import {
   useQueryContactDocument,
   useMutationContactDocument,
 } from "services/hooks/useHuman";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import type { ContactDocument } from "typings/human";
 
@@ -29,14 +30,17 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId } = props;
+
+  const [openFileOption, setOpenFileOptionById] = useState("");
 
   const {
     createContactDocumentAsync,
     updateContractDocumentAsync,
     deleteContractDocumentAsync,
-    updateFileContractDocumentAsync
+    updateFileContractDocumentAsync,
   } = useMutationContactDocument();
 
   const {
@@ -47,8 +51,6 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   } = useQueryContactDocument(humanId, {
     type: 1,
   });
-
-  const [openFileOption, setOpenFileOptionById] = useState("");
 
   useOnClickOutside(ref, () => setOpenFileOptionById(""));
 
@@ -134,14 +136,18 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => async () => {
-      const res = await deleteContractDocumentAsync(contactDocument._id);
-      if (res.status === 200) {
-        refetchListContactDocument();
-        setOpenFileOptionById("");
-      }
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOptionById("");
+          }
+        },
+      });
     },
-    [deleteContractDocumentAsync, refetchListContactDocument]
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
   );
 
   const handleClickUpload = useCallback(() => {
