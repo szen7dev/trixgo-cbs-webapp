@@ -5,7 +5,7 @@ import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
-import TriangleDown from "../../assets/icons/TriangleDown";
+import TriangleDown from "assets/icons/TriangleDown";
 
 export type Item = {
     id?: string | number;
@@ -246,7 +246,7 @@ const DropdownSearchable:FC<Props>
                 {
                     ((typeof values === "undefined" || values?.length <= 0)&&!inlineSearch)?
                         <span
-                            className={"text-left text-gray-300"}>
+                            className={"text-left"}>
                             {placeholder}
                         </span>:
                         null
@@ -293,7 +293,7 @@ const DropdownSearchable:FC<Props>
                             value={searchTerm}
                             onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
-                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                        <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
                 (
                     <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white " + (!value ? "text-gray-300":'')}>
@@ -322,10 +322,10 @@ const DropdownSearchable:FC<Props>
                             value={searchTerm}
                             onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
-                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                        <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
                 (
-                    <div className={"flex-1 flex text-left " + (!value ? "text-gray-300":'')}>
+                    <div className={"flex-1 flex text-left "}>
                         <div>
                             {
                                 readDataValue(value, "text")?
