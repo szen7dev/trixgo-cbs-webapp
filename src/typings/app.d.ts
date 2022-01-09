@@ -51,3 +51,22 @@ export type RowPlanningFinancial = {
   ghiChu?: string;
   childrens?: RowPlanningFinancial[]
 }
+
+export type DeleteConfirmContent = {
+  deleteAction: () => void;
+  title?: string;
+  message?: string;
+}
+
+export type DeleteConfirmState = {
+  isDeleteConfirmOpen: boolean;
+  deleteConfirmContent: DeleteConfirmContent;
+};
+export type OpenDeleteConfirm = {
+  type: "OPEN_DELETE_CONFIRM";
+  payload: DeleteConfirmContent;
+};
+export type CloseDeleteConfirm = {
+  type: "CLOSE_DELETE_CONFIRM";
+};
+export type DeleteConfirmActions = OpenDeleteConfirm | CloseDeleteConfirm;

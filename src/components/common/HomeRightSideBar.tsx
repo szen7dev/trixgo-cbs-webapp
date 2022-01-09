@@ -57,14 +57,14 @@ const HomeRightSideBar: FC<Props> = (props: Props) => {
               alt="Left side bar"
             />
 				</Link>
-        <Link to={`/personal/note`} className="mt-4">
+        <Link to={`/personal/notes`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon3}
               alt="Left side bar"
             />
 				</Link>
-        <Link to={`/personal/bill`} className="mt-4">
+        <Link to={`/personal/bills`} className="mt-4">
             <img
               className="w-6 h-6 object-contain"
               src={icon5}

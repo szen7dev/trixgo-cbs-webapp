@@ -7,6 +7,9 @@ import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
 import OtherIcon from 'assets/images/CBS-Other-Icon.svg';
 import ItemMediaInMessage from "./ItemMediaInMessage";
 import SampleImage from 'assets/images/photo1640398643.png';
+import TriangleDown from "assets/icons/TriangleDown";
+import DatePickerWithRange from "./DatePickerWithRange";
+
 const ListMediaInMessage:FC = () => {
     const listUserInMessage = [
         {
@@ -124,6 +127,7 @@ const ListMediaInMessage:FC = () => {
                     className={"bg-gray-100 rounded-full flex-1 mr-2"}
                     searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}
                 />
+                <DatePickerWithRange/>
             </div>
             <div className={"h-full flex flex-wrap"}>
                 {

@@ -5,7 +5,7 @@ import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
-import TriangleDown from "../../assets/icons/TriangleDown";
+import TriangleDown from "assets/icons/TriangleDown";
 
 export type Item = {
     id?: string | number;
@@ -92,15 +92,6 @@ const DropdownSearchable:FC<Props>
     const [searchTerm, setSearchTerm] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setFirstInit(false);
-        // in case having default data array and default value id
-        if (data) {
-            setDisplayData(data);
-            firstInit&&setDefaultValue(data);
-        }
-    }, [data]);
-
     // useEffect(() => {
     //     // in case have to make request for first time and default value id
     //     if (!data && !defaultValueHaveBeenChange) {
@@ -121,13 +112,13 @@ const DropdownSearchable:FC<Props>
     //     return () => clearTimeout(delayDebounceFn)
     // }, [searchTerm,data]);
 
-    const readDataValue = (item: Item|undefined, key: string) => {
+    const readDataValue = React.useCallback((item: Item|undefined, key: string) => {
         if (!item) return undefined;
         if (formatItem) {
             return item[formatItem[key]]??item[key]
         }
         return item[key];
-    }
+    }, [formatItem]);
 
     const modifyItem = (item: Item) => {
         if (formatItem) {
@@ -177,19 +168,19 @@ const DropdownSearchable:FC<Props>
     //     return data;
     // };
 
-    const setDefaultValue = (checkDataArr:Array<Item>) => {
-        if (initialValue) {
+    const setDefaultValue = React.useCallback((checkDataArr:Array<Item>, _initialValue) => {
+        if (_initialValue) {
             if (isMultiple) {
-                if (typeof initialValue !== "number" && typeof initialValue !== "string") {
-                    const initialItem = checkDataArr?.filter(item => initialValue.includes(readDataValue(item, "id")));
+                if (typeof _initialValue !== "number" && typeof _initialValue !== "string") {
+                    const initialItem = checkDataArr?.filter(item => _initialValue.includes(readDataValue(item, "id")));
                     setValues(initialItem ?? []);
                 }
             } else {
-                const initialItem = checkDataArr?.find(item => readDataValue(item, "id") === initialValue);
+                const initialItem = checkDataArr?.find(item => readDataValue(item, "id") === _initialValue);
                 setValue(initialItem);
             }
         }
-    }
+    }, [isMultiple, readDataValue])
 
     const handleRemoveItem = (id:string|number) => {
         const valuesWillUpdate = values?.filter(item => readDataValue(item,"id") !== id);
@@ -203,6 +194,17 @@ const DropdownSearchable:FC<Props>
         setValue(undefined);
         onClearData&&onClearData();
     };
+
+    React.useLayoutEffect(() => {
+        // in case having default data array and default value id
+        if (data) {
+            setDisplayData(data);
+            if (firstInit && initialValue && data.length > 0) {
+                setFirstInit(false)
+                setDefaultValue(data, initialValue);
+            }
+        }
+    }, [data, firstInit, initialValue, setDefaultValue]);
 
     const renderOptions = () => {
         if (displayData?.length === 0 ) {
@@ -246,7 +248,7 @@ const DropdownSearchable:FC<Props>
                 {
                     ((typeof values === "undefined" || values?.length <= 0)&&!inlineSearch)?
                         <span
-                            className={"text-left text-gray-300"}>
+                            className={"text-left"}>
                             {placeholder}
                         </span>:
                         null
@@ -293,7 +295,7 @@ const DropdownSearchable:FC<Props>
                             value={searchTerm}
                             onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
-                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                        <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
                 (
                     <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white " + (!value ? "text-gray-300":'')}>
@@ -322,10 +324,10 @@ const DropdownSearchable:FC<Props>
                             value={searchTerm}
                             onChange={(e) => handleSearchingValue(e.target.value)}
                         />:
-                        <div className={"flex-1 flex text-left text-gray-300"}>{placeholder}</div>
+                        <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
                 (
-                    <div className={"flex-1 flex text-left " + (!value ? "text-gray-300":'')}>
+                    <div className={"flex-1 flex text-left "}>
                         <div>
                             {
                                 readDataValue(value, "text")?

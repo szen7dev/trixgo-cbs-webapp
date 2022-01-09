@@ -15,6 +15,7 @@ import {
   useMutationContactDocument,
 } from "services/hooks/useHuman";
 import { FormEducation } from "../forms";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import type { ContactDocument } from "typings/human";
 
@@ -28,6 +29,7 @@ const Education: FC<EducationProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId } = props;
 
@@ -123,8 +125,8 @@ const Education: FC<EducationProps> = (props) => {
               toDate: contactDocument.toDate,
               workplace: contactDocument.workplace,
               educationalBackground2:
-                contactDocument.educationalBackground2._id,
-              field2: contactDocument.field2._id,
+                contactDocument?.educationalBackground2?._id,
+              field2: contactDocument?.field2?._id,
             }}
           />
         </div>
@@ -134,14 +136,18 @@ const Education: FC<EducationProps> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => async () => {
-      const res = await deleteContractDocumentAsync(contactDocument._id);
-      if (res.status === 200) {
-        refetchListContactDocument();
-        setOpenFileOption("");
-      }
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOption("");
+          }
+        }
+      })
     },
-    [deleteContractDocumentAsync, refetchListContactDocument]
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
   );
 
   return (
@@ -165,9 +171,9 @@ const Education: FC<EducationProps> = (props) => {
             className="flex justify-start mt-4 relative"
           >
             <p className="w-1/5">
-              {contactDocument.educationalBackground2?.name}
+              {contactDocument?.educationalBackground2?.name}
             </p>
-            <p className="w-1/5">{contactDocument.field2?.name}</p>
+            <p className="w-1/5">{contactDocument?.field2?.name}</p>
             <p className="w-1/5">
               {moment(contactDocument.toDate).isValid() &&
                 moment(contactDocument.toDate).format("YYYY")}

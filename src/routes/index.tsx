@@ -1,10 +1,10 @@
 import { FC, useEffect } from "react";
 
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect,
 } from "react-router-dom";
 import { RouteComponentProps } from 'react-router';
 
@@ -66,13 +66,13 @@ import TaskDetailPage from "views/pages/tasks/detail";
 import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
 // Personal pages
-import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
-import PersonalNotePage from "views/pages/personal/PersonalNotePage";
-import PersonalBillPage from "views/pages/personal/PersonalBillPage";
-import PersonalHomePage from "views/pages/personal/PersonalHomePage";
-import PersonalConfigPage from "views/pages/personal/PersonalConfigPage";
-import PersonalFriendPage from "views/pages/personal/PersonalFriendPage";
-import PersonalHistoryPage from "views/pages/personal/PersonalHistoryPage";
+import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
+import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
+import PersonalBillPage from "views/pages/personal/bill/PersonalBillPage";
+import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
+import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
+import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
+import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
 
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
@@ -177,503 +177,505 @@ import OperationNewsPage from 'views/pages/operation/OperationNewsPage';
 import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
 import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
+import DeleteConfirmProvider from "../services/providers/DeleteConfirm";
+import MessagesLayout from "../views/layouts/MessagesLayout";
 
 const Routes: FC = () => {
-  useEffect(() => {
-    document.title = "CBS | Quản trị doanh nghiệp";
-  }, []);
+    useEffect(() => {
+        document.title = "CBS | Quản trị doanh nghiệp";
+    }, []);
 
-  return (
-    <Router>
-      <AuthProvider>
-        <ThemeProvider>
-          <ChatProvider>
-            <ModalProvider>
-              <Switch>
+    return (
+        <Router>
+            <AuthProvider>
+                <ThemeProvider>
+                    <DeleteConfirmProvider>
+                        <ChatProvider>
+                            <ModalProvider>
+                                <Switch>
+                                    <Route path="/authentication/:path?">
+                                        <FullPageLayout isAuthentication>
+                                            <Switch>
+                                                <Route exact path="/authentication">
+                                                    <Redirect to="/authentication/sign-in" />
+                                                </Route>
+                                                <Route
+                                                    exact
+                                                    path="/authentication/sign-in"
+                                                    component={SignInPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/authentication/register"
+                                                    component={RegisterPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/authentication/reset-password"
+                                                    component={ResetPasswordPage}
+                                                />
+                                                <Route path="/authentication/*" component={ErrorPage} />
+                                            </Switch>
+                                        </FullPageLayout>
+                                    </Route>
 
-                <Route path="/authentication/:path?">
-                  <FullPageLayout isAuthentication>
-                    <Switch>
-                      <Route exact path="/authentication">
-                        <Redirect to="/authentication/sign-in" />
-                      </Route>
-                      <Route
-                        exact
-                        path="/authentication/sign-in"
-                        component={SignInPage}
-                      />
-                      <Route
-                        exact
-                        path="/authentication/register"
-                        component={RegisterPage}
-                      />
-                      <Route
-                        exact
-                        path="/authentication/reset-password"
-                        component={ResetPasswordPage}
-                      />
-                      <Route path="/authentication/*" component={ErrorPage} />
-                    </Switch>
-                  </FullPageLayout>
-                </Route>
+                                    <Route path="/support">
+                                        <SupportLayout>
+                                            <Switch>
+                                                <Route
+                                                    exact
+                                                    path="/support/home"
+                                                    component={SupportPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/register"
+                                                    component={RegisterDashboardPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/companies"
+                                                    component={SupportCompanyPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/grant"
+                                                    component={SupportGrantPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/grant/documents-management"
+                                                    component={DocumentsManagement}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/members"
+                                                    component={SupportMemberPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/support/items"
+                                                    component={SupportItemPage}
+                                                />
+                                                <Route path="/support/*" component={ErrorPage} />
+                                            </Switch>
+                                        </SupportLayout>
+                                    </Route>
 
-                <Route path="/support">
-                  <SupportLayout>
-                    <Switch>
-                      <Route
-                        exact
-                        path="/support/home"
-                        component={SupportPage}
-                      />
-                      <Route
-                        exact
-                        path="/support/register"
-                        component={RegisterDashboardPage}
-                      />
-                      <Route
-                        exact
-                        path="/support/companies"
-                        component={SupportCompanyPage}
-                      />
-                      <Route
-                        exact
-                        path="/support/grant"
-                        component={SupportGrantPage}
-                      />
-                      <Route
-                        exact
-                        path="/support/grant/documents-management"
-                        component={DocumentsManagement}
-                      />
-                      <Route
-                        exact
-                        path="/support/members"
-                        component={SupportMemberPage}
-                      />
-                      <Route
-                        exact
-                        path="/support/items"
-                        component={SupportItemPage}
-                      />
-                      <Route path="/support/*" component={ErrorPage} />
-                    </Switch>
-                  </SupportLayout>
-                </Route>
+                                    <Route path="/owner">
+                                        <OwnerLayout>
+                                            <Switch>
+                                                <Route exact path="/owner/home" component={OwnerHomePage}/>
+                                                <Route exact path="/owner/grant-permission" component={OwnerGrantPage}/>
+                                                <Route path="/owner /*" component={ErrorPage} />
+                                            </Switch>
+                                        </OwnerLayout>
+                                    </Route>
 
-                <Route path="/owner">
-                  <OwnerLayout>
-                    <Switch>
-                      <Route exact path="/owner/home" component={OwnerHomePage}/>
-                      <Route exact path="/owner/grant-permission" component={OwnerGrantPage}/>
-                      <Route path="/owner /*" component={ErrorPage} />
-                    </Switch>
-                  </OwnerLayout>
-                </Route>
+                                    <Route path="/help">
+                                        <HelpCenterLayout>
+                                            <Switch>
+                                                <Route exact path="/help/home" component={HelpCenterPage}/>
+                                                <Route path="/help/*" component={ErrorPage} />
+                                            </Switch>
+                                        </HelpCenterLayout>
+                                    </Route>
 
-                <Route path="/help">
-                  <HelpCenterLayout>
-                    <Switch>
-                      <Route exact path="/help/home" component={HelpCenterPage}/>
-                      <Route path="/help/*" component={ErrorPage} />
-                    </Switch>
-                  </HelpCenterLayout>
-                </Route>
+                                    <Route path="/personal">
+                                        <PersonalLayout>
+                                            <Switch>
+                                                <Route exact path="/personal/notifications" component={PersonalNotificationPage}/>
+                                                <Route exact path="/personal/notes" component={PersonalNotePage}/>
+                                                <Route exact path="/personal/bills" component={PersonalBillPage}/>
+                                                <Route exact path="/personal/home" component={PersonalHomePage}/>
+                                                <Route exact path="/personal/friends" component={PersonalFriendPage}/>
+                                                <Route exact path="/personal/histories" component={PersonalHistoryPage}/>
+                                                <Route exact path="/personal/config" component={PersonalConfigPage}/>
+                                                <Route path="/personal/*" component={ErrorPage} />
+                                            </Switch>
+                                        </PersonalLayout>
+                                    </Route>
 
-                <Route path="/personal">
-                  <PersonalLayout>
-                    <Switch>
-                      <Route exact path="/personal/notifications" component={PersonalNotificationPage}/>
-                      <Route exact path="/personal/notes" component={PersonalNotePage}/>
-                      <Route exact path="/personal/bills" component={PersonalBillPage}/>
-                      <Route exact path="/personal/home" component={PersonalHomePage}/>
-                      <Route exact path="/personal/friends" component={PersonalFriendPage}/>
-                      <Route exact path="/personal/histories" component={PersonalHistoryPage}/>
-                      <Route exact path="/personal/config" component={PersonalConfigPage}/>
-                      <Route path="/personal/*" component={ErrorPage} />
-                    </Switch>
-                  </PersonalLayout>
-                </Route>
+                                    <Route path="/bidding">
+                                        <BiddingLayout>
+                                            <Switch>
+                                                <Route exact path="/bidding/home" component={BiddingHomePage}/>
+                                                <Route exact path="/bidding/exp" component={BiddingOtherPage}/>
+                                                <Route path="/bidding/*" component={ErrorPage} />
+                                            </Switch>
+                                        </BiddingLayout>
+                                    </Route>
 
-                <Route path="/bidding">
-                  <BiddingLayout>
-                    <Switch>
-                      <Route exact path="/bidding/home" component={BiddingHomePage}/>
-                      <Route exact path="/bidding/exp" component={BiddingOtherPage}/>
-                      <Route path="/bidding/*" component={ErrorPage} />
-                    </Switch>
-                  </BiddingLayout>
-                </Route>
+                                    <Route path="/operation">
+                                        <OperationLayout>
+                                            <Switch>
+                                                <Route exact path="/operation/home" component={OperationHomePage}/>
+                                                <Route exact path="/operation/news" component={OperationNewsPage}/>
+                                                <Route exact path="/operation/rfs" component={OperationRfsPage}/>
+                                                <Route exact path="/operation/project" component={OperationProjectPage}/>
+                                                <Route path="/operation/*" component={ErrorPage} />
+                                            </Switch>
+                                        </OperationLayout>
+                                    </Route>
 
-                <Route path="/operation">
-                  <OperationLayout>
-                    <Switch>
-                      <Route exact path="/operation/home" component={OperationHomePage}/>
-                      <Route exact path="/operation/news" component={OperationNewsPage}/>
-                      <Route exact path="/operation/rfs" component={OperationRfsPage}/>
-                      <Route exact path="/operation/project" component={OperationProjectPage}/>
-                      <Route path="/operation/*" component={ErrorPage} />
-                    </Switch>
-                  </OperationLayout>
-                </Route>
+                                    <Route path="/ree">
+                                        <ReeLayout>
+                                            <Switch>
+                                                <Route exact path="/ree/home" component={ReeHomePage}/>
+                                                <Route exact path="/ree/other" component={ReeHomePage}/>
+                                                <Route path="/ree /*" component={ErrorPage} />
+                                            </Switch>
+                                        </ReeLayout>
+                                    </Route>
 
-                <Route path="/ree">
-                  <ReeLayout>
-                    <Switch>
-                      <Route exact path="/ree/home" component={ReeHomePage}/>
-                      <Route exact path="/ree/other" component={ReeHomePage}/>
-                      <Route path="/ree /*" component={ErrorPage} />
-                    </Switch>
-                  </ReeLayout>
-                </Route>
+                                    <Route exact path="/">
+                                        <Redirect to="/pcm/home" />
+                                    </Route>
 
-                <Route exact path="/">
-                  <Redirect to="/pcm/home" />
-                </Route>
+                                    <Route path="/pcm/:path?">
+                                        <Switch>
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/admin"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <ProjectAppAdminPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/home"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <DashboardPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/projects"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <ProjectCategoryPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/market"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <ProjectDeployingPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/dashboard-portfolio"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <ProjectPortfolioPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/dashboard-task"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <ProjectDashboardTaskPage />
+                                                        {/* <KanbanBoardPage /> */}
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/dashboard-document"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <DocumentDashboardPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/mine"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <TasksHomePage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/bookmark"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <TasksHomePage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/draft"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <TasksHomePage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/detail/:id"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <TaskDetailPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/home"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectHomePage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/dashboard"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectDashBoardPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                path={"/pcm/project/:id/folder"}
+                                                component={({ ...props }: RouteComponentProps ) => (
+                                                    <ProjectLayout>
+                                                        <ProjectFolderPage {...props} />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/schedule"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectSchedulePage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/budget"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectBudgetPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                // exact
+                                                path={"/pcm/project/:id/bidding"}
+                                                component={(props: RouteComponentProps) => (
+                                                    <ProjectLayout>
+                                                        <ProjectBiddingPage {...props} />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/payment"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectPaymentPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                // exact
+                                                path={"/pcm/project/:id/document"}
+                                                component={(props: RouteComponentProps) => (
+                                                    <ProjectLayout>
+                                                        <ProjectDocumentPage {...props}/>
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/photo"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectPhotoPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/drawing"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectDrawingPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/rfi"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectRfiPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/rfa"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectRfaPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/inspection"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectInspectionPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/punch"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectPunchPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/resource"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectResourcePage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/mom"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectMomPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/report"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectReportPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/directory"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectDirectoryPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/admin"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectAdminPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <Route path="/pcm/home/*" component={ErrorPage} />
+                                        </Switch>
+                                    </Route>
 
-                <Route path="/pcm/:path?">
-                  <Switch>
-                  <ProtectedRoute
-                      exact
-                      path={"/pcm/admin"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectAppAdminPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/home"}
-                      component={() => (
-                        <HomeLayout>
-                          <DashboardPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/projects"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectCategoryPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/market"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectDeployingPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/dashboard-portfolio"}
-                      component={() => (
-                        <HomeLayout>
-                          <ProjectPortfolioPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/dashboard-task"}
-                      component={() => (
-                        <HomeLayout>
-													<ProjectDashboardTaskPage />
-                          {/* <KanbanBoardPage /> */}
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/dashboard-document"}
-                      component={() => (
-                        <HomeLayout>
-                          <DocumentDashboardPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/mine"}
-                      component={() => (
-                        <HomeLayout>
-                          <TasksHomePage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/bookmark"}
-                      component={() => (
-                        <HomeLayout>
-                          <TasksHomePage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/draft"}
-                      component={() => (
-                        <HomeLayout>
-                          <TasksHomePage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/detail/:id"}
-                      component={() => (
-                        <HomeLayout>
-                          <TaskDetailPage />
-                        </HomeLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/home"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectHomePage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/dashboard"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectDashBoardPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      path={"/pcm/project/:id/folder"}
-                      component={({ ...props }: RouteComponentProps ) => (
-                        <ProjectLayout>
-                          <ProjectFolderPage {...props} />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/schedule"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectSchedulePage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/budget"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectBudgetPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      // exact
-                      path={"/pcm/project/:id/bidding"}
-                      component={(props: RouteComponentProps) => (
-                        <ProjectLayout>
-                          <ProjectBiddingPage {...props} />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/payment"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectPaymentPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      // exact
-                      path={"/pcm/project/:id/document"}
-                      component={(props: RouteComponentProps) => (
-                        <ProjectLayout>
-                          <ProjectDocumentPage {...props}/>
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/photo"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectPhotoPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/drawing"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectDrawingPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/rfi"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectRfiPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/rfa"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectRfaPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/inspection"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectInspectionPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/punch"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectPunchPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/resource"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectResourcePage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/mom"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectMomPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/report"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectReportPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/directory"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectDirectoryPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <ProtectedRoute
-                      exact
-                      path={"/pcm/project/:id/admin"}
-                      component={() => (
-                        <ProjectLayout>
-                          <ProjectAdminPage />
-                        </ProjectLayout>
-                      )}
-                    />
-                    <Route path="/pcm/home/*" component={ErrorPage} />
-                  </Switch>
-                </Route>
+                                    <Route path="/social">
+                                        <HomeLayout>
+                                            <Switch>
+                                                <Route
+                                                    exact
+                                                    path="/social/home"
+                                                    component={() =>
+                                                        <SocialLayoutPrimary>
+                                                            <SocialHomePage />
+                                                        </SocialLayoutPrimary>
+                                                    }
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/home/2"
+                                                    component={() =>
+                                                        <SocialLayoutPrimary>
+                                                            <SocialCategoryPage type="department" />
+                                                        </SocialLayoutPrimary>
+                                                    }
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/home/3"
+                                                    component={() =>
+                                                        <SocialLayoutPrimary>
+                                                            <SocialCategoryPage type="digital-conversion" />
+                                                        </SocialLayoutPrimary>
+                                                    }
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/home/4"
+                                                    component={() =>
+                                                        <SocialLayoutPrimary>
+                                                            <SocialCategoryPage type="system" />
+                                                        </SocialLayoutPrimary>
+                                                    }
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/home/5"
+                                                    component={() =>
+                                                        <SocialLayoutPrimary>
+                                                            <SocialCategoryPage type="just-me" />
+                                                        </SocialLayoutPrimary>
+                                                    }
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/post/:mediaID"
+                                                    component={SocialPostPage}
+                                                />
+                                                <Route
+                                                    exact
+                                                    path="/social/comments"
+                                                    component={SocialCommentsPage}
+                                                />
+                                                <Route path="/social/*" component={ErrorPage} />
+                                            </Switch>
+                                        </HomeLayout>
+                                    </Route>
 
-                <Route path="/social">
-                  <HomeLayout>
-                    <Switch>
-												<Route
-													exact
-													path="/social/home"
-													component={() =>
-														<SocialLayoutPrimary>
-															<SocialHomePage />
-														</SocialLayoutPrimary>
-													}
-												/>
-												<Route
-													exact
-													path="/social/home/2"
-													component={() =>
-														<SocialLayoutPrimary>
-															<SocialCategoryPage type="department" />
-														</SocialLayoutPrimary>
-													}
-												/>
-                        <Route
-													exact
-													path="/social/home/3"
-													component={() =>
-														<SocialLayoutPrimary>
-															<SocialCategoryPage type="digital-conversion" />
-														</SocialLayoutPrimary>
-													}
-												/>
-                        <Route
-													exact
-													path="/social/home/4"
-													component={() =>
-														<SocialLayoutPrimary>
-															<SocialCategoryPage type="system" />
-														</SocialLayoutPrimary>
-													}
-												/>
-                        <Route
-													exact
-													path="/social/home/5"
-													component={() =>
-														<SocialLayoutPrimary>
-															<SocialCategoryPage type="just-me" />
-														</SocialLayoutPrimary>
-													}
-												/>
-                      <Route
-                        exact
-                        path="/social/post/:mediaID"
-                        component={SocialPostPage}
-                      />
-                      <Route
-                        exact
-                        path="/social/comments"
-                        component={SocialCommentsPage}
-                      />
-                      <Route path="/social/*" component={ErrorPage} />
-                    </Switch>
-                  </HomeLayout>
-                </Route>
+                                    <Route path="/document">
+                                        <DocumentLayoutContainer />
+                                    </Route>
 
-                <Route path="/document">
-                  <DocumentLayoutContainer />
-                </Route>
-
-                {/* <Route path="/kanban-board">
+                                    {/* <Route path="/kanban-board">
                   <KanbanBoardLayout>
                     <Switch>
                       <ProtectedRoute
@@ -686,338 +688,329 @@ const Routes: FC = () => {
                   </KanbanBoardLayout>
                 </Route> */}
 
-                <Route path="/human">
-                  <HumanLayout>
-                    <Switch>
-                      <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
-                      <ProtectedRoute exact path="/human/cetificate" component={HumanCetificateFilterPage} />
-                      <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
-                      <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} />
-                      <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
-                      <Route path="/human/*" component={ErrorPage} />
-                    </Switch>
-                  </HumanLayout>
-                </Route>
+                                    <Route path="/human">
+                                        <HumanLayout>
+                                            <Switch>
+                                                <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+                                                <ProtectedRoute exact path="/human/cetificate" component={HumanCetificateFilterPage} />
+                                                <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
+                                                <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} />
+                                                <ProtectedRoute exact path="/human/home/hid=:id" component={HumanInfo} />
+                                                <Route path="/human/*" component={ErrorPage} />
+                                            </Switch>
+                                        </HumanLayout>
+                                    </Route>
 
-                <Route path="/messages/:path?">
-                  <Switch>
-                    {/*<ProtectedRoute*/}
-                    {/*  exact*/}
-                    {/*  path="/messages"*/}
-                    {/*  component={MessagesHomePage}*/}
-                    {/*/>*/}
-                    {/*<ProtectedRoute*/}
-                    {/*  exact*/}
-                    {/*  path="/messages/detail"*/}
-                    {/*  component={MessagesDetailPage}*/}
-                    {/*/>*/}
-                    {/*<Route path="/messages/*" component={ErrorPage} />*/}
+                                    <Route path="/messages/:path?">
+                                        <MessagesLayout>
+                                            <Switch>
+                                                <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                                            </Switch>
+                                        </MessagesLayout>
+                                    </Route>
 
-                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                  </Switch>
-                </Route>
+                                    <Route path="/accounting/:path?">
+                                        <AccountingLayout>
+                                            <Switch>
+                                                <Route exact path="/accounting">
+                                                    <Redirect to="/accounting/home" />
+                                                </Route>
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/home"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/dashboard"
+                                                    component={AccountingDashboardPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/accbill"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/receipt"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/payment"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/goods-import"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/goods-export"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/invoices"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/debit-note"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/credit-note"
+                                                    component={AccountingTicketsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/home/:id"
+                                                    component={AccountingTicketDetailPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/detail"
+                                                    component={AccountingDetailPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/diary"
+                                                    component={AccountingDiaryPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/import-export"
+                                                    component={AccountingInOutPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/debt-tracking"
+                                                    component={AccountingDebtPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/vat"
+                                                    component={AccountingVatPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/financial-report"
+                                                    component={AccountingReportFinancePage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/support-tools"
+                                                    component={AccountingSupportToolsPage}
+                                                />
+                                            </Switch>
+                                        </AccountingLayout>
+                                    </Route>
 
-                <Route path="/accounting/:path?">
-                  <AccountingLayout>
-                    <Switch>
-                      <Route exact path="/accounting">
-                        <Redirect to="/accounting/home" />
-                      </Route>
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/home"
-                        component={AccountingTicketsPage}
-                      />
-                       <ProtectedRoute
-                        exact
-                        path="/accounting/dashboard"
-                        component={AccountingDashboardPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/accbill"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/receipt"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/payment"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/goods-import"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/goods-export"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/invoices"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/debit-note"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/credit-note"
-                        component={AccountingTicketsPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/home/:id"
-                        component={AccountingTicketDetailPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/detail"
-                        component={AccountingDetailPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/diary"
-                        component={AccountingDiaryPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/import-export"
-                        component={AccountingInOutPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/debt-tracking"
-                        component={AccountingDebtPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/vat"
-                        component={AccountingVatPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/financial-report"
-                        component={AccountingReportFinancePage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path="/accounting/support-tools"
-                        component={AccountingSupportToolsPage}
-                      />
-                    </Switch>
-                  </AccountingLayout>
-                </Route>
+                                    <Route path="/fin/:path?">
+                                        <FinLayout>
+                                            <Switch>
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/fin/home"}
+                                                    component={FinHomePage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/fin/dashboard"}
+                                                    component={FinDashboardPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/fin/cashbook"}
+                                                    component={FinCashbookPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/fin/cashflow"}
+                                                    component={FinancialCashFlowPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/fin/cashflow/:id"}
+                                                    component={FinancialPlanningDetailPage}
+                                                />
+                                            </Switch>
+                                        </FinLayout>
+                                    </Route>
 
-                <Route path="/fin/:path?">
-                  <FinLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path={"/fin/home"}
-                        component={FinHomePage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path={"/fin/dashboard"}
-                        component={FinDashboardPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path={"/fin/cashbook"}
-                        component={FinCashbookPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path={"/fin/cashflow"}
-                        component={FinancialCashFlowPage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path={"/fin/cashflow/:id"}
-                        component={FinancialPlanningDetailPage}
-                      />
-                    </Switch>
-                  </FinLayout>
-                </Route>
+                                    <Route path="/cmcs/:path">
+                                        <Switch>
+                                            <Route
+                                                exact
+                                                path="/cmcs/home"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcHomePage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/dashboard"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcDashboardPage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/portfolio"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcPortfolioPage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/income"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcIncomePage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/expenses"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcExpensePage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/guarantee"
+                                                component={() => (
+                                                    <CmcsLayout>
+                                                        <CmcGuaranteePage />
+                                                    </CmcsLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/admin"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractAdminPage />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/home"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractHome />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/dashboard"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractDashBoard />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/editor"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractEditor />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/bill"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractBill />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/budget"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractBudget />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/produce"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractProduce />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/ipc"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractIpc />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/cmcs/contract/:id/product"
+                                                component={() => (
+                                                    <CmcsContractLayout>
+                                                        <ContractProduct />
+                                                    </CmcsContractLayout>
+                                                )}
+                                            />
+                                        </Switch>
+                                    </Route>
 
-                <Route path="/cmcs/:path">
-                  <Switch>
-                    <Route
-                      exact
-                      path="/cmcs/home"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcHomePage />
-                        </CmcsLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/dashboard"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcDashboardPage />
-                        </CmcsLayout>
-                      )}
-                    />
-                     <Route
-                      exact
-                      path="/cmcs/portfolio"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcPortfolioPage />
-                        </CmcsLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/income"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcIncomePage />
-                        </CmcsLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/expenses"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcExpensePage />
-                        </CmcsLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/guarantee"
-                      component={() => (
-                        <CmcsLayout>
-                          <CmcGuaranteePage />
-                        </CmcsLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/admin"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractAdminPage />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/home"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractHome />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/dashboard"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractDashBoard />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/editor"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractEditor />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/bill"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractBill />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/budget"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractBudget />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/produce"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractProduce />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/ipc"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractIpc />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/cmcs/contract/:id/product"
-                      component={() => (
-                        <CmcsContractLayout>
-                          <ContractProduct />
-                        </CmcsContractLayout>
-                      )}
-                    />
-                  </Switch>
-                </Route>
+                                    <Route path="/timesheet/:path?">
+                                        <TimesheetLayout>
+                                            <Switch>
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/timesheet/home"
+                                                    component={TimesheetHomePage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path={"/timesheet/home/:id"}
+                                                    component={TimesheetDetailPage}
+                                                />
+                                            </Switch>
+                                        </TimesheetLayout>
+                                    </Route>
 
-                <Route path="/timesheet/:path?">
-                  <TimesheetLayout>
-                    <Switch>
-                      <ProtectedRoute
-                        exact
-                        path="/timesheet/home"
-                        component={TimesheetHomePage}
-                      />
-                      <ProtectedRoute
-                        exact
-                        path={"/timesheet/home/:id"}
-                        component={TimesheetDetailPage}
-                      />
-                    </Switch>
-                  </TimesheetLayout>
-                </Route>
-
-                <Route path="*">
-                  <FullPageLayout>
-                    <Route path="/*" component={ErrorPage} />
-                  </FullPageLayout>
-                </Route>
-              </Switch>
-            </ModalProvider>
-          </ChatProvider>
-        </ThemeProvider>
-      </AuthProvider>
-    </Router>
-  );
+                                    <Route path="*">
+                                        <FullPageLayout>
+                                            <Route path="/*" component={ErrorPage} />
+                                        </FullPageLayout>
+                                    </Route>
+                                </Switch>
+                            </ModalProvider>
+                        </ChatProvider>
+                    </DeleteConfirmProvider>
+                </ThemeProvider>
+            </AuthProvider>
+        </Router>
+    );
 };
 
 export default Routes;

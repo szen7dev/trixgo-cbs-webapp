@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { useTranslation } from "react-i18next";
+import debounce from 'lodash/debounce';
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -39,10 +40,21 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
   title,
   contactDocumentID,
 }) => {
+  const [searchCertificateType, setSearchCertificateTypeValue] = React.useState('');
+  const [searchCertificateName, setSearchCertificateNameValue] = React.useState('');
+
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
-  const { listDoctypes: listCertificateType } = useQueryListDoctype({ limit: 50, type: 14 });
-  const { listDoctypes: listCertificateName } = useQueryListDoctype({ limit: 50, type: 15 });
+  const { listDoctypes: listCertificateType } = useQueryListDoctype({ 
+    limit: 50,
+    type: 14,
+    keyword: searchCertificateType
+  });
+  const { listDoctypes: listCertificateName } = useQueryListDoctype({ 
+    limit: 50,
+    type: 15,
+    keyword: searchCertificateName
+});
 
   const initialValues = React.useMemo(
     () => ({
@@ -192,6 +204,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("certificateType", value.value)
                         }
+                        onSearchInputChange={debounce(value => setSearchCertificateTypeValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -224,6 +237,8 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                         onchangeValue={(value) =>
                           setFieldValue("certificateName", value.value)
                         }
+                        
+                        onSearchInputChange={debounce(value => setSearchCertificateNameValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
