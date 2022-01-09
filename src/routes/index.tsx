@@ -66,13 +66,13 @@ import TaskDetailPage from "views/pages/tasks/detail";
 import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
 
 // Personal pages
-import PersonalNotificationPage from "views/pages/personal/PersonalNotificationPage";
-import PersonalNotePage from "views/pages/personal/PersonalNotePage";
-import PersonalBillPage from "views/pages/personal/PersonalBillPage";
-import PersonalHomePage from "views/pages/personal/PersonalHomePage";
-import PersonalConfigPage from "views/pages/personal/PersonalConfigPage";
-import PersonalFriendPage from "views/pages/personal/PersonalFriendPage";
-import PersonalHistoryPage from "views/pages/personal/PersonalHistoryPage";
+import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
+import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
+import PersonalBillPage from "views/pages/personal/bill/PersonalBillPage";
+import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
+import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
+import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
+import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
 
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
