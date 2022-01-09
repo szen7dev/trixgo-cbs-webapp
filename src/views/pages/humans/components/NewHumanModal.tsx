@@ -13,7 +13,7 @@ import DropdownSearchable from "components/common/DropdownSearch";
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { INSURANCE_STATUS, CONTACT_POLICY } from "./views/GeneralInfo";
-import { 
+import {
   useFetchListDepartments,
   useQueryListDoctype,
   useFetchListArea,
@@ -92,7 +92,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
     limit: 100,
     keyword: initialValues?.area1?.name || ''
   });
-  
+
   const { listAreas: area2 } = useFetchListArea({
     limit: 100,
     keyword: initialValues?.area2?.name || ''
@@ -222,6 +222,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
                           id: "value",
                         }}
                         inlineSearch={true}
+                        onSearchInputChange={(valueSearch) => console.log(valueSearch)}
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
@@ -244,7 +245,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={defaultValues?.department 
+                        initialValue={defaultValues?.department
                           && `${defaultValues?.department}`
                         }
                         data={listDepartments}
@@ -275,7 +276,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={defaultValues?.position 
+                        initialValue={defaultValues?.position
                           && `${defaultValues?.position}`
                         }
                         // searchUrl='/api/item/positions'
@@ -704,7 +705,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({ initialValues, onFinish }) => {
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={defaultValues?.area1 
+                        initialValue={defaultValues?.area1
                           && `${defaultValues?.area1}`
                         }
                         data={area1.map(elm => ({
