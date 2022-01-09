@@ -7,8 +7,15 @@ import cn from "classnames";
 import DateIcon from "assets/images/icons8-calendar-100.svg";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-
-const DatePickerWithRange:FC = () => {
+type Props = {
+    onValueChange?: (value: {
+        id: number,
+        text: string,
+        startDate: string,
+        endDate: string
+    }) => void
+}
+const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
     const [showOption, setShowOption] = useState(false);
     const [value, setValue] = useState({
         id: 0,
@@ -48,6 +55,7 @@ const DatePickerWithRange:FC = () => {
     }, hideOptions = true) => {
         setValue(value)
         hideOptions&&setShowOption(false);
+        onValueChange&&onValueChange(value);
     }
 
     return (
