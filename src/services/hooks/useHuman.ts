@@ -18,6 +18,7 @@ import type {
     MutationContactDocument,
     Contract,
     QueryContractPayload,
+    DepartmentPayload
 } from 'typings/human';
 
 interface UseListHuman {
@@ -103,13 +104,10 @@ export const useFetchDetailHuman = (id: string): UseDetailHuman => {
     }
 }
 
-export const useFetchListDepartments = ({
+export const useQueryListDepartments = ({
     limit,
     keyword = '',
-}: {
-    limit: number;
-    keyword?: string;
-}): {
+}: Pick<DepartmentPayload, 'limit' | 'keyword'>): {
     loading: boolean;
     totalRecord: number | undefined;
     totalPages: number | undefined;

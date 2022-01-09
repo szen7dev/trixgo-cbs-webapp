@@ -15,6 +15,7 @@ import {
   useMutationContactDocument,
 } from "services/hooks/useHuman";
 import { FormWorkExperience } from "../forms";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import type { ContactDocument, Human } from "typings/human";
 
@@ -29,6 +30,7 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
 
   const { humanId, humanInfo } = props;
 
@@ -124,9 +126,9 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
             defaultValues={{
               fromDate: contactDocument.fromDate,
               toDate: contactDocument.toDate,
-              field2: contactDocument.field2._id,
-              position2: contactDocument.position2._id,
-              contract: contactDocument.contract._id,
+              field2: contactDocument?.field2?._id,
+              position2: contactDocument?.position2?._id,
+              contract: contactDocument?.contract?._id,
               project: contactDocument.project,
               client: contactDocument.client,
             }}
@@ -138,14 +140,18 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => async () => {
-      const res = await deleteContractDocumentAsync(contactDocument._id);
-      if (res.status === 200) {
-        refetchListContactDocument();
-        setOpenFileOption("");
-      }
+    (contactDocument: ContactDocument) => () => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await deleteContractDocumentAsync(contactDocument._id);
+          if (res.status === 200) {
+            refetchListContactDocument();
+            setOpenFileOption("");
+          }
+        }
+      })
     },
-    [deleteContractDocumentAsync, refetchListContactDocument]
+    [deleteContractDocumentAsync, openDeleteConfirm, refetchListContactDocument]
   );
 
   return (
@@ -177,7 +183,7 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
               {moment(contactDocument.toDate).isValid() &&
                 moment(contactDocument.toDate).format(DATE_FORMAT)}
             </p>
-            <p className="w-1/5">{contactDocument.field2.name}</p>
+            <p className="w-1/5">{contactDocument?.field2?.name}</p>
             <div className="w-1/5">
               <p style={{ maxWidth: "80%" }}>
                 {contactDocument.contract && (
@@ -197,7 +203,7 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
                 )}
               </p>
             </div>
-            <p className="w-1/5">{contactDocument.position2.name}</p>
+            <p className="w-1/5">{contactDocument?.position2?.name}</p>
             {contactDocument.files.map((elm) => (
               <div
                 key={elm._id}

@@ -61,6 +61,7 @@ const HumanInfo: FC = () => {
 
   const handleClickUpdateButton = useCallback(
     (defaultValues: Human) => () => {
+      console.log({humanInfo: defaultValues})
       openModal(
         <div
           className={
@@ -68,19 +69,41 @@ const HumanInfo: FC = () => {
           }
         >
           <NewHumanModal
+            title='Cập nhật nhân sự'
             initialValues={{
-              department: defaultValues.department?._id,
-              position: defaultValues?.position?._id,
-              area: defaultValues?.area?._id,
-              area1: defaultValues?.area1?._id,
-              area2: defaultValues?.area2?._id,
+              department: {
+                value: defaultValues?.department?._id,
+                label: defaultValues?.department?.name
+              },
+              position: {
+                value: defaultValues?.position?._id,
+                label: defaultValues?.position?.name
+              },
+              area: {
+                value: defaultValues?.area?._id,
+                label: defaultValues?.area?.name
+              },
+              area1: {
+                value: defaultValues?.area1?._id,
+                label: defaultValues?.area1?.name
+              },
+              area2: {
+                value: defaultValues?.area2?._id,
+                label: defaultValues?.area2?.name
+              },
+              workingStatus: {
+                value: defaultValues?.workingStatus?._id,
+                label: defaultValues?.workingStatus?.name
+              },
+              contractType: {
+                value: defaultValues?.contractType?._id,
+                label: defaultValues?.contractType?.name
+              },
               type: defaultValues.type,
               gender: defaultValues.gender,
-              workingStatus: defaultValues.workingStatus?._id,
               realStatus: defaultValues.realStatus,
               insuranceStatus: defaultValues.insuranceStatus,
               familyPolicy: defaultValues.familyPolicy,
-              contractType: defaultValues.contractType?._id,
               contractSign: defaultValues.contractSign,
               family: defaultValues.family,
               description: defaultValues.description,
@@ -95,7 +118,7 @@ const HumanInfo: FC = () => {
               address: defaultValues.address,
               taxid: defaultValues.taxid,
               insuranceSign: defaultValues.insuranceSign,
-              insuranceDate: defaultValues.insuanceDate,
+              insuranceDate: defaultValues.insuranceDate,
               sallaryFactor: defaultValues.sallaryFactor?.toString(),
               sallarySubFactor: defaultValues.sallarySubFactor?.toString(),
               sallaryBasic: defaultValues.sallaryBasic?.toString(),
@@ -235,7 +258,7 @@ const HumanInfo: FC = () => {
             description: detailHuman.description,
             place: detailHuman.place,
             area2: detailHuman.area2,
-            area1: detailHuman.area2,
+            area1: detailHuman.area1,
             workplace: detailHuman.workplace || [],
             taxid: detailHuman.taxid,
             major: detailHuman.major || [],
