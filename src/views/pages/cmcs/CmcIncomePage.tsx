@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import cn from "classnames";
@@ -20,6 +20,21 @@ const CmcIncome: FC = () => {
   const [itemChecked, setItemChecked] = useState(true);
 
   const { openModal } = useModal();
+
+  // useEffect(() => {
+  //   console.log('🚀 ~ useEffect ~ useEffect', 11111)
+    
+  // })
+
+  const prevPageAction = () => {
+    console.log('Bầm lùi');
+    
+  };
+
+  const nextPageAction = () => {
+    console.log('Bầm tiến');
+    
+  }
 
   return (
     <main className="relative h-full">
@@ -193,7 +208,7 @@ const CmcIncome: FC = () => {
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate totalPages={8} totalRecord={72} hasNextPage prevPageAction={()=>prevPageAction()} nextPageAction={()=>nextPageAction()}/>
     </main>
   );
 };
