@@ -208,7 +208,7 @@ export interface ContactDocument {
     userCreate: string;
     workplace: string;
     reference: string;
-    modifyAt: string;listRecords
+    modifyAt: string;
     createAt: string;
     position2: Position;
     contract: ContractType;
