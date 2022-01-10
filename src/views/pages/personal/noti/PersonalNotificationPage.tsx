@@ -4,7 +4,6 @@ import cn from "classnames";
 
 import DropdownSearchable from "components/common/DropdownSearch";
 
-import FilterBlueIcon from "assets/images/icons8-filter-96.png";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 

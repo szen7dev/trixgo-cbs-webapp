@@ -109,13 +109,17 @@ import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
 import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
 import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "views/pages/accounting/AccountingDiaryPage";
-import AccountingInOutPage from "views/pages/accounting/AccountingInOutPage";
-import AccountingDebtPage from "views/pages/accounting/AccountingDebtPage";
-import AccountingVatPage from "views/pages/accounting/AccountingVatPage";
-import AccountingReportFinancePage from "views/pages/accounting/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "views/pages/accounting/AccountingSupportToolsPage";
+import AccountingDiaryPage from "views/pages/accounting/Diary/AccountingDiaryPage";
+import AccountingInOutPage from "views/pages/accounting/ImportExport/AccountingInOutPage";
+import AccountingDebtPage from "views/pages/accounting/Debt/AccountingDebtPage";
+import AccountingVatPage from "views/pages/accounting/VAT/AccountingVatPage";
+import AccountingReportFinancePage from "views/pages/accounting/FinanceReport/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/pages/accounting/SupportTool/AccountingSupportToolsPage";
 import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
+import AccountingAdminPage from "views/pages/accounting/admin/AccountingAdminPage";
+import ReceivablesCustomers from "views/pages/accounting/Debt/components/ReceivablesCustomers";
+import ReceivablesCustomersCode from "views/pages/accounting/Debt/components/ReceivablesCustomersCode";
+import AccountingTBookPage from "views/pages/accounting/TBook/AccountingTBookPage";
 
 // Bidding pages
 import BiddingHomePage from "views/pages/bidding/BiddingHomePage";
@@ -778,6 +782,11 @@ const Routes: FC = () => {
                                                 />
                                                 <ProtectedRoute
                                                     exact
+                                                    path="/accounting/tbook"
+                                                    component={AccountingTBookPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
                                                     path="/accounting/diary"
                                                     component={AccountingDiaryPage}
                                                 />
@@ -793,6 +802,16 @@ const Routes: FC = () => {
                                                 />
                                                 <ProtectedRoute
                                                     exact
+                                                    path="/accounting/debt-tracking/account=:id"
+                                                    component={ReceivablesCustomers}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/debt-tracking/account/:id/customer/:id"
+                                                    component={ReceivablesCustomersCode}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
                                                     path="/accounting/vat"
                                                     component={AccountingVatPage}
                                                 />
@@ -805,6 +824,11 @@ const Routes: FC = () => {
                                                     exact
                                                     path="/accounting/support-tools"
                                                     component={AccountingSupportToolsPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/admin"
+                                                    component={AccountingAdminPage}
                                                 />
                                             </Switch>
                                         </AccountingLayout>
