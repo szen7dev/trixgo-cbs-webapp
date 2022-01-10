@@ -1,5 +1,5 @@
-import {FC, useState, useEffect, useCallback} from "react";
-
+import { FC } from "react";
+import cloneDeep from 'lodash/cloneDeep';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,8 +12,7 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
-import { number } from "yup";
-
+import _ from "lodash";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -76,67 +75,92 @@ const options = {
     },
   },
 };
-const data = {
+const dataNew = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
   datasets: [
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#2a90fb",
       barThickness: 8,
     },
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#0060E1",
       barThickness: 8,
     },
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#10b981",
       barThickness: 8,
     },
   ],
-};
+}
 const StatisticsByDeviceSupport: FC = () => {
 const { listDevice } = useFetchSupport();
 console.log('listDevice',listDevice)
-const arMonth : number[] = [];
 for (const element of listDevice) {
-    arMonth.push(element._id.month);
-
-  const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
-      list.reduce((previous, currentItem) => {
-        const group = getKey(currentItem);
-        if (!previous[group]) previous[group] = [];
-        previous[group].push(currentItem);
-        return previous;
-      }, {} as Record<K, T[]>);
-  type ListTypeDevice = {
-    type: number;
-    amountAccesses: number;
-  };
-
-  const people: ListTypeDevice[] = element.data
-  const results = groupBy(people, i => i.type);
-  console.log('results',results)
-
+  if(Number(element._id.month) === 1) {
+    dataNew.datasets[0].data[0] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[0] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[0] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 2) {
+    dataNew.datasets[0].data[1] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[1] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[1] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 3) {
+    dataNew.datasets[0].data[2] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[2] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[2] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 4) {
+    dataNew.datasets[0].data[3] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[3] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[3] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 5) {
+    dataNew.datasets[0].data[4] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[4] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[4] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 6) {
+    dataNew.datasets[0].data[5] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[5] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[5] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 7) {
+    dataNew.datasets[0].data[6] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[6] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[6] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 8) {
+    dataNew.datasets[0].data[7] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[7] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[7] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 9) {
+    dataNew.datasets[0].data[8] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[8] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[8] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 10) {
+    dataNew.datasets[0].data[9] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[9] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[9] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 11) {
+    dataNew.datasets[0].data[10] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[10] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[10] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 12) {
+    dataNew.datasets[0].data[11] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[11] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[11] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
 }
-const chartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
-    datasets: listDevice.map((item, index)=>{
-      return {
-            data: arMonth,
-            backgroundColor: "#2a90fb",
-            barThickness: 8,
-          }
-    })
-}
-console.log('arMonth',arMonth)
+  const dataNewList = _.cloneDeep(dataNew);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
@@ -145,7 +169,7 @@ console.log('arMonth',arMonth)
 
       <div className="flex items-center relative">
         <div className="w-11/12 h-[320px]">
-          <Bar options={options} data={chartData} />
+          <Bar options={options} data={dataNewList} />
         </div>
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">
