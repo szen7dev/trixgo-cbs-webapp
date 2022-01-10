@@ -1,5 +1,5 @@
-import {FC, useState, useEffect, useCallback} from "react";
-// const _ = require("lodash");
+import { FC } from "react";
+import cloneDeep from 'lodash/cloneDeep';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,8 +12,7 @@ import {
 import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
-import { number } from "yup";
-
+import _ from "lodash";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -76,139 +75,92 @@ const options = {
     },
   },
 };
-const data = {
+const dataNew = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
   datasets: [
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#2a90fb",
       barThickness: 8,
     },
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#0060E1",
       barThickness: 8,
     },
     {
-      data: [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       backgroundColor: "#10b981",
       barThickness: 8,
     },
   ],
-};
+}
 const StatisticsByDeviceSupport: FC = () => {
 const { listDevice } = useFetchSupport();
 console.log('listDevice',listDevice)
-// const arMonth : number[] = [];
-// const arTypeDevice = [];
-// const arAccesses : number[] = [];
-// const dataDevice = [];
-// for (const element of listDevice) {
-//     arMonth.push(element._id.month);
-//     for(const item of element.data){
-//       arTypeDevice.push(item.type);
-//       arAccesses.push(item.amountAccesses);
-//       dataDevice.push(element.data);
-//     }
-// }
-  // const groupBy = function(xs : any, key :any) {
-  //   return xs.reduce(function(rv : any, x :any) {
-  //     (rv[x[key]] = rv[x[key]] || []).push(x);
-  //     return rv;
-  //   }, {});
-  // };
-
-  // console.log(groupBy(dataDevice, 'length'));
-// const chartData = {
-//     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
-//     datasets: listDevice.map((item, index)=>{
-//       console.log('item',item)
-//       return {
-//             data: arAccesses,
-//             backgroundColor: "#2a90fb",
-//             barThickness: 8,
-//           }
-//     })
-// }
-
-  // const raw = [
-  //       { statusId: 0, firstName: "Joe", status: "appealed", count: 1 },
-  //         { statusId: 0, firstName: "Jane", status: "approved", count: 100 },
-  //         { statusId: 0, firstName: "Smith", status: "approved", count: 63 },
-  //         { statusId: 0, firstName: "Mike", status: "approved", count: 63 },
-  //         { statusId: 0, firstName: "Ken", status: "approved", count: 35 },
-  //         { statusId: 0, firstName: "Kim", status: "approved", count: 193 },
-  //         { statusId: 0, firstName: "JoeJoe", status: "approved", count: 1 },
-  //         { statusId: 0, firstName: "Jane", status: "closed", count: 1 },
-  //         { statusId: 0, firstName: "Joe", status: "concluded", count: 1 },
-  //         { statusId: 0, firstName: "Jane", status: "denied", count: 6 },
-  //         { statusId: 0, firstName: "Smith", status: "denied", count: 9 },
-  //         { statusId: 0, firstName: "Mike", status: "denied", count: 1 },
-  //         { statusId: 0, firstName: "Mark", status: "denied", count: 8 },
-  //         { statusId: 0, firstName: "Ken", status: "denied", count: 2 },
-  //         { statusId: 0, firstName: "Kim", status: "denied", count: 20 },
-  //         { statusId: 0, firstName: "Joe", status: "denied", count: 2 },
-  //         { statusId: 0, firstName: "Joe", status: "transferred", count: 1 }
-  // ];
-  const nameIndices = Object.create(null);
-  const statusHash = Object.create(null);
-  const data = {
-    labels: [],
-    datasets: []
-  };
-  const arAccesses : number[] = [];
-  listDevice.forEach(function (item1) {
-    for(const item of item1.data){
-      arAccesses.push(item.amountAccesses);
-      if (!(item.type in nameIndices)) {
-        nameIndices[item.type] = data.labels.push(item.firstName) - 1;
-        data.datasets.forEach(function (a) {
-          a.data.push(0);
-        });
-      }
-      if (!statusHash[item._id.month]) {
-        statusHash[item._id.month] = {
-          label: item._id.month,
-          fillcolor: 'f00',
-          data: data.labels.map(function () {
-            return 0;
-          })
-        };
-        data.datasets.push(statusHash[item._id.month]);
-      }
-      statusHash[item._id.month].data[nameIndices[item.firstName]] = item.count;
-    }
-  });
-
-  console.log(data);
-
-  const chartData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",],
-    datasets: [
-      {
-        data: arAccesses,
-        backgroundColor: "#2a90fb",
-        barThickness: 8,
-      },
-      {
-        data: arAccesses,
-        backgroundColor: "#0060E1",
-        barThickness: 8,
-      },
-      {
-        data: arAccesses,
-        backgroundColor: "#10b981",
-        barThickness: 8,
-      },
-    ],
+for (const element of listDevice) {
+  if(Number(element._id.month) === 1) {
+    dataNew.datasets[0].data[0] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[0] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[0] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
   }
-console.log('arMonth',arMonth)
+  if(Number(element._id.month) === 2) {
+    dataNew.datasets[0].data[1] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[1] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[1] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 3) {
+    dataNew.datasets[0].data[2] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[2] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[2] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 4) {
+    dataNew.datasets[0].data[3] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[3] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[3] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 5) {
+    dataNew.datasets[0].data[4] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[4] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[4] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 6) {
+    dataNew.datasets[0].data[5] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[5] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[5] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 7) {
+    dataNew.datasets[0].data[6] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[6] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[6] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 8) {
+    dataNew.datasets[0].data[7] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[7] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[7] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 9) {
+    dataNew.datasets[0].data[8] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[8] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[8] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 10) {
+    dataNew.datasets[0].data[9] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[9] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[9] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 11) {
+    dataNew.datasets[0].data[10] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[10] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[10] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+  if(Number(element._id.month) === 12) {
+    dataNew.datasets[0].data[11] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    dataNew.datasets[1].data[11] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    dataNew.datasets[2].data[11] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+  }
+}
+  const dataNewList = _.cloneDeep(dataNew);
   return (
     <section className="w-full h-[358px] py-4 px-6 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
@@ -217,7 +169,7 @@ console.log('arMonth',arMonth)
 
       <div className="flex items-center relative">
         <div className="w-11/12 h-[320px]">
-          <Bar options={options} data={chartData} />
+          <Bar options={options} data={dataNewList} />
         </div>
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">
