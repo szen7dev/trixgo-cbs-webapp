@@ -12,9 +12,12 @@ import ChartReportByTime from "./components/chart/ChartReportByTime";
 import generateImageLink from "../media/utils/images";
 import classNames from "classnames";
 import CardImage from "./components/photo/CardImage";
+import { Link, useLocation } from "react-router-dom";
 
 const ProjectPhoto: FC = () => {
-	const { toggleModal } = useContext(ModalContext)
+	const { toggleModal } = useContext(ModalContext);
+	const location = useLocation();
+	console.log(location)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hình ảnh"
@@ -46,11 +49,13 @@ const ProjectPhoto: FC = () => {
 						<div className="lg:w-6/12 2xl:w-4/12 px-2" key={i}>
 							<div className="shadow-cbs-md">
 								<div className="grid grid-cols-3 gap-1 text-white px-1 pt-2.5">
-									{Array.from({ length: Math.ceil(Math.random() * 12) + 5 }).map((_, index) => index <= 5 && <CardImage index={index} />)}
+									{Array.from({ length: Math.ceil(Math.random() * 12) + 5 }).map((_, index) => index <= 5 && <CardImage pathname={location.pathname + '/package/' + i} index={index} />)}
 								</div>
-								<div className="px-4 py-3 text-justify font-bold text-large">
-									CHG.THT.Thi công san lấp mặt bằng, đường giao thông nội bộ, cầu rửa xe
-								</div>
+								<Link to={location.pathname + '/package/' + i}>
+									<div className="px-4 py-3 text-justify font-bold text-large">
+										CHG.THT.Thi công san lấp mặt bằng, đường giao thông nội bộ, cầu rửa xe
+									</div>
+								</Link>
 								<div className="flex justify-between pl-4 pr-6 py-1.5 text-medium bg-cbs-table-header">
 									<span >Số lượng ảnh</span>
 									<span>
