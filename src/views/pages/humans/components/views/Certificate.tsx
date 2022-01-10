@@ -51,7 +51,7 @@ const Certificate: FC<CertificateProps> = (props) => {
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 4,
+    type: 5,
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
