@@ -104,6 +104,7 @@ import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
 import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
+import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
 
 // Accounting pages
 import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
@@ -516,6 +517,15 @@ const Routes: FC = () => {
                                                 component={() => (
                                                     <ProjectLayout>
                                                         <ProjectPhotoPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/photo/package/:packageId"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectPhotoPackagePage />
                                                     </ProjectLayout>
                                                 )}
                                             />

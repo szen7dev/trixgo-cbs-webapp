@@ -161,7 +161,11 @@ async function fetchListDoctype(params: DoctypePayload) {
     const { data } = await API.get(
         `${ITEM_URL}/doctypes`, {
         params: {
-            select: 'name type',
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
             ...params
         }
     }
