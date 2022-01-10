@@ -17,9 +17,9 @@ type QueryParam = {
 }
 
 type Company = {
-    name: string;
-    sign: string;
-    _id: string;
+    name?: string;
+    sign?: string;
+    _id?: string;
 }
 
 type Position = {
@@ -278,6 +278,7 @@ export type Doctype = {
     _id: string;
     name: string;
     type: number;
+    company?: Company
 }
 
 export type DoctypePayload = QueryParam & {
