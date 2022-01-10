@@ -1260,3 +1260,8 @@ input[type="text"] {
   opacity: 1;
   visibility: visible;
 }
+.message-list-height {
+  height: calc(100vh - 150px);
+  max-height: calc(100vh - 150px);
+  min-height: calc(100vh - 150px);
+}
