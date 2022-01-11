@@ -7,6 +7,7 @@ const getListConversationURL = "/api/chatting/conversations/list-conversation-wi
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
+        console.log("payload: ", payload);
         const { data } = await API.get<ListConversationResponse>(
             `${getListConversationURL}?${convertObToUrl(payload)}`
         );

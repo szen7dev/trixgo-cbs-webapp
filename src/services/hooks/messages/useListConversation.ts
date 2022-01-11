@@ -9,7 +9,6 @@ type UseListConversation = {
     nextListConversation: () => void,
     prevListConversation: () => void,
     totalRecord: number | undefined,
-    nextCursor: string | null,
     hasNextPage: boolean | undefined
 };
 
@@ -23,9 +22,9 @@ export const UseListConversation = (key?: string, params?: ListConversationPaylo
         hasNextPage: hasNextPage
     } = useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
         [key || "list_conversation", params?.keyword],
-        async ({ pageParams }: any) =>
+        async ({ pageParam }: any) =>
             ListConversationRepository.getListConversation({
-                lastestConversationID: pageParams||"",
+                lastestID: pageParam||"",
                 ...params,
             }),
         {
@@ -47,7 +46,6 @@ export const UseListConversation = (key?: string, params?: ListConversationPaylo
     const listConversation = listConversationPined.concat(listConversationUnPin);
 
     const totalRecord = dataListConversation?.pages[0]?.data?.totalRecord;
-    const nextCursor = dataListConversation?.pages[0]?.data?.nextCursor || null;
 
     return {
         listConversation,
@@ -56,7 +54,6 @@ export const UseListConversation = (key?: string, params?: ListConversationPaylo
         nextListConversation,
         prevListConversation,
         totalRecord,
-        nextCursor,
         hasNextPage
     };
 };
