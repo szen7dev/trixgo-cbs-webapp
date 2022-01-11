@@ -68,8 +68,9 @@ type Contact = {
     sign: string;
 }
 
-type File = {
+export type File = {
     name: string;
+    nameOrg: string;
     size: number;
     _id: string;
     url: string;

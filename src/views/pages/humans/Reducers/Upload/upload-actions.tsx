@@ -12,11 +12,12 @@ interface IFileActions {
 }
 
 export const actionsFiles: IFileActions = {
-  setUploadFile: (dispatch) => (payload: File[]) =>
-    dispatch({
-      type: uploadFileTypes.SET_UPLOAD_FILE,
-      payload: payload,
-    }),
+  setUploadFile: (dispatch) => (payload: File[]) => dispatch({
+    type: uploadFileTypes.SET_UPLOAD_FILE,
+    payload: {
+      ...payload
+    },
+  }),
   setUploadFileProgress: (dispatch) => (id: number, progress: number) =>
     dispatch({
       type: uploadFileTypes.SET_UPLOAD_FILE_PROGRESS,
@@ -25,10 +26,10 @@ export const actionsFiles: IFileActions = {
         progress,
       },
     }),
-  setIDFileUploaded: (dispatch) => (id: number, key: string) =>
+  setIDFileUploaded: (dispatch) => (id: number, key: string, contactDocumentID: string) =>
     dispatch({
       type: uploadFileTypes.SET_ID_FILE_UPLOADED,
-      payload: { id, key },
+      payload: { id, key, contactDocumentID },
     }),
   successUploadFile: (dispatch) => (id: number) =>
     dispatch({

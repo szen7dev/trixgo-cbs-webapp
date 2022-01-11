@@ -52,6 +52,7 @@ const fileUploadReducer: TReducer = (state, action) => {
           [action.payload.id]: {
             ...state.files[action.payload.id],
             _id: action.payload.key,
+            contactDocumentID: action.payload.contactDocumentID
           },
         },
       };
