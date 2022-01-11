@@ -338,6 +338,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                         }}
                       />
                     </div>
+                    <div className="w-1/4 flex items-center" />
                   </div>
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">
                     <button

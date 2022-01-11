@@ -191,12 +191,12 @@ const Education: FC<EducationProps> = (props) => {
     }
   }, []);
 
-  const handleRemoveFileUpload = (
+  const handleRemoveFileUpload = useCallback(async (
     file: FileProps | FilePropsUpload,
     contactDocumentID: string
   ) => {
     if (file._id) {
-      removeFileContractDocument({
+      await removeFileContractDocument({
         contactDocumentID,
         fileRemoveID: file._id,
       });
@@ -207,11 +207,12 @@ const Education: FC<EducationProps> = (props) => {
     } else {
       removeUploadedFile(file._id);
     }
-  };
+  }, [refetchListContactDocument, removeFileContractDocument, removeUploadedFile]);
 
   const handleUploadFile = useCallback(
     async (_fileUploads: IFile, contactDocumentID: string) => {
       // Upload files
+      const listFileContractDocumentAsync = []
       for (const [key, { file }] of Object.entries(_fileUploads)) {
         const { _id } = await addFileToUpload({
           files: file,
@@ -220,31 +221,30 @@ const Education: FC<EducationProps> = (props) => {
           },
         });
         if (_id) {
-          updateFileContractDocumentAsync({
-            contactDocumentID,
-            fileID: _id,
-          });
-          setIDFileUploaded(key, _id);
+          listFileContractDocumentAsync.push(
+            updateFileContractDocumentAsync({
+              contactDocumentID,
+              fileID: _id,
+            })
+          );
+          setIDFileUploaded(key, _id, contactDocumentID);
         }
       }
-      removeAllFiles();
-      refetchListContactDocument();
+      Promise.all(listFileContractDocumentAsync).then(() => {
+        removeAllFiles();
+        refetchListContactDocument();
+      }).catch(err => {
+        console.error(err);
+      })
     },
-    [
-      addFileToUpload,
-      refetchListContactDocument,
-      removeAllFiles,
-      setIDFileUploaded,
-      setUploadFileProgress,
-      updateFileContractDocumentAsync,
-    ]
+    [addFileToUpload, refetchListContactDocument, removeAllFiles, setIDFileUploaded, setUploadFileProgress, updateFileContractDocumentAsync]
   );
 
   const handleAttachFiles = useCallback(
     (contactDocumentID: string) =>
       async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
-        const files = modifyUploadedFilesV2(e.target.files);
+        const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
         setUploadFile(files);
 
         handleUploadFile(files, contactDocumentID);
@@ -299,68 +299,76 @@ const Education: FC<EducationProps> = (props) => {
                 const size =
                   "progress" in d ? d.file.size : d.file ? d.file.size : d.size;
                 const key = "progress" in d ? d.id : d._id;
-                return (
-                  <div key={key} className="flex justify-between items-center ">
-                    <div className="flex relative">
-                      <div>
-                        <img src={PDFIcon} alt="PDF" />
-                      </div>
-                      <div className="ml-2">
-                        <p>{name}</p>
-                        <p
-                          className="text-primary-gray"
-                          style={{ fontSize: 10, maxWidth: "80%" }}
-                        >
-                          {`${size}KB`}
-                        </p>
-                        <button
-                          type="button"
-                          className={className(
-                            "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center"
-                          )}
-                          onClick={() =>
-                            handleRemoveFileUpload(d, contactDocument._id)
-                          }
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+                if (d.contactDocumentID === contactDocument._id) {
+                  return (
+                    <div
+                      key={key}
+                      className="flex justify-between items-center "
+                    >
+                      <div className="flex relative">
+                        <div>
+                          <img src={PDFIcon} alt="PDF" />
+                        </div>
+                        <div className="ml-2">
+                          <p>{name}</p>
+                          <p
+                            className="text-primary-gray"
+                            style={{ fontSize: 10, maxWidth: "80%" }}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div
-                        className={className(
-                          "relative w-[32px] h-[32px] border rounded-full border-blue-600",
-                          {
-                            hidden: "progress" in d && d.progress === 100,
-                          }
-                        )}
-                      >
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                          }}
-                          className={className("text-primary")}
+                            {`${size}KB`}
+                          </p>
+                          <button
+                            type="button"
+                            className={className(
+                              "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", {
+                                hidden: !d._id
+                              }
+                            )}
+                            onClick={() =>
+                              handleRemoveFileUpload(d, contactDocument._id)
+                            }
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div
+                          className={className(
+                            "relative w-[32px] h-[32px] border rounded-full border-blue-600",
+                            {
+                              hidden: "progress" in d && d.progress === 100,
+                            }
+                          )}
                         >
-                          {90 + "%"}
-                        </span>
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)",
+                            }}
+                            className={className("text-primary")}
+                          >
+                            {d.progress + "%"}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
+                  );
+                }
+                return null;
               })}
             </div>
             <div className="absolute inset-y-0 right-0">
