@@ -302,7 +302,7 @@ export type DoctypePayload = QueryParam & {
     // 18 - Chung - Nguyên nhân thất bại
     // 20 - Chung các lỗi hay gặp
     // 21 - Công việc, Đánh giá chất lượng
-    type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19| 20 | 21;
+    type: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
 }
 
 export type DoctypeResponse = APIResponse & {
@@ -363,13 +363,13 @@ export type UpdateFileContactDocumentPayload = {
 
 export type RemoveFileContactDocumentPayload = {
     contactDocumentID: string;
-    fileRemoveID: string;
+    fileRemoveID: string | number;
 }
 
 export type MutationContactDocument = {
     status?: number;
     error: boolean,
-    data: ContactDocument 
+    data: ContactDocument
 }
 
 export interface Contract {
@@ -393,3 +393,27 @@ export type QueryContractResponse = APIResponse & {
         nextCursor?: string;
     }
 }
+
+interface FileProp {
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+}
+
+export interface FileProps {
+    file?: FileProp
+    _id: number | string;
+    url: string;
+    name: string;
+    size: number;
+};
+
+export interface FilePropsUpload {
+    _id: string;
+    id: number;
+    file: File;
+    progress: number;
+    cancelTokenSource: CancelTokenSource;
+    proimise?: Interval;
+};
