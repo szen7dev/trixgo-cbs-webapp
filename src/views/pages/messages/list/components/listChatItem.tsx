@@ -8,10 +8,9 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 
 type Props = {
-    chat: ItemListConversation,
-    index: number
+    chat: ItemListConversation
 }
-const ListChatItem:FC<Props> = ({chat,index}) => {
+const ListChatItem:FC<Props> = ({chat}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"";
