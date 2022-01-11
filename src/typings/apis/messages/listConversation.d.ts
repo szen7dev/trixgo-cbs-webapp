@@ -60,6 +60,6 @@ export type ListConversationResponse = {
 
 export type ListConversationPayload = {
     keyword?: string;
-    lastestConversationID?: string;
+    lastestID?: string;
     limit?: number;
 };
