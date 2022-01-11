@@ -28,12 +28,12 @@ const MainChatHeading:FC<Props> = ({chat}) => {
         });
     }
     return (
-        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1"}>
+        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-50"}>
             <div className={"avatar-chat"}>
                 {
                     chat.chatAvatar?
                         <img className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat.chatAvatar??""} alt={chat.chatName}/>:
-                        <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: getColor()}}>
+                        <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: "#8DD4D6"}}>
                             {getPresentGroupName()}
                         </div>
                 }

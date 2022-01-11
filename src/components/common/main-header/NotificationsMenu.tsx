@@ -18,7 +18,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
       <div>
         <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
           {notifications.length ? (
-            <span className="absolute -top-1 -right-1 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
+            <span className="absolute top-0 right-0 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
               {notifications.length}
             </span>
           ) : ''}

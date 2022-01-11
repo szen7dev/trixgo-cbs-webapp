@@ -1,9 +1,10 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 import SearchInput from "components/common/SearchInput";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 const MessageList:FC = () => {
     const listTab = [
@@ -11,156 +12,29 @@ const MessageList:FC = () => {
             text: "All",
             tabId: "all",
             unread: 0
-        },
-        {
-            text: "CBS",
-            tabId: "cbs",
-            unread: 0
-        },
-        {
-            text: "Quản trị",
-            tabId: "quan-tri",
-            unread: 0
-        },
-        {
-            text: "Budget",
-            tabId: "budget",
-            unread: 0
-        },
-        {
-            text: "Unread",
-            tabId: "unread",
-            unread: 7
-        },
-        {
-            text: "Quản trị",
-            tabId: "quan-tri2",
-            unread: 0
-        },
-        {
-            text: "Budget",
-            tabId: "budget2",
-            unread: 0
-        },
-    ]
-    const listChat = [
-        {
-            _id: 1,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 2,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 3,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 4,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
-        },
-        {
-            _id: 5,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 6,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 7,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 8,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
-        },
-        {
-            _id: 9,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 10,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 11,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 12,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
         }
     ]
 
+    const [searchText, setSearchText] = useState("");
+    const {listConversation, nextListConversation, hasNextPage, isLoadingListConversation} = UseListConversation('list_conversation', {keyword: searchText});
+    const listInnerRef = useRef<HTMLDivElement>(null);
+
+    const onScroll = () => {
+        if (listInnerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
+                nextListConversation();
+            }
+        }
+    };
+
+    useEffect(() => {
+        listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
+    },[listInnerRef])
+
     return (
         <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
-            <div className={"overflow-auto h-full"}>
-                <div className={"sticky top-0 bg-white z-5"}>
+                <div className={"bg-white z-5"}>
                     <div className={"p-2 flex"}>
                         <HamLeftMenu/>
                         <SearchInput classNameWrapper={"flex-1"} classNameInput={"rounded-full"} onChange={value => console.log(value)}/>
@@ -181,14 +55,14 @@ const MessageList:FC = () => {
                         ))}
                     </div>
                 </div>
-
-                <div className={"chat-list p-1"}>
-                    {_map(listChat, (chat,index) => (
+                <div
+                    className={"overflow-auto message-list-height"}
+                    ref={listInnerRef}
+                    id={'list-conversation'}>
+                    {_map(listConversation, (chat,index) => (
                         <ListChatItem key={chat._id} chat={chat} index={index}/>
                     ))}
                 </div>
-
-            </div>
             <AddNewChatGroup/>
         </div>
     )

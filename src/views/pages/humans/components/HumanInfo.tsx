@@ -21,7 +21,6 @@ import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import Loader from "components/shared/Loader";
 import {
   useFetchDetailHuman,
-  useFetchListContactDocuments,
   useUpdateContactMutation,
 } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
@@ -44,37 +43,6 @@ const HumanInfo: FC = () => {
   );
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
-  const {
-    listContactDocument: workSideHistory,
-    loading: isWorkSideHistoryLoading,
-    fetchNextPageContactDocument: fetchNextPageWorkSideHistory,
-    totalRecord: totalRecordWorkSideHistory,
-  } = useFetchListContactDocuments(id, { type: 1 });
-  const {
-    listContactDocument: workExperience,
-    loading: isWorkExperienceLoading,
-    fetchNextPageContactDocument: fetchNextPageWorkExperience,
-    totalRecord: totalRecordWorkExperience,
-  } = useFetchListContactDocuments(id, { type: 2 });
-  const {
-    listContactDocument: experienceAppointment,
-    loading: isExperienceAppointmentLoading,
-    fetchNextPageContactDocument: fetchNextPageExperienceAppointment,
-    totalRecord: totalRecordExperienceAppointment,
-  } = useFetchListContactDocuments(id, { type: 3 });
-  const {
-    listContactDocument: education,
-    loading: isEducationLoading,
-    fetchNextPageContactDocument: fetchNextPageEducation,
-    totalRecord: totalRecordEducation,
-  } = useFetchListContactDocuments(id, { type: 4 });
-  const {
-    listContactDocument: certificateGrade,
-    loading: isCertificateGradeLoading,
-    fetchNextPageContactDocument: fetchNextPageCertificateGrade,
-    totalRecord: totalRecordCertificateGrade,
-  } = useFetchListContactDocuments(id, { type: 5 });
-
   const handleFinishForm = useCallback(
     async (values) => {
       const res = await updateContactMutateAsync({
@@ -100,19 +68,41 @@ const HumanInfo: FC = () => {
           }
         >
           <NewHumanModal
+            title='Cập nhật nhân sự'
             initialValues={{
-              department: defaultValues.department?._id,
-              position: defaultValues?.position?._id,
-              area: defaultValues?.area?._id,
-              area1: defaultValues?.area1?._id,
-              area2: defaultValues?.area2?._id,
+              department: {
+                value: defaultValues?.department?._id,
+                label: defaultValues?.department?.name
+              },
+              position: {
+                value: defaultValues?.position?._id,
+                label: defaultValues?.position?.name
+              },
+              area: {
+                value: defaultValues?.area?._id,
+                label: defaultValues?.area?.name
+              },
+              area1: {
+                value: defaultValues?.area1?._id,
+                label: defaultValues?.area1?.name
+              },
+              area2: {
+                value: defaultValues?.area2?._id,
+                label: defaultValues?.area2?.name
+              },
+              workingStatus: {
+                value: defaultValues?.workingStatus?._id,
+                label: defaultValues?.workingStatus?.name
+              },
+              contractType: {
+                value: defaultValues?.contractType?._id,
+                label: defaultValues?.contractType?.name
+              },
               type: defaultValues.type,
               gender: defaultValues.gender,
-              workingStatus: defaultValues.workingStatus?._id,
               realStatus: defaultValues.realStatus,
               insuranceStatus: defaultValues.insuranceStatus,
               familyPolicy: defaultValues.familyPolicy,
-              contractType: defaultValues.contractType?._id,
               contractSign: defaultValues.contractSign,
               family: defaultValues.family,
               description: defaultValues.description,
@@ -127,7 +117,7 @@ const HumanInfo: FC = () => {
               address: defaultValues.address,
               taxid: defaultValues.taxid,
               insuranceSign: defaultValues.insuranceSign,
-              insuranceDate: defaultValues.insuanceDate,
+              insuranceDate: defaultValues.insuranceDate,
               sallaryFactor: defaultValues.sallaryFactor?.toString(),
               sallarySubFactor: defaultValues.sallarySubFactor?.toString(),
               sallaryBasic: defaultValues.sallaryBasic?.toString(),
@@ -267,7 +257,7 @@ const HumanInfo: FC = () => {
             description: detailHuman.description,
             place: detailHuman.place,
             area2: detailHuman.area2,
-            area1: detailHuman.area2,
+            area1: detailHuman.area1,
             workplace: detailHuman.workplace || [],
             taxid: detailHuman.taxid,
             major: detailHuman.major || [],
@@ -294,36 +284,14 @@ const HumanInfo: FC = () => {
             signerOut: detailHuman.signerOut,
           }}
         />
-        <WorkHistory
-          loading={isWorkSideHistoryLoading}
-          info={workSideHistory}
-          fetchNextPageDocument={fetchNextPageWorkSideHistory}
-          totalRecord={totalRecordWorkSideHistory || 0}
-        />
+        <WorkHistory humanId={id} />
         <WorkExperience
-          info={workExperience}
-          loading={isWorkExperienceLoading}
-          fetchNextPageDocument={fetchNextPageWorkExperience}
-          totalRecord={totalRecordWorkExperience || 0}
+          humanId={id}
+          humanInfo={detailHuman}
         />
-        <ExperienceAppointment
-          info={experienceAppointment}
-          loading={isExperienceAppointmentLoading}
-          fetchNextPageDocument={fetchNextPageExperienceAppointment}
-          totalRecord={totalRecordExperienceAppointment || 0}
-        />
-        <Education
-          info={education}
-          loading={isEducationLoading}
-          fetchNextPageDocument={fetchNextPageEducation}
-          totalRecord={totalRecordEducation || 0}
-        />
-        <Certificate
-          info={certificateGrade}
-          loading={isCertificateGradeLoading}
-          fetchNextPageDocument={fetchNextPageCertificateGrade}
-          totalRecord={totalRecordCertificateGrade || 0}
-        />
+        <ExperienceAppointment humanId={id} humanInfo={detailHuman} />
+        <Education humanId={id} />
+        <Certificate humanId={id} />
       </section>
     </main>
   );

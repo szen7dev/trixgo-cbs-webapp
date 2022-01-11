@@ -1,5 +1,5 @@
 import API from "../repository";
-
+import type { AxiosRequestConfig } from 'axios';
 import type {
     ListHumanResponse,
     HumanPayload,
@@ -15,15 +15,23 @@ import type {
     AreaPayload,
     AreaResponse,
     CreateContactResponse,
-    MutationContactPayload
+    MutationContactPayload,
+
+    CreateContactDocumentPayload,
+    UpdateContactDocumentPayload,
+    UpdateFileContactDocumentPayload,
+    RemoveFileContactDocumentPayload,
+    MutationContactDocument,
+    QueryContractPayload,
+    QueryContractResponse
 } from "typings/human";
 
-const CONTACT_URL = "/api/item";
+const ITEM_URL = "/api/item";
 const CONTACT_DOCUMENT_URL = "/api/human";
 
 async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
     const { data } = await API.get(
-        `${CONTACT_URL}/contacts`,
+        `${ITEM_URL}/contacts`,
         {
             params: {
                 filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
@@ -44,7 +52,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
         params: {
             populates: {
-                "path": "company contact files contract",
+                "path": "company contact files contract position2 educationalBackground2 field2",
                 "select": "name sign size url userCreate createAt",
                 "populate": {
                     "path": "userCreate project",
@@ -58,9 +66,44 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
     return data;
 }
 
+async function requestCreateContactDocument<T>(body: T): Promise<{error: boolean; data: T}> {
+    const { data } = await API.post(
+        `${CONTACT_DOCUMENT_URL}/contact_documents`,
+        body
+    )
+    return data;
+}
+
+async function requestUpdateContactDocument<T>(body: T): Promise<{error: boolean; data: T}> {
+    const { data } = await API.put(
+        `${CONTACT_DOCUMENT_URL}/contact_documents`,
+        body
+    )
+    return data;
+}
+
+async function requestDeleteContactDocument(contactDocumentID: string): Promise<any> {
+    const { data } = await API.delete(
+        `${CONTACT_DOCUMENT_URL}/contact_documents`, {
+            params: {
+                contactDocumentID
+            }
+        }
+
+    )
+    return data;
+}
+
+async function requestUpdateFileContractDocument<T>(_data: T, configs?: AxiosRequestConfig): Promise<any> {
+    const { data } = await API.put(
+        `${CONTACT_DOCUMENT_URL}/contact_documents`, _data, configs
+    )
+    return data
+}
+
 async function requestCreateContact(formData: MutationContactPayload): Promise<CreateContactResponse> {
     const { data } = await API.post(
-        `${CONTACT_URL}/contacts`,
+        `${ITEM_URL}/contacts`,
         {
             ...formData
         }
@@ -70,7 +113,7 @@ async function requestCreateContact(formData: MutationContactPayload): Promise<C
 
 async function requestUpdateContact(formData: MutationContactPayload): Promise<CreateContactResponse> {
     const { data } = await API.put(
-        `${CONTACT_URL}/contacts`,
+        `${ITEM_URL}/contacts`,
         {
             ...formData
         }
@@ -80,7 +123,7 @@ async function requestUpdateContact(formData: MutationContactPayload): Promise<C
 
 async function fetchListDepartment(params: DepartmentPayload) {
     const { data } = await API.get(
-        `${CONTACT_URL}/departments`, {
+        `${ITEM_URL}/departments`, {
         params: {
             populates: {
                 "path": "members",
@@ -96,7 +139,7 @@ async function fetchListDepartment(params: DepartmentPayload) {
 
 async function fetchListPosition(params: PositionPayload) {
     const { data } = await API.get(
-        `${CONTACT_URL}/positions`, {
+        `${ITEM_URL}/positions`, {
         params: {
             populates: {
                 "path": "parent",
@@ -116,9 +159,13 @@ async function fetchListPosition(params: PositionPayload) {
 
 async function fetchListDoctype(params: DoctypePayload) {
     const { data } = await API.get(
-        `${CONTACT_URL}/doctypes`, {
+        `${ITEM_URL}/doctypes`, {
         params: {
-            select: 'name type',
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
             ...params
         }
     }
@@ -128,9 +175,9 @@ async function fetchListDoctype(params: DoctypePayload) {
 
 async function fetchListArea(params: AreaPayload) {
     const { data } = await API.get(
-        `${CONTACT_URL}/areas`, {
+        `${ITEM_URL}/areas`, {
         params: {
-            populates: { 
+            populates: {
                 "path": "parent",
                 "select": "name sign parent level",
                 "populate": {
@@ -138,7 +185,7 @@ async function fetchListArea(params: AreaPayload) {
                     "select": "name sign parent level"
                 }
             },
-            filter: { 
+            filter: {
                 "company": 1,
                 "name": 1,
                 "sign": 1,
@@ -149,6 +196,22 @@ async function fetchListArea(params: AreaPayload) {
             ...params
         }
     }
+    )
+    return data;
+}
+
+async function fetchListContracts(params: QueryContractPayload): Promise<QueryContractResponse> {
+    const { data } = await API.get(
+        `${ITEM_URL}/contracts`, {
+            params: {
+                populates: {
+                    "path": "company",
+                    "select": "name sign"
+                },
+                select: 'company name sign description createAt',
+                ...params
+            }
+        }
     )
     return data;
 }
@@ -174,6 +237,11 @@ const HumanRepository = {
     }),
     fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> =>
         fetchListContactDocument<ContactDocumentResponse>(params),
+    requestCreateContactDocument: async (body: CreateContactDocumentPayload): Promise<MutationContactDocument> => requestCreateContactDocument(body),
+    requestUpdateContactDocument: async (body: UpdateContactDocumentPayload): Promise<MutationContactDocument> => requestUpdateContactDocument(body),
+    requestDeleteContactDocument,
+    requestUpdateFileContractDocument: async (body: UpdateFileContactDocumentPayload, configs?: AxiosRequestConfig): Promise<any> => requestUpdateFileContractDocument(body, configs),
+    requestRemoveFileContractDocument: async (body: RemoveFileContactDocumentPayload): Promise<any> => requestUpdateFileContractDocument(body),
 
     fetchListDepartment: async (params: DepartmentPayload): Promise<DepartmentResponse> =>
         fetchListDepartment(params),
@@ -189,6 +257,7 @@ const HumanRepository = {
 
     requestCreateContact,
     requestUpdateContact,
+    fetchListContracts,
 };
 
 export default HumanRepository

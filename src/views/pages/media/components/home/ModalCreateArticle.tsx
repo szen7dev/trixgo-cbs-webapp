@@ -41,7 +41,7 @@ import { useSocial } from 'services/hooks/useSocial';
 import { useUpload } from 'services/hooks/useUpload';
 import { typeTextSelected } from '../../utils';
 
-const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, images, initialValues = {
+const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, initialValues = {
 	mediaID: "",
 	title: "",
 	content: "",
@@ -61,16 +61,25 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
 
 	const { user } = useAuth();
-	const { createMedia, updateMedia, refetchListMedias } = useSocial();
+	const { refetchListMedias: refetchListMediasCompany } = useSocial('list_media__company', {
+		type: 'company',
+		companyID: user?.company._id
+	});
+	const { refetchListMedias: refetchListMediasDepartment } = useSocial('list_media__department', {
+		type: 'department',
+		companyID: user?.company._id
+	});
+	const { refetchListMedias: refetchListMediasDigitalConversion } = useSocial('list_media__digital-conversion', { 
+		type: 'digital-conversion'
+	});
+
+	const { createMedia, updateMedia } = useSocial();
 	const { addFileToUpload } = useUpload('MEDIA');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);
 	const [showClassifyArticleCommunity, setShowClassifyArticleCommunity] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
-
-	// const refsImages = useRef<{ [key: string]: NodeJS.Timeout }>({});
-	// const refsFiles = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
 	const toggleClassifyArticle = () => setShowClassifyArticle(!showClassifyArticle);
 	const toggleClassifyDepartment = () => setShowClassifyDepartment(!showClassifyDepartment);
@@ -84,9 +93,6 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 
 	const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files || !event.target.files.length) return;
-
-		// const imgLastKey = Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] || null;
-		// const fileLastKey = Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] || null;
 
 		// Modify file to with key with each file;
 		const [files, images] = modifyUploadedFilesV2({
@@ -142,21 +148,36 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, show, modalType, files, im
 		// Handle api here!
 		switch (modalType) {
 			case 'create':
-				values.companyID = user?.company._id;
+				values.companyID = user?.company?._id;
+				values.departmentID = user?.department?._id;
 
-				// API tạo bài viết
+				// Tạo bài viết
 				await createMedia(values);
-
 				break;
 			case 'update':
 				values.mediaID = initialValues.mediaID;
+
+				// Cập nhật bài viết
 				await updateMedia(values);
 				break;
 			default:
 				break;
 		}
 
-		(values.type === 'company') && refetchListMedias();
+		// Refetch list media
+		switch (values.type) {
+			case 'company':
+				refetchListMediasCompany();
+				break;
+			case 'department':
+				refetchListMediasDepartment();
+				break;
+			case 'digital-conversion':
+				refetchListMediasDigitalConversion();
+				break;
+			default:
+				break;
+		}
 
 		toggle();
 		return [values, uploads];
