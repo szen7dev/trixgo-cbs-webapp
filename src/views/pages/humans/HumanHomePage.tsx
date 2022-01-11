@@ -2,6 +2,7 @@ import { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import './style.module.css';
 import { useModal } from "services/hooks/useModal";
 import NewHumanModal from "./components/NewHumanModal";
 
