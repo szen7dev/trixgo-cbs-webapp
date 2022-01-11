@@ -61,7 +61,6 @@ const HumanInfo: FC = () => {
 
   const handleClickUpdateButton = useCallback(
     (defaultValues: Human) => () => {
-      console.log({humanInfo: defaultValues})
       openModal(
         <div
           className={

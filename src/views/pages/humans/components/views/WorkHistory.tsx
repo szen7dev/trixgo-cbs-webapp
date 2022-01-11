@@ -1,6 +1,8 @@
 import { FC, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
+import className from "classnames";
+import toArray from "lodash/toArray";
 
 import HumanInfoHeader from "../layouts/HumanInfoHeader";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
@@ -16,8 +18,39 @@ import {
   useMutationContactDocument,
 } from "services/hooks/useHuman";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import { useUpload } from "services/hooks/useUpload";
+import useCustomReducer from "../../Reducers/useReducer";
+import {
+  uploadActions,
+  uploadReducer,
+  IMethodFiles,
+} from "../../Reducers/Upload";
+import ContactFile from "../ContactFile";
 
-import type { ContactDocument } from "typings/human";
+import type {
+  ContactDocument,
+  FileProps,
+  FilePropsUpload,
+} from "typings/human";
+export interface IFile {
+  [key: string]: any;
+}
+
+export const modifyUploadedFilesV2 = (files: FileList): IFile => {
+  let currentFileIndex = 0;
+  const fileToUpload: IFile = {};
+  for (let i = 0; i < files.length; i++) {
+    currentFileIndex++;
+    const id = Number(currentFileIndex);
+    fileToUpload[id] = {
+      id,
+      file: files[i],
+      progress: 0,
+    };
+  }
+
+  return fileToUpload;
+};
 
 interface PropWorkHistory {
   humanId: string;
@@ -31,16 +64,34 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
   const { openModal, closeModal } = useModal();
   const inputRef = useRef<HTMLInputElement>(null);
   const { openDeleteConfirm } = useDeleteConfirm();
+  const { addFileToUpload } = useUpload("HUMAN");
 
   const { humanId } = props;
 
   const [openFileOption, setOpenFileOptionById] = useState("");
+  const [
+    uploads,
+    {
+      setUploadFile,
+      removeUploadedFile,
+      setUploadFileProgress,
+      setIDFileUploaded,
+      removeAllFiles
+    },
+  ] = useCustomReducer<IMethodFiles>(
+    uploadReducer,
+    { ...uploadActions },
+    {
+      files: {},
+    }
+  );
 
   const {
     createContactDocumentAsync,
     updateContractDocumentAsync,
     deleteContractDocumentAsync,
     updateFileContractDocumentAsync,
+    removeFileContractDocument,
   } = useMutationContactDocument();
 
   const {
@@ -156,16 +207,59 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
     }
   }, []);
 
-  const handleAttachFiles = useCallback(
-    (contactDocumentID: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      // updateFileContractDocumentAsync({
-      //   contactDocumentID,
-      //   fileID
-      // })
-      console.log(e.target.files, contactDocumentID);
+  const handleRemoveFileUpload = (
+    file: FileProps | FilePropsUpload,
+    contactDocumentID: string
+  ) => {
+    if (file._id) {
+      removeFileContractDocument({
+        contactDocumentID,
+        fileRemoveID: file._id,
+      });
+      refetchListContactDocument();
+    }
+    if ("id" in file) {
+      removeUploadedFile(file.id);
+    } else {
+      removeUploadedFile(file._id);
+    }
+  };
+
+  const handleUploadFile = useCallback(
+    async (_fileUploads: IFile, contactDocumentID: string) => {
+      // Upload files
+      for (const [key, { file }] of Object.entries(_fileUploads)) {
+        const { _id } = await addFileToUpload({
+          files: file,
+          progress: (percentCompleted) => {
+            setUploadFileProgress(key, percentCompleted);
+          },
+        });
+        if (_id) {
+          updateFileContractDocumentAsync({
+            contactDocumentID,
+            fileID: _id,
+          });
+          setIDFileUploaded(key, _id);
+        }
+      }
+      removeAllFiles();
+      refetchListContactDocument();
     },
-    [updateFileContractDocumentAsync]
+    [addFileToUpload, refetchListContactDocument, removeAllFiles, setIDFileUploaded, setUploadFileProgress, updateFileContractDocumentAsync]
+  );
+
+  const handleAttachFiles = useCallback(
+    (contactDocumentID: string) =>
+      async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+        const files = modifyUploadedFilesV2(e.target.files);
+        setUploadFile(files);
+
+        handleUploadFile(files, contactDocumentID);
+        setOpenFileOptionById("");
+      },
+    [handleUploadFile, setUploadFile]
   );
 
   return (
@@ -198,32 +292,97 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
               </p>
               <p className="w-1/4 ">{contactDocument.workplace}</p>
               <p className="w-1/4 ">{contactDocument.reference}</p>
-
-              {contactDocument.files.map((elm) => (
-                <div
-                  key={elm._id}
-                  className="flex justify-between items-center w-1/4"
-                >
-                  <div className="flex">
-                    <div>
-                      <img src={PDFIcon} alt="PDF" />
+              <div className="w-1/4 flex flex-col">
+                {contactDocument.files.map((elm) => (
+                  <ContactFile
+                    key={elm._id}
+                    file={elm}
+                    contactDocumentID={contactDocument._id}
+                    onRemoveFileUpload={handleRemoveFileUpload}
+                  />
+                ))}
+                {toArray(uploads.files).map((d) => {
+                  // {/* {toArray().map((d: any) => { */}
+                  const name =
+                    "progress" in d
+                      ? d.file.name
+                      : d.file
+                      ? d.file.name
+                      : d.name;
+                  const size =
+                    "progress" in d
+                      ? d.file.size
+                      : d.file
+                      ? d.file.size
+                      : d.size;
+                  const key = "progress" in d ? d.id : d._id;
+                  return (
+                    <div
+                      key={key}
+                      className="flex justify-between items-center "
+                    >
+                      <div className="flex relative">
+                        <div>
+                          <img src={PDFIcon} alt="PDF" />
+                        </div>
+                        <div className="ml-2">
+                          <p>{name}</p>
+                          <p
+                            className="text-primary-gray"
+                            style={{ fontSize: 10, maxWidth: "80%" }}
+                          >
+                            {`${size}KB`}
+                          </p>
+                          <button
+                            type="button"
+                            className={className(
+                              "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center"
+                            )}
+                            onClick={() =>
+                              handleRemoveFileUpload(d, contactDocument._id)
+                            }
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div
+                          className={className(
+                            "relative w-[32px] h-[32px] border rounded-full border-blue-600",
+                            {
+                              hidden: "progress" in d && d.progress === 100,
+                            }
+                          )}
+                        >
+                          <span
+                            style={{
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)",
+                            }}
+                            className={className("text-primary")}
+                          >
+                            {90 + "%"}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="ml-2">
-                      <p>{elm.name}</p>
-                      <p
-                        className="text-primary-gray"
-                        style={{ fontSize: 10, maxWidth: "80%" }}
-                      >
-                        {`${elm.size}B | ${elm.userCreate.fullname} | ${
-                          moment(elm.createAt).isValid() &&
-                          moment(elm.createAt).format(DATE_FORMAT)
-                        }`}
-                        {/* 268KB | Trần Thị Ngân-CPMI | 07/12/2021 15:38 */}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
               <div className="absolute inset-y-0 right-0">
                 <div
                   className="cursor-pointer hover:bg-cbs-gray w-[32px] h-[32px] flex justify-center items-center rounded-full"

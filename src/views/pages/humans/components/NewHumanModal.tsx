@@ -179,7 +179,6 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
 
   const handleSubmit = useCallback(
     async (values: any) => {
-      console.log({ values });
       const formatData = {
         ...values,
         appointDate:
@@ -309,9 +308,6 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                           id: "value",
                         }}
                         inlineSearch={true}
-                        onSearchInputChange={(valueSearch) =>
-                          console.log(valueSearch)
-                        }
                       />
                     </div>
                     <div className="w-1/5 flex items-center">
@@ -324,7 +320,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         }
                         onSearchInputChange={debounce(
                           (value) => setSearchDepartmentValue(value),
-                          1000
+                          500
                         )}
                         placeholder={i18n("department") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
@@ -374,7 +370,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         }
                         onSearchInputChange={debounce(
                           (value) => setSearchPositionValue(value),
-                          1000
+                          500
                         )}
                         placeholder={i18n("position") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
@@ -405,10 +401,12 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         initialValue={defaultValues?.position?.value}
                         // searchUrl='/api/item/positions'
                         // searchParam='keyword'
-                        data={listPositions.map((position) => ({
-                          label: position.name,
-                          value: position._id,
-                        }))}
+                        data={listPositions.map((position) => {
+                          return ({
+                            label: `${position.name}.${position.company?.sign}.${position.company?.name}`,
+                            value: position._id,
+                          })
+                        })}
                         formatItem={{
                           id: "value",
                           text: "label",
@@ -460,7 +458,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         }
                         onSearchInputChange={debounce(
                           (value) => setSearchWorkingStatusValue(value),
-                          1000
+                          500
                         )}
                         placeholder="Tình trạng làm việc..."
                         className="w-full pl-0 -mb-1 outline-none"
@@ -644,7 +642,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         }
                         onSearchInputChange={debounce(
                           (value) => setSearchContractTypeValue(value),
-                          1000
+                          500
                         )}
                         placeholder="Loại hợp đồng..."
                         className="w-full pl-0 -mb-1 outline-none"
@@ -868,7 +866,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         onchangeValue={(value) => setFieldValue("area", value)}
                         onSearchInputChange={debounce(
                           (value) => setSearchAreaValue(value),
-                          1000
+                          500
                         )}
                         placeholder="Tìm kiếm thường trú..."
                         className="w-full pl-0 -mb-1 outline-none"
@@ -914,7 +912,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         onchangeValue={(value) => setFieldValue("area1", value)}
                         onSearchInputChange={debounce(
                           (value) => setSearchArea1Value(value),
-                          1000
+                          500
                         )}
                         placeholder="Thường trú..."
                         className="w-full pl-0 -mb-1 outline-none"
@@ -965,7 +963,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         onchangeValue={(value) => setFieldValue("area2", value)}
                         onSearchInputChange={debounce(
                           (value) => setSearchArea2Value(value),
-                          1000
+                          500
                         )}
                         placeholder="Thường trú..."
                         className="w-full pl-0 -mb-1 outline-none"
