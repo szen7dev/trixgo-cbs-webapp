@@ -8,13 +8,13 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/reducer";
 
 const ChattingSection:FC = () => {
-    const {currentChat} = useContext(MessageContext);
+    const {currentChat, showMenu} = useContext(MessageContext);
     const mapData = useSelector((state: RootState) => state.listConversation);
     const {listConversation} = mapData.data;
     const chat = listConversation[currentChat];
 
     return (
-        <div className={"flex-1 transition duration-150"}>
+        <div className={"flex-1 transition-all duration-500 " + (showMenu?"mr-[480px]":"mr-0")}>
             <div className={"relative flex flex-col bg-chat-app h-full"}>
                 {
                     currentChat&&chat&&

@@ -5,12 +5,14 @@ import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
+import {MessageContext} from "../../home/index_v2";
 
 type Props = {
     chat: any
 }
 
 const MainChatHeading:FC<Props> = ({chat}) => {
+    const {setShowMenu, showMenu} = useContext(MessageContext)
     const currentUser = localStorage.getItem("currentUser")??"";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -65,25 +67,25 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                                         "group_2": {
                                             imgWidth: "w-[26px] h-[26px] absolute",
                                             groupPosition: [
-                                                "bottom-0 left-0 z-10",
-                                                "top-0 right-0 z-9",
+                                                "bottom-0 left-0 z-2",
+                                                "top-0 right-0 z-1",
                                             ]
                                         },
                                         "group_3": {
                                             imgWidth: "w-[22px] h-[22px] absolute",
                                             groupPosition: [
-                                                "bottom-0 left-9px z-10",
-                                                "top-0 left-0 z-9",
-                                                "top-0 right-0 z-8",
+                                                "bottom-0 left-9px z-3",
+                                                "top-0 left-0 z-2",
+                                                "top-0 right-0 z-1",
                                             ]
                                         },
                                         "group_4": {
                                             imgWidth: "w-[20px] h-[20px] absolute",
                                             groupPosition: [
-                                                "bottom-0 left-0 z-10",
-                                                "top-0 left-0 z-9",
-                                                "top-0 right-0 z-8",
-                                                "bottom-0 right-0 z-7"
+                                                "bottom-0 left-0 z-4",
+                                                "top-0 left-0 z-3",
+                                                "top-0 right-0 z-2",
+                                                "bottom-0 right-0 z-1"
                                             ]
                                         }
                                     }}
@@ -117,7 +119,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                 <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                     <img src={SearchIcon} alt={"search icon"}/>
                 </button>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                <button onClick={() => setShowMenu(!showMenu)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                     <DotsVerticalIcon/>
                 </button>
             </div>

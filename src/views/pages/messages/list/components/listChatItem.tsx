@@ -105,25 +105,25 @@ const ListChatItem:FC<Props> = ({chat}) => {
                                 "group_2": {
                                     imgWidth: "w-[38px] h-[38px] absolute",
                                     groupPosition: [
-                                        "bottom-0 left-0 z-10",
-                                        "top-0 right-0 z-9",
+                                        "bottom-0 left-0 z-2",
+                                        "top-0 right-0 z-1",
                                     ]
                                 },
                                 "group_3": {
                                     imgWidth: "w-[32px] h-[32px] absolute",
                                     groupPosition: [
-                                        "bottom-0 left-12px z-10",
-                                        "top-0 left-0 z-9",
-                                        "top-0 right-0 z-8",
+                                        "bottom-0 left-12px z-3",
+                                        "top-0 left-0 z-2",
+                                        "top-0 right-0 z-1",
                                     ]
                                 },
                                 "group_4": {
                                     imgWidth: "w-[28px] h-[28px] absolute",
                                     groupPosition: [
-                                        "bottom-0 left-0 z-10",
-                                        "top-0 left-0 z-9",
-                                        "top-0 right-0 z-8",
-                                        "bottom-0 right-0 z-7"
+                                        "bottom-0 left-0 z-4",
+                                        "top-0 left-0 z-3",
+                                        "top-0 right-0 z-2",
+                                        "bottom-0 right-0 z-1"
                                     ]
                                 }
                             }}

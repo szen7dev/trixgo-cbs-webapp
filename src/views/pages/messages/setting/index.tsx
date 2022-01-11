@@ -9,7 +9,8 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";
 const SettingMessageDetail:FC = () => {
-    const {currentChat} = useContext(MessageContext);
+    const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
+
     const mapData = useSelector((state: RootState) => state.listConversation);
     const {listConversation} = mapData.data;
     const chat = listConversation[currentChat];
@@ -53,10 +54,10 @@ const SettingMessageDetail:FC = () => {
         )
     }
     return (
-        <div className={"messages-right-bar w-[480px] border-l transition duration-150 relative group"}>
+        <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute " + (showMenu?"right-0":"right--480px")}>
             <div className={"h-full group bg-gray-100 overflow-auto"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
-                    <button>
+                    <button onClick={() => setShowMenu(false)}>
                         <Close/>
                     </button>
                     <button>
@@ -83,25 +84,25 @@ const SettingMessageDetail:FC = () => {
                                             "group_2": {
                                                 imgWidth: "w-[80px] h-[80px] absolute",
                                                 groupPosition: [
-                                                    "bottom-0 left-0 z-10",
-                                                    "top-0 right-0 z-9",
+                                                    "bottom-0 left-0 z-2",
+                                                    "top-0 right-0 z-1",
                                                 ]
                                             },
                                             "group_3": {
                                                 imgWidth: "w-[70px] h-[70px] absolute",
                                                 groupPosition: [
-                                                    "bottom-0 left-25px z-10",
-                                                    "top-0 left-0 z-9",
-                                                    "top-0 right-0 z-8",
+                                                    "bottom-0 left-25px z-3",
+                                                    "top-0 left-0 z-2",
+                                                    "top-0 right-0 z-1",
                                                 ]
                                             },
                                             "group_4": {
                                                 imgWidth: "w-[70px] h-[70px] absolute",
                                                 groupPosition: [
-                                                    "bottom-0 left-0 z-10",
-                                                    "top-0 left-0 z-9",
-                                                    "top-0 right-0 z-8",
-                                                    "bottom-0 right-0 z-7"
+                                                    "bottom-0 left-0 z-4",
+                                                    "top-0 left-0 z-3",
+                                                    "top-0 right-0 z-2",
+                                                    "bottom-0 right-0 z-1"
                                                 ]
                                             }
                                         }}
