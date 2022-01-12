@@ -5,7 +5,9 @@ import {
     Device,
     ListDevicePayload,
     ListTypeDeviceAccessPayload,
-    ListTypeDevice
+    ListTypeDevice,
+    ListAppAccessPayload,
+    AppAccess
 } from 'typings/support';
 
 interface UseSupport {
@@ -60,5 +62,32 @@ export const useTypeDeviceAccess = (payload?: ListTypeDeviceAccessPayload) : Use
     const listTypeDevice = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
     return {
         listTypeDevice,
+    }
+};
+interface UselistAppAccess {
+    listAppAccess: Array<AppAccess>
+}
+export const useListAppAccess = (payload?: ListAppAccessPayload) : UselistAppAccess => {
+    const infinityQuery = useInfiniteQuery(
+        ["list_app_access", payload],
+        async ({ data }: any) => {
+            return SupportRepository.listAppAccess({
+                fromDate: "2021-12-30",
+                toDate: "2021-12-30",
+                year: 2021,
+            })
+        },
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const { data } = infinityQuery;
+    const listAppAccess = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+    return {
+        listAppAccess,
     }
 };
