@@ -79,7 +79,7 @@ import ConfigListDetail from "views/pages/personal/config/components/ConfigListD
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
-import ProjectAppAdminPage from "views/pages/ppt/ProjectAppAdminPage";
+import ProjectAppAdminPage from "views/pages/ppt/permission/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectPortfolioPage from "views/pages/ppt/ProjectPortfolioPage";
@@ -105,6 +105,7 @@ import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
 import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
+import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
 
 // Accounting pages
 import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
@@ -346,6 +347,15 @@ const Routes: FC = () => {
                                                 component={() => (
                                                     <HomeLayout>
                                                         <ProjectAppAdminPage />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/admin/detail/:id"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <AdminDetail />
                                                     </HomeLayout>
                                                 )}
                                             />

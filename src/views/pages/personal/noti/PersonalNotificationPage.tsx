@@ -20,7 +20,7 @@ const PersonalNotificationPage: FC = () => {
   };
 
   return (
-    <main className="h-max w-full bg-cbs-gray flex justify-center py-4">
+    <main className="h-full w-full bg-cbs-gray flex justify-center py-4">
       <section
         className={cn(
           "bg-primary-light w-[798px] h-[898px]",
