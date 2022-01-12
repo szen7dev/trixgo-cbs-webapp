@@ -3,6 +3,8 @@ import DoubleTickIcon from "../../../../../../assets/images/icons8-double-tick-9
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
+import moment from "moment";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
 type Props = {
     message: any;
     className?: string;
@@ -17,25 +19,26 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
     },[textContentRef])
 
     const renderReply = () => {
-        switch (message.replyTo.type) {
-            case "text":
-                return <TextReply message={message.replyTo}/>
-            case "file":
-                return <FileReply message={message.replyTo}/>
-            case "images":
-                return <ImageReply message={message.replyTo}/>;
+        console.log(message.parent)
+        switch (message.parent.type) {
+            case 0:
+                return <TextReply message={message.parent}/>
+            case 1:
+                return <FileReply message={message.parent}/>
+            case 2:
+                return <ImageReply message={message.parent}/>;
         }
     }
     return (
         <div className={"max-w-[366px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
             {
                 showSenderName&&
-                <div className={"reply-user-name"} style={{color: message.themeColor}}>
-                    {message.userName}
+                <div className={"reply-user-name text-primary"}>
+                    {message.sender.fullname}
                 </div>
             }
             {
-                message.replyTo&&
+                message.parent&&
                 renderReply()
             }
             <div className={"pr-[20px] pb-[5px]"}>
@@ -43,8 +46,8 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
                     <div ref={textContentRef} className={"flex-1 py-[4px]"}>
                     </div>
                 </div>
-                <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
-                    {message.date}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>
+                    {moment(message.createdAt).format("hh:mm")}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>

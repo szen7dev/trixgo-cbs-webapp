@@ -9,9 +9,7 @@ import {RootState} from "../../../../redux/reducer";
 
 const ChattingSection:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);
-    const mapData = useSelector((state: RootState) => state.listConversation);
-    const {listConversation} = mapData.data;
-    const chat = listConversation[currentChat];
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     return (
         <div className={"flex-1 transition-all duration-500 " + (showMenu?"mr-[480px]":"mr-0")}>
@@ -20,7 +18,7 @@ const ChattingSection:FC = () => {
                     currentChat&&chat&&
                     <>
                         <MainChatHeading chat={chat}/>
-                        <MainChatContent/>
+                        <MainChatContent chat={chat}/>
                         <button
                             className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
                             <img src={ArrowDown} alt={"arrow down"}/>
