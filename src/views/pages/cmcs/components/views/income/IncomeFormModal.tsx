@@ -11,6 +11,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import DropdownSearchable from "components/common/DropdownSearch";
+import { CONTRACT_TYPES } from "apis/localdb/index";
 
 const IncomeFormModal: FC = () => {
   const [openManagementInfo, setOpenManagementInfo] = useState(false);
