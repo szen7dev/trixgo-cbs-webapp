@@ -3,6 +3,7 @@ import { FC } from "react";
 import cn from "classnames";
 
 import styles from "../../../styles.module.css";
+import { useListAppDeviceAccess } from 'services/hooks/useSupport';
 
 const data = [
   {
@@ -79,7 +80,37 @@ const data = [
   },
 ];
 
+const dataNew = [
+  {
+    id: 1,
+    name: "",
+    "%": 0,
+    mob: 0,
+    tab: 0,
+    web: 0,
+  },
+];
+console.log('dataNew',dataNew)
 const DetailsByAppDeviceSupport: FC = () => {
+  const { listAppDeviceAccess } = useListAppDeviceAccess();
+  console.log('listAppDeviceAccess',listAppDeviceAccess);
+  let idx = 0;
+  for (const key in listAppDeviceAccess) {
+    console.log('listAppDeviceAccess11',listAppDeviceAccess)
+    // console.log('element',element)
+    idx ++;
+    dataNew[0].id = idx;
+    dataNew[0].name = listAppDeviceAccess[key].app.name;
+    if(Number(listAppDeviceAccess[key].data[0].type) === 1) {
+      dataNew[0].mob = Number(listAppDeviceAccess[key].data[0].amountAccesses)
+    }
+    // if(Number(listAppDeviceAccess[key].data[1].type) === 2) {
+    //   dataNew[0].tab = Number(listAppDeviceAccess[key].data[1].amountAccesses)
+    // }
+    // if(Number(listAppDeviceAccess[key].data[2].type) === 3) {
+    //   dataNew[0].web = Number(listAppDeviceAccess[key].data[2].amountAccesses)
+    // }
+  }
   return (
     <section className="bg-primary-light px-6 py-4 mt-3 h-[620px]">
       <p className="text-primary-gray font-bold text-lg">
@@ -123,7 +154,7 @@ const DetailsByAppDeviceSupport: FC = () => {
         </thead>
 
         <tbody className="text-center leading-9">
-          {data.map((item) => (
+          {dataNew.map((item) => (
             <tr key={item.id} className="h-10 border-b border-primary-border">
               <td className="border-r border-primary-border text-left px-4">
                 {item.name}
