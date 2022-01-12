@@ -19,18 +19,17 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
     },[textContentRef])
 
     const renderReply = () => {
-        console.log(message.parent)
         switch (message.parent.type) {
             case 0:
-                return <TextReply message={message.parent}/>
-            case 1:
-                return <FileReply message={message.parent}/>
+                return <TextReply message={message.parent}/>;
             case 2:
+                return <FileReply message={message.parent}/>;
+            case 1:
                 return <ImageReply message={message.parent}/>;
         }
     }
     return (
-        <div className={"max-w-[366px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
+        <div className={"max-w-[366px] min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
             {
                 showSenderName&&
                 <div className={"reply-user-name text-primary"}>

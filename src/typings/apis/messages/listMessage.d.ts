@@ -67,6 +67,7 @@ type ListMessageData = {
     listRecords: ItemMessage[];
     limit: number;
     currentPage: number;
+    nextCursor: string;
 }
 
 export type ListMessageResponse = {
@@ -76,6 +77,6 @@ export type ListMessageResponse = {
 };
 
 export type ListMessagePayload = {
-    latestMessageID?: string;
+    lastestID?: string;
     conversationID?: string;
 };

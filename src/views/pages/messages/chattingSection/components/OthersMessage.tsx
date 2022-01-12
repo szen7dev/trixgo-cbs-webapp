@@ -5,7 +5,7 @@ import ImagesContent from "./chatContent/imageContent";
 import RightClickMenu from "components/common/RightClickMenu";
 import RightClickMessage from "./RightClickMessage";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {ItemListConversation} from "typings/apis/messages/listConversation";
+
 type Props = {
     message: ItemMessage;
 }
@@ -16,10 +16,10 @@ const OthersMessage:FC<Props> = ({message}) => {
         switch (message.type) {
             case 0:
                 return <TextChatContent message={message} showSenderName={true} className={"bg-white"}/>;
-            // case 1:
-            //     return <FileChatContent message={message} showSenderName={true} className={"bg-white"}/>;
-            // case 2:
-            //     return <ImagesContent message={message} showSenderName={true}/>
+            case 2:
+                return <FileChatContent message={message} showSenderName={true} className={"bg-white"}/>;
+            case 1:
+                return <ImagesContent message={message} showSenderName={true}/>
         }
     }
     return (

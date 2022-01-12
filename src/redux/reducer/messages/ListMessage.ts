@@ -8,18 +8,26 @@ const initialState : {
                 [key: string] : ItemMessage
             }
         },
-        totalRecord: number,
-        nextCursor: string,
-        hasMoreData: boolean,
-        isLoading: boolean
+        totalRecord: {
+            [key: string]: number;
+        },
+        nextCursor: {
+            [key: string]: string;
+        },
+        hasMoreData: {
+            [key: string]: boolean
+        },
+        isLoading: {
+            [key:string] : boolean
+        }
     }
 } = {
     data: {
         listMessage: {},
-        totalRecord: 0,
-        nextCursor: "",
-        hasMoreData: true,
-        isLoading: false,
+        totalRecord: {},
+        nextCursor: {},
+        hasMoreData: {},
+        isLoading: {},
     }
 };
 
@@ -28,34 +36,40 @@ const listMessageSlice = createSlice({
     initialState,
     reducers: {
         setListMessage(state, action) {
-            const newMessageData = {...state.data.listMessage};
+            const newMessageData:{[key: string]: ItemMessage} = {};
             (action.payload.messages??[]).forEach((message: ItemMessage) => {
-                if (!Object.prototype.hasOwnProperty.call(newMessageData,action.payload.conversationId)) {
-                    newMessageData[action.payload.conversationId] = {}
-                }
-                newMessageData[action.payload.conversationId][message._id] = message;
+                newMessageData[message._id] = message;
             });
 
             state.data = {
                 ...state.data,
                 listMessage: {
                     ...state.data.listMessage,
-                    ...newMessageData
+                    [action.payload.conversationId] : {
+                        ...newMessageData,
+                        ...state.data.listMessage[action.payload.conversationId]
+                    }
                 }
             };
         },
         setTotalRecord(state, action) {
-            state.data.totalRecord = action.payload;
+            state.data.totalRecord[action.payload.conversationId] = action.payload.data;
         },
         setNextCursor(state, action) {
             state.data = {
                 ...state.data,
-                nextCursor : action.payload,
-                hasMoreData: action.payload !== null && action.payload !== undefined && action.payload !== ""
+                nextCursor : {
+                    ...state.data.nextCursor,
+                    [action.payload.conversationId]: action.payload.data
+                },
+                hasMoreData : {
+                    ...state.data.hasMoreData,
+                    [action.payload.conversationId]: action.payload.data !== null && action.payload.data !== undefined && action.payload.data !== ""
+                },
             }
         },
         setLoading(state, action) {
-            state.data.isLoading = action.payload
+            state.data.isLoading[action.payload.conversationId] = action.payload.data
         }
     },
     extraReducers: {}

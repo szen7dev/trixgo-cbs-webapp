@@ -11,12 +11,12 @@ export const UseConversation = () : UseConversationType => {
     const dispatch = useDispatch();
 
     const getListMessage = async (params: ListMessagePayload) => {
-        dispatch(setLoading(true));
+        dispatch(setLoading({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.getListMessage(params);
-        dispatch(setTotalRecord(data.totalRecord));
-        dispatch(setNextCursor(data.listRecords[data.listRecords.length-1]._id));
+        dispatch(setTotalRecord({conversationId: params.conversationID, data: data.totalRecord}));
+        dispatch(setNextCursor({conversationId: params.conversationID, data: data.nextCursor}));
         dispatch(setListMessage({conversationId: params.conversationID, messages: data.listRecords}));
-        dispatch(setLoading(false));
+        dispatch(setLoading({conversationId: params.conversationID, data: false}));
 
         return data;
     }
