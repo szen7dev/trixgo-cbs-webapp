@@ -168,7 +168,7 @@ const CmcIncome: FC = () => {
                     style={{ marginLeft: "-23px" }}
                   />
                 </td>
-                <Link to="/cmcs/contract/12345/home">
+                <Link to={"/cmcs/contract/"+(item._id)+"/home"}>
                   <td className="py-1 px-2">
                     {item.name}
                   </td>
@@ -177,7 +177,7 @@ const CmcIncome: FC = () => {
                 moment(item.createAt).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2">{(item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus|| 0)} </td>
                 <td className="py-1 px-2">{(item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance|| 0)}</td>
-                <td className="py-1 px-2">Bổ sung sau</td>
+                <td className="py-1 px-2">0</td>
                 <td className="py-1 px-2">{item.recommendedPayment || 0}</td>
                 <td className="py-1 px-2">{(item.advancePaymentPaid || 0) + (item.amountPaid|| 0)}</td>
                 <td className="py-1 px-2">{item.remainingPayment || 0}</td>
