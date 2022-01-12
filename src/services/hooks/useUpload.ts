@@ -126,7 +126,7 @@ export const useUpload = (app?: string) : UseUpload => {
             console.log('Sending in HD mode');
             await uploadFileToS3({signedUrl, file, progress});
         }
-        return { _id: result?._id, name: fileName };
+        return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };
     }
 
     const blobToFile = (theBlob: Blob, fileName:string): File => {

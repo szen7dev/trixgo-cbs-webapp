@@ -2,7 +2,6 @@ import API from "../repository";
 import { convertObToUrl } from "helpers";
 
 import {ListConversationPayload, ListConversationResponse} from "typings/apis/messages/listConversation";
-
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 
 const ListConversationRepository = {

@@ -63,7 +63,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
         cutout,
         plugins: {
           datalabels: { display: false },
-          tooltip: { enabled: false },
+          tooltip: { enabled: true },
         },
       }}
       plugins={plugins}

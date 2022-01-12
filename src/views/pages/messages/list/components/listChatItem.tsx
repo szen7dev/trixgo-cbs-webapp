@@ -6,12 +6,12 @@ import OptionListItemRightClick from "./OptionListItemRightClick";
 import {MessageContext} from "../../home/index_v2";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
+import AvatarGroupChat from "./AvatarGroupChat";
 
 type Props = {
-    chat: ItemListConversation,
-    index: number
+    chat: ItemListConversation
 }
-const ListChatItem:FC<Props> = ({chat,index}) => {
+const ListChatItem:FC<Props> = ({chat}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"";
@@ -25,7 +25,7 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
 
     const getNameConversation = useCallback(() => {
         if (chat.members && chat.members.length == 2) {
-            const userInConversation = chat?.members.find((item: any) => chat._id != profileId);
+            const userInConversation = chat?.members.find((item: any) => item._id != profileId);
             return userInConversation.fullname.trim();
         }
 
@@ -34,12 +34,12 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
-            const members = chat.members.filter((item: any) => chat._id != profileId);
+            const members = chat.members.filter((item: any) => item._id != profileId);
             return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
         }
         const avatars: any = [];
         if (chat.members && chat.members.length) {
-            chat.members.forEach((member: any) => {
+            chat.members.slice(0, 4).forEach((member: any) => {
                 avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
             });
         }
@@ -69,7 +69,11 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
 
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
-        if (date.isSame(new Date(), 'year')) {
+        if (date.isSame(new Date(), 'date')) {
+            return date.format("hh:mm")
+        }else if (date.isSame(new Date(), 'week')) {
+            return date.format("dddd").split(" ").map((str:string) => str.charAt(0).toUpperCase() + str.slice(1)).join(" ")
+        }else if (date.isSame(new Date(), 'year')) {
             return date.format("DD/MM")
         } else {
             return date.format("DD/MM/YYYY")
@@ -84,10 +88,47 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
             className={"group flex p-[10px] focus:bg-primary active:bg-primary hover:bg-gray-100 cursor-pointer rounded-md " + (currentChat==chat._id ? "bg-primary":"")}>
             {
                 chat.avatar?
-                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.chatAvatar} alt={chat.chatName}/>:
-                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: "#8DD4D6"}}>
-                        {getPresentGroupName(getNameConversation())}
-                    </div>
+                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
+                    (
+                        getAvatarMembers().length === 0 ?
+                        <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                            {getPresentGroupName(getNameConversation())}
+                        </div> :
+                        <AvatarGroupChat
+                            avatars={getAvatarMembers()}
+                            imageClass={"w-[56px] h-[56px]"}
+                            classesMap={{
+                                "group_1": {
+                                    imgWidth: "w-full h-full",
+                                    groupPosition: [""]
+                                },
+                                "group_2": {
+                                    imgWidth: "w-[38px] h-[38px] absolute",
+                                    groupPosition: [
+                                        "bottom-0 left-0 z-2",
+                                        "top-0 right-0 z-1",
+                                    ]
+                                },
+                                "group_3": {
+                                    imgWidth: "w-[32px] h-[32px] absolute",
+                                    groupPosition: [
+                                        "bottom-0 left-12px z-3",
+                                        "top-0 left-0 z-2",
+                                        "top-0 right-0 z-1",
+                                    ]
+                                },
+                                "group_4": {
+                                    imgWidth: "w-[28px] h-[28px] absolute",
+                                    groupPosition: [
+                                        "bottom-0 left-0 z-4",
+                                        "top-0 left-0 z-3",
+                                        "top-0 right-0 z-2",
+                                        "bottom-0 right-0 z-1"
+                                    ]
+                                }
+                            }}
+                        />
+                    )
             }
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <div className={"flex"}>
@@ -99,11 +140,11 @@ const ListChatItem:FC<Props> = ({chat,index}) => {
                     </div>
                 </div>
                 <div className={"flex mt-1"}>
-                    <div className={"flex-1 truncate text-gray-400 group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>{getLastMessage()}</div>
+                    <div className={"flex-1 truncate w-[250px] text-gray-400 group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>{getLastMessage()}</div>
                     {
                         userUnreadMessage() > 0 &&
                         <span className={"rounded-full bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</span>}
-                    {chat.pinned&&<IconPinned/>}
+                    {chat.isPin&&<IconPinned/>}
                 </div>
             </div>
             <RightClickMenu wrapperRef={wrapperRef} menu={<OptionListItemRightClick/>}/>

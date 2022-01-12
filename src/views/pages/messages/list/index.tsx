@@ -4,6 +4,8 @@ import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
+import {useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 const MessageList:FC = () => {
@@ -16,14 +18,32 @@ const MessageList:FC = () => {
     ]
 
     const [searchText, setSearchText] = useState("");
-    const {listConversation, nextListConversation, hasNextPage, isLoadingListConversation} = UseListConversation('list_conversation', {keyword: searchText});
+    const [reachedEnd, setReachEnd] = useState(false);
+    const {getListConversation} = UseListConversation();
+
+    const mapData = useSelector((state: RootState) => state.listConversation);
+    const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
+
+    useEffect(() => {
+        getListConversation({keyword: searchText});
+    },[searchText]);
+
+    useEffect(() => {
+        if (reachedEnd && !isLoading && hasMoreData) {
+            getListConversation({keyword: searchText, lastestID: nextCursor});
+            setReachEnd(false);
+        }
+    },[reachedEnd, isLoading, hasMoreData]);
+
     const listInnerRef = useRef<HTMLDivElement>(null);
 
     const onScroll = () => {
         if (listInnerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
             if (scrollTop + clientHeight === scrollHeight) {
-                nextListConversation();
+                setReachEnd(true);
+            } else {
+                setReachEnd(false);
             }
         }
     };
@@ -59,8 +79,8 @@ const MessageList:FC = () => {
                     className={"overflow-auto message-list-height"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
-                    {_map(listConversation, (chat,index) => (
-                        <ListChatItem key={chat._id} chat={chat} index={index}/>
+                    {_map(Object.values(listConversation), (chat) => (
+                        <ListChatItem key={chat._id} chat={chat}/>
                     ))}
                 </div>
             <AddNewChatGroup/>
