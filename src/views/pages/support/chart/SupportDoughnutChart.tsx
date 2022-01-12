@@ -56,6 +56,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
 
   return (
     <Doughnut
+        key={Math.random()}
       data={_data}
       options={{
         ...options,

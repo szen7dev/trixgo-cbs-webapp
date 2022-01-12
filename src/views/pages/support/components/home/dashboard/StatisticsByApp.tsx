@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useListAppAccess } from 'services/hooks/useSupport';
+import _ from "lodash";
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +41,32 @@ const data = {
     {
       data: [
         2780, 3780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780, 2780,
+      ],
+      backgroundColor: "#f59f0b",
+      barThickness: 12,
+    },
+  ],
+};
+
+const dataNew = {
+  labels: [
+    "Quản lý công việc",
+    "Quản lý hồ sơ văn bản",
+    "Quản lý hợp đồng",
+    "Quản lý nhân sự",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+    "Quản lý ...",
+  ],
+  datasets: [
+    {
+      data: [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       ],
       backgroundColor: "#f59f0b",
       barThickness: 12,
@@ -96,7 +124,7 @@ const options = {
       display: false,
     },
     tooltip: {
-      enabled: false,
+      enabled: true,
     },
     datalabels: {
       display: true,
@@ -108,6 +136,16 @@ const options = {
 };
 
 const StatisticsByApp: FC = () => {
+  const { listAppAccess } = useListAppAccess();
+  const arrApp = [];
+  const arrAmountAccesses = [];
+  for (const element of listAppAccess) {
+    arrApp.push(element.app.name);
+    arrAmountAccesses.push(element.amountAccesses);
+    dataNew.datasets[0].data = arrAmountAccesses.sort()
+  }
+  dataNew.labels = arrApp;
+  const dataNewApp = _.cloneDeep(dataNew);
   return (
     <section className="w-full h-[462px] py-4 px-6 mt-3 bg-primary-light">
       <p className="text-primary-gray font-bold text-lg">
@@ -115,7 +153,7 @@ const StatisticsByApp: FC = () => {
       </p>
 
       <div className="h-96">
-        <Bar options={options} data={data} />
+        <Bar options={options} data={dataNewApp} />
       </div>
     </section>
   );
