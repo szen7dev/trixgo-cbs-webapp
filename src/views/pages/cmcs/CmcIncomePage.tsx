@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import cn from "classnames";
@@ -54,9 +54,18 @@ const CmcIncome: FC = () => {
   }
 
   const getStatusValue = (value: number) => {
-    return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text ;
-    
+    return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text ; 
   }
+
+  const handleFinishForm =useCallback(async (values) => {
+    console.log('🚀 ~ handleFinishForm ~ values', values)
+    // const res = await createContactMutateAsync(values);
+    // if (!res.error) {
+    //   humans.refetchListHuman()
+    //   return true;
+    // }
+    return false;
+  }, [contractIncome]);
 
   return (
     <main className="relative h-full">
@@ -85,7 +94,7 @@ const CmcIncome: FC = () => {
                   "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                 }
               >
-                <IncomeFormModal />
+                <IncomeFormModal onFinish={handleFinishForm}/>
               </div>
             )
           }

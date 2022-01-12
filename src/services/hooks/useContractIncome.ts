@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from "react-query";
 import { ContractIncome } from "typings/contractIncome";
 import ContractIncomeRepository from 'apis/contractIncome';
+import HumanRepository from 'apis/human';
 
 type UseContractIncomeProp = {
     listContractIncome: Array<ContractIncome>;
@@ -87,3 +88,49 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
       // fetchPreviousPage
   }
 };
+
+export const useQueryListDoctype = ({ limit, type, keyword }: any): any => {
+  const res = useInfiniteQuery(
+      [`list_doctype,${type}.${keyword}`, type, keyword],
+      async ({ pageParam }: any) =>
+          // mai request BE check lại api này
+          HumanRepository.fetchListDoctype({
+              limit: limit || 10,
+              lastestID: pageParam || "",
+              type,
+              keyword,
+          }),
+      {
+          getNextPageParam: ({ data }: any) => {
+              return data?.nextCursor || undefined;
+          },
+          refetchOnWindowFocus: false,
+          enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      }
+  );
+  const {
+      isLoading,
+      data,
+      refetch: refetchListDoctype,
+      fetchNextPage: fetchNextPageDoctype,
+      hasNextPage
+  } = res;
+
+  const listDoctypes = []
+      .concat(
+          ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+      )
+      .filter(Boolean);
+  const totalRecord = data?.pages[0]?.data?.totalRecord;
+  const totalPages = data?.pages[0]?.data?.totalPages;
+
+  return {
+      loading: isLoading,
+      listDoctypes,
+      totalRecord,
+      totalPages,
+      hasNextPage,
+      refetchListDoctype,
+      fetchNextPageDoctype
+  }
+}
