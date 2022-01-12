@@ -2,8 +2,9 @@ import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import cn from "classnames";
-
+import moment from "moment";
 import { useModal } from "services/hooks/useModal";
+import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 
 import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
@@ -16,23 +17,43 @@ import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
+import { UseContractIncomeList } from "services/hooks/useContractIncome";
+
 const CmcIncome: FC = () => {
-  const [itemChecked, setItemChecked] = useState(true);
+  const [itemChecked, setItemChecked] = useState(null);
+  const [pageParam, setPageParam] = useState('');
+  const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
 
-  // useEffect(() => {
-  //   console.log('🚀 ~ useEffect ~ useEffect', 11111)
-    
-  // })
+  const contractIncome = UseContractIncomeList(pageParam);
 
   const prevPageAction = () => {
-    console.log('Bầm lùi');
+    if (!contractIncome.nextCursor) {
+      setPageParam(prevCursor[prevCursor.length-2] || '')
+    } else {
+      const prev = prevCursor.findIndex(item => item === contractIncome.nextCursor)
+      setPageParam(prevCursor[prev-2] || '')
+    }
     
   };
 
+  useEffect(() => {
+    if (!contractIncome.nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === contractIncome.nextCursor )
+    if (!isExist) {
+      setPrevCursor([...prevCursor, contractIncome.nextCursor])      
+    }
+  }, [contractIncome.nextCursor]);
+
   const nextPageAction = () => {
-    console.log('Bầm tiến');
+    setPageParam(contractIncome.nextCursor)    
+  }
+
+  const getStatusValue = (value: number) => {
+    return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text ;
     
   }
 
@@ -133,82 +154,42 @@ const CmcIncome: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-10 bg-cbs-table-header">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">{""}</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                checked={itemChecked}
-                onChange={() => setItemChecked(!itemChecked)}
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <Link to="/cmcs/contract/12345/home">
-              <td className="py-1 px-2">
-                Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-              </td>
-            </Link>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">Đang làm</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <Link to="/cmcs/contract/12345/home">
-              <td className="py-1 px-2">
-                Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-              </td>
-            </Link>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">34.125.000</td>
-            <td className="py-1 px-2">Đang làm</td>
-          </tr>
+          {contractIncome?.listContractIncome?.map((item: any) => {
+            return (
+              <tr  key={item._id} className="border-b border-primary-border h-[50px]">
+                <td className="py-1 px-2 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    checked={itemChecked === item._id}
+                    onChange={() => setItemChecked(item._id)}
+                    style={{ marginLeft: "-23px" }}
+                  />
+                </td>
+                <Link to="/cmcs/contract/12345/home">
+                  <td className="py-1 px-2">
+                    {item.name}
+                  </td>
+                </Link>
+                <td className="py-1 px-2">              {moment(item.createAt).isValid() &&
+                moment(item.createAt).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{(item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus|| 0)} </td>
+                <td className="py-1 px-2">{(item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance|| 0)}</td>
+                <td className="py-1 px-2">Bổ sung sau</td>
+                <td className="py-1 px-2">{item.recommendedPayment || 0}</td>
+                <td className="py-1 px-2">{(item.advancePaymentPaid || 0) + (item.amountPaid|| 0)}</td>
+                <td className="py-1 px-2">{item.remainingPayment || 0}</td>
+                <td className="py-1 px-2">{getStatusValue(item.status)}</td>
+              </tr>
+            )
+          })
+          }
         </tbody>
       </table>
 
-      <Paginate totalPages={8} totalRecord={72} hasNextPage prevPageAction={()=>prevPageAction()} nextPageAction={()=>nextPageAction()}/>
+      <Paginate totalPages={contractIncome.totalPage} totalRecord={contractIncome.totalRecord} hasNextPage prevPageAction={()=>prevPageAction()} nextPageAction={()=>nextPageAction()}/>
     </main>
   );
 };
