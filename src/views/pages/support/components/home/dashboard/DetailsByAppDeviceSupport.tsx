@@ -90,27 +90,36 @@ const dataNew = [
     web: 0,
   },
 ];
-console.log('dataNew',dataNew)
 const DetailsByAppDeviceSupport: FC = () => {
   const { listAppDeviceAccess } = useListAppDeviceAccess();
   console.log('listAppDeviceAccess',listAppDeviceAccess);
-  let idx = 0;
+  let totalMobile = 0;
+  let totalTablet = 0;
+  let totalWebsite = 0;
+  let totalMo = 0;
+  let totalTab = 0;
+  let totalWeb = 0;
   for (const key in listAppDeviceAccess) {
-    console.log('listAppDeviceAccess11',listAppDeviceAccess)
-    // console.log('element',element)
-    idx ++;
-    dataNew[0].id = idx;
-    dataNew[0].name = listAppDeviceAccess[key].app.name;
-    if(Number(listAppDeviceAccess[key].data[0].type) === 1) {
-      dataNew[0].mob = Number(listAppDeviceAccess[key].data[0].amountAccesses)
+    if(listAppDeviceAccess[key].data[0].type === 1) {
+      totalMo = listAppDeviceAccess[key].data[0].amountAccesses;
+      totalMobile += totalMo;
     }
-    // if(Number(listAppDeviceAccess[key].data[1].type) === 2) {
-    //   dataNew[0].tab = Number(listAppDeviceAccess[key].data[1].amountAccesses)
-    // }
-    // if(Number(listAppDeviceAccess[key].data[2].type) === 3) {
-    //   dataNew[0].web = Number(listAppDeviceAccess[key].data[2].amountAccesses)
-    // }
+    if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[1] && listAppDeviceAccess[key].data[1].type === 2) {
+       totalTab = listAppDeviceAccess[key].data[1].amountAccesses;
+      totalTablet += totalTab
+    }
+    if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[2] && listAppDeviceAccess[key].data[2].type === 3) {
+       totalWeb = listAppDeviceAccess[key].data[2].amountAccesses;
+      totalWebsite += totalWeb
+    }
+    // console.log('totalAccessApp1111',totalAccessApp)
   }
+  const totalAccess = totalMobile + totalTablet + totalWebsite;
+  console.log('totalMobile',totalMobile)
+  console.log('totalTablet',totalTablet)
+  console.log('totalWebsite',totalWebsite)
+  console.log('totalAccess',totalAccess)
+  console.log('dataNew',dataNew)
   return (
     <section className="bg-primary-light px-6 py-4 mt-3 h-[620px]">
       <p className="text-primary-gray font-bold text-lg">
@@ -154,10 +163,10 @@ const DetailsByAppDeviceSupport: FC = () => {
         </thead>
 
         <tbody className="text-center leading-9">
-          {dataNew.map((item) => (
-            <tr key={item.id} className="h-10 border-b border-primary-border">
+          {listAppDeviceAccess.map((item, index) => (
+            <tr key={index} className="h-10 border-b border-primary-border">
               <td className="border-r border-primary-border text-left px-4">
-                {item.name}
+                {item.app.name}
               </td>
               <td
                 className={cn(
@@ -165,7 +174,13 @@ const DetailsByAppDeviceSupport: FC = () => {
                   styles.widthFifteenPercent
                 )}
               >
-                {item["%"]}
+                {
+                  (((
+                      (item?.data?.[0] && item.data[0].type === 1 ? item.data[0].amountAccesses : 0)
+                      + (item?.data?.[1] && item.data[1].type === 2 ? item.data[1].amountAccesses : 0)
+                      + (item?.data?.[2] && item.data[2].type === 3 ? item.data[2].amountAccesses : 0)
+                  )/totalAccess)*100).toFixed(2)
+                }
               </td>
               <td
                 className={cn(
@@ -173,7 +188,7 @@ const DetailsByAppDeviceSupport: FC = () => {
                   styles.widthFifteenPercent
                 )}
               >
-                {item.mob}
+                { item?.data?.[0] && item.data[0].type === 1 ? item.data[0].amountAccesses : 0 }
               </td>
               <td
                 className={cn(
@@ -181,7 +196,7 @@ const DetailsByAppDeviceSupport: FC = () => {
                   styles.widthFifteenPercent
                 )}
               >
-                {item.tab}
+                { item?.data?.[1] && item.data[1].type === 2 ? item.data[1].amountAccesses : 0 }
               </td>
               <td
                 className={cn(
@@ -189,7 +204,7 @@ const DetailsByAppDeviceSupport: FC = () => {
                   styles.widthFifteenPercent
                 )}
               >
-                {item.web}
+                { item?.data?.[2] && item.data[2].type === 3 ? item.data[2].amountAccesses : 0 }
               </td>
             </tr>
           ))}
@@ -197,9 +212,9 @@ const DetailsByAppDeviceSupport: FC = () => {
           <tr className="h-9 bg-cbs-active-comment font-bold leading-9">
             <td className="text-left px-4">Tổng</td>
             <td className="text-base text-primary leading-9">100</td>
-            <td>15.000</td>
-            <td>35.000</td>
-            <td>50.000</td>
+            <td>{totalMobile}</td>
+            <td>{totalTablet}</td>
+            <td>{totalWebsite}</td>
           </tr>
         </tbody>
       </table>
