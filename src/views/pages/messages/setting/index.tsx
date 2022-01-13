@@ -11,9 +11,7 @@ import AvatarGroupChat from "../list/components/AvatarGroupChat";
 const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
 
-    const mapData = useSelector((state: RootState) => state.listConversation);
-    const {listConversation} = mapData.data;
-    const chat = listConversation[currentChat];
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     const currentUser = localStorage.getItem("currentUser")??"";
     const profileId = JSON.parse(currentUser)?._id;
@@ -49,7 +47,7 @@ const SettingMessageDetail:FC = () => {
 
     if (!chat) {
         return (
-            <div className={"messages-right-bar w-[480px] border-l transition duration-150 relative group"}>
+            <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute right--480px"}>
             </div>
         )
     }
