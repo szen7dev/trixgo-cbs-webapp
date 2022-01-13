@@ -24,6 +24,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
+    const [firstInit, setFirstInit] = useState(false);
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
     const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
     const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
@@ -35,19 +36,22 @@ const MainChatContent:FC<Props> = ({chat}) => {
         getListMessage({conversationID: currentChat}).then((data) => {
             setTimeout(() => {
                 scrollToBottom()
+                setFirstInit(true)
             }, 100)
         })
     },[currentChat]);
 
     useEffect(() => {
-        conversationMessagesList.current&&conversationMessagesList.current.addEventListener("scroll", () => onScroll());
-        document.addEventListener("wheel", function (e) {
-            onScroll();
-        });
-    },[conversationMessagesList]);
+        if (firstInit) {
+            conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
+            document.addEventListener("wheel", function (e) {
+                onScroll();
+            });
+        }
+    },[conversationMessagesList,firstInit]);
 
     useEffect(() => {
-        if (reachedTop && !isLoading && hasMoreData) {
+        if (reachedTop && !isLoading && hasMoreData && firstInit) {
             getListMessage({lastestID: nextCursor, conversationID: currentChat});
             setReachTop(false);
         }
@@ -65,8 +69,8 @@ const MainChatContent:FC<Props> = ({chat}) => {
     };
 
     const scrollToBottom = () => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        if (conversationMessagesList.current) {
+            conversationMessagesList.current.scrollTo({top: conversationMessagesList.current.scrollHeight, behavior: "smooth" });
         }
     }
 
@@ -86,7 +90,6 @@ const MainChatContent:FC<Props> = ({chat}) => {
         <>
             <div
                 ref={conversationMessagesList}
-                style={{scrollBehavior: "smooth"}}
                 id={"conversation-messages-list"}
                 className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition-all duration-150"}
             >
@@ -97,7 +100,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                             null
                     }
                 </div>
-                <div ref={messagesEndRef} />
+                <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
             <button
                 onClick={() => scrollToBottom()}
