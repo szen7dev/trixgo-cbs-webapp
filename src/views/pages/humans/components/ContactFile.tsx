@@ -3,6 +3,7 @@ import moment from "moment";
 import className from "classnames";
 
 import PDFIcon from "assets/images/icons8-pdf.svg";
+import type { File } from 'typings/human';
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
@@ -14,17 +15,7 @@ type DataRemove = {
 };
 
 interface ContactProps {
-  file: {
-    id?: string;
-    _id: string;
-    name: string;
-    url: string;
-    createAt: string;
-    userCreate: {
-      fullname: string;
-    };
-    size: number;
-  };
+  file: File;
   contactDocumentID: string;
   onRemoveFileUpload: (data: DataRemove, contactDocumentID: string) => void;
 }
@@ -35,14 +26,18 @@ const ContactFile: React.FC<ContactProps> = ({
   onRemoveFileUpload,
   children,
 }) => {
+  const handleDownloadFile = React.useCallback((_file) => () => {
+    window.open(_file.url)
+  }, []);
+
   return (
     <div key={file._id} className="flex justify-between items-center ">
       <div className="flex relative">
         <div>
           <img src={PDFIcon} alt="PDF" />
         </div>
-        <div className="ml-2">
-          <p>{file.name}</p>
+        <div className="ml-2 cursor-pointer" onClick={handleDownloadFile(file)}>
+          <p>{file.nameOrg}</p>
           <p
             className="text-primary-gray"
             style={{ fontSize: 10, maxWidth: "80%" }}

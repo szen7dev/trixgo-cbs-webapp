@@ -1265,3 +1265,10 @@ input[type="text"] {
   max-height: calc(100vh - 150px);
   min-height: calc(100vh - 150px);
 }
+
+.messages-right-bar.right--480px {
+  right: -480px;
+}
+.messages-main-content {
+  font-size: 15px;
+}

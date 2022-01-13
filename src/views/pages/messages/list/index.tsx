@@ -22,7 +22,7 @@ const MessageList:FC = () => {
     const {getListConversation} = UseListConversation();
 
     const mapData = useSelector((state: RootState) => state.listConversation);
-    const {listConversationUnPin, listConversationPined, nextCursor, isLoading,  hasMoreData} = mapData.data;
+    const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
         getListConversation({keyword: searchText});
@@ -79,10 +79,7 @@ const MessageList:FC = () => {
                     className={"overflow-auto message-list-height"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
-                    {_map(Object.values(listConversationPined), (chat) => (
-                        <ListChatItem key={chat._id} chat={chat}/>
-                    ))}
-                    {_map(Object.values(listConversationUnPin), (chat) => (
+                    {_map(Object.values(listConversation), (chat) => (
                         <ListChatItem key={chat._id} chat={chat}/>
                     ))}
                 </div>

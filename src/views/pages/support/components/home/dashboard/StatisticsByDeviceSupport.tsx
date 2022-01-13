@@ -68,7 +68,7 @@ const options = {
       display: false,
     },
     tooltip: {
-      enabled: false,
+      enabled: true,
     },
     datalabels: {
       display: false,

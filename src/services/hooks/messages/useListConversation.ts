@@ -1,13 +1,13 @@
 import ListConversationRepository from "apis/messages";
 import {ListConversationPayload} from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
-import {setNextCursor, setListConversationPined, setListConversationUnpin, setTotalRecord, setLoading} from "redux/reducer/messages/ListConversation";
+import {setNextCursor, setListConversation, setTotalRecord, setLoading} from "redux/reducer/messages/ListConversation";
 
-type UseListConversation = {
+type UseListConversationType = {
     getListConversation: (params: ListConversationPayload) => void;
 };
 
-export const UseListConversation = () : UseListConversation => {
+export const UseListConversation = () : UseListConversationType => {
     const dispatch = useDispatch();
 
     const getListConversation = async (params: ListConversationPayload) => {
@@ -15,8 +15,7 @@ export const UseListConversation = () : UseListConversation => {
         const {data} = await ListConversationRepository.getListConversation(params);
         dispatch(setTotalRecord(data.totalRecord));
         dispatch(setNextCursor(data.nextCursor));
-        dispatch(setListConversationPined(data.listConversationPin));
-        dispatch(setListConversationUnpin(data.listRecords));
+        dispatch(setListConversation(data.listRecords));
         dispatch(setLoading(false));
     }
 

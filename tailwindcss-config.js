@@ -67,7 +67,9 @@ module.exports = {
                 "cbs-down": "#FEECEB",
                 "cbs-down-text": "#F44336",
                 "cbs-nav-text": "#00B9F2",
-                "cbs-light-blue": "#E7F3FF"
+                "cbs-light-blue": "#E7F3FF",
+                "cbs-pink": "#FDF3F5",
+                "cbs-green-bg": "#FDF3F5",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -89,6 +91,7 @@ module.exports = {
             width: {
                 ...autoGeneratePx,
                 fill: "-webkit-fill-available",
+                fit: 'fit-content',
             },
             height: {
                 ...autoGeneratePx,

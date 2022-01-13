@@ -1,297 +1,118 @@
-import React, {FC} from "react";
+import React, {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
 import NotificationCenter from "./NotificationCenter";
 import OthersMessage from "./OthersMessage";
 import MyMessage from "./MyMessage";
-import SampleAvatar from "assets/images/sample_avt.svg";
 import {map as _map} from "lodash";
-import SampleImage from 'assets/images/photo1640398643.png';
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
+import {useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {MessageContext} from "../../home/index_v2";
+import ArrowDown from "assets/images/icon-arrow-down.svg";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
-const MainChatContent:FC = () => {
-    const messages = [
-        {
-            _id: 1,
-            type: "noti",
-            content: {
-                content: 'Thursday'
-            }
-        },
-        {
-            _id: 2,
-            type: "noti",
-            content: {
-                content: 'Hiepnh created the group "TRX.PGI-Quản trị nội bộ"'
-            }
-        },
-        {
-            _id: 3,
-            type: "other",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
-                date: "07:04",
-                type: "text",
-                replyTo: {
-                    userName: "Toan TRX",
-                    themeColor: "#0060E1",
-                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm",
-                    date: "07:04",
-                    type: "text",
-                }
-            }
-        },
-        {
-            _id: 7,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "images",
-                content: [
-                    {
-                        _id: 123,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    },
-                    {
-                        _id: 124,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    },
-                    {
-                        _id: 125,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    },
-                    {
-                        _id: 126,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    },
-                    {
-                        _id: 127,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    },
-                    {
-                        _id: 128,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: SampleImage,
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    }
-                ]
-            }
-        },
-        {
-            _id: 4,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
-                date: "07:04",
-                type: "text",
-                replyTo: {
-                    userName: "Toan TRX",
-                    themeColor: "#0060E1",
-                    content: "Ok, vậy trước mắt đẩy giúp cháu Plus, AND, TAI nhé. Đặc biệt 2 nhà tôi là có Bún đậu mắm tôm",
-                    date: "07:04",
-                    type: "text",
-                }
-            }
-        },
-        {
-            _id: 5,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "file",
-                content: [
-                    {
-                        _id: 123,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: '#',
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    }
-                ]
-            }
-        },
-        {
-            _id: 6,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "file",
-                content: [
-                    {
-                        _id: 123,
-                        fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                        fileUrl: '#',
-                        fileSize: '440.8 KB',
-                        fileType: 'pdf'
-                    }
-                ]
-            }
-        },
-        {
-            _id: 8,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "text",
-                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
-                replyTo: {
-                    userName: "Toan TRX",
-                    themeColor: "#0060E1",
-                    date: "07:04",
-                    type: "images",
-                    content: [
-                        {
-                            _id: 123,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        },
-                        {
-                            _id: 124,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        },
-                        {
-                            _id: 125,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        },
-                        {
-                            _id: 126,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        },
-                        {
-                            _id: 127,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        },
-                        {
-                            _id: 128,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: SampleImage,
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            _id: 9,
-            type: "my",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "text",
-                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
-                replyTo: {
-                    userName: "Toan TRX",
-                    themeColor: "#0060E1",
-                    date: "07:04",
-                    type: "file",
-                    content: [
-                        {
-                            _id: 123,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: '#',
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            _id: 10,
-            type: "other",
-            content: {
-                avt: SampleAvatar,
-                userName: "Thu PGI",
-                themeColor: "#FCC7A7",
-                date: "07:04",
-                type: "text",
-                content: 'Ok. Đã nắm được thông tin rồi nhé. <a href="#" class="text-primary">Tú</a> ơi cíu anh.',
-                replyTo: {
-                    userName: "Toan TRX",
-                    themeColor: "#0060E1",
-                    date: "07:04",
-                    type: "file",
-                    content: [
-                        {
-                            _id: 123,
-                            fileName: 'ThongBaoTamNgungThiCongCT.pdf',
-                            fileUrl: '#',
-                            fileSize: '440.8 KB',
-                            fileType: 'pdf'
-                        }
-                    ]
-                }
+type Props = {
+    chat: ItemListConversation
+}
+
+const MainChatContent:FC<Props> = ({chat}) => {
+    const {getListMessage} = UseConversation();
+    const currentUser = localStorage.getItem("currentUser")??"";
+    const profileId = JSON.parse(currentUser)?._id;
+    const {currentChat} = useContext(MessageContext);
+
+    const conversationMessagesList = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [reachedTop, setReachTop] = useState(false);
+    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
+    const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
+    const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
+    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
+
+    const memoizedValue = useMemo(() => parseMessageData(messagesData), [messagesData]);
+
+    useEffect(() => {
+        getListMessage({conversationID: currentChat}).then((data) => {
+            setTimeout(() => {
+                scrollToBottom()
+            }, 100)
+        })
+    },[currentChat]);
+
+    useEffect(() => {
+        conversationMessagesList.current&&conversationMessagesList.current.addEventListener("scroll", () => onScroll());
+        document.addEventListener("wheel", function (e) {
+            onScroll();
+        });
+    },[conversationMessagesList]);
+
+    useEffect(() => {
+        if (reachedTop && !isLoading && hasMoreData) {
+            getListMessage({lastestID: nextCursor, conversationID: currentChat});
+            setReachTop(false);
+        }
+    }, [reachedTop, nextCursor])
+
+    const onScroll = () => {
+        if (conversationMessagesList.current) {
+            const { scrollTop, offsetTop } = conversationMessagesList.current;
+            if (offsetTop > scrollTop) {
+                setReachTop(true);
+            } else {
+                setReachTop(false);
             }
         }
-    ]
+    };
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }
 
     const renderMessage = (message: any) => {
         switch (message.type) {
-            case "noti":
-                return <NotificationCenter key={message._id} content={message.content.content}/>
-            case "other":
-                return <OthersMessage key={message._id} message={message.content}/>
-            case "my":
-                return <MyMessage key={message._id} message={message.content}/>
+            case 0:
+                if (message.sender._id === profileId) {
+                    return <MyMessage key={message._id} message={message}/>
+                } else {
+                    return <OthersMessage key={message._id} message={message}/>
+                }
+            case 108:
+                return <NotificationCenter key={message._id} content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
         }
     }
     return (
-        <div className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition duration-150"}>
-            <div className={"w-full max-w-[645px] pt-[20px] px-[20px] pb-[100px]"}>
-                {
-                    _map(messages, message => renderMessage(message))
-                }
+        <>
+            <div
+                ref={conversationMessagesList}
+                style={{scrollBehavior: "smooth"}}
+                id={"conversation-messages-list"}
+                className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition-all duration-150"}
+            >
+                <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
+                    {
+                        messagesData?
+                            _map(memoizedValue, message => renderMessage(message)):
+                            null
+                    }
+                </div>
+                <div ref={messagesEndRef} />
             </div>
-        </div>
+            <button
+                onClick={() => scrollToBottom()}
+                className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
+                <img src={ArrowDown} alt={"arrow down"}/>
+                <span
+                    className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>3</span>
+            </button>
+        </>
     )
+}
+
+const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+    if (!messagesData) return [];
+    return _map(Object.values(messagesData), message => message)
 }
 
 export default MainChatContent;

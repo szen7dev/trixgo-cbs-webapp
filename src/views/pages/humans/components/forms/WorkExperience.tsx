@@ -220,7 +220,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                   {/* -------------- Line 2 --------------- */}
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">
-                      <span className="w-6/12 text-primary-gray text-leftt">
+                      <span className="w-6/12 text-primary-gray text-left">
                         Hợp đồng
                       </span>
                       <DropdownSearchable
@@ -253,7 +253,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
-                      <span className="w-6/12 text-primary-gray text-leftt">
+                      <span className="w-6/12 text-primary-gray text-left">
                         Dự án
                       </span>
                       <Field
@@ -267,7 +267,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
-                      <span className="w-6/12 text-primary-gray text-leftt">
+                      <span className="w-6/12 text-primary-gray text-left">
                         Chủ đầu tư
                       </span>
                       <Field
@@ -280,6 +280,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
                         }}
                       />
                     </div>
+                    <div className="w-1/4 flex items-center" />
                   </div>
                   <div className="absolute flex justify-end items-center bottom-0 -ml-6 px-6 h-12 w-full border-t border-gray-300 text-primary-light">
                     <button
