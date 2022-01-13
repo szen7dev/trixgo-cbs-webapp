@@ -1,37 +1,17 @@
-import { FC, useContext, useEffect } from "react";
-
-// Context
-import { Context as ModalContext, Provider as ModalProvider } from "../document/contexts/contextModal";
+import { FC, useEffect } from "react";
 
 import SearchInput from "components/common/SearchInput";
-import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
-import ButtonMore from "views/pages/document/components/common/ButtonMore";
-import ModalCreateDocument from "../document/components/common/ModalCreateDocument";
-import ChartReportByTime from "./components/chart/ChartReportByTime";
-import generateImageLink from "../media/utils/images";
-import classNames from "classnames";
 
 import iconDownload from 'assets/images/icons8-download-48_2.png';
 import iconPdf from 'assets/images/icons8-pdf.svg';
 
-const ProjectDrawing: FC = () => {
-	const { toggleModal } = useContext(ModalContext)
-
+const ProjectDrawingPage: FC = () => {
 	useEffect(() => {
 		document.title = "CHG.THT-Hình ảnh"
 	}, []);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
-			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
-				<DropdownFilterButton className="mr-auto" />
-
-				<ButtonCreate onClick={toggleModal} />
-				<ButtonMore />
-			</div>
 			{/* Content */}
 			<div className="flex overflow-auto flex-1">
 				<div className="w-[330px] border-r border-cbs-border h-full">
@@ -80,14 +60,5 @@ const ProjectDrawing: FC = () => {
 		</div>
 	);
 };
-
-const ProjectDrawingPage: FC = () => {
-	return (
-		<ModalProvider>
-			<ProjectDrawing />
-			<ModalCreateDocument />
-		</ModalProvider>
-	)
-}
 
 export default ProjectDrawingPage;
