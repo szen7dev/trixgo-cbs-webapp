@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useRef, useState} from "react";
+import React, {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
 import NotificationCenter from "./NotificationCenter";
 import OthersMessage from "./OthersMessage";
 import MyMessage from "./MyMessage";
@@ -8,7 +8,8 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
-import ArrowDown from "../../../../../assets/images/icon-arrow-down.svg";
+import ArrowDown from "assets/images/icon-arrow-down.svg";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 type Props = {
     chat: ItemListConversation
@@ -21,23 +22,29 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const {currentChat} = useContext(MessageContext);
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
     const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
     const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
     const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
 
-    useEffect(() => {
-        getListMessage({conversationID: currentChat})
-    },[currentChat])
+    const memoizedValue = useMemo(() => parseMessageData(messagesData), [messagesData]);
 
     useEffect(() => {
-        scrollToBottom()
-    }, [messagesData])
+        getListMessage({conversationID: currentChat}).then((data) => {
+            setTimeout(() => {
+                scrollToBottom()
+            }, 100)
+        })
+    },[currentChat]);
 
     useEffect(() => {
         conversationMessagesList.current&&conversationMessagesList.current.addEventListener("scroll", () => onScroll());
-    },[conversationMessagesList])
+        document.addEventListener("wheel", function (e) {
+            onScroll();
+        });
+    },[conversationMessagesList]);
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreData) {
@@ -58,8 +65,8 @@ const MainChatContent:FC<Props> = ({chat}) => {
     };
 
     const scrollToBottom = () => {
-        if (conversationMessagesList.current) {
-            conversationMessagesList.current.scrollTop = conversationMessagesList.current.scrollHeight;
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }
 
@@ -86,10 +93,11 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {
                         messagesData?
-                            _map(Object.values(messagesData), message => renderMessage(message)):
+                            _map(memoizedValue, message => renderMessage(message)):
                             null
                     }
                 </div>
+                <div ref={messagesEndRef} />
             </div>
             <button
                 onClick={() => scrollToBottom()}
@@ -100,6 +108,11 @@ const MainChatContent:FC<Props> = ({chat}) => {
             </button>
         </>
     )
+}
+
+const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+    if (!messagesData) return [];
+    return _map(Object.values(messagesData), message => message)
 }
 
 export default MainChatContent;

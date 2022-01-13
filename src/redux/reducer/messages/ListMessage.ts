@@ -45,10 +45,14 @@ const listMessageSlice = createSlice({
                 ...state.data,
                 listMessage: {
                     ...state.data.listMessage,
-                    [action.payload.conversationId] : {
-                        ...newMessageData,
-                        ...state.data.listMessage[action.payload.conversationId]
-                    }
+                    [action.payload.conversationId] :
+                        action.payload.isFreshData?
+                        {
+                            ...state.data.listMessage[action.payload.conversationId],
+                            ...newMessageData
+                        }
+                        :
+                        Object.assign(newMessageData, state.data.listMessage[action.payload.conversationId])
                 }
             };
         },
