@@ -41,4 +41,5 @@ export type FileProps = {
   userCreate: string,
   modifyAt: string,
   createAt: string,
+  nameOrg: string,
 }

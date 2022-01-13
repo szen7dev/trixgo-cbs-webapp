@@ -234,6 +234,14 @@ export const CONTRACT_OUTIN = [
     { value: 2, text: 'Hợp đồng mua vào' },
 ]
 
+// TRẠNG THÁI HỢP ĐỒNG BÁN RA
+export const CONTRACT_COME_IN_STATUS = [
+    { value: 1, text: 'Đang triển khai' },
+    { value: 2, text: 'Đang bàn giao' },
+    { value: 3, text: 'Hoàn thành' },
+    { value: 4, text: 'Tạm dừng' },
+]
+
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
 export const CONTRACT_TA = [
     { value: 1, text: 'T' },
@@ -511,3 +519,5 @@ export const MIME_TYPES_IMAGE = [ 'image/jpeg', 'image/pjpeg', 'image/png', 'ima
 export const MIME_TYPES_PCM   = [ 'mov', 'mp4' , 'MP4', 'wav', 'WAV', 'jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'image/png', 'txt', 'mpp'];
 
 export const MIME_TYPES_MESSAGE   = [ 'jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'txt', 'mpp' ];
+
+export const DATE_FORMAT = "DD/MM/YYYY";

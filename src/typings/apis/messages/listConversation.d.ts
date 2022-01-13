@@ -46,7 +46,7 @@ export type ItemListConversation = {
 }
 export type DataListConversation = {
     listRecords: ItemListConversation[];
-    listConversationPin: ItemListConversation[];
+    // listConversationPin: ItemListConversation[];
     limit: number;
     totalRecord: number;
     nextCursor: string;

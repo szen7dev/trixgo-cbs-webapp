@@ -95,6 +95,11 @@ const SupportPage: FC = () => {
           <button className="flex items-center justify-around w-[120px] h-[30px] border rounded">
             <img src={PolygonIcon} alt="Polygon" />
             <span className="text-xs text-primary-gray">Chọn thời gian</span>
+            <select name="" id="">
+              <option value="1">2020</option>
+              <option value="2">2021</option>
+              <option value="3">2022</option>
+            </select>
           </button>
           <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
             <img alt={"Icon"} src={ThreeDotsVertical} />

@@ -219,63 +219,6 @@ export const useQueryListDoctype = ({ limit, type, keyword }: ParamQueryPayload)
     }
 }
 
-// export const useFetchListDoctype = ({
-//     limit,
-//     type,
-// }: Pick<DoctypePayload, 'type'> & {
-//     limit: number;
-// }): {
-//     loading: boolean;
-//     totalRecord: number | undefined;
-//     totalPages: number | undefined;
-//     hasNextPage: boolean | undefined;
-//     listDoctypes: Array<Doctype>;
-//     refetchListDoctypes: () => void;
-//     fetchNextPageDoctypes: () => void;
-// } => {
-//     const res = useInfiniteQuery(
-//         [`list_Doctype.${type}`, limit],
-//         async ({ pageParam }: any) =>
-//             HumanRepository.fetchListDoctype({
-//                 limit: limit || 10,
-//                 lastestID: pageParam || "",
-//                 type
-//             }),
-//         {
-//             getNextPageParam: ({ data }: any) => {
-//                 return data?.nextCursor || undefined;
-//             },
-//             refetchOnWindowFocus: false,
-//             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-//         }
-//     );
-//     const {
-//         isLoading,
-//         data,
-//         refetch: refetchListDoctypes,
-//         fetchNextPage: fetchNextPageDoctypes,
-//         hasNextPage
-//     } = res;
-
-//     const listDoctypes = []
-//         .concat(
-//             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-//         )
-//         .filter(Boolean);
-//     const totalRecord = data?.pages[0]?.data?.totalRecord;
-//     const totalPages = data?.pages[0]?.data?.totalPages;
-
-//     return {
-//         loading: isLoading,
-//         listDoctypes,
-//         totalRecord,
-//         totalPages,
-//         hasNextPage,
-//         refetchListDoctypes,
-//         fetchNextPageDoctypes
-//     }
-// }
-
 export const useFetchListArea = ({
     limit,
     keyword = '',
@@ -364,11 +307,7 @@ interface UseMutationContactDocument {
     createContactDocumentAsync: (payload: CreateContactDocumentPayload) => Promise<MutationContactDocument>;
     updateContractDocumentAsync: (payload: UpdateContactDocumentPayload) => Promise<MutationContactDocument>;
     deleteContractDocumentAsync: (contactDocumentID: string) => Promise<MutationContactDocument>;
-    updateFileContractDocumentAsync: (
-        payload: UpdateFileContactDocumentPayload & {
-            onUploadProgress?: (progressEvent: any) => void
-        },
-    ) => Promise<any>;
+    updateFileContractDocumentAsync: (payload: UpdateFileContactDocumentPayload) => Promise<any>;
     removeFileContractDocument: (payload: RemoveFileContactDocumentPayload) => Promise<any>;
 }
 type TypeParam = Pick<ContactDocumentPayload, 'type' | 'limit'>;
