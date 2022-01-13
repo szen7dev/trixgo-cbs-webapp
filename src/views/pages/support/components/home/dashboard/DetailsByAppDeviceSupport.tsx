@@ -80,46 +80,23 @@ const data = [
   },
 ];
 
-const dataNew = [
-  {
-    id: 1,
-    name: "",
-    "%": 0,
-    mob: 0,
-    tab: 0,
-    web: 0,
-  },
-];
 const DetailsByAppDeviceSupport: FC = () => {
   const { listAppDeviceAccess } = useListAppDeviceAccess();
-  console.log('listAppDeviceAccess',listAppDeviceAccess);
   let totalMobile = 0;
   let totalTablet = 0;
   let totalWebsite = 0;
-  let totalMo = 0;
-  let totalTab = 0;
-  let totalWeb = 0;
   for (const key in listAppDeviceAccess) {
     if(listAppDeviceAccess[key].data[0].type === 1) {
-      totalMo = listAppDeviceAccess[key].data[0].amountAccesses;
-      totalMobile += totalMo;
+      totalMobile += listAppDeviceAccess[key].data[0].amountAccesses;
     }
     if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[1] && listAppDeviceAccess[key].data[1].type === 2) {
-       totalTab = listAppDeviceAccess[key].data[1].amountAccesses;
-      totalTablet += totalTab
+      totalTablet += listAppDeviceAccess[key].data[1].amountAccesses;
     }
     if(listAppDeviceAccess[key] && listAppDeviceAccess[key].data[2] && listAppDeviceAccess[key].data[2].type === 3) {
-       totalWeb = listAppDeviceAccess[key].data[2].amountAccesses;
-      totalWebsite += totalWeb
+      totalWebsite += listAppDeviceAccess[key].data[2].amountAccesses;
     }
-    // console.log('totalAccessApp1111',totalAccessApp)
   }
   const totalAccess = totalMobile + totalTablet + totalWebsite;
-  console.log('totalMobile',totalMobile)
-  console.log('totalTablet',totalTablet)
-  console.log('totalWebsite',totalWebsite)
-  console.log('totalAccess',totalAccess)
-  console.log('dataNew',dataNew)
   return (
     <section className="bg-primary-light px-6 py-4 mt-3 h-[620px]">
       <p className="text-primary-gray font-bold text-lg">
