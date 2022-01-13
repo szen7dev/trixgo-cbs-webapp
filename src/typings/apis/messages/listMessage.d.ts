@@ -62,7 +62,7 @@ export type ItemMessage = {
     __v: number;
     [key: string]: any;
 }
-type ListMessageData = {
+export type ListMessageData = {
     totalRecord: number;
     listRecords: ItemMessage[];
     limit: number;

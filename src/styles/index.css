@@ -1269,3 +1269,6 @@ input[type="text"] {
 .messages-right-bar.right--480px {
   right: -480px;
 }
+.messages-main-content {
+  font-size: 15px;
+}
