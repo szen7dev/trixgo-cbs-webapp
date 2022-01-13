@@ -42,13 +42,11 @@ const MainChatContent:FC<Props> = ({chat}) => {
     },[currentChat]);
 
     useEffect(() => {
-        if (firstInit) {
-            conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
-            document.addEventListener("wheel", function (e) {
-                onScroll();
-            });
-        }
-    },[conversationMessagesList,firstInit]);
+        conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
+        document.addEventListener("wheel", function (e) {
+            onScroll();
+        });
+    },[conversationMessagesList]);
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreData && firstInit) {

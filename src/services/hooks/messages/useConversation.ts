@@ -1,14 +1,17 @@
 import ListMessageRepository from "apis/messages/message";
-import {ListMessageData, ListMessagePayload} from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord} from "redux/reducer/messages/ListMessage";
+import {ListMessageData, ListMessagePayload, SendNormalMessagePayload} from "typings/apis/messages/listMessage";
+import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
     getListMessage: (params: ListMessagePayload) => Promise<ListMessageData>;
+    sendNormalMessage: (params: SendNormalMessagePayload) => void;
 }
 
 export const UseConversation = () : UseConversationType => {
     const dispatch = useDispatch();
+    const currentUser = localStorage.getItem("currentUser")??"";
+    const profile = JSON.parse(currentUser);
 
     const getListMessage = async (params: ListMessagePayload) => {
         dispatch(setLoading({conversationId: params.conversationID, data: true}));
@@ -23,7 +26,21 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const sendNormalMessage = async (params: SendNormalMessagePayload) => {
+        const {data} = await ListMessageRepository.sendNormalMessage(params);
+        data&&dispatch(appendMessageToConversation({
+            conversationId: params.conversationID,
+            messageId: data._id,
+            messageData: {
+                ...data,
+                sender: profile
+            }
+        }));
+
+        return data;
+    }
     return {
-        getListMessage
+        getListMessage,
+        sendNormalMessage
     }
 }

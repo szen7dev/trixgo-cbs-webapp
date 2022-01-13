@@ -80,3 +80,15 @@ export type ListMessagePayload = {
     lastestID?: string;
     conversationID?: string;
 };
+
+
+export type SendNormalMessagePayload = {
+    conversationID: string;
+    type: number;
+    content: string;
+}
+export type SendNormalMessageResponse = {
+    error: boolean;
+    data: ItemMessage;
+    status: number;
+};

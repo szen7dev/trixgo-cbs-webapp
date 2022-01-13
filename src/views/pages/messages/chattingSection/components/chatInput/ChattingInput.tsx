@@ -6,6 +6,7 @@ import IconSendMessage from "assets/images/icons8-email-send-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {MessageContext} from "../../../home/index_v2";
 import {map as _map} from "lodash";
+import {UseConversation} from "services/hooks/messages/useConversation";
 
 type Props = {
     chat: ItemListConversation;
@@ -14,30 +15,52 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const currentUser = localStorage.getItem("currentUser")??"";
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat} = useContext(MessageContext);
-    const [inputText, setInputText] = useState("");
+    const {sendNormalMessage} = UseConversation();
     const [realValue, setRealValue] = useState("");
-    const [showMention, setShowMention] = useState({
+    const [showMention, setShowMention] = useState<{show: boolean; mentionValue: string; tempValue?: string}>({
         show: false,
-        mentionValue: ""
+        mentionValue: "",
+        tempValue: ""
     });
 
     const handleInput = (value: string) => {
-        setRealValue(value);
-        setInputText(value);
-        if (value.match(/[@][a-zA-Z]?/g)) {
+        value = value.replaceAll(/<a class="text-primary" href="([a-zA-Z0-9]+)">[@]([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+)<["/]a>/g, (replacement: string) => {
+            const matchs = (/<a class="text-primary" href="([a-zA-Z0-9]+)">[@]([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+)<["/]a>/g).exec(replacement);
+            if (matchs) {
+                const userId = matchs[1];
+                const fullName = matchs[2];
+                return `@[${fullName}](${userId})`;
+            } else {
+                return replacement;
+            }
+        })
+        if (value.match(/[@][a-zA-Z]+/g)) {
             const matchValue = value.match(/[@][a-zA-Z]+/g);
-            setShowMention({show: true, mentionValue: matchValue?matchValue[0].replaceAll("@",""):""})
+            setShowMention({
+                show: true,
+                mentionValue: matchValue?matchValue[0].replaceAll("@",""):"",
+                tempValue: value
+            })
         } else {
             setShowMention({show: false, mentionValue: ""});
+            setRealValue(value);
         }
     }
 
     const setMention = (member: any) => {
         const newRealValue = `@[${member.fullname}](${member._id}) `;
-        setRealValue(realValue.replaceAll(/[@][a-zA-Z]?/g, newRealValue));
-        const newInputText = `<a class="text-primary" href=${member._id}>@${member.fullname}</a> `;
-        setInputText(inputText.replaceAll(/[@][a-zA-Z]?/g, newInputText));
-        setShowMention({show: false, mentionValue: ""})
+        setRealValue((showMention.tempValue??"").replace(/[@][a-zA-Z]+/g, newRealValue));
+        setShowMention({show: false, mentionValue: "", tempValue: (showMention.tempValue??"").replace(/[@][a-zA-Z]+/g, newRealValue)})
+    }
+
+    const handleSendMessage = () => {
+        sendNormalMessage({
+            conversationID: currentChat,
+            content: realValue,
+            type: 0
+        });
+        setRealValue("");
+        setShowMention({show: false, mentionValue: "", tempValue: ""});
     }
 
     return (
@@ -48,7 +71,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                     <div
                         className={"absolute bg-white bottom-60px left-0 rounded-lg min-w-[421px] max-w-[421px] max-h-[242px]"}>
                         {
-                            _map(chat.members.filter(mem => mem.fullname.includes(showMention.mentionValue)), member => (
+                            _map(chat.members.filter(mem => mem.fullname.toLowerCase().includes(showMention.mentionValue.toLowerCase())), member => (
                                 <div
                                     onClick={() => setMention(member)}
                                     key={member._id} className={"hover:bg-gray-300 py-[10px] px-[15px] flex items-center"}>
@@ -64,10 +87,12 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }
                 <div className={"flex-1 rounded-md bg-white flex items-end"}>
                     <IconButton/>
-                    <InputForMessage onChange={(target) => handleInput(target.innerText)} html={inputText}/>
+                    <InputForMessage onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
                     <IconAttach/>
                 </div>
-                <button className={"w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
+                <button
+                    onClick={() => handleSendMessage()}
+                    className={"w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
                     <img src={IconSendMessage} alt={"send message"}/>
                 </button>
             </div>

@@ -8,11 +8,37 @@ const InputForMessage:FC<Props> = ({onChange,html}) => {
     const inputRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (inputRef&&inputRef.current) {
-            inputRef.current.innerHTML = html;
-            inputRef.current.focus();
+            inputRef.current.innerHTML = html.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                if (matchs) {
+                    const fullName = matchs[1];
+                    const userId = matchs[2];
+                    return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
+                } else {
+                    return replacement;
+                }
+            });
+
+            const target = document.createTextNode('');
+            inputRef.current.appendChild(target);
+            // do not move caret if element was not focused
+            const isTargetFocused = document.activeElement === inputRef.current;
+            if (target !== null && target.nodeValue !== null && isTargetFocused) {
+                const sel = window.getSelection();
+                if (sel !== null) {
+                    const range = document.createRange();
+                    range.setStart(target, target.nodeValue.length);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+                inputRef.current.focus();
+                inputRef.current.click();
+            }
         }
     },[html, inputRef])
     return (
+        <>
         <div
             ref={inputRef}
             contentEditable={"true"}
@@ -20,6 +46,8 @@ const InputForMessage:FC<Props> = ({onChange,html}) => {
             placeholder={"Message"}
             onInput={() => onChange(inputRef?.current)}
         />
+        <input type={"hidden"} value={html}/>
+        </>
     )
 }
 export default InputForMessage

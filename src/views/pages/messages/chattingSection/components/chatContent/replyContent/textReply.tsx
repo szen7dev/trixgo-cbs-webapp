@@ -10,7 +10,7 @@ const TextReply:FC<Props> = ({message}) => {
             if (matchs) {
                 const fullName = matchs[1];
                 const userId = matchs[2];
-                return `<a class="text-primary" href=${userId}>@${fullName}</a>`;
+                return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
             } else {
                 return replacement;
             }
