@@ -14,7 +14,16 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
-            textContentRef.current.innerHTML = message.content;
+            textContentRef.current.innerHTML = message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                if (matchs) {
+                    const fullName = matchs[1];
+                    const userId = matchs[2];
+                    return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
+                } else {
+                    return replacement;
+                }
+            });
         }
     },[textContentRef])
 
