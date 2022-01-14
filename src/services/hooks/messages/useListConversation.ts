@@ -3,11 +3,11 @@ import {ListConversationPayload} from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setNextCursor, setListConversation, setTotalRecord, setLoading} from "redux/reducer/messages/ListConversation";
 
-type UseListConversation = {
+type UseListConversationType = {
     getListConversation: (params: ListConversationPayload) => void;
 };
 
-export const UseListConversation = () : UseListConversation => {
+export const UseListConversation = () : UseListConversationType => {
     const dispatch = useDispatch();
 
     const getListConversation = async (params: ListConversationPayload) => {

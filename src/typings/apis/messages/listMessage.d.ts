@@ -62,7 +62,7 @@ export type ItemMessage = {
     __v: number;
     [key: string]: any;
 }
-type ListMessageData = {
+export type ListMessageData = {
     totalRecord: number;
     listRecords: ItemMessage[];
     limit: number;
@@ -79,4 +79,16 @@ export type ListMessageResponse = {
 export type ListMessagePayload = {
     lastestID?: string;
     conversationID?: string;
+};
+
+
+export type SendNormalMessagePayload = {
+    conversationID: string;
+    type: number;
+    content: string;
+}
+export type SendNormalMessageResponse = {
+    error: boolean;
+    data: ItemMessage;
+    status: number;
 };

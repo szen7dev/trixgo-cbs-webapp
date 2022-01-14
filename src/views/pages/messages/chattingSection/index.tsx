@@ -19,7 +19,7 @@ const ChattingSection:FC = () => {
                     <>
                         <MainChatHeading chat={chat}/>
                         <MainChatContent chat={chat}/>
-                        <ChattingInput/>
+                        <ChattingInput chat={chat}/>
                     </>
                 }
             </div>

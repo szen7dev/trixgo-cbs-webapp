@@ -55,7 +55,15 @@ const ListChatItem:FC<Props> = ({chat}) => {
         if (chat.lastMessage) {
             switch (chat.lastMessage.type) {
                 case 0:
-                    return chat.lastMessage.content
+                    return chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                        const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                        if (matchs) {
+                            const fullName = matchs[1];
+                            return `@${fullName}`;
+                        } else {
+                            return replacement;
+                        }
+                    });
                 case 1:
                     return "[Hình ảnh]";
                 case 2:

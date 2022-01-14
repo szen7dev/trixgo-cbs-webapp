@@ -92,12 +92,13 @@ import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
 import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
 import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
 import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
-import ProjectDrawingPage from "views/pages/ppt/ProjectDrawingPage";
 import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
 import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
 import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
 import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
-import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
+import ProjectProductionPage from "views/pages/ppt/ProjectProductionPage";
+import ProjectOtherPage from "views/pages/ppt/ProjectOtherPage";
+// import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
 import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
 import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
 import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
@@ -105,6 +106,8 @@ import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
 import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
+import ProjectDrawingRoutes from "views/pages/ppt/routes/ProjectDrawingRoutes";
+import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes";
 import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
 
 // Accounting pages
@@ -540,11 +543,10 @@ const Routes: FC = () => {
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
                                                 path={"/pcm/project/:id/drawing"}
-                                                component={() => (
+                                                component={(props: RouteComponentProps) => (
                                                     <ProjectLayout>
-                                                        <ProjectDrawingPage />
+                                                        <ProjectDrawingRoutes {...props} />
                                                     </ProjectLayout>
                                                 )}
                                             />
@@ -585,11 +587,11 @@ const Routes: FC = () => {
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/project/:id/resource"}
-                                                component={() => (
+                                                component={(props: RouteComponentProps) => (
                                                     <ProjectLayout>
-                                                        <ProjectResourcePage />
+                                                        <ProjectResourceRoutes {...props} />
                                                     </ProjectLayout>
                                                 )}
                                             />
@@ -617,6 +619,24 @@ const Routes: FC = () => {
                                                 component={() => (
                                                     <ProjectLayout>
                                                         <ProjectDirectoryPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/production"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectProductionPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/other"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectOtherPage />
                                                     </ProjectLayout>
                                                 )}
                                             />

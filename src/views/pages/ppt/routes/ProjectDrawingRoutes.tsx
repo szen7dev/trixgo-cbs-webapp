@@ -1,0 +1,26 @@
+import { FC } from "react";
+
+// Context
+import { Provider as ModalProvider } from "../../document/contexts/contextModal";
+
+import ModalCreateDocument from "../../document/components/common/ModalCreateDocument";
+
+import { Route, RouteComponentProps, Switch } from "react-router";
+import LayoutProjectDrawing from "../components/layouts/LayoutProjectDrawing";
+import ProjectDrawingPage from "../ProjectDrawingPage";
+import ProjectDrawing2Page from "../ProjectDrawing2Page";
+
+const ProjectDrawingRoutes: FC<RouteComponentProps> = ({ ...props }) => {
+	return <LayoutProjectDrawing {...props}>
+		<Switch>
+			<Route exact path={props.match.url}>
+				<ProjectDrawingPage />
+			</Route>
+			<Route exact path={props.match.url + '/2'}>
+				<ProjectDrawing2Page />
+			</Route>
+		</Switch>
+	</LayoutProjectDrawing>
+}
+
+export default ProjectDrawingRoutes

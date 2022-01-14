@@ -45,10 +45,14 @@ const listMessageSlice = createSlice({
                 ...state.data,
                 listMessage: {
                     ...state.data.listMessage,
-                    [action.payload.conversationId] : {
-                        ...newMessageData,
-                        ...state.data.listMessage[action.payload.conversationId]
-                    }
+                    [action.payload.conversationId] :
+                        action.payload.isFreshData?
+                        {
+                            ...state.data.listMessage[action.payload.conversationId],
+                            ...newMessageData
+                        }
+                        :
+                        Object.assign(newMessageData, state.data.listMessage[action.payload.conversationId])
                 }
             };
         },
@@ -70,10 +74,26 @@ const listMessageSlice = createSlice({
         },
         setLoading(state, action) {
             state.data.isLoading[action.payload.conversationId] = action.payload.data
+        },
+        appendMessageToConversation(state, action) {
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listMessage[action.payload.conversationId],
+                        [action.payload.messageId] : action.payload.messageData
+                    }
+                },
+                totalRecord: {
+                    ...state.data.totalRecord,
+                    [action.payload.conversationId]: state.data.totalRecord[action.payload.conversationId]+1
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading } = listMessageSlice.actions;
+export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
