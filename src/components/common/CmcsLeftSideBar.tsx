@@ -41,9 +41,9 @@ const NavLinkMenuLeftSideBar: FC = () => {
               src={iconFolder}
               alt="Menu item"
             />
-            <span className="truncate">Quản trị công ty</span>
+            <span className="truncate">Báo cáo quản trị</span>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={`/cmcs/portfolio`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -53,7 +53,7 @@ const NavLinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Quản trị dự án</span>
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to={`/cmcs/income`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
@@ -65,7 +65,7 @@ const NavLinkMenuLeftSideBar: FC = () => {
             />
             <span className="truncate">Hợp đồng bán ra</span>
           </NavLink>
-          <NavLink
+          {/* <NavLink
             to={`/cmcs/expenses`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -75,7 +75,7 @@ const NavLinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Hợp đồng mua vào</span>
-          </NavLink>
+          </NavLink> */}
           <NavLink
             to={`/cmcs/guarantee`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
