@@ -8,7 +8,9 @@ import {
     ListAppAccessPayload,
     ListAppAccessResponse,
     ListAppDeviceAccessPayload,
-    ListAppDeviceAccessResponse
+    ListAppDeviceAccessResponse,
+    ListCompanyAccessPayload,
+    ListCompanyAccessResponse
 } from "typings/support";
 
 const spURL = "/api/analysis/history_traffics";
@@ -36,6 +38,11 @@ const SupportRepository = {
     //5. THỐNG KÊ TRUY CẬP THEO APP VÀ THIẾT BỊ
     async listAppDeviceAccess(params: ListAppDeviceAccessPayload): Promise<ListAppDeviceAccessResponse> {
         const { data } = await API.get<ListAppDeviceAccessResponse>(`${spURL}/statistics_access_by_app_and_device`, {params: params});
+        return data;
+    },
+    //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
+    async listCompanyAccess(params: ListCompanyAccessPayload): Promise<ListCompanyAccessResponse> {
+        const { data } = await API.get<ListCompanyAccessResponse>(`${spURL}/statistics_access_by_company`, {params: params});
         return data;
     },
 };

@@ -4,13 +4,21 @@ import Tabs from "../../tabs/HomeTabList";
 
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
+import { useListAppDeviceAccess } from 'services/hooks/useSupport';
 
 const SupportPage: FC = () => {
+  const { listAppDeviceAccess } = useListAppDeviceAccess();
   const [toggleTab, setToggleTab] = useState(1);
+  const timeType = ['all', 'today', 'week', 'month', 'quater'];
+  const [type, setType] = useState();
 
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
+  const handleChange = (event : any) => {
+    // updating an object instead of a Map
+    console.log('event', event.target.value)
+  }
 
   return (
     <main className="w-full h-max bg-cbs-gray">
@@ -47,6 +55,7 @@ const SupportPage: FC = () => {
                 id=""
                 value="all"
                 className="w-4 h-4 mr-2.5"
+                onChange={handleChange}
               />
               <span className="text-black">Tất cả</span>
             </div>
@@ -56,8 +65,9 @@ const SupportPage: FC = () => {
                 name="type"
                 id=""
                 defaultChecked
-                value="week"
+                value="today"
                 className="w-4 h-4 mr-2.5"
+                onChange={handleChange}
               />
               <span>Ngày này</span>
             </div>
@@ -68,6 +78,7 @@ const SupportPage: FC = () => {
                 id=""
                 value="week"
                 className="w-4 h-4 mr-2.5"
+                onChange={handleChange}
               />
               <span>Tuần này</span>
             </div>
@@ -78,6 +89,7 @@ const SupportPage: FC = () => {
                 id=""
                 value="month"
                 className="w-4 h-4 mr-2.5"
+                onChange={handleChange}
               />
               <span>Tháng này</span>
             </div>
@@ -88,6 +100,7 @@ const SupportPage: FC = () => {
                 id=""
                 value="quater"
                 className="w-4 h-4 mr-2.5"
+                onChange={handleChange}
               />
               <span>Quý này</span>
             </div>
@@ -107,7 +120,7 @@ const SupportPage: FC = () => {
         </div>
       </div>
 
-      <Tabs toggleTab={toggleTab} />
+      <Tabs toggleTab={toggleTab}/>
     </main>
   );
 };

@@ -1,6 +1,12 @@
 import { FC } from "react";
+import { useListCompanyAccess } from 'services/hooks/useSupport';
+import moment from 'moment';
 
 const ByBusinessSupport: FC = () => {
+  const { listCompany } = useListCompanyAccess();
+  console.log('listCompany',listCompany)
+  console.log(moment().startOf('year').format("YYYY-MM-DD"));
+  console.log(moment().endOf("year").format("YYYY-MM-DD"));
   return (
     <section className="h-[834px] bg-primary-light px-6 py-4 mt-3">
       <p className="text-primary-gray text-lg font-bold">Theo doanh nghiệp</p>
