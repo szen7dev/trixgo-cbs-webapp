@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemListConversation} from "typings/apis/messages/listConversation";
+import moment from "moment";
 
 const initialState : {data: {listConversation: {[key: string]: ItemListConversation}, totalRecord: number, nextCursor: string, hasMoreData: boolean, isLoading: boolean}} = {
     data: {
@@ -18,7 +19,10 @@ const listConversationSlice = createSlice({
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
             (action.payload??[]).forEach((conversation: ItemListConversation) => {
-                newConversationData[conversation._id] = conversation
+                newConversationData[conversation._id] = {
+                    ...conversation,
+                    position: moment(conversation.lastMessage.updatedAt).toDate().getTime()
+                }
             });
 
             state.data = {

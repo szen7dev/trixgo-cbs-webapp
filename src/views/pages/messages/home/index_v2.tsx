@@ -1,28 +1,33 @@
-import React, {createContext, FC, useMemo, useState} from "react";
+import React, {createContext, FC, useMemo, useRef, useState} from "react";
 import MessageList from "../list";
 import { useLocation } from 'react-router-dom';
 import ChattingSection from "../chattingSection";
 import SettingMessageDetail from "../setting";
+import { useSocket } from "services/hooks/useSocket";
 
 export const MessageContext = createContext<{
     currentChat: string;
     setCurrentChat: React.Dispatch<React.SetStateAction<string>>;
     showMenu: boolean;
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+    socketRef: any;
 }>({
     currentChat: '',
     setCurrentChat: () => undefined,
     showMenu: false,
-    setShowMenu: () => undefined
+    setShowMenu: () => undefined,
+    socketRef: null,
 });
 
 const MessagesHome:FC = () => {
     const location = useLocation();
     const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
     const [showMenu, setShowMenu] = useState(false);
+    const socketRef = useSocket();
+
     const value = useMemo(
-        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu}),
-        [currentChat, showMenu]
+        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef}),
+        [currentChat, showMenu, socketRef]
     );
 
     return (

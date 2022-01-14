@@ -1,5 +1,3 @@
-import {Data} from "../../main-search";
-
 export type ItemListConversation = {
     _id: string;
     members: any[];
@@ -26,7 +24,9 @@ export type ItemListConversation = {
             image: string;
             company: string;
             fullname: string;
-        }
+        },
+        updatedAt: string;
+        [key: string]: any;
     };
     usersMissMessage: {amount: number; userID: string;}[];
     avatar: {

@@ -1,12 +1,14 @@
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import SearchInput from "components/common/SearchInput";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {MessageContext} from "../home/index_v2";
+import {setListConversation} from "redux/reducer/messages/ListConversation";
 
 const MessageList:FC = () => {
     const listTab = [
@@ -16,10 +18,15 @@ const MessageList:FC = () => {
             unread: 0
         }
     ]
-
+    const dispatch = useDispatch();
     const [searchText, setSearchText] = useState("");
     const [reachedEnd, setReachEnd] = useState(false);
     const {getListConversation} = UseListConversation();
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
+    useEffect(() => {
+        socket&&socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+    },[socket])
 
     const mapData = useSelector((state: RootState) => state.listConversation);
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
@@ -52,6 +59,10 @@ const MessageList:FC = () => {
         listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
     },[listInnerRef])
 
+    const onReceiveConversation = (data: any) => {
+        dispatch(setListConversation(data.data.listRecords));
+    }
+
     return (
         <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
                 <div className={"bg-white z-5"}>
@@ -79,7 +90,7 @@ const MessageList:FC = () => {
                     className={"overflow-auto message-list-height"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
-                    {_map(Object.values(listConversation), (chat) => (
+                    {_map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
                         <ListChatItem key={chat._id} chat={chat}/>
                     ))}
                 </div>
