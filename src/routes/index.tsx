@@ -96,6 +96,8 @@ import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
 import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
 import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
 import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
+import ProjectProductionPage from "views/pages/ppt/ProjectProductionPage";
+import ProjectOtherPage from "views/pages/ppt/ProjectOtherPage";
 // import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
 import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
 import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
@@ -617,6 +619,24 @@ const Routes: FC = () => {
                                                 component={() => (
                                                     <ProjectLayout>
                                                         <ProjectDirectoryPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/production"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectProductionPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/other"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectOtherPage />
                                                     </ProjectLayout>
                                                 )}
                                             />
