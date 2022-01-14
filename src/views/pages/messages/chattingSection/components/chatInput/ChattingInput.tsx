@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import IconButton from "./IconButton";
 import IconAttach from "./IconAttach";
 import InputForMessage from "./Input";
@@ -6,7 +6,10 @@ import IconSendMessage from "assets/images/icons8-email-send-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {MessageContext} from "../../../home/index_v2";
 import {map as _map} from "lodash";
-import {UseConversation} from "services/hooks/messages/useConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {v4 as uuidv4} from "uuid";
+import {appendMessageToConversation, updateNewMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {useDispatch} from "react-redux";
 
 type Props = {
     chat: ItemListConversation;
@@ -14,14 +17,49 @@ type Props = {
 const ChattingInput:FC<Props> = ({chat}) => {
     const currentUser = localStorage.getItem("currentUser")??"";
     const profileId = JSON.parse(currentUser)?._id;
-    const {currentChat} = useContext(MessageContext);
-    const {sendNormalMessage} = UseConversation();
+    const {currentChat, socketRef} = useContext(MessageContext);
+    const dispatch = useDispatch();
+
     const [realValue, setRealValue] = useState("");
     const [showMention, setShowMention] = useState<{show: boolean; mentionValue: string; tempValue?: string}>({
         show: false,
         mentionValue: "",
         tempValue: ""
     });
+
+    const socket = socketRef.current;
+    const {getListConversation} = UseListConversation();
+    useEffect(() => {
+        socket&&socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+    },[socket])
+
+    const onReceiveMessage = (data: any) => {
+        if (data.infoMessage?.conversation === currentChat) {
+            if (data?.infoMessage?.error) {
+                // Alert.alert(t('notification'), data.infoMessage.message);
+                getListConversation({});
+                return;
+            }
+            if (data.infoMessage?.sender?._id === profileId) {
+                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+                dispatch(updateNewMessageToConversation({
+                    conversationId: currentChat,
+                    newMessageId: data.infoMessage._id,
+                    oldMessageId: data.tmpid,
+                    messageData: data.infoMessage
+                }));
+            } else {
+                dispatch(appendMessageToConversation({
+                    conversationId: currentChat,
+                    messageId: data.infoMessage._id,
+                    messageData: data.infoMessage
+                }))
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 500)
+            }
+        }
+    };
 
     const handleInput = (value: string) => {
         value = value.replaceAll(/<a class="text-primary" href="([a-zA-Z0-9]+)">[@]([a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+)<["/]a>/g, (replacement: string) => {
@@ -54,13 +92,44 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleSendMessage = () => {
-        sendNormalMessage({
-            conversationID: currentChat,
-            content: realValue,
-            type: 0
-        });
+        const usersTag = realValue.match(/(?<=\()[^\][]*(?=\))/g)??[];
+        sendSocketMessage(currentChat,realValue,usersTag, 0);
         setRealValue("");
         setShowMention({show: false, mentionValue: "", tempValue: ""});
+    }
+
+    const sendSocketMessage = (conversationID: string, content: string, usersTag: string[], type: number) => {
+        const message: any = {
+            tmpid: uuidv4(),
+            conversationID: conversationID,
+            content: content,
+            sender: {
+                _id: profileId
+            },
+            type: type,
+            usersTag: usersTag,
+            createAt: new Date(),
+        };
+        dispatch(appendMessageToConversation({
+            conversationId: conversationID,
+            messageId: message.tmpid,
+            messageData: {
+                ...message,
+                _id: message.tmpid
+            }
+        }));
+        setTimeout(() => {
+            scrollToBottom();
+        }, 500)
+        socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+    }
+
+    const scrollToBottom = () => {
+        const conversationMessagesList = document.getElementById("conversation-messages-list");
+        if (conversationMessagesList) {
+            conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
+        }
     }
 
     return (

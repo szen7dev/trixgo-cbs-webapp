@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useMemo, useRef, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import NotificationCenter from "./NotificationCenter";
 import OthersMessage from "./OthersMessage";
 import MyMessage from "./MyMessage";
@@ -55,6 +55,11 @@ const MainChatContent:FC<Props> = ({chat}) => {
         }
     }, [reachedTop, nextCursor])
 
+    const userUnreadMessage = useCallback(() => {
+        const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
+        return userUnread?.amount??0
+    }, [chat, profileId])
+
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, offsetTop } = conversationMessagesList.current;
@@ -75,6 +80,8 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const renderMessage = (message: any) => {
         switch (message.type) {
             case 0:
+            case 1:
+            case 2:
                 if (message.sender._id === profileId) {
                     return <MyMessage key={message._id} message={message}/>
                 } else {
@@ -100,13 +107,16 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
-            <button
-                onClick={() => scrollToBottom()}
-                className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
-                <img src={ArrowDown} alt={"arrow down"}/>
-                <span
-                    className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>3</span>
-            </button>
+            {
+                userUnreadMessage()>0 &&
+                <button
+                    onClick={() => scrollToBottom()}
+                    className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
+                    <img src={ArrowDown} alt={"arrow down"}/>
+                    <span
+                        className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>{userUnreadMessage()}</span>
+                </button>
+            }
         </>
     )
 }

@@ -90,10 +90,23 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId]: state.data.totalRecord[action.payload.conversationId]+1
                 }
             }
+        },
+        updateNewMessageToConversation(state, action) {
+            const newMessage = {...state.data.listMessage[action.payload.conversationId]};
+            newMessage[action.payload.newMessageId] = action.payload.messageData;
+            delete newMessage[action.payload.oldMessageId];
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: newMessage
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation } = listMessageSlice.actions;
+export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, updateNewMessageToConversation } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
