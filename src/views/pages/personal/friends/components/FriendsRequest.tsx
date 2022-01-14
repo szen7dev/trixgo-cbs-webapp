@@ -20,7 +20,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -34,7 +34,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -48,7 +48,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -62,7 +62,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -76,7 +76,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -90,7 +90,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -104,7 +104,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -118,7 +118,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -132,7 +132,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -146,7 +146,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -160,7 +160,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
@@ -174,7 +174,7 @@ const FriendsRequest: FC = () => {
             <button className="rounded bg-primary text-primary-light text-[15px] h-[36px]">
               Xác nhận
             </button>
-            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px]">
+            <button className="rounded bg-cbs-gray text-dark text-[15px] h-[36px] mb-[13px]">
               Huỷ bỏ
             </button>
           </div>
