@@ -93,3 +93,22 @@ type DataListAppDevice = {
         name: string
     }
 };
+
+//6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
+export type ListCompanyAccessPayload = {
+    fromDate: string;
+    toDate: string;
+    year: number;
+};
+export type ListCompanyAccessResponse = APIResponse & {
+    data?: {
+        listCompanyAccess?: listCompany[];
+    }
+};
+
+type ListCompany = {
+    amountAccesses: number;
+    company: {
+        name: string
+    }
+};

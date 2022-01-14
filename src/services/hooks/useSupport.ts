@@ -9,7 +9,8 @@ import {
     ListAppAccessPayload,
     AppAccess,
     ListAppDeviceAccessPayload,
-    DataListAppDevice
+    DataListAppDevice,
+    ListCompany
 } from 'typings/support';
 
 interface UseSupport {
@@ -118,5 +119,33 @@ export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : U
     const listAppDeviceAccess = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
     return {
         listAppDeviceAccess,
+    }
+};
+//6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
+interface UselistCompanyAccess {
+    listCompany: Array<ListCompany>
+}
+export const useListCompanyAccess = (payload?: ListAppDeviceAccessPayload) : UselistCompanyAccess => {
+    const infinityQuery = useInfiniteQuery(
+        ["list_company_access", payload],
+        async ({ data }: any) => {
+            return SupportRepository.listCompanyAccess({
+                fromDate: "2021-12-30",
+                toDate: "2021-12-30",
+                year: 2021,
+            })
+        },
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const { data } = infinityQuery;
+    const listCompany = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+    return {
+        listCompany,
     }
 };
