@@ -68,7 +68,7 @@ module.exports = {
                 "cbs-nav-text": "#00B9F2",
                 "cbs-light-blue": "#E7F3FF",
                 "cbs-pink": "#FDF3F5",
-                "cbs-green-bg": "#FDF3F5",
+                "cbs-green-bg": "#EBFAF2",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -95,6 +95,7 @@ module.exports = {
             height: {
                 ...autoGeneratePx,
                 max: "max-content",
+                fit: 'fit-content',
             },
             minWidth: {
                 ...autoGeneratePx,

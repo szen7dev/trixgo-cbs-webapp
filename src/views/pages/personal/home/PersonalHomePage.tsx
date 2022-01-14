@@ -35,11 +35,11 @@ const PersonalHomePage: FC = () => {
     <main className="bg-cbs-gray h-full flex justify-center gap-7 py-4">
       <section
         className={cn(
-          "w-[404px] h-[571px] bg-primary-light relative",
+          "w-[404px] h-fit bg-primary-light relative p-5",
           styles.boxShadowBorderRadius
         )}
       >
-        <div className="mb-3 relative flex p-5">
+        <div className="relative flex pt-5 pb-3">
           <img src={PersonalLogo} alt="Personal" />
           <div className="bg-primary-light absolute bottom-4 left-24 h-9 w-9 rounded-full flex items-center justify-center">
             <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
@@ -51,7 +51,7 @@ const PersonalHomePage: FC = () => {
             </div>
           </div>
         </div>
-        <div className="mb-8 px-5">
+        <div className="mb-8">
           <p className="text-2xl">Phùng Thị Thu-PGI</p>
           <p className="text-sm text-primary-gray">@thunpt</p>
         </div>
@@ -65,8 +65,8 @@ const PersonalHomePage: FC = () => {
             const { handleBlur } = formik;
 
             return (
-              <Form className="px-5">
-                <div className="mb-6 relative">
+              <Form>
+                <div className="mb-[30px] relative">
                   <p className="text-sm mb-2">Mật khẩu hiện tại</p>
                   <input
                     type={showCurrentPassword ? "text" : "password"}
@@ -85,7 +85,7 @@ const PersonalHomePage: FC = () => {
                   />
                 </div>
 
-                <div className="mb-6 relative">
+                <div className="mb-[30px] relative">
                   <p className="text-sm mb-2">Mật khẩu mới</p>
                   <input
                     type={showNewPassword ? "text" : "password"}
@@ -104,7 +104,7 @@ const PersonalHomePage: FC = () => {
                   />
                 </div>
 
-                <div className="relative">
+                <div className="relative mb-[30px]">
                   <p className="text-sm mb-2">Xác nhận mật khẩu mới</p>
                   <input
                     type={showConfirmPassword ? "text" : "password"}
@@ -123,7 +123,7 @@ const PersonalHomePage: FC = () => {
                   />
                 </div>
 
-                <div className="absolute bottom-0 right-0 p-5">
+                <div className="float-right">
                   <button
                     type="submit"
                     className="text-primary-light text-[15px] w-[105px] h-[38px] bg-primary rounded"

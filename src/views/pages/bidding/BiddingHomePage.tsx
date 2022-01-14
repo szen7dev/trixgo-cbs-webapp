@@ -12,6 +12,14 @@ import 'swiper/swiper-bundle.min.css';
 import image from 'assets/images/image-home-project.png';
 import icon from "assets/images/icons8-bid-100.svg"
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
+import DownloadIcon from "assets/images/icons8-download-96.svg";
+import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
+import CopyIcon from "assets/images/icons8-copy-96.svg";
+import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
+import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import TrashIcon from "assets/images/icons8-remove-96.svg";
+import PrintIcon from "assets/images/icons8-print-96.svg";
+import SortingIcon from "assets/images/icons8-sorting-100.svg";
 SwiperCore.use([Pagination]);
 
 const pages = [
@@ -30,7 +38,7 @@ const BiddingHomePage: FC = () => {
 		<div className={cn(styles.content, "bg-cbs-gray min-h-full")}>
 			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1")}>
 				<div className="flex flex-wrap">
-					<div className="p-8 mt-4 flex bg-white mr-4">
+					<div className="p-8 mt-4 flex bg-white mr-4 flex-1">
 						<div className="mr-[100px]">
 							<p className="text-lg text-primary-gray font-bold">Dự thầu</p>
 							<p className="mt-6 text-2xl">78</p>
@@ -45,7 +53,7 @@ const BiddingHomePage: FC = () => {
 							<p className="mt-7 text-sm text-primary-gray">Đang triển khai</p>
 						</div>
 					</div>
-					<div className="p-8 mt-4 flex bg-cbs-schedule-twoweek mr-4 min-w-[280px] justify-between">
+					<div className="p-8 mt-4 flex bg-cbs-schedule-twoweek mr-4 min-w-[280px] 2xl:min-w-[411px] justify-between">
 						<div className="text-white">
 							<p className="text-lg font-bold">Mời thầu</p>
 							<p className="mt-[51px] text-4x-large">125</p>
@@ -55,7 +63,7 @@ const BiddingHomePage: FC = () => {
 							<img src={icon} alt="Icon" />
 						</div>
 					</div>
-					<div className="p-8 mt-4 flex bg-cbs-schedule-yestoday min-w-[280px] justify-between">
+					<div className="p-8 mt-4 flex bg-cbs-schedule-yestoday min-w-[280px] 2xl:min-w-[411px] justify-between">
 						<div className="text-white">
 							<p className="text-lg font-bold">Tư vấn thầu</p>
 							<p className="mt-[51px] text-4x-large">2.367</p>
@@ -77,8 +85,33 @@ const BiddingHomePage: FC = () => {
 					<div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
 						<div className={"flex items-center flex-1"}>
 							<div className={"text-lg"}>Quản lý đấu thầu</div>
-							<SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)}/>
+							<SearchInput classNameWrapper={"ml-4 min-w-[296px]"} onChange={event => console.log(event.target.value)}/>
 							{/* <FinancialCashFlowFilterButton/> */}
+							<button className="flex items-center ml-8 mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={DownloadIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={ShareIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={CopyIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={SendEmailIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={PencilIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={TrashIcon}/>
+							</button>
+							<button className="flex items-center mr-5 min-w-max">
+								<img className="w-[24px] h-[24px]" alt="icon" src={PrintIcon}/>
+							</button>
+							<button className={"bg-gray-50 flex items-center justify-center ml-3 px-3 h-[30px] rounded hover:bg-blue-100"}>
+								<img src={SortingIcon} alt={"icon sorting icon"}/>
+								<span className={"ml-2 text-gray-500"}>Filter</span>
+							</button>
 						</div>
 						<button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
 							<img alt={"Icon"} src={ThreeDotsVertical}/>
@@ -86,29 +119,29 @@ const BiddingHomePage: FC = () => {
 					</div>
 					<div className={"financial-cashflow-table"}>
 						<div className={"relative table border-collapse w-full"}>
-							<div className={"header flex table-row sticky z-10"}>
+							<div className={"header bg-cbs-table-header flex table-row sticky z-10"}>
 								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
 									<div className={"flex items-center"}>
 										<input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault"/>
 										<TriangleDown/>
 									</div>
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"}>
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top w-2/12 text-gray-500"}>
 									Gói thầu
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
 									Thuộc dự án
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
 									Chủ đầu tư
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-									Thời điểm mời thầu
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
+									<span className="inline-block w-max">Thời điểm mời thầu</span>
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-									Thời điểm nộp thầu
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500 min-w-max"}>
+									<span className="inline-block w-max">Thời điểm nộp thầu</span>
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
+								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
 									Trạng thái
 								</div>
 							</div>
