@@ -7,9 +7,9 @@ async function fetchList<T>(params: any): Promise<T> {
         `${ITEM_URL}/contracts`,
         {
             params: {
-                select: "name value vatValue plus vatPlus acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+                select: "sign name value vatValue plus vatPlus acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
                 populates: {
-                    "path": "company",
+                    "path": "project company",
                     "select": "name sign"
                 },
                 outin: 1,

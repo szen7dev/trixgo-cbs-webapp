@@ -1,4 +1,5 @@
 export type ContractIncome = {
+    sign: string;
     name: string;
     value: number;
     vatValue: number;
