@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react';
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 
 import cn from 'classnames'
 
@@ -60,13 +60,13 @@ const ModalCreateDocument: React.FC = () => {
 						{/* Fisrt row */}
 						{
 							fakeDataTag.map(item => {
-								return (<>
-									<div key={item.title} className="py-1.5 h-[30px] box-content">
+								return (<Fragment key={item.title}>
+									<div className="py-1.5 h-[30px] box-content">
 										<p className="py-1.5">
 											{item.title}
 										</p>
 									</div>
-									<div key={item.title} className="py-1.5 h-[30px] box-content px-2">
+									<div key={item.title + 1} className="py-1.5 h-[30px] box-content px-2">
 										<div className="flex border border-cbs-border rounded-full w-[209px] px-2.5 py-0.5">
 											<img src={itemTag} alt="" className="h-6 w-6 mr-1.5" />
 											<input className="inline-block" type="text" value="Nội dung dữ liệu" />
@@ -77,13 +77,13 @@ const ModalCreateDocument: React.FC = () => {
 											</button>
 										</div>
 									</div>
-								</>)
+								</Fragment>)
 							})
 						}
 						{
 							fakeDataInput.map((item) => {
 								return (
-									<>
+									<Fragment key={item.title}>
 										<div className="py-1.5 h-[30px] box-content">
 											<p className="py-1.5">
 												{item.title}
@@ -94,7 +94,7 @@ const ModalCreateDocument: React.FC = () => {
 												{item.type === 'text' ? item.value : <input type={item.type} value={item.value} checked={item.checked} />}
 											</div>
 										</div>
-									</>
+									</Fragment>
 								)
 							})
 						}

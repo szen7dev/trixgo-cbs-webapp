@@ -9,8 +9,8 @@ const LayoutProjectDocument: FC<RouteComponentProps> = ({ match, children }) => 
 		{ id: '1', title: 'List', path: match.url },
 		{ id: '2', title: 'Phân loại', path: match.url + '/1' },
 		{ id: '3', title: 'Thư mục', path: match.url + '/2' },
-		{ id: '3', title: 'Báo cáo', path: match.url + '/3' },
-		{ id: '3', title: 'Lịch sử upload file', path: match.url + '/4' },
+		{ id: '4', title: 'Báo cáo', path: match.url + '/3' },
+		{ id: '5', title: 'Lịch sử upload file', path: match.url + '/4' },
 	]
 
 	return (
