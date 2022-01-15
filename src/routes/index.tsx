@@ -189,6 +189,7 @@ import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "../services/providers/DeleteConfirm";
 import MessagesLayout from "../views/layouts/MessagesLayout";
+import PopupSendFiles from "../services/providers/PopupSendFiles";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -747,11 +748,13 @@ const Routes: FC = () => {
                                     </Route>
 
                                     <Route path="/messages/:path?">
-                                        <MessagesLayout>
-                                            <Switch>
-                                                <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                                            </Switch>
-                                        </MessagesLayout>
+                                        <PopupSendFiles>
+                                            <MessagesLayout>
+                                                <Switch>
+                                                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                                                </Switch>
+                                            </MessagesLayout>
+                                        </PopupSendFiles>
                                     </Route>
 
                                     <Route path="/accounting/:path?">
