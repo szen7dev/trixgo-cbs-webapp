@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { ContractIncome } from "typings/contractIncome";
 import ContractIncomeRepository from 'apis/contractIncome';
 import HumanRepository from 'apis/human';
@@ -49,6 +49,7 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
       status,
       data,
       error,
+      refetch
     } = useQuery(
         ["contractIncomeList", {pageParam}],
         async ( pageParams : any) => {
@@ -60,17 +61,6 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
       },
       {keepPreviousData: true}
       );
-
-        // const listContractIncome = []       
-        // .concat(
-        //     ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        // )
-        // .filter(Boolean);
-    // const dataResponse = data?.pages || [];
-    // const listContractIncome = (dataResponse.length>=2 ? dataResponse[dataResponse.length-1] : dataResponse[0])?.data?.listRecords       
-    // const totalRecord = data?.pages[0]?.data?.totalRecord;
-    // const totalPage = data?.pages[0]?.data?.totalPage;
-    // const isLoading = isFetching;
     
     const listContractIncome = data?.data?.listRecords
     const totalRecord = data?.data?.totalRecord
@@ -79,22 +69,148 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
     
     return {
       listContractIncome,
-      // isLoading,
       totalRecord,
       totalPage,
-      nextCursor
-      // hasNextPage,
-      // fetchNextPage,
-      // fetchPreviousPage
+      nextCursor,
+      refetch
   }
 };
 
-export const useQueryListDoctype = ({ limit, type, keyword }: any): any => {
+export const useCreateContractMutation = (): {
+    createContractMutateAsync: (payload: any) => Promise<any>;
+    loading: boolean;
+} => {
+    const { mutateAsync, isLoading } = useMutation((payload: any) =>
+        ContractIncomeRepository.requestCreateContract(payload)
+    );
+    return {
+        createContractMutateAsync: mutateAsync,
+        loading: isLoading,
+    }
+}
+
+export const useUpdateContractMutation = (): {
+    updateContractMutateAsync: (payload: any) => Promise<any>;
+    loading: boolean;
+} => {
+    const { mutateAsync, isLoading } = useMutation((payload: any) =>
+        ContractIncomeRepository.requestUpdateContract(payload)
+    );
+    return {
+        updateContractMutateAsync: mutateAsync,
+        loading: isLoading,
+    }
+}
+
+export const useDeleteContractMutation = (): {
+   deleteContractMutateAsync: (payload: any) => Promise<any>;
+    loading: boolean;
+} => {
+    const { mutateAsync, isLoading } = useMutation((payload: any) =>
+        ContractIncomeRepository.requestDeleteContract(payload)
+    );
+    return {
+       deleteContractMutateAsync: mutateAsync,
+        loading: isLoading,
+    }
+}
+
+export const useQueryListContact = ({ limit, keyword }: any): any => {
   const res = useInfiniteQuery(
-      [`list_doctype,${type}.${keyword}`, type, keyword],
+      [`list_contact,${keyword}`, keyword],
       async ({ pageParam }: any) =>
           // mai request BE check lại api này
-          HumanRepository.fetchListDoctype({
+          HumanRepository.fetchListContact({
+              limit: limit || 10,
+              lastestID: pageParam || "",
+              keyword,
+          }),
+      {
+          getNextPageParam: ({ data }: any) => {
+              return data?.nextCursor || undefined;
+          },
+          refetchOnWindowFocus: false,
+          enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      }
+  );
+  const {
+      isLoading,
+      data,
+      refetch: refetchListDoctype,
+      fetchNextPage: fetchNextPageDoctype,
+      hasNextPage
+  } = res;
+
+  const listContact = []
+      .concat(
+          ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+      )
+      .filter(Boolean);
+  const totalRecord = data?.pages[0]?.data?.totalRecord;
+  const totalPages = data?.pages[0]?.data?.totalPages;
+
+  return {
+      loading: isLoading,
+      listContact,
+      totalRecord,
+      totalPages,
+      hasNextPage,
+      refetchListDoctype,
+      fetchNextPageDoctype
+  }
+}
+
+export const useQueryListWarehouse = ({ limit, keyword }: any): any => {
+  const res = useInfiniteQuery(
+      [`list_warehouse,${keyword}`, keyword],
+      async ({ pageParam }: any) =>
+          // mai request BE check lại api này
+          HumanRepository.fetchListWarehouse({
+              limit: limit || 10,
+              lastestID: pageParam || "",
+              keyword,
+          }),
+      {
+          getNextPageParam: ({ data }: any) => {
+              return data?.nextCursor || undefined;
+          },
+          refetchOnWindowFocus: false,
+          enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      }
+  );
+  const {
+      isLoading,
+      data,
+      refetch: refetchListDoctype,
+      fetchNextPage: fetchNextPageDoctype,
+      hasNextPage
+  } = res;
+
+  const listWarehouse = []
+      .concat(
+          ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+      )
+      .filter(Boolean);
+  const totalRecord = data?.pages[0]?.data?.totalRecord;
+  const totalPages = data?.pages[0]?.data?.totalPages;
+
+  return {
+      loading: isLoading,
+      listWarehouse,
+      totalRecord,
+      totalPages,
+      hasNextPage,
+      refetchListDoctype,
+      fetchNextPageDoctype
+  }
+}
+
+export const useQueryListProject = ({ limit, type, keyword }: any): any => {
+  const res = useInfiniteQuery(
+      [`list_project,${type}.${keyword}`, keyword],
+      async ({ pageParam }: any) =>
+          // mai request BE check lại api này
+          HumanRepository.fetchListProject({
               limit: limit || 10,
               lastestID: pageParam || "",
               type,
@@ -116,7 +232,7 @@ export const useQueryListDoctype = ({ limit, type, keyword }: any): any => {
       hasNextPage
   } = res;
 
-  const listDoctypes = []
+  const listProject = []
       .concat(
           ...(data?.pages || []).map((d: any) => d.data?.listRecords)
       )
@@ -126,11 +242,33 @@ export const useQueryListDoctype = ({ limit, type, keyword }: any): any => {
 
   return {
       loading: isLoading,
-      listDoctypes,
+      listProject,
       totalRecord,
       totalPages,
       hasNextPage,
       refetchListDoctype,
       fetchNextPageDoctype
   }
+}
+
+export const useDetailContractMutation = (id: string): any => {
+    const res = useQuery(`contract_detail.${id}`, () =>
+    ContractIncomeRepository.fetchDetailContract({
+            contactID: id,
+        })
+    );
+    if (Array.isArray(res.data?.data)) {
+        return {
+            detailContract: {},
+            message: res.data?.data[0].message,
+            loading: res.isLoading,
+            refetch: res.refetch,
+        }
+    }
+    return {
+        detailContract: res.data?.data || {},
+        message: 'Ok',
+        loading: res.isLoading,
+        refetch: res.refetch,
+    }
 }

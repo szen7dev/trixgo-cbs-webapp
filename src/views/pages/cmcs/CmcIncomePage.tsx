@@ -17,55 +17,102 @@ import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-import { UseContractIncomeList } from "services/hooks/useContractIncome";
+import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/useContractIncome";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 const CmcIncome: FC = () => {
-  const [itemChecked, setItemChecked] = useState(null);
+  const [itemChecked, setItemChecked] = useState('');
+
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
 
   const contractIncome = UseContractIncomeList(pageParam);
-  // console.log(contractIncome)
+  const { createContractMutateAsync, loading } = useCreateContractMutation();
+  const { updateContractMutateAsync } = useUpdateContractMutation();
+  const { deleteContractMutateAsync } = useDeleteContractMutation();
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {
-      setPageParam(prevCursor[prevCursor.length-2] || '')
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
     } else {
       const prev = prevCursor.findIndex(item => item === contractIncome.nextCursor)
-      setPageParam(prevCursor[prev-2] || '')
+      setPageParam(prevCursor[prev - 2] || '')
     }
-    
+
   };
 
   useEffect(() => {
     if (!contractIncome.nextCursor) {
       return;
     }
-    const isExist = prevCursor.find(item => item === contractIncome.nextCursor )
+    const isExist = prevCursor.find(item => item === contractIncome.nextCursor)
     if (!isExist) {
-      setPrevCursor([...prevCursor, contractIncome.nextCursor])      
+      setPrevCursor([...prevCursor, contractIncome.nextCursor])
     }
   }, [contractIncome.nextCursor]);
 
   const nextPageAction = () => {
-    setPageParam(contractIncome.nextCursor)    
+    setPageParam(contractIncome.nextCursor)
   }
 
   const getStatusValue = (value: number) => {
-    return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text ; 
+    return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text;
   }
+  const handleFinishForm = useCallback(async (values, isEdit = false) => {
+    let res: any
+    if (isEdit) {
+      res = await updateContractMutateAsync(values);
+    } else {
+      res = await createContractMutateAsync(values);
+    }
 
-  const handleFinishForm =useCallback(async (values) => {
-    console.log('🚀 ~ handleFinishForm ~ values', values)
-    // const res = await createContactMutateAsync(values);
-    // if (!res.error) {
-    //   humans.refetchListHuman()
-    //   return true;
-    // }
+    if (res.code && res.code !== 200) {
+      return false;
+    }
+
+    if (!res.error) {
+      contractIncome.refetch()
+      return true;
+    }
     return false;
   }, [contractIncome]);
+
+  const { openDeleteConfirm } = useDeleteConfirm();
+
+  const handleDeleteAction = async () => {
+    openDeleteConfirm({
+      deleteAction: async () => {
+        const res = await deleteContractMutateAsync(itemChecked)
+        if (!res.error) {
+          contractIncome.refetch()
+        }
+      },
+    });
+  }
+  const handleEditAction = async () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+        }
+      >
+        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+      </div>
+    )
+  }
+  const handleAddAction = () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+        }
+      >
+        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" />
+      </div>
+    )
+  }
 
   return (
     <main className="relative h-full">
@@ -81,23 +128,13 @@ const CmcIncome: FC = () => {
           <FinancialCashFlowFilterButton />
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
-              <ActionGroupFinancial />
+              <ActionGroupFinancial deleteAction={handleDeleteAction} editAction={handleEditAction} />
             </div>
           )}
         </div>
         <button
           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-          onClick={() =>
-            openModal(
-              <div
-                className={
-                  "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                }
-              >
-                <IncomeFormModal onFinish={handleFinishForm}/>
-              </div>
-            )
-          }
+          onClick={handleAddAction}
         >
           Tạo mới
         </button>
@@ -167,7 +204,7 @@ const CmcIncome: FC = () => {
           {contractIncome?.listContractIncome?.map((item: any) => {
             // console.log(item)
             return (
-              <tr  key={item._id} className="border-b border-primary-border h-[50px]">
+              <tr key={item._id} className="border-b border-primary-border h-[50px]">
                 <td className="py-1 px-2 text-center">
                   <input
                     className="form-check-input"
@@ -179,19 +216,18 @@ const CmcIncome: FC = () => {
                     style={{ marginLeft: "-23px" }}
                   />
                 </td>
-                <Link to={"/cmcs/contract/"+(item._id)+"/home"}>
+                <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
                   <td className="py-1 px-2">
                     {item.name}
                     <p className="text-primary-gray">{item.project.sign} | {item.sign}</p>
                   </td>
                 </Link>
-                <td className="py-1 px-2">              {moment(item.createAt).isValid() &&
-                moment(item.createAt).format(DATE_FORMAT)}</td>
-                <td className="py-1 px-2">{(item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus|| 0)} </td>
-                <td className="py-1 px-2">{(item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance|| 0)}</td>
+                <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{(item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0)} </td>
+                <td className="py-1 px-2">{(item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance || 0)}</td>
                 <td className="py-1 px-2">0</td>
                 <td className="py-1 px-2">{item.recommendedPayment || 0}</td>
-                <td className="py-1 px-2">{(item.advancePaymentPaid || 0) + (item.amountPaid|| 0)}</td>
+                <td className="py-1 px-2">{(item.advancePaymentPaid || 0) + (item.amountPaid || 0)}</td>
                 <td className="py-1 px-2">{item.remainingPayment || 0}</td>
                 <td className="py-1 px-2">{getStatusValue(item.status)}</td>
               </tr>
@@ -201,7 +237,7 @@ const CmcIncome: FC = () => {
         </tbody>
       </table>
 
-      <Paginate totalPages={contractIncome.totalPage} totalRecord={contractIncome.totalRecord} hasNextPage prevPageAction={()=>prevPageAction()} nextPageAction={()=>nextPageAction()}/>
+      <Paginate totalPages={contractIncome.totalPage} totalRecord={contractIncome.totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => nextPageAction()} />
     </main>
   );
 };

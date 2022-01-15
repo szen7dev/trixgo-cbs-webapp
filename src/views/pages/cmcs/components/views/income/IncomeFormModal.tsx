@@ -1,11 +1,11 @@
-import { FC, FormEvent, useCallback, useState } from "react";
+import "react-day-picker/lib/style.css";
+import { FC, FormEvent, useCallback, useEffect, useState } from "react";
 
 import { Field, Form, Formik } from "formik";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import "react-day-picker/lib/style.css";
 import { useModal } from "services/hooks/useModal";
 
 import styles from "../../../styles.module.css";
@@ -15,33 +15,126 @@ import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import DropdownSearchable from "components/common/DropdownSearch";
 import {
-  useQueryListDepartments,
   useQueryListDoctype,
-  useFetchListArea,
 } from "services/hooks/useHuman";
- 
-import { CONTRACT_TYPES, CONTRACT_SUB_TYPES, CONTRACT_TA, CONTRACT_COME_IN_STATUS } from "apis/localdb/index";
+import {
+  useQueryListContact,
+  useQueryListWarehouse,
+  useQueryListProject,
+  useDetailContractMutation
+} from "services/hooks/useContractIncome";
+
+import { CONTRACT_TYPES, CONTRACT_OUTIN, CONTRACT_SUB_TYPES, CONTRACT_TA, CONTRACT_COME_IN_STATUS, LIMIT_DROPDOWN, DATE_FORMAT } from "apis/localdb/index";
 
 interface NewContractIncomeModalProps {
   defaultValues?: any;
-  onFinish: (values: any) => Promise<boolean>;
+  onFinish: (values: any, isEdit: boolean) => Promise<boolean>;
   title?: string;
+  idEdit?: string;
+  isEdit?: boolean;
 }
 
-const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  onFinish,  title}) => {
+const mappingData = (data: any) => {
+  return {
+    contractID: data.contractID,
+    projectID: data.project || data.projectID,
+    subType: data.subType,
+    draft: data.draft,
+    field: data.field,
+    outin: data.outin,
+    chair: data.chair,
+    status: data.status,
+    personInCharge: data.personInCharge,
+    real: data.real,
+    debtStatus: data.debtStatus,
+    type: data.type,
+    warehouse: data.warehouse,
+
+    name: data.name,
+    buyerInfo: data.buyerInfo || '',
+    sign: data.sign,
+    buyerBank: data.buyerBank,
+    storeSign: data.storeSign,
+    sellerInfo: data.sellerInfo || '',
+    description: data.description,
+    sellerBank: data.sellerBank,
+    note: data.note,
+    packageName: data.packageName,
+    date: convertDate(data.date),
+    note1: data.note1,
+    startTime: convertDate(data.date),
+    lock: data.lock,
+    endTime: convertDate(data.endTime),
+
+    value: Number(data.value) || 0,
+    vatValue: Number(data.vatValue) || 0,
+    plus: Number(data.plus) || 0,
+    vatPlus: Number(data.vatPlus) || 0,
+    advancePayment: Number(data.advancePayment) || 0,
+    produce: Number(data.produce) || 0,
+    vatProduce: Number(data.vatProduce) || 0,
+    plusProduce: Number(data.plusProduce) || 0,
+    vatPlusProduce: Number(data.vatPlusProduce) || 0,
+    acceptance: Number(data.acceptance) || 0,
+    vatAcceptance: Number(data.vatAcceptance) || 0,
+    plusAcceptance: Number(data.plusAcceptance) || 0,
+    vatPlusAcceptance: Number(data.vatPlusAcceptance) || 0,
+    retainedValue: Number(data.retainedValue) || 0,
+    advancePaymentDeduction: Number(data.advancePaymentDeduction) || 0,
+    otherDeduction: Number(data.otherDeduction) || 0,
+    recommendedPayment: Number(data.recommendedPayment) || 0,
+    advancePaymentPaid: Number(data.advancePaymentPaid) || 0,
+    amountPaid: Number(data.amountPaid) || 0,
+    remainingPayment: Number(data.remainingPayment) || 0,
+    advancePaymentOverage: Number(data.advancePaymentOverage) || 0,
+    vat: Number(data.vat) || 0,
+
+    budget: Number(data.budget) || 0,
+    managementFee: Number(data.managementFee) || 0,
+    budgetVAT: Number(data.budgetVAT) || 0,
+    subcontractFee: Number(data.subcontractFee) || 0,
+    forecastBudget: Number(data.forecastBudget) || 0,
+    expenses: Number(data.expenses) || 0,
+    forecastBudgetVAT: Number(data.forecastBudgetVAT) || 0,
+    profit: Number(data.profit) || 0,
+
+    cgValue: Number(data.cgValue) || 0,
+    agValue: Number(data.agValue) || 0,
+    expiredCg: convertDate(data.expiredCg),
+    expiredAg: convertDate(data.expiredAg),
+  }
+}
+
+const convertDate = (date: any) => {
+  return (moment(date).isValid() && moment(date).toJSON()) || ""
+}
+
+const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false }) => {
   const [openManagementInfo, setOpenManagementInfo] = useState(false);
   const [openGeneralInfo, setOpenGeneralInfo] = useState(false);
   const [openAcceptancePayment, setOpenAcceptancePayment] = useState(false);
   const [openBudget, setOpenBudget] = useState(false);
   const [openGuarantee, setOpenGuarantee] = useState(false);
+  const [initialValues, setInitialValues] = useState(mappingData({}));
+
+  const { detailContract } = useDetailContractMutation(idEdit);
 
   const { closeModal } = useModal();
+
+  const [searchProjectValue, setSearchProjectValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listProject } = useQueryListProject({
+    limit: LIMIT_DROPDOWN,
+    type: 2,
+    keyword: searchProjectValue,
+  });
 
   const [searchFieldValue, setSearchFieldValue] = useState(
     defaultValues?.department?.name || ""
   );
   const { listDoctypes: listField } = useQueryListDoctype({
-    limit: 10,
+    limit: LIMIT_DROPDOWN,
     type: 3,
     keyword: searchFieldValue,
   });
@@ -50,86 +143,66 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
     defaultValues?.department?.name || ""
   );
   const { listDoctypes: listDebtStatus } = useQueryListDoctype({
-    limit: 10,
+    limit: LIMIT_DROPDOWN,
     type: 16,
     keyword: searchDebtStatusValue,
   });
 
-  const initialValues = {
-    company: "",
-    project: "",
-    parent: "",
-    level: "",
-    admins: "",
-    members: "",
-    draft: 1,
-    field: '',
-    outIn: 1,
-    status: 1,
-    real: 1,
-    debtStatus: '',
-    type: 1,
-    subType: 1,
-    name: "",
-    sign: "",
-    storeSign: "",
-    description: "",
-    note: "",
-    note1: "",
-    date: null,
-    startTime: null,
-    endTime: null,
-    buyerInfo: "",
-    buyerBank: "",
-    sellerInfo: "",
-    sellerBank: "",
-    packageName: "",
-    lock: 1,
-    value: 0,
-    vatValue: 0,
-    plus: 0,
-    vatPlus: 0,
-    advancePayment: 0,
-    produce: 0,
-    vatProduce: 0,
-    plusProduce: 0,
-    vatPlusProduce: 0,
-    acceptance: 0,
-    vatAcceptance: 0,
-    plusAcceptance: 0,
-    vatPlusAcceptance: 0,
-    retainedValue: 0,
-    advancePaymentDeduction: 0,
-    otherDeduction: 0,
-    recommendedPayment: 0,
-    advancePaymentPaid: 0,
-    amountPaid: 0,
-    remainingPayment: 0,
-    advancePaymentOverage: 0,
-    finalValue: 0,
-    budget: 0,
-    budgetVAT: 0,
-    forecastBudget: 0,
-    forecastBudgetVAT: 0,
-    managementFee: 0,
-    subcontractFee: 0,
-    expenses: 0,
-    profit: 0,
-    cgValue: 0,
-    expiredCg: null,
-    agValue: 0,
-    expiredAg: null,
-  };
+  const [searchChairValue, setSearchChairValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listContact: listChair } = useQueryListContact({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchChairValue,
+  });
+
+  const [searchPersonInChargeValue, setSearchPersonInChargeValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listContact: listPersonInCharge } = useQueryListContact({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchPersonInChargeValue,
+  });
+
+  const [searchWarehouseValue, setSearchWarehouseValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listWarehouse } = useQueryListWarehouse({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchWarehouseValue,
+  });
+
+  const [searchBuyerInfoValue, setSearchBuyerInfoValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listContact: listBuyerInfo } = useQueryListContact({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchBuyerInfoValue,
+  });
+
+  const [searchSellerInfoValue, setSearchSellerInfoValue] = useState(
+    defaultValues?.department?.name || ""
+  );
+  const { listContact: listSellerInfo } = useQueryListContact({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchSellerInfoValue,
+  });
 
   const handleSubmit = useCallback(
     async (values: any) => {
-      const formatData = {
+      let formatData = {
         ...values,
-        
-      };
-      
-      console.log('🚀 ~ formatData', formatData)
-      const isSuccess = await onFinish(formatData);
+      }
+
+      if (isEdit) {
+        formatData = {
+          ...values,
+          contractID: detailContract._id
+        }
+      }
+
+      console.log('🚀 ~ formatData', mappingData(formatData))
+      const isSuccess = await onFinish(mappingData(formatData), isEdit);
       if (isSuccess) {
         closeModal();
       }
@@ -137,10 +210,20 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
     [onFinish, closeModal]
   );
 
+  // let initialValues = {...mappingData({})}
+
+  useEffect(() => {
+    console.log('useEffect detailContract for UPDATE ', detailContract);
+
+    setInitialValues(mappingData(detailContract))
+    console.log('🚀 ~ useEffect ~ detailContract', initialValues)
+
+  }, [idEdit, detailContract]);
+
   return (
-    <main className="relative h-full">
+    <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
-        <p className="text-xl font-bold">Tạo mới/cập nhật</p>
+        <p className="text-xl font-bold">{title}</p>
         <img
           src={CloseIcon}
           alt="Close"
@@ -149,11 +232,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
         />
       </header>
 
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit}>
         {(formik) => {
           const { handleBlur, setFieldValue } = formik;
           return (
-            <Form className="max-h-[690px] py-5 overflow-y-auto">
+            <Form className="max-h-[690px] py-5 overflow-y-auto text-left">
               <div>
                 <div
                   className="flex items-center px-7 mb-8 select-none cursor-pointer"
@@ -185,26 +268,23 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        data={[
-                          {
-                            _id: 1,
-                            content:
-                              "Tư vấn quản lý dự án cụm 1 trường Tây Hồ Tây",
-                          },
-                          {
-                            _id: 2,
-                            content:
-                              "Tư vấn quản lý dự án cụm 2 trường Tây Hồ Tây",
-                          },
-                          {
-                            _id: 3,
-                            content:
-                              "Tư vấn quản lý dự án cụm 3 trường Tây Hồ Tây",
-                          },
-                        ]}                        
+                        onSearchInputChange={debounce(
+                          (value) => setSearchProjectValue(value),
+                          500
+                        )}
+                        initialValue={initialValues?.projectID}
+                        data={listProject.map((item: any) => ({
+                          label: item.name,
+                          value: item._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
                       />
                     </div>
 
@@ -218,9 +298,10 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
+                        initialValue={initialValues?.subType}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
                         data={CONTRACT_SUB_TYPES}
                         formatItem={{
@@ -236,18 +317,19 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         Phân loại chính thức (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) =>setFieldValue("draft", value.id)}
+                        onchangeValue={(value) => setFieldValue("draft", value.id)}
                         placeholder="Phân loại chính thức..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
+                        initialValue={initialValues?.draft}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
                         data={[
                           {
@@ -277,7 +359,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -312,7 +394,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -320,23 +402,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                           styles.disabledBg
                         )}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Bán ra",
-                          },
-                          {
-                            _id: 2,
-                            content: "Bán ra",
-                          },
-                          {
-                            _id: 3,
-                            content: "Bán ra",
-                          },
-                        ]}
+                        initialValue={initialValues?.outin}
+                        data={CONTRACT_OUTIN}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "text",
                         }}
                         inlineSearch={true}
                       />
@@ -352,7 +422,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -360,23 +430,18 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                           styles.disabledBg
                         )}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Phan Văn Trường-PGI",
-                          },
-                          {
-                            _id: 2,
-                            content: "Phan Văn Trường-PGI",
-                          },
-                          {
-                            _id: 3,
-                            content: "Phan Văn Trường-PGI",
-                          },
-                        ]}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchChairValue(value),
+                          500
+                        )}
+                        initialValue={initialValues?.chair}
+                        data={listChair.map((item: any) => ({
+                          label: item.name,
+                          value: item._id,
+                        }))}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -392,10 +457,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => <span>{item.text}</span>}
+                        initialValue={initialValues?.status}
                         data={CONTRACT_COME_IN_STATUS}
                         formatItem={{
                           id: "value",
@@ -415,27 +481,22 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => <span>{item.text}</span>}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Nguyễn Hữu Hiệp-PGI",
-                          },
-                          {
-                            _id: 2,
-                            content: "Nguyễn Hữu Hiệp-PGI",
-                          },
-                          {
-                            _id: 3,
-                            content: "Nguyễn Hữu Hiệp-PGI",
-                          },
-                        ]}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchPersonInChargeValue(value),
+                          500
+                        )}
+                        initialValue={initialValues?.personInCharge}
+                        data={listPersonInCharge.map((item: any) => ({
+                          label: item.name,
+                          value: item._id,
+                        }))}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -446,12 +507,12 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         Phân loại NA (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) =>setFieldValue("real", value.id)}
+                        onchangeValue={(value) => setFieldValue("real", value.id)}
                         placeholder="Phân loại NA..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -459,6 +520,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                           styles.disabledBg
                         )}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
+                        initialValue={initialValues?.real}
                         data={CONTRACT_TA}
                         formatItem={{
                           id: "value",
@@ -473,12 +535,12 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         Phân loại theo trạng thái công nợ (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) =>setFieldValue("debtStatus", value.id)}
+                        onchangeValue={(value) => setFieldValue("debtStatus", value.id)}
                         placeholder="Phân loại theo trạng thái công nợ..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -508,12 +570,12 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         Phân loại theo hình thức hợp đồng (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) =>setFieldValue("type", value.id)}
+                        onchangeValue={(value) => setFieldValue("type", value.id)}
                         placeholder="Phân loại theo hình thức hợp đồng..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -521,6 +583,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                           styles.disabledBg
                         )}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
+                        initialValue={initialValues?.type}
                         data={CONTRACT_TYPES}
                         formatItem={{
                           id: "value",
@@ -534,13 +597,13 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       <p className="text-xs text-primary-gray mb-2">
                         Phân loại theo kho (*)
                       </p>
-                      <DropdownSearchable                      
-                        onchangeValue={(value) =>setFieldValue("warehouse", value.id)}
+                      <DropdownSearchable
+                        onchangeValue={(value) => setFieldValue("warehouse", value.id)}
                         placeholder="Phân loại theo kho..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
-                        allowClearValueSingleInput={false}
+                        allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -548,23 +611,18 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                           styles.disabledBg
                         )}
                         renderSelectedItem={(item) => <span>{item.text}</span>}
-                        data={[
-                          {
-                            _id: 1,
-                            content: "Kho công trình",
-                          },
-                          {
-                            _id: 2,
-                            content: "Kho công trình",
-                          },
-                          {
-                            _id: 3,
-                            content: "Kho công trình",
-                          },
-                        ]}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchWarehouseValue(value),
+                          500
+                        )}
+                        initialValue={initialValues?.warehouse}
+                        data={listWarehouse.map((item: any) => ({
+                          label: item.name,
+                          value: item._id,
+                        }))}
                         formatItem={{
-                          id: "_id",
-                          text: "content",
+                          id: "value",
+                          text: "label",
                         }}
                         inlineSearch={true}
                       />
@@ -588,7 +646,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
               {openGeneralInfo && (
                 <div className="grid grid-cols-2 gap-x-11 gap-y-5 pb-9 mb-7 border-b mx-7">
                   <div>
-                    <p className="text-primary text-xs mb-2">
+                    <p className="text-primary-gray text-xs mb-2">
                       Tên hợp đồng (*)
                     </p>
                     <Field
@@ -596,39 +654,34 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="name"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tên hợp đồng..."
-                      // onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    // onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
 
                   <div>
                     <p className="text-primary-gray text-xs mb-2">Bên mua</p>
                     <DropdownSearchable
-                      onchangeValue={(value:any) => setFieldValue("buyerInfo", value)}
+                      onchangeValue={(value: any) => setFieldValue("buyerInfo", value.id)}
                       placeholder="Bên mua..."
                       className="w-full pl-0 -mb-1 outline-none"
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
-                      allowClearValueSingleInput={false}
+                      allowClearValueSingleInput={true}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       renderSelectedItem={(item) => <span>{item.text}</span>}
-                      data={[
-                        {
-                          _id: 1,
-                          content: "Công ty Cổ phần ABC",
-                        },
-                        {
-                          _id: 2,
-                          content: "Công ty Cổ phần ABC",
-                        },
-                        {
-                          _id: 3,
-                          content: "Công ty Cổ phần ABC",
-                        },
-                      ]}
+                      onSearchInputChange={debounce(
+                        (value) => setSearchBuyerInfoValue(value),
+                        500
+                      )}
+                      initialValue={initialValues?.buyerInfo}
+                      data={listBuyerInfo.map((item: any) => ({
+                        label: item.name,
+                        value: item._id,
+                      }))}
                       formatItem={{
-                        id: "_id",
-                        text: "content",
+                        id: "value",
+                        text: "label",
                       }}
                       inlineSearch={true}
                     />
@@ -640,10 +693,9 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                     </p>
                     <Field
                       type="text"
-                      name="storeSign"
+                      name="sign"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Mã hiệu..."
-                      defaultValue="2906/2011/HDKT"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -657,7 +709,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="buyerBank"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ngân hàng bên mua..."
-                      defaultValue="102253566-VCB Chi nhánh Hà Nội"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -671,7 +722,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="storeSign"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Mã hiệu nội bộ..."
-                      defaultValue="2906/2011/HDKT"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -679,12 +729,12 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                   <div>
                     <p className="text-primary-gray text-xs mb-2">Bên bán</p>
                     <DropdownSearchable
-                      onchangeValue={(value:any) => setFieldValue("sellerInfo", value)}
+                      onchangeValue={(value: any) => setFieldValue("sellerInfo", value.id)}
                       placeholder="Bên bán..."
                       className="w-full pl-0 -mb-1 outline-none"
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
-                      allowClearValueSingleInput={false}
+                      allowClearValueSingleInput={true}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       disableClass={cn(
@@ -692,30 +742,25 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         styles.disabledBg
                       )}
                       renderSelectedItem={(item) => <span>{item.text}</span>}
-                      data={[
-                        {
-                          _id: 1,
-                          content: "Công ty Cổ phần XYZ",
-                        },
-                        {
-                          _id: 2,
-                          content: "Công ty Cổ phần XYZ",
-                        },
-                        {
-                          _id: 3,
-                          content: "Công ty Cổ phần XYZ",
-                        },
-                      ]}
+                      onSearchInputChange={debounce(
+                        (value) => setSearchSellerInfoValue(value),
+                        500
+                      )}
+                      initialValue={initialValues?.sellerInfo}
+                      data={listSellerInfo.map((item: any) => ({
+                        label: item.name,
+                        value: item._id,
+                      }))}
                       formatItem={{
-                        id: "_id",
-                        text: "content",
+                        id: "value",
+                        text: "label",
                       }}
                       inlineSearch={true}
                     />
                   </div>
 
                   <div>
-                    <p className="text-primary text-xs mb-2">Mô tả</p>
+                    <p className="text-primary-gray text-xs mb-2">Mô tả</p>
                     <Field
                       type="text"
                       name="description"
@@ -745,7 +790,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="note"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ghi chú..."
-                      defaultValue="Đã chính thức ký kết"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -759,7 +803,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="packageName"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tên gói thầu..."
-                      defaultValue="Tư vấn quản lý dự án cụm 2 trường Tây Hồ Tây"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -769,14 +812,17 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Ngày ký (*)
                     </p>
                     <DayPickerInput
-                        format="dd/MM/yyyy"
-                        classNames={{ container: "w-full", overlayWrapper: '', overlay:'' }}
-                        onDayChange={(day:any) => setFieldValue("date", day)}
-                        inputProps={{
-                          className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh hợp đồng",
-                        }}
-                      />
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.date &&
+                        moment(initialValues.date).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("date", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Ngày ký",
+                      }}
+                    />
                   </div>
 
                   <div>
@@ -788,7 +834,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       name="note1"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Ghi chú khác..."
-                      defaultValue="Dự kiến khả thi"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -798,14 +843,17 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Bắt đầu thực hiện
                     </p>
                     <DayPickerInput
-                        format="dd/MM/yyyy"
-                        classNames={{ container: "w-full", overlayWrapper: '', overlay:'' }}
-                        onDayChange={(day:any) => setFieldValue("startTime", day)}
-                        inputProps={{
-                          className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh hợp đồng",
-                        }}
-                      />
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.startTime &&
+                        moment(initialValues.startTime).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("startTime", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Bắt đầu thực hiện",
+                      }}
+                    />
                   </div>
 
                   <div>
@@ -813,12 +861,12 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Khóa hợp đồng
                     </p>
                     <DropdownSearchable
-                      onchangeValue={(value:any) => setFieldValue("lock", value)}
+                      onchangeValue={(value: any) => setFieldValue("lock", value.id)}
                       placeholder="Khóa hợp đồng..."
                       className="w-full pl-0 -mb-1 outline-none"
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
-                      allowClearValueSingleInput={false}
+                      allowClearValueSingleInput={true}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       disableClass={cn(
@@ -826,20 +874,21 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                         styles.disabledBg
                       )}
                       renderSelectedItem={(item) => <span>{item.text}</span>}
+                      initialValue={initialValues?.lock}
                       data={[
                         {
-                          _id: 1,
-                          content: "Open",
+                          value: 1,
+                          label: "Open",
                         },
                         {
-                          _id: 2,
-                          content: "Khóa",
+                          value: 2,
+                          label: "Khóa",
                         },
-                        
+
                       ]}
                       formatItem={{
-                        id: "_id",
-                        text: "content",
+                        id: "value",
+                        text: "label",
                       }}
                       inlineSearch={true}
                     />
@@ -850,14 +899,17 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Kết thúc thực hiện
                     </p>
                     <DayPickerInput
-                        format="dd/MM/yyyy"
-                        classNames={{ container: "w-full", overlayWrapper: '', overlay:'' }}
-                        onDayChange={(day:any) => setFieldValue("endTime", day)}
-                        inputProps={{
-                          className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh hợp đồng",
-                        }}
-                      />
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.endTime &&
+                        moment(initialValues.endTime).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("endTime", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Kết thúc thực hiện",
+                      }}
+                    />
                   </div>
                 </div>
               )}
@@ -888,9 +940,8 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       <p className="text-primary-gray text-xs mr-5">
                         Tỷ giá USD
                       </p>
-                      <input
+                      <Field
                         type="text"
-                        defaultValue="23.010"
                         className="w-[66px] h-8 outline-none text-right border-b border-primary-border text-primary"
                       />
                     </div>
@@ -976,7 +1027,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       />
                     </div>
                   </div>
-                  
+
                   <div className="mb-4">
                     <p className="text-primary-gray text-xs mb-2">
                       4 - Phát sinh phần VAT
@@ -1515,12 +1566,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                     <p className="text-primary-gray text-xs mb-2">
                       VAT ngân sách
                     </p>
-                    <input
+                    <Field
                       type="text"
                       name="budgetVAT"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="VAT ngân sách..."
-                      defaultValue="10.000.000"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1529,12 +1579,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                     <p className="text-primary-gray text-xs mb-2">
                       Tỷ lệ giao khoán
                     </p>
-                    <input
+                    <Field
                       type="text"
                       name="subcontractFee"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Tỷ lệ giao khoán..."
-                      defaultValue="10.000.000"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1543,24 +1592,22 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                     <p className="text-primary-gray text-xs mb-2">
                       Dự báo ngân sách
                     </p>
-                    <input
+                    <Field
                       type="text"
                       name="forecastBudget"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Dự báo ngân sách..."
-                      defaultValue="10.000.000"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
 
                   <div>
                     <p className="text-primary-gray text-xs mb-2">Chi phí</p>
-                    <input
+                    <Field
                       type="text"
                       name="expenses"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Chi phí..."
-                      defaultValue="10.000.000"
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
                   </div>
@@ -1620,7 +1667,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                     <p className="text-primary-gray text-xs mb-2">
                       Bảo lãnh tạm ứng
                     </p>
-                    <input
+                    <Field
                       type="text"
                       name="agValue"
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
@@ -1634,14 +1681,18 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Thời hạn bảo lãnh hợp đồng
                     </p>
                     <DayPickerInput
-                        classNames={{ container: "w-full", overlayWrapper: '', overlay:'' }}
-                        onDayChange={(day:any) => setFieldValue("expiredCg", day)}
-                        inputProps={{
-                          className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh hợp đồng",
-                        }}
-                      />
-                    
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.expiredCg &&
+                        moment(initialValues.expiredCg).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("expiredCg", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Thời hạn bảo lãnh hợp đồng",
+                      }}
+                    />
+
                   </div>
 
                   <div>
@@ -1649,15 +1700,18 @@ const IncomeFormModal: FC<NewContractIncomeModalProps>  =  ({ defaultValues,  on
                       Thời hạn bảo lãnh tạm ứng
                     </p>
                     <DayPickerInput
-                        format="dd/MM/yyyy"
-                        classNames={{ container: "w-full", overlayWrapper: '', overlay:'' }}
-                        onDayChange={(day:any) => setFieldValue("expiredAg", day)}
-                        inputProps={{
-                          className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh hợp đồng",
-                        }}
-                      />
-                   
+                      format={DATE_FORMAT}
+                      value={
+                        initialValues.expiredAg &&
+                        moment(initialValues.expiredAg).format(DATE_FORMAT)
+                      }
+                      onDayChange={(day: any) => setFieldValue("expiredAg", day)}
+                      inputProps={{
+                        className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
+                        placeholder: "Thời hạn bảo lãnh tạm ứng",
+                      }}
+                    />
+
                   </div>
                 </div>
               )}
