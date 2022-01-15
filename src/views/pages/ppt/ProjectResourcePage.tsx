@@ -43,10 +43,10 @@ const InfoBlock: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 				</Menu>
 			</div>
 			<div className="grid grid-cols-2 gap-2 mt-4">
-				{Array.from({ length: Math.ceil(Math.random() * 13) }).map((_) => {
+				{Array.from({ length: Math.ceil(Math.random() * 13) }).map((_, index) => {
 					const value = Math.round(Math.random() * 101);
 					return (
-						<>
+						<Fragment key={index}>
 							<div>
 								Máy phát điện dự phòng trung thế K522 cho khu vực chính
 							</div>
@@ -55,7 +55,7 @@ const InfoBlock: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 									{value}%
 								</div>
 							</div>
-						</>
+						</Fragment>
 					)
 				})}
 				<button type="button" className="col-span-2 text-center text-cbs-primary text-x-large pt-4 pb-4">
@@ -79,45 +79,47 @@ const ProjectResourcePage: FC = () => {
 		<div className="flex-1 text-sm text-black overflow-x-hidden">
 			<div className="overflow-x-auto bg-white border-0.5 border-cbs-border pt-4 pr-6 custom-scroll">
 				<table className="text-center text-cbs-subtext ml-3 text-x-small min-w-full">
-					<tr className="text-cbs-highlight-color">
-						<th className="sticky left-0 bg-white text-left whitespace-nowrap align-middle text-cbs-subtext pl-2">Chỉ số tháng</th>
-						{Array.from({ length: month }).map((_, index) => (
-							<th key={index} className="px-2.5">T{index}</th>
-						))}
-						<th className="w-full"></th>
-					</tr>
-					<tr>
-						<td className="sticky left-0 bg-white text-left whitespace-nowrap align-middle pl-2">Kế hoạch</td>
-						{Array.from({ length: month }).map((_, index) => (
-							<td key={index} className="px-2.5 pt-3">{index}</td>
-						))}
-						<td></td>
-					</tr>
-					<tr>
-						<td className="sticky left-0 bg-white text-left whitespace-nowrap align-middle pl-2">Thực tế</td>
-						{Array.from({ length: month }).map((_, index) => (
-							<td key={index} className="px-2.5 pb-5 pt-5">{index}</td>
-						))}
-						<td></td>
-					</tr>
-					<tr>
-						<td className="sticky left-0 bg-white text-left whitespace-nowrap pt-2 pl-2">Mục tiêu %</td>
-						{Array.from({ length: month }).map((_, index) => (
-							<td key={index} className="border-t-0.5 border-cbs-border px-2.5 pt-2">{(Math.round(Math.random() * 10) + 100)}%</td>
-						))}
-						<td className="border-t-0.5 border-cbs-border"></td>
-					</tr>
-					<tr>
-						<td className="sticky left-0 bg-white text-left pb-2 pl-2 text-cbs-primary"><i>Đơn vị: tỷ VND</i></td>
-						{Array.from({ length: month }).map((_, index) => (
-							<td key={index} className="px-2.5 pt-2 pb-2">
-								<div className="rounded-full w-6 h-6 bg-cbs-green shadow-cbs-md inline-block">
+					<tbody>
+						<tr className="text-cbs-highlight-color">
+							<th className="sticky left-0 bg-white text-left whitespace-nowrap align-middle text-cbs-subtext pl-2">Chỉ số tháng</th>
+							{Array.from({ length: month }).map((_, index) => (
+								<th key={index} className="px-2.5">T{index}</th>
+							))}
+							<th className="w-full"></th>
+						</tr>
+						<tr>
+							<td className="sticky left-0 bg-white text-left whitespace-nowrap align-middle pl-2">Kế hoạch</td>
+							{Array.from({ length: month }).map((_, index) => (
+								<td key={index} className="px-2.5 pt-3">{index}</td>
+							))}
+							<td></td>
+						</tr>
+						<tr>
+							<td className="sticky left-0 bg-white text-left whitespace-nowrap align-middle pl-2">Thực tế</td>
+							{Array.from({ length: month }).map((_, index) => (
+								<td key={index} className="px-2.5 pb-5 pt-5">{index}</td>
+							))}
+							<td></td>
+						</tr>
+						<tr>
+							<td className="sticky left-0 bg-white text-left whitespace-nowrap pt-2 pl-2">Mục tiêu %</td>
+							{Array.from({ length: month }).map((_, index) => (
+								<td key={index} className="border-t-0.5 border-cbs-border px-2.5 pt-2">{(Math.round(Math.random() * 10) + 100)}%</td>
+							))}
+							<td className="border-t-0.5 border-cbs-border"></td>
+						</tr>
+						<tr>
+							<td className="sticky left-0 bg-white text-left pb-2 pl-2 text-cbs-primary"><i>Đơn vị: tỷ VND</i></td>
+							{Array.from({ length: month }).map((_, index) => (
+								<td key={index} className="px-2.5 pt-2 pb-2">
+									<div className="rounded-full w-6 h-6 bg-cbs-green shadow-cbs-md inline-block">
 
-								</div>
-							</td>
-						))}
-						<td></td>
-					</tr>
+									</div>
+								</td>
+							))}
+							<td></td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 

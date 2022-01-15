@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import cn from 'classnames';
 
 import iconFile from 'assets/images/icons8-audit-96.png';
-import { RouteComponentProps, useHistory, useLocation } from "react-router";
+import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 import Paginate from "components/common/Paginate";
 
 // import 'swiper/swiper-bundle.min.css';

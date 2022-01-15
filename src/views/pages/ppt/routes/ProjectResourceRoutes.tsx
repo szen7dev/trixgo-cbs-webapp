@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Route, RouteComponentProps, Switch } from "react-router";
+import { Route, RouteComponentProps, Switch } from "react-router-dom";
 import ProjectResourcePage from "../ProjectResourcePage";
 import LayoutPrimary from "views/pages/media/layouts/LayoutPrimary";
 

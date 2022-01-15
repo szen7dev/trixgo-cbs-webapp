@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useMemo } from "react";
 
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 // Context
 import { Context, Provider as ModalProvider } from "../document/contexts/contextModal";
