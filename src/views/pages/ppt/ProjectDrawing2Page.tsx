@@ -1,11 +1,9 @@
 import { FC, useEffect, useMemo } from "react";
+import useCheckedList from "./hook/useCheckedList";
 
 const ProjectDrawing2Page: FC = () => {
-	useEffect(() => {
-		document.title = "CHG.THT-Hình ảnh"
-	}, []);
 	const data = useMemo(() => Array.from({ length: 30 }).map((_, index) => ({
-		_id: index,
+		id: index,
 		code: 'A-00-0' + index,
 		name: '10TH TO 23RD STOREY PLAN',
 		size: 'A3',
@@ -16,6 +14,10 @@ const ProjectDrawing2Page: FC = () => {
 		created_by: 'Sở Kế hoạch và Đầu tư thành phố Hà Nội',
 		created_at: "15:30 22/12/2021",
 	})), []);
+	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data)
+	useEffect(() => {
+		document.title = "CHG.THT-Hình ảnh"
+	}, []);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -43,7 +45,7 @@ const ProjectDrawing2Page: FC = () => {
 						<thead className="">
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 								<th className="py-2.5 px-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border w-1">
-									<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={input => { if (input) input.indeterminate = true }} />
+									<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 								</th>
 								<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
 									Mã hiệu
@@ -70,22 +72,12 @@ const ProjectDrawing2Page: FC = () => {
 						</thead>
 						<tbody className="text-small">
 							{
-								data.map(({
-									_id,
-									code,
-									name,
-									size,
-									note,
-									version_1,
-									version_2,
-									version_3,
-									created_by,
-									created_at,
-								}) => {
+								data.map((props) => {
+									const { id, code, name, size, note, version_1, version_2, version_3 } = props;
 									return (
-										<tr key={_id} className="text-left hover:bg-cbs-active-comment">
-											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-												<input className="" type="checkbox" value="" id="flexCheckDefault" />
+										<tr key={id} className="text-left hover:bg-cbs-active-comment">
+											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-center" onClick={e => { e.stopPropagation() }}>
+												<input className="" type="checkbox" value="" id="flexCheckDefault" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{code}</td>
 											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{name}</td>

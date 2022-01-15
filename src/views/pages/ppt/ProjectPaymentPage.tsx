@@ -1,6 +1,8 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-import Paginate from "components/common/Paginate";
+// Hook
+import useCheckedList from "./hook/useCheckedList";
+
 import SearchInput from "components/common/SearchInput";
 
 import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
@@ -11,19 +13,21 @@ import CaretDownIcon from "assets/images/icon-caret-down.png";
 
 const ProjectPaymentPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
+	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hồ sơ thanh toán"
+		setData(() => Array.from({ length: 30 }).map((_, index) => ({
+			id: index,
+			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+			joined: 8,
+			worked: 15,
+			created_at: "15:30 22/12/2021",
+			updated_at: "15:30 22/12/2021",
+			status: index,
+		})));
 	}, []);
-	const data = useMemo(() => Array.from({ length: 30 }).map((_, index) => ({
-		_id: index,
-		project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-		joined: 8,
-		worked: 15,
-		created_at: "15:30 22/12/2021",
-		updated_at: "15:30 22/12/2021",
-		status: index,
-	})), []);
 
 	const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
 
@@ -44,7 +48,7 @@ const ProjectPaymentPage: FC = () => {
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 							<th className="px-4 py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-r-0 border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={input => { if (input) input.indeterminate = true }} />
+								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 								<button className="inline-block align-middle" type="button">
 									<img
 										className="w-8 opacity-50"
@@ -97,12 +101,12 @@ const ProjectPaymentPage: FC = () => {
 					<tbody className="text-small">
 						{
 							data.map(({
-								_id,
+								id,
 							}) => {
 								return (
-									<tr key={_id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="" type="checkbox" value="" id="flexCheckDefault" />
+											<input className="" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">Cục rà phá bom mìn-Vabomin</td>
