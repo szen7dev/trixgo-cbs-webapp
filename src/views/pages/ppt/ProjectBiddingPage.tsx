@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useMemo } from "react";
 
 import cn from "classnames";
-import { Route, RouteComponentProps, Switch, useHistory } from "react-router";
+import { Route, RouteComponentProps, Switch, useHistory } from "react-router-dom";
 
 import { Context } from 'views/pages/document/contexts/contextModal';
 

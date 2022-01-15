@@ -143,12 +143,12 @@ const ListChatItem:FC<Props> = ({chat}) => {
                     <div className={"flex-1 font-bold group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>
                         {getNameConversation()}
                     </div>
-                    <div className={"text-xs text-gray-400 group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>
+                    <div className={"text-xs group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"text-gray-400")}>
                         {getDate()}
                     </div>
                 </div>
                 <div className={"flex mt-1"}>
-                    <div className={"flex-1 truncate w-[250px] text-gray-400 group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>{getLastMessage()}</div>
+                    <div className={"flex-1 truncate w-[250px] group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"text-gray-400")}>{getLastMessage()}</div>
                     {
                         userUnreadMessage() > 0 &&
                         <span className={"rounded-full bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</span>}
