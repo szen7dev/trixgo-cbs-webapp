@@ -7,6 +7,7 @@ export const initialState: PopupSendFilesState = {
   popSendFilesContent: {
     files: [],
     sendType: "image",
+    defaultSendType: "image",
     conversationID: "",
     handleSendFile: (message: any, useCompress = true) => undefined
   }

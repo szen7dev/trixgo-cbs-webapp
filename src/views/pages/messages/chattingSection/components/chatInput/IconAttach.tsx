@@ -65,6 +65,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                 }
             }),
             sendType: Object.keys(files).length>0?"file":"image",
+            defaultSendType: Object.keys(files).length>0?"file":"image",
             conversationID: currentChat,
             handleSendFile: (message, useCompress) => handleUploadFile(message, useCompress)
         })
@@ -86,48 +87,38 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
         let sendMessage : any = {...message};
         const sendFiles = [];
         for (const file of sendMessage.files) {
-            if (file.file.file.type.includes("image")) {
-                const {_id} = await addFileToUpload({
-                    files: file.realFile,
-                    progress: percentCompleted => {
-                        console.log(`${percentCompleted}% ${file.file.file.name}`);
-                        dispatch(updateNewMessageToConversation({
-                            conversationId: currentChat,
-                            newMessageId: message.tmpid,
-                            oldMessageId: message.tmpid,
-                            messageData: {
-                                ...message,
-                                _id: message.tmpid,
-                                files: [...message.files].map(oldFile => {
-                                    if (oldFile._id === file._id) {
-                                        return {
-                                            ...oldFile,
-                                            progress: percentCompleted
-                                        }
-                                    }
+            const {_id} = await addFileToUpload({
+                files: file.realFile,
+                progress: percentCompleted => {
+                    console.log(`${percentCompleted}% ${file.file.file.name}`);
+                    dispatch(updateNewMessageToConversation({
+                        conversationId: currentChat,
+                        newMessageId: message.tmpid,
+                        oldMessageId: message.tmpid,
+                        messageData: {
+                            ...message,
+                            _id: message.tmpid,
+                            files: [...message.files].map(oldFile => {
+                                if (oldFile._id === file._id) {
                                     return {
-                                        ...oldFile
+                                        ...oldFile,
+                                        progress: percentCompleted
                                     }
-                                })
-                            }
-                        }));
-                    },
-                    compressConfig: {
-                    	useCompress: useCompress
-                    }
-                })
-                console.log("fileId",_id)
-                sendFiles.push({
-                    ...file,
-                    file: {
-                        ...file.file,
-                        file: {
-                            ...file.file.file,
-                            _id: _id
+                                }
+                                return {
+                                    ...oldFile
+                                }
+                            })
                         }
-                    }
-                })
-            }
+                    }));
+                },
+                compressConfig: {
+                    useCompress: useCompress,
+                    quality: 0.8
+                }
+            })
+            console.log("fileId",_id)
+            sendFiles.push(_id)
         }
 
         sendMessage = {
@@ -135,6 +126,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
             _id: sendMessage.tmpid,
             files: sendFiles
         }
+        console.log(sendMessage)
         socket.emit('CHATTING_CSS_SEND_MESSAGE', sendMessage);
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
     }

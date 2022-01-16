@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useRef, useState} from "react";
+import React, {FC, Fragment, useEffect, useRef, useState} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 import Close from "assets/icons/Close";
@@ -11,7 +11,7 @@ import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import {v4 as uuidv4} from "uuid";
 
 const PopupSendImageAndFile: FC = () => {
-    const { isShowPopupSendFiles, closePopupSendFiles, popSendFilesContent } = usePopupSendFiles();
+    const { isShowPopupSendFiles, closePopupSendFiles, popSendFilesContent, setSendType } = usePopupSendFiles();
     const focusElementRef = useRef<HTMLDivElement>(null);
     const imageClass = ["w-1/2","w-1/2","w-1/2","w-1/2","w-1/3"]
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -112,7 +112,7 @@ const PopupSendImageAndFile: FC = () => {
         const message: any = {
             tmpid: uuidv4(),
             conversationID: popSendFilesContent.conversationID,
-            content: "",
+            content: content,
             sender: {
                 _id: profileId
             },
@@ -124,6 +124,16 @@ const PopupSendImageAndFile: FC = () => {
         closePopupSendFiles();
         popSendFilesContent.handleSendFile(message,useCompress)
     }
+
+    const handleSetUseCompress = (value: boolean) => {
+        setUseCompress(value);
+        if (!value) {
+            setSendType("file");
+        } else {
+            setSendType("image");
+        }
+    }
+
     return (
         <Transition appear show={isShowPopupSendFiles} as={Fragment}>
             <Dialog
@@ -185,11 +195,11 @@ const PopupSendImageAndFile: FC = () => {
                                     {renderPreviewFile()}
                                 </div>
                                 {
-                                    popSendFilesContent.sendType === "image" &&
+                                    popSendFilesContent.defaultSendType === "image" &&
                                     <div className={"flex mt-4"}>
                                         <input
                                             checked={useCompress}
-                                            onChange={event => setUseCompress(event.target.checked)}
+                                            onChange={event => handleSetUseCompress(event.target.checked)}
                                             className="form-check-input" type="checkbox" value="" id="compress"/>
                                         <label className={"ml-2"} htmlFor="compress">Nén ảnh</label>
                                     </div>

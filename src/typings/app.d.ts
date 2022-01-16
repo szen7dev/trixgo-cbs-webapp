@@ -74,6 +74,7 @@ export type DeleteConfirmActions = OpenDeleteConfirm | CloseDeleteConfirm;
 export type PopupSendFilesContent = {
   files: any[];
   sendType: "image"|"file";
+  defaultSendType: "image"|"file";
   conversationID: string;
   handleSendFile: (message: any, useCompress=true) => void
 }
@@ -92,4 +93,9 @@ export type ClosePopupSendFiles = {
   type: "CLOSE_POPUP_SEND_FILES"
 }
 
-export type PopupSendFilesActions = OpenPopupSendFiles | ClosePopupSendFiles;
+export type SetSendTypePopupSendFiles = {
+  type: "SET_SEND_TYPE",
+  payload: "image"|"file"
+}
+
+export type PopupSendFilesActions = OpenPopupSendFiles | ClosePopupSendFiles | SetSendTypePopupSendFiles;

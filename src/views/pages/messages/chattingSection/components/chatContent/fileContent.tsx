@@ -77,7 +77,17 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                     message.files&&
                     _map(message.files, file => (
                         <div key={file._id} className={"message-file-content flex mb-1"}>
-                            {renderFileTypeImage(file.file.file)}
+                            <div className={"relative"}>
+                                {renderFileTypeImage(file.file.file)}
+                                {
+                                    file.progress!==null&&file.progress!==undefined&&file.progress<100&&
+                                    <div className={"absolute w-full flex items-center justify-center top-5px h-[5px]"}>
+                                        <div className={"rounded-full overflow-hidden bg-white bg-opacity-70 relative w-11/12 h-full"}>
+                                            <div style={{width: `${file.progress}%`}} className={"absolute transition duration-150 h-full bg-primary"}></div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                             <div className={"flex-1 flex flex-col justify-center ml-[7px]"}>
                                 <a href={file.file.file.url} download className={"mb-[2px] hover:text-primary"}>{file.file.file.name}</a>
                                 <div className={"text-primary"}>{formatBytes(file.file.file.size)}</div>

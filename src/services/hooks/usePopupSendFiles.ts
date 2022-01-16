@@ -8,6 +8,7 @@ type UsePopupSendFiles = {
   openPopupSendFiles: (payload: PopupSendFilesContent) => void;
   closePopupSendFiles: () => void;
   popSendFilesContent: PopupSendFilesContent;
+  setSendType: (payload: "image"|"file") => void
 };
 
 export const usePopupSendFiles = (): UsePopupSendFiles => {
@@ -26,10 +27,18 @@ export const usePopupSendFiles = (): UsePopupSendFiles => {
     });
   };
 
+  const setSendType = (payload: "image"|"file") => {
+    dispatch({
+      type: "SET_SEND_TYPE",
+      payload
+    })
+  }
+
   return {
     isShowPopupSendFiles: state.isShowPopupSendFiles,
     openPopupSendFiles,
     closePopupSendFiles,
     popSendFilesContent: state.popSendFilesContent,
+    setSendType
   };
 };
