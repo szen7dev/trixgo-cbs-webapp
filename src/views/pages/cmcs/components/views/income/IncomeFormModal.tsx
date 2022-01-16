@@ -202,7 +202,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
         }
       }
 
-      console.log('🚀 ~ formatData', mappingData(formatData))
       const isSuccess = await onFinish(mappingData(formatData), isEdit);
       if (isSuccess) {
         closeModal();
@@ -214,10 +213,8 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
   // let initialValues = {...mappingData({})}
 
   useEffect(() => {
-    console.log('useEffect detailContract for UPDATE ', detailContract);
 
     setInitialValues(mappingData(detailContract))
-    console.log('🚀 ~ useEffect ~ detailContract', initialValues)
 
   }, [idEdit, detailContract]);
 

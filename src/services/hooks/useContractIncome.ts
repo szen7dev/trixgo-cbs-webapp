@@ -15,36 +15,6 @@ type UseContractIncomeProp = {
 
 export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
 
-    // const {
-    //     status,
-    //     data,
-    //     error,
-    //     isFetching,
-    //     isFetchingNextPage,
-    //     isFetchingPreviousPage,
-    //     fetchNextPage,
-    //     fetchPreviousPage,
-    //     hasNextPage,
-    //     hasPreviousPage
-    //   } = useInfiniteQuery(
-    //     "contractIncomeList",
-    //       async ( { pageParam } : any) => {       
-    //         return ContractIncomeRepository.fetchList({
-    //             limit,
-    //             lastestID: pageParam || "",
-    //         })
-    //     },
-    //     {
-    //       getPreviousPageParam: (firstPage, allPages) => {
-
-    //         const prevPage = allPages.length >= 2 ? allPages[allPages.length-2].data.nextCursor : null;
-    //         console.log('🚀 ~ UseContractIncomeList ~ allPages',allPages, prevPage)
-    //         return prevPage;
-    //       },
-    //       getNextPageParam: ({ data }: any ) => {return data?.nextCursor || undefined;     },
-    //     }
-    //   );
-
     const {
         status,
         data,
