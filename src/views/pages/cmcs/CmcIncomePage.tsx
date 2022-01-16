@@ -17,7 +17,7 @@ import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/useContractIncome";
+import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useHistoryTraffics } from "services/hooks/useContractIncome";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import { formatNumberMoney } from "helpers/index"
@@ -34,6 +34,18 @@ const CmcIncome: FC = () => {
   const { createContractMutateAsync, loading } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
+
+  const { createHistoryTraffics } = useHistoryTraffics();
+
+  useEffect(() => {
+    createHistoryTraffics(
+      {
+        "appID": "5e4785eb8b50843d34481d49",
+        "menuID": "5e3f93fa1969583819518362",
+        "type": 1
+      }
+    )
+  }, [])
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {

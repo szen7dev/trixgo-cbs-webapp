@@ -1,6 +1,7 @@
 import API from "../repository";
 
 const ITEM_URL = "/api/item";
+const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
@@ -20,7 +21,7 @@ async function fetchList<T>(params: any): Promise<T> {
     return data
 }
 
-async function fetchDetailContract<T>(params: any): Promise<T> {    
+async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
         `${ITEM_URL}/contracts?contractID=${params.contactID}`
     )
@@ -32,6 +33,16 @@ async function requestCreateContract(formData: any): Promise<any> {
         `${ITEM_URL}/contracts`,
         {
             ...formData
+        }
+    )
+    return data;
+}
+
+async function requestHistoryTraffics(parame: any): Promise<any> {
+    const { data } = await API.post(
+        `${HISTORY_TRAFFICS}`,
+        {
+            ...parame
         }
     )
     return data;
@@ -49,19 +60,20 @@ async function requestUpdateContract(formData: any): Promise<any> {
 
 async function requestDeleteContract(contractID: string): Promise<any> {
     const { data } = await API.delete(
-        `${ITEM_URL}/contracts?contractID=${contractID}`    )
+        `${ITEM_URL}/contracts?contractID=${contractID}`)
     return data;
 }
 
 const ContractIncomeRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fetchList: async (params:any): Promise<any> => fetchList<any>(params),
+    fetchList: async (params: any): Promise<any> => fetchList<any>(params),
     fetchDetailContract: async (params: {
         contactID: string;
     }): Promise<any> => fetchDetailContract(params),
     requestCreateContract,
     requestUpdateContract,
-    requestDeleteContract
+    requestDeleteContract,
+    requestHistoryTraffics
 };
 
 export default ContractIncomeRepository
