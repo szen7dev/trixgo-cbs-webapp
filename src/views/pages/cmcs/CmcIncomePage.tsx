@@ -27,6 +27,7 @@ const CmcIncome: FC = () => {
   const { openModal } = useModal();
 
   const contractIncome = UseContractIncomeList(pageParam);
+  // console.log(contractIncome)
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {
@@ -155,6 +156,7 @@ const CmcIncome: FC = () => {
 
         <tbody>
           {contractIncome?.listContractIncome?.map((item: any) => {
+            // console.log(item)
             return (
               <tr  key={item._id} className="border-b border-primary-border h-[50px]">
                 <td className="py-1 px-2 text-center">
@@ -171,6 +173,7 @@ const CmcIncome: FC = () => {
                 <Link to={"/cmcs/contract/"+(item._id)+"/home"}>
                   <td className="py-1 px-2">
                     {item.name}
+                    <p className="text-primary-gray">{item.project.sign} | {item.sign}</p>
                   </td>
                 </Link>
                 <td className="py-1 px-2">              {moment(item.createAt).isValid() &&

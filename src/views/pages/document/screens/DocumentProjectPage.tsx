@@ -12,6 +12,8 @@ import DropdownFilterButton from "views/pages/document/components/DocumentFilter
 import GroupActions from "views/pages/document/components/projects/GroupActions";
 import { Context as ContextModal } from "views/pages/document/contexts/contextModal";
 
+import { Link } from "react-router-dom";
+
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i,
 	title: 'Thẻ lọc chính',
@@ -128,8 +130,10 @@ const DocumentProjectPage: FC = () => {
 												<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 											</td>
 											<td className="px-2 w-[271px] py-2.5">
-												<p>{content}</p>
-												<p className="mt-1.5 text-primary-gray">{created_by}</p>
+												<Link to={`/document/project/:id/document/doc`}>
+													<p>{content}</p>
+													<p className="mt-1.5 text-primary-gray">{created_by}</p>
+												</Link>
 											</td>
 											<td className="py-2.5 px-2 w-[150px]">{publisher}</td>
 											<td className="py-2.5 px-2 w-[166px]">{code}</td>
