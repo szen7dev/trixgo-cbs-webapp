@@ -1,7 +1,7 @@
 import "react-day-picker/lib/style.css";
 import { FC, FormEvent, useCallback, useEffect, useState } from "react";
 
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -14,6 +14,11 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import DropdownSearchable from "components/common/DropdownSearch";
+
+import { convertDateToString, formatNumberMoney } from "helpers/index"
+import { MESSAGE_ERROR } from "helpers/constants"
+import { string, object } from 'yup';
+
 import {
   useQueryListDoctype,
 } from "services/hooks/useHuman";
@@ -60,11 +65,11 @@ const mappingData = (data: any) => {
     sellerBank: data.sellerBank,
     note: data.note,
     packageName: data.packageName,
-    date: convertDate(data.date),
+    date: convertDateToString(data.date),
     note1: data.note1,
-    startTime: convertDate(data.date),
+    startTime: convertDateToString(data.date),
     lock: data.lock,
-    endTime: convertDate(data.endTime),
+    endTime: convertDateToString(data.endTime),
 
     value: Number(data.value) || 0,
     vatValue: Number(data.vatValue) || 0,
@@ -100,13 +105,9 @@ const mappingData = (data: any) => {
 
     cgValue: Number(data.cgValue) || 0,
     agValue: Number(data.agValue) || 0,
-    expiredCg: convertDate(data.expiredCg),
-    expiredAg: convertDate(data.expiredAg),
+    expiredCg: convertDateToString(data.expiredCg),
+    expiredAg: convertDateToString(data.expiredAg),
   }
-}
-
-const convertDate = (date: any) => {
-  return (moment(date).isValid() && moment(date).toJSON()) || ""
 }
 
 const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false }) => {
@@ -220,6 +221,24 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
 
   }, [idEdit, detailContract]);
 
+  const formValidation = object().shape({
+    projectID: string().required(MESSAGE_ERROR.required),
+    subType: string().required(MESSAGE_ERROR.required),
+    draft: string().required(MESSAGE_ERROR.required),
+    field: string().required(MESSAGE_ERROR.required),
+    outin: string().required(MESSAGE_ERROR.required),
+    chair: string().required(MESSAGE_ERROR.required),
+    status: string().required(MESSAGE_ERROR.required),
+    personInCharge: string().required(MESSAGE_ERROR.required),
+    real: string().required(MESSAGE_ERROR.required),
+    debtStatus: string().required(MESSAGE_ERROR.required),
+    type: string().required(MESSAGE_ERROR.required),
+    warehouse: string().required(MESSAGE_ERROR.required),
+
+    name: string().required(MESSAGE_ERROR.required),
+    sign: string().required(MESSAGE_ERROR.required),
+  });
+
   return (
     <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
@@ -232,7 +251,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
         />
       </header>
 
-      <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} validationSchema={formValidation} enableReinitialize={true} onSubmit={handleSubmit}>
         {(formik) => {
           const { handleBlur, setFieldValue } = formik;
           return (
@@ -271,6 +290,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         allowClearValueSingleInput={true}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
+                        onClearData={() => setFieldValue("projectID", '')}
                         onSearchInputChange={debounce(
                           (value) => setSearchProjectValue(value),
                           500
@@ -286,6 +306,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="projectID"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -299,6 +324,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("subType", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         initialValue={initialValues?.subType}
@@ -309,6 +335,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                           text: "text",
                         }}
                         inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="subType"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
                       />
                     </div>
 
@@ -323,6 +354,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("draft", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -347,6 +379,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="draft"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -360,6 +397,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("field", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -382,6 +420,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="field"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -395,6 +438,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("outin", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -410,6 +454,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="outin"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -423,6 +472,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("chair", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -445,6 +495,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="chair"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -458,6 +513,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("status", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -468,6 +524,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                           text: "text",
                         }}
                         inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="status"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
                       />
                     </div>
 
@@ -482,6 +543,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("personInCharge", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -500,6 +562,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="personInCharge"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -513,6 +580,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("real", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -528,6 +596,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="real"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -541,6 +614,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("debtStatus", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -563,6 +637,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="debtStatus"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -576,6 +655,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("type", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -591,6 +671,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         }}
                         inlineSearch={true}
                       />
+                      <ErrorMessage
+                        name="type"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                     </div>
 
                     <div>
@@ -604,6 +689,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("warehouse", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -625,6 +711,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                           text: "label",
                         }}
                         inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="warehouse"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
                       />
                     </div>
                   </div>
@@ -656,6 +747,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       placeholder="Tên hợp đồng..."
                     // onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
                     />
+                    <ErrorMessage
+                      name="name"
+                      component="span"
+                      className="font-normal leading-7 text-sm text-negative"
+                    />
                   </div>
 
                   <div>
@@ -667,6 +763,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
                       allowClearValueSingleInput={true}
+                      onClearData={() => setFieldValue("buyerInfo", '')}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -697,6 +794,11 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                       placeholder="Mã hiệu..."
                       onBlur={(e: FormEvent<HTMLInputElement>) => handleBlur(e)}
+                    />
+                    <ErrorMessage
+                      name="sign"
+                      component="span"
+                      className="font-normal leading-7 text-sm text-negative"
                     />
                   </div>
 
@@ -735,6 +837,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
                       allowClearValueSingleInput={true}
+                      onClearData={() => setFieldValue("sellerInfo", '')}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       disableClass={cn(
@@ -867,6 +970,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       classNameInput="border border-primary-border rounded h-[32px]"
                       isMultiple={false}
                       allowClearValueSingleInput={true}
+                      onClearData={() => setFieldValue("lock", '')}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
                       disableClass={cn(
@@ -942,6 +1046,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                       </p>
                       <Field
                         type="text"
+                        value="23.010"
                         className="w-[66px] h-8 outline-none text-right border-b border-primary-border text-primary"
                       />
                     </div>
@@ -986,8 +1091,9 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         name="vatValue"
                         className="pl-3 border border-primary-border rounded w-full h-[32px] outline-none"
                         placeholder="Giá trị VAT..."
-                        onBlur={(e: FormEvent<HTMLInputElement>) =>
+                        onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e)
+                        }
                         }
                       />
                       <Field
@@ -1719,6 +1825,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                 <button
                   type="submit"
                   className="text-primary-light bg-primary w-24 h-8 mr-8 rounded"
+                  disabled={!formik.isValid}
                 >
                   Xác nhận
                 </button>
