@@ -1,24 +1,54 @@
-import { FC, useRef } from "react";
+import React, { FC, useRef } from "react";
 import DatePicker from "react-datepicker";
+import debounce from "lodash/debounce";
+import moment from "moment";
 
 import DropdownSearchable from "components/common/DropdownSearch";
 import RightClickMenu from "components/common/RightClickMenu";
 import MenuChildRow from "../../financial/planning/components/FinancialCashFlowDetail/MenuChildRow";
 
+import { useQueryListFriend } from "services/hooks/users/useFriend";
+
+import type { TimeSheetChild, UpdateTimeSheetChildPayload } from "typings/time-sheet";
+
 type Props = {
-  rowData: any;
-  index: number | string;
+  rowData: TimeSheetChild;
   collapsed: boolean;
   isLastRow: boolean;
+  index: number;
+  onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
 };
 
 const DetailChildRow: FC<Props> = ({
   rowData,
-  index,
   collapsed,
   isLastRow,
+  index,
+  onUpdatedTimeSheetChild
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState("");
+  const [isInitialValue, setInitialValue] = React.useState(false);
+
+  const { data: listFriend } = useQueryListFriend({
+    keyword: searchAssigneeStr,
+  });
+
+  const handleClickUpdateTimeSheet = React.useCallback((value) => {
+    onUpdatedTimeSheetChild({
+      ...rowData,
+      ...value
+    })
+  }, [onUpdatedTimeSheetChild, rowData]);
+
+  React.useEffect(() => {
+    if (!isInitialValue) {
+      setInitialValue(true);
+      setSearchAssigneeStr(rowData.assignee?.fullname || "");
+    }
+  }, [isInitialValue, rowData]);
+
   return (
     <div
       ref={wrapperRef}
@@ -37,7 +67,7 @@ const DetailChildRow: FC<Props> = ({
         (collapsed ? "collapsed " : "not-collapsed ") +
         (isLastRow ? "last-child-row" : "")
       }
-      data-row-index={rowData._id + "_" + index}
+      data-row-index={rowData._id}
     >
       <div
         className={
@@ -50,11 +80,10 @@ const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 px-2 py-5"}
         >
-          {rowData.tt}
+          {index + 1}
         </p>
       </div>
       <div
@@ -66,8 +95,15 @@ const DetailChildRow: FC<Props> = ({
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 p-2"}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              name: value
+            })
+          }}
         >
-          {rowData.content}
+          {rowData.name}
         </p>
       </div>
       <div
@@ -79,7 +115,14 @@ const DetailChildRow: FC<Props> = ({
           className="w-16"
           value={rowData.date}
           selected={null}
-          onChange={(date: Date | null) => console.log(date)}
+          placeholderText='Chọn thời gian'
+          onChange={(date: Date | null) => {
+            if (moment(date).isValid())
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              date: moment(date).toJSON(),
+            })
+          }}
         />
       </div>
       <div
@@ -102,21 +145,15 @@ const DetailChildRow: FC<Props> = ({
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              hours: `${value}`
+            })
+          }}
         >
-          {rowData.totalHour}
-        </p>
-      </div>
-      <div
-        className={
-          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
-        }
-      >
-        <p
-          contentEditable={"true"}
-          suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 p-2 flex justify-end"}
-        >
-          {rowData.price}
+          {rowData.hours}
         </p>
       </div>
       <div
@@ -130,6 +167,35 @@ const DetailChildRow: FC<Props> = ({
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              unitprice: `${value}`
+            })
+          }}
+        >
+          {rowData.unitprice}
+        </p>
+      </div>
+      <div
+        className={
+          "table-cell relative box-border border border-gray-300 bg-white w-1/12"
+        }
+      >
+        <p
+          contentEditable={"true"}
+          suppressContentEditableWarning={true}
+          className={
+            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
+          }
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              amount: `${value}`
+            })
+          }}
         >
           {rowData.amount}
         </p>
@@ -141,18 +207,29 @@ const DetailChildRow: FC<Props> = ({
       >
         <DropdownSearchable
           id="ticket-creator"
+          className={"w-full flex-1 py-1 px-3"}
+          bordered
+          isMultiple={false}
+          allowClearValueSingleInput
+          showTriangle
           placeholder="Người thực hiện"
-          initialValue={rowData.assignee}
-          data={[
-            {
-              id: "1",
-              text: "Nguyễn Phan Thanh Hương-CPMI",
-            },
-            {
-              id: "2",
-              text: "Nguyễn Phan Thanh Hương-CPMI",
-            },
-          ]}
+          renderSelectedItem={(item) => <span>{item.text}</span>}
+          data={listFriend}
+          initialValue={rowData?.assignee?._id}
+          formatItem={{
+            id: "_id",
+            text: "fullname",
+          }}
+          onSearchInputChange={debounce(
+            (value) => setSearchAssigneeStr(value),
+            500
+          )}
+          onchangeValue={(value) =>
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              assigneeID: value
+            })
+          }
         />
       </div>
       <div
@@ -164,8 +241,15 @@ const DetailChildRow: FC<Props> = ({
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 p-2"}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+            const value = e.target.innerText;
+            handleClickUpdateTimeSheet({
+              ...rowData,
+              note: value
+            })
+          }}
         >
-          {rowData.description}
+          {rowData.note}
         </p>
       </div>
       <RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow />} />

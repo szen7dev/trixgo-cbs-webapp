@@ -39,7 +39,7 @@ const TimeSheetHomePage: FC = () => {
     async (values) => {
       try {
         const isCreated = await onCreateTimeSheetParentAsync(values);
-        if (isCreated) {
+        if (!isCreated.error) {
           refreshListTimeSheet();
           closeModal();
           return null;
@@ -57,7 +57,7 @@ const TimeSheetHomePage: FC = () => {
     async (values) => {
       try {
         const isUpdated = await onUpdateTimeSheetParentAsync(values);
-        if (isUpdated) {
+        if (!isUpdated.error) {
           refreshListTimeSheet();
           closeModal();
           return null;
@@ -225,7 +225,7 @@ const TimeSheetHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={"/timesheet/home/123"}>
+                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
                   {timeSheetParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>

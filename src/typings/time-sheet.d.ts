@@ -46,9 +46,12 @@ export type TimeSheetParent = {
     "project": Project;
     "note": string;
     "createdAt": string;
+    "updatedAt": string;
 }
 
-export type ListTimeSheetPayload = QueryParam;
+export type ListTimeSheetPayload = QueryParam & {
+    expertTimesheetID?: string;
+};
 // time sheet parent
 export type QueryTimeSheetParentResponse = APIResponse & {
     data: {
@@ -58,6 +61,9 @@ export type QueryTimeSheetParentResponse = APIResponse & {
         "totalPage": number;
         "nextCursor": string | null;
     };
+}
+export type QueryDetailTimeSheetParentResponse = APIResponse & {
+    data: TimeSheetParent;
 }
 export type InsertTimeSheetParentPayload = {
     name: string;
@@ -97,7 +103,10 @@ export type TimeSheetChild = {
     "timeApproved": string | null;
     "state": 1;
     "name": string;
+    "date": string;
     "parent"?: TimeSheetParent;
+    assignee?: Assignee,
+    note?: string,
 }
 export type QueryListTimeSheetChildPayload = QueryParam & {
     parentID: string;
@@ -111,3 +120,26 @@ export type QueryTimeSheetChildResponse = APIResponse & {
         "nextCursor": string | null;
     };
 }
+export type InsertTimeSheetChildPayload = {
+    parentID: string;
+    assigneeID?: string;
+    name: string;
+    date?: string;
+    status?: string;
+    hours?: string;
+    unitprice?: string;
+    amount?: string;
+    assignee?: string;
+    note?: string;
+}
+export type InsertTimeSheetChildResponse = {
+    error: boolean;
+    data: TimeSheetChild & {
+        assignee?: string;
+        project: string;
+    }
+}
+export type UpdateTimeSheetChildPayload = InsertTimeSheetChildPayload & {
+    expertTimesheetID: string;
+}
+export type UpdateTimeSheetChildResponse = InsertTimeSheetChildResponse;

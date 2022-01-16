@@ -135,7 +135,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     }}
                     onSearchInputChange={debounce(
                       (value) => setSearchAssigneeStr(value),
-                      1000
+                      500
                     )}
                     onchangeValue={(value) =>
                       setFieldValue("assigneeID", value.id)
