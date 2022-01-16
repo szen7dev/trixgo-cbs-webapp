@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useEffect} from "react";
 
 import {
   Chart as ChartJS,
@@ -134,9 +134,12 @@ const options = {
     },
   },
 };
-
-const StatisticsByApp: FC = () => {
-  const { listAppAccess } = useListAppAccess();
+type Props = {
+  timeType: string;
+};
+const StatisticsByApp: FC<Props> = (props) => {
+  const { timeType } = props;
+  const { listAppAccess } = useListAppAccess({fromDate: '2022-1-15', toDate: '2022-1-15', year: 2022});
   const arrApp = [];
   const arrAmountAccesses = [];
   for (const element of listAppAccess) {
