@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from "react";
-import events from "node:events";
 
 type Props = {
     className?: string;
@@ -9,6 +8,7 @@ type Props = {
 
 const InputWidthAdjust:FC<Props> = ({className, value, onChange}) => {
     const [valueHeading, setValueHeading] = useState(value??"");
+    const [isInitialValue, toggleInitialValue] = useState(false)
     const [headingWidthInput, setHeadingWidthInput] = useState(0);
 
     useEffect(() => {
@@ -19,6 +19,13 @@ const InputWidthAdjust:FC<Props> = ({className, value, onChange}) => {
         setValueHeading(event.target.value)
         onChange&&onChange(event);
     }
+
+    React.useLayoutEffect(() => {
+        if (value && !isInitialValue) {
+            toggleInitialValue(true);
+            setValueHeading(value);
+        }
+    }, [isInitialValue, value])
 
     return (
         <input

@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { TimeSheetParentRepository, TimeSheetChildRepository } from 'apis/time-sheet';
 
 import type {
@@ -10,6 +10,10 @@ import type {
     DeleteTimeSheetParentPayload,
     DeleteTimeSheetParentResponse,
     TimeSheetChild,
+    InsertTimeSheetChildPayload,
+    InsertTimeSheetChildResponse,
+    UpdateTimeSheetChildPayload,
+    UpdateTimeSheetChildResponse
 } from 'typings/time-sheet';
 
 // Time Sheet Parent
@@ -61,6 +65,42 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         totalRecord,
         refetch,
         fetchNextPage
+    }
+}
+
+interface UseQueryDetailTimeSheetParent {
+    loading: boolean;
+    data?: TimeSheetParent;
+    error: boolean;
+    refetch: () => void;
+}
+export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQueryDetailTimeSheetParent => {
+    const result = useQuery(
+        `list_time-sheet.parent.${expertTimesheetID}`, async () =>
+        TimeSheetParentRepository.fetchDetailTimeSheet({
+            populates: {
+                "path": "assignee project userCreate",
+                "select": "fullname name"
+            },
+            expertTimesheetID
+        }), {
+        getNextPageParam: ({ data }: any) => {
+            return data?.nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
+    const {
+        isLoading,
+        data,
+        refetch,
+    } = result;
+
+    return {
+        loading: isLoading,
+        data: data?.data,
+        error: data?.error || false,
+        refetch,
     }
 }
 
@@ -134,5 +174,23 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         totalRecord,
         refetch,
         fetchNextPage
+    }
+}
+
+interface UseMutationTimeSheetChild {
+    onCreateTimeSheetAsync: (payload: InsertTimeSheetChildPayload) =>
+        Promise<InsertTimeSheetChildResponse>;
+    onUpdateTimeSheetAsync: (payload: UpdateTimeSheetChildPayload) =>
+        Promise<UpdateTimeSheetChildResponse>;
+}
+export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
+    const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
+        TimeSheetChildRepository.insertTimeSheet(payload));
+    const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
+        TimeSheetChildRepository.updateTimeSheet(payload));
+
+    return {
+        onCreateTimeSheetAsync: insertMutation.mutateAsync,
+        onUpdateTimeSheetAsync: updateMutation.mutateAsync,
     }
 }
