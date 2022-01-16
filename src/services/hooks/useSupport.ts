@@ -22,7 +22,7 @@ export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
       ["list_device", payload],
       async ({ data }: any) => {
         return SupportRepository.listDeviceAccess({
-            year: 2021
+            year: 2022
         })      
       },
       {
@@ -48,8 +48,8 @@ export const useTypeDeviceAccess = (payload?: ListTypeDeviceAccessPayload) : Use
         ["list_type_device_access", payload],
         async ({ data }: any) => {
             return SupportRepository.listTypeDeviceAccess({
-                fromDate: "2021-12-30",
-                toDate: "2021-12-30",
+                fromDate: "2022-1-15",
+                toDate: "2022-1-15",
                 year: 2021,
             })
         },
@@ -71,13 +71,15 @@ interface UselistAppAccess {
     listAppAccess: Array<AppAccess>
 }
 export const useListAppAccess = (payload?: ListAppAccessPayload) : UselistAppAccess => {
+    console.log('payload',payload)
     const infinityQuery = useInfiniteQuery(
         ["list_app_access", payload],
-        async ({ data }: any) => {
+        async ({ pageParam }: any) => {
+            console.log('pageParam',pageParam)
             return SupportRepository.listAppAccess({
-                fromDate: "2021-12-30",
-                toDate: "2021-12-30",
-                year: 2021,
+                fromDate: "2022-1-15",
+                toDate: "2022-1-15",
+                year: 2022,
             })
         },
         {
@@ -102,8 +104,8 @@ export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : U
         ["list_app_device_access", payload],
         async ({ data }: any) => {
             return SupportRepository.listAppDeviceAccess({
-                fromDate: "2021-12-30",
-                toDate: "2021-12-30",
+                fromDate: "2022-1-15",
+                toDate: "2022-1-15",
                 year: 2021,
             })
         },
@@ -130,8 +132,8 @@ export const useListCompanyAccess = (payload?: ListAppDeviceAccessPayload) : Use
         ["list_company_access", payload],
         async ({ data }: any) => {
             return SupportRepository.listCompanyAccess({
-                fromDate: "2021-12-30",
-                toDate: "2021-12-30",
+                fromDate: "2022-1-15",
+                toDate: "2022-1-15",
                 year: 2021,
             })
         },

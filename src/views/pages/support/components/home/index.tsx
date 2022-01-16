@@ -9,7 +9,8 @@ import { useListAppDeviceAccess } from 'services/hooks/useSupport';
 const SupportPage: FC = () => {
   const { listAppDeviceAccess } = useListAppDeviceAccess();
   const [toggleTab, setToggleTab] = useState(1);
-  const timeType = ['all', 'today', 'week', 'month', 'quater'];
+  // const timeType = ['all', 'today', 'week', 'month', 'quater'];
+  let timeType = '';
   const [type, setType] = useState();
 
   const handleToggleTab = (index: number) => {
@@ -18,6 +19,7 @@ const SupportPage: FC = () => {
   const handleChange = (event : any) => {
     // updating an object instead of a Map
     console.log('event', event.target.value)
+    timeType = event.target.value;
   }
 
   return (
@@ -120,7 +122,7 @@ const SupportPage: FC = () => {
         </div>
       </div>
 
-      <Tabs toggleTab={toggleTab}/>
+      <Tabs toggleTab={toggleTab} timeType={timeType}/>
     </main>
   );
 };
