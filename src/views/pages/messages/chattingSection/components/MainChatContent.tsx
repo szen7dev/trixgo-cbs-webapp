@@ -17,7 +17,7 @@ type Props = {
 
 const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat} = useContext(MessageContext);
 

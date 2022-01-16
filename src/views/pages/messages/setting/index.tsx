@@ -13,7 +13,7 @@ const SettingMessageDetail:FC = () => {
 
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"P{";
     const profileId = JSON.parse(currentUser)?._id;
 
     const getAvatarMembers = useCallback(() => {
