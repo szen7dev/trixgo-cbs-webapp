@@ -103,7 +103,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                   />
                 </div>
                 {/* filter item */}
-                <div className="t-main-search-filter-item flex items-center mt-4">
+                {/* <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Đơn vị thực hiện</p>
                   <DropdownSearchable
                     placeholder={"Đơn vị thực hiện"}
@@ -142,7 +142,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                     }}
                     inlineSearch={true}
                   />
-                </div>
+                </div> */}
                 {/* filter item */}
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Thời hạn</p>
@@ -157,7 +157,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3 border-b border-gray-200",
                           placeholder: "Từ ngày...",
-                          readonly: "true",
+                          readOnly: true,
                         }}
                       />
                     </div>
@@ -171,7 +171,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3 border-b border-gray-200",
                           placeholder: "Đến ngày...",
-                          readonly: "true",
+                          readOnly: true,
                         }}
                       />
                     </div>

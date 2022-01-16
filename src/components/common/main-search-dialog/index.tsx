@@ -81,7 +81,7 @@ const MainSearchDialog: FC = () => {
             </button>
           </div>
           <div className="flex items-center text-primary-gray">
-            {searchText.length ? (
+            {searchResultList.length ? (
               <>
                 <span className="mr-4">{totalRecord && totalRecord > 10 ? '10' : totalRecord} trong số {totalRecord}</span>
                 {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
@@ -149,7 +149,9 @@ const MainSearchDialog: FC = () => {
                     </Link>
                   );
                 })
-                : ''
+                : (
+                  <p className="mt-4 text-center">Không tìm thấy kết quả nào.</p>
+                )
               }
             </div>
           )
