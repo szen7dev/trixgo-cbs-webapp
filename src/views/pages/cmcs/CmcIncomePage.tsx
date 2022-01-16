@@ -129,7 +129,7 @@ const CmcIncome: FC = () => {
   }
 
   return (
-    <main className="relative h-full">
+    <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Hợp đồng bán ra</p>
@@ -216,9 +216,8 @@ const CmcIncome: FC = () => {
 
         <tbody>
           {contractIncome?.listContractIncome?.map((item: any) => {
-            // console.log(item)
             return (
-              <tr key={item._id} className="border-b border-primary-border h-[50px]">
+              <tr key={item._id} className="border-b border-primary-border ">
                 <td className="py-1 px-2 text-center">
                   <input
                     className="form-check-input"
