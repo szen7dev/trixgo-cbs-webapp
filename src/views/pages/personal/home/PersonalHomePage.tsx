@@ -1,8 +1,12 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useState, useEffect } from "react";
 
 import cn from "classnames";
-import { Form, Formik } from "formik";
-
+import { Form, Formik, Field } from "formik";
+import { useAuth } from "services/hooks/useAuth";
+import { UpdateUser, UpdatePasswordUser } from 'typings/user';
+import DatePicker from "react-datepicker";
+import moment from 'moment'
+import { useUser } from 'services/hooks/useUser';
 import styles from "../style.module.css";
 
 import PersonalLogo from "assets/images/personal-logo.svg";
@@ -11,26 +15,60 @@ import EyeCloseIcon from "assets/images/icon-eye-close.svg";
 import EyeOpenIcon from "assets/images/icon-eye-open.svg";
 import SignatureLogo from "assets/images/signature-logo.svg";
 
+const infoValues = {
+  email: "",
+  phone: "",
+  birthDay: "",
+  gender: '1',
+  lang: "vn",
+  // signature: "",
+};
+const passwordValues = {
+  currentPass: "",
+  newPass: "",
+  confirmPass: "",
+};
 const PersonalHomePage: FC = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [infoUser, setInfoUser] = useState(infoValues);
+  const { dataUserInfo } = useAuth();
+  const { updateUser, updatePasswordUser } = useUser();
 
-  const passwordValues = {
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  };
+  const handleSubmitUpdateUser = async (values: UpdateUser) => {
+    await updateUser(values);
+  }
 
-  const infoValues = {
-    email: "",
-    phone: "",
-    birthDate: "",
-    gender: "",
-    language: "",
-    signatureImage: "",
-  };
+  const handleSubmitUpdatePassword = async (values: UpdatePasswordUser) => {
+    await updatePasswordUser(values);
+  }
 
+  useEffect(() => {
+    if(dataUserInfo) {
+      setInfoUser(dataUserInfo.data)
+      // Nếu giới tính chưa có
+      if(!dataUserInfo?.data.gender) {
+        setInfoUser(user => ({
+          ...user,
+          ...{gender: '1'}
+        }));
+      } else { // Nếu có sẽ đổi sang string
+        setInfoUser(user => ({
+          ...user,
+          ...{gender: user.gender.toString()}
+        }));
+      }
+      if(!dataUserInfo?.data.gender) {
+        setInfoUser(user => ({
+          ...user,
+          ...{lang: 'vn'}
+        }));
+      }
+    } else {
+      setInfoUser(infoValues)
+    }
+  },[dataUserInfo])
   return (
     <main className="bg-cbs-gray h-full flex justify-center gap-7 py-4">
       <section
@@ -59,10 +97,10 @@ const PersonalHomePage: FC = () => {
         <Formik
           initialValues={passwordValues}
           // eslint-disable-next-line no-console
-          onSubmit={(values) => console.log(values)}
+          onSubmit={handleSubmitUpdatePassword}
         >
           {(formik) => {
-            const { handleBlur } = formik;
+            const { handleBlur, values, handleChange } = formik;
 
             return (
               <Form>
@@ -70,9 +108,10 @@ const PersonalHomePage: FC = () => {
                   <p className="text-sm mb-2">Mật khẩu hiện tại</p>
                   <input
                     type={showCurrentPassword ? "text" : "password"}
-                    name="currentPassword"
+                    name="currentPass"
                     placeholder="Nhập mật khẩu hiện tại của bạn"
                     className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+                    onChange={handleChange}
                     onBlur={(e: FormEvent<HTMLInputElement>) => {
                       handleBlur(e);
                     }}
@@ -89,9 +128,10 @@ const PersonalHomePage: FC = () => {
                   <p className="text-sm mb-2">Mật khẩu mới</p>
                   <input
                     type={showNewPassword ? "text" : "password"}
-                    name="newPassword"
+                    name="newPass"
                     placeholder="Nhập mật khẩu mới"
                     className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+                    onChange={handleChange}
                     onBlur={(e: FormEvent<HTMLInputElement>) => {
                       handleBlur(e);
                     }}
@@ -108,9 +148,10 @@ const PersonalHomePage: FC = () => {
                   <p className="text-sm mb-2">Xác nhận mật khẩu mới</p>
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    name="confirmPassword"
+                    name="confirmPass"
                     placeholder="Nhập lại mật khẩu mới"
                     className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+                    onChange={handleChange}
                     onBlur={(e: FormEvent<HTMLInputElement>) => {
                       handleBlur(e);
                     }}
@@ -146,12 +187,13 @@ const PersonalHomePage: FC = () => {
         <p className="text-lg p-5">Thông tin tài khoản</p>
 
         <Formik
-          initialValues={infoValues}
+          enableReinitialize
+          initialValues={ infoUser }
           // eslint-disable-next-line no-console
-          onSubmit={(value) => console.log(value)}
+          onSubmit={handleSubmitUpdateUser}
         >
           {(formik) => {
-            const { handleBlur } = formik;
+            const { handleBlur, values, handleChange, setFieldValue } = formik;
 
             return (
               <Form className="px-5">
@@ -161,6 +203,8 @@ const PersonalHomePage: FC = () => {
                     type="text"
                     name="email"
                     placeholder="Email"
+                    value={values.email}
+                    onChange={handleChange}
                     className="w-full h-9 px-4 border border-primary-border rounded outline-none"
                     onBlur={(e: FormEvent<HTMLInputElement>) => {
                       handleBlur(e);
@@ -174,6 +218,8 @@ const PersonalHomePage: FC = () => {
                     type="text"
                     name="phone"
                     placeholder="Điện thoại"
+                    value={values.phone}
+                    onChange={handleChange}
                     className="w-full h-9 px-4 border border-primary-border rounded outline-none"
                     onBlur={(e: FormEvent<HTMLInputElement>) => {
                       handleBlur(e);
@@ -183,73 +229,55 @@ const PersonalHomePage: FC = () => {
 
                 <div className="mb-6">
                   <p className="text-sm mb-2">Ngày sinh</p>
-                  <input
-                    type="text"
-                    name="birthDate"
-                    placeholder="Ngày sinh"
-                    className="w-full h-9 px-4 border border-primary-border rounded outline-none"
-                    onBlur={(e: FormEvent<HTMLInputElement>) => {
-                      handleBlur(e);
+                  <DatePicker
+                    selected={(values.birthDay && new Date(values.birthDay)) || new Date()}
+                    dateFormat="dd/MM/yyyy"
+                    onChange={(date: Date | null) => setFieldValue("birthDay", moment(date).format('YYYY-MM-DD'))}
+                    showYearDropdown
+                    onKeyDown={(e) => {
+                      e.preventDefault();
                     }}
+                    customInput={
+                      <input
+                        type="text"
+                        name="birthDay"
+                        placeholder=""
+                        // value={values.birthDay}
+                        className="w-full h-9 px-4 border border-primary-border rounded outline-none"
+                      />
+                    }
                   />
                 </div>
 
                 <div className="mb-6">
                   <p className="text-sm">Giới tính</p>
                   <div className="flex items-center gap-14 mt-4">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        name="gender"
-                        defaultChecked
-                        value="Nam"
-                        className="mr-3"
-                      />
-                      <p>Nam</p>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Nữ"
-                        className="mr-3"
-                      />
-                      <p>Nữ</p>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="Khác"
-                        className="mr-3"
-                      />
-                      <p>Khác</p>
-                    </div>
+                    <label>
+                      <Field type="radio" name="gender" value='1' className="mr-3" onChange={handleChange} checked={values.gender === '1'} />
+                      Nam
+                    </label>
+                    <label>
+                      <Field type="radio" name="gender" value='2' className="mr-3" onChange={handleChange} checked={values.gender === '2'} />
+                      Nữ
+                    </label>
+                    <label>
+                      <Field type="radio" name="gender" value='3' className="mr-3" onChange={handleChange} checked={values.gender === '3'} />
+                      Khác
+                    </label>
                   </div>
                 </div>
 
                 <div className="mb-6">
                   <p className="text-sm">Ngôn ngữ hiển thị</p>
                   <div className="flex items-center gap-14 mt-4">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        name="language"
-                        defaultChecked
-                        value="Vietnamese"
-                        className="mr-3"
-                      />
-                      <p>Tiếng Việt</p>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        name="language"
-                        value="English"
-                        className="mr-3"
-                      />
-                      <p>English</p>
-                    </div>
+                  <label>
+                      <Field type="radio" name="lang" value="vi" className="mr-3" onChange={handleChange} checked={values.lang === 'vi'} />
+                      Tiếng Việt
+                    </label>
+                    <label>
+                      <Field type="radio" name="lang" value="en" className="mr-3" onChange={handleChange} checked={values.lang === 'en'} />
+                      English
+                    </label>
                   </div>
                 </div>
 
