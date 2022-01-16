@@ -28,7 +28,17 @@ const TimeSheetHomePage: FC = () => {
 
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
-  const { data, refetch: refreshListTimeSheet } = useQueryListTimeSheetParent();
+  const {
+    data,
+    refetch: refreshListTimeSheet,
+    totalPages,
+    totalRecord,
+    fetchNextPage,
+    fetchPrevPage,
+    loading,
+    hasNextPage,
+  } = useQueryListTimeSheetParent();
+  console.log({data})
   const {
     onCreateTimeSheetParentAsync,
     onUpdateTimeSheetParentAsync,
@@ -116,8 +126,8 @@ const TimeSheetHomePage: FC = () => {
                 <CreateOrEditDialog
                   title="Tạo mới"
                   onSubmit={handleCreateTimeSheet}
-                  projectName={''}
-                  assigneeName={''}
+                  projectName={""}
+                  assigneeName={""}
                 />
               </div>
             )
@@ -280,7 +290,14 @@ const TimeSheetHomePage: FC = () => {
           ))}
         </div>
       </div>
-      <Paginate />
+      <Paginate
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        nextPageAction={fetchNextPage}
+        prevPageAction={fetchPrevPage}
+        isFetching={loading}
+        hasNextPage={hasNextPage}
+      />
     </div>
   );
 };
