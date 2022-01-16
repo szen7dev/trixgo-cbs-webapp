@@ -25,6 +25,7 @@ interface UseQueryListTimeSheetParent {
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
+    fetchPrevPage: () => void;
 }
 export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
     const result = useInfiniteQuery(
@@ -46,6 +47,7 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         data,
         refetch,
         fetchNextPage,
+        fetchPreviousPage: fetchPrevPage,
         hasNextPage
     } = result;
 
@@ -64,7 +66,8 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         totalPages,
         totalRecord,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        fetchPrevPage,
     }
 }
 
@@ -76,7 +79,7 @@ interface UseQueryDetailTimeSheetParent {
 }
 export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQueryDetailTimeSheetParent => {
     const result = useQuery(
-        `list_time-sheet.parent.${expertTimesheetID}`, async () =>
+        `time-sheet.parent.${expertTimesheetID}`, async () =>
         TimeSheetParentRepository.fetchDetailTimeSheet({
             populates: {
                 "path": "assignee project userCreate",
@@ -136,10 +139,11 @@ interface UseQueryListTimeSheetChild {
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
+    fetchPrevPage: () => void;
 }
 export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryListTimeSheetChild => {
     const result = useInfiniteQuery(
-        `list_time-sheet.parent`, async ({ pageParam }: any) =>
+        `list_time-sheet.child`, async ({ pageParam }: any) =>
         TimeSheetChildRepository.fetchListTimeSheet({
             parentID: timeSheetParentID,
             lastestID: pageParam,
@@ -155,6 +159,7 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         data,
         refetch,
         fetchNextPage,
+        fetchPreviousPage: fetchPrevPage,
         hasNextPage
     } = result;
 
@@ -173,7 +178,8 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         totalPages,
         totalRecord,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        fetchPrevPage
     }
 }
 

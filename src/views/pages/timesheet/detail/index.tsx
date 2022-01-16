@@ -9,7 +9,7 @@ import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
-
+import Paginate from "components/common/Paginate";
 import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
 import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
 import DetailMainRow from "../components/DetailMainRow";
@@ -32,6 +32,9 @@ const TimeSheetDetailPage: FC = () => {
     loading: isFetchTimeSheetChild,
     totalPages,
     totalRecord,
+    hasNextPage,
+    fetchNextPage,
+    fetchPrevPage,
     refetch: onRefreshTimeSheetChild,
   } = useQueryListTimeSheetChild(id);
   const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
@@ -247,6 +250,14 @@ const TimeSheetDetailPage: FC = () => {
           <DetailChildRowCreateForm onInsert={handleCreateTimeSheet} />
         </div>
       </div>
+      <Paginate 
+      totalPages={totalPages}
+      totalRecord={totalRecord}
+      nextPageAction={fetchNextPage}
+      prevPageAction={fetchPrevPage}
+      isFetching={isFetchTimeSheetChild}
+      hasNextPage={hasNextPage}
+      />
     </div>
   );
 };
