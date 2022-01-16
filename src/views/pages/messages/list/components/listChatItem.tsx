@@ -14,7 +14,7 @@ type Props = {
 const ListChatItem:FC<Props> = ({chat}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const wrapperRef = useRef(null);
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
     const getPresentGroupName = (name: string) => {

@@ -70,3 +70,32 @@ export type CloseDeleteConfirm = {
   type: "CLOSE_DELETE_CONFIRM";
 };
 export type DeleteConfirmActions = OpenDeleteConfirm | CloseDeleteConfirm;
+
+export type PopupSendFilesContent = {
+  files: any[];
+  sendType: "image"|"file";
+  defaultSendType: "image"|"file";
+  conversationID: string;
+  handleSendFile: (message: any, useCompress=true) => void
+}
+
+export type PopupSendFilesState = {
+  isShowPopupSendFiles: boolean;
+  popSendFilesContent: PopupSendFilesContent;
+}
+
+export type OpenPopupSendFiles = {
+  type: "OPEN_POPUP_SEND_FILES";
+  payload: PopupSendFilesContent;
+}
+
+export type ClosePopupSendFiles = {
+  type: "CLOSE_POPUP_SEND_FILES"
+}
+
+export type SetSendTypePopupSendFiles = {
+  type: "SET_SEND_TYPE",
+  payload: "image"|"file"
+}
+
+export type PopupSendFilesActions = OpenPopupSendFiles | ClosePopupSendFiles | SetSendTypePopupSendFiles;

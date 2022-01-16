@@ -21,7 +21,7 @@ const listConversationSlice = createSlice({
             (action.payload??[]).forEach((conversation: ItemListConversation) => {
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: moment(conversation.lastMessage.updatedAt).toDate().getTime()
+                    position: moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime()
                 }
             });
 

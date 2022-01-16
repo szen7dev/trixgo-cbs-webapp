@@ -62,6 +62,14 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
                         {message.files.length-5}+
                     </div>
                 }
+                {
+                    image.progress!==null&&image.progress!==undefined&&image.progress<100&&
+                    <div className={"absolute w-full flex items-center justify-center top-5px h-[5px]"}>
+                        <div className={"rounded-full overflow-hidden bg-white bg-opacity-70 relative w-11/12 h-full"}>
+                            <div style={{width: `${image.progress}%`}} className={"absolute transition duration-150 h-full bg-primary"}></div>
+                        </div>
+                    </div>
+                }
             </div>
         ))
     }

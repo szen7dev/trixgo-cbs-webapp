@@ -93,8 +93,8 @@ const listMessageSlice = createSlice({
         },
         updateNewMessageToConversation(state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
-            newMessage[action.payload.newMessageId] = action.payload.messageData;
             delete newMessage[action.payload.oldMessageId];
+            newMessage[action.payload.newMessageId] = action.payload.messageData;
 
             state.data = {
                 ...state.data,
