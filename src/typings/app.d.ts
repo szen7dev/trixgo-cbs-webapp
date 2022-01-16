@@ -73,6 +73,9 @@ export type DeleteConfirmActions = OpenDeleteConfirm | CloseDeleteConfirm;
 
 export type PopupSendFilesContent = {
   files: any[];
+  sendType: "image"|"file";
+  conversationID: string;
+  handleSendFile: (message: any, useCompress=true) => void
 }
 
 export type PopupSendFilesState = {

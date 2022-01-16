@@ -13,7 +13,7 @@ type Props = {
 
 const MainChatHeading:FC<Props> = ({chat}) => {
     const {setShowMenu, showMenu} = useContext(MessageContext)
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
     const getNameConversation = useCallback(() => {

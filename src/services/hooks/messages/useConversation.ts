@@ -10,7 +10,7 @@ type UseConversationType = {
 
 export const UseConversation = () : UseConversationType => {
     const dispatch = useDispatch();
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);
 
     const getListMessage = async (params: ListMessagePayload) => {
