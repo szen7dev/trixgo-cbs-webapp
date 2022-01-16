@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import cn from "classnames";
 
@@ -12,8 +12,11 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
+import { useUser } from 'services/hooks/useUser';
 
 const Friends: FC = () => {
+  const { listFriends } = useUser('list_friends', { limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}' });
+
   return (
     <main className="h-full">
       <header className="sticky top-0 z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -89,121 +92,36 @@ const Friends: FC = () => {
         </thead>
 
         <tbody className="bg-primary-light">
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              <div className="flex items-center">
-                <img
-                  src={MemberIcon}
-                  alt="Member"
-                  className="rounded-full mr-2"
+          {listFriends?.length ? listFriends.map((friend, i) => (
+            <tr className="border-b border-primary-border h-10" key={friend._id}>
+              <td className="py-1 px-2 text-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  style={{ marginLeft: "-23px" }}
                 />
-                <p>Đỗ Duy Linh-CPMI</p>
-              </div>
-            </td>
-            <td className="py-1 px-2">
-              Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-            </td>
-            <td className="py-1 px-2">linhdd@gmail.com</td>
-            <td className="py-1 px-2">0955666333</td>
-            <td className="py-1 px-2">22/12/2021</td>
-            <td className="py-1 px-2 text-negative">Huỷ bạn bè</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              <div className="flex items-center">
-                <img
-                  src={MemberIcon}
-                  alt="Member"
-                  className="rounded-full mr-2"
-                />
-                <p>Đỗ Duy Linh-CPMI</p>
-              </div>
-            </td>
-            <td className="py-1 px-2">
-              Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-            </td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2 text-primary">Gửi yêu cầu kết bạn</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              <div className="flex items-center">
-                <img
-                  src={MemberIcon}
-                  alt="Member"
-                  className="rounded-full mr-2"
-                />
-                <p>Đỗ Duy Linh-CPMI</p>
-              </div>
-            </td>
-            <td className="py-1 px-2">
-              Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-            </td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2 text-primary-gray">Huỷ yêu cầu kết bạn</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              <div className="flex items-center">
-                <img
-                  src={MemberIcon}
-                  alt="Member"
-                  className="rounded-full mr-2"
-                />
-                <p>Đỗ Duy Linh-CPMI</p>
-              </div>
-            </td>
-            <td className="py-1 px-2">
-              Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-            </td>
-            <td className="py-1 px-2">linhdd@gmail.com</td>
-            <td className="py-1 px-2">0955666333</td>
-            <td className="py-1 px-2">22/12/2021</td>
-            <td className="py-1 px-2 text-negative">Huỷ bạn bè</td>
-          </tr>
+              </td>
+              <td className="py-1 px-2">
+                <div className="flex items-center">
+                  <img
+                    src={MemberIcon}
+                    alt="Member"
+                    className="rounded-full mr-2"
+                  />
+                  <p>{ friend.fullname }</p>
+                </div>
+              </td>
+              <td className="py-1 px-2">
+                {friend.company? friend.company.name : null}
+              </td>
+              <td className="py-1 px-2">{ friend.email }</td>
+              <td className="py-1 px-2">{ friend.phone }</td>
+              <td className="py-1 px-2">{ friend.birthDay }</td>
+              <td className="py-1 px-2 text-negative">Huỷ bạn bè</td>
+                </tr>
+          )) : null}
         </tbody>
       </table>
 
