@@ -21,12 +21,13 @@ const MainSearchDialog: FC = () => {
   const [isResultNavigation, setIsResultNavigation] = useState(false);
   const [isVisibleSearchFilter, setIsVisibleSearchFilter] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
+  const [filterParam, setFilterParam] = useState({});
   const { searchResultList, 
           fetchSearchResultList, 
           totalRecord, 
           nextCursor, 
           isLoadingSearchResultList, 
-        } = UseMainSearch('search_results', { keyword: searchText, lastestID: !isResultNavigation ? '' : currentID });
+        } = UseMainSearch('search_results', { keyword: searchText, lastestID: !isResultNavigation ? '' : currentID, ...filterParam });
 
   const toggleSearchFilter = () => {
     setIsVisibleSearchFilter(!isVisibleSearchFilter);
@@ -39,11 +40,17 @@ const MainSearchDialog: FC = () => {
   
   useEffect(() => {
     fetchSearchResultList();
-  }, [searchText, currentID, isResultNavigation]);
+  }, [searchText, currentID, isResultNavigation, filterParam]);
 
   const handleNextPageButton = () => {
     setCurrentID(nextCursor || "");
     setIsResultNavigation(true);
+  };
+
+  // handle data from filter tab
+  const onHandleFilterData = (filterData: any) => {
+    // console.log(filterData);
+    setFilterParam(filterData);
   };
 
   return (
@@ -74,7 +81,7 @@ const MainSearchDialog: FC = () => {
             </button>
           </div>
           <div className="flex items-center text-primary-gray">
-            {searchText.length ? (
+            {searchResultList.length ? (
               <>
                 <span className="mr-4">{totalRecord && totalRecord > 10 ? '10' : totalRecord} trong số {totalRecord}</span>
                 {/* <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-solid border-transparent hover:border-primary-border">
@@ -101,7 +108,7 @@ const MainSearchDialog: FC = () => {
           :
           (
             <div className="t-main-search-results-container relative">
-              {searchText.length && searchResultList.length ? 
+              {searchResultList.length ? 
                 searchResultList.map(searchResultItem => {
                   const progressValue = searchResultItem.amountChecklist ? searchResultItem.amountFinishChecklist/searchResultItem.amountChecklist : 0;
                   return (
@@ -122,22 +129,29 @@ const MainSearchDialog: FC = () => {
                             <img src={thumbnail} alt="Thumbnail" className="w-6 h-6 rounded-full mr-3" />
                             <span className="text-secondary-gray">
                               {searchResultItem.assignee?.fullname} {searchResultItem.group?.sign && '|'} {searchResultItem.group?.sign}
-                              </span>
+                            </span>
                           </div>
-                          <div className="w-2/5">
-                            <div className="text-right text-[12px] mb-1">
-                              {searchResultItem.amountFinishChecklist}/{searchResultItem.amountChecklist}
-                            </div>
-                            <div className="border border-solid border-primary-border bg-secondary-light rounded">
-                              <div className="bg-green h-1" style={{ width: `${progressValue}%` }}></div>
-                            </div>
-                          </div>
+                          {searchResultItem.amountChecklist ? 
+                            (
+                              <div className="w-2/5">
+                                <div className="text-right text-[12px] mb-1">
+                                  {searchResultItem.amountFinishChecklist}/{searchResultItem.amountChecklist}
+                                </div>
+                                <div className="border border-solid border-primary-border bg-secondary-light rounded">
+                                  <div className="bg-green h-1" style={{ width: `${progressValue}%` }}></div>
+                                </div>
+                              </div>
+                            ) : ''
+                          }
+                          
                         </div>
                       </div>
                     </Link>
                   );
                 })
-                : ''
+                : (
+                  <p className="mt-4 text-center">Không tìm thấy kết quả nào.</p>
+                )
               }
             </div>
           )
@@ -146,7 +160,10 @@ const MainSearchDialog: FC = () => {
 
       {/* search filter */}
       <div className={cn("t-main-search-filter pl-8 pr-8 mb-5", {"hidden": !isVisibleSearchFilter})}>
-        <MainSearchFilter />
+        <MainSearchFilter
+          handleFilterData={onHandleFilterData}
+          toggleSearchFilter={toggleSearchFilter}
+        />
       </div>
       
     </div>
