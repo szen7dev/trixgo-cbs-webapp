@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { TimeSheetParentRepository, TimeSheetChildRepository } from 'apis/time-sheet';
 
 import type {
@@ -10,6 +10,10 @@ import type {
     DeleteTimeSheetParentPayload,
     DeleteTimeSheetParentResponse,
     TimeSheetChild,
+    InsertTimeSheetChildPayload,
+    InsertTimeSheetChildResponse,
+    UpdateTimeSheetChildPayload,
+    UpdateTimeSheetChildResponse
 } from 'typings/time-sheet';
 
 // Time Sheet Parent
@@ -21,6 +25,7 @@ interface UseQueryListTimeSheetParent {
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
+    fetchPrevPage: () => void;
 }
 export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
     const result = useInfiniteQuery(
@@ -42,6 +47,7 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         data,
         refetch,
         fetchNextPage,
+        fetchPreviousPage: fetchPrevPage,
         hasNextPage
     } = result;
 
@@ -60,7 +66,44 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         totalPages,
         totalRecord,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        fetchPrevPage,
+    }
+}
+
+interface UseQueryDetailTimeSheetParent {
+    loading: boolean;
+    data?: TimeSheetParent;
+    error: boolean;
+    refetch: () => void;
+}
+export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQueryDetailTimeSheetParent => {
+    const result = useQuery(
+        `time-sheet.parent.${expertTimesheetID}`, async () =>
+        TimeSheetParentRepository.fetchDetailTimeSheet({
+            populates: {
+                "path": "assignee project userCreate",
+                "select": "fullname name"
+            },
+            expertTimesheetID
+        }), {
+        getNextPageParam: ({ data }: any) => {
+            return data?.nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
+    const {
+        isLoading,
+        data,
+        refetch,
+    } = result;
+
+    return {
+        loading: isLoading,
+        data: data?.data,
+        error: data?.error || false,
+        refetch,
     }
 }
 
@@ -96,10 +139,11 @@ interface UseQueryListTimeSheetChild {
     totalRecord: number;
     refetch: () => void;
     fetchNextPage: () => void;
+    fetchPrevPage: () => void;
 }
 export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryListTimeSheetChild => {
     const result = useInfiniteQuery(
-        `list_time-sheet.parent`, async ({ pageParam }: any) =>
+        `list_time-sheet.child`, async ({ pageParam }: any) =>
         TimeSheetChildRepository.fetchListTimeSheet({
             parentID: timeSheetParentID,
             lastestID: pageParam,
@@ -115,6 +159,7 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         data,
         refetch,
         fetchNextPage,
+        fetchPreviousPage: fetchPrevPage,
         hasNextPage
     } = result;
 
@@ -133,6 +178,25 @@ export const useQueryListTimeSheetChild = (timeSheetParentID: string): UseQueryL
         totalPages,
         totalRecord,
         refetch,
-        fetchNextPage
+        fetchNextPage,
+        fetchPrevPage
+    }
+}
+
+interface UseMutationTimeSheetChild {
+    onCreateTimeSheetAsync: (payload: InsertTimeSheetChildPayload) =>
+        Promise<InsertTimeSheetChildResponse>;
+    onUpdateTimeSheetAsync: (payload: UpdateTimeSheetChildPayload) =>
+        Promise<UpdateTimeSheetChildResponse>;
+}
+export const useMutationTimeSheetChild = (): UseMutationTimeSheetChild => {
+    const insertMutation = useMutation((payload: InsertTimeSheetChildPayload) =>
+        TimeSheetChildRepository.insertTimeSheet(payload));
+    const updateMutation = useMutation((payload: UpdateTimeSheetChildPayload) =>
+        TimeSheetChildRepository.updateTimeSheet(payload));
+
+    return {
+        onCreateTimeSheetAsync: insertMutation.mutateAsync,
+        onUpdateTimeSheetAsync: updateMutation.mutateAsync,
     }
 }
