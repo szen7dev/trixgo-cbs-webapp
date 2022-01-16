@@ -109,13 +109,13 @@ export const useUpload = (app?: string) : UseUpload => {
         //Handle images
         if (file.type.includes("image/") && compressConfig?.useCompress) {
             new Compressor(file, {
-                quality: compressConfig.quality,
+                quality: compressConfig.quality??0.8,
 
                 // The compression process is asynchronous,
                 // which means you have to access the `result` in the `success` hook function.
                 success(result) {
                     const compressFile = blobToFile(result, file.name);
-                    console.log('Sending in compress mode with quality: ' + compressConfig.quality);
+                    console.log('Sending in compress mode with quality: ' + compressConfig.quality??0.8);
                     uploadFileToS3({signedUrl, file: compressFile, progress});
                 },
                 error(err) {

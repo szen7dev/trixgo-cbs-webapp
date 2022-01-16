@@ -15,7 +15,7 @@ type Props = {
     chat: ItemListConversation;
 }
 const ChattingInput:FC<Props> = ({chat}) => {
-    const currentUser = localStorage.getItem("currentUser")??"";
+    const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat, socketRef} = useContext(MessageContext);
     const dispatch = useDispatch();
@@ -157,7 +157,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 <div className={"flex-1 rounded-md bg-white flex items-end"}>
                     <IconButton/>
                     <InputForMessage onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
-                    <IconAttach/>
+                    <IconAttach currentChat={currentChat} scrollToBottom={() => scrollToBottom()}/>
                 </div>
                 <button
                     onClick={() => handleSendMessage()}

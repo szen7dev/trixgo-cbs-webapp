@@ -5,7 +5,11 @@ import {PopupSendFilesActions, PopupSendFilesState} from "typings/app";
 export const initialState: PopupSendFilesState = {
   isShowPopupSendFiles: false,
   popSendFilesContent: {
-    files: []
+    files: [],
+    sendType: "image",
+    defaultSendType: "image",
+    conversationID: "",
+    handleSendFile: (message: any, useCompress = true) => undefined
   }
 };
 

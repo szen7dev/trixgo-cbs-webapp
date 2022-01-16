@@ -25,9 +25,21 @@ const reducer = (state: PopupSendFilesState, action: PopupSendFilesActions): Pop
         ...state,
         isShowPopupSendFiles: false,
         popSendFilesContent: {
-          files: []
+          files: [],
+          sendType: "image",
+          defaultSendType: "image",
+          conversationID: "",
+          handleSendFile: (message, useCompress= true) => undefined
         },
       };
+    case "SET_SEND_TYPE":
+      return {
+        ...state,
+        popSendFilesContent: {
+          ...state.popSendFilesContent,
+          sendType: action.payload
+        }
+      }
     default:
       return state;
   }
