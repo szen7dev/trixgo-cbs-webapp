@@ -1,13 +1,15 @@
 import React, {FC, useEffect, useRef, useState} from "react";
+import {v4 as uuidv4} from "uuid";
 
 type Props = {
     onChange: (target: any) => void;
     html: string;
-    onPressEnter?: () => void
+    onPressEnter?: () => void;
+    onPasteImage?: (file: File) => void;
 }
-const InputForMessage:FC<Props> = ({onChange,html, onPressEnter}) => {
+const InputForMessage:FC<Props> = ({onChange,html, onPressEnter, onPasteImage}) => {
     const [keyCode, setKeyCode] = useState(0);
-    const [addNewLine, setAddNewLine] = useState(false);
+    const [addFile, setAddFile] = useState<File|null|undefined>(null);
     const inputRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (inputRef&&inputRef.current) {
@@ -48,6 +50,18 @@ const InputForMessage:FC<Props> = ({onChange,html, onPressEnter}) => {
                     setKeyCode(0)
                 }
             });
+
+            inputRef.current.addEventListener("paste", (evt) => {
+                const dT = evt.clipboardData;
+                const file = dT?.files[ 0 ];
+                if (file) {
+                    setAddFile(file)
+                    evt.stopPropagation();
+                    evt.preventDefault();
+                } else {
+                    setAddFile(undefined)
+                }
+            });
         }
     },[html, inputRef])
 
@@ -56,6 +70,13 @@ const InputForMessage:FC<Props> = ({onChange,html, onPressEnter}) => {
             onPressEnter&&onPressEnter()
         }
     },[keyCode]);
+
+    useEffect(() => {
+        if (addFile) {
+            onPasteImage&&onPasteImage(addFile);
+            setAddFile(undefined);
+        }
+    },[addFile?.size])
 
     return (
         <>

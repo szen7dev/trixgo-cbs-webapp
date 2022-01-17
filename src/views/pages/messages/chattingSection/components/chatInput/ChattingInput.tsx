@@ -10,6 +10,9 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {v4 as uuidv4} from "uuid";
 import {appendMessageToConversation, updateNewMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
+import {useUpload} from "services/hooks/useUpload";
+import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
+import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 
 type Props = {
     chat: ItemListConversation;
@@ -19,6 +22,8 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat, socketRef} = useContext(MessageContext);
     const dispatch = useDispatch();
+    const { addFileToUpload } = useUpload('CHATTING');
+    const {openPopupSendFiles} = usePopupSendFiles();
 
     const [realValue, setRealValue] = useState("");
     const [showMention, setShowMention] = useState<{show: boolean; mentionValue: string; tempValue?: string}>({
@@ -141,6 +146,91 @@ const ChattingInput:FC<Props> = ({chat}) => {
         return html;
     }
 
+    const handlePasteFile = (file: File) => {
+        openPopupSendFiles({
+            files: [
+                {
+                    file: {
+                        file: {
+                            url: window.URL.createObjectURL(file),
+                            name: file.name,
+                            size: file.size,
+                            _id: uuidv4(),
+                            type: file.type
+                        }
+                    },
+                    // progress: file.progress,
+                    _id: uuidv4(),
+                    realFile: file,
+                }
+            ],
+            sendType: "image",
+            defaultSendType: "image",
+            conversationID: currentChat,
+            handleSendFile: (message, useCompress) => handleUploadFilePaste(message, useCompress)
+        })
+    }
+
+    const handleUploadFilePaste = async (message: any, useCompress = true) => {
+        console.log(message)
+        dispatch(appendMessageToConversation({
+            conversationId: currentChat,
+            messageId: message.tmpid,
+            messageData: {
+                ...message,
+                _id: message.tmpid
+            }
+        }));
+        setTimeout(() => {
+            scrollToBottom();
+        }, 100)
+
+        let sendMessage : any = {...message};
+        const sendFiles = [];
+        for (const file of sendMessage.files) {
+            const {_id} = await addFileToUpload({
+                files: file.realFile,
+                progress: percentCompleted => {
+                    console.log(`${percentCompleted}% ${file.file.file.name}`);
+                    // const messageData = {
+                    //     ...message,
+                    //     _id: message.tmpid,
+                    //     files: [...message.files].map(oldFile => {
+                    //         if (oldFile._id === file._id) {
+                    //             return {
+                    //                 ...oldFile,
+                    //                 progress: percentCompleted
+                    //             }
+                    //         }
+                    //         return {
+                    //             ...oldFile
+                    //         }
+                    //     })
+                    // };
+                    // dispatch(updateFileProgressOnMessage({
+                    //     conversationId: currentChat,
+                    //     messageId: message.tmpid,
+                    //     messageData: messageData,
+                    // }));
+                },
+                compressConfig: {
+                    useCompress: useCompress,
+                    quality: 0.8
+                }
+            })
+            console.log("fileId",_id)
+            sendFiles.push(_id)
+        }
+
+        sendMessage = {
+            ...sendMessage,
+            // _id: sendMessage.tmpid,
+            files: sendFiles
+        }
+        socket.emit('CHATTING_CSS_SEND_MESSAGE', sendMessage);
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+    }
+
     return (
         <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
             <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
@@ -165,7 +255,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }
                 <div className={"flex-1 rounded-md bg-white flex items-end"}>
                     <IconButton/>
-                    <InputForMessage onPressEnter={() => handleSendMessage()} onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
+                    <InputForMessage onPasteImage={(file) => handlePasteFile(file)} onPressEnter={() => handleSendMessage()} onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
                     <IconAttach currentChat={currentChat} scrollToBottom={() => scrollToBottom()}/>
                 </div>
                 <button
