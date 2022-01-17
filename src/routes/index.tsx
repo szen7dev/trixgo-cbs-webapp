@@ -108,6 +108,8 @@ import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
 import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
 import ProjectDrawingRoutes from "views/pages/ppt/routes/ProjectDrawingRoutes";
 import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes";
+import ProjectDashboardRoutes from "views/pages/ppt/routes/ProjectDashboardRoutes";
+import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRoutes2";
 import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
 
 // Accounting pages
@@ -391,20 +393,20 @@ const Routes: FC = () => {
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/dashboard-portfolio"}
-                                                component={() => (
+                                                component={({ ...props }: RouteComponentProps ) => (
                                                     <HomeLayout>
-                                                        <ProjectPortfolioPage />
+                                                        <ProjectDashboardRoutes2 {...props} />
                                                     </HomeLayout>
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/dashboard-task"}
-                                                component={() => (
+                                                component={({ ...props }: RouteComponentProps ) => (
                                                     <HomeLayout>
-                                                        <ProjectDashboardTaskPage />
+                                                        <ProjectDashboardRoutes {...props} />
                                                         {/* <KanbanBoardPage /> */}
                                                     </HomeLayout>
                                                 )}
