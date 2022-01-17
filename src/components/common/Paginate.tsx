@@ -1,4 +1,4 @@
-import React, {FC, HTMLAttributes, useEffect, useState} from "react";
+import React, { FC, HTMLAttributes, useEffect, useState } from "react";
 
 type Props = {
     prevPageAction?: () => void;
@@ -6,11 +6,11 @@ type Props = {
     isFetching?: boolean;
     limit?: number;
     totalRecord?: number;
-    totalPages?:number;
-    hasNextPage?:boolean;
+    totalPages?: number;
+    hasNextPage?: boolean;
 }
 
-const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nextPageAction,limit = 10, totalRecord=0, totalPages, isFetching, hasNextPage, ...props}) => {
+const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props }) => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const totalPagesNumber = totalPages || 0
 
@@ -18,15 +18,15 @@ const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nex
         if (!isFetching) {
             //TODO
         }
-    },[isFetching])
+    }, [isFetching])
     const handlePrevPage = () => {
-        setCurrentIndex(currentIndex => currentIndex-1);
+        setCurrentIndex(currentIndex => currentIndex - 1);
         if (prevPageAction) prevPageAction()
     }
 
     const handleNextPage = () => {
         if (currentIndex < totalPagesNumber) {
-            setCurrentIndex(currentIndex => currentIndex+1);            
+            setCurrentIndex(currentIndex => currentIndex + 1);
         }
         if (nextPageAction) nextPageAction()
     }
@@ -36,7 +36,7 @@ const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nex
             <div className="bg-white px-4 items-center flex items-center justify-center relative">
                 <div className={'inline-flex'}>
                     <button
-                        disabled={currentIndex===1||isFetching}
+                        disabled={currentIndex === 1 || isFetching}
                         onClick={() => handlePrevPage()}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tl-md rounded-bl-md"}
                     >
@@ -45,12 +45,12 @@ const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nex
                         </svg>
                     </button>
                     <div className={"flex items-center justify-center border-t border-b pl-4 pr-4 text-gray-700 border-gray-300"}>
-                        {currentIndex ===  1 ? (<span > {limit} trong {totalRecord}</span>)
-                        : (<span> {(currentIndex-1)*limit+1} - {(currentIndex*limit)>=totalRecord ? totalRecord: currentIndex*limit} trong {totalRecord}</span>)}
-                        
+                        {(currentIndex === 1 && limit <= totalRecord) ? (<span > {limit} trong {totalRecord}</span>)
+                            : (currentIndex === 1 && limit > totalRecord) ? ((<span > {totalRecord} trong {totalRecord}</span>)) : (<span> {(currentIndex - 1) * limit + 1} - {(currentIndex * limit) >= totalRecord ? totalRecord : currentIndex * limit} trong {totalRecord}</span>)}
+
                     </div>
                     <button
-                        disabled={!hasNextPage||isFetching || currentIndex>=totalPagesNumber}
+                        disabled={!hasNextPage || isFetching || currentIndex >= totalPagesNumber}
                         onClick={() => handleNextPage()}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tr-md rounded-br-md"}
                     >
@@ -59,7 +59,7 @@ const Paginate:FC<Props & HTMLAttributes<HTMLDivElement>> = ({prevPageAction,nex
                         </svg>
                     </button>
                 </div>
-            </div>           
+            </div>
         </div>
     )
 }

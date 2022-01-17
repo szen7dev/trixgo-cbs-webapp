@@ -22,14 +22,14 @@ async function fetchList<T>(params: any): Promise<T> {
 
 async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contracts?contractID=${params.contactID}`
+        `${APP_CMCS}/contract_ipcs?contractID=${params.contactID}`
     )
     return data
 }
 
 async function requestCreateContract(formData: any): Promise<any> {
     const { data } = await API.post(
-        `${APP_CMCS}/contracts`,
+        `${APP_CMCS}/contract_ipcs`,
         {
             ...formData
         }
@@ -49,7 +49,7 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
 
 async function requestUpdateContract(formData: any): Promise<any> {
     const { data } = await API.put(
-        `${APP_CMCS}/contracts`,
+        `${APP_CMCS}/contract_ipcs`,
         {
             ...formData
         }
@@ -59,7 +59,7 @@ async function requestUpdateContract(formData: any): Promise<any> {
 
 async function requestDeleteContract(contractID: string): Promise<any> {
     const { data } = await API.delete(
-        `${APP_CMCS}/contracts?contractID=${contractID}`)
+        `${APP_CMCS}/contract_ipcs?contractIpcID=${contractID}`)
     return data;
 }
 

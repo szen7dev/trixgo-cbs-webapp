@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 
 import cn from "classnames";
 
@@ -23,7 +23,10 @@ import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import { useParams } from "react-router-dom";
 
 import {
-  UseContractIPCList
+  UseContractIPCList,
+  useCreateContractIPCMutation,
+  useUpdateContractIPCMutation,
+  useDeleteContractIPCMutation,
 } from "services/hooks/useContractIPC";
 
 const ContractIpc: FC = () => {
@@ -36,6 +39,20 @@ const ContractIpc: FC = () => {
   const params: any = useParams();
 
   const contractIPC = UseContractIPCList(pageParam, params.id);
+
+  const { createContractIPCMutateAsync } = useCreateContractIPCMutation();
+  const { updateContractIPCMutateAsync } = useUpdateContractIPCMutation();
+  const { deleteContractIPCMutateAsync } = useDeleteContractIPCMutation();
+
+  useEffect(() => {
+    if (!contractIPC.nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === contractIPC.nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, contractIPC.nextCursor])
+    }
+  }, [contractIPC.nextCursor]);
 
   const prevPageAction = () => {
     if (!contractIPC.nextCursor) {
@@ -56,10 +73,10 @@ const ContractIpc: FC = () => {
   const handleDeleteAction = async () => {
     openDeleteConfirm({
       deleteAction: async () => {
-        // const res = await deleteContractMutateAsync(itemChecked)
-        // if (!res.error) {
-        //   contractIPC.refetch()
-        // }
+        const res = await deleteContractIPCMutateAsync(itemChecked)
+        if (!res.error) {
+          contractIPC.refetch()
+        }
       },
     });
   }
@@ -70,27 +87,27 @@ const ContractIpc: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit contractID={params.id} title="Cập nhật" />
       </div>
     )
   }
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
-    // if (isEdit) {
-    //   res = await updateContractMutateAsync(values);
-    // } else {
-    //   res = await createContractMutateAsync(values);
-    // }
+    if (isEdit) {
+      // res = await updateContractMutateAsync(values);
+    } else {
+      res = await createContractIPCMutateAsync(values);
+    }
 
-    // if (res.code && res.code !== 200) {
-    //   return false;
-    // }
+    if (res.code && res.code !== 200) {
+      return false;
+    }
 
-    // if (!res.error) {
-    //   contractIPC.refetch()
-    //   return true;
-    // }
+    if (!res.error) {
+      contractIPC.refetch()
+      return true;
+    }
     return false;
   }, [contractIPC]);
 
@@ -119,10 +136,12 @@ const ContractIpc: FC = () => {
               openModal(
                 <div
                   className={
-                    "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+
                   }
                 >
-                  <ContractIpcModal onFinish={handleFinishForm} title="Tạo mới" />
+                  <ContractIpcModal onFinish={handleFinishForm} contractID={params.id} title="Tạo mới" />
                 </div>
               )
             }
@@ -212,7 +231,7 @@ const ContractIpc: FC = () => {
                 <td className="py-1 px-2">{item.sign}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0))}</td>
                 <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.timeForPayment).format(DATE_FORMAT)}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0))}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.amountPaid || 0))}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) - (item.amountPaid || 0))}</td>
                 <td className="py-1 px-2">{item.description}</td>
               </tr>

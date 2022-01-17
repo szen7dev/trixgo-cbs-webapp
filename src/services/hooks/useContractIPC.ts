@@ -47,15 +47,15 @@ export const UseContractIPCList = (pageParam = '', contractID = '', limit = 10):
     }
 };
 
-export const useCreateContractMutation = (): {
-    createContractMutateAsync: (payload: any) => Promise<any>;
+export const useCreateContractIPCMutation = (): {
+    createContractIPCMutateAsync: (payload: any) => Promise<any>;
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
         ContractIPCRepository.requestCreateContract(payload)
     );
     return {
-        createContractMutateAsync: mutateAsync,
+        createContractIPCMutateAsync: mutateAsync,
         loading: isLoading,
     }
 }
@@ -73,28 +73,28 @@ export const useHistoryTraffics = (): {
     }
 }
 
-export const useUpdateContractMutation = (): {
-    updateContractMutateAsync: (payload: any) => Promise<any>;
+export const useUpdateContractIPCMutation = (): {
+    updateContractIPCMutateAsync: (payload: any) => Promise<any>;
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
         ContractIPCRepository.requestUpdateContract(payload)
     );
     return {
-        updateContractMutateAsync: mutateAsync,
+        updateContractIPCMutateAsync: mutateAsync,
         loading: isLoading,
     }
 }
 
-export const useDeleteContractMutation = (): {
-    deleteContractMutateAsync: (payload: any) => Promise<any>;
+export const useDeleteContractIPCMutation = (): {
+    deleteContractIPCMutateAsync: (payload: any) => Promise<any>;
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
         ContractIPCRepository.requestDeleteContract(payload)
     );
     return {
-        deleteContractMutateAsync: mutateAsync,
+        deleteContractIPCMutateAsync: mutateAsync,
         loading: isLoading,
     }
 }
@@ -235,7 +235,7 @@ export const useQueryListProject = ({ limit, type, keyword }: any): any => {
     }
 }
 
-export const useDetailContractMutation = (id: string): any => {
+export const useDetailContractIPCMutation = (id: string): any => {
     const res = useQuery(`contract_detail.${id}`, () =>
         ContractIPCRepository.fetchDetailContract({
             contactID: id,
