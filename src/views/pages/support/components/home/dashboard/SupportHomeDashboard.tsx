@@ -8,7 +8,7 @@ import AccessList from "./AccessListSupport";
 import ByBusinessSupport from "./ByBusinessSupport";
 type Props = {
     timeType: string;
-    typeYear: string
+    typeYear: number
 };
 const SupportHomeDashboard: FC<Props> = (props) => {
     const { timeType, typeYear } = props;

@@ -17,14 +17,12 @@ interface UseSupport {
     listDevice: Array<Device>,
     isLoading: boolean;
 };
-export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
+export const useFetchSupport = (params?: ListDevicePayload) : UseSupport => {
     const infinityQuery = useInfiniteQuery(
-      ["list_device", payload],
-      async ({ data }: any) => {
-        return SupportRepository.listDeviceAccess({
-            year: 2022
-        })      
-      },
+      ["list_device", params],
+      async ({ data }: any) =>
+        SupportRepository.listDeviceAccess(params)
+      ,
       {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;

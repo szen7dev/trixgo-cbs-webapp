@@ -3,7 +3,7 @@ import { APIResponse } from "./apis/response";
 
 //2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM
 export type ListDevicePayload = {
-    year: number;
+    year?: number;
 };
 
 export type ListDeviceResponse = APIResponse & {

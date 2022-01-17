@@ -13,6 +13,7 @@ import { Bar } from "react-chartjs-2";
 
 import { useFetchSupport } from 'services/hooks/useSupport';
 import _ from "lodash";
+import {ListDevicePayload} from "../../../../../../typings/support";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -96,18 +97,23 @@ const dataNew = {
   ],
 }
 type Props = {
-  typeYear: string
+  typeYear: number
 };
 const StatisticsByDeviceSupport: FC<Props> = (props) => {
   const { typeYear } = props;
-  console.log('typeYear',typeYear)
-const { listDevice } = useFetchSupport();
-console.log('listDevice',listDevice)
+  console.log('typeYear11',typeYear)
+  const listParam : ListDevicePayload = { year: typeYear}
+
+const { listDevice } = useFetchSupport(listParam);
 for (const element of listDevice) {
+  console.log('listDevice',listDevice)
   if(Number(element._id.month) === 1) {
     dataNew.datasets[0].data[0] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
+    console.log(dataNew.datasets[0].data[0])
     dataNew.datasets[1].data[0] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
+    console.log(dataNew.datasets[1].data[0])
     dataNew.datasets[2].data[0] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
+    console.log(dataNew.datasets[2].data[0])
   }
   if(Number(element._id.month) === 2) {
     dataNew.datasets[0].data[1] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
@@ -174,7 +180,7 @@ for (const element of listDevice) {
 
       <div className="flex items-center relative">
         <div className="w-11/12 h-[320px]">
-          <Bar options={options} data={dataNewList} />
+          <Bar key={Math.random()} options={options} data={dataNewList} />
         </div>
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">
