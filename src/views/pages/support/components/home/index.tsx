@@ -16,8 +16,9 @@ const SupportPage: FC = () => {
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
+  const currentYear = new Date().getFullYear();
   const [timeType, setTimeType] = useState('today');
-  const [typeYear, setTypeYear] = useState('2022');
+  const [typeYear, setTypeYear] = useState(currentYear);
   const handleChange = (event : any) => {
     // timeType = event.target.value;
     setTimeType(event.target.value)
@@ -115,7 +116,7 @@ const SupportPage: FC = () => {
           <button className="flex items-center justify-around w-[120px] h-[30px] border rounded">
             <img src={PolygonIcon} alt="Polygon" />
             <span className="text-xs text-primary-gray">Chọn thời gian</span>
-            <select name="" id="" onChange={handleChangeYear}>
+            <select name="selectBox" id="select-box-year" onChange={handleChangeYear}>
               <option value="2020">2020</option>
               <option value="2021">2021</option>
               <option value="2022">2022</option>

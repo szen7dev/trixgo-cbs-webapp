@@ -6,7 +6,7 @@ import SupportHomeDashboard from "../components/home/dashboard/SupportHomeDashbo
 type Props = {
     toggleTab: number;
     timeType: string;
-    typeYear: string
+    typeYear: number
 };
 
 const TabsList: FC<Props> = (props) => {
