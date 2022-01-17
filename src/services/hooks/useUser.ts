@@ -1,5 +1,5 @@
-import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User } from "typings/user";
-import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
+import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad } from "typings/user";
+import { FetchNextPageOptions, useInfiniteQuery, useMutation, useQuery } from "react-query";
 import UserRepository from "apis/user";
 import { toast } from "react-toastify";
 
@@ -7,6 +7,12 @@ type UseUser = {
     listFriends: Array<User>,
     updateUser: (payload: UpdateUser) => Promise<void>,
     updatePasswordUser: (payload: UpdatePasswordUser) => Promise<void>,
+    requestAddFriend: (payload: AddFriendPayLoad) => Promise<void>,
+    requestUnFriend: (payload: UnFriendPayLoad) => Promise<void>,
+    checkCodeUser: (payload: CheckCodeUser) => Promise<CheckCodeResponse>,
+    getCodeUser: () => Promise<CheckCodeResponse>,
+    codeUser: any;
+    refetchCode: () => void,
     isLoadingListFriends: boolean,
     refetchListFriends: () => void,
     nextPageListFriends: (options?: FetchNextPageOptions | undefined) => void,
@@ -25,6 +31,27 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
         useMutation((payload: UpdatePasswordUser) =>
         UserRepository.updatePasswordUser(payload)
         );
+    
+    const { mutateAsync: checkCodeUserAsync } =
+        useMutation((payload: CheckCodeUser) =>
+        UserRepository.checkCodeUser(payload)
+    );
+
+    const { mutateAsync: requestAddFriendAsync } =
+        useMutation((payload: AddFriendPayLoad) =>
+        UserRepository.requestAddFriend(payload)
+    );
+
+    const { mutateAsync: requestUnFriendAsync } =
+        useMutation((payload: UnFriendPayLoad) =>
+        UserRepository.requestUnFriend(payload)
+    );
+
+    const { mutateAsync: getCodeUserAsync } =
+        useMutation(() =>
+        UserRepository.getCodeUser()
+    );
+
     const updateUser = async (payload: UpdateUser) => {
         try {
             const { error, message } = await updateUserAsync(payload);
@@ -62,6 +89,96 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
             }
         }
     };
+
+    const getCodeUser = async () => {
+        try {
+            const { error, data } = await getCodeUserAsync();
+
+            if (!error) {
+                toast.success('Tạo mã thành công');
+                return data
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const checkCodeUser = async (payload: CheckCodeUser) => {
+        try {
+            const { error, data } = await checkCodeUserAsync(payload);
+            if (!error) {
+                return data
+            } else {
+                if(data && data[0]) {
+                    if(data[0].message === 'code_invalid') {
+                        toast.error('Mã không tồn tại');
+                    }  
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const requestAddFriend = async (payload: AddFriendPayLoad) => {
+        try {
+            const { error, data } = await requestAddFriendAsync(payload);
+
+            if (!error) {
+                toast.success('Gửi lời mời kết bạn thành công');
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+    
+    const requestUnFriend = async (payload: UnFriendPayLoad) => {
+        try {
+            const { error, data } = await requestUnFriendAsync(payload);
+
+            if (!error) {
+                toast.success('Hủy kết bạn thành công');
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    // Get code
+    const { data: dataUserCode, refetch: refetchCode } = useQuery("user_code", () => UserRepository.getCodeUser(), {enabled: false});
+    const codeUser = dataUserCode?.data;
+
+    // const { data: dataFriend, refetch: refetchFriend } = useQuery("user_code", () => UserRepository.checkCodeUser(), {enabled: false});
+    // const friend = dataFriend?.data;
+
     // Get danh sách
     const {
         isLoading: isLoadingListFriends,
@@ -93,6 +210,12 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
     return {
         updateUser,
         updatePasswordUser,
+        requestAddFriend,
+        requestUnFriend,
+        checkCodeUser,
+        codeUser,
+        getCodeUser,
+        refetchCode,
         listFriends,
         isLoadingListFriends,
         refetchListFriends,
