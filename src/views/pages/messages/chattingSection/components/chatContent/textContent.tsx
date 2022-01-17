@@ -1,10 +1,10 @@
-import React, {FC, ReactNode, useEffect, useRef} from "react";
-import DoubleTickIcon from "../../../../../../assets/images/icons8-double-tick-96.svg";
+import React, {FC, useEffect, useRef} from "react";
+import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
-import {ItemListConversation} from "typings/apis/messages/listConversation";
+
 type Props = {
     message: any;
     className?: string;
@@ -23,7 +23,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
                 } else {
                     return replacement;
                 }
-            });
+            }).replaceAll("\n","<br>");
         }
     },[textContentRef])
 
@@ -50,7 +50,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
                 renderReply()
             }
             <div className={"pr-[20px] pb-[5px]"}>
-                <div className={"message-content"} ref={textContentRef}>
+                <div className={"message-content"}>
                     <div ref={textContentRef} className={"flex-1 py-[4px]"}>
                     </div>
                 </div>

@@ -1,10 +1,13 @@
-import React, {FC, useEffect, useRef} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 
 type Props = {
     onChange: (target: any) => void;
     html: string;
+    onPressEnter?: () => void
 }
-const InputForMessage:FC<Props> = ({onChange,html}) => {
+const InputForMessage:FC<Props> = ({onChange,html, onPressEnter}) => {
+    const [keyCode, setKeyCode] = useState(0);
+    const [addNewLine, setAddNewLine] = useState(false);
     const inputRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (inputRef&&inputRef.current) {
@@ -22,8 +25,8 @@ const InputForMessage:FC<Props> = ({onChange,html}) => {
             const target = document.createTextNode('');
             inputRef.current.appendChild(target);
             // do not move caret if element was not focused
-            const isTargetFocused = document.activeElement === inputRef.current;
-            if (target !== null && target.nodeValue !== null && isTargetFocused) {
+            // const isTargetFocused = document.activeElement === inputRef.current;
+            if (target !== null && target.nodeValue !== null) {
                 const sel = window.getSelection();
                 if (sel !== null) {
                     const range = document.createRange();
@@ -35,8 +38,25 @@ const InputForMessage:FC<Props> = ({onChange,html}) => {
                 inputRef.current.focus();
                 inputRef.current.click();
             }
+
+            inputRef.current.addEventListener('keydown', (event) => {
+                if (event.keyCode===13) {
+                    setKeyCode(event.keyCode)
+                    event.preventDefault();
+                }
+                else {
+                    setKeyCode(0)
+                }
+            });
         }
     },[html, inputRef])
+
+    useEffect(() => {
+        if (keyCode === 13) {
+            onPressEnter&&onPressEnter()
+        }
+    },[keyCode]);
+
     return (
         <>
         <div

@@ -41,7 +41,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 return;
             }
             if (data.infoMessage?.sender?._id === profileId) {
-                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
                 dispatch(updateNewMessageToConversation({
                     conversationId: currentChat,
                     newMessageId: data.infoMessage._id,
@@ -58,6 +57,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                     scrollToBottom();
                 }, 100)
             }
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
         }
     };
 
@@ -92,8 +92,9 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleSendMessage = () => {
+        if (removeTags(realValue).trim().length<=0) return;
         const usersTag = realValue.match(/(?<=\()[^\][]*(?=\))/g)??[];
-        sendSocketMessage(currentChat,realValue,usersTag, 0);
+        sendSocketMessage(currentChat,removeTags(realValue),usersTag, 0);
         setRealValue("");
         setShowMention({show: false, mentionValue: "", tempValue: ""});
     }
@@ -132,6 +133,14 @@ const ChattingInput:FC<Props> = ({chat}) => {
         }
     }
 
+    const removeTags = (html:string) => {
+        html = html.replace(/<br>/g, "\n");
+        const tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        html = tmp.textContent || tmp.innerText;
+        return html;
+    }
+
     return (
         <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
             <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
@@ -156,7 +165,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }
                 <div className={"flex-1 rounded-md bg-white flex items-end"}>
                     <IconButton/>
-                    <InputForMessage onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
+                    <InputForMessage onPressEnter={() => handleSendMessage()} onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
                     <IconAttach currentChat={currentChat} scrollToBottom={() => scrollToBottom()}/>
                 </div>
                 <button
