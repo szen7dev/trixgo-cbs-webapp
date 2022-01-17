@@ -101,19 +101,13 @@ type Props = {
 };
 const StatisticsByDeviceSupport: FC<Props> = (props) => {
   const { typeYear } = props;
-  console.log('typeYear11',typeYear)
   const listParam : ListDevicePayload = { year: typeYear}
-
-const { listDevice } = useFetchSupport(listParam);
+  const { listDevice } = useFetchSupport(listParam);
 for (const element of listDevice) {
-  console.log('listDevice',listDevice)
   if(Number(element._id.month) === 1) {
     dataNew.datasets[0].data[0] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
-    console.log(dataNew.datasets[0].data[0])
     dataNew.datasets[1].data[0] = element.data[1] ? Number(element.data[1].amountAccesses) : Number(0);
-    console.log(dataNew.datasets[1].data[0])
     dataNew.datasets[2].data[0] = element.data[2] ? Number(element.data[2].amountAccesses) : Number(0);
-    console.log(dataNew.datasets[2].data[0])
   }
   if(Number(element._id.month) === 2) {
     dataNew.datasets[0].data[1] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
