@@ -1,5 +1,4 @@
 import { FC, useContext, useEffect, useState } from 'react'
-import { useHistory } from 'react-router';
 
 // Context
 import { Context } from 'views/pages/document/contexts/contextModal';
@@ -13,8 +12,10 @@ import SearchInput from 'views/pages/document/components/SearchInput';
 import GroupActions from 'views/pages/document/components/projects/GroupActions';
 import ButtonCreate from 'views/pages/document/components/common/ButtonCreate';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
+import ModalReport from './ModalReport';
 
 const PageTwo: FC = () => {
+	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 	const { toggleModal } = useContext(Context);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
@@ -34,6 +35,12 @@ const PageTwo: FC = () => {
 		})));
 	}, []);
 
+	const toggleVisible = () => { setVisibleDrawer(!visibleDrawer) };
+	const handleClickRow = (id: number) => {
+		handleChangeCheckbox(undefined, { id });
+		setVisibleDrawer(true);
+	}
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -49,40 +56,40 @@ const PageTwo: FC = () => {
 				<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-							<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
+							<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border w-1">
+								<input className="cbs-checkbox" type="checkbox" value="all" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
 									Nội dung
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
 									Số dư đầu kỳ
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
 									Phát sinh trong kỳ
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
 									Số dư cuối kỳ
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border" style={{ minWidth: "150px" }}>
 								<span className="pl-2 border-l border-cbs-border">
 									Khởi tạo
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border" style={{ minWidth: "150px" }}>
 								<span className="pl-2 border-l border-cbs-border">
 									Cập nhật lần cuối
 								</span>
 							</th>
-							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-b border-cbs-border" style={{ minWidth: "150px" }}>
 								<span className="pl-2 border-l border-cbs-border">
 									Người được truy cập
 								</span>
@@ -103,9 +110,9 @@ const PageTwo: FC = () => {
 								updated_at,
 							}) => {
 								return (
-									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={e => handleChangeCheckbox(undefined, { id })}>
+									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={e => handleClickRow(id)}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
+											<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{content}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{parseInt(opening_balance).toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
@@ -129,6 +136,7 @@ const PageTwo: FC = () => {
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+			<ModalReport open={visibleDrawer} onClose={toggleVisible} />
 		</div >
 	);
 }

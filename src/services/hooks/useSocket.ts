@@ -38,7 +38,7 @@ export const useSocket = (): UseSocket => {
             socketRef.current = socket;
         }
 
-        initSocket();
+        // initSocket();
         return () => {
             socketRef.current.disconnect();
         }

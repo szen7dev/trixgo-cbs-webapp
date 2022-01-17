@@ -158,6 +158,7 @@ module.exports = {
     },
     variants: {
         extend: {
+						textAlign:['odd','even'],
 						borderColor: ['checked'],
 						backgroundColor: ['checked'],
 						outline: ['focus-visible'],

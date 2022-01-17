@@ -888,7 +888,7 @@ const Routes: FC = () => {
                                                     component={FinHomePage}
                                                 />
                                                 <ProtectedRoute
-                                                    exact
+                                                    // exact
                                                     path={"/fin/dashboard"}
                                                     component={FinDashboardPage}
                                                 />
