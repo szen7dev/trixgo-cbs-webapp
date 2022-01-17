@@ -10,7 +10,8 @@ import type {
     UpdateTimeSheetParentPayload,
     UpdateTimeSheetParentResponse,
     DeleteTimeSheetParentPayload,
-    DeleteTimeSheetParentResponse
+    DeleteTimeSheetParentResponse,
+    QueryDetailTimeSheetParentResponse
 } from 'typings/time-sheet';
 
 export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Promise<T> {
@@ -39,12 +40,15 @@ export async function updateTimeSheet<P, R>(payload: P): Promise<R> {
 }
 
 export async function deleteTimeSheet<P, R>(payload: P): Promise<R> {
-    const { data } = await API.delete(`${TIME_SHEET_URL}/expert_timesheets`, payload);
+    const { data } = await API.delete(`${TIME_SHEET_URL}/expert_timesheets`, {
+        data: payload
+    });
     return data;
 }
 
 interface TimeSheetParentRepository {
     fetchListTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryTimeSheetParentResponse>;
+    fetchDetailTimeSheet: (params: ListTimeSheetPayload) => Promise<QueryDetailTimeSheetParentResponse>;
     insertTimeSheet: (payload: InsertTimeSheetParentPayload) => Promise<InsertTimeSheetParentResponse>;
     updateTimeSheet: (payload: UpdateTimeSheetParentPayload) => Promise<UpdateTimeSheetParentResponse>;
     deleteTimeSheet: (payload: DeleteTimeSheetParentPayload) => Promise<DeleteTimeSheetParentResponse>;
@@ -52,6 +56,9 @@ interface TimeSheetParentRepository {
 
 export const timeSheetParentRepository: TimeSheetParentRepository = {
     fetchListTimeSheet: async (params) => {
+        return fetchListTimeSheet(params)
+    },
+    fetchDetailTimeSheet: async (params) => {
         return fetchListTimeSheet(params)
     },
     insertTimeSheet: async (payload) => {

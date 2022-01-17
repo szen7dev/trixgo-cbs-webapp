@@ -10,6 +10,9 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {v4 as uuidv4} from "uuid";
 import {appendMessageToConversation, updateNewMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
+import {useUpload} from "services/hooks/useUpload";
+import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
+import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 
 type Props = {
     chat: ItemListConversation;
@@ -19,6 +22,8 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat, socketRef} = useContext(MessageContext);
     const dispatch = useDispatch();
+    const { addFileToUpload } = useUpload('CHATTING');
+    const {openPopupSendFiles} = usePopupSendFiles();
 
     const [realValue, setRealValue] = useState("");
     const [showMention, setShowMention] = useState<{show: boolean; mentionValue: string; tempValue?: string}>({
@@ -41,7 +46,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 return;
             }
             if (data.infoMessage?.sender?._id === profileId) {
-                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
                 dispatch(updateNewMessageToConversation({
                     conversationId: currentChat,
                     newMessageId: data.infoMessage._id,
@@ -56,8 +60,9 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }))
                 setTimeout(() => {
                     scrollToBottom();
-                }, 500)
+                }, 100)
             }
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
         }
     };
 
@@ -92,8 +97,9 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleSendMessage = () => {
+        if (removeTags(realValue).trim().length<=0) return;
         const usersTag = realValue.match(/(?<=\()[^\][]*(?=\))/g)??[];
-        sendSocketMessage(currentChat,realValue,usersTag, 0);
+        sendSocketMessage(currentChat,removeTags(realValue),usersTag, 0);
         setRealValue("");
         setShowMention({show: false, mentionValue: "", tempValue: ""});
     }
@@ -120,7 +126,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         }));
         setTimeout(() => {
             scrollToBottom();
-        }, 500)
+        }, 100)
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
     }
@@ -130,6 +136,99 @@ const ChattingInput:FC<Props> = ({chat}) => {
         if (conversationMessagesList) {
             conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
         }
+    }
+
+    const removeTags = (html:string) => {
+        html = html.replace(/<br>/g, "\n");
+        const tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        html = tmp.textContent || tmp.innerText;
+        return html;
+    }
+
+    const handlePasteFile = (file: File) => {
+        openPopupSendFiles({
+            files: [
+                {
+                    file: {
+                        file: {
+                            url: window.URL.createObjectURL(file),
+                            name: file.name,
+                            size: file.size,
+                            _id: uuidv4(),
+                            type: file.type
+                        }
+                    },
+                    // progress: file.progress,
+                    _id: uuidv4(),
+                    realFile: file,
+                }
+            ],
+            sendType: "image",
+            defaultSendType: "image",
+            conversationID: currentChat,
+            handleSendFile: (message, useCompress) => handleUploadFilePaste(message, useCompress)
+        })
+    }
+
+    const handleUploadFilePaste = async (message: any, useCompress = true) => {
+        console.log(message)
+        dispatch(appendMessageToConversation({
+            conversationId: currentChat,
+            messageId: message.tmpid,
+            messageData: {
+                ...message,
+                _id: message.tmpid
+            }
+        }));
+        setTimeout(() => {
+            scrollToBottom();
+        }, 100)
+
+        let sendMessage : any = {...message};
+        const sendFiles = [];
+        for (const file of sendMessage.files) {
+            const {_id} = await addFileToUpload({
+                files: file.realFile,
+                progress: percentCompleted => {
+                    console.log(`${percentCompleted}% ${file.file.file.name}`);
+                    // const messageData = {
+                    //     ...message,
+                    //     _id: message.tmpid,
+                    //     files: [...message.files].map(oldFile => {
+                    //         if (oldFile._id === file._id) {
+                    //             return {
+                    //                 ...oldFile,
+                    //                 progress: percentCompleted
+                    //             }
+                    //         }
+                    //         return {
+                    //             ...oldFile
+                    //         }
+                    //     })
+                    // };
+                    // dispatch(updateFileProgressOnMessage({
+                    //     conversationId: currentChat,
+                    //     messageId: message.tmpid,
+                    //     messageData: messageData,
+                    // }));
+                },
+                compressConfig: {
+                    useCompress: useCompress,
+                    quality: 0.8
+                }
+            })
+            console.log("fileId",_id)
+            sendFiles.push(_id)
+        }
+
+        sendMessage = {
+            ...sendMessage,
+            // _id: sendMessage.tmpid,
+            files: sendFiles
+        }
+        socket.emit('CHATTING_CSS_SEND_MESSAGE', sendMessage);
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
     }
 
     return (
@@ -156,7 +255,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }
                 <div className={"flex-1 rounded-md bg-white flex items-end"}>
                     <IconButton/>
-                    <InputForMessage onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
+                    <InputForMessage onPasteImage={(file) => handlePasteFile(file)} onPressEnter={() => handleSendMessage()} onChange={(target) => handleInput(target.innerHTML)} html={realValue}/>
                     <IconAttach currentChat={currentChat} scrollToBottom={() => scrollToBottom()}/>
                 </div>
                 <button

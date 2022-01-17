@@ -1,27 +1,88 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { map as _map } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
-import { RootState } from "redux/reducer";
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
-
+import Paginate from "components/common/Paginate";
 import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
 import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
 import DetailMainRow from "../components/DetailMainRow";
 import AccessingUsers from "../components/AccessingUsers";
+import DetailChildRowCreateForm from "../components/DetailChildRowCreateForm";
+
+import {
+  useQueryDetailTimeSheetParent,
+  useQueryListTimeSheetChild,
+  useMutationTimeSheetChild,
+} from "services/hooks/useTimeSheet";
 
 const TimeSheetDetailPage: FC = () => {
   const params = useParams<{ id: string }>();
   const id = params["id"];
 
-  const mapData = useSelector(
-    (state: RootState) => state.timesheetDetail.data[id] ?? []
+  const { data, error, loading, refetch } = useQueryDetailTimeSheetParent(id);
+  const {
+    data: listTimeSheetChild,
+    loading: isFetchTimeSheetChild,
+    totalPages,
+    totalRecord,
+    hasNextPage,
+    fetchNextPage,
+    fetchPrevPage,
+    refetch: onRefreshTimeSheetChild,
+  } = useQueryListTimeSheetChild(id);
+  const { onUpdateTimeSheetAsync, onCreateTimeSheetAsync } =
+    useMutationTimeSheetChild();
+
+  const handleUpdatedTimeSheet = React.useCallback(
+    async (values) => {
+      try {
+        const isUpdated = await onUpdateTimeSheetAsync({
+          expertTimesheetID: id,
+          ...values,
+          hours: `${values.hours}`,
+          amount: `${values.amount}`,
+          state: `${values.state}`,
+          unitprice: `${values.unitprice}`,
+          type: `${values.type}`,
+          status: `${values.status}`,
+        });
+        if (!isUpdated.error) {
+          onRefreshTimeSheetChild();
+        }
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    },
+    [id, onRefreshTimeSheetChild, onUpdateTimeSheetAsync]
   );
+
+  const handleCreateTimeSheet = React.useCallback(async (values) => {
+    try {
+      if (!values.name) {
+        throw new Error('Name is required');
+      }
+      const isCreated = await onCreateTimeSheetAsync({
+        name: values.name,
+        parentID: id,
+      });
+      if (!isCreated.error) {
+        onRefreshTimeSheetChild();
+        return true;
+      }
+      throw new Error('ERROR~');
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild]);
 
   const dispatch = useDispatch();
 
@@ -37,12 +98,15 @@ const TimeSheetDetailPage: FC = () => {
           <div className={"flex"}>
             <InputWidthAdjust
               className={"text-lg w-auto mr-2"}
-              value="Bảng chấm công chuyên gia Lưu Đình Thi-PGI"
+              value={data?.name}
             />
             <img alt={"star-icon"} src={StarIcon} />
           </div>
           <p className={"text-gray-400"}>
-            Chỉnh sửa lần cuối cách đây 2 giờ bởi Nguyễn Hữu Hiệp
+            Chỉnh sửa lần cuối cách đây{" "}
+            {moment(data?.updatedAt).isValid() &&
+              moment(data?.updatedAt).fromNow()}{" "}
+            bởi {data?.userCreate?.fullname}
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
@@ -175,16 +239,25 @@ const TimeSheetDetailPage: FC = () => {
               Mô tả/ghi chú
             </div>
           </div>
-          {_map(mapData, (row, index) => (
+          {data?._id && Array.isArray(listTimeSheetChild) && (
             <DetailMainRow
-              key={row._id}
-              idDetail={id}
-              rowData={row}
-              index={index}
+              timeSheetParentInfo={data}
+              listTimeSheetChild={listTimeSheetChild}
+              onUpdatedTimeSheetChild={handleUpdatedTimeSheet}
+              isFetchTimeSheetChild={isFetchTimeSheetChild}
             />
-          ))}
+          )}
+          <DetailChildRowCreateForm onInsert={handleCreateTimeSheet} />
         </div>
       </div>
+      <Paginate 
+      totalPages={totalPages}
+      totalRecord={totalRecord}
+      nextPageAction={fetchNextPage}
+      prevPageAction={fetchPrevPage}
+      isFetching={isFetchTimeSheetChild}
+      hasNextPage={hasNextPage}
+      />
     </div>
   );
 };
