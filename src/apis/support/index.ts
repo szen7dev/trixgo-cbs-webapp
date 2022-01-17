@@ -1,5 +1,5 @@
 import API from "../repository";
-
+import { convertObToUrl } from "helpers";
 import {
     ListDeviceResponse,
     ListDevicePayload,
@@ -30,8 +30,8 @@ const SupportRepository = {
     },
 
     //4. THỐNG KÊ TRUY CẬP THEO APP
-    async listAppAccess(params: ListAppAccessPayload): Promise<ListAppAccessResponse> {
-        const { data } = await API.get<ListAppAccessResponse>(`${spURL}/statistics_access_by_app`, {params: params});
+    async listAppAccess(payload?: ListAppAccessPayload): Promise<ListAppAccessResponse> {
+        const { data } = await API.get<ListAppAccessResponse>(`${spURL}/statistics_access_by_app?${convertObToUrl(payload)}`);
         return data;
     },
 

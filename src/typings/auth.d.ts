@@ -20,6 +20,9 @@ export type User = {
   status: number,
   level: number,
   image: string
+  gender: number,
+  lang: string,
+  birthDay: string
 };
 
 export type AuthState = {

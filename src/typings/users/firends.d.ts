@@ -19,6 +19,7 @@ interface QueryParam {
 export interface Friend {
     _id: string;
     fullname: string;
+    imgUrl?: string;
 }
 
 export interface ListFriendPayload extends QueryParam {

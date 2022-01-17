@@ -4,16 +4,17 @@ import SupportHomeActivity from "../components/home/activity/SupportHomeActivity
 import SupportHomeDashboard from "../components/home/dashboard/SupportHomeDashboard";
 
 type Props = {
-  toggleTab: number;
+    toggleTab: number;
+    timeType: string;
+    typeYear: string
 };
 
 const TabsList: FC<Props> = (props) => {
-  const { toggleTab } = props;
-
+  const { toggleTab, timeType, typeYear } = props;
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>
-        <SupportHomeDashboard />
+        <SupportHomeDashboard timeType={timeType} typeYear={typeYear} />
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>

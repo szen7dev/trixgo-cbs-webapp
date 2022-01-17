@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useEffect} from "react";
 
 import {
   Chart as ChartJS,
@@ -12,6 +12,12 @@ import {
 import { Bar } from "react-chartjs-2";
 import { useListAppAccess } from 'services/hooks/useSupport';
 import _ from "lodash";
+import {useParams} from "react-router-dom";
+import moment from "moment";
+import {
+  ListAppAccessPayload,
+  ListTypeDeviceAccessPayload,
+} from 'typings/support';
 
 ChartJS.register(
   CategoryScale,
@@ -134,9 +140,51 @@ const options = {
     },
   },
 };
-
-const StatisticsByApp: FC = () => {
-  const { listAppAccess } = useListAppAccess();
+type Props = {
+  timeType: string;
+};
+const StatisticsByApp: FC<Props> = (props) => {
+  const currentYear = new Date().getFullYear();
+  const { timeType } = props;
+  let listParam : ListAppAccessPayload = {}
+  if(timeType === 'all') {
+     listParam = {
+      fromDate: moment().startOf('year').format("YYYY-MM-DD"),
+      toDate: moment().endOf("year").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  } else if(timeType === 'today') {
+    listParam = {
+      fromDate: moment().format("YYYY-MM-DD"),
+      toDate: moment().format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'week') {
+    listParam = {
+      fromDate: moment().startOf('week').format("YYYY-MM-DD"),
+      toDate: moment().endOf("week").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'month') {
+    listParam = {
+      fromDate: moment().startOf('month').format("YYYY-MM-DD"),
+      toDate: moment().endOf("month").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'quarter') {
+    listParam = {
+      fromDate: moment().startOf('quarter').format("YYYY-MM-DD"),
+      toDate: moment().endOf("quarter").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'year') {
+    listParam = {
+      fromDate: moment().startOf('year').format("YYYY-MM-DD"),
+      toDate: moment().endOf("year").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }
+  const { listAppAccess } = useListAppAccess(listParam);
   const arrApp = [];
   const arrAmountAccesses = [];
   for (const element of listAppAccess) {

@@ -1,7 +1,8 @@
-import React, {FC, ReactNode, useEffect, useRef, useState} from "react";
+import React, {FC, ReactNode, useRef, useState} from "react";
 import {map as _map} from "lodash";
-import API from "../../apis/repository";
-import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
+import classNames from "classnames";
+// import API from "../../apis/repository";
+// import {GetSearchSelectResponse} from "../../typings/apis/searchSelect";
 import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 import Close from "assets/icons/Close";
 import BlueCheck from "assets/images/blue-check.svg";
@@ -46,7 +47,8 @@ type Props = {
     disabled?: boolean;
     disableClass?: string;
     searchInputClassName?: string;
-    onSearchInputChange?: (valueSearch: string) => void
+    onSearchInputChange?: (valueSearch: string) => void;
+    bordered?: boolean;
 }
 
 // type Params = {
@@ -79,7 +81,8 @@ const DropdownSearchable:FC<Props>
        disabled,
        disableClass,
        searchInputClassName,
-       onSearchInputChange
+       onSearchInputChange,
+       bordered = true
    }) => {
 
     const [value, setValue] = useState<Item>();
@@ -298,7 +301,11 @@ const DropdownSearchable:FC<Props>
                         <div className={"flex-1 flex text-left"}>{placeholder}</div>
                 ):
                 (
-                    <div className={"flex text-left relative border rounded-full py-0.5 pl-2 pr-8 mb-1 bg-white " + (!value ? "text-gray-300":'')}>
+                    <div className={classNames("flex text-left relative py-0.5 pl-2 pr-8 mb-1 bg-white ", {
+                        'text-gray-300': !value,
+                        border: bordered,
+                        'rounded-full': bordered,
+                    })}>
                         {
                             renderSelectedItem?
                                 renderSelectedItem(modifyItem(value)):

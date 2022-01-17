@@ -28,7 +28,17 @@ const TimeSheetHomePage: FC = () => {
 
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
-  const { data, refetch: refreshListTimeSheet } = useQueryListTimeSheetParent();
+  const {
+    data,
+    refetch: refreshListTimeSheet,
+    totalPages,
+    totalRecord,
+    fetchNextPage,
+    fetchPrevPage,
+    loading,
+    hasNextPage,
+  } = useQueryListTimeSheetParent();
+  console.log({data})
   const {
     onCreateTimeSheetParentAsync,
     onUpdateTimeSheetParentAsync,
@@ -39,7 +49,7 @@ const TimeSheetHomePage: FC = () => {
     async (values) => {
       try {
         const isCreated = await onCreateTimeSheetParentAsync(values);
-        if (isCreated) {
+        if (!isCreated.error) {
           refreshListTimeSheet();
           closeModal();
           return null;
@@ -57,7 +67,7 @@ const TimeSheetHomePage: FC = () => {
     async (values) => {
       try {
         const isUpdated = await onUpdateTimeSheetParentAsync(values);
-        if (isUpdated) {
+        if (!isUpdated.error) {
           refreshListTimeSheet();
           closeModal();
           return null;
@@ -116,8 +126,8 @@ const TimeSheetHomePage: FC = () => {
                 <CreateOrEditDialog
                   title="Tạo mới"
                   onSubmit={handleCreateTimeSheet}
-                  projectName={''}
-                  assigneeName={''}
+                  projectName={""}
+                  assigneeName={""}
                 />
               </div>
             )
@@ -225,7 +235,7 @@ const TimeSheetHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
                 }
               >
-                <NavLink to={"/timesheet/home/123"}>
+                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
                   {timeSheetParent.name}
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
@@ -280,7 +290,14 @@ const TimeSheetHomePage: FC = () => {
           ))}
         </div>
       </div>
-      <Paginate />
+      <Paginate
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        nextPageAction={fetchNextPage}
+        prevPageAction={fetchPrevPage}
+        isFetching={loading}
+        hasNextPage={hasNextPage}
+      />
     </div>
   );
 };
