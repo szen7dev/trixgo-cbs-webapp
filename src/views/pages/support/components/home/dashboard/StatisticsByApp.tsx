@@ -153,10 +153,34 @@ const StatisticsByApp: FC<Props> = (props) => {
       toDate: moment().endOf("year").format("YYYY-MM-DD"),
       year: currentYear
     }
-  } else {
+  } else if(timeType === 'today') {
     listParam = {
       fromDate: moment().format("YYYY-MM-DD"),
       toDate: moment().format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'week') {
+    listParam = {
+      fromDate: moment().startOf('week').format("YYYY-MM-DD"),
+      toDate: moment().endOf("week").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'month') {
+    listParam = {
+      fromDate: moment().startOf('month').format("YYYY-MM-DD"),
+      toDate: moment().endOf("month").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'quarter') {
+    listParam = {
+      fromDate: moment().startOf('quarter').format("YYYY-MM-DD"),
+      toDate: moment().endOf("quarter").format("YYYY-MM-DD"),
+      year: currentYear
+    }
+  }else if(timeType === 'year') {
+    listParam = {
+      fromDate: moment().startOf('year').format("YYYY-MM-DD"),
+      toDate: moment().endOf("year").format("YYYY-MM-DD"),
       year: currentYear
     }
   }

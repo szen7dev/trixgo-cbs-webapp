@@ -16,7 +16,7 @@ const SupportPage: FC = () => {
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
-  const [timeType, setTimeType] = useState('');
+  const [timeType, setTimeType] = useState('today');
   const handleChange = (event : any) => {
     // timeType = event.target.value;
     setTimeType(event.target.value)
@@ -99,7 +99,7 @@ const SupportPage: FC = () => {
                 type="radio"
                 name="type"
                 id=""
-                value="quater"
+                value="quarter"
                 className="w-4 h-4 mr-2.5"
                 onChange={handleChange}
               />
