@@ -56,7 +56,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 }))
                 setTimeout(() => {
                     scrollToBottom();
-                }, 500)
+                }, 100)
             }
         }
     };
@@ -120,7 +120,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         }));
         setTimeout(() => {
             scrollToBottom();
-        }, 500)
+        }, 100)
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
     }
