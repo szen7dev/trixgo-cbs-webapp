@@ -1,5 +1,7 @@
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+
+import useCheckedList from '../../hook/useCheckedList';
 
 import XIcon from 'assets/icons/X';
 import CaretDownIcon from "assets/images/icon-caret-down.png";
@@ -13,6 +15,14 @@ interface Props {
 	onClose: (open: boolean) => unknown,
 }
 const ModalInformation: FC<Props> = ({ open, onClose }) => {
+	const [data, setData] = useState<Array<number>>([])
+	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
+
+	useEffect(() => {
+		const _data = Array.from({ length: 10 }).map((_, i) => i);
+		setData(_data);
+	}, [])
+
 	return (
 		<Transition.Root show={open} as={Fragment}>
 			<Dialog as="div" className="fixed inset-y-0 right-0 overflow-hidden z-50" onClose={onClose}>
@@ -44,9 +54,7 @@ const ModalInformation: FC<Props> = ({ open, onClose }) => {
 									<div className='px-6 pt-2'>
 										<div className="flex mt-4 mb-3 pl-5 justify-between">
 											<div className="flex items-center">
-												<input type="checkbox" className='cbs-checkbox' ref={input => {
-													if (input) input.indeterminate = true;
-												}} />
+												<input type="checkbox" className='cbs-checkbox' ref={checkboxRef} onClick={handleCheckAll} />
 												<button>
 													<img
 														className="w-6 opacity-50"
@@ -104,11 +112,13 @@ const ModalInformation: FC<Props> = ({ open, onClose }) => {
 
 									<div className="px-6 pt-2 relative flex-1 overflow-y-auto">
 										{/* Content */}
-										{Array.from({ length: 10 }).map((_, index) => {
+										{data.map((_, index) => {
 											return (
 												<div key={index} className="my-4 pl-5">
 													<div className="flex">
-														<input type="checkbox" className='self-start' />
+														<div>
+															<input type="checkbox" value={_} checked={Boolean(assigned[_])} className='cbs-checkbox block self-start' onChange={handleChangeCheckbox} />
+														</div>
 														<div className="pl-2">
 															<span>
 																CHG.THT.Hồ sơ thanh toán đợt 05 gói thầu Tư vấn thiết kế 112

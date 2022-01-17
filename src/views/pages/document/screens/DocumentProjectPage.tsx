@@ -130,7 +130,7 @@ const DocumentProjectPage: FC = () => {
 												<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 											</td>
 											<td className="px-2 w-[271px] py-2.5">
-												<Link to={`/document/project/:id/document/doc`}>
+												<Link to={`/document/project/asd/document/doc`}>
 													<p>{content}</p>
 													<p className="mt-1.5 text-primary-gray">{created_by}</p>
 												</Link>

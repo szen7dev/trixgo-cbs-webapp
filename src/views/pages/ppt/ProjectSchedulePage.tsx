@@ -1,14 +1,9 @@
 import { FC, useEffect } from "react";
-import SwiperCore, { Pagination } from 'swiper';
-import {useHistory} from "react-router-dom"
-import cn from "classnames";
+import { useHistory } from "react-router-dom"
 
-import styles from "./style.module.css";
-import 'swiper/swiper-bundle.min.css';
 import image from 'assets/images/icons8-stacked-organizational-chart-highlighted-first-node-96 1.png';
 import avatar from 'assets/images/avatar.jpg';
-
-SwiperCore.use([Pagination]);
+import Gantt from "./components/schedule/Gantt";
 
 const ProjectSchedulePage: FC = () => {
 	const history = useHistory();
@@ -20,10 +15,22 @@ const ProjectSchedulePage: FC = () => {
 		history.goBack();
 	}
 
+	const data = {
+		// data: Array.from({ length: 30 }).map((_, i) => ({
+		// 	id: i + 1, text: 'Task #' + i % 4, start_date: new Date((new Date()).setDate(i)), duration: 3, progress: 0.6,
+		// })),
+		data: [
+			{ id: 1, text: 'Task #1', start_date: '15-04-2019', duration: 3, progress: 0.6 },
+			{ id: 2, text: 'Task #2', start_date: '18-04-2019', duration: 3, progress: 0.4 }
+		],
+		links: [
+			{ id: 1, source: 1, target: 2, type: '0' }
+		]
+	};
 	return (
-		<div className={styles['progress-page']}>
+		<div className="flex flex-col h-full overflow-hidden">
 			{/* Header */}
-			<div className={cn(styles["progress-header"], "flex justify-between")}>
+			<div className="flex justify-between sticky top-0 bg-gray-800 text-white py-1.5 z-10">
 				<div className="ml-4">
 					<button onClick={handleClick}>
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,8 +48,8 @@ const ProjectSchedulePage: FC = () => {
 				</div>
 			</div>
 			{/* Content */}
-			<main>
-
+			<main className="flex-1 overflow-auto">
+				<Gantt tasks={data} />
 			</main>
 		</div>
 	);

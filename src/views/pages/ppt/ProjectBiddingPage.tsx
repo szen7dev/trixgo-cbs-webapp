@@ -108,7 +108,7 @@ const ProjectBidding: FC = () => {
 								return (
 									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push('/')}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
+											<input className="cbs-checkbox" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{project}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
