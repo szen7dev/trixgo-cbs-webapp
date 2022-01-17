@@ -14,7 +14,33 @@ export type UpdatePasswordUser = {
 export type PostResponse = APIResponse & {
     data: User;
     message: string;
-  };
+};
+
+export type UserCodeResponse = APIResponse & {
+    data: CodeUser;
+};
+
+export type CheckCodeUser = {
+    code: string,
+}; 
+
+export type CodeUser = {
+    state: 1,
+    user: string,
+    code: string,
+    expiredTime: string,
+    modifyAt: string,
+    createAt: string,
+    updatedAt: string,
+};
+
+export type CheckCodeResponse = APIResponse & {
+    data: {
+        user: User,
+        code: string,
+        expiredTime: string
+    }
+};
 
 export type User = {
     _id: string;
@@ -57,3 +83,10 @@ export type ListUserResponse = APIResponse & {
       totalPages?: number;
     };
 };
+
+export type AddFriendPayLoad = {
+    sendRequestToFriendID: string,
+}; 
+export type UnFriendPayLoad = {
+    unFriendID: string,
+}; 

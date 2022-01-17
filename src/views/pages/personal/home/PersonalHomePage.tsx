@@ -33,7 +33,7 @@ const PersonalHomePage: FC = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [infoUser, setInfoUser] = useState(infoValues);
-  const { dataUserInfo } = useAuth();
+  const { dataUserInfo, user } = useAuth();
   const { updateUser, updatePasswordUser } = useUser();
 
   const handleSubmitUpdateUser = async (values: UpdateUser) => {
@@ -90,8 +90,8 @@ const PersonalHomePage: FC = () => {
           </div>
         </div>
         <div className="mb-8">
-          <p className="text-2xl">Phùng Thị Thu-PGI</p>
-          <p className="text-sm text-primary-gray">@thunpt</p>
+          <p className="text-2xl">{user? user.fullname : null}</p>
+          <p className="text-sm text-primary-gray">{user? user.email : null}</p>
         </div>
 
         <Formik
