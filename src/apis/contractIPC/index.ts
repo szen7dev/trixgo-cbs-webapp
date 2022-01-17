@@ -1,0 +1,78 @@
+import API from "../repository";
+
+const APP_CMCS = "/api/cmcs";
+const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
+
+async function fetchList<T>(params: any): Promise<T> {
+    const { data } = await API.get(
+        `${APP_CMCS}/contract_ipcs`,
+        {
+            params: {
+                select: "name date sign acceptance timeForPayment amountPaid description createAt",
+                populates: {
+                    "path": "project company",
+                    "select": "name sign"
+                },
+                ...params,
+            },
+        }
+    )
+    return data
+}
+
+async function fetchDetailContract<T>(params: any): Promise<T> {
+    const { data } = await API.get(
+        `${APP_CMCS}/contracts?contractID=${params.contactID}`
+    )
+    return data
+}
+
+async function requestCreateContract(formData: any): Promise<any> {
+    const { data } = await API.post(
+        `${APP_CMCS}/contracts`,
+        {
+            ...formData
+        }
+    )
+    return data;
+}
+
+async function requestHistoryTraffics(parame: any): Promise<any> {
+    const { data } = await API.post(
+        `${HISTORY_TRAFFICS}`,
+        {
+            ...parame
+        }
+    )
+    return data;
+}
+
+async function requestUpdateContract(formData: any): Promise<any> {
+    const { data } = await API.put(
+        `${APP_CMCS}/contracts`,
+        {
+            ...formData
+        }
+    )
+    return data;
+}
+
+async function requestDeleteContract(contractID: string): Promise<any> {
+    const { data } = await API.delete(
+        `${APP_CMCS}/contracts?contractID=${contractID}`)
+    return data;
+}
+
+const ContractIPCRepository = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fetchList: async (params: any): Promise<any> => fetchList<any>(params),
+    fetchDetailContract: async (params: {
+        contactID: string;
+    }): Promise<any> => fetchDetailContract(params),
+    requestCreateContract,
+    requestUpdateContract,
+    requestDeleteContract,
+    requestHistoryTraffics
+};
+
+export default ContractIPCRepository

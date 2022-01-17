@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useCallback, useState } from "react";
 
 import { Form, Formik } from "formik";
 
@@ -9,7 +9,15 @@ import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import DropdownSearchable from "components/common/DropdownSearch";
 
-const ContractIpcModal: FC = () => {
+interface NewContractIPCModalProps {
+  defaultValues?: any;
+  onFinish: (values: any, isEdit: boolean) => Promise<boolean>;
+  title?: string;
+  idEdit?: string;
+  isEdit?: boolean;
+}
+
+const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false }) => {
   const [openGeneralInfo, setOpenGeneralInfo] = useState(false);
   const [openRealizedOutput, setOpenRealizedOutput] = useState(false);
   const [openPaymentSatus, setOpenPaymentStatus] = useState(false);
@@ -32,6 +40,27 @@ const ContractIpcModal: FC = () => {
     requestAdvancePayment: "",
   };
 
+  const handleSubmit = useCallback(
+    async (values: any) => {
+      // let formatData = {
+      //   ...values,
+      // }
+
+      // if (isEdit) {
+      //   formatData = {
+      //     ...values,
+      //     contractID: detailContract._id
+      //   }
+      // }
+
+      // const isSuccess = await onFinish(mappingData(formatData), isEdit);
+      // if (isSuccess) {
+      //   closeModal();
+      // }
+    },
+    [onFinish, closeModal]
+  );
+
   return (
     <main className="relative h-full">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
@@ -44,7 +73,7 @@ const ContractIpcModal: FC = () => {
         />
       </header>
 
-      <Formik initialValues={initialValues} onSubmit={() => closeModal()}>
+      <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit}>
         {(formik) => {
           const { handleBlur } = formik;
 
