@@ -17,10 +17,16 @@ const SupportPage: FC = () => {
     setToggleTab(index);
   };
   const [timeType, setTimeType] = useState('today');
+  const [typeYear, setTypeYear] = useState('2022');
   const handleChange = (event : any) => {
     // timeType = event.target.value;
     setTimeType(event.target.value)
   }
+  const handleChangeYear = (event : any) => {
+    // timeType = event.target.value;
+    setTypeYear(event.target.value)
+  }
+  // console.log('typeYear',typeYear);
   return (
     <main className="w-full h-max bg-cbs-gray">
       <div className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-12 px-6 border-b border-gray-300">
@@ -109,10 +115,10 @@ const SupportPage: FC = () => {
           <button className="flex items-center justify-around w-[120px] h-[30px] border rounded">
             <img src={PolygonIcon} alt="Polygon" />
             <span className="text-xs text-primary-gray">Chọn thời gian</span>
-            <select name="" id="">
-              <option value="1">2020</option>
-              <option value="2">2021</option>
-              <option value="3">2022</option>
+            <select name="" id="" onChange={handleChangeYear}>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
             </select>
           </button>
           <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
@@ -121,7 +127,7 @@ const SupportPage: FC = () => {
         </div>
       </div>
 
-      <Tabs toggleTab={toggleTab} timeType={timeType}/>
+      <Tabs toggleTab={toggleTab} timeType={timeType} typeYear={typeYear}/>
     </main>
   );
 };

@@ -95,7 +95,12 @@ const dataNew = {
     },
   ],
 }
-const StatisticsByDeviceSupport: FC = () => {
+type Props = {
+  typeYear: string
+};
+const StatisticsByDeviceSupport: FC<Props> = (props) => {
+  const { typeYear } = props;
+  console.log('typeYear',typeYear)
 const { listDevice } = useFetchSupport();
 console.log('listDevice',listDevice)
 for (const element of listDevice) {

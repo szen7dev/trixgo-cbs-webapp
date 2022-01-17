@@ -8,13 +8,14 @@ import AccessList from "./AccessListSupport";
 import ByBusinessSupport from "./ByBusinessSupport";
 type Props = {
     timeType: string;
+    typeYear: string
 };
 const SupportHomeDashboard: FC<Props> = (props) => {
-    const { timeType } = props;
+    const { timeType, typeYear } = props;
   return (
     <section className="flex h-max">
       <div className="w-2/3 p-3">
-        <StatisticsByDeviceSupport />
+        <StatisticsByDeviceSupport typeYear={typeYear} />
 
         <StatisticsByApp timeType={timeType}/>
 
