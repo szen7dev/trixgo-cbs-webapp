@@ -60,7 +60,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                         }
                     },
                     progress: file.progress,
-                    _id: uuidv4(),
+                    // _id: uuidv4(),
                     realFile: file.file,
                 }
             }),
@@ -82,7 +82,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
         }));
         setTimeout(() => {
             scrollToBottom();
-        }, 500)
+        }, 100)
 
         let sendMessage : any = {...message};
         const sendFiles = [];
@@ -123,7 +123,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
 
         sendMessage = {
             ...sendMessage,
-            _id: sendMessage.tmpid,
+            // _id: sendMessage.tmpid,
             files: sendFiles
         }
         console.log(sendMessage)
