@@ -1,4 +1,4 @@
-import React, {createContext, FC, useMemo, useRef, useState} from "react";
+import React, {createContext, FC, useMemo, useEffect, useState} from "react";
 import MessageList from "../list";
 import { useLocation } from 'react-router-dom';
 import ChattingSection from "../chattingSection";
@@ -29,6 +29,10 @@ const MessagesHome:FC = () => {
         () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef}),
         [currentChat, showMenu, socketRef]
     );
+
+    useEffect(() => {
+        currentChat&&setShowMenu(true)
+    }, [currentChat])
 
     return (
         <MessageContext.Provider value={value}>

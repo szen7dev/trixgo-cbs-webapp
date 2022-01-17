@@ -1,5 +1,4 @@
 import React, {FC, useContext, useEffect, useRef, useState} from "react";
-import SearchInput from "components/common/SearchInput";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
@@ -9,6 +8,7 @@ import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MessageContext} from "../home/index_v2";
 import {setListConversation} from "redux/reducer/messages/ListConversation";
+import SearchUserAndConversation from "./components/SearchUserAndConversation";
 
 const MessageList:FC = () => {
     const listTab = [
@@ -68,7 +68,7 @@ const MessageList:FC = () => {
                 <div className={"bg-white z-5"}>
                     <div className={"p-2 flex"}>
                         <HamLeftMenu/>
-                        <SearchInput classNameWrapper={"flex-1"} classNameInput={"rounded-full"} onChange={value => console.log(value)}/>
+                        <SearchUserAndConversation/>
                     </div>
                     <div className={"flex overflow-auto max-w-full border-b border-gray-100 no-webkit-scrollbar"}>
                         {_map(listTab, tab => (

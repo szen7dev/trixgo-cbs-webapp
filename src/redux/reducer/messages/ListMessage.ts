@@ -93,8 +93,8 @@ const listMessageSlice = createSlice({
         },
         updateNewMessageToConversation(state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
-            delete newMessage[action.payload.oldMessageId];
             newMessage[action.payload.newMessageId] = action.payload.messageData;
+            delete newMessage[action.payload.oldMessageId];
 
             state.data = {
                 ...state.data,
@@ -103,10 +103,22 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId]: newMessage
                 }
             }
+        },
+        updateFileProgressOnMessage(state, action) {
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listMessage[action.payload.conversationId],
+                        [action.payload.messageId]: action.payload.messageData
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, updateNewMessageToConversation } = listMessageSlice.actions;
+export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
