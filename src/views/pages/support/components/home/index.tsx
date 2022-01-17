@@ -10,18 +10,17 @@ const SupportPage: FC = () => {
   const { listAppDeviceAccess } = useListAppDeviceAccess();
   const [toggleTab, setToggleTab] = useState(1);
   // const timeType = ['all', 'today', 'week', 'month', 'quater'];
-  let timeType = '';
   const [type, setType] = useState();
+  // let timeType = '';
 
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };
+  const [timeType, setTimeType] = useState('');
   const handleChange = (event : any) => {
-    // updating an object instead of a Map
-    console.log('event', event.target.value)
-    timeType = event.target.value;
+    // timeType = event.target.value;
+    setTimeType(event.target.value)
   }
-
   return (
     <main className="w-full h-max bg-cbs-gray">
       <div className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-12 px-6 border-b border-gray-300">

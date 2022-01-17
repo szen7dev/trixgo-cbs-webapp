@@ -34,9 +34,9 @@ export type arTypeDevice = {
 
 //3. THỐNG KÊ THEO LOẠI THIẾT BỊ(TỪ NGÀY ĐẾN NGÀY)
 export type ListTypeDeviceAccessPayload = {
-    fromDate: string;
-    toDate: string;
-    year: number;
+    fromDate?: string;
+    toDate?: string;
+    year?: number;
 };
 
 export type ListTypeDeviceAccessResponse = APIResponse & {
@@ -54,9 +54,9 @@ type ListTypeDevice = {
 
 //4. THỐNG KÊ TRUY CẬP THEO APP
 export type ListAppAccessPayload = {
-    fromDate: string;
-    toDate: string;
-    year: number;
+    fromDate?: string;
+    toDate?: string;
+    year?: number;
 };
 export type ListAppAccessResponse = APIResponse & {
     data?: {

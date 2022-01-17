@@ -11,7 +11,6 @@ type Props = {
 const TabsList: FC<Props> = (props) => {
   const { toggleTab } = props;
   const { timeType } = props;
-
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>

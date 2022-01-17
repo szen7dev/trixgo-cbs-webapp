@@ -70,18 +70,20 @@ export const useTypeDeviceAccess = (payload?: ListTypeDeviceAccessPayload) : Use
 interface UselistAppAccess {
     listAppAccess: Array<AppAccess>
 }
-export const useListAppAccess = (payload?: ListAppAccessPayload) : UselistAppAccess => {
-    console.log('payload',payload)
+export const useListAppAccess = (params?: ListAppAccessPayload) : UselistAppAccess => {
+    console.log('params',params)
     const infinityQuery = useInfiniteQuery(
-        ["list_app_access", payload],
-        async ({ pageParam }: any) => {
-            console.log('pageParam',pageParam)
-            return SupportRepository.listAppAccess({
-                fromDate: "2022-1-15",
-                toDate: "2022-1-15",
-                year: 2022,
-            })
-        },
+        ["list_app_access", params],
+        async ({ pageParam }: any) =>
+            // return SupportRepository.listAppAccess({
+            //     fromDate: "2022-1-15",
+            //     toDate: "2022-1-15",
+            //     year: 2022,
+            // })
+            SupportRepository.listAppAccess(
+                params
+            )
+        ,
         {
             getNextPageParam: ({ data }: any) => {
                 return data?.nextCursor || undefined;
