@@ -4,8 +4,8 @@ import {useAuth} from "../services/hooks/useAuth";
 const OneSignalController = () => {
     const { hasAuthenticated , updateDevice , user } = useAuth();
     useEffect(() => {
-        if (hasAuthenticated && user) {
-            updateDevice(user._id);
+        if (hasAuthenticated) {
+            updateDevice();
         }
     },[hasAuthenticated])
     return null
