@@ -1,5 +1,5 @@
 import React, { FC, useRef } from "react";
-import DatePicker from "react-datepicker";
+import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import moment from "moment";
 
@@ -111,12 +111,12 @@ const DetailChildRow: FC<Props> = ({
           "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
       >
-        <DatePicker
-          className="w-16"
+        <DayPickerInput
+          // className="w-16"
+          // selected={null}
           value={rowData.date}
-          selected={null}
-          placeholderText='Chọn thời gian'
-          onChange={(date: Date | null) => {
+          placeholder='Chọn thời gian'
+          onDayChange={(date: Date | null) => {
             if (moment(date).isValid())
             handleClickUpdateTimeSheet({
               ...rowData,
