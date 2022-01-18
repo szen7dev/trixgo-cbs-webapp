@@ -10,21 +10,63 @@ import {
     AppAccess,
     ListAppDeviceAccessPayload,
     DataListAppDevice,
-    ListCompany
+    ListCompany,
+    HistoryTraffic,
+    ListHistoryTrafficPayload
 } from 'typings/support';
 
+//1. LIST HISTORY TRAFFIC
+interface UseListHistoryTraffic {
+    listHistoryTraffic: Array<HistoryTraffic>,
+    isLoading: boolean;
+};
+export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseListHistoryTraffic => {
+    // Get danh sách
+    const infinityQuery = useInfiniteQuery(
+        ["list_history_traffic", params],
+        async ({ pageParams }: any) =>
+            SupportRepository.listHistoryTraffic({
+                lastestID: pageParams ? pageParams : "",
+                filter: JSON.stringify({
+                    type: 1,
+                    app: 1,
+                    menu: 1,
+                    companyOfAuthor: 1,
+                    createdAt: 1,
+                    userCreate: 1,
+                }),
+                populates: JSON.stringify({
+                    path: "companyOfAuthor userCreate app menu",
+                    select: "name sign fullname image",
+                }),
+                ...params
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const { data, isLoading } = infinityQuery;
+    const listHistoryTraffic = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
+    return {
+        isLoading,
+        listHistoryTraffic,
+    }
+};
+//2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM
 interface UseSupport {
     listDevice: Array<Device>,
     isLoading: boolean;
 };
-export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
+export const useFetchSupport = (params?: ListDevicePayload) : UseSupport => {
     const infinityQuery = useInfiniteQuery(
-      ["list_device", payload],
-      async ({ data }: any) => {
-        return SupportRepository.listDeviceAccess({
-            year: 2022
-        })      
-      },
+      ["list_device", params],
+      async ({ data }: any) =>
+        SupportRepository.listDeviceAccess(params)
+      ,
       {
         getNextPageParam: ({ data }: any) => {
             return data?.nextCursor || undefined;
@@ -40,6 +82,8 @@ export const useFetchSupport = (payload?: ListDevicePayload) : UseSupport => {
         listDevice,
     }
 };
+
+//3. THỐNG KÊ THEO LOẠI THIẾT BỊ(TỪ NGÀY ĐẾN NGÀY)
 interface UseTypeDeviceAccess {
     listTypeDevice: Array<ListTypeDevice>
 }
@@ -67,6 +111,8 @@ export const useTypeDeviceAccess = (payload?: ListTypeDeviceAccessPayload) : Use
         listTypeDevice,
     }
 };
+
+//4. THỐNG KÊ TRUY CẬP THEO APP
 interface UselistAppAccess {
     listAppAccess: Array<AppAccess>
 }
@@ -98,6 +144,8 @@ export const useListAppAccess = (params?: ListAppAccessPayload) : UselistAppAcce
         listAppAccess,
     }
 };
+
+//5. THỐNG KÊ TRUY CẬP THEO APP VÀ THIẾT BỊ
 interface UselistAppDeviceAccess {
     listAppDeviceAccess: Array<DataListAppDevice>
 }
@@ -125,6 +173,7 @@ export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : U
         listAppDeviceAccess,
     }
 };
+
 //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
 interface UselistCompanyAccess {
     listCompany: Array<ListCompany>

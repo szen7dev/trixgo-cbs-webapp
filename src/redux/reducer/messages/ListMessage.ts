@@ -8,6 +8,11 @@ const initialState : {
                 [key: string] : ItemMessage
             }
         },
+        listFakeMessage: {
+            [key: string]: {
+                [key: string] : ItemMessage
+            }
+        },
         totalRecord: {
             [key: string]: number;
         },
@@ -24,6 +29,7 @@ const initialState : {
 } = {
     data: {
         listMessage: {},
+        listFakeMessage: {},
         totalRecord: {},
         nextCursor: {},
         hasMoreData: {},
@@ -91,16 +97,46 @@ const listMessageSlice = createSlice({
                 }
             }
         },
+        appendFakeMessageToConversation(state, action) {
+            state.data = {
+                ...state.data,
+                listFakeMessage: {
+                    ...state.data.listFakeMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listFakeMessage[action.payload.conversationId],
+                        [action.payload.messageId] : action.payload.messageData
+                    }
+                },
+            }
+        },
         updateNewMessageToConversation(state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
-            delete newMessage[action.payload.oldMessageId];
             newMessage[action.payload.newMessageId] = action.payload.messageData;
+
+            const fakeMessage = {...state.data.listFakeMessage[action.payload.conversationId]};
+            delete fakeMessage[action.payload.oldMessageId];
 
             state.data = {
                 ...state.data,
                 listMessage: {
                     ...state.data.listMessage,
                     [action.payload.conversationId]: newMessage
+                },
+                listFakeMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: fakeMessage
+                }
+            }
+        },
+        updateFileProgressOnMessage(state, action) {
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listMessage[action.payload.conversationId],
+                        [action.payload.messageId]: action.payload.messageData
+                    }
                 }
             }
         }
@@ -108,5 +144,5 @@ const listMessageSlice = createSlice({
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, updateNewMessageToConversation } = listMessageSlice.actions;
+export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, appendFakeMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

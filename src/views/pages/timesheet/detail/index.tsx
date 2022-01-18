@@ -54,6 +54,7 @@ const TimeSheetDetailPage: FC = () => {
           status: `${values.status}`,
         });
         if (!isUpdated.error) {
+          refetch();
           onRefreshTimeSheetChild();
         }
       } catch (err) {
@@ -61,7 +62,7 @@ const TimeSheetDetailPage: FC = () => {
         return null;
       }
     },
-    [id, onRefreshTimeSheetChild, onUpdateTimeSheetAsync]
+    [id, onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
   );
 
   const handleCreateTimeSheet = React.useCallback(async (values) => {
@@ -74,6 +75,7 @@ const TimeSheetDetailPage: FC = () => {
         parentID: id,
       });
       if (!isCreated.error) {
+        refetch()
         onRefreshTimeSheetChild();
         return true;
       }
@@ -82,7 +84,7 @@ const TimeSheetDetailPage: FC = () => {
       console.error(err);
       return false;
     }
-  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild]);
+  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]);
 
   const dispatch = useDispatch();
 

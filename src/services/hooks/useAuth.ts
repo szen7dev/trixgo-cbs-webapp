@@ -112,6 +112,7 @@ export const useAuth = (): UseAuth => {
               if (oneSignalWebPushID) {
                 const oneSignalId = localStorage.getItem("oneSignalId");
                 if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+                  localStorage.setItem("oneSignalId", oneSignalWebPushID);
                   await AuthenticationRepository.updateDevice({
                     platform: "1",
                     deviceID: 'BROWSER',
@@ -158,6 +159,7 @@ export const useAuth = (): UseAuth => {
     dispatch({
       type: "SIGN_OUT",
     });
+    localStorage.removeItem("oneSignalId");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     window.location.reload();

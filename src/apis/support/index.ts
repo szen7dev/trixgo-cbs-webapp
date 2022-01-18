@@ -10,16 +10,23 @@ import {
     ListAppDeviceAccessPayload,
     ListAppDeviceAccessResponse,
     ListCompanyAccessPayload,
-    ListCompanyAccessResponse
+    ListCompanyAccessResponse,
+    ListHistoryTrafficPayload,
+    ListHistoryTrafficResponse
 } from "typings/support";
 
 const spURL = "/api/analysis/history_traffics";
 
 const SupportRepository = {
+    //1. LIST HISTORY TRAFFIC
+    async listHistoryTraffic(payload?: ListHistoryTrafficPayload): Promise<ListHistoryTrafficResponse> {
+        const { data } = await API.get<ListHistoryTrafficResponse>(`${spURL}?${convertObToUrl(payload)}`);
+        return data;
+    },
 
     //2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM
-    async listDeviceAccess(params: ListDevicePayload): Promise<ListDeviceResponse> {
-        const { data } = await API.get<ListDeviceResponse>(`${spURL}/statistics_device_access_by_year`, {params: params});
+    async listDeviceAccess(payload?: ListDevicePayload): Promise<ListDeviceResponse> {
+        const { data } = await API.get<ListDeviceResponse>(`${spURL}/statistics_device_access_by_year?${convertObToUrl(payload)}`);
         return data;
     },
 

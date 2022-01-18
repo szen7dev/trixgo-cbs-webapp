@@ -17,7 +17,7 @@ const HamLeftMenu:FC = () => {
             </button>
             {
                 showOption&&
-                <div className={"absolute top-50px left-0 rounded-md shadow-lg bg-white min-w-[272px] text-gray-500"}>
+                <div className={"absolute top-50px left-0 rounded-md shadow-lg bg-white min-w-[272px] text-gray-500 z-10"}>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img src={BookmarkIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Saved Messages</div>
                     </button>
