@@ -44,6 +44,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 getListConversation({});
                 return;
             }
+            console.log(data)
             if (data.infoMessage?.sender?._id === profileId) {
                 dispatch(updateNewMessageToConversation({
                     conversationId: currentChat,
