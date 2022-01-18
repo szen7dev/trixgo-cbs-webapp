@@ -1,4 +1,4 @@
-import { FC, FormEvent, useCallback, useState } from "react";
+import { FC, FormEvent, useCallback, useEffect, useState } from "react";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
@@ -19,6 +19,10 @@ import {
 import { MESSAGE_ERROR } from "helpers/constants"
 import { string, object } from 'yup';
 
+import {
+  useDetailContractIPCMutation,
+} from "services/hooks/useContractIPC";
+
 interface NewContractIPCModalProps {
   defaultValues?: any;
   onFinish: (values: any, isEdit: boolean) => Promise<boolean>;
@@ -30,6 +34,7 @@ interface NewContractIPCModalProps {
 
 const mappingData = (data: any) => {
   return {
+    contractIpcID: data.contractIpcID,
     type: data.type || '',
     date: convertDateToString(data.date),
     name: data.name || '',
@@ -59,18 +64,24 @@ const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, onFinis
 
   const { closeModal } = useModal();
 
+  const { detailContract } = useDetailContractIPCMutation(idEdit);
+
+  useEffect(() => {
+    setInitialValues(mappingData(detailContract))
+  }, [idEdit, detailContract]);
+
   const handleSubmit = useCallback(
     async (values: any) => {
-      const formatData = {
+      let formatData = {
         ...values,
       }
 
-      // if (isEdit) {
-      //   formatData = {
-      //     ...values,
-      //     contractID: detailContract._id
-      //   }
-      // }
+      if (isEdit) {
+        formatData = {
+          ...values,
+          contractIpcID: detailContract._id
+        }
+      }
 
       console.log('🚀 ~ formatData', mappingData(formatData))
 
@@ -147,6 +158,7 @@ const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, onFinis
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         renderSelectedItem={(item) => <span>{item.text}</span>}
+                        initialValue={initialValues?.type}
                         data={CONTRACT_IPC_TYPES}
                         formatItem={{
                           id: "value",

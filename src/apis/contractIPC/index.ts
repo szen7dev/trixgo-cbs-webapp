@@ -22,7 +22,7 @@ async function fetchList<T>(params: any): Promise<T> {
 
 async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contract_ipcs?contractID=${params.contactID}`
+        `${APP_CMCS}/contract_ipcs?contractIpcID=${params.contractIpcID}`
     )
     return data
 }
@@ -67,7 +67,7 @@ const ContractIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
     fetchDetailContract: async (params: {
-        contactID: string;
+        contractIpcID: string;
     }): Promise<any> => fetchDetailContract(params),
     requestCreateContract,
     requestUpdateContract,

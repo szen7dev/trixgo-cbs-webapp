@@ -87,7 +87,7 @@ const ContractIpc: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit contractID={params.id} title="Cập nhật" />
+        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
       </div>
     )
   }
@@ -95,7 +95,7 @@ const ContractIpc: FC = () => {
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
     if (isEdit) {
-      // res = await updateContractMutateAsync(values);
+      res = await updateContractIPCMutateAsync(values);
     } else {
       res = await createContractIPCMutateAsync(values);
     }
