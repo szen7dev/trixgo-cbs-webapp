@@ -134,8 +134,10 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
     }
 
     useEffect(() => {
-        const isDone = doneUpload.every(file => file.progress === 100);
+        const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
+        console.log("upload",isDone)
         if (isDone&&willSendFileMessage) {
+            console.log(willSendFileMessage)
             socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
             setDoneUpload([]);
