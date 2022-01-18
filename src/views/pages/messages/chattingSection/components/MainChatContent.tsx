@@ -26,11 +26,13 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const [reachedTop, setReachTop] = useState(false);
     const [firstInit, setFirstInit] = useState(false);
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
+    const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[chat._id]);
     const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
     const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
     const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
 
     const memoizedValue = useMemo(() => parseMessageData(messagesData), [messagesData]);
+    const memoizedFakeValue = useMemo(() => parseMessageData(fakeMessagesData), [fakeMessagesData]);
 
     useEffect(() => {
         getListMessage({conversationID: currentChat}).then((data) => {
@@ -102,6 +104,11 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     {
                         messagesData?
                             _map(memoizedValue, message => renderMessage(message)):
+                            null
+                    }
+                    {
+                        messagesData?
+                            _map(memoizedFakeValue, message => renderMessage(message)):
                             null
                     }
                 </div>

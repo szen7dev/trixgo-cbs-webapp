@@ -15,7 +15,10 @@ for (let i=1; i <= 1000; i++) {
     autoGenerateIndex[`${i}`] = `${i}`;
 }
 module.exports = {
-    purge: [],
+		// mode: 'jit',
+    purge: [
+			// './src/**/*.{ts,tsx}'
+		],
     darkMode: "class", // or 'media' or false
     theme: {
         fontFamily: {
@@ -70,6 +73,7 @@ module.exports = {
                 "cbs-light-blue": "#E7F3FF",
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
+								"cbs-indeterminate": "#F7AF22"
             },
             fontSize: {
                 "[13px]": "13px",
@@ -154,6 +158,10 @@ module.exports = {
     },
     variants: {
         extend: {
+						textAlign:['odd','even'],
+						borderColor: ['checked'],
+						backgroundColor: ['checked'],
+						outline: ['focus-visible'],
             opacity: ['disabled','group-hover'],
             textColor: ['group-focus'],
 						height: ['last'],
@@ -186,11 +194,6 @@ module.exports = {
 				)
 				addUtilities([
 					{ '.border-spacing-0': { 'border-spacing': '0' } },
-					{
-						'.cbs-checkbox:indeterminate': {
-							filter: 'hue-rotate(170deg) brightness(1.8)'
-						}
-					}
 				])
 			},
 			{

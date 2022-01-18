@@ -483,43 +483,6 @@ table.table tbody td {
   background-color: currentColor;
 }
 
-/*______________________________Invest______________________________*/
-.invest tr td:nth-child(1) {
-  padding: 16px 18px 12px 15px;
-  width: 1%;
-  min-width: 308px;
-}
-
-.invest tr td:nth-child(2) {
-  padding: 16px 13px 12px 14px;
-  width: 174px;
-}
-
-.invest tr td:nth-child(3) {
-  padding: 16px 19px 12px 22px;
-  width: 170px;
-}
-
-.invest tr td:nth-child(4) {
-  padding: 16px 19px 12px 22px;
-  width: 170px;
-}
-
-.invest tr td:nth-child(5) {
-  padding: 16px 16px 12px 26px;
-  width: 143px;
-}
-
-.invest tr td:nth-child(6) {
-  padding: 16px 17px 12px 15px;
-  width: 100px;
-}
-
-.invest tr td:nth-child(7) {
-  padding: 16px 16px 12px 24px;
-}
-
-
 /*______________________________Report Page______________________________*/
 
 .next,

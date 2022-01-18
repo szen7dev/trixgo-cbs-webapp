@@ -44,8 +44,8 @@ const TimeSheetDetailPage: FC = () => {
     async (values) => {
       try {
         const isUpdated = await onUpdateTimeSheetAsync({
-          expertTimesheetID: id,
           ...values,
+          expertTimesheetID: values._id,
           hours: `${values.hours}`,
           amount: `${values.amount}`,
           state: `${values.state}`,
@@ -55,13 +55,14 @@ const TimeSheetDetailPage: FC = () => {
         });
         if (!isUpdated.error) {
           onRefreshTimeSheetChild();
+          refetch(); // refetch time sheet parent
         }
       } catch (err) {
         console.error(err);
         return null;
       }
     },
-    [id, onRefreshTimeSheetChild, onUpdateTimeSheetAsync]
+    [onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
   );
 
   const handleCreateTimeSheet = React.useCallback(async (values) => {
@@ -74,6 +75,7 @@ const TimeSheetDetailPage: FC = () => {
         parentID: id,
       });
       if (!isCreated.error) {
+        refetch()
         onRefreshTimeSheetChild();
         return true;
       }
@@ -82,7 +84,7 @@ const TimeSheetDetailPage: FC = () => {
       console.error(err);
       return false;
     }
-  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild]);
+  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]);
 
   const dispatch = useDispatch();
 

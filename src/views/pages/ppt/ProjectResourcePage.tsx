@@ -3,6 +3,20 @@ import { Menu, Transition } from "@headlessui/react";
 
 import iconHat from 'assets/images/icons8-safety-hat-96.png';
 import iconFilter from 'assets/images/icons8-filter-96.png';
+import classNames from "classnames";
+
+const getBlockColor = (type: number): string => {
+	switch (type % 5) {
+		case 1:
+			return "bg-cbs-green";
+		case 2:
+			return "bg-cbs-schedule-nextweek";
+		case 3:
+			return "bg-cbs-schedule-expired";
+		default:
+			return "bg-cbs-green";
+	}
+}
 
 const InfoBlock: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 	return (
@@ -112,7 +126,7 @@ const ProjectResourcePage: FC = () => {
 							<td className="sticky left-0 bg-white text-left pb-2 pl-2 text-cbs-primary"><i>Đơn vị: tỷ VND</i></td>
 							{Array.from({ length: month }).map((_, index) => (
 								<td key={index} className="px-2.5 pt-2 pb-2">
-									<div className="rounded-full w-6 h-6 bg-cbs-green shadow-cbs-md inline-block">
+									<div className={classNames("rounded-full w-6 h-6 shadow-cbs-md inline-block", getBlockColor(index))}>
 
 									</div>
 								</td>

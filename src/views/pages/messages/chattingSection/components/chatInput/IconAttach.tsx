@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef, useState} from "react";
+import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import attachIcon from "assets/images/icons8-attach-96.svg";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import ImagesIcon from "assets/images/icons8-photo-gallery-96.svg";
@@ -9,7 +9,11 @@ import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
 import {v4 as uuidv4} from "uuid";
 import {MessageContext} from "../../../home/index_v2";
 import {useUpload} from "services/hooks/useUpload";
-import {appendMessageToConversation, updateNewMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {
+    appendFakeMessageToConversation,
+    appendMessageToConversation,
+    updateFileProgressOnMessage,
+} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 
 type Props = {
@@ -19,6 +23,8 @@ type Props = {
 
 const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
     const [showOption, setShowOption] = useState(false);
+    const [doneUpload, setDoneUpload] = useState<{_id: string; progress: number;}[]>([]);
+    const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const el = useRef<HTMLDivElement>(null);
     useOnClickOutside(el, () => setShowOption(false))
     const {openPopupSendFiles} = usePopupSendFiles();
@@ -55,12 +61,12 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                             url: window.URL.createObjectURL(file.file),
                             name: file.file.name,
                             size: file.file.size,
-                            // _id: uuidv4(),
+                            _id: uuidv4(),
                             type: file.file.type
                         }
                     },
                     progress: file.progress,
-                    // _id: uuidv4(),
+                    _id: uuidv4(),
                     realFile: file.file,
                 }
             }),
@@ -72,7 +78,14 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
-        dispatch(appendMessageToConversation({
+        setDoneUpload(message.files.map((file:any) => {
+            return {
+                _id: file._id,
+                progress: file.progress
+            }
+        }))
+        // dispatch(appendMessageToConversation({
+        dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
             messageData: {
@@ -91,26 +104,17 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                 files: file.realFile,
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
-                    dispatch(updateNewMessageToConversation({
-                        conversationId: currentChat,
-                        newMessageId: message.tmpid,
-                        oldMessageId: message.tmpid,
-                        messageData: {
-                            ...message,
-                            _id: message.tmpid,
-                            files: [...message.files].map(oldFile => {
-                                if (oldFile._id === file._id) {
-                                    return {
-                                        ...oldFile,
-                                        progress: percentCompleted
-                                    }
-                                }
-                                return {
-                                    ...oldFile
-                                }
-                            })
+                    setDoneUpload((oldValue: any) => oldValue.map((oldFile: any) => {
+                        if (oldFile._id === file._id) {
+                            return {
+                                ...oldFile,
+                                progress: percentCompleted
+                            }
                         }
-                    }));
+                        return {
+                            ...oldFile
+                        }
+                    }))
                 },
                 compressConfig: {
                     useCompress: useCompress,
@@ -126,10 +130,20 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
             // _id: sendMessage.tmpid,
             files: sendFiles
         }
-        console.log(sendMessage)
-        socket.emit('CHATTING_CSS_SEND_MESSAGE', sendMessage);
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+        setWillSendFileMessage(sendMessage);
     }
+
+    useEffect(() => {
+        const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
+        console.log("upload",isDone)
+        if (isDone&&willSendFileMessage) {
+            console.log(willSendFileMessage)
+            socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+            setDoneUpload([]);
+            setWillSendFileMessage(null);
+        }
+    }, [willSendFileMessage, doneUpload])
 
     return (
         <div ref={el} className={"relative"}>

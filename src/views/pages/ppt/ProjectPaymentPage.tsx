@@ -10,6 +10,7 @@ import GroupActions from "views/pages/document/components/projects/GroupActions"
 import ModalInformation from "./components/modal/ModalInformation";
 
 import CaretDownIcon from "assets/images/icon-caret-down.png";
+import ButtonMore from "../document/components/common/ButtonMore";
 
 const ProjectPaymentPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
@@ -39,8 +40,24 @@ const ProjectPaymentPage: FC = () => {
 				<DropdownFilterButton />
 				<GroupActions className="flex items-center flex-1" />
 
-				<div>
-
+				<div className="text-x-large flex items-center gap-x-4">
+					<span>
+						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-expired"></i>
+						125
+					</span>
+					<span>
+						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-nextweek"></i>
+						226
+					</span>
+					<span>
+						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-after-7days"></i>
+						182
+					</span>
+					<span>
+						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-primary"></i>
+						277
+					</span>
+					<ButtonMore />
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -106,7 +123,7 @@ const ProjectPaymentPage: FC = () => {
 								return (
 									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
+											<input className="cbs-checkbox" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">Cục rà phá bom mìn-Vabomin</td>

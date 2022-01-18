@@ -32,7 +32,7 @@ const RowGroup: FC<HTMLAttributes<HTMLTableSectionElement> & RowProps> = ({ inde
 				Array.from({ length: 10 }).map((_, _index) => (
 					<tr key={_index} className={cn({ hidden: !expanded })}>
 						<td className='border-b-0.5 border-cbs-border px-4 align-middle'>
-							<input type="checkbox" value={_index} checked={checkedList?.[String(index).concat(String(_index))]} onChange={e => onClickCheckbox?.(e, { _id: String(index).concat(String(_index)) })} />
+							<input type="checkbox" className='cbs-checkbox' value={_index} checked={checkedList?.[String(index).concat(String(_index))]} onChange={e => onClickCheckbox?.(e, { _id: String(index).concat(String(_index)) })} />
 						</td>
 						<td className='border-b-0.5 border-cbs-border py-4 px-1'>
 							<div className='flex gap-x-2'>
