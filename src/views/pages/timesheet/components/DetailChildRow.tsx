@@ -9,7 +9,10 @@ import MenuChildRow from "../../financial/planning/components/FinancialCashFlowD
 
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 
-import type { TimeSheetChild, UpdateTimeSheetChildPayload } from "typings/time-sheet";
+import type {
+  TimeSheetChild,
+  UpdateTimeSheetChildPayload,
+} from "typings/time-sheet";
 
 type Props = {
   rowData: TimeSheetChild;
@@ -24,30 +27,27 @@ const DetailChildRow: FC<Props> = ({
   collapsed,
   isLastRow,
   index,
-  onUpdatedTimeSheetChild
+  onUpdatedTimeSheetChild,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState("");
-  const [isInitialValue, setInitialValue] = React.useState(false);
+  const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
+    rowData.assignee?.fullname || ""
+  );
 
   const { data: listFriend } = useQueryListFriend({
     keyword: searchAssigneeStr,
   });
 
-  const handleClickUpdateTimeSheet = React.useCallback((value) => {
-    onUpdatedTimeSheetChild({
-      ...rowData,
-      ...value
-    })
-  }, [onUpdatedTimeSheetChild, rowData]);
-
-  React.useEffect(() => {
-    if (!isInitialValue) {
-      setInitialValue(true);
-      setSearchAssigneeStr(rowData.assignee?.fullname || "");
-    }
-  }, [isInitialValue, rowData]);
+  const handleClickUpdateTimeSheet = React.useCallback(
+    (value) => {
+      onUpdatedTimeSheetChild({
+        ...rowData,
+        ...value,
+      });
+    },
+    [onUpdatedTimeSheetChild, rowData]
+  );
 
   return (
     <div
@@ -99,8 +99,8 @@ const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
               ...rowData,
-              name: value
-            })
+              name: value,
+            });
           }}
         >
           {rowData.name}
@@ -115,13 +115,13 @@ const DetailChildRow: FC<Props> = ({
           // className="w-16"
           // selected={null}
           value={rowData.date}
-          placeholder='Chọn thời gian'
+          placeholder="Chọn thời gian"
           onDayChange={(date: Date | null) => {
             if (moment(date).isValid())
-            handleClickUpdateTimeSheet({
-              ...rowData,
-              date: moment(date).toJSON(),
-            })
+              handleClickUpdateTimeSheet({
+                ...rowData,
+                date: moment(date).toJSON(),
+              });
           }}
         />
       </div>
@@ -131,7 +131,17 @@ const DetailChildRow: FC<Props> = ({
         }
       >
         <p className={"w-full h-full focus:outline-blue-600 p-2"}>
-          <input type="checkbox" className="form-check-input cursor-pointer" />
+          <input
+            type="checkbox"
+            className="form-check-input cursor-pointer"
+            checked={rowData.status === 1 ? true : false}
+            onChange={(e) => {
+              handleClickUpdateTimeSheet({
+                ...rowData,
+                status: e.target.checked ? 1 : 0,
+              });
+            }}
+          />
         </p>
       </div>
       <div
@@ -149,8 +159,8 @@ const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
               ...rowData,
-              hours: `${value}`
-            })
+              hours: `${value}`,
+            });
           }}
         >
           {rowData.hours}
@@ -171,8 +181,8 @@ const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
               ...rowData,
-              unitprice: `${value}`
-            })
+              unitprice: `${value}`,
+            });
           }}
         >
           {rowData.unitprice}
@@ -193,8 +203,8 @@ const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
               ...rowData,
-              amount: `${value}`
-            })
+              amount: `${value}`,
+            });
           }}
         >
           {rowData.amount}
@@ -207,13 +217,26 @@ const DetailChildRow: FC<Props> = ({
       >
         <DropdownSearchable
           id="ticket-creator"
-          className={"w-full flex-1 py-1 px-3"}
+          className={"w-full pl-0 -mb-1 outline-none"}
           bordered
           isMultiple={false}
           allowClearValueSingleInput
           showTriangle
           placeholder="Người thực hiện"
-          renderSelectedItem={(item) => <span>{item.text}</span>}
+          renderSelectedItem={(item) => (
+            <p
+              style={{
+                textOverflow: "ellipsis",
+                maxWidth: "100%",
+                minWidth: 0,
+                width: '100px',
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {item.text}
+            </p>
+          )}
           data={listFriend}
           initialValue={rowData?.assignee?._id}
           formatItem={{
@@ -227,7 +250,7 @@ const DetailChildRow: FC<Props> = ({
           onchangeValue={(value) =>
             handleClickUpdateTimeSheet({
               ...rowData,
-              assigneeID: value
+              assigneeID: value.id,
             })
           }
         />
@@ -245,8 +268,8 @@ const DetailChildRow: FC<Props> = ({
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
               ...rowData,
-              note: value
-            })
+              note: value,
+            });
           }}
         >
           {rowData.note}

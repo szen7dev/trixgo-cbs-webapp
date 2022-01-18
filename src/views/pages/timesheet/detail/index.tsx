@@ -44,8 +44,8 @@ const TimeSheetDetailPage: FC = () => {
     async (values) => {
       try {
         const isUpdated = await onUpdateTimeSheetAsync({
-          expertTimesheetID: id,
           ...values,
+          expertTimesheetID: values._id,
           hours: `${values.hours}`,
           amount: `${values.amount}`,
           state: `${values.state}`,
@@ -62,7 +62,7 @@ const TimeSheetDetailPage: FC = () => {
         return null;
       }
     },
-    [id, onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
+    [onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
   );
 
   const handleCreateTimeSheet = React.useCallback(async (values) => {
