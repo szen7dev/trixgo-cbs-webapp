@@ -210,8 +210,6 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
     [onFinish, closeModal]
   );
 
-  // let initialValues = {...mappingData({})}
-
   useEffect(() => {
 
     setInitialValues(mappingData(detailContract))

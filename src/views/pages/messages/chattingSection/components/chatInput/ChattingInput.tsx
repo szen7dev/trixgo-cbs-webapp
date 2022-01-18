@@ -8,10 +8,9 @@ import {MessageContext} from "../../../home/index_v2";
 import {map as _map} from "lodash";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {v4 as uuidv4} from "uuid";
-import {appendMessageToConversation, updateNewMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {appendMessageToConversation, updateNewMessageToConversation, appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 import {useUpload} from "services/hooks/useUpload";
-import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
 import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 
 type Props = {
@@ -45,6 +44,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 getListConversation({});
                 return;
             }
+            console.log(data)
             if (data.infoMessage?.sender?._id === profileId) {
                 dispatch(updateNewMessageToConversation({
                     conversationId: currentChat,
@@ -116,7 +116,8 @@ const ChattingInput:FC<Props> = ({chat}) => {
             usersTag: usersTag,
             createAt: new Date(),
         };
-        dispatch(appendMessageToConversation({
+        // dispatch(appendMessageToConversation({
+        dispatch(appendFakeMessageToConversation({
             conversationId: conversationID,
             messageId: message.tmpid,
             messageData: {

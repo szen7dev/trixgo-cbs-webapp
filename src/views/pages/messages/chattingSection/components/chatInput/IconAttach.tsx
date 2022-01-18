@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef, useState} from "react";
+import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import attachIcon from "assets/images/icons8-attach-96.svg";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import ImagesIcon from "assets/images/icons8-photo-gallery-96.svg";
@@ -10,6 +10,7 @@ import {v4 as uuidv4} from "uuid";
 import {MessageContext} from "../../../home/index_v2";
 import {useUpload} from "services/hooks/useUpload";
 import {
+    appendFakeMessageToConversation,
     appendMessageToConversation,
     updateFileProgressOnMessage,
 } from "redux/reducer/messages/ListMessage";
@@ -22,6 +23,8 @@ type Props = {
 
 const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
     const [showOption, setShowOption] = useState(false);
+    const [doneUpload, setDoneUpload] = useState<{_id: string; progress: number;}[]>([]);
+    const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const el = useRef<HTMLDivElement>(null);
     useOnClickOutside(el, () => setShowOption(false))
     const {openPopupSendFiles} = usePopupSendFiles();
@@ -62,7 +65,7 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                             type: file.file.type
                         }
                     },
-                    // progress: file.progress,
+                    progress: file.progress,
                     _id: uuidv4(),
                     realFile: file.file,
                 }
@@ -75,8 +78,14 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
-        console.log(message)
-        dispatch(appendMessageToConversation({
+        setDoneUpload(message.files.map((file:any) => {
+            return {
+                _id: file._id,
+                progress: file.progress
+            }
+        }))
+        // dispatch(appendMessageToConversation({
+        dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
             messageData: {
@@ -95,26 +104,17 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
                 files: file.realFile,
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
-                    // const messageData = {
-                    //     ...message,
-                    //     _id: message.tmpid,
-                    //     files: [...message.files].map(oldFile => {
-                    //         if (oldFile._id === file._id) {
-                    //             return {
-                    //                 ...oldFile,
-                    //                 progress: percentCompleted
-                    //             }
-                    //         }
-                    //         return {
-                    //             ...oldFile
-                    //         }
-                    //     })
-                    // };
-                    // dispatch(updateFileProgressOnMessage({
-                    //     conversationId: currentChat,
-                    //     messageId: message.tmpid,
-                    //     messageData: messageData,
-                    // }));
+                    setDoneUpload((oldValue: any) => oldValue.map((oldFile: any) => {
+                        if (oldFile._id === file._id) {
+                            return {
+                                ...oldFile,
+                                progress: percentCompleted
+                            }
+                        }
+                        return {
+                            ...oldFile
+                        }
+                    }))
                 },
                 compressConfig: {
                     useCompress: useCompress,
@@ -130,9 +130,20 @@ const IconAttach:FC<Props> = ({currentChat,scrollToBottom}) => {
             // _id: sendMessage.tmpid,
             files: sendFiles
         }
-        socket.emit('CHATTING_CSS_SEND_MESSAGE', sendMessage);
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+        setWillSendFileMessage(sendMessage);
     }
+
+    useEffect(() => {
+        const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
+        console.log("upload",isDone)
+        if (isDone&&willSendFileMessage) {
+            console.log(willSendFileMessage)
+            socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+            setDoneUpload([]);
+            setWillSendFileMessage(null);
+        }
+    }, [willSendFileMessage, doneUpload])
 
     return (
         <div ref={el} className={"relative"}>

@@ -7,6 +7,8 @@ import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 import Paginate from "components/common/Paginate";
 import useCheckedList from "./hook/useCheckedList";
 
+import './style.css';
+
 // import 'swiper/swiper-bundle.min.css';
 
 interface IData {
@@ -130,7 +132,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									return (
 										<tr key={index} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push(match.path + path)}>
 											<td className="px-4 py-2 w-[1px]">
-												<input className="form-check-input" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
+												<input className="cbs-checkbox" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="px-2 py-2">
 												<p className="align-top">

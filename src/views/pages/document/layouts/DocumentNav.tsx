@@ -21,7 +21,7 @@ const DocumentNav: React.FC<RouteComponentProps> = ({ match }) => {
 	return (
 			<div className="flex flex-col text-sm text-black overflow-hidden h-full">
 				{/* Header */}
-				<div className="px-2 flex justify-between w-full text-primary-gray bg-white border border-gray-300">
+				<div className="px-2 flex justify-between w-full text-primary-gray bg-white border-b-0.5 border-gray-300">
 					<TabsList className="flex flex-1 text-medium" tabs={tabs} url={match.url} />
 					<div className="py-1 flex items-center">
 

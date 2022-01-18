@@ -1,8 +1,14 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 
 import cn from "classnames";
 
 import { useModal } from "services/hooks/useModal";
+
+import moment from "moment";
+import { DATE_FORMAT } from "apis/localdb/index";
+import { formatNumberMoney } from "helpers/index"
+
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
@@ -14,12 +20,99 @@ import styles from "../../../styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+import { useParams } from "react-router-dom";
+
+import {
+  UseContractIPCList,
+  useCreateContractIPCMutation,
+  useUpdateContractIPCMutation,
+  useDeleteContractIPCMutation,
+} from "services/hooks/useContractIPC";
 
 const ContractIpc: FC = () => {
+  const [itemChecked, setItemChecked] = useState('');
+
+  const [pageParam, setPageParam] = useState('');
+  const [prevCursor, setPrevCursor] = useState([null]);
+
   const { openModal } = useModal();
+  const params: any = useParams();
+
+  const contractIPC = UseContractIPCList(pageParam, params.id);
+
+  const { createContractIPCMutateAsync } = useCreateContractIPCMutation();
+  const { updateContractIPCMutateAsync } = useUpdateContractIPCMutation();
+  const { deleteContractIPCMutateAsync } = useDeleteContractIPCMutation();
+
+  useEffect(() => {
+    if (!contractIPC.nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === contractIPC.nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, contractIPC.nextCursor])
+    }
+  }, [contractIPC.nextCursor]);
+
+  const prevPageAction = () => {
+    if (!contractIPC.nextCursor) {
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
+    } else {
+      const prev = prevCursor.findIndex(item => item === contractIPC.nextCursor)
+      setPageParam(prevCursor[prev - 2] || '')
+    }
+
+  };
+
+  const nextPageAction = () => {
+    setPageParam(contractIPC.nextCursor)
+  }
+
+  const { openDeleteConfirm } = useDeleteConfirm();
+
+  const handleDeleteAction = async () => {
+    openDeleteConfirm({
+      deleteAction: async () => {
+        const res = await deleteContractIPCMutateAsync(itemChecked)
+        if (!res.error) {
+          contractIPC.refetch()
+        }
+      },
+    });
+  }
+  const handleEditAction = async () => {
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+        }
+      >
+        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
+      </div>
+    )
+  }
+
+  const handleFinishForm = useCallback(async (values, isEdit = false) => {
+    let res: any
+    if (isEdit) {
+      res = await updateContractIPCMutateAsync(values);
+    } else {
+      res = await createContractIPCMutateAsync(values);
+    }
+
+    if (res.code && res.code !== 200) {
+      return false;
+    }
+
+    if (!res.error) {
+      contractIPC.refetch()
+      return true;
+    }
+    return false;
+  }, [contractIPC]);
 
   return (
-    <main className="relative h-full">
+    <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Nghiệm thu hoàn thành</p>
@@ -31,7 +124,9 @@ const ContractIpc: FC = () => {
           />
           <FinancialCashFlowFilterButton />
           <div className="border-l-2 border-primary-border ml-5 pl-5">
-            <ActionGroupFinancial />
+            <ActionGroupFinancial
+              deleteAction={handleDeleteAction}
+              editAction={handleEditAction} />
           </div>
         </div>
         <div className="flex items-center">
@@ -41,10 +136,12 @@ const ContractIpc: FC = () => {
               openModal(
                 <div
                   className={
-                    "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+
                   }
                 >
-                  <ContractIpcModal />
+                  <ContractIpcModal onFinish={handleFinishForm} contractID={params.id} title="Tạo mới" />
                 </div>
               )
             }
@@ -113,76 +210,41 @@ const ContractIpc: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-10 bg-cbs-table-header">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">30.000.000</td>
-            <td className="py-1 px-2">270.000.000</td>
-            <td className="py-1 px-2">{""}</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                defaultChecked
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Khối lượng thực hiện tháng 6 năm 2021 gói thầu Binary
-            </td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">P15008</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">10.000.000</td>
-            <td className="py-1 px-2">90.000.000</td>
-            <td className="py-1 px-2">
-              Đệ trình phê duyệt Hồ sơ thanh toán Đợt 6 PGI-PMI Dự án CHG
-            </td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Khối lượng thực hiện tháng 6 năm 2021 gói thầu Binary
-            </td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">P15008</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">10.000.000</td>
-            <td className="py-1 px-2">90.000.000</td>
-            <td className="py-1 px-2">Đang triển khai</td>
-          </tr>
+          {contractIPC?.listContractIPC?.map((item: any) => {
+            return (
+              <tr key={item._id} className="border-b border-primary-border h-[50px]">
+                <td className="py-1 px-2 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    checked={itemChecked === item._id}
+                    onChange={() => setItemChecked(item._id)}
+                    style={{ marginLeft: "-23px" }}
+                  />
+                </td>
+                <td className="py-1 px-2">
+                  {item.name}
+                </td>
+                <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{item.sign}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0))}</td>
+                <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.timeForPayment).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.amountPaid || 0))}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) - (item.amountPaid || 0))}</td>
+                <td className="py-1 px-2">{item.description}</td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate
+        totalPages={contractIPC.totalPage}
+        totalRecord={contractIPC.totalRecord} hasNextPage
+        prevPageAction={() => prevPageAction()}
+        nextPageAction={() => nextPageAction()} />
     </main>
   );
 };

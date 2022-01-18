@@ -1,5 +1,8 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames';
+
+import RightClickMenu from 'components/common/RightClickMenu';
+import MenuChildRow from 'views/pages/financial/planning/components/FinancialCashFlowDetail/MenuChildRow';
 
 interface RowItem {
 	_id: string | number,
@@ -21,12 +24,14 @@ interface RowData {
 }
 
 const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
-	const [state, setState] = useState<boolean>(show)
+	const [state, setState] = useState<boolean>(show);
+	const wrapperRef = useRef<HTMLTableSectionElement>(null);
+	
 	useEffect(() => {
 		setState(show);
 	}, [show])
 	return (
-		<tbody className="text-black">
+		<tbody className="text-black" ref={wrapperRef}>
 			<tr className="text-right">
 				<th className='bg-gray-300 px-1.5 relative'>
 					<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: state })} />
@@ -53,18 +58,19 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 						{i === row.data.length - 1 && < div className='absolute left-1/2 bg-cbs-subtext w-1/2 top-1/2 h-[1px]' />}
 					</td>
 					<td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0">{i}</td>
-					<td contentEditable className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">Dự án trường Newton tại Ciputra</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.budget).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.predict).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.signed).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.advance).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.volume).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.finish).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.pay).toLocaleString()}</td>
-					<td contentEditable className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.rest).toLocaleString()}</td>
-					<td contentEditable className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'>{_d.note}</td>
+					<td contentEditable suppressContentEditableWarning className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">Dự án trường Newton tại Ciputra</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.budget).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.predict).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.signed).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.advance).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.volume).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.finish).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.pay).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.rest).toLocaleString()}</td>
+					<td contentEditable suppressContentEditableWarning className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'>{_d.note}</td>
 				</tr>
 			))}
+			<RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow/>}/>
 		</tbody>
 	)
 }

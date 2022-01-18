@@ -95,7 +95,7 @@ const ProjectDashboardTaskPage: FC = () => {
 	const handleClose = () => setOpen({ ...open, show: false });
 
 	return (
-		<>
+		<div className="overflow-auto">
 			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
@@ -143,7 +143,7 @@ const ProjectDashboardTaskPage: FC = () => {
 							<tr className="text-left whitespace-nowrap  border-b border-cbs-border">
 								<th className="pl-2 py-2 w-max">
 									<div className="flex items-center justify-between">
-										<input type="checkbox" />
+										<input type="checkbox" className="cbs-checkbox" />
 										<img
 											className="w-6 opacity-50"
 											src={CaretDownIcon}
@@ -191,7 +191,7 @@ const ProjectDashboardTaskPage: FC = () => {
 						<tbody className="">
 							{data.map((d, index) => <tr key={index}>
 								<td className="p-2 border border-r-0 border-cbs-border">
-									<input type="checkbox" />
+									<input type="checkbox" className="cbs-checkbox" />
 								</td>
 								<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
 									MAR.HAR.Court Yard By Marriott Ha Long Bay
@@ -239,7 +239,7 @@ const ProjectDashboardTaskPage: FC = () => {
 					</table>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 };
 

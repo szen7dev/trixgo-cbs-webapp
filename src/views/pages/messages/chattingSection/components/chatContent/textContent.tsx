@@ -14,16 +14,29 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
-            textContentRef.current.innerHTML = message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
-                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
-                if (matchs) {
-                    const fullName = matchs[1];
-                    const userId = matchs[2];
-                    return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
-                } else {
-                    return replacement;
-                }
-            }).replaceAll("\n","<br>");
+            textContentRef.current.innerHTML = message.content
+                //Regex mention
+                .replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                    const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                    if (matchs) {
+                        const fullName = matchs[1];
+                        const userId = matchs[2];
+                        return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
+                    } else {
+                        return replacement;
+                    }
+                })
+                //Regex new line
+                .replaceAll("\n","<br>")
+                //Regex link
+                // eslint-disable-next-line no-useless-escape
+                .replaceAll(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g, (replacement: string) => {
+                    // eslint-disable-next-line no-useless-escape
+                    const matchs = (/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/g).exec(replacement);
+                    if (matchs) {
+                        return `<a class="text-primary" href="${matchs[0]}" target="_blank">${matchs[0]}</a>`
+                    }
+                });
         }
     },[textContentRef])
 
@@ -51,7 +64,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
             }
             <div className={"pr-[20px] pb-[5px]"}>
                 <div className={"message-content"}>
-                    <div ref={textContentRef} className={"flex-1 py-[4px]"}>
+                    <div ref={textContentRef} className={"flex-1 py-[4px] break-all"}>
                     </div>
                 </div>
                 <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>
