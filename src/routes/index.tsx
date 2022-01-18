@@ -893,7 +893,7 @@ const Routes: FC = () => {
                                                     component={FinDashboardPage}
                                                 />
                                                 <ProtectedRoute
-                                                    exact
+                                                    // exact
                                                     path={"/fin/cashbook"}
                                                     component={FinCashbookPage}
                                                 />

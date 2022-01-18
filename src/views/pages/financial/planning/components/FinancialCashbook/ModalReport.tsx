@@ -46,7 +46,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 											<XIcon className="h-5 w-5" aria-hidden="true" />
 										</button>
 									</div>
-									<div className="px-6 pt-2 relative flex-1 overflow-y-auto">
+									<div className="px-6 pt-2 relative flex-1">
 										{/* Content */}
 										<div className='text-medium flex justify-between'>
 											<p>

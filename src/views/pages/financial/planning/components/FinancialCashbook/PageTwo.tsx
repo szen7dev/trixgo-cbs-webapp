@@ -12,10 +12,11 @@ import SearchInput from 'views/pages/document/components/SearchInput';
 import GroupActions from 'views/pages/document/components/projects/GroupActions';
 import ButtonCreate from 'views/pages/document/components/common/ButtonCreate';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
-import ModalReport from './ModalReport';
+import ModalContainer from 'views/pages/media/components/ModalContainer';
+import { Link } from 'react-router-dom';
 
 const PageTwo: FC = () => {
-	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
+	const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
 	const { toggleModal } = useContext(Context);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
@@ -35,11 +36,8 @@ const PageTwo: FC = () => {
 		})));
 	}, []);
 
-	const toggleVisible = () => { setVisibleDrawer(!visibleDrawer) };
-	const handleClickRow = (id: number) => {
-		handleChangeCheckbox(undefined, { id });
-		setVisibleDrawer(true);
-	}
+	const handleClickRow = (id: number) => handleChangeCheckbox(undefined, { id })
+	const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -47,7 +45,7 @@ const PageTwo: FC = () => {
 				<span className="text-x-large mr-7">Hồ sơ dự thầu</span>
 				<SearchInput className="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 				<DropdownFilterButton />
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions className="flex items-center flex-1" onClickTrash={toggleDeleteModal} />
 
 				<ButtonCreate onClick={toggleModal} />
 				<ButtonMore />
@@ -114,7 +112,11 @@ const PageTwo: FC = () => {
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{content}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" onClick={e => e.stopPropagation()}>
+											<Link to={{ pathname: "/fin/cashbook/cashbookId", state: 2 }} className='hover:text-cbs-primary'>
+												{content}
+											</Link>
+										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{parseInt(opening_balance).toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{parseInt(increased_balance).toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{parseInt(closing_balance).toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
@@ -136,7 +138,17 @@ const PageTwo: FC = () => {
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
-			<ModalReport open={visibleDrawer} onClose={toggleVisible} />
+			<ModalContainer isModalOpen={isShowDeleteModal} toggle={() => ''}>
+				<div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
+					<div className="p-5 mb-4 text-xl leading-6 font-bold">
+						Bạn có muốn xóa không?
+					</div>
+					<div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
+						<button className="py-1.5 px-5 mr-2 uppercase" onClick={toggleDeleteModal}>Hủy</button>
+						<button className="py-1.5 px-3 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md" onClick={toggleDeleteModal}>Xác nhận</button>
+					</div>
+				</div>
+			</ModalContainer>
 		</div >
 	);
 }

@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import cn from "classnames";
 import { ElementType, FC, HTMLAttributes } from "react";
 import { NavLink } from "react-router-dom";
 import { boolean } from "yup";
@@ -8,12 +8,13 @@ interface PageProps {
 	id: string | number
 	path?: string
 	title: string
+	state?: unknown
 }
 type Props = {
 	rightHeader?: ElementType,
 	pages: Array<PageProps>,
 	onClickPage?: (page: any) => any,
-	value?: PageProps,
+	value?: PageProps | unknown,
 	component?: boolean
 }
 
@@ -26,19 +27,24 @@ const LayoutPrimary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ value, onCl
 					{pages.map(page => !component
 						? <NavLink
 							key={page.id}
-							className="flex items-center justify-center border-b-2 border-transparent mx-2 leading-4 py-3"
-							activeClassName="border-cbs-primary text-black font-bold"
+							className={cn(
+								"flex items-center justify-center border-b-2 border-transparent mx-2 leading-4 py-3",
+								value && page.state && value === page.state
+									? "border-cbs-primary text-black font-bold"
+									: ""
+							)}
+							activeClassName={value ? "" : "border-cbs-primary text-black font-bold"}
 							style={{ minWidth: "110px" }}
-							to={page.path || '/'}
+							to={{ pathname: page.path || '/', state: page.state }}
 							exact
 						>
 							{page.title}
 						</NavLink>
 						: <button
 							key={page.id}
-							className={classNames(
+							className={cn(
 								"flex items-center justify-center border-b-2 border-transparent mx-2 leading-4 py-3",
-								{ "border-cbs-primary text-black font-bold": value?.id === page.id }
+								{ "border-cbs-primary text-black font-bold": (value as PageProps)?.id === page.id }
 							)}
 							onClick={() => onClickPage?.(page)}
 						>
@@ -49,7 +55,7 @@ const LayoutPrimary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ value, onCl
 			</div>
 			{/* Content */}
 			{children}
-		</div>
+		</div >
 	)
 }
 
