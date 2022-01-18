@@ -1,4 +1,4 @@
-import { FC, Fragment, HTMLAttributes, ReactElement, useState } from 'react'
+import { ChangeEventHandler, FC, Fragment, HTMLAttributes, ReactElement, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 
 // const people = [
@@ -13,58 +13,65 @@ type DataProps = {
 	[key: string]: string | number | DataProps
 }
 
-function ListSelect<T extends HTMLAttributes<HTMLDivElement> & { data: DataProps[] }>({ data }: T): ReactElement {
-	const [selected, setSelected] = useState(data[0])
+type Props = {
+	data: DataProps[],
+	defaultValue?: DataProps
+}
+
+function ListSelect<T extends HTMLAttributes<HTMLDivElement> & Props>({ data, defaultValue }: T): ReactElement {
+	const [selected, setSelected] = useState(defaultValue ? defaultValue : null);
+	const [_data, _setData] = useState(data);
+
+	const handleChangeText: ChangeEventHandler<HTMLInputElement> = (e) => {
+		// _setData(e.target.value)
+	}
+
 	return (
-		<div>
-			<Listbox value={selected} onChange={setSelected}>
-				<div className="relative mt-1">
-					<Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm">
-						<span className="block truncate">{selected.name}</span>
-					</Listbox.Button>
-					<Transition
-						as={Fragment}
-						leave="transition ease-in duration-100"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0"
-					>
-						<Listbox.Options className="absolute z-1 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-							{data.map((d, idx) => (
-								<Listbox.Option
-									key={idx}
-									className={({ active }) =>
-										`${active ? 'text-amber-900 bg-amber-100' : 'text-gray-900'}
-                          cursor-default select-none relative py-2 pl-10 pr-4`
-									}
-									value={d}
-								>
-									{({ selected, active }) => (
-										<>
-											<span
-												className={`${selected ? 'font-medium' : 'font-normal'
-													} block truncate`}
-											>
-												{d.name}
-											</span>
-											{selected ? (
-												<span
-													className={`${active ? 'text-amber-600' : 'text-amber-600'
-														}
-                                absolute inset-y-0 left-0 flex items-center pl-3`}
-												>
-													{/* <CheckIcon className="w-5 h-5" aria-hidden="true" /> */}
-													asd
-												</span>
-											) : null}
-										</>
-									)}
-								</Listbox.Option>
-							))}
-						</Listbox.Options>
-					</Transition>
-				</div>
-			</Listbox>
-		</div>
+		<Listbox value={selected} onChange={setSelected}>
+			<div className="relative">
+				<Listbox.Button className="relative w-full pl-3 pr-10 text-left cursor-default">
+					<span className="block truncate">{selected ? selected.name : "Chọn "}</span>
+					<span className="w-4 h-4 bg-cbs-gray absolute inset-y-0 right-0 flex justify-center items-center pointer-events-none">
+						<svg className='inline-block' width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4" />
+						</svg>
+					</span>
+				</Listbox.Button>
+				<Transition
+					as={Fragment}
+					leave="transition ease-in duration-100"
+					leaveFrom="opacity-100"
+					leaveTo="opacity-0"
+				>
+					<Listbox.Options className="min-w-[193px] absolute z-1 right-0 mt-1 overflow-auto text-left bg-white shadow-cbs-md border-0.5 border-cbs-border rounded-md focus:outline-none">
+						<div className='px-2 border-cbs-border border-b-0.5 pt-3 pb-2.5'>
+							<input type="text" className='w-full focus:outline-none' placeholder='Tìm kiếm' defaultValue={selected ? selected.name as string : ''} onChange={handleChangeText} />
+						</div>
+						{/* </Listbox.Option> */}
+						{_data.map((d, idx) => (
+							<Listbox.Option
+								key={idx}
+								className={({ active }) =>
+									`${active ? 'bg-cbs-active-comment' : ''}
+                          cursor-default select-none relative py-2 px-3 hover:bg-cbs-active-comment`
+								}
+								value={d}
+							>
+								{({ selected, active }) => (
+									<>
+										<span
+											className="block truncate"
+										>
+											{d.name}
+										</span>
+									</>
+								)}
+							</Listbox.Option>
+						))}
+					</Listbox.Options>
+				</Transition>
+			</div>
+		</Listbox>
 	)
 }
 

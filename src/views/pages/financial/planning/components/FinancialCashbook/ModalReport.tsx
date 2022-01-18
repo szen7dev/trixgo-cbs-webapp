@@ -4,6 +4,8 @@ import { Dialog, Transition, Listbox } from '@headlessui/react'
 import ChartExpenseSumary from 'views/pages/financial/planning/components/FinancialCashbook/ChartExpenseSumary';
 
 import XIcon from 'assets/icons/X';
+import iconCash from 'assets/images/icons8-cash-app-144.png';
+import classNames from 'classnames';
 
 interface Props {
 	open: boolean,
@@ -21,7 +23,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 	const [selectedYear, setSelectedYear] = useState(years[0])
 	return (
 		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" className="fixed inset-y-0 right-0 overflow-hidden z-50" onClose={() => null}>
+			<Dialog as="div" className="fixed inset-y-0 right-0 overflow-hidden z-50" onClose={onClose}>
 				<div className="absolute inset-0 overflow-hidden">
 					<div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
 						<Transition.Child
@@ -61,12 +63,22 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 											</p>
 											<div className='relative'>
 												<Listbox value={selectedYear} onChange={setSelectedYear}>
-													<Listbox.Button className="border-0.5 border-cbs-border py-2 px-2.5 relative rounded-md">Năm {selectedYear.name}</Listbox.Button>
-													<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+													<Listbox.Button className="border-0.5 border-cbs-border py-2 pl-8 pr-2.5 relative rounded-md">
+														<span className='absolute inset-y-0 left-2 flex items-center'>
+															<svg className='inline-block' width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+																<path d="M6.5 7L0.00480938 0.25L12.9952 0.25L6.5 7Z" fill="#C4C4C4" />
+															</svg>
+														</span>
+														<span>
+															Năm {selectedYear.name}
+														</span>
+													</Listbox.Button>
+													<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-center bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
 														{years.map((year) => (
 															<Listbox.Option
 																key={year.id}
 																value={year}
+																className={({ active }) => classNames({ "bg-cbs-active-comment": active }, "py-2 px-2.5 hover:bg-cbs-active-comment cursor-pointer")}
 																disabled={year.unavailable}
 															>
 																Năm {year.name}
@@ -79,11 +91,13 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 										<div>
 											<ChartExpenseSumary />
 										</div>
-										<div className='text-small'>
+										<div className='text-small pb-10'>
 											<div className='flex mt-8'>
-												<div>icon</div>
+												<div className='mr-2'>
+													<img src={iconCash} alt="" />
+												</div>
 												<div className="grid grid-cols-odd-2 flex-1 gap-y-4">
-													<div className='text-x-large'>
+													<div className='text-x-large mb-1'>
 														Tổng hợp quỹ
 													</div>
 													<div className='text-cbs-completed text-x-large text-right'>4.500.000.000</div>
@@ -96,9 +110,11 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 												</div>
 											</div>
 											<div className='flex mt-8'>
-												<div>icon</div>
+												<div className='mr-2'>
+													<img src={iconCash} alt="" />
+												</div>
 												<div className="grid grid-cols-odd-2 flex-1 gap-y-4">
-													<div className='text-x-large'>
+													<div className='text-x-large mb-1'>
 														Chi tiết quỹ
 													</div>
 													<div className='text-x-large text-right'>4.500.000.000</div>

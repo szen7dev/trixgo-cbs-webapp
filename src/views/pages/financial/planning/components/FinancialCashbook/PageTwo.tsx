@@ -1,8 +1,5 @@
 import { FC, useContext, useEffect, useState } from 'react'
 
-// Context
-import { Context } from 'views/pages/document/contexts/contextModal';
-
 // Hook
 import useCheckedList from 'views/pages/ppt/hook/useCheckedList';
 
@@ -14,10 +11,11 @@ import ButtonCreate from 'views/pages/document/components/common/ButtonCreate';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
 import ModalContainer from 'views/pages/media/components/ModalContainer';
 import { Link } from 'react-router-dom';
+import ModalCreateFinancial from './ModalCreateFinancial';
 
 const PageTwo: FC = () => {
 	const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
-	const { toggleModal } = useContext(Context);
+	const [visibleCreateModal, setVisibleCreateModal] = useState<boolean>(false);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 
@@ -38,6 +36,7 @@ const PageTwo: FC = () => {
 
 	const handleClickRow = (id: number) => handleChangeCheckbox(undefined, { id })
 	const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
+	const toggleCreateModal = () => setVisibleCreateModal(!visibleCreateModal);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -47,7 +46,7 @@ const PageTwo: FC = () => {
 				<DropdownFilterButton />
 				<GroupActions className="flex items-center flex-1" onClickTrash={toggleDeleteModal} />
 
-				<ButtonCreate onClick={toggleModal} />
+				<ButtonCreate onClick={toggleCreateModal} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -138,6 +137,11 @@ const PageTwo: FC = () => {
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+			<ModalContainer isModalOpen={visibleCreateModal} toggle={() => null}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+					<ModalCreateFinancial toggle={toggleCreateModal} />
+				</div>
+			</ModalContainer>
 			<ModalContainer isModalOpen={isShowDeleteModal} toggle={() => ''}>
 				<div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
 					<div className="p-5 mb-4 text-xl leading-6 font-bold">
