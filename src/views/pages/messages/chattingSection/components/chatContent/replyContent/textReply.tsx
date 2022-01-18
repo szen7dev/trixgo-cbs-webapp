@@ -8,7 +8,7 @@ const TextReply:FC<Props> = ({message}) => {
 
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
-            return message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+            textContentRef.current.innerHTML =  message.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
                 const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
                 if (matchs) {
                     const fullName = matchs[1];
@@ -19,7 +19,7 @@ const TextReply:FC<Props> = ({message}) => {
                 }
             })
         }
-    },[textContentRef])
+    },[textContentRef, message.content])
     return (
         <div className={"reply-content border-l-2 border-primary pl-[7px]"}>
             <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
