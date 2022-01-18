@@ -186,9 +186,9 @@ type DataListAppDevice = {
 
 //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
 export type ListCompanyAccessPayload = {
-    fromDate: string;
-    toDate: string;
-    year: number;
+    fromDate?: string;
+    toDate?: string;
+    year?: number;
 };
 export type ListCompanyAccessResponse = APIResponse & {
     data?: {
@@ -196,7 +196,7 @@ export type ListCompanyAccessResponse = APIResponse & {
     }
 };
 
-type ListCompany = {
+type listCompany = {
     amountAccesses: number;
     company: {
         name: string

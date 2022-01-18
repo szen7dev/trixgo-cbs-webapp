@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import SupportHomeActivity from "../components/home/activity/SupportHomeActivity";
 import SupportHomeDashboard from "../components/home/dashboard/SupportHomeDashboard";
@@ -18,7 +18,7 @@ const TabsList: FC<Props> = (props) => {
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>
-        <SupportHomeActivity />
+        <SupportHomeActivity timeType={timeType} />
       </div>
     </section>
   );

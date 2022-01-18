@@ -18,7 +18,7 @@ import {
   ListAppAccessPayload,
   ListTypeDeviceAccessPayload,
 } from 'typings/support';
-
+import { checkTimeType } from "helpers/app";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -144,47 +144,49 @@ type Props = {
   timeType: string;
 };
 const StatisticsByApp: FC<Props> = (props) => {
-  const currentYear = new Date().getFullYear();
+  // const listParam : ListAppAccessPayload = {}
   const { timeType } = props;
-  let listParam : ListAppAccessPayload = {}
-  if(timeType === 'all') {
-     listParam = {
-      fromDate: moment().startOf('year').format("YYYY-MM-DD"),
-      toDate: moment().endOf("year").format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  } else if(timeType === 'today') {
-    listParam = {
-      fromDate: moment().format("YYYY-MM-DD"),
-      toDate: moment().format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  }else if(timeType === 'week') {
-    listParam = {
-      fromDate: moment().startOf('week').format("YYYY-MM-DD"),
-      toDate: moment().endOf("week").format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  }else if(timeType === 'month') {
-    listParam = {
-      fromDate: moment().startOf('month').format("YYYY-MM-DD"),
-      toDate: moment().endOf("month").format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  }else if(timeType === 'quarter') {
-    listParam = {
-      fromDate: moment().startOf('quarter').format("YYYY-MM-DD"),
-      toDate: moment().endOf("quarter").format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  }else if(timeType === 'year') {
-    listParam = {
-      fromDate: moment().startOf('year').format("YYYY-MM-DD"),
-      toDate: moment().endOf("year").format("YYYY-MM-DD"),
-      year: currentYear
-    }
-  }
+  const listParam = checkTimeType(timeType);
+  // let listParam : ListAppAccessPayload = {}
+  // if(timeType === 'all') {
+  //    listParam = {
+  //     fromDate: moment().startOf('year').format("YYYY-MM-DD"),
+  //     toDate: moment().endOf("year").format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // } else if(timeType === 'today') {
+  //   listParam = {
+  //     fromDate: moment().format("YYYY-MM-DD"),
+  //     toDate: moment().format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // }else if(timeType === 'week') {
+  //   listParam = {
+  //     fromDate: moment().startOf('week').format("YYYY-MM-DD"),
+  //     toDate: moment().endOf("week").format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // }else if(timeType === 'month') {
+  //   listParam = {
+  //     fromDate: moment().startOf('month').format("YYYY-MM-DD"),
+  //     toDate: moment().endOf("month").format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // }else if(timeType === 'quarter') {
+  //   listParam = {
+  //     fromDate: moment().startOf('quarter').format("YYYY-MM-DD"),
+  //     toDate: moment().endOf("quarter").format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // }else if(timeType === 'year') {
+  //   listParam = {
+  //     fromDate: moment().startOf('year').format("YYYY-MM-DD"),
+  //     toDate: moment().endOf("year").format("YYYY-MM-DD"),
+  //     year: currentYear
+  //   }
+  // }
   const { listAppAccess } = useListAppAccess(listParam);
+  console.log('listAppAccess',listAppAccess)
   const arrApp = [];
   const arrAmountAccesses = [];
   for (const element of listAppAccess) {

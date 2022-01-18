@@ -1,9 +1,16 @@
 import { FC } from "react";
 import { useListCompanyAccess } from 'services/hooks/useSupport';
 import moment from 'moment';
+import {checkTimeType} from "../../../../../../helpers/app";
 
-const ByBusinessSupport: FC = () => {
-  const { listCompany } = useListCompanyAccess();
+type Props = {
+  timeType: string;
+};
+
+const ByBusinessSupport: FC<Props> = (props) => {
+  const { timeType } = props;
+  const listParam = checkTimeType(timeType);
+  const { listCompany } = useListCompanyAccess(listParam);
   console.log('listCompany',listCompany)
   return (
     <section className="h-[834px] bg-primary-light px-6 py-4 mt-3">
