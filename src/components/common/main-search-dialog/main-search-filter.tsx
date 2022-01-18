@@ -7,6 +7,7 @@ import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
 
 import { useQueryListDepartments, useQueryListDoctype } from "services/hooks/useHuman";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 import DropdownSearchable from "components/common/DropdownSearch";
 
@@ -27,6 +28,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [otherFieldValue, setOtherFieldValue] = useState("");
   const [searchFriendName, setSearchFriendName] = useState("");
+  const [searchCompanyName, setSearchCompanyName] = useState("");
 
   const { listDepartments } = useQueryListDepartments({
     limit: 50,
@@ -39,6 +41,9 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
   });
   const { data: listFriend } = useQueryListFriend({
     keyword: searchFriendName,
+  });
+  const { data: listCompany } = useQueryListCompany({
+    keyword: searchCompanyName,
   });
 
   return (
@@ -103,52 +108,61 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                   />
                 </div>
                 {/* filter item */}
-                {/* <div className="t-main-search-filter-item flex items-center mt-4">
+                <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Đơn vị thực hiện</p>
                   <DropdownSearchable
-                    placeholder={"Đơn vị thực hiện"}
+                    onchangeValue={(value) => {
+                      setFieldValue("companyOfAssignee", value?.id);
+                      setSearchCompanyName("");
+                    }}
+                    onClearData={() => setFieldValue("companyOfAssignee", "")}
+                    onSearchInputChange={debounce(
+                      (value) => setSearchCompanyName(value),
+                      500
+                    )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
-                    focusedClass={"border-b border-primary"}
-                    maxWidthInput={"max-w-none"}
-                    isMultiple={true}
+                    placeholder="Đơn vị thực hiện"
+                    isMultiple={false}
                     allowClearValueSingleInput={true}
-                    renderSelectedItem={item => (
-                      <div className={"flex items-center"}>
-                        <img alt={"tag icon"} src={TagIcon}/>
-                        <span>{item.text}</span>
+                    showTriangle={false}
+                    maxWidthInput="max-w-none"
+                    renderSelectedItem={(item) => (
+                      <div
+                        style={{ width: 100 }}
+                        className="flex items-center"
+                      >
+                        <img alt="Tag" src={TagIcon} className="mr-1" />
+                        <p
+                          style={{
+                            textOverflow: "ellipsis",
+                            maxWidth: "100%",
+                            minWidth: 0,
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            flex: "1 1 auto",
+                          }}
+                        >
+                          {item.text}
+                        </p>
                       </div>
                     )}
-                    data={[
-                        {
-                            "_id": 1,
-                            "content":"Trần Thanh Quang"
-                        },
-                        {
-                            "_id": 2,
-                            "content":"Trần Thanh Quang 2"
-                        },
-                        {
-                            "_id": 3,
-                            "content":"Trần Thanh Quang 3"
-                        },
-                        {
-                            "_id": 4,
-                            "content":"Trần Thanh Quang 4"
-                        },
-                    ]}
+                    data={listCompany.map((company) => ({
+                      label: company.name,
+                      value: company._id,
+                    }))}
                     formatItem={{
-                        id : "_id",
-                        text : "content"
+                      id: "value",
+                      text: "label",
                     }}
                     inlineSearch={true}
                   />
-                </div> */}
+                </div>
                 {/* filter item */}
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Thời hạn</p>
                   <div className="t-main-search-filter-item-dropdown t-main-search-filter-item-date flex items-center">
                     <div className="w-1/2 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left">
+                      <span className="w-3/12 text-primary-gray text-left">
                         Từ ngày
                       </span>
                       <DayPickerInput
@@ -162,7 +176,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                       />
                     </div>
                     <div className="w-1/2 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left">
+                      <span className="w-3/12 text-primary-gray text-left">
                         Đến ngày
                       </span>
                       <DayPickerInput
@@ -233,9 +247,10 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Dự án</p>
                   <DropdownSearchable
-                    onchangeValue={(value) =>
-                      setFieldValue("projectID", value?.id)
-                    }
+                    onchangeValue={(value) => {
+                      setFieldValue("projectID", value?.id);
+                      setSearchDepartmentValue("");
+                    }}
                     onClearData={() => setFieldValue("projectID", "")}
                     onSearchInputChange={debounce(
                       (value) => setSearchDepartmentValue(value),
@@ -373,9 +388,10 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                 <div className="t-main-search-filter-item flex items-center mt-4">
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại khác</p>
                   <DropdownSearchable
-                    onchangeValue={(item) =>
-                      setFieldValue("fieldID", item.value)
-                    }
+                    onchangeValue={(item) => {
+                      setFieldValue("fieldID", item.value);
+                      setOtherFieldValue("");
+                    }}
                     onClearData={() => setFieldValue("fieldID", "")}
                     onSearchInputChange={debounce(
                       (value) => setOtherFieldValue(value),

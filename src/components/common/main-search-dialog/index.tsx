@@ -49,7 +49,6 @@ const MainSearchDialog: FC = () => {
 
   // handle data from filter tab
   const onHandleFilterData = (filterData: any) => {
-    // console.log(filterData);
     setFilterParam(filterData);
   };
 
