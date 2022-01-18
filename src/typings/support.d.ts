@@ -1,6 +1,96 @@
 import { type } from "os";
 import { APIResponse } from "./apis/response";
+import {Human} from "./human";
 
+//1. LIST HISTORY TRAFFIC
+type APIResponse = {
+    error?: boolean;
+    status?: number;
+}
+type Populate = {
+    path?: string;
+    select?: string;
+    populate?: Populate
+}
+
+type QueryParam = {
+    limit?: number;
+    lastestID?: string;
+    keyword?: string;
+    populates?: Populate;
+}
+type Filter = {
+    type: 1,
+    app: 1,
+    menu: 1,
+    companyOfAuthor: 1,
+    createdAt: 1,
+    userCreate: 1
+}
+export type ListHistoryTrafficPayload = {
+    filter?: string,
+    limit?: number,
+    keyword?: string,
+    lastestID?: string,
+    populates?: string,
+    fromDate?: string,
+    toDate?: string
+};
+
+type companyOfAuthor = {
+    _id: string,
+    name: string,
+    sign: string,
+    image: string
+}
+type userCreate = {
+    _id: string,
+    image: string,
+    fullname: string
+}
+type App = {
+    _id: string,
+    name: string,
+    image: string
+}
+type Menu = {
+    _id: string,
+    name: string,
+    image: string
+}
+export type HistoryTraffic = {
+    listRecords?: {
+        _id: string,
+        type: 1,
+        companyOfAuthor?: companyOfAuthor,
+        userCreate?: userCreate,
+        app?: App,
+        menu?: Menu,
+        createdAt: string
+    };
+}
+export interface ListParam {
+    _id: string,
+    type: number,
+    companyOfAuthor: companyOfAuthor,
+    userCreate: userCreate,
+    app: App,
+    menu: Menu,
+    createdAt: string
+
+    map(param: (item: any) => any): any;
+}
+export type ListHistoryTrafficResponse = APIResponse & {
+    error: boolean,
+    data?: {
+        listRecords?: ListParam[],
+        limit: number,
+        totalRecord: number,
+        totalPage: number,
+        nextCursor: string
+    },
+    status: number
+};
 //2. THỐNG KÊ THEO THIẾT BỊ THEO NĂM
 export type ListDevicePayload = {
     year?: number;
