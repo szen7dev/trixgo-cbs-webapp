@@ -19,6 +19,7 @@ type UseAuth = {
   signIn: (payload: SignInPayload) => void;
   signOut: () => void;
   dataUserInfo: any;
+  refetchDataUserInfo: any;
   updateDevice: () => void;
 };
 
@@ -47,8 +48,8 @@ export const useAuth = (): UseAuth => {
     }
   }, [dispatch]);
 
-  const { data: dataUserInfo } =
-      useQuery("user_info", () => AuthenticationRepository.usersInfo());
+  const { data: dataUserInfo, refetch: refetchDataUserInfo } =
+      useQuery("user_info", () => AuthenticationRepository.usersInfo(), {enabled: false});
 
   const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
       useMutation((payload: SignInPayload) =>
@@ -174,6 +175,7 @@ export const useAuth = (): UseAuth => {
     signIn,
     signOut,
     dataUserInfo,
+    refetchDataUserInfo,
     updateDevice
   };
 };
