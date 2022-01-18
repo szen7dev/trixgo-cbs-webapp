@@ -24,8 +24,8 @@ const DocumentLayoutContainer: FC = () => {
 							<Route exact path="/document/home" component={DocumentHomePage} />
 							<Route exact path='/document/project/:id/document/doc' component={DocumentDetailPage} />
 							<Route path="/document/project/:id/document" component={DocumentNav} />
-							<ModalCreateDocument />
 						</Switch>
+						<ModalCreateDocument />
 					</Provider>
 					<Route path="/document/*" component={ErrorPage} />
 				</Switch>
