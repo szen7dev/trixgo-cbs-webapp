@@ -1316,4 +1316,8 @@ input[type="text"] {
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
+  overflow: auto;
+}
+.message-input .DraftEditor-root::-webkit-scrollbar {
+  display: none;
 }
