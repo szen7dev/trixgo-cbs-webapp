@@ -262,6 +262,13 @@ export const CONTRACT_DEBT_TYPES = [
     { value: 4, text: 'Nợ khác' },
 ]
 
+// PHÂN Contract IPC
+export const CONTRACT_IPC_TYPES = [
+    { value: 1, text: 'Tạm ứng' },
+    { value: 2, text: 'Thanh toán' },
+    { value: 3, text: 'Quyết toán' },
+]
+
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU
 export const GOODS_TYPES = [
     { value: 1, text: 'Nguyên liệu, vật liệu' },

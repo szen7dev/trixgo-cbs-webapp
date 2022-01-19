@@ -71,15 +71,27 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 		} else if (e && data) {
 			if (typeof data === 'string' || typeof data === 'number') {
 				newAssigned[data] = !newAssigned[data];
-				newChecked = (newChecked as string[]).filter(s => s !== data) as Array<S>;
+				if (e.target.checked) {
+					newChecked.push(data)
+				} else {
+					newChecked = (newChecked as string[]).filter(s => s !== data) as Array<S>;
+				}
 			} else if ('id' in data) {
 				newAssigned[data.id] = !newAssigned[data.id];
-				newChecked = (newChecked as Array<Exclude<S, StateTwo | string | number>>)
-					.filter(_checked => _checked.id !== data.id);
+				if (e.target.checked) {
+					newChecked.push(data)
+				} else {
+					newChecked = (newChecked as Array<Exclude<S, StateTwo | string | number>>)
+						.filter(_checked => _checked.id !== data.id);
+				}
 			} else {
 				newAssigned[data._id] = !newAssigned[data._id];
-				newChecked = (newChecked as Array<Exclude<S, StateTwo | string | number>>)
-					.filter(_checked => _checked._id !== data._id);
+				if (e.target.checked) {
+					newChecked.push(data)
+				} else {
+					newChecked = (newChecked as Array<Exclude<S, StateTwo | string | number>>)
+						.filter(_checked => _checked._id !== data._id);
+				}
 			}
 		} else {
 			return;

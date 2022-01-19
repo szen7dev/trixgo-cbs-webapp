@@ -1,7 +1,7 @@
 import API from "../repository";
 
 import { 
-    UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad
+    UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser
 } from "typings/user";
 import { convertObToUrl } from "helpers";
 const userURL = "/api/auth/users";
@@ -23,6 +23,13 @@ const UserRepository = {
         return data;
     },
     async updatePasswordUser(payload: UpdatePasswordUser): Promise<PostResponse> {
+        const { data } = await API.put<PostResponse>(
+            `${userURL}`,
+            payload
+        );
+        return data;
+    },
+    async updateAvatarUser(payload: UpdateAvatarUser): Promise<PostResponse> {
         const { data } = await API.put<PostResponse>(
             `${userURL}`,
             payload

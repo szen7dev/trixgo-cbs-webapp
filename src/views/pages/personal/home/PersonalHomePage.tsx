@@ -1,9 +1,14 @@
-import { FC, FormEvent, useState, useEffect } from "react";
+import { FC, FormEvent, useState, useEffect, memo } from "react";
 
 import cn from "classnames";
 import { Form, Formik, Field } from "formik";
 import { useAuth } from "services/hooks/useAuth";
-import { UpdateUser, UpdatePasswordUser } from 'typings/user';
+import { useUpload } from 'services/hooks/useUpload';
+import useCustomReducer from 'views/pages/document/reducer/upload/useCustomReducer';
+import fileUploadReducer, { INITIAL_STATE } from 'views/pages/media/context/upload.reducer';
+import uploadActions from 'views/pages/media/context/upload.actions';
+import { modifyUploadedFiles, modifyUploadedFilesV2 } from 'views/pages/media/context/upload.utils';
+import { UpdateUser, UpdatePasswordUser, UpdateAvatarUser } from 'typings/user';
 import DatePicker from "react-datepicker";
 import moment from 'moment'
 import { useUser } from 'services/hooks/useUser';
@@ -33,22 +38,78 @@ const PersonalHomePage: FC = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [infoUser, setInfoUser] = useState(infoValues);
-  const { dataUserInfo, user } = useAuth();
-  const { updateUser, updatePasswordUser } = useUser();
+  const [avatar, setAvatar] = useState(PersonalLogo);
+  const { dataUserInfo, user, refetchDataUserInfo } = useAuth();
+  const { updateUser, updatePasswordUser, updateAvatarUser } = useUser();
+  const { addFileToUpload } = useUpload('MEDIA');
 
+  // Cập nhật info
   const handleSubmitUpdateUser = async (values: UpdateUser) => {
     await updateUser(values);
   }
 
+  // Đổi Password
   const handleSubmitUpdatePassword = async (values: UpdatePasswordUser) => {
     await updatePasswordUser(values);
   }
 
+  const updateAvatar = async (values: UpdateAvatarUser) => {
+    await updateAvatarUser(values);
+  }
+
+  // Upload avatar
+  const [uploads, {
+		setUploadImageProgress,
+		setUploadFileProgress,
+		setIDImageUploaded,
+		setIDFileUploaded,
+		setUploadImage,
+		setUploadFile,
+	}] = useCustomReducer(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE));
+
+  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (!event.target.files || !event.target.files.length) return;
+
+		// Modify file to with key with each file;
+		const [files, images] = modifyUploadedFilesV2({
+			imgLastKey: Object.keys(uploads.images).length || null,
+			fileLastKey: Object.keys(uploads.files).length || null,
+		}, event.target.files);
+		setUploadImage(images);
+		setUploadFile(files);
+		// Upload images
+		for (const [key, { file }] of Object.entries(images)) {
+			const { _id, name } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					setUploadImageProgress(key, percentCompleted)
+				},
+			})
+     setIDImageUploaded(key, _id)
+     updateAvatar({image: name})
+     setTimeout(() => {
+      refetchDataUserInfo()
+     }, 500)
+		}
+
+		// Upload files
+		for (const [key, { file }] of Object.entries(files)) {
+			const { _id } = await addFileToUpload({
+				files: file,
+				progress: percentCompleted => {
+					setUploadFileProgress(key, percentCompleted)
+				}
+			})
+			setIDFileUploaded(key, _id);
+		}
+	}
+
   useEffect(() => {
+    refetchDataUserInfo()
     if(dataUserInfo) {
       setInfoUser(dataUserInfo.data)
       // Nếu giới tính chưa có
-      if(!dataUserInfo?.data.gender) {
+      if(!dataUserInfo?.data?.gender) {
         setInfoUser(user => ({
           ...user,
           ...{gender: '1'}
@@ -59,16 +120,23 @@ const PersonalHomePage: FC = () => {
           ...{gender: user.gender.toString()}
         }));
       }
-      if(!dataUserInfo?.data.gender) {
+      if(!dataUserInfo?.data?.gender) {
         setInfoUser(user => ({
           ...user,
           ...{lang: 'vn'}
         }));
       }
+      if(dataUserInfo?.data?.image) {
+        setAvatar(dataUserInfo.data.image)
+      }
     } else {
       setInfoUser(infoValues)
     }
   },[dataUserInfo])
+
+  const Image = memo(function Image() {
+    return <img src={`${process.env.REACT_APP_URL_S3}/test/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
+  });
   return (
     <main className="bg-cbs-gray h-full flex justify-center gap-7 py-4">
       <section
@@ -78,15 +146,19 @@ const PersonalHomePage: FC = () => {
         )}
       >
         <div className="relative flex pt-5 pb-3">
-          <img src={PersonalLogo} alt="Personal" />
+        {/* <img src={avatar} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" /> */}
+          <Image />
           <div className="bg-primary-light absolute bottom-4 left-24 h-9 w-9 rounded-full flex items-center justify-center">
+            <label>
             <div className="w-[30px] h-[30px] bg-secondary-gray rounded-full flex items-center justify-center">
               <img
                 src={CameraIcon}
                 alt="Camera"
                 className="w-[15px] h-[13px]"
               />
+              <input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
             </div>
+            </label>
           </div>
         </div>
         <div className="mb-8">

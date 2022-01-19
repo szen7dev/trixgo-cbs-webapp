@@ -15,10 +15,10 @@ for (let i=1; i <= 1000; i++) {
     autoGenerateIndex[`${i}`] = `${i}`;
 }
 module.exports = {
-		// mode: 'jit',
+    mode: 'jit',
     purge: [
-			// './src/**/*.{ts,tsx}'
-		],
+			'./src/**/*.{ts,tsx}'
+    ],
     darkMode: "class", // or 'media' or false
     theme: {
         fontFamily: {

@@ -57,7 +57,7 @@ export const modifyUploadedFilesV2 = (
     fileLastKey: string | number | null;
     imgLastKey: string | number | null;
   },
-  files: FileList
+  files: FileList|Blob[]
 ): [IFile, IFile] => {
   let currentFileIndex = 0;
   let currentImageIndex = 0;

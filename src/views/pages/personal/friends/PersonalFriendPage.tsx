@@ -11,7 +11,7 @@ const PersonalFriendPage: FC = () => {
 
   return (
     <main className="w-full h-max">
-      <div className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300">
+      <div className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300 z-10">
         <div className="h-full">
           <button
             className={

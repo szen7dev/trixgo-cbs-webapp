@@ -1307,3 +1307,17 @@ input[type="text"] {
 .income-form-modal .DayPickerInput {
   width: 100%;
 }
+.ipc-form-modal .DayPickerInput {
+  width: 40%;
+}
+.message-input .DraftEditor-root {
+  flex-grow: 1;
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 200px;
+  padding: 15px 0;
+  overflow: auto;
+}
+.message-input .DraftEditor-root::-webkit-scrollbar {
+  display: none;
+}
