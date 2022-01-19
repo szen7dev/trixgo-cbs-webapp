@@ -1310,3 +1310,10 @@ input[type="text"] {
 .ipc-form-modal .DayPickerInput {
   width: 40%;
 }
+.message-input .DraftEditor-root {
+  flex-grow: 1;
+  max-width: 100%;
+  min-height: 50px;
+  max-height: 200px;
+  padding: 15px 0;
+}
