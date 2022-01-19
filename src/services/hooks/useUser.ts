@@ -1,4 +1,4 @@
-import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad } from "typings/user";
+import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser } from "typings/user";
 import { FetchNextPageOptions, useInfiniteQuery, useMutation, useQuery } from "react-query";
 import UserRepository from "apis/user";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ type UseUser = {
     listFriends: Array<User>,
     updateUser: (payload: UpdateUser) => Promise<void>,
     updatePasswordUser: (payload: UpdatePasswordUser) => Promise<void>,
+    updateAvatarUser: (payload: UpdateAvatarUser) => Promise<void>,
     requestAddFriend: (payload: AddFriendPayLoad) => Promise<void>,
     requestUnFriend: (payload: UnFriendPayLoad) => Promise<void>,
     checkCodeUser: (payload: CheckCodeUser) => Promise<CheckCodeResponse>,
@@ -19,7 +20,7 @@ type UseUser = {
     prevPageListFriends: () => void,
     totalRecord: number | undefined,
     totalPages: number | undefined,
-    hasNextPage: boolean | undefined,
+    hasNextPageListFriends: boolean | undefined,
 };
 export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => {
     const { mutateAsync: updateUserAsync } =
@@ -30,7 +31,11 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
     const { mutateAsync: updatePasswordUserAsync } =
         useMutation((payload: UpdatePasswordUser) =>
         UserRepository.updatePasswordUser(payload)
-        );
+    );
+    const { mutateAsync: updateAvatarUserAsync } =
+        useMutation((payload: UpdateAvatarUser) =>
+        UserRepository.updateAvatarUser(payload)
+    );
     
     const { mutateAsync: checkCodeUserAsync } =
         useMutation((payload: CheckCodeUser) =>
@@ -76,6 +81,26 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
 
             if (!error) {
                 toast.success('Cập nhật mật khẩu thành công');
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const updateAvatarUser = async (payload: UpdateAvatarUser) => {
+        try {
+            const { error, data } = await updateAvatarUserAsync(payload);
+
+            if (!error) {
+                toast.success('Cập nhật ảnh đại diện thành công');
             } else {
                 if(data && data[0]) {
                     toast.error(data[0].message);
@@ -186,13 +211,13 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
         data: dataListFriends,
         fetchNextPage: nextPageListFriends,
         fetchPreviousPage: prevPageListFriends,
-        hasNextPage: hasNextPage
+        hasNextPage: hasNextPageListFriends
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
             key || "list_friends",
             async ({ pageParam }: any) =>
                 UserRepository.listFriends({ 
-                    lastestID: pageParam ? pageParam : "",
+                    lastestID: pageParam || "",
                     ...params,
                 }),
             {
@@ -206,10 +231,12 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
         );
     const listFriends = [].concat(...(dataListFriends?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListFriends?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListFriends?.pages[0]?.data?.totalPages;
+    // const totalPages = dataListFriends?.pages[0]?.data?.totalPages;
+    const totalPages = 5
     return {
         updateUser,
         updatePasswordUser,
+        updateAvatarUser,
         requestAddFriend,
         requestUnFriend,
         checkCodeUser,
@@ -223,6 +250,6 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
         prevPageListFriends,
         totalRecord,
         totalPages,
-        hasNextPage,
+        hasNextPageListFriends,
     }
 }

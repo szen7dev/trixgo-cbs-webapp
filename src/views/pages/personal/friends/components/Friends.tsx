@@ -18,7 +18,7 @@ import { useAuth } from 'services/hooks/useAuth';
 const Friends: FC = () => {
   const [code, setCode] = useState(null)
   const [codeSearch, setCodeSearch] = useState('')
-  const { listFriends } = useUser('list_friends', { limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}' });
+  const { listFriends, totalRecord, totalPages, isLoadingListFriends, nextPageListFriends, prevPageListFriends, hasNextPageListFriends } = useUser('list_friends', {limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}' });
   const [friend, setFriend] = useState<any>(null)
   const [isFriend, setIsFriend] = useState(false)
 
@@ -55,9 +55,14 @@ const Friends: FC = () => {
       setFriend(null)
     }
   },[codeSearch])
+  useEffect(() => {
+    if(listFriends) {
+      console.log(listFriends)
+    }
+  },[listFriends])
   return (
-    <main className="h-full">
-      <header className="sticky top-0 z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
+    <main className="flex-1">
+      <header className="sticky top-[40px] z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Danh sách</p>
           <SearchInput
@@ -199,7 +204,7 @@ const Friends: FC = () => {
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate  hasNextPage={hasNextPageListFriends} totalRecord={totalRecord} totalPages={totalPages} isFetching={isLoadingListFriends} nextPageAction={nextPageListFriends} prevPageAction={prevPageListFriends} className="fixed" />
     </main>
   );
 };
