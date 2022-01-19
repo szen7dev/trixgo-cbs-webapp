@@ -65,7 +65,7 @@ const ProjectPaymentPage: FC = () => {
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 							<th className="px-4 py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-r-0 border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
+								<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 								<button className="inline-block align-middle" type="button">
 									<img
 										className="w-8 opacity-50"
@@ -123,7 +123,7 @@ const ProjectPaymentPage: FC = () => {
 								return (
 									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
+											<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">Cục rà phá bom mìn-Vabomin</td>

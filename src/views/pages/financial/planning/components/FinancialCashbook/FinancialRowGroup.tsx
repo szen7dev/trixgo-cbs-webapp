@@ -23,13 +23,13 @@ interface RowData {
 	data: Array<RowItem>
 }
 
-const FinancialRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
+const FinancialRowGroup: FC<{ row: RowData, show: boolean, forceUpdateValue?: string | number }> = ({ forceUpdateValue, row, show }) => {
 	const [state, setState] = useState<boolean>(show);
 	const wrapperRef = useRef<HTMLTableSectionElement>(null);
 
 	useEffect(() => {
 		setState(show);
-	}, [show])
+	}, [show, forceUpdateValue])
 	return (
 		<tbody className="text-black" ref={wrapperRef}>
 			<tr className="text-right">
@@ -51,9 +51,9 @@ const FinancialRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) =
 						{i === row.data.length - 1 && < div className='absolute left-1/2 bg-cbs-subtext w-1/2 top-1/2 h-[1px]' />}
 					</td>
 					<td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0">{i}</td>
-					<td contentEditable suppressContentEditableWarning className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">Tiền mặt</td>
-					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.budget).toLocaleString()}</td>
-					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.predict).toLocaleString()}</td>
+					<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">Tiền mặt</td>
+					<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.budget).toLocaleString()}</td>
+					<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.predict).toLocaleString()}</td>
 				</tr>
 			))}
 			<RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow />} />
