@@ -41,7 +41,7 @@ const PersonalHomePage: FC = () => {
   const [avatar, setAvatar] = useState(PersonalLogo);
   const { dataUserInfo, user, refetchDataUserInfo } = useAuth();
   const { updateUser, updatePasswordUser, updateAvatarUser } = useUser();
-  const { addFileToUpload } = useUpload('MEDIA');
+  const { addFileToUpload } = useUpload('MEDIA', 'user');
 
   // Cập nhật info
   const handleSubmitUpdateUser = async (values: UpdateUser) => {
@@ -79,6 +79,7 @@ const PersonalHomePage: FC = () => {
 		setUploadFile(files);
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
+      file.typeUpload = 'user'
 			const { _id, name } = await addFileToUpload({
 				files: file,
 				progress: percentCompleted => {
@@ -135,7 +136,8 @@ const PersonalHomePage: FC = () => {
   },[dataUserInfo])
 
   const Image = memo(function Image() {
-    return <img src={`${process.env.REACT_APP_URL_S3}/test/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
+    return <img src={`${process.env.REACT_APP_URL_S3_USER}/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
+    // return <img src={`${process.env.REACT_APP_URL_S3}/test/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
   });
   return (
     <main className="bg-cbs-gray h-full flex justify-center gap-7 py-4">
