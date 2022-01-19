@@ -1,8 +1,13 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import AccessList from "../dashboard/AccessListSupport";
 import ByBusinessSupport from "../dashboard/ByBusinessSupport";
 
-const SupportHomeActivity: FC = () => {
+type Props = {
+    timeType: string;
+};
+
+const SupportHomeActivity: FC<Props> = (props) => {
+    const { timeType } = props;
   return (
     <section>
         <div className="block">
@@ -13,7 +18,7 @@ const SupportHomeActivity: FC = () => {
                         <AccessList />
                     </div>
                     <div className="w-1/3 pr-3 pt-3 pb-3">
-                        <ByBusinessSupport />
+                        <ByBusinessSupport timeType={timeType}/>
                     </div>
                 </div>
             </section>

@@ -10,9 +10,10 @@ import {
     AppAccess,
     ListAppDeviceAccessPayload,
     DataListAppDevice,
-    ListCompany,
+    listCompany,
     HistoryTraffic,
-    ListHistoryTrafficPayload
+    ListHistoryTrafficPayload,
+    ListCompanyAccessPayload
 } from 'typings/support';
 
 //1. LIST HISTORY TRAFFIC
@@ -176,17 +177,15 @@ export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : U
 
 //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
 interface UselistCompanyAccess {
-    listCompany: Array<ListCompany>
+    listCompany: Array<listCompany>
 }
-export const useListCompanyAccess = (payload?: ListAppDeviceAccessPayload) : UselistCompanyAccess => {
+export const useListCompanyAccess = (params?: ListCompanyAccessPayload) : UselistCompanyAccess => {
     const infinityQuery = useInfiniteQuery(
-        ["list_company_access", payload],
+        ["list_company_access", params],
         async ({ data }: any) => {
-            return SupportRepository.listCompanyAccess({
-                fromDate: "2022-1-15",
-                toDate: "2022-1-15",
-                year: 2021,
-            })
+            await SupportRepository.listCompanyAccess(
+                params
+            )
         },
         {
             getNextPageParam: ({ data }: any) => {
