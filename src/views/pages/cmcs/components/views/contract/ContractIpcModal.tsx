@@ -83,8 +83,6 @@ const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, onFinis
         }
       }
 
-      console.log('🚀 ~ formatData', mappingData(formatData))
-
       const isSuccess = await onFinish({ ...mappingData(formatData), contractID }, isEdit);
       if (isSuccess) {
         closeModal();

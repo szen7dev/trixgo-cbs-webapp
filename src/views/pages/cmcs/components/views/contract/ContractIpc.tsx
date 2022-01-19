@@ -71,6 +71,9 @@ const ContractIpc: FC = () => {
   const { openDeleteConfirm } = useDeleteConfirm();
 
   const handleDeleteAction = async () => {
+    if (!itemChecked) {
+      return
+    }
     openDeleteConfirm({
       deleteAction: async () => {
         const res = await deleteContractIPCMutateAsync(itemChecked)
@@ -81,6 +84,9 @@ const ContractIpc: FC = () => {
     });
   }
   const handleEditAction = async () => {
+    if (!itemChecked) {
+      return
+    }
     openModal(
       <div
         className={
