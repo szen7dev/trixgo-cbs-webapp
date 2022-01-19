@@ -20,7 +20,9 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
     const [open, setOpen] = useState(true);
 
     const { MentionSuggestions, plugins } = useMemo(() => {
-        const mentionPlugin = createMentionPlugin();
+        const mentionPlugin = createMentionPlugin({
+            mentionPrefix: '@',
+        });
         // eslint-disable-next-line no-shadow
         const { MentionSuggestions } = mentionPlugin;
         // eslint-disable-next-line no-shadow
@@ -28,64 +30,6 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
         return { plugins, MentionSuggestions };
     }, []);
 
-    const inputRef = useRef<HTMLDivElement>(null);
-
-    // useEffect(() => {
-    //     if (inputRef.current) {
-    //         inputRef.current.addEventListener('keydown', (event) => {
-    //             if (event.shiftKey && event.keyCode === 13) {
-    //                 setKeyCode(-99);
-    //                 event.preventDefault();
-    //             }
-    //             else if (event.keyCode===13) {
-    //                 setKeyCode(event.keyCode)
-    //                 event.preventDefault();
-    //             }
-    //             else {
-    //                 setKeyCode(0)
-    //             }
-    //         });
-    //
-    //         inputRef.current.addEventListener("paste", (evt) => {
-    //             const dT = evt.clipboardData;
-    //             const file = dT?.files[ 0 ];
-    //             if (file) {
-    //                 setAddFile(file)
-    //                 evt.stopPropagation();
-    //                 evt.preventDefault();
-    //             } else {
-    //                 setAddFile(undefined)
-    //             }
-    //         });
-    //     }
-    // },[])
-    //
-    // useEffect(() => {
-    //     if (keyCode === 13) {
-    //         onPressEnter&&onPressEnter()
-    //     }
-    //     if (keyCode === -99 && inputRef.current) {
-    //         const linebreak = document.createElement("br");
-    //         inputRef.current.appendChild(linebreak);
-    //     }
-    // },[keyCode,inputRef]);
-    //
-    // useEffect(() => {
-    //     if (addFile) {
-    //         onPasteImage&&onPasteImage(addFile);
-    //         setAddFile(undefined);
-    //     }
-    // },[addFile?.size])
-
-    // return (
-    //     <div
-    //         ref={inputRef}
-    //         contentEditable={"true"}
-    //         className={"flex-1 max-w-full min-h-[50px] max-h-26 focus:outline-none py-[15px] whitespace-pre-wrap transition duration-150"}
-    //         placeholder={"Message"}
-    //         onInput={() => onChange(inputRef?.current)}
-    //     />
-    // )
     const onOpenChange = useCallback((_open: boolean) => {
         setOpen(_open);
     }, []);
