@@ -114,7 +114,11 @@ const DetailChildRow: FC<Props> = ({
         <DayPickerInput
           // className="w-16"
           // selected={null}
-          value={moment(rowData.date).isValid() && moment(rowData.date).format('DD/MM/YYYY') || ''}
+          value={
+            (moment(rowData.date).isValid() &&
+              moment(rowData.date).format("DD/MM/YYYY")) ||
+            ""
+          }
           placeholder="Chọn thời gian"
           onDayChange={(date: Date | null) => {
             if (moment(date).isValid())
@@ -185,7 +189,7 @@ const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {rowData.unitprice}
+          {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -194,20 +198,20 @@ const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          contentEditable={"true"}
+          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
-              ...rowData,
-              amount: `${value}`,
-            });
-          }}
+          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+          //   const value = e.target.innerText;
+          //   handleClickUpdateTimeSheet({
+          //     ...rowData,
+          //     amount: `${value}`,
+          //   });
+          // }}
         >
-          {rowData.amount}
+          {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -229,7 +233,7 @@ const DetailChildRow: FC<Props> = ({
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: '100px',
+                width: "100px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
               }}
