@@ -3,6 +3,7 @@ import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import WordIcon from "assets/images/CBS-Word-Icon.svg";
 import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 type Props = {
     file: any
 }
@@ -10,13 +11,13 @@ const ItemFileInMessage:FC<Props> = ({file}) => {
     const renderFileTypeImage = (file:any) => {
         switch (file.fileType){
             case "pdf":
-                return <img className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "word":
-                return <img className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon pdf"}/>
             case "excel":
-                return <img className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon pdf"}/>
             default:
-                return <img className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon pdf"}/>
         }
     }
 

@@ -4,6 +4,7 @@ import iconNext from 'assets/images/icons8-next-page-50.png';
 import { ModalProps } from 'typings/social';
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 interface Props {
     images: any[]
@@ -55,15 +56,15 @@ const ViewImage: FC<Props & ModalProps> = ({ images, toggle, index, message }) =
                 <div className="flex flex-grow overflow-hidden">
                     <div className="flex items-center px-3 select-none">
                         <button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === 0} onClick={handlePreviousImage}>
-                            <img src={iconNext} alt="next" className="react__slider-btn" />
+                            <LazyLoadImage effect="blur" src={iconNext} alt="next" className="react__slider-btn" />
                         </button>
                     </div>
                     <div className="react__slider flex flex-1 justify-center px-2">
-                        <img className="max-h-full object-contain w-full" alt="..." src={images[imageIndex].file.file.url} />
+                        <LazyLoadImage effect="blur" className="max-h-full object-contain w-full" alt="..." src={images[imageIndex].file.file.url} />
                     </div>
                     <div className="flex items-center px-3 select-none">
                         <button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === images.length - 1} onClick={handleNextImage}>
-                            <img src={iconNext} alt="next" className="react__slider-btn transform rotate-180" />
+                            <LazyLoadImage effect="blur" src={iconNext} alt="next" className="react__slider-btn transform rotate-180" />
                         </button>
                     </div>
                 </div>

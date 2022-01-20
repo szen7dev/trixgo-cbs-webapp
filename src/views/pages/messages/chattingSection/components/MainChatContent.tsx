@@ -10,6 +10,7 @@ import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 type Props = {
     chat: ItemListConversation
@@ -119,7 +120,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 <button
                     onClick={() => scrollToBottom()}
                     className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
-                    <img src={ArrowDown} alt={"arrow down"}/>
+                    <LazyLoadImage effect="blur" src={ArrowDown} alt={"arrow down"}/>
                     <span
                         className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>{userUnreadMessage()}</span>
                 </button>

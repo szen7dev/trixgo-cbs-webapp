@@ -7,6 +7,7 @@ import {MessageContext} from "../../home/index_v2";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import AvatarGroupChat from "./AvatarGroupChat";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 type Props = {
     chat: ItemListConversation
@@ -96,7 +97,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             className={"group flex p-[10px] focus:bg-primary active:bg-primary hover:bg-gray-100 cursor-pointer rounded-md " + (currentChat==chat._id ? "bg-primary":"")}>
             {
                 chat.avatar?
-                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
+                    <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
                     (
                         getAvatarMembers().length === 0 ?
                         <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

@@ -4,6 +4,7 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 type Props = {
     message: any;
@@ -68,7 +69,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
                     </div>
                 </div>
                 <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>
-                    {moment(message.createdAt).format("hh:mm")}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    {moment(message.createdAt).format("hh:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>
