@@ -1,3 +1,5 @@
+import { Company } from "typings/human";
+
 interface APIResponse {
     error?: boolean;
     status?: number;
@@ -20,6 +22,7 @@ export interface Friend {
     _id: string;
     fullname: string;
     imgUrl?: string;
+    company?: Company;
 }
 
 export interface ListFriendPayload extends QueryParam {
