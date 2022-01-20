@@ -32,14 +32,15 @@ type UseUpload = {
     addFileToUpload: ({ files, progress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
 };
 
-export const useUpload = (app?: string) : UseUpload => {
+export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
     const { mutateAsync: generateLinkS3Async } =
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
                 type: payload.type,
                 size: payload.size as never,
-                app
+                app,
+                typeUpload: typeUpload
             })
         );
 
@@ -82,6 +83,7 @@ export const useUpload = (app?: string) : UseUpload => {
                quality: 0.8
            },
        }: UploadFileProps) => {
+            console.log('here', files)
         // let urlsPromise: Promise<GenerateLinkResponse>[] = [];
 
         // if(!files.length) return;

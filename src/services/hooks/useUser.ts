@@ -14,15 +14,12 @@ type UseUser = {
     getCodeUser: () => Promise<CheckCodeResponse>,
     codeUser: any;
     refetchCode: () => void,
-    isLoadingListFriends: boolean,
-    refetchListFriends: () => void,
-    nextPageListFriends: (options?: FetchNextPageOptions | undefined) => void,
-    prevPageListFriends: () => void,
     totalRecord: number | undefined,
-    totalPages: number | undefined,
-    hasNextPageListFriends: boolean | undefined,
+    totalPage: number | undefined,
+    nextCursor: string,
+    refetchListFriends: () => void,
 };
-export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => {
+export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const { mutateAsync: updateUserAsync } =
         useMutation((payload: UpdateUser) =>
         UserRepository.updateUser(payload)
@@ -201,38 +198,27 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
     const { data: dataUserCode, refetch: refetchCode } = useQuery("user_code", () => UserRepository.getCodeUser(), {enabled: false});
     const codeUser = dataUserCode?.data;
 
-    // const { data: dataFriend, refetch: refetchFriend } = useQuery("user_code", () => UserRepository.checkCodeUser(), {enabled: false});
-    // const friend = dataFriend?.data;
-
-    // Get danh sách
     const {
-        isLoading: isLoadingListFriends,
-        refetch: refetchListFriends,
-        data: dataListFriends,
-        fetchNextPage: nextPageListFriends,
-        fetchPreviousPage: prevPageListFriends,
-        hasNextPage: hasNextPageListFriends
-    } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            key || "list_friends",
-            async ({ pageParam }: any) =>
-                UserRepository.listFriends({ 
-                    lastestID: pageParam || "",
-                    ...params,
-                }),
-            {
-                getNextPageParam: (params: any) => {
-                    const nextCursor = params?.data?.nextCursor;
-                    return nextCursor || undefined;
-                },
-                refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-            }
-        );
-    const listFriends = [].concat(...(dataListFriends?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = dataListFriends?.pages[0]?.data?.totalRecord;
-    // const totalPages = dataListFriends?.pages[0]?.data?.totalPages;
-    const totalPages = 5
+        status,
+        data,
+        error,
+        refetch: refetchListFriends
+    } = useQuery(
+        ["contractIPCList", { pageParam }],
+        async () => {
+            return UserRepository.listFriends({
+                lastestID: pageParam || "",
+                ...params,
+            })
+        },
+        { keepPreviousData: true }
+    );
+
+    const listFriends = data?.data?.listRecords
+    const totalRecord = data?.data?.totalRecord
+    const totalPage = data?.data?.totalPage
+    const nextCursor = data?.data?.nextCursor
+
     return {
         updateUser,
         updatePasswordUser,
@@ -244,12 +230,9 @@ export const useUser = (key?: string, params?: ListFriendsPayload) : UseUser => 
         getCodeUser,
         refetchCode,
         listFriends,
-        isLoadingListFriends,
-        refetchListFriends,
-        nextPageListFriends,
-        prevPageListFriends,
         totalRecord,
-        totalPages,
-        hasNextPageListFriends,
+        totalPage,
+        nextCursor,
+        refetchListFriends
     }
 }
