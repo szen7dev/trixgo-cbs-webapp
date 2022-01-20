@@ -15,6 +15,13 @@ export type UpdateAvatarUser = {
     image: string,
 };
 
+export type AcceptRequestFriend = {
+    acceptFriendRequestID: string,
+};
+export type RemoveRequestFriend = {
+    removeFriendRequestID: string,
+};
+
 export type PostResponse = APIResponse & {
     data: User;
     message: string;

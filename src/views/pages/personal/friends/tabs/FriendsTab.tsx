@@ -12,13 +12,16 @@ const FriendsTab: FC<Props> = (props) => {
 
   return (
     <section>
-      <div className={toggleTab === 1 ? "block" : "hidden"}>
-        <Friends />
-      </div>
-
-      <div className={toggleTab === 2 ? "block" : "hidden"}>
-        <FriendsRequest />
-      </div>
+      {toggleTab === 1 && 
+        <div className={toggleTab === 1 ? "block" : "hidden"}>
+          <Friends />
+        </div>
+      }
+      {toggleTab === 2 && 
+        <div className={toggleTab === 2 ? "block" : "hidden"}>
+          <FriendsRequest />
+        </div>
+      }
     </section>
   );
 };
