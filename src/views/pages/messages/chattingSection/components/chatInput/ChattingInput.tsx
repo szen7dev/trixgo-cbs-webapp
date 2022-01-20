@@ -119,7 +119,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         }
         const usersTag :string[] = [];
         mentionedUsers.forEach(mention => {
-            sendValue = sendValue.replace(mention.name, `@[${mention.name}](${mention._id})`)
+            sendValue = sendValue.replace(`@${mention.name}`, `@[${mention.name}](${mention._id})`)
             usersTag.push(mention._id);
         })
         if (sendValue.length<=0) return;
