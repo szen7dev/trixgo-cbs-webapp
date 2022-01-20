@@ -10,9 +10,10 @@ import {
     AppAccess,
     ListAppDeviceAccessPayload,
     DataListAppDevice,
-    ListCompany,
+    listCompany,
     HistoryTraffic,
-    ListHistoryTrafficPayload
+    ListHistoryTrafficPayload,
+    ListCompanyAccessPayload
 } from 'typings/support';
 
 //1. LIST HISTORY TRAFFIC
@@ -117,7 +118,6 @@ interface UselistAppAccess {
     listAppAccess: Array<AppAccess>
 }
 export const useListAppAccess = (params?: ListAppAccessPayload) : UselistAppAccess => {
-    console.log('params',params)
     const infinityQuery = useInfiniteQuery(
         ["list_app_access", params],
         async ({ pageParam }: any) =>
@@ -176,17 +176,17 @@ export const useListAppDeviceAccess = (payload?: ListAppDeviceAccessPayload) : U
 
 //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
 interface UselistCompanyAccess {
-    listCompany: Array<ListCompany>
+    listCompany: Array<listCompany>
 }
-export const useListCompanyAccess = (payload?: ListAppDeviceAccessPayload) : UselistCompanyAccess => {
+export const useListCompanyAccess = (params?: ListCompanyAccessPayload) : UselistCompanyAccess => {
+    console.log('params1',params)
     const infinityQuery = useInfiniteQuery(
-        ["list_company_access", payload],
+        ["list_company_access", params],
         async ({ data }: any) => {
-            return SupportRepository.listCompanyAccess({
-                fromDate: "2022-1-15",
-                toDate: "2022-1-15",
-                year: 2021,
-            })
+            console.log('params2',params)
+            return SupportRepository.listCompanyAccess(
+                params
+            )
         },
         {
             getNextPageParam: ({ data }: any) => {
@@ -196,6 +196,7 @@ export const useListCompanyAccess = (payload?: ListAppDeviceAccessPayload) : Use
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
+    console.log('infinityQuery',infinityQuery)
     const { data } = infinityQuery;
     const listCompany = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
     return {

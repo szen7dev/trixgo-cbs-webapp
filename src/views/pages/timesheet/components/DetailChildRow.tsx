@@ -114,7 +114,7 @@ const DetailChildRow: FC<Props> = ({
         <DayPickerInput
           // className="w-16"
           // selected={null}
-          value={rowData.date}
+          value={moment(rowData.date).isValid() && moment(rowData.date).format('DD/MM/YYYY') || ''}
           placeholder="Chọn thời gian"
           onDayChange={(date: Date | null) => {
             if (moment(date).isValid())

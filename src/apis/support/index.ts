@@ -48,8 +48,8 @@ const SupportRepository = {
         return data;
     },
     //6. THỐNG KÊ TRUY CẬP THEO CÔNG TY
-    async listCompanyAccess(params: ListCompanyAccessPayload): Promise<ListCompanyAccessResponse> {
-        const { data } = await API.get<ListCompanyAccessResponse>(`${spURL}/statistics_access_by_company`, {params: params});
+    async listCompanyAccess(payload?: ListCompanyAccessPayload): Promise<ListCompanyAccessResponse> {
+        const { data } = await API.get<ListCompanyAccessResponse>(`${spURL}/statistics_access_by_company?${convertObToUrl(payload)}`);
         return data;
     },
 };

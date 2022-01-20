@@ -1,8 +1,17 @@
 import React, { FC, useMemo, useState } from 'react'
 import FinancialRowGroup from './FinancialRowGroup';
 
+//create your forceUpdate hook
+function useForceUpdate() {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [value, setValue] = useState(0); // integer state
+	return { forceUpdate: () => setValue(value => value + 1), value }; // update the state to force render
+}
+
 const PageOne: FC = () => {
-	const [show, setShow] = useState<boolean>(true)
+	const [show, setShow] = useState<boolean>(true);
+	const { forceUpdate, value } = useForceUpdate();
+	// console.log('rerender');
 	const data = useMemo(() => Array.from({ length: 3 }).map((_, index) => ({
 		_id: index,
 		project: { sign: 'test' },
@@ -22,14 +31,23 @@ const PageOne: FC = () => {
 			note: 'Xây dựng mẫu BoQ cho công tác preliminaries'
 		}))
 	})), []);
+
+	const handleToggle = (v: boolean) => {
+		if (v === show) {
+			forceUpdate();
+		} else {
+			setShow(v)
+		}
+	}
+
 	return (
 		<div className='flex-1 overflow-y-auto'>
 			<table className='text-small border-separate border-spacing-0 text-center'>
 				<thead className="text-left">
 					<tr>
 						<th className="sticky top-0 bg-gray-300 px-1.5 z-10">
-							<button className="block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(true)}>1</button>
-							<button className="block mt-0.5 text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(false)}>2</button>
+							<button className="block text-white rounded bg-gray-600 w-5 h-5" onClick={() => handleToggle(true)}>1</button>
+							<button className="block mt-0.5 text-white rounded bg-gray-600 w-5 h-5" onClick={() => handleToggle(false)}>2</button>
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2">
 							TT
@@ -40,7 +58,7 @@ const PageOne: FC = () => {
 					</tr>
 				</thead>
 				{
-					data.map((_item, index) => <FinancialRowGroup row={_item} key={index} show={show} />)
+					data.map((_item, index) => <FinancialRowGroup row={_item} key={index} show={show} forceUpdateValue={value} />)
 				}
 				<tfoot>
 					<tr className="text-right">

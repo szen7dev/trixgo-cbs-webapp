@@ -61,7 +61,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 
 	useEffect(() => {
 		document.title = "CHG.THT-Thư mục dữ liệu";
-		setData(Array.from({ length: Math.ceil(Math.random() * 5) }).map((_, i) => ({
+		setData(Array.from({ length: Math.ceil(Math.random() * 4 + 3) }).map((_, i) => ({
 			id: i,
 			type: i < 3 ? 'folder' : 'file',
 			content: "Thi công san lấp mặt bằng công trình",
@@ -96,7 +96,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						<thead className="">
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
+									<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
@@ -132,7 +132,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 									return (
 										<tr key={index} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push(match.path + path)}>
 											<td className="px-4 py-2 w-[1px]">
-												<input className="cbs-checkbox" type="checkbox" value={id} checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
+												<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="px-2 py-2">
 												<p className="align-top">
