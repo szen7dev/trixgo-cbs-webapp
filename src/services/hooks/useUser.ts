@@ -1,4 +1,4 @@
-import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser } from "typings/user";
+import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend } from "typings/user";
 import { FetchNextPageOptions, useInfiniteQuery, useMutation, useQuery } from "react-query";
 import UserRepository from "apis/user";
 import { toast } from "react-toastify";
@@ -10,6 +10,8 @@ type UseUser = {
     updateAvatarUser: (payload: UpdateAvatarUser) => Promise<void>,
     requestAddFriend: (payload: AddFriendPayLoad) => Promise<void>,
     requestUnFriend: (payload: UnFriendPayLoad) => Promise<void>,
+    acceptRequestFriend: (payload: AcceptRequestFriend) => Promise<void>,
+    removeRequestFriend: (payload: RemoveRequestFriend) => Promise<void>,
     checkCodeUser: (payload: CheckCodeUser) => Promise<CheckCodeResponse>,
     getCodeUser: () => Promise<CheckCodeResponse>,
     codeUser: any;
@@ -18,6 +20,15 @@ type UseUser = {
     totalPage: number | undefined,
     nextCursor: string,
     refetchListFriends: () => void,
+    // request friends
+    isLoadingListRequestFriends: boolean,
+    refetchListRequestFriends: () => void,
+    listRequestFriends: Array<User>,
+    nextPageListRequestFriends: () => void,
+    prevPageListRequestFriends: () => void,
+    hasNextPage: boolean | undefined,
+    totalRecordRequest: number | undefined,
+    totalPagesRequest: number | undefined,
 };
 export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const { mutateAsync: updateUserAsync } =
@@ -32,6 +43,14 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const { mutateAsync: updateAvatarUserAsync } =
         useMutation((payload: UpdateAvatarUser) =>
         UserRepository.updateAvatarUser(payload)
+    );
+    const { mutateAsync: acceptRequestAsync } =
+        useMutation((payload: AcceptRequestFriend) =>
+        UserRepository.acceptRequestFriend(payload)
+    );
+    const { mutateAsync: removeRequestAsync } =
+        useMutation((payload: RemoveRequestFriend) =>
+        UserRepository.removeRequestFriend(payload)
     );
     
     const { mutateAsync: checkCodeUserAsync } =
@@ -98,6 +117,46 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
 
             if (!error) {
                 toast.success('Cập nhật ảnh đại diện thành công');
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const acceptRequestFriend = async (payload: AcceptRequestFriend) => {
+        try {
+            const { error, data } = await acceptRequestAsync(payload);
+
+            if (!error) {
+                toast.success('Đông ý kết bạn thành công');
+            } else {
+                if(data && data[0]) {
+                    toast.error(data[0].message);
+                }
+            }
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
+    const removeRequestFriend = async (payload: RemoveRequestFriend) => {
+        try {
+            const { error, data } = await removeRequestAsync(payload);
+
+            if (!error) {
+                toast.success('Hủy lời mời kết bạn thành công');
             } else {
                 if(data && data[0]) {
                     toast.error(data[0].message);
@@ -198,13 +257,14 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const { data: dataUserCode, refetch: refetchCode } = useQuery("user_code", () => UserRepository.getCodeUser(), {enabled: false});
     const codeUser = dataUserCode?.data;
 
+    // Danh sách bạn bè của mình
     const {
         status,
         data,
         error,
         refetch: refetchListFriends
     } = useQuery(
-        ["contractIPCList", { pageParam }],
+        ["list_friends", { pageParam }],
         async () => {
             return UserRepository.listFriends({
                 lastestID: pageParam || "",
@@ -219,12 +279,42 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const totalPage = data?.data?.totalPage
     const nextCursor = data?.data?.nextCursor
 
+    // Danh sách lời mời kết bạn
+    // Get danh sách
+    const {
+        isLoading: isLoadingListRequestFriends,
+        refetch: refetchListRequestFriends,
+        data: listRequestFriendsFromAPI, // dataListContracts
+        fetchNextPage: nextPageListRequestFriends,
+        fetchPreviousPage: prevPageListRequestFriends,
+        hasNextPage: hasNextPage
+    } =
+        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+            "list_request_friends", // Key để phân biệt vùng tác động bởi data thay đổi
+            async ({ pageParams }: any) => 
+            UserRepository.listRequestFriends({ 
+                lastestID: pageParams ? pageParams : "",
+                ...params
+            }),
+            {
+                getNextPageParam: ({ nextCursor }: any) => {
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+    const listRequestFriends = [].concat(...(listRequestFriendsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecordRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalRecord;
+    const totalPagesRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalPages;
     return {
         updateUser,
         updatePasswordUser,
         updateAvatarUser,
         requestAddFriend,
         requestUnFriend,
+        acceptRequestFriend,
+        removeRequestFriend,
         checkCodeUser,
         codeUser,
         getCodeUser,
@@ -233,6 +323,14 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         totalRecord,
         totalPage,
         nextCursor,
-        refetchListFriends
+        refetchListFriends,
+        listRequestFriends,
+        isLoadingListRequestFriends,
+        refetchListRequestFriends,
+        totalRecordRequest,
+        totalPagesRequest,
+        nextPageListRequestFriends,
+        prevPageListRequestFriends,
+        hasNextPage
     }
 }
