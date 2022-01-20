@@ -1,0 +1,97 @@
+export interface addTaskPayload {
+    name: string;
+    description: string;
+    projectID: string;
+    fieldID: string;
+    groupID: string;
+    assigneeID: string;
+    isproposal: number;
+    type: number;
+    startTime: string;
+    expiredTime: string;
+    relatedIDs: string[];
+    authorAttachs: string[];
+}
+
+export interface Data {
+    childs: any[];
+    subtasks: any[];
+    level: number;
+    related: string[];
+    template: number;
+    draft: number;
+    type: number;
+    isproposal: number;
+    priority: number;
+    status: number;
+    lock: number;
+    mistake: any[];
+    order: number;
+    checklists: any[];
+    amountChecklist: number;
+    amountFinishChecklist: number;
+    signatures: any[];
+    links: any[];
+    authorAttachs: string[];
+    assigneeAttachs: any[];
+    startTime: Date;
+    expiredTime: Date;
+    actualStartTime: Date;
+    actualFinishTime: Date;
+    schedule?: any;
+    alert: number;
+    addRelatedExpired?: any;
+    percentage: number;
+    overdue: number;
+    score: number;
+    urgent: number;
+    difficult: number;
+    finishTime?: any;
+    punish: number;
+    amountoftime: number;
+    executiontime: number;
+    amountPerHour: number;
+    ipcs: any[];
+    rfas: any[];
+    timeApproved?: any;
+    valueApproved: number;
+    bidPrice: number;
+    bidPriceDiscount: number;
+    bidPriceAdjustment: number;
+    openedUsers: any[];
+    openedStatus: number;
+    responses: any[];
+    viewedUsers: any[];
+    reactions: any[];
+    comments: any[];
+    situations: any[];
+    methods: any[];
+    news: any[];
+    flags: any[];
+    usersDelete: any[];
+    usersPermanentDelete: any[];
+    state: number;
+    _id: string;
+    name: string;
+    company: string;
+    project: string;
+    group: string;
+    assignee: string;
+    author: string;
+    suid: string;
+    description: string;
+    field: string;
+    modifyAt: Date;
+    createAt: Date;
+    responsesTyping: any[];
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
+
+export interface addTaskResponse {
+    error: boolean;
+    data: Data;
+    status: number;
+    message: string;
+}

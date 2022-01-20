@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "react-query";
 
 import { FriendRepository } from 'apis/users';
-import type { Friend, ListFriendPayload } from 'typings/users/firends';
+import type { Friend, ListFriendPayload } from 'typings/users/friends';
 
 interface UseQueryListFriend {
     loading: boolean;

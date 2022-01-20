@@ -2,7 +2,7 @@ import API from "../repository";
 import type { 
     ListFriendPayload,
     QueryFriendResponse
-} from 'typings/users/firends';
+} from 'typings/users/friends';
 
 import { USER_URL } from '.';
 
