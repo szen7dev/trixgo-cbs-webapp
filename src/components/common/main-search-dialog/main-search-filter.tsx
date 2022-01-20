@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -36,7 +36,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
   });
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
-    type: 13,
+    type: 2,
     keyword: otherFieldValue,
   });
   const { data: listFriend } = useQueryListFriend({
@@ -51,7 +51,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
       <div className="t-main-search-filter-wrapper">
         <Formik initialValues={{ fromDate: '', toDate: '' }} onSubmit={onSubmitFilterData}>
           {(formik) => {
-            const { handleBlur, setFieldValue, values } = formik;
+            const { setFieldValue, values } = formik;
 
             return (
               <Form>
@@ -368,7 +368,7 @@ const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilter }) =
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}
                     maxWidthInput={"max-w-none"}
-                    isMultiple={true}
+                    isMultiple={false}
                     allowClearValueSingleInput={true}
                     renderSelectedItem={item => (
                       <div className={"flex items-center"}>
