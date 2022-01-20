@@ -2,6 +2,7 @@ import React, {FC, useContext} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
 import {AddNewChatGroupContext} from "../AddNewChatGroup";
 import DropdownSearchable from "../../../../../../components/common/DropdownSearch";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 const AddNewSection:FC = () => {
     const {setShowAddNew} = useContext(AddNewChatGroupContext);
@@ -29,7 +30,7 @@ const AddNewSection:FC = () => {
         <div className={"absolute top-0 w-full h-full bg-white z-10"}>
             <div className={"sticky top-0 bg-white w-full flex h-[56px] px-[28px] items-center"}>
                 <button onClick={() => setShowAddNew(false)} className={"flex items-center justify-center"}>
-                    <img src={IconBackGray} alt={"----"}/>
+                    <LazyLoadImage effect="blur" src={IconBackGray} alt={"----"}/>
                 </button>
                 <div className={"text-lg ml-5"}>
                     Nhóm mới

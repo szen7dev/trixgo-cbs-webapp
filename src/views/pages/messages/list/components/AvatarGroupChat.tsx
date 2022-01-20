@@ -1,5 +1,6 @@
 import React, {FC} from "react";
 import {map as _map} from "lodash"
+import {LazyLoadImage} from "react-lazy-load-image-component";
 type Props = {
     avatars: string[];
     classesMap: {[key: string] : any};
@@ -13,7 +14,7 @@ const AvatarGroupChat:FC<Props> = ({avatars, classesMap, imageClass}) => {
         <div className={`rounded-full flex items-center justify-center text-white font-bold text-xl relative ${imageClass}`}>
             {
                 _map(avatars, (avatar,index) => (
-                    <img key={index} className={`rounded-full bg-gray-100 ring-2 ring-white ${classObj["imgWidth"]} ${classObj["groupPosition"][index]}`} src={avatar} alt={"---"}/>
+                    <LazyLoadImage effect="blur" wrapperClassName={`w-full h-full ${classObj["imgWidth"]} ${classObj["groupPosition"][index]}`} key={index} className={`rounded-full bg-gray-100 ring-2 ring-white`} src={avatar} alt={"---"}/>
                 ))
             }
         </div>

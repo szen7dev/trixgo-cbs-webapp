@@ -10,6 +10,7 @@ import {map as _map} from "lodash";
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 type Props = {
     message: any;
     className?: string;
@@ -21,19 +22,19 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <img className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <img className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <img className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <img className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
             default:
-                return <img className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
@@ -96,7 +97,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                     ))
                 }
                 <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
-                    {message.date}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    {message.date}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>

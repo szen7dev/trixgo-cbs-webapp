@@ -5,6 +5,7 @@ import ChattingSection from "../chattingSection";
 import SettingMessageDetail from "../setting";
 import { useSocket } from "services/hooks/useSocket";
 import '@draft-js-plugins/emoji/lib/plugin.css';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 export const MessageContext = createContext<{
     currentChat: string;

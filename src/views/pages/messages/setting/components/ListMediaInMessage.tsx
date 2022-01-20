@@ -9,6 +9,7 @@ import ItemMediaInMessage from "./ItemMediaInMessage";
 import SampleImage from 'assets/images/photo1640398643.png';
 import TriangleDown from "assets/icons/TriangleDown";
 import DatePickerWithRange from "./DatePickerWithRange";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 const ListMediaInMessage:FC = () => {
     const listMediaInMessage = [
@@ -116,7 +117,7 @@ const ListMediaInMessage:FC = () => {
                     ]}
                     renderItem={(item) => (
                         <div className={"flex align-items-center text-left"}>
-                            <img alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
+                            <LazyLoadImage effect="blur" alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
                             <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>
                         </div>
                     )}
