@@ -82,6 +82,9 @@ const Friends: FC = () => {
   const nextPageAction = () => {
     setPageParam(nextCursor)
   }
+  useEffect(() => {
+    refetchListFriends()
+  }, [])
   return (
     <main className="flex-1">
       <header className="sticky top-[40px] z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
