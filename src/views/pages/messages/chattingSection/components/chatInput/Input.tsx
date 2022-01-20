@@ -1,5 +1,4 @@
-import React, {FC, useEffect, useRef, useState, useCallback, useMemo, useContext, ReactElement} from "react";
-import {v4 as uuidv4} from "uuid";
+import React, {FC, useState, useCallback, useMemo, useContext} from "react";
 import {getDefaultKeyBinding, DraftHandleValue} from "draft-js"
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
@@ -9,6 +8,17 @@ import createMentionPlugin, {
 
 import "@draft-js-plugins/mention/lib/plugin.css";
 import {ChattingInputContext} from "./ChattingInput";
+import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
+import IconButton from "./IconButton";
+// import editorStyles from './editorStyles.module.css';
+
+defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
+defaultTheme.emojiSuggestionsEntry = defaultTheme.emojiSuggestionsEntry + " flex items-center";
+defaultTheme.emojiSuggestionsEntryFocused = defaultTheme.emojiSuggestionsEntryFocused + " flex items-center";
+defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " border-0 h-full";
+defaultTheme.emojiSelectButtonPressed = defaultTheme.emojiSelectButtonPressed + " border-0 h-full";
+defaultTheme.emojiSelectPopoverEntry = defaultTheme.emojiSelectPopoverEntry + " flex items-center justify-center";
+defaultTheme.emojiSelectPopoverEntryFocused = defaultTheme.emojiSelectPopoverEntryFocused + " flex items-center justify-center";
 
 type Props = {
     onPressEnter?: () => void;
@@ -19,15 +29,32 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
     const {editorState, onChangeCallback, suggestions, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
 
-    const { MentionSuggestions, plugins } = useMemo(() => {
+    const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
             mentionPrefix: '@',
         });
         // eslint-disable-next-line no-shadow
         const { MentionSuggestions } = mentionPlugin;
         // eslint-disable-next-line no-shadow
-        const plugins = [mentionPlugin];
-        return { plugins, MentionSuggestions };
+
+        const emojiPlugin = createEmojiPlugin({
+            theme : defaultTheme,
+            positionSuggestions: (settings) => {
+                return {
+                    left: 0,
+                    top: '-30px', // change this value (40) for manage the distance between cursor and bottom edge of popover
+                    display: 'block',
+                    transform: 'scale(1) translateY(-100%)', // transition popover on the value of its height
+                    transformOrigin: '1em 0% 0px',
+                    transition: 'all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1)'
+                };
+            },
+            selectButtonContent: <IconButton/>
+        });
+        const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+
+        const plugins = [mentionPlugin, emojiPlugin];
+        return { plugins, MentionSuggestions, EmojiSuggestions, EmojiSelect };
     }, []);
 
     const onOpenChange = useCallback((_open: boolean) => {
@@ -62,6 +89,7 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
 
     return (
         <>
+            <EmojiSelect />
             <Editor
                 editorState={editorState}
                 onChange={onChangeCallback}
@@ -77,6 +105,7 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
                 suggestions={suggestions}
                 // entryComponent={Entry}
             />
+            <EmojiSuggestions />
         </>
     )
 }
