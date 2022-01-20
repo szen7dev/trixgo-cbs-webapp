@@ -38,7 +38,7 @@ const TimeSheetHomePage: FC = () => {
     loading,
     hasNextPage,
   } = useQueryListTimeSheetParent();
-  console.log({data})
+  console.log({ data });
   const {
     onCreateTimeSheetParentAsync,
     onUpdateTimeSheetParentAsync,
@@ -262,7 +262,10 @@ const TimeSheetHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {timeSheetParent.unitprice}
+                {`${timeSheetParent?.amount}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                )}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {timeSheetParent.note}
