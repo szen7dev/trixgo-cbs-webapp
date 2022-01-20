@@ -11,6 +11,7 @@ async function fetchListFriend<T>(params?: ListFriendPayload): Promise<T> {
         `${USER_URL}/list-friend`, {
         params: {
             select: 'fullname image',
+            populates: '{"path": "company", "select": "name sign"}',
             ...params,
         }
     }
