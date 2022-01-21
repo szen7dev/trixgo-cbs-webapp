@@ -11,6 +11,8 @@ import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import Reminder from "./Reminder";
+import moment from "moment";
 
 type Props = {
     chat: ItemListConversation
@@ -80,18 +82,41 @@ const MainChatContent:FC<Props> = ({chat}) => {
         }
     }
 
-    const renderMessage = (message: any) => {
+    const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined) => {
+        const messageCreatedAt = moment(message.createdAt);
+        return (
+            <div key={message._id}>
+                {
+                    previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
+                        <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
+                        (
+                            !previousMessage?
+                                <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
+                                null
+                        )
+                }
+                {renderPrimaryMessage(message)}
+            </div>
+        )
+    }
+    const renderPrimaryMessage = (message: ItemMessage) => {
         switch (message.type) {
             case 0:
             case 1:
             case 2:
                 if (message.sender._id === profileId) {
-                    return <MyMessage key={message._id} message={message}/>
+                    return <MyMessage message={message}/>
                 } else {
-                    return <OthersMessage key={message._id} message={message}/>
+                    return <OthersMessage message={message}/>
                 }
+            case 4:
+                return <div>
+                    <Reminder message={message}/>
+                </div>;
             case 108:
-                return <NotificationCenter key={message._id} content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
+                return <NotificationCenter content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
+            case 116:
+                return <NotificationCenter content={`${message.sender.fullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
         }
     }
     return (
@@ -104,12 +129,12 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {
                         messagesData?
-                            _map(memoizedValue, message => renderMessage(message)):
+                            _map(memoizedValue, (message, index) => renderMessage(message, memoizedValue[index-1])):
                             null
                     }
                     {
                         messagesData?
-                            _map(memoizedFakeValue, message => renderMessage(message)):
+                            _map(memoizedFakeValue, (message, index) => renderMessage(message, memoizedFakeValue[index-1])):
                             null
                     }
                 </div>

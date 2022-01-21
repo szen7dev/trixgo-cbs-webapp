@@ -23,7 +23,7 @@ export const UseListConversation = () : UseListConversationType => {
 
     const getListMembersOfConversation = async (params: ListMembersOfConversationPayload) => {
         const { data } = await ListConversationRepository.getListMembersOfConversation(params);
-        dispatch(setListMembers({conversationId: params.conversationID, data}))
+        dispatch(setListMembers({conversationId: params.conversationID, data: data.listRecords}))
     }
 
     return {
