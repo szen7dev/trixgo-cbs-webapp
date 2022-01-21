@@ -79,7 +79,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
         if (date.isSame(new Date(), 'date')) {
-            return date.format("hh:mm")
+            return date.format("HH:mm")
         }else if (date.isSame(new Date(), 'week')) {
             return date.format("dddd").split(" ").map((str:string) => str.charAt(0).toUpperCase() + str.slice(1)).join(" ")
         }else if (date.isSame(new Date(), 'year')) {
