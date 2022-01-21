@@ -20,7 +20,7 @@ const ListConversationRepository = {
 
     async getListMembersOfConversation(payload: ListMembersOfConversationPayload): Promise<ListMembersOfConversationResponse> {
         const { data } = await API.get<ListMembersOfConversationResponse>(
-            `${getListMembersOfConversationURL}${convertObToUrl(payload)}`
+            `${getListMembersOfConversationURL}?${convertObToUrl(payload)}`
         )
 
         return data;
