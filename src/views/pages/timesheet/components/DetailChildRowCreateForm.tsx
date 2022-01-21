@@ -85,12 +85,12 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
           placeholder='Nhập nội dung...'
           className={"w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"}
           onBlur={async (e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
+            const value = e.target.value;
             const isCreated = await handleClickUpdateTimeSheet({
               name: value,
             });
             if (isCreated) {
-              e.target.innerText = "";
+              e.target.value = "";
             }
           }}
         />
