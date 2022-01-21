@@ -11,6 +11,7 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import moment from "moment";
 type Props = {
     message: any;
     className?: string;
@@ -97,7 +98,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                     ))
                 }
                 <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
-                    {message.date}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    {moment(message.createdAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>
