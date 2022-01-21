@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 
 import cn from "classnames";
 
@@ -15,11 +15,109 @@ import styles from "../../../styles.module.css";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 
+import moment from "moment";
+import { DATE_FORMAT } from "apis/localdb/index";
+import { formatNumberMoney } from "helpers/index"
+
+import {
+  UseContractProduceList,
+  useCreateContractProduceMutation,
+  useUpdateContractProduceMutation,
+  useDeleteContractProduceMutation,
+} from "services/hooks/useContractProduce";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import { useParams } from "react-router-dom";
+
 const ContractProduce: FC = () => {
+  const [itemChecked, setItemChecked] = useState('');
+
+  const [pageParam, setPageParam] = useState('');
+  const [prevCursor, setPrevCursor] = useState([null]);
+
   const { openModal } = useModal();
+  const params: any = useParams();
+
+  const contractProduce = UseContractProduceList(pageParam, params.id);
+
+  const { createContractProduceMutateAsync } = useCreateContractProduceMutation();
+  const { updateContractProduceMutateAsync } = useUpdateContractProduceMutation();
+  const { deleteContractProduceMutateAsync } = useDeleteContractProduceMutation();
+
+  useEffect(() => {
+    if (!contractProduce.nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find((item: any) => item === contractProduce.nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, contractProduce.nextCursor])
+    }
+  }, [contractProduce.nextCursor]);
+
+  const prevPageAction = () => {
+    if (!contractProduce.nextCursor) {
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
+    } else {
+      const prev = prevCursor.findIndex((item: any) => item === contractProduce.nextCursor)
+      setPageParam(prevCursor[prev - 2] || '')
+    }
+
+  };
+
+  const nextPageAction = () => {
+    setPageParam(contractProduce.nextCursor)
+  }
+
+  const { openDeleteConfirm } = useDeleteConfirm();
+
+  const handleDeleteAction = async () => {
+    if (!itemChecked) {
+      return
+    }
+    openDeleteConfirm({
+      deleteAction: async () => {
+        const res = await deleteContractProduceMutateAsync(itemChecked)
+        if (!res.error) {
+          contractProduce.refetch()
+        }
+      },
+    });
+  }
+  const handleEditAction = async () => {
+    if (!itemChecked) {
+      return
+    }
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+        }
+      >
+        <ContractProduceModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
+      </div>
+    )
+  }
+
+  const handleFinishForm = useCallback(async (values, isEdit = false) => {
+    let res: any
+    if (isEdit) {
+      res = await updateContractProduceMutateAsync(values);
+    } else {
+      res = await createContractProduceMutateAsync(values);
+    }
+
+    if (res.code && res.code !== 200) {
+      return false;
+    }
+
+    if (!res.error) {
+      contractProduce.refetch()
+      return true;
+    }
+    return false;
+  }, [contractProduce]);
 
   return (
-    <main className="relative h-full">
+    <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Sản lượng</p>
@@ -31,7 +129,10 @@ const ContractProduce: FC = () => {
           />
           <FinancialCashFlowFilterButton />
           <div className="border-l-2 border-primary-border ml-5 pl-5">
-            <ActionGroupFinancial />
+            <ActionGroupFinancial
+              deleteAction={handleDeleteAction}
+              editAction={handleEditAction}
+            />
           </div>
         </div>
         <div className="flex items-center">
@@ -41,10 +142,11 @@ const ContractProduce: FC = () => {
               openModal(
                 <div
                   className={
-                    "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
                   }
                 >
-                  <ContractProduceModal />
+                  <ContractProduceModal onFinish={handleFinishForm} contractID={params.id} title="Thêm mới" />
                 </div>
               )
             }
@@ -113,74 +215,42 @@ const ContractProduce: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-10 bg-cbs-table-header">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">{""}</td>
-            <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">300.000.000</td>
-            <td className="py-1 px-2">{""}</td>
-          </tr>
+          {contractProduce?.listContractProduce?.map((item: any) => {
+            return (
+              <tr key={item._id} className="border-b border-primary-border h-[50px]">
+                <td className="py-1 px-2 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    checked={itemChecked === item._id}
+                    onChange={() => setItemChecked(item._id)}
+                    style={{ marginLeft: "-23px" }}
+                  />
+                </td>
+                <td className="py-1 px-2">
+                  {item.name}
+                </td>
+                <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{item.sign}</td>
+                <td className="py-1 px-2">{formatNumberMoney((item.produce || 0))}</td>
+                <td className="py-1 px-2">{formatNumberMoney((item.vatProduce || 0))}</td>
+                <td className="py-1 px-2">{formatNumberMoney((item.plusProduce || 0))}</td>
+                <td className="py-1 px-2">{formatNumberMoney((item.vatPlusProduce || 0))}</td>
+                <td className="py-1 px-2">{item.description}</td>
+              </tr>
+            )
+          })}
 
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                defaultChecked
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Khối lượng thực hiện tháng 6 năm 2021 gói thầu Binary
-            </td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">P15008</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">Đang triển khai</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Khối lượng thực hiện tháng 6 năm 2021 gói thầu Binary
-            </td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">P15008</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">100.000.000</td>
-            <td className="py-1 px-2">Đang triển khai</td>
-          </tr>
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate
+        totalPages={contractProduce.totalPage}
+        totalRecord={contractProduce.totalRecord}
+        prevPageAction={() => prevPageAction()}
+        nextPageAction={() => nextPageAction()} />
     </main>
   );
 };
