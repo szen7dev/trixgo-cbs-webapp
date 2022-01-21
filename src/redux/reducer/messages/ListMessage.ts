@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {ItemMembersOfConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {
     data: {
@@ -24,6 +25,9 @@ const initialState : {
         },
         isLoading: {
             [key:string] : boolean
+        },
+        listMembers: {
+            [key:string] : ItemMembersOfConversation[];
         }
     }
 } = {
@@ -34,6 +38,7 @@ const initialState : {
         nextCursor: {},
         hasMoreData: {},
         isLoading: {},
+        listMembers: {}
     }
 };
 
@@ -139,10 +144,19 @@ const listMessageSlice = createSlice({
                     }
                 }
             }
+        },
+        setListMembers(state, action) {
+            state.data = {
+                ...state.data,
+                listMembers: {
+                    ...state.data.listMembers,
+                    [action.payload.conversationId] : action.payload.data
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, appendFakeMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage } = listMessageSlice.actions;
+export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, appendFakeMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage, setListMembers } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

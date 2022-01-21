@@ -63,3 +63,23 @@ export type ListConversationPayload = {
     lastestID?: string;
     limit?: number;
 };
+
+export type ListMembersOfConversationPayload = {
+    conversationID: string;
+}
+export type ItemMembersOfConversation = {
+    _id: string;
+    image: string;
+    sendToFriends: any[];
+    receiveFromFriends: any[];
+    friends: string[];
+    email: string;
+    fullname: string;
+    position: string;
+    recentlyFriends: string[]
+}
+export type ListMembersOfConversationResponse = {
+    error: boolean;
+    data: ItemMembersOfConversation[];
+    status: number;
+};

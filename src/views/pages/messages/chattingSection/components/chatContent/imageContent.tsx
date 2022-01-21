@@ -96,7 +96,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
                 {renderImageDisplay()}
             </div>
             <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
-                {moment(message.createAt).format("hh:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                {moment(message.createAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                 <div className="flex overflow-hidden transition-all transform w-full h-full">
