@@ -53,7 +53,7 @@ const SettingMessageDetail:FC = () => {
         )
     }
     return (
-        <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute " + (showMenu?"right-0":"right--480px")}>
+        <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute h-full " + (showMenu?"right-0":"right--480px")}>
             <div className={"h-full group bg-gray-100 overflow-auto"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button onClick={() => setShowMenu(false)}>

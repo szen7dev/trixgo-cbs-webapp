@@ -76,10 +76,16 @@ export type ItemMembersOfConversation = {
     email: string;
     fullname: string;
     position: string;
-    recentlyFriends: string[]
+    recentlyFriends: string[];
+    [key: string]: any;
 }
 export type ListMembersOfConversationResponse = {
     error: boolean;
-    data: ItemMembersOfConversation[];
+    data: {
+        listRecords: ItemMembersOfConversation[];
+        limit: number;
+        totalRecord: number;
+        nextCursor: string;
+    };
     status: number;
 };
