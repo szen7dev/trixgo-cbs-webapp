@@ -11,6 +11,14 @@ const Reminder:FC<Props> = ({message}) => {
         switch (message.reminder.repeat) {
             case "once":
                 return "Không lặp lại";
+            case "daily":
+                return "Hàng ngày";
+            case "weekly":
+                return "Hàng tuần";
+            case "monthly":
+                return "Hàng tháng";
+            case "yearly":
+                return "Hàng năm";
         }
     };
     const checkUserAccept = () => {

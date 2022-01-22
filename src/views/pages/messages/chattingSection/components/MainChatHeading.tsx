@@ -51,7 +51,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
             <div className={"avatar-chat flex items-center justify-center"}>
                 {
                     chat.avatar?
-                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
+                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

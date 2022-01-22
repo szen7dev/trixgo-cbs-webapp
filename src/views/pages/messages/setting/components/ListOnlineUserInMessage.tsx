@@ -17,7 +17,7 @@ const ListOnlineUserInMessage:FC = () => {
 
     if (!listUserInMessage) return null;
     return (
-        <div className={"bg-white overflow-auto flex-1"}>
+        <div className={"bg-white flex-1"}>
             {
                 _map(listUserInMessage, (user,index) => (
                     <OnlineUserInChatItem key={user._id} user={user} index={index}/>
