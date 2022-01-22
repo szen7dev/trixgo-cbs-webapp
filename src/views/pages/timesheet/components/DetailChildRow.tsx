@@ -81,7 +81,7 @@ const DetailChildRow: FC<Props> = ({
       >
         <p
           suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 px-2 py-5"}
+          className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
         >
           {index + 1}
         </p>
@@ -108,13 +108,17 @@ const DetailChildRow: FC<Props> = ({
       </div>
       <div
         className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <DayPickerInput
           // className="w-16"
           // selected={null}
-          value={moment(rowData.date).isValid() && moment(rowData.date).format('DD/MM/YYYY') || ''}
+          value={
+            (moment(rowData.date).isValid() &&
+              moment(rowData.date).format("DD/MM/YYYY")) ||
+            ""
+          }
           placeholder="Chọn thời gian"
           onDayChange={(date: Date | null) => {
             if (moment(date).isValid())
@@ -130,7 +134,7 @@ const DetailChildRow: FC<Props> = ({
           "table-cell relative box-border border border-gray-300 text-end bg-white"
         }
       >
-        <p className={"w-full h-full focus:outline-blue-600 p-2"}>
+        <p className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}>
           <input
             type="checkbox"
             className="form-check-input cursor-pointer"
@@ -153,7 +157,7 @@ const DetailChildRow: FC<Props> = ({
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
-            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
@@ -175,7 +179,7 @@ const DetailChildRow: FC<Props> = ({
           contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
-            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
@@ -185,7 +189,7 @@ const DetailChildRow: FC<Props> = ({
             });
           }}
         >
-          {rowData.unitprice}
+          {`${rowData.unitprice}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
@@ -194,30 +198,30 @@ const DetailChildRow: FC<Props> = ({
         }
       >
         <p
-          contentEditable={"true"}
+          // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={
-            "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
+            "w-full h-full focus:outline-blue-600 px-[16px] py-[9px] flex justify-end"
           }
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-            const value = e.target.innerText;
-            handleClickUpdateTimeSheet({
-              ...rowData,
-              amount: `${value}`,
-            });
-          }}
+          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+          //   const value = e.target.innerText;
+          //   handleClickUpdateTimeSheet({
+          //     ...rowData,
+          //     amount: `${value}`,
+          //   });
+          // }}
         >
-          {rowData.amount}
+          {`${rowData.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         </p>
       </div>
       <div
         className={
-          "p-2 table-cell relative box-border border border-gray-300 bg-white"
+          "px-[16px] py-[9px] table-cell relative box-border border border-gray-300 bg-white"
         }
       >
         <DropdownSearchable
           id="ticket-creator"
-          className={"w-full pl-0 -mb-1 outline-none"}
+          className={"w-full pl-0 -mb-1 outline-none "}
           bordered
           isMultiple={false}
           allowClearValueSingleInput
@@ -229,7 +233,7 @@ const DetailChildRow: FC<Props> = ({
                 textOverflow: "ellipsis",
                 maxWidth: "100%",
                 minWidth: 0,
-                width: '100px',
+                width: "100px",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
               }}
@@ -263,7 +267,7 @@ const DetailChildRow: FC<Props> = ({
         <p
           contentEditable={"true"}
           suppressContentEditableWarning={true}
-          className={"w-full h-full focus:outline-blue-600 p-2"}
+          className={"w-full h-full focus:outline-blue-600 px-[16px] py-[9px]"}
           onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.innerText;
             handleClickUpdateTimeSheet({
