@@ -87,14 +87,14 @@ const ChattingInput:FC<Props> = ({chat}) => {
             // console.log(data)
             if (data.infoMessage?.sender?._id === profileId) {
                 dispatch(updateNewMessageToConversation({
-                    conversationId: currentChat,
+                    conversationId: data.infoMessage.conversation,
                     newMessageId: data.infoMessage._id,
                     oldMessageId: data.tmpid,
                     messageData: data.infoMessage
                 }));
             } else {
                 dispatch(appendMessageToConversation({
-                    conversationId: currentChat,
+                    conversationId: data.infoMessage.conversation,
                     messageId: data.infoMessage._id,
                     messageData: data.infoMessage
                 }))

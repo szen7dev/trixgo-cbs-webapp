@@ -20,7 +20,7 @@ type UseAuth = {
   signOut: () => void;
   dataUserInfo: any;
   refetchDataUserInfo: any;
-  updateDevice: () => void;
+  updateDevice: (_id: string) => void;
 };
 
 export const useAuth = (): UseAuth => {
@@ -59,7 +59,7 @@ export const useAuth = (): UseAuth => {
   const ONESIGNAL_APP_ID = process.env.REACT_APP_ENV === 'development'
       ? process.env.REACT_APP_ONESIGNAL_APP_ID_LOCAL
       : process.env.REACT_APP_ONESIGNAL_APP_ID_STAGING;
-  const updateDevice = () => {
+  const updateDevice = (_id: string) => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
@@ -91,9 +91,9 @@ export const useAuth = (): UseAuth => {
               OneSignalReact.getUserId(async function(oneSignalWebPushID) {
                 console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
                 if (oneSignalWebPushID) {
-                  const oneSignalId = localStorage.getItem("oneSignalId");
+                  const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
                   if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
-                    localStorage.setItem("oneSignalId", oneSignalWebPushID);
+                    localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
                     await AuthenticationRepository.updateDevice({
                       platform: "1",
                       deviceID: 'BROWSER',
@@ -111,9 +111,9 @@ export const useAuth = (): UseAuth => {
             OneSignalReact.getUserId(async function(oneSignalWebPushID) {
               console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
               if (oneSignalWebPushID) {
-                const oneSignalId = localStorage.getItem("oneSignalId");
+                const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
                 if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
-                  localStorage.setItem("oneSignalId", oneSignalWebPushID);
+                  localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
                   await AuthenticationRepository.updateDevice({
                     platform: "1",
                     deviceID: 'BROWSER',
@@ -160,7 +160,9 @@ export const useAuth = (): UseAuth => {
     dispatch({
       type: "SIGN_OUT",
     });
-    localStorage.removeItem("oneSignalId");
+    const user = JSON.parse(localStorage.getItem("currentUser") as string) ?? null;
+    const _id = user._id;
+    localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     window.location.reload();
