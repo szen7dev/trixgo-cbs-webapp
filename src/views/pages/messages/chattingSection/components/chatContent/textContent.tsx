@@ -65,7 +65,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
             }
             <div className={"pr-[20px] pb-[5px]"}>
                 <div className={"message-content"}>
-                    <div ref={textContentRef} className={"flex-1 py-[4px] break-all"}>
+                    <div ref={textContentRef} className={"flex-1 py-[4px] break-words"}>
                     </div>
                 </div>
                 <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>

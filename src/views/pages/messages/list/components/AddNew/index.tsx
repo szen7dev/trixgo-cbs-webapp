@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
 import {AddNewChatGroupContext} from "../AddNewChatGroup";
 import {LazyLoadImage} from "react-lazy-load-image-component";
@@ -7,13 +7,32 @@ import {map as _map} from "lodash";
 import Close from "assets/icons/Close";
 
 const AddNewSection:FC = () => {
-    const {setShowAddNew} = useContext(AddNewChatGroupContext);
+    const {setShowAddNew, setParamsConversation, paramsConversation} = useContext(AddNewChatGroupContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [pageParam, setPageParam] = useState('');
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
     const params = {limit: 10, select: 'fullname email phone image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam, keyword: searchTerm}
     const { listFriends, nextCursor } = useUser(pageParam, params);
+
+    useEffect(() => {
+        if (Object.values(selectedFriends).length > 1) {
+            setParamsConversation(oldValue => {
+                return {
+                    ...oldValue,
+                    isPrivate: false,
+                    name: ''
+                }
+            })
+        } else {
+            setParamsConversation(oldValue => {
+                return {
+                    ...oldValue,
+                    isPrivate: true
+                }
+            })
+        }
+    },[selectedFriends])
 
     const handleAddFriendToConversation = (value: boolean, friend: any) => {
         const selected = {...selectedFriends};
@@ -24,16 +43,28 @@ const AddNewSection:FC = () => {
         }
         setSearchTerm("");
         setSelectedFriends(selected);
+        setParamsConversation(oldValue => {
+            return {
+                ...oldValue,
+                membersID: Object.keys(selected)
+            }
+        })
     }
 
     const removeSelectedFriend = (_id: string) => {
         const selected = {...selectedFriends};
         delete selected[_id];
         setSelectedFriends(selected);
+        setParamsConversation(oldValue => {
+            return {
+                ...oldValue,
+                membersID: Object.keys(selected)
+            }
+        })
     }
 
     return (
-        <div className={"absolute top-0 w-full h-full bg-white z-20 overflow-auto no-webkit-scrollbar"}>
+        <div className={"absolute top-0 w-full h-full bg-white z-5 overflow-auto no-webkit-scrollbar"}>
             <div className={"sticky top-0 bg-white w-full flex h-[56px] px-[28px] items-center z-15"}>
                 <button onClick={() => setShowAddNew(false)} className={"flex items-center justify-center"}>
                     <LazyLoadImage effect="blur" src={IconBackGray} alt={"----"}/>
@@ -42,9 +73,18 @@ const AddNewSection:FC = () => {
                     Nhóm mới
                 </div>
             </div>
-            <div className={"w-full px-[20px] mt-[30px] group relative z-5"}>
+            <div className={"w-full px-[20px] mt-[30px] group relative z-5 " + (paramsConversation.isPrivate?"hidden":"block")}>
                 <label className={"absolute -top-2 left-8 bg-white group-focus:text-primary group-hover:text-primary text-gray-300 z-15"}>Group Name</label>
-                <input className={"add-group-name relative w-full focus:outline-none group-hover:border-primary group-focus:border-primary border border-gray-300 h-[50px] rounded-lg px-[16px]"}/>
+                <input
+                    className={"add-group-name relative w-full focus:outline-none group-hover:border-primary group-focus:border-primary border border-gray-300 h-[50px] rounded-lg px-[16px]"}
+                    value={paramsConversation.name}
+                    onChange={e => setParamsConversation(oldValue => {
+                        return {
+                            ...oldValue,
+                            name: e.target.value
+                        }
+                    })}
+                />
             </div>
             <div className={"w-full mt-[20px]"}>
                 <div
@@ -60,6 +100,7 @@ const AddNewSection:FC = () => {
                         ))
                     }
                     <input
+                        type={"text"}
                         className={"focus:outline-none"}
                         placeholder={"Thêm người"}
                         value={searchTerm}
@@ -75,7 +116,6 @@ const AddNewSection:FC = () => {
                             className="form-check-input mx-4"
                             type="checkbox"
                             id={`friend-${friend._id}`}
-                            checked={Object.values(selectedFriends).includes(friend._id)}
                             defaultChecked={Object.values(selectedFriends).includes(friend._id)}
                         />
                         <label className={"flex-1 flex items-center"} htmlFor={`friend-${friend._id}`}>
@@ -87,7 +127,7 @@ const AddNewSection:FC = () => {
             }
             {
                 nextCursor&&
-                <div className={"flex items-center justify-center"}>
+                <div className={"flex items-center justify-center mb-5"}>
                     <button
                         onClick={() => setPageParam(nextCursor)}
                         className={"text-primary text-center"}
