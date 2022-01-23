@@ -44,7 +44,15 @@ const Reminder:FC<Props> = ({message}) => {
                     </div>
                     <div className={"flex-1"}>
                         <div className={"font-bold text-lg"}>
-                            {message.reminder.content}
+                            {message.reminder.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                                if (matchs) {
+                                    const fullName = matchs[1];
+                                    return `@${fullName}`;
+                                } else {
+                                    return replacement;
+                                }
+                            })}
                         </div>
                         <div>
                             {moment(message.reminder.remindTime).format("HH:mm dddd, DD MMMM YYYY")}

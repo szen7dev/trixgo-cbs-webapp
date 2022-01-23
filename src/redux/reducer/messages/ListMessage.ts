@@ -28,6 +28,9 @@ const initialState : {
         },
         listMembers: {
             [key:string] : ItemMembersOfConversation[];
+        },
+        listImages: {
+            [key: string] : any[]
         }
     }
 } = {
@@ -38,7 +41,8 @@ const initialState : {
         nextCursor: {},
         hasMoreData: {},
         isLoading: {},
-        listMembers: {}
+        listMembers: {},
+        listImages: {}
     }
 };
 
@@ -153,10 +157,34 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId] : action.payload.data
                 }
             }
+        },
+        setListMedias(state, action) {
+            switch (action.payload.type) {
+                case 1:
+                    state.data = {
+                        ...state.data,
+                        listImages: {
+                            ...state.data.listImages,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, appendFakeMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage, setListMembers } = listMessageSlice.actions;
+export const {
+    setListMessage,
+    setTotalRecord,
+    setNextCursor,
+    setLoading,
+    appendMessageToConversation,
+    appendFakeMessageToConversation,
+    updateNewMessageToConversation,
+    updateFileProgressOnMessage,
+    setListMembers,
+    setListMedias
+} = listMessageSlice.actions;
 export default listMessageSlice.reducer;
