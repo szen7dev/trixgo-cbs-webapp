@@ -137,3 +137,35 @@ export type CreateConversationResponse = {
     data: CreateConversationResponseBodyData;
     status: number;
 };
+
+export type MediasOfConversationPayload = {
+    conversationID: string;
+    typeMessage: 1|2|3;
+    senderID?: string;
+    fromDate?: string;
+    toDate?: string;
+    dateCreate?: string;
+    limit?: number
+}
+export type ItemMediaOfConversation = {
+    dataFormat: string;
+    messages: {
+        name: string;
+        size: number;
+        url: string;
+        _id: string;
+    }[];
+    _id: string;
+}
+export type MediasOfConversationResponseBodyData = {
+    listRecords: ItemMediaOfConversation[];
+    limit: number;
+    totalRecord: number;
+    nextCursor: string;
+}
+
+export type MediasOfConversationResponse = {
+    error: boolean;
+    data: any;
+    status: number;
+};

@@ -2,15 +2,21 @@ import API from "../repository";
 import { convertObToUrl } from "helpers";
 
 import {
-    CheckExistConversationResponse, CreateConversationPayload, CreateConversationResponse,
+    CheckExistConversationResponse,
+    CreateConversationPayload,
+    CreateConversationResponse,
     ListConversationPayload,
     ListConversationResponse,
-    ListMembersOfConversationPayload, ListMembersOfConversationResponse
+    ListMembersOfConversationPayload,
+    ListMembersOfConversationResponse,
+    MediasOfConversationPayload,
+    MediasOfConversationResponse
 } from "typings/apis/messages/listConversation";
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
 const checkExistConversation = "/api/chatting/conversations/check-exists-conversation";
 const createConversation = "/api/chatting/conversations/create-conversation";
+const mediasOfConversation = "/api/chatting/conversations/list-message-media-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -44,6 +50,14 @@ const ListConversationRepository = {
         )
 
         return data
+    },
+
+    async getListImagesOfConversation(payload: MediasOfConversationPayload): Promise<MediasOfConversationResponse> {
+        const {data} = await API.get<MediasOfConversationResponse>(
+            `${mediasOfConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
     }
 
 };

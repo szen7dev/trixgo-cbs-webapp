@@ -54,7 +54,7 @@ const SettingMessageDetail:FC = () => {
     }
     return (
         <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute h-full " + (showMenu?"right-0":"right--480px")}>
-            <div className={"h-full group bg-gray-100 overflow-auto"}>
+            <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button onClick={() => setShowMenu(false)}>
                         <Close/>
@@ -122,6 +122,7 @@ const SettingMessageDetail:FC = () => {
                     <div className={"flex-1 text-left ml-4"}>Notifications</div>
                     <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
                 </div>
+                <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab/>
             </div>
             <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
