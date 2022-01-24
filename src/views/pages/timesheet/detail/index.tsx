@@ -210,7 +210,7 @@ const TimeSheetDetailPage: FC = () => {
                 "p-2 table-cell box-border border border-gray-300 align-middle bg-gray-100"
               }
             >
-              Số giờ thực hiện
+              Số giờ
             </div>
             <div
               className={

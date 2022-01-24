@@ -1,48 +1,49 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import DotsHorizontalGrayIcon from "assets/icons/DotsHorizontalGray";
 import RemoveIcon from "assets/images/icons8-remove-100.svg";
 import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {MessageContext} from "../../home/index_v2";
 
 type Props = {
     user: any,
     index: number
 }
 const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
-    const backGround = [
-        "#84BBE4",
-        "#8DD4D6",
-        "#FCC4A2",
-        "#A6DA95",
-        "#0060E1",
-        "#4781CF",
-        "#F089B7",
-    ]
-    const getPresentGroupName = () => {
-        return user.userName.split(' ').slice(0, 2).map((text: string) => {
-            return text.charAt(0)
+    const {createConversation} = UseListConversation();
+    const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
+    const socket = socketRef.current;
+
+    const handleStartPrivateChat = (memberId: string) => {
+        createConversation({
+            name: "",
+            description: "",
+            isPrivate: true,
+            membersID: [memberId]
+        }).then(data => {
+            console.log(data)
+            if (currentChat === data._id) return;
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
+            setCurrentChat(data._id);
+            window.location.hash = `#${data._id}`
         });
     }
-
-    const getColor = () => {
-        return backGround[index%7]
-    }
-
     return (
         <div
             className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item"}>
-            {
-                user.userAvatar?
-                    <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={user.userAvatar} alt={user.userName}/>:
-                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
-                        {getPresentGroupName()}
-                    </div>
-            }
+            <LazyLoadImage
+                onClick={() => handleStartPrivateChat(user._id)}
+                effect="blur"
+                className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
+                src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.fullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
-                <span className={"font-bold"}>
-                    {user.userName}
+                <span
+                    onClick={() => handleStartPrivateChat(user._id)}
+                    className={"font-bold"}>
+                    {user.fullname}
                 </span>
-                <span className={"truncate "+(user.status==="online"?"text-primary":"text-gray-400")}>{user.status}</span>
+                <span className={"truncate "+(user.status===1?"text-primary":"text-gray-400")}>{user.status===1?"online":"offline"}</span>
             </div>
             <div
                 className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>

@@ -265,7 +265,7 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         error,
         refetch: refetchListFriends
     } = useQuery(
-        ["list_friends", { pageParam }],
+        ["list_friends", { pageParam }, params.keyword],
         async () => {
             return UserRepository.listFriends({
                 lastestID: pageParam || "",

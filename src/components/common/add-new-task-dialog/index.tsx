@@ -157,7 +157,7 @@ const AddNewTaskDialog: FC = () => {
                             </div>
                           )}
                           data={listDepartments.map((department) => ({
-                            label: department.name,
+                            label: `${department.sign}.${department.name}`,
                             value: department._id,
                           }))}
                           formatItem={{
@@ -342,7 +342,7 @@ const AddNewTaskDialog: FC = () => {
                             </div>
                           )}
                           data={listFriend.map((item) => ({
-                            label: item.fullname,
+                            label: `${item.fullname}-${item.company?.sign}`,
                             value: item._id,
                             imgUrl: item.imgUrl,
                           }))}
@@ -407,7 +407,7 @@ const AddNewTaskDialog: FC = () => {
                           </div>
                         )}
                         data={listFriend.map((item) => ({
-                          label: item.fullname,
+                          label: `${item.fullname}-${item.company?.sign}`,
                           value: item._id,
                           imgUrl: item.imgUrl,
                         }))}
@@ -464,7 +464,7 @@ const AddNewTaskDialog: FC = () => {
                   />
                 </div>
 
-                <div className="t-add-new-task-dialog-attachment px-6 mb-3">
+                {/* <div className="t-add-new-task-dialog-attachment px-6 mb-3">
                   <div className="t-add-new-task-dialog-attachment-item px-3 py-2 mb-3 flex items-center">
                     <p className="t-add-new-task-dialog-attachment-title truncate mr-2" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
                     <span className="mr-2">(3.908K)</span>
@@ -483,10 +483,10 @@ const AddNewTaskDialog: FC = () => {
                     <span className="mr-2">(3.908K)</span>
                     <button className="ml-auto"><Close /></button>
                   </div>
-                </div>
+                </div> */}
 
                 <div className={"flex items-center border-t py-3 px-6"}>
-                  <label>
+                  {/* <label>
                     <img
                       src={AttachIcon}
                       alt="Icon attach"
@@ -500,7 +500,7 @@ const AddNewTaskDialog: FC = () => {
                       accept="image/*"
                       multiple
                     />
-                  </label>
+                  </label> */}
                   <div className={"flex items-center ml-4"}>
                     <input type="checkbox" id="email-notice" className={"form-check-input mt-0"}/>
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>

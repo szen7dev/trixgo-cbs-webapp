@@ -18,7 +18,10 @@ const MainChatHeading:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length == 2) {
+        if (chat.members && chat.members.length === 1) {
+            return "Saved Messages";
+        }
+        if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
             return userInConversation.fullname.trim();
         }
@@ -28,8 +31,12 @@ const MainChatHeading:FC<Props> = ({chat}) => {
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
-            const members = chat.members.filter((item: any) => item._id != profileId);
-            return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            if (chat.members.length === 1) {
+                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+            } else {
+                const members = chat.members.filter((item: any) => item._id != profileId);
+                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            }
         }
         const avatars: any = [];
         if (chat.members && chat.members.length) {
@@ -51,7 +58,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
             <div className={"avatar-chat flex items-center justify-center"}>
                 {
                     chat.avatar?
-                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
+                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
