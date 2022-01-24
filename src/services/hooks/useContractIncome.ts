@@ -45,6 +45,39 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
         refetch
     }
 };
+export const UseContractGuaranteeList = (pageParam = '', limit = 10): any => {
+
+    const {
+        status,
+        data,
+        error,
+        refetch
+    } = useQuery(
+        ["contractGuaranteeList", { pageParam }],
+        async (pageParams: any) => {
+            const [, { pageParam }] = pageParams.queryKey;
+            return ContractIncomeRepository.fetchList({
+                limit,
+                lastestID: pageParam || "",
+                isExpiredAg: 1
+            })
+        },
+        { keepPreviousData: true }
+    );
+
+    const listContractIncome = data?.data?.listRecords
+    const totalRecord = data?.data?.totalRecord
+    const totalPage = data?.data?.totalPage
+    const nextCursor = data?.data?.nextCursor
+
+    return {
+        listContractIncome,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch
+    }
+};
 
 export const useCreateContractMutation = (): {
     createContractMutateAsync: (payload: any) => Promise<any>;

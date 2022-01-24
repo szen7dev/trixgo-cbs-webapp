@@ -74,7 +74,7 @@ const CmcManagementReport: FC = () => {
       </div>
 
       <div className="w-1/3 h-full">
-        <div className="h-[640px] mb-3">
+        <div className="h-[640px] overflow-scroll mb-3 bg-primary-light">
           <StatusReport listContracts={listContracts} />
         </div>
 
