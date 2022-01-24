@@ -1,7 +1,9 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import cn from "classnames";
-
+import moment from 'moment'
+import debounce from 'lodash/debounce';
+import { useHistoryTraffics } from 'services/hooks/useHistoryTraffics';
 import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
@@ -13,6 +15,42 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 
 const PersonalHistoryPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
+  const [pageParam, setPageParam] = useState('')
+  const [prevCursor, setPrevCursor] = useState(['']);
+  const [keyword, setKeyword] = useState('');
+  const params = {limit: 10, lastestID: pageParam, keyword}
+  const { listHistoryTraffics, totalRecord, totalPage, nextCursor, refetchListHistoryTraffics } = useHistoryTraffics(params, pageParam);
+
+  const search = debounce(async (text)  => {
+    setKeyword(text)
+}, 500);
+
+  useEffect(() => {
+    if (!nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, nextCursor])
+    }
+  }, [nextCursor]);
+
+  const prevPageAction = () => {
+    if (!nextCursor) {
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
+    } else {
+      const prev = prevCursor.findIndex(item => item === nextCursor)
+      setPageParam(prevCursor[prev - 2] || '')
+    }
+
+  };
+
+  const nextPageAction = () => {
+    setPageParam(nextCursor)
+  }
+  useEffect(() => {
+    refetchListHistoryTraffics()
+  }, [])
 
   return (
     <main className="h-full">
@@ -24,7 +62,7 @@ const PersonalHistoryPage: FC = () => {
             classNameInput="outline-none w-[296px]"
             placeholder="Nhập từ khóa tìm kiếm"
             // eslint-disable-next-line no-console
-            onChange={(event) => console.log(event.target.value)}
+            onChange={(event) => search(event.target.value)}
           />
           <FinancialCashFlowFilterButton />
           {itemChecked && (
@@ -82,82 +120,34 @@ const PersonalHistoryPage: FC = () => {
         </thead>
 
         <tbody className="bg-primary-light">
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-                checked={itemChecked}
-                onClick={() => setItemChecked(!itemChecked)}
-              />
-            </td>
-            <td className="py-1 px-2">Trương Hoàng Việt Ánh-PGI</td>
-            <td className="py-1 px-2">Công ty Cổ phần PGI Partners</td>
-            <td className="py-1 px-2">Quản lý công việc</td>
-            <td className="py-1 px-2">Báo cáo quản trị</td>
-            <td className="py-1 px-2">Mobile</td>
-            <td className="py-1 px-2 text-primary">20/12/2021 14:40</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Trương Hoàng Việt Ánh-PGI</td>
-            <td className="py-1 px-2">Công ty Cổ phần PGI Partners</td>
-            <td className="py-1 px-2">Quản lý công việc</td>
-            <td className="py-1 px-2">Báo cáo quản trị</td>
-            <td className="py-1 px-2">Mobile</td>
-            <td className="py-1 px-2 text-primary">20/12/2021 14:40</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Trương Hoàng Việt Ánh-PGI</td>
-            <td className="py-1 px-2">Công ty Cổ phần PGI Partners</td>
-            <td className="py-1 px-2">Quản lý công việc</td>
-            <td className="py-1 px-2">Báo cáo quản trị</td>
-            <td className="py-1 px-2">Mobile</td>
-            <td className="py-1 px-2 text-primary">20/12/2021 14:40</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Trương Hoàng Việt Ánh-PGI</td>
-            <td className="py-1 px-2">Công ty Cổ phần PGI Partners</td>
-            <td className="py-1 px-2">Quản lý công việc</td>
-            <td className="py-1 px-2">Báo cáo quản trị</td>
-            <td className="py-1 px-2">Mobile</td>
-            <td className="py-1 px-2 text-primary">20/12/2021 14:40</td>
-          </tr>
+          {listHistoryTraffics?.length ? listHistoryTraffics.map((history, i) => (
+            <tr key={history._id} className="border-b border-primary-border h-10">
+              <td className="py-1 px-2 text-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexCheckDefault"
+                  style={{ marginLeft: "-23px" }}
+                  checked={itemChecked}
+                  onClick={() => setItemChecked(!itemChecked)}
+                />
+              </td>
+              <td className="py-1 px-2">{ history.userCreate?.fullname }</td>
+              <td className="py-1 px-2">{ history.companyOfAuthor?.name }</td>
+              <td className="py-1 px-2">{ history.app?.name }</td>
+              <td className="py-1 px-2">{ history.menu?.name }</td>
+              <td className="py-1 px-2">Mobile</td>
+              <td className="py-1 px-2 text-primary">{ history.createdAt && moment(history.createdAt).format('DD/MM/YYYY hh:mm') }</td>
+            </tr>
+          )): null}
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate
+        totalPages={totalPage}
+        totalRecord={totalRecord} hasNextPage
+        prevPageAction={() => prevPageAction()}
+        nextPageAction={() => nextPageAction()} />
     </main>
   );
 };

@@ -11,7 +11,14 @@ const notificationURL = "/api/notifications";
 const NotificationRepository = {
     async listNotification(payload: ListNotificationPayload): Promise<ListNotificationResponse> {
         const { data } = await API.get<ListNotificationResponse>(
-            `${notificationURL}/list-notifications?${convertObToUrl(payload)}`
+            `${notificationURL}`,
+            {
+                params: {
+                    select: 'title content type sender status createAt', 
+                    populates: '{"path": "sender", "select": "fullname email"}',
+                    ...payload,
+                }
+            }
         );
         return data;
     },

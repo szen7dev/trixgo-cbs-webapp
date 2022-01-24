@@ -83,7 +83,6 @@ const Friends: FC = () => {
     setPageParam(nextCursor)
   }
   useEffect(() => {
-    console.log('1')
     refetchListFriends()
   }, [])
   return (
