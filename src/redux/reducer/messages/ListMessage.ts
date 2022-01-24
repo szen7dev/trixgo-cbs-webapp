@@ -31,6 +31,12 @@ const initialState : {
         },
         listImages: {
             [key: string] : any[]
+        },
+        listLinks: {
+            [key: string] : any[]
+        },
+        listFiles: {
+            [key: string] : any[]
         }
     }
 } = {
@@ -42,7 +48,9 @@ const initialState : {
         hasMoreData: {},
         isLoading: {},
         listMembers: {},
-        listImages: {}
+        listImages: {},
+        listFiles: {},
+        listLinks: {}
     }
 };
 
@@ -165,6 +173,24 @@ const listMessageSlice = createSlice({
                         ...state.data,
                         listImages: {
                             ...state.data.listImages,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+                case 2:
+                    state.data = {
+                        ...state.data,
+                        listFiles: {
+                            ...state.data.listFiles,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+                case 3:
+                    state.data = {
+                        ...state.data,
+                        listLinks: {
+                            ...state.data.listLinks,
                             [action.payload.conversationId] : action.payload.data
                         }
                     }

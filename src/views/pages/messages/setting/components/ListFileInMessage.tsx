@@ -21,8 +21,7 @@ const ListFileInMessage:FC = () => {
     useEffect(() => {
         getListMediasOfConversation({conversationID: currentChat, typeMessage: 2})
     },[currentChat]);
-    const listFileInMessage = useSelector((state: RootState) => state.listMessage.data.listImages[currentChat]);
-
+    const listFileInMessage = useSelector((state: RootState) => state.listMessage.data.listFiles[currentChat]);
     return (
         <div className={"bg-white flex-1"}>
             <div className={"sticky bg-white top-110px w-full z-10 flex items-center p-[10px]"}>
