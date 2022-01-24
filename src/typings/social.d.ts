@@ -20,6 +20,11 @@ export type MediaPayload = {
   type: string;
 };
 
+export type MediaReactionPayload = {
+  mediaID: string;
+  typeReaction?: string;
+};
+
 export type PostResponse = APIResponse & {
   data: MediaProps;
   message: string;
