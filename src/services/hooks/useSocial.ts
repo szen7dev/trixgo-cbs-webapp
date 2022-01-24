@@ -2,7 +2,14 @@ import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query
 import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
 import SocialRepository from "apis/social";
-import { MediaProps, MediaPayload, CommentPayload, ListCommentsPayload, ListMediasPayload } from "typings/social";
+import { 
+    MediaProps, 
+    MediaPayload, 
+    CommentPayload, 
+    ListCommentsPayload, 
+    ListMediasPayload,
+    MediaReactionPayload
+} from "typings/social";
 import { CommentProps } from 'typings/common';
 import { objPopulate } from 'views/pages/media/utils';
 
@@ -11,6 +18,7 @@ type UseSocial = {
     listMedias: Array<MediaProps>,
     createMedia: (payload: MediaPayload) => Promise<void>,
     updateMedia: (payload: MediaPayload) => Promise<void>,
+    reactionMedia: (payload: MediaReactionPayload) => Promise<void>,
     deleteMedia: (id: string) => Promise<void>,
     isLoadingListMedias: boolean,
     refetchListMedias: () => void,
@@ -38,7 +46,6 @@ type UseCommentSocial = {
 export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial => {
     const { current: socket }: any = useSocket();
 
-    // Phương thức thêm
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             SocialRepository.createMedia(payload)
@@ -52,6 +59,11 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
     const { mutateAsync: deleteMediaAsync } =
         useMutation((id: string) =>
             SocialRepository.deleteMedia(id)
+        );
+
+    const { mutateAsync: reactionMediaAsync } =
+        useMutation((payload: MediaReactionPayload) =>
+            SocialRepository.reactionMedia(payload)
         );
     
     // Get danh sách
@@ -80,7 +92,6 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
             }
         );
 
-    // Nội dung hàm/API viết bài
     const createMedia = async (payload: MediaPayload) => {
         try {
             const { error, data, message } = await createMediaAsync(payload);
@@ -141,6 +152,19 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         }
     };
 
+    const reactionMedia = async (payload: MediaReactionPayload) => {
+        try {
+            const response = await reactionMediaAsync(payload);
+            console.log({ response });
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+    };
+
     const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
@@ -149,6 +173,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         createMedia,
         updateMedia,
         deleteMedia,
+        reactionMedia,
         listMedias,
         isLoadingListMedias,
         refetchListMedias,
