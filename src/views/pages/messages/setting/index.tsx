@@ -19,8 +19,12 @@ const SettingMessageDetail:FC = () => {
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
-            const members = chat.members.filter((item: any) => item._id != profileId);
-            return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            if (chat.members.length === 1) {
+                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+            } else {
+                const members = chat.members.filter((item: any) => item._id != profileId);
+                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            }
         }
         const avatars: any = [];
         if (chat.members && chat.members.length) {
@@ -32,7 +36,10 @@ const SettingMessageDetail:FC = () => {
     }, [chat, profileId]);
 
     const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length == 2) {
+        if (chat.members && chat.members.length === 1) {
+            return "Saved Messages";
+        }
+        if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
             return userInConversation.fullname.trim();
         }
