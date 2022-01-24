@@ -29,6 +29,7 @@ type UseUser = {
     hasNextPage: boolean | undefined,
     totalRecordRequest: number | undefined,
     totalPagesRequest: number | undefined,
+    nextCursorRequest: string
 };
 export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const { mutateAsync: updateUserAsync } =
@@ -300,6 +301,11 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
                 },
+                // getNextPageParam: (params: any) => {
+                //     const nextCursor = params?.data?.nextCursor;
+                //     console.log('nextCursor', nextCursor)
+                //     return nextCursor || undefined;
+                // },
                 refetchOnWindowFocus: false,
                 enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
             }
@@ -307,6 +313,7 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const listRequestFriends = [].concat(...(listRequestFriendsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecordRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalRecord;
     const totalPagesRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalPages;
+    const nextCursorRequest = listRequestFriendsFromAPI?.pages[0]?.data?.nextCursor;
     return {
         updateUser,
         updatePasswordUser,
@@ -331,6 +338,7 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         totalPagesRequest,
         nextPageListRequestFriends,
         prevPageListRequestFriends,
-        hasNextPage
+        hasNextPage,
+        nextCursorRequest,
     }
 }
