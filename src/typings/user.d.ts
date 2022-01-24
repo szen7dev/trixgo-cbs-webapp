@@ -87,11 +87,21 @@ export type ListFriendsPayload = {
     populates?: string;
 };
 
+export type ListRequestsPayload = {
+    limit?: number;
+    type?: string;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+};
+
 export type ListUserResponse = APIResponse & {
     data: {
-      listRecords: Array<any>;
-      totalRecord: number;
-      totalPages: number;
+        listRecords: Array<any>;
+        limit?: number;
+        totalRecord?: number;
+        totalPages?: number;
+        nextCursor?: string;
     };
 };
 

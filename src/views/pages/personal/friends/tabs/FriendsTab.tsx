@@ -12,15 +12,17 @@ const FriendsTab: FC<Props> = (props) => {
 
   return (
     <section>
-      {toggleTab === 1 && 
+      {toggleTab === 1 ?
         <div className={toggleTab === 1 ? "block" : "hidden"}>
           <Friends />
         </div>
+        : null
       }
-      {toggleTab === 2 && 
+      {toggleTab === 2 ?
         <div className={toggleTab === 2 ? "block" : "hidden"}>
           <FriendsRequest />
         </div>
+        : null
       }
     </section>
   );

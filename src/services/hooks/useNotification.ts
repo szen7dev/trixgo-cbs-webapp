@@ -13,7 +13,7 @@ type UseNotification = {
     hasNextPage: boolean | undefined
 };
 
-export const useNotification = () : UseNotification => {
+export const useNotification = (params?: any) : UseNotification => {
     const {
         isLoading: isLoadingListNotification,
         refetch: refetchListNotification,
@@ -26,6 +26,7 @@ export const useNotification = () : UseNotification => {
             "list_notifications",
             async ({ pageParams }: any) => 
             NotificationRepository.listNotification({ 
+                ...params,
                 lastestID: pageParams ? pageParams : "",
             }),
             {

@@ -23,7 +23,7 @@ const PersonalNotificationPage: FC = () => {
     <main className="h-full w-full bg-cbs-gray flex justify-center py-4">
       <section
         className={cn(
-          "bg-primary-light w-[798px] h-[898px]",
+          "bg-primary-light w-[798px] h-auto",
           styles.boxShadowBorderRadius
         )}
       >
