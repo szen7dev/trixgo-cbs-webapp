@@ -979,7 +979,7 @@ button {
 .custom-scroll::-webkit-scrollbar {
   width: 8px;
   border-radius: 13px;
-	height: 8px;
+  height: 8px;
   background-clip: padding-box;
   border: 0px solid transparent;
 }
@@ -1291,17 +1291,17 @@ input[type="text"] {
 }
 
 .cbs-checkbox {
-	@apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border w-4 h-4 checked:border-cbs-primary;
+  @apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border w-4 h-4 checked:border-cbs-primary;
 }
 .cbs-checkbox:checked {
-	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
 }
 
 .cbs-checkbox:indeterminate {
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
-	--tw-border-opacity: 1;
-	border-color: rgba(247, 175, 34, var(--tw-border-opacity));
-	--tw-bg-opacity: 1;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+  --tw-border-opacity: 1;
+  border-color: rgba(247, 175, 34, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
   background-color: rgba(247, 175, 34, var(--tw-bg-opacity));
 }
 .income-form-modal .DayPickerInput {
@@ -1320,4 +1320,20 @@ input[type="text"] {
 }
 .message-input .DraftEditor-root::-webkit-scrollbar {
   display: none;
+}
+
+.text-1-line-clamp {
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.text-2-line-clamp {
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  overflow: hidden;
 }
