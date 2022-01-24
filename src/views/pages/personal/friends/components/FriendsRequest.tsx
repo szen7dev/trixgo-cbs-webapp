@@ -6,10 +6,8 @@ import MaleLogo from "assets/images/male-friend-logo.svg";
 import FemaleLogo from "assets/images/female-friend-logo.svg";
 
 const FriendsRequest: FC = () => {
-  const [pageParam, setPageParam] = useState('')
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const params = {limit: 5, select: 'fullname email gender image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam}
-  const { listRequestFriends, nextPageListRequestFriends, nextCursorRequest, refetchListRequestFriends } = useUser(pageParam, params);
+  const params = {limit: 4, select: 'fullname email gender image', populates: '{"path": "company", "select": "name"}'}
+  const { listRequestFriends, nextPageListRequestFriends, refetchListRequestFriends } = useUser(params);
   const { acceptRequestFriend, removeRequestFriend } = useUser()
   
   const acceptRequest = async (values: AcceptRequestFriend) => {
@@ -22,12 +20,6 @@ const FriendsRequest: FC = () => {
     await refetchListRequestFriends()
   }
 
-  const handleClickViewMore = async () => {
-    console.log('nextCursorRequest', nextCursorRequest)
-    setPageParam(nextCursorRequest)
-    nextPageListRequestFriends()
-  }
-
   useEffect(() => {
     refetchListRequestFriends()
   }, [])
@@ -35,7 +27,7 @@ const FriendsRequest: FC = () => {
     <main className="h-screen bg-cbs-gray">
       <header className="flex items-center justify-between px-5 py-4">
         <p className="font-bold text-lg">Yêu cầu kết bạn</p>
-        <p className="text-primary text-base" onClick={() => handleClickViewMore()}>Xem thêm (125)</p>
+        <p className="text-primary text-base" onClick={() => nextPageListRequestFriends()}>Xem thêm (125)</p>
       </header>
 
       <section className="grid grid-cols-6 gap-y-3 gap-x-1 px-12">

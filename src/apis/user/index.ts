@@ -1,7 +1,7 @@
 import API from "../repository";
 
 import { 
-    UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend
+    UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend, ListRequestsPayload
 } from "typings/user";
 import { convertObToUrl } from "helpers";
 const userURL = "/api/auth/users";
@@ -68,8 +68,8 @@ const UserRepository = {
         );
         return data;
     },
-    async listRequestFriends(payload: ListFriendsPayload): Promise<ListUserResponse> {
-        const { data } = await API.get<ListFriendsPayload>(
+    async listRequestFriends(payload: ListRequestsPayload): Promise<ListUserResponse> {
+        const { data } = await API.get<ListRequestsPayload>(
             `${requestFriendUrl}?${convertObToUrl(payload)}`
         );
         return data;

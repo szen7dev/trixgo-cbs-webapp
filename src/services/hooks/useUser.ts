@@ -29,9 +29,8 @@ type UseUser = {
     hasNextPage: boolean | undefined,
     totalRecordRequest: number | undefined,
     totalPagesRequest: number | undefined,
-    nextCursorRequest: string
 };
-export const useUser = (pageParam = '', params?: any ) : UseUser => {
+export const useUser = (params?: any, pageParam = '' ) : UseUser => {
     const { mutateAsync: updateUserAsync } =
         useMutation((payload: UpdateUser) =>
         UserRepository.updateUser(payload)
@@ -265,7 +264,7 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         error,
         refetch: refetchListFriends
     } = useQuery(
-        ["list_friends", { pageParam }, params.keyword],
+        ["list_friends", { pageParam }, params?.keyword],
         async () => {
             return UserRepository.listFriends({
                 lastestID: pageParam || "",
@@ -281,7 +280,24 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
     const nextCursor = data?.data?.nextCursor
 
     // Danh sách lời mời kết bạn
-    // Get danh sách
+    const infinityQuery = useInfiniteQuery(
+        ['list_request_friends'],
+        async ({ pageParam }: any) => {
+            return UserRepository.listRequestFriends({
+                ...params,
+                lastestID: pageParam || "",
+            })
+        }
+        ,
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    )
+    // console.log(infinityQuery);
     const {
         isLoading: isLoadingListRequestFriends,
         refetch: refetchListRequestFriends,
@@ -289,31 +305,16 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         fetchNextPage: nextPageListRequestFriends,
         fetchPreviousPage: prevPageListRequestFriends,
         hasNextPage: hasNextPage
-    } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_request_friends", // Key để phân biệt vùng tác động bởi data thay đổi
-            async ({ pageParams }: any) => 
-            UserRepository.listRequestFriends({ 
-                lastestID: pageParams ? pageParams : "",
-                ...params
-            }),
-            {
-                getNextPageParam: ({ nextCursor }: any) => {
-                    return nextCursor || undefined;
-                },
-                // getNextPageParam: (params: any) => {
-                //     const nextCursor = params?.data?.nextCursor;
-                //     console.log('nextCursor', nextCursor)
-                //     return nextCursor || undefined;
-                // },
-                refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-            }
-        );
-    const listRequestFriends = [].concat(...(listRequestFriendsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    } = infinityQuery;
+
+    const listRequestFriends = []
+        .concat(
+            ...(listRequestFriendsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
     const totalRecordRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalRecord;
     const totalPagesRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalPages;
-    const nextCursorRequest = listRequestFriendsFromAPI?.pages[0]?.data?.nextCursor;
+
     return {
         updateUser,
         updatePasswordUser,
@@ -339,6 +340,5 @@ export const useUser = (pageParam = '', params?: any ) : UseUser => {
         nextPageListRequestFriends,
         prevPageListRequestFriends,
         hasNextPage,
-        nextCursorRequest,
     }
 }
