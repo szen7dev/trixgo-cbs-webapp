@@ -72,39 +72,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
     );
 
     const socket = socketRef.current;
-    const {getListConversation} = UseListConversation();
-    useEffect(() => {
-        socket&&socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-    },[socket])
-
-    const onReceiveMessage = (data: any) => {
-        if (data.infoMessage?.conversation === currentChat) {
-            if (data?.infoMessage?.error) {
-                // Alert.alert(t('notification'), data.infoMessage.message);
-                getListConversation({});
-                return;
-            }
-            // console.log(data)
-            if (data.infoMessage?.sender?._id === profileId) {
-                dispatch(updateNewMessageToConversation({
-                    conversationId: data.infoMessage.conversation,
-                    newMessageId: data.infoMessage._id,
-                    oldMessageId: data.tmpid,
-                    messageData: data.infoMessage
-                }));
-            } else {
-                dispatch(appendMessageToConversation({
-                    conversationId: data.infoMessage.conversation,
-                    messageId: data.infoMessage._id,
-                    messageData: data.infoMessage
-                }))
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 100)
-            }
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
-        }
-    };
 
     const handleSendMessage = () => {
         let sendValue = removeTags(realValue).trim().replace(/^\s+|\s+$/g, '');
