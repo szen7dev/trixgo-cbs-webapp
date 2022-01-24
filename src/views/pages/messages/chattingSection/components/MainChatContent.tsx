@@ -82,12 +82,12 @@ const MainChatContent:FC<Props> = ({chat}) => {
         }
     }
 
-    const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined) => {
+    const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderData = true) => {
         const messageCreatedAt = moment(message.createdAt);
         return (
             <div key={message._id}>
                 {
-                    previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
+                    shouldRenderData&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
                         (
                             !previousMessage?
@@ -134,7 +134,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     }
                     {
                         messagesData?
-                            _map(memoizedFakeValue, (message, index) => renderMessage(message, memoizedFakeValue[index-1])):
+                            _map(memoizedFakeValue, message => renderMessage(message, null, false)):
                             null
                     }
                 </div>
