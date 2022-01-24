@@ -238,7 +238,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 },
                 compressConfig: {
                     useCompress: useCompress,
-                    quality: 0.6
+                    quality: 0.8
                 }
             })
             console.log("fileId",_id)
