@@ -35,14 +35,15 @@ type UseUpload = {
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
-export const useUpload = (app?: string) : UseUpload => {
+export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
     const { mutateAsync: generateLinkS3Async } =
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
                 type: payload.type,
                 size: payload.size as never,
-                app
+                app,
+                typeUpload: typeUpload
             })
         );
 
@@ -118,14 +119,14 @@ export const useUpload = (app?: string) : UseUpload => {
         // Handle images
         if (file.type.includes("image/") && compressConfig?.useCompress) {
             new Compressor(file, {
-                quality: compressConfig.quality,
+                quality: compressConfig.quality??0.8,
 
                 // The compression process is asynchronous,
                 // which means you have to access the `result` in the `success` hook function.
                 success(result) {
                     const compressFile = blobToFile(result, file.name);
-                    console.log('Sending in compress mode with quality: ' + compressConfig.quality);
-                    uploadFileToS3({signedUrl, file: compressFile, progress});
+                    console.log('Sending in compress mode with quality: ' + compressConfig.quality??0.8);
+                    uploadFileToS3({ signedUrl, file: compressFile, progress });
                 },
                 error(err) {
                     console.log(err.message);
@@ -133,10 +134,10 @@ export const useUpload = (app?: string) : UseUpload => {
             });
         } else {
             console.log('Sending in HD mode');
-            await uploadFileToS3({signedUrl, file, progress});
+            await uploadFileToS3({ signedUrl, file, progress });
         }
 
-        return { _id: result?._id, name: fileName };
+        return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };
     }
 
     const blobToFile = (theBlob: Blob, fileName: string): File => {

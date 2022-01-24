@@ -1,9 +1,11 @@
-import { FC, useContext, useEffect, useMemo } from "react";
+import { FC, useContext, useEffect, useMemo, useState } from "react";
 
 import cn from "classnames";
-import { Route, RouteComponentProps, Switch, useHistory } from "react-router";
+import { Route, RouteComponentProps, Switch, useHistory } from "react-router-dom";
 
 import { Context } from 'views/pages/document/contexts/contextModal';
+
+import useCheckedList from "./hook/useCheckedList";
 
 import LayoutProjectBidding from "./components/layouts/LayoutProjectBidding";
 import Paginate from "components/common/Paginate";
@@ -26,19 +28,21 @@ function getStatus(status: number) {
 const ProjectBidding: FC = () => {
 	const { toggleModal } = useContext(Context);
 	const history = useHistory();
+	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
+	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
+		setData(Array.from({ length: 30 }).map((_, index) => ({
+			id: index,
+			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+			joined: 8,
+			worked: 15,
+			created_at: "15:30 22/12/2021",
+			updated_at: "15:30 22/12/2021",
+			status: index,
+		})));
 	}, []);
-	const data = useMemo(() => Array.from({ length: 30 }).map((_, index) => ({
-		_id: index,
-		project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-		joined: 8,
-		worked: 15,
-		created_at: "15:30 22/12/2021",
-		updated_at: "15:30 22/12/2021",
-		status: index,
-	})), []);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -56,7 +60,7 @@ const ProjectBidding: FC = () => {
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 							<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={input => { if (input) input.indeterminate = true }} />
+								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
@@ -93,7 +97,7 @@ const ProjectBidding: FC = () => {
 					<tbody className="text-small">
 						{
 							data.map(({
-								_id,
+								id,
 								project,
 								joined,
 								worked,
@@ -102,9 +106,9 @@ const ProjectBidding: FC = () => {
 								status,
 							}) => {
 								return (
-									<tr key={_id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push('/')}>
+									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push('/')}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="" type="checkbox" value="" id="flexCheckDefault" />
+											<input className="cbs-checkbox" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{project}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>

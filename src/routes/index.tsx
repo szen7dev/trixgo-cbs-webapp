@@ -79,7 +79,7 @@ import ConfigListDetail from "views/pages/personal/config/components/ConfigListD
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Project pages (Project and Construction Management)
-import ProjectAppAdminPage from "views/pages/ppt/ProjectAppAdminPage";
+import ProjectAppAdminPage from "views/pages/ppt/permission/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
 import ProjectPortfolioPage from "views/pages/ppt/ProjectPortfolioPage";
@@ -92,30 +92,41 @@ import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
 import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
 import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
 import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
-import ProjectDrawingPage from "views/pages/ppt/ProjectDrawingPage";
 import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
 import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
 import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
 import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
-import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
+import ProjectProductionPage from "views/pages/ppt/ProjectProductionPage";
+import ProjectOtherPage from "views/pages/ppt/ProjectOtherPage";
+// import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
 import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
 import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
 import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
 import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
 import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
 import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
+import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
+import ProjectDrawingRoutes from "views/pages/ppt/routes/ProjectDrawingRoutes";
+import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes";
+import ProjectDashboardRoutes from "views/pages/ppt/routes/ProjectDashboardRoutes";
+import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRoutes2";
+import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
 
 // Accounting pages
 import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
 import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
 import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "views/pages/accounting/AccountingDiaryPage";
-import AccountingInOutPage from "views/pages/accounting/AccountingInOutPage";
-import AccountingDebtPage from "views/pages/accounting/AccountingDebtPage";
-import AccountingVatPage from "views/pages/accounting/AccountingVatPage";
-import AccountingReportFinancePage from "views/pages/accounting/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "views/pages/accounting/AccountingSupportToolsPage";
+import AccountingDiaryPage from "views/pages/accounting/Diary/AccountingDiaryPage";
+import AccountingInOutPage from "views/pages/accounting/ImportExport/AccountingInOutPage";
+import AccountingDebtPage from "views/pages/accounting/Debt/AccountingDebtPage";
+import AccountingVatPage from "views/pages/accounting/VAT/AccountingVatPage";
+import AccountingReportFinancePage from "views/pages/accounting/FinanceReport/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/pages/accounting/SupportTool/AccountingSupportToolsPage";
 import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
+import AccountingAdminPage from "views/pages/accounting/admin/AccountingAdminPage";
+import ReceivablesCustomers from "views/pages/accounting/Debt/components/ReceivablesCustomers";
+import ReceivablesCustomersCode from "views/pages/accounting/Debt/components/ReceivablesCustomersCode";
+import AccountingTBookPage from "views/pages/accounting/TBook/AccountingTBookPage";
 
 // Bidding pages
 import BiddingHomePage from "views/pages/bidding/BiddingHomePage";
@@ -180,6 +191,7 @@ import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "../services/providers/DeleteConfirm";
 import MessagesLayout from "../views/layouts/MessagesLayout";
+import PopupSendFiles from "../services/providers/PopupSendFiles";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -346,6 +358,15 @@ const Routes: FC = () => {
                                             />
                                             <ProtectedRoute
                                                 exact
+                                                path={"/pcm/admin/detail/:id"}
+                                                component={() => (
+                                                    <HomeLayout>
+                                                        <AdminDetail />
+                                                    </HomeLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
                                                 path={"/pcm/home"}
                                                 component={() => (
                                                     <HomeLayout>
@@ -372,20 +393,20 @@ const Routes: FC = () => {
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/dashboard-portfolio"}
-                                                component={() => (
+                                                component={({ ...props }: RouteComponentProps ) => (
                                                     <HomeLayout>
-                                                        <ProjectPortfolioPage />
+                                                        <ProjectDashboardRoutes2 {...props} />
                                                     </HomeLayout>
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/dashboard-task"}
-                                                component={() => (
+                                                component={({ ...props }: RouteComponentProps ) => (
                                                     <HomeLayout>
-                                                        <ProjectDashboardTaskPage />
+                                                        <ProjectDashboardRoutes {...props} />
                                                         {/* <KanbanBoardPage /> */}
                                                     </HomeLayout>
                                                 )}
@@ -517,10 +538,18 @@ const Routes: FC = () => {
                                             />
                                             <ProtectedRoute
                                                 exact
-                                                path={"/pcm/project/:id/drawing"}
+                                                path={"/pcm/project/:id/photo/package/:packageId"}
                                                 component={() => (
                                                     <ProjectLayout>
-                                                        <ProjectDrawingPage />
+                                                        <ProjectPhotoPackagePage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                path={"/pcm/project/:id/drawing"}
+                                                component={(props: RouteComponentProps) => (
+                                                    <ProjectLayout>
+                                                        <ProjectDrawingRoutes {...props} />
                                                     </ProjectLayout>
                                                 )}
                                             />
@@ -561,11 +590,11 @@ const Routes: FC = () => {
                                                 )}
                                             />
                                             <ProtectedRoute
-                                                exact
+                                                // exact
                                                 path={"/pcm/project/:id/resource"}
-                                                component={() => (
+                                                component={(props: RouteComponentProps) => (
                                                     <ProjectLayout>
-                                                        <ProjectResourcePage />
+                                                        <ProjectResourceRoutes {...props} />
                                                     </ProjectLayout>
                                                 )}
                                             />
@@ -593,6 +622,24 @@ const Routes: FC = () => {
                                                 component={() => (
                                                     <ProjectLayout>
                                                         <ProjectDirectoryPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/production"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectProductionPage />
+                                                    </ProjectLayout>
+                                                )}
+                                            />
+                                            <ProtectedRoute
+                                                exact
+                                                path={"/pcm/project/:id/other"}
+                                                component={() => (
+                                                    <ProjectLayout>
+                                                        <ProjectOtherPage />
                                                     </ProjectLayout>
                                                 )}
                                             />
@@ -703,11 +750,13 @@ const Routes: FC = () => {
                                     </Route>
 
                                     <Route path="/messages/:path?">
-                                        <MessagesLayout>
-                                            <Switch>
-                                                <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                                            </Switch>
-                                        </MessagesLayout>
+                                        <PopupSendFiles>
+                                            <MessagesLayout>
+                                                <Switch>
+                                                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                                                </Switch>
+                                            </MessagesLayout>
+                                        </PopupSendFiles>
                                     </Route>
 
                                     <Route path="/accounting/:path?">
@@ -778,6 +827,11 @@ const Routes: FC = () => {
                                                 />
                                                 <ProtectedRoute
                                                     exact
+                                                    path="/accounting/tbook"
+                                                    component={AccountingTBookPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
                                                     path="/accounting/diary"
                                                     component={AccountingDiaryPage}
                                                 />
@@ -790,6 +844,16 @@ const Routes: FC = () => {
                                                     exact
                                                     path="/accounting/debt-tracking"
                                                     component={AccountingDebtPage}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/debt-tracking/account=:id"
+                                                    component={ReceivablesCustomers}
+                                                />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/debt-tracking/account/:id/customer/:id"
+                                                    component={ReceivablesCustomersCode}
                                                 />
                                                 <ProtectedRoute
                                                     exact
@@ -806,6 +870,11 @@ const Routes: FC = () => {
                                                     path="/accounting/support-tools"
                                                     component={AccountingSupportToolsPage}
                                                 />
+                                                <ProtectedRoute
+                                                    exact
+                                                    path="/accounting/admin"
+                                                    component={AccountingAdminPage}
+                                                />
                                             </Switch>
                                         </AccountingLayout>
                                     </Route>
@@ -819,12 +888,12 @@ const Routes: FC = () => {
                                                     component={FinHomePage}
                                                 />
                                                 <ProtectedRoute
-                                                    exact
+                                                    // exact
                                                     path={"/fin/dashboard"}
                                                     component={FinDashboardPage}
                                                 />
                                                 <ProtectedRoute
-                                                    exact
+                                                    // exact
                                                     path={"/fin/cashbook"}
                                                     component={FinCashbookPage}
                                                 />

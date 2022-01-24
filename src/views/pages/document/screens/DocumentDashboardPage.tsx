@@ -7,8 +7,9 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState } from "react";
+import { FC, forwardRef, useState } from "react";
 
+import DatePicker from "react-datepicker";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import cn from "classnames";
@@ -70,6 +71,15 @@ const getClass = (date: number) => {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ButtonDatePicker = forwardRef<HTMLButtonElement, any>((({ value, onClick }, ref) => (
+	<button className="rounded-md border border-cbs-border p-2" ref={ref} onClick={onClick}>
+		Chọn thời gian
+		{/* {value} */}
+	</button>
+)));
+ButtonDatePicker.displayName = 'ButtonDatePicker';
+
 const DocumentDashboardPage: FC = () => {
 	const [type, setType] = useState<string>('all');
 	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
@@ -129,7 +139,15 @@ const DocumentDashboardPage: FC = () => {
 									</label>
 								</li>
 							</ul>
-							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
+							<DatePicker
+								selected={new Date()}
+								dateFormat="MM.yyyy"
+								customInput={<ButtonDatePicker />}
+								showMonthYearPicker
+								wrapperClassName="w-auto"
+								clearButtonClassName="hello"
+								onChange={(date: Date | null) => console.log(date)}
+							/>
 						</div>
 					</div>
 					<div className="flex-1">

@@ -1,5 +1,6 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
+import moment from "moment";
 import Paginate from "components/common/Paginate";
 import TriangleDown from "assets/icons/TriangleDown";
 import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-valid-content-96.svg";
@@ -11,10 +12,90 @@ import FilterButton from "../components/FilterButton";
 import CreateOrEditDialog from "../components/CreateOrEditDialog";
 
 import { useModal } from "services/hooks/useModal";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import {
+  useQueryListTimeSheetParent,
+  useMutationTimeSheetParent,
+} from "services/hooks/useTimeSheet";
+
+const DATE_FORMAT = "DD/MM/YYYY HH:mm";
+enum TYPE {
+  "Chuyên gia" = 1,
+}
 
 const TimeSheetHomePage: FC = () => {
-  const { openModal } = useModal();
+  const [recordSelected, toggleRecord] = React.useState<any>({});
 
+  const { openModal, closeModal } = useModal();
+  const { openDeleteConfirm } = useDeleteConfirm();
+  const {
+    data,
+    refetch: refreshListTimeSheet,
+    totalPages,
+    totalRecord,
+    fetchNextPage,
+    fetchPrevPage,
+    loading,
+    hasNextPage,
+  } = useQueryListTimeSheetParent();
+
+  const {
+    onCreateTimeSheetParentAsync,
+    onUpdateTimeSheetParentAsync,
+    onDeleteTimeSheetParentAsync,
+  } = useMutationTimeSheetParent();
+
+  const handleCreateTimeSheet = React.useCallback(
+    async (values) => {
+      try {
+        const isCreated = await onCreateTimeSheetParentAsync(values);
+        if (!isCreated.error) {
+          refreshListTimeSheet();
+          closeModal();
+          return null;
+        }
+        throw new Error("Can not create!");
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    },
+    [closeModal, onCreateTimeSheetParentAsync, refreshListTimeSheet]
+  );
+
+  const handleUpdateTimeSheet = React.useCallback(
+    async (values) => {
+      try {
+        const isUpdated = await onUpdateTimeSheetParentAsync(values);
+        if (!isUpdated.error) {
+          refreshListTimeSheet();
+          closeModal();
+          return null;
+        }
+        throw new Error("Can not create!");
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    },
+    [closeModal, onUpdateTimeSheetParentAsync, refreshListTimeSheet]
+  );
+
+  const handleClickDeleteTimeSheet = React.useCallback(
+    (timeSheetID) => {
+      openDeleteConfirm({
+        deleteAction: async () => {
+          const res = await onDeleteTimeSheetParentAsync({
+            expertTimesheetID: timeSheetID,
+          });
+          if (res.status === 200) {
+            refreshListTimeSheet();
+          }
+        },
+      });
+    },
+    [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
+  );
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -28,16 +109,29 @@ const TimeSheetHomePage: FC = () => {
             classNameWrapper={"ml-4"}
             onChange={(event) => console.log(event.target.value)}
           />
-          <FilterButton />
-          <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
-          <ActionGroupButton />
+          {Object.keys(recordSelected).length > 1 && (
+            <>
+              <FilterButton />
+              <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
+              <ActionGroupButton
+                recordSelected={recordSelected}
+                onUpdateTimeSheet={handleUpdateTimeSheet}
+                onDeleteTimeSheet={handleClickDeleteTimeSheet}
+              />
+            </>
+          )}
         </div>
         <button
           className={"bg-green-success h-[32px] text-white rounded px-5"}
           onClick={() =>
             openModal(
               <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
-                <CreateOrEditDialog />
+                <CreateOrEditDialog
+                  title="Tạo mới"
+                  onSubmit={handleCreateTimeSheet}
+                  projectName={""}
+                  assigneeName={""}
+                />
               </div>
             )
           }
@@ -116,64 +210,100 @@ const TimeSheetHomePage: FC = () => {
               Trạng thái/Phê duyệt
             </div>
           </div>
-          <div className={"body-table table-row"}>
-            <div
-              className={
-                "px-6 py-4 table-cell box-border border-b align-middle w-3"
-              }
-            >
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-            </div>
-            <div
-              className={
-                "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
-              }
-            >
-              <NavLink to={"/timesheet/home/123"}>
-                Bảng chấm công chuyên gia Lưu Đình Thi
-              </NavLink>
-              <p className={"mt-1 text-gray-500"}>
-                Phùng Thị Hà-PG 20/07/2021 15:26
-              </p>
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b"}>
-              Chuyên gia
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b"}>
-              Phòng tư vấn giá
-            </div>
-            <div
-              className={"px-2 py-4 table-cell box-border border-b text-right"}
-            >
-              30
-            </div>
-            <div
-              className={"px-2 py-4 table-cell box-border border-b text-right"}
-            >
-              7.500.000
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b"}>
-              Mỗi bảng chấm công sẽ được link với 1 task PCM để quản lí/tương
-              tác
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b"}>
-              <div className={"flex items-center text-primary"}>
-                <span className={"mr-3"}>Đã phê duyệt</span>
-                <img src={VerifyIcon} alt={"icon"} />
+          {data.map((timeSheetParent) => (
+            <div className={"body-table table-row"} key={timeSheetParent._id}>
+              <div
+                className={
+                  "px-6 py-4 table-cell box-border border-b align-middle w-3"
+                }
+              >
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexCheckDefault"
+                  checked={recordSelected?._id === timeSheetParent._id}
+                  onChange={(e) => {
+                    // chỉ cho chọn 1
+                    if (e.target.checked) {
+                      toggleRecord(timeSheetParent);
+                      return null;
+                    }
+                    toggleRecord({});
+                    return null;
+                  }}
+                />
               </div>
-              <p className={"mt-1 text-gray-500"}>
-                Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
-              </p>
+              <div
+                className={
+                  "px-2 py-4 table-cell box-border border-b align-middle w-2/12"
+                }
+              >
+                <NavLink to={`/timesheet/home/${timeSheetParent._id}`}>
+                  {timeSheetParent.name}
+                </NavLink>
+                <p className={"mt-1 text-gray-500"}>
+                  {timeSheetParent?.userCreate?.fullname}
+                  {moment(timeSheetParent.createdAt).isValid() &&
+                    moment(timeSheetParent.createdAt).format(DATE_FORMAT)}
+                </p>
+              </div>
+              <div className={"px-2 py-4 table-cell box-border border-b"}>
+                {TYPE[timeSheetParent.type]}
+              </div>
+              <div className={"px-2 py-4 table-cell box-border border-b"}>
+                {timeSheetParent.project.name}
+              </div>
+              <div
+                className={
+                  "px-2 py-4 table-cell box-border border-b text-right"
+                }
+              >
+                {timeSheetParent.hours}
+              </div>
+              <div
+                className={
+                  "px-2 py-4 table-cell box-border border-b text-right"
+                }
+              >
+                {`${timeSheetParent?.amount}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                )}
+              </div>
+              <div className={"px-2 py-4 table-cell box-border border-b"}>
+                {timeSheetParent.note}
+              </div>
+              <div className={"px-2 py-4 table-cell box-border border-b"}>
+                <div className={"flex items-center text-primary"}>
+                  <span className={"mr-3"}>
+                    {timeSheetParent.timeApproved
+                      ? "Đã phê duyệt"
+                      : "Chưa phê duyệt"}
+                  </span>
+                  {timeSheetParent.timeApproved && (
+                    <img src={VerifyIcon} alt={"icon"} />
+                  )}
+                </div>
+                <p className={"mt-1 text-gray-500"}>
+                  {moment(timeSheetParent.timeApproved).isValid() &&
+                    moment(timeSheetParent.timeApproved).format(DATE_FORMAT)}
+                </p>
+                {/* <p className={"mt-1 text-gray-500"}>
+                  Nguyễn Hữu Hiệp-PG 12/12/2021 15:45
+                </p> */}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
-      <Paginate />
+      <Paginate
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        nextPageAction={fetchNextPage}
+        prevPageAction={fetchPrevPage}
+        isFetching={loading}
+        hasNextPage={hasNextPage}
+      />
     </div>
   );
 };

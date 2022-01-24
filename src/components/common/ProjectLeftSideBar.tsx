@@ -31,6 +31,10 @@ const LinkMenuLeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Thư mục dữ liệu</span>
           </Link>
+          <Link to={`/pcm/project/12345/mom`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Họp</span>
+          </Link>
           <Link to={`/pcm/project/12345/schedule`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Tiến độ</span>
@@ -42,6 +46,14 @@ const LinkMenuLeftSideBar: FC = () => {
           <Link to={`/pcm/project/12345/bidding`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Lựa chọn nhà thầu</span>
+          </Link>
+          <Link to={`/pcm/project/12345/report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Báo cáo</span>
+          </Link>
+          <Link to={`/pcm/project/12345/production`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Sản lượng thực hiện</span>
           </Link>
           <Link to={`/pcm/project/12345/payment`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
@@ -61,42 +73,29 @@ const LinkMenuLeftSideBar: FC = () => {
           </Link>
           <Link to={`/pcm/project/12345/rfi`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Yêu cầu thông tin</span>
-          </Link>
-          <Link to={`/pcm/project/12345/rfa`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Đệ trình phê duyệt</span>
+            <span className="truncate">Yêu cầu, đệ trình</span>
           </Link>
           <Link to={`/pcm/project/12345/inspection`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Nghiệm thu chất lượng</span>
           </Link>
-          <Link to={`/pcm/project/12345/punch`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Yêu cầu sửa chữa</span>
-          </Link>
           <Link to={`/pcm/project/12345/resource`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Quản lý vật tư</span>
           </Link>
-          <Link to={`/pcm/project/12345/mom`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Họp</span>
-          </Link>
-          <Link to={`/pcm/project/12345/report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
-            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-            <span className="truncate">Báo cáo</span>
-          </Link>
           <Link to={`/pcm/project/12345/directory`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Danh bạ dự án</span>
+          </Link>
+          <Link to={`/pcm/project/12345/other`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Khác</span>
           </Link>
           <Link to={`/pcm/project/12345/admin`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Quản trị viên</span>
           </Link>
         </div>
-
       </div>
     </div>
   );

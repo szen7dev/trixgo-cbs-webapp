@@ -4,7 +4,6 @@ import cn from "classnames";
 
 import DropdownSearchable from "components/common/DropdownSearch";
 
-import FilterBlueIcon from "assets/images/icons8-filter-96.png";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 
@@ -21,7 +20,7 @@ const PersonalNotificationPage: FC = () => {
   };
 
   return (
-    <main className="h-max w-full bg-cbs-gray flex justify-center py-4">
+    <main className="h-full w-full bg-cbs-gray flex justify-center py-4">
       <section
         className={cn(
           "bg-primary-light w-[798px] h-[898px]",

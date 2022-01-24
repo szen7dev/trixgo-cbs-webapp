@@ -41,7 +41,7 @@ const HomeNavigation: FC = () => {
 					</Link>
           <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Phát triển dự án</span>
+              <span className="truncate">Phát triển thị trường</span>
 					</Link>
           <Link to={`/pcm/dashboard-portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />

@@ -1,27 +1,40 @@
 import { FC, useRef } from "react";
 import { map as _map } from "lodash";
 
+import Loader from "components/shared/Loader";
 import RightClickMenu from "components/common/RightClickMenu";
 import MenuMainRow from "../../financial/planning/components/FinancialCashFlowDetail/MenuMainRow";
 import CollapseButton from "./CollapseButton";
 import DetailChildRow from "./DetailChildRow";
 
+import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
+
 type Props = {
-  rowData: any;
-  index: number | string;
-  idDetail: number | string;
+  timeSheetParentInfo?: TimeSheetParent;
+  listTimeSheetChild: TimeSheetChild[];
+  onUpdatedTimeSheetChild: (values: any) => void;
+  isFetchTimeSheetChild: boolean;
 };
 
-const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
+const DetailMainRow: FC<Props> = ({
+  timeSheetParentInfo,
+  listTimeSheetChild,
+  onUpdatedTimeSheetChild,
+  isFetchTimeSheetChild,
+}) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  if (isFetchTimeSheetChild) {
+    return <Loader className="border-primary" />;
+  }
 
   return (
     <>
       <div
         ref={wrapperRef}
         className={
-          "row table-row font-semibold main-row " +
-          (rowData.collapsed ? "collapsed " : "not-collapsed ")
+          "row table-row font-semibold main-row " + "not-collapsed"
+          // (rowData.collapsed ? "collapsed " : "not-collapsed")
         }
       >
         <div
@@ -31,9 +44,9 @@ const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
         >
           <div className={"flex flex-col items-center justify-center"}>
             <CollapseButton
-              idDetail={idDetail}
-              collapsed={rowData.collapsed}
-              index={index}
+              idDetail={timeSheetParentInfo?._id || ""}
+              collapsed={false}
+              index={1}
             />
           </div>
         </div>
@@ -42,14 +55,14 @@ const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"
           }
         >
-          {rowData.tt}
+          {"A"}
         </div>
         <div
           className={
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"
           }
         >
-          {rowData.content}
+          {timeSheetParentInfo?.name}
         </div>
         <div
           className={
@@ -68,7 +81,7 @@ const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
           }
         >
-          <div className="flex justify-end">{rowData.totalHour}</div>
+          <div className="flex justify-end">{timeSheetParentInfo?.hours}</div>
         </div>
         <div
           className={
@@ -80,7 +93,12 @@ const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
           }
         >
-          <div className="flex justify-end">{rowData.amount}</div>
+          <div className="flex justify-end">
+            {`${timeSheetParentInfo?.amount}`.replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              ","
+            )}
+          </div>
         </div>
         <div
           className={
@@ -94,13 +112,14 @@ const DetailMainRow: FC<Props> = ({ rowData, index, idDetail }) => {
         ></div>
         <RightClickMenu wrapperRef={wrapperRef} menu={<MenuMainRow />} />
       </div>
-      {_map(rowData.childrens, (childRow, indexChild) => (
+      {_map(listTimeSheetChild, (childRow, index) => (
         <DetailChildRow
-          isLastRow={Number(indexChild) === rowData.childrens.length - 1}
-          collapsed={rowData.collapsed}
-          index={indexChild}
-          rowData={childRow}
           key={childRow._id}
+          isLastRow={false}
+          collapsed={false}
+          rowData={childRow}
+          index={index}
+          onUpdatedTimeSheetChild={onUpdatedTimeSheetChild}
         />
       ))}
     </>

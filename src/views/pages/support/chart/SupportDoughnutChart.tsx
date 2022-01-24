@@ -56,6 +56,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
 
   return (
     <Doughnut
+        key={Math.random()}
       data={_data}
       options={{
         ...options,
@@ -63,7 +64,7 @@ const ChartDoughnutSmall: React.FC<Props> = ({
         cutout,
         plugins: {
           datalabels: { display: false },
-          tooltip: { enabled: false },
+          tooltip: { enabled: true },
         },
       }}
       plugins={plugins}

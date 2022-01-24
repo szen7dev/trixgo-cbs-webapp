@@ -1,10 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEventHandler, FC, FormEventHandler, useEffect, useReducer, useRef, useState } from "react";
 
 import cn from 'classnames';
 
 import iconFile from 'assets/images/icons8-audit-96.png';
-import { RouteComponentProps, useHistory, useLocation } from "react-router";
+import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
 import Paginate from "components/common/Paginate";
+import useCheckedList from "./hook/useCheckedList";
+
+import './style.css';
 
 // import 'swiper/swiper-bundle.min.css';
 
@@ -54,10 +57,11 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	const history = useHistory();
 	const location = useLocation();
 	const [data, setData] = useState<IData[]>([]);
+	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Thư mục dữ liệu";
-		setData(Array.from({ length: Math.ceil(Math.random() * 30) }).map((_, i) => ({
+		setData(Array.from({ length: Math.ceil(Math.random() * 4 + 3) }).map((_, i) => ({
 			id: i,
 			type: i < 3 ? 'folder' : 'file',
 			content: "Thi công san lấp mặt bằng công trình",
@@ -92,7 +96,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						<thead className="">
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+									<input className="cbs-checkbox" type="checkbox" value="checkAll" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
@@ -123,20 +127,12 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</thead>
 						<tbody className="text-small">
 							{
-								data.map(({
-									id,
-									type,
-									content,
-									created_by,
-									created_at,
-									status,
-									count,
-									path
-								}, index) => {
+								data.map((props, index) => {
+									const { id, type, content, created_by, created_at, status, path } = props
 									return (
 										<tr key={index} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push(match.path + path)}>
 											<td className="px-4 py-2 w-[1px]">
-												<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+												<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="px-2 py-2">
 												<p className="align-top">

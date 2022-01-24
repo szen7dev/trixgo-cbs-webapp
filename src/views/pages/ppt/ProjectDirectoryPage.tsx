@@ -1,6 +1,7 @@
-import { FC, useContext, useEffect, useMemo } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 
-import { useHistory } from "react-router";
+// Hook
+import useCheckedList from "./hook/useCheckedList";
 
 // Context
 import { Context, Provider as ModalProvider } from "../document/contexts/contextModal";
@@ -17,23 +18,24 @@ import RowGroup from "./components/directory/RowGroup";
 
 const ProjectDirectory: FC = () => {
 	const { toggleModal } = useContext(Context);
-	const history = useHistory();
+	const [data, setData] = useState<{ _id: number | string, [key: string]: string | number }[]>([])
+	const { assigned, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hồ sơ văn bản"
+		setData(Array.from({ length: 30 }).map((_, index) => ({
+			_id: index,
+			content: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+			created_by: 'Sở Kế hoạch và Đầu tư thành phố Hà Nội',
+			code: 'ARM.CAL-PGI.PMI\\HDCG\\210515',
+			saved_code: 'ARM.CAL-PGI.PMI\\HDCG\\210515',
+			amount: 12,
+			signed: index % 4,
+			note: 'Có bản gốc đi kèm',
+			saved_location: "Cặp F1, Ngăn A5, tủ A",
+			created_at: "15:30 22/12/2021",
+		})));
 	}, []);
-	const data = useMemo(() => Array.from({ length: 30 }).map((_, index) => ({
-		_id: index,
-		content: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-		created_by: 'Sở Kế hoạch và Đầu tư thành phố Hà Nội',
-		code: 'ARM.CAL-PGI.PMI\\HDCG\\210515',
-		saved_code: 'ARM.CAL-PGI.PMI\\HDCG\\210515',
-		amount: 12,
-		signed: index % 4,
-		note: 'Có bản gốc đi kèm',
-		saved_location: "Cặp F1, Ngăn A5, tủ A",
-		created_at: "15:30 22/12/2021",
-	})), []);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -51,7 +53,7 @@ const ProjectDirectory: FC = () => {
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 							<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
-								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={input => { if (input) input.indeterminate = true }} />
+								<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" ref={checkboxRef} onClick={handleCheckAll} />
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 								<span className="pl-2 border-l border-cbs-border">
@@ -85,44 +87,11 @@ const ProjectDirectory: FC = () => {
 							</th>
 						</tr>
 					</thead>
-					<RowGroup />
-					<RowGroup />
-					<RowGroup />
-					<RowGroup />
-					<RowGroup />
-					{/* <tbody className="text-small">
-						{
-							data.map(({
-								_id,
-								content,
-								created_by,
-								code,
-								created_at,
-								saved_code,
-								amount,
-								signed,
-								note,
-								saved_location,
-							}) => {
-								return (
-									<tr key={_id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push('/')}>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="" type="checkbox" value="" id="flexCheckDefault" />
-										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{content}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{created_by}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{code}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{created_at}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{saved_code}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{amount}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{signed ? 'Đã ký' : 'Chưa ký'}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{note}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{saved_location}</td>
-									</tr>
-								)
-							})
-						}
-					</tbody> */}
+					<RowGroup checkedList={assigned} onClickCheckbox={handleChangeCheckbox} index={0} />
+					<RowGroup checkedList={assigned} onClickCheckbox={handleChangeCheckbox} index={1} />
+					<RowGroup checkedList={assigned} onClickCheckbox={handleChangeCheckbox} index={2} />
+					<RowGroup checkedList={assigned} onClickCheckbox={handleChangeCheckbox} index={3} />
+					<RowGroup checkedList={assigned} onClickCheckbox={handleChangeCheckbox} index={4} />
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />

@@ -1,11 +1,12 @@
 import React, {FC, useRef} from "react";
 import TextChatContent from "./chatContent/textContent";
+import RightClickMenu from "components/common/RightClickMenu";
+import RightClickMessage from "./RightClickMessage";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 import FileChatContent from "./chatContent/fileContent";
 import ImagesContent from "./chatContent/imageContent";
-import RightClickMenu from "../../../../../components/common/RightClickMenu";
-import RightClickMessage from "./RightClickMessage";
 type Props = {
-    message: any
+    message: ItemMessage;
 }
 
 const MyMessage:FC<Props> = ({message}) => {
@@ -13,11 +14,11 @@ const MyMessage:FC<Props> = ({message}) => {
 
     const renderMessageContent = () => {
         switch (message.type) {
-            case "text":
+            case 0:
                 return <TextChatContent message={message} className={"bg-cbs-active-comment"}/>;
-            case "file":
+            case 2:
                 return <FileChatContent message={message} className={"bg-cbs-active-comment"}/>;
-            case "images":
+            case 1:
                 return <ImagesContent message={message}/>
         }
     }

@@ -10,7 +10,10 @@ import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import SortIcon from "assets/images/icons8-sorting.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
-
+import { useListHistoryTraffic } from 'services/hooks/useSupport';
+import {ListHistoryTrafficPayload} from 'typings/support';
+import moment from "moment";
+import {checkTimeType} from "../../../../../../helpers/app";
 type Item = {
   id: number;
   name: string;
@@ -33,8 +36,17 @@ for (let i = 0; i <= 9; i++) {
     accsessTime: "20/12/2021 14:40",
   });
 }
-
-const AccessList: FC = () => {
+type Props = {
+  timeType: string;
+};
+const AccessList: FC<Props> = (props) => {
+  const { timeType } = props;
+  const listParam = checkTimeType(timeType);
+  console.log('listParam',listParam)
+  // const listParam : ListHistoryTrafficPayload = { fromDate: '2021-12-20', toDate: '2022-12-30'};
+  const { listHistoryTraffic } = useListHistoryTraffic(listParam);
+  console.log('listHistoryTraffic',listHistoryTraffic)
+  const dataNew : any = listHistoryTraffic[0]?.listRecords;
   return (
     <section className="bg-primary-light h-[834px] mt-3 border relative">
       <div className="flex justify-between items-center py-1 pr-2 pl-4 border-b border-primary-border">
@@ -112,8 +124,8 @@ const AccessList: FC = () => {
         </thead>
 
         <tbody className="border border-primary-border">
-          {data.map((item) => (
-            <tr key={item.id} className="border-b border-primary-border h-12">
+          {dataNew?.map((item :any) => (
+            <tr key={item._id} className="border-b border-primary-border h-12">
               <td className="w-1/12 pt-2 pb-2 text-center">
                 <input
                   className={cn(
@@ -125,12 +137,12 @@ const AccessList: FC = () => {
                   id="flexCheckDefault"
                 />
               </td>
-              <td className="w-3/12 pt-2 pb-2 pl-2">{item.name}</td>
-              <td className="w-1/12 pt-2 pb-2 pl-2">{item.app}</td>
-              <td className="w-2/12 pt-2 pb-2 pl-2">{item.feature}</td>
-              <td className="w-2/12 pt-2 pb-2 pl-2">{item.device}</td>
+              <td className="w-3/12 pt-2 pb-2 pl-2">{item.userCreate.fullname}</td>
+              <td className="w-1/12 pt-2 pb-2 pl-2">{item.app.name}</td>
+              <td className="w-2/12 pt-2 pb-2 pl-2">{item.menu.name}</td>
+              <td className="w-2/12 pt-2 pb-2 pl-2">{item.type === 1 ? 'Mobile' : item.type === 2 ? 'Website' : 'Tablet'}</td>
               <td className="w-1/12 pt-2 pb-2 pl-2 text-primary">
-                {item.accsessTime}
+                {moment(item.createdAt).format("h:mm:ss DD-MM-YYYY")}
               </td>
             </tr>
           ))}

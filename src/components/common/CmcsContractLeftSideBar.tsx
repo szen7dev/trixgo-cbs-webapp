@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 import { useAuth } from "services/hooks/useAuth";
 
@@ -9,6 +9,7 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 
 const CmcsContractLeftSideBar: FC = () => {
   const { user } = useAuth();
+  const { id: contractID } = useParams<{id: string }>();
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
@@ -31,8 +32,8 @@ const CmcsContractLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
-        <NavLink
-            to="/cmcs/contract/:id/admin"
+          <NavLink
+            to={`/cmcs/contract/${contractID}/admin`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -40,10 +41,10 @@ const CmcsContractLeftSideBar: FC = () => {
               src={iconFolder}
               alt="Menu item"
             />
-            <span className="truncate">Quản trị hợp đồng</span>
+            <span className="truncate">Quản trị thành viên</span>
           </NavLink>
           <NavLink
-            to="/cmcs/contract/:id/home"
+            to={`/cmcs/contract/${contractID}/home`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -54,7 +55,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Trang chủ hợp đồng</span>
           </NavLink>
           <NavLink
-            to="/cmcs/contract/:id/dashboard"
+            to={`/cmcs/contract/${contractID}/dashboard`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -64,8 +65,8 @@ const CmcsContractLeftSideBar: FC = () => {
             />
             <span className="truncate">Báo cáo quản trị</span>
           </NavLink>
-          <NavLink
-            to="/cmcs/contract/:id/editor"
+          {/* <NavLink
+            to={`/cmcs/contract/${contractID}/editor`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -74,9 +75,9 @@ const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Biên soạn hợp đồng</span>
-          </NavLink>
-          <NavLink
-            to="/cmcs/contract/:id/bill"
+          </NavLink> */}
+          {/* <NavLink
+            to={`/cmcs/contract/${contractID}/bill`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -85,9 +86,9 @@ const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Biểu khối lượng</span>
-          </NavLink>
-          <NavLink
-            to="/cmcs/contract/:id/budget"
+          </NavLink> */}
+          {/* <NavLink
+            to={`/cmcs/contract/${contractID}/budget`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -96,9 +97,9 @@ const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Ngân sách</span>
-          </NavLink>
+          </NavLink> */}
           <NavLink
-            to="/cmcs/contract/:id/produce"
+            to={`/cmcs/contract/${contractID}/produce`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -109,7 +110,7 @@ const CmcsContractLeftSideBar: FC = () => {
             <span className="truncate">Sản lượng</span>
           </NavLink>
           <NavLink
-            to="/cmcs/contract/:id/ipc"
+            to={`/cmcs/contract/${contractID}/ipc`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -119,8 +120,8 @@ const CmcsContractLeftSideBar: FC = () => {
             />
             <span className="truncate">Nghiệm thu hoàn thành</span>
           </NavLink>
-          <NavLink
-            to="/cmcs/contract/:id/product"
+          {/* <NavLink
+            to={`/cmcs/contract/${contractID}/product`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
             <img
@@ -129,7 +130,7 @@ const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Hồ sơ, sản phẩm</span>
-          </NavLink>
+          </NavLink> */}
         </div>
       </div>
     </div>

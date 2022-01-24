@@ -15,7 +15,10 @@ for (let i=1; i <= 1000; i++) {
     autoGenerateIndex[`${i}`] = `${i}`;
 }
 module.exports = {
-    purge: [],
+		mode: 'jit',
+    purge: [
+			'./src/**/*.{ts,tsx}'
+		],
     darkMode: "class", // or 'media' or false
     theme: {
         fontFamily: {
@@ -42,6 +45,7 @@ module.exports = {
                 "green-success": "#00C614",
 
                 "cbs-primary": "#0060E1",
+								"cbs-highlight-color": "#111E6C",
                 "cbs-secondary": "#4781CF",
                 "cbs-gray": "#F0F0F0",
                 "cbs-active-comment": "#E7F3FF",
@@ -66,6 +70,9 @@ module.exports = {
                 "cbs-down": "#FEECEB",
                 "cbs-down-text": "#F44336",
                 "cbs-nav-text": "#00B9F2",
+                "cbs-pink": "#FDF3F5",
+                "cbs-green-bg": "#EBFAF2",
+								"cbs-indeterminate": "#F7AF22"
             },
             fontSize: {
                 "[13px]": "13px",
@@ -87,10 +94,12 @@ module.exports = {
             width: {
                 ...autoGeneratePx,
                 fill: "-webkit-fill-available",
+                fit: 'fit-content',
             },
             height: {
                 ...autoGeneratePx,
                 max: "max-content",
+                fit: 'fit-content',
             },
             minWidth: {
                 ...autoGeneratePx,
@@ -151,6 +160,7 @@ module.exports = {
     },
     variants: {
         extend: {
+						backgroundColor: ['indeterminate'],
             opacity: ['disabled','group-hover'],
             textColor: ['group-focus'],
 						height: ['last'],
@@ -184,11 +194,6 @@ module.exports = {
 
 				addUtilities([
 					{ '.border-spacing-0': { 'border-spacing': '0' } },
-					{
-						'.cbs-checkbox:indeterminate': {
-							filter: 'hue-rotate(170deg) brightness(1.8)'
-						}
-					},
 				])
 			},
 			{

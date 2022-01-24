@@ -1,47 +1,24 @@
-import React, {FC} from "react";
+import React, {FC, useCallback} from "react";
 import DotsHorizontalGrayIcon from "assets/icons/DotsHorizontalGray";
 import RemoveIcon from "assets/images/icons8-remove-100.svg";
 import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 
 type Props = {
     user: any,
     index: number
 }
 const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
-    const backGround = [
-        "#84BBE4",
-        "#8DD4D6",
-        "#FCC4A2",
-        "#A6DA95",
-        "#0060E1",
-        "#4781CF",
-        "#F089B7",
-    ]
-    const getPresentGroupName = () => {
-        return user.userName.split(' ').slice(0, 2).map((text: string) => {
-            return text.charAt(0)
-        });
-    }
-
-    const getColor = () => {
-        return backGround[index%7]
-    }
-
     return (
         <div
             className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item"}>
-            {
-                user.userAvatar?
-                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={user.userAvatar} alt={user.userName}/>:
-                    <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl"} style={{background: "#8DD4D6"}}>
-                        {getPresentGroupName()}
-                    </div>
-            }
+            <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.fullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <span className={"font-bold"}>
-                    {user.userName}
+                    {user.fullname}
                 </span>
-                <span className={"truncate "+(user.status==="online"?"text-primary":"text-gray-400")}>{user.status}</span>
+                <span className={"truncate "+(user.status===1?"text-primary":"text-gray-400")}>{user.status===1?"online":"offline"}</span>
             </div>
             <div
                 className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>
@@ -49,10 +26,10 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
 
                 <div className={"action-menu-button absolute z-10 top-30px right-1 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 opacity-0 invisible transition duration-500"}>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                        <img src={RemoveIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Remove</div>
+                        <LazyLoadImage effect="blur" src={RemoveIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Remove</div>
                     </button>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                        <img src={AddAdminIcon} alt={"add folder"}/><div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
+                        <LazyLoadImage effect="blur" src={AddAdminIcon} alt={"add folder"}/><div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
                     </button>
                 </div>
             </div>

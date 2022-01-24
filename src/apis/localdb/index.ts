@@ -41,18 +41,18 @@ export const SCALES_COMPANY = [
 
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const APP_ROLES = [
-    { value: 11, text: 'Nhóm quản trị ứng dụng', permission: {read: 1, create: 1, update: 1, deleteIn: 1} },
-    { value: 12, text: 'Nhóm ban lãnh đạo', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 13, text: 'Nhóm nhân viên công ty', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 14, text: 'Nhóm khách mời của công ty', permission: {read: 1, create: 0, update: 0, deleteIn: 0} },
+    { value: 11, text: 'Nhóm quản trị ứng dụng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
+    { value: 12, text: 'Nhóm ban lãnh đạo', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 13, text: 'Nhóm nhân viên công ty', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 14, text: 'Nhóm khách mời của công ty', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } },
 ]
 
 // NHÓM CHỨC NĂNG ỨNG DỤNG MẶC ĐỊNH (PHỤC VỤ CẤU HÌNH BAN ĐẦU)
 export const PROJECT_ROLES = [
-    { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: {read: 1, create: 1, update: 1, deleteIn: 1} },
-    { value: 22, text: 'Nhóm ban lãnh đạo', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 23, text: 'Nhóm thành viên Dự án/Phòng ban/Hợp đồng', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 24, text: 'Nhóm khách mời của Dự án/Phòng ban/Hợp đồng', permission: {read: 1, create: 0, update: 0, deleteIn: 0} }
+    { value: 21, text: 'Nhóm quản trị Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
+    { value: 22, text: 'Nhóm ban lãnh đạo', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 23, text: 'Nhóm thành viên Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 24, text: 'Nhóm khách mời của Dự án/Phòng ban/Hợp đồng', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } }
 ]
 
 // CÁC BÊN THAM GIA TRONG DỰ ÁN
@@ -65,13 +65,13 @@ export const PROJECT_PARTIES = [
     { value: 5, text: 'Nhà thầu thi công', key: '' },
 ]
 
-// For CONINCO only
+// For CNC only
 export const CNC_PROJECT_ROLES = [
-    { value: 21, text: 'Ban TGĐ', permission: {read: 1, create: 0, update: 0, deleteIn: 0} },
-    { value: 22, text: 'Phòng Kinh doanh', permission: {read: 1, create: 1, update: 1, deleteIn: 1} },
-    { value: 23, text: 'Phòng Quản lý kỹ thuật', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 24, text: 'Phòng Tài chính đầu tư', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
-    { value: 25, text: 'Trung tâm', permission: {read: 1, create: 1, update: 1, deleteIn: 0} },
+    { value: 21, text: 'Ban TGĐ', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } },
+    { value: 22, text: 'Phòng Kinh doanh', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
+    { value: 23, text: 'Phòng Quản lý kỹ thuật', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 24, text: 'Phòng Tài chính đầu tư', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
+    { value: 25, text: 'Trung tâm', permission: { read: 1, create: 1, update: 1, deleteIn: 0 } },
 ]
 
 // PHÂN LOẠI PHÒNG BAN/DỰ ÁN
@@ -86,6 +86,16 @@ export const DEPARTMENT_STATUS = [
     { value: 2, text: 'Bàn giao', class: 'tajic-status-btn-open', backgroud: '4d4dff', key: 'hand_over' },
     { value: 3, text: 'Hoàn thành', class: 'tajic-status-btn-completed', backgroud: '5fba7d', key: 'completed' },
     { value: 4, text: 'Tạm dừng', class: 'tajic-status-btn-follow-up', backgroud: '5bc0de', key: 'follow_up' },
+]
+
+// GIAI ĐOẠN CỦA DỰ ÁN
+export const PROJECT_STAGE = [
+    { value: 1, text: 'Đang phát triển', key: '' },
+    { value: 2, text: 'Lập kế hoạch', key: '' },
+    { value: 3, text: 'Thiết kế', key: '' },
+    { value: 4, text: 'Đấu thầu', key: '' },
+    { value: 5, text: 'Xây dựng', key: '' },
+    { value: 6, text: 'Khác', key: '' },
 ]
 
 // LOẠI DỰ ÁN
@@ -234,6 +244,14 @@ export const CONTRACT_OUTIN = [
     { value: 2, text: 'Hợp đồng mua vào' },
 ]
 
+// TRẠNG THÁI HỢP ĐỒNG BÁN RA
+export const CONTRACT_COME_IN_STATUS = [
+    { value: 1, text: 'Đang triển khai' },
+    { value: 2, text: 'Đang bàn giao' },
+    { value: 3, text: 'Hoàn thành' },
+    { value: 4, text: 'Tạm dừng' },
+]
+
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
 export const CONTRACT_TA = [
     { value: 1, text: 'T' },
@@ -254,6 +272,13 @@ export const CONTRACT_DEBT_TYPES = [
     { value: 4, text: 'Nợ khác' },
 ]
 
+// PHÂN Contract IPC
+export const CONTRACT_IPC_TYPES = [
+    { value: 1, text: 'Tạm ứng' },
+    { value: 2, text: 'Thanh toán' },
+    { value: 3, text: 'Quyết toán' },
+]
+
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU
 export const GOODS_TYPES = [
     { value: 1, text: 'Nguyên liệu, vật liệu' },
@@ -262,7 +287,7 @@ export const GOODS_TYPES = [
     { value: 4, text: 'Hàng gửi đi bán' },
     { value: 5, text: 'Vật tư' },
     { value: 6, text: 'Nhân công' },
-    { value: 7, text: 'Thiết bị'  },
+    { value: 7, text: 'Thiết bị' },
     { value: 8, text: 'Giao khoán' },
     { value: 9, text: 'Khác' },
 ]
@@ -271,7 +296,7 @@ export const GOODS_TYPES = [
 export const PRODUCT_TYPES = [
     { value: 1, text: 'Vật tư' },
     { value: 2, text: 'Nhân công, máy' },
-    { value: 3, text: 'Thiết bị'  },
+    { value: 3, text: 'Thiết bị' },
 ]
 
 // LOẠI CÔNG VIỆC PHÁT SINH
@@ -323,7 +348,7 @@ export const PCM_PRIORITY_TASK = [
 
 // MỨC ĐỘ CẤP BÁCH
 export const ARR_URGENT = [
-    { value: 1, text: 'Không cấp bách'},
+    { value: 1, text: 'Không cấp bách' },
     { value: 2, text: 'Trung bình' },
     { value: 3, text: 'Cấp bách' },
 ]
@@ -331,8 +356,8 @@ export const ARR_URGENT = [
 // MỨC ĐỘ PHỨC TẠP
 export const ARR_DIFFICULT = [
     { value: 1, text: 'Không phức tạp' },
-    { value: 2, text: 'Phức tạp trung bình'},
-    { value: 3, text: 'Phức tạp cao'},
+    { value: 2, text: 'Phức tạp trung bình' },
+    { value: 3, text: 'Phức tạp cao' },
 ]
 
 // PHÂN LOẠI TIẾN ĐỘ
@@ -416,31 +441,31 @@ export const VOUCHER_TYPES = [
 // Doanh thu thuần: Doanh thu bán hàng - Các khoản giảm trừ doanh thu
 // '621','622','623','627' => 154 => 632
 export const ADREPORT_TYPES = [
-    { value: 1, text: 'Quỹ', accounts: ['111','112'], isDebit: true },
-    { value: 2, text: 'Doanh thu', accounts: ['511','515','521','711'], isDebit: false },
-    { value: 3, text: 'Chi phí', accounts: ['621','622','623','627','631','632','635','641','642','811','821'], isDebit: true },
-    { value: 4, text: 'Công nợ phải thu', accounts: ['128','131','136','138','141'], isDebit: true },
-    { value: 5, text: 'Công nợ phải trả', accounts: ['331','334','336','338','341'], isDebit: false },
+    { value: 1, text: 'Quỹ', accounts: ['111', '112'], isDebit: true },
+    { value: 2, text: 'Doanh thu', accounts: ['511', '515', '521', '711'], isDebit: false },
+    { value: 3, text: 'Chi phí', accounts: ['621', '622', '623', '627', '631', '632', '635', '641', '642', '811', '821'], isDebit: true },
+    { value: 4, text: 'Công nợ phải thu', accounts: ['128', '131', '136', '138', '141'], isDebit: true },
+    { value: 5, text: 'Công nợ phải trả', accounts: ['331', '334', '336', '338', '341'], isDebit: false },
 ]
 
 // PHÂN LOẠI NGUỒN KHÁCH HÀNG
 export const ORDER_SOURCE = [
-    { value: 1, text: 'Facebook',  class: 'tajic-status-btn-open' },
-    { value: 2, text: 'Website',  class: 'tajic-status-btn-open' },
-    { value: 3, text: 'Zalo',  class: 'tajic-status-btn-in-progress' },
-    { value: 4, text: 'Khác',  class: 'tajic-status-btn-in-progress' },
+    { value: 1, text: 'Facebook', class: 'tajic-status-btn-open' },
+    { value: 2, text: 'Website', class: 'tajic-status-btn-open' },
+    { value: 3, text: 'Zalo', class: 'tajic-status-btn-in-progress' },
+    { value: 4, text: 'Khác', class: 'tajic-status-btn-in-progress' },
 ]
 
 // PHÂN LOẠI ĐƠN HÀNG
 export const ORDER_NEW = [
-    { value: 1, text: 'Đơn cũ',  class: 'tajic-status-btn-open' },
-    { value: 2, text: 'Đơn mới',  class: 'tajic-status-btn-open' },
+    { value: 1, text: 'Đơn cũ', class: 'tajic-status-btn-open' },
+    { value: 2, text: 'Đơn mới', class: 'tajic-status-btn-open' },
 ]
 
 // CHÍNH SÁCH GIÁ BÁN
 export const ORDER_POLICY = [
-    { value: 1, text: 'Bán lẻ',  class: 'tajic-status-btn-open' },
-    { value: 2, text: 'Bán buôn',  class: 'tajic-status-btn-open' },
+    { value: 1, text: 'Bán lẻ', class: 'tajic-status-btn-open' },
+    { value: 2, text: 'Bán buôn', class: 'tajic-status-btn-open' },
 ]
 
 // TRẠNG THÁI KHÁCH HÀNG
@@ -473,12 +498,12 @@ export const REACTION_TYPES = [
  * 5-Nhà thầu thi công 
  */
 export const PCM_MEMBER_POSITION_TYPE = [
-	{ value: 0, text: 'Trợ lý viên' },
-	{ value: 1, text: 'Chủ đầu tư' },
-	{ value: 2, text: 'Tư vấn QLDA' },
-	{ value: 3, text: 'Tư vấn giám sát' },
-	{ value: 4, text: 'Tư vấn thiết kế' },
-	{ value: 5, text: 'Nhà thầu thi công' },
+    { value: 0, text: 'Trợ lý viên' },
+    { value: 1, text: 'Chủ đầu tư' },
+    { value: 2, text: 'Tư vấn QLDA' },
+    { value: 3, text: 'Tư vấn giám sát' },
+    { value: 4, text: 'Tư vấn thiết kế' },
+    { value: 5, text: 'Nhà thầu thi công' },
 ]
 
 /**
@@ -487,27 +512,30 @@ export const PCM_MEMBER_POSITION_TYPE = [
  * 3. Zip
  */
 export const PCM_TYPE_FILE = [
-    { value: 1, type: [ 'jpg','jpeg', 'png', 'gif', 'heic'] },
+    { value: 1, type: ['jpg', 'jpeg', 'png', 'gif', 'heic'] },
     { value: 2, type: ['mp3', 'mp4', 'wav'] },
     { value: 3, type: ['zip', 'rar', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'txt', 'mpp'] }
 ]
 
 export const MESSAGE_TYPE_FILE = [
-    { value: 1, type: [ 'jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF',  'image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml'] },
+    { value: 1, type: ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml'] },
     { value: 2, type: ['mp3', 'MP3', 'mp4', 'MP4', 'wav', 'WAV'] },
     { value: 3, type: ['zip', 'rar', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', "application/x-zip", "application/zip", 'rar', 'txt', 'mpp'] }
 ]
 export const TEMPLATE_TYPE = [
-	{ value: 1, text: 'Chung' },
-	{ value: 2, text: 'Biểu đồ cột' },
-	{ value: 3, text: 'Biểu đồ tròn' },
-	{ value: 4, text: 'Biểu đồ Histogram' },
+    { value: 1, text: 'Chung' },
+    { value: 2, text: 'Biểu đồ cột' },
+    { value: 3, text: 'Biểu đồ tròn' },
+    { value: 4, text: 'Biểu đồ Histogram' },
 ]
 /**
  * MIME Types image
  */
-export const MIME_TYPES_IMAGE = [ 'image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml' ];
+export const MIME_TYPES_IMAGE = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/svg+xml'];
 
-export const MIME_TYPES_PCM   = [ 'mov', 'mp4' , 'MP4', 'wav', 'WAV', 'jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'image/png', 'txt', 'mpp'];
+export const MIME_TYPES_PCM = ['mov', 'mp4', 'MP4', 'wav', 'WAV', 'jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'image/png', 'txt', 'mpp'];
 
-export const MIME_TYPES_MESSAGE   = [ 'jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'txt', 'mpp' ];
+export const MIME_TYPES_MESSAGE = ['jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'xlsm', 'ppt', 'pptx', 'dwg', 'mmap', 'mdb', 'rar', 'txt', 'mpp'];
+
+export const DATE_FORMAT = "DD/MM/YYYY";
+export const LIMIT_DROPDOWN = 30;

@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react';
-import React, { useContext } from 'react'
+import React, { Fragment, useContext } from 'react'
 
 import cn from 'classnames'
 
@@ -7,6 +7,7 @@ import { Context } from '../../contexts/contextModal';
 import ModalContainer from "views/pages/media/components/ModalContainer";
 import iconAttach from "assets/images/icons8-attach-96.png";
 import itemTag from "assets/images/icons8-price-tag.svg"
+import DropdownSearchable from 'components/common/DropdownSearch';
 
 const fakeDataInput = [
 	{ title: 'Số lượng', type: 'text', value: '12' },
@@ -39,6 +40,26 @@ const fakeDataTag = [
 
 const ModalCreateDocument: React.FC = () => {
 	const { state, toggleModal } = useContext(Context);
+
+	const tempData = [
+		{
+			"_id": 1,
+			"content": "Trần Thanh Quang"
+		},
+		{
+			"_id": 2,
+			"content": "Trần Thanh Quang 2"
+		},
+		{
+			"_id": 3,
+			"content": "Trần Thanh Quang 3"
+		},
+		{
+			"_id": 4,
+			"content": "Trần Thanh Quang 4"
+		},
+	];
+
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white" style={{ maxWidth: '1569px' }}>
@@ -60,14 +81,34 @@ const ModalCreateDocument: React.FC = () => {
 						{/* Fisrt row */}
 						{
 							fakeDataTag.map(item => {
-								return (<>
-									<div key={item.title} className="py-1.5 h-[30px] box-content">
+								return (<Fragment key={item.title}>
+									<div className="py-1.5 h-[30px] box-content">
 										<p className="py-1.5">
 											{item.title}
 										</p>
 									</div>
-									<div key={item.title} className="py-1.5 h-[30px] box-content px-2">
-										<div className="flex border border-cbs-border rounded-full w-[209px] px-2.5 py-0.5">
+									<div key={item.title + 1} className="py-0.5 h-[30px] box-content px-2">
+										<DropdownSearchable
+											placeholder={"Dự án"}
+											className={"w-full flex-1"}
+											showTriangle={false}
+											maxWidthInput={"max-w-none"}
+											isMultiple={false}
+											allowClearValueSingleInput={true}
+											renderSelectedItem={item => (
+												<div className={"flex items-center"}>
+													<img alt={"tag icon"} src={itemTag} />
+													<span>{item.text}</span>
+												</div>
+											)}
+											data={tempData}
+											formatItem={{
+												id: "_id",
+												text: "content"
+											}}
+											inlineSearch={true}
+										/>
+										{/* <div className="flex border border-cbs-border rounded-full w-[209px] px-2.5 py-0.5">
 											<img src={itemTag} alt="" className="h-6 w-6 mr-1.5" />
 											<input className="inline-block" type="text" value="Nội dung dữ liệu" />
 											<button type="button">
@@ -75,15 +116,15 @@ const ModalCreateDocument: React.FC = () => {
 													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 												</svg>
 											</button>
-										</div>
+										</div> */}
 									</div>
-								</>)
+								</Fragment>)
 							})
 						}
 						{
 							fakeDataInput.map((item) => {
 								return (
-									<>
+									<Fragment key={item.title}>
 										<div className="py-1.5 h-[30px] box-content">
 											<p className="py-1.5">
 												{item.title}
@@ -91,21 +132,61 @@ const ModalCreateDocument: React.FC = () => {
 										</div>
 										<div className="text-black py-1.5 h-[30px] box-content px-2">
 											<div className="py-1.5">
-												{item.type === 'text' ? item.value : <input type={item.type} value={item.value} checked={item.checked} />}
+												{item.type === 'text'
+													? <input type="text" defaultValue={item.value} className='w-full' placeholder='Nội dung' />
+													: <input type={item.type} value={item.value} checked={item.checked} />}
 											</div>
 										</div>
-									</>
+									</Fragment>
 								)
 							})
 						}
-						<label htmlFor="title" className="py-1.5 h-[30px] box-content">
+						<label htmlFor='title' className="py-1.5 h-[30px] box-content">
 							<p className="py-1.5">
 								Tiêu đề
 							</p>
 						</label>
-						<input id="title" type="text" name="title" placeholder="Tiêu đề" className="col-span-7 focus:outline-none py-1.5 h-[30px] box-content" />
-						<label htmlFor="description" className="py-1.5 h-[30px] box-content">
+						<input id="title" type="text" name="title" placeholder="Tiêu đề" className="col-span-3 focus:outline-none py-1.5 h-[30px] box-content px-2" />
+						<label htmlFor="status" className="py-1.5 h-[30px] box-content">
+							<p className='py-1.5'>
+								Tình trạng hoàn thành
+							</p>
+						</label>
+						<div className="text-black py-1.5 h-[30px] box-content px-2">
+							<div className="py-1.5">
+								<input type="checkbox" id='status' value="status" defaultChecked={true} />
+							</div>
+						</div>
+
+						<div className="py-1.5 h-[30px] box-content">
 							<p className="py-1.5">
+								Lĩnh vực
+							</p>
+						</div>
+						<div className="py-0.5 h-[30px] box-content px-2">
+							<DropdownSearchable
+								placeholder={"Dự án"}
+								className={"w-full flex-1"}
+								showTriangle={false}
+								maxWidthInput={"max-w-none"}
+								isMultiple={false}
+								allowClearValueSingleInput={true}
+								renderSelectedItem={item => (
+									<div className={"flex items-center"}>
+										<img alt={"tag icon"} src={itemTag} />
+										<span>{item.text}</span>
+									</div>
+								)}
+								data={tempData}
+								formatItem={{
+									id: "_id",
+									text: "content"
+								}}
+								inlineSearch={true}
+							/>
+						</div>
+						<label htmlFor="description" className="py-1.5 h-[30px] box-content">
+							<p className='py-1.5'>
 								Mô tả
 							</p>
 						</label>

@@ -1,9 +1,14 @@
-import React, {FC} from "react";
-import SearchInput from "components/common/SearchInput";
+import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {MessageContext} from "../home/index_v2";
+import {setListConversation} from "redux/reducer/messages/ListConversation";
+import SearchUserAndConversation from "./components/SearchUserAndConversation";
 
 const MessageList:FC = () => {
     const listTab = [
@@ -11,159 +16,59 @@ const MessageList:FC = () => {
             text: "All",
             tabId: "all",
             unread: 0
-        },
-        {
-            text: "CBS",
-            tabId: "cbs",
-            unread: 0
-        },
-        {
-            text: "Quản trị",
-            tabId: "quan-tri",
-            unread: 0
-        },
-        {
-            text: "Budget",
-            tabId: "budget",
-            unread: 0
-        },
-        {
-            text: "Unread",
-            tabId: "unread",
-            unread: 7
-        },
-        {
-            text: "Quản trị",
-            tabId: "quan-tri2",
-            unread: 0
-        },
-        {
-            text: "Budget",
-            tabId: "budget2",
-            unread: 0
-        },
-    ]
-    const listChat = [
-        {
-            _id: 1,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 2,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 3,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 4,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
-        },
-        {
-            _id: 5,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 6,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 7,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 8,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
-        },
-        {
-            _id: 9,
-            chatName: "CBS-Backend",
-            text: "You: Anh em hình dung rồi đúng không",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04",
-            unread: 4
-        },
-        {
-            _id: 10,
-            chatName: "CBS-BE-FE",
-            text: "Minh CBS: 🙃 Sticker ",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 11,
-            chatName: "Minh CBS",
-            text: "BaoCaoDanhGia.pdf",
-            chatAvatar: null,
-            pinned: true,
-            isDraft: false,
-            date: "10:04"
-        },
-        {
-            _id: 12,
-            chatName: "CBS-BE-FE",
-            text: "Alo em, em và Đệ đã online chưa?",
-            chatAvatar: null,
-            pinned: false,
-            isDraft: true,
-            date: "10:04"
         }
     ]
+    const dispatch = useDispatch();
+    const [searchText, setSearchText] = useState("");
+    const [reachedEnd, setReachEnd] = useState(false);
+    const {getListConversation} = UseListConversation();
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
+    useEffect(() => {
+        socket&&socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+    },[socket])
+
+    const mapData = useSelector((state: RootState) => state.listConversation);
+    const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
+
+    useEffect(() => {
+        getListConversation({keyword: searchText});
+    },[searchText]);
+
+    useEffect(() => {
+        if (reachedEnd && !isLoading && hasMoreData) {
+            getListConversation({keyword: searchText, lastestID: nextCursor});
+            setReachEnd(false);
+        }
+    },[reachedEnd, isLoading, hasMoreData]);
+
+    const listInnerRef = useRef<HTMLDivElement>(null);
+
+    const onScroll = () => {
+        if (listInnerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
+                setReachEnd(true);
+            } else {
+                setReachEnd(false);
+            }
+        }
+    };
+
+    useEffect(() => {
+        listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
+    },[listInnerRef])
+
+    const onReceiveConversation = (data: any) => {
+        dispatch(setListConversation(data.data.listRecords));
+    }
 
     return (
         <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
-            <div className={"overflow-auto h-full"}>
-                <div className={"sticky top-0 bg-white z-5"}>
+                <div className={"bg-white z-5"}>
                     <div className={"p-2 flex"}>
                         <HamLeftMenu/>
-                        <SearchInput classNameWrapper={"flex-1"} classNameInput={"rounded-full"} onChange={value => console.log(value)}/>
+                        <SearchUserAndConversation/>
                     </div>
                     <div className={"flex overflow-auto max-w-full border-b border-gray-100 no-webkit-scrollbar"}>
                         {_map(listTab, tab => (
@@ -181,14 +86,14 @@ const MessageList:FC = () => {
                         ))}
                     </div>
                 </div>
-
-                <div className={"chat-list p-1"}>
-                    {_map(listChat, (chat,index) => (
-                        <ListChatItem key={chat._id} chat={chat} index={index}/>
+                <div
+                    className={"overflow-auto message-list-height"}
+                    ref={listInnerRef}
+                    id={'list-conversation'}>
+                    {_map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
+                        <ListChatItem key={chat._id} chat={chat}/>
                     ))}
                 </div>
-
-            </div>
             <AddNewChatGroup/>
         </div>
     )

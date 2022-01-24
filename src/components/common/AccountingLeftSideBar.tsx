@@ -1,9 +1,11 @@
 import { FC } from "react";
 
+import { NavLink } from 'react-router-dom';
+
+import { useAuth } from "services/hooks/useAuth";
+
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-import { Link } from 'react-router-dom';
-import { useAuth } from "services/hooks/useAuth";
 
 const LinkMenuLeftSideBar: FC = () => {
     const { user } = useAuth();
@@ -19,74 +21,82 @@ const LinkMenuLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
-          <Link to={`/accounting/home`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px] active">
+          <NavLink to={`/accounting/home`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Trang chủ</span>
-          </Link>
-          <Link to={`/accounting/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo quản trị</span>
-          </Link>
-          <Link to={`/accounting/accbill`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/accbill`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Phiếu kế toán</span>
-          </Link>
-          <Link to={`/accounting/receipt`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/receipt`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Phiếu thu</span>
-          </Link>
-          <Link to={`/accounting/payment`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/payment`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Phiếu chi</span>
-          </Link>
-          <Link to={`/accounting/goods-import`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/goods-import`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Phiếu nhập</span>
-          </Link>
-          <Link to={`/accounting/goods-export`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/goods-export`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Phiếu xuất</span>
-          </Link>
-          <Link to={`/accounting/invoices`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/invoices`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Hóa đơn dịch vụ</span>
-          </Link>
-          <Link to={`/accounting/debit-note`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/debit-note`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Giấy báo nợ</span>
-          </Link>
-          <Link to={`/accounting/credit-note`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/credit-note`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Giấy báo có</span>
-          </Link>
-          <Link to={`/accounting/detail`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/detail`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Chi tiết tài khoản</span>
-          </Link>
-          <Link to={`/accounting/diary`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/tbook`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Sổ tổng hợp tài khoản chữ T</span>
+          </NavLink>
+          <NavLink to={`/accounting/diary`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Sổ nhật ký chung</span>
-          </Link>
-          <Link to={`/accounting/import-export`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/import-export`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Nhập xuất tồn</span>
-          </Link>
-          <Link to={`/accounting/debt-tracking`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/debt-tracking`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Theo dõi công nợ</span>
-          </Link>
-          <Link to={`/accounting/vat`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/vat`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Bảng kê VAT</span>
-          </Link>
-          <Link to={`/accounting/financial-report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/financial-report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo tài chính</span>
-          </Link>
-          <Link to={`/accounting/support-tools`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+          </NavLink>
+          <NavLink to={`/accounting/support-tools`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Công cụ hỗ trợ</span>
-          </Link>
+          </NavLink>
+          <NavLink to={`/accounting/admin`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-[13px]">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Quản trị ứng dụng</span>
+          </NavLink>
         </div>
 
       </div>

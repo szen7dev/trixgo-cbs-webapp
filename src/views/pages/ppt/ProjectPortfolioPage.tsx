@@ -8,12 +8,7 @@ import getPlugins, { _data, optionsOne as options } from "./chart/ProjectDoughnu
 
 import styles from "./style.module.css";
 import { Link } from "react-router-dom";
-
-const pages = [
-	{ id: 'dashboard', title: 'Dashboard' },
-	{ id: 'finnace', title: 'Kế hoạch tài chính' },
-	{ id: 'report', title: 'Báo cáo' },
-]
+import SearchIcon from "assets/images/icons8-search-120.png";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -35,26 +30,10 @@ const ProjectPortfolioPage: FC = () => {
 	}, []);
 
 	return (
-		// <div className="flex flex-col w-full overflow-y-auto" style={{ height: 'calc(100vh - 64px)' }}>
-		<div className={cn(styles.content, "bg-cbs-gray")}>
-			<div className='text-cbs-subtext bg-white border border-cbs-border px-4 flex justify-between w-full'>
-				<div className="flex justify-center flex-1">
-					{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === 'dashboard' })}>
-						<button>
-							{page.title}
-						</button>
-					</div>)}
-				</div>
-				<div className={cn(styles['input-container'], 'rounded-full flex my-2.5')}>
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-4 my-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-					</svg>
-					<input className="bg-transparent focus:outline-none py-3 px-2.5 flex-1" placeholder="Tìm kiếm" />
-				</div>
-			</div>
-			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1")}>
+		<div className={cn("bg-cbs-gray overflow-y-auto")}>
+			<div className={cn(styles['content-container'], "custom-scroll overflow-y-auto p-4 pt-0 flex-1")}>
 				{/* Content */}
-				<div className="flex flex-wrap -mx-2">
+				<div className="flex flex-wrap -mx-2 text-cbs-subtext">
 					<div className={cn("px-2 mt-4  flex-auto")}>
 						<div className={cn(styles.cell, 'border border-cbs-border h-full px-5 pt-7 pb-8')}>
 							<div className={cn(styles['finance-progress'], "text-3x-large")}>
@@ -143,19 +122,24 @@ const ProjectPortfolioPage: FC = () => {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-wrap -mx-2 mt-4">
+				<div className="flex flex-wrap -mx-2 mt-4 text-cbs-subtext">
 					<div className="px-2 w-full">
-						<div className={cn(styles.cell, styles.border, 'h-full')}>
-							<table className={cn(styles['finance-table'], styles.invest, 'text-x-small w-full')}>
+						<div className='h-full bg-white shadow-md border-separate'>
+							<table className='text-x-small w-full'>
 								<thead>
-									<tr>
-										<th>DỰ ÁN</th>
-										<th>NGÂN SÁCH</th>
-										<th>KÝ HỢP ĐỒNG</th>
-										<th>ĐÃ GIẢI NGÂN</th>
-										<th>GIAI ĐOẠN</th>
-										<th>CỘT MỐC</th>
-										<th>THẢO LUẬN</th>
+									<tr className="lowercase border-b-0.5 border-cbs-border">
+										<th className="first-letter:capitalize font-normal">DỰ ÁN</th>
+										<th className="first-letter:capitalize font-normal">NGÂN SÁCH</th>
+										<th className="first-letter:capitalize font-normal">KÝ HỢP ĐỒNG</th>
+										<th className="first-letter:capitalize font-normal">ĐÃ GIẢI NGÂN</th>
+										<th className="first-letter:capitalize font-normal">GIAI ĐOẠN</th>
+										<th className="first-letter:capitalize font-normal">CỘT MỐC</th>
+										<th className="first-letter:capitalize font-normal py-0.5 w-min text-right">
+											<div className="rounded-full inline-flex bg-cbs-left-menu px-4 py-1.5 items-center h-10 w-min right-0">
+												<img src={SearchIcon} alt={"icon search"} className="w-5 h-5" />
+												<input placeholder="Tìm kiếm" className="bg-transparent focus:outline-none w-60" />
+											</div>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -176,19 +160,19 @@ const ProjectPortfolioPage: FC = () => {
 										const getRandomColor = (): string => { return colors[Math.floor(Math.random() * colors.length)] }
 										return (
 											<tr key={d.id}>
-												<td>
-													<div className={styles.black}>
+												<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-3.5 pr-4 w-[275px]">
+													<div className="text-black text-medium">
 														<Link to="/">
 															CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây
 														</Link>
 													</div>
-													<div className={cn(styles['text-tiny'], "mt-3")}>
-														<div className={cn(styles[getRandomColor()], 'inline-block w-2 h-2 mr-1.5 rounded-lg')} style={{ backgroundColor: 'currentcolor' }} />
-														ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+													<div className={cn("text-x-small", "mt-3")}>
+														<div className={cn(styles[getRandomColor()], 'inline-block w-2 h-2 mr-1.5 rounded-lg bg-current')} />
+														Đúng tiến độ, vượt ngân sách
 													</div>
 													<div className="flex justify-between mt-2.5">
 														<div>
-															<p className={styles['text-tiny']}>
+															<p className="text-x-small">
 																Bắt đầu
 															</p>
 															<p>
@@ -196,7 +180,7 @@ const ProjectPortfolioPage: FC = () => {
 															</p>
 														</div>
 														<div>
-															<p className={styles['text-tiny']}>
+															<p className="text-x-small">
 																Kết thúc
 															</p>
 															<p>
@@ -208,20 +192,20 @@ const ProjectPortfolioPage: FC = () => {
 														<div className="flex absolute inset-0 items-center">
 															<div className={cn(styles.bar, styles['dark-gray'], "h-0.5 w-full")} />
 														</div>
-														<div className={cn(styles.bar, styles.black, "relative left-3 transform -translate-x-1/2 w-1 h-4")}></div>
+														<div className={cn(styles.bar, "text-black relative left-3 transform -translate-x-1/2 w-1 h-4")}></div>
 													</div>
 												</td>
-												<td className="px-3 pt-4">
+												<td className="px-3 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 													<p>$150.000.000</p>
 													<div className={cn(styles.lime, styles.circle, "h-1.5 mt-1")} />
 													<p className="mt-2.5">$165.000.000</p>
 													<div className="h-1.5 mt-1" style={{ backgroundColor: '#666666' }} />
 													<div className="flex justify-between mt-4 items-center">
 														<div>$15.000</div>
-														<div className={cn(styles.danger, 'inline-block w-2 h-2 rounded-lg')} />
+														<i className='inline-block w-2 h-2 rounded-lg bg-cbs-down-text' />
 													</div>
 												</td>
-												<td className="px-5">
+												<td className="px-5 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 													<div>
 														<div className="w-0 relative" style={{ left: `${d.progress}%` }}>
 															<div className="w-min transform -translate-x-1/2">{d.progress}%</div>
@@ -229,7 +213,7 @@ const ProjectPortfolioPage: FC = () => {
 														<div className={cn(styles.progress, "w-full mt-0.5 h-1.5")} style={{ '--width': `${d.progress}%` } as React.CSSProperties} />
 													</div>
 												</td>
-												<td className="px-5">
+												<td className="px-5 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 													<div>
 														<div className="w-0 relative" style={{ left: `${d.progress}%` }}>
 															<div className="w-min transform -translate-x-1/2">{d.progress}%</div>
@@ -237,12 +221,12 @@ const ProjectPortfolioPage: FC = () => {
 														<div className={cn(styles.progress, "w-full mt-0.5 h-1.5")} style={{ '--width': `${d.progress}%` } as React.CSSProperties} />
 													</div>
 												</td>
-												<td>
-													<p className="font-bold mt-2.5 uppercase">
+												<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-4 w-min">
+													<p className="text-cbs-primary mt-2.5 uppercase">
 														Đấu thầu
 													</p>
 												</td>
-												<td className="px-4">
+												<td className="px-4 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 													<div>
 														<div className="w-0 relative" style={{ left: `${d.progress}%` }}>
 															<div className="w-min transform -translate-x-1/2 font-bold">3/5</div>
@@ -250,7 +234,7 @@ const ProjectPortfolioPage: FC = () => {
 														<div className={cn(styles.progress, "w-full h-1.5")} style={{ '--width': `${d.progress}%` } as React.CSSProperties} />
 													</div>
 												</td>
-												<td style={{ color: "rgba(0, 96, 225, 1)", letterSpacing: "4%" }}>
+												<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 px-4" style={{ color: "rgba(0, 96, 225, 1)", letterSpacing: "4%" }}>
 													<svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline mr-2">
 														<path d="M6.00005 0.998217C4.81078 0.998217 4.49197 0.999266 2.99978 0.998778C2.99978 0.998778 1.38869 1.00212 1.00037 1.00017C1.00032 1.09694 0.999756 0.887155 1.00012 1.50017C1.00031 1.84658 1.00037 2.1761 1.00037 2.50017C1.00037 3.27486 1.00061 4.23766 1.00047 5.00017C1.00007 6.50017 1.00007 7.50017 1.00031 9.00017C1.00007 9.50017 1.00031 10.5002 1.00031 11.0002C0.997731 11.0638 1.5 11 2 11C2.17969 11 2.46452 10.9959 2.5 11H4C4.30806 11.0116 4.19181 11 4.5 11C4.54846 11 4.93661 11.4632 5 11.5C5.02235 11.513 5.1212 11.6036 5.14739 11.6266C5.28066 11.7436 5.38498 11.8567 5.5 12C5.90165 12.5003 6.23297 12.9031 6.5 13.5C6.58223 13.6838 6.82589 13.6911 7 13.5C7.07711 13.3942 7.5 12.5 7.5 12.5L8 12C8.15687 11.7091 8.5 11 9 11H13V10.9989V10.4989V8.99895V5.99895V3.00017V0.999848H12H10C8.53817 0.999848 7.46523 0.998217 6.00005 0.998217Z" fill="currentColor" />
 														<path d="M7 13.5C7.07711 13.3942 7.5 12.5 7.5 12.5C7.5 12.5 7.5 12.5 8 12C8.15687 11.7091 8.5 11 9 11C10.5 11 11.4945 11 13 11C13 11 13 11.1924 13 10.9989C13 10.7134 13 10.7845 13 10.4989C13 9.94469 13 9.5 13 8.99895C13 8 13 6.92793 13 5.99895C13 4.98419 13 3.99895 13 3.00017C13 2.7489 13 0.500524 13 0.999848C12.4305 0.999848 12.5 0.999848 12 0.999848C11.5 0.999848 10.4985 0.999848 10 0.999848C8.53817 0.999848 7.46523 0.998217 6.00005 0.998217C4.81078 0.998217 4.49197 0.999266 2.99978 0.998778C2.99978 0.998778 1.38869 1.00212 1.00037 1.00017C1.00032 1.09694 0.999756 0.887155 1.00012 1.50017C1.00031 1.84658 1.00037 2.1761 1.00037 2.50017C1.00037 3.27486 1.00061 4.23766 1.00047 5.00017C1.00007 6.50017 1.00007 7.50017 1.00031 9.00017C1.00007 9.50017 1.00031 10.5002 1.00031 11.0002C0.997731 11.0638 1.5 11 2 11C2.17969 11 2.46452 10.9959 2.5 11C3 11 3.5 11 4 11C4.30806 11.0116 4.19181 11 4.5 11C4.54846 11 4.93661 11.4632 5 11.5C5.02235 11.513 5.1212 11.6036 5.14739 11.6266C5.28066 11.7436 5.38498 11.8567 5.5 12C5.90165 12.5003 6.23297 12.9031 6.5 13.5C6.58223 13.6838 6.82589 13.6911 7 13.5ZM7 13.5C6.87287 13.6744 7.14443 13.3415 7 13.5Z" stroke="currentColor" strokeLinecap="round" />

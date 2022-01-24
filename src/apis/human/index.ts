@@ -53,7 +53,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
         params: {
             populates: {
                 "path": "company contact files contract position2 educationalBackground2 field2",
-                "select": "name sign size url userCreate createAt",
+                "select": "name sign size url userCreate createAt nameOrg",
                 "populate": {
                     "path": "userCreate project",
                     "select": "fullname projectType buildingGrade"
@@ -161,7 +161,59 @@ async function fetchListDoctype(params: DoctypePayload) {
     const { data } = await API.get(
         `${ITEM_URL}/doctypes`, {
         params: {
-            select: 'name type',
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
+async function fetchListContact(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/contacts`, {
+        params: {
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
+async function fetchListWarehouse(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/warehouses`, {
+        params: {
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
+async function fetchListProject(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/departments`, {
+        params: {
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
             ...params
         }
     }
@@ -247,6 +299,12 @@ const HumanRepository = {
 
     fetchListDoctype: async (params: DoctypePayload): Promise<DoctypeResponse> =>
         fetchListDoctype(params),
+    fetchListContact: async (params: any): Promise<any> =>
+        fetchListContact(params),
+    fetchListWarehouse: async (params: any): Promise<any> =>
+        fetchListWarehouse(params),
+    fetchListProject: async (params: any): Promise<any> =>
+        fetchListProject(params),
 
     fetchListAreas: async (params: AreaPayload): Promise<AreaResponse> =>
         fetchListArea(params),

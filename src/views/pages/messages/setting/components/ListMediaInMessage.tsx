@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useContext, useEffect} from "react";
 import {map as _map} from "lodash";
 import DropdownSearchable from "../../../../../components/common/DropdownSearch";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
@@ -9,82 +9,19 @@ import ItemMediaInMessage from "./ItemMediaInMessage";
 import SampleImage from 'assets/images/photo1640398643.png';
 import TriangleDown from "assets/icons/TriangleDown";
 import DatePickerWithRange from "./DatePickerWithRange";
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import {MessageContext} from "../../home/index_v2";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
 
 const ListMediaInMessage:FC = () => {
-    const listMediaInMessage = [
-        {
-            _id: 1,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 2,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 3,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 4,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 5,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 6,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 7,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 8,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 9,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 10,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 11,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 12,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 13,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 14,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 15,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 16,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 17,
-            imageUrl: SampleImage,
-        },
-        {
-            _id: 18,
-            imageUrl: SampleImage,
-        },
-    ]
+    const {currentChat} = useContext(MessageContext);
+    const {getListMediasOfConversation} = UseListConversation();
+    useEffect(() => {
+        getListMediasOfConversation({conversationID: currentChat, typeMessage: 1})
+    },[currentChat])
+    const listImageInMessage = useSelector((state: RootState) => state.listMessage.data.listImages[currentChat]);
 
     return (
         <div className={"bg-white flex-1"}>
@@ -116,7 +53,7 @@ const ListMediaInMessage:FC = () => {
                     ]}
                     renderItem={(item) => (
                         <div className={"flex align-items-center text-left"}>
-                            <img alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
+                            <LazyLoadImage effect="blur" alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
                             <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>
                         </div>
                     )}
@@ -129,13 +66,12 @@ const ListMediaInMessage:FC = () => {
                 />
                 <DatePickerWithRange/>
             </div>
-            <div className={"h-full flex flex-wrap"}>
-                {
-                    _map(listMediaInMessage, (media,index) => (
-                        <ItemMediaInMessage key={index} media={media}/>
-                    ))
-                }
-            </div>
+            {
+                listImageInMessage&&
+                _map(listImageInMessage, media => (
+                    <ItemMediaInMessage key={media._id} media={media}/>
+                ))
+            }
         </div>
     )
 }

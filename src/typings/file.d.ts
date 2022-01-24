@@ -6,6 +6,7 @@ export type FilePayload = Partial<File> & {
   name: string;
   size: string;
   app?: string;
+  typeUpload?: string;
 };
 
 export type UploadPayload = {
@@ -41,4 +42,5 @@ export type FileProps = {
   userCreate: string,
   modifyAt: string,
   createAt: string,
+  nameOrg: string,
 }
