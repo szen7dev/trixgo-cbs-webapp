@@ -151,9 +151,12 @@ export type ItemMediaOfConversation = {
     dataFormat: string;
     messages: {
         name: string;
+        nameOrg: string;
         size: number;
         url: string;
         _id: string;
+        link: string;
+        [key: string]: any;
     }[];
     _id: string;
 }

@@ -1,9 +1,8 @@
 import React, {FC, useRef, useState} from "react";
-import HamMenu from "assets/images/icons8-menu-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 import AddFolderIcon from "assets/images/icons8-add-folder-96.svg";
 import SettingIcon from "assets/images/icons8-setting-100.svg";
-import {useOnClickOutside} from "../../../../../services/hooks/useOnclickOutside";
+import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 
 const HamLeftMenu:FC = () => {
