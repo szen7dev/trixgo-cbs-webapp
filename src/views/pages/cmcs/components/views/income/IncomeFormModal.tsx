@@ -226,9 +226,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
     status: string().required(MESSAGE_ERROR.required),
     personInCharge: string().required(MESSAGE_ERROR.required),
     real: string().required(MESSAGE_ERROR.required),
-    debtStatus: string().required(MESSAGE_ERROR.required),
     type: string().required(MESSAGE_ERROR.required),
-    warehouse: string().required(MESSAGE_ERROR.required),
 
     name: string().required(MESSAGE_ERROR.required),
     sign: string().required(MESSAGE_ERROR.required),
@@ -292,7 +290,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
                         )}
                         initialValue={initialValues?.projectID}
                         data={listProject.map((item: any) => ({
-                          label: item.name,
+                          label: item.sign + "." + item.name,
                           value: item._id,
                         }))}
                         formatItem={{
@@ -600,7 +598,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo trạng thái công nợ (*)
+                        Phân loại theo trạng thái công nợ
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("debtStatus", value.id)}
@@ -675,7 +673,7 @@ const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFin
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo kho (*)
+                        Phân loại theo kho
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("warehouse", value.id)}
