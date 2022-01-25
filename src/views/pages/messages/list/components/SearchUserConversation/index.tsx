@@ -80,7 +80,7 @@ const SearchUserConversationSection:FC = () => {
                             <button
                                 key={friend._id}
                                 onClick={() => handleStartPrivateChat(friend._id)}
-                                className={"hover:bg-gray-200 rounded-lg w-[78px] flex flex-col items-center py-[15px] px-[10px]"}>
+                                className={"hover:bg-gray-100 rounded-lg w-[78px] flex flex-col items-center py-[15px] px-[10px]"}>
                                 <LazyLoadImage effect="blur" src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`} alt={'======'} wrapperClassName={"w-[54px] h-[54px] rounded-full"} className={"w-full h-full rounded-full"}/>
                                 <div className={"truncate text-sm max-w-full mt-[5px]"}>{friend.fullname}</div>
                             </button>
