@@ -34,12 +34,10 @@ const SearchUserConversationSection:FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [pageParam, setPageParam] = useState('');
     const params = {limit: 10, select: 'fullname email phone image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam, keyword: searchTerm}
-    const { listFriends, nextCursor } = useUser(pageParam, params);
-    const {createConversation} = UseListConversation();
+    const { listFriends, nextCursor } = useUser(params, pageParam);
 
     const paramsListConversation = {limit: 10, keyword: searchTerm};
-
-    const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation);
+    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation);
 
     const handleStartPrivateChat = (memberId: string) => {
         createConversation({
