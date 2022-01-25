@@ -18,12 +18,15 @@ import { useAuth } from 'services/hooks/useAuth';
 const Friends: FC = () => {
   const [code, setCode] = useState(null)
   const [codeSearch, setCodeSearch] = useState('')
-  const { listFriends } = useUser('list_friends', { limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}' });
+  const [pageParam, setPageParam] = useState('')
+  const [prevCursor, setPrevCursor] = useState(['']);
+  const params = {limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}', lastestID: pageParam}
+  const { listFriends, totalRecord, totalPage, nextCursor, refetchListFriends } = useUser(pageParam, params);
   const [friend, setFriend] = useState<any>(null)
   const [isFriend, setIsFriend] = useState(false)
 
   const { user } = useAuth();
-  const { getCodeUser, checkCodeUser, requestAddFriend, requestUnFriend, refetchListFriends} = useUser();
+  const { getCodeUser, checkCodeUser, requestAddFriend, requestUnFriend} = useUser();
   const getCode = async () => {
     const data = await getCodeUser()
     if(data?.code) {
@@ -55,9 +58,36 @@ const Friends: FC = () => {
       setFriend(null)
     }
   },[codeSearch])
+
+  useEffect(() => {
+    if (!nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, nextCursor])
+    }
+  }, [nextCursor]);
+
+  const prevPageAction = () => {
+    if (!nextCursor) {
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
+    } else {
+      const prev = prevCursor.findIndex(item => item === nextCursor)
+      setPageParam(prevCursor[prev - 2] || '')
+    }
+
+  };
+
+  const nextPageAction = () => {
+    setPageParam(nextCursor)
+  }
+  useEffect(() => {
+    refetchListFriends()
+  }, [])
   return (
-    <main className="h-full">
-      <header className="sticky top-0 z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
+    <main className="flex-1">
+      <header className="sticky top-[40px] z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
           <p className="text-lg">Danh sách</p>
           <SearchInput
@@ -159,7 +189,7 @@ const Friends: FC = () => {
               </td>
               <td className="py-1 px-2 align-middle">{ friend.email }</td>
               <td className="py-1 px-2 align-middle">{ friend.phone }</td>
-              <td className="py-1 px-2 align-middle">{ friend.birthDay }</td>
+              <td className="py-1 px-2 align-middle">{ friend.birthDay && moment(friend.birthDay).format('DD/MM/YYYY')}</td>
               <td className="py-1 px-2 text-negative align-middle cursor-pointer hover:text-opacity-50" onClick={() => unFriend({unFriendID: friend._id})}>Huỷ bạn bè</td>
             </tr>
           )) : null}
@@ -199,7 +229,11 @@ const Friends: FC = () => {
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate
+        totalPages={totalPage}
+        totalRecord={totalRecord} hasNextPage
+        prevPageAction={() => prevPageAction()}
+        nextPageAction={() => nextPageAction()} />
     </main>
   );
 };

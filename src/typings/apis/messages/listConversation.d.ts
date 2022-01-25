@@ -39,6 +39,7 @@ export type ItemListConversation = {
         createdAt: string;
         updatedAt: string;
         __v: number;
+        url: string;
     },
     description: string;
     messagesPin: string[];
@@ -62,4 +63,112 @@ export type ListConversationPayload = {
     keyword?: string;
     lastestID?: string;
     limit?: number;
+};
+
+export type ListMembersOfConversationPayload = {
+    conversationID: string;
+}
+export type ItemMembersOfConversation = {
+    _id: string;
+    image: string;
+    sendToFriends: any[];
+    receiveFromFriends: any[];
+    friends: string[];
+    email: string;
+    fullname: string;
+    position: string;
+    recentlyFriends: string[];
+    [key: string]: any;
+}
+export type ListMembersOfConversationResponse = {
+    error: boolean;
+    data: {
+        listRecords: ItemMembersOfConversation[];
+        limit: number;
+        totalRecord: number;
+        nextCursor: string;
+    };
+    status: number;
+};
+
+export type CheckExistConversationResponse = {
+    error: boolean;
+    data: any;
+    status: number;
+};
+
+export type CreateConversationPayload = {
+    name: string;
+    description: string;
+    isPrivate: boolean
+    membersID: string[]
+}
+
+export type CreateConversationResponseBodyData = {
+    config: {
+        configHighlight: number,
+        configSeeOldMessage: number,
+        configEditInfo: number,
+        configCreateNote: number,
+        configCreatePoll: number,
+        configPinMessage: number,
+        configSendMessage: number
+    },
+    members: string[],
+    authors: string[],
+    messagesPin: string[],
+    usersHide: string[],
+    state: number,
+    _id: string,
+    name: string,
+    description: string,
+    modifyAt: string,
+    createAt: string,
+    usersMissMessage: string[],
+    usersDeleteHistory: string[],
+    usersMute: string[],
+    createdAt: string,
+    updatedAt: string,
+    __v: number
+}
+
+export type CreateConversationResponse = {
+    error: boolean;
+    data: CreateConversationResponseBodyData;
+    status: number;
+};
+
+export type MediasOfConversationPayload = {
+    conversationID: string;
+    typeMessage: 1|2|3;
+    senderID?: string;
+    fromDate?: string;
+    toDate?: string;
+    dateCreate?: string;
+    limit?: number
+}
+export type ItemMediaOfConversation = {
+    dataFormat: string;
+    messages: {
+        name: string;
+        nameOrg: string;
+        size: number;
+        url: string;
+        _id: string;
+        link: string;
+        [key: string]: any;
+    }[];
+    _id: string;
+}
+export type MediasOfConversationResponseBodyData = {
+    listRecords: ItemMediaOfConversation[];
+    limit: number;
+    totalRecord: number;
+    nextCursor: string;
+}
+
+export type MediasOfConversationResponse = {
+    error: boolean;
+    data: any;
+    status: number;
 };

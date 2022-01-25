@@ -4,6 +4,9 @@ import { useLocation } from 'react-router-dom';
 import ChattingSection from "../chattingSection";
 import SettingMessageDetail from "../setting";
 import { useSocket } from "services/hooks/useSocket";
+import '@draft-js-plugins/emoji/lib/plugin.css';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import SocketController from "./socket";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -41,6 +44,7 @@ const MessagesHome:FC = () => {
                 <ChattingSection/>
                 <SettingMessageDetail/>
             </div>
+            <SocketController/>
         </MessageContext.Provider>
     )
 }

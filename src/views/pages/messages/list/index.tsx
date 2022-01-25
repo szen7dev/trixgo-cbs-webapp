@@ -17,16 +17,11 @@ const MessageList:FC = () => {
             tabId: "all",
             unread: 0
         }
-    ]
-    const dispatch = useDispatch();
+    ];
+
     const [searchText, setSearchText] = useState("");
     const [reachedEnd, setReachEnd] = useState(false);
     const {getListConversation} = UseListConversation();
-    const {socketRef} = useContext(MessageContext);
-    const socket = socketRef.current;
-    useEffect(() => {
-        socket&&socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
-    },[socket])
 
     const mapData = useSelector((state: RootState) => state.listConversation);
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
@@ -57,11 +52,7 @@ const MessageList:FC = () => {
 
     useEffect(() => {
         listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
-    },[listInnerRef])
-
-    const onReceiveConversation = (data: any) => {
-        dispatch(setListConversation(data.data.listRecords));
-    }
+    },[listInnerRef]);
 
     return (
         <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>

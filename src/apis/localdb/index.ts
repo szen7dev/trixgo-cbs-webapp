@@ -65,7 +65,7 @@ export const PROJECT_PARTIES = [
     { value: 5, text: 'Nhà thầu thi công', key: '' },
 ]
 
-// For CONINCO only
+// For CNC only
 export const CNC_PROJECT_ROLES = [
     { value: 21, text: 'Ban TGĐ', permission: { read: 1, create: 0, update: 0, deleteIn: 0 } },
     { value: 22, text: 'Phòng Kinh doanh', permission: { read: 1, create: 1, update: 1, deleteIn: 1 } },
@@ -86,6 +86,16 @@ export const DEPARTMENT_STATUS = [
     { value: 2, text: 'Bàn giao', class: 'tajic-status-btn-open', backgroud: '4d4dff', key: 'hand_over' },
     { value: 3, text: 'Hoàn thành', class: 'tajic-status-btn-completed', backgroud: '5fba7d', key: 'completed' },
     { value: 4, text: 'Tạm dừng', class: 'tajic-status-btn-follow-up', backgroud: '5bc0de', key: 'follow_up' },
+]
+
+// GIAI ĐOẠN CỦA DỰ ÁN
+export const PROJECT_STAGE = [
+    { value: 1, text: 'Đang phát triển', key: '' },
+    { value: 2, text: 'Lập kế hoạch', key: '' },
+    { value: 3, text: 'Thiết kế', key: '' },
+    { value: 4, text: 'Đấu thầu', key: '' },
+    { value: 5, text: 'Xây dựng', key: '' },
+    { value: 6, text: 'Khác', key: '' },
 ]
 
 // LOẠI DỰ ÁN
@@ -260,6 +270,13 @@ export const CONTRACT_DEBT_TYPES = [
     { value: 2, text: 'Nợ chờ quyết toán/bảo hành' },
     { value: 3, text: 'Nợ dự kiến tiền về' },
     { value: 4, text: 'Nợ khác' },
+]
+
+// PHÂN Contract IPC
+export const CONTRACT_IPC_TYPES = [
+    { value: 1, text: 'Tạm ứng' },
+    { value: 2, text: 'Thanh toán' },
+    { value: 3, text: 'Quyết toán' },
 ]
 
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU

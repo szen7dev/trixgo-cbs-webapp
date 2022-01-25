@@ -7,6 +7,7 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type Props = {
     message:any;
@@ -55,7 +56,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
             <div
                 onClick={() => setModalShowImage({show: true, index: index})}
                 key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
-                <img className={"w-full h-full object-cover " + classNameMap[index]["img"]} src={image.file.file.url} alt={"image"}/>
+                <LazyLoadImage effect="blur" wrapperClassName={"w-full h-full"} className={"w-full h-full object-cover " + classNameMap[index]["img"]} src={image.file.file.url} alt={"image"}/>
                 {
                     (index === 4 &&message.files.length > 5) &&
                     <div className={"absolute w-full h-full bg-black bg-opacity-40 bottom-0 right-0 flex items-center justify-center text-xl text-white"}>
@@ -95,7 +96,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
                 {renderImageDisplay()}
             </div>
             <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
-                {moment(message.createAt).format("hh:mm")}<img className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                {moment(message.createAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                 <div className="flex overflow-hidden transition-all transform w-full h-full">

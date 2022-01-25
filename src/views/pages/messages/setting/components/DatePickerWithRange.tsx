@@ -7,6 +7,7 @@ import cn from "classnames";
 import DateIcon from "assets/images/icons8-calendar-100.svg";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 type Props = {
     onValueChange?: (value: {
         id: number,
@@ -82,7 +83,7 @@ const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                 className={"hover:bg-gray-100 transition duration-500 flex cursor-pointer py-3 px-4"}
                             >
                                 <div className={"w-[15px] mr-3 flex items-center justify-center"}>
-                                    <img src={BlueCheck} alt={'checked'} className={cn("w-full mr-3", {
+                                    <LazyLoadImage effect="blur" src={BlueCheck} alt={'checked'} className={cn("w-full mr-3", {
                                         "opacity-100": value.id === option.id,
                                         "opacity-0": value.id !== option.id,
                                     })}/>
@@ -103,7 +104,7 @@ const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                         className={"w-full cursor-pointer py-3 px-4"}>
                         <div className={"flex"}>
                             <div className={"w-[15px] mr-3 flex items-center justify-center"}>
-                                <img src={BlueCheck} alt={'checked'} className={cn("w-full mr-3", {
+                                <LazyLoadImage effect="blur" src={BlueCheck} alt={'checked'} className={cn("w-full mr-3", {
                                     "opacity-100": value.id === 4,
                                     "opacity-0": value.id !== 4,
                                 })}/>
@@ -137,7 +138,7 @@ const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                                 className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
                                             />
                                             <div className={"h-full flex align-items-center pr-2"}>
-                                                <img src={DateIcon} alt={"calendar icon"}/>
+                                                <LazyLoadImage effect="blur" src={DateIcon} alt={"calendar icon"}/>
                                             </div>
                                         </div>
                                     }
@@ -166,7 +167,7 @@ const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                                 className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
                                             />
                                             <div className={"h-full flex align-items-center pr-2"}>
-                                                <img src={DateIcon} alt={"calendar icon"}/>
+                                                <LazyLoadImage effect="blur" src={DateIcon} alt={"calendar icon"}/>
                                             </div>
                                         </div>
                                     }

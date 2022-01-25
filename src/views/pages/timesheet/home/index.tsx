@@ -38,7 +38,7 @@ const TimeSheetHomePage: FC = () => {
     loading,
     hasNextPage,
   } = useQueryListTimeSheetParent();
-  console.log({data})
+
   const {
     onCreateTimeSheetParentAsync,
     onUpdateTimeSheetParentAsync,
@@ -96,7 +96,6 @@ const TimeSheetHomePage: FC = () => {
     },
     [onDeleteTimeSheetParentAsync, refreshListTimeSheet, openDeleteConfirm]
   );
-
   return (
     <div className={"financial-cashflow-listing paginate-wrapper relative"}>
       <div
@@ -110,13 +109,17 @@ const TimeSheetHomePage: FC = () => {
             classNameWrapper={"ml-4"}
             onChange={(event) => console.log(event.target.value)}
           />
-          <FilterButton />
-          <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
-          <ActionGroupButton
-            recordSelected={recordSelected}
-            onUpdateTimeSheet={handleUpdateTimeSheet}
-            onDeleteTimeSheet={handleClickDeleteTimeSheet}
-          />
+          {Object.keys(recordSelected).length > 1 && (
+            <>
+              <FilterButton />
+              <div className={"mr-3 w-4 border-r border-gray-400 h-[16px]"} />
+              <ActionGroupButton
+                recordSelected={recordSelected}
+                onUpdateTimeSheet={handleUpdateTimeSheet}
+                onDeleteTimeSheet={handleClickDeleteTimeSheet}
+              />
+            </>
+          )}
         </div>
         <button
           className={"bg-green-success h-[32px] text-white rounded px-5"}
@@ -262,7 +265,10 @@ const TimeSheetHomePage: FC = () => {
                   "px-2 py-4 table-cell box-border border-b text-right"
                 }
               >
-                {timeSheetParent.unitprice}
+                {`${timeSheetParent?.amount}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                )}
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>
                 {timeSheetParent.note}

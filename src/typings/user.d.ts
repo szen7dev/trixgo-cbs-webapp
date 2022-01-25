@@ -11,6 +11,17 @@ export type UpdatePasswordUser = {
     newPass: string,
 };
 
+export type UpdateAvatarUser = {
+    image: string,
+};
+
+export type AcceptRequestFriend = {
+    acceptFriendRequestID: string,
+};
+export type RemoveRequestFriend = {
+    removeFriendRequestID: string,
+};
+
 export type PostResponse = APIResponse & {
     data: User;
     message: string;
@@ -80,7 +91,7 @@ export type ListUserResponse = APIResponse & {
     data: {
       listRecords: Array<any>;
       totalRecord: number;
-      totalPages?: number;
+      totalPages: number;
     };
 };
 

@@ -98,7 +98,7 @@ const CmcsContractLeftSideBar: FC = () => {
             />
             <span className="truncate">Ngân sách</span>
           </NavLink> */}
-          {/* <NavLink
+          <NavLink
             to={`/cmcs/contract/${contractID}/produce`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -108,7 +108,7 @@ const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Sản lượng</span>
-          </NavLink> */}
+          </NavLink>
           <NavLink
             to={`/cmcs/contract/${contractID}/ipc`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"

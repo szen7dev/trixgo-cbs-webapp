@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {ItemMembersOfConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {
     data: {
@@ -24,6 +25,18 @@ const initialState : {
         },
         isLoading: {
             [key:string] : boolean
+        },
+        listMembers: {
+            [key:string] : ItemMembersOfConversation[];
+        },
+        listImages: {
+            [key: string] : any[]
+        },
+        listLinks: {
+            [key: string] : any[]
+        },
+        listFiles: {
+            [key: string] : any[]
         }
     }
 } = {
@@ -34,6 +47,10 @@ const initialState : {
         nextCursor: {},
         hasMoreData: {},
         isLoading: {},
+        listMembers: {},
+        listImages: {},
+        listFiles: {},
+        listLinks: {}
     }
 };
 
@@ -139,10 +156,61 @@ const listMessageSlice = createSlice({
                     }
                 }
             }
+        },
+        setListMembers(state, action) {
+            state.data = {
+                ...state.data,
+                listMembers: {
+                    ...state.data.listMembers,
+                    [action.payload.conversationId] : action.payload.data
+                }
+            }
+        },
+        setListMedias(state, action) {
+            switch (action.payload.type) {
+                case 1:
+                    state.data = {
+                        ...state.data,
+                        listImages: {
+                            ...state.data.listImages,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+                case 2:
+                    state.data = {
+                        ...state.data,
+                        listFiles: {
+                            ...state.data.listFiles,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+                case 3:
+                    state.data = {
+                        ...state.data,
+                        listLinks: {
+                            ...state.data.listLinks,
+                            [action.payload.conversationId] : action.payload.data
+                        }
+                    }
+                    break;
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListMessage, setTotalRecord, setNextCursor, setLoading, appendMessageToConversation, appendFakeMessageToConversation, updateNewMessageToConversation, updateFileProgressOnMessage } = listMessageSlice.actions;
+export const {
+    setListMessage,
+    setTotalRecord,
+    setNextCursor,
+    setLoading,
+    appendMessageToConversation,
+    appendFakeMessageToConversation,
+    updateNewMessageToConversation,
+    updateFileProgressOnMessage,
+    setListMembers,
+    setListMedias
+} = listMessageSlice.actions;
 export default listMessageSlice.reducer;

@@ -7,7 +7,8 @@ import {
     MediaPayload,
     PostResponse, 
     CommentPayload,
-    ListCommentsPayload
+    ListCommentsPayload,
+    MediaReactionPayload
 } from "typings/social";
 import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "helpers";
@@ -50,6 +51,13 @@ const SocialRepository = {
     async listMedias(payload: ListMediasPayload): Promise<ListMediasResponse> {
         const { data } = await API.get<ListMediasResponse>(
             `${mediaURL}?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+    async reactionMedia(payload: MediaReactionPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${mediaURL}/reaction`,
+            payload
         );
         return data;
     },

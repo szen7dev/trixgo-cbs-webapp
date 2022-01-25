@@ -3,31 +3,61 @@ import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import WordIcon from "assets/images/CBS-Word-Icon.svg";
 import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import {ItemMediaOfConversation} from "typings/apis/messages/listConversation";
+import {map as _map} from "lodash";
+import SampleImage from "assets/images/icons8-image-256.svg";
 type Props = {
-    file: any
+    file: ItemMediaOfConversation
 }
 const ItemFileInMessage:FC<Props> = ({file}) => {
-    const renderFileTypeImage = (file:any) => {
-        switch (file.fileType){
+    const renderFileTypeImage = (filename: string) => {
+        const extension = filename.split(".").pop();
+        switch (extension){
             case "pdf":
-                return <img className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
-            case "word":
-                return <img className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon pdf"}/>
-            case "excel":
-                return <img className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+            case "doc":
+            case "docx":
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+            case "xlsx":
+            case "xls":
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+            case "jpg":
+            case "jpeg":
+            case "png":
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
             default:
-                return <img className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon pdf"}/>
+                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
+    const formatBytes = (bytes: number, decimals = 3) => {
+        if (bytes === 0) return '0 Bytes';
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
     return (
-        <div className={"flex media-item-message py-[10px] px-[21px] relative hover:bg-gray-200"}>
-            {renderFileTypeImage(file)}
-            <div className={"flex-1 ml-2"}>
-                <p>{file.fileName}</p>
-                <p className={"text-gray-400"}>{file.fileSize} {file.date}</p>
-            </div>
-            <input type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer absolute top-10px right-10px invisible opacity-0 w-[24px] h-[24px]" />
+        <div className={"mb-3"}>
+            <div className={"px-[10px] py-[15px] font-bold"}>{file.dataFormat}</div>
+            {
+                _map(file.messages, f => (
+                    <div key={f._id} className={"flex media-item-message py-[10px] px-[21px] relative hover:bg-gray-200"}>
+                        {renderFileTypeImage(f.name)}
+                        <div className={"flex-1 ml-2"}>
+                            <p>{f.nameOrg??f.name}</p>
+                            <p className={"text-gray-400"}>{formatBytes(f.size)}</p>
+                        </div>
+                        <input type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer absolute top-10px right-10px invisible opacity-0 w-[24px] h-[24px]" />
+                    </div>
+                ))
+            }
         </div>
     )
 }

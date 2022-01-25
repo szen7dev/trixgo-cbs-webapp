@@ -44,7 +44,7 @@ const DetailMainRow: FC<Props> = ({
         >
           <div className={"flex flex-col items-center justify-center"}>
             <CollapseButton
-              idDetail={timeSheetParentInfo?._id || ''}
+              idDetail={timeSheetParentInfo?._id || ""}
               collapsed={false}
               index={1}
             />
@@ -55,7 +55,7 @@ const DetailMainRow: FC<Props> = ({
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-3"
           }
         >
-          {'A'}
+          {"A"}
         </div>
         <div
           className={
@@ -93,7 +93,12 @@ const DetailMainRow: FC<Props> = ({
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100"
           }
         >
-          <div className="flex justify-end">{timeSheetParentInfo?.amount}</div>
+          <div className="flex justify-end">
+            {`${timeSheetParentInfo?.amount}`.replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              ","
+            )}
+          </div>
         </div>
         <div
           className={

@@ -7,6 +7,7 @@ import {MessageContext} from "../../home/index_v2";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import AvatarGroupChat from "./AvatarGroupChat";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 type Props = {
     chat: ItemListConversation
@@ -24,7 +25,10 @@ const ListChatItem:FC<Props> = ({chat}) => {
     }
 
     const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length == 2) {
+        if (chat.members && chat.members.length === 1) {
+            return "Saved Messages";
+        }
+        if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
             return userInConversation.fullname.trim();
         }
@@ -34,8 +38,12 @@ const ListChatItem:FC<Props> = ({chat}) => {
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
-            const members = chat.members.filter((item: any) => item._id != profileId);
-            return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            if (chat.members.length === 1) {
+                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+            } else {
+                const members = chat.members.filter((item: any) => item._id != profileId);
+                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
+            }
         }
         const avatars: any = [];
         if (chat.members && chat.members.length) {
@@ -78,7 +86,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
         if (date.isSame(new Date(), 'date')) {
-            return date.format("hh:mm")
+            return date.format("HH:mm")
         }else if (date.isSame(new Date(), 'week')) {
             return date.format("dddd").split(" ").map((str:string) => str.charAt(0).toUpperCase() + str.slice(1)).join(" ")
         }else if (date.isSame(new Date(), 'year')) {
@@ -96,7 +104,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             className={"group flex p-[10px] focus:bg-primary active:bg-primary hover:bg-gray-100 cursor-pointer rounded-md " + (currentChat==chat._id ? "bg-primary":"")}>
             {
                 chat.avatar?
-                    <img className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat.avatar.file.url} alt={getNameConversation()}/>:
+                    <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                     (
                         getAvatarMembers().length === 0 ?
                         <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

@@ -13,9 +13,9 @@ import cn from 'classnames';
  * COMPONENTS
  */
 // import ModalFullContainer from "../components/ModalFullContainer";
+// import ViewPost from "../components/post/ViewPost";
 import ModalContainer from "../components/ModalContainer";
 import PostFile from '../components/post/PostFile';
-// import ViewPost from "../components/post/ViewPost";
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
 import ModalCreateArticle from "../components/home/ModalCreateArticle";
@@ -24,6 +24,8 @@ import RootCommentsList from '../components/RootCommentsList';
 /**
  * ASSETS
  */
+// import iconLike from 'assets/images/icons8-Emoji-Thumbs Up.png';
+// import iconLikeOutline from 'assets/images/like-outline.png';
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
@@ -68,7 +70,7 @@ const SocialPost: FC = () => {
 			break;
 	}
 
-	const { deleteMedia, listMedias } = useSocial(`list_media__related.${mediaID}`, conditionListMedia);
+	const { deleteMedia, reactionMedia, listMedias } = useSocial(`list_media__related.${mediaID}`, conditionListMedia);
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `list_comments.${mediaID}`
@@ -91,6 +93,11 @@ const SocialPost: FC = () => {
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
 		history.push('/social/home');
+	}
+
+	const handleReactionMedia = async () => {
+		await reactionMedia({ mediaID });
+		refetch();
 	}
 
 	if (!media) {
@@ -220,7 +227,10 @@ const SocialPost: FC = () => {
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
 								<span>
-									<img src={iconThumb} alt="Like" className="inline-block mr-2" />
+									<button onClick={handleReactionMedia}>
+										{/* <img src={iconLike} alt="Like" className="inline-block mr-2" style={{ width: '30px' }} /> */}
+										<img src={iconThumb} alt="Like" className="inline-block mr-2" />
+									</button>
 									<button onClick={toggleModalReact}>
 										{abbreviateNumber(media.amountReaction)}
 									</button>
@@ -292,7 +302,7 @@ const SocialPost: FC = () => {
 							<div className="flex items-center justify-center border-b-2 border-primary py-4 text-primary" style={{ minWidth: "100px" }}>
 								<img src={iconThumb} alt="Like" className="inline-block" />
 								<span>
-									28,7k
+									{abbreviateNumber(media.amountReaction)}
 								</span>
 							</div>
 						</div>
