@@ -50,7 +50,7 @@ export type DataListConversation = {
     // listConversationPin: ItemListConversation[];
     limit: number;
     totalRecord: number;
-    nextCursor: string;
+    nextCursor: string|null;
 }
 
 export type ListConversationResponse = {
@@ -61,7 +61,7 @@ export type ListConversationResponse = {
 
 export type ListConversationPayload = {
     keyword?: string;
-    lastestID?: string;
+    lastestID?: string|null;
     limit?: number;
 };
 

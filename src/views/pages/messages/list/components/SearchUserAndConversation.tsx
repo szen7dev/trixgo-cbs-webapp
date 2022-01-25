@@ -20,7 +20,7 @@ const SearchUserAndConversation:FC = () => {
     return (
         <SearchUserAndConversationContext.Provider value={value}>
             <div className={"relative flex items-center flex-1"}>
-                <LazyLoadImage effect="blur" src={SearchIcon} alt={"icon search"} className={"absolute w-[14px] h-[14px] left-2"}/>
+                <LazyLoadImage effect="blur" src={SearchIcon} alt={"icon search"} wrapperClassName={"absolute w-[14px] h-[14px] left-2"} className={"w-full h-full"}/>
                 <input onFocus={() => setShowSearch(true)} className={"h-[30px] w-full bg-gray-50 pl-10 rounded rounded-full"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}/>
             </div>
             {
