@@ -37,7 +37,7 @@ const SearchUserConversationSection:FC = () => {
     const { listFriends, nextCursor } = useUser(pageParam, params);
     const {createConversation} = UseListConversation();
 
-    const paramsListConversation = {limit: 2, keyword: searchTerm};
+    const paramsListConversation = {limit: 10, keyword: searchTerm};
 
     const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation);
 
