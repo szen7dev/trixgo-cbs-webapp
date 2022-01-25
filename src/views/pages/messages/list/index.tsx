@@ -19,7 +19,6 @@ const MessageList:FC = () => {
         }
     ];
 
-    const [searchText, setSearchText] = useState("");
     const [reachedEnd, setReachEnd] = useState(false);
     const {getListConversation} = UseListConversation();
 
@@ -27,12 +26,12 @@ const MessageList:FC = () => {
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
-        getListConversation({keyword: searchText});
-    },[searchText]);
+        getListConversation({});
+    },[]);
 
     useEffect(() => {
         if (reachedEnd && !isLoading && hasMoreData) {
-            getListConversation({keyword: searchText, lastestID: nextCursor});
+            getListConversation({lastestID: nextCursor});
             setReachEnd(false);
         }
     },[reachedEnd, isLoading, hasMoreData]);

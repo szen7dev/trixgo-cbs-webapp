@@ -101,7 +101,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             onClick={() => setCurrentChat(chat._id)}
             ref={wrapperRef}
             to={`#${chat._id}`}
-            className={"group flex p-[10px] focus:bg-primary active:bg-primary hover:bg-gray-100 cursor-pointer rounded-md " + (currentChat==chat._id ? "bg-primary":"")}>
+            className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
             {
                 chat.avatar?
                     <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
@@ -148,15 +148,15 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <div className={"flex"}>
-                    <div className={"flex-1 font-bold group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"")}>
+                    <div className={"flex-1 font-bold group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"")}>
                         {getNameConversation()}
                     </div>
-                    <div className={"text-xs group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"text-gray-400")}>
+                    <div className={"text-xs group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"text-gray-400")}>
                         {getDate()}
                     </div>
                 </div>
                 <div className={"flex mt-1"}>
-                    <div className={"flex-1 truncate w-[250px] group-active:text-white group-focus:text-white "+ (currentChat==chat._id ? "text-white":"text-gray-400")}>{getLastMessage()}</div>
+                    <div className={"flex-1 truncate w-[250px] group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"text-gray-400")}>{getLastMessage()}</div>
                     {
                         userUnreadMessage() > 0 &&
                         <span className={"rounded-full bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</span>}
