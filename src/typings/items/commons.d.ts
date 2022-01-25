@@ -13,5 +13,12 @@ export interface QueryParam {
     limit?: number;
     lastestID?: string;
     keyword?: string;
+    select?: string;
     populates?: Populate;
+}
+
+export interface Company {
+    name?: string;
+    sign?: string;
+    _id?: string;
 }
