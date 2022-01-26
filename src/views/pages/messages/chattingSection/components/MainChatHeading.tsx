@@ -6,6 +6,7 @@ import SearchIcon from "assets/images/icons8-search-120.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
+import SavedMessage from "assets/images/saved-messages.svg";
 
 type Props = {
     chat: any
@@ -31,7 +32,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];

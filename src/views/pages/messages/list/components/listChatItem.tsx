@@ -1,19 +1,19 @@
-import React, {FC, useCallback, useContext, useRef} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef} from "react";
 import IconPinned from "assets/icons/Pinned";
 import { NavLink } from "react-router-dom";
-import RightClickMenu from "components/common/RightClickMenu";
 import OptionListItemRightClick from "./OptionListItemRightClick";
 import {MessageContext} from "../../home/index_v2";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import AvatarGroupChat from "./AvatarGroupChat";
+import SavedMessage from "assets/images/saved-messages.svg";
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 
 type Props = {
     chat: ItemListConversation
 }
 const ListChatItem:FC<Props> = ({chat}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
-    const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -38,7 +38,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
@@ -96,74 +96,76 @@ const ListChatItem:FC<Props> = ({chat}) => {
     },[chat, profileId])
 
     return (
-        <NavLink
-            onClick={() => setCurrentChat(chat._id)}
-            ref={wrapperRef}
-            to={`#${chat._id}`}
-            className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
-            {
-                chat.avatar?
-                    <img  className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
-                    (
-                        getAvatarMembers().length === 0 ?
-                        <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
-                            {getPresentGroupName(getNameConversation())}
-                        </div> :
-                        <AvatarGroupChat
-                            avatars={getAvatarMembers()}
-                            imageClass={"w-[56px] h-[56px]"}
-                            classesMap={{
-                                "group_1": {
-                                    imgWidth: "w-full h-full",
-                                    groupPosition: [""]
-                                },
-                                "group_2": {
-                                    imgWidth: "w-[38px] h-[38px] absolute",
-                                    groupPosition: [
-                                        "bottom-0 left-0 z-2",
-                                        "top-0 right-0 z-1",
-                                    ]
-                                },
-                                "group_3": {
-                                    imgWidth: "w-[32px] h-[32px] absolute",
-                                    groupPosition: [
-                                        "bottom-0 left-12px z-3",
-                                        "top-0 left-0 z-2",
-                                        "top-0 right-0 z-1",
-                                    ]
-                                },
-                                "group_4": {
-                                    imgWidth: "w-[28px] h-[28px] absolute",
-                                    groupPosition: [
-                                        "bottom-0 left-0 z-4",
-                                        "top-0 left-0 z-3",
-                                        "top-0 right-0 z-2",
-                                        "bottom-0 right-0 z-1"
-                                    ]
-                                }
-                            }}
-                        />
-                    )
-            }
-            <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
-                <div className={"flex"}>
-                    <div className={"flex-1 font-bold group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"")}>
-                        {getNameConversation()}
+        <RightClickMenuWrapper
+            contextMenu={<OptionListItemRightClick/>}
+        >
+            <NavLink
+                onClick={() => setCurrentChat(chat._id)}
+                to={`#${chat._id}`}
+                className={"group smooth-animation flex p-[10px] cursor-pointer rounded-md z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
+                {
+                    chat.avatar?
+                        <img  className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        (
+                            getAvatarMembers().length === 0 ?
+                                <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                                    {getPresentGroupName(getNameConversation())}
+                                </div> :
+                                <AvatarGroupChat
+                                    avatars={getAvatarMembers()}
+                                    imageClass={"w-[56px] h-[56px]"}
+                                    classesMap={{
+                                        "group_1": {
+                                            imgWidth: "w-full h-full",
+                                            groupPosition: [""]
+                                        },
+                                        "group_2": {
+                                            imgWidth: "w-[38px] h-[38px] absolute",
+                                            groupPosition: [
+                                                "bottom-0 left-0 z-2",
+                                                "top-0 right-0 z-1",
+                                            ]
+                                        },
+                                        "group_3": {
+                                            imgWidth: "w-[32px] h-[32px] absolute",
+                                            groupPosition: [
+                                                "bottom-0 left-12px z-3",
+                                                "top-0 left-0 z-2",
+                                                "top-0 right-0 z-1",
+                                            ]
+                                        },
+                                        "group_4": {
+                                            imgWidth: "w-[28px] h-[28px] absolute",
+                                            groupPosition: [
+                                                "bottom-0 left-0 z-4",
+                                                "top-0 left-0 z-3",
+                                                "top-0 right-0 z-2",
+                                                "bottom-0 right-0 z-1"
+                                            ]
+                                        }
+                                    }}
+                                />
+                        )
+                }
+                <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
+                    <div className={"flex"}>
+                        <div className={"flex-1 font-bold "+ (currentChat===chat._id ? "text-white":"")}>
+                            {getNameConversation()}
+                        </div>
+                        <div className={"text-xs "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>
+                            {getDate()}
+                        </div>
                     </div>
-                    <div className={"text-xs group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"text-gray-400")}>
-                        {getDate()}
+                    <div className={"flex mt-1"}>
+                        <div className={"flex-1 truncate w-[250px] "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>{getLastMessage()}</div>
+                        {
+                            userUnreadMessage() > 0 &&
+                            <div className={"rounded-full flex items-center justify-center bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</div>}
+                        {chat.isPin&&<IconPinned style={{filter: currentChat === chat._id ? "brightness(0) invert(1)": "none"}}/>}
                     </div>
                 </div>
-                <div className={"flex mt-1"}>
-                    <div className={"flex-1 truncate w-[250px] group-active:text-white group-focus:text-white "+ (currentChat===chat._id ? "text-white":"text-gray-400")}>{getLastMessage()}</div>
-                    {
-                        userUnreadMessage() > 0 &&
-                        <span className={"rounded-full bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</span>}
-                    {chat.isPin&&<IconPinned/>}
-                </div>
-            </div>
-            <RightClickMenu wrapperRef={wrapperRef} menu={<OptionListItemRightClick/>}/>
-        </NavLink>
+            </NavLink>
+        </RightClickMenuWrapper>
     )
 }
 

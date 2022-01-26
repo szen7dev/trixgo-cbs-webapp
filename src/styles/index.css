@@ -1337,3 +1337,7 @@ input[type="text"] {
   white-space: normal;
   overflow: hidden;
 }
+.smooth-animation {
+  -webkit-transform: translate3d(0,0,1px);
+  -webkit-backface-visibility: hidden;
+}

@@ -3,11 +3,9 @@ import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../home/index_v2";
-import {setListConversation} from "redux/reducer/messages/ListConversation";
 import SearchUserAndConversation from "./components/SearchUserAndConversation";
 
 const MessageList:FC = () => {

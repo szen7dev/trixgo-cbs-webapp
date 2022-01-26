@@ -1,11 +1,11 @@
 import React, {FC, useCallback, useContext, useRef} from "react";
 import { NavLink } from "react-router-dom";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import moment from "moment";
 
 import {MessageContext} from "../../../home/index_v2";
 import AvatarGroupChat from "../AvatarGroupChat";
 import {SearchUserAndConversationContext} from "../SearchUserAndConversation";
+import SavedMessage from "assets/images/saved-messages.svg";
 
 type Props = {
     chat: ItemListConversation
@@ -39,7 +39,7 @@ const SearchChatItem:FC<Props> = ({chat}) => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
@@ -116,7 +116,7 @@ const SearchChatItem:FC<Props> = ({chat}) => {
                 {
                     chat.members.length > 2 ?
                     <div className={"flex mt-1"}>
-                        <div className={"flex-1 w-[250px] font-xs text-gray-400"}>{chat.members.length} thành viên</div>
+                        <div className={"flex-1 w-[250px] font-xs text-gray-500"}>{chat.members.length} thành viên</div>
                     </div>:
                     <div className={"flex mt-1 h-[22px]"}/>
                 }

@@ -22,7 +22,6 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
             isPrivate: true,
             membersID: [memberId]
         }).then(data => {
-            console.log(data)
             if (currentChat === data._id) return;
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
             setCurrentChat(data._id);
@@ -31,7 +30,7 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
     }
     return (
         <div
-            className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item"}>
+            className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>
             <img
                 onClick={() => handleStartPrivateChat(user._id)}
                 className={"w-[56px] h-[56px] rounded-full overflow-hidden"}

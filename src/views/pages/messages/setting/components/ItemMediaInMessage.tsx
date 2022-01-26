@@ -7,7 +7,7 @@ type Props = {
 }
 const ItemMediaInMessage:FC<Props> = ({media}) => {
     return (
-        <div className={"mb-3"}>
+        <div className={"mb-3 smooth-animation"}>
             <div className={"px-[10px] py-[15px] font-bold"}>{media.dataFormat}</div>
             <div className={"flex flex-wrap"}>
                 {
