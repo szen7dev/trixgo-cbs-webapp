@@ -17,7 +17,6 @@ import {
     MentionData,
 } from '@draft-js-plugins/mention';
 import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -271,7 +270,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                     <button
                         onClick={() => handleSendMessage()}
                         className={"w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
-                        <LazyLoadImage effect="blur" src={IconSendMessage} alt={"send message"}/>
+                        <img  src={IconSendMessage} alt={"send message"}/>
                     </button>
                 </div>
             </div>

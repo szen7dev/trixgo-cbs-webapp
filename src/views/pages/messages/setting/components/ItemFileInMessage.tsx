@@ -3,7 +3,7 @@ import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import WordIcon from "assets/images/CBS-Word-Icon.svg";
 import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import {ItemMediaOfConversation} from "typings/apis/messages/listConversation";
 import {map as _map} from "lodash";
 import SampleImage from "assets/images/icons8-image-256.svg";
@@ -15,19 +15,19 @@ const ItemFileInMessage:FC<Props> = ({file}) => {
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
             default:
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 

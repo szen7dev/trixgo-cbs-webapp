@@ -1,13 +1,11 @@
-import React, {FC, useContext, useEffect, useRef, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../home/index_v2";
-import {setListConversation} from "redux/reducer/messages/ListConversation";
 import SearchUserAndConversation from "./components/SearchUserAndConversation";
 
 const MessageList:FC = () => {
@@ -53,6 +51,12 @@ const MessageList:FC = () => {
         listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
     },[listInnerRef]);
 
+    const renderListConversation = useCallback(() => {
+        return _map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
+            <ListChatItem key={chat._id} chat={chat}/>
+        ))
+    },[listConversation]);
+
     return (
         <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
                 <div className={"bg-white z-5"}>
@@ -80,9 +84,7 @@ const MessageList:FC = () => {
                     className={"overflow-auto message-list-height"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
-                    {_map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
-                        <ListChatItem key={chat._id} chat={chat}/>
-                    ))}
+                    {renderListConversation()}
                 </div>
             <AddNewChatGroup/>
         </div>

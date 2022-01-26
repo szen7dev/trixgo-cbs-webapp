@@ -2,9 +2,9 @@ import React, {FC, useRef} from "react";
 import CollapseButton from "./CollapseButton";
 import {map as _map} from "lodash";
 import FinancialPlanningDetailChildRow from "./FinancialPlanningDetailChildRow";
-import RightClickMenu from "../../../../../../components/common/RightClickMenu";
-import {RowPlanningFinancial} from "../../../../../../typings/app";
+import {RowPlanningFinancial} from "typings/app";
 import MenuMainRow from "./MenuMainRow";
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 
 type Props = {
     rowData: RowPlanningFinancial;
@@ -13,10 +13,9 @@ type Props = {
 }
 
 const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index, idDetail}) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
     return (
         <>
-            <div ref={wrapperRef} className={"row flex table-row font-semibold main-row " + (rowData.collapsed?"collapsed ":"not-collapsed ")}>
+            <RightClickMenuWrapper contextMenu={<MenuMainRow/>} className={"row flex table-row font-semibold main-row " + (rowData.collapsed?"collapsed ":"not-collapsed ")}>
                 <div className={"financial-planning-table-action-sidebar w-6 bg-gray-300 text-white table-cell align-middle border border-gray-300 transition duration-300 ease-in-out"}>
                     <div className={"flex flex-col items-center justify-center"}>
                         <CollapseButton idDetail={idDetail} collapsed={rowData.collapsed} index={index}/>
@@ -51,8 +50,7 @@ const FinancialPlanningDetailMainRow:FC<Props> = ({rowData, index, idDetail}) =>
                 <div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-2/12"}>
 
                 </div>
-                <RightClickMenu wrapperRef={wrapperRef} menu={<MenuMainRow/>}/>
-            </div>
+            </RightClickMenuWrapper>
             {
                 _map(rowData.childrens, (childRow, indexChild) => (
                     <FinancialPlanningDetailChildRow isLastRow={indexChild===((rowData.childrens??[]).length-1)} collapsed={rowData.collapsed} index={indexChild} rowData={childRow} key={childRow._id}/>

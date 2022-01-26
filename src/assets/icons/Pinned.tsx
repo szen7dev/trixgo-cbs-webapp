@@ -1,10 +1,11 @@
 import React, {FC} from "react";
 type Props = {
-    fill?: string
+    fill?: string;
+    style?: any
 }
-const IconPinned:FC<Props> = ({fill}) => {
+const IconPinned:FC<Props> = ({fill, style}) => {
     return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill={fill} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg style={style} width="16" height="16" viewBox="0 0 16 16" fill={fill} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <rect width="16" height="16" fill="url(#pattern0)"/>
             <defs>
                 <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">

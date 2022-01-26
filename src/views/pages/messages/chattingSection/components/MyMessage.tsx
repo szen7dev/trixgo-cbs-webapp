@@ -1,17 +1,15 @@
 import React, {FC, useRef} from "react";
 import TextChatContent from "./chatContent/textContent";
-import RightClickMenu from "components/common/RightClickMenu";
-import RightClickMessage from "./RightClickMessage";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import FileChatContent from "./chatContent/fileContent";
 import ImagesContent from "./chatContent/imageContent";
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
+import RightClickMessage from "./RightClickMessage";
 type Props = {
     message: ItemMessage;
 }
 
 const MyMessage:FC<Props> = ({message}) => {
-    const messageRef = useRef<HTMLDivElement>(null);
-
     const renderMessageContent = () => {
         switch (message.type) {
             case 0:
@@ -23,10 +21,9 @@ const MyMessage:FC<Props> = ({message}) => {
         }
     }
     return (
-        <div ref={messageRef} className={"flex justify-end items-end mb-2 transition duration-500"}>
+        <RightClickMenuWrapper contextMenu={<RightClickMessage/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
             {renderMessageContent()}
-            <RightClickMenu wrapperRef={messageRef} menu={<RightClickMessage/>}/>
-        </div>
+        </RightClickMenuWrapper>
     )
 }
 

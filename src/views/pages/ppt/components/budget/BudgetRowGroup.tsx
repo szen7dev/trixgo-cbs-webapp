@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames';
 
-import RightClickMenu from 'components/common/RightClickMenu';
 import MenuChildRow from 'views/pages/financial/planning/components/FinancialCashFlowDetail/MenuChildRow';
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 
 interface RowItem {
 	_id: string | number,
@@ -31,7 +31,11 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 		setState(show);
 	}, [show])
 	return (
-		<tbody className="text-black" ref={wrapperRef}>
+		<RightClickMenuWrapper
+			contextMenu={<MenuChildRow/>}
+			customRenderTag={"tbody"}
+			className="text-black"
+		>
 			<tr className="text-right">
 				<th className='bg-gray-300 px-1.5 relative'>
 					<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: state })} />
@@ -70,8 +74,7 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 					<td contentEditable suppressContentEditableWarning className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'>{_d.note}</td>
 				</tr>
 			))}
-			<RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow/>}/>
-		</tbody>
+		</RightClickMenuWrapper>
 	)
 }
 
