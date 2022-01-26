@@ -52,9 +52,28 @@ const MessageList:FC = () => {
     },[listInnerRef]);
 
     const renderListConversation = useCallback(() => {
-        return _map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
-            <ListChatItem key={chat._id} chat={chat}/>
-        ))
+        return _map(Object.values(listConversation)
+            // .sort((a,b) => b.isSaved ? 1 : -1)
+            .sort((a,b) => {
+                if (b.position > a.position) {
+                    return 1
+                } else {
+                    if (b.isPin&&!a.isPin) {
+                        return 1
+                    } else if (b.isPin&&a.isPin) {
+                        if (b.position > a.position) {
+                            return 1
+                        } else {
+                            return -1
+                        }
+                    }
+                }
+                return -1
+            })
+            ,(chat) => (
+                <ListChatItem key={chat._id} chat={chat}/>
+            )
+        )
     },[listConversation]);
 
     return (
