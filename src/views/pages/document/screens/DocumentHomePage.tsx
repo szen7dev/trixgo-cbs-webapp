@@ -78,7 +78,7 @@ const DocumentHomePage: FC = () => {
                     <div className="flex flex-1 justify-center items-center">
                       <div className="rounded-full flex flex-col justify-center items-center w-[75px] h-[75px] border-cbs-border border-b bg-cbs-gray">
                         <p className="text-x-large text-black">
-                          {item.numberOfDocs}
+                          {item.numberOfDocs || 0}
                         </p>
                         <p>Hồ sơ</p>
                       </div>

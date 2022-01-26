@@ -158,7 +158,7 @@ const DocumentProjectPage: FC = () => {
                       key={index}
                       className="text-left hover:bg-cbs-active-comment"
                     >
-                      <td className="px-4 py-2.5">
+                      <td className="px-4 py-2.5 border-b border-cbs-border">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -166,41 +166,41 @@ const DocumentProjectPage: FC = () => {
                           id="flexCheckDefault"
                         />
                       </td>
-                      <td className="px-2 w-[271px] py-2.5">
+                      <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
                         <Link to={`/document/project/asd/document/doc`}>
                           <p>{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
-                            {`${document?.userCreate?.fullname || ""}-${
+                            {`${document?.author?.fullname || ""}-${
                               moment(document.createAt).isValid() &&
                               moment(document.createAt).format("DD/MM/YYYY")
                             }`}
                           </p>
                         </Link>
                       </td>
-                      <td className="py-2.5 px-2 w-[150px]">
+                      <td className="py-2.5 border-b border-cbs-border px-2 w-[150px]">
                         {document?.sender?.name}
                       </td>
-                      <td className="py-2.5 px-2 w-[166px]">{document.sign}</td>
-                      <td className="py-2.5 px-2 w-24 text-right">
+                      <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">{document.sign}</td>
+                      <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
                         {moment(document.date).isValid() &&
                           moment(document.date).format("DD/MM/YYYY")}
                       </td>
-                      <td className="py-2.5 px-2">
+                      <td className="py-2.5 border-b border-cbs-border px-2">
                         {document?.storeSign?.name}
                       </td>
                       <td
-                        className="py-2.5 px-2 whitespace-nowrap text-right min-w-[85px]"
+                        className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right min-w-[85px]"
                         style={{ width: "1%" }}
                       >
                         {document.amount}
                       </td>
-                      <td className="py-2.5 px-2 box-border">
+                      <td className="py-2.5 border-b border-cbs-border px-2 box-border">
                         {document.status}
                       </td>
-                      <td className="py-2.5 px-2 box-border">
+                      <td className="py-2.5 border-b border-cbs-border px-2 box-border">
                         {document.note}
                       </td>
-                      <td className="py-2.5 px-2">{document?.storage?.name}</td>
+                      <td className="py-2.5 border-b border-cbs-border px-2">{document?.storage?.name}</td>
                     </tr>
                   );
                 })}
