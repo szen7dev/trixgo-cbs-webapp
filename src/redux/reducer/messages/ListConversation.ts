@@ -19,11 +19,11 @@ const listConversationSlice = createSlice({
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
             (action.payload??[]).forEach((conversation: ItemListConversation) => {
-                const isSavedMessages = conversation.members.length === 1&&conversation.authors[0]===conversation.members[0]["_id"];
+                const isSavedMessages = conversation.members.length === 1;
 
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime(),
+                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime(),
                     isSaved: isSavedMessages,
                     isPin: isSavedMessages?true: conversation.isPin
                 }
