@@ -1,6 +1,7 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
+import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
-import { Task, CheckList } from "typings/task";
+import { Task, CheckList, CheckListPayload } from "typings/task";
 
 type UseTask = {
   listTasks: Array<Task>;
@@ -68,6 +69,7 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
 };
 
 type UseCheckList = {
+  addChecklist: (payload: CheckListPayload) => void,
   listCheckList: Array<CheckList>;
   isLoadingListCheckList: boolean;
   totalRecord: number | undefined;
@@ -79,6 +81,29 @@ type UseCheckList = {
 };
 
 export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
+  const { mutateAsync: addChecklistAsync } =
+    useMutation((payload: CheckListPayload) =>
+      TaskRepository.addChecklist(payload)
+    );
+
+  const addChecklist = async (payload: CheckListPayload) => {
+    try {
+        const { error, message } = await addChecklistAsync(payload);
+
+        if (error) {
+          return toast.warning(message);
+        }
+ 
+        toast.success('Tạo checklist thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+};
+
   const {
     isLoading: isLoadingListCheckList,
     data: dataListCheckList,
@@ -94,10 +119,12 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         limit,
         lastestID: pageParam || "",
         parentID: parentID || "",
+        type: 2,
+        isSortChecklist: 1,
         select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({
           path: "assignee",
-          select: "name fullname image",
+          select: "name fullname bizfullname image",
         }),
       });
     },
@@ -119,6 +146,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
   const totalPages = dataListCheckList?.pages[0]?.data?.totalPages;
 
   return {
+    addChecklist,
     listCheckList,
     isLoadingListCheckList,
     totalRecord,

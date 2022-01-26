@@ -238,6 +238,7 @@ const TaskDetailPage: FC = () => {
             </div>
             <div className="mt-8 pr-3">
               <CheckList
+                task={data?.data}
                 data={listCheckList}
                 totalRecord={totalRecord}
                 onSeeMore={nextPageListCheckList}
