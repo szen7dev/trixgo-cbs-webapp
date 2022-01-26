@@ -246,6 +246,25 @@ const ChattingInput:FC<Props> = ({chat}) => {
         return html;
     }
 
+    useEffect(() => {
+        const dropZone = document.getElementById("chatting-section");
+        if (dropZone) {
+            dropZone.addEventListener('dragover', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            // Get file data on drop
+            dropZone.addEventListener('drop', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                if (e.dataTransfer&&currentChat) {
+                    handleSetFiles(e.dataTransfer.files);
+                }
+            });
+        }
+    },[])
+
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>

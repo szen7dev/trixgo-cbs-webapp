@@ -10,19 +10,6 @@ const RightClickMenuV2: FC = () => {
     const innerRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(innerRef, () => closeRightClick());
 
-    useEffect(() => {
-        document.addEventListener("click", (e) => {
-            e.preventDefault();
-            closeRightClick();
-        });
-        return () => {
-            document.removeEventListener("click", (e) => {
-                e.preventDefault();
-                closeRightClick();
-            });
-        }
-    },[]);
-
     return (
         <Transition appear show={isRightClickMenuOpen} as={Fragment}>
             <Dialog
