@@ -3,13 +3,13 @@ import { DepartmentRepository } from 'apis/item';
 
 import type { Department } from 'typings/items';
 
-type ParamsQuery = Pick<Department.DepartmentPayload, 'limit' | 'keyword'>;
+type ParamsQuery = Omit<Department.DepartmentPayload, 'type'>;
 
 interface UseQueryListDepartment {
     loading: boolean;
-    totalRecord: number | undefined;
-    totalPages: number | undefined;
-    hasNextPage: boolean | undefined;
+    totalRecord: number;
+    totalPages: number;
+    hasNextPage?: boolean;
     listDepartments: Array<Department.Department>;
     refetchListDepartments: () => void;
     fetchNextPageDepartments: () => void;
@@ -23,7 +23,8 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
                 type: 1,
-                keyword: params?.keyword || ''
+                keyword: params?.keyword || '',
+                select: params?.select || '',
             }),
         {
             getNextPageParam: ({ data }: any) => {
@@ -46,8 +47,8 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)
         )
         .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPages || 0;
 
     return {
         loading: isLoading,
