@@ -9,7 +9,6 @@ import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import SampleImage from "assets/images/icons8-image-256.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import {v4 as uuidv4} from "uuid";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 const PopupSendImageAndFile: FC = () => {
     const { isShowPopupSendFiles, closePopupSendFiles, popSendFilesContent, setSendType } = usePopupSendFiles();
@@ -26,19 +25,19 @@ const PopupSendImageAndFile: FC = () => {
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
             default:
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
@@ -58,7 +57,7 @@ const PopupSendImageAndFile: FC = () => {
         if (popSendFilesContent.sendType==="image") {
             if (popSendFilesContent.files.length === 1) {
                 return <div className={"flex items-center justify-center"}>
-                    <LazyLoadImage effect="blur" alt={"----"} className={"max-h-[320px] rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                    <img  alt={"----"} className={"max-h-[320px] rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
                 </div>
             }
             if (popSendFilesContent.files.length === 2) {
@@ -66,7 +65,7 @@ const PopupSendImageAndFile: FC = () => {
                     {
                         _map(popSendFilesContent.files, (image,index) => (
                             <div className={"w-1/2 p-1"} key={index}>
-                                <LazyLoadImage effect="blur" alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                                <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
                             </div>
                         ))
                     }
@@ -75,14 +74,14 @@ const PopupSendImageAndFile: FC = () => {
             if (popSendFilesContent.files.length === 3) {
                 return <div className={"flex"}>
                     <div className={"p-1"}>
-                        <LazyLoadImage effect="blur" alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                        <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
                     </div>
                     <div className={"flex"}>
                         <div className={"p-1"}>
-                            <LazyLoadImage effect="blur" alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[1].file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[1].file.file.url}/>
                         </div>
                         <div className={"p-1"}>
-                            <LazyLoadImage effect="blur" alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[2].file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[2].file.file.url}/>
                         </div>
                     </div>
                 </div>
@@ -91,7 +90,7 @@ const PopupSendImageAndFile: FC = () => {
                 {
                     _map(popSendFilesContent.files, (image,index) => (
                         <div className={(imageClass[index]??"w-1/3") + " p-1"} key={index}>
-                            <LazyLoadImage effect="blur" alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
                         </div>
                     ))
                 }

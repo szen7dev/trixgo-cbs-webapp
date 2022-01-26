@@ -10,7 +10,7 @@ import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import Reminder from "./Reminder";
 import moment from "moment";
 
@@ -34,8 +34,15 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
     const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
 
-    const memoizedValue = useMemo(() => parseMessageData(messagesData), [messagesData]);
-    const memoizedFakeValue = useMemo(() => parseMessageData(fakeMessagesData), [fakeMessagesData]);
+    const memoizedValue = useCallback(() => {
+        const value = parseMessageData(messagesData);
+        return _map(value, (message, index) => renderMessage(message, value[index-1]))
+    },[messagesData]);
+
+    const memoizedFakeValue = useCallback(() => {
+        const value = parseMessageData(fakeMessagesData);
+        return _map(value, (message, index) => renderMessage(message, value[index-1]))
+    },[fakeMessagesData]);
 
     useEffect(() => {
         getListMessage({conversationID: currentChat}).then((data) => {
@@ -127,16 +134,8 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition-all duration-150"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
-                    {
-                        messagesData?
-                            _map(memoizedValue, (message, index) => renderMessage(message, memoizedValue[index-1])):
-                            null
-                    }
-                    {
-                        messagesData?
-                            _map(memoizedFakeValue, message => renderMessage(message, null, false)):
-                            null
-                    }
+                    {memoizedValue()}
+                    {memoizedFakeValue()}
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
@@ -145,7 +144,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 <button
                     onClick={() => scrollToBottom()}
                     className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
-                    <LazyLoadImage effect="blur" src={ArrowDown} alt={"arrow down"}/>
+                    <img  src={ArrowDown} alt={"arrow down"}/>
                     <span
                         className={"absolute -top-1 -right-1 w-[24px] h-[24px] bg-positive rounded-full flex items-center justify-center text-white"}>{userUnreadMessage()}</span>
                 </button>

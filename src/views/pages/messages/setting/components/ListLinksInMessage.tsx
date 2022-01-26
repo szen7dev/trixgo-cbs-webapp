@@ -6,7 +6,7 @@ import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import DatePickerWithRange from "./DatePickerWithRange";
 import {map as _map} from "lodash";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import {MessageContext} from "../../home/index_v2";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
@@ -51,7 +51,7 @@ const ListLinksInMessage:FC = () => {
                     ]}
                     renderItem={(item) => (
                         <div className={"flex align-items-center text-left"}>
-                            <LazyLoadImage effect="blur" alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
+                            <img  alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
                             <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>
                         </div>
                     )}

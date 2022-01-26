@@ -9,7 +9,7 @@ import {map as _map} from "lodash";
 import SampleImage from "assets/images/photo1640398643.png";
 import moment from "moment";
 import ItemFileInMessage from "./ItemFileInMessage";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import {MessageContext} from "../../home/index_v2";
 import {UseListConversation} from "../../../../../services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
@@ -52,7 +52,7 @@ const ListFileInMessage:FC = () => {
                     ]}
                     renderItem={(item) => (
                         <div className={"flex align-items-center text-left"}>
-                            <LazyLoadImage effect="blur" alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
+                            <img  alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
                             <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>
                         </div>
                     )}

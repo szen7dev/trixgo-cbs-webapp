@@ -1,7 +1,7 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
 import {AddNewChatGroupContext} from "../AddNewChatGroup";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import Close from "assets/icons/Close";
@@ -67,7 +67,7 @@ const AddNewSection:FC = () => {
         <div className={"absolute top-0 w-full h-full bg-white z-5 overflow-auto no-webkit-scrollbar"}>
             <div className={"sticky top-0 bg-white w-full flex h-[56px] px-[28px] items-center z-15"}>
                 <button onClick={() => setShowAddNew(false)} className={"flex items-center justify-center"}>
-                    <LazyLoadImage effect="blur" src={IconBackGray} alt={"----"}/>
+                    <img  src={IconBackGray} alt={"----"}/>
                 </button>
                 <div className={"text-lg ml-5"}>
                     Nhóm mới

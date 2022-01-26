@@ -6,7 +6,6 @@ import SearchIcon from "assets/images/icons8-search-120.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 type Props = {
     chat: any
@@ -58,7 +57,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
             <div className={"avatar-chat flex items-center justify-center"}>
                 {
                     chat.avatar?
-                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        <img  className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -112,7 +111,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                     <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
                 </div>
                 <div className={"flex-1 flex ml-[5px]"}>
-                    <LazyLoadImage effect="blur" src={SampleImage} alt={"sample"} className={"w-[36px] h-[36px]"}/>
+                    <img  src={SampleImage} alt={"sample"} className={"w-[36px] h-[36px]"}/>
                     <div className={"flex-1 max-w-[185px] ml-[5px]"}>
                         <div className={"text-primary"}>Pinned Message</div>
                         <div className={"truncate"}>Báo cáo ảnh tuần 12 của CPM olala ABC</div>
@@ -125,7 +124,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
             <div className={"action-section flex items-center justify-end ml-[20px]"}>
                 <MainChatOptions/>
                 <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <LazyLoadImage effect="blur" src={SearchIcon} alt={"search icon"}/>
+                    <img  src={SearchIcon} alt={"search icon"}/>
                 </button>
                 <button onClick={() => setShowMenu(!showMenu)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                     <DotsVerticalIcon/>
