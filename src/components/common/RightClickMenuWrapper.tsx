@@ -18,7 +18,7 @@ const RightClickMenuWrapper: FC <Props>= ({children, contextMenu, customRenderTa
         wrapperRef.current&&wrapperRef.current.addEventListener("contextmenu", handleContextMenu);
 
         return () => {
-            document.removeEventListener("contextmenu", handleContextMenu);
+            wrapperRef.current&&wrapperRef.current.removeEventListener("contextmenu", handleContextMenu);
         };
     },[wrapperRef]);
 
