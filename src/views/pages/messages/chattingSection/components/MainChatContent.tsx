@@ -123,6 +123,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
             case 108:
                 return <NotificationCenter content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
             case 116:
+            case 117:
                 return <NotificationCenter content={`${message.sender.fullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
         }
     }

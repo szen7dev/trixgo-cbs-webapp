@@ -19,6 +19,8 @@ const SocketController:FC = () => {
     useEffect(() => {
         if (socket) {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
     },[socket]);
@@ -52,6 +54,17 @@ const SocketController:FC = () => {
 
     const onReceiveConversation = (data: any) => {
         dispatch(setListConversation(data.data.listRecords));
+    }
+
+    const onFireMessage = (data: any) => {
+        dispatch(appendMessageToConversation({
+            conversationId: data.data.conversation,
+            messageId: data.data._id,
+            messageData: data.data
+        }));
+        setTimeout(() => {
+            scrollToBottom();
+        }, 100)
     }
 
     const scrollToBottom = () => {
