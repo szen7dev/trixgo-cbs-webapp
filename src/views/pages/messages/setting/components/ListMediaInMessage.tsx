@@ -1,23 +1,26 @@
-import React, {FC, useCallback, useContext, useEffect} from "react";
+import React, {createContext, FC, useCallback, useContext, useEffect, useState} from "react";
 import {map as _map} from "lodash";
-import DropdownSearchable from "../../../../../components/common/DropdownSearch";
+import DropdownSearchable from "components/common/DropdownSearch";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import WordIcon from 'assets/images/CBS-Word-Icon.svg';
 import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
 import OtherIcon from 'assets/images/CBS-Other-Icon.svg';
 import ItemMediaInMessage from "./ItemMediaInMessage";
-import SampleImage from 'assets/images/photo1640398643.png';
-import TriangleDown from "assets/icons/TriangleDown";
 import DatePickerWithRange from "./DatePickerWithRange";
 
 import {MessageContext} from "../../home/index_v2";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import ModalFullContainer from "../../../media/components/ModalFullContainer";
+import ViewImage from "../../chattingSection/components/chatContent/ViewImage";
 
 const ListMediaInMessage:FC = () => {
     const {currentChat} = useContext(MessageContext);
     const {getListMediasOfConversation} = UseListConversation();
+    const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
+    const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
+
     useEffect(() => {
         getListMediasOfConversation({conversationID: currentChat, typeMessage: 1})
     },[currentChat])
@@ -25,9 +28,21 @@ const ListMediaInMessage:FC = () => {
 
     const renderListMedia = useCallback(() => {
         return _map(listImageInMessage??[], media => (
-            <ItemMediaInMessage key={media._id} media={media}/>
+            <ItemMediaInMessage key={media._id} media={media} setModalShowImage={setModalShowImage}/>
         ))
     }, [listImageInMessage]);
+
+    const listImages = useCallback(() => {
+        const images : string[] = [];
+        if (!listImageInMessage) return images;
+        listImageInMessage.forEach(media => {
+            media.messages.forEach(image => {
+                images.push(image.url)
+            })
+        });
+
+        return images;
+    },[listImageInMessage]);
 
     return (
         <div className={"bg-white flex-1"}>
@@ -73,6 +88,11 @@ const ListMediaInMessage:FC = () => {
                 <DatePickerWithRange/>
             </div>
             {renderListMedia()}
+            <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
+                <div className="flex overflow-hidden transition-all transform w-full h-full">
+                    <ViewImage show={modalShowImage.show} toggle={closeModalImage} imageList={[...listImages()]} index={modalShowImage.index} />
+                </div>
+            </ModalFullContainer>
         </div>
     )
 }

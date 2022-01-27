@@ -1,11 +1,17 @@
 import ListMessageRepository from "apis/messages/message";
-import {ListMessageData, ListMessagePayload, SendNormalMessagePayload} from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {
+    ListMessageData,
+    ListMessagePayload,
+    SendNormalMessagePayload, UpdateReminderMessageData,
+    UpdateReminderMessagePayload
+} from "typings/apis/messages/listMessage";
+import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
     getListMessage: (params: ListMessagePayload) => Promise<ListMessageData>;
     sendNormalMessage: (params: SendNormalMessagePayload) => void;
+    updateReminder: (params: UpdateReminderMessagePayload) => Promise<UpdateReminderMessageData>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -39,8 +45,18 @@ export const UseConversation = () : UseConversationType => {
 
         return data;
     }
+
+    const updateReminder = async (params: UpdateReminderMessagePayload) => {
+        const {data} = await ListMessageRepository.updateReminder(params);
+        dispatch(updateReminderData({conversationId: params.conversationID, messageId: params.messageID, reminderData: data.infoReminder}));
+        return new Promise<UpdateReminderMessageData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     return {
         getListMessage,
-        sendNormalMessage
+        sendNormalMessage,
+        updateReminder
     }
 }

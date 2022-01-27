@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {ItemMembersOfConversation} from "typings/apis/messages/listConversation";
+import {ItemMediaOfConversation, ItemMembersOfConversation} from "typings/apis/messages/listConversation";
+import {action} from "@storybook/addon-actions";
 
 const initialState : {
     data: {
@@ -30,7 +31,7 @@ const initialState : {
             [key:string] : ItemMembersOfConversation[];
         },
         listImages: {
-            [key: string] : any[]
+            [key: string] : ItemMediaOfConversation[]
         },
         listLinks: {
             [key: string] : any[]
@@ -140,7 +141,7 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId]: newMessage
                 },
                 listFakeMessage: {
-                    ...state.data.listMessage,
+                    ...state.data.listFakeMessage,
                     [action.payload.conversationId]: fakeMessage
                 }
             }
@@ -196,6 +197,21 @@ const listMessageSlice = createSlice({
                     }
                     break;
             }
+        },
+        updateReminderData (state, action) {
+            state.data  = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listMessage[action.payload.conversationId],
+                        [action.payload.messageId]: {
+                            ...state.data.listMessage[action.payload.conversationId][action.payload.messageId],
+                            reminder: action.payload.reminderData
+                        }
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
@@ -211,6 +227,7 @@ export const {
     updateNewMessageToConversation,
     updateFileProgressOnMessage,
     setListMembers,
-    setListMedias
+    setListMedias,
+    updateReminderData
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

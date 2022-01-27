@@ -102,7 +102,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             <NavLink
                 onClick={() => setCurrentChat(chat._id)}
                 to={`#${chat._id}`}
-                className={"group smooth-animation flex p-[10px] cursor-pointer rounded-md z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
+                className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
                 {
                     chat.avatar?
                         <img  className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
