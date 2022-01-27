@@ -29,6 +29,16 @@ const TaskRepository = {
     return data;
   },
 
+  async updateChecklist(
+    payload: CheckListPayload
+  ): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
   async listCheckList(
     payload: ListCheckListPayload
   ): Promise<ListCheckListResponse> {

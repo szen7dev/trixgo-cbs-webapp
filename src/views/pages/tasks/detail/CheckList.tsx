@@ -52,11 +52,11 @@ const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
 
   const initialValues = {
     name: "",
-    expiredTime: null,
+    assigneeID: "",
     parentID: task._id,
     groupID: task.group._id,
     projectID: task.project._id,
-    assigneeID: "",
+    expiredTime: null,
     type: 2
   };
 
@@ -287,8 +287,8 @@ const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {getIn(touched, "assignee.fullname") &&
-                              getIn(errors, "assignee.fullname")}
+                            {getIn(touched, "assigneeID") &&
+                              getIn(errors, "assigneeID")}
                           </span>
                         </div>
                         <div className="w-1/6 ">

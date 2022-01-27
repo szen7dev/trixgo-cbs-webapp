@@ -70,6 +70,7 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
 
 type UseCheckList = {
   addChecklist: (payload: CheckListPayload) => void,
+  updateChecklist: (payload: CheckListPayload) => void,
   listCheckList: Array<CheckList>;
   isLoadingListCheckList: boolean;
   totalRecord: number | undefined;
@@ -84,6 +85,11 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
   const { mutateAsync: addChecklistAsync } =
     useMutation((payload: CheckListPayload) =>
       TaskRepository.addChecklist(payload)
+    );
+
+  const { mutateAsync: updateChecklistAsync } =
+    useMutation((payload: CheckListPayload) =>
+      TaskRepository.updateChecklist(payload)
     );
 
   const addChecklist = async (payload: CheckListPayload) => {
@@ -102,7 +108,25 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
             toast.error(error.message);
         }
     }
-};
+  };
+
+  const updateChecklist = async (payload: CheckListPayload) => {
+    try {
+        const { error, message } = await updateChecklistAsync(payload);
+
+        if (error) {
+          return toast.warning(message);
+        }
+ 
+        toast.success('Cập nhật checklist thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  };
 
   const {
     isLoading: isLoadingListCheckList,
@@ -147,6 +171,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
 
   return {
     addChecklist,
+    updateChecklist,
     listCheckList,
     isLoadingListCheckList,
     totalRecord,
