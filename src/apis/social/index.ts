@@ -1,8 +1,9 @@
 import API from "../repository";
 
 import { 
+    ListResponse,
+    ListReactionPayload,
     ListMediasPayload,
-    ListMediasResponse,
     infoMediaResponse,
     MediaPayload,
     PostResponse, 
@@ -48,9 +49,15 @@ const SocialRepository = {
         );
         return data;
     },
-    async listMedias(payload: ListMediasPayload): Promise<ListMediasResponse> {
-        const { data } = await API.get<ListMediasResponse>(
+    async listMedias(payload: ListMediasPayload): Promise<ListResponse> {
+        const { data } = await API.get<ListResponse>(
             `${mediaURL}?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+    async listReactions(payload: ListReactionPayload): Promise<ListResponse> {
+        const { data } = await API.get<ListResponse>(
+            `${mediaURL}/reaction?${convertObToUrl(payload)}`
         );
         return data;
     },

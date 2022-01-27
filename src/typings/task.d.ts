@@ -68,6 +68,7 @@ export type CheckList = {
 };
 
 export type CheckListPayload = {
+  taskID?: string;
   name: string;
   description: string;
   expiredTime: string;
