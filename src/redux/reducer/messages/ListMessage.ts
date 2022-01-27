@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {ItemMembersOfConversation} from "typings/apis/messages/listConversation";
+import {ItemMediaOfConversation, ItemMembersOfConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {
     data: {
@@ -30,7 +30,7 @@ const initialState : {
             [key:string] : ItemMembersOfConversation[];
         },
         listImages: {
-            [key: string] : any[]
+            [key: string] : ItemMediaOfConversation[]
         },
         listLinks: {
             [key: string] : any[]

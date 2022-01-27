@@ -11,7 +11,7 @@ export type ItemMessage = {
     conversation: string;
     modifyAt: string;
     createAt: string;
-    parent?: {
+    parent: {
         content: string;
         conversation: string;
         createAt: string;
@@ -54,8 +54,9 @@ export type ItemMessage = {
                 createdAt: string;
                 updatedAt: string;
                 __v: number;
-            }
-        }
+            };
+        };
+        [key: string]: any;
     }[];
     createdAt: string;
     updatedAt: string;

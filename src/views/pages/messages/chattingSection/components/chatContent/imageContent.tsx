@@ -7,10 +7,10 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 type Props = {
-    message:any;
+    message: ItemMessage;
     className?: string;
     showSenderName?: boolean;
 }
@@ -100,7 +100,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
             </div>
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                 <div className="flex overflow-hidden transition-all transform w-full h-full">
-                    <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} images={message.files} index={modalShowImage.index} />
+                    <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => file.file.file.url)} index={modalShowImage.index} />
                 </div>
             </ModalFullContainer>
         </div>
