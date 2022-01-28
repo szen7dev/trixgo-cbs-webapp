@@ -51,7 +51,7 @@ const ItemFileInMessage:FC<Props> = ({file}) => {
                     <div key={f._id} className={"flex media-item-message py-[10px] px-[21px] relative hover:bg-gray-200"}>
                         {renderFileTypeImage(f.name)}
                         <div className={"flex-1 ml-2"}>
-                            <p>{f.nameOrg??f.name}</p>
+                            <a href={f.url} download target="_blank" rel="noreferrer">{f.nameOrg??f.name}</a>
                             <p className={"text-gray-400"}>{formatBytes(f.size)}</p>
                         </div>
                         <input type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer absolute top-10px right-10px invisible opacity-0 w-[24px] h-[24px]" />

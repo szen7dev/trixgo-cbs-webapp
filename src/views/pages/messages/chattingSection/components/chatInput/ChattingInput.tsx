@@ -44,15 +44,20 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const [doneUpload, setDoneUpload] = useState<{_id: string; progress: number;}[]>([]);
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const [realValue, setRealValue] = useState("");
-    const [suggestions, setSuggestions] = useState<MentionData[]>(chat.members.map(member=> {
-        return {
-            name: member.fullname,
-            _id: member._id,
-            avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-        }
-    }))
 
-    const [editorState, setEditorState] = React.useState(
+    const suggestionsData = useCallback(() => {
+        return chat.members.map(member=> {
+            return {
+                name: member.fullname,
+                _id: member._id,
+                avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
+            }
+        });
+    },[chat])
+
+    const [suggestions, setSuggestions] = useState<MentionData[]>(suggestionsData());
+
+    const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     );
 
@@ -274,13 +279,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                         <InputForMessage
                             onPasteFiles={(files) => handleSetFiles(files)}
                             onPressEnter={() => handleSendMessage()}
-                            mentions={chat.members.map(member=> {
-                                return {
-                                    name: member.fullname,
-                                    _id: member._id,
-                                    avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-                                }
-                            })}
+                            mentions={suggestionsData()}
                         />
                         <IconAttach
                             handleUploadFiles={(files) => handleSetFiles(files)}

@@ -2,32 +2,14 @@ import React, {FC, useContext} from "react";
 import DotsHorizontalGrayIcon from "assets/icons/DotsHorizontalGray";
 import RemoveIcon from "assets/images/icons8-remove-100.svg";
 import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
-
-import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../home/index_v2";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     user: any,
     index: number
 }
 const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
-    const {createConversation} = UseListConversation();
-    const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
-    const socket = socketRef.current;
-
-    const handleStartPrivateChat = (memberId: string) => {
-        createConversation({
-            name: "",
-            description: "",
-            isPrivate: true,
-            membersID: [memberId]
-        }).then(data => {
-            if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
-            setCurrentChat(data._id);
-            window.location.hash = `#${data._id}`
-        });
-    }
+    const {handleStartPrivateChat} = UseMessageHelper();
     return (
         <div
             className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>

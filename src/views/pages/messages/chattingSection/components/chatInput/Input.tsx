@@ -26,7 +26,7 @@ type Props = {
     mentions: MentionData[]
 }
 const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
-    const {editorState, onChangeCallback, suggestions, setSuggestions} = useContext(ChattingInputContext);
+    const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
@@ -102,7 +102,7 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
                 open={open}
                 onOpenChange={onOpenChange}
                 onSearchChange={onSearchChange}
-                suggestions={suggestions}
+                suggestions={mentions}
                 // entryComponent={Entry}
             />
             <EmojiSuggestions />
