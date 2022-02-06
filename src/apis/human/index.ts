@@ -189,6 +189,38 @@ async function fetchListContact(params: any) {
     return data;
 }
 
+async function fetchListContract(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/contracts`, {
+        params: {
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+const APP_CMCS = "/api/cmcs";
+async function fetchListContractIPC(params: any) {
+    const { data } = await API.get(
+        `${APP_CMCS}/contract_ipcs`, {
+        params: {
+            select: 'name type company',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
 async function fetchListWarehouse(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/warehouses`, {
@@ -301,6 +333,10 @@ const HumanRepository = {
         fetchListDoctype(params),
     fetchListContact: async (params: any): Promise<any> =>
         fetchListContact(params),
+    fetchListContract: async (params: any): Promise<any> =>
+        fetchListContract(params),
+    fetchListContractIPC: async (params: any): Promise<any> =>
+        fetchListContractIPC(params),
     fetchListWarehouse: async (params: any): Promise<any> =>
         fetchListWarehouse(params),
     fetchListProject: async (params: any): Promise<any> =>

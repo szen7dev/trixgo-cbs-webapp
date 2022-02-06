@@ -131,6 +131,97 @@ export const useDeleteContractMutation = (): {
     }
 }
 
+export const useQueryListContract = ({ limit, keyword }: any): any => {
+    const res = useInfiniteQuery(
+        [`list_contract,${keyword}`, keyword],
+        async ({ pageParam }: any) =>
+            // mai request BE check lại api này
+            HumanRepository.fetchListContract({
+                limit: limit || 10,
+                lastestID: pageParam || "",
+                keyword,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const {
+        isLoading,
+        data,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        hasNextPage
+    } = res;
+
+    const listContract = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
+    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const totalPages = data?.pages[0]?.data?.totalPages;
+
+    return {
+        loading: isLoading,
+        listContract,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+        refetchListDoctype,
+        fetchNextPageDoctype
+    }
+}
+
+export const useQueryListContractIPC = ({ limit, keyword, contractID }: any): any => {
+    const res = useInfiniteQuery(
+        [`list_contractIPC,${keyword}`, keyword, contractID],
+        async ({ pageParam }: any) =>
+            // mai request BE check lại api này
+            HumanRepository.fetchListContractIPC({
+                limit: limit || 10,
+                lastestID: pageParam || "",
+                keyword,
+                contractID
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const {
+        isLoading,
+        data,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        hasNextPage
+    } = res;
+
+    const listContractIPC = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
+    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const totalPages = data?.pages[0]?.data?.totalPages;
+
+    return {
+        loading: isLoading,
+        listContractIPC,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+        refetchListDoctype,
+        fetchNextPageDoctype
+    }
+}
+
 export const useQueryListContact = ({ limit, keyword }: any): any => {
     const res = useInfiniteQuery(
         [`list_contact,${keyword}`, keyword],
