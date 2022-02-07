@@ -14,12 +14,14 @@ const shareMessageSlice = createSlice({
     reducers: {
         shareMessageToConversation (state, action) {
             state.data = {
+                ...state.data,
                 isOpenShare: true,
                 shareMessage: action.payload.messageData
             }
         },
         dismissShare (state, action) {
             state.data = {
+                ...state.data,
                 isOpenShare: false,
                 shareMessage: null
             }

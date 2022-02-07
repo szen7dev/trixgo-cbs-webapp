@@ -13,7 +13,6 @@ import {useDispatch} from "react-redux";
 import {setReplyMessage} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
-import {useShareMessage} from "services/hooks/useShareMessage";
 type Props = {
     message: ItemMessage
 }
@@ -21,7 +20,6 @@ type Props = {
 const RightClickMessage:FC<Props> = ({message}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
-    const {setShareMessage} = useShareMessage();
     return (
         <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
             <button

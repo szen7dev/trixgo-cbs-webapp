@@ -63,10 +63,10 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
             className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
-                    <img  className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px]")} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                     (
                         getAvatarMembers().length === 0 ?
-                        <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                        <div className={"rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px] " + (avatarClassname??"w-[56px] h-[56px]")} style={{background: "#8DD4D6"}}>
                             {getPresentGroupName(getNameConversation())}
                         </div> :
                         <AvatarGroupChat

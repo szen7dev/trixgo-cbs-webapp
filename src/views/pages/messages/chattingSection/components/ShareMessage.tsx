@@ -55,8 +55,8 @@ const ShareMessage:FC = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <div className={"max-w-[521px] min-w-[420px] rounded-md shadow-lg bg-white p-[22px] z-51"}>
-                            <div className={"flex w-full items-center"}>
+                        <div className={"max-w-[521px] min-w-[420px] rounded-md shadow-lg bg-white py-[22px] z-51"}>
+                            <div className={"flex w-full items-center px-[22px]"}>
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
                                     onClick={() => dispatch(dismissShare({}))}
@@ -64,11 +64,15 @@ const ShareMessage:FC = () => {
                                     <Close/>
                                 </button>
                                 <div className={"flex-1 text-left text-lg font-bold"}>
-
+                                    <input
+                                        onChange={event => setSearchTerm(event.target.value)}
+                                        className={"w-full focus:outline-none"}
+                                        placeholder={"Gửi tới"}
+                                    />
                                 </div>
                                 <button
                                     onClick={() => console.log('asdasd')}
-                                    className={"w-[95px] h-[32px] rounded-md bg-primary text-white"}
+                                    className={"h-[32px] rounded-md text-primary font-semibold"}
                                 >
                                     Gửi
                                 </button>

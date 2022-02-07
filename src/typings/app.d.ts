@@ -121,19 +121,3 @@ export type CloseRightClickMenu = {
   type: "CLOSE_RIGHT_CLICK";
 };
 export type RightClickMenuActions = OpenRightClickMenu | CloseRightClickMenu;
-
-export type ShareMessageState = {
-  isShowShareMessage: boolean;
-  shareMessage: ItemMessage|null;
-}
-
-export type OpenShareMessage = {
-  type: "OPEN_SHARE_MESSAGE";
-  payload: ItemMessage;
-}
-
-export type CloseShareMessage = {
-  type: "CLOSE_SHARE_MESSAGE"
-}
-
-export type ShareMessageActions = OpenShareMessage | CloseShareMessage;
