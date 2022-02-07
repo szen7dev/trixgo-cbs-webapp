@@ -26,7 +26,7 @@ const TextReply:FC<Props> = ({message, className}) => {
             <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
                 {message.sender.fullname}
             </div>
-            <div className={"truncate text-gray-400"} ref={textContentRef}>
+            <div className={"truncate text-gray-400 max-w-[500px]"} ref={textContentRef}>
             </div>
         </div>
     )

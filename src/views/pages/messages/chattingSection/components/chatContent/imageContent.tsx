@@ -87,7 +87,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
     }
 
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg relative " + (className??"")}>
+        <div className={"max-w-[366px] min-w-[70px] rounded-lg relative overflow-hidden " + (className??"")}>
             {
                 message.parent&&
                 renderReply()
