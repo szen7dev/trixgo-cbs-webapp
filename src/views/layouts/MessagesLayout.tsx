@@ -8,6 +8,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
+import ShareMessage from "../pages/messages/chattingSection/components/ShareMessage";
 
 type Props = {
   children: ReactNode;
@@ -40,6 +41,7 @@ const MessagesLayout: FC<Props> = ({ children }) => {
       <main className="messages-main-content content-avoid-header transition-all duration-500 ease-out overflow-auto relative">
         {children}
       </main>
+      <ShareMessage/>
     </section>
   );
 };

@@ -18,7 +18,7 @@ const shareMessageSlice = createSlice({
                 shareMessage: action.payload.messageData
             }
         },
-        dismissShare (state) {
+        dismissShare (state, action) {
             state.data = {
                 isOpenShare: false,
                 shareMessage: null

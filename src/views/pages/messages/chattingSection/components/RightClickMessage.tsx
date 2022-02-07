@@ -13,6 +13,7 @@ import {useDispatch} from "react-redux";
 import {setReplyMessage} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
+import {useShareMessage} from "services/hooks/useShareMessage";
 type Props = {
     message: ItemMessage
 }

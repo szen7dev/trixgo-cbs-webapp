@@ -18,14 +18,15 @@ const ShareMessage:FC = () => {
     const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation);
 
     const closeShare = () => {
-        // dispatch(dismissShare())
+        console.log('asdasd')
+        // dispatch(dismissShare({}))
     }
 
     return (
         <Transition appear show={isOpenShare} as={Fragment}>
             <Dialog
                 as="div"
-                className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
+                className="fixed inset-0 z-50 overflow-y-auto share-message"
                 onClose={closeShare}
                 initialFocus={focusElementRef}
             >
@@ -50,58 +51,57 @@ const ShareMessage:FC = () => {
                         &#8203;
                     </span>
 
-                    {isOpenShare && (
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100 scale-100"
-                            leaveTo="opacity-0 scale-95"
-                        >
-                            <div className={"max-w-[521px] min-w-[420px] rounded-md shadow-lg bg-white p-[22px] z-51"}>
-                                <div className={"flex w-full items-center"}>
-                                    <button
-                                        className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
-                                        onClick={() => closeShare()}
-                                    >
-                                        <Close/>
-                                    </button>
-                                    <div className={"flex-1 text-left text-lg font-bold"}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0 scale-95"
+                        enterTo="opacity-100 scale-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100 scale-100"
+                        leaveTo="opacity-0 scale-95"
+                    >
+                        <div className={"max-w-[521px] min-w-[420px] rounded-md shadow-lg bg-white p-[22px] z-51"}>
+                            <div className={"flex w-full items-center"}>
+                                <button
+                                    className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
+                                    onClick={closeShare}
+                                >
+                                    <Close/>
+                                </button>
+                                <div className={"flex-1 text-left text-lg font-bold"}>
 
-                                    </div>
-                                    <button
-                                        onClick={() => console.log('asdasd')}
-                                        className={"w-[95px] h-[32px] rounded-md bg-primary text-white"}
-                                    >
-                                        Gửi
-                                    </button>
                                 </div>
-                                <div className={"max-h-[737px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
-                                    <div className={"px-[5px]"}>
-                                        {
-                                            _map(listConversations, conversation => (
-                                                <SearchChatItem
-                                                    itemClickAction={chat => {
-                                                        console.log(chat)
-                                                    }}
-                                                    chat={conversation} key={conversation._id}/>
-                                            ))
-                                        }
-                                        {
-                                            hasListConversationNextPage &&
-                                            <button
-                                                onClick={() => nextPageListConversations()}
-                                                className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
-                                                Xem thêm
-                                            </button>
-                                        }
-                                    </div>
+                                <button
+                                    onClick={() => console.log('asdasd')}
+                                    className={"w-[95px] h-[32px] rounded-md bg-primary text-white"}
+                                >
+                                    Gửi
+                                </button>
+                            </div>
+                            <div className={"max-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
+                                <div className={"px-[5px]"}>
+                                    {
+                                        _map(listConversations, conversation => (
+                                            <SearchChatItem
+                                                avatarClassname={"w-[40px] h-[40px]"}
+                                                itemClickAction={chat => {
+                                                    console.log(chat)
+                                                }}
+                                                chat={conversation} key={conversation._id}/>
+                                        ))
+                                    }
+                                    {
+                                        hasListConversationNextPage &&
+                                        <button
+                                            onClick={() => nextPageListConversations()}
+                                            className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
+                                            Xem thêm
+                                        </button>
+                                    }
                                 </div>
                             </div>
-                        </Transition.Child>
-                    )}
+                        </div>
+                    </Transition.Child>
                 </div>
             </Dialog>
         </Transition>

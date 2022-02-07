@@ -7,8 +7,10 @@ import SavedMessage from "assets/images/saved-messages.svg";
 type Props = {
     chat: ItemListConversation;
     itemClickAction: (chat: ItemListConversation) => void;
+    avatarClassname?: string;
+    avatarClassnameMap?: any;
 }
-const SearchChatItem:FC<Props> = ({chat, itemClickAction}) => {
+const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avatarClassnameMap}) => {
     const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
@@ -69,8 +71,8 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction}) => {
                         </div> :
                         <AvatarGroupChat
                             avatars={getAvatarMembers()}
-                            imageClass={"w-[56px] h-[56px]"}
-                            classesMap={{
+                            imageClass={avatarClassname??"w-[56px] h-[56px]"}
+                            classesMap={avatarClassnameMap??{
                                 "group_1": {
                                     imgWidth: "w-full h-full",
                                     groupPosition: [""]
