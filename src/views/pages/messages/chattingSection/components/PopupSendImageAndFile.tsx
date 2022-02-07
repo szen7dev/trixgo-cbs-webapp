@@ -134,6 +134,25 @@ const PopupSendImageAndFile: FC = () => {
         }
     }
 
+    useEffect(() => {
+        isShowPopupSendFiles&&document.addEventListener('keydown', keyboardHandle, false);
+
+        return () => {
+            document.removeEventListener('keydown', keyboardHandle);
+        }
+    }, [isShowPopupSendFiles]);
+
+    const keyboardHandle = (event: KeyboardEvent) => {
+        if (event.code === 'Enter'||event.code === 'NumpadEnter') {
+            event.preventDefault();
+            handleConfirm();
+        }
+        if (event.code === 'Escape') {
+            event.preventDefault();
+            closePopupSendFiles();
+        }
+    }
+
     return (
         <Transition appear show={isShowPopupSendFiles} as={Fragment}>
             <Dialog

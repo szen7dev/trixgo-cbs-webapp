@@ -95,7 +95,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
         }
         return "[Thông báo]";
-    }, [chat._id, currentChat])
+    }, [chat, currentChat])
 
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
