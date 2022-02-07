@@ -21,7 +21,7 @@ const MyMessage:FC<Props> = ({message}) => {
         }
     }
     return (
-        <RightClickMenuWrapper contextMenu={<RightClickMessage/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
+        <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
             {renderMessageContent()}
         </RightClickMenuWrapper>
     )

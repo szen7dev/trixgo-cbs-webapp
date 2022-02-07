@@ -1,11 +1,12 @@
 import React, {FC} from "react";
 
 type Props = {
-    message: any
+    message: any;
+    className?: string;
 }
-const ImageReply:FC<Props> = ({message}) => {
+const ImageReply:FC<Props> = ({message, className}) => {
     return (
-        <div className={"reply-content border-l-2 border-primary pl-[7px] flex"}>
+        <div className={"reply-content border-l-2 border-primary pl-[7px] flex " + (className??"")}>
             <div className={"flex items-center justify-center mr-1"}>
                 {/*<img className={"w-[25px] h-[25px]"} src={message.content[0].fileUrl} alt={"icon pdf"}/>*/}
             </div>

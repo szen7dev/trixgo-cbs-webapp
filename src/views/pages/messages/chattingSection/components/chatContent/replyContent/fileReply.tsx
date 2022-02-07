@@ -5,8 +5,9 @@ import EXCELIcon from "assets/images/CBS-Excel-Icon-48.svg";
 
 type Props = {
     message: any;
+    className?: string;
 }
-const FileReply:FC<Props> = ({message}) => {
+const FileReply:FC<Props> = ({message, className}) => {
     const renderFileTypeImage = (file:any) => {
         switch (file.fileType){
             case "pdf":
@@ -19,7 +20,7 @@ const FileReply:FC<Props> = ({message}) => {
     }
 
     return (
-        <div className={"reply-content border-l-2 border-primary pl-[7px] flex"}>
+        <div className={"reply-content border-l-2 border-primary pl-[7px] flex " + (className??"")}>
             <div className={"flex items-center justify-center mr-1"}>
                 {/*{renderFileTypeImage(message.content[0])}*/}
             </div>
