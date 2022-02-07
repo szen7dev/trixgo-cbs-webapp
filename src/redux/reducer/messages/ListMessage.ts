@@ -38,6 +38,9 @@ const initialState : {
         },
         listFiles: {
             [key: string] : any[]
+        },
+        replyMessage: {
+            [key: string] : ItemMessage;
         }
     }
 } = {
@@ -51,7 +54,8 @@ const initialState : {
         listMembers: {},
         listImages: {},
         listFiles: {},
-        listLinks: {}
+        listLinks: {},
+        replyMessage: {}
     }
 };
 
@@ -212,6 +216,24 @@ const listMessageSlice = createSlice({
                     }
                 }
             }
+        },
+        setReplyMessage (state, action) {
+            state.data = {
+                ...state.data,
+                replyMessage: {
+                    ...state.data.replyMessage,
+                    [action.payload.conversationId] : action.payload.messageData
+                }
+            }
+        },
+        removeReplyMessage (state, action) {
+            const newReplyMessage = {...state.data.replyMessage};
+            delete newReplyMessage[action.payload.conversationId];
+
+            state.data = {
+                ...state.data,
+                replyMessage: newReplyMessage
+            }
         }
     },
     extraReducers: {}
@@ -228,6 +250,8 @@ export const {
     updateFileProgressOnMessage,
     setListMembers,
     setListMedias,
-    updateReminderData
+    updateReminderData,
+    setReplyMessage,
+    removeReplyMessage
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

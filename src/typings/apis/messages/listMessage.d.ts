@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export type ItemMessage = {
     _id: string;
     receivers: {_id: string; image: string; fullname: string}[];

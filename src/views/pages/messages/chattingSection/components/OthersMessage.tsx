@@ -31,7 +31,7 @@ const OthersMessage:FC<Props> = ({message}) => {
                 className={"avt-user w-[34px] h-[34px] rounded-full overflow-hidden mr-[5px] cursor-pointer"}>
                 <img src={`${process.env.REACT_APP_URL_S3_USER}/${message.sender.image}`} alt={message.userName}/>
             </div>
-            <RightClickMenuWrapper contextMenu={<RightClickMessage/>}>
+            <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>}>
                 {renderMessageContent()}
             </RightClickMenuWrapper>
         </div>

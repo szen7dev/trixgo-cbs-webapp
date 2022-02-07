@@ -13,15 +13,15 @@ const MyMessage:FC<Props> = ({message}) => {
     const renderMessageContent = () => {
         switch (message.type) {
             case 0:
-                return <TextChatContent message={message} className={"bg-cbs-active-comment"}/>;
+                return <TextChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 2:
-                return <FileChatContent message={message} className={"bg-cbs-active-comment"}/>;
+                return <FileChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 1:
-                return <ImagesContent message={message}/>
+                return <ImagesContent message={message} isMyMessage={true}/>
         }
     }
     return (
-        <RightClickMenuWrapper contextMenu={<RightClickMessage/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
+        <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
             {renderMessageContent()}
         </RightClickMenuWrapper>
     )

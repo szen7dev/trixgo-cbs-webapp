@@ -16,8 +16,9 @@ type Props = {
     message: any;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
-const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
         const extension = filename.split(".").pop();
@@ -97,7 +98,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                         </div>
                     ))
                 }
-                <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
+                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center " + (isMyMessage?"text-primary":"text-gray-500")}>
                     {moment(message.createdAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>

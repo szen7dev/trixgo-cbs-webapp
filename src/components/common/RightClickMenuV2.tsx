@@ -1,14 +1,24 @@
-import React, {FC, Fragment, useEffect, useRef, useState} from "react";
+import React, {FC, Fragment, useEffect, useRef} from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
 
 import { useRightClickMenu } from "services/hooks/useRightClickMenu";
-import {useOnClickOutside} from "../../services/hooks/useOnclickOutside";
 
 const RightClickMenuV2: FC = () => {
     const { isRightClickMenuOpen, closeRightClick, rightClickMenuContent } = useRightClickMenu();
-    const innerRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(innerRef, () => closeRightClick());
+
+    useEffect(() => {
+        const listener = (event: Event) => {
+            const wrapper = document.getElementById('right-click-menu-container');
+            if (wrapper && !wrapper.contains(event.target as Node)) {
+                closeRightClick();
+            }
+        };
+        document.addEventListener("mousedown", listener);
+        return () => {
+            document.removeEventListener("mousedown", listener);
+        };
+    }, [isRightClickMenuOpen]);
 
     return (
         <Transition appear show={isRightClickMenuOpen} as={Fragment}>
@@ -32,7 +42,7 @@ const RightClickMenuV2: FC = () => {
                             leaveTo="opacity-0 scale-95"
                         >
                            <div
-                               ref={innerRef}
+                               id={'right-click-menu-container'}
                                className={"max-w-[216px] absolute"}
                                style={{
                                    top: `${rightClickMenuContent.y}px`,

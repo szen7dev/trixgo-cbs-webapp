@@ -100,7 +100,12 @@ const SearchUserConversationSection:FC = () => {
             <div className={"px-[5px]"}>
                 {
                     _map(listConversations, conversation => (
-                        <SearchChatItem chat={conversation} key={conversation._id}/>
+                        <SearchChatItem
+                            itemClickAction={(chat) => {
+                                setCurrentChat(chat._id);
+                                setShowSearch(false)
+                            }}
+                            chat={conversation} key={conversation._id}/>
                     ))
                 }
                 {

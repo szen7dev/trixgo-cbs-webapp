@@ -8,11 +8,27 @@ import IconSelected from "assets/images/icons-web-select.svg";
 import SampleAvatar from "assets/images/sample_avt.svg";
 import GroupIcon from "assets/images/icons8-group-90.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
+import {ItemMessage} from "typings/apis/messages/listMessage";
+import {useDispatch} from "react-redux";
+import {setReplyMessage} from "redux/reducer/messages/ListMessage";
+import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
+import {useRightClickMenu} from "services/hooks/useRightClickMenu";
+type Props = {
+    message: ItemMessage
+}
 
-const RightClickMessage:FC = () => {
+const RightClickMessage:FC<Props> = ({message}) => {
+    const dispatch = useDispatch();
+    const {closeRightClick} = useRightClickMenu();
+
     return (
         <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}))
+                    closeRightClick();
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ForwardIcon}/>
                 <div className={"mr-2 ml-4"}>Reply</div>
             </button>
@@ -28,7 +44,12 @@ const RightClickMessage:FC = () => {
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>
                 <div className={"mr-2 ml-4"}>Download</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    dispatch(shareMessageToConversation({messageData: message}));
+                    closeRightClick();
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>
                 <div className={"mr-2 ml-4"}>Forward</div>
             </button>

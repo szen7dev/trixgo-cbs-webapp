@@ -1,7 +1,6 @@
 import React, {FC, ReactNode, useEffect, useRef} from "react";
 
 import { useRightClickMenu } from "services/hooks/useRightClickMenu";
-import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 
 type Props = {
     contextMenu: ReactNode;
@@ -10,9 +9,8 @@ type Props = {
 }
 
 const RightClickMenuWrapper: FC <Props>= ({children, contextMenu, customRenderTag,...props}) => {
-    const { closeRightClick, openRightClick} = useRightClickMenu();
+    const { openRightClick} = useRightClickMenu();
     const wrapperRef = useRef<HTMLDivElement>(null);
-    useOnClickOutside(wrapperRef, () => closeRightClick());
 
     useEffect(() => {
         wrapperRef.current&&wrapperRef.current.addEventListener("contextmenu", handleContextMenu);

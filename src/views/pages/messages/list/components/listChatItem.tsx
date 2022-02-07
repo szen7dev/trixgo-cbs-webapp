@@ -33,7 +33,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
         }
 
         return chat?.name;
-    }, [chat, profileId]);
+    }, [chat._id]);
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
@@ -51,36 +51,51 @@ const ListChatItem:FC<Props> = ({chat}) => {
             });
         }
         return avatars;
-    }, [chat, profileId]);
+    }, [chat._id]);
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
-    }, [chat, profileId])
+    }, [chat._id])
 
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
             switch (chat.lastMessage.type) {
                 case 0:
-                    return chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
-                        const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
-                        if (matchs) {
-                            const fullName = matchs[1];
-                            return `@${fullName}`;
-                        } else {
-                            return replacement;
-                        }
-                    });
+                    return <div className={"flex items-center"}>
+                        <span className={(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
+                        <div className={"ml-[5px] truncate w-[210px]"}>
+                            {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
+                                const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
+                                if (matchs) {
+                                    const fullName = matchs[1];
+                                    return `@${fullName}`;
+                                } else {
+                                    return replacement;
+                                }
+                            })}
+                        </div>
+                    </div>
                 case 1:
-                    return "[Hình ảnh]";
+                    return <div className={"flex items-center"}>
+                        <span className={(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
+                        <div className={"ml-[5px]"}>
+                        [Hình ảnh]
+                        </div>
+                    </div>;
                 case 2:
-                    return "[Tệp tin]";
+                    return <div className={"flex items-center"}>
+                        <span className={(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
+                        <div className={"ml-[5px]"}>
+                        [Tệp tin]
+                        </div>
+                    </div>;
                 default:
                     return "[Thông báo]";
             }
         }
         return "[Thông báo]";
-    }, [chat, profileId])
+    }, [chat, currentChat])
 
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
@@ -93,7 +108,13 @@ const ListChatItem:FC<Props> = ({chat}) => {
         } else {
             return date.format("DD/MM/YYYY")
         }
-    },[chat, profileId])
+    },[chat._id]);
+
+    const getSenderName = useCallback(() => {
+        if (chat.lastMessage.sender._id === profileId) {
+            return "Bạn";
+        } else return chat.lastMessage.sender.fullname;
+    },[chat._id])
 
     return (
         <RightClickMenuWrapper
@@ -157,7 +178,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
                         </div>
                     </div>
                     <div className={"flex mt-1"}>
-                        <div className={"flex-1 truncate w-[250px] "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>{getLastMessage()}</div>
+                        <div className={"flex-1 "+ (currentChat===chat._id ? "text-white":"text-gray-500")}>{getLastMessage()}</div>
                         {
                             userUnreadMessage() > 0 &&
                             <div className={"rounded-full flex items-center justify-center bg-positive text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{userUnreadMessage()}</div>}

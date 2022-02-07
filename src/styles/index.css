@@ -1312,7 +1312,7 @@ input[type="text"] {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: 100%;
+  max-width: 645px;
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
