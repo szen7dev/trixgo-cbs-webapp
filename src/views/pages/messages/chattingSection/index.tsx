@@ -5,6 +5,7 @@ import ChattingInput from "./components/chatInput/ChattingInput";
 import {MessageContext} from "../home/index_v2";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import ShareMessage from "./components/ShareMessage";
 
 const ChattingSection:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);
@@ -19,6 +20,7 @@ const ChattingSection:FC = () => {
                         <MainChatHeading chat={chat}/>
                         <MainChatContent chat={chat}/>
                         <ChattingInput chat={chat}/>
+                        <ShareMessage/>
                     </>
                 }
             </div>

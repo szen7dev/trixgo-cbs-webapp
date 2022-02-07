@@ -4,13 +4,15 @@ import FinancialPlanningDetailSlice from './FinancialPlanningDetailSlice';
 import TimesheetDetailSlice from './Timesheet'
 import ListConverSationSlice from './messages/ListConversation';
 import ListMessageSlice from './messages/ListMessage';
+import ShareMessageSlice from './messages/ShareMessage';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
     financialPlanningDetails: FinancialPlanningDetailSlice,
     timesheetDetail: TimesheetDetailSlice,
     listConversation: ListConverSationSlice,
-    listMessage: ListMessageSlice
+    listMessage: ListMessageSlice,
+    shareMessage: ShareMessageSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

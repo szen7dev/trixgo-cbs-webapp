@@ -9,8 +9,9 @@ type Props = {
     message: any;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
-const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
+const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
@@ -67,7 +68,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName}) => {
                     <div ref={textContentRef} className={"flex-1 py-[4px] break-words"}>
                     </div>
                 </div>
-                <div className={"date-message absolute bottom-3px right-4px text-gray-400 text-xs flex items-center"}>
+                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     {moment(message.createdAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>

@@ -11,6 +11,7 @@ import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {useDispatch} from "react-redux";
 import {setReplyMessage} from "redux/reducer/messages/ListMessage";
+import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 type Props = {
     message: ItemMessage
@@ -43,7 +44,12 @@ const RightClickMessage:FC<Props> = ({message}) => {
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>
                 <div className={"mr-2 ml-4"}>Download</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    dispatch(shareMessageToConversation({messageData: message}));
+                    closeRightClick();
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>
                 <div className={"mr-2 ml-4"}>Forward</div>
             </button>

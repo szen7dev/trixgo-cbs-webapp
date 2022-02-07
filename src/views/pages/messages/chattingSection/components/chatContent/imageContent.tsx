@@ -13,11 +13,12 @@ type Props = {
     message: ItemMessage;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
+const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -95,7 +96,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
             <div className={"flex flex-wrap bg-white"}>
                 {renderImageDisplay()}
             </div>
-            <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
+            <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-xs flex items-center px-[4px] rounded-full "  + (isMyMessage?"text-primary":"text-gray-500")}>
                 {moment(message.createAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>

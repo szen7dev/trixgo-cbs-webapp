@@ -1,19 +1,14 @@
 import React, {FC, useCallback, useContext, useRef} from "react";
 import { NavLink } from "react-router-dom";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-
-import {MessageContext} from "../../../home/index_v2";
 import AvatarGroupChat from "../AvatarGroupChat";
-import {SearchUserAndConversationContext} from "../SearchUserAndConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
 
 type Props = {
-    chat: ItemListConversation
+    chat: ItemListConversation;
+    itemClickAction: (chat: ItemListConversation) => void;
 }
-const SearchChatItem:FC<Props> = ({chat}) => {
-    const {setCurrentChat} = useContext(MessageContext);
-    const {setShowSearch} = useContext(SearchUserAndConversationContext);
-
+const SearchChatItem:FC<Props> = ({chat, itemClickAction}) => {
     const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
@@ -54,14 +49,13 @@ const SearchChatItem:FC<Props> = ({chat}) => {
         return avatars;
     }, [chat, profileId]);
 
-    const handleSelectChat = (_id: string) => {
-        setCurrentChat(_id);
-        setShowSearch(false)
+    const handleSelectChat = (chat: ItemListConversation) => {
+        itemClickAction(chat)
     }
 
     return (
         <NavLink
-            onClick={() => handleSelectChat(chat._id)}
+            onClick={() => handleSelectChat(chat)}
             ref={wrapperRef}
             to={`#${chat._id}`}
             className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md hover:bg-gray-100"}>
