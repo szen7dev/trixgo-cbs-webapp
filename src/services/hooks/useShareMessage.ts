@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import ShareMessageContext from "../contexts/ShareMessage";
-import {ItemMessage} from "../../typings/apis/messages/listMessage";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 type UseShareMessage = {
   isShowShareMessage: boolean;
   setShareMessage: (payload: ItemMessage) => void;
   dismissShareMessage: () => void;
-  shareMessage: ItemMessage|null;
+  shareMessageData: ItemMessage|null;
 };
 
 export const useShareMessage = (): UseShareMessage => {
@@ -29,6 +29,6 @@ export const useShareMessage = (): UseShareMessage => {
     isShowShareMessage: state.isShowShareMessage,
     setShareMessage,
     dismissShareMessage,
-    shareMessage: state.shareMessage,
+    shareMessageData: state.shareMessage,
   };
 };

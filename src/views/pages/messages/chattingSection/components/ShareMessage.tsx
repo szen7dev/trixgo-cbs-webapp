@@ -17,17 +17,12 @@ const ShareMessage:FC = () => {
     const paramsListConversation = {limit: 10, keyword: searchTerm};
     const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation);
 
-    const closeShare = () => {
-        console.log('asdasd')
-        // dispatch(dismissShare({}))
-    }
-
     return (
         <Transition appear show={isOpenShare} as={Fragment}>
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto share-message"
-                onClose={closeShare}
+                onClose={() => dispatch(dismissShare({}))}
                 initialFocus={focusElementRef}
             >
                 <div ref={focusElementRef} className="min-h-screen flex items-center justify-center z-51 share-message">
@@ -64,7 +59,7 @@ const ShareMessage:FC = () => {
                             <div className={"flex w-full items-center"}>
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
-                                    onClick={closeShare}
+                                    onClick={() => dispatch(dismissShare({}))}
                                 >
                                     <Close/>
                                 </button>

@@ -12,17 +12,12 @@ type Props = {
 const reducer = (state: ShareMessageState, action: ShareMessageActions): ShareMessageState => {
   switch (action.type) {
     case "OPEN_SHARE_MESSAGE":
-      console.log("you")
       return {
         ...state,
         isShowShareMessage: true,
-        shareMessage: {
-          ...state.shareMessage,
-          ...action.payload
-        },
+        shareMessage: action.payload
       };
     case "CLOSE_SHARE_MESSAGE":
-      console.log("fuck")
       return {
         ...state,
         isShowShareMessage: false,

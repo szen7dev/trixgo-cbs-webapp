@@ -21,7 +21,7 @@ type Props = {
 const RightClickMessage:FC<Props> = ({message}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
-
+    const {setShareMessage} = useShareMessage();
     return (
         <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
             <button
@@ -47,8 +47,9 @@ const RightClickMessage:FC<Props> = ({message}) => {
             </button>
             <button
                 onClick={() => {
+                    // setShareMessage(message);
                     dispatch(shareMessageToConversation({messageData: message}));
-                    closeRightClick();
+                    // closeRightClick();
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>
