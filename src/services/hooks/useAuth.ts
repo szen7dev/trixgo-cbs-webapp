@@ -95,7 +95,7 @@ export const useAuth = (): UseAuth => {
                   if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
                     localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
                     await AuthenticationRepository.updateDevice({
-                      platform: "1",
+                      platform: process.env.REACT_APP_PLATFORM??"1",
                       deviceID: 'BROWSER',
                       deviceName: 'BROWSER',
                       registrationID: oneSignalWebPushID || '',
@@ -115,7 +115,7 @@ export const useAuth = (): UseAuth => {
                 if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
                   localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
                   await AuthenticationRepository.updateDevice({
-                    platform: "1",
+                    platform: process.env.REACT_APP_PLATFORM??"1",
                     deviceID: 'BROWSER',
                     deviceName: 'BROWSER',
                     registrationID: oneSignalWebPushID || '',
