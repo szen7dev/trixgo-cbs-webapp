@@ -8,6 +8,7 @@ import ModalContainer from "views/pages/media/components/ModalContainer";
 import iconAttach from "assets/images/icons8-attach-96.png";
 import itemTag from "assets/images/icons8-price-tag.svg"
 import DropdownSearchable from 'components/common/DropdownSearch';
+import FileUploadRow from './FileUploadRow';
 
 const fakeDataInput = [
 	{ title: 'Số lượng', type: 'text', value: '12' },
@@ -202,22 +203,7 @@ const ModalCreateDocument: React.FC = () => {
 						</div>
 						{/* File uploaded */}
 						{
-							Array.from({ length: 3 }).map((_, index) =>
-								<div key={index} className="col-span-8 py-1 pl-2 pr-1 max-w-md flex mb-3" style={{ backgroundColor: '#EDEBEB' }}>
-									<a className={cn("font-bold whitespace-nowrap flex overflow-hidden", { 'text-cbs-primary': index === 0 })} href='/' target="_blank" rel="noreferrer">
-										<div className="document__line-min inline-block mr-1.5 py-1 align-bottom">Screen Shot 2021-12-22 at 10.15.22.png</div>
-										<div className="inline-block py-1" style={{ color: '#777' }}>(725K)</div>
-									</a>
-									{index !== 0 ? <div className="inline-block w-[124px] min-w-[124px] bg-white border border-cbs-primary p-0.5 h-3 ml-3 my-2">
-										<div className="bg-cbs-primary h-full" style={{ width: 30 + '%' }}></div>
-									</div> : null}
-									<button type="button" className="ml-auto p-1">
-										<svg aria-label="Xóa tệp đính kèm" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-										</svg>
-									</button>
-								</div>
-							)
+							Array.from({ length: 3 }).map((_, index) => <FileUploadRow key={index} index={index} />)
 						}
 					</div>
 				</div>

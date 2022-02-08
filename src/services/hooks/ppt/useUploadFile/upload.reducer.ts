@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-redeclare */
 import uploadFileTypes from "./upload.types";
 
 import { ISTATE, TReducer } from "./upload.d";
@@ -15,8 +17,8 @@ export const INITIAL_STATE: ISTATE = {
 };
 
 const fileUploadReducer: TReducer = (state, action) => {
-	let cloneFiles;
-	let cloneImages;
+  let cloneFiles;
+  let cloneImages;
   switch (action.type) {
     case uploadFileTypes.SET_UPLOAD_FILE:
       return {
@@ -56,7 +58,7 @@ const fileUploadReducer: TReducer = (state, action) => {
           },
         },
       };
-    case uploadFileTypes.SET_ID_IMAGE_UPLOADED: 
+    case uploadFileTypes.SET_ID_IMAGE_UPLOADED:
       return {
         ...state,
         images: {
@@ -67,7 +69,7 @@ const fileUploadReducer: TReducer = (state, action) => {
           },
         },
       };
-    case uploadFileTypes.SET_ID_FILE_UPLOADED: 
+    case uploadFileTypes.SET_ID_FILE_UPLOADED:
       return {
         ...state,
         files: {
@@ -125,7 +127,7 @@ const fileUploadReducer: TReducer = (state, action) => {
         },
       };
     case uploadFileTypes.CANCEL_UPLOAD_FILE:
-			cloneFiles = { ...state.files };
+      cloneFiles = { ...state.files };
       delete cloneFiles[action.payload];
       return {
         ...state,
@@ -153,11 +155,11 @@ const fileUploadReducer: TReducer = (state, action) => {
         images: cloneImages,
       };
     case uploadFileTypes.REMOVE_ALL_FILES:
-        return {
-          ...state,
-          images: [],
-          files: [],
-        };
+      return {
+        ...state,
+        images: [],
+        files: [],
+      };
     default:
       return state;
   }
