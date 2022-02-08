@@ -1,14 +1,52 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Chart,
+  ChartData,
+  CoreChartOptions,
+  DatasetChartOptions,
+  DoughnutControllerChartOptions,
+  ElementChartOptions,
   Plugin,
+  PluginChartOptions,
+  ScaleChartOptions,
 } from "chart.js";
 import { AnyObject } from "chart.js/types/basic";
+import { _DeepPartialObject } from "chart.js/types/utils";
 
-export const optionsOne = {
-  cutout: 55,
+export const optionsOne: _DeepPartialObject<
+  CoreChartOptions<"doughnut"> &
+    ElementChartOptions<"doughnut"> &
+    PluginChartOptions<"doughnut"> &
+    DatasetChartOptions<"doughnut"> &
+    ScaleChartOptions<"doughnut"> &
+    DoughnutControllerChartOptions
+> = {
+  // elements: {
+  //   arc: {},
+  // },
+  // maintainAspectRatio: false,
+  cutout: 60,
   rotation: 90,
-  plugins: { datalabels: { display: false } },
+  plugins: {
+    datalabels: {
+      display: false,
+    },
+    tooltip: {
+      enabled: false,
+    },
+    legend: {
+      display: false,
+      position: "right",
+      align: "center",
+
+      labels: {
+        usePointStyle: true,
+        boxHeight: 8,
+        boxWidth: 8,
+        padding: 11,
+        // boxPadding: 30,
+      },
+    },
+  },
 };
 
 function getPlugins(
@@ -19,31 +57,6 @@ function getPlugins(
   return [
     {
       id: "beforeDraw",
-      // beforeDraw(chart): void {
-      //   const width = chart.width,
-      //     height = chart.height,
-      //     ctx = chart.ctx;
-
-      //   ctx.restore();
-      //   ctx.font =
-      //     (options?.bold ? "bold " : "") +
-      //     (options?.titleSize || 30) +
-      //     "px Arial";
-
-      //   ctx.textBaseline = "middle";
-
-      //   ctx.fillStyle = "black";
-      //   ctx.fillText(title, width / 2, height / 2);
-
-      //   const theCenterText = subtitle;
-      //   ctx.textBaseline = "middle";
-      //   ctx.textAlign = "center";
-      //   ctx.font = (options?.subtitleSize || 15) + "px Arial";
-      //   ctx.fillStyle = "rgba(121, 130, 149, 1)";
-
-      //   ctx.fillText(theCenterText, width / 2, height / 2 + 20);
-      //   ctx.save();
-      // }
       afterDraw(chart) {
         const width = chart.width,
           height = chart.height,
@@ -63,7 +76,7 @@ function getPlugins(
             0
           ),
           width / 2,
-          height / 2
+          height / 2 - 10
         );
 
         const theCenterText = subtitle;
@@ -72,18 +85,25 @@ function getPlugins(
         ctx.font = (options?.subtitleSize || 15) + "px Arial";
         ctx.fillStyle = "rgba(121, 130, 149, 1)";
 
-        ctx.fillText(theCenterText, width / 2, height / 2 + 20);
+        ctx.fillText(theCenterText, width / 2, height / 2 + 10);
         ctx.save();
       },
     },
   ];
 }
 
-export const _data = {
+export const _data: ChartData<"doughnut", number[], unknown> = {
+  labels: [
+    "Chưa bắt đầu",
+    "Lập kế hoạch",
+    "Thiết kế",
+    "Đấu thầu",
+    "Xây dựng",
+    "Khác",
+  ],
   datasets: [
     {
-      label: "# of Votes",
-      data: [],
+      data: [0, 0, 0, 0, 0, 0],
       backgroundColor: [
         "rgba(44, 134, 237, 1)",
         "rgba(255, 165, 0, 1)",

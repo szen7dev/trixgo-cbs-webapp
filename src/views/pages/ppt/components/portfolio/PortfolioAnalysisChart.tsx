@@ -21,8 +21,22 @@ const PortfolioAnalysisChart = forwardRef<ChartJSOrUndefined<"doughnut", number[
 				case 0:
 					d.waiting = _d.amount
 					break;
+				case 1:
+					d.plan = _d.amount
+					break;
+				case 2:
+					d.design = _d.amount
+					break;
+				case 3:
+					d.bidding = _d.amount
+					break;
+				case 4:
+					d.building = _d.amount
+					break;
+				case 5:
+					d.other = _d.amount
+					break;
 				default:
-
 					break;
 			}
 		})
@@ -39,19 +53,19 @@ const PortfolioAnalysisChart = forwardRef<ChartJSOrUndefined<"doughnut", number[
 						<Link to="/" className="flex items-center"><div className='bg-cbs-primary w-3 h-3 rounded-lg mr-2'></div>Chưa bắt đầu ({data.waiting})</Link>
 					</li>
 					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-schedule-nextweek w-3 h-3 rounded-lg mr-2'></div>Lập kế hoạch (80)</Link>
+						<Link to="/" className="flex items-center"><div className='bg-cbs-schedule-nextweek w-3 h-3 rounded-lg mr-2'></div>Lập kế hoạch ({data.plan})</Link>
 					</li>
 					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-purple w-3 h-3 rounded-lg mr-2'></div>Thiết kế (15)</Link>
+						<Link to="/" className="flex items-center"><div className='bg-cbs-purple w-3 h-3 rounded-lg mr-2'></div>Thiết kế ({data.design})</Link>
 					</li>
 					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-pink-600 w-3 h-3 rounded-lg mr-2'></div>Đấu thầu (5)</Link>
+						<Link to="/" className="flex items-center"><div className='bg-pink-600 w-3 h-3 rounded-lg mr-2'></div>Đấu thầu ({data.bidding})</Link>
 					</li>
 					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-green w-3 h-3 rounded-lg mr-2'></div>Xây dựng (3)</Link>
+						<Link to="/" className="flex items-center"><div className='bg-cbs-green w-3 h-3 rounded-lg mr-2'></div>Xây dựng ({data.building})</Link>
 					</li>
 					<li className="flex items-center whitespace-nowrap">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-gray w-3 h-3 rounded-lg mr-2'></div>Khác (2)</Link>
+						<Link to="/" className="flex items-center"><div className='bg-cbs-gray w-3 h-3 rounded-lg mr-2'></div>Khác ({data.other})</Link>
 					</li>
 				</ul>
 			</div>

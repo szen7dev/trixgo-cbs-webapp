@@ -10,8 +10,11 @@ const PortfolioAnalysisContainer: FC = () => {
 	const { data, loading, refetch } = useQueryDepartmentsAnalysis({
 		onSuccess(data) {
 			if (chartRef.current) {
-				// chartRef.current.data.datasets[0].data = [23, 24];
-				chartRef.current.data.datasets[0].data = data.data.dataBlock3.map(d => d.amount);
+				const _data = Array.from({ length: chartRef.current.data.datasets[0].data.length }, () => 0).fill(0);
+				data.data.dataBlock3.forEach(_d => {
+					_data[_d._id.stage] = _d.amount;
+				})
+				chartRef.current.data.datasets[0].data = _data;
 				chartRef.current.update();
 			}
 		}
