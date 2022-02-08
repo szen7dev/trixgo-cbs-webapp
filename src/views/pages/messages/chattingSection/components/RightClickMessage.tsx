@@ -46,8 +46,10 @@ const RightClickMessage:FC<Props> = ({message}) => {
             <button
                 onClick={() => {
                     // setShareMessage(message);
-                    dispatch(shareMessageToConversation({messageData: message}));
-                    // closeRightClick();
+                    dispatch(shareMessageToConversation({messageData: [message]}));
+                    setTimeout(() => {
+                        closeRightClick();
+                    }, 100)
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>

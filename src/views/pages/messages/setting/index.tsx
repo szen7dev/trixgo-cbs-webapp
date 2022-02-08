@@ -49,7 +49,7 @@ const SettingMessageDetail:FC = () => {
     }, [chat, profileId]);
 
     const getPresentGroupName = (name: string) => {
-        return name.split(' ').slice(0, 1).map((text: string) => {
+        return name.split('').slice(0, 1).map((text: string) => {
             return text.charAt(0).toUpperCase()
         });
     }

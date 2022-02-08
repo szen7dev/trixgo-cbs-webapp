@@ -16,7 +16,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
     const profileId = JSON.parse(currentUser)?._id;
 
     const getPresentGroupName = (name: string) => {
-        return name.split(' ').slice(0, 2).map((text: string) => {
+        return name.split('').slice(0, 1).map((text: string) => {
             return text.charAt(0)
         });
     }
@@ -60,7 +60,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
             onClick={() => handleSelectChat(chat)}
             ref={wrapperRef}
             to={`#${chat._id}`}
-            className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md hover:bg-gray-100"}>
+            className={"group flex p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
                     <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px]")} src={chat?.avatar?.url} alt={getNameConversation()}/>:
