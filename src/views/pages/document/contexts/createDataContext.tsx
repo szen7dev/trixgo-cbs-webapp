@@ -1,49 +1,33 @@
-import { Context, createContext, FC, useReducer } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Context, createContext, Dispatch as ReactDispatch, FC, Reducer, useEffect, useReducer } from 'react';
 
-interface IAction {
-	type: string;
-	payload?: unknown;
-}
+// Typescript 
+import { Dispatch, Effect, ReducerActionsProps, IR, DispatchProps, ProviderState } from 'typings/ppt/reducer';
 
-interface ReducerActionsProps {
-	type: string;
-	payload?: unknown;
-}
-
-type dispatch = (...any: unknown[]) => void;
-type TAction = (dispatch: React.Dispatch<IAction>) => dispatch;
-type IActions<K> = {
-	[key in keyof K]: dispatch;
-}
-
-type ActionsProps<A> = {
-	[key in keyof A]: TAction
-}
-
-interface ProviderState {
-	initialValue?: {
-		[key: string]: any;
-	};
-}
-
-type IR<S, A> = (state: S, action: A) => S
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function createDataContext<_R, A, S>(
-	reducer: IR<S, ReducerActionsProps>,
-	action: ActionsProps<A>,
-	defaultValues: S
-): { Context: Context<{ state: S } & IActions<A>>, Provider: FC<ProviderState> } {
-	const Context = createContext<{ state: S } & IActions<A>>(Object.assign({ state: defaultValues }));
+function createDataContext<R extends Reducer<any, any>, A extends Record<any, (dispatch: ReactDispatch<DispatchProps>) => any>, S>(
+	reducer: R,
+	action: A,
+	defaultValues: S,
+	effect?: Effect<Dispatch<A>>
+): { Context: Context<{ state: S } & Dispatch<A>>, Provider: FC<ProviderState> } {
+	const Context = createContext(Object.assign({
+		state: defaultValues,
+	}));
 
 	const Provider: FC<ProviderState> = ({ children, initialValue }) => {
-		const [state, dispatch] = useReducer(reducer, Object.assign(defaultValues, initialValue));
+		const [state, dispatch] = useReducer(reducer as IR<S, ReducerActionsProps>, Object.assign(defaultValues, initialValue));
 
-		const boundActions: { [key: string]: unknown } = {}
+		const boundActions: Record<string, any> = {}
 
 		for (const key in action) {
 			boundActions[key] = action[key](dispatch)
 		}
+
+		useEffect(() => {
+			if (effect) effect(boundActions as Dispatch<A>);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []);
+
 		return (
 			<Context.Provider value={Object.assign({ state, ...boundActions })}>
 				{children}

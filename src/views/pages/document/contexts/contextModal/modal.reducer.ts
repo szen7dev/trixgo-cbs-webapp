@@ -1,18 +1,17 @@
 import modalTypes from "./modal.types";
 
+// Typescript
+import { DispatchProps } from "typings/ppt/reducer";
+
 interface StateProps {
   isShow: boolean;
-}
-
-interface ActionProps {
-  type: string;
 }
 
 export const INITIAL_STATE = {
   isShow: false,
 };
 
-const modalReducers = (state: StateProps, action: ActionProps): StateProps => {
+const modalReducers = (state: StateProps, action: DispatchProps): StateProps => {
   switch (action.type) {
     case modalTypes.TOGGLE_MODAL:
       return {

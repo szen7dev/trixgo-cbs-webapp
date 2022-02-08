@@ -1,34 +1,26 @@
 import { SetComments } from "./../../../media/context/comment/comment.d";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dispatch } from "react";
 
 import commentsTypes from "./comment.types";
 
-interface DispatchProps {
-  type: string;
-  payload: any;
-}
+// Typescript;
+import { Action } from "typings/ppt/reducer";
 
-type Action = (
-  dispatch: Dispatch<DispatchProps>
-) => (...payload: any[]) => void;
-
-interface ActionsCommentProps {
-  setComment: Action;
-  viewMoreComments: Action;
-  viewMoreCommentsReply: Action;
-  addComment: Action;
-  updateComment: Action;
-  deleteComment: Action;
-  [key: string]: Action;
-}
+type ActionsCommentProps = {
+  setComment: Action<(payload: any) => void>;
+  viewMoreComments: Action<(id: number, progress: number) => void>;
+  viewMoreCommentsReply: Action<(payload: any) => void>;
+  addComment: Action<(payload: any) => void>;
+  updateComment: Action<(payload: any) => void>;
+  deleteComment: Action<(payload: any) => void>;
+};
 const actionsUploadImages: ActionsCommentProps = {
   setComment: (dispatch) => (payload) =>
     dispatch({
       type: commentsTypes.SET_COMMENTS,
       payload: payload,
     }),
-  viewMoreComments: (dispatch) => (id: number, progress: number) =>
+  viewMoreComments: (dispatch) => (id, progress) =>
     dispatch({
       type: commentsTypes.VIEW_MORE_COMMENTS,
       payload: {

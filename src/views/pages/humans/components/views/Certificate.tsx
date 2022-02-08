@@ -19,7 +19,7 @@ import {
 import { FormCertificate } from "../forms";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import ContactFile from "../ContactFile";
-import useCustomReducer from "../../Reducers/useReducer";
+import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
@@ -66,12 +66,12 @@ const Certificate: FC<CertificateProps> = (props) => {
       setIDFileUploaded,
       removeAllFiles,
     },
-  ] = useCustomReducer<IMethodFiles>(
+  ] = useCustomReducer(
     uploadReducer,
     { ...uploadActions },
     {
       files: {},
-    }
+    } as IFile
   );
 
   const {

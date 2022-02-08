@@ -13,8 +13,9 @@ import {convertToRaw, EditorState} from "draft-js";
 import {
     MentionData,
 } from '@draft-js-plugins/mention';
+import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 import ReplyChat from "./replyChat";
-import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "../../../../../../redux/reducer";
 
