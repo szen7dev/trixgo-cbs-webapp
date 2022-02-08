@@ -6,6 +6,9 @@ import {
   ListCheckListPayload,
   ListCheckListResponse,
   CheckListPayload,
+  ResponsePayload,
+  ResponseResponse,
+  ListResponsePayload,
 } from "typings/task";
 import { convertObToUrl } from "helpers";
 
@@ -16,6 +19,21 @@ const TaskRepository = {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
     );
+    return data;
+  },
+
+  async taskInfo(taskID: string): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
+        taskID,
+        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountResponseMarked",
+        populates: JSON.stringify({
+          path: "group author assignee related parent project approver",
+          select: "_id name fullname image sign",
+        }),
+      })}`
+    );
+
     return data;
   },
 
@@ -48,19 +66,32 @@ const TaskRepository = {
     return data;
   },
 
-  async taskInfo(taskID: string): Promise<any> {
-    const { data } = await API.get<any>(
-      `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        taskID,
-        select:
-          "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments",
-        populates: JSON.stringify({
-          path: "group author assignee related parent project approver",
-          select: "_id name fullname image sign",
-        }),
-      })}`
+  async addResponse(
+    payload: ResponsePayload
+  ): Promise<ResponseResponse> {
+    const { data } = await API.post<ResponseResponse>(
+      `${pcmURL}/pcm_plan_task_comments`,
+      payload
     );
+    return data;
+  },
 
+  async updateMarkResponse(
+    payload: { commentTemplateID: string, taskID: string, isMarked: boolean }
+  ): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_task_comments`,
+      payload
+    );
+    return data;
+  },
+
+  async listResponse(
+    payload: ListResponsePayload
+  ): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_task_comments?${convertObToUrl(payload)}`
+    );
     return data;
   },
 };

@@ -47,7 +47,6 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleClickImage = (index: number) => {
-		console.log(comment)
 		onClickImage?.(index, images, comment._id)
 	}
 

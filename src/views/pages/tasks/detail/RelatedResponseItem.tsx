@@ -1,4 +1,6 @@
-import { FC } from "react";
+import React, { FC } from "react";
+import moment from "moment";
+import { useMutation } from "react-query";
 
 import HumanAvatar from "assets/images/human-avatar.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
@@ -6,32 +8,48 @@ import PDFIcon from "assets/images/icons8-pdf-48 1.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import IconDownload from "assets/images/icons8-download-48_3.svg";
 import TestImage from "assets/images/home-slide-img1.jpg";
+import { ResponseProps } from "typings/task";
+import TaskRepository from "apis/task";
 
 type Props = {
   expanded?: boolean;
   showImageTest?: boolean;
+  response: ResponseProps
 };
 
-const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) => {
+  const { mutateAsync: updateMarkResponseAsync } =
+    useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
+      TaskRepository.updateMarkResponse(payload)
+    );
+
+  const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await updateMarkResponseAsync({
+      commentTemplateID: response._id,
+      taskID: response.task,
+      isMarked: e.target.checked
+    })
+  }
+
   return (
     <>
       <div className="flex">
-        <img src={HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
+        <img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
         <div className="w-full ml-5">
           <div className="flex justify-between">
             <div>
-              <p className="text-[14px]">Vũ Thanh Bình-CPMI</p>
+              <p className="text-[14px]">{response.userCreate.bizfullname}</p>
               {expanded && (
                 <p className="text-[13px] text-primary-gray pb-5">
-                  Giám đốc Tư vấn Quản lý dự án
+                  {response.userCreate?.position?.name}
                 </p>
               )}
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-[13px] text-primary-gray">
-                15:30 22/12/2012 (1 day ago)
+                {moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
               </span>
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked={response.isMarked} onChange={handleMarkChange} />
               <button
                 className={`${
                   expanded ? "h-10 bg-lighter-gray" : "pl-3"
@@ -45,9 +63,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest }) => {
           {/* Content */}
           <div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
             <span className="text-[13px]">
-              Dear @Tô Duy Cảnh-CDC,
-              <br /> Em thêm Mr.Phan Châu Tín-ARMO và Mr. Nguyễn Mạnh Hùng-ARMO
-              vào mục người liên quan của đầu việc này để nắm thông tin nhé.
+              {response.comment.content}
             </span>
           </div>
 
@@ -133,6 +149,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest }) => {
 
 RelatedResponseItem.defaultProps = {
   expanded: true,
-  showImageTest: false,
+  showImageTest: true,
 };
+
 export default RelatedResponseItem;
