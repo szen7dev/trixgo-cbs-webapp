@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { ThunkAction, Action } from "@reduxjs/toolkit";
 
 import Store from "data/store";
+import {ItemMessage} from "./apis/messages/listMessage";
 
 export type AppDispatch = typeof Store.dispatch;
 export type RootState = ReturnType<typeof Store.getState>;

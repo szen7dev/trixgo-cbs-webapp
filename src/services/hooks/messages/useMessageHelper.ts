@@ -9,7 +9,7 @@ type UseMessageHelperType = {
 export const UseMessageHelper = () : UseMessageHelperType => {
     const {createConversation} = UseListConversation();
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
-    const socket = socketRef.current;
+    const socket = socketRef?.current;
 
     const handleStartPrivateChat = (memberId: string) => {
         createConversation({
