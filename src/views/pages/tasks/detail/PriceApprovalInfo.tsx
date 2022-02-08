@@ -1,6 +1,6 @@
 import { FC } from "react";
 import moment from "moment";
-import { User } from "typings/task";
+import { User } from "typings/user";
 
 type Props = {
   valueApproved: number;

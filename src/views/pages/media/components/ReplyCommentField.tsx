@@ -251,4 +251,4 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	)
 }
 
-export default ReplyCommentField
+export default ReplyCommentField;

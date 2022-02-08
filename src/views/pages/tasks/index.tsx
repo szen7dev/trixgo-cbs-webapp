@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Menu } from '@headlessui/react';
-import {NavLink, useParams} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import caretDown from "assets/images/icon-caret-down.png";
 import iconLabels from "assets/images/icon-labels.png";
