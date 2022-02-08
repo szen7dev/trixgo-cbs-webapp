@@ -72,7 +72,11 @@ module.exports = {
                 "cbs-nav-text": "#00B9F2",
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
-								"cbs-indeterminate": "#F7AF22"
+								"cbs-indeterminate": "#F7AF22",
+
+								"cbs-purple": "#9B59B6",
+								"cbs-red": "#FF4242",
+								"cbs-green": "#008000",
             },
             fontSize: {
                 "[13px]": "13px",

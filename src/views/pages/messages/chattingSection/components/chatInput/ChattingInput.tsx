@@ -16,7 +16,7 @@ import {convertToRaw, EditorState, ContentState} from "draft-js";
 import {
     MentionData,
 } from '@draft-js-plugins/mention';
-import {modifyUploadedFilesV2} from "../../../../media/context/upload.utils";
+import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 
 export const ChattingInputContext = createContext<{

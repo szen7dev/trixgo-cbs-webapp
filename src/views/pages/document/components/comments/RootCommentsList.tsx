@@ -21,7 +21,7 @@ type Props = {
 const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
 }) => {
-	const { state, setComment,viewMoreComments } = useContext(CommentContext);
+	const { state, setComment, viewMoreComments } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 
 	useEffect(() => {
@@ -37,7 +37,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		setAmountComment(amountComment - limit);
 
 		if (!error && data.listRecords.length) {
-			viewMoreComments(data.listRecords)
+			// viewMoreComments(data.listRecords)
 		}
 	}
 

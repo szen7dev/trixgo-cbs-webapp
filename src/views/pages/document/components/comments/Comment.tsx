@@ -3,13 +3,9 @@ import { FC, HTMLAttributes, useContext } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-// import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import PostFile from './PostFile';
 import { CommentProps } from 'typings/common';
-// import CommentContext from '../context/comment/comment.context';
 import { useCommentSocial } from 'services/hooks/useSocial';
-// import { FileProps } from 'typings/social';
-// import generateImageLink from '../utils/images';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,

@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Chart as ChartJS,
-  BubbleDataPoint,
-  ChartTypeRegistry,
-  ScatterDataPoint,
+  Chart,
+  Plugin,
 } from "chart.js";
-
-type IChart = ChartJS<
-  keyof ChartTypeRegistry,
-  (number | ScatterDataPoint | BubbleDataPoint | null)[],
-  unknown
->;
+import { AnyObject } from "chart.js/types/basic";
 
 export const optionsOne = {
   cutout: 55,
@@ -22,11 +15,36 @@ function getPlugins(
   title: string,
   subtitle: string,
   options?: { titleSize?: number; subtitleSize?: number; bold?: boolean }
-): any[] {
+): Plugin<"doughnut", AnyObject>[] {
   return [
     {
       id: "beforeDraw",
-      beforeDraw(chart: IChart): void {
+      // beforeDraw(chart): void {
+      //   const width = chart.width,
+      //     height = chart.height,
+      //     ctx = chart.ctx;
+
+      //   ctx.restore();
+      //   ctx.font =
+      //     (options?.bold ? "bold " : "") +
+      //     (options?.titleSize || 30) +
+      //     "px Arial";
+
+      //   ctx.textBaseline = "middle";
+
+      //   ctx.fillStyle = "black";
+      //   ctx.fillText(title, width / 2, height / 2);
+
+      //   const theCenterText = subtitle;
+      //   ctx.textBaseline = "middle";
+      //   ctx.textAlign = "center";
+      //   ctx.font = (options?.subtitleSize || 15) + "px Arial";
+      //   ctx.fillStyle = "rgba(121, 130, 149, 1)";
+
+      //   ctx.fillText(theCenterText, width / 2, height / 2 + 20);
+      //   ctx.save();
+      // }
+      afterDraw(chart) {
         const width = chart.width,
           height = chart.height,
           ctx = chart.ctx;
@@ -38,9 +56,15 @@ function getPlugins(
           "px Arial";
 
         ctx.textBaseline = "middle";
-
         ctx.fillStyle = "black";
-        ctx.fillText(title, width / 2, height / 2);
+        ctx.fillText(
+          (chart as any)._metasets.reduce(
+            (pre: number, next: any) => pre + next.total,
+            0
+          ),
+          width / 2,
+          height / 2
+        );
 
         const theCenterText = subtitle;
         ctx.textBaseline = "middle";
@@ -59,7 +83,7 @@ export const _data = {
   datasets: [
     {
       label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
+      data: [],
       backgroundColor: [
         "rgba(44, 134, 237, 1)",
         "rgba(255, 165, 0, 1)",
@@ -78,11 +102,7 @@ export const _dataTwo = {
     {
       label: "# of Votes",
       data: [60, 180, 120],
-      backgroundColor: [
-        "#00CA99",
-        "#FF9900",
-        "#F55F5F",
-      ],
+      backgroundColor: ["#00CA99", "#FF9900", "#F55F5F"],
       borderWidth: 0,
     },
   ],
