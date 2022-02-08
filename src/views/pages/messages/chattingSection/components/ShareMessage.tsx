@@ -30,7 +30,11 @@ const ShareMessage:FC = () => {
 
     const handleAddConversation = (conversation: ItemListConversation) => {
         const selected = {...selectedConversations};
-        selected[conversation._id] = conversation;
+        if (Object.keys(selected).includes(conversation._id)) {
+            delete selected[conversation._id];
+        } else {
+            selected[conversation._id] = conversation;
+        }
         setSearchTerm("");
         setSelectedConversations(selected);
     };
