@@ -20,9 +20,18 @@ const SocketController:FC = () => {
         if (socket) {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
             socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+
+            socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+        }
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
@@ -65,6 +74,10 @@ const SocketController:FC = () => {
         setTimeout(() => {
             scrollToBottom();
         }, 100)
+    };
+
+    const onReceiveShareMessage = (data: any) => {
+        console.log(data)
     }
 
     const scrollToBottom = () => {

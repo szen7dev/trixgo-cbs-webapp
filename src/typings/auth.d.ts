@@ -36,6 +36,7 @@ export type SignInPayload = {
   email: string;
   password: string;
   platform: string;
+  domain: string;
 };
 
 export type SignInResponse = APIResponse & {
