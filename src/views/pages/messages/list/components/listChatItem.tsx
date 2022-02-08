@@ -33,7 +33,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
         }
 
         return chat?.name;
-    }, [chat._id]);
+    }, [chat.members.length]);
 
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
@@ -51,12 +51,12 @@ const ListChatItem:FC<Props> = ({chat}) => {
             });
         }
         return avatars;
-    }, [chat._id]);
+    }, [chat.members.length]);
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
-    }, [chat._id])
+    }, [chat.usersMissMessage])
 
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
@@ -95,7 +95,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
         }
         return "[Thông báo]";
-    }, [chat, currentChat])
+    }, [chat.lastMessage])
 
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
@@ -108,13 +108,13 @@ const ListChatItem:FC<Props> = ({chat}) => {
         } else {
             return date.format("DD/MM/YYYY")
         }
-    },[chat._id]);
+    },[chat.modifyAt]);
 
     const getSenderName = useCallback(() => {
         if (chat.lastMessage.sender._id === profileId) {
             return "Bạn";
         } else return chat.lastMessage.sender.fullname;
-    },[chat._id])
+    },[chat.lastMessage])
 
     return (
         <RightClickMenuWrapper

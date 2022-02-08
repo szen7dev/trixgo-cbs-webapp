@@ -7,7 +7,7 @@ import {
 } from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../index_v2";
 import {useDispatch} from "react-redux";
-import {setListConversation} from "redux/reducer/messages/ListConversation";
+import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
 
 const SocketController:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -80,10 +80,12 @@ const SocketController:FC = () => {
     };
 
     const onReceiveShareMessage = (data: any) => {
-        console.log(data.data)
         dispatch(setShareMessage({
-            conversationId: data.data.infoConversation,
+            conversationId: data.data.infoConversation._id,
             messagesShare: data.data.listMessagesShared
+        }));
+        dispatch(updateSingleConversation({
+            conversationData: data.data.infoConversation
         }))
     }
 
