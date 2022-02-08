@@ -50,7 +50,6 @@ const ShareMessage:FC = () => {
             conversationsID: Object.keys(selectedConversations),
             messagesID: Object.keys(shareMessage)
         });
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION');
         setSelectedConversations({});
         dispatch(dismissShare({}));
     };
