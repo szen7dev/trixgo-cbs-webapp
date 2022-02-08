@@ -233,6 +233,20 @@ const listMessageSlice = createSlice({
                 ...state.data,
                 replyMessage: newReplyMessage
             }
+        },
+        setShareMessage (state, action) {
+            const newMessage = {...state.data.listMessage[action.payload.conversationId]};
+            action.payload.messagesShare.forEach((message: ItemMessage) => {
+                newMessage[message._id] = message;
+            });
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: newMessage
+                }
+            }
         }
     },
     extraReducers: {}
@@ -251,6 +265,7 @@ export const {
     setListMedias,
     updateReminderData,
     setReplyMessage,
-    removeReplyMessage
+    removeReplyMessage,
+    setShareMessage
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
