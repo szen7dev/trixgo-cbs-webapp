@@ -1,23 +1,23 @@
 import React, {createContext, FC, useCallback, useContext, useEffect, useMemo, useState} from "react";
-import IconButton from "./IconButton";
 import IconAttach from "./IconAttach";
 import InputForMessage from "./Input";
 import IconSendMessage from "assets/images/icons8-email-send-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {MessageContext} from "../../../home/index_v2";
-import {map as _map} from "lodash";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {v4 as uuidv4} from "uuid";
-import {appendMessageToConversation, updateNewMessageToConversation, appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
-import {useDispatch} from "react-redux";
+import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {useDispatch, useSelector} from "react-redux";
 import {useUpload} from "services/hooks/useUpload";
 import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
-import {convertToRaw, EditorState, ContentState} from "draft-js";
+import {convertToRaw, EditorState} from "draft-js";
 import {
     MentionData,
 } from '@draft-js-plugins/mention';
 import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import ReplyChat from "./replyChat";
+import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
+import {RootState} from "../../../../../../redux/reducer";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -45,17 +45,23 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const [doneUpload, setDoneUpload] = useState<{_id: string; progress: number;}[]>([]);
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const [realValue, setRealValue] = useState("");
-    const [suggestions, setSuggestions] = useState<MentionData[]>(chat.members.map(member=> {
-        return {
-            name: member.fullname,
-            _id: member._id,
-            avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-        }
-    }))
 
-    const [editorState, setEditorState] = React.useState(
+    const suggestionsData = useCallback(() => {
+        return chat.members.map(member=> {
+            return {
+                name: member.fullname,
+                _id: member._id,
+                avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
+            }
+        });
+    },[chat])
+
+    const [suggestions, setSuggestions] = useState<MentionData[]>(suggestionsData());
+
+    const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     );
+    const replyData =  useSelector((state: RootState) => state.listMessage.data.replyMessage[currentChat]);
 
     const onChangeCallback = useCallback((editorState) => {
         setEditorState(editorState);
@@ -107,18 +113,20 @@ const ChattingInput:FC<Props> = ({chat}) => {
             usersTag: usersTag,
             createAt: new Date(),
         };
-        // dispatch(appendMessageToConversation({
         dispatch(appendFakeMessageToConversation({
             conversationId: conversationID,
             messageId: message.tmpid,
             messageData: {
                 ...message,
-                _id: message.tmpid
+                _id: message.tmpid,
+                parent: replyData
             }
         }));
         setTimeout(() => {
             scrollToBottom();
         }, 100)
+        message['parentID'] = replyData?replyData._id:"";
+        dispatch(removeReplyMessage({conversationId: currentChat}));
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
     }
@@ -171,13 +179,13 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 progress: file.progress
             }
         }))
-        // dispatch(appendMessageToConversation({
         dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
             messageData: {
                 ...message,
-                _id: message.tmpid
+                _id: message.tmpid,
+                parent: replyData
             }
         }));
         setTimeout(() => {
@@ -215,9 +223,11 @@ const ChattingInput:FC<Props> = ({chat}) => {
         sendMessage = {
             ...sendMessage,
             // _id: sendMessage.tmpid,
-            files: sendFiles
+            files: sendFiles,
         }
+        sendMessage['parentID'] = replyData?replyData._id:"";
         setWillSendFileMessage(sendMessage);
+        dispatch(removeReplyMessage({conversationId: currentChat}));
     }
 
     useEffect(() => {
@@ -247,31 +257,47 @@ const ChattingInput:FC<Props> = ({chat}) => {
         return html;
     }
 
+    useEffect(() => {
+        const dropZone = document.getElementById("chatting-section");
+        if (dropZone) {
+            dropZone.addEventListener('dragover', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            // Get file data on drop
+            dropZone.addEventListener('drop', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                if (e.dataTransfer&&currentChat) {
+                    handleSetFiles(e.dataTransfer.files);
+                }
+            });
+        }
+    },[])
+
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
                 <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
-                    <div className={"flex-1 message-input rounded-md bg-white flex items-end relative"}>
+                    <div className={"flex-1 message-input rounded-md bg-white flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
-                        <InputForMessage
-                            onPasteFiles={(files) => handleSetFiles(files)}
-                            onPressEnter={() => handleSendMessage()}
-                            mentions={chat.members.map(member=> {
-                                return {
-                                    name: member.fullname,
-                                    _id: member._id,
-                                    avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-                                }
-                            })}
-                        />
-                        <IconAttach
-                            handleUploadFiles={(files) => handleSetFiles(files)}
-                        />
+                        <ReplyChat replyData={replyData}/>
+                        <div className={"flex w-full"}>
+                            <InputForMessage
+                                onPasteFiles={(files) => handleSetFiles(files)}
+                                onPressEnter={() => handleSendMessage()}
+                                mentions={suggestionsData()}
+                            />
+                            <IconAttach
+                                handleUploadFiles={(files) => handleSetFiles(files)}
+                            />
+                        </div>
                     </div>
                     <button
                         onClick={() => handleSendMessage()}
                         className={"w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
-                        <LazyLoadImage effect="blur" src={IconSendMessage} alt={"send message"}/>
+                        <img  src={IconSendMessage} alt={"send message"}/>
                     </button>
                 </div>
             </div>

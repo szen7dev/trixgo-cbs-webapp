@@ -5,6 +5,7 @@ import {
   ListTaskResponse,
   ListCheckListPayload,
   ListCheckListResponse,
+  CheckListPayload,
 } from "typings/task";
 import { convertObToUrl } from "helpers";
 
@@ -14,6 +15,26 @@ const TaskRepository = {
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
+
+  async addChecklist(
+    payload: CheckListPayload
+  ): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
+  async updateChecklist(
+    payload: CheckListPayload
+  ): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
     );
     return data;
   },

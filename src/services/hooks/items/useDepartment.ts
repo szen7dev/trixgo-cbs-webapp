@@ -17,7 +17,7 @@ interface UseQueryListDepartment {
 
 export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepartment => {
     const res = useInfiniteQuery(
-        [`items.department.${params?.keyword}`, params?.limit],
+        [`items.department`, {params}],
         async ({ pageParam }: any) =>
             DepartmentRepository.fetchListDepartment({
                 limit: params?.limit || 10,
@@ -25,6 +25,7 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
                 type: 1,
                 keyword: params?.keyword || '',
                 select: params?.select || '',
+                ...params,
             }),
         {
             getNextPageParam: ({ data }: any) => {

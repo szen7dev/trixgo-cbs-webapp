@@ -2,39 +2,19 @@ import React, {FC, useContext} from "react";
 import DotsHorizontalGrayIcon from "assets/icons/DotsHorizontalGray";
 import RemoveIcon from "assets/images/icons8-remove-100.svg";
 import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
-import {LazyLoadImage} from "react-lazy-load-image-component";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../home/index_v2";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     user: any,
     index: number
 }
 const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
-    const {createConversation} = UseListConversation();
-    const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
-    const socket = socketRef.current;
-
-    const handleStartPrivateChat = (memberId: string) => {
-        createConversation({
-            name: "",
-            description: "",
-            isPrivate: true,
-            membersID: [memberId]
-        }).then(data => {
-            console.log(data)
-            if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
-            setCurrentChat(data._id);
-            window.location.hash = `#${data._id}`
-        });
-    }
+    const {handleStartPrivateChat} = UseMessageHelper();
     return (
         <div
-            className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item"}>
-            <LazyLoadImage
+            className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>
+            <img
                 onClick={() => handleStartPrivateChat(user._id)}
-                effect="blur"
                 className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
                 src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.fullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
@@ -51,10 +31,10 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
 
                 <div className={"action-menu-button absolute z-10 top-30px right-1 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 opacity-0 invisible transition duration-500"}>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                        <LazyLoadImage effect="blur" src={RemoveIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Remove</div>
+                        <img  src={RemoveIcon} alt={"bookmark"}/><div className={"flex-1 text-left ml-4"}>Remove</div>
                     </button>
                     <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
-                        <LazyLoadImage effect="blur" src={AddAdminIcon} alt={"add folder"}/><div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
+                        <img  src={AddAdminIcon} alt={"add folder"}/><div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
                     </button>
                 </div>
             </div>

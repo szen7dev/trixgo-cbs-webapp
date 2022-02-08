@@ -67,6 +67,27 @@ export type ImageProps = {
   size: number;
 };
 
+export type ReactionProps = {
+  _id: number | string;
+  reaction: {
+    type: number
+  };
+  userCreate: {
+    _id: string,
+    fullname: string,
+    bizfullname: string,
+    image: string
+  };
+};
+
+export type ListReactionPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
+};
+
 export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
@@ -78,14 +99,6 @@ export type ListMediasPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-};
-
-export type ListMediasResponse = APIResponse & {
-  data: {
-    listRecords: Array<any>;
-    totalRecord: number;
-    totalPages?: number;
-  };
 };
 
 export type MediaProps = {
@@ -182,4 +195,12 @@ export type CommentPayload = {
   content: string;
   files?: string[];
   images?: string[];
+};
+
+export type ListResponse = APIResponse & {
+  data: {
+    listRecords: Array<any>;
+    totalRecord: number;
+    totalPages?: number;
+  };
 };

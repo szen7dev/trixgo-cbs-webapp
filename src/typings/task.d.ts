@@ -13,6 +13,7 @@ export type User = {
   _id: string;
   image: string;
   fullname: string;
+  bizfullname: string
 };
 
 export type Assignee = User;
@@ -66,6 +67,15 @@ export type CheckList = {
   assignee: Assignee;
 };
 
+export type CheckListPayload = {
+  taskID?: string;
+  name: string;
+  description: string;
+  expiredTime: string;
+  type: number;
+  assignee: string;
+};
+
 export type ListCheckListPayload = {
   lastestID?: string;
   limit?: number;
@@ -73,6 +83,7 @@ export type ListCheckListPayload = {
   select?: string;
   type?: numer;
   typeStatus?: number;
+  isSortChecklist: number;
   parentID?: string;
 };
 

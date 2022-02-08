@@ -7,17 +7,18 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 type Props = {
-    message:any;
+    message: ItemMessage;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
+const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -56,7 +57,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
             <div
                 onClick={() => setModalShowImage({show: true, index: index})}
                 key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
-                <LazyLoadImage effect="blur" wrapperClassName={"w-full h-full"} className={"w-full h-full object-cover " + classNameMap[index]["img"]} src={image.file.file.url} alt={"image"}/>
+                <img className={"w-full h-full object-cover " + classNameMap[index]["img"]} src={image.file.file.url} alt={"image"}/>
                 {
                     (index === 4 &&message.files.length > 5) &&
                     <div className={"absolute w-full h-full bg-black bg-opacity-40 bottom-0 right-0 flex items-center justify-center text-xl text-white"}>
@@ -87,7 +88,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
     }
 
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg relative " + (className??"")}>
+        <div className={"max-w-[366px] min-w-[70px] rounded-lg relative overflow-hidden " + (className??"")}>
             {
                 message.parent&&
                 renderReply()
@@ -95,12 +96,12 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName}) => {
             <div className={"flex flex-wrap bg-white"}>
                 {renderImageDisplay()}
             </div>
-            <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-gray-500 text-xs flex items-center px-[4px] rounded-full"}>
-                {moment(message.createAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+            <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-xs flex items-center px-[4px] rounded-full "  + (isMyMessage?"text-primary":"text-gray-500")}>
+                {moment(message.createAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                 <div className="flex overflow-hidden transition-all transform w-full h-full">
-                    <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} images={message.files} index={modalShowImage.index} />
+                    <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => file.file.file.url)} index={modalShowImage.index} />
                 </div>
             </ModalFullContainer>
         </div>

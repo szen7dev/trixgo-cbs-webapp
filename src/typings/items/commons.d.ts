@@ -22,3 +22,9 @@ export interface Company {
     sign?: string;
     _id?: string;
 }
+
+export interface Human {
+    _id: string;
+    fullname?: string;
+    image?: string;
+}

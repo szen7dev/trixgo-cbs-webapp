@@ -2,16 +2,18 @@ import React, {FC, useRef} from "react";
 import TextChatContent from "./chatContent/textContent";
 import FileChatContent from "./chatContent/fileContent";
 import ImagesContent from "./chatContent/imageContent";
-import RightClickMenu from "components/common/RightClickMenu";
-import RightClickMessage from "./RightClickMessage";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
+import RightClickMessage from "./RightClickMessage";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     message: ItemMessage;
 }
 
 const OthersMessage:FC<Props> = ({message}) => {
-    const messageRef = useRef<HTMLDivElement>(null);
+    const {handleStartPrivateChat} = UseMessageHelper();
+
     const renderMessageContent = () => {
         switch (message.type) {
             case 0:
@@ -23,12 +25,15 @@ const OthersMessage:FC<Props> = ({message}) => {
         }
     }
     return (
-        <div ref={messageRef} className={"flex justify-start items-end mb-2 transition duration-500"}>
-            <div className={"avt-user w-[34px] h-[34px] rounded-full overflow-hidden mr-[5px]"}>
+        <div className={"flex justify-start items-end mb-2 transition duration-500"}>
+            <div
+                onClick={() => handleStartPrivateChat(message.sender._id)}
+                className={"avt-user w-[34px] h-[34px] rounded-full overflow-hidden mr-[5px] cursor-pointer"}>
                 <img src={`${process.env.REACT_APP_URL_S3_USER}/${message.sender.image}`} alt={message.userName}/>
             </div>
-            {renderMessageContent()}
-            <RightClickMenu wrapperRef={messageRef} menu={<RightClickMessage/>}/>
+            <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>}>
+                {renderMessageContent()}
+            </RightClickMenuWrapper>
         </div>
     )
 }

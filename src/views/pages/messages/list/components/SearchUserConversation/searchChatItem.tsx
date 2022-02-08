@@ -1,25 +1,22 @@
 import React, {FC, useCallback, useContext, useRef} from "react";
 import { NavLink } from "react-router-dom";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import moment from "moment";
-import {LazyLoadImage} from "react-lazy-load-image-component";
-import {MessageContext} from "../../../home/index_v2";
 import AvatarGroupChat from "../AvatarGroupChat";
-import {SearchUserAndConversationContext} from "../SearchUserAndConversation";
+import SavedMessage from "assets/images/saved-messages.svg";
 
 type Props = {
-    chat: ItemListConversation
+    chat: ItemListConversation;
+    itemClickAction: (chat: ItemListConversation) => void;
+    avatarClassname?: string;
+    avatarClassnameMap?: any;
 }
-const SearchChatItem:FC<Props> = ({chat}) => {
-    const {setCurrentChat} = useContext(MessageContext);
-    const {setShowSearch} = useContext(SearchUserAndConversationContext);
-
+const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avatarClassnameMap}) => {
     const wrapperRef = useRef(null);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
     const getPresentGroupName = (name: string) => {
-        return name.split(' ').slice(0, 2).map((text: string) => {
+        return name.split('').slice(0, 1).map((text: string) => {
             return text.charAt(0)
         });
     }
@@ -39,7 +36,7 @@ const SearchChatItem:FC<Props> = ({chat}) => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
@@ -54,29 +51,28 @@ const SearchChatItem:FC<Props> = ({chat}) => {
         return avatars;
     }, [chat, profileId]);
 
-    const handleSelectChat = (_id: string) => {
-        setCurrentChat(_id);
-        setShowSearch(false)
+    const handleSelectChat = (chat: ItemListConversation) => {
+        itemClickAction(chat)
     }
 
     return (
         <NavLink
-            onClick={() => handleSelectChat(chat._id)}
+            onClick={() => handleSelectChat(chat)}
             ref={wrapperRef}
             to={`#${chat._id}`}
-            className={"group flex p-[10px] focus:bg-primary active:bg-primary cursor-pointer rounded-md hover:bg-gray-100"}>
+            className={"group flex p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
-                    <LazyLoadImage effect="blur" className={"w-[56px] h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px]")} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                     (
                         getAvatarMembers().length === 0 ?
-                        <div className={"w-[56px] h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
+                        <div className={"rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px] " + (avatarClassname??"w-[56px] h-[56px]")} style={{background: "#8DD4D6"}}>
                             {getPresentGroupName(getNameConversation())}
                         </div> :
                         <AvatarGroupChat
                             avatars={getAvatarMembers()}
-                            imageClass={"w-[56px] h-[56px]"}
-                            classesMap={{
+                            imageClass={avatarClassname??"w-[56px] h-[56px]"}
+                            classesMap={avatarClassnameMap??{
                                 "group_1": {
                                     imgWidth: "w-full h-full",
                                     groupPosition: [""]
@@ -116,7 +112,7 @@ const SearchChatItem:FC<Props> = ({chat}) => {
                 {
                     chat.members.length > 2 ?
                     <div className={"flex mt-1"}>
-                        <div className={"flex-1 w-[250px] font-xs text-gray-400"}>{chat.members.length} thành viên</div>
+                        <div className={"flex-1 w-[250px] font-xs text-gray-500"}>{chat.members.length} thành viên</div>
                     </div>:
                     <div className={"flex mt-1 h-[22px]"}/>
                 }

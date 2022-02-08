@@ -1,12 +1,23 @@
-import React, {FC, ReactNode} from "react";
+import React, {FC, ReactNode, useCallback, useContext} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
 import {useAuth} from "services/hooks/useAuth";
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {MessageContext} from "../../home/index_v2";
+import {updateReminderData} from "redux/reducer/messages/ListMessage";
+import {useDispatch} from "react-redux";
 type Props = {
     message: ItemMessage;
 }
 const Reminder:FC<Props> = ({message}) => {
-    const {user} = useAuth();
+    const {updateReminder} = UseConversation();
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
+    const dispatch = useDispatch();
+
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const getRepeatText = () => {
         switch (message.reminder.repeat) {
             case "once":
@@ -21,12 +32,29 @@ const Reminder:FC<Props> = ({message}) => {
                 return "Hàng năm";
         }
     };
-    const checkUserAccept = () => {
+    const checkUserAccept = useCallback(() => {
         const userAcceptStatus = [...message.reminder.accepts,...message.reminder.rejects];
         return {
-            didTakeAction: userAcceptStatus.includes(user?._id),
-            didAccept: message.reminder.accepts.includes(user?._id)&&!message.reminder.rejects.includes(user?._id)
+            didTakeAction: userAcceptStatus.includes(profileId),
+            didAccept: message.reminder.accepts.includes(profileId)&&!message.reminder.rejects.includes(profileId)
         }
+    }, [message]);
+
+    const reminderAction = (isJoin: boolean) => {
+        const reminderData = {...message.reminder};
+        if (isJoin) {
+            reminderData.accepts =  [...reminderData.accepts, profileId];
+        } else {
+            reminderData.rejects = [...reminderData.rejects, profileId];
+        }
+        dispatch(updateReminderData({
+            conversationId: message.conversation,
+            messageId: message._id,
+            reminderData: reminderData
+        }));
+        updateReminder({conversationID: message.conversation, messageID: message._id, isJoin: isJoin}).then((data) => {
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
+        });
     }
     return (
         <div className={"reminder-center flex flex-col items-center justify-center mb-2"}>
@@ -68,10 +96,14 @@ const Reminder:FC<Props> = ({message}) => {
                 {
                     (!checkUserAccept().didTakeAction)?
                     <div className={"flex"}>
-                        <button className={"flex-1 text-negative py-2"}>
+                        <button
+                            onClick={() => reminderAction(false)}
+                            className={"flex-1 text-negative py-2"}>
                             Từ chổi
                         </button>
-                        <button className={"flex-1 text-primary py-2"}>
+                        <button
+                            onClick={() => reminderAction(true)}
+                            className={"flex-1 text-primary py-2"}>
                             Xác nhận
                         </button>
                     </div>:

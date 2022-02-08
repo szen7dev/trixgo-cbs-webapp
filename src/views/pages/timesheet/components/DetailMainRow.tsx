@@ -1,13 +1,13 @@
-import { FC, useRef } from "react";
+import React, { FC, useRef } from "react";
 import { map as _map } from "lodash";
 
 import Loader from "components/shared/Loader";
-import RightClickMenu from "components/common/RightClickMenu";
 import MenuMainRow from "../../financial/planning/components/FinancialCashFlowDetail/MenuMainRow";
 import CollapseButton from "./CollapseButton";
 import DetailChildRow from "./DetailChildRow";
 
 import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 
 type Props = {
   timeSheetParentInfo?: TimeSheetParent;
@@ -22,16 +22,14 @@ const DetailMainRow: FC<Props> = ({
   onUpdatedTimeSheetChild,
   isFetchTimeSheetChild,
 }) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
   if (isFetchTimeSheetChild) {
     return <Loader className="border-primary" />;
   }
 
   return (
     <>
-      <div
-        ref={wrapperRef}
+      <RightClickMenuWrapper
+          contextMenu={<MenuMainRow />}
         className={
           "row table-row font-semibold main-row " + "not-collapsed"
           // (rowData.collapsed ? "collapsed " : "not-collapsed")
@@ -110,8 +108,7 @@ const DetailMainRow: FC<Props> = ({
             "p-2 table-cell box-border border border-gray-300 align-middle bg-blue-100 w-4/12"
           }
         ></div>
-        <RightClickMenu wrapperRef={wrapperRef} menu={<MenuMainRow />} />
-      </div>
+      </RightClickMenuWrapper>
       {_map(listTimeSheetChild, (childRow, index) => (
         <DetailChildRow
           key={childRow._id}

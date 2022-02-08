@@ -8,7 +8,8 @@ import {MessageContext} from "../home/index_v2";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+import SavedMessage from "assets/images/saved-messages.svg";
+
 const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
 
@@ -20,7 +21,7 @@ const SettingMessageDetail:FC = () => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
@@ -48,7 +49,7 @@ const SettingMessageDetail:FC = () => {
     }, [chat, profileId]);
 
     const getPresentGroupName = (name: string) => {
-        return name.split(' ').slice(0, 1).map((text: string) => {
+        return name.split('').slice(0, 1).map((text: string) => {
             return text.charAt(0).toUpperCase()
         });
     }
@@ -67,13 +68,13 @@ const SettingMessageDetail:FC = () => {
                         <Close/>
                     </button>
                     <button>
-                        <LazyLoadImage effect="blur" src={PencilIcon} alt={'--'}/>
+                        <img  src={PencilIcon} alt={'--'}/>
                     </button>
                 </div>
                 <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
                     {
                         chat.avatar?
-                            <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                            <img  className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                             (
                                 getAvatarMembers().length === 0 ?
                                     <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -125,7 +126,7 @@ const SettingMessageDetail:FC = () => {
                     </div>
                 </div>
                 <div className={"flex justify-between items-center p-[17px] bg-white"}>
-                    <LazyLoadImage effect="blur" src={BellIcon} alt={"...."}/>
+                    <img  src={BellIcon} alt={"...."}/>
                     <div className={"flex-1 text-left ml-4"}>Notifications</div>
                     <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
                 </div>
@@ -133,7 +134,7 @@ const SettingMessageDetail:FC = () => {
                 <SettingMessageDetailTab/>
             </div>
             <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
-                <LazyLoadImage effect="blur" src={AddUserToGroup} alt={"Pencil icon"}/>
+                <img  src={AddUserToGroup} alt={"Pencil icon"}/>
             </button>
         </div>
     )

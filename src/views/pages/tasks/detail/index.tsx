@@ -39,7 +39,7 @@ const TaskDetailPage: FC = () => {
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
-  const { data, isLoading } = useQuery(`task_info.${id}`, () =>
+  const { data: infoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
   );
   const { listCheckList, totalRecord, nextPageListCheckList } =
@@ -57,18 +57,18 @@ const TaskDetailPage: FC = () => {
   };
 
   useEffect(() => {
-    if (data?.data) {
-      setPercentComplete(`${data.data.percentage}%`);
+    if (infoTask?.data) {
+      setPercentComplete(`${infoTask.data.percentage}%`);
     }
-  }, [data]);
+  }, [infoTask]);
 
   useEffect(() => {
-    if (data?.data) {
-      setConfirmUsers([data.data.author, data.data.assignee]);
+    if (infoTask?.data) {
+      setConfirmUsers([infoTask.data.author, infoTask.data.assignee]);
     }
-  }, [data]);
+  }, [infoTask]);
 
-  if (isLoading) {
+  if (isLoading || !infoTask || !infoTask.data) {
     return <Loader className="border-primary" />;
   }
 
@@ -136,7 +136,7 @@ const TaskDetailPage: FC = () => {
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            {data?.data.name}
+            {infoTask.data.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -157,8 +157,8 @@ const TaskDetailPage: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {data?.data.project?.sign} {">"}{" "}
-                  {getGroupTitle(data?.data.group)}
+                  {infoTask.data.project?.sign} {">"}{" "}
+                  {getGroupTitle(infoTask.data.group)}
                 </span>
                 <div>
                   <img
@@ -168,7 +168,7 @@ const TaskDetailPage: FC = () => {
                   />
                 </div>
               </div>
-              {data.data?.parent && (
+              {infoTask.data.parent && (
                 <div className="flex items-end pr-2">
                   <img
                     className="w-6"
@@ -176,7 +176,7 @@ const TaskDetailPage: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    {`Việc cha: ${data.data.parent.name}`}
+                    {`Việc cha: ${infoTask.data.parent?.name}`}
                   </span>
                 </div>
               )}
@@ -186,10 +186,10 @@ const TaskDetailPage: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(data.data.expiredTime).format("DD/MM/YYYY")}
+                    {moment(infoTask.data.expiredTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(data.data.expiredTime).format("HH:mm")}
+                    {moment(infoTask.data.expiredTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
@@ -221,11 +221,11 @@ const TaskDetailPage: FC = () => {
                 >
                   {parse(
                     isTruncate
-                      ? _truncate(data?.data.description || "", { length: 300 })
-                      : data?.data.description || ""
+                      ? _truncate(infoTask.data.description || "", { length: 300 })
+                      : infoTask.data.description || ""
                   )}
                 </div>
-                {data?.data.description && (
+                {infoTask.data.description && (
                   <button onClick={() => setIsTruncate(!isTruncate)}>
                     <p className="text-[13px] text-primary mt-2.5 mb-4">
                       Xem thêm/Thu gọn
@@ -238,6 +238,7 @@ const TaskDetailPage: FC = () => {
             </div>
             <div className="mt-8 pr-3">
               <CheckList
+                task={infoTask.data}
                 data={listCheckList}
                 totalRecord={totalRecord}
                 onSeeMore={nextPageListCheckList}
@@ -245,8 +246,8 @@ const TaskDetailPage: FC = () => {
             </div>
             <div className="px-5 mt-5">
               <PriceApprovalInfo
-                timeApproved={data.data.timeApproved}
-                valueApproved={data.data.valueApproved}
+                timeApproved={infoTask.data.timeApproved}
+                valueApproved={infoTask.data.valueApproved}
               />
             </div>
             <div className="px-5 my-5">
@@ -257,10 +258,10 @@ const TaskDetailPage: FC = () => {
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
             <SideBar
-              author={data.data.author}
-              assignee={data.data.assignee}
-              createAt={data.data.createAt}
-              related={data.data.related}
+              author={infoTask.data.author}
+              assignee={infoTask.data.assignee}
+              createAt={infoTask.data.createAt}
+              related={infoTask.data.related}
               confirmUsers={confirmUsers}
             />
           </div>

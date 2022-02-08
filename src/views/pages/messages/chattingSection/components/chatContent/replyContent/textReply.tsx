@@ -1,9 +1,10 @@
 import React, {FC, useEffect, useRef} from "react";
 
 type Props = {
-    message: any
+    message: any;
+    className?: string;
 }
-const TextReply:FC<Props> = ({message}) => {
+const TextReply:FC<Props> = ({message, className}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -21,11 +22,11 @@ const TextReply:FC<Props> = ({message}) => {
         }
     },[textContentRef, message.content])
     return (
-        <div className={"reply-content border-l-2 border-primary pl-[7px]"}>
+        <div className={"reply-content border-l-2 border-primary pl-[7px] " + (className??"")}>
             <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
                 {message.sender.fullname}
             </div>
-            <div className={"truncate text-gray-400"} ref={textContentRef}>
+            <div className={"truncate text-gray-400 max-w-[500px]"} ref={textContentRef}>
             </div>
         </div>
     )

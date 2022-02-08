@@ -19,8 +19,19 @@ const SocketController:FC = () => {
     useEffect(() => {
         if (socket) {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+
+            socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+        }
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
@@ -47,11 +58,26 @@ const SocketController:FC = () => {
                 scrollToBottom();
             }, 100)
         }
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation });
+        // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation });
     };
 
     const onReceiveConversation = (data: any) => {
         dispatch(setListConversation(data.data.listRecords));
+    }
+
+    const onFireMessage = (data: any) => {
+        dispatch(appendMessageToConversation({
+            conversationId: data.data.conversation,
+            messageId: data.data._id,
+            messageData: data.data
+        }));
+        setTimeout(() => {
+            scrollToBottom();
+        }, 100)
+    };
+
+    const onReceiveShareMessage = (data: any) => {
+        console.log(data)
     }
 
     const scrollToBottom = () => {

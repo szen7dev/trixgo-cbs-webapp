@@ -64,12 +64,12 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
             [`list_conversations`, params?.keyword], // Key để phân biệt vùng tác động bởi data thay đổi
             async ({pageParam} : any) =>
                 ListConversationRepository.getListConversation({
-                    lastestID: pageParam,
+                    lastestID: pageParam||"",
                     ...params
                 }),
             {
                 getNextPageParam: ({data} : any) => {
-                    return data.nextCursor || undefined;
+                    return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
                 enabled: true, // https://react-query.tanstack.com/guides/disabling-queries

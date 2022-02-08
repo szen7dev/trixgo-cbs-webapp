@@ -1,4 +1,4 @@
-import type { QueryParam, Company } from './commons';
+import type { QueryParam, Company, Human } from './commons';
 
 export type Department = {
     name: string;
@@ -8,6 +8,11 @@ export type Department = {
     image?: string;
     numberOfDocs?: number;
     company: Company;
+    actualStartTime: string;
+    actualFinishTime: string;
+    numberFinishOfDocs: number;
+    pm: Human;
+    assistant: Human;
 }
 
 export type DepartmentPayload = QueryParam & {

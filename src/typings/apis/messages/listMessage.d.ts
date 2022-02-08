@@ -11,12 +11,12 @@ export type ItemMessage = {
     conversation: string;
     modifyAt: string;
     createAt: string;
-    parent?: {
+    parent: {
         content: string;
         conversation: string;
         createAt: string;
         createdAt: string;
-        files: {status: number, usersDelete: any[], _id: string, file: string}[];
+        files: {status: number; usersDelete: any[]; _id: string; file: string}[];
         modifyAt: string;
         reactions: string[];
         receivers: string[];
@@ -54,12 +54,27 @@ export type ItemMessage = {
                 createdAt: string;
                 updatedAt: string;
                 __v: number;
-            }
-        }
+            };
+        };
+        [key: string]: any;
     }[];
     createdAt: string;
     updatedAt: string;
     __v: number;
+    reminder: {
+        accepts: string[]
+        content: string
+        createdAt: string
+        notifyFor: string
+        rejects: string[]
+        remindTime: string
+        repeat: string
+        state: number
+        status: number
+        updatedAt: string
+        __v: number
+        _id: string
+    }
     [key: string]: any;
 }
 export type ListMessageData = {
@@ -90,5 +105,53 @@ export type SendNormalMessagePayload = {
 export type SendNormalMessageResponse = {
     error: boolean;
     data: ItemMessage;
+    status: number;
+};
+
+export type UpdateReminderMessagePayload = {
+    conversationID: string;
+    messageID: string;
+    isJoin: boolean;
+}
+export type UpdateReminderMessageData = {
+    infoMessageNotification: {
+        content: string
+        conversation: string
+        createAt: string
+        createdAt: string
+        files: any[]
+        modifyAt: string
+        reactions: string[]
+        receivers: string[]
+        reminder: string
+        sender: string
+        state: number
+        status: number
+        type: number
+        updatedAt: string
+        usersAssigned: string[]
+        usersDelete: string[]
+        usersSeen: string[]
+        __v: number
+        _id: string
+    };
+    infoReminder: {
+        accepts: string[]
+        content: string
+        createdAt: string
+        notifyFor: string
+        rejects: string[]
+        remindTime: string
+        repeat: string
+        state: number
+        status: number
+        updatedAt: string
+        __v: number
+        _id: string
+    }
+};
+export type UpdateReminderMessageResponse = {
+    error: boolean;
+    data: UpdateReminderMessageData;
     status: number;
 };

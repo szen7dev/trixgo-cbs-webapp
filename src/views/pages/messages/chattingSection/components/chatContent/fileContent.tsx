@@ -10,32 +10,33 @@ import {map as _map} from "lodash";
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import moment from "moment";
 type Props = {
     message: any;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
-const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
             default:
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
@@ -97,8 +98,8 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                         </div>
                     ))
                 }
-                <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
-                    {moment(message.createdAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center " + (isMyMessage?"text-primary":"text-gray-500")}>
+                    {moment(message.createdAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>
