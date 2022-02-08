@@ -63,7 +63,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             switch (chat.lastMessage.type) {
                 case 0:
                     return <div className={"flex items-center"}>
-                        <span className={(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
+                        <div className={(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</div>:
                         <div className={"ml-[5px] truncate w-[210px]"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
                                 const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
@@ -95,7 +95,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
         }
         return "[Thông báo]";
-    }, [chat.lastMessage])
+    }, [chat.lastMessage, currentChat])
 
     const getDate = useCallback(() => {
         const date = moment(chat.modifyAt);
