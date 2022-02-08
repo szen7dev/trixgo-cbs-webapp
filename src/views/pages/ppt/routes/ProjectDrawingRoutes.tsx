@@ -1,10 +1,5 @@
 import { FC } from "react";
 
-// Context
-import { Provider as ModalProvider } from "../../document/contexts/contextModal";
-
-import ModalCreateDocument from "../../document/components/common/ModalCreateDocument";
-
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
 import LayoutProjectDrawing from "../components/layouts/LayoutProjectDrawing";
 import ProjectDrawingPage from "../ProjectDrawingPage";

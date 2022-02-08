@@ -19,7 +19,7 @@ import {
 import { FormExperienceAppointment } from "../forms";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import ContactFile from "../ContactFile";
-import useCustomReducer from "../../Reducers/useReducer";
+import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
@@ -78,12 +78,12 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
       setIDFileUploaded,
       removeAllFiles,
     },
-  ] = useCustomReducer<IMethodFiles>(
+  ] = useCustomReducer(
     uploadReducer,
     { ...uploadActions },
     {
       files: {},
-    }
+    } as IFile
   );
 
   const {

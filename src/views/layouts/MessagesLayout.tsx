@@ -4,7 +4,6 @@ import cn from "classnames";
 import FinLeftSideBar from "components/common/FinLeftSideBar";
 import MainHeader from "components/common/main-header";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
-import ShareMessage from "../pages/messages/chattingSection/components/ShareMessage";
 
 type Props = {
   children: ReactNode;
@@ -36,7 +35,6 @@ const MessagesLayout: FC<Props> = ({ children }) => {
       {/* Content area */}
       <main className="messages-main-content content-avoid-header transition-all duration-500 ease-out overflow-auto relative">
         {children}
-        <ShareMessage/>
       </main>
     </section>
   );

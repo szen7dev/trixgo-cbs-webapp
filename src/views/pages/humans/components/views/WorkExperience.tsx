@@ -19,7 +19,7 @@ import {
 import { FormWorkExperience } from "../forms";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import ContactFile from "../ContactFile";
-import useCustomReducer from "../../Reducers/useReducer";
+import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
@@ -62,12 +62,12 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
       setIDFileUploaded,
       removeAllFiles,
     },
-  ] = useCustomReducer<IMethodFiles>(
+  ] = useCustomReducer(
     uploadReducer,
-    { ...uploadActions },
+    uploadActions,
     {
       files: {},
-    }
+    } as IFile
   );
 
   const {

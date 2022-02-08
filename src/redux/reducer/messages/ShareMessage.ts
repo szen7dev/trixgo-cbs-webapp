@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 
-const initialState : {data: {isOpenShare: boolean, shareMessage: ItemMessage|null}} = {
+const initialState : {data: {isOpenShare: boolean, shareMessage: {[key: string]: ItemMessage}}} = {
     data: {
         isOpenShare: false,
-        shareMessage: null
+        shareMessage: {}
     }
 };
 
@@ -13,17 +13,21 @@ const shareMessageSlice = createSlice({
     initialState,
     reducers: {
         shareMessageToConversation (state, action) {
+            const newShareData = {...state.data.shareMessage};
+            action.payload.messageData.forEach((message: ItemMessage) => {
+                newShareData[message._id] = message
+            });
             state.data = {
                 ...state.data,
                 isOpenShare: true,
-                shareMessage: action.payload.messageData
+                shareMessage: newShareData
             }
         },
         dismissShare (state, action) {
             state.data = {
                 ...state.data,
                 isOpenShare: false,
-                shareMessage: null
+                shareMessage: {}
             }
         }
     },

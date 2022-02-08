@@ -9,15 +9,12 @@ import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
 import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import ModalCreateDocument from "../document/components/common/ModalCreateDocument";
 import ChartReportByTime from "./components/chart/ChartReportByTime";
-import generateImageLink from "../media/utils/images";
-import classNames from "classnames";
 import CardImage from "./components/photo/CardImage";
 import { Link, useLocation } from "react-router-dom";
 
 const ProjectPhoto: FC = () => {
 	const { toggleModal } = useContext(ModalContext);
 	const location = useLocation();
-	console.log(location)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hình ảnh"
