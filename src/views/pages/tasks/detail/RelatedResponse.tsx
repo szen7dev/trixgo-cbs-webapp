@@ -197,6 +197,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
     if ('id' in file) {
       type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
+
       queue.cancel(String(type + file.id));
       if (timer[type + file.id]) {
         clearInterval(timer[type + file.id]);
@@ -205,6 +206,13 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     } else {
       type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
     }
+  }
+
+  const handleSkip = () => {
+    queue.abord();
+    Object.values(timer).forEach(t => clearInterval(t));
+    removeAllFiles();
+    setVisibleForm(true);
   }
 
   return (
@@ -301,7 +309,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
                 </label>
               </div>
               <div>
-                <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={() => { removeAllFiles(); setVisibleForm(true) }}>Bỏ qua</button>
+                <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
                 <button type="button" className="mx-3 px-3 py-2 rounded bg-primary text-white" onClick={handleAddResponse}>Xác nhận</button>
               </div>
             </div>

@@ -152,8 +152,11 @@ export class QueueUpload<
       if (queue) {
         const { key, promise } = queue;
         console.log("Runing queue id", key);
-
-        promise(this._running[key])
+        const wrappedPromise = new Promise((resolve, reject) => {
+          this._running[key] = reject;
+          return promise().then(resolve).catch(reject);
+        });
+        wrappedPromise
           .then(() => {
             this.run();
           })
@@ -182,6 +185,16 @@ export class QueueUpload<
     }
     if (this._queue.length === 0) {
       this.isRunning = false;
+    } else {
+      this.run();
     }
+  }
+  abord(): void {
+    Object.keys(this._running).forEach((key) => {
+      this._running[key]();
+    });
+    this._running = {};
+    this._queue = [];
+    this.isRunning = false;
   }
 }
