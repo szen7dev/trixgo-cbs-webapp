@@ -155,3 +155,36 @@ export type UpdateReminderMessageResponse = {
     data: UpdateReminderMessageData;
     status: number;
 };
+
+export type ShareMessagePayload = {
+    conversationsID: string[];
+    messagesID: string[]
+}
+
+export type ShareMessageData = {
+    results: {
+        receivers: string[],
+        content: string,
+        status: number,
+        type: number,
+        listSeen: string[],
+        usersDelete: any[],
+        membersAssigned: any[],
+        _id: string,
+        conversation: string,
+        sender: string,
+        files: any[],
+        modifyAt: string,
+        createAt: string,
+        createdAt: string,
+        updatedAt: string,
+        __v: number
+    }[],
+    errors: any[]
+}
+
+export type ShareMessageResponse = {
+    error: boolean;
+    data: ShareMessageData[];
+    status: number;
+};

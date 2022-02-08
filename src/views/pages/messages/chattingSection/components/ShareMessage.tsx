@@ -11,6 +11,7 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SelectedShareConversationItem from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
 import {MessageContext} from "../../home/index_v2";
+import {UseConversation} from "services/hooks/messages/useConversation";
 
 const ShareMessage:FC = () => {
     const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ShareMessage:FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const paramsListConversation = {limit: 10, keyword: searchTerm};
     const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation);
+    const {shareMessageToConversation} = UseConversation();
 
     const [selectedConversations, setSelectedConversations] = useState<{[key: string]: ItemListConversation}>({});
 
@@ -40,6 +42,10 @@ const ShareMessage:FC = () => {
     };
 
     const forwardMessagesToConversation = () => {
+        shareMessageToConversation({
+            conversationsID: Object.keys(selectedConversations),
+            messagesID: Object.keys(shareMessage)
+        });
         socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
             conversationsID: Object.keys(selectedConversations),
             messagesID: Object.keys(shareMessage)

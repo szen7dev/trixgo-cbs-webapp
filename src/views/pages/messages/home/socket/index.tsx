@@ -1,12 +1,13 @@
 import React, {FC, useContext, useEffect} from "react";
-import {UseListConversation} from "../../../../../services/hooks/messages/useListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
-    updateNewMessageToConversation
+    updateNewMessageToConversation,
+    setShareMessage
 } from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../index_v2";
 import {useDispatch} from "react-redux";
-import {setListConversation} from "../../../../../redux/reducer/messages/ListConversation";
+import {setListConversation} from "redux/reducer/messages/ListConversation";
 
 const SocketController:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -26,11 +27,13 @@ const SocketController:FC = () => {
         };
 
         return () => {
-            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-            socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-            socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+            if (socket) {
+                socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+                socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+                socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
 
-            socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+                socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+            }
         }
     },[socket]);
 
@@ -77,7 +80,11 @@ const SocketController:FC = () => {
     };
 
     const onReceiveShareMessage = (data: any) => {
-        console.log(data)
+        console.log(data.data)
+        dispatch(setShareMessage({
+            conversationId: data.data.infoConversation,
+            messagesShare: data.data.listMessagesShared
+        }))
     }
 
     const scrollToBottom = () => {

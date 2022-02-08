@@ -2,7 +2,7 @@ import ListMessageRepository from "apis/messages/message";
 import {
     ListMessageData,
     ListMessagePayload,
-    SendNormalMessagePayload, UpdateReminderMessageData,
+    SendNormalMessagePayload, ShareMessagePayload, UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
 import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData} from "redux/reducer/messages/ListMessage";
@@ -12,6 +12,7 @@ type UseConversationType = {
     getListMessage: (params: ListMessagePayload) => Promise<ListMessageData>;
     sendNormalMessage: (params: SendNormalMessagePayload) => void;
     updateReminder: (params: UpdateReminderMessagePayload) => Promise<UpdateReminderMessageData>;
+    shareMessageToConversation: (params: ShareMessagePayload) => void
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -54,9 +55,15 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const shareMessageToConversation = async (params: ShareMessagePayload) => {
+        const {data} = await ListMessageRepository.shareMessage(params);
+        return data;
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
-        updateReminder
+        updateReminder,
+        shareMessageToConversation
     }
 }
