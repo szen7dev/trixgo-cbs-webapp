@@ -28,6 +28,7 @@ const HeaderPinedMessages:FC = () => {
     },[listPinnedMessage, indexPinnedMessage])
 
     const renderPinned = (pinnedMessage: ItemMessage) => {
+        if (!pinnedMessage) return null;
         switch (pinnedMessage.type) {
             case 0:
                 return <TextPinned message={pinnedMessage}/>;
@@ -45,7 +46,7 @@ const HeaderPinedMessages:FC = () => {
             setIndexPinnedMessage(indexPinnedMessage+1)
         }
     }
-    if (!listPinnedMessage) return null;
+    if (!listPinnedMessage||listPinnedMessage.length<=0) return null;
     return (
         <div className={"items-center flex"}>
             <div className={"indicator-pinned flex flex-col-reverse h-full"}>
