@@ -1,11 +1,13 @@
-import { FC, useState, useContext, useEffect, useRef } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import classNames from "classnames";
+import { toArray } from "lodash";
 
 /** 
  * Icon
  */
 import IconImage from "views/pages/media/components/Icon/IconImage";
-import IconFile from "views/pages/media/components/Icon/IconFile";
+// import IconFile from "views/pages/media/components/Icon/IconFile";
 
 /**
  * Context
@@ -22,17 +24,17 @@ import IconDownload from "assets/images/icons8-reply-arrow-96.svg";
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /**
- * Hooks, typings
+ * Hooks, custom
  */
 import { useTask } from 'services/hooks/useTask';
+import { useUpload } from 'services/hooks/useUpload';
 import { Task } from 'typings/task';
 import useUploadFile from "services/hooks/ppt/useUploadFile";
-import { modifyUploadedFilesV2, uploadImageWithProgressPromise, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
-import classNames from "classnames";
-import { toArray } from "lodash";
-import PostFile from 'views/pages/media/components/post/PostFile';
-import PostImage from "views/pages/media/components/post/PostImage";
-import ChevronDownIcon from "assets/icons/ChevronDown";
+import { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
+
+// import PostFile from 'views/pages/media/components/post/PostFile';
+// import PostImage from "views/pages/media/components/post/PostImage";
+// import ChevronDownIcon from "assets/icons/ChevronDown";
 import IconPaperClip from "views/pages/media/components/Icon/IconPaperClip";
 import PostImageV2 from "views/pages/media/components/post/PostImageV2";
 import FileUploadRow from "views/pages/document/components/common/FileUploadRow";
@@ -54,6 +56,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const { id } = useParams<{ id: string }>();
   const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
   const { state, dispatch } = useContext(CommentContext);
+	const { addFileToUpload } = useUpload('PCM_PLAN_TASK');
   const [uploads,
     {
       setUploadImageProgress,
@@ -97,10 +100,24 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const handleAddResponse = async () => {
     setVisibleForm(false);
 
+    let images: string[] = [];
+		let files: string[] = [];
+
+		// Get list file uploaded
+		for (const [, { _id }] of Object.entries(uploads.images)) {
+			_id && (images = [...images, _id]);
+		}
+
+		for (const [, { _id }] of Object.entries(uploads.files)) {
+			_id && (files = [...files, _id]);
+		}
+
     const infoAfterCreate: any = await addResponse({
       taskID: id,
-      type: 2,
-      content
+			type: 2,
+      content,
+			files,
+			images,
     });
 
     dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
@@ -116,6 +133,14 @@ const RelatedResponse: FC<Props> = ({ task }) => {
       populates: JSON.stringify({
         path: "comment userCreate",
         select: "_id bizfullname fullname image files images content",
+        populate: {
+          path: 'images files',
+          select: '_id name nameOrg url description createAt userCreate',
+          populate: {
+            path: 'userCreate',
+            select: '_id bizfullname'
+          }
+        }
       }),
     });
 
@@ -125,7 +150,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
   }
 
-  // HandleSetFileUpload
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) return;
 
@@ -137,29 +161,22 @@ const RelatedResponse: FC<Props> = ({ task }) => {
 
     setUploadImage(images);
     setUploadFile(files);
+
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        // Function fake upload
-        const { _id } = await uploadImageWithProgressPromise(file, {
-          id: 'IMAGE' + key,
-          timer,
-          onUploadProgress(progress) {
-            setUploadImageProgress(key, progress);
-          }
+        const { _id } = await addFileToUpload({
+        	files: file,
+        	progress: percentCompleted => {
+        		console.log(`${percentCompleted}%`, key);
+        		setUploadImageProgress(key, percentCompleted)
+        	},
+        	// compressConfig: {
+        	// 	useCompress: false
+        	// }
         })
 
-        // const { _id } = await addFileToUpload({
-        // 	files: file,
-        // 	progress: percentCompleted => {
-        // 		console.log(`${percentCompleted}%`, key);
-        // 		setUploadImageProgress(key, percentCompleted)
-        // 	},
-        // 	// compressConfig: {
-        // 	// 	useCompress: false
-        // 	// }
-        // })
         delete timer['IMAGE' + key];
         setIDImageUploaded(key, _id);
       }
@@ -169,21 +186,22 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        const { _id } = await uploadImageWithProgressPromise(file, {
-          id: 'FILE' + key,
-          timer,
-          speed: 300,
-          onUploadProgress(progress) {
-            setUploadFileProgress(key, progress);
-          }
-        })
-        // const { _id } = await addFileToUpload({
-        //   files: file,
-        //   progress: percentCompleted => {
-        //     console.log(`${percentCompleted}%`, key);
-        //     setUploadFileProgress(key, percentCompleted)
+        // const { _id } = await uploadImageWithProgressPromise(file, {
+        //   id: 'FILE' + key,
+        //   timer,
+        //   speed: 300,
+        //   onUploadProgress(progress) {
+        //     setUploadFileProgress(key, progress);
         //   }
         // })
+        const { _id } = await addFileToUpload({
+          files: file,
+          progress: percentCompleted => {
+            console.log(`${percentCompleted}%`, key);
+            setUploadFileProgress(key, percentCompleted)
+          }
+        })
+
         delete timer['FILE' + key];
         setIDFileUploaded(key, _id);
         return false;

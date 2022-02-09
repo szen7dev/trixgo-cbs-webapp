@@ -130,7 +130,7 @@ const ListTable: FC<Props> = ({
                     {subContentHtml(taskOutDate.lastLog?.content)}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
-                      {taskOutDate.lastLog?.author.fullname}
+                      {taskOutDate.lastLog?.author?.fullname}
                     </span>
                     <span className="text-primary-gray mx-2 text-[13px]">
                       {moment(taskOutDate.lastLog?.createAt).fromNow()}

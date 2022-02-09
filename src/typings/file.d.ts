@@ -9,6 +9,12 @@ export type FilePayload = Partial<File> & {
   typeUpload?: string;
 };
 
+export type FileUpdatePayload = {
+  fileID: string,
+  status?: number,
+  description?: string
+}
+
 export type UploadPayload = {
   signedUrl: string;
   file: File;
