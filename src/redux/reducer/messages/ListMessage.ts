@@ -40,7 +40,10 @@ const initialState : {
         },
         replyMessage: {
             [key: string] : ItemMessage;
-        }
+        },
+        listMessagePinned: {
+            [key: string]: ItemMessage[]
+        },
     }
 } = {
     data: {
@@ -54,7 +57,8 @@ const initialState : {
         listImages: {},
         listFiles: {},
         listLinks: {},
-        replyMessage: {}
+        replyMessage: {},
+        listMessagePinned: {}
     }
 };
 
@@ -247,6 +251,15 @@ const listMessageSlice = createSlice({
                     ...newMessage
                 }
             }
+        },
+        setPinnedMessage (state, action) {
+            state.data = {
+                ...state.data,
+                listMessagePinned: {
+                    ...state.data.listMessagePinned,
+                    [action.payload.conversationId]: action.payload.listMessagesPinned
+                }
+            }
         }
     },
     extraReducers: {}
@@ -266,6 +279,7 @@ export const {
     updateReminderData,
     setReplyMessage,
     removeReplyMessage,
-    setShareMessage
+    setShareMessage,
+    setPinnedMessage
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

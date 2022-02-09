@@ -2,7 +2,7 @@ import API from "../repository";
 import { convertObToUrl } from "helpers";
 import {
     ListMessagePayload,
-    ListMessageResponse,
+    ListMessageResponse, PinnedMessagePayload, PinnedMessageResponse,
     SendNormalMessagePayload,
     SendNormalMessageResponse,
     ShareMessagePayload,
@@ -18,8 +18,8 @@ const updateReminder = "/api/chatting/conversations/update-user-join-message-rem
 const shareMessage = "/api/chatting/conversations/share-message-conversation";
 
 const ListMessageRepository = {
-    async getListPinMessage(payload: ListMessagePayload): Promise<ListMessageResponse> {
-        const { data } = await API.get<ListMessageResponse>(
+    async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
+        const { data } = await API.get<PinnedMessageResponse>(
             `${getListPinMessageURL}?${convertObToUrl(payload)}`
         );
 

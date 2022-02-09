@@ -9,17 +9,18 @@ import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     message: ItemMessage;
+    bgMessage?: string;
 }
 
-const OthersMessage:FC<Props> = ({message}) => {
+const OthersMessage:FC<Props> = ({message,bgMessage}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
 
     const renderMessageContent = () => {
         switch (message.type) {
             case 0:
-                return <TextChatContent message={message} showSenderName={true} className={"bg-white"}/>;
+                return <TextChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 2:
-                return <FileChatContent message={message} showSenderName={true} className={"bg-white"}/>;
+                return <FileChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 1:
                 return <ImagesContent message={message} showSenderName={true}/>
         }
