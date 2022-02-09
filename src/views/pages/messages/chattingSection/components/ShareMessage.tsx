@@ -49,11 +49,13 @@ const ShareMessage:FC = () => {
         shareMessageToConversation({
             conversationsID: Object.keys(selectedConversations),
             messagesID: Object.keys(shareMessage)
+        }).then(() => {
+            socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
+                conversationsID: Object.keys(selectedConversations),
+                messagesID: Object.keys(shareMessage)
+            });
         });
-        socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
-            conversationsID: Object.keys(selectedConversations),
-            messagesID: Object.keys(shareMessage)
-        });
+
         setSelectedConversations({});
         dispatch(dismissShare({}));
     };
