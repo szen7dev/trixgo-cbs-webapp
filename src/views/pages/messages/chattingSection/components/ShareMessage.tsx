@@ -49,11 +49,23 @@ const ShareMessage:FC = () => {
         shareMessageToConversation({
             conversationsID: Object.keys(selectedConversations),
             messagesID: Object.keys(shareMessage)
+        }).then((data) => {
+            const messsageIds : string[] = [];
+            data.forEach(mess => {
+                mess.results.forEach(res => {
+                    messsageIds.push(res._id)
+                })
+            })
+            console.log({
+                conversationsID: Object.keys(selectedConversations),
+                messagesID: messsageIds
+            })
+            socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
+                conversationsID: Object.keys(selectedConversations),
+                messagesID: messsageIds
+            });
         });
-        socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
-            conversationsID: Object.keys(selectedConversations),
-            messagesID: Object.keys(shareMessage)
-        });
+
         setSelectedConversations({});
         dispatch(dismissShare({}));
     };

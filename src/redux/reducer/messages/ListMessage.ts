@@ -235,16 +235,16 @@ const listMessageSlice = createSlice({
             }
         },
         setShareMessage (state, action) {
-            const newMessage = {...state.data.listMessage[action.payload.conversationId]};
+            const newMessage = {...state.data.listMessage};
             action.payload.messagesShare.forEach((message: ItemMessage) => {
-                newMessage[message._id] = message;
+                newMessage[message.conversation][message._id] = message;
             });
 
             state.data = {
                 ...state.data,
                 listMessage: {
                     ...state.data.listMessage,
-                    [action.payload.conversationId]: newMessage
+                    ...newMessage
                 }
             }
         }
