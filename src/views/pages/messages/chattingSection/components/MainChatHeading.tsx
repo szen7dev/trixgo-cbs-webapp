@@ -3,10 +3,10 @@ import SampleImage from "assets/images/icons8-image-256.svg";
 import Close from "assets/icons/Close";
 import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
 import SavedMessage from "assets/images/saved-messages.svg";
+import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
 
 type Props = {
     chat: any
@@ -55,7 +55,9 @@ const MainChatHeading:FC<Props> = ({chat}) => {
 
     return (
         <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-50"}>
-            <div className={"avatar-chat flex items-center justify-center"}>
+            <div
+                onClick={() => setShowMenu(!showMenu)}
+                className={"avatar-chat flex items-center justify-center cursor-pointer"}>
                 {
                     chat.avatar?
                         <img  className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
@@ -101,7 +103,9 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
+            <div
+                onClick={() => setShowMenu(!showMenu)}
+                className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1 cursor-pointer"}>
                 <div className={""}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
@@ -123,13 +127,13 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                 </div>
             </div>
             <div className={"action-section flex items-center justify-end ml-[20px]"}>
-                <MainChatOptions/>
+                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                    <img  src={BulletListIcon} alt={"ham"}/>
+                </button>
                 <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                     <img  src={SearchIcon} alt={"search icon"}/>
                 </button>
-                <button onClick={() => setShowMenu(!showMenu)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <DotsVerticalIcon/>
-                </button>
+                <MainChatOptions/>
             </div>
         </div>
     )
