@@ -12,32 +12,30 @@ const MainChatOptions:FC = () => {
 
     return (
         <Menu>
-            <Menu.Button>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <DotsVerticalIcon/>
-                </button>
+            <Menu.Button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                <DotsVerticalIcon/>
             </Menu.Button>
             <Menu.Items className={"absolute top-55px right-0 rounded-md shadow-lg bg-white min-w-[272px] text-gray-500"}>
                 <Menu.Item>
-                    <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  src={NotificationIcon} alt={"bookmark"}/>
                         <div className={"flex-1 text-left ml-4"}>Mute</div>
-                    </button>
+                    </div>
                 </Menu.Item>
                 <Menu.Item>
-                    <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  src={IconSelected} alt={"add folder"}/>
                         <div className={"flex-1 text-left ml-4"}>Select messages</div>
-                    </button>
+                    </div>
                 </Menu.Item>
                 <Menu.Item>
-                    <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  className={"mr-2"} src={ExitRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Exit</div>
-                    </button>
+                    </div>
                 </Menu.Item>
                 <Menu.Item>
-                    <button
+                    <div
                         onClick={() => openDeleteConfirm({
                             deleteAction: () => console.log('hiiii'),
                             // title: "Hello",
@@ -46,7 +44,7 @@ const MainChatOptions:FC = () => {
                         className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  className={"mr-2"} src={RemoveRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Delete</div>
-                    </button>
+                    </div>
                 </Menu.Item>
             </Menu.Items>
         </Menu>

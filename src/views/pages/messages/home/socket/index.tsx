@@ -80,10 +80,9 @@ const SocketController:FC = () => {
     };
 
     const onReceiveShareMessage = (data: any) => {
-        dispatch(setShareMessage({
-            conversationId: data.data.infoConversation._id,
-            messagesShare: data.data.listMessagesShared
-        }));
+        // dispatch(setShareMessage({
+        //     messagesShare: data.data.listMessagesShared
+        // }));
         dispatch(updateSingleConversation({
             conversationData: data.data.infoConversation
         }))
