@@ -17,11 +17,10 @@ import FileRepository from "apis/upload";
 
 type Props = {
   expanded?: boolean;
-  showImageTest?: boolean;
   response: ResponseProps
 };
 
-const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
   const { mutateAsync: updateMarkResponseAsync } =
     useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
       TaskRepository.updateMarkResponse(payload)
@@ -88,7 +87,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
           {/* File */}
           {expanded && (
             <div>
-              {response.comment?.files?.length ? response.comment.files.map(file => (
+              {(response.comment.files && response.comment.files.length) ? response.comment.files.map(file => (
                 <div className="flex w-full my-2" key={file._id}>
                   <div className="w-5/8 bg-gray-100 p-2 rounded-sm border border-slate-400">
                     <a href="/">
@@ -145,7 +144,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
               <div className="flex w-full space-x-2 mt-5 mb-2">
                 {(response.comment.images && response.comment.images.length) ? response.comment.images.map((file, index) => {
 
-                  if(index < 3) {
+                  if(index < 2) {
                     return (
                       <div className="w-1/3" key={file._id}>
                         <img src={TestImage} className="w-full" alt="test" />
@@ -153,7 +152,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
                     )
                   }
 
-                  if(index === 4) {
+                  if(index === 3) {
                     return (
                       <div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
                         <img
@@ -180,7 +179,6 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
 
 RelatedResponseItem.defaultProps = {
   expanded: true,
-  showImageTest: false,
 };
 
 export default RelatedResponseItem;

@@ -24,7 +24,7 @@ const MainHeader: FC = () => {
 		const socket = socketRef.current;
     if (!socket) return;
 
-		socket.on('NOTIFICATION_SSC_ADD_MEDIA', () => {
+		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
       refetchListNotification();
 		});
 	}, []);

@@ -6,7 +6,6 @@ import RootComment from './RootComment';
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
-import { objPopulate } from '../utils';
 import { ContextModalPost } from '../context/post';
 
 type Props = {
@@ -32,7 +31,6 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		const { error, data } = await SocialRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
-			...objPopulate
 		});
 		setAmountComment(amountComment - limit);
 

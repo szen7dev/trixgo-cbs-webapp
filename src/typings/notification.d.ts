@@ -27,6 +27,7 @@ export type NotificationProps = {
   status: number,
   sender: {
     _id: string;
+    bizfullname: string,
     fullname: string,
     image: string
   },

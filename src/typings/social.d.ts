@@ -140,6 +140,7 @@ export type MediaProps = {
   company: {
     _id: string;
     name: string;
+    sign: string;
   };
   modifyAt: string;
   createAt: string;
