@@ -118,16 +118,23 @@ export type ResponsePayload = {
 
 export type ResponseResponse = APIResponse & {
   data: {
-    data: ResponseProps;
-    message: string;
-    error: boolean;
+    result: ResponseProps,
+    receivers: Array<string>,
   };
 };
 
 export type ListResponsePayload = {
   lastestID?: string;
   limit?: number;
+  isMarked?: boolean;
   populates?: string;
   select?: string;
   taskID?: string;
+};
+
+export type SearchResponsePayload = {
+  taskID: string;
+  commentID: string;
+  select?: string;
+  populates?: string;
 };

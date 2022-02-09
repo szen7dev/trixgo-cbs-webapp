@@ -11,9 +11,7 @@ import {
     MediaReactionPayload
 } from "typings/social";
 import { CommentProps } from 'typings/common';
-import { objPopulate } from 'views/pages/media/utils';
 
-// Định nghĩa toàn bộ các Hook (đóng gói lại) để làm việc với API
 type UseSocial = {
     createMedia: (payload: MediaPayload) => Promise<void>,
     updateMedia: (payload: MediaPayload) => Promise<void>,
@@ -54,7 +52,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useMutation((payload: MediaReactionPayload) =>
             SocialRepository.reactionMedia(payload)
         );
-    
+
     // Get danh sách media
     const {
         isLoading: isLoadingListMedias,
@@ -114,10 +112,8 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
             const { error, data, message } = await createMediaAsync(payload);
 
             if (!error) {
-                // refetchListMedias();
-
                 toast.success('Tạo bài viết thành công');
-                socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
+                socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
                     receivers: data.receivers
                 });
             } else {
@@ -248,7 +244,6 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             async ({ pageParams }: any) => 
             SocialRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
-                ...objPopulate,
                 ...payload
             }),
             {

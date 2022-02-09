@@ -2,10 +2,10 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
 import { Task, CheckList, CheckListPayload, ResponseProps, ResponsePayload } from "typings/task";
-// import { useSocket } from 'services/hooks/useSocket';
+import { useSocket } from 'services/hooks/useSocket';
 
 type UseTask = {
-  addResponse: (payload: ResponsePayload) => Promise<{ data: ResponseProps } | undefined>;
+  addResponse: (payload: ResponsePayload) => Promise<{ result: ResponseProps } | undefined>;
   listResponses: Array<ResponseProps>;
   totalRecordResponse: number;
   refetchListResponse: () => void;
@@ -22,11 +22,12 @@ type UseTask = {
 type Props = {
   taskID?: string;
   typeStatus?: number;
-  type?: number
+  type?: number;
+  isMarked?: boolean;
 }
 
-export const useTask = ({ taskID, typeStatus, type }: Props): UseTask => {
-    // const { current: socket }: any = useSocket();
+export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask => {
+  const { current: socket }: any = useSocket();
 
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
@@ -43,9 +44,9 @@ export const useTask = ({ taskID, typeStatus, type }: Props): UseTask => {
         toast.success('Tạo phản hồi thành công');
       }
 
-      // socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
-      //     receivers: data.receivers
-      // });
+      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+          receivers: data.receivers
+      });
 
       return data;
     } catch (error: unknown) {
@@ -62,25 +63,13 @@ export const useTask = ({ taskID, typeStatus, type }: Props): UseTask => {
     refetch: refetchListResponse,
   } = useInfiniteQuery(
     // https://react-query.tanstack.com/reference/useInfiniteQuery
-    ["list_responses", taskID],
+    ["list_responses", taskID, isMarked || false],
     async ({ pageParam }: any) => {
       return TaskRepository.listResponse({
         taskID,
         lastestID: pageParam || "",
-        limit: 3,
-        select: "comment isMarked type task userCreate createAt",
-        populates: JSON.stringify({
-          path: "comment userCreate",
-          select: "_id bizfullname fullname image files images content",
-          populate: {
-            path: 'images files',
-            select: '_id name nameOrg url description createAt userCreate',
-            populate: {
-              path: 'userCreate',
-              select: '_id bizfullname'
-            }
-          }
-        }),
+        limit: 5,
+        isMarked: isMarked || false,
       });
     },
     {

@@ -9,6 +9,7 @@ import {
   ResponsePayload,
   ResponseResponse,
   ListResponsePayload,
+  SearchResponsePayload,
 } from "typings/task";
 import { convertObToUrl } from "helpers";
 
@@ -90,7 +91,52 @@ const TaskRepository = {
     payload: ListResponsePayload
   ): Promise<any> {
     const { data } = await API.get<any>(
-      `${pcmURL}/pcm_plan_task_comments?${convertObToUrl(payload)}`
+      `${pcmURL}/pcm_plan_task_comments?${convertObToUrl({
+        select: "comment isMarked type task userCreate createAt",
+        populates: JSON.stringify({
+          path: "comment userCreate",
+          select: "_id bizfullname fullname image files images content",
+          populate: {
+            path: 'images files',
+            options: {
+              limit: 5,
+            },
+            select: '_id name nameOrg url description createAt userCreate',
+            populate: {
+              path: 'userCreate',
+              select: '_id bizfullname'
+            }
+          }
+        }),
+        ...payload
+      })}`
+    );
+    return data;
+  },
+
+  async searchResponseById(
+    payload: SearchResponsePayload
+  ): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_plan_task_comments/search?${convertObToUrl({
+        select: "comment isMarked type task userCreate createAt",
+        populates: JSON.stringify({
+          path: "comment userCreate",
+          select: "_id bizfullname fullname image files images content",
+          populate: {
+            path: 'images files',
+            options: {
+              limit: 5,
+            },
+            select: '_id name nameOrg url description createAt userCreate',
+            populate: {
+              path: 'userCreate',
+              select: '_id bizfullname'
+            }
+          }
+        }),
+        ...payload
+      })}`
     );
     return data;
   },

@@ -1,5 +1,5 @@
 import { FC, useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toArray } from "lodash";
 
@@ -54,7 +54,13 @@ const queue = new QueueUpload();
 
 const RelatedResponse: FC<Props> = ({ task }) => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation(); // location.hash
+
   const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
+  const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
+    taskID: id, isMarked: true
+  });
+
   const { state, dispatch } = useContext(CommentContext);
 	const { addFileToUpload } = useUpload('PCM_PLAN_TASK');
   const [uploads,
@@ -76,9 +82,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const [amountComment, setAmountComment] = useState(totalRecordResponse);
 
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
-  const [collapsed, setCollapsed] = useState(false);
-
-  // const timer = useRef<NodeJS.Timeout[]>([]);
+  const [collapsed] = useState(false);
 
   useEffect(() => {
     dispatch({ type: 'SET_COMMENTS', payload: listResponses });
@@ -90,6 +94,18 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   useEffect(() => {
     setAmountComment(totalRecordResponse);
   }, [totalRecordResponse])
+
+  useEffect(() => {
+    (async () => {
+      const response = await TaskRepository.searchResponseById({
+        taskID: id,
+        commentID: location.hash.substring(1)
+      });
+
+      console.log({ response })
+    })();
+
+  }, [location.hash])
 
   const getClassTab = (tab: RelatedResponseTab) => {
     return currentTab === tab
@@ -120,28 +136,16 @@ const RelatedResponse: FC<Props> = ({ task }) => {
 			images,
     });
 
-    dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate });
+    dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate.result });
   }
 
   const handleViewPrevious = async () => {
-    const LIMIT = 3;
+    const LIMIT = 5;
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[0]._id,
       taskID: id,
       limit: LIMIT,
-      select: "comment isMarked type task userCreate createAt",
-      populates: JSON.stringify({
-        path: "comment userCreate",
-        select: "_id bizfullname fullname image files images content",
-        populate: {
-          path: 'images files',
-          select: '_id name nameOrg url description createAt userCreate',
-          populate: {
-            path: 'userCreate',
-            select: '_id bizfullname'
-          }
-        }
-      }),
+      isMarked: currentTab === 'MARKED' ? true : false,
     });
 
     if (error || !data.listRecords.length) return;
@@ -233,6 +237,18 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     setVisibleForm(true);
   }
 
+  const onClickTabAll = () => {
+    setCurrentTab(RelatedResponseTab.ALL);
+    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    setAmountComment(totalRecordResponse);
+  }
+
+  const onClickTabMarked = () => {
+    setCurrentTab(RelatedResponseTab.MARKED);
+    dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked });
+    setAmountComment(totalRecordResponseMarked);
+  }
+
   return (
     <div>
       {/* Header */}
@@ -243,13 +259,13 @@ const RelatedResponse: FC<Props> = ({ task }) => {
           </div>
           <button
             className={getClassTab(RelatedResponseTab.ALL)}
-            onClick={() => setCurrentTab(RelatedResponseTab.ALL)}
+            onClick={onClickTabAll}
           >
             <span className="text-[13px]">Tất cả ({task.amountResponse})</span>
           </button>
           <button
             className={getClassTab(RelatedResponseTab.MARKED)}
-            onClick={() => setCurrentTab(RelatedResponseTab.MARKED)}
+            onClick={onClickTabMarked}
           >
             <span className="text-[13px]">Đã đánh dấu ({task.amountResponseMarked})</span>
           </button>
@@ -282,7 +298,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
         {state.comments.length ? state.comments.map(response => (
           <RelatedResponseItem key={response._id} expanded={isExpand} response={response} />
         )) : ''}
-        {/* <RelatedResponseItem expanded={isExpand} showImageTest={true} /> */}
       </div>
 
       {visibleForm ? (
