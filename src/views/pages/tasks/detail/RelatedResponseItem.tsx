@@ -1,5 +1,7 @@
 import React, { FC } from "react";
 import moment from "moment";
+import { toast } from "react-toastify";
+import _ from "lodash";
 import { useMutation } from "react-query";
 
 import HumanAvatar from "assets/images/human-avatar.svg";
@@ -9,7 +11,9 @@ import CopyIcon from "assets/images/icons8-copy-96.svg";
 import IconDownload from "assets/images/icons8-download-48_3.svg";
 import TestImage from "assets/images/home-slide-img1.jpg";
 import { ResponseProps } from "typings/task";
+import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
+import FileRepository from "apis/upload";
 
 type Props = {
   expanded?: boolean;
@@ -23,6 +27,11 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
       TaskRepository.updateMarkResponse(payload)
     );
 
+  const { mutateAsync: updateFileAsync } =
+    useMutation((payload: FileUpdatePayload) =>
+      FileRepository.updateFile(payload)
+    );
+
   const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     await updateMarkResponseAsync({
       commentTemplateID: response._id,
@@ -30,6 +39,15 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
       isMarked: e.target.checked
     })
   }
+
+  const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
+    await updateFileAsync({
+      fileID: e.target.dataset.fileid,
+      description: e.target.value
+    });
+
+    toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
+  }, 1000)
 
   return (
     <>
@@ -70,9 +88,8 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
           {/* File */}
           {expanded && (
             <div>
-              {/* List file */}
-              {!showImageTest ? (
-                <div className="flex w-full my-2">
+              {response.comment?.files?.length ? response.comment.files.map(file => (
+                <div className="flex w-full my-2" key={file._id}>
                   <div className="w-5/8 bg-gray-100 p-2 rounded-sm border border-slate-400">
                     <a href="/">
                       <div className="flex">
@@ -82,7 +99,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
                         <div className="ml-3">
                           <div className="flex">
                             <span className="w-5/6">
-                              2021.15.12-CBS.BLD.HiepNH-BaoCaoDanhGiaTacDongMoiTruong.pdf
+                              {file.nameOrg}
                             </span>
                             <div className="w-1/6 flex justify-end">
                               <img
@@ -95,10 +112,10 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
 
                           <div className="flex w-full mt-2">
                             <span className="w-4/5 text-[13px] text-primary-gray">
-                              Nguyễn Phan Thanh Hương-CDC
+                            {file.userCreate?.bizfullname}
                             </span>
                             <span className="text-end w-1/5 text-[13px] text-primary-gray">
-                              15:30 12/5/21
+                              {moment(file.createAt).format('HH:mm DD/M/YYYY')}
                             </span>
                           </div>
                         </div>
@@ -109,35 +126,49 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
                     <textarea
                       className="h-full focus:outline-none"
                       placeholder="Nhập nội dung ghi chú cho file"
+                      defaultValue={file.description}
+                      data-fileid={file._id}
+                      onKeyUp={handleUpdateDescriptionFile}
                     />
                   </div>
                   <div className="w-1/8 flex flex-col items-center justify-between">
                     <input type="checkbox" />
                     <div className="rounded-full p-2 border-2">
-                      <img src={IconDownload} alt="Avatar" className="w-6" />
+                      <a href={file.url}>
+                        <img src={IconDownload} alt="Avatar" className="w-6" />
+                      </a>
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div className="flex w-full space-x-2 mt-5 mb-2">
-                  <div className="w-1/3">
-                    <img src={TestImage} className="w-full" alt="test" />
-                  </div>
-                  <div className="w-1/3">
-                    <img src={TestImage} className="w-full" alt="test" />
-                  </div>
-                  <div className="w-1/3 relative bg-black flex items-center justify-center">
-                    <img
-                      src={TestImage}
-                      className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
-                      alt="test"
-                    />
-                    <div className="relative z-6">
-                      <p className="text-4x-large text-white">+12</p>
-                    </div>
-                  </div>
-                </div>
-              )}
+              )) : ''}
+
+              <div className="flex w-full space-x-2 mt-5 mb-2">
+                {(response.comment.images && response.comment.images.length) ? response.comment.images.map((file, index) => {
+
+                  if(index < 3) {
+                    return (
+                      <div className="w-1/3" key={file._id}>
+                        <img src={TestImage} className="w-full" alt="test" />
+                      </div>
+                    )
+                  }
+
+                  if(index === 4) {
+                    return (
+                      <div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
+                        <img
+                          src={TestImage}
+                          className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
+                          alt="test"
+                        />
+                        <div className="relative z-6">
+                          <p className="text-4x-large text-white">+{response.comment.images && response.comment.images.length - 3}</p>
+                        </div>
+                      </div>
+                    )
+                  }
+                }) : ''}
+              </div>
             </div>
           )}
         </div>
@@ -149,7 +180,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, showImageTest, response }) =
 
 RelatedResponseItem.defaultProps = {
   expanded: true,
-  showImageTest: true,
+  showImageTest: false,
 };
 
 export default RelatedResponseItem;

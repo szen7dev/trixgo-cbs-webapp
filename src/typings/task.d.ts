@@ -112,8 +112,8 @@ export type ResponsePayload = {
   taskID: string,
   type: number;
   content: string;
-  files?: FileProps[] | undefined;
-  images?: FileProps[] | undefined;
+  files?: Array<string>;
+  images?: Array<string>;
 };
 
 export type ResponseResponse = APIResponse & {
