@@ -4,6 +4,7 @@ import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissShare} from "redux/reducer/messages/ShareMessage";
+import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {map as _map} from "lodash";
 import SearchChatItem from "../../list/components/SearchUserConversation/searchChatItem";
@@ -56,10 +57,6 @@ const ShareMessage:FC = () => {
                     messsageIds.push(res._id)
                 })
             })
-            console.log({
-                conversationsID: Object.keys(selectedConversations),
-                messagesID: messsageIds
-            })
             socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
                 conversationsID: Object.keys(selectedConversations),
                 messagesID: messsageIds
@@ -68,6 +65,7 @@ const ShareMessage:FC = () => {
 
         setSelectedConversations({});
         dispatch(dismissShare({}));
+        dispatch(removeAllSelectedMessage({conversationId: currentChat}));
     };
 
     return (

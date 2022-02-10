@@ -1,16 +1,26 @@
-import React, {FC, useRef} from "react";
+import React, {FC, useCallback} from "react";
 import TextChatContent from "./chatContent/textContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import FileChatContent from "./chatContent/fileContent";
 import ImagesContent from "./chatContent/imageContent";
 import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 import RightClickMessage from "./RightClickMessage";
+import SelectMessageCheckbox from "./SelectMessageCheckbox";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
+
 type Props = {
     message: ItemMessage;
 }
 
 const MyMessage:FC<Props> = ({message}) => {
-    const renderMessageContent = () => {
+    const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
+    const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
+
+    const dispatch = useDispatch();
+
+    const renderMessageContent = useCallback(() => {
         switch (message.type) {
             case 0:
                 return <TextChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
@@ -19,11 +29,27 @@ const MyMessage:FC<Props> = ({message}) => {
             case 1:
                 return <ImagesContent message={message} isMyMessage={true}/>
         }
-    }
+    }, [message]);
+
     return (
-        <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>} className={"flex justify-end items-end mb-2 transition duration-500"}>
-            {renderMessageContent()}
-        </RightClickMenuWrapper>
+        <div className={"flex items-center"}>
+            <SelectMessageCheckbox message={message}/>
+            <div
+                onClick={() => {
+                    if (selectedState) {
+                        if (!Object.keys(listSelectedMessage??{}).includes(message._id)) {
+                            dispatch(setSelectedMessages({selectedMessages: [message], conversationId: message.conversation}))
+                        } else {
+                            dispatch(removeSelectedMessage({conversationId: message.conversation, messageId: message._id}))
+                        }
+                    }
+                }}
+                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer"}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>} className={"mb-2 transition duration-500"}>
+                    {renderMessageContent()}
+                </RightClickMenuWrapper>
+            </div>
+        </div>
     )
 }
 
