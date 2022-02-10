@@ -15,28 +15,28 @@ const FilePinned:FC<Props> = ({message}) => {
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <img  className={"w-[36px] h-[36px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <img  className={"w-[36px] h-[36px]"} style={{width: 36}} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <img  className={"w-[36px] h-[36px]"} src={WordIcon} alt={"icon word"}/>
+                return <img  className={"w-[36px] h-[36px]"} style={{width: 36}} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <img  className={"w-[36px] h-[36px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <img  className={"w-[36px] h-[36px]"} style={{width: 36}} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <img  className={"w-[36px] h-[36px]"} src={SampleImage} alt={"icon images"}/>
+                return <img  className={"w-[36px] h-[36px]"} style={{width: 36}} src={SampleImage} alt={"icon images"}/>
             default:
-                return <img  className={"w-[36px] h-[36px]"} src={OtherIcon} alt={"icon other"}/>
+                return <img  className={"w-[36px] h-[36px]"} style={{width: 36}} src={OtherIcon} alt={"icon other"}/>
         }
     }, [message])
 
     return (
         <>
             {renderFileTypeImage()}
-            <div className={"flex-1 max-w-[185px] ml-[5px]"}>
-                <div className={"text-primary"}>Tin đã ghim</div>
-                <div className={"truncate"}>
+            <div className={"flex-1 max-w-[185px] ml-[5px] flex flex-col justify-start"}>
+                <div className={"text-primary text-left"}>Tin đã ghim</div>
+                <div className={"truncate text-left"}>
                     {message.files[0].file.file.nameOrg??message.files[0].file.file.name}
                 </div>
             </div>

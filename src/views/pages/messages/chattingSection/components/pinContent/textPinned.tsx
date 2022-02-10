@@ -22,9 +22,9 @@ const TextPinned:FC<Props> = ({message, className}) => {
         }
     },[textContentRef, message.content])
     return (
-        <div className={"flex-1 max-w-[185px] ml-[5px]"}>
-            <div className={"text-primary"}>Tin đã ghim</div>
-            <div className={"truncate"} ref={textContentRef}></div>
+        <div className={"flex-1 max-w-[185px] ml-[5px] flex flex-col justify-start"}>
+            <div className={"text-primary text-left"}>Tin đã ghim</div>
+            <div className={"truncate text-left"} ref={textContentRef}></div>
         </div>
     )
 }

@@ -1351,3 +1351,9 @@ input[type="text"] {
 .aspect-ratio-1 {
 	aspect-ratio: 1;
 }
+.pinned-list-header .carousel .control-dots {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  width: 2px;
+}
