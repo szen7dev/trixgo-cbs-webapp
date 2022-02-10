@@ -1114,6 +1114,12 @@ button {
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
 }
+.form-check-input.border-white {
+  border-color: white;
+}
+.form-check-input.bg-transparent {
+  background-color: transparent;
+}
 .form-check-input:focus {
   border-color: #86b7fe;
   outline: 0;
@@ -1344,4 +1350,17 @@ input[type="text"] {
 
 .aspect-ratio-1 {
 	aspect-ratio: 1;
+}
+.pinned-list-header .carousel .control-dots {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  max-height: 100%;
+  width: 2px;
+  margin: 0;
+  overflow: hidden;
+}
+.pinned-list-header .carousel .control-dots .dot-pin{
+  min-height: 15px;
+  max-height: 100%;
 }

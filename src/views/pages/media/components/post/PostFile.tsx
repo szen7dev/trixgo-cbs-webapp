@@ -11,13 +11,13 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 	if (!files?.length) return null;
 
 	const handleDownload = (file: FileProps | File) => {
-		if ('url' in file) {
+		if ('path' in file) {
 			const a = document.createElement('a');
-			a.href = file.url
-			a.download = file.name
-			document.body.appendChild(a)
-			a.click()
-			document.body.removeChild(a)
+			a.href = `${process.env.REACT_APP_URL_S3}/${file.path}`;
+			a.download = file.nameOrg;
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
 		}
 	};
 
@@ -25,7 +25,7 @@ const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ fi
 		<>
 			{
 				files.map((d) => {
-					const name = 'progress' in d ? d.file.name : (d.file ? d.file.name : d.name);
+					const name = 'progress' in d ? d.file.name : (d.file ? d.file.nameOrg : d.nameOrg);
 					const size = 'progress' in d ? d.file.size : (d.file ? d.file.size : d.size);
 					const download = 'progress' in d ? d.file : (d.file ? d.file : d);
 					const key = 'progress' in d ? d.id : d._id;

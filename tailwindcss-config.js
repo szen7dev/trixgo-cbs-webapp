@@ -38,6 +38,15 @@ module.exports = {
             display: ["SanFranciscoDisplay, serif"],
         },
         extend: {
+            keyframes: {
+                wiggle: {
+                    '0%, 100%': { transform: 'scale(0)' },
+                    '50%': { transform: 'scale(1.25)' },
+                }
+            },
+            animation: {
+                wiggle: 'wiggle 1s ease-in-out infinite',
+            },
             colors: {
                 transparent: "transparent",
                 primary: "#0060E1",

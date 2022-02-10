@@ -1,15 +1,14 @@
 import React, {FC, useCallback, useContext} from "react";
-import SampleImage from "assets/images/icons8-image-256.svg";
-import Close from "assets/icons/Close";
 import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
 import SavedMessage from "assets/images/saved-messages.svg";
-import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
+import HeaderPinedMessages from "./HeaderPinedMessages";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
 
 type Props = {
-    chat: any
+    chat: ItemListConversation
 }
 
 const MainChatHeading:FC<Props> = ({chat}) => {
@@ -103,33 +102,12 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div
-                onClick={() => setShowMenu(!showMenu)}
-                className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1 cursor-pointer"}>
-                <div className={""}>{getNameConversation()}</div>
+            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
+                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
-            <div className={"items-center flex"}>
-                <div className={"indicator-pinned flex flex-col h-full"}>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                </div>
-                <div className={"flex-1 flex ml-[5px]"}>
-                    <img  src={SampleImage} alt={"sample"} className={"w-[36px] h-[36px]"}/>
-                    <div className={"flex-1 max-w-[185px] ml-[5px]"}>
-                        <div className={"text-primary"}>Pinned Message</div>
-                        <div className={"truncate"}>Báo cáo ảnh tuần 12 của CPM olala ABC</div>
-                    </div>
-                    <button className={"flex items-center justify-center ml-[20px]"}>
-                        <Close/>
-                    </button>
-                </div>
-            </div>
-            <div className={"action-section flex items-center justify-end ml-[20px]"}>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <img  src={BulletListIcon} alt={"ham"}/>
-                </button>
+            <HeaderPinedMessages/>
+            <div className={"action-section flex items-center justify-end ml-[10px]"}>
                 <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                     <img  src={SearchIcon} alt={"search icon"}/>
                 </button>

@@ -54,6 +54,7 @@ export type ItemMessage = {
                 createdAt: string;
                 updatedAt: string;
                 __v: number;
+                nameOrg: string;
             };
         };
         [key: string]: any;
@@ -188,3 +189,21 @@ export type ShareMessageResponse = {
     data: ShareMessageData[];
     status: number;
 };
+
+export type PinnedMessagePayload = {
+    conversationID: string;
+    page?: number;
+}
+
+export type PinnedMessageData = {
+    listRecords: ItemMessage[],
+    limit: number;
+    currentPage: number;
+    totalRecord: number;
+}
+
+export type PinnedMessageResponse = {
+    data: PinnedMessageData;
+    error: boolean;
+    status: number;
+}

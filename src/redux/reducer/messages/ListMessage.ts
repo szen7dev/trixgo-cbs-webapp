@@ -40,6 +40,17 @@ const initialState : {
         },
         replyMessage: {
             [key: string] : ItemMessage;
+        },
+        listMessagePinned: {
+            [key: string]: ItemMessage[]
+        },
+        listSelectedMessage: {
+            [key: string]: {
+                [key: string] : ItemMessage
+            }
+        },
+        selectedState: {
+            [key: string]: boolean
         }
     }
 } = {
@@ -54,7 +65,10 @@ const initialState : {
         listImages: {},
         listFiles: {},
         listLinks: {},
-        replyMessage: {}
+        replyMessage: {},
+        listMessagePinned: {},
+        listSelectedMessage: {},
+        selectedState: {}
     }
 };
 
@@ -247,6 +261,73 @@ const listMessageSlice = createSlice({
                     ...newMessage
                 }
             }
+        },
+        setPinnedMessage (state, action) {
+            state.data = {
+                ...state.data,
+                listMessagePinned: {
+                    ...state.data.listMessagePinned,
+                    [action.payload.conversationId]: action.payload.listMessagesPinned
+                }
+            }
+        },
+        setSelectedMessages (state, action) {
+            const newMessageSelected : {[key: string] : ItemMessage} = {};
+            action.payload.selectedMessages.forEach((message: ItemMessage) => {
+                newMessageSelected[message._id] = message;
+            })
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listSelectedMessage[action.payload.conversationId],
+                        ...newMessageSelected
+                    }
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: true
+                }
+            }
+        },
+        removeAllSelectedMessage (state, action) {
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: {}
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: false
+                }
+            }
+        },
+        removeSelectedMessage (state, action) {
+            const newSelectedMessage = {...state.data.listSelectedMessage[action.payload.conversationId]};
+            delete newSelectedMessage[action.payload.messageId];
+
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: newSelectedMessage
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: Object.keys(newSelectedMessage).length > 0
+                }
+            }
+        },
+        setSelectedStateOn (state, action) {
+            state.data = {
+                ...state.data,
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: true
+                }
+            }
         }
     },
     extraReducers: {}
@@ -266,6 +347,11 @@ export const {
     updateReminderData,
     setReplyMessage,
     removeReplyMessage,
-    setShareMessage
+    setShareMessage,
+    setPinnedMessage,
+    setSelectedMessages,
+    removeSelectedMessage,
+    removeAllSelectedMessage,
+    setSelectedStateOn
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

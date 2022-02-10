@@ -1,18 +1,17 @@
-import React, { FC, HTMLAttributes, useContext, useState } from 'react'
+import { FC, HTMLAttributes, useContext } from 'react';
 
 import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 import ReplyCommentField from '../ReplyCommentField';
 import RootCommentsList from '../RootCommentsList';
-import CommentContext from '../../context/comment/comment.context';
 import { ContextModalPost } from '../../context/post';
+// import CommentContext from '../../context/comment/comment.context';
 
 const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [reply, setReply] = useState<boolean>(false);
-	const { state } = useContext(CommentContext);
+	// const [reply, setReply] = useState<boolean>(false);
+	// const { state } = useContext(CommentContext);
 	const { state: statePost } = useContext(ContextModalPost);
-	// console.log(statePost);
 
 	return (
 		<div {...props}>
@@ -73,4 +72,4 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = (
 	)
 }
 
-export default SideComments
+export default SideComments;

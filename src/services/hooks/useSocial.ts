@@ -298,7 +298,11 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         }
     };
 
-    const listComments = [].concat(...(dataListComments?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean)
+    const listComments = []
+        .concat(...(dataListComments?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
     const totalRecord = dataListComments?.pages[0]?.data?.totalRecord || 0;
     const nextCursor = dataListComments?.pages[0]?.data?.nextCursor;
     const limit = dataListComments?.pages[0]?.data?.limit || 5;

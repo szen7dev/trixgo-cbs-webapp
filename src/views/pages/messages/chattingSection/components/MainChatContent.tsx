@@ -27,7 +27,6 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
-    const [firstInit, setFirstInit] = useState(false);
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
     const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[chat._id]);
     const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
@@ -45,23 +44,15 @@ const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        getListMessage({conversationID: currentChat}).then((data) => {
-            setTimeout(() => {
-                scrollToBottom()
-                setFirstInit(true)
-            }, 100)
-        })
+        getListMessage({conversationID: currentChat})
     },[currentChat]);
 
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
-        document.addEventListener("wheel", function (e) {
-            onScroll();
-        });
     },[conversationMessagesList]);
 
     useEffect(() => {
-        if (reachedTop && !isLoading && hasMoreData && firstInit) {
+        if (reachedTop && !isLoading && hasMoreData) {
             getListMessage({lastestID: nextCursor, conversationID: currentChat});
             setReachTop(false);
         }
@@ -74,9 +65,9 @@ const MainChatContent:FC<Props> = ({chat}) => {
 
     const onScroll = () => {
         if (conversationMessagesList.current) {
-            const { scrollTop, offsetTop } = conversationMessagesList.current;
-            if (offsetTop > scrollTop) {
-                setReachTop(true);
+            const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
+            if (scrollHeight + scrollTop - clientHeight < 200) {
+                setReachTop(true)
             } else {
                 setReachTop(false);
             }
@@ -132,7 +123,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-list"}
-                className={"flex-1 h-full items-center flex flex-col relative overflow-auto transition-all duration-150"}
+                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {memoizedValue()}

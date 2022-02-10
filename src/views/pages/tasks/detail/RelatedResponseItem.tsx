@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
+import classNames from "classnames";
 import _ from "lodash";
 import { useMutation } from "react-query";
 
@@ -17,10 +18,11 @@ import FileRepository from "apis/upload";
 
 type Props = {
   expanded?: boolean;
+  isHighlight?: boolean;
   response: ResponseProps
 };
 
-const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => {
   const { mutateAsync: updateMarkResponseAsync } =
     useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
       TaskRepository.updateMarkResponse(payload)
@@ -50,7 +52,13 @@ const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
 
   return (
     <>
-      <div className="flex">
+      <div className={
+        classNames("flex",
+        isHighlight 
+          ? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 hover:scale-125 p-3 transition ease-in-out delay-150 duration-300' 
+          : 'animate-[wiggle_1s_ease-in-out_infinite]'
+        )
+      }>
         <img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
         <div className="w-full ml-5">
           <div className="flex justify-between">
@@ -133,7 +141,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
                   <div className="w-1/8 flex flex-col items-center justify-between">
                     <input type="checkbox" />
                     <div className="rounded-full p-2 border-2">
-                      <a href={file.url}>
+                      <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
                         <img src={IconDownload} alt="Avatar" className="w-6" />
                       </a>
                     </div>
@@ -147,7 +155,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
                   if(index < 2) {
                     return (
                       <div className="w-1/3" key={file._id}>
-                        <img src={TestImage} className="w-full" alt="test" />
+                        <img src={file.path ? `${process.env.REACT_APP_URL_S3}/${file.path}` : file.url} className="w-full" alt="test" />
                       </div>
                     )
                   }
@@ -179,6 +187,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
 
 RelatedResponseItem.defaultProps = {
   expanded: true,
+  isHighlight: false
 };
 
 export default RelatedResponseItem;

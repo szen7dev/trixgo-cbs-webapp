@@ -62,9 +62,9 @@ const ListChatItem:FC<Props> = ({chat}) => {
         if (chat.lastMessage) {
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <div className={"flex items-center"}>
-                        <div className={(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</div>:
-                        <div className={"ml-[5px] truncate w-[210px]"}>
+                    return <p className={"flex items-center"}>
+                        <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
+                        <span className={"ml-[5px] truncate max-w-[300px]"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
                                 const matchs = (/[@]\[(.*?)\]\((.*?)\)/g).exec(replacement);
                                 if (matchs) {
@@ -74,22 +74,22 @@ const ListChatItem:FC<Props> = ({chat}) => {
                                     return replacement;
                                 }
                             })}
-                        </div>
-                    </div>
+                        </span>
+                    </p>
                 case 1:
-                    return <div className={"flex items-center"}>
-                        <span className={(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
-                        <div className={"ml-[5px]"}>
+                    return <p className={"flex items-center"}>
+                        <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
+                        <span className={"ml-[5px]"}>
                         [Hình ảnh]
-                        </div>
-                    </div>;
+                        </span>
+                    </p>;
                 case 2:
-                    return <div className={"flex items-center"}>
-                        <span className={(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
-                        <div className={"ml-[5px]"}>
+                    return <p className={"flex items-center"}>
+                        <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
+                        <span className={"ml-[5px]"}>
                         [Tệp tin]
-                        </div>
-                    </div>;
+                        </span>
+                    </p>;
                 default:
                     return "[Thông báo]";
             }
@@ -134,7 +134,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
                                 </div> :
                                 <AvatarGroupChat
                                     avatars={getAvatarMembers()}
-                                    imageClass={"w-[56px] h-[56px]"}
+                                    imageClass={"w-[56px] h-[56px] min-w-[56px] min-h-[56px]"}
                                     classesMap={{
                                         "group_1": {
                                             imgWidth: "w-full h-full",
