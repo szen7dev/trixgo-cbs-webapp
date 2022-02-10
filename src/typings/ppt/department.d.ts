@@ -1,350 +1,17 @@
-type Department = {
-  /** Công ty */
-  company: string;
-  /** Phần tử cha */
-  parent: string;
-  /**
-   * PHÂN QUYỀN TRUY CẬP
-   */
-  admins: [string];
-  members: [string];
-  /**
-    Phân loại
-    1-Phòng ban
-    2-Dự án
-   */
-  type: number;
-  /**
-   * Giai đoạn dự án
-   * 1-Đang phát triển
-   * 2-Lập kế hoạch
-   * 3-Thiết kế
-   * 4-Đấu thầu
-   * 5-Xây dựng
-   * 6-Khác
-   */
-  stage: number;
-  /**
-   * Ontime
-   * 1-Ontime
-   * 2-Offtime
-   */
-  ontime: number;
-  /**
-   * Onbudget
-   * 1-Onbudget
-   * 2-Offbudget
-   */
-  onbudget: number;
-  /**
-   * Trạng thái triển khai
-   * 1-Đang triển khai
-   * 2-Bàn giao
-   * 3-Hoàn thành
-   * 4-Tạm dừng
-   */
-  status: number;
-  /**
-   * Nhóm dự án
-   * 1-Quan trọng quốc gia
-   * 2-Nhóm A
-   * 3-Nhóm B
-   * 4-Nhóm C
-   */
-  projectType: number;
-  /**
-   * Nguồn vốn
-   * 1-Ngân sách
-   * 2-Tư nhân
-   * 3-...
-   * 4-...
-   */
-  projectCapital: number;
-  /**
-   * Loại công trình
-   * 1-Dân dụng
-   * 2-...
-   * 3-...
-   * 4-...
-   */
-  buildingType: number;
-  /**
-   * Cấp công trình
-   */
-  buildingGrade: number;
-  /**
-   * THÔNG TIN CĂN BẢN
-   */
-  /** Tên */
-  name: string;
-  /** Mô tả */
-  description: string;
-  /** Ký hiệu */
-  sign: string;
-  /** Chủ đầu tư */
-  owner: string;
-  /** Địa chỉ theo google map */
-  location: string;
-  /** Địa chỉ dự án/phòng ban */
-  address: string;
-  /** Khu vực dự án/phòng ban */
-  area: string;
-  /** Kế hoạch bắt đầu */
-  startTime: Date;
-  /** Kế hoạch kết thúc */
-  expiredTime: Date;
-  /** Thực tế bắt đầu */
-  actualStartTime: Date;
-  /** Thực tế kết thúc */
-  actualFinishTime: Date;
-  /** Trưởng dự án/phòng ban */
-  pm: string;
-  /** Phụ trách chấm công/Trợ lý của PM */
-  assistant: string;
-  /** Tổng mức đầu tư */
-  budget: number;
-  /** Ghi chú */
-  note: string;
-  /** Chức vụ của thành viên trong Dự án/phòng ban (BỎ) */
-  position: [
-    {
-      user: string;
-      name: string;
-    }
-  ];
-  /** Hình ảnh đại diện */
-  image: string;
-  /** Hình ảnh đại diện (2021) */
-  files: string;
-  /**
-   * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
-   */
-  userCreate: string;
-  userUpdate: string;
-
-  /**
-   * COLLECTION CÔNG VIỆC VÀ THÔNG TIN
-   */
-  //______Tổng số cột mốc
-  milestones: number;
-  //______Số mốc đã hoàn thành
-  completedMilestones: number;
-
-  //______Tổng số công việc
-  tasks: number;
-  //______Tổng số công việc
-  completedTasks: number;
-  //______Hình ảnh gần đây nhất của dự án
-  images: [string];
-  //______Bình luận cuối cùng
-  lastComment: string;
-
-  /**
-   * COLLECTION CHỈ SỐ TÀI CHÍNH
-   */
-  //______Doanh thu
-  revenue: number;
-
-  //______Dự báo doanh thu tới khi kết thúc
-  forecastRevenue: number;
-  //______Doanh thu thực tế
-  realRevenue: number;
-
-  //______Dự báo ngân sách
-  forecastBudget: number;
-
-  //______Ngân sách thực tế
-  realBudget: number;
-
-  //______Lợi nhuận NPV
-  npv: number;
-
-  //______Dự báo Lợi nhuận NPV
-  forecastNpv: number;
-
-  //______Thực tế lợi nhuận
-  realNpv: number;
-
-  //______Lợi nhuận IRR
-  irr: number;
-
-  //______Dự báo lợi nhuận IRR
-  forecastIrr: number;
-
-  //______Thực tế IRR
-  realIrr: number;
-
-  /**
-   * COLLECTION DÒNG TIỀN CHI
-   */
-  //______Số lượng gói thầu
-  numberOfPackage: number;
-  //______Giá trị gói thầu đã hoàn thành
-  numberOfCompletedPackage: number;
-
-  //______Số lượng hợp đồng mua vào
-  numberOfContractIn: number;
-
-  //______Giá trị ký hợp đồng trước VAT
-  contractValue: number;
-
-  //______Giá trị phát sinh trước VAT
-  contractPlusValue: number;
-
-  //______VAT hợp đồng
-  contractVatValue: number;
-
-  //______Tạm ứng theo hợp đồng
-  contractAdvancePayment: number;
-
-  //______Sản lượng trước VAT
-  contractProduce: number;
-
-  //______Nghiệm thu phát sinh trước VAT
-  contractPlusAcceptance: number;
-
-  //______VAT
-  contractVatAcceptance: number;
-
-  //______Giá trị giữ lại
-  contractRetainedValue: number;
-
-  //______Thu hồi tạm ứng
-  contractAdvancePaymentDeduction: number;
-
-  //______Khấu trừ khác
-  contractOtherDeduction: number;
-
-  //______Đề nghị tạm ứng/thanh toán
-  contractRecommendedPayment: number;
-
-  //______Đã giải ngân
-  contractAmountPaid: number;
-
-  //______Còn lại chưa giải ngân
-  contractRemainingPayment: number;
-
-  //______Dư ứng
-  contractAdvancePaymentOverage: number;
-
-  /**
-   * COLLECTION DÒNG TIỀN THU
-   */
-  //______Bắt đầu mở bán
-  openTime: {
-    type: Date;
-  };
-
-  //______Kết thúc mở bán
-  closedTime: {
-    type: Date;
-  };
-
-  //______Số đại lý tham gia bán hàng
-  numberOfAgent: number;
-
-  //______Số lượng booking
-  numberOfBooking: number;
-
-  //______Giá trị booking
-  totalBookingValue: number;
-
-  //______Số lượng đặt cọc
-  numberOfDeposit: number;
-
-  //______Giá trị đặt cọc
-  totalDepositValue: number;
-
-  //______Số hợp đồng bán ra
-  numberOfContract: number;
-
-  //______Giá trị hợp đồng bán ra
-  totalContractValue: number;
-
-  //______Công nợ phải thu
-  receivable: number;
-
-  /**
-   * COLLECTION PHÁT TRIỂN THỊ TRƯỜNG
-   */
-
-  //______Ước tính giá trị
-  estimate: number;
-
-  //______Ngày liên hệ gần nhất
-  lastDateContact: {
-    type: Date;
-  };
-
-  //______Đầu mối kết nối
-  transactionContacts: {
-    type: Schema.Types.ObjectId;
-    ref: "contract";
-  };
-
-  //______Khả năng thành công
-  likelihoodOfSuccess: {
-    type: Date;
-  };
-
-  //______Tiến trình cuối cùng
-  lastChange: {
-    type: Schema.Types.ObjectId;
-    ref: "comment";
-  };
-
-  /**
-   * THÔNG TIN KHÁC
-   */
-  //______Số danh bạ
-  numberOfContact: number;
-
-  //______Số biên bản họp
-  numberOfMoms: number;
-
-  //______Số lượng hồ sơ văn bản
-  numberOfDocs: number;
-
-  //______Số lượng hồ sơ văn bản đã hoàn thành
-  numberFinishOfDocs: number;
-
-  //______Số bản vẽ
-  numberOfDrawings: number;
-
-  //______Số báo cáo
-  numberOfReports: number;
-
-  //______Số hồ sơ thanh toán
-  numberOfIpcs: number;
-
-  //______Số RFI
-  numberOfRfis: number;
-
-  //______Số Submitals
-  numberOfSubmitals: number;
-
-  //______Số Punch list
-  numberOfPunchLists: number;
-
-  //______Số hình ảnh
-  numberOfPhotos: number;
-
-  //______Số hồ sơ chất lượng
-  numberOfInspections: number;
-
-  //______Last log cuối cùng của dự án
-  lastLog: string;
-};
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { DepartmentEnumType } from "./index";
 
 // Response form
-type DepartmentResponse<T> = {
+export type DepartmentResponse<T> = {
   error: boolean;
   data: T;
   status?: number;
 };
 
 // Analysis
-type DataBlock1 = Array<{
+export type DataBlock1 = Array<{
   _id: {
     ontime: number;
     onbudget: number;
@@ -352,7 +19,7 @@ type DataBlock1 = Array<{
   amount: number;
 }>;
 
-type DataBlock2 = Array<{
+export type DataBlock2 = Array<{
   _id: null | any;
   budget: number;
   forecastBudget: number;
@@ -360,34 +27,250 @@ type DataBlock2 = Array<{
   contractAmountPaid: number;
 }>;
 
-type DataBlock3 = Array<{
+export type DataBlock3 = Array<{
   _id: {
     stage: number;
   };
   amount: number;
 }>;
-type DepartmentsAnalysisData = {
+export type DepartmentsAnalysisData = {
   dataBlock1: DataBlock1;
   dataBlock2: DataBlock2;
   dataBlock3: DataBlock3;
 };
 
-// List departments
-type DepartmentRecord = {
+// Subfield
+export type AreaData = {
   _id: string;
+  childs: string[];
+  level: number;
   name: string;
-  description: string;
-  company: string;
+  sign: string;
+  modifyAt: string;
   createAt: string;
-  sign: null | any;
-  expiredTime: string;
-  startTime: string;
+  userCreate: string;
+  __v: number;
 };
 
-type DepartmentListData = {
-  listRecords: DepartmentRecord[];
+export type CompanyData = {
+  _id: string;
+  field: number;
+  scale: number;
+  owners: string[];
+  name: string;
+  modifyAt: string;
+  createAt: string;
+  timeActive: string;
+  __v: number;
+  image: string;
+  address: string;
+  phone: string;
+  sign: string;
+  slogan: string;
+  taxid: string;
+  userUpdate: string;
+  adreport: string[];
+  description: string;
+  show: number;
+  website: string;
+  supporters: string[];
+};
+
+// List departments
+export type DepartmentListData<T> = {
+  listRecords: T[];
   limit: number;
   totalRecord: number;
   totalPage: number;
   nextCursor: string | null;
 };
+
+export type DataCommon<P, Sn> = {
+  _id: string;
+  childs: string[];
+  level: number;
+  admins: string[];
+  members: string[];
+  type: number;
+  stage?: number;
+  status: number;
+  contracts: string[];
+  packages: string[];
+  projectType: number;
+  projectCapital: number;
+  buildingType: number;
+  buildingGrade: number;
+  planGroups: string[];
+  investmentAmount: number;
+  name: string;
+  sign: string;
+  modifyAt: string;
+  createAt: string;
+  userCreate: string;
+  position: string[];
+  __v: number;
+  numberOfDocs: number;
+  company: "company" extends P
+    ? undefined extends Sn
+      ? CompanyData
+      : Pick<CompanyData, Sn>
+    : null;
+  area: "area" extends P
+    ? undefined extends Sn
+      ? AreaData
+      : Pick<AreaData, Sn>
+    : string;
+};
+
+export type DataProjectPart<P, Sn> = {
+  ontime?: number;
+  onbudget?: number;
+  startTime: string;
+  expiredTime: string;
+  actualStartTime: string | null;
+  actualFinishTime: string | null;
+};
+
+export type DataDepartmentPart<P, Sn> = {
+  topics: string[];
+  startDate: string | null;
+  endDate: string | null;
+  description: string;
+  owner: string;
+  address: string;
+  pm: string;
+  assistant: string;
+  parent: string;
+};
+
+export type DataProject<P, Sn> = DataCommon<P, Sn> & DataProjectPart<P, Sn>;
+export type DataDepartment<P, Sn> = DataCommon<P, Sn> &
+  DataDepartmentPart<P, Sn>;
+
+type ExcludeString<O> = {
+  [K in keyof O as O[K] extends string | string[] | null | number | never
+    ? never
+    : K]: Exclude<O[K], string | null>;
+};
+
+type ExcludeObject<O, P> = P extends keyof O
+  ? {
+      [K in keyof O as O[K] extends object | object[] | null | never
+        ? never
+        : K]: Exclude<O[K], object | null>;
+    }
+  : O;
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I
+) => void
+  ? I
+  : never;
+
+type NestedPartial<T, K extends keyof T> = UnionToIntersection<Pick<T, K>[K]>;
+
+export type DataEnum<P, Sn> = {
+  [DepartmentEnumType.PROJECT]: DataProject<P, Sn>;
+  [DepartmentEnumType.DEPARTMENT]: DataDepartment<P, Sn>;
+};
+
+type EnumValue<T extends DepartmentEnumType | undefined> = T extends undefined
+  ? DepartmentEnumType[DepartmentEnumType.PROJECT]
+  : T;
+
+export type UseHook<
+  T extends DepartmentEnumType | undefined,
+  S extends keyof DataEnum<undefined, undefined>[T extends undefined
+    ? DepartmentEnumType.PROJECT
+    : T],
+  // | undefined,
+  P extends
+    | (S extends keyof DataEnum<undefined, undefined>[T extends undefined
+        ? DepartmentEnumType.PROJECT
+        : T]
+        ? S
+        : keyof DataEnum<undefined, undefined>[T extends undefined
+            ? DepartmentEnumType.PROJECT
+            : T])
+    | undefined,
+  Sn extends S extends undefined
+    ? P extends keyof DataEnum<P, undefined>[T extends undefined
+        ? DepartmentEnumType.PROJECT
+        : T]
+      ? keyof NestedPartial<
+          DataEnum<P, undefined>[T extends undefined
+            ? DepartmentEnumType.PROJECT
+            : T],
+          P
+        >
+      : undefined
+    : P extends keyof DataEnum<P, undefined>[T extends undefined
+        ? DepartmentEnumType.PROJECT
+        : T]
+    ? keyof NestedPartial<
+        DataEnum<P, undefined>[T extends undefined
+          ? DepartmentEnumType.PROJECT
+          : T],
+        P
+      >
+    : undefined
+> = (props: {
+  type?: T;
+  select?: S;
+  populates?: {
+    path?: P;
+    select?: Sn;
+  };
+}) => DepartmentResponse<
+  DepartmentListData<DataDepartmentResponse<T, S, P, Sn>>
+>;
+
+export type DataDepartmentResponse<T, S, P, Sn> = undefined extends S
+  ? // S is undefined - done
+    undefined extends P
+    ? // P is undefined - done
+      DataEnum<undefined, undefined>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT]
+    : // P is defined - done
+    undefined extends Sn
+    ? // Sn is undefined - done
+      DataEnum<P, undefined>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT]
+    : // Sn is defined - done
+      DataEnum<P, Sn>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT]
+  : // S is key; - done
+  undefined extends P
+  ? // P is undefined - done
+    Pick<
+      DataEnum<undefined, undefined>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT],
+      S
+    >
+  : // P is defined - done
+  undefined extends Sn
+  ? // Sn is undefined - done
+    Pick<
+      DataEnum<P, undefined>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT],
+      S
+    >
+  : // Sn is defined - done
+    Pick<
+      DataEnum<P, Sn>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT],
+      S
+    >;
+
+const v: UseHook<undefined, undefined, "area", undefined>;
+v().data.listRecords[0].area;
+
+// Convert Array to Type
+export type ElementType<T extends ReadonlyArray<unknown>> =
+  T extends ReadonlyArray<infer ElementType> ? ElementType : never;

@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { DepartmentsRepository } from "apis/ppt";
+import type { DepartmentResponse, DepartmentsAnalysisData } from "typings/ppt/department";
 
 type NewType = {
   loading: boolean;

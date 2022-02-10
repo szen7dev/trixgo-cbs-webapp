@@ -16,4 +16,9 @@ export interface QueryParam {
     populates?: Populate;
 }
 
-export * from './Document';
+export enum DepartmentEnumType {
+  DEPARTMENT = 1,
+  PROJECT = 2,
+}
+
+export * from './Document.d';

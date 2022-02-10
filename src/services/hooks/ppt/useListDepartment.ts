@@ -1,6 +1,5 @@
 import {
   useInfiniteQuery,
-  useQuery,
   InfiniteData,
   RefetchOptions,
   QueryObserverResult,
@@ -8,6 +7,15 @@ import {
   InfiniteQueryObserverResult,
 } from "react-query";
 import { DepartmentsRepository } from "apis/ppt";
+import {
+  DataDepartmentResponse,
+  DataEnum,
+  DepartmentListData,
+  DepartmentResponse,
+  // DepartmentResponseType,
+  NestedPartial,
+} from "typings/ppt/department";
+import { DepartmentEnumType } from "typings/ppt";
 
 type NewType<T> = {
   loading: boolean;
@@ -18,41 +26,59 @@ type NewType<T> = {
   fetchNextPage: (
     options?: FetchNextPageOptions | undefined
   ) => Promise<InfiniteQueryObserverResult<T, unknown>>;
-};
-type InputProps = {
-  onSuccess?:
-    | ((data: InfiniteData<DepartmentResponse<DepartmentListData>>) => void)
-    | undefined;
+  hasNextPage?: boolean;
 };
 
-type DepartmentHook<T> = () => NewType<T>;
-
-export const useListDepartment: DepartmentHook<
-  DepartmentResponse<DepartmentListData>
-> = (props: InputProps = {}) => {
-  const { isLoading, data, refetch, fetchNextPage } = useInfiniteQuery(
-    ["departments.list"],
-    ({ pageParam }) =>
-      DepartmentsRepository.getDepartmentList({
-        select:
-          "name description sign company startTime expiredTime milestones completedMilestones stage createAt",
-        type: 2,
-      }),
-    {
-      refetchOnWindowFocus: false,
-      enabled: true,
-      getNextPageParam(response) {
-        return response.data.nextCursor;
-      },
-    }
-  );
+export function useListDepartment<
+  T extends DepartmentEnumType | undefined,
+  S extends
+    | keyof DataEnum<undefined, undefined>[T extends undefined
+        ? DepartmentEnumType.PROJECT
+        : T]
+    | undefined,
+  P extends
+    | (S extends keyof DataEnum<undefined, undefined>[T extends undefined
+        ? DepartmentEnumType.PROJECT
+        : T]
+        ? S
+        : keyof DataEnum<undefined, undefined>[T extends undefined
+            ? DepartmentEnumType.PROJECT
+            : T])
+    | undefined,
+  Sn extends
+    | keyof DataEnum<P, undefined>[T extends DepartmentEnumType
+        ? T
+        : DepartmentEnumType.PROJECT]
+    | undefined
+>(props: {
+  type?: T;
+  select?: S[];
+  populates?: {
+    path?: P[];
+    select?: Sn[];
+  };
+}): NewType<
+  DepartmentResponse<DepartmentListData<DataDepartmentResponse<T, S, P, Sn>>>
+> {
+  const { isLoading, data, refetch, fetchNextPage, hasNextPage } =
+    useInfiniteQuery(
+      ["departments.list"],
+      ({ pageParam }) => DepartmentsRepository.getDepartmentList(props),
+      {
+        refetchOnWindowFocus: false,
+        enabled: true,
+        getNextPageParam(response) {
+          return response.data.nextCursor;
+        },
+      }
+    );
 
   return {
     loading: isLoading,
     data,
     refetch,
-    // hasNextPage,
+    hasNextPage,
     fetchNextPage,
     // fetchPreviousPage,
   };
-};
+}

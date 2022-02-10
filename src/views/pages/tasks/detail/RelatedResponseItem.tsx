@@ -110,10 +110,10 @@ const RelatedResponseItem: FC<Props> = ({ expanded, response }) => {
                           </div>
 
                           <div className="flex w-full mt-2">
-                            <span className="w-4/5 text-[13px] text-primary-gray">
+                            <span className="w-[70%] text-[13px] text-primary-gray">
                             {file.userCreate?.bizfullname}
                             </span>
-                            <span className="text-end w-1/5 text-[13px] text-primary-gray">
+                            <span className="text-right w-[30%] text-[13px] text-primary-gray">
                               {moment(file.createAt).format('HH:mm DD/M/YYYY')}
                             </span>
                           </div>

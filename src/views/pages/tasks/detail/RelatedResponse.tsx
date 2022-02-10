@@ -49,7 +49,6 @@ type Props = {
   task: Task
 }
 
-const timer: Record<string | number, NodeJS.Timeout> = {};
 const queue = new QueueUpload();
 
 const RelatedResponse: FC<Props> = ({ task }) => {
@@ -86,9 +85,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
 
   useEffect(() => {
     dispatch({ type: 'SET_COMMENTS', payload: listResponses });
-    return () => {
-      Object.values(timer).forEach(t => clearInterval(t));
-    }
   }, [listResponses.length])
 
   useEffect(() => {
@@ -181,7 +177,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
         	// }
         })
 
-        delete timer['IMAGE' + key];
         setIDImageUploaded(key, _id);
       }
     })));
@@ -206,7 +201,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
           }
         })
 
-        delete timer['FILE' + key];
         setIDFileUploaded(key, _id);
         return false;
       }
@@ -221,10 +215,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
       type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
 
       queue.cancel(String(type + file.id));
-      if (timer[type + file.id]) {
-        clearInterval(timer[type + file.id]);
-      }
-      delete timer[type + file.id];
     } else {
       type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
     }
@@ -232,7 +222,6 @@ const RelatedResponse: FC<Props> = ({ task }) => {
 
   const handleSkip = () => {
     queue.abord();
-    Object.values(timer).forEach(t => clearInterval(t));
     removeAllFiles();
     setVisibleForm(true);
   }

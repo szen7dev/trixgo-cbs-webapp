@@ -7,6 +7,8 @@ import getPlugins, { _data, optionsOne as options } from "../../chart/ProjectDou
 
 import { Link } from "react-router-dom";
 
+import { DataBlock3 } from "typings/ppt/department";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const plugins = getPlugins('205', 'PROJECTS')

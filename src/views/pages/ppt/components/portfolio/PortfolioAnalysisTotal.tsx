@@ -1,6 +1,8 @@
 import React, { FC, HTMLAttributes, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { DataBlock1 } from 'typings/ppt/department';
+
 interface Props {
 	data?: DataBlock1
 }
