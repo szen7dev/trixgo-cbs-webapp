@@ -51,10 +51,11 @@ type Props = {
 
 const timer: Record<string | number, NodeJS.Timeout> = {};
 const queue = new QueueUpload();
+const LIMIT_PER_RESPONSE = 5;
 
 const RelatedResponse: FC<Props> = ({ task }) => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation(); // location.hash
+  const location = useLocation();
 
   const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
   const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
@@ -80,6 +81,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [content, setContent] = useState('');
   const [amountComment, setAmountComment] = useState(totalRecordResponse);
+  const [amountCommentBack, setAmountCommentBack] = useState(0);
 
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
   const [collapsed] = useState(false);
@@ -102,7 +104,12 @@ const RelatedResponse: FC<Props> = ({ task }) => {
         commentID: location.hash.substring(1)
       });
 
-      console.log({ response })
+      if(response.status === 200) {
+        const { listRecords, totalRecordBack, totalRecordFront } = response.data;
+        setAmountComment(totalRecordFront);
+        setAmountCommentBack(totalRecordBack);
+        dispatch({ type: 'SET_COMMENTS', payload: listRecords });
+      }
     })();
 
   }, [location.hash])
@@ -140,17 +147,33 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   }
 
   const handleViewPrevious = async () => {
-    const LIMIT = 5;
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[0]._id,
       taskID: id,
-      limit: LIMIT,
+      limit: LIMIT_PER_RESPONSE,
       isMarked: currentTab === 'MARKED' ? true : false,
     });
 
     if (error || !data.listRecords.length) return;
 
-    setAmountComment(amountComment - LIMIT);
+    setAmountComment(amountComment - LIMIT_PER_RESPONSE);
+    dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords });
+  }
+
+  const handleViewNext = async () => {
+    const { error, data } = await TaskRepository.listResponse({
+      lastestID: state.comments[state.comments.length - 1]._id,
+      taskID: id,
+      limit: LIMIT_PER_RESPONSE,
+      isMarked: false,
+      sortKey: JSON.stringify({
+        keys: ['createAt__1', '_id__1']
+      })
+    });
+
+    if (error || !data.listRecords.length) return;
+
+    setAmountCommentBack(amountCommentBack - LIMIT_PER_RESPONSE);
     dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
   }
 
@@ -241,12 +264,14 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     setCurrentTab(RelatedResponseTab.ALL);
     dispatch({ type: 'SET_COMMENTS', payload: listResponses });
     setAmountComment(totalRecordResponse);
+    setAmountCommentBack(0);
   }
 
   const onClickTabMarked = () => {
     setCurrentTab(RelatedResponseTab.MARKED);
     dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked });
     setAmountComment(totalRecordResponseMarked);
+    setAmountCommentBack(0);
   }
 
   return (
@@ -261,13 +286,13 @@ const RelatedResponse: FC<Props> = ({ task }) => {
             className={getClassTab(RelatedResponseTab.ALL)}
             onClick={onClickTabAll}
           >
-            <span className="text-[13px]">Tất cả ({task.amountResponse})</span>
+            <span className="text-[13px]">Tất cả ({task.amountResponse || 0})</span>
           </button>
           <button
             className={getClassTab(RelatedResponseTab.MARKED)}
             onClick={onClickTabMarked}
           >
-            <span className="text-[13px]">Đã đánh dấu ({task.amountResponseMarked})</span>
+            <span className="text-[13px]">Đã đánh dấu ({task.amountResponseMarked || 0})</span>
           </button>
         </div>
         <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
@@ -289,16 +314,21 @@ const RelatedResponse: FC<Props> = ({ task }) => {
           </button>
         </div>
       </div>
-      {(amountComment && amountComment > 3) ? (
+      {(amountComment && amountComment > LIMIT_PER_RESPONSE) ? (
         <p className="mb-5 text-sm text-primary">
-          <button onClick={handleViewPrevious}>Xem {amountComment - 3} phản hồi trước</button>
+          <button onClick={handleViewPrevious}>Xem {amountComment - LIMIT_PER_RESPONSE} phản hồi trước</button>
         </p>
       ) : ''}
       <div>
         {state.comments.length ? state.comments.map(response => (
-          <RelatedResponseItem key={response._id} expanded={isExpand} response={response} />
+          <RelatedResponseItem key={response._id} response={response} expanded={isExpand} isHighlight={location.hash.substring(1) === response._id} />
         )) : ''}
       </div>
+      {(amountCommentBack && amountCommentBack > LIMIT_PER_RESPONSE) ? (
+        <p className="mb-5 text-sm text-primary">
+          <button onClick={handleViewNext}>Xem {amountCommentBack - LIMIT_PER_RESPONSE} phản hồi sau</button>
+        </p>
+      ) : ''}
 
       {visibleForm ? (
         <div className="ml-16">

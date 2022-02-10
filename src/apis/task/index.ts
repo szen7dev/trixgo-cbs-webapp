@@ -101,7 +101,7 @@ const TaskRepository = {
             options: {
               limit: 5,
             },
-            select: '_id name nameOrg url description createAt userCreate',
+            select: '_id name nameOrg path description createAt userCreate',
             populate: {
               path: 'userCreate',
               select: '_id bizfullname'
@@ -128,7 +128,7 @@ const TaskRepository = {
             options: {
               limit: 5,
             },
-            select: '_id name nameOrg url description createAt userCreate',
+            select: '_id name nameOrg path description createAt userCreate',
             populate: {
               path: 'userCreate',
               select: '_id bizfullname'

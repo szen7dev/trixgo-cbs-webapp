@@ -55,7 +55,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
                   author={notification.sender.bizfullname}
                   content={notification.title}
                   path={notification.path}
-                  lastActive={moment(notification.createdAt).fromNow()}
+                  lastActive={moment(notification.createAt).fromNow()}
                 />
               </Menu.Item>
             )) : ''}

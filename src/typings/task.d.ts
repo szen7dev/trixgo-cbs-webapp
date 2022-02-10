@@ -124,12 +124,13 @@ export type ResponseResponse = APIResponse & {
 };
 
 export type ListResponsePayload = {
+  taskID?: string;
   lastestID?: string;
   limit?: number;
   isMarked?: boolean;
   populates?: string;
   select?: string;
-  taskID?: string;
+  sortKey?: string;
 };
 
 export type SearchResponsePayload = {

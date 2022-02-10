@@ -7,7 +7,7 @@ export type CommentsState = {
 export type CommentState = ResponseProps;
 
 export type SetComments = {
-    type: 'SET_COMMENTS' | 'VIEW_MORE_COMMENTS',
+    type: 'SET_COMMENTS' | 'VIEW_MORE_COMMENTS' | 'VIEW_PREVIOUS_COMMENTS',
     payload: ResponseProps[]
 }
 

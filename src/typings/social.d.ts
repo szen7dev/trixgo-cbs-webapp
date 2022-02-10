@@ -46,25 +46,31 @@ export type PostImageProps = {
 
 interface FileProp {
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
 }
 
 export type FileProps = {
 	file?: FileProp
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
 };
 
 export type ImageProps = {
   file?: FileProp
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
 };
 
 export type ReactionProps = {
@@ -155,7 +161,7 @@ export type MediaProps = {
 export type FilePropsUpload = {
   _id: string;
   id: number;
-  file: File;
+  file: File | FileProps;
   progress: number;
   cancelTokenSource: CancelTokenSource;
   proimise?: Interval;
@@ -185,8 +191,6 @@ export type ListCommentsPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-  populates1?: string;
-  populates2?: string
 };
 
 export type CommentPayload = {

@@ -35,5 +35,5 @@ export type NotificationProps = {
   title: string,
   content: string,
   path: string,
-  createdAt: string
+  createAt: string
 };

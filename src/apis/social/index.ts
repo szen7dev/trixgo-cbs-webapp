@@ -98,16 +98,16 @@ const SocialRepository = {
         const { data } = await API.get<ListCommentResponse>(
             `${mediaURL}/comments?${convertObToUrl({
                 populates: JSON.stringify({
-                    value: 'comment userCreate lastestReplyID',
-                    select: '_id fullname image parent content files images amountCommentReply amountReaction createAt'
-                }),
-                populates1: JSON.stringify({
-                    value: 'files images comment userCreate lastestReplyID',
-                    select: '_id name url size type fullname image content files images amountCommentReply amountReaction'
-                }),
-                populates2: JSON.stringify({
-                    value: 'files images',
-                    select: '_id name url size type'
+                    path: 'comment userCreate lastestReplyID',
+                    select: '_id fullname image parent content files images amountCommentReply amountReaction createAt',
+                    populate: {
+                        path: 'files images comment userCreate lastestReplyID',
+                        select: '_id name nameOrg path size type fullname image content files images amountCommentReply amountReaction',
+                        populate: {
+                            path: 'files images',
+                            select: '_id name nameOrg path size type'
+                        }
+                    }
                 }),
                 ...payload
             })}`
