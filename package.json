@@ -52,6 +52,7 @@
     "react-onesignal": "^2.0.2",
     "react-query": "^3.19.0",
     "react-redux": "^7.2.4",
+    "react-responsive-carousel": "^3.2.22",
     "react-router": "5.2.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "^4.0.3",

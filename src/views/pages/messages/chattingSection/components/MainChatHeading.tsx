@@ -102,10 +102,8 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div
-                onClick={() => setShowMenu(!showMenu)}
-                className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1 cursor-pointer"}>
-                <div className={""}>{getNameConversation()}</div>
+            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
+                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
             <HeaderPinedMessages/>
