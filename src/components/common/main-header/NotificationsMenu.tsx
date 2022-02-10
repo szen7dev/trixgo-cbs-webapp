@@ -52,7 +52,7 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
               <Menu.Item key={notification._id}>
                 <NotificationItem
                   avatar={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender.image}`}
-                  author={notification.sender.fullname}
+                  author={notification.sender.bizfullname}
                   content={notification.title}
                   path={notification.path}
                   lastActive={moment(notification.createdAt).fromNow()}

@@ -1,6 +1,6 @@
 import Axios from "axios";
 import API from "../repository";
-import { FilePayload, FileResponse, UploadPayload } from "typings/file";
+import { FilePayload, FileResponse, UploadPayload, FileUpdatePayload } from "typings/file";
 
 const BASE_URL = process.env.REACT_APP_ENV === 'development' 
   ? process.env.REACT_APP_API_DOMAIN_LOCAL
@@ -35,6 +35,13 @@ const FileRepository = {
                     payload.progress && payload.progress(percentCompleted);
                 }
             }
+        );
+        return data;
+    },
+    async updateFile(payload: FileUpdatePayload): Promise<any> {
+        const { data } = await API.put<any>(
+            fileURL,
+            payload
         );
         return data;
     },

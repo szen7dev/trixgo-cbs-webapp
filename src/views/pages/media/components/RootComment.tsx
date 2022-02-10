@@ -8,7 +8,6 @@ import { CommentProps } from 'typings/common';
 import { FileProps } from 'typings/social';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
-import { objPopulate } from '../utils';
 import { ContextModalPost } from '../context/post';
 
 interface Props {
@@ -61,7 +60,6 @@ const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, rend
 			lastestID,
 			mediaID: comment.media,
 			parentID: comment._id,
-			...objPopulate
 		});
 		setAmountReply(amountReply - limit);
 

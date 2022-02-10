@@ -6,8 +6,8 @@ import { toArray } from 'lodash';
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import PostImage from './PostImage';
-import PostFile from './PostFile';
+import PostImage from 'views/pages/media/components/post/PostImage';
+import PostFile from 'views/pages/media/components/post/PostFile';
 
 import {  modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 

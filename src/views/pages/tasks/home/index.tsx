@@ -12,18 +12,18 @@ const TaskHomePage: FC = () => {
     listTasks: tasksOutDate,
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
-  } = useTask();
+  } = useTask({});
   const {
     listTasks: tasksNextWeek,
     isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
-  } = useTask(2);
+  } = useTask({ typeStatus: 2 });
   const {
     listTasks: tasksMoreThanSevenDay,
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
-  } = useTask(3);
+  } = useTask({ typeStatus: 3 });
 
   const handleSeeMore = (typeStatus: string) => {
     switch (typeStatus) {

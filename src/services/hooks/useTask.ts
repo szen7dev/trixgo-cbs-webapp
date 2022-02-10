@@ -1,9 +1,14 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
-import { Task, CheckList, CheckListPayload } from "typings/task";
+import { Task, CheckList, CheckListPayload, ResponseProps, ResponsePayload } from "typings/task";
+import { useSocket } from 'services/hooks/useSocket';
 
 type UseTask = {
+  addResponse: (payload: ResponsePayload) => Promise<{ result: ResponseProps } | undefined>;
+  listResponses: Array<ResponseProps>;
+  totalRecordResponse: number;
+  refetchListResponse: () => void;
   listTasks: Array<Task>;
   isLoadingListTask: boolean;
   totalRecord: number | undefined;
@@ -14,7 +19,68 @@ type UseTask = {
   prevPageListTask: () => void;
 };
 
-export const useTask = (typeStatus?: number, type?: number): UseTask => {
+type Props = {
+  taskID?: string;
+  typeStatus?: number;
+  type?: number;
+  isMarked?: boolean;
+}
+
+export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask => {
+  const { current: socket }: any = useSocket();
+
+  const { mutateAsync: addResponseAsync } =
+    useMutation((payload: ResponsePayload) =>
+      TaskRepository.addResponse(payload)
+    );
+
+  const addResponse = async (payload: ResponsePayload) => {
+    try {
+      const { error, data, message } = await addResponseAsync(payload);
+
+      if(error) {
+        toast.warning(message)
+      } else{
+        toast.success('Tạo phản hồi thành công');
+      }
+
+      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+          receivers: data.receivers
+      });
+
+      return data;
+    } catch (error: unknown) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
+  };
+
+  const {
+    data: dataListResponse,
+    refetch: refetchListResponse,
+  } = useInfiniteQuery(
+    // https://react-query.tanstack.com/reference/useInfiniteQuery
+    ["list_responses", taskID, isMarked || false],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listResponse({
+        taskID,
+        lastestID: pageParam || "",
+        limit: 5,
+        isMarked: isMarked || false,
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+    }
+  );
+
   const {
     isLoading: isLoadingListTask,
     data: dataListTask,
@@ -50,13 +116,19 @@ export const useTask = (typeStatus?: number, type?: number): UseTask => {
     .concat(...(dataListTask?.pages || []).map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
-  // console.log('============12333')
-  // console.log(listTasks)
+  const listResponses = []
+    .concat(...(dataListResponse?.pages || []).map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
 
+  const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPages;
 
   return {
+    addResponse,
+    listResponses,
+    totalRecordResponse,
+    refetchListResponse,
     listTasks,
     isLoadingListTask,
     totalRecord,

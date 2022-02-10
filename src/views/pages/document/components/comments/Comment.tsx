@@ -3,7 +3,7 @@ import { FC, HTMLAttributes, useContext } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-import PostFile from './PostFile';
+import PostFile from 'views/pages/media/components/post/PostFile';
 import { CommentProps } from 'typings/common';
 import { useCommentSocial } from 'services/hooks/useSocial';
 

@@ -23,13 +23,13 @@ import FileAttachment from "./FileAttachment";
 import SideBar from "./SideBar";
 import CheckList from "./CheckList";
 import PriceApprovalInfo from "./PriceApprovalInfo";
-import RelatedResponse from "./RelatedResponse";
+import RelatedResponsePage from "./RelatedResponse";
 import Loader from "components/shared/Loader";
 import styles from "../style.module.css";
 
 import TaskRepository from "apis/task";
 import { useCheckList } from "services/hooks/useTask";
-import { User } from "typings/task";
+import { User } from "typings/user";
 
 const TaskDetailPage: FC = () => {
   const history = useHistory();
@@ -42,13 +42,11 @@ const TaskDetailPage: FC = () => {
   const { data: infoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id)
   );
-  const { listCheckList, totalRecord, nextPageListCheckList } =
-    useCheckList(id);
+  const { listCheckList, totalRecord, nextPageListCheckList } = useCheckList(id);
 
   const getGroupTitle = (group: any) => {
     let title = "";
     if (group.parent) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const name = getGroupTitle(group.parent);
       title = title ? `${name} > ${title}` : name;
     }
@@ -251,7 +249,7 @@ const TaskDetailPage: FC = () => {
               />
             </div>
             <div className="px-5 my-5">
-              <RelatedResponse />
+              <RelatedResponsePage task={infoTask.data} />
             </div>
           </div>
 

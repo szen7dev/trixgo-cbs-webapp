@@ -1,4 +1,5 @@
 import { APIResponse } from "./apis/response";
+import { User } from "typings/user";
 
 export type ListTaskPayload = {
   lastestID?: string;
@@ -7,13 +8,6 @@ export type ListTaskPayload = {
   select?: string;
   type?: numer;
   typeStatus?: number;
-};
-
-export type User = {
-  _id: string;
-  image: string;
-  fullname: string;
-  bizfullname: string
 };
 
 export type Assignee = User;
@@ -46,6 +40,8 @@ export type Task = {
   assignee: Assignee;
   percentage: number;
   project: Project;
+  amountResponse: number;
+  amountResponseMarked: number;
 };
 
 export type ListTaskResponse = APIResponse & {
@@ -81,7 +77,7 @@ export type ListCheckListPayload = {
   limit?: number;
   populates?: string;
   select?: string;
-  type?: numer;
+  type?: number;
   typeStatus?: number;
   isSortChecklist: number;
   parentID?: string;
@@ -95,4 +91,50 @@ export type ListCheckListResponse = APIResponse & {
     nextCursor: string;
     limit: number;
   };
+};
+
+export type ResponseProps = {
+  _id: string,
+  type: number,
+  isMarked: boolean,
+  task: string,
+  comment: {
+    content: string,
+    files: FileProps[] | undefined,
+    images: FileProps[] | undefined,
+    author: User,
+  },
+  userCreate: User,
+  createAt: string
+}
+
+export type ResponsePayload = {
+  taskID: string,
+  type: number;
+  content: string;
+  files?: Array<string>;
+  images?: Array<string>;
+};
+
+export type ResponseResponse = APIResponse & {
+  data: {
+    result: ResponseProps,
+    receivers: Array<string>,
+  };
+};
+
+export type ListResponsePayload = {
+  lastestID?: string;
+  limit?: number;
+  isMarked?: boolean;
+  populates?: string;
+  select?: string;
+  taskID?: string;
+};
+
+export type SearchResponsePayload = {
+  taskID: string;
+  commentID: string;
+  select?: string;
+  populates?: string;
 };
