@@ -16,12 +16,12 @@ import { Carousel } from 'react-responsive-carousel';
 const HeaderPinedMessages:FC = () => {
     const {currentChat} = useContext(MessageContext)
     const {getListPinMessage} = UseConversation();
-    useEffect(() => {
-        getListPinMessage({conversationID: currentChat})
-    }, [currentChat]);
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
     const [indexPinnedMessage, setIndexPinnedMessage] = useState(0);
-
+    useEffect(() => {
+        getListPinMessage({conversationID: currentChat})
+        setIndexPinnedMessage(0)
+    }, [currentChat]);
     const renderPinned = (pinnedMessage: ItemMessage) => {
         if (!pinnedMessage) return null;
         switch (pinnedMessage.type) {
@@ -37,8 +37,17 @@ const HeaderPinedMessages:FC = () => {
     const viewPinMessage = () => {
         if (indexPinnedMessage+1 === listPinnedMessage.length) {
             setIndexPinnedMessage(0)
+            moveDots(0)
         } else {
             setIndexPinnedMessage(indexPinnedMessage+1)
+            moveDots(indexPinnedMessage)
+        }
+    }
+    const moveDots = (index: number) => {
+        const dotHeight = document.getElementsByClassName('dot-pin')[0].clientHeight;
+        const dots = document.querySelectorAll<HTMLElement>('.dot-pin');
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].style.transform = `translateY(${dotHeight*index}px)`
         }
     }
     if (!listPinnedMessage||listPinnedMessage.length<=0) return null;
@@ -54,7 +63,7 @@ const HeaderPinedMessages:FC = () => {
                 renderIndicator={(clickHandler, isSelected,index, label) => (
                     <div
                         onClick={() => setIndexPinnedMessage(index)}
-                        className={"w-[2px] flex-1 mb-[2px] transition cursor-pointer " + (isSelected?"bg-primary":"bg-gray-200")}/>
+                        className={"w-[2px] dot-pin flex-1 mb-[2px] transition cursor-pointer " + (isSelected?"bg-primary":"bg-gray-200")}/>
                 )}
                 width={200}
                 onChange={setIndexPinnedMessage}
