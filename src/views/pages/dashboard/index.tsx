@@ -137,7 +137,7 @@ const HomePage: FC = () => {
                   listMediasDigitalConversion.map(media => (
                     <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
                       <div className="t-home-slider-item-warpper relative flex items-end p-2">
-                        <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={(media.images && media.images.length) ? media.images[0].url : newsImg1} alt="News" />
+                        <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={(media.images && media.images.length) ? media.images[0].path : newsImg1} alt="News" />
                         <div className="t-home-slider-item-text">
                           <Link to={`/social/post/${media._id}`}>
                             <p className="text-lg font-bold" title={media.title}>
@@ -176,7 +176,7 @@ const HomePage: FC = () => {
             {listMediasCompany.length ? (
               <div className="flex items-center">
                 <Link to={`/social/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
-                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].url : imgMedia} alt="Media" />
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? listMediasCompany[0].images[0].path : imgMedia} alt="Media" />
                 </Link>
                 <div className="t-home-media-text text-dark">
                   <Link to={`/social/post/${listMediasCompany[0]._id}`}>
