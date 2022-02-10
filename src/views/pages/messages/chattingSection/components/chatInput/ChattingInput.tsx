@@ -289,6 +289,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                                 onPasteFiles={(files) => handleSetFiles(files)}
                                 onPressEnter={() => handleSendMessage()}
                                 mentions={suggestionsData()}
+                                replyData={replyData}
                             />
                             <IconAttach
                                 handleUploadFiles={(files) => handleSetFiles(files)}
