@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -8,18 +8,38 @@ import IconSelected from "assets/images/icons-web-select.svg";
 import SampleAvatar from "assets/images/sample_avt.svg";
 import GroupIcon from "assets/images/icons8-group-90.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
+import UnPinnedIcon from "assets/images/icons8-unpin-96.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setReplyMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {RootState} from "redux/reducer";
 type Props = {
-    message: ItemMessage
+    message: ItemMessage;
+    socket: any
 }
 
-const RightClickMessage:FC<Props> = ({message}) => {
+const RightClickMessage:FC<Props> = ({message, socket}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
+    const {updatePinMessage, getListPinMessage} = UseConversation();
+
+    const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
+    const isPin = useCallback(() => {
+        const pinIds = listPinnedMessage.map(message => message._id);
+        return pinIds.includes(message._id)
+    }, [message, listPinnedMessage]);
+
+    const doUpdatePinMessage = () => {
+        updatePinMessage({conversationID: message.conversation, messageID: message._id, isPin: !isPin()}).then((data) => {
+            isPin()&&socket.emit('CHATTING_CSS_UNPIN_MESSAGE', {conversationID: data.infoConversation._id});
+            !isPin()&&socket.emit('CHATTING_CSS_PIN_MESSAGE', {conversationID: data.infoConversation._id});
+            getListPinMessage({conversationID: data.infoConversation._id})
+        });
+    }
+
     return (
         <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
             <button
@@ -35,9 +55,14 @@ const RightClickMessage:FC<Props> = ({message}) => {
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
                 <div className={"mr-2 ml-4"}>Copy Text</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
-                <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={PinIcon}/>
-                <div className={"mr-2 ml-4"}>Pin</div>
+            <button
+                onClick={() => {
+                    doUpdatePinMessage();
+                    closeRightClick();
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
+                <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>

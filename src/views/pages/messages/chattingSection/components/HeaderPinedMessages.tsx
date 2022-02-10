@@ -70,7 +70,7 @@ const HeaderPinedMessages:FC = () => {
                 selectedItem={indexPinnedMessage}
             >
                 {
-                    _map([...listPinnedMessage].reverse(), message => (
+                    _map([...listPinnedMessage], message => (
                         <div
                             onClick={() => viewPinMessage()}
                             key={message._id} style={{ height: 55 }} className={"items-center flex-1 flex ml-[5px] cursor-pointer min-w-[220px]"}>
