@@ -62,13 +62,12 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
     data: dataListResponse,
     refetch: refetchListResponse,
   } = useInfiniteQuery(
-    // https://react-query.tanstack.com/reference/useInfiniteQuery
     ["list_responses", taskID, isMarked || false],
     async ({ pageParam }: any) => {
       return TaskRepository.listResponse({
         taskID,
-        lastestID: pageParam || "",
         limit: 5,
+        lastestID: pageParam || "",
         isMarked: isMarked || false,
       });
     },
@@ -77,7 +76,7 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      enabled: true,
     }
   );
 
@@ -89,7 +88,6 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
   } = useInfiniteQuery(
-    // https://react-query.tanstack.com/reference/useInfiniteQuery
     ["list_tasks", type, typeStatus],
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
@@ -108,16 +106,18 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      enabled: true,
     }
   );
 
   const listTasks = []
-    .concat(...(dataListTask?.pages || []).map((d: any) => d.data?.listRecords))
+    .concat(...(dataListTask?.pages || [])
+    .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
   const listResponses = []
-    .concat(...(dataListResponse?.pages || []).map((d: any) => d.data?.listRecords))
+    .concat(...(dataListResponse?.pages || [])
+    .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
   const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;

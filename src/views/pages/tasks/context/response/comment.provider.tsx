@@ -18,6 +18,11 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
     case "VIEW_MORE_COMMENTS":
       return {
         ...state,
+        comments: [...state.comments, ...action.payload]
+      }
+    case "VIEW_PREVIOUS_COMMENTS":
+      return {
+        ...state,
         comments: [...action.payload, ...state.comments]
       }
     case "ADD_COMMENT": {

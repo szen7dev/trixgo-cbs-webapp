@@ -42,4 +42,8 @@ const NotificationItem: FC<Props> = ({
   );
 };
 
+NotificationItem.defaultProps = {
+  path: ''
+}
+
 export default NotificationItem;

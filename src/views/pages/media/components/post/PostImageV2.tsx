@@ -5,7 +5,7 @@ const ImageUploading: FC<{ d: FilePropsUpload } & HTMLAttributes<HTMLImageElemen
 	return <img src={URL.createObjectURL(d.file)} alt="" {...props} />
 }
 const ImageUploaded: FC<{ d: FileProps } & HTMLAttributes<HTMLImageElement>> = ({ d, ...props }) => {
-	return <img src={d.url} alt="" {...props} />
+	return <img src={d.path} alt="" {...props} />
 }
 
 const MemoImageUploading = memo(ImageUploading, (prevProps, nextProps) => prevProps.d.id === nextProps.d.id);

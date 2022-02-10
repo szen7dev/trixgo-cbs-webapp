@@ -5,7 +5,7 @@ const ImageUploading: FC<{ d: FilePropsUpload }> = ({ d }) => {
 	return <img src={URL.createObjectURL(d.file)} alt="" />
 }
 const ImageUploaded: FC<{ d: FileProps }> = ({ d }) => {
-	return <img src={d.url} alt="" />
+	return <img src={`${process.env.REACT_APP_URL_S3}/${d.path}`} alt="" />
 }
 
 const MemoImageUploading = memo(ImageUploading, (prevProps, nextProps) => prevProps.d.id === nextProps.d.id);

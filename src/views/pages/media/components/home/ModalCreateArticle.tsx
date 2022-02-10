@@ -99,6 +99,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, 
 
 		setUploadImage(images);
 		setUploadFile(files);
+
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
 			const { _id } = await addFileToUpload({
