@@ -92,7 +92,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                                 }
                             </div>
                             <div className={"flex-1 flex flex-col justify-center ml-[7px]"}>
-                                <a href={file.file.file.url} download className={"mb-[2px] hover:text-primary"}>{file.file.file.name}</a>
+                                <a href={`${process.env.REACT_APP_URL_S3}/${file.file.file.path}`} download className={"mb-[2px] hover:text-primary"}>{file.file.file.nameOrg??file.file.file.name}</a>
                                 <div className={"text-primary"}>{formatBytes(file.file.file.size)}</div>
                             </div>
                         </div>

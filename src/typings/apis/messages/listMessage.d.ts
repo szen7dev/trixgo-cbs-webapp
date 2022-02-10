@@ -55,6 +55,7 @@ export type ItemMessage = {
                 updatedAt: string;
                 __v: number;
                 nameOrg: string;
+                path: string;
             };
         };
         [key: string]: any;
