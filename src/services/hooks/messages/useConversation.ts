@@ -1,8 +1,13 @@
 import ListMessageRepository from "apis/messages/message";
 import {
     ListMessageData,
-    ListMessagePayload, PinnedMessagePayload,
-    SendNormalMessagePayload, ShareMessageData, ShareMessagePayload, UpdateReminderMessageData,
+    ListMessagePayload,
+    PinnedMessagePayload,
+    SendNormalMessagePayload,
+    ShareMessageData,
+    ShareMessagePayload, UpdatePinnedMessageData,
+    UpdatePinnedMessagePayload,
+    UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
 import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage} from "redux/reducer/messages/ListMessage";
@@ -14,6 +19,7 @@ type UseConversationType = {
     updateReminder: (params: UpdateReminderMessagePayload) => Promise<UpdateReminderMessageData>;
     shareMessageToConversation: (params: ShareMessagePayload) => Promise<ShareMessageData[]>;
     getListPinMessage: (params: PinnedMessagePayload) => void;
+    updatePinMessage: (params: UpdatePinnedMessagePayload) => Promise<UpdatePinnedMessageData>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -69,11 +75,20 @@ export const UseConversation = () : UseConversationType => {
         return data
     }
 
+    const updatePinMessage = async (params: UpdatePinnedMessagePayload) => {
+        const {data} = await ListMessageRepository.updatePinMessage(params);
+
+        return new Promise<UpdatePinnedMessageData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
         updateReminder,
         shareMessageToConversation,
-        getListPinMessage
+        getListPinMessage,
+        updatePinMessage
     }
 }

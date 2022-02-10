@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import TextChatContent from "./chatContent/textContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import FileChatContent from "./chatContent/fileContent";
@@ -9,6 +9,7 @@ import SelectMessageCheckbox from "./SelectMessageCheckbox";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
+import {MessageContext} from "../../home/index_v2";
 
 type Props = {
     message: ItemMessage;
@@ -17,6 +18,8 @@ type Props = {
 const MyMessage:FC<Props> = ({message}) => {
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
 
     const dispatch = useDispatch();
 
@@ -45,7 +48,7 @@ const MyMessage:FC<Props> = ({message}) => {
                     }
                 }}
                 className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message}/>} className={"mb-2 transition duration-500"}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>} className={"mb-2 transition duration-500"}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>

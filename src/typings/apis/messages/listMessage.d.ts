@@ -1,3 +1,5 @@
+import {ItemListConversation} from "./listConversation";
+
 export type ItemMessage = {
     _id: string;
     receivers: {_id: string; image: string; fullname: string}[];
@@ -204,6 +206,23 @@ export type PinnedMessageData = {
 
 export type PinnedMessageResponse = {
     data: PinnedMessageData;
+    error: boolean;
+    status: number;
+}
+
+export type UpdatePinnedMessagePayload = {
+    conversationID: string;
+    messageID: string;
+    isPin: boolean;
+}
+
+export type UpdatePinnedMessageData = {
+    infoConversation: ItemListConversation,
+    infoMessage: ItemMessage;
+}
+
+export type UpdatePinnedMessageResponse = {
+    data: UpdatePinnedMessageData;
     error: boolean;
     status: number;
 }
