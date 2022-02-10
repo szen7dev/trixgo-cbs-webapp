@@ -37,7 +37,7 @@ const ListMediaInMessage:FC = () => {
         if (!listImageInMessage) return images;
         listImageInMessage.forEach(media => {
             media.messages.forEach(image => {
-                images.push(image.url)
+                images.push(`${process.env.REACT_APP_URL_S3}/${image.path}`)
             })
         });
 
