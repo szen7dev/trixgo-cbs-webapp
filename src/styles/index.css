@@ -1114,6 +1114,12 @@ button {
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
 }
+.form-check-input.border-white {
+  border-color: white;
+}
+.form-check-input.bg-transparent {
+  background-color: transparent;
+}
 .form-check-input:focus {
   border-color: #86b7fe;
   outline: 0;

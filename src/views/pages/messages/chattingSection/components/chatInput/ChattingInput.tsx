@@ -14,10 +14,10 @@ import {
     MentionData,
 } from '@draft-js-plugins/mention';
 import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 import ReplyChat from "./replyChat";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
-import {RootState} from "../../../../../../redux/reducer";
+import {RootState} from "redux/reducer";
+import SelectedActionGroup from "./SelectedActionGroup";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -280,6 +280,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
                 <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
+                    <SelectedActionGroup/>
                     <div className={"flex-1 message-input rounded-md bg-white flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
                         <ReplyChat replyData={replyData}/>
@@ -288,6 +289,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                                 onPasteFiles={(files) => handleSetFiles(files)}
                                 onPressEnter={() => handleSendMessage()}
                                 mentions={suggestionsData()}
+                                replyData={replyData}
                             />
                             <IconAttach
                                 handleUploadFiles={(files) => handleSetFiles(files)}
