@@ -6,14 +6,12 @@ import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import DatePickerWithRange from "./DatePickerWithRange";
 import {map as _map} from "lodash";
-import SampleImage from "assets/images/photo1640398643.png";
-import moment from "moment";
 import ItemFileInMessage from "./ItemFileInMessage";
 
 import {MessageContext} from "../../home/index_v2";
-import {UseListConversation} from "../../../../../services/hooks/messages/useListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../../../redux/reducer";
+import {RootState} from "redux/reducer";
 
 const ListFileInMessage:FC = () => {
     const {currentChat} = useContext(MessageContext);
