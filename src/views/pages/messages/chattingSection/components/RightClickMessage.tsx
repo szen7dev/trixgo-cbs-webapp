@@ -34,9 +34,7 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
 
     const doUpdatePinMessage = () => {
         updatePinMessage({conversationID: message.conversation, messageID: message._id, isPin: !isPin()}).then((data) => {
-            isPin()&&socket.emit('CHATTING_CSS_UNPIN_MESSAGE', {conversationID: data.infoConversation._id});
-            !isPin()&&socket.emit('CHATTING_CSS_PIN_MESSAGE', {conversationID: data.infoConversation._id});
-            getListPinMessage({conversationID: data.infoConversation._id})
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
         });
     }
 
