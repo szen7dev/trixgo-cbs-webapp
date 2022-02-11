@@ -1,12 +1,16 @@
-import { FC, forwardRef, HTMLAttributes, useMemo } from "react";
+import { forwardRef, HTMLAttributes, useMemo } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
 
 import getPlugins, { _data, optionsOne as options } from "../../chart/ProjectDoughnutChart";
 
-import { Link } from "react-router-dom";
+// ===== Constants =====
+import { DEPARTMENT_STAGE } from "helpers/constants/department";
 
+// ===== Types =====
 import { DataBlock3 } from "typings/ppt/department";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -17,33 +21,13 @@ interface Props {
 }
 const PortfolioAnalysisChart = forwardRef<ChartJSOrUndefined<"doughnut", number[], unknown>, React.PropsWithChildren<HTMLAttributes<HTMLDivElement> & Props>>((props, ref) => {
 	const data = useMemo(() => {
-		const d = { waiting: 0, plan: 0, design: 0, bidding: 0, building: 0, other: 0 }
-		props.data?.forEach(_d => {
-			switch (_d._id.stage) {
-				case 0:
-					d.waiting = _d.amount
-					break;
-				case 1:
-					d.plan = _d.amount
-					break;
-				case 2:
-					d.design = _d.amount
-					break;
-				case 3:
-					d.bidding = _d.amount
-					break;
-				case 4:
-					d.building = _d.amount
-					break;
-				case 5:
-					d.other = _d.amount
-					break;
-				default:
-					break;
-			}
-		})
-		return d;
+		// Merge two arrays of object to array of object based on key
+		return DEPARTMENT_STAGE.map(item => ({
+			...item,
+			...(props.data?.find(itm => itm._id.stage === item.value))
+		}))
 	}, [props.data])
+
 	return <div {...props}>
 		<div className="flex bg-white box-border border-0.5 border-cbs-border pl-11 pr-10 pt-7 pb-7 h-full">
 			<div className="w-[154px] mr-[54px] flex height-full">
@@ -51,24 +35,12 @@ const PortfolioAnalysisChart = forwardRef<ChartJSOrUndefined<"doughnut", number[
 			</div>
 			<div>
 				<ul>
-					<li className="whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-primary w-3 h-3 rounded-lg mr-2'></div>Chưa bắt đầu ({data.waiting})</Link>
-					</li>
-					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-schedule-nextweek w-3 h-3 rounded-lg mr-2'></div>Lập kế hoạch ({data.plan})</Link>
-					</li>
-					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-purple w-3 h-3 rounded-lg mr-2'></div>Thiết kế ({data.design})</Link>
-					</li>
-					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-pink-600 w-3 h-3 rounded-lg mr-2'></div>Đấu thầu ({data.bidding})</Link>
-					</li>
-					<li className="flex items-center whitespace-nowrap mb-3">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-green w-3 h-3 rounded-lg mr-2'></div>Xây dựng ({data.building})</Link>
-					</li>
-					<li className="flex items-center whitespace-nowrap">
-						<Link to="/" className="flex items-center"><div className='bg-cbs-gray w-3 h-3 rounded-lg mr-2'></div>Khác ({data.other})</Link>
-					</li>
+					{data.map(item => <li key={item.value} className="flex items-center whitespace-nowrap mb-3">
+						<Link to="/" className="flex items-center">
+							<div className={classNames(item.className, 'w-3 h-3 rounded-lg mr-2')}></div>
+							{item.text} ({item.amount})
+						</Link>
+					</li>)}
 				</ul>
 			</div>
 		</div>
