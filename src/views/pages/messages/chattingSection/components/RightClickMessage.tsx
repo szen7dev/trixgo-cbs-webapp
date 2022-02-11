@@ -13,6 +13,8 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {setReplyMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
+import {deleteAndRevokeMessageOfConversation} from "redux/reducer/messages/DeleteAndRevokeMessage";
+
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {RootState} from "redux/reducer";
@@ -101,7 +103,14 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                     <img alt={"------"} src={SampleAvatar} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
                 </div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    dispatch(deleteAndRevokeMessageOfConversation({messageIds: [message._id], conversationId: message.conversation}))
+                    setTimeout(() => {
+                        closeRightClick();
+                    }, 100)
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                 <div className={"flex-1 text-left ml-4 text-negative"}>Delete</div>
             </button>

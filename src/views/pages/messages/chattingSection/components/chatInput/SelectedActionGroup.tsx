@@ -7,7 +7,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../../home/index_v2";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
-import {shareMessageToConversation} from "../../../../../../redux/reducer/messages/ShareMessage";
+import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
+import {deleteAndRevokeMessageOfConversation} from "redux/reducer/messages/DeleteAndRevokeMessage";
 
 const SelectedActionGroup:FC = () => {
     const {currentChat} = useContext(MessageContext);
@@ -46,6 +47,9 @@ const SelectedActionGroup:FC = () => {
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ForwardIcon}/>
                 </button>
                 <button
+                    onClick={() => {
+                        dispatch(deleteAndRevokeMessageOfConversation({messageIds: Object.keys(listSelectedMessage), conversationId: currentChat}))
+                    }}
                     className={"mx-[5px]"}
                 >
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>
