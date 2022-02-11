@@ -25,8 +25,6 @@ const SocketController:FC = () => {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
             socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-            socket.on('CHATTING_SSC_UNPIN_MESSAGE', onReceivePinMessage);
-            socket.on('CHATTING_SSC_PIN_MESSAGE', onReceivePinMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -36,8 +34,6 @@ const SocketController:FC = () => {
                 socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
                 socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-                socket.off('CHATTING_SSC_UNPIN_MESSAGE', onReceivePinMessage);
-                socket.off('CHATTING_SSC_PIN_MESSAGE', onReceivePinMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -81,6 +77,9 @@ const SocketController:FC = () => {
             messageId: data.data._id,
             messageData: data.data
         }));
+        if (data.data.type === 108) {
+            getListPinMessage({conversationID: data.data.conversation})
+        }
         setTimeout(() => {
             scrollToBottom();
         }, 100)
@@ -93,10 +92,6 @@ const SocketController:FC = () => {
         dispatch(updateSingleConversation({
             conversationData: data.data.infoConversation
         }))
-    }
-
-    const onReceivePinMessage = (data: any) => {
-        getListPinMessage({conversationID: data.data.infoConversation._id})
     }
 
     const scrollToBottom = () => {
