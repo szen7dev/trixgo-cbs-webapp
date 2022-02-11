@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, LegacyRef } from "react";
 import moment from "moment";
-import { toast } from "react-toastify";
 import classNames from "classnames";
 import _ from "lodash";
+import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
 import HumanAvatar from "assets/images/human-avatar.svg";
@@ -19,10 +19,11 @@ import FileRepository from "apis/upload";
 type Props = {
   expanded?: boolean;
   isHighlight?: boolean;
-  response: ResponseProps
+  response: ResponseProps,
+  divRef?: LegacyRef<HTMLDivElement> | undefined
 };
 
-const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef }) => {
   const { mutateAsync: updateMarkResponseAsync } =
     useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
       TaskRepository.updateMarkResponse(payload)
@@ -58,7 +59,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
           ? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 hover:scale-125 p-3 transition ease-in-out delay-150 duration-300' 
           : 'animate-[wiggle_1s_ease-in-out_infinite]'
         )
-      }>
+      } ref={divRef}>
         <img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
         <div className="w-full ml-5">
           <div className="flex justify-between">

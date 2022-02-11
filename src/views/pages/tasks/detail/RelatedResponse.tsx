@@ -1,44 +1,48 @@
-import { FC, useState, useContext, useEffect } from "react";
+/**
+ * Libraries
+ */
+import { FC, useState, useContext, useEffect, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toArray } from "lodash";
-
-/** 
- * Icon
- */
-import IconImage from "views/pages/media/components/Icon/IconImage";
-// import IconFile from "views/pages/media/components/Icon/IconFile";
 
 /**
  * Context
  */
 import CommentProvider from '../context/response/comment.provider';
 import CommentContext from '../context/response/comment.context';
-import RelatedResponseItem from "./RelatedResponseItem";
-import TaskRepository from "apis/task";
 
 /**
  * Assets
  */
 import IconDownload from "assets/images/icons8-reply-arrow-96.svg";
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
+import IconPaperClip from "views/pages/media/components/Icon/IconPaperClip";
+import IconImage from "views/pages/media/components/Icon/IconImage";
 
 /**
  * Hooks, custom
  */
+import { useSocket } from "services/hooks/useSocket";
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
-import { Task } from 'typings/task';
 import useUploadFile from "services/hooks/ppt/useUploadFile";
 import { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
+import { APP_TYPE } from "helpers/constants";
 
-// import PostFile from 'views/pages/media/components/post/PostFile';
-// import PostImage from "views/pages/media/components/post/PostImage";
-// import ChevronDownIcon from "assets/icons/ChevronDown";
-import IconPaperClip from "views/pages/media/components/Icon/IconPaperClip";
+/**
+ * Typings, apis
+ */
+import TaskRepository from "apis/task";
+import { FileProps, FilePropsUpload } from "typings/social";
+import { Task } from 'typings/task';
+
+/** 
+ * Component
+ */
+import RelatedResponseItem from "./RelatedResponseItem";
 import PostImageV2 from "views/pages/media/components/post/PostImageV2";
 import FileUploadRow from "views/pages/document/components/common/FileUploadRow";
-import { FileProps, FilePropsUpload } from "typings/social";
 
 enum RelatedResponseTab {
   ALL = "ALL",
@@ -55,6 +59,8 @@ const LIMIT_PER_RESPONSE = 5;
 const RelatedResponse: FC<Props> = ({ task }) => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const divRef = useRef<HTMLDivElement>(null);
+  const { current: socket }: any = useSocket();
 
   const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
   const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
@@ -105,10 +111,22 @@ const RelatedResponse: FC<Props> = ({ task }) => {
         setAmountComment(totalRecordFront);
         setAmountCommentBack(totalRecordBack);
         dispatch({ type: 'SET_COMMENTS', payload: listRecords });
+
+        divRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
     })();
 
   }, [location.hash])
+
+  useEffect(() => {
+    socket?.on('COMMENT_SSC_ADD_COMMENT', (result: any) => {
+      const { data, error } = result;
+
+      if(error || !amountCommentBack) return;
+
+      dispatch({ type: 'ADD_COMMENT', payload: data.infoComment });
+    });
+  }, [socket])
 
   const getClassTab = (tab: RelatedResponseTab) => {
     return currentTab === tab
@@ -138,6 +156,12 @@ const RelatedResponse: FC<Props> = ({ task }) => {
 			files,
 			images,
     });
+
+    socket?.emit('COMMENT_CSS_ADD_COMMENT', {
+      app: APP_TYPE.PCM_PLAN_TASK,
+      objectID: id,
+      infoComment: infoAfterCreate?.result
+    })
 
     dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate.result });
   }
@@ -310,7 +334,13 @@ const RelatedResponse: FC<Props> = ({ task }) => {
       ) : ''}
       <div>
         {state.comments.length ? state.comments.map(response => (
-          <RelatedResponseItem key={response._id} response={response} expanded={isExpand} isHighlight={location.hash.substring(1) === response._id} />
+          <RelatedResponseItem 
+            key={response._id} 
+            response={response} 
+            expanded={isExpand} 
+            isHighlight={location.hash.substring(1) === response._id} 
+            divRef={location.hash.substring(1) === response._id ? divRef : null}
+          />
         )) : ''}
       </div>
       {(amountCommentBack && amountCommentBack > LIMIT_PER_RESPONSE) ? (
