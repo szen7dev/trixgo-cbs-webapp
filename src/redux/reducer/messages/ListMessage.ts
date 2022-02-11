@@ -344,6 +344,21 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId]: newMessage
                 },
             }
+        },
+
+        revokeMessageInConversation (state, action) {
+            const newMessage = {...state.data.listMessage};
+            action.payload.messages.forEach((item: ItemMessage) => {
+                delete newMessage[item.conversation][item._id]
+            });
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    ...newMessage
+                },
+            }
         }
     },
     extraReducers: {}
@@ -369,6 +384,7 @@ export const {
     removeSelectedMessage,
     removeAllSelectedMessage,
     setSelectedStateOn,
-    deleteMessageInConversations
+    deleteMessageInConversations,
+    revokeMessageInConversation
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

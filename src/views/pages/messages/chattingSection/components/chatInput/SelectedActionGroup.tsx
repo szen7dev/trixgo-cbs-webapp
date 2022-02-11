@@ -48,7 +48,7 @@ const SelectedActionGroup:FC = () => {
                 </button>
                 <button
                     onClick={() => {
-                        dispatch(deleteAndRevokeMessageOfConversation({messageIds: Object.keys(listSelectedMessage), conversationId: currentChat}))
+                        dispatch(deleteAndRevokeMessageOfConversation({messageIds: Object.values(listSelectedMessage), conversationId: currentChat}))
                     }}
                     className={"mx-[5px]"}
                 >

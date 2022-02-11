@@ -29,7 +29,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
     const dispatch = useDispatch();
 
     const renderMessageContent = useCallback(() => {
-        if (message.usersDelete.includes(profileId)) {
+        if (message.usersDelete&&message.usersDelete.includes(profileId)) {
             return <DeleteChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>
         }
         switch (message.type) {

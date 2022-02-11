@@ -30,6 +30,7 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const isPin = useCallback(() => {
+        if (!listPinnedMessage) return false;
         const pinIds = listPinnedMessage.map(message => message._id);
         return pinIds.includes(message._id)
     }, [message, listPinnedMessage]);
@@ -105,7 +106,7 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
             </button>
             <button
                 onClick={() => {
-                    dispatch(deleteAndRevokeMessageOfConversation({messageIds: [message._id], conversationId: message.conversation}))
+                    dispatch(deleteAndRevokeMessageOfConversation({messageIds: [message], conversationId: message.conversation}))
                     setTimeout(() => {
                         closeRightClick();
                     }, 100)

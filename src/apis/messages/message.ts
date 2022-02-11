@@ -19,6 +19,7 @@ const updateReminder = "/api/chatting/conversations/update-user-join-message-rem
 const shareMessage = "/api/chatting/conversations/share-message-conversation";
 const updatePinMessage = "/api/chatting/conversations/update-pin-message-conversation";
 const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
+const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -78,6 +79,15 @@ const ListMessageRepository = {
         {
                 params: {...payload}
             }
+        );
+
+        return data;
+    },
+
+    async revokeMessage(payload: DeleteRevokeMessagePayload) : Promise<DeleteRevokeMessageResponse> {
+        const {data} = await API.post(
+        `${revokeMessage}`,
+        {...payload}
         );
 
         return data;

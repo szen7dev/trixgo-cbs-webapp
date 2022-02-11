@@ -1,20 +1,32 @@
-import {FC, Fragment, useRef} from "react";
+import {FC, Fragment, useContext, useRef, useState} from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissDeleteRevoke} from "redux/reducer/messages/DeleteAndRevokeMessage";
 import {UseConversation} from "services/hooks/messages/useConversation";
+import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
+import {MessageContext} from "../../home/index_v2";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 const DeleteAndRevokeMessageConfirm: FC = () => {
     const dispatch = useDispatch();
     const {isOpenDeleteRevoke, deleteAndRevokeMessage, conversationId} = useSelector((state: RootState) => state.deleteAndRevokeMessage.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
     const {deleteMessage} = UseConversation();
+    const [isRevoke, setIsRevoke] = useState(false);
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
 
     const handleConfirm = () => {
-        deleteMessage({messagesID: deleteAndRevokeMessage, conversationID: conversationId})
+        if (isRevoke) {
+            socket.emit("CHATTING_CSS_REVOKE_MESSAGE",{conversationID: conversationId, messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id)})
+        } else {
+            deleteMessage({messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id), conversationID: conversationId})
+        }
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: conversationId });
         dispatch(dismissDeleteRevoke({}))
+        dispatch(removeAllSelectedMessage({conversationId: conversationId}))
     }
     return (
         <Transition appear show={isOpenDeleteRevoke} as={Fragment}>
@@ -59,7 +71,7 @@ const DeleteAndRevokeMessageConfirm: FC = () => {
                                     Bạn có chắc muốn xóa tin nhắn này?
                                 </div>
                                 <div className={"flex items-center mt-4"}>
-                                    <input type="checkbox" id="revoke" className={"form-check-input mt-0"}/>
+                                    <input onChange={event => setIsRevoke(event.target.checked)} type="checkbox" id="revoke" className={"form-check-input mt-0"}/>
                                     <label htmlFor="revoke" className={"text-left ml-5 whitespace-nowrap"}>Xoá tin nhắn đối với tất cả thành viên trong nhóm chat</label>
                                 </div>
                                 <div className={"flex justify-end mt-[20px]"}>

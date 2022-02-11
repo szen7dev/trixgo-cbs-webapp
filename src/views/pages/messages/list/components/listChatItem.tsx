@@ -60,7 +60,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
 
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
-            if (chat.lastMessage.usersDelete.includes(profileId)) {
+            if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
                 return "Tin nhắn đã xóa";
             }
             switch (chat.lastMessage.type) {

@@ -64,7 +64,7 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, replyD
 
     useEffect(() => {
         editor&&editor.current&&editor.current.focus()
-    }, [replyData, editor])
+    }, [replyData])
 
     const onOpenChange = useCallback((_open: boolean) => {
         setOpen(_open);

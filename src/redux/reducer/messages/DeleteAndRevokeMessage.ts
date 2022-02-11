@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
-const initialState : {data: {isOpenDeleteRevoke: boolean, deleteAndRevokeMessage: string[], conversationId: string}} = {
+const initialState : {data: {isOpenDeleteRevoke: boolean, deleteAndRevokeMessage: ItemMessage[], conversationId: string}} = {
     data: {
         isOpenDeleteRevoke: false,
         deleteAndRevokeMessage: [],

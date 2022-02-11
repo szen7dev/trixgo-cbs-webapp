@@ -3,12 +3,13 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
     updateNewMessageToConversation,
-    setShareMessage
+    setShareMessage, revokeMessageInConversation
 } from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../index_v2";
 import {useDispatch} from "react-redux";
 import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
-import {UseConversation} from "../../../../../services/hooks/messages/useConversation";
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {toast} from "react-toastify";
 
 const SocketController:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -25,6 +26,7 @@ const SocketController:FC = () => {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
             socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+            socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -34,6 +36,7 @@ const SocketController:FC = () => {
                 socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
                 socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+                socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -92,6 +95,14 @@ const SocketController:FC = () => {
         dispatch(updateSingleConversation({
             conversationData: data.data.infoConversation
         }))
+    }
+
+    const onReceiveRevokeMessage = (data: any) => {
+        if (!data.data.error) {
+            dispatch(revokeMessageInConversation({messages: data.data.data}))
+        } else {
+            toast.error(data.data.message);
+        }
     }
 
     const scrollToBottom = () => {
