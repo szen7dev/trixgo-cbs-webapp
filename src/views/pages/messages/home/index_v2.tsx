@@ -8,6 +8,7 @@ import '@draft-js-plugins/emoji/lib/plugin.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import SocketController from "./socket";
 import ShareMessage from "../chattingSection/components/ShareMessage";
+import DeleteAndRevokeMessageConfirm from "../chattingSection/components/DeleteAndRevokeMessage";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -47,6 +48,7 @@ const MessagesHome:FC = () => {
             </div>
             <SocketController/>
             <ShareMessage/>
+            <DeleteAndRevokeMessageConfirm/>
         </MessageContext.Provider>
     )
 }

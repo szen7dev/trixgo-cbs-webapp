@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useContext} from "react";
+import React, {FC, useCallback} from "react";
 import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -13,6 +13,8 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {setReplyMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {shareMessageToConversation} from "redux/reducer/messages/ShareMessage";
+import {deleteAndRevokeMessageOfConversation} from "redux/reducer/messages/DeleteAndRevokeMessage";
+
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {RootState} from "redux/reducer";
@@ -24,10 +26,11 @@ type Props = {
 const RightClickMessage:FC<Props> = ({message, socket}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
-    const {updatePinMessage, getListPinMessage} = UseConversation();
+    const {updatePinMessage} = UseConversation();
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const isPin = useCallback(() => {
+        if (!listPinnedMessage) return false;
         const pinIds = listPinnedMessage.map(message => message._id);
         return pinIds.includes(message._id)
     }, [message, listPinnedMessage]);
@@ -49,7 +52,12 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ForwardIcon}/>
                 <div className={"mr-2 ml-4"}>Reply</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    navigator.clipboard.writeText(message.content);
+                    closeRightClick();
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
                 <div className={"mr-2 ml-4"}>Copy Text</div>
             </button>
@@ -96,7 +104,14 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                     <img alt={"------"} src={SampleAvatar} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
                 </div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    dispatch(deleteAndRevokeMessageOfConversation({messageIds: [message], conversationId: message.conversation}))
+                    setTimeout(() => {
+                        closeRightClick();
+                    }, 100)
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                 <div className={"flex-1 text-left ml-4 text-negative"}>Delete</div>
             </button>

@@ -10,7 +10,7 @@ const HamLeftMenu:FC = () => {
     useOnClickOutside(el, () => setShowOption(false))
 
     return (
-        <div ref={el} className={"relative"}>
+        <div ref={el} className={"relative mr-[14px]"}>
             <button onClick={() => setShowOption(oldValue => !oldValue)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                 <img  src={SettingIcon} alt={"ham"}/>
             </button>

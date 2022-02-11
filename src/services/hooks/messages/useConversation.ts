@@ -1,5 +1,6 @@
 import ListMessageRepository from "apis/messages/message";
 import {
+    DeleteRevokeMessagePayload, ItemMessage,
     ListMessageData,
     ListMessagePayload,
     PinnedMessagePayload,
@@ -10,7 +11,7 @@ import {
     UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage} from "redux/reducer/messages/ListMessage";
+import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
@@ -20,6 +21,8 @@ type UseConversationType = {
     shareMessageToConversation: (params: ShareMessagePayload) => Promise<ShareMessageData[]>;
     getListPinMessage: (params: PinnedMessagePayload) => void;
     updatePinMessage: (params: UpdatePinnedMessagePayload) => Promise<UpdatePinnedMessageData>;
+    deleteMessage: (params: DeleteRevokeMessagePayload) => void;
+    revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -83,12 +86,32 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const deleteMessage = async (params: DeleteRevokeMessagePayload) => {
+        const {data} = await ListMessageRepository.deleteMessage(params);
+        dispatch(deleteMessageInConversations({
+            conversationId: params.conversationID,
+            messageData: data
+        }));
+
+        return data;
+    }
+
+    const revokeMessage = async (params: DeleteRevokeMessagePayload) => {
+        const {data,error} = await ListMessageRepository.revokeMessage(params);
+
+        return new Promise<{data: ItemMessage[], error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
         updateReminder,
         shareMessageToConversation,
         getListPinMessage,
-        updatePinMessage
+        updatePinMessage,
+        deleteMessage,
+        revokeMessage
     }
 }
