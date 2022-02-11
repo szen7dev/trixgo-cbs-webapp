@@ -5,16 +5,15 @@ import PortfolioAnalysisChart from './PortfolioAnalysisChart';
 import PortfolioAnalysisTotal from './PortfolioAnalysisTotal';
 import PortfolioBudgetAndContract from './PortfolioBudgetAndContract';
 
+// ===== Constants =====
+import { DEPARTMENT_STAGE } from 'helpers/constants/department';
+
 const PortfolioAnalysisContainer: FC = () => {
 	const chartRef = useRef<ChartJSOrUndefined<"doughnut", number[], unknown>>(null);
 	const { data, loading, refetch } = useQueryDepartmentsAnalysis({
 		onSuccess(data) {
 			if (chartRef.current) {
-				const _data = Array.from({ length: chartRef.current.data.datasets[0].data.length }, () => 0).fill(0);
-				data.data.dataBlock3.forEach(_d => {
-					_data[_d._id.stage] = _d.amount;
-				})
-				chartRef.current.data.datasets[0].data = _data;
+				chartRef.current.data.datasets[0].data = DEPARTMENT_STAGE.map(item => data.data.dataBlock3.find(itm => itm._id.stage === item.value)?.amount || 0);
 				chartRef.current.update();
 			}
 		}
