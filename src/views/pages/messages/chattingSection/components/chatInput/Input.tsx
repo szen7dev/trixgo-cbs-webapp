@@ -62,9 +62,9 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, replyD
         return { plugins, MentionSuggestions, EmojiSuggestions, EmojiSelect };
     }, []);
 
-    useEffect(() => {
-        editor&&editor.current&&editor.current.focus()
-    }, [replyData])
+    // useEffect(() => {
+    //     editor&&editor.current&&replyData&&editor.current.focus()
+    // }, [replyData])
 
     const onOpenChange = useCallback((_open: boolean) => {
         setOpen(_open);

@@ -88,7 +88,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
                         (
-                            !previousMessage?
+                            shouldRenderDate&&!previousMessage?
                                 <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
                                 null
                         )
