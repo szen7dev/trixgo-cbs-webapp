@@ -29,6 +29,9 @@ const SelectedActionGroup:FC = () => {
                 {
                     Object.keys(listSelectedMessage).length === 1 &&
                     <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(listSelectedMessage[0].content);
+                        }}
                         className={"mx-[5px]"}
                     >
                         <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
