@@ -22,16 +22,16 @@ async function fetchList<T>(params: any): Promise<T> {
     return data
 }
 
-async function fetchDetailContract<T>(params: any): Promise<T> {
+async function fetchDetailAccountingVoucher<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_ACCOUNTING}/contract_ipcs?contractIpcID=${params.contractIpcID}`
+        `${APP_ACCOUNTING}/${params.id}`
     )
     return data
 }
 
-async function requestCreateContract(formData: any): Promise<any> {
+async function requestCreateAccountingVoucher(formData: any): Promise<any> {
     const { data } = await API.post(
-        `${APP_ACCOUNTING}/contract_ipcs`,
+        `${APP_ACCOUNTING}/insertFull`,
         {
             ...formData
         }
@@ -49,9 +49,9 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
     return data;
 }
 
-async function requestUpdateContract(formData: any): Promise<any> {
+async function requestUpdateAccountingVoucher(formData: any): Promise<any> {
     const { data } = await API.put(
-        `${APP_ACCOUNTING}/contract_ipcs`,
+        `${APP_ACCOUNTING}/update`,
         {
             ...formData
         }
@@ -59,22 +59,22 @@ async function requestUpdateContract(formData: any): Promise<any> {
     return data;
 }
 
-async function requestDeleteContract(contractID: string): Promise<any> {
+async function requestDeleteAccountingVoucher(contractID: string): Promise<any> {
     const { data } = await API.delete(
-        `${APP_ACCOUNTING}/contract_ipcs?contractIpcID=${contractID}`)
+        `${APP_ACCOUNTING}/remove?contractIpcID=${contractID}`)
     return data;
 }
 
-const ContractIPCRepository = {
+const AccountingVoucherIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
-    fetchDetailContract: async (params: {
-        contractIpcID: string;
-    }): Promise<any> => fetchDetailContract(params),
-    requestCreateContract,
-    requestUpdateContract,
-    requestDeleteContract,
+    fetchDetailAccountingVoucher: async (params: {
+        id: string;
+    }): Promise<any> => fetchDetailAccountingVoucher(params),
+    requestCreateAccountingVoucher,
+    requestUpdateAccountingVoucher,
+    requestDeleteAccountingVoucher,
     requestHistoryTraffics
 };
 
-export default ContractIPCRepository
+export default AccountingVoucherIPCRepository

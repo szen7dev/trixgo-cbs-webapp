@@ -204,6 +204,39 @@ async function fetchListContract(params: any) {
     )
     return data;
 }
+
+async function fetchListAccount(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/accounts`, {
+        params: {
+            select: 'name description',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
+async function fetchListGood(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/goods`, {
+        params: {
+            select: 'name description',
+            populates: {
+                path: 'company',
+                select: 'sign name'
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
 const APP_CMCS = "/api/cmcs";
 async function fetchListContractIPC(params: any) {
     const { data } = await API.get(
@@ -335,6 +368,10 @@ const HumanRepository = {
         fetchListContact(params),
     fetchListContract: async (params: any): Promise<any> =>
         fetchListContract(params),
+    fetchListAccount: async (params: any): Promise<any> =>
+        fetchListAccount(params),
+    fetchListGood: async (params: any): Promise<any> =>
+        fetchListGood(params),
     fetchListContractIPC: async (params: any): Promise<any> =>
         fetchListContractIPC(params),
     fetchListWarehouse: async (params: any): Promise<any> =>

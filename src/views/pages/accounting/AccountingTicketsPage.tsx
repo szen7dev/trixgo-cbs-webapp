@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
@@ -12,6 +12,9 @@ import { formatNumberMoney } from "helpers/index"
 
 import {
     UseAccountingVoucherList,
+    useCreateAccountingVoucherMutation,
+    useUpdateAccountingVoucherMutation,
+    useDeleteAccountingVoucherMutation,
 } from "services/hooks/useAccountingVoucher";
 import { NavLink } from "react-router-dom";
 import SearchInput from "../../../components/common/SearchInput";
@@ -25,6 +28,10 @@ const AccountingTicketsPage: FC = () => {
     const [pageParam, setPageParam] = useState('');
     const [prevCursor, setPrevCursor] = useState([null]);
     const accountingVoucher = UseAccountingVoucherList(pageParam);
+
+    const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
+    const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
+    const { deleteAccountingVoucherMutateAsync } = useDeleteAccountingVoucherMutation();
 
     useEffect(() => {
         if (!accountingVoucher.nextCursor) {
@@ -49,6 +56,25 @@ const AccountingTicketsPage: FC = () => {
     const nextPageAction = () => {
         setPageParam(accountingVoucher.nextCursor)
     }
+
+    const handleFinishForm = useCallback(async (values, isEdit = false) => {
+        let res: any
+        if (isEdit) {
+            res = await updateAccountingVoucherMutateAsync(values);
+        } else {
+            res = await createAccountingVoucherMutateAsync(values);
+        }
+
+        if (res.code && res.code !== 200) {
+            return false;
+        }
+
+        if (!res.error) {
+            accountingVoucher.refetch()
+            return true;
+        }
+        return false;
+    }, [accountingVoucher]);
 
     const { openDeleteConfirm } = useDeleteConfirm();
 
@@ -75,9 +101,55 @@ const AccountingTicketsPage: FC = () => {
                     "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
                 }
             >
-                {/* <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" /> */}
+                {/* <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={params.id} title="Cập nhật" /> */}
             </div>
         )
+    }
+
+    const handleAction = async (data: any, action: any) => {
+        console.log('🚀 ~ handleAction ~ data, action', data, action)
+
+        switch (action) { // 1. In, 2. Copy 3. Cập nhật 4. Xóa
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                // setIđEit(data._id);
+                // useEffect(() => {
+                //     console.log('🚀 ~ detailAccountingVoucher', detailAccountingVoucher)
+                //     const dataDetail = {
+                //         ...detailAccountingVoucher.infoVoucher,
+                //         selectedJournals: [...detailAccountingVoucher.listJournal || []]
+                //     }
+                //     console.log('🚀 ~ useEffect ~ dataDetail', dataDetail)
+                //     // setInitialValues(mappingData(dataDetail))
+                // }, [idEdit, detailAccountingVoucher]);
+                // console.log('detailAccountingVoucher ', detailAccountingVoucher);
+
+                openModal(
+
+                    <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+
+                        <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={data._id} title="Cập nhật" />
+                    </div>
+                )
+                break;
+            case 4:
+                openDeleteConfirm({
+                    deleteAction: async () => {
+                        const res = await deleteAccountingVoucherMutateAsync(data._id)
+                        if (!res.error) {
+                            accountingVoucher.refetch()
+                        }
+                    },
+                });
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     return (
@@ -92,7 +164,7 @@ const AccountingTicketsPage: FC = () => {
                     onClick={() =>
                         openModal(
                             <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-                                <CreateNewTicket />
+                                <CreateNewTicket onFinish={handleFinishForm} title="Phiếu mới" />
                             </div>
                         )
                     }
@@ -176,7 +248,7 @@ const AccountingTicketsPage: FC = () => {
                                     {item.note}
                                 </div>
                                 <div className={"px-2 py-4 table-cell box-border border-b"}>
-                                    <ActionAccountingGroup />
+                                    <ActionAccountingGroup data={item} handleAction={handleAction} />
                                 </div>
                             </div>
                         )

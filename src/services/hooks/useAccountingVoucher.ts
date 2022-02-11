@@ -51,7 +51,7 @@ export const useCreateAccountingVoucherMutation = (): {
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
-        AccountingVoucherRepository.requestCreateContract(payload)
+        AccountingVoucherRepository.requestCreateAccountingVoucher(payload)
     );
     return {
         createAccountingVoucherMutateAsync: mutateAsync,
@@ -77,7 +77,7 @@ export const useUpdateAccountingVoucherMutation = (): {
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
-        AccountingVoucherRepository.requestUpdateContract(payload)
+        AccountingVoucherRepository.requestUpdateAccountingVoucher(payload)
     );
     return {
         updateAccountingVoucherMutateAsync: mutateAsync,
@@ -90,7 +90,7 @@ export const useDeleteAccountingVoucherMutation = (): {
     loading: boolean;
 } => {
     const { mutateAsync, isLoading } = useMutation((payload: any) =>
-        AccountingVoucherRepository.requestDeleteContract(payload)
+        AccountingVoucherRepository.requestDeleteAccountingVoucher(payload)
     );
     return {
         deleteAccountingVoucherMutateAsync: mutateAsync,
@@ -100,9 +100,7 @@ export const useDeleteAccountingVoucherMutation = (): {
 
 export const useDetailAccountingVoucherMutation = (id: string): any => {
     const res = useQuery(`AccountingVoucher_detail.${id}`, () =>
-        AccountingVoucherRepository.fetchDetailContract({
-            contractIpcID: id,
-        })
+        AccountingVoucherRepository.fetchDetailAccountingVoucher({ id })
     );
     if (Array.isArray(res.data?.data)) {
         return {
