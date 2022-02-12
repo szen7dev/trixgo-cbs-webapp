@@ -42,7 +42,7 @@ const SettingMessageDetail:FC = () => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.fullname.trim();
+            return userInConversation.bizfullname.trim();
         }
 
         return chat?.name;
@@ -56,12 +56,12 @@ const SettingMessageDetail:FC = () => {
 
     if (!chat) {
         return (
-            <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute right--480px"}>
+            <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] absolute right--402px"}>
             </div>
         )
     }
     return (
-        <div className={"messages-right-bar border-l transition-all duration-500 group w-[480px] absolute h-full " + (showMenu?"right-0":"right--480px")}>
+        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] absolute h-full " + (showMenu?"right-0":"right--402px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button onClick={() => setShowMenu(false)}>
@@ -74,7 +74,7 @@ const SettingMessageDetail:FC = () => {
                 <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
                     {
                         chat.avatar?
-                            <img  className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                             (
                                 getAvatarMembers().length === 0 ?
                                     <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -82,7 +82,7 @@ const SettingMessageDetail:FC = () => {
                                     </div> :
                                     <AvatarGroupChat
                                         avatars={getAvatarMembers()}
-                                        imageClass={"w-[120px] h-[120px]"}
+                                        imageClass={"w-[120px] h-[120px] min-w-[120px] min-h-[120px]"}
                                         classesMap={{
                                             "group_1": {
                                                 imgWidth: "w-full h-full",
@@ -131,11 +131,12 @@ const SettingMessageDetail:FC = () => {
                     <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
                 </div>
                 <div className={"h-3 w-full bg-gray-100"}></div>
-                <SettingMessageDetailTab/>
+                <SettingMessageDetailTab chat={chat}/>
             </div>
-            <button className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
-                <img  src={AddUserToGroup} alt={"Pencil icon"}/>
-            </button>
+            {!chat.isPrivate&&<button
+                className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
+                <img src={AddUserToGroup} alt={"Pencil icon"}/>
+            </button>}
         </div>
     )
 }

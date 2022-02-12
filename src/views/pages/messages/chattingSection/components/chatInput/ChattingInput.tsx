@@ -5,7 +5,7 @@ import IconSendMessage from "assets/images/icons8-email-send-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {MessageContext} from "../../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
-import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {useUpload} from "services/hooks/useUpload";
 import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
@@ -49,7 +49,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const suggestionsData = useCallback(() => {
         return chat.members.map(member=> {
             return {
-                name: member.fullname,
+                name: member.bizfullname,
                 _id: member._id,
                 avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
             }
@@ -153,14 +153,16 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 return {
                     file: {
                         file: {
+                            fakeUrl: window.URL.createObjectURL(file.file),
                             url: window.URL.createObjectURL(file.file),
                             name: file.file.name,
                             size: file.file.size,
                             _id: uuidv4(),
-                            type: file.file.type
+                            type: file.file.type,
+                            isDraft: true,
                         }
                     },
-                    progress: file.progress,
+                    progress: 0,
                     _id: uuidv4(),
                     realFile: file.file,
                 }
@@ -173,12 +175,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
-        setDoneUpload(message.files.map((file:any) => {
-            return {
-                _id: file._id,
-                progress: file.progress
-            }
-        }))
         dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
@@ -199,24 +195,31 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 files: file.realFile,
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
-                    setDoneUpload((oldValue: any) => oldValue.map((oldFile: any) => {
-                        if (oldFile._id === file._id) {
-                            return {
-                                ...oldFile,
-                                progress: percentCompleted
+                    const messageData = {
+                        ...message,
+                        files: [...message.files].map(oldFile => {
+                            if (oldFile._id === file._id) {
+                                return {
+                                    ...oldFile,
+                                    progress: percentCompleted
+                                }
                             }
-                        }
-                        return {
-                            ...oldFile
-                        }
-                    }))
+                            return {
+                                ...oldFile
+                            }
+                        })
+                    };
+                    dispatch(updateFileProgressOnMessage({
+                        conversationId: currentChat,
+                        messageId: message.tmpid,
+                        messageData: messageData,
+                    }));
                 },
                 compressConfig: {
                     useCompress: useCompress,
                     quality: 0.8
                 }
             })
-            console.log("fileId",_id)
             sendFiles.push(_id)
         }
 
@@ -232,7 +235,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
-        console.log("upload",isDone)
         if (isDone&&willSendFileMessage) {
             // console.log(willSendFileMessage)
             socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);

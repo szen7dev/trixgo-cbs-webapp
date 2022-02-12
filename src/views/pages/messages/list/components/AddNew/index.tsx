@@ -93,8 +93,8 @@ const AddNewSection:FC = () => {
                     {
                         _map(Object.values(selectedFriends), friend => (
                             <div key={friend._id} className={"flex items-center bg-gray-100 rounded-full px-3 py-1 mr-2 mb-1"}>
-                                <img className={"w-[30px] h-[30px] rounded-full overflow-hidden"} alt={friend.fullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
-                                <div className={"flex-1 mx-2"}>{friend.fullname}</div>
+                                <img className={"w-[30px] h-[30px] rounded-full overflow-hidden"} alt={friend.bizfullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
+                                <div className={"flex-1 mx-2"}>{friend.bizfullname}</div>
                                 <Close onClick={() => removeSelectedFriend(friend._id)}/>
                             </div>
                         ))
@@ -119,8 +119,8 @@ const AddNewSection:FC = () => {
                             defaultChecked={Object.values(selectedFriends).includes(friend._id)}
                         />
                         <label className={"flex-1 flex items-center"} htmlFor={`friend-${friend._id}`}>
-                            <img className={"w-[44px] h-[44px] rounded-full overflow-hidden"} alt={friend.fullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
-                            <div className={"ml-4"}>{friend.fullname}</div>
+                            <img className={"w-[44px] h-[44px] rounded-full overflow-hidden"} alt={friend.bizfullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
+                            <div className={"ml-4"}>{friend.bizfullname}</div>
                         </label>
                     </div>
                 ))

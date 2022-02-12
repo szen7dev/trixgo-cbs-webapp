@@ -10,7 +10,7 @@ import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-
+import 'react-circular-progressbar/dist/styles.css';
 import Reminder from "./Reminder";
 import moment from "moment";
 
@@ -112,10 +112,10 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     <Reminder message={message}/>
                 </div>;
             case 108:
-                return <NotificationCenter content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
+                return <NotificationCenter content={`${message.sender.bizfullname} đã ghim một tin nhắn`}/>
             case 116:
             case 117:
-                return <NotificationCenter content={`${message.sender.fullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+                return <NotificationCenter content={`${message.sender.bizfullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
         }
     }
     return (
@@ -131,6 +131,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
+            <iframe id="download_iframe" className={"hidden"}></iframe>
             {
                 userUnreadMessage()>0 &&
                 <button

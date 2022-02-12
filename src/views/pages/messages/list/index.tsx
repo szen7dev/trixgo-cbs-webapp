@@ -100,7 +100,7 @@ const MessageList:FC = () => {
                     </div>
                 </div>
                 <div
-                    className={"overflow-auto message-list-height mx-[5px]"}
+                    className={"overflow-auto message-list-height px-[5px]"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
                     {renderListConversation()}

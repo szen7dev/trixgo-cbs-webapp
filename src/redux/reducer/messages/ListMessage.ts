@@ -166,10 +166,10 @@ const listMessageSlice = createSlice({
         updateFileProgressOnMessage(state, action) {
             state.data = {
                 ...state.data,
-                listMessage: {
-                    ...state.data.listMessage,
+                listFakeMessage: {
+                    ...state.data.listFakeMessage,
                     [action.payload.conversationId]: {
-                        ...state.data.listMessage[action.payload.conversationId],
+                        ...state.data.listFakeMessage[action.payload.conversationId],
                         [action.payload.messageId]: action.payload.messageData
                     }
                 }

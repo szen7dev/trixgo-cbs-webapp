@@ -27,7 +27,7 @@ const DeleteChatContent:FC<Props> = ({message,className,showSenderName, isMyMess
             {
                 showSenderName&&
                 <div className={"reply-user-name text-primary"}>
-                    {message.sender.fullname}
+                    {message.sender.bizfullname}
                 </div>
             }
             {

@@ -16,12 +16,12 @@ const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
             <img
                 onClick={() => handleStartPrivateChat(user._id)}
                 className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
-                src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.fullname}/>
+                src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.bizfullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <span
                     onClick={() => handleStartPrivateChat(user._id)}
                     className={"font-bold"}>
-                    {user.fullname}
+                    {user.bizfullname}
                 </span>
                 <span className={"truncate "+(user.status===1?"text-primary":"text-gray-400")}>{user.status===1?"online":"offline"}</span>
             </div>

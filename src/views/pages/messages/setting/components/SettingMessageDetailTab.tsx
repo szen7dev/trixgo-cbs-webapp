@@ -5,40 +5,53 @@ import ListMediaInMessage from "./ListMediaInMessage";
 import ListFileInMessage from "./ListFileInMessage";
 import {MessageContext} from "../../home/index_v2";
 import ListLinksInMessage from "./ListLinksInMessage";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
+import ListGeneralGroupByMember from "./ListGeneralGroupByMember";
 
-const SettingMessageDetailTab:FC = () => {
+type Props = {
+    chat: ItemListConversation
+}
+const SettingMessageDetailTab:FC<Props> = ({chat}) => {
     const {currentChat} = useContext(MessageContext)
     const [activeTab, setActiveTab] = useState("members");
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
+
     useEffect(() => {
         setActiveTab("members");
     },[currentChat])
     const listTab = [
         {
             text: "Members",
-            tabId: "members"
+            tabId: "members",
+            isShow: !chat.isPrivate
         },
         {
             text: "Media",
-            tabId: "media"
+            tabId: "media",
+            isShow: true
         },
         {
             text: "Files",
-            tabId: "files"
+            tabId: "files",
+            isShow: true
         },
         {
             text: "Links",
-            tabId: "links"
+            tabId: "links",
+            isShow: true
         },
-        // {
-        //     text: "Groups",
-        //     tabId: "groups"
-        // },
+        {
+            text: "Groups",
+            tabId: "groups",
+            isShow: chat.isPrivate
+        },
     ]
 
     return (
         <>
             <div className={"flex max-w-full border-b border-gray-100 bg-white h-[55px] sticky top-55px z-5 min-h-[55px]"}>
-                {_map(listTab, (tab) => (
+                {_map(listTab.filter(tab => tab.isShow), (tab) => (
                     <div
                         className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
                         key={tab.tabId}
@@ -67,6 +80,10 @@ const SettingMessageDetailTab:FC = () => {
             {
                 activeTab==="links"&&
                 <ListLinksInMessage/>
+            }
+            {
+                activeTab==="groups"&&
+                <ListGeneralGroupByMember memberId={chat?.members.find((item: any) => item._id !== profileId)?._id}/>
             }
         </>
     )

@@ -26,9 +26,11 @@
     @apply w-2;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-secondary-gray bg-clip-padding rounded-full;
+    @apply bg-secondary-gray bg-clip-padding rounded-full opacity-0 invisible;
   }
-
+  .overflow-auto:hover::-webkit-scrollbar-thumb,.overflow-y-scroll:hover::-webkit-scrollbar-thumb {
+    @apply opacity-100 visible transition duration-200
+  }
   .t-scrollbar-horizontal::-webkit-scrollbar {
     @apply h-3;
   }
