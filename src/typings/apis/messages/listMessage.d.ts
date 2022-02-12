@@ -227,3 +227,15 @@ export type UpdatePinnedMessageResponse = {
     error: boolean;
     status: number;
 }
+
+export type DeleteRevokeMessagePayload = {
+    conversationID: string;
+    filesID?: string[];
+    messagesID: string[];
+}
+
+export type DeleteRevokeMessageResponse = {
+    data: ItemMessage[];
+    error: boolean;
+    status: number;
+}

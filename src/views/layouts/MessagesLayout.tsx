@@ -33,7 +33,7 @@ const MessagesLayout: FC<Props> = ({ children }) => {
       <FinLeftSideBar />
 
       {/* Content area */}
-      <main className="messages-main-content content-avoid-header transition-all duration-500 ease-out overflow-auto relative">
+      <main className="messages-main-content content-avoid-header transition-all duration-500 ease-out overflow-auto relative mt-[2px]">
         {children}
       </main>
     </section>

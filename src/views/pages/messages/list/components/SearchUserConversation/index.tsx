@@ -62,15 +62,15 @@ const SearchUserConversationSection:FC = () => {
         <div className={"absolute top-0 w-full h-full overflow-auto bg-white z-20 left-0 no-webkit-scrollbar"}>
             <div className={"sticky top-0 bg-white w-full z-55"}>
                 <div className={"flex h-[56px] p-2 items-center"}>
-                    <button onClick={() => setShowSearch(false)} className={"flex w-[40px] h-[40px] items-center justify-center"}>
+                    <button onClick={() => setShowSearch(false)} className={"flex w-[40px] h-[40px] items-center justify-center mr-[14px]"}>
                         <img  src={IconBackGray} alt={"----"}/>
                     </button>
                     <div className={"relative flex items-center flex-1"}>
-                        <img  src={SearchIcon} alt={"icon search"} className={"absolute w-[14px] h-[14px] left-2"}/>
+                        <img  src={SearchIcon} alt={"icon search"} className={"absolute w-[24px] h-[24px] left-2"}/>
                         <input
                             onChange={e => handleSearchTerm(e.target.value)}
                             ref={inputRef}
-                            className={"h-[30px] w-full bg-gray-50 pl-10 rounded rounded-full focus:outline-blue-300"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}
+                            className={"h-[44px] w-full bg-gray-100 px-[12px] py-[10px] pl-[36px] rounded-full focus:outline-none"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}
                         />
                     </div>
                 </div>

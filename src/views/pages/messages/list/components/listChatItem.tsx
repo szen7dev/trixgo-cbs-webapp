@@ -60,6 +60,9 @@ const ListChatItem:FC<Props> = ({chat}) => {
 
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
+            if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
+                return "Tin nhắn đã xóa";
+            }
             switch (chat.lastMessage.type) {
                 case 0:
                     return <p className={"flex items-center"}>

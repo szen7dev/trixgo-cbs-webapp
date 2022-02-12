@@ -1,6 +1,7 @@
 import API from "../repository";
 import { convertObToUrl } from "helpers";
 import {
+    DeleteRevokeMessagePayload, DeleteRevokeMessageResponse,
     ListMessagePayload,
     ListMessageResponse, PinnedMessagePayload, PinnedMessageResponse,
     SendNormalMessagePayload,
@@ -17,6 +18,8 @@ const sendNormalMessageURL = "/api/chatting/conversations/insert-message-convers
 const updateReminder = "/api/chatting/conversations/update-user-join-message-reminder-conversation";
 const shareMessage = "/api/chatting/conversations/share-message-conversation";
 const updatePinMessage = "/api/chatting/conversations/update-pin-message-conversation";
+const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
+const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -68,6 +71,26 @@ const ListMessageRepository = {
             {...payload}
         )
         return data
+    },
+
+    async deleteMessage(payload: DeleteRevokeMessagePayload) : Promise<DeleteRevokeMessageResponse> {
+        const {data} = await API.delete(
+        `${deleteMessage}`,
+        {
+                params: {...payload}
+            }
+        );
+
+        return data;
+    },
+
+    async revokeMessage(payload: DeleteRevokeMessagePayload) : Promise<DeleteRevokeMessageResponse> {
+        const {data} = await API.post(
+        `${revokeMessage}`,
+        {...payload}
+        );
+
+        return data;
     }
 };
 

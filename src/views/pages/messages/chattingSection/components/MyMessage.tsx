@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../../home/index_v2";
+import DeleteChatContent from "./chatContent/deleteContent";
 
 type Props = {
     message: ItemMessage;
@@ -20,10 +21,15 @@ const MyMessage:FC<Props> = ({message}) => {
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
     const {socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
 
     const dispatch = useDispatch();
 
     const renderMessageContent = useCallback(() => {
+        if (message.usersDelete&&message.usersDelete.includes(profileId)) {
+            return <DeleteChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>
+        }
         switch (message.type) {
             case 0:
                 return <TextChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
