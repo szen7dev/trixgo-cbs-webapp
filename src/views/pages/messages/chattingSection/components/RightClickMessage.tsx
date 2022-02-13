@@ -117,11 +117,17 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                 <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
                     <div className={"mr-4 ml-4"}>{message.usersSeen?.length} đã xem</div>
-                    <div className={"flex"}>
+                    <div className={"flex -space-x-1"}>
                         {
                             _map(message.usersSeen.slice(0, 5), user => (
-                                <img key={user._id} alt={"------"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
+                                <img key={user._id} alt={"------"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[16px] h-[16px] rounded-full overflow-hidden border border-white"}/>
                             ))
+                        }
+                        {
+                            message.usersSeen.length - 5 > 0 &&
+                            <div className={"w-[16px] h-[16px] text-xs rounded-full overflow-hidden bg-gray-300 text-gray-500 border border-white"}>
+                                {message.usersSeen.length - 5}+
+                            </div>
                         }
                     </div>
                 </button>

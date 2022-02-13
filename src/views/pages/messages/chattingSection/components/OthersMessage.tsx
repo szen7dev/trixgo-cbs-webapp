@@ -12,7 +12,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
-import ReactionActions from "./ReactionActions";
 
 type Props = {
     message: ItemMessage;
@@ -67,7 +66,6 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                 <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
-                <ReactionActions message={message}/>
             </div>
         </div>
     )

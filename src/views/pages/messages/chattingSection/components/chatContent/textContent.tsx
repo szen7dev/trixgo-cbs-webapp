@@ -4,6 +4,8 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
+import ReactionList from "../ReactionList";
+import ReactionActions from "../ReactionActions";
 
 type Props = {
     message: any;
@@ -69,9 +71,12 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
                     </div>
                 </div>
                 <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
-                    {moment(message.createdAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    <ReactionList message={message}/>
+                    <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
+                    <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
+            <ReactionActions message={message}/>
         </div>
     )
 }
