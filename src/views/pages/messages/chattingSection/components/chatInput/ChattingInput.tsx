@@ -49,7 +49,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const suggestionsData = useCallback(() => {
         return chat.members.map(member=> {
             return {
-                name: member.bizfullname,
+                name: member.bizfullname||member.bizfullname,
                 _id: member._id,
                 avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
             }
@@ -128,7 +128,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         message['parentID'] = replyData?replyData._id:"";
         dispatch(removeReplyMessage({conversationId: currentChat}));
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
     }
 
     const handleSetFiles = (filesUpload: FileList|Blob[]) => {
@@ -175,6 +175,12 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
+        setDoneUpload(message.files.map((file:any) => {
+            return {
+                _id: file._id,
+                progress: file.progress
+            }
+        }))
         dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
@@ -214,6 +220,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                         messageId: message.tmpid,
                         messageData: messageData,
                     }));
+                    setDoneUpload(messageData.files)
                 },
                 compressConfig: {
                     useCompress: useCompress,
@@ -235,10 +242,11 @@ const ChattingInput:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
+        console.log(isDone)
         if (isDone&&willSendFileMessage) {
             // console.log(willSendFileMessage)
             socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat });
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
             setDoneUpload([]);
             setWillSendFileMessage(null);
         }

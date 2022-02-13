@@ -22,7 +22,7 @@ const SelectedShareConversationItem:FC<Props> = ({conversation, removeSelectedCo
         }
         if (conversation.members && conversation.members.length === 2) {
             const userInConversation = conversation?.members.find((item: any) => item._id !== profileId);
-            return userInConversation.bizfullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return conversation?.name;

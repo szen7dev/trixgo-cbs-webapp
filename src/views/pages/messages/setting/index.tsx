@@ -42,7 +42,7 @@ const SettingMessageDetail:FC = () => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.bizfullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -56,12 +56,12 @@ const SettingMessageDetail:FC = () => {
 
     if (!chat) {
         return (
-            <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] absolute right--402px"}>
+            <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute right--402px"}>
             </div>
         )
     }
     return (
-        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] absolute h-full bg-white " + (showMenu?"right-0":"right--402px")}>
+        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white " + (showMenu?"right-0":"right--402px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button onClick={() => setShowMenu(false)}>

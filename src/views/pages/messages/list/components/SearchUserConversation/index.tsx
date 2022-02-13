@@ -47,7 +47,7 @@ const SearchUserConversationSection:FC = () => {
             membersID: [memberId]
         }).then(data => {
             if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id, select: JSON.stringify({ sender:"bizfullname" }) });
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });
@@ -82,7 +82,7 @@ const SearchUserConversationSection:FC = () => {
                                 onClick={() => handleStartPrivateChat(friend._id)}
                                 className={"hover:bg-gray-100 rounded-lg w-[78px] flex flex-col items-center py-[15px] px-[10px]"}>
                                 <img  src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`} alt={'======'}  className={"w-[54px] h-[54px] rounded-full"}/>
-                                <div className={"truncate text-xs max-w-full mt-[5px]"}>{friend.bizfullname}</div>
+                                <div className={"truncate text-xs max-w-full mt-[5px]"}>{friend.bizfullname||friend.fullname}</div>
                             </button>
                         ))
                     }
