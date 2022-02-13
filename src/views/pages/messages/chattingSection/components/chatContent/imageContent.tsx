@@ -99,8 +99,8 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
     }
 
     return (
-        <>
-            <div className={"max-w-[366px] min-w-[70px] rounded-lg relative overflow-hidden " + (className??"")}>
+        <div className={"max-w-[366px] min-w-[70px] relative " + (className??"")}>
+            <div className={"overflow-hidden rounded-lg"}>
                 {
                     message.parent&&
                     renderReply()
@@ -122,7 +122,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                 </ModalFullContainer>
             </div>
             <ReactionActions message={message}/>
-        </>
+        </div>
     )
 }
 

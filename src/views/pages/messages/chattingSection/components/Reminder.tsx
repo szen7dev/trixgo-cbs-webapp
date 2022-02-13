@@ -67,8 +67,8 @@ const Reminder:FC<Props> = ({message}) => {
                 {`${message.sender.bizfullname||message.sender.fullname} đã tạo một lời nhắc`}
                 </span>
             </div>
-            <div className={"w-[365px] rounded-md bg-white"}>
-                <div className={"p-3 border-b border-gray-200 flex"}>
+            <div className={"w-[365px] rounded-md bg-white mb-5"}>
+                <div className={"p-3 flex"}>
                     <div className={"flex flex-col items-center px-2"}>
                         <div className={"text-lg text-negative"}>{moment(message.reminder.remindTime).format("MMM")}</div>
                         <div>{moment(message.reminder.remindTime).format("DD")}</div>
@@ -98,7 +98,7 @@ const Reminder:FC<Props> = ({message}) => {
                 </div>
                 {
                     (!checkUserAccept().didTakeAction)?
-                    <div className={"flex justify-around py-[11px]"}>
+                    <div className={"flex justify-around py-[11px] border-t border-gray-200"}>
                         <button
                             onClick={() => reminderAction(true)}
                             className={"w-[126px] rounded-full h-[36px] flex items-center py-2 bg-gray-100 text-center justify-center"}>

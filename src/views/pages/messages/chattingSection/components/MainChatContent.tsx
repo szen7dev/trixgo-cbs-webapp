@@ -21,6 +21,8 @@ import like from "assets/emoji/like.png";
 import sad from "assets/emoji/sad.png";
 import surprise from "assets/emoji/surprise.png";
 import ReminderNoti from "./ReminderNoti";
+import Poll from "./Poll";
+import PollNoti from "./PollNoti";
 
 export const listEmoji = [
     {
@@ -154,14 +156,17 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     return <OthersMessage message={message}/>
                 }
             case 4:
-                return <div>
-                    <Reminder message={message}/>
-                </div>;
+                return <Reminder message={message}/>;
+            case 5:
+                return <Poll message={message} chat={chat}/>;
             case 108:
                 return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+            case 111:
+            case 112:
+                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
-                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
     return (

@@ -16,6 +16,7 @@ export const ReactionActions:FC<Props> = ({message}) => {
                 {
                     _map(listEmoji.filter(emoji => emoji.id !== 6), emoji => (
                         <button
+                            key={emoji.id}
                             onClick={() => {
                                 socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value});
                             }}

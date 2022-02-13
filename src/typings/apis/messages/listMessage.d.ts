@@ -89,7 +89,27 @@ export type ItemMessage = {
             fullname: string;
             image: string;
         }
-    }[]
+    }[],
+    poll: {
+        createdAt: string
+        name: string
+        options: {
+            createAt: string
+            title: string
+            usersVote: {
+                bizfullname: string
+                fullname: string
+                image: string
+                _id: string
+            }[]
+            _id: string
+        }[]
+        state: number
+        status: number
+        updatedAt: string
+        __v: number
+        _id: string
+    }
     [key: string]: any;
 }
 export type ListMessageData = {
