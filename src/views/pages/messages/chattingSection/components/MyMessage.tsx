@@ -11,6 +11,7 @@ import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
+import ReactionActions from "./ReactionActions";
 
 type Props = {
     message: ItemMessage;
@@ -53,10 +54,11 @@ const MyMessage:FC<Props> = ({message}) => {
                         }
                     }
                 }}
-                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer"}>
+                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative message-container"}>
                 <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>} className={"mb-2 transition duration-500"}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
+                <ReactionActions message={message}/>
             </div>
         </div>
     )

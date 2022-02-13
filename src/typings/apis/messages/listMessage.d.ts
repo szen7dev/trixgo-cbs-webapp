@@ -80,7 +80,16 @@ export type ItemMessage = {
         updatedAt: string
         __v: number
         _id: string
-    }
+    },
+    reactions: {
+        _id: string;
+        type: number;
+        userCreate : {
+            _id: string;
+            fullname: string;
+            image: string;
+        }
+    }[]
     [key: string]: any;
 }
 export type ListMessageData = {

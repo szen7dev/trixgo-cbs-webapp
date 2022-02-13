@@ -27,6 +27,7 @@ const SocketController:FC = () => {
             socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
             socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+            socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -37,6 +38,7 @@ const SocketController:FC = () => {
                 socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
                 socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+                socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -103,6 +105,10 @@ const SocketController:FC = () => {
         } else {
             toast.error(data.data.message);
         }
+    }
+
+    const onReceiveReactionMessage = (data: any) => {
+        console.log(data)
     }
 
     const scrollToBottom = () => {

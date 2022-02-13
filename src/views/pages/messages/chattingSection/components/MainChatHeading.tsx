@@ -102,16 +102,18 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
-                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer"}>{getNameConversation()}</div>
+            <div className={"flex flex-col justify-center mx-[10px] flex-1 " + (showMenu??"chat-basic-infor")}>
+                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
-            <HeaderPinedMessages/>
-            <div className={"action-section flex items-center justify-end ml-[10px]"}>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <img  src={SearchIcon} alt={"search icon"}/>
-                </button>
-                <MainChatOptions/>
+            <div className={"flex items-center justify-end"}>
+                <HeaderPinedMessages/>
+                <div className={"action-section flex items-center justify-end ml-[10px]"}>
+                    <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                        <img  src={SearchIcon} alt={"search icon"}/>
+                    </button>
+                    <MainChatOptions/>
+                </div>
             </div>
         </div>
     )

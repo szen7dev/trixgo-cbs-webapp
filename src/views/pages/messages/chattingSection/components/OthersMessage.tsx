@@ -67,7 +67,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                 <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
-                <ReactionActions/>
+                <ReactionActions message={message}/>
             </div>
         </div>
     )
