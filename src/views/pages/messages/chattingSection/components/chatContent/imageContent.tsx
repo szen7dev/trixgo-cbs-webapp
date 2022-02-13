@@ -8,6 +8,8 @@ import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import ReactionList from "../ReactionList";
+import ReactionActions from "../ReactionActions";
 
 type Props = {
     message: ItemMessage;
@@ -97,22 +99,29 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
     }
 
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg relative overflow-hidden " + (className??"")}>
-            {
-                message.parent&&
-                renderReply()
-            }
-            <div className={"flex flex-wrap bg-white"}>
-                {renderImageDisplay()}
-            </div>
-            <div className={"date-message absolute bg-gray-100 bg-opacity-80 bottom-3px right-4px text-xs flex items-center px-[4px] rounded-full "  + (isMyMessage?"text-primary":"text-gray-500")}>
-                {moment(message.createAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
-            </div>
-            <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
-                <div className="flex overflow-hidden transition-all transform w-full h-full">
-                    <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => `${process.env.REACT_APP_URL_S3}/${file.file.file.path}`)} index={modalShowImage.index} />
+        <div className={"max-w-[366px] min-w-[70px] relative " + (className??"")}>
+            <div className={"overflow-hidden rounded-lg"}>
+                {
+                    message.parent&&
+                    renderReply()
+                }
+                <div className={"flex flex-wrap bg-white"}>
+                    {renderImageDisplay()}
                 </div>
-            </ModalFullContainer>
+                <div className={"absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
+                    <ReactionList message={message}/>
+                    <div className={"date-message bg-gray-100 bg-opacity-80 px-[4px] rounded-full flex items-center ml-[5px]"}>
+                        <span>{moment(message.createAt).format("HH:mm")}</span>
+                        <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    </div>
+                </div>
+                <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
+                    <div className="flex overflow-hidden transition-all transform w-full h-full">
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => `${process.env.REACT_APP_URL_S3}/${file.file.file.path}`)} index={modalShowImage.index} />
+                    </div>
+                </ModalFullContainer>
+            </div>
+            <ReactionActions message={message}/>
         </div>
     )
 }
