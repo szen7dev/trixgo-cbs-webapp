@@ -5,7 +5,6 @@ import PinIcon from "assets/images/icons8-pin-96.svg";
 import DownloadIcon from "assets/images/icons8-download-thin-96.svg";
 import ShareIcon from "assets/images/icons8-share-100.svg";
 import IconSelected from "assets/images/icons-web-select.svg";
-import SampleAvatar from "assets/images/sample_avt.svg";
 import GroupIcon from "assets/images/icons8-group-90.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
 import UnPinnedIcon from "assets/images/icons8-unpin-96.svg";
@@ -117,11 +116,13 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                 </button>
                 <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
-                    <div className={"mr-4 ml-4"}>5 Seen</div>
+                    <div className={"mr-4 ml-4"}>{message.usersSeen?.length} đã xem</div>
                     <div className={"flex"}>
-                        <img alt={"------"} src={SampleAvatar} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
-                        <img alt={"------"} src={SampleAvatar} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
-                        <img alt={"------"} src={SampleAvatar} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
+                        {
+                            _map(message.usersSeen.slice(0, 5), user => (
+                                <img key={user._id} alt={"------"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[16px] h-[16px] rounded-full overflow-hidden"}/>
+                            ))
+                        }
                     </div>
                 </button>
                 <button
