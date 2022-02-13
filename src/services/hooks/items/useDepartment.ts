@@ -1,3 +1,4 @@
+import React from 'react';
 import { useInfiniteQuery } from "react-query";
 import { DepartmentRepository } from 'apis/item';
 
@@ -59,5 +60,35 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
         hasNextPage,
         refetchListDepartments,
         fetchNextPageDepartments
+    }
+}
+
+interface UseQueryDetailDepartment {
+    loading: boolean;
+    detailDepartment: Department.Department,
+    onFetchDetailDepartmentAsync: (departmentID: string) => void;
+}
+export const useQueryDetailDepartment = (): UseQueryDetailDepartment => {
+    const [detailDepartment, setDetailDepartment] = React.useState<Department.Department | any>({});
+    const [loading, setLoading] = React.useState(false);
+
+    const onFetchDetailDepartment = React.useCallback(async (departmentID) => {
+       try {
+        setLoading(true);
+        const result = await DepartmentRepository.fetchDetailDepartment({ departmentID });
+        setDetailDepartment(result.data);
+        return result.data;
+       } catch(err) {
+           console.error(err);
+            setDetailDepartment({});
+       } finally {
+        setLoading(false)
+       }
+
+    }, []);
+    return {
+        onFetchDetailDepartmentAsync: onFetchDetailDepartment,
+        loading,
+        detailDepartment,
     }
 }

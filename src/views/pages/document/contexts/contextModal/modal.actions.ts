@@ -5,12 +5,15 @@ import modalTypes from "./modal.types";
 
 interface DispatchProps {
   type: string;
+  payload?: any;
 }
 
-type Action = (dispatch: Dispatch<DispatchProps>) => () => void;
-
+type Action = (
+  dispatch: Dispatch<DispatchProps>
+) => (...payload: any[]) => void;
 interface ActionsProps {
   toggleModal: Action;
+  updateModal: Action;
 }
 
 const modalActions: ActionsProps = {
@@ -19,6 +22,12 @@ const modalActions: ActionsProps = {
       type: modalTypes.TOGGLE_MODAL,
     });
   },
+  updateModal: (dispatch) => (payload) => {
+    return dispatch({
+      type: modalTypes.UPDATE_MODAL,
+      payload,
+    })
+  }
 };
 
 export default modalActions;

@@ -7,7 +7,7 @@ interface IAction {
 
 interface ReducerActionsProps {
 	type: string;
-	payload?: unknown;
+	payload?: any;
 }
 
 type dispatch = (...any: unknown[]) => void;

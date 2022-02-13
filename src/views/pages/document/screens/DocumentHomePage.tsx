@@ -91,7 +91,7 @@ const DocumentHomePage: FC = () => {
                     {`${item.sign}.${item.name}`}
                   </Link>
                   <p className="text-x-small document__line-min mt-1.5">
-                    {item.company.name}
+                    {item?.company?.name}
                   </p>
                 </div>
               </div>

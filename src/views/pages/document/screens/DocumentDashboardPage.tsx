@@ -104,7 +104,6 @@ const DocumentDashboardPage: FC = () => {
         select: "fullname image",
       },
     });
-  console.log({ listDepartments });
   // const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
   // 	id: i,
   // 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
@@ -272,6 +271,10 @@ const DocumentDashboardPage: FC = () => {
                       100
                   );
                 }
+                let numberFinishOfDocs = 0;
+                if (department.numberFinishOfDocs && department.numberOfDocs) {
+                  numberFinishOfDocs = (department.numberFinishOfDocs / department?.numberOfDocs) * 100;
+                }
                 return (
                   <tr key={index}>
                     <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
@@ -294,13 +297,13 @@ const DocumentDashboardPage: FC = () => {
                         <span className="text-2x-large text-black mr-auto">
                           {department.numberFinishOfDocs || 0}
                         </span>
-                        <span>48%</span>
+                        <span>{numberFinishOfDocs}%</span>
                       </div>
                       <div className="border border-cbs-border h-1.5 box-border mt-2">
                         <div
                           className="bg-cbs-schedule-after-7days h-full"
                           style={{
-                            width: department.numberOfDocs || 0 * 100 + "%",
+                            width: numberFinishOfDocs + "%",
                           }}
                         ></div>
                       </div>
