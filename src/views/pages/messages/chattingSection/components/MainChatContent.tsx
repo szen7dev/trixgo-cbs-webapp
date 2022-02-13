@@ -20,6 +20,7 @@ import laugh from "assets/emoji/laugh.png";
 import like from "assets/emoji/like.png";
 import sad from "assets/emoji/sad.png";
 import surprise from "assets/emoji/surprise.png";
+import ReminderNoti from "./ReminderNoti";
 
 export const listEmoji = [
     {
@@ -160,7 +161,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 116:
             case 117:
-                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
         }
     }
     return (
