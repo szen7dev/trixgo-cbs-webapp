@@ -1,8 +1,13 @@
 import ListConversationRepository from "apis/messages";
 import {
-    CreateConversationPayload, CreateConversationResponseBodyData, DataListConversation, ItemListConversation,
+    CreateConversationPayload,
+    CreateConversationResponseBodyData,
+    DataListConversation,
+    GeneralGroupByMemberPayload,
+    ItemListConversation,
     ListConversationPayload,
-    ListMembersOfConversationPayload, MediasOfConversationPayload
+    ListMembersOfConversationPayload,
+    MediasOfConversationPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setNextCursor, setListConversation, setTotalRecord, setLoading} from "redux/reducer/messages/ListConversation";
@@ -14,6 +19,7 @@ type UseListConversationType = {
     getListMembersOfConversation: (params: ListMembersOfConversationPayload) => Promise<void>;
     createConversation: (params: CreateConversationPayload) => Promise<CreateConversationResponseBodyData>;
     getListMediasOfConversation: (params: MediasOfConversationPayload) => Promise<void>;
+    getListGeneralGroupByMember: (params: GeneralGroupByMemberPayload) => Promise<ItemListConversation[]>;
     isLoadingListConversations: boolean,
     refetchListConversations: () => void,
     listConversations: Array<ItemListConversation>,
@@ -50,6 +56,11 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
     const getListMediasOfConversation = async (params: MediasOfConversationPayload) => {
         const {data} = await ListConversationRepository.getListImagesOfConversation(params);
         dispatch(setListMedias({conversationId: params.conversationID, data: data.listRecords, type: params.typeMessage}))
+    }
+
+    const getListGeneralGroupByMember = async (params: GeneralGroupByMemberPayload) => {
+        const {data} = await ListConversationRepository.getListGeneralGroupByMember(params);
+        return data;
     }
 
     const {
@@ -89,6 +100,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         nextPageListConversations,
         prevPageListConversations,
         hasListConversationNextPage,
-        totalRecordRequest
+        totalRecordRequest,
+        getListGeneralGroupByMember
     }
 };

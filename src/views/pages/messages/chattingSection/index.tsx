@@ -11,7 +11,7 @@ const ChattingSection:FC = () => {
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     return (
-        <div id={"chatting-section"} className={"flex-1 transition-all duration-500 " + (showMenu?"mr-[480px]":"mr-0")}>
+        <div id={"chatting-section"} className={"flex-1 transition-all duration-500 " + (showMenu?"mr-[402px]":"mr-0")}>
             <div className={"relative flex flex-col bg-chat-app h-full"}>
                 {
                     currentChat&&chat&&

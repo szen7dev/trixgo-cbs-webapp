@@ -24,6 +24,7 @@ export type ItemListConversation = {
             image: string;
             company: string;
             fullname: string;
+            bizfullname: string;
         },
         updatedAt: string;
         [key: string]: any;
@@ -172,3 +173,13 @@ export type MediasOfConversationResponse = {
     data: any;
     status: number;
 };
+
+export type GeneralGroupByMemberPayload = {
+    memberID: string;
+};
+
+export type GeneralGroupByMemberResponse = {
+    error: boolean;
+    data: ItemListConversation[];
+    status: number;
+}

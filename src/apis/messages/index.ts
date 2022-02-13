@@ -4,7 +4,7 @@ import { convertObToUrl } from "helpers";
 import {
     CheckExistConversationResponse,
     CreateConversationPayload,
-    CreateConversationResponse,
+    CreateConversationResponse, GeneralGroupByMemberPayload, GeneralGroupByMemberResponse,
     ListConversationPayload,
     ListConversationResponse,
     ListMembersOfConversationPayload,
@@ -17,6 +17,7 @@ const getListMembersOfConversationURL = "/api/chatting/conversations/list-member
 const checkExistConversation = "/api/chatting/conversations/check-exists-conversation";
 const createConversation = "/api/chatting/conversations/create-conversation";
 const mediasOfConversation = "/api/chatting/conversations/list-message-media-conversation";
+const generalGroupOfMember = "/api/chatting/conversations/info-general-group-by-member";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -55,6 +56,14 @@ const ListConversationRepository = {
     async getListImagesOfConversation(payload: MediasOfConversationPayload): Promise<MediasOfConversationResponse> {
         const {data} = await API.get<MediasOfConversationResponse>(
             `${mediasOfConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async getListGeneralGroupByMember(payload: GeneralGroupByMemberPayload): Promise<GeneralGroupByMemberResponse> {
+        const {data} = await API.get<GeneralGroupByMemberResponse>(
+            `${generalGroupOfMember}?${convertObToUrl(payload)}`
         )
 
         return data;

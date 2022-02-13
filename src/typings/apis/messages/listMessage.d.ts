@@ -2,14 +2,14 @@ import {ItemListConversation} from "./listConversation";
 
 export type ItemMessage = {
     _id: string;
-    receivers: {_id: string; image: string; fullname: string}[];
+    receivers: {_id: string; image: string; fullname: string}; bizfullname: string[];
     content: string;
     status: number;
     type: number;
-    listSeen: {_id: string; image: string; fullname: string}[];
+    listSeen: {_id: string; image: string; fullname: string; bizfullname: string}[];
     usersDelete: any[];
     membersAssigned: any[];
-    sender: {_id: string; image: string; fullname: string};
+    sender: {_id: string; image: string; fullname: string; bizfullname: string};
     conversation: string;
     modifyAt: string;
     createAt: string;
@@ -49,6 +49,7 @@ export type ItemMessage = {
                 app: string;
                 name: string;
                 url: string;
+                fakeUrl: string;
                 size: number;
                 userCreate: string;
                 modifyAt: string;
@@ -58,6 +59,7 @@ export type ItemMessage = {
                 __v: number;
                 nameOrg: string;
                 path: string;
+                isDraft: boolean;
             };
         };
         [key: string]: any;
@@ -78,7 +80,16 @@ export type ItemMessage = {
         updatedAt: string
         __v: number
         _id: string
-    }
+    },
+    reactions: {
+        _id: string;
+        type: number;
+        userCreate : {
+            _id: string;
+            fullname: string;
+            image: string;
+        }
+    }[]
     [key: string]: any;
 }
 export type ListMessageData = {

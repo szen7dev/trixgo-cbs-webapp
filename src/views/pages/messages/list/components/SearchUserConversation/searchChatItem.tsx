@@ -27,7 +27,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.fullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -63,7 +63,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
             className={"group flex p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
-                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px]")} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px] min-w-[56px] min-h-[56px]")} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                     (
                         getAvatarMembers().length === 0 ?
                         <div className={"rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px] " + (avatarClassname??"w-[56px] h-[56px]")} style={{background: "#8DD4D6"}}>

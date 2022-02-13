@@ -13,10 +13,12 @@ import ListPinnedMessage from "./ListPinnedMessage";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 
-const HeaderPinedMessages:FC = () => {
+type Props = {
+    listPinnedMessage: ItemMessage[]
+}
+const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
     const {currentChat} = useContext(MessageContext)
     const {getListPinMessage} = UseConversation();
-    const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
     const [indexPinnedMessage, setIndexPinnedMessage] = useState(0);
     useEffect(() => {
         getListPinMessage({conversationID: currentChat})

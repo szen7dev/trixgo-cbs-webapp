@@ -46,7 +46,7 @@ const ViewImage: FC<Props & ModalProps> = ({ imageList, toggle, index, message }
                             </svg>
                         </button>
                         <div>
-                            {message&&<p className="text-base">{message.sender.fullname}</p>}
+                            {message&&<p className="text-base">{message.sender.bizfullname||message.sender.fullname}</p>}
                             {message&&<p className="text-sm">{moment(message.createAt).format("hh:mm:ss DD/MM/YYYY")}</p>}
                         </div>
                     </div>

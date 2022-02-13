@@ -27,6 +27,7 @@ const SocketController:FC = () => {
             socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
             socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+            socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -37,6 +38,7 @@ const SocketController:FC = () => {
                 socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
                 socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+                socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -44,6 +46,7 @@ const SocketController:FC = () => {
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
+        console.log(data)
         if (data?.infoMessage?.error) {
             // Alert.alert(t('notification'), data.infoMessage.message);
             getListConversation({keyword: ""});
@@ -71,6 +74,7 @@ const SocketController:FC = () => {
     };
 
     const onReceiveConversation = (data: any) => {
+        console.log(data)
         dispatch(setListConversation(data.data.listRecords));
     }
 
@@ -103,6 +107,15 @@ const SocketController:FC = () => {
         } else {
             toast.error(data.data.message);
         }
+    }
+
+    const onReceiveReactionMessage = (data: any) => {
+        dispatch(updateNewMessageToConversation({
+            conversationId: data.data.conversation._id,
+            newMessageId: data.data._id,
+            oldMessageId: data.data._id,
+            messageData: {...data.data, conversation: data.data.conversation._id}
+        }));
     }
 
     const scrollToBottom = () => {

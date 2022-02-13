@@ -62,7 +62,7 @@ const Reminder:FC<Props> = ({message}) => {
                 {moment(message.createdAt).format("HH:mm")}
             </div>
             <div className={"rounded-full text-xs  bg-gray-200 text-gray-500 px-5 py-1 mb-2"}>
-                {`${message.sender.fullname} đã tạo một lời nhắc`}
+                {`${message.sender.bizfullname||message.sender.fullname} đã tạo một lời nhắc`}
             </div>
             <div className={"w-[300px] rounded-md bg-white border border-gray-400"}>
                 <div className={"p-3 border-b border-gray-200 flex"}>
