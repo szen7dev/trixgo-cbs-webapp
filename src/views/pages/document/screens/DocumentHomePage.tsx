@@ -71,7 +71,7 @@ const DocumentHomePage: FC = () => {
                 <div className="document__home-card relative mt-2 border-cbs-border box-border border">
                   <div className="flex mb-5">
                     <img
-                      src={item.image || projectImage}
+                      src={item.image ? `${process.env.REACT_APP_URL_S3_PROJECT}/${item.image}` : projectImage}
                       alt="Avatar"
                       className="h-[90px] w-[90px] object-cover"
                     />

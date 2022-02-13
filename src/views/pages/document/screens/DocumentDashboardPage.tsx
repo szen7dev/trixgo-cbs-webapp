@@ -310,19 +310,23 @@ const DocumentDashboardPage: FC = () => {
                     </td>
                     <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border text-black">
                       <div className="whitespace-nowrap">
-                        <img
-                          src={`${department?.pm?.image}`}
-                          alt="Director"
-                          className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-                        />
+                        {department?.pm?.image && (
+                          <img
+                            src={`${process.env.REACT_APP_URL_S3_USER}/${department?.pm?.image}`}
+                            alt="Director"
+                            className="inline-block w-6 h-6 rounded-3xl mr-2.5"
+                          />
+                        )}
                         {department?.pm?.fullname}
                       </div>
                       <div className="whitespace-nowrap pl-9 w-max pt-1.5">
-                        <img
-                          src={`${department?.assistant?.image}`}
-                          alt="Secretary"
-                          className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-                        />
+                        {department?.assistant?.image && (
+                          <img
+                            src={`${process.env.REACT_APP_URL_S3_USER}/${department?.assistant?.image}`}
+                            alt="Secretary"
+                            className="inline-block w-6 h-6 rounded-3xl mr-2.5"
+                          />
+                        )}
                         {department?.assistant?.fullname}
                       </div>
                     </td>
