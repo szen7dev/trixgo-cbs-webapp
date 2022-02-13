@@ -110,7 +110,13 @@ const SocketController:FC = () => {
     }
 
     const onReceiveReactionMessage = (data: any) => {
-        console.log(data)
+        console.log(data.data)
+        dispatch(updateNewMessageToConversation({
+            conversationId: data.data.conversation._id,
+            newMessageId: data.data._id,
+            oldMessageId: data.data._id,
+            messageData: {...data.data, conversation: data.data.conversation._id}
+        }));
     }
 
     const scrollToBottom = () => {

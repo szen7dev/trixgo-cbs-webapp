@@ -49,7 +49,14 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                 className={"flex items-center mb-[5px] min-w-max bg-white rounded-full shadow-lg p-2 absolute"} style={{top: -50}}>
                 {
                     _map(listEmoji, emoji => (
-                        <button key={emoji.id} className={"mr-[5px]"}>
+                        <button
+                            onClick={() => {
+                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value});
+                                setTimeout(() => {
+                                    closeRightClick();
+                                }, 100)
+                            }}
+                            key={emoji.id} className={"mr-[5px]"}>
                             <img src={emoji.icon} className={"w-[24px] h-[24px]"} alt={"-----"}/>
                         </button>
                     ))
