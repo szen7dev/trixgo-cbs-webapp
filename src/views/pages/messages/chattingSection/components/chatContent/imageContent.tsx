@@ -54,7 +54,6 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
         const map = (message.files.length>=5)?"map_more":("map_"+message.files.length);
         const classNameMap = classMapping[map];
         return _map(message.files.slice(0,5), (image,index:number)=> {
-            console.log(image.progress)
             return <div
                 onClick={() => {
                     if (image.file.file.isDraft) return;

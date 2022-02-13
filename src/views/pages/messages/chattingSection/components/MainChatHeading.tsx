@@ -22,7 +22,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.bizfullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -102,11 +102,11 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div className={"flex flex-col justify-center mx-[10px] flex-1 " + (showMenu??"chat-basic-infor")}>
+            <div className={"flex flex-col justify-center mx-[10px] " + (showMenu&&chat.messagesPin.length>0?"chat-basic-infor":"")}>
                 <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
-            <div className={"flex items-center justify-end"}>
+            <div className={"flex items-center justify-end flex-1"}>
                 <HeaderPinedMessages/>
                 <div className={"action-section flex items-center justify-end ml-[10px]"}>
                     <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>

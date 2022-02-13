@@ -38,7 +38,7 @@ const FileReply:FC<Props> = ({message, className}) => {
             </div>
             <div className={"flex-1"}>
                 <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
-                    {message.sender.bizfullname}
+                    {message.sender.bizfullname||message.sender.fullname}
                 </div>
                 <div className={"truncate text-gray-400"}>
                     {message.files[0].file.file.nameOrg??message.files[0].file.file.name}

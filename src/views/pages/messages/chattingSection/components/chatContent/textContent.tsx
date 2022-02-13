@@ -56,7 +56,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
             {
                 showSenderName&&
                 <div className={"reply-user-name text-primary"}>
-                    {message.sender.bizfullname}
+                    {message.sender.bizfullname||message.sender.fullname}
                 </div>
             }
             {

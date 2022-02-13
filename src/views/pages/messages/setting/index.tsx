@@ -42,7 +42,7 @@ const SettingMessageDetail:FC = () => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.bizfullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;

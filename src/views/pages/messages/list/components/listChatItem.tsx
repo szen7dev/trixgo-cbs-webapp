@@ -29,7 +29,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.bizfullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -65,7 +65,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[350px]"}>
+                    return <p className={"flex items-center max-w-[275px]"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
@@ -116,7 +116,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
     const getSenderName = useCallback(() => {
         if (chat.lastMessage.sender._id === profileId) {
             return "Bạn";
-        } else return chat.lastMessage.sender.bizfullname;
+        } else return (chat.lastMessage.sender.bizfullname||chat.lastMessage.sender.fullname);
     },[chat.lastMessage])
 
     return (
