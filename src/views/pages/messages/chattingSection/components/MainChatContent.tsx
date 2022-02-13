@@ -13,6 +13,51 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
 import Reminder from "./Reminder";
 import moment from "moment";
+import angered from "assets/emoji/angered.png";
+import dislike from "assets/emoji/dis-like.png";
+import heart from "assets/emoji/heart.png";
+import laugh from "assets/emoji/laugh.png";
+import like from "assets/emoji/like.png";
+import sad from "assets/emoji/sad.png";
+import surprise from "assets/emoji/surprise.png";
+
+export const listEmoji = [
+    {
+        id: 1,
+        icon: heart,
+        value: 1
+    },
+    {
+        id: 2,
+        icon: laugh,
+        value: 2
+    },
+    {
+        id: 3,
+        icon: surprise,
+        value: 3
+    },
+    {
+        id: 4,
+        icon: sad,
+        value: 4
+    },
+    {
+        id: 5,
+        icon: angered,
+        value: 5
+    },
+    {
+        id: 6,
+        icon: like,
+        value: 6
+    },
+    {
+        id: 7,
+        icon: dislike,
+        value: 7
+    }
+];
 
 type Props = {
     chat: ItemListConversation
@@ -123,7 +168,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-list"}
-                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150"}
+                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {memoizedValue()}

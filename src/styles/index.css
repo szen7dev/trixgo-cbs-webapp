@@ -1366,3 +1366,14 @@ input[type="text"] {
   min-height: 15px;
   max-height: 100%;
 }
+.emoji-group {
+  bottom: -16px;
+  /*transform: translateX(80px);*/
+}
+.message-container:hover .emoji-group {
+  opacity: 1;
+  visibility: visible;
+}
+.message-container .emoji-group .reactions-group {
+  top: -45px;
+}
