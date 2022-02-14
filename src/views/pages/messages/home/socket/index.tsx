@@ -69,7 +69,7 @@ const SocketController:FC = () => {
                 scrollToBottom();
             }, 100)
         }
-        // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation });
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation, select: JSON.stringify({ sender:"bizfullname" }) });
     };
 
     const onReceiveConversation = (data: any) => {

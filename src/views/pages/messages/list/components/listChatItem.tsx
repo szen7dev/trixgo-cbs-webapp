@@ -65,7 +65,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[275px]"}>
+                    return <p className={"flex items-center max-w-[250px]"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
