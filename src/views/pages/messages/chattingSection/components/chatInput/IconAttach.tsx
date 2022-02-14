@@ -4,12 +4,17 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import ImagesIcon from "assets/images/icons8-photo-gallery-96.svg";
 import FileIcon from "assets/images/icons8-attach-96.png";
 import FolderIcon from "assets/images/icons8-add-folder-96.svg"
+import {openCreatePoll} from "redux/reducer/messages/CreatePoll";
+import {useDispatch} from "react-redux";
+import {MessageContext} from "../../../home/index_v2";
 
 type Props = {
     handleUploadFiles: (files: FileList|Blob[]) => void;
 }
 
 const IconAttach:FC<Props> = ({handleUploadFiles}) => {
+    const {currentChat} = useContext(MessageContext);
+    const dispatch = useDispatch();
     const [showOption, setShowOption] = useState(false);
     const el = useRef<HTMLDivElement>(null);
     useOnClickOutside(el, () => setShowOption(false))
@@ -38,9 +43,14 @@ const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                         <div className={"flex-1 text-left ml-6"}>File</div>
                         <input type="file" name="files" id="files" className="hidden" accept="file/*" multiple onChange={event => handleSetFiles(event)} />
                     </label>
-                    <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                    <button
+                        onClick={() => {
+                            setShowOption(false)
+                            dispatch(openCreatePoll({conversationId: currentChat}))
+                        }}
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  className={"mr-2"} src={FolderIcon} alt={"exit"}/>
-                        <div className={"flex-1 text-left ml-6"}>Bỏ phiếu</div>
+                        <div className={"flex-1 text-left ml-4"}>Bỏ phiếu</div>
                     </button>
                 </div>
             }

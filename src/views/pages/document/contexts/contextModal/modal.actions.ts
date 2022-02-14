@@ -5,6 +5,7 @@ import { Action } from "typings/ppt/reducer";
 
 type ActionsProps = {
   toggleModal: Action<() => void>;
+  updateModal: Action<(payload: any) => void>;
 };
 
 const modalActions: ActionsProps = {
@@ -13,6 +14,12 @@ const modalActions: ActionsProps = {
       type: modalTypes.TOGGLE_MODAL,
     });
   },
+  updateModal: (dispatch) => (payload) => {
+    return dispatch({
+      type: modalTypes.UPDATE_MODAL,
+      payload,
+    })
+  }
 };
 
 export default modalActions;

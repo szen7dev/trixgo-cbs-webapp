@@ -9,6 +9,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import SocketController from "./socket";
 import ShareMessage from "../chattingSection/components/ShareMessage";
 import DeleteAndRevokeMessageConfirm from "../chattingSection/components/DeleteAndRevokeMessage";
+import PollCreate from "../chattingSection/components/poll/PollCreate";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -49,6 +50,7 @@ const MessagesHome:FC = () => {
             <SocketController/>
             <ShareMessage/>
             <DeleteAndRevokeMessageConfirm/>
+            <PollCreate/>
         </MessageContext.Provider>
     )
 }

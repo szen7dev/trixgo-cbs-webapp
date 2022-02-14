@@ -12,8 +12,8 @@ import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
-import ReactionList from "../ReactionList";
-import ReactionActions from "../ReactionActions";
+import ReactionList from "../reactions/ReactionList";
+import ReactionActions from "../reactions/ReactionActions";
 type Props = {
     message: any;
     className?: string;

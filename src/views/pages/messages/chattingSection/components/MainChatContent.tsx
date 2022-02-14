@@ -11,7 +11,7 @@ import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
-import Reminder from "./Reminder";
+import Reminder from "./reminder/Reminder";
 import moment from "moment";
 import angered from "assets/emoji/angered.png";
 import dislike from "assets/emoji/dis-like.png";
@@ -20,9 +20,9 @@ import laugh from "assets/emoji/laugh.png";
 import like from "assets/emoji/like.png";
 import sad from "assets/emoji/sad.png";
 import surprise from "assets/emoji/surprise.png";
-import ReminderNoti from "./ReminderNoti";
-import Poll from "./Poll";
-import PollNoti from "./PollNoti";
+import ReminderNoti from "./reminder/ReminderNoti";
+import Poll from "./poll/Poll";
+import PollNoti from "./poll/PollNoti";
 
 export const listEmoji = [
     {
@@ -162,8 +162,9 @@ const MainChatContent:FC<Props> = ({chat}) => {
             case 108:
                 return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:
-            case 112:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+            case 112:
+                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
                 return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>

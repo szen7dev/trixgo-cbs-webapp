@@ -4,7 +4,7 @@ import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import MyMessage from "./MyMessage";
 import OthersMessage from "./OthersMessage";
-import Reminder from "./Reminder";
+import Reminder from "./reminder/Reminder";
 import NotificationCenter from "./NotificationCenter";
 import {map as _map} from "lodash"
 import moment from "moment";
