@@ -22,7 +22,7 @@ export type MediaPayload = {
 
 export type MediaReactionPayload = {
   mediaID: string;
-  typeReaction?: string;
+  typeReaction?: number;
 };
 
 export type PostResponse = APIResponse & {
