@@ -7,6 +7,8 @@ import Close from "assets/icons/Close";
 import MemberVote from "assets/images/icons-member-vote.svg";
 
 import moment from "moment";
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {MessageContext} from "../../../home/index_v2";
 
 type Props = {
     message: ItemMessage;
@@ -18,8 +20,10 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);
     const profileId = profile?._id;
-
+    const {updatePoll} = UseConversation();
     const focusElementRef = useRef<HTMLDivElement>(null);
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
 
     const mapUserVote = () => {
         const votes : {[key: string]: {
@@ -61,7 +65,11 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
             }
         })
 
-        return didChange;
+        return {
+            didChange,
+            defaultUserVote,
+            newVote
+        };
     }, [userVote, message])
 
     const usersVote = useCallback(() => {
@@ -96,6 +104,37 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
             }
         }
         setUserVote(selected);
+    }
+
+    const handleSendVote = () => {
+        const votesChange : {
+            newVotes: string[],
+            votesCancel: string[]
+        } = {
+            newVotes: [],
+            votesCancel: []
+        };
+        const voteChangeInformation = checkDidUserTakeAction();
+        const defaultUserVote = voteChangeInformation.defaultUserVote;
+        const newVote = voteChangeInformation.newVote;
+
+        Object.keys(defaultUserVote).forEach(key => {
+            if (defaultUserVote[key] === undefined && newVote[key] !== undefined) {
+                votesChange.newVotes.push(key)
+            }
+            if (defaultUserVote[key] !== undefined && newVote[key] === undefined) {
+                votesChange.votesCancel.push(key)
+            }
+        })
+
+        updatePoll({
+            conversationID: message.conversation,
+            messageID: message._id,
+            ...votesChange
+        }).then(data => {
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
+        })
     }
 
     return (
@@ -147,10 +186,8 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
                                     Bình chọn
                                 </div>
                                 <button
-                                    disabled={!checkDidUserTakeAction()}
-                                    onClick={() => {
-                                        console.log('asdas')
-                                    }}
+                                    disabled={!checkDidUserTakeAction().didChange}
+                                    onClick={() => handleSendVote()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
                                     Xác nhận

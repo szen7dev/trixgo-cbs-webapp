@@ -271,3 +271,45 @@ export type DeleteRevokeMessageResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdatePollPayload = {
+    conversationID: string;
+    messageID: string;
+    newVotes?: string[];
+    votesCancel?: string[];
+    newOptions?: {
+        title: string;
+        usersVote?: string[]
+    }[];
+}
+
+export type UpdatePollData = {
+    infoMessage: ItemMessage[],
+    infoMessageNotification: {
+        content: string
+        conversation: string
+        createAt: string
+        createdAt: string
+        files: any[]
+        modifyAt: string
+        poll: string
+        reactions: any[]
+        receivers: string[]
+        sender: string
+        state: number
+        status: number
+        type: number
+        updatedAt: string
+        usersAssigned: string[]
+        usersDelete: string[]
+        usersSeen: string[]
+        __v: number
+        _id: string
+    }
+}
+
+export type UpdatePollResponse = {
+    data: UpdatePollData ;
+    error: boolean;
+    status: number;
+}
