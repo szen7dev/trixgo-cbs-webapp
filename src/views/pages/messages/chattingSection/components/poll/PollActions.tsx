@@ -65,6 +65,11 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
             }
         })
 
+        //Kiểm tra xem chọn gì chưa
+        if (Object.values(newVote).every(vote => vote === undefined)) {
+            didChange = false;
+        }
+
         return {
             didChange,
             defaultUserVote,
@@ -134,6 +139,7 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
         }).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
+            setCloseVote()
         })
     }
 

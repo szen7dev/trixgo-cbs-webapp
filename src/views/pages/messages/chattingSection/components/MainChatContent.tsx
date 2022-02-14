@@ -162,8 +162,9 @@ const MainChatContent:FC<Props> = ({chat}) => {
             case 108:
                 return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:
-            case 112:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+            case 112:
+                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
                 return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
