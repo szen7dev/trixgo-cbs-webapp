@@ -51,13 +51,14 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
     toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
   }, 1000)
 
+  // hover:scale-125
   return (
     <>
       <div className={
         classNames("flex",
-        isHighlight 
+        isHighlight  
           ? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300' 
-          : 'animate-[wiggle_1s_ease-in-out_infinite] hover:scale-125'
+          : 'animate-[wiggle_1s_ease-in-out_infinite]'
         )
       } ref={divRef}>
         <img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
