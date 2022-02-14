@@ -24,10 +24,10 @@ async function fetchDocumentInfo(params: DocumentInfoQueryPayload): Promise<Docu
         `${DOCUMENT_URL}/info-document`, {
             params: {
                 populates: {
-                    "path": "files property package project sender receiver author storage field",
+                    "path": "userUpdate files property package project sender receiver author storage field",
                     "select": "_id path name sign type fullname"
                 },
-                select: 'name sign type description project package approver requestResponse date storage createAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note',
+                select: 'userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note',
                 ...params,
             }
         }

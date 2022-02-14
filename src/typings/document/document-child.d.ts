@@ -1,4 +1,6 @@
-import type { APIResponse } from './commons';
+import type { APIResponse, QueryParam } from './commons';
+
+export type { Document } from 'typings/ppt/Document';
 
 export interface DocumentProps extends Omit<DocumentChildInserPayload, 'parentID' | 'departmentID' | 'packageID' |'senderID' | 'receiverID' | 'propertyID' | 'fieldID' |'storageID'> {
     _id: string;
@@ -18,8 +20,7 @@ export interface DocumentProps extends Omit<DocumentChildInserPayload, 'parentID
     userUpdate?: string;
 }
 
-export interface DocumentChildInserPayload {
-    "parentID": string;
+interface DocumentInserPayload {
     "departmentID": string;
     "name": string;
     "sign": string;
@@ -46,6 +47,9 @@ export interface DocumentChildInserPayload {
     "value": number;
     "completeStatus": number;
 }
+export interface DocumentChildInserPayload extends DocumentInserPayload {
+    "parentID": string;
+}
 
 export interface DocumentChildInserResponse extends APIResponse {
     data: DocumentProps
@@ -61,5 +65,19 @@ export interface DocumentChildUpdateResponse extends APIResponse {
         sender: string;
         receiver: string;
         userUpdate: string;
+    }
+}
+
+export interface DocumentChildQueryPayload extends QueryParam {
+    parentID: string;
+}
+
+export interface DocumentChildQueryResponse extends APIResponse {
+    data: {
+        listRecords: DocumentProps[];
+        limit: number;
+        totalRecord: number;
+        totalPages: number;
+        nextCursor: string | null;
     }
 }

@@ -27,7 +27,10 @@ export interface Document {
         _id: string;
         name: string;
     };
-    date: string;
+    date?: string;
+    receivedDate?: string;
+    style?: string;
+    direction?: number;
     storeSign?: {
         _id: string;
         name: string;
@@ -40,8 +43,14 @@ export interface Document {
         name: string;
     };
     createAt: string;
+    updatedAt: string;
     userCreate?: Author;
+    userUpdate?: Author;
     package?: {
+        _id: string;
+        name: string;
+    };
+    contract?: {
         _id: string;
         name: string;
     };
@@ -49,6 +58,17 @@ export interface Document {
         _id: string;
         name: string;
     };
+    property: {
+        _id: string;
+        name: string;
+    },
+    type?: number;
+    amountDelivery?: number;
+    requestResponse?: boolean;
+    completeStatus?: boolean;
+    expiredResponse?: string;
+    approver?: string;
+    value?: string;
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {
