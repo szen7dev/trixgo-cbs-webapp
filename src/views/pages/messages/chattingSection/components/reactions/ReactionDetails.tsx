@@ -1,10 +1,10 @@
 import React, {FC, Fragment, useContext, useRef} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../../home/index_v2";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash"
-import {listEmoji} from "./MainChatContent";
+import {listEmoji} from "../MainChatContent";
 
 type Props = {
     message: ItemMessage;
@@ -61,18 +61,22 @@ export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
                                 >
                                     <Close/>
                                 </button>
-                                <div className={"flex-1 text-left text-lg font-bold"}>
-
+                                <div className={"flex-1 text-left text-primary"}>
+                                    Tất cả ({message.reactions.length})
                                 </div>
                             </div>
-                            <div>
+                            <div className={"max-h-500px overflow-scroll"}>
                                 {
                                     _map(message.reactions, reaction => (
                                         <div
                                             key={reaction._id}
                                             className={"flex items-center"}
                                         >
-                                            a
+                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${reaction.userCreate.image}`} className={"w-[40px] h-[40px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
+                                            <div className={"flex-1 ml-2"}>
+                                                {reaction.userCreate.bizfullname}
+                                            </div>
+                                            <img src={listEmoji[reaction.type-1].icon} className={"w-[24px] h-[24px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
                                         </div>
                                     ))
                                 }

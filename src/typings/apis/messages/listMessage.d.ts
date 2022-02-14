@@ -87,6 +87,7 @@ export type ItemMessage = {
         userCreate : {
             _id: string;
             fullname: string;
+            bizfullname: string;
             image: string;
         }
     }[],
