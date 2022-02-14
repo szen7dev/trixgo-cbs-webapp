@@ -2,7 +2,7 @@ import React, {FC, ReactNode, useCallback, useContext} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../../home/index_v2";
 import {updateReminderData} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 import Clock from "assets/images/icons8-time-48.svg";

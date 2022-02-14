@@ -1,8 +1,9 @@
 import React, {FC, useCallback, useContext, useRef, useState} from "react";
 import {map as _map} from "lodash";
-import {listEmoji} from "./MainChatContent";
+import {listEmoji} from "../MainChatContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
+import ReactionDetails from "./ReactionDetails";
 type Props = {
     message: ItemMessage
 }
@@ -32,6 +33,7 @@ export const ReactionList:FC<Props> = ({message}) => {
                     ))
                 }
             </div>
+            <ReactionDetails message={message} isOpen={showReactionGroup} setCloseVote={() => setShowReactionGroup(false)}/>
         </div>
     )
 }
