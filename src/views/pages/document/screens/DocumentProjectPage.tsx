@@ -13,9 +13,14 @@ import { Context as ContextModal } from "views/pages/document/contexts/contextMo
 import Paginate from "components/common/Paginate";
 import Loader from "components/shared/Loader";
 
-import { useQueryListDocument } from "services/hooks/ppt/useDocument";
+import {
+  useQueryListDocument,
+  useQueryDetailDocument,
+} from "services/hooks/ppt/useDocument";
+import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
+import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 
-import { IPackage, IProjects } from "typings/document";
+import { IPackage } from "typings/document";
 
 const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
   id: i,
@@ -24,14 +29,19 @@ const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 
 const DocumentProjectPage: FC = () => {
   const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
-  const { toggleModal } = useContext(ContextModal);
+  const { toggleModal, updateModal } = useContext(ContextModal);
   const { id: departmentID } = useParams<{ id: string }>();
   const [pageParam, setPageParam] = useState<any>({});
   const [cursorPage, setCursorPage] = useState<string[]>([]);
-
-  const { data, totalRecord, totalPages, loading, nextCursor } =
-    useQueryListDocument(departmentID, pageParam);
   const [isShow, setIsShow] = useState<boolean>(false);
+  const [recordSelected, setSelectRecord] = useState<any>({});
+
+  const { data, totalRecord, totalPages, loading, nextCursor, refetch } =
+    useQueryListDocument(departmentID, pageParam);
+  const { inserDocumentChildAsync, updateDocumentChildAsync } =
+    useMutationDocumentChild();
+  const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
+  const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
@@ -51,6 +61,70 @@ const DocumentProjectPage: FC = () => {
       setPageParam({ lastestID: cursorPage[currentIndex - 1] }); // lấy id trước đó
     }
   }, [cursorPage, pageParam]);
+
+  const handleCreate = React.useCallback(async () => {
+    const result = await onFetchDetailDepartmentAsync(departmentID);
+    toggleModal();
+    updateModal({
+      departmentId: departmentID,
+      departmentInfo: result,
+      title: "Thêm mới",
+      onSubmit: async (values: any) => {
+        const result = await inserDocumentChildAsync({
+          ...values,
+          departmentID,
+        });
+        if (result.status === 200) {
+          refetch();
+          toggleModal();
+          updateModal({
+            departmentInfo: {},
+          });
+        }
+      },
+    });
+  }, [
+    departmentID,
+    inserDocumentChildAsync,
+    onFetchDetailDepartmentAsync,
+    refetch,
+    toggleModal,
+    updateModal,
+  ]);
+
+  const handleOnClickUpdate = React.useCallback(
+    (record) => async () => {
+      const result = await onFetchDetailDocumentAsync(record._id);
+      // console.log(result);
+      // console.log(record);
+      toggleModal();
+      updateModal({
+        departmentId: departmentID,
+        departmentInfo: {
+          company: {
+            _id: record.company,
+          },
+        },
+        title: "Cập nhật",
+        initialValues: result,
+        onSubmit: async (values: any) => {
+          const result = await updateDocumentChildAsync({
+            ...values,
+            documentID: record._id,
+          });
+          if (result.status === 200) {
+            refetch();
+            toggleModal();
+            updateModal({
+              departmentInfo: {},
+              initialValues: {},
+            });
+          }
+        },
+      });
+    },
+    [departmentID, onFetchDetailDocumentAsync, refetch, toggleModal, updateDocumentChildAsync, updateModal]
+  );
 
   React.useEffect(() => {
     if (nextCursor) {
@@ -79,9 +153,14 @@ const DocumentProjectPage: FC = () => {
             onSelectValue={setPkg}
           />
           <DropdownFilterButton />
-          <GroupActions className="flex items-center flex-1" />
+          {Object.keys(recordSelected).length > 0 && (
+            <GroupActions
+              className="flex items-center flex-1"
+              onClickPencil={handleOnClickUpdate(recordSelected)}
+            />
+          )}
 
-          <ButtonCreate onClick={toggleModal} />
+          <ButtonCreate onClick={handleCreate} />
           <ButtonMore />
         </div>
         <div className="flex-1 overflow-y-auto">
@@ -162,12 +241,22 @@ const DocumentProjectPage: FC = () => {
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          value=""
                           id="flexCheckDefault"
+                          checked={document._id === recordSelected._id}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectRecord(document);
+                              return null;
+                            }
+                            setSelectRecord({});
+                            return null;
+                          }}
                         />
                       </td>
                       <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
-                        <Link to={`/document/project/asd/document/doc`}>
+                        <Link
+                          to={`/document/project/${document.project._id}/document/doc?documentId=${document._id}`}
+                        >
                           <p>{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
                             {`${document?.author?.fullname || ""}-${
@@ -180,7 +269,9 @@ const DocumentProjectPage: FC = () => {
                       <td className="py-2.5 border-b border-cbs-border px-2 w-[150px]">
                         {document?.sender?.name}
                       </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">{document.sign}</td>
+                      <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">
+                        {document.sign}
+                      </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
                         {moment(document.date).isValid() &&
                           moment(document.date).format("DD/MM/YYYY")}
@@ -200,7 +291,9 @@ const DocumentProjectPage: FC = () => {
                       <td className="py-2.5 border-b border-cbs-border px-2 box-border">
                         {document.note}
                       </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2">{document?.storage?.name}</td>
+                      <td className="py-2.5 border-b border-cbs-border px-2">
+                        {document?.storage?.name}
+                      </td>
                     </tr>
                   );
                 })}

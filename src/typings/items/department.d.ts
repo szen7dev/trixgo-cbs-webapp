@@ -1,9 +1,9 @@
 import type { QueryParam, Company, Human } from './commons';
 
 export type Department = {
+    _id: string;
     name: string;
     sign: string;
-    _id: string;
     description?: string;
     image?: string;
     numberOfDocs?: number;
@@ -27,4 +27,12 @@ export type DepartmentResponse = APIResponse & {
         totalPages: number;
         nextCursor: string | null;
     }
+}
+
+export type DepartmentDetailPayload = QueryParam & {
+    departmentID: string;
+}
+
+export type DepartmentDetailResponse = APIResponse & {
+    data: Department;
 }
