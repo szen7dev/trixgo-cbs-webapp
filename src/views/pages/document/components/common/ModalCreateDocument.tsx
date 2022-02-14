@@ -95,6 +95,21 @@ const useInitialValues = (departmentID: string, companyID: string) => {
 
 const ModalCreateDocument: React.FC = (props) => {
   const { state, toggleModal, updateModal } = useContext(Context);
+
+  const initialValues = React.useMemo(() => {
+    const obj = {...state.initialValues};
+    return {
+      ...obj,
+      field: state.initialValues?.field?._id,
+      package: state.initialValues?.package?._id,
+      project: state.initialValues?.project?._id,
+      receiver: state.initialValues?.receiver?._id,
+      sender: state.initialValues?.sender?._id,
+      storage: state.initialValues?.storage?._id,
+      property: state.initialValues?.property?._id,
+    }
+  }, [state.initialValues]);
+
   const {
     fields,
     listContact,
@@ -207,15 +222,7 @@ const ModalCreateDocument: React.FC = (props) => {
           </button>
         </div>
         <Formik
-          initialValues={{
-            ...state.initialValues,
-            field: state.initialValues?.field?._id,
-            package: state.initialValues?.package?._id,
-            project: state.initialValues?.project?._id,
-            receiver: state.initialValues?.receiver?._id,
-            sender: state.initialValues?.sender?._id,
-            storage: state.initialValues?.storage?._id,
-          }}
+          initialValues={initialValues}
           onSubmit={handleSubmit}
         >
           {(formik) => {

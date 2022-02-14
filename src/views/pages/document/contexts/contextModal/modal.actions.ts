@@ -1,20 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { Dispatch } from "react";
-
 import modalTypes from "./modal.types";
 
-interface DispatchProps {
-  type: string;
-  payload?: any;
-}
+// Typescript;
+import { Action } from "typings/ppt/reducer";
 
-type Action = (
-  dispatch: Dispatch<DispatchProps>
-) => (...payload: any[]) => void;
-interface ActionsProps {
-  toggleModal: Action;
-  updateModal: Action;
-}
+type ActionsProps = {
+  toggleModal: Action<() => void>;
+  updateModal: Action<(payload: any) => void>;
+};
 
 const modalActions: ActionsProps = {
   toggleModal: (dispatch) => () => {

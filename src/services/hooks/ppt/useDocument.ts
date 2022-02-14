@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { DocumentRepository } from 'apis/ppt';
 
-import type { Document,  } from 'typings/ppt';
+import type { Document, } from 'typings/ppt';
 
 interface UseQueryListDocument {
     loading: boolean;
@@ -59,25 +59,26 @@ export const useQueryListDocument = (departmentID: string, pageParam: any): UseQ
 interface UseQueryDetailDocument {
     loading: boolean;
     detailDocument: Document,
-    onFetchDetailDocumentAsync: (documentId: string) => void;
+    onFetchDetailDocumentAsync: (documentId: string) => Promise<Document>;
 }
 export const useQueryDetailDocument = (): UseQueryDetailDocument => {
-    const [detailDocument, setDetailDocument] = React.useState< | any>({});
+    const [detailDocument, setDetailDocument] = React.useState<| any>({});
     const [loading, setLoading] = React.useState(false);
 
-    const onFetchDetailDocumentAsync = React.useCallback(async (documentId) => {
-       try {
-        setLoading(true);
-        const result = await DocumentRepository.fetchDocumentInfo({ documentID: documentId });
-        setDetailDocument(result.data);
-        return result.data;
-       } catch(err) {
-           console.error(err);
+    const onFetchDetailDocumentAsync = React.useCallback(async (documentId): Promise<Document | any> => {
+        const result = {}
+        try {
+            setLoading(true);
+            const res = await DocumentRepository.fetchDocumentInfo({ documentID: documentId });
+            setDetailDocument(res.data);
+            Object.assign(result, res.data);
+        } catch (err) {
+            console.error(err);
             setDetailDocument({});
-       } finally {
-        setLoading(false)
-       }
-
+        } finally {
+            setLoading(false)
+        }
+        return result;
     }, []);
 
     return {

@@ -1,8 +1,9 @@
 import API from "../repository";
 
 import { 
+    ListResponse,
+    ListReactionPayload,
     ListMediasPayload,
-    ListMediasResponse,
     infoMediaResponse,
     MediaPayload,
     PostResponse, 
@@ -48,9 +49,15 @@ const SocialRepository = {
         );
         return data;
     },
-    async listMedias(payload: ListMediasPayload): Promise<ListMediasResponse> {
-        const { data } = await API.get<ListMediasResponse>(
+    async listMedias(payload: ListMediasPayload): Promise<ListResponse> {
+        const { data } = await API.get<ListResponse>(
             `${mediaURL}?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+    async listReactions(payload: ListReactionPayload): Promise<ListResponse> {
+        const { data } = await API.get<ListResponse>(
+            `${mediaURL}/reaction?${convertObToUrl(payload)}`
         );
         return data;
     },
@@ -89,7 +96,21 @@ const SocialRepository = {
     },
     async listComments(payload: ListCommentsPayload): Promise<ListCommentResponse> {
         const { data } = await API.get<ListCommentResponse>(
-            `${mediaURL}/comments?${convertObToUrl(payload)}`
+            `${mediaURL}/comments?${convertObToUrl({
+                populates: JSON.stringify({
+                    path: 'comment userCreate lastestReplyID',
+                    select: '_id fullname image parent content files images amountCommentReply amountReaction createAt',
+                    populate: {
+                        path: 'files images comment userCreate lastestReplyID',
+                        select: '_id name nameOrg path size type fullname image content files images amountCommentReply amountReaction',
+                        populate: {
+                            path: 'files images',
+                            select: '_id name nameOrg path size type'
+                        }
+                    }
+                }),
+                ...payload
+            })}`
         );
         return data;
     },

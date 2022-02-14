@@ -1,13 +1,11 @@
-import React, {FC, useContext, useEffect, useRef, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import ListChatItem from "./components/listChatItem";
 import HamLeftMenu from "./components/hamLeftMenu";
 import AddNewChatGroup from "./components/AddNewChatGroup";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../home/index_v2";
-import {setListConversation} from "redux/reducer/messages/ListConversation";
 import SearchUserAndConversation from "./components/SearchUserAndConversation";
 
 const MessageList:FC = () => {
@@ -19,7 +17,6 @@ const MessageList:FC = () => {
         }
     ];
 
-    const [searchText, setSearchText] = useState("");
     const [reachedEnd, setReachEnd] = useState(false);
     const {getListConversation} = UseListConversation();
 
@@ -27,12 +24,12 @@ const MessageList:FC = () => {
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
-        getListConversation({keyword: searchText});
-    },[searchText]);
+        getListConversation({});
+    },[]);
 
     useEffect(() => {
         if (reachedEnd && !isLoading && hasMoreData) {
-            getListConversation({keyword: searchText, lastestID: nextCursor});
+            getListConversation({lastestID: nextCursor});
             setReachEnd(false);
         }
     },[reachedEnd, isLoading, hasMoreData]);
@@ -54,8 +51,33 @@ const MessageList:FC = () => {
         listInnerRef.current&&listInnerRef.current.addEventListener("scroll", () => onScroll());
     },[listInnerRef]);
 
+    const renderListConversation = useCallback(() => {
+        return _map(Object.values(listConversation)
+            // .sort((a,b) => b.isSaved ? 1 : -1)
+            .sort((a,b) => {
+                if (b.position > a.position) {
+                    return 1
+                } else {
+                    if (b.isPin&&!a.isPin) {
+                        return 1
+                    } else if (b.isPin&&a.isPin) {
+                        if (b.position > a.position) {
+                            return 1
+                        } else {
+                            return -1
+                        }
+                    }
+                }
+                return -1
+            })
+            ,(chat) => (
+                <ListChatItem key={chat._id} chat={chat}/>
+            )
+        )
+    },[listConversation]);
+
     return (
-        <div className={"messages-left-bar w-[480px] border-r transition duration-150 group relative"}>
+        <div className={"messages-left-bar w-[480px] min-w-[480px] border-r transition duration-150 group relative"}>
                 <div className={"bg-white z-5"}>
                     <div className={"p-2 flex"}>
                         <HamLeftMenu/>
@@ -78,12 +100,10 @@ const MessageList:FC = () => {
                     </div>
                 </div>
                 <div
-                    className={"overflow-auto message-list-height"}
+                    className={"overflow-auto message-list-height px-[5px]"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
-                    {_map(Object.values(listConversation).sort((a,b) => ((a.position < b.position)||a.isPin||b.isPin) ? 1 : -1), (chat) => (
-                        <ListChatItem key={chat._id} chat={chat}/>
-                    ))}
+                    {renderListConversation()}
                 </div>
             <AddNewChatGroup/>
         </div>

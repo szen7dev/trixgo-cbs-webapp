@@ -66,7 +66,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
     return data;
 }
 
-async function requestCreateContactDocument<T>(body: T): Promise<{error: boolean; data: T}> {
+async function requestCreateContactDocument<T>(body: T): Promise<{ error: boolean; data: T }> {
     const { data } = await API.post(
         `${CONTACT_DOCUMENT_URL}/contact_documents`,
         body
@@ -74,7 +74,7 @@ async function requestCreateContactDocument<T>(body: T): Promise<{error: boolean
     return data;
 }
 
-async function requestUpdateContactDocument<T>(body: T): Promise<{error: boolean; data: T}> {
+async function requestUpdateContactDocument<T>(body: T): Promise<{ error: boolean; data: T }> {
     const { data } = await API.put(
         `${CONTACT_DOCUMENT_URL}/contact_documents`,
         body
@@ -85,10 +85,10 @@ async function requestUpdateContactDocument<T>(body: T): Promise<{error: boolean
 async function requestDeleteContactDocument(contactDocumentID: string): Promise<any> {
     const { data } = await API.delete(
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
-            params: {
-                contactDocumentID
-            }
+        params: {
+            contactDocumentID
         }
+    }
 
     )
     return data;
@@ -209,7 +209,7 @@ async function fetchListProject(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
         params: {
-            select: 'name type company',
+            select: 'name type company sign',
             populates: {
                 path: 'company',
                 select: 'sign name'
@@ -251,15 +251,15 @@ async function fetchListArea(params: AreaPayload) {
 async function fetchListContracts(params: QueryContractPayload): Promise<QueryContractResponse> {
     const { data } = await API.get(
         `${ITEM_URL}/contracts`, {
-            params: {
-                populates: {
-                    "path": "company",
-                    "select": "name sign"
-                },
-                select: 'company name sign description createAt',
-                ...params
-            }
+        params: {
+            populates: {
+                "path": "company",
+                "select": "name sign"
+            },
+            select: 'company name sign description createAt',
+            ...params
         }
+    }
     )
     return data;
 }

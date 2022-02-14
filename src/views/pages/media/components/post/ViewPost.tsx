@@ -97,7 +97,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 						</button>
 					</div>
 					<div className="react__slider flex flex-1 justify-center px-2">
-						{/* <img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].url} />
+						{/* <img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].path} />
 						<div>
 							<input type="range" min={settings.min} max={settings.max} step={settings.step} onInput={e => console.log(e.currentTarget.value)} />
 						</div> */}
@@ -141,7 +141,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 											}}
 											wrapperClass='inset-0 justify-center items-center'
 										>
-											<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].url} />
+											<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].path} />
 										</TransformComponent>
 									</React.Fragment>
 								)

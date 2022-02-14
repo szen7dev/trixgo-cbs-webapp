@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext, useState } from "react";
+import React, { FC, Fragment, useContext, useState } from "react";
 
 /**
  * LIBRARIES
@@ -12,8 +12,6 @@ import cn from 'classnames';
 /**
  * COMPONENTS
  */
-// import ModalFullContainer from "../components/ModalFullContainer";
-// import ViewPost from "../components/post/ViewPost";
 import ModalContainer from "../components/ModalContainer";
 import PostFile from '../components/post/PostFile';
 import Loader from "components/shared/Loader";
@@ -24,8 +22,6 @@ import RootCommentsList from '../components/RootCommentsList';
 /**
  * ASSETS
  */
-// import iconLike from 'assets/images/icons8-Emoji-Thumbs Up.png';
-// import iconLikeOutline from 'assets/images/like-outline.png';
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
@@ -39,7 +35,7 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps } from "typings/social";
+import { FileProps, ReactionProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { abbreviateNumber } from 'utils';
@@ -71,6 +67,7 @@ const SocialPost: FC = () => {
 	}
 
 	const { deleteMedia, reactionMedia, listMedias } = useSocial(`list_media__related.${mediaID}`, conditionListMedia);
+	const { listReactions, refetchListReactions } = useSocial(`list_reactions.${mediaID}`, { mediaID });
 	const { listComments, totalRecord, limit } = useCommentSocial({
 		mediaID,
 		key: `list_comments.${mediaID}`
@@ -78,7 +75,6 @@ const SocialPost: FC = () => {
 
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
-	// const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
 	const { openPost } = useContext(ContextModalPost);
 
 	const toggleModalEditMedia = () => {
@@ -87,8 +83,6 @@ const SocialPost: FC = () => {
 	};
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
-	// const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
-	// const openModalImage = (index: number) => setModalShowImage({ show: true, index });
 
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
@@ -98,6 +92,7 @@ const SocialPost: FC = () => {
 	const handleReactionMedia = async () => {
 		await reactionMedia({ mediaID });
 		refetch();
+		refetchListReactions();
 	}
 
 	if (!media) {
@@ -204,8 +199,8 @@ const SocialPost: FC = () => {
 							<div className="post__content-images">
 								{images.length ? images.slice(0, 3).map((image, i) => {
 									const id = image.file ? image.file._id : image._id;
-									const name = image.file ? image.file.name : image.name;
-									const url = image.file ? image.file.url : image.url;
+									const name = image.file ? image.file.nameOrg : image.nameOrg;
+									const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openPost({ mediaId: mediaID, images, index: i })} >
@@ -267,12 +262,12 @@ const SocialPost: FC = () => {
 							<p>Liên quan</p>
 							<div>
 								{listMedias.length ? listMedias.map(media => (
-									<>
+									<React.Fragment key={media._id}>
 										<Link to="/"><div>{abbreviateNumber(media.amountView)}</div></Link>
 										<Link to={`/social/post/${media._id}`}>
 											{media.title}
 										</Link>
-									</>
+									</React.Fragment>
 								)) : ''}
 								
 								{/* <Link to="/"><div>21,3k</div></Link>
@@ -313,23 +308,25 @@ const SocialPost: FC = () => {
 						</button>
 					</div>
 					<ul className="py-1 overflow-y-auto custom-scroll">
-						{Array.from(Array(30).keys()).map(id => (
-							<li key={id} className="flex justify-between pl-4 pr-2 py-2">
+						{(listReactions && listReactions.length) ? listReactions.map((reaction: ReactionProps) => (
+							<li key={reaction._id} className="flex justify-between pl-4 pr-2 py-2">
 								<div className="flex">
-									<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="avatar" className="h-10 w-10 rounded-full mr-3" />
+									<img src={`${process.env.REACT_APP_URL_S3_USER}/${reaction.userCreate?.image}`} alt="avatar" className="h-10 w-10 rounded-full mr-3" />
 									<div>
-										<p className="text-black text-[15px]">Nguyễn Văn Dương-TRX</p>
-										<p className="leading-[15px] mt-1">Đã là bạn</p>
+										<p className="text-black text-[15px]">{reaction.userCreate?.bizfullname}</p>
+										<p className="leading-[15px] mt-1">
+											{user?._id === reaction.userCreate?._id ? 'Đã là bạn' : ''}
+										</p>
 									</div>
 								</div>
 								<div>
-									<button className="flex items-center text-black py-1.5 pl-1.5 pr-4 bg-gray-100 rounded-md">
+									<Link to={`/messages/#${reaction.userCreate?._id}`} className="flex items-center text-black py-1.5 pl-1.5 pr-4 bg-gray-100 rounded-md">
 										<img src={iconComment} alt="" className="inline-block w-6 h-6 mr-1" />
 										Nhắn tin
-									</button>
+									</Link>
 								</div>
 							</li>
-						))}
+						)) : ''}
 					</ul>
 				</div>
 			</ModalContainer>

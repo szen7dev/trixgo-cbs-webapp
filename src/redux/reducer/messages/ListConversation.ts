@@ -19,9 +19,13 @@ const listConversationSlice = createSlice({
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
             (action.payload??[]).forEach((conversation: ItemListConversation) => {
+                const isSavedMessages = conversation.members.length === 1;
+
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime()
+                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime(),
+                    isSaved: isSavedMessages,
+                    isPin: isSavedMessages?true: conversation.isPin
                 }
             });
 
@@ -56,10 +60,27 @@ const listConversationSlice = createSlice({
         },
         setLoading(state, action) {
             state.data.isLoading = action.payload
+        },
+        updateSingleConversation(state, action) {
+            const newConversationData = {...state.data.listConversation};
+            const isSavedMessages = action.payload.conversationData.members.length === 1;
+            action.payload.conversationData = {
+                ...action.payload.conversationData,
+                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData?.lastMessage?.updatedAt??action.payload.conversationData.updatedAt).toDate().getTime(),
+                isSaved: isSavedMessages,
+                isPin: isSavedMessages?true: action.payload.conversationData.isPin
+            };
+
+            newConversationData[action.payload.conversationData._id] = action.payload.conversationData;
+
+            state.data = {
+                ...state.data,
+                listConversation: newConversationData
+            };
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

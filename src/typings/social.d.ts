@@ -46,25 +46,52 @@ export type PostImageProps = {
 
 interface FileProp {
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
 }
 
 export type FileProps = {
 	file?: FileProp
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
 };
 
 export type ImageProps = {
   file?: FileProp
   _id: number | string;
-  url: string;
+  path: string;
   name: string;
+  nameOrg: string;
   size: number;
+  type: string;
+};
+
+export type ReactionProps = {
+  _id: number | string;
+  reaction: {
+    type: number
+  };
+  userCreate: {
+    _id: string,
+    fullname: string,
+    bizfullname: string,
+    image: string
+  };
+};
+
+export type ListReactionPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
 };
 
 export type ListMediasPayload = {
@@ -78,14 +105,6 @@ export type ListMediasPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-};
-
-export type ListMediasResponse = APIResponse & {
-  data: {
-    listRecords: Array<any>;
-    totalRecord: number;
-    totalPages?: number;
-  };
 };
 
 export type MediaProps = {
@@ -127,6 +146,7 @@ export type MediaProps = {
   company: {
     _id: string;
     name: string;
+    sign: string;
   };
   modifyAt: string;
   createAt: string;
@@ -141,7 +161,7 @@ export type MediaProps = {
 export type FilePropsUpload = {
   _id: string;
   id: number;
-  file: File;
+  file: File | FileProps;
   progress: number;
   cancelTokenSource: CancelTokenSource;
   proimise?: Interval;
@@ -171,8 +191,6 @@ export type ListCommentsPayload = {
   filter?: string;
   select?: string;
   populates?: string;
-  populates1?: string;
-  populates2?: string
 };
 
 export type CommentPayload = {
@@ -182,4 +200,12 @@ export type CommentPayload = {
   content: string;
   files?: string[];
   images?: string[];
+};
+
+export type ListResponse = APIResponse & {
+  data: {
+    listRecords: Array<any>;
+    totalRecord: number;
+    totalPages?: number;
+  };
 };

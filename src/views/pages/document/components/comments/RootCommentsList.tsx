@@ -5,7 +5,6 @@ import RootComment from './RootComment';
 
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
-import { objPopulate } from 'views/pages/media/utils';
 
 import { CommentContext } from '../../contexts/comment';
 // import CommentContext from 'views/pages/media/context/comment/comment.context';
@@ -21,7 +20,7 @@ type Props = {
 const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
 }) => {
-	const { state, setComment,viewMoreComments } = useContext(CommentContext);
+	const { state, setComment, viewMoreComments } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
 
 	useEffect(() => {
@@ -32,12 +31,11 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		const { error, data } = await SocialRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
-			...objPopulate
 		});
 		setAmountComment(amountComment - limit);
 
 		if (!error && data.listRecords.length) {
-			viewMoreComments(data.listRecords)
+			// viewMoreComments(data.listRecords)
 		}
 	}
 

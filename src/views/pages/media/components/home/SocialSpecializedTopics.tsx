@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-import iconComment from 'assets/images/icon-chat-project.png';
-import { useSocial } from "services/hooks/useSocial";
-import { MediaProps } from 'typings/social';
-import { abbreviateNumber } from 'utils';
+// import iconComment from 'assets/images/icon-chat-project.png';
+// import { useSocial } from "services/hooks/useSocial";
+// import { MediaProps } from 'typings/social';
+// import { abbreviateNumber } from 'utils';
 
 const SocialSpecializedTopics: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { listMedias } = useSocial('list_medias_system', { type: 'system' });
+	// const { listMedias } = useSocial('list_medias_system', { type: 'system' });
 
 	return (
 		<div {...props}>

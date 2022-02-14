@@ -35,7 +35,7 @@ const CheckListItem: FC<Props> = ({ data }) => {
                 className="w-5 h-5 rounded-full"
               />
               <span className="text-primary-gray text-[13px] ml-2">
-                {data.assignee.fullname}
+                {data.assignee.bizfullname || data.assignee.fullname}
               </span>
             </div>
           </div>

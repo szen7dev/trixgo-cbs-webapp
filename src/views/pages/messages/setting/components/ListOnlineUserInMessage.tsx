@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from "react";
+import React, {FC, useCallback, useContext, useEffect} from "react";
 import {map as _map} from "lodash";
 import OnlineUserInChatItem from "./OnlineUserInChatItem";
 import {MessageContext} from "../../home/index_v2";
@@ -15,14 +15,15 @@ const ListOnlineUserInMessage:FC = () => {
 
     const listUserInMessage = useSelector((state: RootState) => state.listMessage.data.listMembers[currentChat]);
 
-    if (!listUserInMessage) return null;
+    const renderListOnlineUser = useCallback(() => {
+        return  _map(listUserInMessage??[], (user,index) => (
+            <OnlineUserInChatItem key={user._id} user={user} index={index}/>
+        ))
+    }, [listUserInMessage]);
+
     return (
         <div className={"bg-white flex-1"}>
-            {
-                _map(listUserInMessage, (user,index) => (
-                    <OnlineUserInChatItem key={user._id} user={user} index={index}/>
-                ))
-            }
+            {renderListOnlineUser()}
         </div>
     )
 }

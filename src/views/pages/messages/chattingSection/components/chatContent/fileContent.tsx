@@ -10,32 +10,35 @@ import {map as _map} from "lodash";
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
+import ReactionList from "../ReactionList";
+import ReactionActions from "../ReactionActions";
 type Props = {
     message: any;
     className?: string;
     showSenderName?: boolean;
+    isMyMessage?: boolean;
 }
-const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={PDFIcon} alt={"icon pdf"}/>
             case "doc":
             case "docx":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={WordIcon} alt={"icon word"}/>
             case "xlsx":
             case "xls":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={ExcelIcon} alt={"icon excel"}/>
             case "jpg":
             case "jpeg":
             case "png":
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={SampleImage} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px] rounded-md overflow-hidden"} src={file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}/${file.path}`} alt={"icon images"}/>
             default:
-                return <LazyLoadImage effect="blur" className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
+                return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
@@ -74,7 +77,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                 message.parent&&
                 renderReply()
             }
-            <div className={"pr-[20px] pb-[5px]"}>
+            <div className={" pb-[5px]"}>
                 {
                     message.files&&
                     _map(message.files, file => (
@@ -83,24 +86,37 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName}) => {
                                 {renderFileTypeImage(file.file.file)}
                                 {
                                     file.progress!==null&&file.progress!==undefined&&file.progress<100&&
-                                    <div className={"absolute w-full flex items-center justify-center top-5px h-[5px]"}>
-                                        <div className={"rounded-full overflow-hidden bg-white bg-opacity-70 relative w-11/12 h-full"}>
-                                            <div style={{width: `${file.progress}%`}} className={"absolute transition duration-150 h-full bg-primary"}></div>
-                                        </div>
+                                    <div className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60 rounded-md"}>
                                     </div>
                                 }
                             </div>
-                            <div className={"flex-1 flex flex-col justify-center ml-[7px]"}>
-                                <a href={file.file.file.url} download className={"mb-[2px] hover:text-primary"}>{file.file.file.name}</a>
-                                <div className={"text-primary"}>{formatBytes(file.file.file.size)}</div>
+                            <div className={"flex-1 flex flex-col justify-center ml-[7px] pr-[20px]"}>
+                                <a href={`${process.env.REACT_APP_URL_S3}/${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
+                                <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
                             </div>
+                            {
+                                file.progress!==null&&file.progress!==undefined&&file.progress<100&&
+                                <div className={"w-[40px] h-[40px]"}>
+                                    <CircularProgressbar
+                                        styles={buildStyles({
+                                            // Colors
+                                            pathColor: `#0060E1`,
+                                            trailColor: '#cccccc',
+                                            textColor: `#0060E1`,
+                                        })}
+                                        value={file.progress} text={`${file.progress}%`} />
+                                </div>
+                            }
                         </div>
                     ))
                 }
-                <div className={"date-message absolute bottom-3px right-4px text-primary text-xs flex items-center"}>
-                    {moment(message.createdAt).format("HH:mm")}<LazyLoadImage effect="blur" className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center " + (isMyMessage?"text-primary":"text-gray-500")}>
+                    <ReactionList message={message}/>
+                    <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
+                    <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
+            <ReactionActions message={message}/>
         </div>
     )
 }

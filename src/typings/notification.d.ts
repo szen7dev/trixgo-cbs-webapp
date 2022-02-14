@@ -1,9 +1,7 @@
 import { APIResponse } from "./apis/response";
 
 export type ListNotificationPayload = {
-    lastestID?: string;
-    limit?: number;
-    companyID?: string;
+  companyID?: string;
 };
 
 export type NotificationResponse = APIResponse & {
@@ -16,6 +14,10 @@ export type ListNotificationResponse = APIResponse & {
     listRecords: Array<any>;
     totalRecord: number;
     totalPages?: number;
+    limit?: number;
+    totalRecord?: number;
+    totalPages?: number;
+    nextCursor?: string;
   };
 };
 
@@ -25,6 +27,7 @@ export type NotificationProps = {
   status: number,
   sender: {
     _id: string;
+    bizfullname: string,
     fullname: string,
     image: string
   },
@@ -32,5 +35,5 @@ export type NotificationProps = {
   title: string,
   content: string,
   path: string,
-  createdAt: string
+  createAt: string
 };

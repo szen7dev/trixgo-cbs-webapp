@@ -17,4 +17,9 @@ export interface QueryParam {
     select?: string;
 }
 
-export * from './Document';
+export enum DepartmentEnumType {
+  DEPARTMENT = 1,
+  PROJECT = 2,
+}
+
+export * from './Document.d';

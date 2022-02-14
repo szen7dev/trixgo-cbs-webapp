@@ -26,11 +26,7 @@ import iconDown from 'assets/images/Frame 1745.png';
 /**
  * CONTEXTS
  */
-import fileUploadReducer, { INITIAL_STATE } from '../../context/upload.reducer';
-import useCustomReducer from '../../context/useCustomReducer';
-import uploadActions from '../../context/upload.actions';
-import { IMethodFiles, IMethodImages } from '../../context/upload';
-import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../../context/upload.utils';
+import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 
 /**
  * Types, Services
@@ -40,6 +36,7 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useSocial } from 'services/hooks/useSocial';
 import { useUpload } from 'services/hooks/useUpload';
 import { typeTextSelected } from '../../utils';
+import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
 const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, initialValues = {
 	mediaID: "",
@@ -58,7 +55,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, 
 			setUploadFile,
 			removeUploadedImage,
 			removeUploadedFile,
-		}] = useCustomReducer<IMethodFiles & IMethodImages>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images))
+		}] = useUploadFile({ files, images });
 
 	const { user } = useAuth();
 	const { refetchListMedias: refetchListMediasCompany } = useSocial('list_media__company', {
@@ -102,6 +99,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, 
 
 		setUploadImage(images);
 		setUploadFile(files);
+
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
 			const { _id } = await addFileToUpload({

@@ -1,5 +1,4 @@
 import API from "../repository";
-import { convertObToUrl } from "helpers";
 
 import { 
     ListNotificationResponse,
@@ -11,7 +10,17 @@ const notificationURL = "/api/notifications";
 const NotificationRepository = {
     async listNotification(payload: ListNotificationPayload): Promise<ListNotificationResponse> {
         const { data } = await API.get<ListNotificationResponse>(
-            `${notificationURL}/list-notifications?${convertObToUrl(payload)}`
+            notificationURL,
+            {
+                params: {
+                    select: 'title content type path sender status createAt',
+                    populates: JSON.stringify({
+                        path: 'sender',
+                        select: '_id fullname bizfullname image email'
+                    }),
+                    ...payload,
+                }
+            }
         );
         return data;
     },

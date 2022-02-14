@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { ThunkAction, Action } from "@reduxjs/toolkit";
 
 import Store from "data/store";
+import {ItemMessage} from "./apis/messages/listMessage";
 
 export type AppDispatch = typeof Store.dispatch;
 export type RootState = ReturnType<typeof Store.getState>;
@@ -99,3 +100,24 @@ export type SetSendTypePopupSendFiles = {
 }
 
 export type PopupSendFilesActions = OpenPopupSendFiles | ClosePopupSendFiles | SetSendTypePopupSendFiles;
+
+export type RightClickMenuState = {
+  isRightClickMenuOpen: boolean;
+  rightClickMenuContent: {
+    content: ReactNode,
+    x: number,
+    y: number
+  };
+};
+export type OpenRightClickMenu = {
+  type: "OPEN_RIGHT_CLICK";
+  payload: {
+    content: ReactNode,
+    x: number,
+    y: number
+  };
+};
+export type CloseRightClickMenu = {
+  type: "CLOSE_RIGHT_CLICK";
+};
+export type RightClickMenuActions = OpenRightClickMenu | CloseRightClickMenu;

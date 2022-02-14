@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import cn from "classnames";
 
@@ -10,8 +10,41 @@ import ActionGroupFinancial from "views/pages/financial/planning/components/Fina
 import styles from "./styles.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
+import moment from "moment";
+import { DATE_FORMAT } from "apis/localdb/index";
+
+import { UseContractGuaranteeList } from "services/hooks/useContractIncome";
+import Popover from "components/shared/Popover";
 
 const CmcGuarantee: FC = () => {
+  const [pageParam, setPageParam] = useState('');
+  const [prevCursor, setPrevCursor] = useState([null]);
+  const contractGuarantee = UseContractGuaranteeList(pageParam);
+
+  const prevPageAction = () => {
+    if (!contractGuarantee.nextCursor) {
+      setPageParam(prevCursor[prevCursor.length - 2] || '')
+    } else {
+      const prev = prevCursor.findIndex(item => item === contractGuarantee.nextCursor)
+      setPageParam(prevCursor[prev - 2] || '')
+    }
+
+  };
+
+  useEffect(() => {
+    if (!contractGuarantee.nextCursor) {
+      return;
+    }
+    const isExist = prevCursor.find(item => item === contractGuarantee.nextCursor)
+    if (!isExist) {
+      setPrevCursor([...prevCursor, contractGuarantee.nextCursor])
+    }
+  }, [contractGuarantee.nextCursor]);
+
+  const nextPageAction = () => {
+    setPageParam(contractGuarantee.nextCursor)
+  }
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -42,7 +75,6 @@ const CmcGuarantee: FC = () => {
                   className="form-check-input mr-2"
                   type="checkbox"
                   value=""
-                  defaultChecked
                   id="flexCheckDefault"
                 />
                 <img src={PolygonIcon} alt="Polygon" />
@@ -85,89 +117,43 @@ const CmcGuarantee: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 pl-1 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-25px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
-            <td className="py-1 px-2">Bảo lãnh tạm ứng</td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">Phùng Thị Thu-PGI (095566633)</td>
-            <td className="py-1 px-2">Đang yêu cầu nhà thầu gia hạn</td>
-          </tr>
 
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 pl-1 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-25px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
-            <td className="py-1 px-2">Bảo lãnh tạm ứng</td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">Phùng Thị Thu-PGI (095566633)</td>
-            <td className="py-1 px-2">Đang yêu cầu nhà thầu gia hạn</td>
-          </tr>
+          {contractGuarantee?.listContractIncome?.map((item: any) => {
+            return (
+              <tr key={item._id} className="border-b border-primary-border h-[50px]">
+                <td className="py-1 pl-1 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    style={{ marginLeft: "-25px" }}
+                  />
+                </td>
+                <td className="py-1 px-2">
+                  <Popover onMouseEnterTooltip={false} tooltip={`${item.project.sign}.${item.name}`} classTooltip="w-[404px] whitespace-normal" >
+                    <p className="text-1-line-clamp">{`${item.project.sign}.${item.name}`}</p>
+                  </Popover>
 
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 pl-1 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-25px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
-            <td className="py-1 px-2">Bảo lãnh tạm ứng</td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">Phùng Thị Thu-PGI (095566633)</td>
-            <td className="py-1 px-2">Đang yêu cầu nhà thầu gia hạn</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-[50px]">
-            <td className="py-1 pl-1 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-25px" }}
-              />
-            </td>
-            <td className="py-1 px-2">
-              Tư vấn Quản lý dự án, Tư vấn BIM, Tư vấn giám sát và thẩm tra
-            </td>
-            <td className="py-1 px-2">Bảo lãnh tạm ứng</td>
-            <td className="py-1 px-2">05/11/2021</td>
-            <td className="py-1 px-2">15.332.000.000</td>
-            <td className="py-1 px-2">Phùng Thị Thu-PGI (095566633)</td>
-            <td className="py-1 px-2">Đang yêu cầu nhà thầu gia hạn</td>
-          </tr>
+                  <p className="text-primary-gray">{`${item.sign}`} | Ngày ký: {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</p>
+                </td>
+                <td className="py-1 px-2">Bảo lãnh tạm ứng</td>
+                <td className="py-1 px-2">{moment(item.expiredAg).isValid() && moment(item.expiredAg).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{item.agValue}</td>
+                <td className="py-1 px-2">{item.personInCharge?.name}</td>
+                <td className="py-1 px-2">{item.note}</td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
 
-      <Paginate />
+      <Paginate totalPages={contractGuarantee.totalPage}
+        totalRecord={contractGuarantee.totalRecord}
+        hasNextPage
+        prevPageAction={() => prevPageAction()}
+        nextPageAction={() => nextPageAction()} />
+
     </main>
   );
 };

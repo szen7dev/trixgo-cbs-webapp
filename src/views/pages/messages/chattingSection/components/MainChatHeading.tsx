@@ -1,21 +1,23 @@
 import React, {FC, useCallback, useContext} from "react";
-import SampleImage from "assets/images/icons8-image-256.svg";
-import Close from "assets/icons/Close";
 import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+import SavedMessage from "assets/images/saved-messages.svg";
+import HeaderPinedMessages from "./HeaderPinedMessages";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../../redux/reducer";
 
 type Props = {
-    chat: any
+    chat: ItemListConversation
 }
 
 const MainChatHeading:FC<Props> = ({chat}) => {
-    const {setShowMenu, showMenu} = useContext(MessageContext)
+    const {setShowMenu, showMenu, currentChat} = useContext(MessageContext)
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
 
     const getNameConversation = useCallback(() => {
         if (chat.members && chat.members.length === 1) {
@@ -23,7 +25,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.fullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -32,7 +34,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
     const getAvatarMembers = useCallback(() => {
         if (chat.isPrivate) {
             if (chat.members.length === 1) {
-                return [`${process.env.REACT_APP_URL_S3_USER}/${chat.members[0].image}`];
+                return [SavedMessage];
             } else {
                 const members = chat.members.filter((item: any) => item._id != profileId);
                 return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
@@ -48,17 +50,19 @@ const MainChatHeading:FC<Props> = ({chat}) => {
     }, [chat, profileId]);
 
     const getPresentGroupName = (name: string) => {
-        return name.split(' ').slice(0, 2).map((text: string) => {
+        return name.split('').slice(0, 1).map((text: string) => {
             return text.charAt(0)
         });
     }
 
     return (
         <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-50"}>
-            <div className={"avatar-chat flex items-center justify-center"}>
+            <div
+                onClick={() => setShowMenu(!showMenu)}
+                className={"avatar-chat flex items-center justify-center cursor-pointer"}>
                 {
                     chat.avatar?
-                        <LazyLoadImage effect="blur" className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -101,35 +105,18 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
-                <div className={""}>{getNameConversation()}</div>
+            <div className={"flex flex-col justify-center mx-[10px] " + ((showMenu&&listPinnedMessage&&listPinnedMessage.length>0)?"chat-basic-infor":"")}>
+                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
-            <div className={"items-center flex"}>
-                <div className={"indicator-pinned flex flex-col h-full"}>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                    <div className={"bg-primary w-[2px] flex-1 mb-[2px]"}></div>
-                </div>
-                <div className={"flex-1 flex ml-[5px]"}>
-                    <LazyLoadImage effect="blur" src={SampleImage} alt={"sample"} className={"w-[36px] h-[36px]"}/>
-                    <div className={"flex-1 max-w-[185px] ml-[5px]"}>
-                        <div className={"text-primary"}>Pinned Message</div>
-                        <div className={"truncate"}>Báo cáo ảnh tuần 12 của CPM olala ABC</div>
-                    </div>
-                    <button className={"flex items-center justify-center ml-[20px]"}>
-                        <Close/>
+            <div className={"flex items-center flex-1 justify-end"}>
+                <HeaderPinedMessages listPinnedMessage={listPinnedMessage}/>
+                <div className={"action-section flex items-center justify-end ml-[10px]"}>
+                    <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                        <img  src={SearchIcon} alt={"search icon"}/>
                     </button>
+                    <MainChatOptions/>
                 </div>
-            </div>
-            <div className={"action-section flex items-center justify-end ml-[20px]"}>
-                <MainChatOptions/>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <LazyLoadImage effect="blur" src={SearchIcon} alt={"search icon"}/>
-                </button>
-                <button onClick={() => setShowMenu(!showMenu)} className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <DotsVerticalIcon/>
-                </button>
             </div>
         </div>
     )

@@ -1,8 +1,8 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames';
 
-import RightClickMenu from 'components/common/RightClickMenu';
 import MenuChildRow from 'views/pages/financial/planning/components/FinancialCashFlowDetail/MenuChildRow';
+import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
 
 interface RowItem {
 	_id: string | number,
@@ -31,7 +31,11 @@ const FinancialRowGroup: FC<{ row: RowData, show: boolean, forceUpdateValue?: st
 		setState(show);
 	}, [show, forceUpdateValue])
 	return (
-		<tbody className="text-black" ref={wrapperRef}>
+		<RightClickMenuWrapper
+			contextMenu={<MenuChildRow />}
+			customRenderTag={"tbody"}
+			className="text-black"
+		>
 			<tr className="text-right">
 				<th className='bg-gray-300 px-1.5 relative'>
 					<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: state })} />
@@ -56,8 +60,7 @@ const FinancialRowGroup: FC<{ row: RowData, show: boolean, forceUpdateValue?: st
 					<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.predict).toLocaleString()}</td>
 				</tr>
 			))}
-			<RightClickMenu wrapperRef={wrapperRef} menu={<MenuChildRow />} />
-		</tbody>
+		</RightClickMenuWrapper>
 	)
 }
 

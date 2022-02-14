@@ -1,23 +1,16 @@
-import { Dispatch } from "react";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import modalTypes from "./modal.types";
 
-interface DispatchProps {
-  type: string;
-  payload?: any;
-}
+// Typescript
+import { Action } from "typings/ppt/reducer";
 
-type Action = (
-  dispatch: Dispatch<DispatchProps>
-) => (...payload: any[]) => void;
-
-interface ActionsProps {
-  toggleModal: Action;
-  closeModal: Action;
-  openPost: Action;
-  openComment: Action;
-  openReply: Action;
-}
+type ActionsProps = {
+  toggleModal: Action<() => void>;
+  closeModal: Action<() => void>;
+  openPost: Action<(payload: any) => void>;
+  openComment: Action<(payload: any) => void>;
+  openReply: Action<(payload: any) => void>;
+};
 
 const modalActions: ActionsProps = {
   toggleModal: (dispatch) => () => {

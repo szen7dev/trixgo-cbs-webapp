@@ -14,24 +14,12 @@ import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import CheckListItem from "./CheckListItem";
 import DropdownSearchable from "components/common/DropdownSearch";
 
+import { useQueryListFriend } from "services/hooks/users/useFriend";
+import { useCheckList } from "services/hooks/useTask";
 import { CheckList as CheckListType } from "typings/task";
 
-const tempData = [
-  {
-    _id: 1,
-    name: "Vũ Thị Lan-CHG",
-  },
-  {
-    _id: 2,
-    name: "Nguyễn Phan Thanh Hương",
-  },
-  {
-    _id: 3,
-    name: "Tô Ngọc An-CDC",
-  },
-];
-
 type Props = {
+  task: any,
   data: Array<CheckListType>;
   totalRecord?: number;
   onSeeMore: () => void;
@@ -46,15 +34,15 @@ enum CheckListTab {
   MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
 }
 
-const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
+const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
+  const { addChecklist, refetchListCheckList } = useCheckList(task._id);
+  const { data: listFriend } = useQueryListFriend();
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-  };
+  const handleSelectAll = () => setSelectAll(!selectAll);
 
   const getClassTab = (tab: CheckListTab) => {
     return currentTab === tab
@@ -63,24 +51,28 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
   };
 
   const initialValues = {
-    content: "",
-    assignee: {
-      id: null,
-      name: "",
-    },
+    name: "",
+    assigneeID: "",
+    parentID: task._id,
+    groupID: task.group._id,
+    projectID: task.project._id,
     expiredTime: null,
+    type: 2
   };
 
   const checkListSchema = object().shape({
-    content: string().required("Bạn cần nhập nội dung công việc"),
+    name: string().required("Bạn cần nhập nội dung công việc"),
     expiredTime: date()
       .required("Bạn cần nhập thời hạn")
       .typeError("Bạn cần nhập thời hạn"),
-    assignee: object().shape({
-      _id: string().required(),
-      name: string().required("Bạn cần chọn người thực hiện"),
-    }),
+    assigneeID: string().required("Bạn cần chọn người thực hiện"),
   });
+
+  const handleAddChecklist = async (values: any) => {
+    await addChecklist(values);
+    refetchListCheckList();
+    setVisibleForm(false);
+  }
 
   return (
     <div>
@@ -203,7 +195,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
               <Formik
                 initialValues={initialValues}
                 validationSchema={checkListSchema}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => handleAddChecklist(values)}
               >
                 {({
                   values,
@@ -219,7 +211,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                       <div className="flex w-full">
                         <div className="w-3/6 border-b">
                           <input
-                            name="content"
+                            name="name"
                             className="w-full h-8 placeholder-gray-300 focus:outline-none"
                             placeholder="Nội dung công việc"
                             onChange={handleChange}
@@ -240,18 +232,17 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                                 <span>{item.text}</span>
                               </div>
                             )}
-                            data={tempData}
+                            data={listFriend.map((item) => ({
+                              label: `${item.fullname}-${item.company?.sign}`,
+                              value: item._id,
+                            }))}
                             formatItem={{
-                              id: "_id",
-                              text: "name",
+                              id: "value",
+                              text: "label",
                             }}
                             inlineSearch={true}
-                            onchangeValue={(item) =>
-                              setFieldValue("assignee", item)
-                            }
-                            onClearData={() =>
-                              setFieldValue("assignee", { id: null, name: "" })
-                            }
+                            onchangeValue={item => setFieldValue("assigneeID", item.id)}
+                            onClearData={() => setFieldValue("assigneeID", "")}
                           />
                         </div>
                         <div className="w-1/6 border-b">
@@ -288,7 +279,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {touched.content && errors.content}
+                            {touched.name && errors.name}
                           </span>
                         </div>
                         <div className="w-2/6 mx-3 ">
@@ -296,8 +287,8 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                             className="text-red-500"
                             style={{ fontSize: 11 }}
                           >
-                            {getIn(touched, "assignee.name") &&
-                              getIn(errors, "assignee.name")}
+                            {getIn(touched, "assigneeID") &&
+                              getIn(errors, "assigneeID")}
                           </span>
                         </div>
                         <div className="w-1/6 ">
@@ -320,7 +311,7 @@ const CheckList: FC<Props> = ({ data, totalRecord, onSeeMore }) => {
                         <button
                           type="submit"
                           className="mx-3 px-3 py-2 rounded bg-primary text-white"
-                          onClick={() =>handleSubmit()}
+                          onClick={() => handleSubmit()}
                         >
                           Xác nhận
                         </button>

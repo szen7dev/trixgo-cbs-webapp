@@ -58,6 +58,7 @@ export type User = {
     email: string,
     phone: string,
     fullname: string,
+    bizfullname: string;
     company: {
         _id: string,
         name: string,
@@ -65,6 +66,11 @@ export type User = {
         image: string
     },
     department: {
+        _id: string,
+        name: string,
+        sign: string
+    },
+    position: {
         _id: string,
         name: string,
         sign: string
@@ -87,11 +93,21 @@ export type ListFriendsPayload = {
     populates?: string;
 };
 
+export type ListRequestsPayload = {
+    limit?: number;
+    type?: string;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+};
+
 export type ListUserResponse = APIResponse & {
     data: {
-      listRecords: Array<any>;
-      totalRecord: number;
-      totalPages: number;
+        listRecords: Array<any>;
+        limit?: number;
+        totalRecord?: number;
+        totalPages?: number;
+        nextCursor?: string;
     };
 };
 

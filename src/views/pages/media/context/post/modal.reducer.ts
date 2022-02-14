@@ -1,5 +1,7 @@
 import modalTypes from "views/pages/media/context/post/modal.types";
 
+import { DispatchProps } from "typings/ppt/reducer";
+
 interface StateProps {
   isShow: boolean;
   mediaID: string;
@@ -8,11 +10,6 @@ interface StateProps {
   isReply: boolean;
   images: any[];
   index: number;
-}
-
-interface ActionProps {
-  type: string;
-  payload?: any;
 }
 
 export const INITIAL_STATE = {
@@ -25,7 +22,10 @@ export const INITIAL_STATE = {
   index: 0,
 };
 
-const modalReducers = (state: StateProps, action: ActionProps): StateProps => {
+const modalReducers = (
+  state: StateProps,
+  action: DispatchProps
+): StateProps => {
   switch (action.type) {
     case modalTypes.TOGGLE_MODAL:
       return {
@@ -38,7 +38,6 @@ const modalReducers = (state: StateProps, action: ActionProps): StateProps => {
         isShow: false,
       };
     case modalTypes.OPEN_POST:
-			console.log(action)
       return {
         ...state,
         isShow: true,

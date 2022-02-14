@@ -3,28 +3,50 @@ const plugin = require('tailwindcss/plugin');
 
 /* eslint-disable */
 let autoGeneratePx = {}
-for (let i=1; i <= 1000; i++) {
+for (let i = 1; i <= 1000; i++) {
     autoGeneratePx[`[${i}px]`] = `${i}px`;
 }
 let autoGeneratePxNoBacket = {}
-for (let i=1; i <= 1000; i++) {
+for (let i = 1; i <= 1000; i++) {
     autoGeneratePxNoBacket[`${i}px`] = `${i}px`;
 }
 let autoGenerateIndex = {}
-for (let i=1; i <= 1000; i++) {
+for (let i = 1; i <= 1000; i++) {
     autoGenerateIndex[`${i}`] = `${i}`;
 }
 module.exports = {
-		mode: 'jit',
-    purge: [
-			'./src/**/*.{ts,tsx}'
-		],
+    mode: 'jit',
+    purge: {
+        content: [
+            './src/**/*.{ts,tsx}'
+        ],
+        safelist: [
+            'aspect-ratio-1',
+						"cbs-schedule-yestoday",
+						"cbs-schedule-today",
+						"cbs-schedule-oneweek",
+						"cbs-schedule-twoweek",
+						"cbs-schedule-threeweek",
+						"cbs-schedule-expired",
+						"cbs-schedule-nextweek",
+						"cbs-schedule-after-7days",
+        ]
+    },
     darkMode: "class", // or 'media' or false
     theme: {
         fontFamily: {
             display: ["SanFranciscoDisplay, serif"],
         },
         extend: {
+            keyframes: {
+                wiggle: {
+                    '0%, 100%': { transform: 'scale(0)' },
+                    '50%': { transform: 'scale(1.25)' },
+                }
+            },
+            animation: {
+                wiggle: 'wiggle 1s ease-in-out infinite',
+            },
             colors: {
                 transparent: "transparent",
                 primary: "#0060E1",
@@ -45,7 +67,7 @@ module.exports = {
                 "green-success": "#00C614",
 
                 "cbs-primary": "#0060E1",
-								"cbs-highlight-color": "#111E6C",
+                "cbs-highlight-color": "#111E6C",
                 "cbs-secondary": "#4781CF",
                 "cbs-gray": "#F0F0F0",
                 "cbs-active-comment": "#E7F3FF",
@@ -72,7 +94,11 @@ module.exports = {
                 "cbs-nav-text": "#00B9F2",
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
-								"cbs-indeterminate": "#F7AF22"
+                "cbs-indeterminate": "#F7AF22",
+
+                "cbs-purple": "#9B59B6",
+                "cbs-red": "#FF4242",
+                "cbs-green": "#008000",
             },
             fontSize: {
                 "[13px]": "13px",
@@ -119,24 +145,24 @@ module.exports = {
                 "authentication-img": "url('../assets/images/authentication-img.png')",
             },
             borderWidth: {
-								'0.5': '0.5px',
+                '0.5': '0.5px',
                 6: "6px",
             },
-						borderRadius: {
-							"cbs-sm": "3px",
-							"cbs": "5px",
-							"cbs-md": "10px",
-							"cbs-lg": "15px"
-						},
-						boxShadow: {
-							"cbs-md": "0px 4px 4px rgba(0, 0, 0, 0.25)"
-						},
+            borderRadius: {
+                "cbs-sm": "3px",
+                "cbs": "5px",
+                "cbs-md": "10px",
+                "cbs-lg": "15px"
+            },
+            boxShadow: {
+                "cbs-md": "0px 4px 4px rgba(0, 0, 0, 0.25)"
+            },
             lineHeight: {
                 "[15px]": "14.95px",
 
             },
             transformOrigin: {
-                'top-left-1/2-0' : "50% 0"
+                'top-left-1/2-0': "50% 0"
             },
             paddingRight: {
                 "[100px]": "100px"
@@ -150,66 +176,66 @@ module.exports = {
             padding: {
                 ...autoGeneratePx
             },
-						gridTemplateColumns: {
-							'odd-2':'repeat(1, auto min-content)',
-							'odd-4':'repeat(2, auto min-content)',
-							'odd-6':'repeat(3, auto min-content)',
-							'odd-8':'repeat(4, auto min-content)',
-						}
+            gridTemplateColumns: {
+                'odd-2': 'repeat(1, auto min-content)',
+                'odd-4': 'repeat(2, auto min-content)',
+                'odd-6': 'repeat(3, auto min-content)',
+                'odd-8': 'repeat(4, auto min-content)',
+            }
         },
     },
     variants: {
         extend: {
-						backgroundColor: ['indeterminate'],
-            opacity: ['disabled','group-hover'],
+            backgroundColor: ['indeterminate'],
+            opacity: ['disabled', 'group-hover'],
             textColor: ['group-focus'],
-						height: ['last'],
-						width: ['last'],
+            height: ['last'],
+            width: ['last'],
         },
     },
     plugins: [
-			plugin(function ({ addUtilities, theme, variants, e }) {
-				const values = theme('lineClamp')
-		
-				addUtilities(
-					[
-						Object.entries(values).map(([key, value]) => {
-							return {
-								[`.${e(`line-clamp-${key}`)}`]: {
-									overflow: 'hidden',
-									display: '-webkit-box',
-									'-webkit-box-orient': 'vertical',
-									'-webkit-line-clamp': `${value}`,
-								},
-							}
-						}),
-						{
-							'.line-clamp-none': {
-								'-webkit-line-clamp': 'unset',
-							},
-						},
-					],
-					variants('lineClamp')
-				)
+        plugin(function ({ addUtilities, theme, variants, e }) {
+            const values = theme('lineClamp')
 
-				addUtilities([
-					{ '.border-spacing-0': { 'border-spacing': '0' } },
-				])
-			},
-			{
-				theme: {
-					lineClamp: {
-						1: '1',
-						2: '2',
-						3: '3',
-						4: '4',
-						5: '5',
-						6: '6',
-					},
-				},
-				variants: {
-					lineClamp: ['responsive'],
-				},
-			}),
-		],
+            addUtilities(
+                [
+                    Object.entries(values).map(([key, value]) => {
+                        return {
+                            [`.${e(`line-clamp-${key}`)}`]: {
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                '-webkit-box-orient': 'vertical',
+                                '-webkit-line-clamp': `${value}`,
+                            },
+                        }
+                    }),
+                    {
+                        '.line-clamp-none': {
+                            '-webkit-line-clamp': 'unset',
+                        },
+                    },
+                ],
+                variants('lineClamp')
+            )
+
+            addUtilities([
+                { '.border-spacing-0': { 'border-spacing': '0' } },
+            ])
+        },
+            {
+                theme: {
+                    lineClamp: {
+                        1: '1',
+                        2: '2',
+                        3: '3',
+                        4: '4',
+                        5: '5',
+                        6: '6',
+                    },
+                },
+                variants: {
+                    lineClamp: ['responsive'],
+                },
+            }),
+    ],
 };

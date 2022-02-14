@@ -10,7 +10,6 @@ import { CommentContext } from 'views/pages/document/contexts/comment';
 import { CommentProps } from 'typings/common';
 import { FileProps } from 'typings/social';
 import SocialRepository from "apis/social";
-import { objPopulate } from 'views/pages/media/utils';
 
 interface Props {
 	renderNestedComment?: React.ElementType
@@ -57,7 +56,6 @@ const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNestedCommen
 			lastestID,
 			mediaID: comment.media,
 			parentID: comment._id,
-			...objPopulate
 		});
 		setAmountReply(amountReply - limit);
 		// console.log({ parent: comment._id, comments: data.listRecords })

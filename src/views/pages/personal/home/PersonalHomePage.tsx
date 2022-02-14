@@ -4,10 +4,8 @@ import cn from "classnames";
 import { Form, Formik, Field } from "formik";
 import { useAuth } from "services/hooks/useAuth";
 import { useUpload } from 'services/hooks/useUpload';
-import useCustomReducer from 'views/pages/document/reducer/upload/useCustomReducer';
-import fileUploadReducer, { INITIAL_STATE } from 'views/pages/media/context/upload.reducer';
-import uploadActions from 'views/pages/media/context/upload.actions';
-import { modifyUploadedFiles, modifyUploadedFilesV2 } from 'views/pages/media/context/upload.utils';
+import useUploadFile from "services/hooks/ppt/useUploadFile";
+import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { UpdateUser, UpdatePasswordUser, UpdateAvatarUser } from 'typings/user';
 import DatePicker from "react-datepicker";
 import moment from 'moment'
@@ -65,7 +63,7 @@ const PersonalHomePage: FC = () => {
 		setIDFileUploaded,
 		setUploadImage,
 		setUploadFile,
-	}] = useCustomReducer(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE));
+	}] = useUploadFile();
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files || !event.target.files.length) return;

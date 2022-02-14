@@ -1,32 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Chart as ChartJS,
-  BubbleDataPoint,
-  ChartTypeRegistry,
-  ScatterDataPoint,
+  ChartData,
+  CoreChartOptions,
+  DatasetChartOptions,
+  DoughnutControllerChartOptions,
+  ElementChartOptions,
+  Plugin,
+  PluginChartOptions,
+  ScaleChartOptions,
 } from "chart.js";
+import { AnyObject } from "chart.js/types/basic";
+import { _DeepPartialObject } from "chart.js/types/utils";
 
-type IChart = ChartJS<
-  keyof ChartTypeRegistry,
-  (number | ScatterDataPoint | BubbleDataPoint | null)[],
-  unknown
->;
-
-export const optionsOne = {
-  cutout: 55,
+export const optionsOne: _DeepPartialObject<
+  CoreChartOptions<"doughnut"> &
+    ElementChartOptions<"doughnut"> &
+    PluginChartOptions<"doughnut"> &
+    DatasetChartOptions<"doughnut"> &
+    ScaleChartOptions<"doughnut"> &
+    DoughnutControllerChartOptions
+> = {
+  // elements: {
+  //   arc: {},
+  // },
+  // maintainAspectRatio: false,
+  cutout: 60,
   rotation: 90,
-  plugins: { datalabels: { display: false } },
+  plugins: {
+    datalabels: {
+      display: false,
+    },
+    tooltip: {
+      enabled: false,
+    },
+    legend: {
+      display: false,
+      position: "right",
+      align: "center",
+
+      labels: {
+        usePointStyle: true,
+        boxHeight: 8,
+        boxWidth: 8,
+        padding: 11,
+        // boxPadding: 30,
+      },
+    },
+  },
 };
 
 function getPlugins(
   title: string,
   subtitle: string,
   options?: { titleSize?: number; subtitleSize?: number; bold?: boolean }
-): any[] {
+): Plugin<"doughnut", AnyObject>[] {
   return [
     {
       id: "beforeDraw",
-      beforeDraw(chart: IChart): void {
+      afterDraw(chart) {
         const width = chart.width,
           height = chart.height,
           ctx = chart.ctx;
@@ -38,9 +69,15 @@ function getPlugins(
           "px Arial";
 
         ctx.textBaseline = "middle";
-
         ctx.fillStyle = "black";
-        ctx.fillText(title, width / 2, height / 2);
+        ctx.fillText(
+          (chart as any)._metasets.reduce(
+            (pre: number, next: any) => pre + next.total,
+            0
+          ),
+          width / 2,
+          height / 2 - 10
+        );
 
         const theCenterText = subtitle;
         ctx.textBaseline = "middle";
@@ -48,18 +85,25 @@ function getPlugins(
         ctx.font = (options?.subtitleSize || 15) + "px Arial";
         ctx.fillStyle = "rgba(121, 130, 149, 1)";
 
-        ctx.fillText(theCenterText, width / 2, height / 2 + 20);
+        ctx.fillText(theCenterText, width / 2, height / 2 + 10);
         ctx.save();
       },
     },
   ];
 }
 
-export const _data = {
+export const _data: ChartData<"doughnut", number[], unknown> = {
+  labels: [
+    "Chưa bắt đầu",
+    "Lập kế hoạch",
+    "Thiết kế",
+    "Đấu thầu",
+    "Xây dựng",
+    "Khác",
+  ],
   datasets: [
     {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
+      data: [0, 0, 0, 0, 0, 0],
       backgroundColor: [
         "rgba(44, 134, 237, 1)",
         "rgba(255, 165, 0, 1)",
@@ -78,11 +122,7 @@ export const _dataTwo = {
     {
       label: "# of Votes",
       data: [60, 180, 120],
-      backgroundColor: [
-        "#00CA99",
-        "#FF9900",
-        "#F55F5F",
-      ],
+      backgroundColor: ["#00CA99", "#FF9900", "#F55F5F"],
       borderWidth: 0,
     },
   ],

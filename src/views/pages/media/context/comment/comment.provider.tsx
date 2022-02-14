@@ -80,7 +80,9 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
     case "DELETE_COMMENT": {
       const newState = { ...state };
       if(action.payload.parent){
-        delete newState.commentsReply[action.payload._id];
+        const listCommentReply = newState.commentsReply[action.payload.parent].filter(comment => comment._id !== action.payload._id);
+        newState.commentsReply[action.payload.parent] = listCommentReply;
+        // delete newState.commentsReply[action.payload.parent];
       } else{
         newState.comments = newState.comments.filter(comment => comment._id !== action.payload._id);
       }

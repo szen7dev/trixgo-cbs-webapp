@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {ItemMembersOfConversation} from "typings/apis/messages/listConversation";
+import {ItemMediaOfConversation, ItemMembersOfConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {
     data: {
@@ -30,13 +30,27 @@ const initialState : {
             [key:string] : ItemMembersOfConversation[];
         },
         listImages: {
-            [key: string] : any[]
+            [key: string] : ItemMediaOfConversation[]
         },
         listLinks: {
             [key: string] : any[]
         },
         listFiles: {
             [key: string] : any[]
+        },
+        replyMessage: {
+            [key: string] : ItemMessage;
+        },
+        listMessagePinned: {
+            [key: string]: ItemMessage[]
+        },
+        listSelectedMessage: {
+            [key: string]: {
+                [key: string] : ItemMessage
+            }
+        },
+        selectedState: {
+            [key: string]: boolean
         }
     }
 } = {
@@ -50,7 +64,11 @@ const initialState : {
         listMembers: {},
         listImages: {},
         listFiles: {},
-        listLinks: {}
+        listLinks: {},
+        replyMessage: {},
+        listMessagePinned: {},
+        listSelectedMessage: {},
+        selectedState: {}
     }
 };
 
@@ -140,7 +158,7 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId]: newMessage
                 },
                 listFakeMessage: {
-                    ...state.data.listMessage,
+                    ...state.data.listFakeMessage,
                     [action.payload.conversationId]: fakeMessage
                 }
             }
@@ -148,10 +166,10 @@ const listMessageSlice = createSlice({
         updateFileProgressOnMessage(state, action) {
             state.data = {
                 ...state.data,
-                listMessage: {
-                    ...state.data.listMessage,
+                listFakeMessage: {
+                    ...state.data.listFakeMessage,
                     [action.payload.conversationId]: {
-                        ...state.data.listMessage[action.payload.conversationId],
+                        ...state.data.listFakeMessage[action.payload.conversationId],
                         [action.payload.messageId]: action.payload.messageData
                     }
                 }
@@ -196,6 +214,151 @@ const listMessageSlice = createSlice({
                     }
                     break;
             }
+        },
+        updateReminderData (state, action) {
+            state.data  = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listMessage[action.payload.conversationId],
+                        [action.payload.messageId]: {
+                            ...state.data.listMessage[action.payload.conversationId][action.payload.messageId],
+                            reminder: action.payload.reminderData
+                        }
+                    }
+                }
+            }
+        },
+        setReplyMessage (state, action) {
+            state.data = {
+                ...state.data,
+                replyMessage: {
+                    ...state.data.replyMessage,
+                    [action.payload.conversationId] : action.payload.messageData
+                }
+            }
+        },
+        removeReplyMessage (state, action) {
+            const newReplyMessage = {...state.data.replyMessage};
+            delete newReplyMessage[action.payload.conversationId];
+
+            state.data = {
+                ...state.data,
+                replyMessage: newReplyMessage
+            }
+        },
+        setShareMessage (state, action) {
+            const newMessage = {...state.data.listMessage};
+            action.payload.messagesShare.forEach((message: ItemMessage) => {
+                newMessage[message.conversation][message._id] = message;
+            });
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    ...newMessage
+                }
+            }
+        },
+        setPinnedMessage (state, action) {
+            state.data = {
+                ...state.data,
+                listMessagePinned: {
+                    ...state.data.listMessagePinned,
+                    [action.payload.conversationId]: action.payload.listMessagesPinned
+                }
+            }
+        },
+        setSelectedMessages (state, action) {
+            const newMessageSelected : {[key: string] : ItemMessage} = {};
+            action.payload.selectedMessages.forEach((message: ItemMessage) => {
+                newMessageSelected[message._id] = message;
+            })
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: {
+                        ...state.data.listSelectedMessage[action.payload.conversationId],
+                        ...newMessageSelected
+                    }
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: true
+                }
+            }
+        },
+        removeAllSelectedMessage (state, action) {
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: {}
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: false
+                }
+            }
+        },
+        removeSelectedMessage (state, action) {
+            const newSelectedMessage = {...state.data.listSelectedMessage[action.payload.conversationId]};
+            delete newSelectedMessage[action.payload.messageId];
+
+            state.data = {
+                ...state.data,
+                listSelectedMessage: {
+                    ...state.data.listSelectedMessage,
+                    [action.payload.conversationId]: newSelectedMessage
+                },
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: Object.keys(newSelectedMessage).length > 0
+                }
+            }
+        },
+        setSelectedStateOn (state, action) {
+            state.data = {
+                ...state.data,
+                selectedState: {
+                    ...state.data.selectedState,
+                    [action.payload.conversationId]: true
+                }
+            }
+        },
+        deleteMessageInConversations (state, action) {
+            const newMessage = {...state.data.listMessage[action.payload.conversationId]};
+            action.payload.messageData.forEach((item: ItemMessage) => {
+                newMessage[item._id] = {
+                    ...newMessage[item._id],
+                    usersDelete: item.usersDelete
+                };
+            });
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId]: newMessage
+                },
+            }
+        },
+
+        revokeMessageInConversation (state, action) {
+            const newMessage = {...state.data.listMessage};
+            action.payload.messages.forEach((item: ItemMessage) => {
+                delete newMessage[item.conversation][item._id]
+            });
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    ...newMessage
+                },
+            }
         }
     },
     extraReducers: {}
@@ -211,6 +374,17 @@ export const {
     updateNewMessageToConversation,
     updateFileProgressOnMessage,
     setListMembers,
-    setListMedias
+    setListMedias,
+    updateReminderData,
+    setReplyMessage,
+    removeReplyMessage,
+    setShareMessage,
+    setPinnedMessage,
+    setSelectedMessages,
+    removeSelectedMessage,
+    removeAllSelectedMessage,
+    setSelectedStateOn,
+    deleteMessageInConversations,
+    revokeMessageInConversation
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {FC, useState, useCallback, useMemo, useContext} from "react";
+import React, {FC, useState, useCallback, useMemo, useContext, useRef, useEffect} from "react";
 import {getDefaultKeyBinding, DraftHandleValue} from "draft-js"
 import Editor from "@draft-js-plugins/editor";
 import createMentionPlugin, {
@@ -7,9 +7,12 @@ import createMentionPlugin, {
 } from '@draft-js-plugins/mention';
 
 import "@draft-js-plugins/mention/lib/plugin.css";
+import '@draft-js-plugins/focus/lib/plugin.css';
 import {ChattingInputContext} from "./ChattingInput";
 import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
+import createFocusPlugin from '@draft-js-plugins/focus';
 import IconButton from "./IconButton";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 // import editorStyles from './editorStyles.module.css';
 
 defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
@@ -23,11 +26,13 @@ defaultTheme.emojiSelectPopoverEntryFocused = defaultTheme.emojiSelectPopoverEnt
 type Props = {
     onPressEnter?: () => void;
     onPasteFiles?: (files: FileList|Blob[]) => void;
-    mentions: MentionData[]
+    mentions: MentionData[];
+    replyData: ItemMessage;
 }
-const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
-    const {editorState, onChangeCallback, suggestions, setSuggestions} = useContext(ChattingInputContext);
+const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, replyData }) => {
+    const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
+    const editor = useRef<Editor>(null);
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
@@ -52,10 +57,14 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
             selectButtonContent: <IconButton/>
         });
         const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
-
-        const plugins = [mentionPlugin, emojiPlugin];
+        const focusPlugin = createFocusPlugin();
+        const plugins = [mentionPlugin, emojiPlugin, focusPlugin];
         return { plugins, MentionSuggestions, EmojiSuggestions, EmojiSelect };
     }, []);
+
+    // useEffect(() => {
+    //     editor&&editor.current&&replyData&&editor.current.focus()
+    // }, [replyData])
 
     const onOpenChange = useCallback((_open: boolean) => {
         setOpen(_open);
@@ -97,12 +106,13 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions}) => {
                 keyBindingFn={myKeyBindingFn}
                 handleKeyCommand={handleKeyCommand}
                 handlePastedFiles={handlePastedFiles}
+                ref={editor}
             />
             <MentionSuggestions
                 open={open}
                 onOpenChange={onOpenChange}
                 onSearchChange={onSearchChange}
-                suggestions={suggestions}
+                suggestions={mentions}
                 // entryComponent={Entry}
             />
             <EmojiSuggestions />

@@ -11,15 +11,16 @@ import {
     MediaReactionPayload
 } from "typings/social";
 import { CommentProps } from 'typings/common';
-import { objPopulate } from 'views/pages/media/utils';
 
-// Định nghĩa toàn bộ các Hook (đóng gói lại) để làm việc với API
 type UseSocial = {
-    listMedias: Array<MediaProps>,
     createMedia: (payload: MediaPayload) => Promise<void>,
     updateMedia: (payload: MediaPayload) => Promise<void>,
-    reactionMedia: (payload: MediaReactionPayload) => Promise<void>,
     deleteMedia: (id: string) => Promise<void>,
+    listMedias: Array<MediaProps>,
+    reactionMedia: (payload: MediaReactionPayload) => Promise<void>,
+    listReactions: Array<any>,
+    refetchListReactions: () => void,
+    nextPageListReactions: (options?: FetchNextPageOptions | undefined) => void,
     isLoadingListMedias: boolean,
     refetchListMedias: () => void,
     nextPageListMedias: (options?: FetchNextPageOptions | undefined) => void,
@@ -28,20 +29,6 @@ type UseSocial = {
     totalPages: number | undefined,
     hasNextPage: boolean | undefined,
 };
-
-type UseCommentSocial = {
-    createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
-    updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
-    deleteComment: (id: string) => Promise<void>,
-    listComments: Array<CommentProps>,
-    totalRecord: number,
-    limit: number,
-    nextCursor: string | undefined,
-    isLoadingListComments: boolean,
-    refetchListComments: () => void,
-    nextPageListComments: () => void,
-    prevPageListComments: () => void,
-}
 
 export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial => {
     const { current: socket }: any = useSocket();
@@ -65,8 +52,8 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useMutation((payload: MediaReactionPayload) =>
             SocialRepository.reactionMedia(payload)
         );
-    
-    // Get danh sách
+
+    // Get danh sách media
     const {
         isLoading: isLoadingListMedias,
         refetch: refetchListMedias,
@@ -92,15 +79,41 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
             }
         );
 
+    // Get danh sách reaction
+    const {
+        data: dataListReactions,
+        refetch: refetchListReactions,
+        fetchNextPage: nextPageListReactions,
+    } =
+        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+            ["list_reactions", key],
+            async ({ pageParam }: any) =>
+                SocialRepository.listReactions({ 
+                    limit: 10,
+                    lastestID: pageParam ? pageParam : "",
+                    populates: JSON.stringify({
+                        path: 'reaction userCreate',
+                        select: '_id type fullname bizfullname image'
+                    }),
+                    ...params,
+                }),
+            {
+                getNextPageParam: (params: any) => {
+                    const nextCursor = params?.data?.nextCursor;
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+
     const createMedia = async (payload: MediaPayload) => {
         try {
             const { error, data, message } = await createMediaAsync(payload);
 
             if (!error) {
-                // refetchListMedias();
-
                 toast.success('Tạo bài viết thành công');
-                socket.emit('NOTIFICATION_CSS_ADD_MEDIA', {
+                socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
                     receivers: data.receivers
                 });
             } else {
@@ -154,8 +167,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
 
     const reactionMedia = async (payload: MediaReactionPayload) => {
         try {
-            const response = await reactionMediaAsync(payload);
-            console.log({ response });
+            await reactionMediaAsync(payload);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -169,12 +181,17 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 
+    const listReactions = [].concat(...(dataListReactions?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+
     return {
         createMedia,
         updateMedia,
         deleteMedia,
         reactionMedia,
         listMedias,
+        listReactions,
+        refetchListReactions,
+        nextPageListReactions,
         isLoadingListMedias,
         refetchListMedias,
         nextPageListMedias,
@@ -184,6 +201,20 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         hasNextPage,
     };
 };
+
+type UseCommentSocial = {
+    createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
+    updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
+    deleteComment: (id: string) => Promise<void>,
+    listComments: Array<CommentProps>,
+    totalRecord: number,
+    limit: number,
+    nextCursor: string | undefined,
+    isLoadingListComments: boolean,
+    refetchListComments: () => void,
+    nextPageListComments: () => void,
+    prevPageListComments: () => void,
+}
 
 export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSocial => {
     const { mutateAsync: createCommentAsync } =
@@ -213,7 +244,6 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
             async ({ pageParams }: any) => 
             SocialRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
-                ...objPopulate,
                 ...payload
             }),
             {
@@ -268,7 +298,11 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         }
     };
 
-    const listComments = [].concat(...(dataListComments?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean)
+    const listComments = []
+        .concat(...(dataListComments?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
     const totalRecord = dataListComments?.pages[0]?.data?.totalRecord || 0;
     const nextCursor = dataListComments?.pages[0]?.data?.nextCursor;
     const limit = dataListComments?.pages[0]?.data?.limit || 5;

@@ -117,6 +117,7 @@ const DocumentProjectPage: FC = () => {
             toggleModal();
             updateModal({
               departmentInfo: {},
+              initialValues: {},
             });
           }
         },

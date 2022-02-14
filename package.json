@@ -1,6 +1,6 @@
 {
   "name": "cbs-web-app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -19,6 +19,7 @@
     "@babel/plugin-syntax-decorators": "^7.16.7",
     "@draft-js-plugins/editor": "^4.1.1",
     "@draft-js-plugins/emoji": "^4.5.5",
+    "@draft-js-plugins/focus": "^4.1.2",
     "@draft-js-plugins/mention": "^5.1.1",
     "@headlessui/react": "^1.3.0",
     "@reduxjs/toolkit": "^1.6.1",
@@ -40,6 +41,7 @@
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.0.0",
+    "react-circular-progressbar": "^2.0.4",
     "react-collapse": "^5.1.1",
     "react-datepicker": "^4.5.0",
     "react-day-picker": "^7.4.10",
@@ -51,6 +53,7 @@
     "react-onesignal": "^2.0.2",
     "react-query": "^3.19.0",
     "react-redux": "^7.2.4",
+    "react-responsive-carousel": "^3.2.22",
     "react-router": "5.2.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "^4.0.3",
@@ -102,7 +105,8 @@
     "typescript": "^4.3.5"
   },
   "resolutions": {
-    "babel-loader": "8.1.0"
+    "babel-loader": "8.1.0",
+    "react-error-overlay": "6.0.9"
   },
   "eslintConfig": {
     "env": {

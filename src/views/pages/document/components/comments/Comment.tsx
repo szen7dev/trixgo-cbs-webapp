@@ -3,13 +3,9 @@ import { FC, HTMLAttributes, useContext } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-// import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
-import PostFile from './PostFile';
+import PostFile from 'views/pages/media/components/post/PostFile';
 import { CommentProps } from 'typings/common';
-// import CommentContext from '../context/comment/comment.context';
 import { useCommentSocial } from 'services/hooks/useSocial';
-// import { FileProps } from 'typings/social';
-// import generateImageLink from '../utils/images';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,
@@ -72,7 +68,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							{images.length ? images.slice(0, 3).map((image, i) => {
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;
-								const url = image.file ? image.file.url : image.url;
+								const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
 
 								return (
 									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => 1} >

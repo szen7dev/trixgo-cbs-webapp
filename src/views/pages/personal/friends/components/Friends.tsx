@@ -21,7 +21,7 @@ const Friends: FC = () => {
   const [pageParam, setPageParam] = useState('')
   const [prevCursor, setPrevCursor] = useState(['']);
   const params = {limit: 10, select: 'fullname email phone birthDay', populates: '{"path": "company", "select": "name"}', lastestID: pageParam}
-  const { listFriends, totalRecord, totalPage, nextCursor, refetchListFriends } = useUser(pageParam, params);
+  const { listFriends, totalRecord, totalPage, nextCursor, refetchListFriends } = useUser(params, pageParam);
   const [friend, setFriend] = useState<any>(null)
   const [isFriend, setIsFriend] = useState(false)
 

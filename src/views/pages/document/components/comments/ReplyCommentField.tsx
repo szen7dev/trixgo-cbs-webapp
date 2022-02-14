@@ -6,19 +6,16 @@ import { toArray } from 'lodash';
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import PostImage from './PostImage';
-import PostFile from './PostFile';
+import PostImage from 'views/pages/media/components/post/PostImage';
+import PostFile from 'views/pages/media/components/post/PostFile';
 
-import useCustomReducer from 'views/pages/document/reducer/upload/useCustomReducer';
-import fileUploadReducer, { INITIAL_STATE } from 'views/pages/media/context/upload.reducer';
-// import CommentContext from 'views/pages/media/context/comment/comment.context';
-import uploadActions from 'views/pages/media/context/upload.actions';
-import { modifyUploadedFiles, modifyUploadedFilesV2 } from 'views/pages/media/context/upload.utils';
+import {  modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
 import { useCommentSocial } from 'services/hooks/useSocial';
 import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from '../../contexts/comment';
+import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -60,7 +57,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		removeUploadedImage,
 		removeUploadedFile,
 		removeAllFiles
-	}] = useCustomReducer(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images));
+	}] = useUploadFile({ files, images });
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');

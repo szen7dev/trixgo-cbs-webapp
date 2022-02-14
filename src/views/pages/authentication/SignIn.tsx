@@ -28,7 +28,8 @@ const LoginPage: FC = () => {
   const initialValues: SignInPayload = {
     email: "",
     password: "",
-    platform: "1",
+    platform: process.env.REACT_APP_PLATFORM??"1",
+    domain: process.env.REACT_APP_DOMAIN??""
   };
 
   const signInSchema = object().shape({

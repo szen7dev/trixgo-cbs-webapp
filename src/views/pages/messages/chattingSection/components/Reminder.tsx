@@ -1,12 +1,26 @@
-import React, {FC, ReactNode} from "react";
+import React, {FC, ReactNode, useCallback, useContext} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
-import {useAuth} from "services/hooks/useAuth";
+import {UseConversation} from "services/hooks/messages/useConversation";
+import {MessageContext} from "../../home/index_v2";
+import {updateReminderData} from "redux/reducer/messages/ListMessage";
+import {useDispatch} from "react-redux";
+import Clock from "assets/images/icons8-time-48.svg";
+import IconCheck from "assets/images/icon-check.svg";
+import IconRedClose from "assets/images/icon-red-close.svg";
+
 type Props = {
     message: ItemMessage;
 }
 const Reminder:FC<Props> = ({message}) => {
-    const {user} = useAuth();
+    const {updateReminder} = UseConversation();
+    const {socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
+    const dispatch = useDispatch();
+
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const getRepeatText = () => {
         switch (message.reminder.repeat) {
             case "once":
@@ -21,23 +35,40 @@ const Reminder:FC<Props> = ({message}) => {
                 return "Hàng năm";
         }
     };
-    const checkUserAccept = () => {
+    const checkUserAccept = useCallback(() => {
         const userAcceptStatus = [...message.reminder.accepts,...message.reminder.rejects];
         return {
-            didTakeAction: userAcceptStatus.includes(user?._id),
-            didAccept: message.reminder.accepts.includes(user?._id)&&!message.reminder.rejects.includes(user?._id)
+            didTakeAction: userAcceptStatus.includes(profileId),
+            didAccept: message.reminder.accepts.includes(profileId)&&!message.reminder.rejects.includes(profileId)
         }
+    }, [message]);
+
+    const reminderAction = (isJoin: boolean) => {
+        const reminderData = {...message.reminder};
+        if (isJoin) {
+            reminderData.accepts =  [...reminderData.accepts, profileId];
+        } else {
+            reminderData.rejects = [...reminderData.rejects, profileId];
+        }
+        dispatch(updateReminderData({
+            conversationId: message.conversation,
+            messageId: message._id,
+            reminderData: reminderData
+        }));
+        updateReminder({conversationID: message.conversation, messageID: message._id, isJoin: isJoin}).then((data) => {
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
+        });
     }
     return (
         <div className={"reminder-center flex flex-col items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs bg-gray-200 text-gray-500 px-5 py-1 mb-2"}>
-                {moment(message.createdAt).format("HH:mm")}
+            <div className={"rounded-full text-xs bg-white text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center"}>
+                <img src={Clock} alt={"-----"} className={"w-[18px] h-[18px] mr-2"}/>
+                <span>
+                {`${message.sender.bizfullname||message.sender.fullname} đã tạo một lời nhắc`}
+                </span>
             </div>
-            <div className={"rounded-full text-xs  bg-gray-200 text-gray-500 px-5 py-1 mb-2"}>
-                {`${message.sender.fullname} đã tạo một lời nhắc`}
-            </div>
-            <div className={"w-[300px] rounded-md bg-white border border-gray-400"}>
-                <div className={"p-3 border-b border-gray-200 flex"}>
+            <div className={"w-[365px] rounded-md bg-white mb-5"}>
+                <div className={"p-3 flex"}>
                     <div className={"flex flex-col items-center px-2"}>
                         <div className={"text-lg text-negative"}>{moment(message.reminder.remindTime).format("MMM")}</div>
                         <div>{moment(message.reminder.remindTime).format("DD")}</div>
@@ -67,12 +98,18 @@ const Reminder:FC<Props> = ({message}) => {
                 </div>
                 {
                     (!checkUserAccept().didTakeAction)?
-                    <div className={"flex"}>
-                        <button className={"flex-1 text-negative py-2"}>
-                            Từ chổi
+                    <div className={"flex justify-around py-[11px] border-t border-gray-200"}>
+                        <button
+                            onClick={() => reminderAction(true)}
+                            className={"w-[126px] rounded-full h-[36px] flex items-center py-2 bg-gray-100 text-center justify-center"}>
+                            <img alt={"-----"} src={IconCheck} className={"w-[16px] h-[16px] mr-[5px]"}/>
+                            <span>Tham gia</span>
                         </button>
-                        <button className={"flex-1 text-primary py-2"}>
-                            Xác nhận
+                        <button
+                            onClick={() => reminderAction(false)}
+                            className={"w-[126px] rounded-full h-[36px] flex items-center py-2 bg-gray-100 text-center justify-center"}>
+                            <img alt={"-----"} src={IconRedClose} className={"w-[16px] h-[16px] mr-[5px]"}/>
+                            <span>Từ chối</span>
                         </button>
                     </div>:
                     null

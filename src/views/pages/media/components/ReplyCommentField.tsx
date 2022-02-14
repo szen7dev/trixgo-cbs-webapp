@@ -9,15 +9,12 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import PostImage from './post/PostImage';
 import PostFile from './post/PostFile';
 
-import useCustomReducer from '../context/useCustomReducer';
-import { IMethodFiles, IMethodImages, IMethodFileCommon } from '../context/upload';
-import fileUploadReducer, { INITIAL_STATE } from '../context/upload.reducer';
 import CommentContext from '../context/comment/comment.context';
-import uploadActions from '../context/upload.actions';
-import { modifyUploadedFiles, modifyUploadedFilesV2 } from '../context/upload.utils';
+import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
 import { useCommentSocial } from 'services/hooks/useSocial';
 import { useUpload } from 'services/hooks/useUpload';
+import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -58,7 +55,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		removeUploadedImage,
 		removeUploadedFile,
 		removeAllFiles
-	}] = useCustomReducer<IMethodFiles & IMethodImages & IMethodFileCommon>(fileUploadReducer, uploadActions, modifyUploadedFiles(INITIAL_STATE, files, images));
+	}] = useUploadFile({ files, images });
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');
@@ -138,17 +135,17 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		}
 		let infoAfterCreateOrUpdate;
 
-		if(defaultValue){
+		if (defaultValue) {
 			infoAfterCreateOrUpdate = await updateComment(dataInsertOrUpdate);
-			dispatch({ 
-				type: 'UPDATE_COMMENT', 
+			dispatch({
+				type: 'UPDATE_COMMENT',
 				payload: {
 					commentID,
 					parent: parentID,
 					body: infoAfterCreateOrUpdate,
 				}
 			});
-		} else{
+		} else {
 			infoAfterCreateOrUpdate = await createComment(dataInsertOrUpdate);
 			dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreateOrUpdate });
 		}
@@ -159,7 +156,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		refInputComment.current && (refInputComment.current.innerText = '');
 
 		// Clear files, images
-		if(refDivFile.current){
+		if (refDivFile.current) {
 			refDivFile.current.innerHTML = '';
 			refDivFile.current.classList.add('h-0');
 			refDivFile.current.classList.remove('post__files', 'pt-2', 'pb-6');
@@ -171,9 +168,9 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
-		if ('id' in file){
+		if ('id' in file) {
 			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
-		} else{
+		} else {
 			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
 		}
 	}
@@ -221,11 +218,11 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 							suppressContentEditableWarning={true}
 							onKeyPress={handleKeyPressInput}
 							// Handle change text
-							onInput={e => 
+							onInput={e =>
 								onTextChange
 									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
-								}
+							}
 						>{defaultValue}</span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
@@ -251,4 +248,4 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	)
 }
 
-export default ReplyCommentField
+export default ReplyCommentField;

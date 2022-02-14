@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import CommentIcon from "assets/images/icons8-comments.svg";
 import { ContractProps } from "typings/cmcs";
+import Popover from "components/shared/Popover";
 
 type Props = {
   listContracts: Array<ContractProps>
@@ -29,13 +30,17 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
         </div>
       </div>
 
-      <div className="px-4">
-        
+      <div className="px-4 bg-primary-light">
+
         {listContracts.length ? listContracts.map((contract: ContractProps) => (
-          <div className="border-b -mt-1" key={contract._id}>
+          <div className="border-b -mt-1 py-3" key={contract._id}>
             <div className="flex justify-between">
               <div className="max-w-[240px]">
-                <p>{contract.project?.sign}.{contract.name}</p>
+                {/* <p className="text-2-line-clamp">{contract.project?.sign}.{contract.name}</p> */}
+                {/* <Popover tooltip={`${contract.project?.sign}.${contract.name}`} > */}
+                <Popover onMouseEnterTooltip={false} tooltip={`${contract.project?.sign}.${contract.name}`} classTooltip="w-[240px] whitespace-normal" >
+                  <p className="text-2-line-clamp">{contract.project?.sign}.{contract.name}</p>
+                </Popover>
               </div>
 
               <div className="flex w-[165px] justify-between">
@@ -55,8 +60,9 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
             </div>
 
             <div className="flex justify-between items-center">
+              <div className="empty w-[65px]"></div>
               <div>
-                <div className="flex justify-between max-w-[240px]">
+                <div className="flex justify-between w-[180px] min-w-[124px]">
                   <span className="text-xs text-primary-gray">2020</span>
                   <div className="flex">
                     <div>
@@ -67,8 +73,8 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="w-[240px] h-[5px] border border-primary-border" />
-                  <div className="absolute w-[60px] h-[5px] bg-primary-gray top-0" />
+                  <div className="min-w-[124px] h-[5px] border border-primary-border" />
+                  <div className="absolute w-[30px] h-[5px] bg-primary-gray top-0" />
                 </div>
               </div>
 
@@ -141,7 +147,7 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
 
         <p className="text-primary ml-2 mt-1">Xem tất cả</p>
       </div>
-    </div>
+    </div >
   );
 };
 

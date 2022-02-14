@@ -2,7 +2,7 @@ import React, {createContext, FC, useCallback, useContext, useMemo, useState} fr
 import iconPencilWhite from "assets/images/icons8-pencil-64.svg";
 import arrowRightWhite from "assets/images/icon-arrow-right-white.svg";
 import AddNewSection from "./AddNew";
-import {LazyLoadImage} from "react-lazy-load-image-component";
+
 import {CreateConversationPayload} from "typings/apis/messages/listConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MessageContext} from "../../home/index_v2";
@@ -49,7 +49,7 @@ const AddNewChatGroup:FC = () => {
                 isPrivate: true,
                 membersID: []
             });
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id });
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id, select: JSON.stringify({ sender:"bizfullname" }) });
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });
@@ -65,13 +65,13 @@ const AddNewChatGroup:FC = () => {
     return (
         <AddNewChatGroupContext.Provider value={value}>
             <button onClick={() => setShowAddNew(true)} className={"w-[56px] h-[56px] rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center z-15 group-hover:opacity-100 opacity-0 " + (showAddNew?'hidden':'block')}>
-                <LazyLoadImage effect="blur" src={iconPencilWhite} alt={"Pencil icon"}/>
+                <img  src={iconPencilWhite} alt={"Pencil icon"}/>
             </button>
             <button
                 disabled={checkDisableCondition()}
                 onClick={() => createNewConversation()}
                 className={"w-[56px] h-[56px] rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center z-15 disabled:bg-gray-300 " + (!showAddNew?'hidden':'block')}>
-                <LazyLoadImage effect="blur" src={arrowRightWhite} alt={"right icon"}/>
+                <img  src={arrowRightWhite} alt={"right icon"}/>
             </button>
             {
                 showAddNew&&

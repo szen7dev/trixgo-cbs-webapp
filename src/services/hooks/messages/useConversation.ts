@@ -1,11 +1,28 @@
 import ListMessageRepository from "apis/messages/message";
-import {ListMessageData, ListMessagePayload, SendNormalMessagePayload} from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {
+    DeleteRevokeMessagePayload, ItemMessage,
+    ListMessageData,
+    ListMessagePayload,
+    PinnedMessagePayload,
+    SendNormalMessagePayload,
+    ShareMessageData,
+    ShareMessagePayload, UpdatePinnedMessageData,
+    UpdatePinnedMessagePayload,
+    UpdateReminderMessageData,
+    UpdateReminderMessagePayload
+} from "typings/apis/messages/listMessage";
+import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
     getListMessage: (params: ListMessagePayload) => Promise<ListMessageData>;
     sendNormalMessage: (params: SendNormalMessagePayload) => void;
+    updateReminder: (params: UpdateReminderMessagePayload) => Promise<UpdateReminderMessageData>;
+    shareMessageToConversation: (params: ShareMessagePayload) => Promise<ShareMessageData[]>;
+    getListPinMessage: (params: PinnedMessagePayload) => void;
+    updatePinMessage: (params: UpdatePinnedMessagePayload) => Promise<UpdatePinnedMessageData>;
+    deleteMessage: (params: DeleteRevokeMessagePayload) => void;
+    revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -39,8 +56,62 @@ export const UseConversation = () : UseConversationType => {
 
         return data;
     }
+
+    const updateReminder = async (params: UpdateReminderMessagePayload) => {
+        const {data} = await ListMessageRepository.updateReminder(params);
+        dispatch(updateReminderData({conversationId: params.conversationID, messageId: params.messageID, reminderData: data.infoReminder}));
+        return new Promise<UpdateReminderMessageData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const shareMessageToConversation = async (params: ShareMessagePayload) => {
+        const {data} = await ListMessageRepository.shareMessage(params);
+        return new Promise<ShareMessageData[]>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const getListPinMessage = async (params: PinnedMessagePayload) => {
+        const {data} = await ListMessageRepository.getListPinMessage(params);
+        dispatch(setPinnedMessage({conversationId: params.conversationID, listMessagesPinned: data.listRecords}))
+        return data
+    }
+
+    const updatePinMessage = async (params: UpdatePinnedMessagePayload) => {
+        const {data} = await ListMessageRepository.updatePinMessage(params);
+
+        return new Promise<UpdatePinnedMessageData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteMessage = async (params: DeleteRevokeMessagePayload) => {
+        const {data} = await ListMessageRepository.deleteMessage(params);
+        dispatch(deleteMessageInConversations({
+            conversationId: params.conversationID,
+            messageData: data
+        }));
+
+        return data;
+    }
+
+    const revokeMessage = async (params: DeleteRevokeMessagePayload) => {
+        const {data,error} = await ListMessageRepository.revokeMessage(params);
+
+        return new Promise<{data: ItemMessage[], error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        });
+    }
+
     return {
         getListMessage,
-        sendNormalMessage
+        sendNormalMessage,
+        updateReminder,
+        shareMessageToConversation,
+        getListPinMessage,
+        updatePinMessage,
+        deleteMessage,
+        revokeMessage
     }
 }
