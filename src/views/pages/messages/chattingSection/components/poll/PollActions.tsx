@@ -139,6 +139,7 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
         }).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessageNotification);
+            setCloseVote()
         })
     }
 

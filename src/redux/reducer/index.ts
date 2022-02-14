@@ -6,6 +6,7 @@ import ListConverSationSlice from './messages/ListConversation';
 import ListMessageSlice from './messages/ListMessage';
 import ShareMessageSlice from './messages/ShareMessage';
 import DeleteAndRevokeMessageSlice from './messages/DeleteAndRevokeMessage';
+import CreatePollSlice from './messages/CreatePoll';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     listMessage: ListMessageSlice,
     shareMessage: ShareMessageSlice,
     deleteAndRevokeMessage: DeleteAndRevokeMessageSlice,
+    createPoll: CreatePollSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
