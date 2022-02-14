@@ -12,10 +12,11 @@ export interface Populate {
 }
 
 export interface QueryParam {
-  limit?: number;
-  lastestID?: string;
-  keyword?: string;
-  populates?: Populate;
+    limit?: number;
+    lastestID?: string;
+    keyword?: string;
+    populates?: Populate;
+    select?: string;
 }
 
 export enum DepartmentEnumType {

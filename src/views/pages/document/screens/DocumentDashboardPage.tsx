@@ -104,7 +104,6 @@ const DocumentDashboardPage: FC = () => {
         select: "fullname image",
       },
     });
-  console.log({ listDepartments });
   // const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
   // 	id: i,
   // 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
@@ -272,6 +271,10 @@ const DocumentDashboardPage: FC = () => {
                       100
                   );
                 }
+                let numberFinishOfDocs = 0;
+                if (department.numberFinishOfDocs && department.numberOfDocs) {
+                  numberFinishOfDocs = (department.numberFinishOfDocs / department?.numberOfDocs) * 100;
+                }
                 return (
                   <tr key={index}>
                     <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
@@ -294,32 +297,36 @@ const DocumentDashboardPage: FC = () => {
                         <span className="text-2x-large text-black mr-auto">
                           {department.numberFinishOfDocs || 0}
                         </span>
-                        <span>48%</span>
+                        <span>{numberFinishOfDocs}%</span>
                       </div>
                       <div className="border border-cbs-border h-1.5 box-border mt-2">
                         <div
                           className="bg-cbs-schedule-after-7days h-full"
                           style={{
-                            width: department.numberOfDocs || 0 * 100 + "%",
+                            width: numberFinishOfDocs + "%",
                           }}
                         ></div>
                       </div>
                     </td>
                     <td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border text-black">
                       <div className="whitespace-nowrap">
-                        <img
-                          src={`${department?.pm?.image}`}
-                          alt="Director"
-                          className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-                        />
+                        {department?.pm?.image && (
+                          <img
+                            src={`${process.env.REACT_APP_URL_S3_USER}/${department?.pm?.image}`}
+                            alt="Director"
+                            className="inline-block w-6 h-6 rounded-3xl mr-2.5"
+                          />
+                        )}
                         {department?.pm?.fullname}
                       </div>
                       <div className="whitespace-nowrap pl-9 w-max pt-1.5">
-                        <img
-                          src={`${department?.assistant?.image}`}
-                          alt="Secretary"
-                          className="inline-block w-6 h-6 rounded-3xl mr-2.5"
-                        />
+                        {department?.assistant?.image && (
+                          <img
+                            src={`${process.env.REACT_APP_URL_S3_USER}/${department?.assistant?.image}`}
+                            alt="Secretary"
+                            className="inline-block w-6 h-6 rounded-3xl mr-2.5"
+                          />
+                        )}
                         {department?.assistant?.fullname}
                       </div>
                     </td>

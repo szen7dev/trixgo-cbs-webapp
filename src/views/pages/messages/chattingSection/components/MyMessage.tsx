@@ -53,7 +53,7 @@ const MyMessage:FC<Props> = ({message}) => {
                         }
                     }
                 }}
-                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer"}>
+                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative message-container my-message"}>
                 <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>} className={"mb-2 transition duration-500"}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>

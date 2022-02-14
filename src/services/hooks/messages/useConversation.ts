@@ -7,7 +7,7 @@ import {
     SendNormalMessagePayload,
     ShareMessageData,
     ShareMessagePayload, UpdatePinnedMessageData,
-    UpdatePinnedMessagePayload,
+    UpdatePinnedMessagePayload, UpdatePollData, UpdatePollPayload,
     UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
@@ -23,6 +23,7 @@ type UseConversationType = {
     updatePinMessage: (params: UpdatePinnedMessagePayload) => Promise<UpdatePinnedMessageData>;
     deleteMessage: (params: DeleteRevokeMessagePayload) => void;
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
+    updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -104,6 +105,14 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const updatePoll = async (params: UpdatePollPayload) => {
+        const {data} = await  ListMessageRepository.updatePoll(params);
+
+        return new Promise<UpdatePollData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
@@ -112,6 +121,7 @@ export const UseConversation = () : UseConversationType => {
         getListPinMessage,
         updatePinMessage,
         deleteMessage,
-        revokeMessage
+        revokeMessage,
+        updatePoll
     }
 }

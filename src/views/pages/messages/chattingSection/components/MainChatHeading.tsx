@@ -6,15 +6,18 @@ import {MessageContext} from "../../home/index_v2";
 import SavedMessage from "assets/images/saved-messages.svg";
 import HeaderPinedMessages from "./HeaderPinedMessages";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../../redux/reducer";
 
 type Props = {
     chat: ItemListConversation
 }
 
 const MainChatHeading:FC<Props> = ({chat}) => {
-    const {setShowMenu, showMenu} = useContext(MessageContext)
+    const {setShowMenu, showMenu, currentChat} = useContext(MessageContext)
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
 
     const getNameConversation = useCallback(() => {
         if (chat.members && chat.members.length === 1) {
@@ -22,7 +25,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
         }
         if (chat.members && chat.members.length === 2) {
             const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return userInConversation.fullname.trim();
+            return (userInConversation.bizfullname||userInConversation.fullname).trim();
         }
 
         return chat?.name;
@@ -59,7 +62,7 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                 className={"avatar-chat flex items-center justify-center cursor-pointer"}>
                 {
                     chat.avatar?
-                        <img  className={"w-[40px] h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -102,16 +105,18 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                         )
                 }
             </div>
-            <div className={"chat-basic-infor flex flex-col justify-center ml-[10px] flex-1"}>
-                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer"}>{getNameConversation()}</div>
+            <div className={"flex flex-col justify-center mx-[10px] " + ((showMenu&&listPinnedMessage&&listPinnedMessage.length>0)?"chat-basic-infor":"")}>
+                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
-            <HeaderPinedMessages/>
-            <div className={"action-section flex items-center justify-end ml-[10px]"}>
-                <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                    <img  src={SearchIcon} alt={"search icon"}/>
-                </button>
-                <MainChatOptions/>
+            <div className={"flex items-center flex-1 justify-end"}>
+                <HeaderPinedMessages listPinnedMessage={listPinnedMessage}/>
+                <div className={"action-section flex items-center justify-end ml-[10px]"}>
+                    <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                        <img  src={SearchIcon} alt={"search icon"}/>
+                    </button>
+                    <MainChatOptions/>
+                </div>
             </div>
         </div>
     )

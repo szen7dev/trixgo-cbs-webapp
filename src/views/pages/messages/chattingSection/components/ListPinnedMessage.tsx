@@ -4,7 +4,7 @@ import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import MyMessage from "./MyMessage";
 import OthersMessage from "./OthersMessage";
-import Reminder from "./Reminder";
+import Reminder from "./reminder/Reminder";
 import NotificationCenter from "./NotificationCenter";
 import {map as _map} from "lodash"
 import moment from "moment";
@@ -51,10 +51,10 @@ const ListPinnedMessage:FC<Props> = ({listPinnedMessage}) => {
                     <Reminder message={message}/>
                 </div>;
             case 108:
-                return <NotificationCenter content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
+                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 116:
             case 117:
-                return <NotificationCenter content={`${message.sender.fullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
         }
     }
 

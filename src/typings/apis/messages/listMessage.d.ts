@@ -2,14 +2,14 @@ import {ItemListConversation} from "./listConversation";
 
 export type ItemMessage = {
     _id: string;
-    receivers: {_id: string; image: string; fullname: string}[];
+    receivers: {_id: string; image: string; fullname: string}; bizfullname: string[];
     content: string;
     status: number;
     type: number;
-    listSeen: {_id: string; image: string; fullname: string}[];
+    listSeen: {_id: string; image: string; fullname: string; bizfullname: string}[];
     usersDelete: any[];
     membersAssigned: any[];
-    sender: {_id: string; image: string; fullname: string};
+    sender: {_id: string; image: string; fullname: string; bizfullname: string};
     conversation: string;
     modifyAt: string;
     createAt: string;
@@ -49,6 +49,7 @@ export type ItemMessage = {
                 app: string;
                 name: string;
                 url: string;
+                fakeUrl: string;
                 size: number;
                 userCreate: string;
                 modifyAt: string;
@@ -58,6 +59,7 @@ export type ItemMessage = {
                 __v: number;
                 nameOrg: string;
                 path: string;
+                isDraft: boolean;
             };
         };
         [key: string]: any;
@@ -73,6 +75,36 @@ export type ItemMessage = {
         rejects: string[]
         remindTime: string
         repeat: string
+        state: number
+        status: number
+        updatedAt: string
+        __v: number
+        _id: string
+    },
+    reactions: {
+        _id: string;
+        type: number;
+        userCreate : {
+            _id: string;
+            fullname: string;
+            bizfullname: string;
+            image: string;
+        }
+    }[],
+    poll: {
+        createdAt: string
+        name: string
+        options: {
+            createAt: string
+            title: string
+            usersVote: {
+                bizfullname: string
+                fullname: string
+                image: string
+                _id: string
+            }[]
+            _id: string
+        }[]
         state: number
         status: number
         updatedAt: string
@@ -236,6 +268,48 @@ export type DeleteRevokeMessagePayload = {
 
 export type DeleteRevokeMessageResponse = {
     data: ItemMessage[];
+    error: boolean;
+    status: number;
+}
+
+export type UpdatePollPayload = {
+    conversationID: string;
+    messageID: string;
+    newVotes?: string[];
+    votesCancel?: string[];
+    newOptions?: {
+        title: string;
+        usersVote?: string[]
+    }[];
+}
+
+export type UpdatePollData = {
+    infoMessage: ItemMessage[],
+    infoMessageNotification: {
+        content: string
+        conversation: string
+        createAt: string
+        createdAt: string
+        files: any[]
+        modifyAt: string
+        poll: string
+        reactions: any[]
+        receivers: string[]
+        sender: string
+        state: number
+        status: number
+        type: number
+        updatedAt: string
+        usersAssigned: string[]
+        usersDelete: string[]
+        usersSeen: string[]
+        __v: number
+        _id: string
+    }
+}
+
+export type UpdatePollResponse = {
+    data: UpdatePollData ;
     error: boolean;
     status: number;
 }

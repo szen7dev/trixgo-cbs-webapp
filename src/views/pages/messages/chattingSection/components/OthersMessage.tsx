@@ -44,7 +44,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
 
     return (
         <div className={"flex justify-start items-end mb-2 transition duration-500"}>
-            <div className={"mb-[10px]"}>
+            <div className={"mb-[10px] mr-[10px]"}>
                 <SelectMessageCheckbox message={message}/>
             </div>
             <div
@@ -62,7 +62,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                         }
                     }
                 }}
-                className={"transition duration-500 cursor-pointer"}>
+                className={"transition relative duration-500 cursor-pointer message-container"}>
                 <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>

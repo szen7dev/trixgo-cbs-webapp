@@ -10,9 +10,57 @@ import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-
-import Reminder from "./Reminder";
+import 'react-circular-progressbar/dist/styles.css';
+import Reminder from "./reminder/Reminder";
 import moment from "moment";
+import angered from "assets/emoji/angered.png";
+import dislike from "assets/emoji/dis-like.png";
+import heart from "assets/emoji/heart.png";
+import laugh from "assets/emoji/laugh.png";
+import like from "assets/emoji/like.png";
+import sad from "assets/emoji/sad.png";
+import surprise from "assets/emoji/surprise.png";
+import ReminderNoti from "./reminder/ReminderNoti";
+import Poll from "./poll/Poll";
+import PollNoti from "./poll/PollNoti";
+
+export const listEmoji = [
+    {
+        id: 1,
+        icon: heart,
+        value: 1
+    },
+    {
+        id: 2,
+        icon: laugh,
+        value: 2
+    },
+    {
+        id: 3,
+        icon: surprise,
+        value: 3
+    },
+    {
+        id: 4,
+        icon: sad,
+        value: 4
+    },
+    {
+        id: 5,
+        icon: angered,
+        value: 5
+    },
+    {
+        id: 6,
+        icon: like,
+        value: 6
+    },
+    {
+        id: 7,
+        icon: dislike,
+        value: 7
+    }
+];
 
 type Props = {
     chat: ItemListConversation
@@ -108,14 +156,17 @@ const MainChatContent:FC<Props> = ({chat}) => {
                     return <OthersMessage message={message}/>
                 }
             case 4:
-                return <div>
-                    <Reminder message={message}/>
-                </div>;
+                return <Reminder message={message}/>;
+            case 5:
+                return <Poll message={message} chat={chat}/>;
             case 108:
-                return <NotificationCenter content={`${message.sender.fullname} đã ghim một tin nhắn`}/>
+                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+            case 111:
+            case 112:
+                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
-                return <NotificationCenter content={`${message.sender.fullname} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
     return (
@@ -123,7 +174,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-list"}
-                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150"}
+                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {memoizedValue()}
@@ -131,6 +182,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
+            <iframe id="download_iframe" className={"hidden"}></iframe>
             {
                 userUnreadMessage()>0 &&
                 <button
