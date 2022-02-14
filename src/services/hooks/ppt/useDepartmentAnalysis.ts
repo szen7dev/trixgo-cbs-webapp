@@ -1,6 +1,9 @@
 import { useQuery } from "react-query";
 import { DepartmentsRepository } from "apis/ppt";
-import type { DepartmentResponse, DepartmentsAnalysisData } from "typings/ppt/department";
+import type {
+  DepartmentsAnalysisData,
+} from "typings/ppt/department";
+import type { APIResponse } from "typings/ppt";
 
 type NewType = {
   loading: boolean;
@@ -8,7 +11,9 @@ type NewType = {
   refetch: () => void;
 };
 type InputProps = {
-  onSuccess?: ((data: DepartmentResponse<DepartmentsAnalysisData>) => void) | undefined;
+  onSuccess?:
+    | ((data: APIResponse & { data: DepartmentsAnalysisData }) => void)
+    | undefined;
 };
 
 export function useQueryDepartmentsAnalysis(props: InputProps = {}): NewType {

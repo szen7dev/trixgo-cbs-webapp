@@ -37,5 +37,16 @@ export const DEPARTMENT_STAGE = [
   { value: 6, text: "Khác", path: "/", className: "bg-cbs-gray", key: "Other" },
 ];
 
+export const DEPARTMENT_STATUS = {
+  1: {
+    1: { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
+    2: { message: "Đúng tiến độ, vượt ngân sách", className: "bg-red-400" },
+  },
+  2: {
+    1: { message: "Chậm tiến độ, đúng ngân", className: "bg-red-400" },
+    2: { message: "Chậm tiến độ, vượt ngân", className: "bg-red-400" },
+  },
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {}

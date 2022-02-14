@@ -7,13 +7,11 @@ import {
   InfiniteQueryObserverResult,
 } from "react-query";
 import { DepartmentsRepository } from "apis/ppt";
+import { APIResponse } from "typings/ppt";
 import {
   DataDepartmentResponse,
   DataEnum,
   DepartmentListData,
-  DepartmentResponse,
-  // DepartmentResponseType,
-  NestedPartial,
 } from "typings/ppt/department";
 import { DepartmentEnumType } from "typings/ppt";
 
@@ -31,11 +29,9 @@ type NewType<T> = {
 
 export function useListDepartment<
   T extends DepartmentEnumType | undefined,
-  S extends
-    | keyof DataEnum<undefined, undefined>[T extends undefined
-        ? DepartmentEnumType.PROJECT
-        : T]
-    | undefined,
+  S extends (keyof DataEnum<undefined, undefined>[T extends undefined
+    ? DepartmentEnumType.PROJECT
+    : T])[],
   P extends
     | (S extends keyof DataEnum<undefined, undefined>[T extends undefined
         ? DepartmentEnumType.PROJECT
@@ -52,18 +48,20 @@ export function useListDepartment<
     | undefined
 >(props: {
   type?: T;
-  select?: S[];
+  select?: S;
   populates?: {
     path?: P[];
     select?: Sn[];
   };
 }): NewType<
-  DepartmentResponse<DepartmentListData<DataDepartmentResponse<T, S, P, Sn>>>
+  APIResponse & {
+    data: DepartmentListData<DataDepartmentResponse<T, S, P, Sn>>;
+  }
 > {
   const { isLoading, data, refetch, fetchNextPage, hasNextPage } =
     useInfiniteQuery(
       ["departments.list"],
-      ({ pageParam }) => DepartmentsRepository.getDepartmentList(props),
+      ({ pageParam }) => DepartmentsRepository.getDepartmentList({ ...props }),
       {
         refetchOnWindowFocus: false,
         enabled: true,
