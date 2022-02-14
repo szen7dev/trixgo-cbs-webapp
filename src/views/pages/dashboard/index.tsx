@@ -45,15 +45,13 @@ const HomePage: FC = () => {
   useEffect(() => {
     (async () => {
       const response = await PcmRepository.listTotalAnalysis();
-      console.log('response',response);
-      
       setTaskAnalysis(response.data);
     })();
 
     const socket = socketRef.current;
     if (!socket) return;
 
-		socket.on('NOTIFICATION_SSC_ADD_MEDIA', () => {
+		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
       refetchListMedias();
 		});
   }, [])
