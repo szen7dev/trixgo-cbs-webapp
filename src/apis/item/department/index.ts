@@ -20,13 +20,30 @@ async function fetchListDepartment(params: any) {
     return data;
 }
 
+async function fetchDetailDepartment(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/departments`, {
+            params: {
+                'select': 'name sign description contracts company',
+                populates: {
+                    select: '_id',
+                    path: 'company',
+                },
+                ...params,
+            }
+        }
+    )
+    return data;
+}
+
 interface DepartmentRepository {
     fetchListDepartment: (params: Department.DepartmentPayload) =>
         Promise<Department.DepartmentResponse>;
+    fetchDetailDepartment: (data: Department.DepartmentDetailPayload) => Promise<Department.DepartmentDetailResponse>,
 }
 
 export const departmentRepository: DepartmentRepository = {
     fetchListDepartment: async (params) =>
         fetchListDepartment(params),
-
+    fetchDetailDepartment: async (data) => fetchDetailDepartment(data),
 }

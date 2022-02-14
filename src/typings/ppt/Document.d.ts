@@ -16,14 +16,16 @@ interface Project {
 export interface Document {
     _id: string;
     author?: Author;
-    project?: Project;
+    project: Project;
     name?: string;
     sign: string;
     sender?: {
         _id: string;
         name: string;
-        phone: string;
-        sign: string;
+    };
+    receiver?: {
+        _id: string;
+        name: string;
     };
     date: string;
     storeSign?: {
@@ -39,11 +41,18 @@ export interface Document {
     };
     createAt: string;
     userCreate?: Author;
+    package?: {
+        _id: string;
+        name: string;
+    };
+    field?: {
+        _id: string;
+        name: string;
+    };
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {
     departmentID: string;
-    select?: string;
 }
 
 export interface ListDocumentQueryResponse extends APIResponse {
@@ -54,4 +63,12 @@ export interface ListDocumentQueryResponse extends APIResponse {
         totalPage: number;
         nextCursor: string | null;
     }
+}
+
+export interface DocumentInfoQueryPayload extends QueryParam {
+    documentID: string;
+}
+
+export interface DocumentInfoQueryResponse extends APIResponse {
+    data: Document;
 }

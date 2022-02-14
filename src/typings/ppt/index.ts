@@ -14,6 +14,7 @@ export interface QueryParam {
     lastestID?: string;
     keyword?: string;
     populates?: Populate;
+    select?: string;
 }
 
 export enum DepartmentEnumType {
