@@ -57,13 +57,13 @@ const SocialRepository = {
     },
     async listReactions(payload: ListReactionPayload): Promise<ListResponse> {
         const { data } = await API.get<ListResponse>(
-            `${mediaURL}/reaction?${convertObToUrl(payload)}`
+            `${mediaURL}/reactions?${convertObToUrl(payload)}`
         );
         return data;
     },
     async reactionMedia(payload: MediaReactionPayload): Promise<any> {
         const { data } = await API.post<any>(
-            `${mediaURL}/reaction`,
+            `${mediaURL}/reactions`,
             payload
         );
         return data;
