@@ -1,13 +1,20 @@
 import API from "../repository";
 import { convertObToUrl } from "helpers";
 import {
-    DeleteRevokeMessagePayload, DeleteRevokeMessageResponse,
+    DeleteRevokeMessagePayload,
+    DeleteRevokeMessageResponse,
     ListMessagePayload,
-    ListMessageResponse, PinnedMessagePayload, PinnedMessageResponse,
+    ListMessageResponse,
+    PinnedMessagePayload,
+    PinnedMessageResponse,
     SendNormalMessagePayload,
     SendNormalMessageResponse,
     ShareMessagePayload,
-    ShareMessageResponse, UpdatePinnedMessagePayload, UpdatePinnedMessageResponse,
+    ShareMessageResponse,
+    UpdatePinnedMessagePayload,
+    UpdatePinnedMessageResponse,
+    UpdatePollPayload,
+    UpdatePollResponse,
     UpdateReminderMessagePayload,
     UpdateReminderMessageResponse
 } from "typings/apis/messages/listMessage";
@@ -20,6 +27,7 @@ const shareMessage = "/api/chatting/conversations/share-message-conversation";
 const updatePinMessage = "/api/chatting/conversations/update-pin-message-conversation";
 const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
+const updatePoll = "/api/chatting/conversations/update-message-poll-conversation";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -89,6 +97,15 @@ const ListMessageRepository = {
         `${revokeMessage}`,
         {...payload}
         );
+
+        return data;
+    },
+
+    async updatePoll(payload: UpdatePollPayload) : Promise<UpdatePollResponse> {
+        const {data} = await API.put(
+            `${updatePoll}`,
+            {...payload}
+        )
 
         return data;
     }
