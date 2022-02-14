@@ -1370,7 +1370,14 @@ input[type="text"] {
   bottom: -7px;
   /*transform: translateX(80px);*/
 }
+.emoji-action, .emoji-group {
+  transition: all 0.3s ease-in-out;
+}
 .message-container:hover .emoji-group {
+  opacity: 1;
+  visibility: visible;
+}
+.message-container:hover .emoji-action {
   opacity: 1;
   visibility: visible;
 }
@@ -1379,4 +1386,20 @@ input[type="text"] {
 }
 .main-message.show-menu .chat-basic-infor {
   max-width: calc(100% - 404px);
+}
+.message-container .emoji-action {
+  right: -20px;
+  bottom: 5px;
+}
+.message-container .emoji-action .other-emojis{
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+.message-container .emoji-action:hover .other-emojis{
+  opacity: 100;
+  visibility: visible;
+  height: 144px;
+}
+.message-container.my-message .emoji-action {
+  left: -20px;
 }
