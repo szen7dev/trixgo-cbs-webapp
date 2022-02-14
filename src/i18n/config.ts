@@ -9,6 +9,7 @@ import resetPasswordEN from "./en/reset-password.json";
 import resetPasswordVN from "./vn/reset-password.json";
 
 import humanVN from './vn/human.json';
+import documentVN from './vn/document.json';
 
 export const resources = {
   en: {
@@ -16,12 +17,14 @@ export const resources = {
     register: registerEN,
     resetPassword: resetPasswordEN,
     human: humanVN,
+    document: documentVN,
   },
   vn: {
     signIn: signInVN,
     register: registerVN,
     resetPassword: resetPasswordVN,
     human: humanVN,
+    document: documentVN,
   },
 } as const;
 
