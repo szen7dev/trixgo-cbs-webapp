@@ -65,6 +65,11 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
             }
         })
 
+        //Kiểm tra xem chọn gì chưa
+        if (Object.values(newVote).every(vote => vote === undefined)) {
+            didChange = false;
+        }
+
         return {
             didChange,
             defaultUserVote,
