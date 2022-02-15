@@ -9,7 +9,8 @@ import {
     PostResponse, 
     CommentPayload,
     ListCommentsPayload,
-    MediaReactionPayload
+    MediaReactionPayload,
+    ListSeenPayload
 } from "typings/social";
 import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "helpers";
@@ -37,6 +38,13 @@ const SocialRepository = {
         );
         return data;
     },
+    async updateViewMedia(id: string): Promise<PostResponse> {
+        const { data } = await API.put<PostResponse>(
+            `${mediaURL}/views`,
+            { mediaID: id }
+        );
+        return data;
+    },
     async deleteMedia(id: string): Promise<infoMediaResponse> {
         const { data } = await API.delete<infoMediaResponse>(
             `${mediaURL}?mediaID=${id}`
@@ -52,6 +60,12 @@ const SocialRepository = {
     async listMedias(payload: ListMediasPayload): Promise<ListResponse> {
         const { data } = await API.get<ListResponse>(
             `${mediaURL}?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+    async listSeensMedia(payload: ListSeenPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${mediaURL}/seens?${convertObToUrl(payload)}`
         );
         return data;
     },

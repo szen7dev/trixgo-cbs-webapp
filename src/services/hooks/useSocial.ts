@@ -13,14 +13,21 @@ import {
 import { CommentProps } from 'typings/common';
 
 type UseSocial = {
-    createMedia: (payload: MediaPayload) => Promise<void>,
-    updateMedia: (payload: MediaPayload) => Promise<void>,
-    deleteMedia: (id: string) => Promise<void>,
-    listMedias: Array<MediaProps>,
+    // SEEN
+    listSeens: Array<any>,
+    totalRecordSeen: number,
+    refetchListSeens: () => void,
+    nextPageListSeens: (options?: FetchNextPageOptions | undefined) => void,
+    // REACTION
     reactionMedia: (payload: MediaReactionPayload) => Promise<void>,
     listReactions: Array<any>,
     refetchListReactions: () => void,
     nextPageListReactions: (options?: FetchNextPageOptions | undefined) => void,
+    // MEDIA
+    createMedia: (payload: MediaPayload) => Promise<void>,
+    updateMedia: (payload: MediaPayload) => Promise<void>,
+    deleteMedia: (id: string) => Promise<void>,
+    listMedias: Array<MediaProps>,
     isLoadingListMedias: boolean,
     refetchListMedias: () => void,
     nextPageListMedias: (options?: FetchNextPageOptions | undefined) => void,
@@ -62,7 +69,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         fetchPreviousPage: prevPageListMedias,
         hasNextPage: hasNextPage
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+        useInfiniteQuery(
             key || "list_medias",
             async ({ pageParam }: any) =>
                 SocialRepository.listMedias({ 
@@ -85,7 +92,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         refetch: refetchListReactions,
         fetchNextPage: nextPageListReactions,
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+        useInfiniteQuery(
             ["list_reactions", key],
             async ({ pageParam }: any) =>
                 SocialRepository.listReactions({ 
@@ -94,6 +101,34 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
                     populates: JSON.stringify({
                         path: 'reaction userCreate',
                         select: '_id type fullname bizfullname image'
+                    }),
+                    ...params,
+                }),
+            {
+                getNextPageParam: (params: any) => {
+                    const nextCursor = params?.data?.nextCursor;
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+
+    // Get danh sách seen media
+    const {
+        data: dataListSeens,
+        refetch: refetchListSeens,
+        fetchNextPage: nextPageListSeens,
+    } =
+        useInfiniteQuery(
+            ["list_seens_media", key],
+            async ({ pageParam }: any) =>
+                SocialRepository.listSeensMedia({ 
+                    limit: 20,
+                    lastestID: pageParam ? pageParam : "",
+                    populates: JSON.stringify({
+                        path: 'userCreate',
+                        select: '_id fullname bizfullname image'
                     }),
                     ...params,
                 }),
@@ -177,21 +212,38 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         }
     };
 
-    const listMedias = [].concat(...(dataListMedias?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const listMedias = []
+        .concat(...(dataListMedias?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const listSeens = []
+        .concat(...(dataListSeens?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecordSeen = dataListSeens?.pages[0]?.data?.totalRecord;
     const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
     const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
 
     const listReactions = [].concat(...(dataListReactions?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
 
     return {
+        // SEEN MEDIA
+        listSeens,
+        totalRecordSeen,
+        refetchListSeens,
+        nextPageListSeens,
+        // REACTION
+        listReactions,
+        refetchListReactions,
+        nextPageListReactions,
+        // MEDIA
         createMedia,
         updateMedia,
         deleteMedia,
         reactionMedia,
         listMedias,
-        listReactions,
-        refetchListReactions,
-        nextPageListReactions,
         isLoadingListMedias,
         refetchListMedias,
         nextPageListMedias,
@@ -239,7 +291,7 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         fetchNextPage: nextPageListComments,
         fetchPreviousPage: prevPageListComments,
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+        useInfiniteQuery(
             (payload && payload.key) || "list_comments",
             async ({ pageParams }: any) => 
             SocialRepository.listComments({ 

@@ -86,6 +86,14 @@ export type ReactionProps = {
   };
 };
 
+export type ListSeenPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
+};
+
 export type ListReactionPayload = {
   lastestID?: string;
   limit?: number;
