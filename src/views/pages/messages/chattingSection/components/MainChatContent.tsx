@@ -23,6 +23,7 @@ import surprise from "assets/emoji/surprise.png";
 import ReminderNoti from "./reminder/ReminderNoti";
 import Poll from "./poll/Poll";
 import PollNoti from "./poll/PollNoti";
+import {action} from "@storybook/addon-actions";
 
 export const listEmoji = [
     {
@@ -167,7 +168,12 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
-                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+                // eslint-disable-next-line no-case-declarations
+                let didAccept = message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id);
+                if (!didAccept) {
+                    didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
+                }
+                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
     return (
