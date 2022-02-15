@@ -12,6 +12,7 @@ import DeleteAndRevokeMessageConfirm from "../chattingSection/components/DeleteA
 import PollCreate from "../chattingSection/components/poll/PollCreate";
 import ReminderCreate from "../chattingSection/components/reminder/ReminderCreate";
 import SendContactMessage from "../chattingSection/components/SendContactMessage";
+import Editor from "@draft-js-plugins/editor";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -19,23 +20,28 @@ export const MessageContext = createContext<{
     showMenu: boolean;
     setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
     socketRef: any;
+    editorRef: any;
+    setEditorRef: React.Dispatch<React.SetStateAction<any>>;
 }>({
     currentChat: '',
     setCurrentChat: () => undefined,
     showMenu: false,
     setShowMenu: () => undefined,
     socketRef: null,
+    editorRef: null,
+    setEditorRef: () => undefined
 });
 
 const MessagesHome:FC = () => {
     const location = useLocation();
     const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
     const [showMenu, setShowMenu] = useState(false);
+    const [editorRef, setEditorRef] = useState<Editor>();
     const socketRef = useSocket();
 
     const value = useMemo(
-        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef}),
-        [currentChat, showMenu, socketRef]
+        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef}),
+        [currentChat, showMenu, socketRef, editorRef]
     );
 
     useEffect(() => {

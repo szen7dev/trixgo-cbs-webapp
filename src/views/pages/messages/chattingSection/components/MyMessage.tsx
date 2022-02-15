@@ -20,8 +20,9 @@ type Props = {
 const MyMessage:FC<Props> = ({message}) => {
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const editor = editorRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -57,7 +58,7 @@ const MyMessage:FC<Props> = ({message}) => {
                     }
                 }}
                 className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative message-container my-message"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>} className={"mb-2 transition duration-500"}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>

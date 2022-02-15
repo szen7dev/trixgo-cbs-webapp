@@ -4,15 +4,12 @@ import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissSendContactMessage} from "redux/reducer/messages/ContactMessage";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {map as _map} from "lodash";
-import SearchChatItem from "../../list/components/SearchUserConversation/searchChatItem";
-import {ItemListConversation} from "typings/apis/messages/listConversation";
-import SelectedShareConversationItem from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
 import {MessageContext} from "../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
+import {useUser} from "services/hooks/useUser";
 
 const SendContactMessage:FC = () => {
     const dispatch = useDispatch();
@@ -23,57 +20,55 @@ const SendContactMessage:FC = () => {
     const profileId = profile?._id;
 
     const [searchTerm, setSearchTerm] = useState('');
-    const paramsListConversation = {limit: 10, keyword: searchTerm};
-    const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation);
-    const [selectedConversations, setSelectedConversations] = useState<{[key: string]: ItemListConversation}>({});
+    const [pageParam, setPageParam] = useState('');
+    const params = {limit: 10, select: 'fullname email phone image', lastestID: pageParam, keyword: searchTerm}
+    const { listFriends, nextCursor } = useUser(params, pageParam);
+    const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
-    const {socketRef, currentChat} = useContext(MessageContext);
+    const {socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
 
-    const handleAddConversation = (conversation: ItemListConversation) => {
-        const selected = {...selectedConversations};
-        if (Object.keys(selected).includes(conversation._id)) {
-            delete selected[conversation._id];
+    const handleAddFriendToConversation = (value: boolean, friend: any) => {
+        const selected = {...selectedFriends};
+        if (value) {
+            selected[friend._id] = friend;
         } else {
-            selected[conversation._id] = conversation;
+            delete selected[friend._id];
         }
         setSearchTerm("");
-        setSelectedConversations(selected);
-    };
-
-    const removeSelectedConversation = (_id: string) => {
-        const selected = {...selectedConversations};
-        delete selected[_id];
-        setSelectedConversations(selected);
-    };
+        setSelectedFriends(selected);
+    }
 
     const forwardMessagesToConversation = () => {
-        const message: any = {
-            tmpid: uuidv4(),
-            conversationID: conversationId,
-            sender: {
-                _id: profileId
-            },
-            type: 7,
-            usersAssigned: Object.keys(selectedConversations)
-        };
-        dispatch(appendFakeMessageToConversation({
-            conversationId: conversationId,
-            messageId: message.tmpid,
-            messageData: {
-                ...message,
-                _id: message.tmpid,
-                createAt: new Date(),
-                consversation: conversationId,
+        Object.keys(selectedFriends).forEach(friendId => {
+            const message: any = {
+                tmpid: uuidv4(),
+                conversationID: conversationId,
                 sender: {
-                    _id: profileId,
+                    _id: profileId
                 },
-                usersAssigned: Object.values(selectedConversations)
-            }
-        }));
-        socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        setSelectedConversations({});
+                type: 7,
+                usersAssigned: [friendId]
+            };
+            dispatch(appendFakeMessageToConversation({
+                conversationId: conversationId,
+                messageId: message.tmpid,
+                messageData: {
+                    ...message,
+                    _id: message.tmpid,
+                    createAt: new Date(),
+                    consversation: conversationId,
+                    sender: {
+                        _id: profileId,
+                    },
+                    usersAssigned: selectedFriends[friendId]
+                }
+            }));
+            socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
+        })
+        setSelectedFriends({});
         dispatch(dismissSendContactMessage({}));
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: conversationId, select: JSON.stringify({ sender:"bizfullname" }) });
     };
 
     return (
@@ -114,7 +109,7 @@ const SendContactMessage:FC = () => {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                     >
-                        <div className={"max-w-[521px] min-w-[420px] rounded-md shadow-lg bg-white py-[22px] z-51"}>
+                        <div className={"w-[462px] rounded-md shadow-lg bg-white py-[22px] z-51"}>
                             <div className={"flex w-full items-center px-[22px]"}>
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
@@ -123,84 +118,64 @@ const SendContactMessage:FC = () => {
                                     <Close/>
                                 </button>
                                 <div className={"flex-1 text-left text-lg font-bold"}>
-                                    <input
-                                        onChange={event => setSearchTerm(event.target.value)}
-                                        className={"w-full focus:outline-none"}
-                                        placeholder={"Gửi tới"}
-                                    />
+                                    Tin nhắn danh bạ
                                 </div>
                                 <button
-                                    disabled={Object.keys(selectedConversations).length <= 0}
+                                    disabled={Object.keys(selectedFriends).length <= 0}
                                     onClick={() => forwardMessagesToConversation()}
-                                    className={"h-[32px] rounded-md text-primary font-semibold disabled:bg-transparent disabled:text-gray-500"}
+                                    className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
-                                    Gửi
+                                    Xác nhận
                                 </button>
                             </div>
                             <div
-                                className={"px-[22px] mt-[15px] w-full flex flex-wrap"}
+                                className={"border-b border-gray-200 py-[15px] px-[20px] w-full flex flex-wrap"}
                             >
                                 {
-                                    _map(Object.values(selectedConversations), conversation => (
-                                        <SelectedShareConversationItem key={conversation._id} conversation={conversation} removeSelectedConversation={removeSelectedConversation}/>
+                                    _map(Object.values(selectedFriends), friend => (
+                                        <div key={friend._id} className={"flex items-center bg-gray-100 rounded-full pr-3 mr-2 mb-1"}>
+                                            <img className={"w-[30px] h-[30px] rounded-full overflow-hidden"} alt={friend.bizfullname||friend.fullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
+                                            <div className={"flex-1 mx-2"}>{friend.bizfullname||friend.fullname}</div>
+                                        </div>
                                     ))
                                 }
+                                <input
+                                    type={"text"}
+                                    className={"focus:outline-none"}
+                                    placeholder={"Thêm người"}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                             </div>
-                            <div className={"max-h-[500px] min-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
+                            <div className={"max-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
                                 <div className={"px-[5px]"}>
                                     {
-                                        _map(listConversations.filter(conversation => conversation._id !== currentChat), conversation => (
-                                            <div key={conversation._id} className={"relative"}>
-                                                <SearchChatItem
-                                                    avatarClassname={"w-[40px] h-[40px]"}
-                                                    avatarClassnameMap={{
-                                                        "group_1": {
-                                                            imgWidth: "w-full h-full",
-                                                            groupPosition: [""]
-                                                        },
-                                                        "group_2": {
-                                                            imgWidth: "w-[32px] h-[32px] absolute",
-                                                            groupPosition: [
-                                                                "bottom-0 left-0 z-2",
-                                                                "top-0 right-0 z-1",
-                                                            ]
-                                                        },
-                                                        "group_3": {
-                                                            imgWidth: "w-[26px] h-[26px] absolute",
-                                                            groupPosition: [
-                                                                "bottom-0 left-12px z-3",
-                                                                "top-0 left-0 z-2",
-                                                                "top-0 right-0 z-1",
-                                                            ]
-                                                        },
-                                                        "group_4": {
-                                                            imgWidth: "w-[24px] h-[24px] absolute",
-                                                            groupPosition: [
-                                                                "bottom-0 left-0 z-4",
-                                                                "top-0 left-0 z-3",
-                                                                "top-0 right-0 z-2",
-                                                                "bottom-0 right-0 z-1"
-                                                            ]
-                                                        }
-                                                    }}
-                                                    itemClickAction={chat => {
-                                                        handleAddConversation(chat)
-                                                    }}
-                                                    chat={conversation}
+                                        _map(listFriends, friend => (
+                                            <div key={friend._id} className={"flex items-center px-[18px] py-[10px] hover:bg-gray-100 rounded-md"}>
+                                                <label className={"flex-1 flex items-center"} htmlFor={`friend-${friend._id}`}>
+                                                    <img className={"w-[44px] h-[44px] rounded-full overflow-hidden"} alt={friend.bizfullname||friend.fullname} src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`}/>
+                                                    <div className={"ml-4"}>{friend.bizfullname||friend.fullname}</div>
+                                                </label>
+                                                <input
+                                                    onChange={event => handleAddFriendToConversation(event.target.checked, friend)}
+                                                    className="form-check-input mx-4"
+                                                    type="checkbox"
+                                                    id={`friend-${friend._id}`}
+                                                    defaultChecked={Object.values(selectedFriends).includes(friend._id)}
                                                 />
-                                                <div className={"absolute inset-y-0 right-0 h-full px-[10px] flex items-center justify-center transition-opacity " + (Object.keys(selectedConversations).includes(conversation._id) ? "opacity-100": "opacity-0")}>
-                                                    <img src={CheckIcon} alt={'------'} />
-                                                </div>
                                             </div>
                                         ))
                                     }
                                     {
-                                        hasListConversationNextPage &&
-                                        <button
-                                            onClick={() => nextPageListConversations()}
-                                            className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
-                                            Xem thêm
-                                        </button>
+                                        nextCursor&&
+                                        <div className={"flex items-center justify-center mb-5"}>
+                                            <button
+                                                onClick={() => setPageParam(nextCursor)}
+                                                className={"text-primary text-center"}
+                                            >
+                                                Xem thêm
+                                            </button>
+                                        </div>
                                     }
                                 </div>
                             </div>
