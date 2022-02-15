@@ -6,15 +6,17 @@ import ReactionList from "../reactions/ReactionList";
 import ReactionActions from "../reactions/ReactionActions";
 type Props = {
     message: ItemMessage;
+    className?: string;
+    borderClass?: string;
 }
-const ContactContent:FC<Props> = ({message}) => {
+const ContactContent:FC<Props> = ({message, className, borderClass}) => {
     const {handleStartPrivateChat} = UseMessageHelper()
     return <>
         {
             _map(message.usersAssigned, user => (
                 <div key={user._id} className={"max-w-[351px] relative"}>
-                    <div className={"rounded-md overflow-hidden bg-white relative"}>
-                        <div className={"flex items-center p-[11px] border-b border-gray-100"}>
+                    <div className={"rounded-md overflow-hidden bg-white relative " + (className??"")}>
+                        <div className={"flex items-center p-[11px] border-b " + (borderClass??"border-gray-100")}>
                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={"----"} className={"w-[50px] h-[50px] min-w-[50px] rounded-full overflow-hidden"}/>
                             <div className={"ml-4"}>
                                 <div>{user.bizfullname}</div>
@@ -29,7 +31,7 @@ const ContactContent:FC<Props> = ({message}) => {
                             </button>
                         </div>
                     </div>
-                    <div className={"absolute right-2 z-10 bottom--5px"}>
+                    <div className={"absolute right-2 z-10"} style={{bottom: -5}}>
                         <ReactionList message={message}/>
                     </div>
                     <ReactionActions message={message}/>

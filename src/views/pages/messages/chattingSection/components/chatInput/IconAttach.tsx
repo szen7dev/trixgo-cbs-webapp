@@ -10,6 +10,7 @@ import FolderIcon from "assets/images/icons8-add-folder-96.svg"
 import {openCreatePoll} from "redux/reducer/messages/CreatePoll";
 import {sendContactMessageToConversation} from "redux/reducer/messages/ContactMessage";
 import {openCreateReminder} from "redux/reducer/messages/CreateReminder";
+import {sendNPSMessageToConversation} from "redux/reducer/messages/CreateNPSMessage";
 import {useDispatch} from "react-redux";
 import {MessageContext} from "../../../home/index_v2";
 
@@ -78,7 +79,7 @@ const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                     <button
                         onClick={() => {
                             setShowOption(false)
-                            dispatch(openCreatePoll({conversationId: currentChat}))
+                            dispatch(sendNPSMessageToConversation({conversationId: currentChat}))
                         }}
                         className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img  className={"mr-2"} src={NPSIcon} alt={"exit"}/>

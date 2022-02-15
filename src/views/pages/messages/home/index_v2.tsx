@@ -13,6 +13,7 @@ import PollCreate from "../chattingSection/components/poll/PollCreate";
 import ReminderCreate from "../chattingSection/components/reminder/ReminderCreate";
 import SendContactMessage from "../chattingSection/components/SendContactMessage";
 import Editor from "@draft-js-plugins/editor";
+import NPSCreate from "../chattingSection/components/nps/NPSCreate";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -61,6 +62,7 @@ const MessagesHome:FC = () => {
             <PollCreate/>
             <ReminderCreate/>
             <SendContactMessage/>
+            <NPSCreate/>
         </MessageContext.Provider>
     )
 }

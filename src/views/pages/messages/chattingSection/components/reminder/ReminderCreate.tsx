@@ -178,13 +178,13 @@ const ReminderCreate:FC = () => {
                                 <div className={"w-1/2 flex items-center"}>
                                     <input
                                         checked={notifyFor === "onlyme"}
-                                        onChange={event => setNotifyFor(event.target.value)} value={"onlyme"} type="radio" id="notifyFor-1" name={"notifyFor"} className={"form-check-input mt-0 w-[24px] h-[24px]"}/>
+                                        onChange={event => setNotifyFor(event.target.value)} value={"onlyme"} type="radio" id="notifyFor-1" name={"notifyFor"} className={"form-check-input min-w-[24px] min-h-[24px] mt-0 w-[24px] h-[24px]"}/>
                                     <label htmlFor="notifyFor-1" className={"text-left ml-3"}>Chỉ mình tôi</label>
                                 </div>
                                 <div className={"w-1/2 flex items-center"}>
                                     <input
                                         checked={notifyFor === "all"}
-                                        onChange={event => setNotifyFor(event.target.value)} value={"all"} type="radio" id="notifyFor-2" name={"notifyFor"} className={"form-check-input mt-0 w-[24px] h-[24px]"}/>
+                                        onChange={event => setNotifyFor(event.target.value)} value={"all"} type="radio" id="notifyFor-2" name={"notifyFor"} className={"form-check-input min-w-[24px] min-h-[24px] mt-0 w-[24px] h-[24px]"}/>
                                     <label htmlFor="notifyFor-2" className={"text-left ml-3"}>Tất cả thành viên</label>
                                 </div>
                             </div>

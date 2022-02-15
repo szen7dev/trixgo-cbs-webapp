@@ -3,7 +3,6 @@ import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import WordIcon from 'assets/images/CBS-Word-Icon.svg';
 import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
 import OtherIcon from 'assets/images/CBS-Other-Icon.svg';
-import SampleImage from "assets/images/icons8-image-256.svg";
 
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {map as _map} from "lodash";
