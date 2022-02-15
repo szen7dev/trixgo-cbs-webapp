@@ -12,7 +12,7 @@ export const convertObToUrl = (obj: any) => {
 };
 
 export const convertDateToString = (date: any) => {
-	return (moment(date).isValid() && moment(date).toJSON()) || ""
+	return (date && moment(date).isValid() && moment(date).toJSON()) || ""
 }
 
 export const formatNumberMoney = (number: any) => {
