@@ -11,6 +11,7 @@ import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
+import ContactContent from "./chatContent/contactContent";
 
 type Props = {
     message: ItemMessage;
@@ -19,8 +20,9 @@ type Props = {
 const MyMessage:FC<Props> = ({message}) => {
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const editor = editorRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -36,7 +38,9 @@ const MyMessage:FC<Props> = ({message}) => {
             case 2:
                 return <FileChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 1:
-                return <ImagesContent message={message} isMyMessage={true}/>
+                return <ImagesContent message={message} isMyMessage={true}/>;
+            case 7:
+                return <ContactContent message={message}/>;
         }
     }, [message]);
 
@@ -54,7 +58,7 @@ const MyMessage:FC<Props> = ({message}) => {
                     }
                 }}
                 className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative message-container my-message"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>} className={"mb-2 transition duration-500"}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>

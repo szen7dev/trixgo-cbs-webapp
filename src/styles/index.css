@@ -1320,7 +1320,7 @@ input[type="text"] {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: 645px;
+  max-width: calc(100% - 106px);
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
@@ -1371,7 +1371,7 @@ input[type="text"] {
   /*transform: translateX(80px);*/
 }
 .emoji-action, .emoji-group {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 .message-container:hover .emoji-group {
   opacity: 1;
@@ -1392,7 +1392,7 @@ input[type="text"] {
   bottom: 5px;
 }
 .message-container .emoji-action .other-emojis{
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   overflow: hidden;
 }
 .message-container .emoji-action:hover .other-emojis{

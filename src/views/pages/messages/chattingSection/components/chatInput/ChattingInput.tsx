@@ -291,7 +291,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
                 <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
                     <SelectedActionGroup/>
-                    <div className={"flex-1 message-input rounded-md bg-white flex items-end relative flex-col"}>
+                    <div className={"flex-1 message-input max-w-[585px] rounded-md bg-white flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
                         <ReplyChat replyData={replyData}/>
                         <div className={"flex w-full"}>
@@ -299,7 +299,6 @@ const ChattingInput:FC<Props> = ({chat}) => {
                                 onPasteFiles={(files) => handleSetFiles(files)}
                                 onPressEnter={() => handleSendMessage()}
                                 mentions={suggestionsData()}
-                                replyData={replyData}
                             />
                             <IconAttach
                                 handleUploadFiles={(files) => handleSetFiles(files)}
