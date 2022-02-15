@@ -141,7 +141,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 											}}
 											wrapperClass='inset-0 justify-center items-center'
 										>
-											<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].path} />
+											<img className="max-h-full object-contain w-max" alt="..." src={`${process.env.REACT_APP_URL_S3}/${images[imageIndex].path}`} />
 										</TransformComponent>
 									</React.Fragment>
 								)
