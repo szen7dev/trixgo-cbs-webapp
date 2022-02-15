@@ -30,11 +30,28 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
     const {updatePinMessage} = UseConversation();
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
+
     const isPin = useCallback(() => {
         if (!listPinnedMessage) return false;
         const pinIds = listPinnedMessage.map(message => message._id);
         return pinIds.includes(message._id)
     }, [message, listPinnedMessage]);
+
+    const usersSeen = useCallback(() => {
+        if (!message.usersSeen) return [];
+        const users : {_id: string; bizfullname: string; fullname: string; image: string}[] = [];
+        message.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+            if (typeof user === "string") {
+                const find = chat.members.find(member => member._id === user);
+                users.push(find);
+            } else {
+                users.push(user)
+            }
+        })
+
+        return  users;
+    }, [message])
 
     const doUpdatePinMessage = () => {
         updatePinMessage({conversationID: message.conversation, messageID: message._id, isPin: !isPin()}).then((data) => {
@@ -50,7 +67,7 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                     _map(listEmoji, emoji => (
                         <button
                             onClick={() => {
-                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value});
+                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
                                 setTimeout(() => {
                                     closeRightClick();
                                 }, 100)
@@ -116,20 +133,26 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
                 </button>
                 <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
-                    <div className={"mr-4 ml-4"}>{message.usersSeen?.length} đã xem</div>
-                    <div className={"flex -space-x-1"}>
-                        {
-                            _map(message.usersSeen.slice(0, 5), user => (
-                                <img key={user._id} alt={"------"} src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} className={"w-[16px] h-[16px] rounded-full overflow-hidden border border-white"}/>
-                            ))
-                        }
-                        {
-                            message.usersSeen.length - 5 > 0 &&
-                            <div className={"w-[16px] h-[16px] text-xs rounded-full overflow-hidden bg-gray-300 text-gray-500 border border-white"}>
-                                {message.usersSeen.length - 5}+
-                            </div>
-                        }
-                    </div>
+                    <div className={"mr-4 ml-4"}>{usersSeen().length} đã xem</div>
+                    {
+                        usersSeen().length > 0&&
+                        <div className={"flex -space-x-1"}>
+                            {
+                                _map(usersSeen().slice(0, 5), (user, index) => (
+                                    <img key={index} alt={"------"}
+                                         src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+                                         className={"w-[16px] h-[16px] rounded-full overflow-hidden border border-white"}/>
+                                ))
+                            }
+                            {
+                                usersSeen().length - 5 > 0 &&
+                                <div
+                                    className={"w-[16px] h-[16px] text-xs rounded-full overflow-hidden bg-gray-300 text-gray-500 border border-white"}>
+                                    {usersSeen().length - 5}+
+                                </div>
+                            }
+                        </div>
+                    }
                 </button>
                 <button
                     onClick={() => {

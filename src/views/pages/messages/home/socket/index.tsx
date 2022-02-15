@@ -108,6 +108,7 @@ const SocketController:FC = () => {
     }
 
     const onReceiveReactionMessage = (data: any) => {
+        console.log(data.data)
         dispatch(updateNewMessageToConversation({
             conversationId: data.data.conversation._id,
             newMessageId: data.data._id,

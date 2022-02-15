@@ -68,11 +68,11 @@ export type ItemMessage = {
     updatedAt: string;
     __v: number;
     reminder: {
-        accepts: string[]
+        accepts: any[]
         content: string
         createdAt: string
         notifyFor: string
-        rejects: string[]
+        rejects: any[]
         remindTime: string
         repeat: string
         state: number
