@@ -11,6 +11,7 @@ import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
+import ContactContent from "./chatContent/contactContent";
 
 type Props = {
     message: ItemMessage;
@@ -36,7 +37,9 @@ const MyMessage:FC<Props> = ({message}) => {
             case 2:
                 return <FileChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 1:
-                return <ImagesContent message={message} isMyMessage={true}/>
+                return <ImagesContent message={message} isMyMessage={true}/>;
+            case 7:
+                return <ContactContent message={message}/>;
         }
     }, [message]);
 

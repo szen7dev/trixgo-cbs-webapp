@@ -11,6 +11,7 @@ import ShareMessage from "../chattingSection/components/ShareMessage";
 import DeleteAndRevokeMessageConfirm from "../chattingSection/components/DeleteAndRevokeMessage";
 import PollCreate from "../chattingSection/components/poll/PollCreate";
 import ReminderCreate from "../chattingSection/components/reminder/ReminderCreate";
+import SendContactMessage from "../chattingSection/components/SendContactMessage";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -53,6 +54,7 @@ const MessagesHome:FC = () => {
             <DeleteAndRevokeMessageConfirm/>
             <PollCreate/>
             <ReminderCreate/>
+            <SendContactMessage/>
         </MessageContext.Provider>
     )
 }

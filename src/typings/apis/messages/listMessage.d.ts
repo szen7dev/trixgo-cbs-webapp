@@ -31,7 +31,48 @@ export type ItemMessage = {
         status: number;
         type: number;
         updatedAt: string;
-        usersAssigned: any[];
+        usersAssigned: {
+            amountAppUse: number
+            birthDay: string
+            bizfullname: string
+            bookmarks: any[]
+            company: string
+            converMiss: any[]
+            createAt: string
+            department: string
+            departmentContacts: any[]
+            devices: any[]
+            displayHomeConfig: number
+            displayPcmConfig: number
+            email: string
+            emailConfig: number
+            friends: string[]
+            fullname: string
+            gender: number
+            image: string
+            lang: string
+            lastLog: string
+            level: number
+            modifyAt: string
+            noticeConfig: number
+            numLog: number
+            password: string
+            platform: number
+            position: string
+            receiveFromFriends: any[]
+            recentlyFriends: any[]
+            reputation: number
+            sendToFriends: any[]
+            signature: string
+            status: number
+            storageUse: number
+            tags: any[]
+            updatedAt: string
+            userUpdate: string
+            username: string
+            __v: number
+            _id: string
+        }[];
         usersDelete: any[];
         usersSeen: string[];
         __v: number;
@@ -111,6 +152,48 @@ export type ItemMessage = {
         __v: number
         _id: string
     }
+    usersAssigned: {
+        amountAppUse: number
+        birthDay: string
+        bizfullname: string
+        bookmarks: any[]
+        company: string
+        converMiss: any[]
+        createAt: string
+        department: string
+        departmentContacts: any[]
+        devices: any[]
+        displayHomeConfig: number
+        displayPcmConfig: number
+        email: string
+        emailConfig: number
+        friends: string[]
+        fullname: string
+        gender: number
+        image: string
+        lang: string
+        lastLog: string
+        level: number
+        modifyAt: string
+        noticeConfig: number
+        numLog: number
+        password: string
+        platform: number
+        position: string
+        receiveFromFriends: any[]
+        recentlyFriends: any[]
+        reputation: number
+        sendToFriends: any[]
+        signature: string
+        status: number
+        storageUse: number
+        tags: any[]
+        updatedAt: string
+        userUpdate: string
+        username: string
+        __v: number
+        _id: string
+    }[]
     [key: string]: any;
 }
 export type ListMessageData = {

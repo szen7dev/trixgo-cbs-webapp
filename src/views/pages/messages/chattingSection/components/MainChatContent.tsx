@@ -160,6 +160,12 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 return <Reminder message={message}/>;
             case 5:
                 return <Poll message={message} chat={chat}/>;
+            case 7:
+                if (message.sender._id === profileId) {
+                    return <MyMessage message={message}/>
+                } else {
+                    return <OthersMessage message={message}/>
+                }
             case 108:
                 return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:

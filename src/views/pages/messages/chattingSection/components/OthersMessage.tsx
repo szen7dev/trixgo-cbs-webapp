@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
+import ContactContent from "./chatContent/contactContent";
 
 type Props = {
     message: ItemMessage;
@@ -38,7 +39,9 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
             case 2:
                 return <FileChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 1:
-                return <ImagesContent message={message} showSenderName={true}/>
+                return <ImagesContent message={message} showSenderName={true}/>;
+            case 7:
+                return <ContactContent message={message}/>;
         }
     },[message]);
 
