@@ -223,7 +223,7 @@ const PollAction:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
                                                 <input
                                                     onChange={event => handleSelectOption(event.target.checked, option)}
                                                     defaultChecked={userVote[option._id].find(vote => vote._id === profileId) !== undefined}
-                                                    type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer w-[24px] h-[24px] bg-white border-white checked:bg-primary" />
+                                                    type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer w-[24px] h-[24px] min-w-[24px] min-h-[24px] bg-white border-white checked:bg-primary" />
                                                 <div className={"truncate flex-1 ml-2"}>
                                                     {option.title}
                                                 </div>

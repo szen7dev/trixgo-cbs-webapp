@@ -10,6 +10,7 @@ import DeleteAndRevokeMessageSlice from './messages/DeleteAndRevokeMessage';
 import CreatePollSlice from './messages/CreatePoll';
 import CreateReminderSlice from './messages/CreateReminder';
 import CreateNPSMessageSlice from './messages/CreateNPSMessage';
+import DetailNPSMessageSlice from './messages/DetailNPSMessage';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     createPoll: CreatePollSlice,
     createReminder: CreateReminderSlice,
     createNPSMessage: CreateNPSMessageSlice,
+    detailNPSMessage: DetailNPSMessageSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

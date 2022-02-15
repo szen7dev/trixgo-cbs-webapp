@@ -12,6 +12,7 @@ import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
 import ContactContent from "./chatContent/contactContent";
+import NpsContent from "./chatContent/npsContent";
 
 type Props = {
     message: ItemMessage;
@@ -40,7 +41,9 @@ const MyMessage:FC<Props> = ({message}) => {
             case 1:
                 return <ImagesContent message={message} isMyMessage={true}/>;
             case 7:
-                return <ContactContent message={message}/>;
+                return <ContactContent message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"}/>;
+            case 999999:
+                return <NpsContent message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"} isMyMessage={true}/>;
         }
     }, [message]);
 
