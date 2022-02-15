@@ -50,7 +50,7 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
 }
 
 async function requestUpdateAccountingVoucher(formData: any): Promise<any> {
-    const { data } = await API.put(
+    const { data } = await API.post(
         `${APP_ACCOUNTING}/update`,
         {
             ...formData
@@ -59,9 +59,9 @@ async function requestUpdateAccountingVoucher(formData: any): Promise<any> {
     return data;
 }
 
-async function requestDeleteAccountingVoucher(contractID: string): Promise<any> {
+async function requestDeleteAccountingVoucher(voucherID: string): Promise<any> {
     const { data } = await API.delete(
-        `${APP_ACCOUNTING}/remove?contractIpcID=${contractID}`)
+        `${APP_ACCOUNTING}/remove?voucherID=${voucherID}`)
     return data;
 }
 

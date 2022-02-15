@@ -13,6 +13,8 @@ import CreateNewTicketTableAccount from "./CreateNewTicketTableAccount";
 import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES, LIMIT_DROPDOWN } from "apis/localdb/index";
 import { ErrorMessage, Field, FieldArray } from "formik";
 
+import TagIcon from "assets/images/icons8-price-tag-96.svg";
+
 import {
 	useQueryListContact,
 	useQueryListContract,
@@ -24,8 +26,6 @@ import {
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const { handleBlur, setFieldValue, values } = formik;
-
-	// const [listContractIPC, setListContractIPC] = useState([]);
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
 		initialValues?.department?.name || ""
@@ -76,10 +76,29 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("type", '')}
-							showTriangle={true}
+							showTriangle={false}
 							maxWidthInput="max-w-none"
 							initialValue={initialValues?.type}
-							renderSelectedItem={(item) => <span>{item.text}</span>}
+							renderSelectedItem={(item) => (
+								<div
+									style={{ maxWidth: '300px' }}
+									className="flex items-center"
+								>
+									<img alt="Tag" src={TagIcon} className="mr-1" />
+									<p
+										style={{
+											textOverflow: "ellipsis",
+											maxWidth: "100%",
+											minWidth: 0,
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											flex: "1 1 auto",
+										}}
+									>
+										{item.text}
+									</p>
+								</div>
+							)}
 							data={VOUCHER_TYPES}
 							formatItem={{
 								id: "value",
@@ -95,15 +114,15 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					</div>
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"w-1/3 flex items-center"}>
-							<Field type="radio" id="vat-type-1" name="vat" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 1)} />
+							<Field type="radio" name="vat" value={1} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 1)} />
 							<label htmlFor="vat-type-1" className={"text-left ml-3"}>VAT mua vào</label>
 						</div>
 						<div className={"w-1/3 flex items-center"}>
-							<Field type="radio" id={"vat-type-2"} name="vat" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 2)} />
+							<Field type="radio" name="vat" value={2} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 2)} />
 							<label htmlFor="vat-type-2" className={"text-left ml-3"}>VAT bán ra</label>
 						</div>
 						<div className={"w-1/3 flex items-center"}>
-							<Field type="radio" id={"vat-type-3"} name="vat" value={0} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 0)} />
+							<Field type="radio" name="vat" value={0} className={"form-check-input mt-0"} onChange={() => setFieldValue('vat', 0)} />
 							<label htmlFor="vat-type-3" className={"text-left ml-3"}>Hủy</label>
 						</div>
 					</div>
@@ -136,9 +155,28 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("customer", '')}
-							showTriangle={true}
+							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => <span>{item.text}</span>}
+							renderSelectedItem={(item) => (
+								<div
+									style={{ maxWidth: '300px' }}
+									className="flex items-center"
+								>
+									<img alt="Tag" src={TagIcon} className="mr-1" />
+									<p
+										style={{
+											textOverflow: "ellipsis",
+											maxWidth: "100%",
+											minWidth: 0,
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											flex: "1 1 auto",
+										}}
+									>
+										{item.text}
+									</p>
+								</div>
+							)}
 							onSearchInputChange={debounce(
 								(value) => setSearchCustomerValue(value),
 								500
@@ -169,9 +207,28 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("contract", '')}
-							showTriangle={true}
+							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => <span>{item.text}</span>}
+							renderSelectedItem={(item) => (
+								<div
+									style={{ maxWidth: '300px' }}
+									className="flex items-center"
+								>
+									<img alt="Tag" src={TagIcon} className="mr-1" />
+									<p
+										style={{
+											textOverflow: "ellipsis",
+											maxWidth: "100%",
+											minWidth: 0,
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											flex: "1 1 auto",
+										}}
+									>
+										{item.text}
+									</p>
+								</div>
+							)}
 							onSearchInputChange={debounce(
 								(value) => setSearchContractValue(value),
 								500
@@ -197,9 +254,28 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("ipc", '')}
-							showTriangle={true}
+							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => <span>{item.text}</span>}
+							renderSelectedItem={(item) => (
+								<div
+									style={{ maxWidth: '300px' }}
+									className="flex items-center"
+								>
+									<img alt="Tag" src={TagIcon} className="mr-1" />
+									<p
+										style={{
+											textOverflow: "ellipsis",
+											maxWidth: "100%",
+											minWidth: 0,
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											flex: "1 1 auto",
+										}}
+									>
+										{item.text}
+									</p>
+								</div>
+							)}
 							onSearchInputChange={debounce(
 								(value) => setSearchContractValue(value),
 								500
@@ -219,20 +295,39 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Phân loại khác</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("subType", value.id)}
+							onchangeValue={(value: any) => setFieldValue("subtype", value.id)}
 							className={"flex-1"}
 							placeholder="Phân loại khác"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
-							onClearData={() => setFieldValue("subType", '')}
-							showTriangle={true}
+							onClearData={() => setFieldValue("subtype", '')}
+							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => <span>{item.text}</span>}
+							renderSelectedItem={(item) => (
+								<div
+									style={{ maxWidth: '300px' }}
+									className="flex items-center"
+								>
+									<img alt="Tag" src={TagIcon} className="mr-1" />
+									<p
+										style={{
+											textOverflow: "ellipsis",
+											maxWidth: "100%",
+											minWidth: 0,
+											whiteSpace: "nowrap",
+											overflow: "hidden",
+											flex: "1 1 auto",
+										}}
+									>
+										{item.text}
+									</p>
+								</div>
+							)}
 							onSearchInputChange={debounce(
 								(value) => setSearchSubTypeValue(value),
 								500
 							)}
-							initialValue={initialValues?.subType}
+							initialValue={initialValues?.subtype}
 							data={listSubType.map((item: any) => ({
 								label: item.name,
 								value: item._id,
@@ -251,9 +346,8 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						<DatePicker
 							wrapperClassName={"w-auto"}
 							name="date"
-							selected={values.date}
 							showTimeSelect
-							timeIntervals={30}
+							timeIntervals={1}
 							customInput={
 								<div className={"relative w-auto ml-2 min-h-fit"}>
 									<Field

@@ -9,29 +9,27 @@ import { Form, Formik } from "formik";
 import { string, object, number, array } from 'yup';
 import { MESSAGE_ERROR } from "helpers/constants"
 import { convertDateToString } from "helpers/index"
-import {
-  useDetailAccountingVoucherMutation
-} from "services/hooks/useAccountingVoucher";
 import { isEmpty } from "lodash";
 import API from "apis/repository";
 
 const mappingData = (data: any) => {
   return {
+    voucherID: data._id || data.voucherID || '',
     type: Number(data.type) || 0,
-    vat: 0,
+    vat: Number(data.vat) || 0,
     advancePayment: data.advancePayment ? true : false,
     forward: data.forward ? true : false,
     returning: data.returning ? true : false,
     cancel: data.cancel ? true : false,
 
-    customer: data.customer || '',
-    contract: data.contract || '',
+    customer: data?.customer?._id || data?.customer || '',
+    contract: data?.contract?._id || data?.contract || '',
     ipc: data.ipc || '',
     subtype: data.subtype || '',
 
     date: convertDateToString(data.date) || '',
     signInvoice: data.signInvoice || '',
-    dateInvoice: data.dateInvoice || '',
+    dateInvoice: convertDateToString(data.dateInvoice) || '',
     receiver: data.receiver || '',
 
     name: data.name || '',
@@ -41,22 +39,26 @@ const mappingData = (data: any) => {
 
     selectedJournals: data.selectedJournals || [
       {
+        journalID: null,
         debit: '',
         credit: '',
         customerDebit: '',
         customerCredit: '',
         goods: '',
         warehouse: '',
-        inventory: 123,
+        inventory: '',
         amount: '',
         quantity: '',
-        unitPrice: '',
-        contract: 3,
+        unitprice: '',
+        contract: '',
         job: '',
         note: '',
         updown: '',
       }
-    ]
+    ],
+    deletedJournals: data?.deletedJournals && data.deletedJournals.map((item: any) => {
+      return item.journalID !== '' && item.journalID
+    }) || []
   }
 }
 
@@ -65,26 +67,45 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
 
   const [initialValues, setInitialValues] = useState(mappingData({}));
 
-  // const { detailAccountingVoucher } = useDetailAccountingVoucherMutation(idEdit);
   const APP_ACCOUNTING = "/api/accounting/voucher";
 
+  const mappingSelectedJournals = (data = []) => {
+    return data.map((item: any) => {
+      return {
+        goods: item.goods || '',
+        inventory: item.inventory || '',
+        amount: item.amount || 0,
+        quantity: item.quantity || 0,
+        job: item.job || '',
+        note: item.note || '',
+        updown: item.updown || 0,
+
+        journalID: item._id || null,
+        debit: item?.debit?._id || '',
+        credit: item?.credit?._id || '',
+        customerDebit: item?.customerDebit?._id || '',
+        customerCredit: item?.customerCredit?._id || '',
+        warehouse: item?.warehouse?._id || '',
+        contract: item?.contract?._id || '',
+        unitprice: item.quantity * item.amount
+      }
+    })
+  }
+
   useEffect(() => {
-    // detailAccountingVoucher = await fetchDetailAccountingVoucher(idEdit)
+
     const fetchDetailAccountingVoucher = async (id: any) => {
       const { data } = await API.get(
         `${APP_ACCOUNTING}/${id}`
       )
-      console.log('🚀 ~ fetchDetailAccountingVoucher ~ data', data)
-
       const dataDetail = {
         ...data.data?.infoVoucher,
-        selectedJournals: [...data.data?.listJournal || []]
+        selectedJournals: [...mappingSelectedJournals(data.data?.listJournal) || []]
       }
-      console.log('🚀 ~ useEffect ~ dataDetail', dataDetail)
-      // !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
+      !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
       return data
     }
-    // fetchDetailAccountingVoucher(idEdit)
+    fetchDetailAccountingVoucher(idEdit)
   }, [idEdit]);
 
   const handleSubmit = useCallback(
@@ -92,15 +113,6 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       const formatData = {
         ...values,
       }
-
-      console.log('🚀 ~ formatData', formatData)
-      //   if (isEdit) {
-      //     formatData = {
-      //       ...values,
-      //       contractID: detailContract._id
-      //     }
-      //   }
-
       const isSuccess = await onFinish(mappingData(formatData), isEdit);
       if (isSuccess) {
         closeModal();
@@ -128,7 +140,7 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
     <div className={"flex flex-col h-screen"}>
       <div className={"flex w-full py-3 px-6 border-b"}>
         <h4 className={"flex-1 text-lg font-bold text-left"}>{title}</h4>
-        <div className={"flex items-center justify-center"}>
+        <div className={"flex items-center justify-center cursor-pointer"}>
           <Close onClick={() => closeModal()} />
         </div>
       </div>
