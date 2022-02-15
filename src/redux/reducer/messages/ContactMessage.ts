@@ -8,7 +8,7 @@ const initialState : {data: {isOpenSendContact: boolean, conversationId: string}
 };
 
 const contactMessageSlice = createSlice({
-    name: 'share-message',
+    name: 'contact-message',
     initialState,
     reducers: {
         sendContactMessageToConversation (state, action) {

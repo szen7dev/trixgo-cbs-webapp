@@ -61,7 +61,7 @@ const SendContactMessage:FC = () => {
                     sender: {
                         _id: profileId,
                     },
-                    usersAssigned: selectedFriends[friendId]
+                    usersAssigned: [selectedFriends[friendId]]
                 }
             }));
             socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
