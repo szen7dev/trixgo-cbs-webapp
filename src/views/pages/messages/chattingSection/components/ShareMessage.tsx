@@ -138,7 +138,7 @@ const ShareMessage:FC = () => {
                                     ))
                                 }
                             </div>
-                            <div className={"max-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
+                            <div className={"max-h-[500px] min-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
                                 <div className={"px-[5px]"}>
                                     {
                                         _map(listConversations.filter(conversation => conversation._id !== currentChat), conversation => (

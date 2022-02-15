@@ -205,6 +205,7 @@ const ReminderCreate:FC = () => {
                                                 <img src={DateIcon} alt={"calendar icon"} />
                                             </div>
                                             <input
+                                                readOnly={true}
                                                 value={moment(selectedDate.date).format("DD MMMM YYYY HH:mm")}
                                                 type="text"
                                                 name="remindTime"
