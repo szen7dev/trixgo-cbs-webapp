@@ -178,6 +178,7 @@ export type ItemMessage = {
         noticeConfig: number
         numLog: number
         password: string
+        phone: string
         platform: number
         position: string
         receiveFromFriends: any[]

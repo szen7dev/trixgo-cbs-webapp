@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -19,12 +19,14 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
+import {MessageContext} from "../../home/index_v2";
 type Props = {
     message: ItemMessage;
-    socket: any
+    socket: any;
+    editor: any;
 }
 
-const RightClickMessage:FC<Props> = ({message, socket}) => {
+const RightClickMessage:FC<Props> = ({message, socket, editor}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
     const {updatePinMessage} = UseConversation();
@@ -81,7 +83,8 @@ const RightClickMessage:FC<Props> = ({message, socket}) => {
             <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
                 <button
                     onClick={() => {
-                        dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}))
+                        dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}));
+                        editor.focus();
                         closeRightClick();
                     }}
                     className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>

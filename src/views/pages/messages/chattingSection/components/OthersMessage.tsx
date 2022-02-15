@@ -23,8 +23,9 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const editor = editorRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
@@ -66,7 +67,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                     }
                 }}
                 className={"transition relative duration-500 cursor-pointer message-container"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket} editor={editor}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>
