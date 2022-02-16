@@ -28,21 +28,21 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const { handleBlur, setFieldValue, values } = formik;
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.customer || ""
 	);
 	const { listContact: listCustomer } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerValue,
 	});
 	const [searchContractValue, setSearchContractValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.contract || ""
 	);
 	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractValue,
 	});
 	const [searchContractIPCValue, setSearchContractIPCValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.ipc || ""
 	);
 	const { listContractIPC } = useQueryListContractIPC({
 		limit: LIMIT_DROPDOWN,
@@ -347,7 +347,9 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							wrapperClassName={"w-auto"}
 							name="date"
 							showTimeSelect
+							selected={(values.date && new Date(values.date)) || new Date()}
 							timeIntervals={1}
+							timeFormat="HH:mm"
 							customInput={
 								<div className={"relative w-auto ml-2 min-h-fit"}>
 									<Field
@@ -359,7 +361,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 										value={
 											values.date
 												? moment(values.date).format(
-													"DD/MM/YYYY hh:mm"
+													"DD/MM/YYYY HH:mm"
 												)
 												: ""
 										}
