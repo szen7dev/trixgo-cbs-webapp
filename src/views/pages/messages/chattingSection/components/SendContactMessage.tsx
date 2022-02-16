@@ -147,7 +147,7 @@ const SendContactMessage:FC = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                             </div>
-                            <div className={"max-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
+                            <div className={"max-h-[500px] min-h-[500px] mt-[15px] no-webkit-scrollbar overflow-auto"}>
                                 <div className={"px-[5px]"}>
                                     {
                                         _map(listFriends, friend => (

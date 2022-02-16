@@ -5,13 +5,18 @@ import {MessageContext} from "../../home/index_v2";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
 
-const ListOnlineUserInMessage:FC = () => {
+type Props = {
+    chat: ItemListConversation;
+}
+
+const ListOnlineUserInMessage:FC<Props> = ({chat}) => {
     const {currentChat} = useContext(MessageContext);
     const {getListMembersOfConversation} = UseListConversation();
     useEffect(() => {
         getListMembersOfConversation({conversationID: currentChat})
-    },[currentChat])
+    },[currentChat, chat.members.length])
 
     const listUserInMessage = useSelector((state: RootState) => state.listMessage.data.listMembers[currentChat]);
 

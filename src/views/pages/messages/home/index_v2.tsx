@@ -15,6 +15,7 @@ import SendContactMessage from "../chattingSection/components/SendContactMessage
 import Editor from "@draft-js-plugins/editor";
 import NPSCreate from "../chattingSection/components/nps/NPSCreate";
 import SearchMessage from "../search";
+import AddUsersToConversation from "../chattingSection/components/AddUsersToConversation";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -71,6 +72,7 @@ const MessagesHome:FC = () => {
             <ReminderCreate/>
             <SendContactMessage/>
             <NPSCreate/>
+            <AddUsersToConversation/>
         </MessageContext.Provider>
     )
 }

@@ -24,6 +24,8 @@ import ReminderNoti from "./reminder/ReminderNoti";
 import Poll from "./poll/Poll";
 import PollNoti from "./poll/PollNoti";
 import {action} from "@storybook/addon-actions";
+import AddUsersNoti from "./chatContent/AddUsersNoti";
+import PinMessageNoti from "./chatContent/pinMessageNoti";
 
 export const listEmoji = [
     {
@@ -166,8 +168,14 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 } else {
                     return <OthersMessage message={message}/>
                 }
+            case 101:
+                // eslint-disable-next-line no-case-declarations
+                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
+                // eslint-disable-next-line no-case-declarations
+                const messsagesAdd = usersAdded.join("; ");
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
             case 108:
-                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 112:
