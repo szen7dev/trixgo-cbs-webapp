@@ -7,14 +7,14 @@ import SavedMessage from "assets/images/saved-messages.svg";
 import HeaderPinedMessages from "./HeaderPinedMessages";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../../../redux/reducer";
+import {RootState} from "redux/reducer";
 
 type Props = {
     chat: ItemListConversation
 }
 
 const MainChatHeading:FC<Props> = ({chat}) => {
-    const {setShowMenu, showMenu, currentChat} = useContext(MessageContext)
+    const {setShowMenu, showMenu, showSearch, setShowSearch, currentChat} = useContext(MessageContext)
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[currentChat]);
@@ -106,13 +106,21 @@ const MainChatHeading:FC<Props> = ({chat}) => {
                 }
             </div>
             <div className={"flex flex-col justify-center mx-[10px] " + ((showMenu&&listPinnedMessage&&listPinnedMessage.length>0)?"chat-basic-infor":"")}>
-                <div onClick={() => setShowMenu(!showMenu)} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
+                <div onClick={() => {
+                    setShowMenu(!showMenu)
+                    if (showMenu) setShowSearch(false)
+                }} className={"cursor-pointer truncate"}>{getNameConversation()}</div>
                 <div className={"text-xs text-gray-300"}>{chat.members.length} thành viên</div>
             </div>
             <div className={"flex items-center flex-1 justify-end"}>
                 <HeaderPinedMessages listPinnedMessage={listPinnedMessage}/>
                 <div className={"action-section flex items-center justify-end ml-[10px]"}>
-                    <button className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
+                    <button
+                        onClick={() => {
+                            setShowSearch(!showSearch)
+                            if (!showMenu) setShowMenu(true)
+                        }}
+                        className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
                         <img  src={SearchIcon} alt={"search icon"}/>
                     </button>
                     <MainChatOptions/>

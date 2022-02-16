@@ -14,6 +14,7 @@ import ReminderCreate from "../chattingSection/components/reminder/ReminderCreat
 import SendContactMessage from "../chattingSection/components/SendContactMessage";
 import Editor from "@draft-js-plugins/editor";
 import NPSCreate from "../chattingSection/components/nps/NPSCreate";
+import SearchMessage from "../search";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -23,6 +24,8 @@ export const MessageContext = createContext<{
     socketRef: any;
     editorRef: any;
     setEditorRef: React.Dispatch<React.SetStateAction<any>>;
+    showSearch: boolean;
+    setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
     currentChat: '',
     setCurrentChat: () => undefined,
@@ -30,19 +33,22 @@ export const MessageContext = createContext<{
     setShowMenu: () => undefined,
     socketRef: null,
     editorRef: null,
-    setEditorRef: () => undefined
+    setEditorRef: () => undefined,
+    showSearch: false,
+    setShowSearch: () => undefined
 });
 
 const MessagesHome:FC = () => {
     const location = useLocation();
     const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
     const [showMenu, setShowMenu] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
     const [editorRef, setEditorRef] = useState<Editor>();
     const socketRef = useSocket();
 
     const value = useMemo(
-        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef}),
-        [currentChat, showMenu, socketRef, editorRef]
+        () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef, showSearch, setShowSearch}),
+        [currentChat, showMenu, socketRef, editorRef, showSearch]
     );
 
     useEffect(() => {
@@ -51,10 +57,11 @@ const MessagesHome:FC = () => {
 
     return (
         <MessageContext.Provider value={value}>
-            <div className={"main-message flex content-avoid-header w-screen overflow-hidden relative " + (showMenu?"show-menu":"")}>
+            <div className={"main-message flex content-avoid-header w-screen overflow-hidden relative " + (showMenu?"show-menu":"") + (showSearch?"show-search":"")}>
                 <MessageList/>
                 <ChattingSection/>
                 <SettingMessageDetail/>
+                <SearchMessage/>
             </div>
             <SocketController/>
             <ShareMessage/>
