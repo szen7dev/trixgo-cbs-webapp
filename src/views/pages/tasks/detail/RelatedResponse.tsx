@@ -34,7 +34,7 @@ import { APP_TYPE } from "helpers/constants";
  * Typings, apis
  */
 import TaskRepository from "apis/task";
-import { FileProps, FilePropsUpload } from "typings/social";
+import { FileProps, FilePropsUpload, ImageProps } from "typings/social";
 import { Task } from 'typings/task';
 
 /** 
@@ -43,6 +43,7 @@ import { Task } from 'typings/task';
 import RelatedResponseItem from "./RelatedResponseItem";
 import PostImageV2 from "views/pages/media/components/post/PostImageV2";
 import FileUploadRow from "views/pages/document/components/common/FileUploadRow";
+import CommentModal from "components/common/detail-post";
 
 enum RelatedResponseTab {
   ALL = "ALL",
@@ -87,7 +88,10 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   const [content, setContent] = useState('');
   const [amountComment, setAmountComment] = useState(totalRecordResponse);
   const [amountCommentBack, setAmountCommentBack] = useState(0);
-
+	// State manage image comments
+	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, });
+	const [isShow, setIsShow] = useState(false);
+	
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
   const [collapsed] = useState(false);
 
@@ -288,6 +292,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
   }
 
   return (
+		<>
     <div>
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -309,8 +314,8 @@ const RelatedResponse: FC<Props> = ({ task }) => {
           </button>
         </div>
         <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
-          <button onClick={() => setIsExpand(!isExpand)}>
-            <div className="flex flex-col space-y-1">
+          <button className="w-full" onClick={() => setIsExpand(!isExpand)}>
+            <div className="flex flex-col items-center space-y-1">
               <img
                 src={ChevronUpIcon}
                 alt="Cheveron Icon"
@@ -334,12 +339,18 @@ const RelatedResponse: FC<Props> = ({ task }) => {
       ) : ''}
       <div>
         {state.comments.length ? state.comments.map(response => (
-          <RelatedResponseItem 
+					<RelatedResponseItem 
             key={response._id} 
             response={response} 
             expanded={isExpand} 
             isHighlight={location.hash.substring(1) === response._id} 
             divRef={location.hash.substring(1) === response._id ? divRef : null}
+						onClickImage={(images,index) => {
+              if (images.length) {
+                setDefaultState({ mediaID: id, images, index})}
+                setIsShow(true);
+              }
+            }
           />
         )) : ''}
       </div>
@@ -409,6 +420,8 @@ const RelatedResponse: FC<Props> = ({ task }) => {
         </div>
       )}
     </div>
+		<CommentModal isShow={isShow} toggle={()=> setIsShow(!isShow)} initialData={defaultState} />
+		</>
   );
 };
 

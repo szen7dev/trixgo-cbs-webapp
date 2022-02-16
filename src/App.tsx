@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 import "i18n/config";
 import Routes from "routes";
@@ -28,6 +29,7 @@ const App: FC = () => {
         pauseOnHover
       />
       <OneSignalController/>
+			<ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 };

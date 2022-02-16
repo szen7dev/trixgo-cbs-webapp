@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
-import ModalFullContainer from "../../../../media/components/ModalFullContainer";
+import ModalFullContainer from "components/common/modals/ModalFullContainer";
 import ViewImage from "./ViewImage";
 import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";

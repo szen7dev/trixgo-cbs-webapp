@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useContext, useState, useEffect } from "react";
+import React, { FC, Fragment, useState, useEffect } from "react";
 
 /**
  * Libraries
@@ -12,7 +12,7 @@ import cn from 'classnames';
 /**
  * Components
  */
-import ModalContainer from "../components/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 import ModalListUser from "../components/ModalListUser";
 import PostFile from '../components/post/PostFile';
 import Loader from "components/shared/Loader";
@@ -36,15 +36,16 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps } from "typings/social";
+import { FileProps, ImageProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { abbreviateNumber } from 'utils';
 import { useAuth } from 'services/hooks/useAuth';
 import { useSocial, useCommentSocial } from 'services/hooks/useSocial';
+
 import CommentProvider from '../context/comment/comment.provider';
-import ModalViewPost from "../components/post/ModalViewPost";
-import { ContextModalPost, ProviderModalPost } from "../context/post";
+import { ProviderModalPost } from "../context/post";
+import CommentModal from "components/common/detail-post";
 
 const SocialPost: FC = () => {
 	const history = useHistory();
@@ -79,11 +80,14 @@ const SocialPost: FC = () => {
 			key: `list_comments.${mediaID}`
 		});
 
+	// State manage image comments
+	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, });
+	const [isShow, setIsShow] = useState(false);
+
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
 	const [msUpdateView, setMsUpdateView] = useState<number>(0);
-	const { openPost } = useContext(ContextModalPost);
 
 	const toggleModalEditMedia = () => {
 		refetch();
@@ -238,7 +242,11 @@ const SocialPost: FC = () => {
 									const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
 
 									return (
-										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => openPost({ mediaId: mediaID, images, index: i })} >
+										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
+											// openModal(mediaID, images, i)
+											setDefaultState({ mediaID, images, index: i })
+											setIsShow(true)
+										}} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />
 											{i === 2 && images.length > 3 && (
 												<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">
@@ -279,12 +287,12 @@ const SocialPost: FC = () => {
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
-							<RootCommentsList
+							{totalRecord && <RootCommentsList
 								className="px-5"
 								comments={listComments}
 								totalRecord={totalRecord}
 								limit={limit}
-								mediaID={mediaID} />
+								mediaID={mediaID} />}
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 								<ReplyCommentField
 									attachFile
@@ -305,7 +313,6 @@ const SocialPost: FC = () => {
 										</Link>
 									</React.Fragment>
 								)) : ''}
-								
 								{/* <Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link> */}
 							</div>
@@ -340,7 +347,7 @@ const SocialPost: FC = () => {
 				data={listSeens}
 				total={totalRecordSeen}
 			/>
-			<ModalViewPost listComments={listComments} mediaID={mediaID} />
+			<CommentModal isShow={isShow} toggle={() => setIsShow(false)} initialData={defaultState} />
 		</>
 	);
 };

@@ -7,7 +7,7 @@ import SearchInput from 'views/pages/document/components/SearchInput';
 import GroupActions from 'views/pages/document/components/projects/GroupActions';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
 import ModalReport from './ModalReport';
-import ModalContainer from 'views/pages/media/components/ModalContainer';
+import ModalContainer from 'components/common/modals/ModalContainer';
 import DropdownSearchable from 'components/common/DropdownSearch';
 
 // assets

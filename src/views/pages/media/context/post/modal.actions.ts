@@ -10,6 +10,7 @@ type ActionsProps = {
   openPost: Action<(payload: any) => void>;
   openComment: Action<(payload: any) => void>;
   openReply: Action<(payload: any) => void>;
+  setIndex: Action<(payload: any) => void>;
 };
 
 const modalActions: ActionsProps = {
@@ -38,6 +39,12 @@ const modalActions: ActionsProps = {
   openReply: (dispatch) => (payload) => {
     return dispatch({
       type: modalTypes.OPEN_REPLY,
+      payload,
+    });
+  },
+  setIndex: (dispatch) => (payload) => {
+    return dispatch({
+      type: modalTypes.SET_INDEX,
       payload,
     });
   },

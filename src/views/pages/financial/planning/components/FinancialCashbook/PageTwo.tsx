@@ -9,7 +9,7 @@ import SearchInput from 'views/pages/document/components/SearchInput';
 import GroupActions from 'views/pages/document/components/projects/GroupActions';
 import ButtonCreate from 'views/pages/document/components/common/ButtonCreate';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
-import ModalContainer from 'views/pages/media/components/ModalContainer';
+import ModalContainer from 'components/common/modals/ModalContainer';
 import { Link } from 'react-router-dom';
 import ModalCreateFinancial from './ModalCreateFinancial';
 

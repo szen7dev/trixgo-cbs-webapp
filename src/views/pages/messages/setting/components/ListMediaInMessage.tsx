@@ -12,7 +12,7 @@ import {MessageContext} from "../../home/index_v2";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import ModalFullContainer from "../../../media/components/ModalFullContainer";
+import ModalFullContainer from "components/common/modals/ModalFullContainer";
 import ViewImage from "../../chattingSection/components/chatContent/ViewImage";
 
 const ListMediaInMessage:FC = () => {

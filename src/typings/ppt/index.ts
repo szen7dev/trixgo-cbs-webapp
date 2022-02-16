@@ -1,12 +1,14 @@
+import { DEPARTMENT_STATUS } from "helpers/constants/department";
+
 export interface APIResponse {
-    error?: boolean;
-    status?: number;
+  error?: boolean;
+  status?: number;
 }
 
 export interface Populate {
-    path?: string;
-    select?: string;
-    populate?: Populate
+  path?: string;
+  select?: string;
+  populate?: Populate;
 }
 
 export interface QueryParam {
@@ -22,4 +24,8 @@ export enum DepartmentEnumType {
   PROJECT = 2,
 }
 
-export * from './Document.d';
+export type DepartmentOnTimeKey = keyof typeof DEPARTMENT_STATUS;
+export type DepartmentOnBudgetKey =
+  keyof typeof DEPARTMENT_STATUS[keyof typeof DEPARTMENT_STATUS];
+
+export * from "./Document.d";

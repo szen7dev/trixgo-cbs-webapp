@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
-import ModalContainer from "../components/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 
 import ReplyCommentField from "../components/ReplyCommentField";
 import RootCommentsList from "../components/RootCommentsList";
