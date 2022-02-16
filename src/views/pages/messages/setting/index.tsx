@@ -5,14 +5,15 @@ import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import SettingMessageDetailTab from "./components/SettingMessageDetailTab";
 import {MessageContext} from "../home/index_v2";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../../../../redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";
 import SavedMessage from "assets/images/saved-messages.svg";
+import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 
 const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
-
+    const dispatch = useDispatch()
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     const currentUser = localStorage.getItem("currentUser")??"P{";
@@ -128,10 +129,13 @@ const SettingMessageDetail:FC = () => {
                 <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab chat={chat}/>
             </div>
-            {!chat.isPrivate&&<button
-                className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
-                <img src={AddUserToGroup} alt={"Pencil icon"}/>
-            </button>}
+            {!chat.isPrivate&&
+                <button
+                    onClick={() => dispatch(openAddUserToConversation({conversationId: currentChat}))}
+                    className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
+                    <img src={AddUserToGroup} alt={"Pencil icon"}/>
+                </button>
+            }
         </div>
     )
 }

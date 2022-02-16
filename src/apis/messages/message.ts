@@ -1,6 +1,7 @@
 import API from "../repository";
 import { convertObToUrl } from "helpers";
 import {
+    AddUserToConversationPayload, AddUserToConversationResponse,
     DeleteRevokeMessagePayload,
     DeleteRevokeMessageResponse,
     ListMessagePayload,
@@ -28,6 +29,7 @@ const updatePinMessage = "/api/chatting/conversations/update-pin-message-convers
 const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-poll-conversation";
+const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -104,6 +106,15 @@ const ListMessageRepository = {
     async updatePoll(payload: UpdatePollPayload) : Promise<UpdatePollResponse> {
         const {data} = await API.put(
             `${updatePoll}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async addUserToConversation(payload: AddUserToConversationPayload) : Promise<AddUserToConversationResponse>  {
+        const {data} = await API.post(
+            `${addUserToConversation}`,
             {...payload}
         )
 

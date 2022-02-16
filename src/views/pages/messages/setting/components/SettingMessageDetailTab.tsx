@@ -67,7 +67,7 @@ const SettingMessageDetailTab:FC<Props> = ({chat}) => {
             </div>
             {
                 activeTab==="members" &&
-                <ListOnlineUserInMessage/>
+                <ListOnlineUserInMessage chat={chat}/>
             }
             {
                 activeTab==="media" &&

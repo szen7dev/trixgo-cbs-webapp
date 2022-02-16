@@ -121,7 +121,7 @@ export type ItemMessage = {
         updatedAt: string
         __v: number
         _id: string
-    },
+    };
     reactions: {
         _id: string;
         type: number;
@@ -131,7 +131,7 @@ export type ItemMessage = {
             bizfullname: string;
             image: string;
         }
-    }[],
+    }[];
     poll: {
         createdAt: string
         name: string
@@ -283,23 +283,23 @@ export type ShareMessagePayload = {
 
 export type ShareMessageData = {
     results: {
-        receivers: string[],
-        content: string,
-        status: number,
-        type: number,
-        listSeen: string[],
-        usersDelete: any[],
-        membersAssigned: any[],
-        _id: string,
-        conversation: string,
-        sender: string,
-        files: any[],
-        modifyAt: string,
-        createAt: string,
-        createdAt: string,
-        updatedAt: string,
+        receivers: string[];
+        content: string;
+        status: number;
+        type: number;
+        listSeen: string[];
+        usersDelete: any[];
+        membersAssigned: any[];
+        _id: string;
+        conversation: string;
+        sender: string;
+        files: any[];
+        modifyAt: string;
+        createAt: string;
+        createdAt: string;
+        updatedAt: string;
         __v: number
-    }[],
+    }[];
     errors: any[]
 }
 
@@ -315,7 +315,7 @@ export type PinnedMessagePayload = {
 }
 
 export type PinnedMessageData = {
-    listRecords: ItemMessage[],
+    listRecords: ItemMessage[];
     limit: number;
     currentPage: number;
     totalRecord: number;
@@ -334,7 +334,7 @@ export type UpdatePinnedMessagePayload = {
 }
 
 export type UpdatePinnedMessageData = {
-    infoConversation: ItemListConversation,
+    infoConversation: ItemListConversation;
     infoMessage: ItemMessage;
 }
 
@@ -368,7 +368,7 @@ export type UpdatePollPayload = {
 }
 
 export type UpdatePollData = {
-    infoMessage: ItemMessage[],
+    infoMessage: ItemMessage[];
     infoMessageNotification: {
         content: string
         conversation: string
@@ -394,6 +394,53 @@ export type UpdatePollData = {
 
 export type UpdatePollResponse = {
     data: UpdatePollData ;
+    error: boolean;
+    status: number;
+}
+
+export type AddUserToConversationPayload = {
+    conversationID: string;
+    membersID: string[];
+}
+
+export type AddUserToConversationResponse = {
+    data: {
+        config: {
+            configHighlight: number;
+            configSeeOldMessage: number;
+            configEditInfo: number;
+            configCreateNote: number;
+            configCreatePoll: number;
+            configPinMessage: number;
+            configSendMessage: number
+        };
+        members: string[];
+        authors: string[];
+        _id: string;
+        usersPin: string[];
+        name: string
+        modifyAt: string
+        createAt: string
+        arrMissMessage: {
+            amount: number;
+            amout: number
+            _id: string;
+            userID: string
+        }[];
+        usersMute: string[];
+        tasks: any[];
+        createdAt: string
+        updatedAt: string
+        __v: number;
+        description: string
+        lastMessage: string
+        arrMesageTypingUsers: {
+            _id: string
+            userID: string
+            messageTyping: string
+        }[];
+        avatar: string
+    } ;
     error: boolean;
     status: number;
 }
