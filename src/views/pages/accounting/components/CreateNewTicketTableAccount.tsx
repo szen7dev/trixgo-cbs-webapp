@@ -19,42 +19,42 @@ import {
 const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 
 	const [searchWarehouseValue, setSearchWarehouseValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.warehouse || ""
 	);
 	const { listWarehouse } = useQueryListWarehouse({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchWarehouseValue,
 	});
 	const [searchCustomerDebitValue, setSearchCustomerDebitValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.customerDebit || ""
 	);
 	const { listContact: listCustomerDebit } = useQueryListContact({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCustomerDebitValue,
 	});
 	const [searchContractValue, setSearchContractValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.contract || ""
 	);
 	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractValue,
 	});
 	const [searchDebitValue, setSearchDebitValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.debit || ""
 	);
 	const { listAccount: listDebit } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchDebitValue,
 	});
 	const [searchCreditValue, setSearchCreditValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.credit || ""
 	);
 	const { listAccount: listCredit } = useQueryListAccount({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchCreditValue,
 	});
 	const [searchGoodValue, setSearchGoodValue] = useState(
-		initialValues?.department?.name || ""
+		initialValues?.goods || ""
 	);
 	const { listGood } = useQueryListGood({
 		limit: LIMIT_DROPDOWN,

@@ -78,36 +78,7 @@ const AccountingTicketsPage: FC = () => {
 
     const { openDeleteConfirm } = useDeleteConfirm();
 
-    const handleDeleteAction = async () => {
-        // if (!itemChecked) {
-        //     return
-        // }
-        openDeleteConfirm({
-            deleteAction: async () => {
-                // const res = await deleteAccountingVoucherMutateAsync(itemChecked)
-                // if (!res.error) {
-                //     accountingVoucher.refetch()
-                // }
-            },
-        });
-    }
-    const handleEditAction = async () => {
-        // if (!itemChecked) {
-        //     return
-        // }
-        openModal(
-            <div
-                className={
-                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
-                }
-            >
-                {/* <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={params.id} title="Cập nhật" /> */}
-            </div>
-        )
-    }
-
     const handleAction = async (data: any, action: any) => {
-        console.log('🚀 ~ handleAction ~ data, action', data, action)
 
         switch (action) { // 1. In, 2. Copy 3. Cập nhật 4. Xóa
             case 1:
@@ -115,18 +86,6 @@ const AccountingTicketsPage: FC = () => {
             case 2:
                 break;
             case 3:
-                // setIđEit(data._id);
-                // useEffect(() => {
-                //     console.log('🚀 ~ detailAccountingVoucher', detailAccountingVoucher)
-                //     const dataDetail = {
-                //         ...detailAccountingVoucher.infoVoucher,
-                //         selectedJournals: [...detailAccountingVoucher.listJournal || []]
-                //     }
-                //     console.log('🚀 ~ useEffect ~ dataDetail', dataDetail)
-                //     // setInitialValues(mappingData(dataDetail))
-                // }, [idEdit, detailAccountingVoucher]);
-                // console.log('detailAccountingVoucher ', detailAccountingVoucher);
-
                 openModal(
 
                     <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>

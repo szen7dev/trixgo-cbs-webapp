@@ -539,4 +539,4 @@ export const MIME_TYPES_MESSAGE = ['jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', '
 
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const DATE_FORMAT_TIME = "DD/MM/YYYY HH:MM";
-export const LIMIT_DROPDOWN = 30;
+export const LIMIT_DROPDOWN = 1000;
