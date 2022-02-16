@@ -8,6 +8,7 @@ import FileReply from "../chatContent/replyContent/fileReply";
 import ImageReply from "../chatContent/replyContent/imageReply";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
+import ContactReply from "../chatContent/replyContent/contactReply";
 
 type Props = {
     replyData: ItemMessage;
@@ -24,6 +25,8 @@ const ReplyChat:FC<Props> = ({replyData}) => {
                 return <FileReply message={replyData} className={"text-xs"}/>;
             case 1:
                 return <ImageReply message={replyData} className={"text-xs"}/>;
+            case 7:
+                return <ContactReply message={replyData} className={"text-xs"}/>;
         }
     }
 

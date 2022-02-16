@@ -5,7 +5,13 @@ import TimesheetDetailSlice from './Timesheet'
 import ListConverSationSlice from './messages/ListConversation';
 import ListMessageSlice from './messages/ListMessage';
 import ShareMessageSlice from './messages/ShareMessage';
+import ContactMessageSlice from './messages/ContactMessage';
 import DeleteAndRevokeMessageSlice from './messages/DeleteAndRevokeMessage';
+import CreatePollSlice from './messages/CreatePoll';
+import CreateReminderSlice from './messages/CreateReminder';
+import CreateNPSMessageSlice from './messages/CreateNPSMessage';
+import DetailNPSMessageSlice from './messages/DetailNPSMessage';
+import AddUserToConversationSlice from './messages/AddUserToConversation';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -14,7 +20,13 @@ const rootReducer = combineReducers({
     listConversation: ListConverSationSlice,
     listMessage: ListMessageSlice,
     shareMessage: ShareMessageSlice,
+    contactMessage: ContactMessageSlice,
     deleteAndRevokeMessage: DeleteAndRevokeMessageSlice,
+    createPoll: CreatePollSlice,
+    createReminder: CreateReminderSlice,
+    createNPSMessage: CreateNPSMessageSlice,
+    detailNPSMessage: DetailNPSMessageSlice,
+    addUserToConversation: AddUserToConversationSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

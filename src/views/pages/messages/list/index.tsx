@@ -77,7 +77,7 @@ const MessageList:FC = () => {
     },[listConversation]);
 
     return (
-        <div className={"messages-left-bar w-[480px] min-w-[480px] border-r transition duration-150 group relative"}>
+        <div className={"messages-left-bar w-[402px] min-w-[402px] border-r transition duration-150 group relative"}>
                 <div className={"bg-white z-5"}>
                     <div className={"p-2 flex"}>
                         <HamLeftMenu/>

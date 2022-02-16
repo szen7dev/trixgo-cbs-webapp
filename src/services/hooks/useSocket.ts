@@ -40,7 +40,7 @@ export const useSocket = (): UseSocket => {
 
         initSocket();
         return () => {
-            socketRef&&socketRef.current&&socketRef.current.disconnect();
+            socketRef && socketRef.current && socketRef.current.disconnect();
         }
     }, []);
 

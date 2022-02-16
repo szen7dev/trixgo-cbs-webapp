@@ -63,9 +63,9 @@ const Poll:FC<Props> = ({message,chat}) => {
                                                 ))
                                             }
                                             {
-                                                message.usersSeen.length - 3 > 0 &&
+                                                option.usersVote.length - 3 > 0 &&
                                                 <div className={"w-[16px] h-[16px] text-xs rounded-full overflow-hidden bg-gray-300 text-gray-500 border border-white"}>
-                                                    {message.usersSeen.length - 3}+
+                                                    {option.usersVote.length - 3}+
                                                 </div>
                                             }
                                         </div>

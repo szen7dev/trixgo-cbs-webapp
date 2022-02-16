@@ -13,6 +13,7 @@ import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import IconButton from "./IconButton";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {MessageContext} from "../../../home/index_v2";
 // import editorStyles from './editorStyles.module.css';
 
 defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
@@ -27,12 +28,12 @@ type Props = {
     onPressEnter?: () => void;
     onPasteFiles?: (files: FileList|Blob[]) => void;
     mentions: MentionData[];
-    replyData: ItemMessage;
 }
-const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, replyData }) => {
+const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions }) => {
     const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
     const editor = useRef<Editor>(null);
+    const {currentChat, setEditorRef} = useContext(MessageContext)
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
@@ -62,9 +63,11 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, replyD
         return { plugins, MentionSuggestions, EmojiSuggestions, EmojiSelect };
     }, []);
 
-    // useEffect(() => {
-    //     editor&&editor.current&&replyData&&editor.current.focus()
-    // }, [replyData])
+    useEffect(() => {
+        if(editor&&editor.current) {
+            setEditorRef(editor)
+        }
+    }, [editor])
 
     const onOpenChange = useCallback((_open: boolean) => {
         setOpen(_open);

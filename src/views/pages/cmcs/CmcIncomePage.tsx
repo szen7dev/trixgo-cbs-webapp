@@ -232,7 +232,7 @@ const CmcIncome: FC = () => {
                 <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
                   <td className="py-1 px-2">
                     {item.name}
-                    <p className="text-primary-gray">{item.project.sign} | {item.sign}</p>
+                    <p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>
                   </td>
                 </Link>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>

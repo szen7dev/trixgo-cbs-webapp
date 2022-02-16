@@ -1291,8 +1291,12 @@ input[type="text"] {
   min-height: calc(100vh - 150px);
 }
 
-.messages-right-bar.right--402px {
+.messages-right-bar.right--402px,
+.messages-right-bar-search.right--402px {
   right: -402px;
+}
+#chatting-section {
+  max-width: calc(100vw - 402px);
 }
 .messages-main-content {
   font-size: 15px;
@@ -1330,7 +1334,7 @@ input[type="text"] {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: 645px;
+  max-width: calc(100% - 106px);
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
@@ -1381,7 +1385,7 @@ input[type="text"] {
   /*transform: translateX(80px);*/
 }
 .emoji-action, .emoji-group {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 .message-container:hover .emoji-group {
   opacity: 1;
@@ -1394,7 +1398,8 @@ input[type="text"] {
 .message-container .emoji-group .reactions-group {
   top: -45px;
 }
-.main-message.show-menu .chat-basic-infor {
+.main-message.show-menu .chat-basic-infor,
+.main-message.show-search .chat-basic-infor {
   max-width: calc(100% - 404px);
 }
 .message-container .emoji-action {
@@ -1402,7 +1407,7 @@ input[type="text"] {
   bottom: 5px;
 }
 .message-container .emoji-action .other-emojis{
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   overflow: hidden;
 }
 .message-container .emoji-action:hover .other-emojis{

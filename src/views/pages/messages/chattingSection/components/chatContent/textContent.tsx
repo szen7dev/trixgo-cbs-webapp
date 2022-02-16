@@ -6,6 +6,7 @@ import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
 import ReactionList from "../reactions/ReactionList";
 import ReactionActions from "../reactions/ReactionActions";
+import ContactReply from "./replyContent/contactReply";
 
 type Props = {
     message: any;
@@ -51,6 +52,8 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
                 return <FileReply message={message.parent}/>;
             case 1:
                 return <ImageReply message={message.parent}/>;
+            case 7:
+                return <ContactReply message={message.parent}/>;
         }
     }
     return (

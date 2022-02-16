@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef, useState } from 'react'
+import React, { FC, useContext, useRef, useState } from 'react'
 
 import cn from 'classnames';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";

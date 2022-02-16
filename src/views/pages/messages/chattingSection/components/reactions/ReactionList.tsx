@@ -29,7 +29,7 @@ export const ReactionList:FC<Props> = ({message}) => {
             <div onClick={() => setShowReactionGroup(true)} className={"bg-white border border-gray-300 p-1 flex items-center justify-center rounded-full cursor-pointer"}>
                 {
                     _map(arrayReaction(), reaction => (
-                        <img key={listEmoji[reaction-1].id} src={listEmoji[reaction-1].icon} className={"w-[12px] h-[12px]"} alt={"-----"}/>
+                        <img key={listEmoji[reaction-1].id} src={listEmoji[reaction-1].icon} className={"w-[12px] h-[12px] min-w-[12px] min-h-[12px]"} alt={"-----"}/>
                     ))
                 }
             </div>

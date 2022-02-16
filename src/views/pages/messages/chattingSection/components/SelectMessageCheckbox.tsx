@@ -24,7 +24,7 @@ const SelectMessageCheckbox:FC<Props> = ({message}) => {
 
     if ((!listSelectedMessage||Object.keys(listSelectedMessage).length <= 0)&&!selectedState) return null;
     return (
-        <input checked={Object.keys(listSelectedMessage??{}).includes(message._id)} onChange={event => handleSelectedMessage(event.target.checked)} type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer w-[24px] h-[24px] bg-transparent border-white checked:bg-positive" />
+        <input checked={Object.keys(listSelectedMessage??{}).includes(message._id)} onChange={event => handleSelectedMessage(event.target.checked)} type="checkbox" className="form-check-input transition duration-200 rounded-full cursor-pointer min-w-[24px] min-h-[24px] w-[24px] h-[24px] bg-transparent border-white checked:bg-positive" />
     )
 };
 

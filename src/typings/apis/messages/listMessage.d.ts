@@ -31,7 +31,48 @@ export type ItemMessage = {
         status: number;
         type: number;
         updatedAt: string;
-        usersAssigned: any[];
+        usersAssigned: {
+            amountAppUse: number
+            birthDay: string
+            bizfullname: string
+            bookmarks: any[]
+            company: string
+            converMiss: any[]
+            createAt: string
+            department: string
+            departmentContacts: any[]
+            devices: any[]
+            displayHomeConfig: number
+            displayPcmConfig: number
+            email: string
+            emailConfig: number
+            friends: string[]
+            fullname: string
+            gender: number
+            image: string
+            lang: string
+            lastLog: string
+            level: number
+            modifyAt: string
+            noticeConfig: number
+            numLog: number
+            password: string
+            platform: number
+            position: string
+            receiveFromFriends: any[]
+            recentlyFriends: any[]
+            reputation: number
+            sendToFriends: any[]
+            signature: string
+            status: number
+            storageUse: number
+            tags: any[]
+            updatedAt: string
+            userUpdate: string
+            username: string
+            __v: number
+            _id: string
+        }[];
         usersDelete: any[];
         usersSeen: string[];
         __v: number;
@@ -68,11 +109,11 @@ export type ItemMessage = {
     updatedAt: string;
     __v: number;
     reminder: {
-        accepts: string[]
+        accepts: any[]
         content: string
         createdAt: string
         notifyFor: string
-        rejects: string[]
+        rejects: any[]
         remindTime: string
         repeat: string
         state: number
@@ -80,7 +121,7 @@ export type ItemMessage = {
         updatedAt: string
         __v: number
         _id: string
-    },
+    };
     reactions: {
         _id: string;
         type: number;
@@ -90,7 +131,7 @@ export type ItemMessage = {
             bizfullname: string;
             image: string;
         }
-    }[],
+    }[];
     poll: {
         createdAt: string
         name: string
@@ -111,6 +152,49 @@ export type ItemMessage = {
         __v: number
         _id: string
     }
+    usersAssigned: {
+        amountAppUse: number
+        birthDay: string
+        bizfullname: string
+        bookmarks: any[]
+        company: string
+        converMiss: any[]
+        createAt: string
+        department: string
+        departmentContacts: any[]
+        devices: any[]
+        displayHomeConfig: number
+        displayPcmConfig: number
+        email: string
+        emailConfig: number
+        friends: string[]
+        fullname: string
+        gender: number
+        image: string
+        lang: string
+        lastLog: string
+        level: number
+        modifyAt: string
+        noticeConfig: number
+        numLog: number
+        password: string
+        phone: string
+        platform: number
+        position: string
+        receiveFromFriends: any[]
+        recentlyFriends: any[]
+        reputation: number
+        sendToFriends: any[]
+        signature: string
+        status: number
+        storageUse: number
+        tags: any[]
+        updatedAt: string
+        userUpdate: string
+        username: string
+        __v: number
+        _id: string
+    }[]
     [key: string]: any;
 }
 export type ListMessageData = {
@@ -199,23 +283,23 @@ export type ShareMessagePayload = {
 
 export type ShareMessageData = {
     results: {
-        receivers: string[],
-        content: string,
-        status: number,
-        type: number,
-        listSeen: string[],
-        usersDelete: any[],
-        membersAssigned: any[],
-        _id: string,
-        conversation: string,
-        sender: string,
-        files: any[],
-        modifyAt: string,
-        createAt: string,
-        createdAt: string,
-        updatedAt: string,
+        receivers: string[];
+        content: string;
+        status: number;
+        type: number;
+        listSeen: string[];
+        usersDelete: any[];
+        membersAssigned: any[];
+        _id: string;
+        conversation: string;
+        sender: string;
+        files: any[];
+        modifyAt: string;
+        createAt: string;
+        createdAt: string;
+        updatedAt: string;
         __v: number
-    }[],
+    }[];
     errors: any[]
 }
 
@@ -231,7 +315,7 @@ export type PinnedMessagePayload = {
 }
 
 export type PinnedMessageData = {
-    listRecords: ItemMessage[],
+    listRecords: ItemMessage[];
     limit: number;
     currentPage: number;
     totalRecord: number;
@@ -250,7 +334,7 @@ export type UpdatePinnedMessagePayload = {
 }
 
 export type UpdatePinnedMessageData = {
-    infoConversation: ItemListConversation,
+    infoConversation: ItemListConversation;
     infoMessage: ItemMessage;
 }
 
@@ -284,7 +368,7 @@ export type UpdatePollPayload = {
 }
 
 export type UpdatePollData = {
-    infoMessage: ItemMessage[],
+    infoMessage: ItemMessage[];
     infoMessageNotification: {
         content: string
         conversation: string
@@ -310,6 +394,53 @@ export type UpdatePollData = {
 
 export type UpdatePollResponse = {
     data: UpdatePollData ;
+    error: boolean;
+    status: number;
+}
+
+export type AddUserToConversationPayload = {
+    conversationID: string;
+    membersID: string[];
+}
+
+export type AddUserToConversationResponse = {
+    data: {
+        config: {
+            configHighlight: number;
+            configSeeOldMessage: number;
+            configEditInfo: number;
+            configCreateNote: number;
+            configCreatePoll: number;
+            configPinMessage: number;
+            configSendMessage: number
+        };
+        members: string[];
+        authors: string[];
+        _id: string;
+        usersPin: string[];
+        name: string
+        modifyAt: string
+        createAt: string
+        arrMissMessage: {
+            amount: number;
+            amout: number
+            _id: string;
+            userID: string
+        }[];
+        usersMute: string[];
+        tasks: any[];
+        createdAt: string
+        updatedAt: string
+        __v: number;
+        description: string
+        lastMessage: string
+        arrMesageTypingUsers: {
+            _id: string
+            userID: string
+            messageTyping: string
+        }[];
+        avatar: string
+    } ;
     error: boolean;
     status: number;
 }

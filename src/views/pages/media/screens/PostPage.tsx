@@ -1,7 +1,7 @@
-import React, { FC, Fragment, useContext, useState } from "react";
+import React, { FC, Fragment, useState, useEffect } from "react";
 
 /**
- * LIBRARIES
+ * Libraries
  */
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
@@ -10,9 +10,10 @@ import moment from 'moment';
 import cn from 'classnames';
 
 /**
- * COMPONENTS
+ * Components
  */
 import ModalContainer from "components/common/modals/ModalContainer";
+import ModalListUser from "../components/ModalListUser";
 import PostFile from '../components/post/PostFile';
 import Loader from "components/shared/Loader";
 import ReplyCommentField from "../components/ReplyCommentField";
@@ -20,7 +21,7 @@ import ModalCreateArticle from "../components/home/ModalCreateArticle";
 import RootCommentsList from '../components/RootCommentsList';
 
 /**
- * ASSETS
+ * Assets
  */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
@@ -35,7 +36,7 @@ import '../style.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps, ReactionProps } from "typings/social";
+import { FileProps, ImageProps } from "typings/social";
 import SocialRepository from "apis/social";
 import { typePostSelected } from '../utils';
 import { abbreviateNumber } from 'utils';
@@ -67,12 +68,17 @@ const SocialPost: FC = () => {
 			break;
 	}
 
-	const { deleteMedia, reactionMedia, listMedias } = useSocial(`list_media__related.${mediaID}`, conditionListMedia);
-	const { listReactions, refetchListReactions } = useSocial(`list_reactions.${mediaID}`, { mediaID });
-	const { listComments, totalRecord, limit } = useCommentSocial({
-		mediaID,
-		key: `list_comments.${mediaID}`
-	});
+	const { deleteMedia, reactionMedia, listMedias } = 
+		useSocial(`list_media__related.${mediaID}`, conditionListMedia);
+
+	const { listReactions, refetchListReactions, listSeens, totalRecordSeen } = 
+		useSocial(mediaID, { mediaID });
+
+	const { listComments, totalRecord, limit } = 
+		useCommentSocial({
+			mediaID,
+			key: `list_comments.${mediaID}`
+		});
 
 	// State manage image comments
 	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, });
@@ -80,6 +86,8 @@ const SocialPost: FC = () => {
 
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
+	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
+	const [msUpdateView, setMsUpdateView] = useState<number>(0);
 
 	const toggleModalEditMedia = () => {
 		refetch();
@@ -87,6 +95,9 @@ const SocialPost: FC = () => {
 	};
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 	const toggleModalReact = () => setModalShowReact(!modalShowReact);
+	const toggleModalSeen = () => {
+		setModalShowSeen(!modalShowSeen);
+	}
 
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
@@ -98,6 +109,30 @@ const SocialPost: FC = () => {
 		refetch();
 		refetchListReactions();
 	}
+
+	const readingTime = () => {
+		const text = media?.content;
+		const wpm = 200;
+		const words = text?.trim()?.split(/\s+/).length || 0;
+		const time = Math.ceil(words / wpm);
+		const ms = time * 60000;
+		setMsUpdateView(ms);
+	}
+
+	// Update view and user seen for media
+	useEffect(() => {
+		if(msUpdateView <= 0) return;
+
+		const timeout: NodeJS.Timeout = setTimeout(async () => {
+			await SocialRepository.updateViewMedia(mediaID);
+		}, msUpdateView);
+
+		return () => { clearTimeout(timeout) }
+	}, [msUpdateView])
+
+	useEffect(() => {
+		readingTime();
+	}, [media?.content])
 
 	if (!media) {
 		return <Loader className="border-primary" />;
@@ -246,7 +281,9 @@ const SocialPost: FC = () => {
 								</span>
 								<span>
 									<img src={iconEye} alt="View" className="inline-block mr-2" />
-									{abbreviateNumber(media.amountView)}
+									<button onClick={toggleModalSeen}>
+										{abbreviateNumber(media.amountView)}
+									</button>
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
@@ -263,7 +300,6 @@ const SocialPost: FC = () => {
 									fileContainerClassName="border-t"
 									mediaID={mediaID} />
 							</div>
-
 						</div>
 						{/* Post Suggest */}
 						<div className="post__suggest flex-shrink-0">
@@ -278,8 +314,6 @@ const SocialPost: FC = () => {
 									</React.Fragment>
 								)) : ''}
 								{/* <Link to="/"><div>21,3k</div></Link>
-								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link>
-								<Link to="/"><div>21,3k</div></Link>
 								<Link to="/">Đề xuất thanh toán hồ sơ chỉ gồm 01 bước duy nhất</Link> */}
 							</div>
 						</div>
@@ -297,46 +331,22 @@ const SocialPost: FC = () => {
 						images={media.images} />
 				</div>
 			</ModalContainer>
-			<ModalContainer isModalOpen={modalShowReact} toggle={() => ''}>
-				<div className="inline-flex flex-col text-black my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl" style={{ width: "550px", maxHeight: "440px" }}>
-					<div className="flex items-center justify-between border-b border-secondary-gray border-opacity-30 px-3">
-						<div className="flex">
-							<div className="flex items-center justify-center border-b-2 border-primary py-4 text-primary" style={{ minWidth: "100px" }}>
-								<img src={iconThumb} alt="Like" className="inline-block" />
-								<span>
-									{abbreviateNumber(media.amountReaction)}
-								</span>
-							</div>
-						</div>
-						<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl mr-1 h-10 w-10" onClick={() => toggleModalReact()}>
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</button>
-					</div>
-					<ul className="py-1 overflow-y-auto custom-scroll">
-						{(listReactions && listReactions.length) ? listReactions.map((reaction: ReactionProps) => (
-							<li key={reaction._id} className="flex justify-between pl-4 pr-2 py-2">
-								<div className="flex">
-									<img src={`${process.env.REACT_APP_URL_S3_USER}/${reaction.userCreate?.image}`} alt="avatar" className="h-10 w-10 rounded-full mr-3" />
-									<div>
-										<p className="text-black text-[15px]">{reaction.userCreate?.bizfullname}</p>
-										<p className="leading-[15px] mt-1">
-											{user?._id === reaction.userCreate?._id ? 'Đã là bạn' : ''}
-										</p>
-									</div>
-								</div>
-								<div>
-									<Link to={`/messages/#${reaction.userCreate?._id}`} className="flex items-center text-black py-1.5 pl-1.5 pr-4 bg-gray-100 rounded-md">
-										<img src={iconComment} alt="" className="inline-block w-6 h-6 mr-1" />
-										Nhắn tin
-									</Link>
-								</div>
-							</li>
-						)) : ''}
-					</ul>
-				</div>
-			</ModalContainer>
+			<ModalListUser
+				isModalOpen={modalShowReact}
+				toggle={toggleModalReact}
+				icon={iconThumb}
+				userID={user?._id}
+				data={listReactions}
+				total={media.amountReaction}
+			/>
+			<ModalListUser
+				isModalOpen={modalShowSeen}
+				toggle={toggleModalSeen}
+				icon={iconEye}
+				userID={user?._id}
+				data={listSeens}
+				total={totalRecordSeen}
+			/>
 			<CommentModal isShow={isShow} toggle={() => setIsShow(false)} initialData={defaultState} />
 		</>
 	);

@@ -22,7 +22,7 @@ export type MediaPayload = {
 
 export type MediaReactionPayload = {
   mediaID: string;
-  typeReaction?: string;
+  typeReaction?: number;
 };
 
 export type PostResponse = APIResponse & {
@@ -84,6 +84,14 @@ export type ReactionProps = {
     bizfullname: string,
     image: string
   };
+};
+
+export type ListSeenPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
 };
 
 export type ListReactionPayload = {

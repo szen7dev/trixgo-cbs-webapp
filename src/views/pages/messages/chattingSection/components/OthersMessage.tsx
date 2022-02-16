@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
+import ContactContent from "./chatContent/contactContent";
 
 type Props = {
     message: ItemMessage;
@@ -22,8 +23,9 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
@@ -38,7 +40,9 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
             case 2:
                 return <FileChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 1:
-                return <ImagesContent message={message} showSenderName={true}/>
+                return <ImagesContent message={message} showSenderName={true}/>;
+            case 7:
+                return <ContactContent message={message}/>;
         }
     },[message]);
 
@@ -63,7 +67,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                     }
                 }}
                 className={"transition relative duration-500 cursor-pointer message-container"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket}/>}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket} editor={editor}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>

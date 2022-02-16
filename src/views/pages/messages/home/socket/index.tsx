@@ -46,7 +46,6 @@ const SocketController:FC = () => {
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
-        console.log(data)
         if (data?.infoMessage?.error) {
             // Alert.alert(t('notification'), data.infoMessage.message);
             getListConversation({keyword: ""});
@@ -70,11 +69,10 @@ const SocketController:FC = () => {
                 scrollToBottom();
             }, 100)
         }
-        // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation });
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation, select: JSON.stringify({ sender:"bizfullname" }) });
     };
 
     const onReceiveConversation = (data: any) => {
-        console.log(data)
         dispatch(setListConversation(data.data.listRecords));
     }
 

@@ -65,7 +65,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[275px]"}>
+                    return <p className={"flex items-center max-w-[250px]"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
@@ -129,7 +129,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
                 className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
                 {
                     chat.avatar?
-                        <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

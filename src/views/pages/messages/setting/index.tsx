@@ -5,14 +5,15 @@ import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import SettingMessageDetailTab from "./components/SettingMessageDetailTab";
 import {MessageContext} from "../home/index_v2";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../../../../redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";
 import SavedMessage from "assets/images/saved-messages.svg";
+import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 
 const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
-
+    const dispatch = useDispatch()
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     const currentUser = localStorage.getItem("currentUser")??"P{";
@@ -54,14 +55,9 @@ const SettingMessageDetail:FC = () => {
         });
     }
 
-    if (!chat) {
-        return (
-            <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute right--402px"}>
-            </div>
-        )
-    }
+    if (!chat) return null
     return (
-        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white " + (showMenu?"right-0":"right--402px")}>
+        <div className={"messages-right-bar border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white  z-10 " + (showMenu?"right-0":"right--402px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
                 <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
                     <button onClick={() => setShowMenu(false)}>
@@ -74,7 +70,7 @@ const SettingMessageDetail:FC = () => {
                 <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
                     {
                         chat.avatar?
-                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
                             (
                                 getAvatarMembers().length === 0 ?
                                     <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
@@ -133,10 +129,13 @@ const SettingMessageDetail:FC = () => {
                 <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab chat={chat}/>
             </div>
-            {!chat.isPrivate&&<button
-                className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
-                <img src={AddUserToGroup} alt={"Pencil icon"}/>
-            </button>}
+            {!chat.isPrivate&&
+                <button
+                    onClick={() => dispatch(openAddUserToConversation({conversationId: currentChat}))}
+                    className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
+                    <img src={AddUserToGroup} alt={"Pencil icon"}/>
+                </button>
+            }
         </div>
     )
 }

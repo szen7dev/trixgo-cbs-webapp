@@ -41,6 +41,7 @@ export type ItemListConversation = {
         updatedAt: string;
         __v: number;
         url: string;
+        path: string;
     },
     description: string;
     messagesPin: string[];

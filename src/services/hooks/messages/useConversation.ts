@@ -1,5 +1,6 @@
 import ListMessageRepository from "apis/messages/message";
 import {
+    AddUserToConversationPayload,
     DeleteRevokeMessagePayload, ItemMessage,
     ListMessageData,
     ListMessagePayload,
@@ -24,6 +25,7 @@ type UseConversationType = {
     deleteMessage: (params: DeleteRevokeMessagePayload) => void;
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
+    addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -113,6 +115,14 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const addUserToConversation = async (params: AddUserToConversationPayload) => {
+        const {data, error} = await ListMessageRepository.addUserToConversation(params);
+
+        return new Promise<{ data: any, error: boolean }>((resolve, reject) => {
+            resolve({data, error});
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
@@ -122,6 +132,7 @@ export const UseConversation = () : UseConversationType => {
         updatePinMessage,
         deleteMessage,
         revokeMessage,
-        updatePoll
+        updatePoll,
+        addUserToConversation
     }
 }

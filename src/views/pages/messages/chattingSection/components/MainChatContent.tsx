@@ -23,6 +23,9 @@ import surprise from "assets/emoji/surprise.png";
 import ReminderNoti from "./reminder/ReminderNoti";
 import Poll from "./poll/Poll";
 import PollNoti from "./poll/PollNoti";
+import {action} from "@storybook/addon-actions";
+import AddUsersNoti from "./chatContent/AddUsersNoti";
+import PinMessageNoti from "./chatContent/pinMessageNoti";
 
 export const listEmoji = [
     {
@@ -159,14 +162,32 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 return <Reminder message={message}/>;
             case 5:
                 return <Poll message={message} chat={chat}/>;
+            case 7:
+                if (message.sender._id === profileId) {
+                    return <MyMessage message={message}/>
+                } else {
+                    return <OthersMessage message={message}/>
+                }
+            case 101:
+                // eslint-disable-next-line no-case-declarations
+                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
+                // eslint-disable-next-line no-case-declarations
+                const messsagesAdd = usersAdded.join("; ");
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
             case 108:
-                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:
-            case 112:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+            case 112:
+                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
-                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+                // eslint-disable-next-line no-case-declarations
+                let didAccept = message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id);
+                if (!didAccept) {
+                    didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
+                }
+                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
     return (

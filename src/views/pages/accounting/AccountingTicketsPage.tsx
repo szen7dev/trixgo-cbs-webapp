@@ -1,40 +1,129 @@
-import {FC} from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
 import Paginate from "../../../components/common/Paginate";
-import {useModal} from "../../../services/hooks/useModal";
+import { useModal } from "../../../services/hooks/useModal";
 import CreateNewTicket from "./components/CreateNewTicket";
-import {useSocial} from "../../../services/hooks/useSocial";
-import {NavLink} from "react-router-dom";
+import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import moment from "moment";
+import { DATE_FORMAT, DATE_FORMAT_TIME, VOUCHER_TYPES } from "apis/localdb/index";
+import { formatNumberMoney } from "helpers/index"
+
+import {
+    UseAccountingVoucherList,
+    useCreateAccountingVoucherMutation,
+    useUpdateAccountingVoucherMutation,
+    useDeleteAccountingVoucherMutation,
+} from "services/hooks/useAccountingVoucher";
+import { NavLink } from "react-router-dom";
 import SearchInput from "../../../components/common/SearchInput";
 import FinancialCashFlowFilterButton from "../financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import TriangleDown from "../../../assets/icons/TriangleDown";
 
-const AccountingTicketsPage:FC = () => {
+import Popover from "components/shared/Popover";
+
+const AccountingTicketsPage: FC = () => {
     const { openModal } = useModal();
-    const {
-        isLoadingListMedias,
-        nextPageListMedias,
-        prevPageListMedias,
-        totalRecord,
-        totalPages,
-        hasNextPage
-    } = useSocial();
+    const [pageParam, setPageParam] = useState('');
+    const [prevCursor, setPrevCursor] = useState([null]);
+    const accountingVoucher = UseAccountingVoucherList(pageParam);
+
+    const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
+    const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
+    const { deleteAccountingVoucherMutateAsync } = useDeleteAccountingVoucherMutation();
+
+    useEffect(() => {
+        if (!accountingVoucher.nextCursor) {
+            return;
+        }
+        const isExist = prevCursor.find(item => item === accountingVoucher.nextCursor)
+        if (!isExist) {
+            setPrevCursor([...prevCursor, accountingVoucher.nextCursor])
+        }
+    }, [accountingVoucher.nextCursor]);
+
+    const prevPageAction = () => {
+        if (!accountingVoucher.nextCursor) {
+            setPageParam(prevCursor[prevCursor.length - 2] || '')
+        } else {
+            const prev = prevCursor.findIndex(item => item === accountingVoucher.nextCursor)
+            setPageParam(prevCursor[prev - 2] || '')
+        }
+
+    };
+
+    const nextPageAction = () => {
+        setPageParam(accountingVoucher.nextCursor)
+    }
+
+    const handleFinishForm = useCallback(async (values, isEdit = false) => {
+        let res: any
+        if (isEdit) {
+            res = await updateAccountingVoucherMutateAsync(values);
+        } else {
+            res = await createAccountingVoucherMutateAsync(values);
+        }
+
+        if (res.code && res.code !== 200) {
+            return false;
+        }
+
+        if (!res.error) {
+            accountingVoucher.refetch()
+            return true;
+        }
+        return false;
+    }, [accountingVoucher]);
+
+    const { openDeleteConfirm } = useDeleteConfirm();
+
+    const handleAction = async (data: any, action: any) => {
+
+        switch (action) { // 1. In, 2. Copy 3. Cập nhật 4. Xóa
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                openModal(
+
+                    <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
+
+                        <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={data._id} title="Cập nhật" />
+                    </div>
+                )
+                break;
+            case 4:
+                openDeleteConfirm({
+                    deleteAction: async () => {
+                        const res = await deleteAccountingVoucherMutateAsync(data._id)
+                        if (!res.error) {
+                            accountingVoucher.refetch()
+                        }
+                    },
+                });
+                break;
+
+            default:
+                break;
+        }
+
+    }
 
     return (
-        <div className={"paginate-wrapper relative"}>
+        <div className={"relative min-h-full"}>
             <div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
                 <div className={"flex items-center flex-1"}>
                     <div className={"text-lg"}>Danh sách</div>
-                    <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)}/>
-                    <FinancialCashFlowFilterButton/>
+                    <SearchInput classNameWrapper={"ml-4"} onChange={event => console.log(event.target.value)} />
+                    <FinancialCashFlowFilterButton />
                 </div>
                 <button
                     onClick={() =>
                         openModal(
                             <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-                                <CreateNewTicket/>
+                                <CreateNewTicket onFinish={handleFinishForm} title="Phiếu mới" />
                             </div>
                         )
                     }
@@ -42,7 +131,7 @@ const AccountingTicketsPage:FC = () => {
                     Tạo mới
                 </button>
                 <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-                    <img alt={"Icon"} src={ThreeDotsVertical}/>
+                    <img alt={"Icon"} src={ThreeDotsVertical} />
                 </button>
             </div>
             <div className={"financial-cashflow-table"}>
@@ -50,8 +139,8 @@ const AccountingTicketsPage:FC = () => {
                     <div className={"header flex table-row sticky z-10"}>
                         <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
                             <div className={"flex items-center"}>
-                                <input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault"/>
-                                <TriangleDown/>
+                                <input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault" />
+                                <TriangleDown />
                             </div>
                         </div>
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"}>
@@ -81,109 +170,56 @@ const AccountingTicketsPage:FC = () => {
                         <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
                         </div>
                     </div>
-                    <div className={"body-table row flex table-row"}>
-                        <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"/accounting/home/123"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
-                            <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            05/11/2021
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Phiếu chi
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            PGI.PKT13
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Công ty xăng dầu số 2 Vạn Phúc
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Cung cấp xăng dầu định kỳ
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            34.125.000
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Đã cung cấp chứng từ gốc trả về cho công ty
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            <ActionAccountingGroup/>
-                        </div>
-                    </div>
-                    <div className={"body-table row flex table-row"}>
-                        <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"/accounting/home/123"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
-                            <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            05/11/2021
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Phiếu chi
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            PGI.PKT13
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Công ty xăng dầu số 2 Vạn Phúc
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Cung cấp xăng dầu định kỳ
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            34.125.000
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Đã cung cấp chứng từ gốc trả về cho công ty
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            <ActionAccountingGroup/>
-                        </div>
-                    </div>
-                    <div className={"body-table row flex table-row"}>
-                        <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                            <NavLink to={"/accounting/home/123"}>Chi phí xăng xe phục vụ việc đi lại của nhóm dự án CHG</NavLink>
-                            <p className={"mt-1 text-gray-500"}>Phùng Thị Hà-PG 20/07/2021 15:26</p>
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            05/11/2021
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Phiếu chi
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            PGI.PKT13
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Công ty xăng dầu số 2 Vạn Phúc
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Cung cấp xăng dầu định kỳ
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            34.125.000
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            Đã cung cấp chứng từ gốc trả về cho công ty
-                        </div>
-                        <div className={"px-2 py-4 table-cell box-border border-b"}>
-                            <ActionAccountingGroup/>
-                        </div>
-                    </div>
+                    {accountingVoucher?.listAccountingVoucher?.map((item: any) => {
+                        return (
+                            <div key={item._id} className={"body-table row flex table-row"}>
+                                <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
+                                    <NavLink to={`/accounting/home/${item._id}`}>
+                                        <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal" >
+                                            <p className="text-2-line-clamp">{`${item.name}`}</p>
+                                        </Popover>
+                                    </NavLink>
+
+                                    <p className={"mt-1 text-gray-500"}>{item.userCreate.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {item.sign}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {item.customer.name}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {item.contract?.name}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {formatNumberMoney(item.amount)}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    {item.note}
+                                </div>
+                                <div className={"px-2 py-4 table-cell box-border border-b"}>
+                                    <ActionAccountingGroup data={item} handleAction={handleAction} />
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
-            <Paginate  hasNextPage={hasNextPage} totalRecord={totalRecord} totalPages={totalPages} isFetching={isLoadingListMedias} nextPageAction={nextPageListMedias} prevPageAction={prevPageListMedias}/>
-        </div>
+            <Paginate
+                totalPages={accountingVoucher.totalPage}
+                totalRecord={accountingVoucher.totalRecord} hasNextPage
+                prevPageAction={() => prevPageAction()}
+                nextPageAction={() => nextPageAction()} />
+        </div >
     )
 };
 
