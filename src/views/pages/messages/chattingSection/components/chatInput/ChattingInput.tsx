@@ -42,7 +42,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const { addFileToUpload } = useUpload('CHATTING');
     const {openPopupSendFiles} = usePopupSendFiles();
 
-    const [doneUpload, setDoneUpload] = useState<{_id: string; progress: number;}[]>([]);
+    const [doneUpload, setDoneUpload] = useState<{[key: string] : number}>({});
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const [realValue, setRealValue] = useState("");
 
@@ -175,19 +175,19 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
-        setDoneUpload(message.files.map((file:any) => {
-            return {
-                _id: file._id,
-                progress: file.progress
-            }
-        }))
+        const uploadMap : {[key:string]: number} = {}
+        message.files.forEach((file:any) => {
+            uploadMap[file._id] = file.progress
+        })
+        setDoneUpload(uploadMap);
         dispatch(appendFakeMessageToConversation({
             conversationId: currentChat,
             messageId: message.tmpid,
             messageData: {
                 ...message,
                 _id: message.tmpid,
-                parent: replyData
+                parent: replyData,
+                fileProgress: uploadMap
             }
         }));
         setTimeout(() => {
@@ -201,26 +201,18 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 files: file.realFile,
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
-                    const messageData = {
-                        ...message,
-                        files: [...message.files].map(oldFile => {
-                            if (oldFile._id === file._id) {
-                                return {
-                                    ...oldFile,
-                                    progress: percentCompleted
-                                }
-                            }
-                            return {
-                                ...oldFile
-                            }
-                        })
-                    };
                     dispatch(updateFileProgressOnMessage({
                         conversationId: currentChat,
                         messageId: message.tmpid,
-                        messageData: messageData,
+                        fileId: file._id,
+                        progress: percentCompleted
                     }));
-                    setDoneUpload(messageData.files)
+                    setDoneUpload(oldValue => {
+                        return {
+                            ...oldValue,
+                            [file._id]: percentCompleted
+                        }
+                    })
                 },
                 compressConfig: {
                     useCompress: useCompress,
@@ -241,14 +233,16 @@ const ChattingInput:FC<Props> = ({chat}) => {
     }
 
     useEffect(() => {
-        const isDone = doneUpload.length>0&&doneUpload.every(file => file.progress === 100);
-        console.log(isDone)
+        const isDone = Object.values(doneUpload).length>0&&Object.values(doneUpload).every(progress => progress === 100);
+        console.log("done upload: ", isDone)
         if (isDone&&willSendFileMessage) {
             // console.log(willSendFileMessage)
-            socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
-            setDoneUpload([]);
-            setWillSendFileMessage(null);
+            setTimeout(() => {
+                socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
+                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
+                setDoneUpload({});
+                setWillSendFileMessage(null);
+            }, 200)
         }
     }, [willSendFileMessage, doneUpload])
 
