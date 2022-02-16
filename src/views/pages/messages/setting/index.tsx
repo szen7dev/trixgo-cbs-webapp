@@ -69,7 +69,7 @@ const SettingMessageDetail:FC = () => {
                 <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
                     {
                         chat.avatar?
-                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
                             (
                                 getAvatarMembers().length === 0 ?
                                     <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

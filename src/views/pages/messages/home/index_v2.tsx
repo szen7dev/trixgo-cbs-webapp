@@ -53,6 +53,7 @@ const MessagesHome:FC = () => {
 
     useEffect(() => {
         currentChat&&setShowMenu(true)
+        currentChat&&setShowSearch(false)
     }, [currentChat])
 
     return (

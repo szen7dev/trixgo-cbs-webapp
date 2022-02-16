@@ -4,6 +4,7 @@ import TextReply from "./replyContent/textReply";
 import FileReply from "./replyContent/fileReply";
 import ImageReply from "./replyContent/imageReply";
 import moment from "moment";
+import ContactReply from "./replyContent/contactReply";
 
 type Props = {
     message: any;
@@ -20,6 +21,8 @@ const DeleteChatContent:FC<Props> = ({message,className,showSenderName, isMyMess
                 return <FileReply message={message.parent}/>;
             case 1:
                 return <ImageReply message={message.parent}/>;
+            case 7:
+                return <ContactReply message={message.parent}/>;
         }
     }
     return (

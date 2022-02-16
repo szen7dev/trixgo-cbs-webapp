@@ -10,6 +10,7 @@ import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import ReactionList from "../reactions/ReactionList";
 import ReactionActions from "../reactions/ReactionActions";
+import ContactReply from "./replyContent/contactReply";
 
 type Props = {
     message: ItemMessage;
@@ -95,6 +96,8 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                 return <FileReply message={message.parent}/>;
             case 1:
                 return <ImageReply message={message.parent}/>;
+            case 7:
+                return <ContactReply message={message.parent}/>;
         }
     }
 

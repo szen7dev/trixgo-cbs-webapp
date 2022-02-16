@@ -129,7 +129,7 @@ const ListChatItem:FC<Props> = ({chat}) => {
                 className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
                 {
                     chat.avatar?
-                        <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
+                        <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
                         (
                             getAvatarMembers().length === 0 ?
                                 <div className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

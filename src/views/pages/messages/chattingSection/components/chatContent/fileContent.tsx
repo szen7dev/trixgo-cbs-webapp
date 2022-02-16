@@ -13,6 +13,7 @@ import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
 import ReactionList from "../reactions/ReactionList";
 import ReactionActions from "../reactions/ReactionActions";
+import ContactReply from "./replyContent/contactReply";
 type Props = {
     message: any;
     className?: string;
@@ -49,6 +50,8 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                 return <FileReply message={message.parent}/>;
             case 1:
                 return <ImageReply message={message.parent}/>;
+            case 7:
+                return <ContactReply message={message.parent}/>;
         }
     }
 

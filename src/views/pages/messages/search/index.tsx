@@ -1,136 +1,69 @@
-import React, {FC, useCallback, useContext} from "react";
-import Close from "assets/icons/Close";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import BellIcon from "assets/images/icons8-bell-100.svg";
-import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
+import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {MessageContext} from "../home/index_v2";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import AvatarGroupChat from "../list/components/AvatarGroupChat";
-import SavedMessage from "assets/images/saved-messages.svg";
 import IconBackGray from "assets/images/icon-back-gray.svg";
+import SearchIcon from "assets/images/icons8-search-120.png";
+import {UseMessage} from "services/hooks/messages/useMessage";
+import {map as _map} from "lodash";
+import ListSearchMessagesItem from "./components/listSearchMessagesItem";
+import Close from "../../../../assets/icons/Close";
 
 const SearchMessage:FC = () => {
     const {currentChat, setShowSearch, showSearch} = useContext(MessageContext);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const {searchMessages, totalRecordRequest, hasSearchMessageNextPage, nextPageSearchMessage} = UseMessage({conversationID: currentChat, keyword: searchTerm}, (showSearch && searchTerm.length > 0));
 
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
-    const currentUser = localStorage.getItem("currentUser")??"P{";
-    const profileId = JSON.parse(currentUser)?._id;
+    useEffect(() => {
+        inputRef.current&&inputRef.current.focus()
+    }, [inputRef]);
 
-    const getAvatarMembers = useCallback(() => {
-        if (chat.isPrivate) {
-            if (chat.members.length === 1) {
-                return [SavedMessage];
-            } else {
-                const members = chat.members.filter((item: any) => item._id != profileId);
-                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
-            }
-        }
-        const avatars: any = [];
-        if (chat.members && chat.members.length) {
-            chat.members.slice(0, 4).forEach((member: any) => {
-                avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
-            });
-        }
-        return avatars;
-    }, [chat, profileId]);
-
-    const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length === 1) {
-            return "Saved Messages";
-        }
-        if (chat.members && chat.members.length === 2) {
-            const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return (userInConversation.bizfullname||userInConversation.fullname).trim();
-        }
-
-        return chat?.name;
-    }, [chat, profileId]);
-
-    const getPresentGroupName = (name: string) => {
-        return name.split('').slice(0, 1).map((text: string) => {
-            return text.charAt(0).toUpperCase()
-        });
+    const handleSearchTerm = (str: string) => {
+        setSearchTerm(str)
     }
 
     if (!chat) return null;
     return (
         <div className={"messages-right-bar-search border-l transition-all duration-500 group w-[402px] min-w-[402px] absolute h-full bg-white z-11 " + (showSearch?"right-0":"right--402px")}>
             <div className={"h-full group overflow-auto no-webkit-scrollbar"}>
-                <div className={"h-[56px] bg-white flex justify-between p-[17px] sticky top-0 z-5"}>
-                    <button onClick={() => setShowSearch(false)}>
-                        <img  src={IconBackGray} alt={"----"}/>
-                    </button>
-                    <button>
-                        <img  src={PencilIcon} alt={'--'}/>
-                    </button>
-                </div>
-                <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
-                    {
-                        chat.avatar?
-                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={chat?.avatar?.url} alt={getNameConversation()}/>:
-                            (
-                                getAvatarMembers().length === 0 ?
-                                    <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
-                                        {getPresentGroupName(getNameConversation())}
-                                    </div> :
-                                    <AvatarGroupChat
-                                        avatars={getAvatarMembers()}
-                                        imageClass={"w-[120px] h-[120px] min-w-[120px] min-h-[120px]"}
-                                        classesMap={{
-                                            "group_1": {
-                                                imgWidth: "w-full h-full",
-                                                groupPosition: [""]
-                                            },
-                                            "group_2": {
-                                                imgWidth: "w-[80px] h-[80px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-0 z-2",
-                                                    "top-0 right-0 z-1",
-                                                ]
-                                            },
-                                            "group_3": {
-                                                imgWidth: "w-[70px] h-[70px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-25px z-3",
-                                                    "top-0 left-0 z-2",
-                                                    "top-0 right-0 z-1",
-                                                ]
-                                            },
-                                            "group_4": {
-                                                imgWidth: "w-[70px] h-[70px] absolute",
-                                                groupPosition: [
-                                                    "bottom-0 left-0 z-4",
-                                                    "top-0 left-0 z-3",
-                                                    "top-0 right-0 z-2",
-                                                    "bottom-0 right-0 z-1"
-                                                ]
-                                            }
-                                        }}
-                                    />
-                            )
-                    }
-                    <div className={"flex flex-col px-[25px] pb-[15px] w-full items-center mt-[10px]"}>
-                        <div className={"text-xl"}>
-                            {getNameConversation()}
-                        </div>
-                        <div className={"text-gray-400"}>
-                            {chat.members.length} thành viên
+                <div className={"bg-white p-2 sticky top-0 z-5"}>
+                    <div className={"flex items-center"}>
+                        <button onClick={() => setShowSearch(false)} className={"flex w-[40px] h-[40px] items-center justify-center mr-[14px]"}>
+                            <Close/>
+                        </button>
+                        <div className={"relative flex items-center flex-1"}>
+                            <img  src={SearchIcon} alt={"icon search"} className={"absolute w-[24px] h-[24px] left-2"}/>
+                            <input
+                                onChange={e => handleSearchTerm(e.target.value)}
+                                ref={inputRef}
+                                className={"h-[44px] w-full bg-gray-100 px-[12px] py-[10px] pl-[36px] rounded-full focus:outline-none"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}
+                            />
                         </div>
                     </div>
+                    {
+                        searchTerm.length > 0&&
+                        <div className={"text-gray-400 mt-4 px-2"}>
+                            {totalRecordRequest} tin nhắn được tìm thấy
+                        </div>
+                    }
                 </div>
-                <div className={"flex justify-between items-center p-[17px] bg-white"}>
-                    <img  src={BellIcon} alt={"...."}/>
-                    <div className={"flex-1 text-left ml-4"}>Notifications</div>
-                    <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
+                <div className={"w-full px-[5px]"}>
+                    {
+                        _map(searchMessages, message => <div className={"w-full"} key={message._id}><ListSearchMessagesItem message={message}/></div>)
+                    }
+                    {
+                        hasSearchMessageNextPage &&
+                        <button
+                            onClick={() => nextPageSearchMessage()}
+                            className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
+                            Xem thêm
+                        </button>
+                    }
                 </div>
-                <div className={"h-3 w-full bg-gray-100"}></div>
             </div>
-            {!chat.isPrivate&&<button
-                className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
-                <img src={AddUserToGroup} alt={"Pencil icon"}/>
-            </button>}
         </div>
     )
 }
