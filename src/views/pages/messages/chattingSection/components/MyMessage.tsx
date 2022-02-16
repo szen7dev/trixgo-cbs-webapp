@@ -23,7 +23,7 @@ const MyMessage:FC<Props> = ({message}) => {
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
     const {socketRef, editorRef} = useContext(MessageContext);
     const socket = socketRef.current;
-    const editor = editorRef.current;
+    const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
