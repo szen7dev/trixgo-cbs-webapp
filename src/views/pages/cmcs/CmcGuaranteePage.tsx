@@ -131,7 +131,7 @@ const CmcGuarantee: FC = () => {
                   />
                 </td>
                 <td className="py-1 px-2">
-                  <Popover onMouseEnterTooltip={false} tooltip={`${item.project.sign}.${item.name}`} classTooltip="w-[404px] whitespace-normal" >
+                  <Popover onMouseEnterTooltip={false} tooltip={`${item?.project?.sign}.${item.name}`} classTooltip="w-[404px] whitespace-normal" >
                     <p className="text-1-line-clamp">{`${item.project.sign}.${item.name}`}</p>
                   </Popover>
 
