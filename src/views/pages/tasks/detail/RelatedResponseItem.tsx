@@ -15,14 +15,17 @@ import { ResponseProps } from "typings/task";
 import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
+import { ImageProps } from "typings/social";
 
 type Props = {
   expanded?: boolean;
   isHighlight?: boolean;
-  response: ResponseProps
+  response: ResponseProps,
+
+  onClickImage?: (images: ImageProps[], index: number) => void;
 };
 
-const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => {
+const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, onClickImage }) => {
   const { mutateAsync: updateMarkResponseAsync } =
     useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
       TaskRepository.updateMarkResponse(payload)
@@ -54,9 +57,9 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
     <>
       <div className={
         classNames("flex",
-        isHighlight 
-          ? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 hover:scale-125 p-3 transition ease-in-out delay-150 duration-300' 
-          : 'animate-[wiggle_1s_ease-in-out_infinite]'
+          isHighlight
+            ? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 hover:scale-125 p-3 transition ease-in-out delay-150 duration-300'
+            : 'animate-[wiggle_1s_ease-in-out_infinite]'
         )
       }>
         <img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
@@ -76,9 +79,8 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
               </span>
               <input type="checkbox" defaultChecked={response.isMarked} onChange={handleMarkChange} />
               <button
-                className={`${
-                  expanded ? "h-10 bg-lighter-gray" : "pl-3"
-                } text-[13px] w-10 flex justify-center items-center rounded-full`}
+                className={`${expanded ? "h-10 bg-lighter-gray" : "pl-3"
+                  } text-[13px] w-10 flex justify-center items-center rounded-full`}
               >
                 <DotsVerticalIcon />
               </button>
@@ -97,13 +99,13 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
             <div>
               {(response.comment.files && response.comment.files.length) ? response.comment.files.map(file => (
                 <div className="flex w-full my-2" key={file._id}>
-                  <div className="w-5/8 bg-gray-100 p-2 rounded-sm border border-slate-400">
+                  <div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
                     <a href="/">
                       <div className="flex">
                         <div>
                           <img src={PDFIcon} className="w-8" alt="PDF" />
                         </div>
-                        <div className="ml-3">
+                        <div className="ml-3 w-full">
                           <div className="flex">
                             <span className="w-5/6">
                               {file.nameOrg}
@@ -117,9 +119,9 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
                             </div>
                           </div>
 
-                          <div className="flex w-full mt-2">
+                          <div className="flex w-full mt-2 indeterminate:">
                             <span className="w-[70%] text-[13px] text-primary-gray">
-                            {file.userCreate?.bizfullname}
+                              {file.userCreate?.bizfullname}
                             </span>
                             <span className="text-right w-[30%] text-[13px] text-primary-gray">
                               {moment(file.createAt).format('HH:mm DD/M/YYYY')}
@@ -139,7 +141,9 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
                     />
                   </div>
                   <div className="w-1/8 flex flex-col items-center justify-between">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      className="cbs-checkbox-2 w-3.5 h-3.5 checked:bg-cbs-completed checked:border-cbs-completed rounded-[3px] border-[1px] border-primary-border focus:ring-2 focus-visible:outline-none focus:ring-cbs-completed focus:ring-opacity-30" />
                     <div className="rounded-full p-2 border-2">
                       <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
                         <img src={IconDownload} alt="Avatar" className="w-6" />
@@ -152,15 +156,15 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response }) => 
               <div className="flex w-full space-x-2 mt-5 mb-2">
                 {(response.comment.images && response.comment.images.length) ? response.comment.images.map((file, index) => {
 
-                  if(index < 2) {
+                  if (index < 2) {
                     return (
-                      <div className="w-1/3" key={file._id}>
+                      <button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.comment.images || [], index)}>
                         <img src={file.path ? `${process.env.REACT_APP_URL_S3}/${file.path}` : file.url} className="w-full" alt="test" />
-                      </div>
+                      </button>
                     )
                   }
 
-                  if(index === 3) {
+                  if (index === 3) {
                     return (
                       <div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
                         <img

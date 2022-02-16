@@ -1,11 +1,11 @@
-import { FC, memo, MouseEventHandler, useContext, useEffect } from "react";
+import { FC, memo, MouseEventHandler, useEffect, useState } from "react";
 
 import SearchInput from "components/common/SearchInput";
 import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import generateImageLink from 'views/pages/media/utils/images'
-import ModalViewPost from "views/pages/media/components/post/ModalViewPost";
-import { ContextModalPost, ProviderModalPost } from "views/pages/media/context/post";
+import CommentModal from "components/common/detail-post";
+import { ImageProps } from "typings/social";
 
 const CardItem = memo(({ index, onClick }: { index: number, onClick: MouseEventHandler<HTMLDivElement> }) => <div className="w-32 cursor-pointer" onClick={onClick}>
 	<div className="relative w-32 h-32">
@@ -19,18 +19,49 @@ const CardItem = memo(({ index, onClick }: { index: number, onClick: MouseEventH
 
 CardItem.displayName = "CardItem";
 
-const ProjectPhotoPackage: FC = () => {
-	const { openPost } = useContext(ContextModalPost);
+const ProjectPhotoPackagePage: FC = () => {
+	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, });
+	const [isShow, setIsShow] = useState(false);
+
 	useEffect(() => {
 		document.title = "CHG.THT-Hình ảnh"
 	}, []);
 
-	const mediaID = '61c6caf6f92c4e0d68779554';
-	const handleOpenPost = (i = 0) => openPost({
-		mediaId: mediaID,
-		images: Array.from({ length: 4 }).map((_, index) => ({ id: index.toString(), url: generateImageLink() })),
-		index: i
-	})
+	const mediaID = '620b09c36a97815180b079b5';
+	const handleOpenPost = (i = 0) => {
+		setDefaultState({
+			mediaID,
+			images: [
+				{
+					"_id": "620b09c06a97815180b079af",
+					"nameOrg": "photo1642003084205-1642003084324182971234-1642003102108379400375.jpg",
+					"name": "ba3fcd4f-2bd0-4126-81f5-09e4e38acd60.jpg",
+					"path": "root/test/ba3fcd4f-2bd0-4126-81f5-09e4e38acd60.jpg",
+					"size": 77000,
+					"type": "image/jpeg"
+				},
+				{
+					"_id": "620b09c06a97815180b079b1",
+					"nameOrg": "musk3-16357315967521765044075-16357316113371296920407-1644889832128738911430.jpg",
+					"name": "14f65386-95b8-40d4-856d-676d5b71f8d8.jpg",
+					"path": "root/test/14f65386-95b8-40d4-856d-676d5b71f8d8.jpg",
+					"size": 24251,
+					"type": "image/jpeg"
+				},
+				{
+					"_id": "620b09c06a97815180b079b3",
+					"nameOrg": "photo1644889415337-16448894154671522529919.jpg",
+					"name": "3d2da7de-f5b6-4d8a-9999-292d46c303b1.jpg",
+					"path": "root/test/3d2da7de-f5b6-4d8a-9999-292d46c303b1.jpg",
+					"size": 68159,
+					"type": "image/jpeg"
+				}
+			],
+			index: i
+		});
+		setIsShow(true)
+	}
+	const toggle = () => setIsShow(!isShow)
 
 	return (
 		<>
@@ -68,17 +99,9 @@ const ProjectPhotoPackage: FC = () => {
 					}
 				</div>
 			</div>
-			<ModalViewPost listComments={[]} mediaID={mediaID} />
+			<CommentModal isShow={isShow} toggle={toggle} initialData={defaultState} />
 		</>
 	);
 };
-
-const ProjectPhotoPackagePage: FC = () => {
-	return (
-		<ProviderModalPost>
-			<ProjectPhotoPackage />
-		</ProviderModalPost>
-	)
-}
 
 export default ProjectPhotoPackagePage;

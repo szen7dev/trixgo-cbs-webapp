@@ -1,16 +1,7 @@
 import modalTypes from "views/pages/media/context/post/modal.types";
 
 import { DispatchProps } from "typings/ppt/reducer";
-
-interface StateProps {
-  isShow: boolean;
-  mediaID: string;
-  isPost: boolean;
-  isComment: boolean;
-  isReply: boolean;
-  images: any[];
-  index: number;
-}
+import { ImageProps } from "typings/social";
 
 export const INITIAL_STATE = {
   isShow: false,
@@ -18,9 +9,11 @@ export const INITIAL_STATE = {
   isPost: false,
   isComment: false,
   isReply: false,
-  images: [],
+  images: [] as ImageProps[],
   index: 0,
 };
+
+export type StateProps = typeof INITIAL_STATE;
 
 const modalReducers = (
   state: StateProps,
@@ -69,6 +62,11 @@ const modalReducers = (
         isPost: false,
         isComment: false,
         isReply: true,
+      };
+    case modalTypes.SET_INDEX:
+      return {
+        ...state,
+        index: action.payload,
       };
     default:
       return state;

@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useContext, useEffect, useRef, useState } from 'react'
 
 import cn from 'classnames';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -8,21 +8,19 @@ import iconNext from 'assets/images/icons8-next-page-50.png';
 import iconCollapse from 'assets/images/icons8-collapse-48.png';
 import iconFit from 'assets/images/icons8-fit-to-width-50.png';
 
-import { ImageProps, ModalProps } from 'typings/social';
+import { ModalProps } from 'typings/social';
 import SideComments from './SideComments';
 import './style.css';
+import { ContextModalPost } from '../../context/post';
 
 interface Props {
-	images: ImageProps[]
-	index?: number,
 	mediaID: string
 }
 
-const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) => {
+const ViewPost: FC<Props & ModalProps> = ({ toggle, mediaID }) => {
 	const [collapsed, setCollapsed] = useState<boolean>(false);
-	const [imageIndex, setImageIndex] = useState<number>(index || 0);
+	const { state, setIndex } = useContext(ContextModalPost)
 	const [isZoom, setIsZoom] = useState<boolean>(false);
-
 	const transform = useRef<ReactZoomPanPinchRef>(null);
 
 	const settings = {
@@ -37,8 +35,8 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 	const onTransitionEnd = () => {
 		transform.current?.centerView();
 	};
-	const handleNextImage = () => setImageIndex(imageIndex + 1);
-	const handlePreviousImage = () => setImageIndex(imageIndex - 1);
+	const handleNextImage = () => setIndex(state.index + 1);
+	const handlePreviousImage = () => setIndex(state.index - 1);
 	const handleZoom = (e: ReactZoomPanPinchRef) => {
 		console.log('handleZoom')
 		if (e.state.scale === settings.min) {
@@ -92,7 +90,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 						</div>
 					</div>
 					<div className={cn("flex items-center px-3 select-none transition-opacity ease-in-out", isZoom ? "opacity-0 invisible" : '')}>
-						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === 0} onClick={handlePreviousImage}>
+						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={state.index === 0} onClick={handlePreviousImage}>
 							<img src={iconNext} alt="next" className="react__slider-btn" />
 						</button>
 					</div>
@@ -141,7 +139,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 											}}
 											wrapperClass='inset-0 justify-center items-center'
 										>
-											<img className="max-h-full object-contain w-max" alt="..." src={images[imageIndex].path} />
+											<img className="max-h-full object-contain w-max" alt="..." src={`${process.env.REACT_APP_URL_S3}/${state.images[state.index].path}`} />
 										</TransformComponent>
 									</React.Fragment>
 								)
@@ -149,7 +147,7 @@ const ViewPost: FC<Props & ModalProps> = ({ images, toggle, index, mediaID }) =>
 						</TransformWrapper>
 					</div>
 					<div className={cn("flex items-center px-3 select-none transition-opacity ease-in-out", isZoom ? "opacity-0 invisible" : '')}>
-						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={imageIndex === images.length - 1} onClick={handleNextImage}>
+						<button className="media__btn border-none outline-none disabled:opacity-30" disabled={state.index === state.images.length - 1} onClick={handleNextImage}>
 							<img src={iconNext} alt="next" className="react__slider-btn transform rotate-180" />
 						</button>
 					</div>

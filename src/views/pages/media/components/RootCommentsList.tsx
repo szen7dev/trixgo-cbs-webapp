@@ -7,6 +7,7 @@ import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/social";
 import CommentContext from '../context/comment/comment.context';
 import { ContextModalPost } from '../context/post';
+import { Comment as CommentType } from 'typings/ppt/comment';
 
 type Props = {
 	comments?: CommentProps[],
@@ -14,10 +15,11 @@ type Props = {
 	totalRecord?: number,
 	limit?: number,
 	smallImage?: boolean,
+	onClickImage?: (comment: CommentType, index: number) => void,
 }
 
 const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
-	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
+	onClickImage, smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
 }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const { state: statePost } = useContext(ContextModalPost);
