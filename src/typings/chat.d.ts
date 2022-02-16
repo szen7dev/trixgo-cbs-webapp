@@ -1,7 +1,5 @@
 import { Socket } from "socket.io-client";
 
-import { User } from "./auth";
-
 /**
  * ? Message Status Code
  * * 0 --> sent but not received
@@ -16,47 +14,55 @@ enum MessageStatus {
   3 = 3,
 }
 
-export type SSC_ONLINE_USER_CB = {
-  listFriendOnline: string[];
-};
-
-export type CSS_SEND_MESSAGE_PAYLOAD = {
-  tempID: string;
-  conversationID: string;
-  messageID: string;
-  isLikeIcon: boolean;
-  isShareMessage: boolean;
-  messageShareID: string;
-  content: string;
-};
-
 export type MessageChat = {
   _id: string;
-  createAt: string;
-  modifyAt: string;
-  sender: User;
-  status: MessageStatus;
+  roomId: string;
+  senderId: string;
   content: string;
+  status: MessageStatus;
+  createAt: string;
+  modifiedAt: string;
 };
 
 export type Conversation = {
   _id: string;
-  logo: string;
   name: string;
-  members: string[];
-  author: string[];
-  lastMessage: MessageChat;
+  logo: string[];
+  userIds: string[];
+  messages: MessageChat[];
+  createAt: string;
+  modifiedAt: string;
+};
+
+export type SendMessagePayload = {
+  roomId: string;
+  senderId: string;
+  content: string;
 };
 
 export type ChatState = {
   socket: Socket | null;
   conversations: Conversation[];
-  messagesChat: MessageChat[];
+  currentConversation: Conversation | null;
 };
 
-export type ChatActionType = "CONNECT_SOCKET";
 export type ConnectSocket = {
   type: "CONNECT_SOCKET";
   payload: Socket;
 };
-export type ChatActions = ConnectSocket;
+export type DisconnectSocket = {
+  type: "DISCONNECT_SOCKET";
+};
+export type SetConversations = {
+  type: "SET_CONVERSATIONS";
+  payload: Conversation[];
+};
+export type SetCurrentConversation = {
+  type: "SET_CURRENT_CONVERSATION";
+  payload: Conversation;
+};
+export type ChatActions =
+  | ConnectSocket
+  | DisconnectSocket
+  | SetConversations
+  | SetCurrentConversation;

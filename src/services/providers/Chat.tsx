@@ -15,6 +15,21 @@ const reducer = (state: ChatState, action: ChatActions): ChatState => {
         ...state,
         socket: action.payload,
       };
+    case "DISCONNECT_SOCKET":
+      return {
+        ...state,
+        socket: null,
+      };
+    case "SET_CONVERSATIONS":
+      return {
+        ...state,
+        conversations: action.payload,
+      };
+    case "SET_CURRENT_CONVERSATION":
+      return {
+        ...state,
+        currentConversation: action.payload,
+      };
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { ThunkAction, Action } from "@reduxjs/toolkit";
 
 import Store from "data/store";
+import {ItemMessage} from "./apis/messages/listMessage";
 
 export type AppDispatch = typeof Store.dispatch;
 export type RootState = ReturnType<typeof Store.getState>;
@@ -17,7 +18,6 @@ export type ModalState = {
   isModalOpen: boolean;
   modalContent: ReactNode;
 };
-export type ModalActionType = "OPEN_MODAL" | "CLOSE_MODAL";
 export type OpenModal = {
   type: "OPEN_MODAL";
   payload: ReactNode;
@@ -36,3 +36,88 @@ export type ToggleTheme = {
   payload: Theme;
 };
 export type ThemeActions = ToggleTheme;
+
+export type RowPlanningFinancial = {
+  collapsed: boolean;
+  _id: string|number;
+  tt?: string|number;
+  content?: string;
+  ngayDuKien?: string;
+  duKienThu?: string|number;
+  thucTheThu?: string|number;
+  duKienChi?: string|number;
+  thucTeChi?: string|number;
+  ngayThucTe?: string;
+  hopDong?: string|number;
+  ghiChu?: string;
+  childrens?: RowPlanningFinancial[]
+}
+
+export type DeleteConfirmContent = {
+  deleteAction: () => void;
+  title?: string;
+  message?: string;
+}
+
+export type DeleteConfirmState = {
+  isDeleteConfirmOpen: boolean;
+  deleteConfirmContent: DeleteConfirmContent;
+};
+export type OpenDeleteConfirm = {
+  type: "OPEN_DELETE_CONFIRM";
+  payload: DeleteConfirmContent;
+};
+export type CloseDeleteConfirm = {
+  type: "CLOSE_DELETE_CONFIRM";
+};
+export type DeleteConfirmActions = OpenDeleteConfirm | CloseDeleteConfirm;
+
+export type PopupSendFilesContent = {
+  files: any[];
+  sendType: "image"|"file";
+  defaultSendType: "image"|"file";
+  conversationID: string;
+  handleSendFile: (message: any, useCompress=true) => void
+}
+
+export type PopupSendFilesState = {
+  isShowPopupSendFiles: boolean;
+  popSendFilesContent: PopupSendFilesContent;
+}
+
+export type OpenPopupSendFiles = {
+  type: "OPEN_POPUP_SEND_FILES";
+  payload: PopupSendFilesContent;
+}
+
+export type ClosePopupSendFiles = {
+  type: "CLOSE_POPUP_SEND_FILES"
+}
+
+export type SetSendTypePopupSendFiles = {
+  type: "SET_SEND_TYPE",
+  payload: "image"|"file"
+}
+
+export type PopupSendFilesActions = OpenPopupSendFiles | ClosePopupSendFiles | SetSendTypePopupSendFiles;
+
+export type RightClickMenuState = {
+  isRightClickMenuOpen: boolean;
+  rightClickMenuContent: {
+    content: ReactNode,
+    x: number,
+    y: number
+  };
+};
+export type OpenRightClickMenu = {
+  type: "OPEN_RIGHT_CLICK";
+  payload: {
+    content: ReactNode,
+    x: number,
+    y: number
+  };
+};
+export type CloseRightClickMenu = {
+  type: "CLOSE_RIGHT_CLICK";
+};
+export type RightClickMenuActions = OpenRightClickMenu | CloseRightClickMenu;

@@ -1,52 +1,155 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 import AuthContext from "services/contexts/Auth";
-
-import { sleep } from "helpers/time";
+import API from "apis/repository";
+import AuthenticationRepository from "apis/authentication";
 
 import { User, SignInPayload } from "typings/auth";
 
 type UseAuth = {
-  isAuthenticated: boolean;
   isLoading: boolean;
+  hasAuthenticated: boolean;
   user: User | null;
   token: string | null;
   signIn: (payload: SignInPayload) => void;
   signOut: () => void;
+  dataUserInfo: any;
+  refetchDataUserInfo: any;
+  updateDevice: (_id: string) => void;
 };
 
 export const useAuth = (): UseAuth => {
-  const { dispatch, state } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const history = useHistory();
 
-  const signIn = async (_payload: SignInPayload) => {
-    try {
-      dispatch({ type: "REQUEST_SIGN_IN" });
+  useEffect(() => {
+    if (
+        localStorage.getItem("currentUser") === null ||
+        localStorage.getItem("token") === null
+    ) {
+      dispatch({ type: "SIGN_IN_ERROR" });
+    } else {
+      API.defaults.headers.Authorization = `Bearer ${JSON.parse(
+          localStorage.getItem("token") as string
+      )}`;
 
-      await sleep(2500);
-
-      const data = {
-        user: {
-          _id: "496f90ce-e2a1-4c56-966f-2df3aeecd548",
-          image:
-            "https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg",
-          email: "letrunghieu.nalee@gmail.com",
-          userName: "NALee",
-          firstName: "Hiếu",
-          lastName: "Lê",
+      dispatch({
+        type: "SIGN_IN_SUCCESS",
+        payload: {
+          user: JSON.parse(localStorage.getItem("currentUser") as string),
+          token: localStorage.getItem("token") as string
         },
-        token: "5e60f12591e6794c8e13190a",
-      };
+      });
+    }
+  }, [dispatch]);
 
-      if (data.user) {
+  const { data: dataUserInfo, refetch: refetchDataUserInfo } =
+      useQuery("user_info", () => AuthenticationRepository.usersInfo(), {enabled: false});
+
+  const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
+      useMutation((payload: SignInPayload) =>
+          AuthenticationRepository.signIn(payload)
+      );
+
+  const ONESIGNAL_APP_ID = process.env.REACT_APP_ENV === 'development'
+      ? process.env.REACT_APP_ONESIGNAL_APP_ID_LOCAL
+      : process.env.REACT_APP_ONESIGNAL_APP_ID_STAGING;
+  const updateDevice = (_id: string) => {
+    if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
+      navigator.serviceWorker.register('/OneSignalSDKWorker.js');
+    }
+    if (ONESIGNAL_APP_ID) {
+      OneSignalReact.init({
+        appId: ONESIGNAL_APP_ID,
+        notifyButton: {
+          enable: true,
+        },
+        autoResubscribe: true,
+        // notificationClickHandlerMatch: 'origin',
+        // notificationClickHandlerAction: 'focus',
+        allowLocalhostAsSecureOrigin: true,
+      })
+          .then(e => {
+            OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
+              if (isEnabled)
+                console.log("Push notifications are enabled!");
+              else {
+                console.log("Push notifications are not enabled yet.");
+                OneSignalReact.showSlidedownPrompt();
+              }
+            });
+
+            // case 2: chờ submit allow subscribe tại màn hình hiện tại
+            OneSignalReact.on('popoverAllowClick', function() {
+              console.log('Slide ALLOW CLICK');
+
+              OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+                console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+                if (oneSignalWebPushID) {
+                  const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
+                  if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+                    localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
+                    await AuthenticationRepository.updateDevice({
+                      platform: process.env.REACT_APP_PLATFORM??"1",
+                      deviceID: 'BROWSER',
+                      deviceName: 'BROWSER',
+                      registrationID: oneSignalWebPushID || '',
+                      oneSignalID: oneSignalWebPushID || '',
+                      env: "1"
+                    });
+                  }
+                }
+              })
+            });
+
+            // case 1: đã subscribe page trước đó
+            OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+              console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+              if (oneSignalWebPushID) {
+                const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
+                if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+                  localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
+                  await AuthenticationRepository.updateDevice({
+                    platform: process.env.REACT_APP_PLATFORM??"1",
+                    deviceID: 'BROWSER',
+                    deviceName: 'BROWSER',
+                    registrationID: oneSignalWebPushID || '',
+                    oneSignalID: oneSignalWebPushID || '',
+                    env: "1"
+                  });
+                }
+              }
+            })
+
+          })
+          .catch(e => console.error(e));
+    }
+  }
+
+  const signIn = async (payload: SignInPayload) => {
+    try {
+      dispatch({ type: "REQUEST_API" });
+
+      const { error, data, message } = await signInMutateAsync(payload);
+      if (!error) {
         dispatch({ type: "SIGN_IN_SUCCESS", payload: data });
         localStorage.setItem("currentUser", JSON.stringify(data.user));
         localStorage.setItem("token", JSON.stringify(data.token));
-        history.push("/messages");
+
+        API.defaults.headers.Authorization = `Bearer ${data.token}`;
+
+        // updateDevice();
+
+        toast.success("Đăng nhập thành công");
+        history.push("/");
       } else {
         dispatch({ type: "SIGN_IN_ERROR" });
+        toast.error(message);
       }
     } catch (error) {
       dispatch({ type: "SIGN_IN_ERROR" });
@@ -57,16 +160,26 @@ export const useAuth = (): UseAuth => {
     dispatch({
       type: "SIGN_OUT",
     });
+    const user = JSON.parse(localStorage.getItem("currentUser") as string) ?? null;
+    const _id = user._id;
+    localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
+    window.location.reload();
   };
 
   return {
-    isAuthenticated: state.isAuthenticated,
-    isLoading: state.isLoading,
-    user: state.user,
-    token: state.token,
+    isLoading:
+    isSigningIn,
+    hasAuthenticated:
+        !!localStorage.getItem("currentUser") &&
+        !!localStorage.getItem("token"),
+    user: JSON.parse(localStorage.getItem("currentUser") as string) ?? null,
+    token: JSON.parse(localStorage.getItem("token") as string),
     signIn,
     signOut,
+    dataUserInfo,
+    refetchDataUserInfo,
+    updateDevice
   };
 };

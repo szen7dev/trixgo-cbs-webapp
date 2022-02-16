@@ -1,15 +1,15 @@
 import { FC } from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 
 import "i18n/config";
 import Routes from "routes";
 
 import "react-toastify/dist/ReactToastify.css";
+import "swiper/swiper.min.css";
 import "styles/output.css";
-
+import OneSignalController from "components/OneSignalController";
 const queryClient = new QueryClient();
 
 const App: FC = () => {
@@ -27,8 +27,7 @@ const App: FC = () => {
         draggable
         pauseOnHover
       />
-
-      <ReactQueryDevtools initialIsOpen />
+      <OneSignalController/>
     </QueryClientProvider>
   );
 };

@@ -1,9 +1,13 @@
 {
-  "target": "Mục tiêu của TrixGo là giúp doanh nghiệp xây dựng được hệ thống quản trị 4.0 vững chăc, từ đó nhanh chóng phát triển",
-  "title": "Đăng nhập",
-  "description": "Chào mừng đến với TrixGo. Đăng nhập để bắt đầu làm việc",
-  "emailPlaceholder": "Email",
-  "passwordPlaceholder": "Mật khẩu",
+  "target": "Nền tảng quản trị chuyên biệt cho ngành xây dựng",
+  "title": "Chào mừng bạn đến với Trixgo",
+  "description": "Cung cấp thông tin chi tiết của bạn để tiếp tục truy cập",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "emailPlaceholder": "Nhập email tại đây",
+  "passwordPlaceholder": "Nhập mật khẩu tại đây",
+  "register": "Đăng ký",
+  "registerQuestion": "Bạn chưa có tài khoản?",
   "forgotPassword": "Quên mật khẩu?",
   "submitButton": "Đăng nhập"
 }

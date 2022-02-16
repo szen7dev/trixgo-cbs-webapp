@@ -2,15 +2,17 @@ import { FC } from "react";
 
 type Props = {
   className?: string;
+  onClick?: () => void;
 };
 
-const XIcon: FC<Props> = ({ className }) => {
+const XIcon: FC<Props> = ({ className, onClick }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
       className={className}
+      onClick={onClick}
     >
       <path
         fillRule="evenodd"

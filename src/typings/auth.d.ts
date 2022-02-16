@@ -1,26 +1,57 @@
+import { APIResponse } from "./apis/response";
+
 export type User = {
   _id: string;
-  image: string;
-  email: string;
-  userName: string;
-  firstName: string;
-  lastName: string;
+  email: string,
+  phone: string,
+  fullname: string,
+  company: {
+    _id: string,
+    name: string,
+    sign: string,
+    image: string
+  },
+  department: {
+    _id: string,
+    name: string,
+    sign: string
+  },
+  signature: string,
+  status: number,
+  level: number,
+  image: string
+  gender: number,
+  lang: string,
+  birthDay: string
 };
 
 export type AuthState = {
-  isAuthenticated: boolean;
+  isLoading: boolean;
   token: string | null;
   user: User | null;
-  isLoading: boolean;
+  hasAuthenticated: boolean;
 };
 
 export type SignInPayload = {
   email: string;
   password: string;
+  platform: string;
+  domain: string;
 };
 
-export type CallSignInAPI = {
-  type: "REQUEST_SIGN_IN";
+export type SignInResponse = APIResponse & {
+  data: {
+    user: User;
+    token: string;
+  };
+};
+
+export type RequestAPI = {
+  type: "REQUEST_API";
+};
+
+export type RequestAPIComplete = {
+  type: "REQUEST_API_COMPLETE";
 };
 
 export type SetAuth = {
@@ -39,4 +70,23 @@ export type RemoveAuth = {
   type: "SIGN_OUT";
 };
 
-export type AuthActions = CallSignInAPI | SignInError | SetAuth | RemoveAuth;
+export type AuthActions =
+  | RequestAPI
+  | RequestAPIComplete
+  | SignInError
+  | SetAuth
+  | RemoveAuth;
+
+export type UserInfoResponse = APIResponse & {
+  data: User;
+};
+
+export type UpdateDevicePayload = {
+  platform: string,
+  deviceID: string,
+  deviceName: string,
+  registrationID: string,
+  oneSignalID: string,
+  userID?: string,
+  env?: string
+}
