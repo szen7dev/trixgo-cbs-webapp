@@ -84,7 +84,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                             <div className={"relative"}>
                                 {renderFileTypeImage(file.file.file)}
                                 {
-                                    file.progress!==null&&file.progress!==undefined&&file.progress<100&&
+                                    message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
                                     <div className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60 rounded-md"}>
                                     </div>
                                 }
@@ -94,7 +94,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                                 <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
                             </div>
                             {
-                                file.progress!==null&&file.progress!==undefined&&file.progress<100&&
+                                message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
                                 <div className={"w-[40px] h-[40px]"}>
                                     <CircularProgressbar
                                         styles={buildStyles({
@@ -103,7 +103,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                                             trailColor: '#cccccc',
                                             textColor: `#0060E1`,
                                         })}
-                                        value={file.progress} text={`${file.progress}%`} />
+                                        value={message.fileProgress[file._id]} text={`${message.fileProgress[file._id]}%`} />
                                 </div>
                             }
                         </div>

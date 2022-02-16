@@ -73,12 +73,12 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                     </div>
                 }
                 {
-                    image.progress !== null && image.progress !== undefined && image.progress < 100 &&
+                    message.fileProgress !== undefined && message.fileProgress[image._id] !== undefined && message.fileProgress[image._id] < 100 &&
                     <div
                         className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60"}>
                         <div
                             className={"rounded-md overflow-hidden bg-black border border-white bg-opacity-60 w-11/12 h-[10px] bottom-10px absolute"}>
-                            <div style={{width: `${image.progress}%`}}
+                            <div style={{width: `${message.fileProgress[image._id]}%`}}
                                  className={"transition-all duration-150 h-full bg-white bg-opacity-70"}></div>
                         </div>
                     </div>
