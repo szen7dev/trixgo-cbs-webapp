@@ -30,6 +30,10 @@ module.exports = {
 						"cbs-schedule-expired",
 						"cbs-schedule-nextweek",
 						"cbs-schedule-after-7days",
+						"rounded-cbs-sm",
+						"rounded-cbs",
+						"rounded-cbs-md",
+						"rounded-cbs-lg"
         ]
     },
     darkMode: "class", // or 'media' or false
