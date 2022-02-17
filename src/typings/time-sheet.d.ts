@@ -67,9 +67,9 @@ export type QueryDetailTimeSheetParentResponse = APIResponse & {
 }
 export type InsertTimeSheetParentPayload = {
     name: string;
-    assigneeID: string;
+    assignee: Assignee;
     type: 1;
-    projectID: string;
+    project: Project;
     note: string;
 }
 export type InsertTimeSheetParentResponse = {

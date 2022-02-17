@@ -14,14 +14,15 @@ import {
   useQueryListDoctype,
 } from "services/hooks/useHuman";
 
+import type { ContractType, Position } from "typings/human";
 interface ExperienceAppointmentProps {
   title: string;
   defaultValues?: {
     name: string;
     sign: string;
     toDate: string;
-    position2: string;
-    contract: string;
+    position2: Position;
+    contract: ContractType;
     factor: number;
     timeMobilize: number;
   };
@@ -56,8 +57,8 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
       name: "",
       sign: "",
       toDate: "",
-      position2: "",
-      contract: "",
+      position2: {},
+      contract: {},
       factor: "",
       timeMobilize: "",
       ...defaultValues,

@@ -23,7 +23,6 @@ import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
-  IMethodFiles,
 } from "../../Reducers/Upload";
 import { modifyUploadedFilesV2 } from "./WorkHistory";
 import type { IFile } from "./WorkHistory";
@@ -185,8 +184,8 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
               name: contactDocument.name,
               sign: contactDocument.sign,
               toDate: contactDocument.toDate,
-              position2: contactDocument?.position2?._id,
-              contract: contactDocument?.contract?._id,
+              position2: contactDocument?.position2,
+              contract: contactDocument?.contract,
               factor: contactDocument.factor,
               timeMobilize: contactDocument.timeMobilize,
             }}
