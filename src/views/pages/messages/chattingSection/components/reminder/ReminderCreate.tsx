@@ -260,7 +260,10 @@ const ReminderCreate:FC = () => {
                                             text: "Lặp lại hàng năm"
                                         }
                                     ]}
-                                    initialValue={"once"}
+                                    initialValue={{
+                                        id: "once",
+                                        text: "Không lặp lại"
+                                    }}
                                     onchangeValue={({id})  => {
                                         setRepeat(id)
                                     }}

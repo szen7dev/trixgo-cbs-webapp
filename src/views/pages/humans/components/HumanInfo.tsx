@@ -70,31 +70,31 @@ const HumanInfo: FC = () => {
           <NewHumanModal
             title='Cập nhật nhân sự'
             initialValues={{
-              department: {
-                value: defaultValues?.department?._id,
-                label: defaultValues?.department?.name
+              department: defaultValues?.department && {
+                value: defaultValues.department._id,
+                label: defaultValues.department.name
               },
-              position: {
+              position: defaultValues?.position && {
                 value: defaultValues?.position?._id,
                 label: defaultValues?.position?.name
               },
-              area: {
+              area: defaultValues?.area && {
                 value: defaultValues?.area?._id,
                 label: defaultValues?.area?.name
               },
-              area1: {
+              area1: defaultValues?.area1 && {
                 value: defaultValues?.area1?._id,
                 label: defaultValues?.area1?.name
               },
-              area2: {
+              area2: defaultValues?.area2 && {
                 value: defaultValues?.area2?._id,
                 label: defaultValues?.area2?.name
               },
-              workingStatus: {
+              workingStatus: defaultValues?.workingStatus && {
                 value: defaultValues?.workingStatus?._id,
                 label: defaultValues?.workingStatus?.name
               },
-              contractType: {
+              contractType: defaultValues?.contractType && {
                 value: defaultValues?.contractType?._id,
                 label: defaultValues?.contractType?.name
               },

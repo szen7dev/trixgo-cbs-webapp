@@ -86,7 +86,11 @@ const FinancialPlanningDetailChildRow:FC<Props> = ({rowData, index, collapsed, i
             <div className={"px-2 py-4 table-cell relative box-border border border-gray-300 align-middle bg-white w-2/12"}>
                 <DropdownSearchable
                     id="ticket-creator" placeholder="Hợp đồng"
-                    initialValue={rowData.hopDong}
+                    initialValue={{
+                        id: "quangtt",
+                        text:"Trần Thanh Quang",
+
+                    }}
                     data={[
                         {
                             id: "quangtt",

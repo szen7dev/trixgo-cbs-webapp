@@ -160,8 +160,8 @@ const Education: FC<EducationProps> = (props) => {
               toDate: contactDocument.toDate,
               workplace: contactDocument.workplace,
               educationalBackground2:
-                contactDocument?.educationalBackground2?._id,
-              field2: contactDocument?.field2?._id,
+                contactDocument?.educationalBackground2,
+              field2: contactDocument?.field2
             }}
           />
         </div>
