@@ -329,7 +329,7 @@ const HomePage: FC = () => {
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Kỹ sư thực chiến</div>
+              <div className="t-home-right-block-common-title">Workshop</div>
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
@@ -358,7 +358,7 @@ const HomePage: FC = () => {
 
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Cộng đồng chuyển đổi số</div>
+              <div className="t-home-right-block-common-title">Chuyển đổi số</div>
             </div>
           </div>
           <div className="flex items-center t-home-operation t-home-business-group">
