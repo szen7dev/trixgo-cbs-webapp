@@ -1,13 +1,14 @@
-import React,{FC} from "react";
-import {useParams} from "react-router-dom";
+import React, { FC } from "react";
+import { useParams } from "react-router-dom";
 import Back from "assets/icons/Back";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
-import {NavLink} from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
 import LogIcon from "assets/icons/Log";
 import FolderIcon from "assets/images/icons8-folder-100.svg";
-const AccountingTicketDetailPage:FC = () => {
+const AccountingTicketDetailPage: FC = () => {
     const params = useParams<{ id: string }>();
+    console.log('🚀 ~ params', params)
 
     return (
         <div className={"relative"}>
@@ -16,10 +17,10 @@ const AccountingTicketDetailPage:FC = () => {
                     exact
                     to={"/accounting/home"}
                 >
-                    <Back/>
+                    <Back />
                 </NavLink>
-                <button className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
-                    <DotsVerticalIcon/>
+                <button type="button" className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
+                    <DotsVerticalIcon />
                 </button>
             </div>
             <div className={"content-detail-ticket"}>
@@ -30,25 +31,25 @@ const AccountingTicketDetailPage:FC = () => {
                                 Tạm ứng hợp đồng số 19112021/HDKT/CPMI-PGI
                             </div>
                             <span className={"text-sm rounded-full bg-primary text-white h-5 leading-5 ml-2 px-2"}>
-                            Giấy báo có
-                        </span>
+                                Giấy báo có
+                            </span>
                         </div>
-                        <button className={"rounded-full h-10 w-10 flex items-center justify-center bg-gray-100"}>
+                        <button type="button" className={"rounded-full h-10 w-10 flex items-center justify-center bg-gray-100"}>
                             <ActionAccountingGroup
-                                icon={<DotsVerticalIcon/>}
+                                icon={<DotsVerticalIcon />}
                             />
                         </button>
                     </div>
                     <div className={"infor-ticket flex mt-1 items-center"}>
                         <p className={"flex-1"}><span className={"text-gray-500"}>Khởi tạo:</span> Phan Văn Trường-PGI 15/9/2021 15:38</p>
                         <p><span className={"text-gray-500"}>Cập nhật:</span> Phùng Thị Thu-TRX 15/9/2021 15:38</p>
-                        <button className={"ml-2"}>
-                            <LogIcon/>
+                        <button type="button" className={"ml-2"}>
+                            <LogIcon />
                         </button>
                     </div>
                     <div className={"extra-infor-ticket flex text-gray-500 items-center mt-2"}>
                         <span className={"mr-1"}>
-                            <img alt={"icon-folder"} src={FolderIcon}/>
+                            <img alt={"icon-folder"} src={FolderIcon} />
                         </span>
                         Phân vùng: Công ty Cổ phần Trixgo | Hợp đồng: Mua sắm hàng hóa thường xuyên - 1502/HDKT/CPMI/PGI - Ngày 15/2/2021 | Kỳ thanh toán đợt 1
                     </div>

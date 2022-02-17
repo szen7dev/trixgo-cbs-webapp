@@ -25,6 +25,7 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
+	console.log('🚀 ~ initialValues', initialValues)
 	const { handleBlur, setFieldValue, values } = formik;
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
