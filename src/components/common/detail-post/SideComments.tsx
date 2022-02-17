@@ -20,6 +20,7 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 			images: props.images,
 			fileID: String(state.images[state.index]._id),
 		}
+
 		await createComment(dataInsertOrUpdate);
 	}
 
