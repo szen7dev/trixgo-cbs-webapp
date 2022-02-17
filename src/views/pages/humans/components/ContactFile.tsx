@@ -42,7 +42,7 @@ const ContactFile: React.FC<ContactProps> = ({
             className="text-primary-gray"
             style={{ fontSize: 10, maxWidth: "80%" }}
           >
-            {`${file.size}KB | ${file.userCreate.fullname} | ${
+            {`${file.size}KB | ${file?.userCreate?.fullname || ''} | ${
               moment(file.createAt).isValid() &&
               moment(file.createAt).format(DATE_FORMAT)
             }`}
