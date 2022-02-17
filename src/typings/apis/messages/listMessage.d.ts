@@ -404,43 +404,20 @@ export type AddUserToConversationPayload = {
 }
 
 export type AddUserToConversationResponse = {
-    data: {
-        config: {
-            configHighlight: number;
-            configSeeOldMessage: number;
-            configEditInfo: number;
-            configCreateNote: number;
-            configCreatePoll: number;
-            configPinMessage: number;
-            configSendMessage: number
-        };
-        members: string[];
-        authors: string[];
-        _id: string;
-        usersPin: string[];
-        name: string
-        modifyAt: string
-        createAt: string
-        arrMissMessage: {
-            amount: number;
-            amout: number
-            _id: string;
-            userID: string
-        }[];
-        usersMute: string[];
-        tasks: any[];
-        createdAt: string
-        updatedAt: string
-        __v: number;
-        description: string
-        lastMessage: string
-        arrMesageTypingUsers: {
-            _id: string
-            userID: string
-            messageTyping: string
-        }[];
-        avatar: string
-    } ;
+    data: any ;
+    error: boolean;
+    status: number;
+}
+
+export type SearchMessageInConversationByIdPayload = {
+    conversationID: string;
+    messageID: string;
+    filter?: string;
+    select?: string;
+}
+
+export type SearchMessageInConversationByIdResponse = {
+    data: any ;
     error: boolean;
     status: number;
 }
