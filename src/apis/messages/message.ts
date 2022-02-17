@@ -7,7 +7,7 @@ import {
     ListMessagePayload,
     ListMessageResponse,
     PinnedMessagePayload,
-    PinnedMessageResponse,
+    PinnedMessageResponse, SearchMessageInConversationByIdPayload, SearchMessageInConversationByIdResponse,
     SendNormalMessagePayload,
     SendNormalMessageResponse,
     ShareMessagePayload,
@@ -30,6 +30,7 @@ const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-poll-conversation";
 const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
+const searchMessageInConversationById = "api/chatting/conversations/search-message-conversation-by-id";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -116,6 +117,14 @@ const ListMessageRepository = {
         const {data} = await API.post(
             `${addUserToConversation}`,
             {...payload}
+        )
+
+        return data;
+    },
+
+    async goToMessagePosition(payload: SearchMessageInConversationByIdPayload) : Promise<SearchMessageInConversationByIdResponse> {
+        const {data} = await API.get(
+        `${searchMessageInConversationById}?${convertObToUrl(payload)}`
         )
 
         return data;

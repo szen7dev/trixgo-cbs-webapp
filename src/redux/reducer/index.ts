@@ -12,6 +12,7 @@ import CreateReminderSlice from './messages/CreateReminder';
 import CreateNPSMessageSlice from './messages/CreateNPSMessage';
 import DetailNPSMessageSlice from './messages/DetailNPSMessage';
 import AddUserToConversationSlice from './messages/AddUserToConversation';
+import SearchMessageSlice from './messages/SearchMessage';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
     createNPSMessage: CreateNPSMessageSlice,
     detailNPSMessage: DetailNPSMessageSlice,
     addUserToConversation: AddUserToConversationSlice,
+    searchMessage: SearchMessageSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
