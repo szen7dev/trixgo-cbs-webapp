@@ -1,5 +1,3 @@
-import { FC } from "react";
+import DatahubRoutes from './routes';
 
-const TasksPage: FC = () => <h1>Datahub page</h1>;
-
-export default TasksPage;
+export default DatahubRoutes
