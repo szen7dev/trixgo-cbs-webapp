@@ -19,6 +19,7 @@ import imgProcess from "assets/images/icons8-project-setup-80.png";
 import imgProcess2 from "assets/images/home-img-process-management.jpg";
 import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
+import imgBusiness2 from "assets/images/Business.png";
 
 import { abbreviateNumber } from 'utils';
 import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
@@ -280,8 +281,12 @@ const HomePage: FC = () => {
             <div className="t-home-right-block-common-description">Đấu thầu gói thầu quy mô lớn, minh bạch/bảo mật thông tin suốt quá trình</div>
           </div>
         </div>
+				
+				<div className="border-cbs-border rounded-[5px] border-cbs-[1px] mb-4">
+					<img src={imgBusiness2} alt="Business"/>
+				</div>
 
-        <div className="t-home-right-block">
+        {/* <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <img src={imgProcess} alt="Process" />
             <div className="t-home-right-block-common-text">
@@ -302,7 +307,7 @@ const HomePage: FC = () => {
               </a>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">

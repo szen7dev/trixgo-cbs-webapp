@@ -9,6 +9,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import CommentImageRepository from "apis/social/CommentImageRepository";
 import { useMemo } from "react";
+import { commentDummy } from "../dump";
 
 // import { commentDummy } from "./../dump/index";
 
@@ -107,7 +108,6 @@ const useComments = (payload: Payload) => {
 
       // Promise delay two second
       // await new Promise((resolve) => setTimeout(resolve, 2000));
-      // console.log(error);
 
       if (error || code) {
         if (message) return toast.error(message);
@@ -126,9 +126,8 @@ const useComments = (payload: Payload) => {
 
               // Create main;
             } else {
-              old.pages[old.pages.length - 1].data.listRecords[
-                old.pages[old.pages.length - 1].data.listRecords.length - 1
-              ].comment.amountCommentReply++;
+              old.pages[0].data.totalRecord++;
+
               old.pages[old.pages.length - 1].data.listRecords.push({
                 ..._data,
                 listReply: { data: [], nextCursor: null },
@@ -287,7 +286,7 @@ const useComments = (payload: Payload) => {
     () =>
       data?.pages.reduce((acc, page) => page.data.listRecords.length + acc, 0),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data?.pages.length]
+    [data?.pages.length, data?.pages[0].data.totalRecord]
   );
 
   return {
