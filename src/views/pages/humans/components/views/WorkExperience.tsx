@@ -167,9 +167,9 @@ const WorkExperience: FC<WorkExperienceProps> = (props) => {
             defaultValues={{
               fromDate: contactDocument.fromDate,
               toDate: contactDocument.toDate,
-              field2: contactDocument?.field2?._id,
-              position2: contactDocument?.position2?._id,
-              contract: contactDocument?.contract?._id,
+              field2: contactDocument?.field2,
+              position2: contactDocument?.position2,
+              contract: contactDocument?.contract,
               project: contactDocument.project,
               client: contactDocument.client,
             }}

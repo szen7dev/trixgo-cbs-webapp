@@ -7,7 +7,7 @@ import { Formik, Form, Field } from "formik";
 import uniqBy from "lodash/uniqBy";
 
 import { Context } from "../../contexts/contextModal";
-import ModalContainer from "views/pages/media/components/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 import iconAttach from "assets/images/icons8-attach-96.png";
 import itemTag from "assets/images/icons8-price-tag.svg";
 import DropdownSearchable from "components/common/DropdownSearch";

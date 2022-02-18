@@ -7,7 +7,7 @@ import SearchInput from 'views/pages/document/components/SearchInput';
 import GroupActions from 'views/pages/document/components/projects/GroupActions';
 import ButtonMore from 'views/pages/document/components/common/ButtonMore';
 import ModalReport from './ModalReport';
-import ModalContainer from 'views/pages/media/components/ModalContainer';
+import ModalContainer from 'components/common/modals/ModalContainer';
 import DropdownSearchable from 'components/common/DropdownSearch';
 
 // assets
@@ -107,7 +107,10 @@ const PageTwoDetail: FC = () => {
 											<DropdownSearchable
 												id="ticket-creator"
 												placeholder="Hợp đồng"
-												initialValue="1111-Tiền mặt tại quỹ công ty"
+												initialValue={{
+													id: "quangtt",
+													text: "1111-Tiền mặt tại quỹ công ty",
+												}}
 												data={[
 													{
 														id: "quangtt",
@@ -125,7 +128,10 @@ const PageTwoDetail: FC = () => {
 											<DropdownSearchable
 												id="ticket-creator"
 												placeholder="Công ty"
-												initialValue="Công ty TNHH Hoàng Mai Xanh và Tím"
+												initialValue={{
+													id: "quangtt",
+													text: "Công ty TNHH Hoàng Mai Xanh và Tím",
+												}}
 												data={[
 													{
 														id: "quangtt",
@@ -143,7 +149,10 @@ const PageTwoDetail: FC = () => {
 											<DropdownSearchable
 												id="ticket-creator"
 												placeholder="Công ty"
-												initialValue="Cung cấp dịch vụ tư vấn chất lượng nhân sự"
+												initialValue={{
+													id: "quangtt",
+													text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
+												}}
 												data={[
 													{
 														id: "quangtt",

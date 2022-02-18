@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DepartmentEnumType } from "./index";
+import {
+  DepartmentOnTimeKey,
+  DepartmentOnBudgetKey,
+  DepartmentEnumType,
+} from "./index";
 
 // Response form
 export type DepartmentResponse<T> = {
@@ -20,7 +24,7 @@ export type DataBlock1 = Array<{
 }>;
 
 export type DataBlock2 = Array<{
-  _id: null | any;
+  _id: null | string;
   budget: number;
   forecastBudget: number;
   contractValueContractPlusValueContractVatValue: number;
@@ -123,8 +127,8 @@ export type DataCommon<P, Sn> = {
 };
 
 export type DataProjectPart<P, Sn> = {
-  ontime?: number;
-  onbudget?: number;
+  ontime?: DepartmentOnTimeKey;
+  onbudget?: DepartmentOnBudgetKey;
   startTime: string;
   expiredTime: string;
   actualStartTime: string | null;
@@ -161,6 +165,7 @@ type ExcludeObject<O, P> = P extends keyof O
     }
   : O;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
   k: infer I
 ) => void
@@ -174,103 +179,54 @@ export type DataEnum<P, Sn> = {
   [DepartmentEnumType.DEPARTMENT]: DataDepartment<P, Sn>;
 };
 
-type EnumValue<T extends DepartmentEnumType | undefined> = T extends undefined
-  ? DepartmentEnumType[DepartmentEnumType.PROJECT]
-  : T;
-
-export type UseHook<
-  T extends DepartmentEnumType | undefined,
-  S extends keyof DataEnum<undefined, undefined>[T extends undefined
-    ? DepartmentEnumType.PROJECT
-    : T],
-  // | undefined,
-  P extends
-    | (S extends keyof DataEnum<undefined, undefined>[T extends undefined
-        ? DepartmentEnumType.PROJECT
-        : T]
-        ? S
-        : keyof DataEnum<undefined, undefined>[T extends undefined
-            ? DepartmentEnumType.PROJECT
-            : T])
-    | undefined,
-  Sn extends S extends undefined
-    ? P extends keyof DataEnum<P, undefined>[T extends undefined
-        ? DepartmentEnumType.PROJECT
-        : T]
-      ? keyof NestedPartial<
-          DataEnum<P, undefined>[T extends undefined
-            ? DepartmentEnumType.PROJECT
-            : T],
-          P
-        >
-      : undefined
-    : P extends keyof DataEnum<P, undefined>[T extends undefined
-        ? DepartmentEnumType.PROJECT
-        : T]
-    ? keyof NestedPartial<
-        DataEnum<P, undefined>[T extends undefined
-          ? DepartmentEnumType.PROJECT
-          : T],
-        P
-      >
-    : undefined
-> = (props: {
-  type?: T;
-  select?: S;
-  populates?: {
-    path?: P;
-    select?: Sn;
-  };
-}) => DepartmentResponse<
-  DepartmentListData<DataDepartmentResponse<T, S, P, Sn>>
->;
-
-export type DataDepartmentResponse<T, S, P, Sn> = undefined extends S
-  ? // S is undefined - done
-    undefined extends P
-    ? // P is undefined - done
-      DataEnum<undefined, undefined>[T extends DepartmentEnumType
-        ? T
-        : DepartmentEnumType.PROJECT]
-    : // P is defined - done
-    undefined extends Sn
-    ? // Sn is undefined - done
-      DataEnum<P, undefined>[T extends DepartmentEnumType
-        ? T
-        : DepartmentEnumType.PROJECT]
-    : // Sn is defined - done
-      DataEnum<P, Sn>[T extends DepartmentEnumType
-        ? T
-        : DepartmentEnumType.PROJECT]
-  : // S is key; - done
-  undefined extends P
-  ? // P is undefined - done
-    Pick<
-      DataEnum<undefined, undefined>[T extends DepartmentEnumType
-        ? T
-        : DepartmentEnumType.PROJECT],
-      S
-    >
-  : // P is defined - done
-  undefined extends Sn
-  ? // Sn is undefined - done
-    Pick<
+export type DataDepartmentResponse<T, S, P, Sn> = S extends (infer K)[]
+  ? Pick<
       DataEnum<P, undefined>[T extends DepartmentEnumType
         ? T
         : DepartmentEnumType.PROJECT],
-      S
+      K
     >
-  : // Sn is defined - done
-    Pick<
-      DataEnum<P, Sn>[T extends DepartmentEnumType
-        ? T
-        : DepartmentEnumType.PROJECT],
-      S
-    >;
+  : undefined;
 
-const v: UseHook<undefined, undefined, "area", undefined>;
-v().data.listRecords[0].area;
-
-// Convert Array to Type
-export type ElementType<T extends ReadonlyArray<unknown>> =
-  T extends ReadonlyArray<infer ElementType> ? ElementType : never;
+// undefined extends S
+//   ? // S is undefined - done
+//     undefined extends P
+//     ? // P is undefined - done
+//       DataEnum<undefined, undefined>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT]
+//     : // P is defined - done
+//     undefined extends Sn
+//     ? // Sn is undefined - done
+//       DataEnum<P, undefined>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT]
+//     : // Sn is defined - done
+//       DataEnum<P, Sn>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT]
+//   : // S is key; - done
+//   undefined extends P
+//   ? // P is undefined - done
+//     Pick<
+//       DataEnum<undefined, undefined>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT],
+//       S
+//     >
+//   : // P is defined - done
+//   undefined extends Sn
+//   ? // Sn is undefined - done
+//     Pick<
+//       DataEnum<P, undefined>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT],
+//       S
+//     >
+//   : // Sn is defined - done
+//     Pick<
+//       DataEnum<P, Sn>[T extends DepartmentEnumType
+//         ? T
+//         : DepartmentEnumType.PROJECT],
+//       S
+//     >;

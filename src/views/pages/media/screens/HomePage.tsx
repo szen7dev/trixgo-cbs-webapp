@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import ModalContainer from "../components/ModalContainer";
+import ModalContainer from "components/common/modals/ModalContainer";
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
 import '../style.css';

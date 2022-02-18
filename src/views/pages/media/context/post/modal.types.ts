@@ -4,6 +4,7 @@ const modalTypes = {
   OPEN_POST: "OPEN_POST",
   OPEN_COMMENT: "OPEN_COMMENT",
   OPEN_REPLY: "OPEN_REPLY",
+  SET_INDEX: "SET_INDEX",
 };
 
 export default modalTypes;

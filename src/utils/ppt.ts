@@ -1,4 +1,6 @@
+import { DEPARTMENT_STATUS } from "helpers/constants/department";
 import moment from "moment";
+import { DepartmentOnBudgetKey, DepartmentOnTimeKey } from "typings/ppt";
 
 // Date loaded percentage
 export const dateLoadedPercentage = (
@@ -19,21 +21,10 @@ export const formatDate = (date: Date): string => {
   return moment(date).format("DD/MM/YY");
 };
 
-const enumProjectStatus = [
-  [
-    { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
-    { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
-  ],
-  [
-    { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
-    { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
-  ],
-];
-
 // Switch ontime and budget return string
 export const switchOnTimeBudget = (
-  onTime: number,
-  budget: number
+  onTime: DepartmentOnTimeKey,
+  budget: DepartmentOnBudgetKey
 ): { message: string; className: string } => {
-  return enumProjectStatus[onTime][budget];
+  return DEPARTMENT_STATUS[onTime][budget];
 };

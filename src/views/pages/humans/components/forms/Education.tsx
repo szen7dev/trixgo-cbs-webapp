@@ -11,13 +11,14 @@ import DropdownSearchable from "components/common/DropdownSearch";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { useQueryListDoctype } from "services/hooks/useHuman";
 
+import type { EducationBackground, Field2 } from "typings/human";
 interface WorkHistoryProps {
   title: string;
   defaultValues?: {
     workplace: string;
     toDate: string; 
-    educationalBackground2: string;
-    field2: string;
+    educationalBackground2: EducationBackground;
+    field2: Field2;
   };
   onFinish?: (values: any) => void;
   contactDocumentID?: string;
@@ -49,8 +50,8 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
     () => ({
       workplace: "", // nơi đào tạo
       toDate: "", // năm tốt nghiệp
-      educationalBackground2: "", // trình độ
-      field2: "", // chuyên ngành
+      educationalBackground2: {}, // trình độ
+      field2: {}, // chuyên ngành
       ...defaultValues,
     }),
     [defaultValues]

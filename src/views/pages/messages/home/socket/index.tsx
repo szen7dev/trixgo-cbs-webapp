@@ -6,16 +6,19 @@ import {
     setShareMessage, revokeMessageInConversation
 } from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../index_v2";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
+import {RootState} from "../../../../../redux/reducer";
 
 const SocketController:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
     const {socketRef, currentChat} = useContext(MessageContext);
+
+    const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
 
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
@@ -65,9 +68,12 @@ const SocketController:FC = () => {
                 messageId: data.infoMessage._id,
                 messageData: data.infoMessage
             }))
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100)
+
+            if (!inSearchMode){
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100)
+            }
         }
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation, select: JSON.stringify({ sender:"bizfullname" }) });
     };

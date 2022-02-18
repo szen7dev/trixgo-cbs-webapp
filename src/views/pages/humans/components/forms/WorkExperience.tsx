@@ -14,13 +14,15 @@ import {
   useQueryItemContract
 } from "services/hooks/useHuman";
 
+import type { Position, ContractType, Field2 } from "typings/human";
+
 interface WorkExperienceProps {
   defaultValues?: {
     fromDate: string; // từ ngày
     toDate: string; // đến ngày
-    field2: string; // lĩnh vực chuyên môn tham gia
-    position2: string; // vị trí công việc đảm nhận
-    contract: string; // hợp đồng
+    field2: Field2; // lĩnh vực chuyên môn tham gia
+    position2: Position; // vị trí công việc đảm nhận
+    contract: ContractType; // hợp đồng
     project: string; // dự án
     client: string; // chủ đầu tư
   };
@@ -61,9 +63,9 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
     () => ({
       fromDate: "",
       toDate: "",
-      field2: "",
-      position2: "",
-      contract: "",
+      field2: {},
+      position2: {},
+      contract: {},
       project: "",
       client: "",
       ...defaultValues,

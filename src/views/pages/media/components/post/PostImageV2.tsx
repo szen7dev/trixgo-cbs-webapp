@@ -2,7 +2,7 @@ import { FC, HTMLAttributes, memo } from 'react';
 import { FileProps, FilePropsUpload, PostImageProps } from 'typings/social';
 
 const ImageUploading: FC<{ d: FilePropsUpload } & HTMLAttributes<HTMLImageElement>> = ({ d, ...props }) => {
-	return <img src={URL.createObjectURL(d.file)} alt="" {...props} />
+	return <img src={'_id' in d.file ? `${process.env.REACT_APP_URL_S3}/${d.file.path}` : URL.createObjectURL(d.file)} alt="" />
 }
 const ImageUploaded: FC<{ d: FileProps } & HTMLAttributes<HTMLImageElement>> = ({ d, ...props }) => {
 	return <img src={d.path} alt="" {...props} />
