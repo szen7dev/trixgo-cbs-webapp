@@ -71,6 +71,28 @@ const MiniChatBoxDetail:FC<Props> = ({chat}) => {
         }
     };
 
+    useEffect(() => {
+        conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
+    },[conversationMessagesList]);
+
+    useEffect(() => {
+        if (reachedTop && !isLoading && hasMoreData) {
+            getListMessage({lastestID: nextCursor, conversationID: chat._id});
+            setReachTop(false);
+        }
+    }, [reachedTop, nextCursor]);
+
+    const onScroll = () => {
+        if (conversationMessagesList.current) {
+            const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
+            if (scrollHeight + scrollTop - clientHeight < 200) {
+                setReachTop(true)
+            } else {
+                setReachTop(false);
+            }
+        }
+    };
+
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
         return _map(value, (message, index) => renderMessage(message, value[index-1]))
@@ -110,32 +132,32 @@ const MiniChatBoxDetail:FC<Props> = ({chat}) => {
             case 1:
             case 2:
                 if (message.sender._id === profileId) {
-                    return <MyMessage bgMessage={"max-w-[250px]"} context={MiniChatContext} message={message}/>
+                    return <MyMessage isMini={true} context={MiniChatContext} message={message}/>
                 } else {
-                    return <OthersMessage bgMessage={"bg-gray-100 max-w-[250px]"} context={MiniChatContext} message={message}/>
+                    return <OthersMessage isMini={true} bgMessage={"bg-gray-100"} context={MiniChatContext} message={message}/>
                 }
             case 4:
-                return <Reminder context={MiniChatContext} message={message}/>;
+                return <Reminder isMini={true} context={MiniChatContext} message={message}/>;
             case 5:
                 return <Poll message={message} chat={chat}/>;
             case 7:
                 if (message.sender._id === profileId) {
-                    return <MyMessage bgMessage={"max-w-[250px]"} context={MiniChatContext} message={message}/>
+                    return <MyMessage isMini={true} context={MiniChatContext} message={message}/>
                 } else {
-                    return <OthersMessage bgMessage={"bg-gray-100 max-w-[250px]"} context={MiniChatContext} message={message}/>
+                    return <OthersMessage isMini={true} bgMessage={"bg-gray-100"} context={MiniChatContext} message={message}/>
                 }
             case 101:
                 // eslint-disable-next-line no-case-declarations
                 const usersAdded = message.usersAssigned.map(user => user.bizfullname);
                 // eslint-disable-next-line no-case-declarations
                 const messsagesAdd = usersAdded.join("; ");
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
+                return <AddUsersNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
             case 108:
-                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+                return <PinMessageNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:
-                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+                return <PollNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 112:
-                return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
+                return <PollNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã thay đổi bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 116:
             case 117:
                 // eslint-disable-next-line no-case-declarations
@@ -143,7 +165,7 @@ const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 if (!didAccept) {
                     didAccept = message.reminder.accepts.find(action => action._id === message.sender._id)&&!message.reminder.rejects.find(action => action._id === message.sender._id)
                 }
-                return <ReminderNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
+                return <ReminderNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
     const {getNameConversation, getAvatarMembers} = UseMessageHelper()
@@ -169,7 +191,10 @@ const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                     <img src={iconClose} alt="Close" className="w-4 h-4 object-contain filter-white" />
                 </button>
             </div>
-            <div className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
+            <div
+                ref={conversationMessagesList}
+                id={"conversation-messages-list"}
+                className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
                 <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
                     {memoizedValue()}
                     {memoizedFakeValue()}

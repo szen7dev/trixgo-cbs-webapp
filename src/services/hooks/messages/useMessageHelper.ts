@@ -5,7 +5,7 @@ import {ItemListConversation} from "../../../typings/apis/messages/listConversat
 import SavedMessage from "../../../assets/images/saved-messages.svg";
 
 type UseMessageHelperType = {
-    handleStartPrivateChat: (memberId: string) => void;
+    handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;
     getAvatarMembers: (chat: ItemListConversation, profileId: string) => string[];
     getNameConversation: (chat: ItemListConversation, profileId: string) => string;
 }
@@ -15,17 +15,22 @@ export const UseMessageHelper = () : UseMessageHelperType => {
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
     const socket = socketRef?.current;
 
-    const handleStartPrivateChat = (memberId: string) => {
+    const handleStartPrivateChat = (memberId: string, redirectOnly = false) => {
         createConversation({
             name: "",
             description: "",
             isPrivate: true,
             membersID: [memberId]
         }).then(data => {
-            if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id, select: JSON.stringify({ sender:"bizfullname" }) });
-            setCurrentChat(data._id);
-            window.location.hash = `#${data._id}`
+            if (!redirectOnly){
+                if (currentChat === data._id) return;
+                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+                    conversationID: data._id,
+                    select: JSON.stringify({sender: "bizfullname"})
+                });
+                setCurrentChat(data._id);
+            }
+            window.location.href = window.location.origin + "/messages#" + data._id;
         });
     };
 

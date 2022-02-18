@@ -73,7 +73,6 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const {currentChat} = useContext(MessageContext);
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);

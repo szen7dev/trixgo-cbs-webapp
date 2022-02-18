@@ -8,8 +8,9 @@ import PollActions from "./PollActions";
 type Props = {
     message: ItemMessage;
     chat: ItemListConversation;
+    isMini?: boolean
 }
-const Poll:FC<Props> = ({message,chat}) => {
+const Poll:FC<Props> = ({message,chat, isMini}) => {
     const [openVote, setOpenVote] = useState(false);
     const closeVoteModal = () => setOpenVote(false);
 
@@ -27,13 +28,13 @@ const Poll:FC<Props> = ({message,chat}) => {
     }, [message])
     return (
         <div className={"poll-center flex flex-col items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs bg-white text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center"}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
                 <img src={PollIcon} alt={"-----"} className={"w-[14px] h-[16px] mr-2"}/>
                 <span>
                 {message.sender.bizfullname||message.sender.fullname} đã tạo một bình chọn: <span className="text-black">{message.poll.name}</span>
                 </span>
             </div>
-            <div className={"w-[365px] rounded-md bg-white mb-5"}>
+            <div className={"rounded-md bg-white mb-5 " + (isMini?"w-[300px] bg-gray-100":"w-[365px] bg-white")}>
                 <div className={"px-[12px] py-[16px] border-b border-gray-200"}>
                     <div className={"font-bold text-lg"}>
                         {message.poll.name}

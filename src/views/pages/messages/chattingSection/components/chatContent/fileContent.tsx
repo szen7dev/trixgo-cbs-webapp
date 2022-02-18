@@ -19,9 +19,10 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
-    context: any
+    context: any;
+    isMini?: boolean
 }
-const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context, isMini}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
         const extension = filename.split(".").pop();
@@ -69,7 +70,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
     }
 
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             {
                 showSenderName&&
                 <div className={"reply-user-name"} style={{color: message.themeColor}}>

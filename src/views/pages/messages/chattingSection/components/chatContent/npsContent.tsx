@@ -7,11 +7,12 @@ type Props = {
     message: ItemMessage;
     className?: string;
     borderClass?: string;
-    isMyMessage?: boolean
+    isMyMessage?: boolean;
+    isMini?: boolean;
 }
-const NpsContent:FC<Props> = ({message, className,borderClass, isMyMessage}) => {
+const NpsContent:FC<Props> = ({message, className,borderClass, isMyMessage, isMini}) => {
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg p-[7px] relative " + (className??"")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             <div className={"mb-3"}>
                 Nếu cho điểm về sự hài lòng <b>“Trixgo-Quản lý hợp đồng”</b> thì bạn sẵn sàng cho mấy điểm:
             </div>

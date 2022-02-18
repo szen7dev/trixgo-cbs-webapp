@@ -59,7 +59,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
         }
     }
     return (
-        <div className={"max-w-[366px] min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             {
                 showSenderName&&
                 <div className={"reply-user-name text-primary"}>

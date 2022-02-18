@@ -9,11 +9,14 @@ import {MessageContext} from "../../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 
-const PollCreate:FC = () => {
+type Props = {
+    context: any
+}
+const PollCreate:FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenCreatePoll, conversationId} = useSelector((state: RootState) => state.createPoll.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);

@@ -8,14 +8,15 @@ type Props = {
     message: ItemMessage;
     className?: string;
     borderClass?: string;
-    context: any
+    context: any;
+    isMini?: boolean
 }
-const ContactContent:FC<Props> = ({message, className, borderClass, context}) => {
+const ContactContent:FC<Props> = ({message, className, borderClass, context, isMini}) => {
     const {handleStartPrivateChat} = UseMessageHelper()
     return <>
         {
             _map(message.usersAssigned, user => (
-                <div key={user._id} className={"max-w-[351px] relative"}>
+                <div key={user._id} className={"relative " + (isMini?" max-w-[250px]":" max-w-[351px]")}>
                     <div className={"rounded-md overflow-hidden bg-white relative " + (className??"")}>
                         <div className={"flex items-center p-[11px] border-b " + (borderClass??"border-gray-100")}>
                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={"----"} className={"w-[50px] h-[50px] min-w-[50px] rounded-full overflow-hidden"}/>
@@ -26,7 +27,7 @@ const ContactContent:FC<Props> = ({message, className, borderClass, context}) =>
                         </div>
                         <div className={"flex items-center justify-center py-[10px]"}>
                             <button
-                                onClick={() => handleStartPrivateChat(user._id)}
+                                onClick={() => handleStartPrivateChat(user._id, isMini)}
                                 className={"text-primary"}>
                                 Nhắn tin
                             </button>
