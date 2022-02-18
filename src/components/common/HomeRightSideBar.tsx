@@ -14,15 +14,10 @@ import icon3 from "assets/images/icons8-note-100.png";
 import icon4 from "assets/images/icons8-user-manual-64.png";
 import icon5 from "assets/images/icons8-bill-96.png";
 import icon6 from "assets/images/icons8-calendar-128.png";
-import chatIcon from "assets/images/icons8-create-48.png";
-import fakeThumbnail from "assets/images/fake-user.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
+import ChatsOnRightSideBar from "./mini-chatbox/ChatsOnRightSideBar";
 
-type Props = {
-  openNewChatbox: () => void;
-};
-
-const HomeRightSideBar: FC<Props> = (props: Props) => {
+const HomeRightSideBar: FC = () => {
   const [openNotes, setOpenNotes] = useState(false);
   const { openModal } = useModal();
 
@@ -146,48 +141,7 @@ const HomeRightSideBar: FC<Props> = (props: Props) => {
           />
         </Link>
       </div>
-      <div className="absolute left-0 bottom-16 w-full">
-        <div className="text-center">
-          <button className="block ml-auto mr-auto relative mb-4">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={fakeThumbnail}
-              alt="Avartar"
-            />
-          </button>
-          <button className="block ml-auto mr-auto relative mb-4">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={fakeThumbnail}
-              alt="Avartar"
-            />
-          </button>
-          <button className="block ml-auto mr-auto relative mb-4">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={fakeThumbnail}
-              alt="Avartar"
-            />
-          </button>
-          <button className="block ml-auto mr-auto relative mb-4">
-            <img
-              className="w-10 h-10 rounded-full"
-              src={fakeThumbnail}
-              alt="Avartar"
-            />
-          </button>
-        </div>
-        <button
-          onClick={() => props.openNewChatbox()}
-          className="block ml-auto mr-auto tm-right-sidebar-chat-btn w-10 h-10 rounded-full"
-        >
-          <img
-            className="w-6 block ml-auto mr-auto"
-            src={chatIcon}
-            alt="Chat"
-          />
-        </button>
-      </div>
+      <ChatsOnRightSideBar/>
     </div>
   );
 };

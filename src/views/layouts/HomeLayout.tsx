@@ -96,16 +96,8 @@ const HomeLayout: FC<Props> = ({ children }) => {
         </button>
       }
 
-      <MiniChatbox 
-        closeMiniChatbox={closeMiniChatbox} 
-        openMiniChatbox={openMiniChatbox} 
-        closeNewChatbox={handleCloseNewChatbox}
-        isNewChatboxVisible={isNewChatboxVisible} 
-        isChatboxVisible={isChatboxVisible} 
-      />
-
       {/* Right side bar */}
-      <HomeRightSideBar openNewChatbox={handleOpenNewChatbox} />
+      <HomeRightSideBar />
 
       {/* Collapse right side bar button */}
       <button

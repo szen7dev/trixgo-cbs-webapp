@@ -24,7 +24,7 @@ const MessageList:FC = () => {
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
-        getListConversation({});
+        listConversation&&getListConversation({});
     },[]);
 
     useEffect(() => {
