@@ -25,7 +25,6 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
-	console.log('🚀 ~ initialValues', initialValues)
 	const { handleBlur, setFieldValue, values } = formik;
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
@@ -251,7 +250,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 						<DropdownSearchable
 							onchangeValue={(value: any) => setFieldValue("ipc", value.id)}
 							className={"flex-1"}
-							placeholder="Mã khách"
+							placeholder="Kỳ thanh toán"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("ipc", '')}

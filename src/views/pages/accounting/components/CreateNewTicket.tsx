@@ -15,7 +15,7 @@ import API from "apis/repository";
 const mappingData = (data: any) => {
   return {
     voucherID: data._id || data.voucherID || '',
-    type: Number(data.type) || 0,
+    type: Number(data.type) || 1,
     vat: Number(data.vat) || 0,
     advancePayment: data.advancePayment ? true : false,
     forward: data.forward ? true : false,
@@ -24,7 +24,7 @@ const mappingData = (data: any) => {
 
     customer: data?.customer?._id || data?.customer || '',
     contract: data?.contract?._id || data?.contract || '',
-    ipc: data.ipc || '',
+    ipc: data?.ipc?._id || data?.customer || '',
     subtype: data.subtype || '',
 
     date: convertDateToString(data.date) || '',
@@ -67,15 +67,13 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
 
   const [initialValues, setInitialValues] = useState(mappingData({}));
 
-  const APP_ACCOUNTING = "/api/accounting/voucher";
-
   const mappingSelectedJournals = (data = []) => {
     return data.map((item: any) => {
       return {
         goods: item.goods || '',
         inventory: item.inventory || '',
-        amount: item.amount || 0,
         quantity: item.quantity || 0,
+        unitprice: item.unitprice || 0,
         job: item.job || '',
         note: item.note || '',
         updown: item.updown || 0,
@@ -87,26 +85,65 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
         customerCredit: item?.customerCredit?._id || '',
         warehouse: item?.warehouse?._id || '',
         contract: item?.contract?._id || '',
-        unitprice: item.quantity * item.amount
+        amount: item.quantity * item.unitprice
       }
     })
   }
 
-  useEffect(() => {
+  const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
+  const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
 
+  useEffect(() => {
     const fetchDetailAccountingVoucher = async (id: any) => {
       const { data } = await API.get(
-        `${APP_ACCOUNTING}/${id}`
+        `${APP_ACCOUNTING_VOUCHER}/${id}`
       )
+      const { data: selectedJournals } = await API.get(
+        `${APP_ACCOUNTING_JOURNAL}?voucherID=${id}`, {
+        params: {
+          populates: {
+            "path": "debit credit customerCredit customerDebit warehouse contract",
+            "select": "name description",
+          }
+        }
+
+      })
       const dataDetail = {
-        ...data.data?.infoVoucher,
-        selectedJournals: [...mappingSelectedJournals(data.data?.listJournal) || []]
+        ...data.data,
+        selectedJournals: [...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
       }
+      setLastestIDJournals(selectedJournals.data?.nextCursor)
+      setTotalRecord(selectedJournals.data?.totalRecord)
       !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
       return data
     }
     fetchDetailAccountingVoucher(idEdit)
   }, [idEdit]);
+
+  const [lastestIDJournals, setLastestIDJournals] = useState('');
+  const [totalRecord, setTotalRecord] = useState(0);
+
+  const loadMoreSelectedJournals = async () => {
+
+    const { data: selectedJournals } = await API.get(
+      `${APP_ACCOUNTING_JOURNAL}?voucherID=${idEdit}`, {
+      params: {
+        lastestID: lastestIDJournals,
+        populates: {
+          "path": "debit credit customerCredit customerDebit warehouse contract",
+          "select": "name description",
+        }
+      }
+    })
+    const dataDetail = {
+      ...initialValues,
+      selectedJournals: [...initialValues.selectedJournals, ...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
+    }
+    setLastestIDJournals(selectedJournals.data?.nextCursor)
+    setTotalRecord(selectedJournals.data?.totalRecord)
+    !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
+
+  }
 
   const handleSubmit = useCallback(
     async (values: any) => {
@@ -147,7 +184,7 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       <Formik initialValues={initialValues} validationSchema={formValidation} enableReinitialize={true} onSubmit={handleSubmit}>
 
         {(formik) => {
-          const { handleBlur, setFieldValue } = formik;
+          const { handleBlur, setFieldValue, values } = formik;
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>
               <div className={"flex-1 h-full overflow-x-scroll create-ticket-working-space"}>
@@ -155,6 +192,15 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
                 <CreateNewTicketForm formik={formik} initialValues={initialValues} />
 
               </div>
+              {lastestIDJournals && (
+                <div>
+                  <button type="button" onClick={() => {
+                    loadMoreSelectedJournals();
+                  }}>
+                    <span className="text-primary">{`Xem thêm (${totalRecord - values.selectedJournals.length})`}</span>
+                  </button>
+                </div>
+              )}
               <div className={"flex items-center justify-end border-t p-2"}>
                 <button
                   className="btn btn-primary"
