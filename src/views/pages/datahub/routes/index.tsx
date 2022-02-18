@@ -6,24 +6,33 @@ import ErrorPage from 'views/pages/authentication/Error'
 import LayoutPrimary from 'views/pages/media/layouts/LayoutPrimary'
 
 import DatahubHome from '../screens/DatahubHome'
-
-const _prefix = '/datahub'
+import DatahubHomeDetail from '../screens/DatahubHomeDetail'
+import DatahubType from '../screens/DatahubType'
+import DatahubTypeDetail from '../screens/DatahubTypeDetail'
 
 export const routes = [
-	{ path: _prefix + '/home', exact: true, name: 'Trang chủ', component: DatahubHome },
-	{ path: _prefix + '/type', exact: true, name: 'Phân loại hệ thống' },
+	{ path: '/datahub/home', exact: true, name: 'Trang chủ', component: DatahubHome },
+	{ path: '/datahub/home/:d', exact: true, name: 'Trang chủ', component: DatahubHomeDetail, isPrivate: true },
 	{
-		path: _prefix + '/project', name: 'Danh mục dự án',
+		path: '/datahub/type', name: 'Phân loại hệ thống', layout: LayoutPrimary, type: 'state',
+		pages: [
+			{ id: '1', path: '/datahub/type', navExact: true, exact: true, title: 'Lĩnh vực', state: 1, component: DatahubType },
+			{ id: '2', path: '/datahub/type/asd', navExact: true, exact: true, title: 'Chủ đề cộng đồng', state: 2, component: (): JSX.Element => <div>123</div> },
+			{ id: '2', path: '/datahub/type/:id', navExact: true, title: 'Chủ đề cộng đồng', state: 3, component: DatahubTypeDetail, isPrivate: true },
+		],
+	},
+	{
+		path: '/datahub/project', name: 'Danh mục dự án',
 		layout: LayoutPrimary,
 		pages: [
-			{ id: '1', path: _prefix + '/project', exact: true, title: 'Danh sách', state: 1, component: DatahubHome },
-			{ id: '2', path: _prefix + '/project/map', title: 'Bản đồ', state: 2 },
+			{ id: '1', path: '/datahub/project', exact: true, title: 'Danh sách', state: 1, component: DatahubHome },
+			{ id: '2', path: '/datahub/project/map', title: 'Bản đồ', state: 2 },
 		]
 	},
-	{ path: _prefix + '/home', name: 'Năng lực nhà thầu' },
-	{ path: _prefix + '/home', name: 'Biểu mẫu nghiệm thu' },
-	{ path: _prefix + '/home', name: 'Datahub giá' },
-	{ path: _prefix + '/*', name: 'eror', component: ErrorPage, isPrivate: true },
+	{ path: '/datahub/home', name: 'Năng lực nhà thầu' },
+	{ path: '/datahub/home', name: 'Biểu mẫu nghiệm thu' },
+	{ path: '/datahub/home', name: 'Datahub giá' },
+	{ path: '/datahub/*', name: 'eror', component: ErrorPage, isPrivate: true },
 ]
 const DatahubRoutes: FC = () => {
 	return (
@@ -40,6 +49,9 @@ const DatahubRoutes: FC = () => {
 									return (
 										<route.layout pages={route.pages} >
 											<Switch>
+												{/* {route.type==='state' && route.pages.map((page, index) => (
+													props.location.state === page.state && <page.component />
+												))} */}
 												{route.pages.map((page, index) => (
 													page.component && <Route
 														key={index}
