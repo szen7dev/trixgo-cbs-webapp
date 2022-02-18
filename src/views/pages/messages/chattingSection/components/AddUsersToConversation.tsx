@@ -9,7 +9,10 @@ import {MessageContext} from "../../home/index_v2";
 import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
 
-const AddUsersToConversation:FC = () => {
+type Props = {
+    context: any
+}
+const AddUsersToConversation:FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenAddUsersToConversation, conversationId} = useSelector((state: RootState) => state.addUserToConversation.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
@@ -26,7 +29,7 @@ const AddUsersToConversation:FC = () => {
     const { listFriends, nextCursor } = useUser(params, pageParam);
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     const {addUserToConversation} = UseConversation();

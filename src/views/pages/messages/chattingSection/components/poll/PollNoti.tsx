@@ -3,8 +3,9 @@ import PollIcon from "assets/images/icons-poll.svg";
 
 type Props = {
     content: string;
+    isMini?: boolean
 }
-const PollNoti:FC<Props> = ({content}) => {
+const PollNoti:FC<Props> = ({content, isMini}) => {
     const notificationRef = useRef<HTMLSpanElement>(null);
     useEffect(() => {
         if(notificationRef.current) {
@@ -14,7 +15,7 @@ const PollNoti:FC<Props> = ({content}) => {
 
     return (
         <div className={"poll-content flex items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs bg-white text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center"}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
                 <img src={PollIcon} alt={"-----"} className={"w-[14px] h-[16px] mr-2"}/>
                 <span ref={notificationRef}>
                 </span>

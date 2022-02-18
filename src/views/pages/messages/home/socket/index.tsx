@@ -10,13 +10,17 @@ import {useDispatch, useSelector} from "react-redux";
 import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
-import {RootState} from "../../../../../redux/reducer";
+import {RootState} from "redux/reducer";
 
-const SocketController:FC = () => {
+type Props = {
+    context: any;
+    currentChat: string;
+}
+const SocketController:FC<Props> = ({context, currentChat}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
-    const {socketRef, currentChat} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
 
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
 

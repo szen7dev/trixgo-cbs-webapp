@@ -16,12 +16,14 @@ import NpsContent from "./chatContent/npsContent";
 
 type Props = {
     message: ItemMessage;
+    context: any;
+    isMini?: boolean;
 }
 
-const MyMessage:FC<Props> = ({message}) => {
+const MyMessage:FC<Props> = ({message, context, isMini}) => {
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef, editorRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(context);
     const socket = socketRef.current;
     const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -35,15 +37,15 @@ const MyMessage:FC<Props> = ({message}) => {
         }
         switch (message.type) {
             case 0:
-                return <TextChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
+                return <TextChatContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 2:
-                return <FileChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
+                return <FileChatContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>;
             case 1:
-                return <ImagesContent message={message} isMyMessage={true}/>;
+                return <ImagesContent isMini={isMini} context={context} message={message} isMyMessage={true}/>;
             case 7:
-                return <ContactContent message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"}/>;
+                return <ContactContent isMini={isMini} context={context} message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"}/>;
             case 999999:
-                return <NpsContent message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"} isMyMessage={true}/>;
+                return <NpsContent isMini={isMini} message={message} className={"bg-cbs-active-comment"} borderClass={"border-gray-300"} isMyMessage={true}/>;
         }
     }, [message]);
 

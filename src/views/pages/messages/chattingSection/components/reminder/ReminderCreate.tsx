@@ -14,11 +14,14 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import DropdownSearchable from "components/common/DropdownSearch";
 
-const ReminderCreate:FC = () => {
+type Props = {
+    context: any
+}
+const ReminderCreate:FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenCreateReminder, conversationId} = useSelector((state: RootState) => state.createReminder.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);

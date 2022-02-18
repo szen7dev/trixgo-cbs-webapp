@@ -9,13 +9,16 @@ import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {MessageContext} from "../../home/index_v2";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 
-const DeleteAndRevokeMessageConfirm: FC = () => {
+type Props = {
+    context: any
+}
+const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenDeleteRevoke, deleteAndRevokeMessage, conversationId} = useSelector((state: RootState) => state.deleteAndRevokeMessage.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
     const {deleteMessage} = UseConversation();
     const [isRevoke, setIsRevoke] = useState(false);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     const handleConfirm = () => {
