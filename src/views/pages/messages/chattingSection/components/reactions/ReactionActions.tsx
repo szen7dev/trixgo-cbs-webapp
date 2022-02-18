@@ -4,10 +4,11 @@ import {listEmoji} from "../MainChatContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {MessageContext} from "../../../home/index_v2";
 type Props = {
-    message: ItemMessage
+    message: ItemMessage;
+    context: any
 }
-export const ReactionActions:FC<Props> = ({message}) => {
-    const {socketRef} = useContext(MessageContext);
+export const ReactionActions:FC<Props> = ({message, context}) => {
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     return (

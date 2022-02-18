@@ -1,16 +1,17 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
 
 const initialState : {
     data: {
         isNewChatboxVisible: boolean,
         isChatboxVisible: boolean,
-        conversationId: string
+        conversation: ItemListConversation|null
     }
 } = {
     data: {
         isNewChatboxVisible: false,
         isChatboxVisible: false,
-        conversationId: ""
+        conversation: null
     }
 };
 
@@ -28,7 +29,7 @@ const miniChatSlice = createSlice({
             state.data = {
                 ...state.data,
                 isChatboxVisible: true,
-                conversationId: action.payload.conversationId
+                conversation: action.payload.conversation
             }
         },
         dismissCreateNewChatMini (state, action) {
@@ -37,11 +38,11 @@ const miniChatSlice = createSlice({
                 isNewChatboxVisible: false,
             }
         },
-        dismissChatBox (state, action) {
+        dismissChatBox (state) {
             state.data = {
                 ...state.data,
                 isChatboxVisible: false,
-                conversationId: ""
+                conversation: null
             }
         }
     },

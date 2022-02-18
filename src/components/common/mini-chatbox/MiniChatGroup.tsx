@@ -99,7 +99,7 @@ const MiniChatGroup:FC = () => {
                 .slice(0,4)
             ,(chat) => (
                 <button
-                    onClick={() => dispatch(openChatBox({conversationId: chat._id}))}
+                    onClick={() => dispatch(openChatBox({conversation: chat}))}
                     key={chat._id} className="block ml-auto mr-auto relative mb-4 relative">
                     {
                         chat.avatar?

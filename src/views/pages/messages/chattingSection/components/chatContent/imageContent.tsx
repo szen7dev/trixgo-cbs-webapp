@@ -17,11 +17,12 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
+    context: any
 }
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
+const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context}) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -124,7 +125,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                     </div>
                 </ModalFullContainer>
             </div>
-            <ReactionActions message={message}/>
+            <ReactionActions context={context} message={message}/>
         </div>
     )
 }

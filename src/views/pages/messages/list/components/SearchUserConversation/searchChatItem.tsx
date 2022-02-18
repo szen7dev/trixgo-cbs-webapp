@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import AvatarGroupChat from "../AvatarGroupChat";
 import SavedMessage from "assets/images/saved-messages.svg";
+import {UseMessageHelper} from "../../../../../../services/hooks/messages/useMessageHelper";
 
 type Props = {
     chat: ItemListConversation;
@@ -21,35 +22,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
         });
     }
 
-    const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length === 1) {
-            return "Saved Messages";
-        }
-        if (chat.members && chat.members.length === 2) {
-            const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return (userInConversation.bizfullname||userInConversation.fullname).trim();
-        }
-
-        return chat?.name;
-    }, [chat, profileId]);
-
-    const getAvatarMembers = useCallback(() => {
-        if (chat.isPrivate) {
-            if (chat.members.length === 1) {
-                return [SavedMessage];
-            } else {
-                const members = chat.members.filter((item: any) => item._id != profileId);
-                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
-            }
-        }
-        const avatars: any = [];
-        if (chat.members && chat.members.length) {
-            chat.members.slice(0, 4).forEach((member: any) => {
-                avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
-            });
-        }
-        return avatars;
-    }, [chat, profileId]);
+    const {getNameConversation, getAvatarMembers} = UseMessageHelper();
 
     const handleSelectChat = (chat: ItemListConversation) => {
         itemClickAction(chat)
@@ -63,14 +36,14 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
             className={"group flex p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
-                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px] min-w-[56px] min-h-[56px]")} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
+                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px] min-w-[56px] min-h-[56px]")} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                     (
-                        getAvatarMembers().length === 0 ?
+                        getAvatarMembers(chat, profileId).length === 0 ?
                         <div className={"rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px] " + (avatarClassname??"w-[56px] h-[56px]")} style={{background: "#8DD4D6"}}>
-                            {getPresentGroupName(getNameConversation())}
+                            {getPresentGroupName(getNameConversation(chat, profileId))}
                         </div> :
                         <AvatarGroupChat
-                            avatars={getAvatarMembers()}
+                            avatars={getAvatarMembers(chat, profileId)}
                             imageClass={avatarClassname??"w-[56px] h-[56px]"}
                             classesMap={avatarClassnameMap??{
                                 "group_1": {
@@ -107,7 +80,7 @@ const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname, avata
             }
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <div className={"flex"}>
-                    {getNameConversation()}
+                    {getNameConversation(chat, profileId)}
                 </div>
                 {
                     chat.members.length > 2 ?

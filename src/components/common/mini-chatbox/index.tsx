@@ -11,12 +11,14 @@ import MiniChatBoxDetail from "./MiniChatBoxDetail";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
 const MiniChatbox: FC = () => {
-  return (
-    <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out z-50">
-      <NewMiniChatBox/>
-        <MiniChatBoxDetail/>
-    </div>
-  );
+    const {isChatboxVisible, conversation} = useSelector((state: RootState) => state.miniChat.data);
+
+    return (
+        <div className="t-mini-chat-container fixed bottom-0 flex items-end flex-row-reverse transition-all duration-500 ease-out z-50">
+            <NewMiniChatBox/>
+            {isChatboxVisible&&conversation&&<MiniChatBoxDetail chat={conversation}/>}
+        </div>
+    );
 };
 
 export default MiniChatbox;

@@ -13,8 +13,10 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
+    context: any;
+    isMini?: boolean
 }
-const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage}) => {
+const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage, context, isMini}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
@@ -79,7 +81,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
                     <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
-            <ReactionActions message={message}/>
+            <ReactionActions context={context} message={message}/>
         </div>
     )
 }

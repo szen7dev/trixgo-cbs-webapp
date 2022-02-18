@@ -17,13 +17,15 @@ import ContactContent from "./chatContent/contactContent";
 type Props = {
     message: ItemMessage;
     bgMessage?: string;
+    context: any;
+    isMini?: boolean
 }
 
-const OthersMessage:FC<Props> = ({message,bgMessage}) => {
+const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef, editorRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(context);
     const socket = socketRef.current;
     const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -36,13 +38,13 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
         }
         switch (message.type) {
             case 0:
-                return <TextChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <TextChatContent context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 2:
-                return <FileChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <FileChatContent context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 1:
-                return <ImagesContent message={message} showSenderName={true}/>;
+                return <ImagesContent context={context} message={message} showSenderName={true}/>;
             case 7:
-                return <ContactContent message={message}/>;
+                return <ContactContent context={context} message={message} className={bgMessage??"bg-white"}/>;
         }
     },[message]);
 

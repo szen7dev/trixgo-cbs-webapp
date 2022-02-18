@@ -11,10 +11,11 @@ import IconRedClose from "assets/images/icon-red-close.svg";
 
 type Props = {
     message: ItemMessage;
+    context: any
 }
-const Reminder:FC<Props> = ({message}) => {
+const Reminder:FC<Props> = ({message, context}) => {
     const {updateReminder} = UseConversation();
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
     const dispatch = useDispatch();
 

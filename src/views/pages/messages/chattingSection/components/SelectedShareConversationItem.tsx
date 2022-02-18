@@ -1,6 +1,7 @@
 import React, {FC, useCallback} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import Close from "assets/icons/Close";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     conversation: ItemListConversation;
@@ -16,24 +17,14 @@ const SelectedShareConversationItem:FC<Props> = ({conversation, removeSelectedCo
         });
     }
 
-    const getNameConversation = useCallback(() => {
-        if (conversation.members && conversation.members.length === 1) {
-            return "Saved Messages";
-        }
-        if (conversation.members && conversation.members.length === 2) {
-            const userInConversation = conversation?.members.find((item: any) => item._id !== profileId);
-            return (userInConversation.bizfullname||userInConversation.fullname).trim();
-        }
-
-        return conversation?.name;
-    }, [conversation, profileId]);
+    const {getNameConversation} = UseMessageHelper();
 
     return (
         <div key={conversation._id} className={"flex items-center bg-gray-100 rounded-full p-1 pr-2 mr-2 mb-1"}>
             <div className={"rounded-full flex items-center justify-center text-white font-bold text-xs w-[30px] h-[30px]"} style={{background: "#8DD4D6"}}>
-                {getPresentGroupName(getNameConversation())}
+                {getPresentGroupName(getNameConversation(conversation, profileId))}
             </div>
-            <div className={"flex-1 mx-2 text-xs"}>{getNameConversation()}</div>
+            <div className={"flex-1 mx-2 text-xs"}>{getNameConversation(conversation, profileId)}</div>
             <button
                 onClick={() => removeSelectedConversation(conversation._id)}
             >

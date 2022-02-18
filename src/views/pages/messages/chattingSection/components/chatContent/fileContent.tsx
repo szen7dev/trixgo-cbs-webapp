@@ -19,8 +19,9 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
+    context: any
 }
-const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
+const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context}) => {
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
         const extension = filename.split(".").pop();
@@ -118,7 +119,7 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                     <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
-            <ReactionActions message={message}/>
+            <ReactionActions context={context} message={message}/>
         </div>
     )
 }

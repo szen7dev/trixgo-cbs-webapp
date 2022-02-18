@@ -8,8 +8,9 @@ type Props = {
     message: ItemMessage;
     className?: string;
     borderClass?: string;
+    context: any
 }
-const ContactContent:FC<Props> = ({message, className, borderClass}) => {
+const ContactContent:FC<Props> = ({message, className, borderClass, context}) => {
     const {handleStartPrivateChat} = UseMessageHelper()
     return <>
         {
@@ -34,7 +35,7 @@ const ContactContent:FC<Props> = ({message, className, borderClass}) => {
                     <div className={"absolute right-2 z-10"} style={{bottom: -5}}>
                         <ReactionList message={message}/>
                     </div>
-                    <ReactionActions message={message}/>
+                    <ReactionActions context={context} message={message}/>
                 </div>
             ))
         }

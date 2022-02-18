@@ -12,8 +12,6 @@ type Props = {
     setCloseVote: () => void;
 }
 export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
-    const {socketRef} = useContext(MessageContext);
-    const socket = socketRef.current;
     const focusElementRef = useRef<HTMLDivElement>(null);
 
     return (
