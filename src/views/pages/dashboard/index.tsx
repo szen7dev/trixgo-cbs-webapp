@@ -329,7 +329,7 @@ const HomePage: FC = () => {
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Workshop</div>
+              <div className="t-home-right-block-common-title">Workshop thực tế</div>
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
