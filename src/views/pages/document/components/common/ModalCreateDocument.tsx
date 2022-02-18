@@ -122,7 +122,11 @@ const ModalCreateDocument: React.FC = (props) => {
     state?.departmentInfo?.company?._id || ""
   );
 
-  const listFormFieldsDropdown = React.useMemo(() => {
+  const listFormFieldsDropdown = React.useMemo((): {
+    title: string;
+    name: string;
+    data: any[];
+  }[] => {
     return [
       { title: "Gói thầu", data: listPackage, name: "package" },
       {
@@ -270,9 +274,11 @@ const ModalCreateDocument: React.FC = (props) => {
                                 setFieldValue(item.name, value._id)
                               }
                               initialValue={
-                                state?.initialValues[item.name]?._id ||
-                                state.initialValues[item.name] ||
-                                ""
+                                ['direction', 'type'].includes(item.name)
+                                ? item.data.find((elm) => {
+                                  return elm._id === state?.initialValues[item.name];
+                                })
+                                : state?.initialValues[item.name]
                               }
                               data={listUniqById}
                               formatItem={{
@@ -427,7 +433,7 @@ const ModalCreateDocument: React.FC = (props) => {
                           setFieldValue("field", value._id)
                         }
                         initialValue={
-                          state?.initialValues['field']?._id || ""
+                          state?.initialValues['field']
                         }
                         data={uniqBy([...fields, state?.initialValues['field'] || {}].filter(elm => {
                           if (elm._id) {
