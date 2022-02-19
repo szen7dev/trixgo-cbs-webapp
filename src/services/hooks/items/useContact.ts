@@ -1,6 +1,7 @@
+import React from 'react';
 import { useInfiniteQuery } from "react-query";
 
-import { PackageRepository } from 'apis/item';
+import { ContactRepository } from 'apis/item';
 import type { Contact } from 'typings/items';
 
 interface UseQueryContact {
@@ -22,7 +23,7 @@ export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryC
     } = useInfiniteQuery(
         ['contact', { params }],
         async ({ pageParam }: any) =>
-            PackageRepository.fetchListContact({
+            ContactRepository.fetchListContact({
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
                 type: params?.type,
@@ -53,5 +54,44 @@ export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryC
         listContact: listContactDocument,
         totalRecord,
         totalPages
+    }
+}
+
+interface UseQueryDetailContact {
+    detailContact: Contact.Contact,
+    loading: boolean,
+    onFetchDetailContactAsync: (contactId: string, params?: Contact.ContactQueryPayload) => Promise<Contact.Contact>
+}
+export const useQueryDetailContact = (contactID?: string, params?: Contact.ContactQueryPayload): UseQueryDetailContact => {
+    const [detailContact, setDetailContact] = React.useState<any>({});
+    const [loading, setLoading] = React.useState(false);
+    
+    const onFetchDetailContact = React.useCallback(async (contactId: string, _params: any): Promise<any> => {
+        try {
+            setLoading(true)
+            const result = await ContactRepository.fetchDetailContact(contactId, _params);
+            if (result.error) {
+                throw new Error('ERROR~');
+            }
+            setDetailContact(result.data);
+            return result.data
+        } catch(err) {
+            setDetailContact({});
+            return {};
+        } finally {
+            setLoading(false)
+        }
+    }, []);
+
+    React.useEffect(() => {
+        if (contactID && contactID.length > 0) {
+            onFetchDetailContact(contactID, params);
+        }
+    }, [contactID, onFetchDetailContact, params]);
+
+    return {
+        detailContact,
+        loading,
+        onFetchDetailContactAsync: onFetchDetailContact,
     }
 }

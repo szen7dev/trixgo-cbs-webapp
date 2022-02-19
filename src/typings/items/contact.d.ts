@@ -64,3 +64,7 @@ export type ContactQueryResponse = APIResponse & {
         nextCursor: string | null;
     }
 }
+
+export type ContactQueryDetailResponse = APIResponse & {
+    data: Contact
+}
