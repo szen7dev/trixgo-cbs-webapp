@@ -263,6 +263,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
           <Formik initialValues={defaultValues} onSubmit={handleSubmit}>
             {(formik) => {
               const { handleBlur, setFieldValue } = formik;
+              console.log('🚀 ~ defaultValues Human', defaultValues)
               return (
                 <Form className="px-6 text-left">
                   {/* -------------- Line 1 --------------- */}

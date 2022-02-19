@@ -129,7 +129,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="TK nợ"
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.debit`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -160,7 +160,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="TK có"
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.credit`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -192,7 +192,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Mã khách nợ"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerDebit`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -223,7 +223,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Mã khách có"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerCredit`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -254,7 +254,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Sản phẩm/Hàng hóa"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.goods`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -278,7 +278,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="Kho bãi"
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -335,7 +335,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Hợp đồng"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.contract`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
