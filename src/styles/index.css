@@ -1141,8 +1141,7 @@ button {
   height: calc(100vh - 3.5rem);
 }
 .btn.disabled,
-.btn:disabled,
-button:disabled {
+.btn:disabled {
   color: #fff;
   background-color: #e3e6ea;
   border-color: #e3e6ea;

@@ -301,7 +301,9 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.type || 1}
+                        initialValue={convertEnumToArray(CLASSIFY).find(elm => {
+                          return elm.value === (defaultValues?.type || 1);
+                        })}
                         data={convertEnumToArray(CLASSIFY)}
                         formatItem={{
                           text: "label",
@@ -348,7 +350,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.department?.value}
+                        initialValue={initialValues?.department}
                         data={listDepartments.map((department) => ({
                           label: department.name,
                           value: department._id,
@@ -398,9 +400,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.position?.value}
-                        // searchUrl='/api/item/positions'
-                        // searchParam='keyword'
+                        initialValue={defaultValues?.position}
                         data={listPositions.map((position) => {
                           return ({
                             label: `${position.name}.${position.company?.sign}.${position.company?.name}`,
@@ -434,7 +434,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={defaultValues?.gender || 2}
+                        initialValue={convertEnumToArray(GENDER).find(elm => elm.value === (defaultValues?.gender || 2))}
                         data={convertEnumToArray(GENDER)}
                         formatItem={{
                           id: "value",
@@ -486,7 +486,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.workingStatus?.value}
+                        initialValue={defaultValues?.workingStatus}
                         data={listWorkingStatus.map((workingStatus) => ({
                           value: workingStatus._id,
                           label: workingStatus.name,
@@ -532,7 +532,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.realStatus || 1}
+                        initialValue={convertEnumToArray(PERSONAL_STATUS).find(elm => elm.value === (defaultValues?.realStatus || 1))}
                         data={convertEnumToArray(PERSONAL_STATUS)}
                         formatItem={{
                           id: "value",
@@ -575,7 +575,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.insuranceStatus || 1}
+                        initialValue={convertEnumToArray(INSURANCE_STATUS).find(elm => elm.value === (defaultValues?.insuranceStatus || 1))}
                         data={convertEnumToArray(INSURANCE_STATUS)}
                         formatItem={{
                           id: "value",
@@ -618,7 +618,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.familyPolicy || 1}
+                        initialValue={convertEnumToArray(CONTACT_POLICY).find(elm => elm.value === (defaultValues?.familyPolicy || 1))}
                         data={convertEnumToArray(CONTACT_POLICY)}
                         formatItem={{
                           id: "value",
@@ -670,7 +670,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={defaultValues?.contractType?.value}
+                        initialValue={defaultValues?.contractType}
                         data={listContractType}
                         formatItem={{
                           id: "_id",
@@ -874,7 +874,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                         allowClearValueSingleInput={true}
                         showTriangle={false}
                         maxWidthInput="max-w-none"
-                        initialValue={defaultValues?.area?.value}
+                        initialValue={defaultValues?.area}
                         renderSelectedItem={(item) => (
                           <div
                             style={{ width: 100 }}
@@ -940,10 +940,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={
-                          defaultValues?.area1 &&
-                          `${defaultValues?.area1?.value}`
-                        }
+                        initialValue={defaultValues?.area1}
                         data={area1.map((elm) => ({
                           label: `${elm.name}-${elm.parent?.name}-${elm.parent?.parent?.name}`,
                           value: elm._id,
@@ -991,10 +988,7 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
                             </p>
                           </div>
                         )}
-                        initialValue={
-                          defaultValues?.area2 &&
-                          `${defaultValues?.area2.value}`
-                        }
+                        initialValue={defaultValues?.area2}
                         data={area2.map((elm) => ({
                           label: `${elm.name}-${elm.parent?.name}-${elm.parent?.parent?.name}`,
                           value: elm._id,

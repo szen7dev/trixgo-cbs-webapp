@@ -2,12 +2,11 @@ import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "r
 import {MessageContext} from "../home/index_v2";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import IconBackGray from "assets/images/icon-back-gray.svg";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import {UseMessage} from "services/hooks/messages/useMessage";
 import {map as _map} from "lodash";
 import ListSearchMessagesItem from "./components/listSearchMessagesItem";
-import Close from "../../../../assets/icons/Close";
+import Close from "assets/icons/Close";
 
 const SearchMessage:FC = () => {
     const {currentChat, setShowSearch, showSearch} = useContext(MessageContext);

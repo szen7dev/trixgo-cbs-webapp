@@ -22,7 +22,7 @@ type Company = {
     _id?: string;
 }
 
-type Position = {
+export type Position = {
     _id: string;
     name: string;
     description?: string;
@@ -47,7 +47,7 @@ type Workplace = {
     sign: string;
 }
 
-type EducationBackground = {
+export type EducationBackground = {
     name: string;
     _id: string;
 }
@@ -85,7 +85,7 @@ type WorkingStatus = {
     _id: string;
 }
 
-type ContractType = {
+export type ContractType = {
     name: string;
     _id: string;
     sign?: string;
@@ -99,17 +99,17 @@ type ContractType = {
  * Lĩnh vực chuyên môn
  * Chuyên ngành đào tạo
 */
-type Field2 = {
+export type Field2 = {
     name: string;
     _id: string;
 }
 
-type CertificateType = {
+export type CertificateType = {
     name: string;
     _id: string;
 }
 
-type CertificateName = {
+export type CertificateName = {
     name: string;
     _id: string;
 }

@@ -47,9 +47,9 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
 
   const initialValues = {
     name: "",
-    assigneeID: "",
+    assignee: {},
     type: "",
-    projectID: "",
+    project: {},
     note: "",
     ...defaultValues,
   };
@@ -128,7 +128,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     allowClearValueSingleInput
                     renderSelectedItem={(item) => <span>{item.text}</span>}
                     data={listFriend}
-                    initialValue={defaultValues?.assigneeID}
+                    initialValue={defaultValues?.assignee}
                     formatItem={{
                       id: "_id",
                       text: "fullname",
@@ -157,7 +157,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                     maxWidthInput={"max-w-none"}
                     renderSelectedItem={(item) => <span>{item.text}</span>}
                     data={types}
-                    initialValue={defaultValues?.type}
+                    initialValue={types.filter(elm => elm.value === defaultValues?.type)}
                     formatItem={{
                       id: "value",
                       text: "label",
@@ -186,7 +186,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
                       _id: department._id,
                       name: `${department.sign}.${department.name}`
                     }))}
-                    initialValue={defaultValues?.projectID}
+                    initialValue={defaultValues?.project}
                     formatItem={{
                       id: "_id",
                       text: "name",

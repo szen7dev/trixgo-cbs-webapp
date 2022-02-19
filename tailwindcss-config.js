@@ -30,6 +30,10 @@ module.exports = {
 						"cbs-schedule-expired",
 						"cbs-schedule-nextweek",
 						"cbs-schedule-after-7days",
+						"rounded-cbs-sm",
+						"rounded-cbs",
+						"rounded-cbs-md",
+						"rounded-cbs-lg"
         ]
     },
     darkMode: "class", // or 'media' or false
@@ -99,7 +103,7 @@ module.exports = {
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",
-                "cbs-green": "#008000",
+                "cbs-green-dark": "#008000",
             },
             fontSize: {
                 "[13px]": "13px",

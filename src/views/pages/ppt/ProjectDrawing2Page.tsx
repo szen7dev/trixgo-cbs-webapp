@@ -77,7 +77,7 @@ const ProjectDrawing2Page: FC = () => {
 									return (
 										<tr key={id} className="text-left hover:bg-cbs-active-comment">
 											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-center" onClick={e => { e.stopPropagation() }}>
-												<input className="" type="checkbox" value="" id="flexCheckDefault" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
+												<input className="" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{code}</td>
 											<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{name}</td>

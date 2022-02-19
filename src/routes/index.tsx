@@ -141,6 +141,9 @@ import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 // Document pages
 import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
 
+// Datahub pages
+import DatahubRoutes from "views/pages/datahub"
+
 // Financial pages
 import FinHomePage from "views/pages/financial/FinHomePage";
 import FinDashboardPage from "views/pages/financial/FinDashboardPage";
@@ -723,6 +726,10 @@ const Routes: FC = () => {
 
                                         <Route path="/document">
                                             <DocumentLayoutContainer />
+                                        </Route>
+
+                                        <Route path="/datahub">
+                                            <DatahubRoutes />
                                         </Route>
 
                                         {/* <Route path="/kanban-board">
