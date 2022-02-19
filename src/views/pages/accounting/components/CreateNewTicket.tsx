@@ -12,20 +12,23 @@ import { convertDateToString } from "helpers/index"
 import { isEmpty } from "lodash";
 import API from "apis/repository";
 
-const mappingData = (data: any) => {
+import { convertInitialValueDropdown } from "helpers/index"
+import { VOUCHER_TYPES } from "apis/localdb/index";
+
+const mappingData = (data: any, isDataPayLoad = false) => {
   return {
     voucherID: data._id || data.voucherID || '',
-    type: Number(data.type) || 1,
+    type: isDataPayLoad ? Number(data.type.value) : convertInitialValueDropdown(Number(data.type) ? VOUCHER_TYPES.find(item => item.value === data.type) : VOUCHER_TYPES[0], 'value', 'text'),
     vat: Number(data.vat) || 0,
     advancePayment: data.advancePayment ? true : false,
     forward: data.forward ? true : false,
     returning: data.returning ? true : false,
     cancel: data.cancel ? true : false,
 
-    customer: data?.customer?._id || data?.customer || '',
-    contract: data?.contract?._id || data?.contract || '',
-    ipc: data?.ipc?._id || data?.customer || '',
-    subtype: data.subtype || '',
+    customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
+    contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
+    ipc: isDataPayLoad ? data?.ipc?.value : convertInitialValueDropdown(data?.ipc || ''),
+    subtype: isDataPayLoad ? data?.subtype?.value : convertInitialValueDropdown(data?.subtype || ''),
 
     date: convertDateToString(data.date) || '',
     signInvoice: data.signInvoice || '',
@@ -62,33 +65,33 @@ const mappingData = (data: any) => {
   }
 }
 
+const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
+  return data.map((item: any) => {
+    return {
+      journalID: item._id || item.journalID || '',
+      debit: isDataPayLoad ? item?.debit?.value : convertInitialValueDropdown(item?.debit || '', '_id', 'name', 'description'),
+      credit: isDataPayLoad ? item?.credit?.value : convertInitialValueDropdown(item?.credit || '', '_id', 'name', 'description'),
+      customerDebit: isDataPayLoad ? item?.customerDebit?.value : convertInitialValueDropdown(item?.customerDebit || ''),
+      customerCredit: isDataPayLoad ? item?.customerCredit?.value : convertInitialValueDropdown(item?.customerCredit || ''),
+      goods: isDataPayLoad ? item?.goods?.value : convertInitialValueDropdown(item?.goods || ''),
+      warehouse: isDataPayLoad ? item?.warehouse?.value : convertInitialValueDropdown(item?.warehouse || ''),
+      inventory: item.inventory || '',
+      quantity: item.quantity || 0,
+      unitprice: item.unitprice || 0,
+      amount: item.quantity * item.unitprice,
+      contract: isDataPayLoad ? item?.contract?.value : convertInitialValueDropdown(item?.contract || ''),
+      job: item.job || '',
+      note: item.note || '',
+      updown: item.updown || 1,
+
+    }
+  })
+}
+
 const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, }) => {
   const { closeModal } = useModal();
 
   const [initialValues, setInitialValues] = useState(mappingData({}));
-
-  const mappingSelectedJournals = (data = []) => {
-    return data.map((item: any) => {
-      return {
-        goods: item.goods || '',
-        inventory: item.inventory || '',
-        quantity: item.quantity || 0,
-        unitprice: item.unitprice || 0,
-        job: item.job || '',
-        note: item.note || '',
-        updown: item.updown || 0,
-
-        journalID: item._id || null,
-        debit: item?.debit?._id || '',
-        credit: item?.credit?._id || '',
-        customerDebit: item?.customerDebit?._id || '',
-        customerCredit: item?.customerCredit?._id || '',
-        warehouse: item?.warehouse?._id || '',
-        contract: item?.contract?._id || '',
-        amount: item.quantity * item.unitprice
-      }
-    })
-  }
 
   const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
   const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
@@ -96,17 +99,23 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
   useEffect(() => {
     const fetchDetailAccountingVoucher = async (id: any) => {
       const { data } = await API.get(
-        `${APP_ACCOUNTING_VOUCHER}/${id}`
+        `${APP_ACCOUNTING_VOUCHER}/${id}`, {
+        params: {
+          populates: {
+            "path": "customer contract ipc subtype",
+            "select": "name description",
+          }
+        }
+      }
       )
       const { data: selectedJournals } = await API.get(
         `${APP_ACCOUNTING_JOURNAL}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "debit credit customerCredit customerDebit warehouse contract",
+            "path": "debit credit customerCredit customerDebit warehouse goods contract",
             "select": "name description",
           }
         }
-
       })
       const dataDetail = {
         ...data.data,
@@ -115,9 +124,10 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       setLastestIDJournals(selectedJournals.data?.nextCursor)
       setTotalRecord(selectedJournals.data?.totalRecord)
       !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
+      console.log('🚀 ~ fetchDetailAccountingVoucher ~ mappingData(dataDetail)', mappingData(dataDetail))
       return data
     }
-    fetchDetailAccountingVoucher(idEdit)
+    idEdit && fetchDetailAccountingVoucher(idEdit)
   }, [idEdit]);
 
   const [lastestIDJournals, setLastestIDJournals] = useState('');
@@ -139,6 +149,7 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       ...initialValues,
       selectedJournals: [...initialValues.selectedJournals, ...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
     }
+    console.log('🚀 ~ loadMoreSelectedJournals ~ dataDetail', dataDetail)
     setLastestIDJournals(selectedJournals.data?.nextCursor)
     setTotalRecord(selectedJournals.data?.totalRecord)
     !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
@@ -149,8 +160,11 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
     async (values: any) => {
       const formatData = {
         ...values,
+        selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
       }
-      const isSuccess = await onFinish(mappingData(formatData), isEdit);
+      console.log('🚀 ~ mappingSelectedJournals(values.selectedJournals)', mappingSelectedJournals(values.selectedJournals, true))
+      console.log('🚀 ~ mappingData(formatData, true)', mappingData(formatData, true))
+      const isSuccess = await onFinish(mappingData(formatData, true), isEdit);
       if (isSuccess) {
         closeModal();
       }
@@ -159,8 +173,8 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
   );
 
   const formValidation = object().shape({
-    type: number().required(MESSAGE_ERROR.required),
-    customer: string().required(MESSAGE_ERROR.required),
+    type: object().required(MESSAGE_ERROR.required),
+    customer: object().required(MESSAGE_ERROR.required),
 
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
@@ -185,6 +199,8 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
 
         {(formik) => {
           const { handleBlur, setFieldValue, values } = formik;
+          console.log('🚀 ~ values', values, formik.isValid)
+
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>
               <div className={"flex-1 h-full overflow-x-scroll create-ticket-working-space"}>

@@ -70,7 +70,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Loại phiếu (*)</div>
 						<DropdownSearchable
-							onchangeValue={(value) => setFieldValue("type", value.id)}
+							onchangeValue={(value) => setFieldValue("type", value)}
 							className={"flex-1"}
 							placeholder="Phân loại khác..."
 							isMultiple={false}
@@ -99,10 +99,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 									</p>
 								</div>
 							)}
-							data={VOUCHER_TYPES}
+							data={VOUCHER_TYPES.map(item => ({
+								value: item.value,
+								label: item.text
+							}))}
 							formatItem={{
 								id: "value",
-								text: "text",
+								text: "label",
 							}}
 							inlineSearch={true}
 						/>
@@ -149,7 +152,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã khách (*)</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("customer", value.id)}
+							onchangeValue={(value: any) => setFieldValue("customer", value)}
 							className={"flex-1"}
 							placeholder="Mã khách"
 							isMultiple={false}
@@ -201,7 +204,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Hợp đồng</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("contract", value.id)}
+							onchangeValue={(value: any) => setFieldValue("contract", value)}
 							className={"flex-1"}
 							placeholder="Mã khách"
 							isMultiple={false}
@@ -248,7 +251,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ thanh toán</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("ipc", value.id)}
+							onchangeValue={(value: any) => setFieldValue("ipc", value)}
 							className={"flex-1"}
 							placeholder="Kỳ thanh toán"
 							isMultiple={false}
@@ -295,7 +298,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Phân loại khác</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("subtype", value.id)}
+							onchangeValue={(value: any) => setFieldValue("subtype", value)}
 							className={"flex-1"}
 							placeholder="Phân loại khác"
 							isMultiple={false}
