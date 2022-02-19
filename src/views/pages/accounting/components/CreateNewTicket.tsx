@@ -150,6 +150,7 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       selectedJournals: [...initialValues.selectedJournals, ...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
     }
     console.log('🚀 ~ loadMoreSelectedJournals ~ dataDetail', dataDetail)
+
     setLastestIDJournals(selectedJournals.data?.nextCursor)
     setTotalRecord(selectedJournals.data?.totalRecord)
     !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
