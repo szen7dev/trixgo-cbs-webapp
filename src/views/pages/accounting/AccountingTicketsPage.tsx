@@ -90,7 +90,7 @@ const AccountingTicketsPage: FC = () => {
 
                     <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
 
-                        <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={data._id} title="Cập nhật" />
+                        <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={data._id} contractId={data?.contract?._id} title="Cập nhật" />
                     </div>
                 )
                 break;
