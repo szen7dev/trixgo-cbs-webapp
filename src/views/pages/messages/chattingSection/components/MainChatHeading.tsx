@@ -3,12 +3,11 @@ import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
 import {MessageContext} from "../../home/index_v2";
-import SavedMessage from "assets/images/saved-messages.svg";
 import HeaderPinedMessages from "./HeaderPinedMessages";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {UseMessageHelper} from "../../../../../services/hooks/messages/useMessageHelper";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     chat: ItemListConversation

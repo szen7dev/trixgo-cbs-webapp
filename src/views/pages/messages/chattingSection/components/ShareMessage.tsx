@@ -11,7 +11,6 @@ import SearchChatItem from "../../list/components/SearchUserConversation/searchC
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SelectedShareConversationItem from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
-import {MessageContext} from "../../home/index_v2";
 import {UseConversation} from "services/hooks/messages/useConversation";
 
 type Props = {

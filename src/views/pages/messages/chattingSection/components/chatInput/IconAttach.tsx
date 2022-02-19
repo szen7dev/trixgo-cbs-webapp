@@ -33,7 +33,7 @@ const IconAttach:FC<Props> = ({handleUploadFiles}) => {
 
     return (
         <div ref={el} className={"relative"}>
-        <button onClick={() => setShowOption(!showOption)} className={"flex items-center justify-center p-[13px] h-full"}>
+        <button onClick={() => setShowOption(!showOption)} className={"flex chatting-icon-attach items-center justify-center p-[13px] h-full"}>
             <img  src={attachIcon} alt={"icon attach"}/>
         </button>
             {

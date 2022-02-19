@@ -5,7 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 import {map as _map} from "lodash";
-import {MessageContext} from "../../home/index_v2";
 import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
 

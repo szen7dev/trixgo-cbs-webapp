@@ -77,7 +77,7 @@ export type PopupSendFilesContent = {
   sendType: "image"|"file";
   defaultSendType: "image"|"file";
   conversationID: string;
-  handleSendFile: (message: any, useCompress=true) => void
+  handleSendFile: (message: any, useCompress?: boolean) => void
 }
 
 export type PopupSendFilesState = {
