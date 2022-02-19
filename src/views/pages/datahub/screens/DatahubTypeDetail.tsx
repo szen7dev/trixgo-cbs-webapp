@@ -13,6 +13,7 @@ import GroupActions from "views/pages/document/components/projects/GroupActions"
 import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
 import ButtonMore from "views/pages/document/components/common/ButtonMore";
 import DocumentDropdown from "views/pages/document/components/DocumentDropdown";
+import ModalCreateType from "../components/ModalCreateType";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -20,6 +21,7 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubTypeDetail: FC = () => {
+	const [show, setShow] = useState(false);
 	const [pkg, setPkg] = useState(pkgs[0]);
 
 	const history = useHistory();
@@ -57,7 +59,7 @@ const DatahubTypeDetail: FC = () => {
 				<DropdownFilterButton />
 				<GroupActions types={['edit']} className="flex items-center flex-1" />
 
-				<ButtonCreate />
+				<ButtonCreate onClick={() => setShow(!show)} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -109,6 +111,7 @@ const DatahubTypeDetail: FC = () => {
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
 		</div >
 	);
 };
