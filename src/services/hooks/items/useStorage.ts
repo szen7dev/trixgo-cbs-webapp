@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "react-query";
+import React from "react";
 
 import { StorageRepository } from 'apis/item';
 import type { Storage } from 'typings/items';
@@ -54,5 +55,39 @@ export const useQueryListStorage = (params?: Storage.StorageQueryPayload): UseQu
         hasNextPage,
         refetchListStorage,
         fetchNextPageStorage
+    }
+}
+
+interface UseQueryDetailStorage {
+    storage: Storage.Storage,
+    loading: boolean,
+    onFetchDetailStorageAsync: (storageID: string, params?: Storage.StorageQueryPayload) => Promise<Storage.Storage>,
+}
+
+export const useQueryDetailStorage = (): UseQueryDetailStorage => {
+    const [storage, setStorage] = React.useState<any>({});
+    const [loading, setLoading] = React.useState(false);
+
+    const onFetchDetailStorage = React.useCallback(async (storageID: string, params?: Storage.StorageQueryPayload): Promise<any> => {
+        try {
+            setLoading(true);
+            const result = await StorageRepository.fetchDetailStorage(storageID, params)
+            if (result.error) {
+                throw new Error('ERROR~');
+            }
+            setStorage(result.data);
+            return result.data;
+        } catch (err) {
+            setStorage({});
+            return {};
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    return {
+        storage,
+        loading,
+        onFetchDetailStorageAsync: onFetchDetailStorage,
     }
 }

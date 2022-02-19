@@ -126,6 +126,16 @@ const DocumentProjectPage: FC = () => {
     [departmentID, onFetchDetailDocumentAsync, refetch, toggleModal, updateDocumentChildAsync, updateModal]
   );
 
+  const handleOnFilter = React.useCallback((values) => {
+    // console.log(values);
+    setPageParam(() => ({...values }));
+    return true;
+  }, []);
+
+  const handleOnCancelFilter = React.useCallback(() => {
+    setPageParam({});
+  }, []);
+
   React.useEffect(() => {
     if (nextCursor) {
       const currentIndex = cursorPage.findIndex(
@@ -152,7 +162,11 @@ const DocumentProjectPage: FC = () => {
             value={pkg.title}
             onSelectValue={setPkg}
           />
-          <DropdownFilterButton />
+          <DropdownFilterButton
+            onSubmit={handleOnFilter}
+            onCancel={handleOnCancelFilter}
+            initialValues={pageParam}
+          />
           {Object.keys(recordSelected).length > 0 && (
             <GroupActions
               className="flex items-center flex-1"

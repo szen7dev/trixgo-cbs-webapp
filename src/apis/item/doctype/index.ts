@@ -5,10 +5,12 @@ import type { Doctype } from 'typings/items';
 
 interface DoctypeRepository {
     fetchListDoctype: (params: Doctype.DoctypeQueryPayload) => Promise<Doctype.DoctypeQueryResponse>;
+    fetchDetailDoctype: (docTypeID: string, params?: Doctype.DoctypeQueryPayload) => Promise<Doctype.DoctypeQueryDetailResponse>;
 }
 
 export const doctypeRepository: DoctypeRepository = {
     fetchListDoctype: async (params) => fetchListDoctype(params),
+    fetchDetailDoctype: async (doctypeID, params) => fetchListDoctype({...params, doctypeID}),
 }
 
 async function fetchListDoctype(params: any) {
