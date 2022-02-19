@@ -1,5 +1,6 @@
 import ListConversationRepository from "apis/messages";
 import {
+    ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
     DataListConversation,
@@ -20,6 +21,7 @@ type UseListConversationType = {
     createConversation: (params: CreateConversationPayload) => Promise<CreateConversationResponseBodyData>;
     getListMediasOfConversation: (params: MediasOfConversationPayload) => Promise<void>;
     getListGeneralGroupByMember: (params: GeneralGroupByMemberPayload) => Promise<ItemListConversation[]>;
+    getConverationInformation: (payload: ConvversationInformationPayload) => Promise<ItemListConversation>;
     isLoadingListConversations: boolean,
     refetchListConversations: () => void,
     listConversations: Array<ItemListConversation>,
@@ -56,6 +58,12 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
     const getListMediasOfConversation = async (params: MediasOfConversationPayload) => {
         const {data} = await ListConversationRepository.getListImagesOfConversation(params);
         dispatch(setListMedias({conversationId: params.conversationID, data: data.listRecords, type: params.typeMessage}))
+    }
+
+    const getConverationInformation = async (params: ConvversationInformationPayload) => {
+        const {data} = await ListConversationRepository.getConverationInformation(params);
+
+        return data;
     }
 
     const getListGeneralGroupByMember = async (params: GeneralGroupByMemberPayload) => {
@@ -101,6 +109,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         prevPageListConversations,
         hasListConversationNextPage,
         totalRecordRequest,
-        getListGeneralGroupByMember
+        getListGeneralGroupByMember,
+        getConverationInformation
     }
 };

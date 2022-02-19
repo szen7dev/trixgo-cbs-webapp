@@ -2,7 +2,7 @@ import API from "../repository";
 import { convertObToUrl } from "helpers";
 
 import {
-    CheckExistConversationResponse,
+    CheckExistConversationResponse, ConversationInformarionResponse, ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponse, GeneralGroupByMemberPayload, GeneralGroupByMemberResponse,
     ListConversationPayload,
@@ -18,6 +18,7 @@ const checkExistConversation = "/api/chatting/conversations/check-exists-convers
 const createConversation = "/api/chatting/conversations/create-conversation";
 const mediasOfConversation = "/api/chatting/conversations/list-message-media-conversation";
 const generalGroupOfMember = "/api/chatting/conversations/info-general-group-by-member";
+const conversationInformation = "/api/chatting/conversations/info-conversation/";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -64,6 +65,14 @@ const ListConversationRepository = {
     async getListGeneralGroupByMember(payload: GeneralGroupByMemberPayload): Promise<GeneralGroupByMemberResponse> {
         const {data} = await API.get<GeneralGroupByMemberResponse>(
             `${generalGroupOfMember}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async getConverationInformation(payload: ConvversationInformationPayload): Promise<ConversationInformarionResponse> {
+        const {data} = await API.get<ConversationInformarionResponse>(
+            `${conversationInformation}?${convertObToUrl(payload)}`
         )
 
         return data;

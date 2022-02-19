@@ -7,7 +7,7 @@ import DeleteAndRevokeMessageConfirm
     from "views/pages/messages/chattingSection/components/DeleteAndRevokeMessage";
 import {MiniChatContext} from "./ChatsOnRightSideBar";
 import MiniChatSection from "./MiniChatSection";
-import PopupSendImageAndFile from "../../../views/pages/messages/chattingSection/components/PopupSendImageAndFile";
+import PopupSendImageAndFile from "views/pages/messages/chattingSection/components/PopupSendImageAndFile";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
 const MiniChatbox: FC = () => {
