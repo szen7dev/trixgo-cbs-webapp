@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { FC } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom';
 
@@ -10,31 +11,20 @@ import appstore from 'assets/images/appstore.png'
 import chplay from 'assets/images/chplay.png'
 import datahub_banner_1 from 'assets/images/datahub-banner-1.png'
 import datahub_banner_2 from 'assets/images/datahub-banner-2.png'
+import Wallethub from '../components/Wallethub';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
 	return (
 		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 pt-12 overflow-auto'>
-			<div className='pr-80 relative'>
+			<div className='flex relative'>
 				<div className='max-w-4xl mx-auto mt-10 mb-8'>
 					<div className="flex justify-center">
 						<div className='w-6/12 px-2 '>
 							<div className='bg-white py-5 rounded-cbs'>
 								<div className='flex justify-around'>
-									<div className='flex flex-col items-center'>
-										<img src={iconWallet} alt="Icon wallet" className='w-6 h-6' />
-										<p className='text-x-large mt-1.5'><strong>125</strong></p>
-										<p className='text-medium text-cbs-subtext mt-1'>Lĩnh vực</p>
-									</div>
-									<div className='flex flex-col items-center'>
-										<img src={iconWallet} alt="Icon wallet" className='w-6 h-6' />
-										<p className='text-x-large mt-1.5'><strong>125</strong></p>
-										<p className='text-medium text-cbs-subtext mt-1'>Lĩnh vực</p>
-									</div>
-									<div className='flex flex-col items-center'>
-										<img src={iconWallet} alt="Icon wallet" className='w-6 h-6' />
-										<p className='text-x-large mt-1.5'><strong>125</strong></p>
-										<p className='text-medium text-cbs-subtext mt-1'>Lĩnh vực</p>
-									</div>
+									<Wallethub title="125" description='Lĩnh vực' />
+									<Wallethub title="125" description='Lĩnh vực' />
+									<Wallethub title="125" description='Lĩnh vực' />
 								</div>
 							</div>
 						</div>
@@ -69,21 +59,21 @@ const DatahubHome: FC<RouteComponentProps> = () => {
 							)
 						}
 					</div>
-					<div className='flex mt-[2.375rem]'>
-						<div className='px-2 w-6/12'>
+					<div className='flex flex-wrap mt-[2.375rem]'>
+						<div className='px-2 w-full xl:w-6/12'>
 							<div className='border-cbs-border border-[1px] bg-white h-full'>
 								<img src={datahub_banner_1} alt='datahub banner' />
 							</div>
 						</div>
-						<div className='px-2 w-6/12'>
+						<div className='px-2 w-full xl:w-6/12'>
 							<div className='border-cbs-border border-[1px] bg-white h-full'>
 								<img src={datahub_banner_2} alt='datahub banner' />
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className='absolute right-4 inset-y-0'>
-					<div className='sticky'>
+				<div className='relative pr-4'>
+					<div className='sticky top-0'>
 						<div className='text-white bg-cbs-secondary px-6 py-4'>
 							Tiện ích nhanh
 						</div>
