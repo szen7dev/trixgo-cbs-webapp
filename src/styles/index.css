@@ -1333,7 +1333,7 @@ input[type="text"] {
 }
 .message-input .DraftEditor-root {
   flex-grow: 1;
-  max-width: calc(100% - 106px);
+  max-width: 419px;
   min-height: 50px;
   max-height: 200px;
   padding: 15px 0;
@@ -1416,4 +1416,25 @@ input[type="text"] {
 }
 .message-container.my-message .emoji-action {
   left: -20px;
+}
+
+.t-mini-chat .chatting-input-container {
+  padding: 5px 0;
+}
+.t-mini-chat .chatting-input-container .send-chat-button {
+  margin: 0;
+}
+
+.t-mini-chat .chatting-input-container .message-input {
+  max-width: 275px;
+}
+.t-mini-chat .chatting-input-container .message-input .DraftEditor-root {
+  max-width: 182px;
+  padding: 15px 10px;
+}
+.t-mini-chat .chatting-input-container .chatting-icon-attach {
+  padding: 0 10px;
+}
+.t-mini-chat .input-wrapper {
+  @apply bg-gray-100 rounded-full
 }

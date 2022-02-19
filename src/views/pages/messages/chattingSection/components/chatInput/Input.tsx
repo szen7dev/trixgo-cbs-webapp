@@ -12,8 +12,8 @@ import {ChattingInputContext} from "./ChattingInput";
 import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import IconButton from "./IconButton";
-import {ItemMessage} from "typings/apis/messages/listMessage";
 import {MessageContext} from "../../../home/index_v2";
+import IconAttach from "./IconAttach";
 // import editorStyles from './editorStyles.module.css';
 
 defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
@@ -28,12 +28,13 @@ type Props = {
     onPressEnter?: () => void;
     onPasteFiles?: (files: FileList|Blob[]) => void;
     mentions: MentionData[];
+    handleUploadFiles: (files: FileList|Blob[]) => void;
 }
-const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions }) => {
+const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, handleUploadFiles }) => {
     const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
     const editor = useRef<Editor>(null);
-    const {currentChat, setEditorRef} = useContext(MessageContext)
+    const {setEditorRef} = useContext(MessageContext)
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
@@ -100,26 +101,31 @@ const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions }) => {
     }
 
     return (
-        <>
+        <div className={"flex w-full"}>
             <EmojiSelect />
-            <Editor
-                editorState={editorState}
-                onChange={onChangeCallback}
-                plugins={plugins}
-                keyBindingFn={myKeyBindingFn}
-                handleKeyCommand={handleKeyCommand}
-                handlePastedFiles={handlePastedFiles}
-                ref={editor}
-            />
-            <MentionSuggestions
-                open={open}
-                onOpenChange={onOpenChange}
-                onSearchChange={onSearchChange}
-                suggestions={mentions}
-                // entryComponent={Entry}
-            />
-            <EmojiSuggestions />
-        </>
+            <div className={"flex-1 flex input-wrapper"}>
+                <Editor
+                    editorState={editorState}
+                    onChange={onChangeCallback}
+                    plugins={plugins}
+                    keyBindingFn={myKeyBindingFn}
+                    handleKeyCommand={handleKeyCommand}
+                    handlePastedFiles={handlePastedFiles}
+                    ref={editor}
+                />
+                <MentionSuggestions
+                    open={open}
+                    onOpenChange={onOpenChange}
+                    onSearchChange={onSearchChange}
+                    suggestions={mentions}
+                    // entryComponent={Entry}
+                />
+                <EmojiSuggestions />
+                <IconAttach
+                    handleUploadFiles={(files) => handleUploadFiles(files)}
+                />
+            </div>
+        </div>
     )
 }
 export default InputForMessage

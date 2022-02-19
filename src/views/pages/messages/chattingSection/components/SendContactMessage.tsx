@@ -5,8 +5,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissSendContactMessage} from "redux/reducer/messages/ContactMessage";
 import {map as _map} from "lodash";
-import CheckIcon from 'assets/images/blue-check.svg';
-import {MessageContext} from "../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useUser} from "services/hooks/useUser";

@@ -1,6 +1,5 @@
 import React, {FC, Fragment, useEffect, useRef, useState} from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
@@ -9,9 +8,14 @@ import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import SampleImage from "assets/images/icons8-image-256.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import {v4 as uuidv4} from "uuid";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {closePopupSendFiles, setSendType} from "redux/reducer/messages/PopupSendImageAndFile"
 
 const PopupSendImageAndFile: FC = () => {
-    const { isShowPopupSendFiles, closePopupSendFiles, popSendFilesContent, setSendType } = usePopupSendFiles();
+    const {isShowPopupSendFiles, popSendFilesContent} = useSelector((state: RootState) => state.popUpSendFileAndImage.data);
+    const dispatch = useDispatch();
+
     const focusElementRef = useRef<HTMLDivElement>(null);
     const imageClass = ["w-1/2","w-1/2","w-1/2","w-1/2","w-1/3"]
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -121,16 +125,16 @@ const PopupSendImageAndFile: FC = () => {
             createAt: new Date(),
             files: popSendFilesContent.files
         };
-        closePopupSendFiles();
+        dispatch(closePopupSendFiles());
         popSendFilesContent.handleSendFile(message,useCompress)
     }
 
     const handleSetUseCompress = (value: boolean) => {
         setUseCompress(value);
         if (!value) {
-            setSendType("file");
+            dispatch(setSendType("file"));
         } else {
-            setSendType("image");
+            dispatch(setSendType("image"));
         }
     }
 
@@ -149,7 +153,7 @@ const PopupSendImageAndFile: FC = () => {
         }
         if (event.code === 'Escape') {
             event.preventDefault();
-            closePopupSendFiles();
+            dispatch(closePopupSendFiles());
         }
     }
 
@@ -158,7 +162,9 @@ const PopupSendImageAndFile: FC = () => {
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
-                onClose={closePopupSendFiles}
+                onClose={() => {
+                    dispatch(closePopupSendFiles());
+                }}
                 initialFocus={focusElementRef}
             >
                 <div ref={focusElementRef} className="min-h-screen flex items-center justify-center z-51">
@@ -196,7 +202,9 @@ const PopupSendImageAndFile: FC = () => {
                                 <div className={"flex w-full items-center"}>
                                     <button
                                         className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
-                                        onClick={() => closePopupSendFiles()}
+                                        onClick={() => {
+                                            dispatch(closePopupSendFiles());
+                                        }}
                                     >
                                         <Close/>
                                     </button>

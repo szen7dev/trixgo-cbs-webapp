@@ -194,7 +194,6 @@ import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import MessagesLayout from "views/layouts/MessagesLayout";
-import PopupSendFiles from "services/providers/PopupSendFiles";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 const Routes: FC = () => {
@@ -759,13 +758,11 @@ const Routes: FC = () => {
                                         </Route>
 
                                         <Route path="/messages/:path?">
-                                            <PopupSendFiles>
-                                                <MessagesLayout>
-                                                    <Switch>
-                                                        <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                                                    </Switch>
-                                                </MessagesLayout>
-                                            </PopupSendFiles>
+                                            <MessagesLayout>
+                                                <Switch>
+                                                    <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
+                                                </Switch>
+                                            </MessagesLayout>
                                         </Route>
 
                                         <Route path="/accounting/:path?">

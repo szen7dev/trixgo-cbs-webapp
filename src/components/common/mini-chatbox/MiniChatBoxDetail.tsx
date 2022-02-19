@@ -27,49 +27,17 @@ type Props = {
     chat: ItemListConversation;
 }
 const MiniChatBoxDetail:FC<Props> = ({chat}) => {
-    const dispatch = useDispatch();
     const {getListMessage} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
     const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[chat._id]);
     const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
     const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
     const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
-    const imageClassMap = {
-        "group_1": {
-            imgWidth: "w-full h-full",
-            groupPosition: [""]
-        },
-        "group_2": {
-            imgWidth: "w-6 h-6 min-w-6 min-h-6 absolute",
-            groupPosition: [
-                "bottom-0 left-0 z-2",
-                "top-0 right-0 z-1",
-            ]
-        },
-        "group_3": {
-            imgWidth: "w-5 h-5 min-w-5 min-h-5 absolute",
-            groupPosition: [
-                "bottom-0 left-12px z-3",
-                "top-0 left-0 z-2",
-                "top-0 right-0 z-1",
-            ]
-        },
-        "group_4": {
-            imgWidth: "w-4 h-4 min-w-4 min-h-4 absolute",
-            groupPosition: [
-                "bottom-0 left-0 z-4",
-                "top-0 left-0 z-3",
-                "top-0 right-0 z-2",
-                "bottom-0 right-0 z-1"
-            ]
-        }
-    };
 
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
@@ -168,37 +136,15 @@ const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 return <ReminderNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${didAccept?"xác nhận":"từ chối"} tham gia hội thoại: <span class="text-black">${message.reminder.content}</span>`}/>
         }
     }
-    const {getNameConversation, getAvatarMembers} = UseMessageHelper()
 
     return (
-        <div className="t-mini-chat bg-primary-light border border-primary-border">
-            <div className="t-mini-chat-header p-2 flex items-center bg-primary text-primary-light">
-                {
-                    chat.avatar?
-                        <img  className={"w-8 h-8 min-w-8 min-h-8 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={chat._id}/>:
-                        <AvatarGroupChat
-                            avatars={getAvatarMembers(chat, profileId)}
-                            imageClass={"w-8 h-8 min-w-8 min-h-8"}
-                            classesMap={imageClassMap}
-                        />
-                }
-                <button className="text-[14px] flex items-center ml-2">
-                    <span className="truncate">{getNameConversation(chat, profileId)}</span>
-                    <img src={iconChevronDown} alt="Dropdown" className="w-4 h-4 object-contain ml-2 filter-white" />
-                </button>
-                <button
-                    className="ml-auto" onClick={() => dispatch(dismissChatBox())}>
-                    <img src={iconClose} alt="Close" className="w-4 h-4 object-contain filter-white" />
-                </button>
-            </div>
-            <div
-                ref={conversationMessagesList}
-                id={"conversation-messages-list"}
-                className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
-                <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
-                    {memoizedValue()}
-                    {memoizedFakeValue()}
-                </div>
+        <div
+            ref={conversationMessagesList}
+            id={"conversation-messages-list"}
+            className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
+            <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
+                {memoizedValue()}
+                {memoizedFakeValue()}
             </div>
         </div>
     )

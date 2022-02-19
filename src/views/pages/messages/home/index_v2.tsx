@@ -16,6 +16,7 @@ import Editor from "@draft-js-plugins/editor";
 import NPSCreate from "../chattingSection/components/nps/NPSCreate";
 import SearchMessage from "../search";
 import AddUsersToConversation from "../chattingSection/components/AddUsersToConversation";
+import PopupSendImageAndFile from "../chattingSection/components/PopupSendImageAndFile";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -73,6 +74,7 @@ const MessagesHome:FC = () => {
             <SendContactMessage context={MessageContext}/>
             <NPSCreate context={MessageContext}/>
             <AddUsersToConversation context={MessageContext}/>
+            <PopupSendImageAndFile/>
         </MessageContext.Provider>
     )
 }

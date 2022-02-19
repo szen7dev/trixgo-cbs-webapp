@@ -10,7 +10,6 @@ import SelectMessageCheckbox from "./SelectMessageCheckbox";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
 import ContactContent from "./chatContent/contactContent";
 
