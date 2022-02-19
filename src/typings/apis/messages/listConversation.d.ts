@@ -184,3 +184,15 @@ export type GeneralGroupByMemberResponse = {
     data: ItemListConversation[];
     status: number;
 }
+
+export type ConvversationInformationPayload = {
+    conversationID: string;
+    filter?: string;
+    select?: string;
+}
+
+export type ConversationInformarionResponse = {
+    error: boolean;
+    data: ItemListConversation;
+    status: number;
+}
