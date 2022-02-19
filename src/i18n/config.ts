@@ -18,6 +18,7 @@ export const resources = {
     resetPassword: resetPasswordEN,
     human: humanVN,
     document: documentVN,
+    pcm: require('./vn/pcm')
   },
   vn: {
     signIn: signInVN,
@@ -25,6 +26,7 @@ export const resources = {
     resetPassword: resetPasswordVN,
     human: humanVN,
     document: documentVN,
+    pcm: require('./vn/pcm')
   },
 } as const;
 
