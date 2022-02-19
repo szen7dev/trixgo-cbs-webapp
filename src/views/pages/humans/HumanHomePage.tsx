@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -9,16 +9,20 @@ import NewHumanModal from "./components/NewHumanModal";
 import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 // import HumanAvatar from "assets/images/human-avatar.svg";
-import SortIcon from "assets/images/icons8-sorting.svg";
+// import SortIcon from "assets/images/icons8-sorting.svg";
 
 import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
+import DropdownFilterButton from './components/FilterButton';
+
 import type { Human } from "typings/human";
 
 const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
 
 const HumansPage: FC = () => {
   const { t } = useTranslation(["human"]);
-  const humans = useFetchListHuman();
+
+  const [pageParam, setPageParam] = useState<any>({});
+  const humans = useFetchListHuman(pageParam);
   
   const { openModal } = useModal();
   const { createContactMutateAsync } = useCreateContactMutation();
@@ -31,6 +35,16 @@ const HumansPage: FC = () => {
     }
     return false;
   }, [createContactMutateAsync, humans]);
+
+  const handleOnFilter = useCallback((values) => {
+    // console.log(values);
+    setPageParam(() => ({...values }));
+    return true;
+  }, []);
+
+  const handleOnCancelFilter = useCallback(() => {
+    setPageParam({});
+  }, []);
 
   return (
     <section className="w-full">
@@ -51,10 +65,15 @@ const HumansPage: FC = () => {
               className="w-[296px] h-[30px] pl-10 outline-none bg-cbs-table-header"
             />
           </div>
-          <button className="w-[78px] h-[30px] flex items-center justify-around bg-cbs-table-header rounded text-primary-gray">
+          <DropdownFilterButton
+            onSubmit={handleOnFilter}
+            onCancel={handleOnCancelFilter}
+            initialValues={pageParam}
+          />
+          {/* <button className="w-[78px] h-[30px] flex items-center justify-around bg-cbs-table-header rounded text-primary-gray">
             <img src={SortIcon} alt="Sort" />
             <span>Filter</span>
-          </button>
+          </button> */}
         </div>
         <button
           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"

@@ -100,6 +100,12 @@ const FormFilter: FC<FormFilterProps> = ({
       if (typeof values.contractID === "object") {
         formatData.contractID = values.contractID._id;
       }
+      if (typeof values.propertyID === "object") {
+        formatData.senderID = values.senderID._id;
+      }
+      if (typeof values.storageID === "object") {
+        formatData.contractID = values.contractID._id;
+      }
       onSubmit && onSubmit(formatData);
     },
     [onSubmit]
@@ -253,7 +259,6 @@ const DropdownFilterButton: FC<
   const fetchInitialValues = React.useCallback(
     async (_initialValues: any) => {
       const data = { ..._initialValues };
-      console.log({ _initialValues });
       if (_initialValues?.senderID) {
         const contact = await onFetchDetailContactAsync(
           _initialValues.senderID || ""
@@ -283,7 +288,7 @@ const DropdownFilterButton: FC<
           name: property.name,
         };
       }
-      if (_initialValues?.requestResponse) {
+      if ([0, 1].includes(_initialValues.requestResponse)) {
         const requestResponse = [
           { _id: 0, name: "Không" },
           { _id: 1, name: "Có" },
