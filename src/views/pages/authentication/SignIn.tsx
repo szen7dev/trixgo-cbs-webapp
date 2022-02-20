@@ -12,11 +12,34 @@ import { SignInPayload } from "typings/auth";
 import Loader from "components/shared/Loader";
 import RegisterPage from "./Register";
 
-import { LOCALES } from "assets/contents/authentication";
 import SignInLogo from "assets/images/signin-logo.svg";
 import SignInImage from "assets/images/signin-image.svg";
 import MailIcon from "assets/images/icons-email.svg";
 import LockIcon from "assets/images/icons-lock.svg";
+
+import USFlagIcon from "assets/icons/USFlag";
+import VNFlagIcon from "assets/icons/VNFlag";
+import VNFlagGrayIcon from "assets/icons/VNFlagGray";
+import USFlagGrayIcon from "assets/icons/USFlagGray";
+
+import { Locale } from "typings/common";
+
+const LOCALES: Locale[] = [
+  {
+    id: "en-locale",
+    code: "en",
+    name: "english",
+    flag: <USFlagIcon className="w-8 h-8" />,
+    grayFlag: <USFlagGrayIcon className="w-8 h-8" />,
+  },
+  {
+    id: "vn-locale",
+    code: "vn",
+    name: "vietnamese",
+    flag: <VNFlagIcon className="w-8 h-8" />,
+    grayFlag: <VNFlagGrayIcon className="w-8 h-8" />,
+  },
+];
 
 const LoginPage: FC = () => {
   const { t, i18n } = useTranslation(["signIn"]);
