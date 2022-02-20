@@ -59,7 +59,7 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
         }
     }
     return (
-        <div className={"min-w-[70px] rounded-lg p-[7px] pb-[10px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
+        <div className={"min-w-[70px] rounded-lg p-[7px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             {
                 showSenderName&&
                 <div className={"reply-user-name text-primary"}>
@@ -70,12 +70,12 @@ const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessag
                 message.parent&&
                 renderReply()
             }
-            <div className={"pr-[20px] pb-[5px]"}>
+            <div className={"pr-[20px]"}>
                 <div className={"message-content"}>
                     <div ref={textContentRef} className={"flex-1 py-[4px] break-words"}>
                     </div>
                 </div>
-                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
+                <div className={"date-message date-text-message text-xs flex items-center w-full justify-end "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
                     <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
                     <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>

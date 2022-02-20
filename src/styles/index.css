@@ -1438,3 +1438,9 @@ input[type="text"] {
 .t-mini-chat .input-wrapper {
   @apply bg-gray-100 rounded-full
 }
+.date-message {
+  transform: translate(0, 5px);
+}
+.date-text-message {
+  transform: translateX(20px);
+}

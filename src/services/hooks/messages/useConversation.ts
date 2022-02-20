@@ -4,7 +4,7 @@ import {
     DeleteRevokeMessagePayload, ItemMessage,
     ListMessageData,
     ListMessagePayload,
-    PinnedMessagePayload, SearchMessageInConversationByIdPayload,
+    PinnedMessagePayload, SearchMessageInConversationByIdPayload, SearchMessageInConversationByIdResponse,
     SendNormalMessagePayload,
     ShareMessageData,
     ShareMessagePayload, UpdatePinnedMessageData,
@@ -27,7 +27,7 @@ type UseConversationType = {
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
-    goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => void;
+    goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => Promise<any>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -128,6 +128,7 @@ export const UseConversation = () : UseConversationType => {
     const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload, isFirstInit = true, direction = "front") => {
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.goToMessagePosition(params);
+        dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
         dispatch(setTotalRecordFront({conversationId: params.conversationID, data: data.totalRecordFront}));
         dispatch(setTotalRecordBack({conversationId: params.conversationID, data: data.totalRecordBack}));
         if (isFirstInit) {
@@ -140,10 +141,11 @@ export const UseConversation = () : UseConversationType => {
                 dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.listRecords[0]._id}));
             }
         }
-        dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: false}));
 
-        return data;
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
     }
 
     return {
