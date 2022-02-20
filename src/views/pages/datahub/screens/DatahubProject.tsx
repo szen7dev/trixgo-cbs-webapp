@@ -57,7 +57,7 @@ const DatahubProject: FC = () => {
 					value={pkg.title}
 					onSelectValue={setPkg}
 				/>
-				<DropdownFilterButton />
+				{/* <DropdownFilterButton /> */}
 				<GroupActions className="flex items-center flex-1" />
 
 				<ButtonCreate onClick={() => setShow(!show)} />

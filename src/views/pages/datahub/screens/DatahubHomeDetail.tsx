@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import SwiperCore, { Navigation } from 'swiper';
-import SliderRow from '../components/SliderRow';
+import SliderRow from '../components/common/SliderRow';
 
 type Props = {
 
@@ -13,6 +13,7 @@ const DatahubHomeDetail: FC<Props> = (props) => {
 		id: index,
 		items: Array.from({ length: 3 }).map((_, index) => ({
 			id: index,
+			path: index,
 			title: 'CPMI.Công ty Cổ phần CONINCO Quản lý dự án và đầu tư',
 			location: 'Tầng 3, Toà nhà 789, Số 147 đường Hoàng Quốc Việt, Phường Nghĩa Đô...',
 			image: 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com/root/test/04f94158-8b32-4ab0-9d69-73c19854a22f.jpg',
@@ -28,7 +29,7 @@ const DatahubHomeDetail: FC<Props> = (props) => {
 							<div className='text-[22px] leading-6'>
 								Lĩnh vực số 1.{item.id}
 							</div>
-							<SliderRow {...item} />
+							<SliderRow {...item} prefix="/datahub/contractor/home/"/>
 						</div>
 					))
 				}

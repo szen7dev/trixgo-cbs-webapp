@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 // ======== COMPONENT IMPORT ========
-import Acoordion from '../components/Acoordion';
+import Acoordion from '../components/common/Acoordion';
 
 // ======== ASSETS IMPORT ========
 import iconWallet from 'assets/images/icons8-wallet-100.png'
@@ -11,7 +11,8 @@ import appstore from 'assets/images/appstore.png'
 import chplay from 'assets/images/chplay.png'
 import datahub_banner_1 from 'assets/images/datahub-banner-1.png'
 import datahub_banner_2 from 'assets/images/datahub-banner-2.png'
-import Wallethub from '../components/Wallethub';
+import Wallethub from '../components/common/Wallethub';
+import SearchIcon from 'assets/icons/SearchIcon';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
 	return (
@@ -34,9 +35,7 @@ const DatahubHome: FC<RouteComponentProps> = () => {
 							<div className='relative align-middle'>
 								<label className=''>
 									<span className='absolute inset-y-0 left-[1.375rem] flex items-center text-cbs-subtext'>
-										<svg xmlns="http://www.w3.org/2000/svg" className="h-[18px] w-[18px" viewBox="0 0 20 20" fill="currentColor">
-											<path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-										</svg>
+										<SearchIcon className="h-[18px] w-[18px" />
 									</span>
 									<input type="text" placeholder='Tìm kiếm thông tin trong DataHub' className="pl-14 pr-6 py-2.5 w-full focus:outline-none bg-white rounded-full placeholder-cbs-subtext text-large" />
 								</label>
