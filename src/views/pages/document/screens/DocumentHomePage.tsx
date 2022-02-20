@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -15,13 +15,6 @@ import projectImage from "assets/images/project.jpg";
 import "views/pages/document/document.css";
 
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-
-interface IData {
-  id: number;
-  title: string;
-  company: string;
-  count: number;
-}
 
 const DocumentHomePage: FC = () => {
   const { toggleModal } = useContext(Context);
@@ -86,7 +79,7 @@ const DocumentHomePage: FC = () => {
                   </div>
                   <Link
                     className="document__line text-large text-black"
-                    to={`/document/project/${item._id}/document`}
+                    to={`/ppt/project/${item._id}/document`}
                   >
                     {`${item.sign}.${item.name}`}
                   </Link>

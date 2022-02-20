@@ -139,7 +139,8 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 
 // Document pages
-import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
+import DocumentRoutes from "views/pages/document/routes/DocumentRoutes";
+import PPTRoutes from "views/pages/document/routes/PPTRoutes";
 
 // Financial pages
 import FinHomePage from "views/pages/financial/FinHomePage";
@@ -722,8 +723,10 @@ const Routes: FC = () => {
                                         </Route>
 
                                         <Route path="/document">
-                                            <DocumentLayoutContainer />
+                                            <DocumentRoutes />
                                         </Route>
+
+                                        <Route path="/ppt/project/:id/document" component={PPTRoutes} />
 
                                         {/* <Route path="/kanban-board">
                   <KanbanBoardLayout>

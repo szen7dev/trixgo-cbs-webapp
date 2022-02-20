@@ -255,7 +255,7 @@ const DocumentProjectPage: FC = () => {
                       </td>
                       <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
                         <Link
-                          to={`/document/project/${document.project._id}/document/${document._id}`}
+                          to={`/ppt/project/${document.project._id}/document/${document._id}`}
                         >
                           <p>{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
