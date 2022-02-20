@@ -1,8 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import Close from "../../../../assets/icons/Close";
 import { useModal } from "../../../../services/hooks/useModal";
-import DropdownSearchable from "../../../../components/common/DropdownSearch";
-import DatePicker from "react-datepicker";
 import CreateNewTicketForm from "./CreateNewTicketForm";
 
 import { Form, Formik } from "formik";
@@ -27,6 +25,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
 
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
+    contractId: data.contractId,
     ipc: isDataPayLoad ? data?.ipc?.value : convertInitialValueDropdown(data?.ipc || ''),
     subtype: isDataPayLoad ? data?.subtype?.value : convertInitialValueDropdown(data?.subtype || ''),
 
@@ -88,10 +87,10 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
   })
 }
 
-const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, }) => {
+const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, contractId = '' }) => {
   const { closeModal } = useModal();
 
-  const [initialValues, setInitialValues] = useState(mappingData({}));
+  const [initialValues, setInitialValues] = useState(mappingData({ contractId }));
 
   const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
   const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
@@ -119,12 +118,13 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       })
       const dataDetail = {
         ...data.data,
+        contractId,
         selectedJournals: [...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
       }
+      console.log('🚀 ~ fetchDetailAccountingVoucher ~ dataDetail', dataDetail)
       setLastestIDJournals(selectedJournals.data?.nextCursor)
       setTotalRecord(selectedJournals.data?.totalRecord)
       !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
-      console.log('🚀 ~ fetchDetailAccountingVoucher ~ mappingData(dataDetail)', mappingData(dataDetail))
       return data
     }
     idEdit && fetchDetailAccountingVoucher(idEdit)
@@ -149,8 +149,6 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
       ...initialValues,
       selectedJournals: [...initialValues.selectedJournals, ...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
     }
-    console.log('🚀 ~ loadMoreSelectedJournals ~ dataDetail', dataDetail)
-
     setLastestIDJournals(selectedJournals.data?.nextCursor)
     setTotalRecord(selectedJournals.data?.totalRecord)
     !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))
@@ -163,8 +161,6 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
         ...values,
         selectedJournals: [...mappingSelectedJournals(values.selectedJournals, true) || []]
       }
-      console.log('🚀 ~ mappingSelectedJournals(values.selectedJournals)', mappingSelectedJournals(values.selectedJournals, true))
-      console.log('🚀 ~ mappingData(formatData, true)', mappingData(formatData, true))
       const isSuccess = await onFinish(mappingData(formatData, true), isEdit);
       if (isSuccess) {
         closeModal();
@@ -200,7 +196,6 @@ const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '',
 
         {(formik) => {
           const { handleBlur, setFieldValue, values } = formik;
-          console.log('🚀 ~ values', values, formik.isValid)
 
           return (
             <Form style={{ 'height': 'calc(100% - 110px)' }}>

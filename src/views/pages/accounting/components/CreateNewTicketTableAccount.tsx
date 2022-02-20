@@ -281,6 +281,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
+												allowClearValueSingleInput={true}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchWarehouseValue(value),

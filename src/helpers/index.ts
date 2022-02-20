@@ -1,4 +1,5 @@
 import moment from "moment";
+import { DATE_FORMAT } from "apis/localdb/index";
 
 export type Item = {
 	value?: string | number;
@@ -20,6 +21,10 @@ export const convertObToUrl = (obj: any) => {
 
 export const convertDateToString = (date: any) => {
 	return (date && moment(date).isValid() && moment(date).toJSON()) || ""
+}
+
+export const convertDisplayDate = (date: any, format = DATE_FORMAT) => {
+	return moment(date).isValid() && moment(date).format(format)
 }
 
 export const formatNumberMoney = (number: any) => {
