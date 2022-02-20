@@ -19,7 +19,6 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
-import {MessageContext} from "../../home/index_v2";
 type Props = {
     message: ItemMessage;
     socket: any;

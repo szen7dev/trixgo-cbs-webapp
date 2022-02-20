@@ -5,13 +5,15 @@ import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../home/index_v2";
 
-const NPSCreate:FC = () => {
+type Props = {
+    context: any
+}
+const NPSCreate:FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenCreateNPS, conversationId} = useSelector((state: RootState) => state.createNPSMessage.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);

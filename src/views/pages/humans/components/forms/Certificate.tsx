@@ -15,6 +15,7 @@ import {
 import { CONTACT_DOCUMENT_GRADES } from "../views/Certificate";
 import { convertEnumToArray } from "../NewHumanModal";
 
+import type { CertificateType, CertificateName,  } from "typings/human";
 interface ExperienceAppointmentProps {
   title: string;
   defaultValues?: {
@@ -23,8 +24,8 @@ interface ExperienceAppointmentProps {
     sign: string; // ký hiệu
     fromDate: string; // ngày tháng
     toDate: string; // ngày hết hạn
-    certificateType: string; // loại chứng chỉ
-    certificateName: string; // lĩnh vực chứng chỉ
+    certificateType: CertificateType; // loại chứng chỉ
+    certificateName: CertificateName; // lĩnh vực chứng chỉ
     certificateGrade: number; // hạng chứng chỉ
     number: number; // số lượng
     store: string; // vị trí lưu trữ
@@ -63,8 +64,8 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
       sign: "", // ký hiệu
       fromDate: "", // ngày tháng
       toDate: "", // ngày hết hạn
-      certificateType: "", // loại chứng chỉ
-      certificateName: "", // lĩnh vực chứng chỉ
+      certificateType: {}, // loại chứng chỉ
+      certificateName: {}, // lĩnh vực chứng chỉ
       certificateGrade: 1, // hạng chứng chỉ
       number: 0, // số lượng
       store: "", // vị trí lưu trữ
@@ -283,7 +284,7 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={initialValues?.certificateGrade}
+                        initialValue={convertEnumToArray(CONTACT_DOCUMENT_GRADES).find(elm => elm.value === initialValues?.certificateGrade)}
                         data={convertEnumToArray(CONTACT_DOCUMENT_GRADES)}
                         formatItem={{
                           text: "label",

@@ -65,7 +65,7 @@ const OwnerLayout: FC<Props> = ({ children }) => {
       </button>
 
       {/* Right side bar */}
-      <HomeRightSideBar openNewChatbox={() => console.log("Open chatbox!")} />
+      <HomeRightSideBar />
 
       {/* Collapse right side bar button */}
       <button

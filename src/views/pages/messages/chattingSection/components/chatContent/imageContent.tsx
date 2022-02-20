@@ -17,11 +17,13 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
+    context: any;
+    isMini?: boolean
 }
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage}) => {
+const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context, isMini}) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
@@ -102,7 +104,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
     }
 
     return (
-        <div className={"max-w-[366px] min-w-[70px] relative " + (className??"")}>
+        <div className={"min-w-[70px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
             <div className={"overflow-hidden rounded-lg"}>
                 {
                     message.parent&&
@@ -124,7 +126,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                     </div>
                 </ModalFullContainer>
             </div>
-            <ReactionActions message={message}/>
+            <ReactionActions context={context} message={message}/>
         </div>
     )
 }

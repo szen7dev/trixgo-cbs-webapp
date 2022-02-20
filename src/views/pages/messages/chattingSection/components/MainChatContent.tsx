@@ -73,7 +73,6 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const {currentChat} = useContext(MessageContext);
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -95,8 +94,10 @@ const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        getListMessage({conversationID: currentChat})
-    },[currentChat]);
+        if (!messagesData||Object.keys(messagesData).length===0) {
+            getListMessage({conversationID: chat._id})
+        }
+    },[chat._id]);
 
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
@@ -104,7 +105,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreData) {
-            getListMessage({lastestID: nextCursor, conversationID: currentChat});
+            getListMessage({lastestID: nextCursor, conversationID: chat._id});
             setReachTop(false);
         }
     }, [reachedTop, nextCursor])
@@ -154,19 +155,19 @@ const MainChatContent:FC<Props> = ({chat}) => {
             case 1:
             case 2:
                 if (message.sender._id === profileId) {
-                    return <MyMessage message={message}/>
+                    return <MyMessage context={MessageContext} message={message}/>
                 } else {
-                    return <OthersMessage message={message}/>
+                    return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 4:
-                return <Reminder message={message}/>;
+                return <Reminder context={MessageContext} message={message}/>;
             case 5:
                 return <Poll message={message} chat={chat}/>;
             case 7:
                 if (message.sender._id === profileId) {
-                    return <MyMessage message={message}/>
+                    return <MyMessage context={MessageContext} message={message}/>
                 } else {
-                    return <OthersMessage message={message}/>
+                    return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 101:
                 // eslint-disable-next-line no-case-declarations
@@ -203,7 +204,6 @@ const MainChatContent:FC<Props> = ({chat}) => {
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>
-            <iframe id="download_iframe" className={"hidden"}></iframe>
             {
                 userUnreadMessage()>0 &&
                 <button

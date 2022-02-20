@@ -11,10 +11,13 @@ import SearchChatItem from "../../list/components/SearchUserConversation/searchC
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SelectedShareConversationItem from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
-import {MessageContext} from "../../home/index_v2";
 import {UseConversation} from "services/hooks/messages/useConversation";
 
-const ShareMessage:FC = () => {
+type Props = {
+    context: any;
+    currentChat: string;
+}
+const ShareMessage:FC<Props> = ({context,currentChat}) => {
     const dispatch = useDispatch();
     const {isOpenShare, shareMessage} = useSelector((state: RootState) => state.shareMessage.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
@@ -26,7 +29,7 @@ const ShareMessage:FC = () => {
 
     const [selectedConversations, setSelectedConversations] = useState<{[key: string]: ItemListConversation}>({});
 
-    const {socketRef, currentChat} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     const handleAddConversation = (conversation: ItemListConversation) => {

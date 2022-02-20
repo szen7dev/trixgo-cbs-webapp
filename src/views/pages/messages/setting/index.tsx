@@ -6,10 +6,10 @@ import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import SettingMessageDetailTab from "./components/SettingMessageDetailTab";
 import {MessageContext} from "../home/index_v2";
 import {useSelector, useDispatch} from "react-redux";
-import {RootState} from "../../../../redux/reducer";
+import {RootState} from "redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";
-import SavedMessage from "assets/images/saved-messages.svg";
 import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
@@ -19,35 +19,7 @@ const SettingMessageDetail:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"P{";
     const profileId = JSON.parse(currentUser)?._id;
 
-    const getAvatarMembers = useCallback(() => {
-        if (chat.isPrivate) {
-            if (chat.members.length === 1) {
-                return [SavedMessage];
-            } else {
-                const members = chat.members.filter((item: any) => item._id != profileId);
-                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
-            }
-        }
-        const avatars: any = [];
-        if (chat.members && chat.members.length) {
-            chat.members.slice(0, 4).forEach((member: any) => {
-                avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
-            });
-        }
-        return avatars;
-    }, [chat, profileId]);
-
-    const getNameConversation = useCallback(() => {
-        if (chat.members && chat.members.length === 1) {
-            return "Saved Messages";
-        }
-        if (chat.members && chat.members.length === 2) {
-            const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return (userInConversation.bizfullname||userInConversation.fullname).trim();
-        }
-
-        return chat?.name;
-    }, [chat, profileId]);
+    const {getAvatarMembers, getNameConversation} = UseMessageHelper();
 
     const getPresentGroupName = (name: string) => {
         return name.split('').slice(0, 1).map((text: string) => {
@@ -70,14 +42,14 @@ const SettingMessageDetail:FC = () => {
                 <div className={"w-full flex flex-col bg-white items-center py-[20px]"}>
                     {
                         chat.avatar?
-                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation()}/>:
+                            <img  className={"w-[120px] h-[120px] min-w-[120px] min-h-[120px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                             (
-                                getAvatarMembers().length === 0 ?
+                                getAvatarMembers(chat, profileId).length === 0 ?
                                     <div className={"w-[120px] h-[120px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>
-                                        {getPresentGroupName(getNameConversation())}
+                                        {getPresentGroupName(getNameConversation(chat, profileId))}
                                     </div> :
                                     <AvatarGroupChat
-                                        avatars={getAvatarMembers()}
+                                        avatars={getAvatarMembers(chat, profileId)}
                                         imageClass={"w-[120px] h-[120px] min-w-[120px] min-h-[120px]"}
                                         classesMap={{
                                             "group_1": {
@@ -114,7 +86,7 @@ const SettingMessageDetail:FC = () => {
                     }
                     <div className={"flex flex-col px-[25px] pb-[15px] w-full items-center mt-[10px]"}>
                         <div className={"text-xl"}>
-                            {getNameConversation()}
+                            {getNameConversation(chat, profileId)}
                         </div>
                         <div className={"text-gray-400"}>
                             {chat.members.length} thành viên

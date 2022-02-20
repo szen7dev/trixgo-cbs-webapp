@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "react-query";
+import React from "react";
 
 import { DoctypeRepository } from 'apis/item';
 import type { Doctype } from 'typings/items';
@@ -19,9 +20,9 @@ export const useQueryListDoctype = (params: Doctype.DoctypeQueryPayload): UseQue
         async ({ pageParam }: any) =>
             // mai request BE check lại api này
             DoctypeRepository.fetchListDoctype({
-                limit: params.limit || 10,
+                limit: params?.limit || 10,
                 lastestID: pageParam || "",
-                keyword: params.keyword || '',
+                keyword: params?.keyword || '',
                 ...params,
             }),
         {
@@ -56,5 +57,38 @@ export const useQueryListDoctype = (params: Doctype.DoctypeQueryPayload): UseQue
         hasNextPage,
         refetchListDoctype,
         fetchNextPageDoctype
+    }
+}
+
+interface UseQueryDetailDoctype {
+    doctype: Doctype.Doctype,
+    loading: boolean,
+    onFetchDetailDoctypeAsync: (docTypeID: string) => Promise<Doctype.Doctype>;
+}
+export const useQueryDetailDoctype = (): UseQueryDetailDoctype => {
+    const [doctype, setDoctype] = React.useState<any>({});
+    const [loading, setLoading] = React.useState(false);
+
+    const onFetchDetailDoctype = React.useCallback(async (docTypeID): Promise<any> => {
+        try {
+            setLoading(true);
+            const result = await DoctypeRepository.fetchDetailDoctype(docTypeID);
+            if (result.error) {
+                throw new Error('ERROR~');
+            }
+            setDoctype(result.data);
+            return result.data;
+        } catch(err) {
+            setDoctype({});
+            return {}
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    return {
+        doctype,
+        loading,
+        onFetchDetailDoctypeAsync: onFetchDetailDoctype,
     }
 }

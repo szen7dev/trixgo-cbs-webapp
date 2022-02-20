@@ -28,16 +28,16 @@ const ActionGroupButton: FC<ActionGroupButtonProps> = (props) => {
       openModal(
         <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
           <CreateOrEditDialog
-            title="Tạo mới"
+            title="Cập nhật"
             onSubmit={onUpdateTimeSheet}
             expertTimesheetID={record?._id}
             projectName={record.project.name}
             assigneeName={record.assignee.fullname}
             defaultValues={{
-              assigneeID: record.assignee._id,
+              assignee: record.assignee,
               name: record.name,
               note: record.note,
-              projectID: record.project._id,
+              project: record.project,
               type: record.type,
             }}
           />

@@ -4,10 +4,11 @@ import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import MyMessage from "./MyMessage";
 import OthersMessage from "./OthersMessage";
-import Reminder from "./reminder/Reminder";
 import NotificationCenter from "./NotificationCenter";
 import {map as _map} from "lodash"
 import moment from "moment";
+import {MessageContext} from "../../home/index_v2";
+
 type Props = {
     listPinnedMessage: ItemMessage[]
 }
@@ -42,19 +43,16 @@ const ListPinnedMessage:FC<Props> = ({listPinnedMessage}) => {
             case 1:
             case 2:
                 if (message.sender._id === profileId) {
-                    return <MyMessage message={message}/>
+                    return <MyMessage context={MessageContext} message={message}/>
                 } else {
-                    return <OthersMessage message={message} bgMessage={"bg-gray-100"}/>
+                    return <OthersMessage context={MessageContext} message={message}/>
                 }
-            case 4:
-                return <div>
-                    <Reminder message={message}/>
-                </div>;
-            case 108:
-                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
-            case 116:
-            case 117:
-                return <NotificationCenter content={`${(message.sender.bizfullname||message.sender.fullname)} đã ${message.reminder.accepts.includes(message.sender._id)&&!message.reminder.rejects.includes(message.sender._id)?"xác nhận":"từ chối"} tham gia hội thoại: <b class="text-primary">${message.reminder.content}</b>`}/>
+            case 7:
+                if (message.sender._id === profileId) {
+                    return <MyMessage context={MessageContext} message={message}/>
+                } else {
+                    return <OthersMessage context={MessageContext} message={message}/>
+                }
         }
     }
 

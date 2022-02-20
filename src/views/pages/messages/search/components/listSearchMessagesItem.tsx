@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 import {MessageContext} from "../../home/index_v2";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {UseConversation} from "../../../../../services/hooks/messages/useConversation";
 
 type Props = {
     message: ItemMessage
 }
 const ListSearchMessagesItem:FC<Props> = ({message}) => {
-    const {setCurrentChat} = useContext(MessageContext);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -60,11 +60,16 @@ const ListSearchMessagesItem:FC<Props> = ({message}) => {
                 return "[Thông báo]";
         }
     }, [message])
+    const {goToMessagePosition} = UseConversation();
+
+    const handleGoToMessage = (_id: string) => {
+        console.log(_id)
+        // goToMessagePosition({conversationID: message.conversation, messageID: message._id})
+    }
 
     return (
-        <NavLink
-            onClick={() => setCurrentChat(message.conversation)}
-            to={`#${message.conversation}`}
+        <div
+            onClick={() => handleGoToMessage(message._id)}
             className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 hover:bg-gray-100"}>
             <img  className={"w-[56px] h-[56px] min-w-[56px] min-h-[56px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3_USER}/${message?.sender?.image}`} alt={message.sender.bizfullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
@@ -80,7 +85,7 @@ const ListSearchMessagesItem:FC<Props> = ({message}) => {
                     <div className={"flex-1 text-gray-500"}>{getMessageContent()}</div>
                 </div>
             </div>
-        </NavLink>
+        </div>
     )
 }
 

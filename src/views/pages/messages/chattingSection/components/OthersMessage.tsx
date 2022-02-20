@@ -10,20 +10,21 @@ import SelectMessageCheckbox from "./SelectMessageCheckbox";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../home/index_v2";
 import DeleteChatContent from "./chatContent/deleteContent";
 import ContactContent from "./chatContent/contactContent";
 
 type Props = {
     message: ItemMessage;
     bgMessage?: string;
+    context: any;
+    isMini?: boolean
 }
 
-const OthersMessage:FC<Props> = ({message,bgMessage}) => {
+const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
     const selectedState = useSelector((state: RootState) => state.listMessage.data.selectedState[message.conversation]);
     const listSelectedMessage = useSelector((state: RootState) => state.listMessage.data.listSelectedMessage[message.conversation]);
-    const {socketRef, editorRef} = useContext(MessageContext);
+    const {socketRef, editorRef} = useContext(context);
     const socket = socketRef.current;
     const editor = editorRef?.current;
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -36,13 +37,13 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
         }
         switch (message.type) {
             case 0:
-                return <TextChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <TextChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 2:
-                return <FileChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
+                return <FileChatContent isMini={isMini} context={context} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>;
             case 1:
-                return <ImagesContent message={message} showSenderName={true}/>;
+                return <ImagesContent isMini={isMini} context={context} message={message} showSenderName={true}/>;
             case 7:
-                return <ContactContent message={message}/>;
+                return <ContactContent isMini={isMini} context={context} message={message} className={bgMessage??"bg-white"}/>;
         }
     },[message]);
 
@@ -52,7 +53,7 @@ const OthersMessage:FC<Props> = ({message,bgMessage}) => {
                 <SelectMessageCheckbox message={message}/>
             </div>
             <div
-                onClick={() => handleStartPrivateChat(message.sender._id)}
+                onClick={() => handleStartPrivateChat(message.sender._id, isMini)}
                 className={"avt-user w-[34px] h-[34px] rounded-full overflow-hidden mr-[5px] cursor-pointer"}>
                 <img src={`${process.env.REACT_APP_URL_S3_USER}/${message.sender.image}`} alt={message.userName}/>
             </div>

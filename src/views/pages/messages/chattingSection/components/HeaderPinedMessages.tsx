@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useContext, useCallback, useState} from "react";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {MessageContext} from "../../home/index_v2";
-import {useSelector} from "react-redux";
-import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import TextPinned from "./pinContent/textPinned";

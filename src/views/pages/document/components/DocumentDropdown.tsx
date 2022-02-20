@@ -11,9 +11,9 @@ interface IData {
 	title: string | number
 }
 interface DropdownProps {
-	data: Array<IData>
+	data: Array<IData & Record<string, any>>
 	value: string | number
-	onSelectValue: Dispatch<SetStateAction<IData>>
+	onSelectValue: Dispatch<SetStateAction<IData & Record<string, any>>>
 }
 
 const DocumentDropdown: FC<DropdownProps & React.HTMLAttributes<HTMLDivElement>> = ({ data, value, onSelectValue, ...props }) => {

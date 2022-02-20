@@ -8,7 +8,7 @@ import Paginate from "components/common/Paginate";
 
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
-
+import { Test } from './components';
 import styles from "../style.module.css";
 
 const AccountingDiaryPage: FC = () => {
@@ -209,23 +209,7 @@ const AccountingDiaryPage: FC = () => {
               </td>
             </tr>
 
-            <tr className="border-b border-primary-border h-[720px]">
-              <td className="py-1 px-2 text-center border-r border-primary-border">
-                {""}
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="text-primary px-2 py-1 border-r border-primary-border">
-                {""}
-              </td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-              <td className="px-2 py-1 border-r border-primary-border">{""}</td>
-            </tr>
+            <Test />
           </tbody>
         </table>
       </section>

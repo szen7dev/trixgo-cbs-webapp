@@ -11,10 +11,12 @@ import IconRedClose from "assets/images/icon-red-close.svg";
 
 type Props = {
     message: ItemMessage;
+    context: any;
+    isMini?: boolean
 }
-const Reminder:FC<Props> = ({message}) => {
+const Reminder:FC<Props> = ({message, context, isMini}) => {
     const {updateReminder} = UseConversation();
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
     const dispatch = useDispatch();
 
@@ -61,13 +63,13 @@ const Reminder:FC<Props> = ({message}) => {
     }
     return (
         <div className={"reminder-center flex flex-col items-center justify-center mb-2"}>
-            <div className={"rounded-full text-xs bg-white text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center"}>
+            <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
                 <img src={Clock} alt={"-----"} className={"w-[18px] h-[18px] mr-2"}/>
                 <span>
                 {`${message.sender.bizfullname||message.sender.fullname} đã tạo một lời nhắc`}
                 </span>
             </div>
-            <div className={"w-[365px] rounded-md bg-white mb-5"}>
+            <div className={"rounded-md mb-5 " + (isMini?"w-[300px] bg-gray-100":"w-[365px] bg-white")}>
                 <div className={"p-3 flex"}>
                     <div className={"flex flex-col items-center px-2"}>
                         <div className={"text-lg text-negative"}>{moment(message.reminder.remindTime).format("MMM")}</div>

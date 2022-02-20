@@ -5,13 +5,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissSendContactMessage} from "redux/reducer/messages/ContactMessage";
 import {map as _map} from "lodash";
-import CheckIcon from 'assets/images/blue-check.svg';
-import {MessageContext} from "../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useUser} from "services/hooks/useUser";
 
-const SendContactMessage:FC = () => {
+type Props = {
+    context: any
+}
+const SendContactMessage:FC<Props> = ({context}) => {
     const dispatch = useDispatch();
     const {isOpenSendContact, conversationId} = useSelector((state: RootState) => state.contactMessage.data);
     const focusElementRef = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ const SendContactMessage:FC = () => {
     const { listFriends, nextCursor } = useUser(params, pageParam);
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     const handleAddFriendToConversation = (value: boolean, friend: any) => {

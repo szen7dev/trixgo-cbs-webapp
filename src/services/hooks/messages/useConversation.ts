@@ -4,7 +4,7 @@ import {
     DeleteRevokeMessagePayload, ItemMessage,
     ListMessageData,
     ListMessagePayload,
-    PinnedMessagePayload,
+    PinnedMessagePayload, SearchMessageInConversationByIdPayload,
     SendNormalMessagePayload,
     ShareMessageData,
     ShareMessagePayload, UpdatePinnedMessageData,
@@ -13,6 +13,7 @@ import {
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
 import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
+import {setLoadingSearch, setListSearchMessage, setNextSearchCursor, setPrevSearchCursor, setTotalRecordBack, setTotalRecordFront} from "redux/reducer/messages/SearchMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
@@ -26,6 +27,7 @@ type UseConversationType = {
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
+    goToMessagePosition: (params: SearchMessageInConversationByIdPayload) => void;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -123,6 +125,19 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload) => {
+        dispatch(setLoadingSearch({conversationId: params.conversationID, data: true}));
+        const {data} = await ListMessageRepository.goToMessagePosition(params);
+        dispatch(setTotalRecordFront({conversationId: params.conversationID, data: data.totalRecordFront}));
+        dispatch(setTotalRecordBack({conversationId: params.conversationID, data: data.totalRecordBack}));
+        dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
+        dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
+        dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
+        dispatch(setLoadingSearch({conversationId: params.conversationID, data: false}));
+
+        return data;
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
@@ -133,6 +148,7 @@ export const UseConversation = () : UseConversationType => {
         deleteMessage,
         revokeMessage,
         updatePoll,
-        addUserToConversation
+        addUserToConversation,
+        goToMessagePosition
     }
 }

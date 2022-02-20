@@ -1,23 +1,21 @@
 import React, {createContext, FC, useCallback, useContext, useEffect, useMemo, useState} from "react";
-import IconAttach from "./IconAttach";
 import InputForMessage from "./Input";
 import IconSendMessage from "assets/images/icons8-email-send-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {MessageContext} from "../../../home/index_v2";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {useUpload} from "services/hooks/useUpload";
-import {usePopupSendFiles} from "services/hooks/usePopupSendFiles";
 import {convertToRaw, EditorState} from "draft-js";
 import {
-    MentionData,
+    MentionData
 } from '@draft-js-plugins/mention';
 import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
 import ReplyChat from "./replyChat";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "redux/reducer";
 import SelectedActionGroup from "./SelectedActionGroup";
+import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -33,14 +31,14 @@ export const ChattingInputContext = createContext<{
 
 type Props = {
     chat: ItemListConversation;
+    context: any
 }
-const ChattingInput:FC<Props> = ({chat}) => {
+const ChattingInput:FC<Props> = ({chat, context}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const {currentChat, socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const dispatch = useDispatch();
     const { addFileToUpload } = useUpload('CHATTING');
-    const {openPopupSendFiles} = usePopupSendFiles();
 
     const [doneUpload, setDoneUpload] = useState<{[key: string] : number}>({});
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
@@ -61,7 +59,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     );
-    const replyData =  useSelector((state: RootState) => state.listMessage.data.replyMessage[currentChat]);
+    const replyData =  useSelector((state: RootState) => state.listMessage.data.replyMessage[chat._id]);
 
     const onChangeCallback = useCallback((editorState) => {
         setEditorState(editorState);
@@ -96,7 +94,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
             usersTag.push(mention._id);
         })
         if (sendValue.length<=0) return;
-        sendSocketMessage(currentChat,sendValue, usersTag, 0);
+        sendSocketMessage(chat._id,sendValue, usersTag, 0);
         setRealValue("");
         setEditorState(EditorState.createEmpty())
     }
@@ -126,9 +124,9 @@ const ChattingInput:FC<Props> = ({chat}) => {
             scrollToBottom();
         }, 100)
         message['parentID'] = replyData?replyData._id:"";
-        dispatch(removeReplyMessage({conversationId: currentChat}));
+        dispatch(removeReplyMessage({conversationId: chat._id}));
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: chat._id, select: JSON.stringify({ sender:"bizfullname" }) });
     }
 
     const handleSetFiles = (filesUpload: FileList|Blob[]) => {
@@ -147,8 +145,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         Object.keys(images).forEach(key => {
             fileSend.push(images[key]);
         })
-
-        openPopupSendFiles({
+        const data = {
             files: fileSend.map(file => {
                 return {
                     file: {
@@ -169,9 +166,10 @@ const ChattingInput:FC<Props> = ({chat}) => {
             }),
             sendType: Object.keys(files).length>0?"file":"image",
             defaultSendType: Object.keys(files).length>0?"file":"image",
-            conversationID: currentChat,
-            handleSendFile: (message, useCompress) => handleUploadFile(message, useCompress)
-        })
+            conversationID: chat._id,
+            handleSendFile: (message: any, useCompress: boolean) => handleUploadFile(message, useCompress)
+        }
+        dispatch(openPopupSendFiles(data))
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
@@ -181,7 +179,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         })
         setDoneUpload(uploadMap);
         dispatch(appendFakeMessageToConversation({
-            conversationId: currentChat,
+            conversationId: chat._id,
             messageId: message.tmpid,
             messageData: {
                 ...message,
@@ -202,7 +200,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
                     dispatch(updateFileProgressOnMessage({
-                        conversationId: currentChat,
+                        conversationId: chat._id,
                         messageId: message.tmpid,
                         fileId: file._id,
                         progress: percentCompleted
@@ -229,7 +227,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
         }
         sendMessage['parentID'] = replyData?replyData._id:"";
         setWillSendFileMessage(sendMessage);
-        dispatch(removeReplyMessage({conversationId: currentChat}));
+        dispatch(removeReplyMessage({conversationId: chat._id}));
     }
 
     useEffect(() => {
@@ -239,7 +237,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
             // console.log(willSendFileMessage)
             setTimeout(() => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
-                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: currentChat, select: JSON.stringify({ sender:"bizfullname" }) });
+                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: chat._id, select: JSON.stringify({ sender:"bizfullname" }) });
                 setDoneUpload({});
                 setWillSendFileMessage(null);
             }, 200)
@@ -273,7 +271,7 @@ const ChattingInput:FC<Props> = ({chat}) => {
             dropZone.addEventListener('drop', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                if (e.dataTransfer&&currentChat) {
+                if (e.dataTransfer&&chat._id) {
                     handleSetFiles(e.dataTransfer.files);
                 }
             });
@@ -282,26 +280,22 @@ const ChattingInput:FC<Props> = ({chat}) => {
 
     return (
         <ChattingInputContext.Provider value={value}>
-            <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px]"}>
-                <div className={"w-full max-w-[645px] flex items-end justify-center relative"}>
+            <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px] chatting-input-container"}>
+                <div className={"w-full max-w-[585px] flex items-end justify-center relative"}>
                     <SelectedActionGroup/>
-                    <div className={"flex-1 message-input max-w-[585px] rounded-md bg-white flex items-end relative flex-col"}>
+                    <div className={"flex-1 message-input max-w-[525px] rounded-md bg-white flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
                         <ReplyChat replyData={replyData}/>
-                        <div className={"flex w-full"}>
-                            <InputForMessage
-                                onPasteFiles={(files) => handleSetFiles(files)}
-                                onPressEnter={() => handleSendMessage()}
-                                mentions={suggestionsData()}
-                            />
-                            <IconAttach
-                                handleUploadFiles={(files) => handleSetFiles(files)}
-                            />
-                        </div>
+                        <InputForMessage
+                            onPasteFiles={(files) => handleSetFiles(files)}
+                            onPressEnter={() => handleSendMessage()}
+                            mentions={suggestionsData()}
+                            handleUploadFiles={((files) => handleSetFiles(files))}
+                        />
                     </div>
                     <button
                         onClick={() => handleSendMessage()}
-                        className={"w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
+                        className={"send-chat-button w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center ml-[10px]"}>
                         <img  src={IconSendMessage} alt={"send message"}/>
                     </button>
                 </div>

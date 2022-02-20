@@ -63,16 +63,8 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 
 	const { handleBlur, setFieldValue, values } = formik;
 
-	const computeUnitPrice = (item: any, index = 0) => {
-		setFieldValue(`selectedJournals.${index}.unitprice`, (+item.amount || 1) * (+item.quantity || 1))
-	}
-	const removeJournal = (item: any) => {
-		console.log('🚀 ~ removeJournal ~ item', item)
-
-		values.selectedJournals.push(item)
-
-		// setFieldValue(`selectedJournals.${index}.unitprice`, (+item.amount || 1) * (+item.quantity || 1))
-
+	const computeAmount = (item: any, index = 0) => {
+		setFieldValue(`selectedJournals.${index}.amount`, (+item.unitprice || 1) * (+item.quantity || 1))
 	}
 
 	return (
@@ -137,7 +129,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="TK nợ"
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.debit`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -168,7 +160,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="TK có"
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.credit`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
@@ -200,7 +192,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Mã khách nợ"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerDebit`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -231,7 +223,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Mã khách có"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerCredit`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -262,7 +254,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Sản phẩm/Hàng hóa"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.goods`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -286,9 +278,10 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												classNameInput={"border-b border-gray-300 rounded-none"}
 												className={"w-[120px]"}
 												id="ticket-type" placeholder="Kho bãi"
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
+												allowClearValueSingleInput={true}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchWarehouseValue(value),
@@ -311,30 +304,30 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
-												name={`selectedJournals.${index}.amount`}
+												name={`selectedJournals.${index}.quantity`}
 												type="number"
 												min={0}
 												className={"focus:outline-none border-b w-[80px] border-gray-300"}
 												placeholder={"Số lượng"}
 												onKeyUp={async (e: FormEvent<HTMLInputElement>) => {
-													await setFieldValue(`selectedJournals.${index}.amount`, +e.currentTarget.value);
-													computeUnitPrice(item, index)
+													await setFieldValue(`selectedJournals.${index}.quantity`, +e.currentTarget.value);
+													computeAmount(item, index)
 												}} />
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<Field
-												name={`selectedJournals.${index}.quantity`}
+												name={`selectedJournals.${index}.unitprice`}
 												type="number"
 												min={0}
 												className={"focus:outline-none border-b w-[80px] border-gray-300"}
 												placeholder={"Đơn giá"}
 												onKeyUp={async (e: FormEvent<HTMLInputElement>) => {
-													await setFieldValue(`selectedJournals.${index}.quantity`, +e.currentTarget.value);
-													computeUnitPrice(item, index)
+													await setFieldValue(`selectedJournals.${index}.unitprice`, +e.currentTarget.value);
+													computeAmount(item, index)
 												}} />
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-											<Field readOnly name={`selectedJournals.${index}.unitprice`} type="number" min={0} className={"focus:outline-none border-b w-[80px] border-gray-300"} placeholder={"Thành tiền"} />
+											<Field readOnly name={`selectedJournals.${index}.amount`} type="number" min={0} className={"focus:outline-none border-b w-[80px] border-gray-300"} placeholder={"Thành tiền"} />
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
@@ -343,7 +336,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												id="ticket-type" placeholder="Hợp đồng"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value.id)}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.contract`, '')}
 												renderSelectedItem={(item) => <span>{item.text}</span>}
 												onSearchInputChange={debounce(
@@ -417,9 +410,9 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 								goods: '',
 								warehouse: '',
 								inventory: '',
-								amount: '',
 								quantity: '',
 								unitprice: '',
+								amount: '',
 								contract: '',
 								job: '',
 								note: '',

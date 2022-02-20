@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import DropdownSearchable from "../../../../components/common/DropdownSearch";
 import DatePicker from "react-datepicker";
 
@@ -47,7 +47,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const { listContractIPC } = useQueryListContractIPC({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractIPCValue,
-		contractID: values.contract
+		contractID: values.contract.value || values.contractId
 	});
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
@@ -59,9 +59,15 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 		keyword: searchSubTypeValue,
 	});
 
+	const contractId = useRef(values.contractId)
+
 	useEffect(() => {
-		setFieldValue('ipc', '')
-	}, [values.contract])
+		if (contractId.current !== values.contract.value) {
+			contractId.current = values.contract.value
+			setFieldValue('ipc', {})
+		}
+
+	}, [values.contract.value])
 
 	return (
 		<>
@@ -70,7 +76,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Loại phiếu (*)</div>
 						<DropdownSearchable
-							onchangeValue={(value) => setFieldValue("type", value.id)}
+							onchangeValue={(value) => setFieldValue("type", value)}
 							className={"flex-1"}
 							placeholder="Phân loại khác..."
 							isMultiple={false}
@@ -99,10 +105,13 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 									</p>
 								</div>
 							)}
-							data={VOUCHER_TYPES}
+							data={VOUCHER_TYPES.map(item => ({
+								value: item.value,
+								label: item.text
+							}))}
 							formatItem={{
 								id: "value",
-								text: "text",
+								text: "label",
 							}}
 							inlineSearch={true}
 						/>
@@ -149,7 +158,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Mã khách (*)</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("customer", value.id)}
+							onchangeValue={(value: any) => setFieldValue("customer", value)}
 							className={"flex-1"}
 							placeholder="Mã khách"
 							isMultiple={false}
@@ -201,7 +210,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Hợp đồng</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("contract", value.id)}
+							onchangeValue={(value: any) => setFieldValue("contract", value)}
 							className={"flex-1"}
 							placeholder="Mã khách"
 							isMultiple={false}
@@ -248,9 +257,9 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Kỳ thanh toán</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("ipc", value.id)}
+							onchangeValue={(value: any) => setFieldValue("ipc", value)}
 							className={"flex-1"}
-							placeholder="Mã khách"
+							placeholder="Kỳ thanh toán"
 							isMultiple={false}
 							allowClearValueSingleInput={true}
 							onClearData={() => setFieldValue("ipc", '')}
@@ -259,7 +268,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => (
 								<div
 									style={{ maxWidth: '300px' }}
-									className="flex items-center"
+									className="flex items-center ipc-value-selected"
 								>
 									<img alt="Tag" src={TagIcon} className="mr-1" />
 									<p
@@ -277,11 +286,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 								</div>
 							)}
 							onSearchInputChange={debounce(
-								(value) => setSearchContractValue(value),
+								(value) => setSearchContractIPCValue(value),
 								500
 							)}
 							initialValue={initialValues?.ipc}
-							data={values.contract ? listContractIPC.map((item: any) => ({
+							data={values.contract.value ? listContractIPC.map((item: any) => ({
 								label: item.name,
 								value: item._id,
 							})) : []}
@@ -295,7 +304,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 					<div className={"w-1/4 flex items-center"}>
 						<div className={"text-left text-gray-500 flex items-center mr-2"}>Phân loại khác</div>
 						<DropdownSearchable
-							onchangeValue={(value: any) => setFieldValue("subtype", value.id)}
+							onchangeValue={(value: any) => setFieldValue("subtype", value)}
 							className={"flex-1"}
 							placeholder="Phân loại khác"
 							isMultiple={false}
