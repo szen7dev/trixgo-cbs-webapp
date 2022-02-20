@@ -61,7 +61,11 @@ const ListSearchMessagesItem:FC<Props> = ({message}) => {
     const {goToMessagePosition} = UseConversation();
 
     const handleGoToMessage = (_id: string) => {
-        goToMessagePosition({conversationID: message.conversation, messageID: message._id})
+        goToMessagePosition({conversationID: message.conversation, messageID: message._id}).then(data => {
+            setTimeout(() => {
+                document.getElementById(`message-${message._id}`)?.scrollIntoView({block: "end", behavior: "smooth"});
+            }, 500)
+        })
     }
 
     return (

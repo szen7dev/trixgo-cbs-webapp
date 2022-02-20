@@ -33,7 +33,7 @@ export const ReactionList:FC<Props> = ({message}) => {
             <div onClick={() => setShowReactionGroup(true)} className={"flex items-center justify-center cursor-pointer"}>
                 {
                     _map(Object.values(arrayReaction()).filter(reaction => reaction.number > 0), (reaction, index) => (
-                        <div key={index} className={"flex items-center justify-center bg-white border border-gray-300 p-1 rounded-full"}>
+                        <div key={index} className={"flex h-[22px] items-center justify-center bg-white border border-gray-300 p-1 rounded-full"}>
                             <img src={reaction.icon} className={"w-[12px] h-[12px] min-w-[12px] min-h-[12px]"} alt={"-----"}/>
                             {reaction.number>1&&<span className={"text-xs"}>{reaction.number}</span>}
                         </div>

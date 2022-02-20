@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from "react";
+import React, {FC, useCallback, useEffect, useRef, useState, Fragment} from "react";
 import NotificationCenter from "./NotificationCenter";
 import OthersMessage from "./OthersMessage";
 import MyMessage from "./MyMessage";
@@ -25,6 +25,7 @@ import Poll from "./poll/Poll";
 import PollNoti from "./poll/PollNoti";
 import AddUsersNoti from "./chatContent/AddUsersNoti";
 import PinMessageNoti from "./chatContent/pinMessageNoti";
+import { Transition } from '@headlessui/react'
 
 export const listEmoji = [
     {
@@ -117,7 +118,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
-            if (scrollHeight + scrollTop - clientHeight < 200) {
+            if (scrollHeight + scrollTop - clientHeight < 300) {
                 setReachTop(true)
             } else {
                 setReachTop(false);
