@@ -17,10 +17,6 @@ import PinMessageNoti from "views/pages/messages/chattingSection/components/chat
 import PollNoti from "views/pages/messages/chattingSection/components/poll/PollNoti";
 import ReminderNoti from "views/pages/messages/chattingSection/components/reminder/ReminderNoti";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import SavedMessage from "assets/images/saved-messages.svg";
-import AvatarGroupChat from "views/pages/messages/list/components/AvatarGroupChat";
-import {dismissChatBox} from "redux/reducer/messages/MiniChat";
-import {UseMessageHelper} from "../../../services/hooks/messages/useMessageHelper";
 import {MiniChatContext} from "./ChatsOnRightSideBar";
 
 type Props = {

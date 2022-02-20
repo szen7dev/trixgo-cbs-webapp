@@ -4,9 +4,12 @@ import { Route, Switch } from 'react-router-dom'
 import DatahubLayout from 'views/layouts/DatahubLayout'
 import ErrorPage from 'views/pages/authentication/Error'
 import LayoutPrimary from 'views/pages/media/layouts/LayoutPrimary'
+import DatahubContractorDetail from '../screens/DatahubContractorDetail'
+import DatahubContractorHome from '../screens/DatahubContractorHome'
 
 import DatahubHome from '../screens/DatahubHome'
 import DatahubHomeDetail from '../screens/DatahubHomeDetail'
+import DatahubProject from '../screens/DatahubProject'
 import DatahubType from '../screens/DatahubType'
 import DatahubTypeDetail from '../screens/DatahubTypeDetail'
 
@@ -25,11 +28,12 @@ export const routes = [
 		path: '/datahub/project', name: 'Danh mục dự án',
 		layout: LayoutPrimary,
 		pages: [
-			{ id: '1', path: '/datahub/project', exact: true, title: 'Danh sách', state: 1, component: DatahubHome },
+			{ id: '1', path: '/datahub/project', exact: true, title: 'Danh sách', state: 1, component: DatahubProject },
 			{ id: '2', path: '/datahub/project/map', title: 'Bản đồ', state: 2 },
 		]
 	},
-	{ path: '/datahub/home', name: 'Năng lực nhà thầu' },
+	{ path: '/datahub/contractor/home', exact: true, name: 'Năng lực nhà thầu', component: DatahubContractorHome },
+	{ path: '/datahub/contractor/home/:id', name: 'Năng lực nhà thầu', component: DatahubContractorDetail, isPrivate: true },
 	{ path: '/datahub/home', name: 'Biểu mẫu nghiệm thu' },
 	{ path: '/datahub/home', name: 'Datahub giá' },
 	{ path: '/datahub/*', name: 'eror', component: ErrorPage, isPrivate: true },
@@ -49,16 +53,13 @@ const DatahubRoutes: FC = () => {
 									return (
 										<route.layout pages={route.pages} >
 											<Switch>
-												{/* {route.type==='state' && route.pages.map((page, index) => (
-													props.location.state === page.state && <page.component />
-												))} */}
 												{route.pages.map((page, index) => (
 													page.component && <Route
 														key={index}
 														path={page.path}
 														exact={page.exact}
 														render={(props) => {
-															return <page.component {...props} />
+															return <page.component />
 														}}
 													/>
 												))}

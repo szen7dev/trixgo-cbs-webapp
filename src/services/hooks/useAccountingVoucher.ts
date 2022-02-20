@@ -46,6 +46,38 @@ export const UseAccountingVoucherList = (pageParam = '', contractID = '', limit 
     }
 };
 
+export const useJournalDetailList = (pageParam = '', voucherID = '', limit = 10): any => {
+    const {
+        status,
+        data,
+        error,
+        refetch
+    } = useQuery(
+        ["JournalDetailList", { pageParam }],
+        async (pageParams: any) => {
+            const [, { pageParam }] = pageParams.queryKey;
+            return AccountingVoucherRepository.fetchListJournalDetail({
+                limit,
+                lastestID: pageParam || "",
+                voucherID
+            })
+        },
+        { keepPreviousData: true }
+    );
+    const listJournalDetail = data?.data?.listRecords
+    const totalRecord = data?.data?.totalRecord
+    const totalPage = data?.data?.totalPage
+    const nextCursor = data?.data?.nextCursor
+
+    return {
+        listJournalDetail,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch
+    }
+};
+
 export const useCreateAccountingVoucherMutation = (): {
     createAccountingVoucherMutateAsync: (payload: any) => Promise<any>;
     loading: boolean;

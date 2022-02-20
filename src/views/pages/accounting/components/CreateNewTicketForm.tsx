@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import DropdownSearchable from "../../../../components/common/DropdownSearch";
 import DatePicker from "react-datepicker";
 
@@ -47,7 +47,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 	const { listContractIPC } = useQueryListContractIPC({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractIPCValue,
-		contractID: values.contract
+		contractID: values.contract.value || values.contractId
 	});
 
 	const [searchSubTypeValue, setSearchSubTypeValue] = useState(
@@ -59,9 +59,15 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 		keyword: searchSubTypeValue,
 	});
 
+	const contractId = useRef(values.contractId)
+
 	useEffect(() => {
-		setFieldValue('ipc', '')
-	}, [values.contract])
+		if (contractId.current !== values.contract.value) {
+			contractId.current = values.contract.value
+			setFieldValue('ipc', {})
+		}
+
+	}, [values.contract.value])
 
 	return (
 		<>
@@ -262,7 +268,7 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							renderSelectedItem={(item) => (
 								<div
 									style={{ maxWidth: '300px' }}
-									className="flex items-center"
+									className="flex items-center ipc-value-selected"
 								>
 									<img alt="Tag" src={TagIcon} className="mr-1" />
 									<p
@@ -280,11 +286,11 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 								</div>
 							)}
 							onSearchInputChange={debounce(
-								(value) => setSearchContractValue(value),
+								(value) => setSearchContractIPCValue(value),
 								500
 							)}
 							initialValue={initialValues?.ipc}
-							data={values.contract ? listContractIPC.map((item: any) => ({
+							data={values.contract.value ? listContractIPC.map((item: any) => ({
 								label: item.name,
 								value: item._id,
 							})) : []}

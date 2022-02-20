@@ -32,7 +32,7 @@ const miniChatSlice = createSlice({
                 conversation: action.payload.conversation
             }
         },
-        dismissCreateNewChatMini (state, action) {
+        dismissCreateNewChatMini (state) {
             state.data = {
                 ...state.data,
                 isNewChatboxVisible: false,
