@@ -8,11 +8,11 @@ export interface Package {
     createAt: string;
     numberOfDocs: number;
     suid?: string;
-    members?: Member[] | string[];
-    author?: Author | string;
+    members?: Member[];
+    author?: Author;
     project?: Project | string;
     company?: Company | string;
-    userUpdate?: Author | string;
+    userUpdate?: Author;
     contract?: Contract | string;
 }
 
@@ -25,7 +25,7 @@ export type PackageQueryListResponse = APIResponse & {
         listRecords: Department[];
         limit: number;
         totalRecord: number;
-        totalPages: number;
+        totalPage: number;
         nextCursor: string | null;
     }
 }
