@@ -69,7 +69,7 @@ type Props = {
 }
 
 const MainSearchChatContent:FC<Props> = ({chat}) => {
-    const {getListMessage} = UseConversation();
+    const {goToMessagePosition} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -94,10 +94,10 @@ const MainSearchChatContent:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreDataBack) {
-            getListMessage({lastestID: nextCursor, conversationID: chat._id});
+            goToMessagePosition({messageID: prevCursor, conversationID: chat._id}, false, "back");
             setReachTop(false);
         }
-    }, [reachedTop, nextCursor])
+    }, [reachedTop, prevCursor])
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)

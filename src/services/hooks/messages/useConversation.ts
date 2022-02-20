@@ -27,7 +27,7 @@ type UseConversationType = {
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
-    goToMessagePosition: (params: SearchMessageInConversationByIdPayload) => void;
+    goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => void;
 }
 
 export const UseConversation = () : UseConversationType => {
