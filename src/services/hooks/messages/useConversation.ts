@@ -125,13 +125,21 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
-    const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload) => {
+    const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload, isFirstInit = true, direction = "front") => {
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.goToMessagePosition(params);
         dispatch(setTotalRecordFront({conversationId: params.conversationID, data: data.totalRecordFront}));
         dispatch(setTotalRecordBack({conversationId: params.conversationID, data: data.totalRecordBack}));
-        dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
-        dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
+        if (isFirstInit) {
+            dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.listRecords[data.listRecords.length - 1]._id}));
+            dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.listRecords[0]._id}));
+        } else {
+            if (direction === "front") {
+                dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.listRecords[data.listRecords.length - 1]._id}));
+            } else {
+                dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.listRecords[0]._id}));
+            }
+        }
         dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: false}));
 

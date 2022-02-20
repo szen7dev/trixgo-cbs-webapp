@@ -1,9 +1,7 @@
-import React, {FC, useCallback, useContext} from "react";
-import { NavLink } from "react-router-dom";
-import {MessageContext} from "../../home/index_v2";
+import React, {FC, useCallback} from "react";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {UseConversation} from "../../../../../services/hooks/messages/useConversation";
+import {UseConversation} from "services/hooks/messages/useConversation";
 
 type Props = {
     message: ItemMessage
@@ -63,8 +61,7 @@ const ListSearchMessagesItem:FC<Props> = ({message}) => {
     const {goToMessagePosition} = UseConversation();
 
     const handleGoToMessage = (_id: string) => {
-        console.log(_id)
-        // goToMessagePosition({conversationID: message.conversation, messageID: message._id})
+        goToMessagePosition({conversationID: message.conversation, messageID: message._id})
     }
 
     return (
