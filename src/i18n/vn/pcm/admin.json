@@ -1,0 +1,3 @@
+{
+    "nameWithTime": "{{user.name}}-{{user.sign}} {{-time}}"
+}

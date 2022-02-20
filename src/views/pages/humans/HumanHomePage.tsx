@@ -22,9 +22,14 @@ const HumansPage: FC = () => {
   const { t } = useTranslation(["human"]);
 
   const [pageParam, setPageParam] = useState<any>({});
+
+  // Lấy ra data/list data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
   
   const { openModal } = useModal();
+
+  // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
+  // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
   const { createContactMutateAsync } = useCreateContactMutation();
 
   const handleFinishForm = useCallback(async (values) => {
