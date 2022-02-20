@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
+import React, {FC, useCallback, useEffect, useRef, useState, Fragment} from "react";
 import NotificationCenter from "./NotificationCenter";
 import OthersMessage from "./OthersMessage";
 import MyMessage from "./MyMessage";
@@ -23,9 +23,9 @@ import surprise from "assets/emoji/surprise.png";
 import ReminderNoti from "./reminder/ReminderNoti";
 import Poll from "./poll/Poll";
 import PollNoti from "./poll/PollNoti";
-import {action} from "@storybook/addon-actions";
 import AddUsersNoti from "./chatContent/AddUsersNoti";
 import PinMessageNoti from "./chatContent/pinMessageNoti";
+import { Transition } from '@headlessui/react'
 
 export const listEmoji = [
     {
@@ -118,7 +118,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
-            if (scrollHeight + scrollTop - clientHeight < 200) {
+            if (scrollHeight + scrollTop - clientHeight < 300) {
                 setReachTop(true)
             } else {
                 setReachTop(false);
@@ -135,7 +135,7 @@ const MainChatContent:FC<Props> = ({chat}) => {
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createdAt);
         return (
-            <div key={message._id}>
+            <div key={message._id} id={`message-${message._id}`}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:

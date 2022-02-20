@@ -81,44 +81,42 @@ const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessa
                 message.parent&&
                 renderReply()
             }
-            <div className={" pb-[5px]"}>
-                {
-                    message.files&&
-                    _map(message.files, file => (
-                        <div key={file._id} className={"message-file-content flex mb-1"}>
-                            <div className={"relative"}>
-                                {renderFileTypeImage(file.file.file)}
-                                {
-                                    message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
-                                    <div className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60 rounded-md"}>
-                                    </div>
-                                }
-                            </div>
-                            <div className={"flex-1 flex flex-col justify-center ml-[7px] pr-[20px]"}>
-                                <a href={`${process.env.REACT_APP_URL_S3}/${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
-                                <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
-                            </div>
+            {
+                message.files&&
+                _map(message.files, file => (
+                    <div key={file._id} className={"message-file-content flex mb-1"}>
+                        <div className={"relative"}>
+                            {renderFileTypeImage(file.file.file)}
                             {
                                 message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
-                                <div className={"w-[40px] h-[40px]"}>
-                                    <CircularProgressbar
-                                        styles={buildStyles({
-                                            // Colors
-                                            pathColor: `#0060E1`,
-                                            trailColor: '#cccccc',
-                                            textColor: `#0060E1`,
-                                        })}
-                                        value={message.fileProgress[file._id]} text={`${message.fileProgress[file._id]}%`} />
+                                <div className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60 rounded-md"}>
                                 </div>
                             }
                         </div>
-                    ))
-                }
-                <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center " + (isMyMessage?"text-primary":"text-gray-500")}>
-                    <ReactionList message={message}/>
-                    <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
-                    <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
-                </div>
+                        <div className={"flex-1 flex flex-col justify-center ml-[7px] pr-[20px]"}>
+                            <a href={`${process.env.REACT_APP_URL_S3}/${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
+                            <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
+                        </div>
+                        {
+                            message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
+                            <div className={"w-[40px] h-[40px]"}>
+                                <CircularProgressbar
+                                    styles={buildStyles({
+                                        // Colors
+                                        pathColor: `#0060E1`,
+                                        trailColor: '#cccccc',
+                                        textColor: `#0060E1`,
+                                    })}
+                                    value={message.fileProgress[file._id]} text={`${message.fileProgress[file._id]}%`} />
+                            </div>
+                        }
+                    </div>
+                ))
+            }
+            <div className={"date-message text-xs flex items-center w-full justify-end " + (isMyMessage?"text-primary":"text-gray-500")}>
+                <ReactionList message={message}/>
+                <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
+                <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
             </div>
             <ReactionActions context={context} message={message}/>
         </div>
