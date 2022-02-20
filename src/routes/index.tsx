@@ -159,7 +159,7 @@ const Routes: FC = () => {
 
     return (
         <Router>
-            <AuthProvider>
+            <AuthProvider>      {/* Xem lại chỗ này */}
                 <ThemeProvider>
                     <RightClickMenuProvider>
                         <DeleteConfirmProvider>
