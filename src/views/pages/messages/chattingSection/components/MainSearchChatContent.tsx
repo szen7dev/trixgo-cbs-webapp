@@ -107,7 +107,7 @@ const MainSearchChatContent:FC<Props> = ({chat}) => {
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
-            if (scrollHeight + scrollTop - clientHeight < 300) {
+            if (scrollHeight + scrollTop - clientHeight < 100) {
                 setReachTop(true)
             } else {
                 setReachTop(false);

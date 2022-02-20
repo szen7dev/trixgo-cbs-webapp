@@ -17,6 +17,8 @@ import NPSCreate from "../chattingSection/components/nps/NPSCreate";
 import SearchMessage from "../search";
 import AddUsersToConversation from "../chattingSection/components/AddUsersToConversation";
 import PopupSendImageAndFile from "../chattingSection/components/PopupSendImageAndFile";
+import {useDispatch} from "react-redux";
+import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -47,6 +49,7 @@ const MessagesHome:FC = () => {
     const [showSearch, setShowSearch] = useState(false);
     const [editorRef, setEditorRef] = useState<Editor>();
     const socketRef = useSocket();
+    const dispatch = useDispatch();
 
     const value = useMemo(
         () => ({ currentChat, setCurrentChat , showMenu, setShowMenu, socketRef, editorRef, setEditorRef, showSearch, setShowSearch}),
@@ -56,6 +59,7 @@ const MessagesHome:FC = () => {
     useEffect(() => {
         currentChat&&setShowMenu(true)
         currentChat&&setShowSearch(false)
+        currentChat&&dispatch(dismissSearchMode({conversationId: currentChat}));
     }, [currentChat])
 
     return (

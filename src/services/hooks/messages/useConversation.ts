@@ -12,8 +12,8 @@ import {
     UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
-import {setLoadingSearch, setListSearchMessage, setNextSearchCursor, setPrevSearchCursor, setTotalRecordBack, setTotalRecordFront} from "redux/reducer/messages/SearchMessage";
+import {setLoading, setListMessage, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
+import {setLoadingSearch, setListSearchMessage} from "redux/reducer/messages/SearchMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
@@ -38,9 +38,7 @@ export const UseConversation = () : UseConversationType => {
     const getListMessage = async (params: ListMessagePayload) => {
         dispatch(setLoading({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.getListMessage(params);
-        dispatch(setTotalRecord({conversationId: params.conversationID, data: data.totalRecord}));
-        dispatch(setNextCursor({conversationId: params.conversationID, data: data.nextCursor}));
-        dispatch(setListMessage({conversationId: params.conversationID, messages: data.listRecords, isFreshData: !params.lastestID}));
+        dispatch(setListMessage({conversationId: params.conversationID, data: data, isFreshData: !params.lastestID}));
         dispatch(setLoading({conversationId: params.conversationID, data: false}));
 
         return new Promise<ListMessageData>((resolve, reject) => {
@@ -128,19 +126,7 @@ export const UseConversation = () : UseConversationType => {
     const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload, isFirstInit = true, direction = "front") => {
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.goToMessagePosition(params);
-        dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
-        dispatch(setTotalRecordFront({conversationId: params.conversationID, data: data.totalRecordFront}));
-        dispatch(setTotalRecordBack({conversationId: params.conversationID, data: data.totalRecordBack}));
-        if (isFirstInit) {
-            dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.listRecords[data.listRecords.length - 1]._id}));
-            dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.listRecords[0]._id}));
-        } else {
-            if (direction === "front") {
-                dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.listRecords[data.listRecords.length - 1]._id}));
-            } else {
-                dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.listRecords[0]._id}));
-            }
-        }
+        dispatch(setListSearchMessage({conversationId: params.conversationID, data: data, isFirstInit, direction}));
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: false}));
 
         return new Promise<any>((resolve, reject) => {

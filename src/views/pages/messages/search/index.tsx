@@ -17,8 +17,16 @@ const SearchMessage:FC = () => {
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
 
     useEffect(() => {
-        inputRef.current&&inputRef.current.focus()
-    }, [inputRef]);
+        setTimeout(() => {
+            inputRef.current&&showSearch&&inputRef.current.focus()
+        }, 500);
+    }, [inputRef,showSearch]);
+
+    useEffect(() => {
+        if (!showSearch) {
+            setSearchTerm("");
+        }
+    }, [showSearch])
 
     const handleSearchTerm = (str: string) => {
         setSearchTerm(str)
@@ -36,6 +44,7 @@ const SearchMessage:FC = () => {
                         <div className={"relative flex items-center flex-1"}>
                             <img  src={SearchIcon} alt={"icon search"} className={"absolute w-[24px] h-[24px] left-2"}/>
                             <input
+                                value={searchTerm}
                                 onChange={e => handleSearchTerm(e.target.value)}
                                 ref={inputRef}
                                 className={"h-[44px] w-full bg-gray-100 px-[12px] py-[10px] pl-[36px] rounded-full focus:outline-none"} type={"text"} placeholder={"Nhập từ khóa tìm kiếm"}

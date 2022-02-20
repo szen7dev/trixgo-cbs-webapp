@@ -6,9 +6,8 @@ import {MessageContext} from "../../home/index_v2";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import AvatarGroupChat from "./AvatarGroupChat";
-import SavedMessage from "assets/images/saved-messages.svg";
 import RightClickMenuWrapper from "components/common/RightClickMenuWrapper";
-import {UseMessageHelper} from "../../../../../services/hooks/messages/useMessageHelper";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     chat: ItemListConversation
