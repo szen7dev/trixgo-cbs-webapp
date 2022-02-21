@@ -78,7 +78,7 @@ const listMessageSlice = createSlice({
     reducers: {
         setListMessage(state, action) {
             const newMessageData:{[key: string]: ItemMessage} = {};
-            (action.payload.messages??[]).forEach((message: ItemMessage) => {
+            (action.payload.data.listRecords??[]).forEach((message: ItemMessage) => {
                 newMessageData[message._id] = message;
             });
 
@@ -94,24 +94,16 @@ const listMessageSlice = createSlice({
                         }
                         :
                         Object.assign(newMessageData, state.data.listMessage[action.payload.conversationId])
-                }
-            };
-        },
-        setTotalRecord(state, action) {
-            state.data.totalRecord[action.payload.conversationId] = action.payload.data;
-        },
-        setNextCursor(state, action) {
-            state.data = {
-                ...state.data,
-                nextCursor : {
+                },
+                nextCursor: {
                     ...state.data.nextCursor,
-                    [action.payload.conversationId]: action.payload.data
+                    [action.payload.conversationId]: action.payload.data.nextCursor
                 },
                 hasMoreData : {
                     ...state.data.hasMoreData,
-                    [action.payload.conversationId]: action.payload.data !== null && action.payload.data !== undefined && action.payload.data !== ""
+                    [action.payload.conversationId]: action.payload.data.nextCursor !== null && action.payload.data.nextCursor !== undefined && action.payload.data.nextCursor !== ""
                 },
-            }
+            };
         },
         setLoading(state, action) {
             state.data.isLoading[action.payload.conversationId] = action.payload.data
@@ -372,8 +364,6 @@ const listMessageSlice = createSlice({
 
 export const {
     setListMessage,
-    setTotalRecord,
-    setNextCursor,
     setLoading,
     appendMessageToConversation,
     appendFakeMessageToConversation,
