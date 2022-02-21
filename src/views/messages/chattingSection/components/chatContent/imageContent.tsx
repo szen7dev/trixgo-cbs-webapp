@@ -115,7 +115,7 @@ const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage
                 </div>
                 <div className={"absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
-                    <div className={"date-message bg-gray-100 bg-opacity-80 px-[4px] rounded-full flex items-center ml-[5px]"}>
+                    <div className={"date-message-image bg-gray-100 bg-opacity-80 px-[4px] rounded-full flex items-center ml-[5px]"}>
                         <span>{moment(message.createAt).format("HH:mm")}</span>
                         <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                     </div>

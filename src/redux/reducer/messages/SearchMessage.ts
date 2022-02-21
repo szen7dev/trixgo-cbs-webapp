@@ -52,61 +52,62 @@ const listSearchMessageSlice = createSlice({
     initialState,
     reducers: {
         setListSearchMessage(state, action) {
+            const {listRecords, totalRecordFront, totalRecordBack} = action.payload.data;
+            const {isFirstInit, direction, conversationId} = action.payload;
             const newMessageData:{[key: string]: ItemMessage} = {};
-            (action.payload.messages??[]).forEach((message: ItemMessage) => {
+            (listRecords??[]).forEach((message: ItemMessage) => {
                 newMessageData[message._id] = message;
             });
+
+            const nextCursor = {...state.data.nextCursor}
+            const prevCursor = {...state.data.prevCursor}
+            const hasMoreDataBack = {...state.data.hasMoreDataBack};
+            const hasMoreDataFront = {...state.data.hasMoreDataFront};
+
+            hasMoreDataBack[conversationId] = totalRecordBack > 0;
+            hasMoreDataFront[conversationId] = totalRecordFront > 0;
+
+            if (isFirstInit) {
+                nextCursor[conversationId] = listRecords[listRecords.length - 1]._id;
+                prevCursor[conversationId] = listRecords[0]._id;
+            } else {
+                if (direction === "front") {
+                    nextCursor[conversationId] = listRecords[listRecords.length - 1]._id;
+                } else {
+                    prevCursor[conversationId] = listRecords[0]._id;
+                }
+            }
 
             state.data = {
                 ...state.data,
                 inSearchMode: {
                     ...state.data.inSearchMode,
-                    [action.payload.conversationId] : true
+                    [conversationId] : true
                 },
                 listSearchMessage: {
                     ...state.data.listSearchMessage,
-                    [action.payload.conversationId] :
-                        action.payload.isFreshData?
+                    [conversationId] :
+                        isFirstInit?
                             {
-                                ...state.data.listSearchMessage[action.payload.conversationId],
+                                ...state.data.listSearchMessage[conversationId],
                                 ...newMessageData
                             }
                             :
-                            Object.assign(newMessageData, state.data.listSearchMessage[action.payload.conversationId])
-                }
+                            Object.assign(newMessageData, state.data.listSearchMessage[conversationId])
+                },
+                totalRecordFront: {
+                    ...state.data.totalRecordFront,
+                    [action.payload.conversationId]: totalRecordFront
+                },
+                totalRecordBack: {
+                    ...state.data.totalRecordBack,
+                    [action.payload.conversationId]: totalRecordBack
+                },
+                nextCursor,
+                prevCursor,
+                hasMoreDataFront,
+                hasMoreDataBack
             };
-        },
-        setTotalRecordFront(state, action) {
-            state.data.totalRecordFront[action.payload.conversationId] = action.payload.data;
-        },
-        setTotalRecordBack(state, action) {
-            state.data.totalRecordBack[action.payload.conversationId] = action.payload.data;
-        },
-        setNextSearchCursor(state, action) {
-            state.data = {
-                ...state.data,
-                nextCursor : {
-                    ...state.data.nextCursor,
-                    [action.payload.conversationId]: action.payload.data
-                },
-                hasMoreDataFront : {
-                    ...state.data.hasMoreDataFront,
-                    [action.payload.conversationId]: action.payload.data !== null && action.payload.data !== undefined && action.payload.data !== ""
-                },
-            }
-        },
-        setPrevSearchCursor(state, action) {
-            state.data = {
-                ...state.data,
-                prevCursor : {
-                    ...state.data.prevCursor,
-                    [action.payload.conversationId]: action.payload.data
-                },
-                hasMoreDataBack : {
-                    ...state.data.hasMoreDataBack,
-                    [action.payload.conversationId]: action.payload.data !== null && action.payload.data !== undefined && action.payload.data !== ""
-                },
-            }
         },
         setLoadingSearch(state, action) {
             state.data.isLoading[action.payload.conversationId] = action.payload.data
@@ -161,11 +162,8 @@ const listSearchMessageSlice = createSlice({
 
 export const {
     setListSearchMessage,
-    setTotalRecordBack,
-    setTotalRecordFront,
-    setNextSearchCursor,
-    setPrevSearchCursor,
     setLoadingSearch,
-    setInSearchMode
+    setInSearchMode,
+    dismissSearchMode
 } = listSearchMessageSlice.actions;
 export default listSearchMessageSlice.reducer;
