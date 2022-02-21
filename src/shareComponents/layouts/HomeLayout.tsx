@@ -4,7 +4,7 @@ import cn from "classnames";
 import HomeNavigation from "components/common/HomeNavigation";
 import HomeRightSideBar from "components/common/HomeRightSideBar";
 import MainHeader from "components/common/main-header";
-import MiniChatbox from "components/common/mini-chatbox";
+import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";

@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissCreateReminder} from "redux/reducer/messages/CreateReminder";
 import {map as _map} from "lodash"
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import DateIcon from "assets/images/icons8-time-span-144.svg";

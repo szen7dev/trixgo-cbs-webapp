@@ -8,7 +8,7 @@ import DatePickerWithRange from "./DatePickerWithRange";
 import {map as _map} from "lodash";
 import ItemFileInMessage from "./ItemFileInMessage";
 
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";

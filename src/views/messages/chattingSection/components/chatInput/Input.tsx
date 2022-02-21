@@ -12,7 +12,7 @@ import {ChattingInputContext} from "./ChattingInput";
 import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import IconButton from "./IconButton";
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import IconAttach from "./IconAttach";
 // import editorStyles from './editorStyles.module.css';
 

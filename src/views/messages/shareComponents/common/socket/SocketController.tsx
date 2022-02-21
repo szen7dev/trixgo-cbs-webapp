@@ -5,7 +5,6 @@ import {
     updateNewMessageToConversation,
     setShareMessage, revokeMessageInConversation
 } from "redux/reducer/messages/ListMessage";
-import {MessageContext} from "../index_v2";
 import {useDispatch, useSelector} from "react-redux";
 import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
@@ -16,7 +15,7 @@ type Props = {
     context: any;
     currentChat: string;
 }
-const SocketController:FC<Props> = ({context, currentChat}) => {
+export const SocketController:FC<Props> = ({context, currentChat}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
@@ -135,5 +134,3 @@ const SocketController:FC<Props> = ({context, currentChat}) => {
 
     return null;
 };
-
-export default SocketController;

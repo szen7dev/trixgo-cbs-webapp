@@ -10,7 +10,7 @@ import Routes from "routes";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";
-import OneSignalController from "components/OneSignalController";
+import {OneSignalController} from "shareComponents/common/OneSignal";
 const queryClient = new QueryClient();
 
 const App: FC = () => {

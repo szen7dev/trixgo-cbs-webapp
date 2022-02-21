@@ -7,7 +7,7 @@ import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import PlusIcon from "assets/images/icons8-plus-math-96.svg";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import SearchChatItem from "./searchChatItem";
 
 const SearchUserConversationSection:FC = () => {

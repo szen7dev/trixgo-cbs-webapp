@@ -1,23 +1,21 @@
-import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {FC, useCallback, useEffect, useRef, useState} from "react";
+import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import iconChevronDown from "assets/images/icon-chevron-down.png";
-import iconClose from "assets/images/icons8-close-30.png";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
-import NotificationCenter from "views/pages/messages/chattingSection/components/NotificationCenter";
-import MyMessage from "views/pages/messages/chattingSection/components/MyMessage";
-import OthersMessage from "views/pages/messages/chattingSection/components/OthersMessage";
-import Reminder from "views/pages/messages/chattingSection/components/reminder/Reminder";
-import Poll from "views/pages/messages/chattingSection/components/poll/Poll";
-import AddUsersNoti from "views/pages/messages/chattingSection/components/chatContent/AddUsersNoti";
-import PinMessageNoti from "views/pages/messages/chattingSection/components/chatContent/pinMessageNoti";
-import PollNoti from "views/pages/messages/chattingSection/components/poll/PollNoti";
-import ReminderNoti from "views/pages/messages/chattingSection/components/reminder/ReminderNoti";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {MiniChatContext} from "./ChatsOnRightSideBar";
+import {MiniChatContext} from "../../ChatsOnRightSideBar";
+import NotificationCenter from "views/messages/chattingSection/components/NotificationCenter";
+import MyMessage from "views/messages/chattingSection/components/MyMessage";
+import OthersMessage from "views/messages/chattingSection/components/OthersMessage";
+import Reminder from "views/messages/chattingSection/components/reminder/Reminder";
+import Poll from "views/messages/chattingSection/components/poll/Poll";
+import AddUsersNoti from "views/messages/chattingSection/components/chatContent/AddUsersNoti";
+import PinMessageNoti from "views/messages/chattingSection/components/chatContent/pinMessageNoti";
+import PollNoti from "views/messages/chattingSection/components/poll/PollNoti";
+import ReminderNoti from "views/messages/chattingSection/components/reminder/ReminderNoti";
 
 type Props = {
     chat: ItemListConversation;
