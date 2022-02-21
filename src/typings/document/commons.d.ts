@@ -26,7 +26,8 @@ export interface Member {
 export interface Author {
     _id: string;
     image?: string;
-    fullName?: string;
+    fullname?: string;
+    sign?: string;
 }
 
 export interface Project {
