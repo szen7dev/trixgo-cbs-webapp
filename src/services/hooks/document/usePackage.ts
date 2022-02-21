@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "react-query";
+import { useQuery } from "react-query";
 import { PackageRepository } from 'apis/document';
 
 import type { Package, PackageQueryPayload } from 'typings/document/package';
@@ -7,28 +7,24 @@ interface UseQueryListPackage {
     loading: boolean;
     totalRecord: number;
     totalPages: number;
-    hasNextPage?: boolean;
     listPackage: Array<Package>;
+    nextCursor?: string | null;
     refetchListPackage: () => void;
-    fetchNextPagePackage: () => void;
 }
 
 export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPackage => {
-    const res = useInfiniteQuery(
+    const res = useQuery(
         [`documents`, { params }],
-        async ({ pageParam }: any) =>
+        async () =>
             PackageRepository.fetchListPackage({
                 limit: params?.limit || 10,
-                lastestID: pageParam || "",
                 keyword: params?.keyword || '',
                 select: params?.select || '',
                 ...params,
                 departmentID: params.departmentID,
             }),
         {
-            getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor || undefined;
-            },
+            keepPreviousData: true,
             refetchOnWindowFocus: false,
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
@@ -37,25 +33,19 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
         isLoading,
         data,
         refetch,
-        fetchNextPage,
-        hasNextPage
     } = res;
 
-    const listPackage = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
-        .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = data?.pages[0]?.data?.totalPages || 0;
+    const listPackage = data?.data?.listRecords || []
+    const totalRecord = data?.data?.totalRecord || 0;
+    const totalPages = data?.data?.totalPage || 0;
+    const nextCursor = data?.data?.nextCursor
 
     return {
         loading: isLoading,
         listPackage,
         totalRecord,
         totalPages,
-        hasNextPage,
+        nextCursor,
         refetchListPackage: refetch,
-        fetchNextPagePackage: fetchNextPage
     }
 }
