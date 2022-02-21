@@ -2,7 +2,7 @@ import React, {FC, useCallback, useContext} from "react";
 import MainChatOptions from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
 import AvatarGroupChat from "../../list/components/AvatarGroupChat";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 import HeaderPinedMessages from "./HeaderPinedMessages";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";

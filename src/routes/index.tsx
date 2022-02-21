@@ -136,9 +136,6 @@ import DocumentsManagement from "views/pages/support/components/grant/DocumentsM
 import TimesheetHomePage from 'views/timesheet/TimesheetHomePage';
 import TimesheetDetailPage from 'views/timesheet/TimesheetDetailPage';
 
-import MessageList from "../views/pages/messages/list";
-import MessagesHome from "../views/pages/messages/home/index_v2";
-
 // Ree pages
 import ReeHomePage from 'views/pages/ree/ReeHomePage';
 
@@ -149,9 +146,9 @@ import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
 import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
-import MessagesLayout from "views/layouts/MessagesLayout";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 import PCMRouter from "./pcm";
+import MessagesRoute from "./messages";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -401,13 +398,7 @@ const Routes: FC = () => {
                                             </HumanLayout>
                                         </Route>
 
-                                        <Route path="/messages/:path?">
-                                            <MessagesLayout>
-                                                <Switch>
-                                                    <ProtectedRoute exact path={"/messages"} component={MessagesHome} />
-                                                </Switch>
-                                            </MessagesLayout>
-                                        </Route>
+                                        <MessagesRoute/>
 
                                         <Route path="/accounting/:path?">
                                             <AccountingLayout>

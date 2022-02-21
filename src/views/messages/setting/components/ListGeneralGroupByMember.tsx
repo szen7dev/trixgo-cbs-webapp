@@ -7,7 +7,7 @@ import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import DatePickerWithRange from "./DatePickerWithRange";
 import {map as _map} from "lodash";
 
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SearchChatItem from "../../list/components/SearchUserConversation/searchChatItem";

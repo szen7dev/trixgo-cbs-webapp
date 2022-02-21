@@ -8,7 +8,7 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import { Menu } from '@headlessui/react'
 import {setSelectedStateOn} from "redux/reducer/messages/ListMessage";
 import {useDispatch} from "react-redux";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 
 const MainChatOptions:FC = () => {
     const {currentChat} = useContext(MessageContext)

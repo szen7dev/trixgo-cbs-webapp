@@ -1,8 +1,8 @@
 import React, {createContext, FC, useMemo, useState} from "react";
-import MiniChatbox from "./index";
-import MiniChatGroup from "./MiniChatGroup";
+import MiniChatbox from "./components/MiniChatBox";
+import MiniChatGroup from "./components/ChatBox/MiniChatGroup";
 import Editor from "@draft-js-plugins/editor";
-import {useSocket} from "../../../services/hooks/useSocket";
+import {useSocket} from "services/hooks/useSocket";
 
 export const MiniChatContext = createContext<{
     socketRef: any;

@@ -6,7 +6,6 @@ import SettingMessageDetail from "../setting";
 import { useSocket } from "services/hooks/useSocket";
 import '@draft-js-plugins/emoji/lib/plugin.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import SocketController from "./socket";
 import ShareMessage from "../chattingSection/components/ShareMessage";
 import DeleteAndRevokeMessageConfirm from "../chattingSection/components/DeleteAndRevokeMessage";
 import PollCreate from "../chattingSection/components/poll/PollCreate";
@@ -19,6 +18,7 @@ import AddUsersToConversation from "../chattingSection/components/AddUsersToConv
 import PopupSendImageAndFile from "../chattingSection/components/PopupSendImageAndFile";
 import {useDispatch} from "react-redux";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
+import {SocketController} from "views/messages/shareComponents/common/socket";
 
 export const MessageContext = createContext<{
     currentChat: string;

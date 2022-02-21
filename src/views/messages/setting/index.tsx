@@ -4,7 +4,7 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import SettingMessageDetailTab from "./components/SettingMessageDetailTab";
-import {MessageContext} from "../home/index_v2";
+import {MessageContext} from "../home";
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "redux/reducer";
 import AvatarGroupChat from "../list/components/AvatarGroupChat";

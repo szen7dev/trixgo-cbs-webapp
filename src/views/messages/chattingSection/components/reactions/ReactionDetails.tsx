@@ -1,6 +1,6 @@
 import React, {FC, Fragment, useContext, useRef} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash"
