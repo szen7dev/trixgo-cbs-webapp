@@ -4,11 +4,11 @@ import { Route, Switch } from 'react-router-dom'
 // Context
 import { Provider } from '../contexts/contextModal'
 
-import DocumentLayout from 'views/layouts/DocumentLayout'
-import ErrorPage from 'views/pages/authentication/Error'
+import { DocumentLayout } from 'shareComponents/layouts/DocumentLayout'
+import ErrorPage from 'views/authentication/Error'
 
-import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage'
-import DocumentHomePage from 'views/pages/document/screens/DocumentHomePage'
+import DocumentDashboardPage from 'views/document/screens/DocumentDashboardPage'
+import DocumentHomePage from 'views/document/screens/DocumentHomePage'
 
 const DocumentRoutes: FC = () => {
 	return (

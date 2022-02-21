@@ -22,15 +22,15 @@ import HelpCenterLayout from "views/layouts/HelpCenterLayout";
 import AccountingLayout from "views/layouts/AccountingLayout";
 import BiddingLayout from "views/layouts/BiddingLayout"; //*** */
 import CmcsLayout from "views/layouts/CmcsLayout";
-import DocumentLayout from "views/layouts/DocumentLayout";
+// import DocumentLayout from "views/layouts/DocumentLayout";
 import FinLayout from "views/layouts/FinLayout";
-import HumanLayout from "views/layouts/HumanLayout";
+import { HumanLayout } from "shareComponents/layouts/HumanLayout";
 import OperationLayout from "views/layouts/OperationLayout"; //*** */
 import PcmLayout from "views/layouts/PcmLayout";
 import PersonalLayout from "views/layouts/PersonalLayout";
 import ReeLayout from "views/layouts/ReeLayout"; //*** */
 import SupportLayout from "views/layouts/SupportLayout";
-import TimesheetLayout from "views/layouts/TimesheetLayout";
+import { TimesheetLayout } from "shareComponents/layouts/TimesheetLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 import OwnerLayout from "views/layouts/OwnerLayout";
@@ -47,11 +47,11 @@ import OwnerHomePage from "views/pages/owner/OwnerHomePage";
 import OwnerGrantPage from "views/pages/owner/OwnerGrantPage";
 
 // Human pages
-import HumanHomePage from "views/pages/humans/HumanHomePage";
-import HumanCetificateFilterPage from "views/pages/humans/HumanCetificateFilterPage";
-import HumanOtherFilterPage from "views/pages/humans/HumanOtherFilterPage";
-import HumanExpiredPage from "views/pages/humans/HumanExpiredPage";
-import HumanInfo from "views/pages/humans/components/HumanInfo";
+import HumanHomePage from "views/humans/HumanHomePage";
+import HumanCetificateFilterPage from "views/humans/HumanCetificateFilterPage";
+import HumanOtherFilterPage from "views/humans/HumanOtherFilterPage";
+import HumanExpiredPage from "views/humans/HumanExpiredPage";
+import HumanInfo from "views/humans/components/HumanInfo";
 
 // Personal pages
 import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
@@ -93,7 +93,7 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 
 // Document pages
-import DocumentRoutes from "views/pages/document/routes/DocumentRoutes";
+import DocumentRoutes from "views/document/routes/DocumentRoutes";
 import PPTRoutes from "views/pages/document/routes/PPTRoutes";
 
 // Datahub pages
@@ -133,8 +133,9 @@ import SupportItemPage from "views/pages/support/SupportItemPage";
 import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
 // Timesheet pages
-import TimesheetHomePage from 'views/pages/timesheet/home';
-import TimesheetDetailPage from 'views/pages/timesheet/detail';
+import TimesheetHomePage from 'views/timesheet/TimesheetHomePage';
+import TimesheetDetailPage from 'views/timesheet/TimesheetDetailPage';
+
 import MessageList from "../views/pages/messages/list";
 import MessagesHome from "../views/pages/messages/home/index_v2";
 
