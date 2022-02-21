@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {dismissCreatePoll} from "redux/reducer/messages/CreatePoll";
 import {map as _map} from "lodash"
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 

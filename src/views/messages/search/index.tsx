@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {MessageContext} from "../home/index_v2";
+import {MessageContext} from "../home";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import SearchIcon from "assets/images/icons8-search-120.png";

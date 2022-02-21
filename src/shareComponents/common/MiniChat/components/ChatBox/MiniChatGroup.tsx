@@ -6,8 +6,8 @@ import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
 import {map as _map} from "lodash";
-import AvatarGroupChat from "views/pages/messages/list/components/AvatarGroupChat";
 import {openChatBox, openCreateNewChatMini} from "redux/reducer/messages/MiniChat";
+import AvatarGroupChat from "views/messages/list/components/AvatarGroupChat";
 const MiniChatGroup:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;

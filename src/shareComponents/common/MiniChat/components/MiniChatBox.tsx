@@ -2,12 +2,11 @@ import React, { FC, useState } from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import NewMiniChatBox from "./NewMiniChatBox";
-import SocketController from "views/pages/messages/home/socket";
-import DeleteAndRevokeMessageConfirm
-    from "views/pages/messages/chattingSection/components/DeleteAndRevokeMessage";
-import {MiniChatContext} from "./ChatsOnRightSideBar";
-import MiniChatSection from "./MiniChatSection";
-import PopupSendImageAndFile from "views/pages/messages/chattingSection/components/PopupSendImageAndFile";
+import {MiniChatContext} from "../ChatsOnRightSideBar";
+import MiniChatSection from "./ChatBox/MiniChatSection";
+import {SocketController} from "views/messages/shareComponents/common/socket";
+import DeleteAndRevokeMessageConfirm from "views/messages/chattingSection/components/DeleteAndRevokeMessage";
+import PopupSendImageAndFile from "views/messages/chattingSection/components/PopupSendImageAndFile";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
 const MiniChatbox: FC = () => {

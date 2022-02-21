@@ -7,7 +7,7 @@ import OthersMessage from "./OthersMessage";
 import NotificationCenter from "./NotificationCenter";
 import {map as _map} from "lodash"
 import moment from "moment";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 
 type Props = {
     listPinnedMessage: ItemMessage[]

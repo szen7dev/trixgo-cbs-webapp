@@ -2,7 +2,7 @@ import React, {FC, useContext} from "react";
 import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../home/index_v2";
+import {MessageContext} from "../../../home";
 import TextReply from "../chatContent/replyContent/textReply";
 import FileReply from "../chatContent/replyContent/fileReply";
 import ImageReply from "../chatContent/replyContent/imageReply";

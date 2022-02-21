@@ -12,7 +12,7 @@ export * from './HomeLayout';
 export * from './HumanLayout';
 export * from './KanbanBoardLayout';
 export * from './Main';
-export * from './MessagesLayout';
+export * from '../../views/messages/shareComponents/layouts/MessagesLayout';
 export * from './OperationLayout';
 export * from './OwnerLayout';
 export * from './PcmLayout';

@@ -1,14 +1,14 @@
 import React, {FC} from "react"
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import AvatarGroupChat from "views/pages/messages/list/components/AvatarGroupChat";
 import iconChevronDown from "assets/images/icon-chevron-down.png";
 import {dismissChatBox} from "redux/reducer/messages/MiniChat";
 import iconClose from "assets/images/icons8-close-30.png";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {useDispatch} from "react-redux";
 import MiniChatBoxDetail from "./MiniChatBoxDetail";
-import ChattingInput from "../../../views/pages/messages/chattingSection/components/chatInput/ChattingInput";
-import {MiniChatContext} from "./ChatsOnRightSideBar";
+import {MiniChatContext} from "../../ChatsOnRightSideBar";
+import ChattingInput from "views/messages/chattingSection/components/chatInput/ChattingInput";
+import AvatarGroupChat from "views/messages/list/components/AvatarGroupChat";
 
 type Props = {
     chat: ItemListConversation

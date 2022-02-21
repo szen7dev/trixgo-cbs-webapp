@@ -5,7 +5,7 @@ import AddNewSection from "./AddNew";
 
 import {CreateConversationPayload} from "typings/apis/messages/listConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../home/index_v2";
+import {MessageContext} from "../../home";
 
 export const AddNewChatGroupContext = createContext<{
     showAddNew: boolean;

@@ -2,7 +2,7 @@ import React, {FC, useContext} from "react";
 import MainChatHeading from "./components/MainChatHeading";
 import MainChatContent from "./components/MainChatContent";
 import ChattingInput from "./components/chatInput/ChattingInput";
-import {MessageContext} from "../home/index_v2";
+import {MessageContext} from "../home";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import MainSearchChatContent from "./components/MainSearchChatContent";

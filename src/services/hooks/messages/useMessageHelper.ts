@@ -1,8 +1,8 @@
 import {UseListConversation} from "./useListConversation";
 import {ReactNode, useCallback, useContext} from "react";
-import {MessageContext} from "../../../views/pages/messages/home/index_v2";
-import {ItemListConversation} from "../../../typings/apis/messages/listConversation";
-import SavedMessage from "../../../assets/images/saved-messages.svg";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
+import SavedMessage from "assets/images/saved-messages.svg";
+import {MessageContext} from "views/messages/home";
 
 type UseMessageHelperType = {
     handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;
