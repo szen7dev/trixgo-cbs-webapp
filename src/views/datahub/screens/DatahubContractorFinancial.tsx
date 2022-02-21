@@ -6,11 +6,11 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import SearchInput from "components/common/SearchInput";
 import ModalCreateFinancial from "../components/ModalCreateFinancial";
 
-import DropdownFilterButton from "views/document/components/DocumentFilterButton";
-import GroupActions from "views/document/components/projects/GroupActions";
-import ButtonCreate from "views/document/components/common/ButtonCreate";
-import ButtonMore from "views/document/components/common/ButtonMore";
-import DocumentDropdown from "views/document/components/DocumentDropdown";
+import DropdownFilterButton from "views/document/sharedComponents/common/DocumentFilterButton";
+import GroupActions from "views/document/sharedComponents/common/GroupActions";
+import ButtonCreate from "views/document/sharedComponents/common/ButtonCreate";
+import ButtonMore from "views/document/sharedComponents/common/ButtonMore";
+import DocumentDropdown from "views/document/sharedComponents/common/DocumentDropdown";
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 import { formatNumber } from "utils/ppt";
 

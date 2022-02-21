@@ -140,56 +140,6 @@
   background-color: rgba(240, 240, 240, 1);
 }
 
-.header {
-  /* color: var(--gray); */
-  /* border-bottom: 0.5px; */
-  /* border: 0.5px solid #CCCCCC; */
-  /* background-color: white; */
-}
-
-.navigator {
-  border-bottom: solid 2px transparent;
-  padding: 0 8px;
-  margin: 0 12px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 110px;
-  line-height: 16.1px;
-  font-size: 14px;
-}
-
-.navigator.active {
-  border-bottom-color: #0165BE;
-  color: black;
-  font-weight: bold;
-}
-
-.navigator.active>* {
-  font-weight: bold;
-}
-
-.item-sort {
-  font-size: 13px;
-  line-height: 14.95px;
-  color: rgba(102, 102, 102, 1);
-  font-weight: 700;
-}
-
-.item-sort.active {
-  color: rgba(0, 96, 225, 1);
-}
-
-.item-sort:not(:last-child) {
-  margin-right: 116px;
-}
-
-.item-sort>* {
-  display: flex;
-  align-items: center
-}
-
 .input-container {
   background-color: #F5F6F9;
   min-width: 350px;
@@ -208,30 +158,6 @@
 .header-list-sort {
 	border-left: 1px solid #CCCCCC;
 	padding-left: 8px;
-}
-
-.header-item-sort {
-	background-color: #F7F6FC;
-	padding: 6px 6px;
-	display: flex;
-	align-items: center;
-	width: 90px;
-}
-.header-item-sort:first-child {
-	border-radius: 8px 0 0 8px;
-}
-.header-item-sort:last-child {
-	border-radius: 0 8px 8px 0;
-}
-
-.header-item-sort.active {
-	color: var(--blue);
-	background-color: #EAF2FE;
-}
-
-.header-item-sort:first-child,
-.header-item-sort:last-child {
-	width: 75px;
 }
 
 .item {
@@ -314,30 +240,9 @@
   bottom: 0;
 }
 
-.pagination .button-contain {
-  padding-bottom: 16px;
-  border-bottom: 2px;
-  border-color: transparent;
-  border-style: solid;
-  color: rgba(102, 102, 102, 1);
-}
-
 .pagination button {
   background-color: #F0F0F0;
   border-radius: 5px;
-}
-
-.pagination .button-contain.active {
-  border-color: rgba(0, 96, 225, 1);
-  color: rgba(0, 96, 225, 1);
-}
-
-.pagination .button-contain.active button {
-  background-color: #DBE7F2;
-}
-
-.pagination-container {
-  max-width: 1250px;
 }
 
 /*______________________________Table______________________________*/
@@ -394,91 +299,6 @@ table.table tbody th,
 table.table tbody td {
   padding: 10px 8px 5px 8px;
 }
-
-/*______________________________Setting______________________________*/
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-/*______________________________Finance______________________________*/
-.cell {
-  background: #FFFFFF;
-  box-sizing: border-box;
-}
-
-.cell.border {
-  border: 0.5px solid #CCCCCC;
-}
-
-.cell ul>li {
-  line-height: 16.1px;
-  font-size: 14px;
-}
-
-.cell ul>li:not(:first-child) {
-  margin-top: 17px;
-}
-
-.cell ul>li>a>div {
-  display: inline-block;
-  background-color: currentColor;
-  margin-right: 14px;
-}
-
-.finance-progress {
-  display: flex;
-  justify-content: center;
-}
-
-.finance-progress div {
-  border-color: currentColor;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px 25px;
-  border: 4px solid;
-  border-radius: 999px;
-  width: 75px;
-  height: 75px;
-}
-
-.finance-total {
-  background-color: currentColor;
-}
-
-.finance-total~div {
-  font-size: 14px;
-  line-height: 16.1px;
-}
-
-.finance-pie {
-  width: 154px;
-  margin-right: 54px;
-  height: 100%;
-  display: flex;
-}
-
-.finance-pie>canvas {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-
-.finance-table thead th {
-  font-weight: normal;
-  padding: 11px 24px;
-  line-height: 14.95px;
-  font-size: 13px;
-  white-space: nowrap;
-  text-align: left;
-}
-
-.finance-table tbody td {
-  border: 0.5px solid #CCCCCC;
-}
-
 .bar {
   background-color: currentColor;
 }
@@ -618,16 +438,6 @@ table.table tbody td {
 .pagination .swiper-pagination-bullet {
   margin: 0 4px;
 }
-
-/*______________________________Porogress______________________________*/
-.progress-header {
-  position: sticky;
-  top: 0;
-  background-color: #2C2C2C;
-  color: white;
-  padding: 8px;
-}
-
 
 /*______________________________Custom Scroll______________________________*/
 

@@ -2,9 +2,8 @@ import { FC } from "react";
 import { Doughnut } from "react-chartjs-2";
 
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import LayoutPrimary from "views/pages/media/layouts/LayoutPrimary";
-import ProjectDashboardTaskPage from "../ProjectDashboardTaskPage";
-import ProjectPortfolioPage from "../ProjectPortfolioPage";
+import LayoutPrimary from "../sharedComponents/layouts/LayoutPrimary";
+import ProjectPortfolioPage from "../screens/ProjectPortfolioPage";
 
 const ProjectDashboardRoutes2: FC<RouteComponentProps> = ({ match, ...props }) => {
 	const pages = [

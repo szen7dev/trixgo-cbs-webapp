@@ -3,9 +3,9 @@
 import { FC, Fragment } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import DatahubLayout from 'views/layouts/DatahubLayout'
-import ErrorPage from 'views/pages/authentication/Error'
-import LayoutPrimary from 'views/pages/media/layouts/LayoutPrimary'
+import DatahubLayout from '../layouts/DatahubLayout'
+import ErrorPage from 'views/authentication/Error'
+import LayoutPrimary from 'views/media/layouts/LayoutPrimary'
 import DatahubContractorLayout from '../layouts/DatahubContractorLayout'
 import DatahubContractorContract from '../screens/DatahubContractorContract'
 import DatahubContractorDetail from '../screens/DatahubContractorDetail'
@@ -53,10 +53,24 @@ type Routes = Array<{
 }>
 
 export const routes: Routes = [
-	{ path: '/datahub/home', exact: true, name: 'Trang chủ', component: DatahubHome },
-	{ path: '/datahub/home/:d', exact: true, name: 'Trang chủ', component: DatahubHomeDetail, isPrivate: true },
 	{
-		path: '/datahub/type', name: 'Phân loại hệ thống', layout: LayoutPrimary, type: 'state',
+		path: '/datahub/home',
+		exact: true,
+		name: 'Trang chủ',
+		component: DatahubHome
+	},
+	{
+		path: '/datahub/home/:id',
+		exact: true,
+		name: 'Trang chủ',
+		component: DatahubHomeDetail,
+		isPrivate: true
+	},
+	{
+		path: '/datahub/type',
+		name: 'Phân loại hệ thống',
+		layout: LayoutPrimary,
+		type: 'state',
 		pages: [
 			{ id: '1', path: '/datahub/type', navExact: true, exact: true, title: 'Lĩnh vực', state: 1, component: DatahubType },
 			{ id: '2', path: '/datahub/type/asd', navExact: true, exact: true, title: 'Chủ đề cộng đồng', state: 2, component: (): JSX.Element => <div>123</div> },
@@ -64,7 +78,8 @@ export const routes: Routes = [
 		],
 	},
 	{
-		path: '/datahub/project', name: 'Danh mục dự án',
+		path: '/datahub/project',
+		name: 'Danh mục dự án',
 		layout: LayoutPrimary,
 		pages: [
 			{ id: '1', path: '/datahub/project', exact: true, title: 'Danh sách', state: 1, component: DatahubProject },
@@ -72,19 +87,32 @@ export const routes: Routes = [
 		]
 	},
 	{
-		path: '/datahub/contractor/home', exact: true, name: 'Năng lực nhà thầu', component: DatahubContractorHome, isActive(match, location) {
+		path: '/datahub/contractor/home',
+		exact: true,
+		name: 'Năng lực nhà thầu',
+		component: DatahubContractorHome,
+		isActive(match, location) {
 			if (match) return true;
 			return location.pathname.includes('/datahub/contractor/');
 		}
 	},
 	{
-		path: '/datahub/contractor/home/:id', exact: true, name: 'Năng lực nhà thầu', isPrivate: true, layout: DatahubContractorLayout, component: DatahubContractorDetail, isActive(match, location) {
+		path: '/datahub/contractor/home/:id',
+		exact: true,
+		name: 'Năng lực nhà thầu',
+		isPrivate: true,
+		layout: DatahubContractorLayout,
+		component: DatahubContractorDetail,
+		isActive(match, location) {
 			if (match) return true;
 			return location.pathname.includes('/datahub/contractor/');
 		}
 	},
 	{
-		path: '/datahub/contractor/:id', name: 'Năng lực nhà thầu', isPrivate: true, layout: DatahubContractorLayout,
+		path: '/datahub/contractor/:id',
+		name: 'Năng lực nhà thầu',
+		isPrivate: true,
+		layout: DatahubContractorLayout,
 		pages: [
 			{ id: '2', path: '/datahub/contractor/:id', exact: true, title: 'Lĩnh vực', component: DatahubContractorDetail },
 			{ id: '3', path: '/datahub/contractor/:id/service', exact: true, title: 'Dịch vụ', component: DatahubContractorService },

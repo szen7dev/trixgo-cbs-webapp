@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import LayoutPrimary from "views/pages/media/layouts/LayoutPrimary";
-import ProjectDashboardTaskPage from "../ProjectDashboardTaskPage";
+import LayoutPrimary from "../sharedComponents/layouts/LayoutPrimary";
+import ProjectDashboardTaskPage from "../screens/ProjectDashboardTaskPage";
 
 const ProjectDashboardRoutes: FC<RouteComponentProps> = ({ match, ...props }) => {
 	const pages = [

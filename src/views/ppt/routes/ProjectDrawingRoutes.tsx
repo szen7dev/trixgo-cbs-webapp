@@ -1,9 +1,10 @@
 import { FC } from "react";
-
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import LayoutProjectDrawing from "../components/layouts/LayoutProjectDrawing";
-import ProjectDrawingPage from "../ProjectDrawingPage";
-import ProjectDrawing2Page from "../ProjectDrawing2Page";
+
+import LayoutProjectDrawing from "../sharedComponents/layouts/LayoutProjectDrawing";
+
+import ProjectDrawingPage from "../screens/ProjectDrawingPage";
+import ProjectDrawing2Page from "../screens/ProjectDrawing2Page";
 
 const ProjectDrawingRoutes: FC<RouteComponentProps> = ({ ...props }) => {
 	return <LayoutProjectDrawing {...props}>
