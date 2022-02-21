@@ -1,11 +1,11 @@
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 
-import TabsList from "views/pages/document/components/common/TabsList";
-import DocumentFolderPage from "views/pages/document/screens/DocumentFolderPage";
-import DocumentHistoryPage from "views/pages/document/screens/DocumentHistoryPage";
-import DocumentProfilePage from "views/pages/document/screens/DocumentProfilePage";
-import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
-import DocumentReportPage from "views/pages/document/screens/DocumentReportPage";
+import TabsList from "views/document/components/common/TabsList";
+import DocumentFolderPage from "views/document/screens/DocumentFolderPage";
+import DocumentHistoryPage from "views/document/screens/DocumentHistoryPage";
+import DocumentProfilePage from "views/document/screens/DocumentProfilePage";
+import DocumentProjectPage from "views/document/screens/DocumentProjectPage";
+import DocumentReportPage from "views/document/screens/DocumentReportPage";
 
 import '../document.css';
 

@@ -28,3 +28,8 @@ export const switchOnTimeBudget = (
 ): { message: string; className: string } => {
   return DEPARTMENT_STATUS[onTime][budget];
 };
+
+// Format number locale
+export const formatNumber = (number: number): string => {
+	return new Intl.NumberFormat("en-US").format(number);
+};

@@ -24,11 +24,12 @@ const DatahubLeftSideBar: FC = () => {
 					{
 						routes.map((route, index) => {
 							if (!route.isPrivate) return (
-								<NavLink key={index} to={route.path} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+								<NavLink key={index} to={route.link ? route.link : route.path} exact={route.navExact} strict={route.navStrict} isActive={route.isActive} location={route.location} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
 									<img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
 									<span className="truncate">{route.name}</span>
 								</NavLink>
 							)
+							return null
 						})
 					}
 				</div>
