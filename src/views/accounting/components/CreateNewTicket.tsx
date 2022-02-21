@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import Close from "../../../../assets/icons/Close";
-import { useModal } from "../../../../services/hooks/useModal";
+import Close from "../../../assets/icons/Close";
+import { useModal } from "../../../services/hooks/useModal";
 import CreateNewTicketForm from "./CreateNewTicketForm";
 
 import { Form, Formik } from "formik";

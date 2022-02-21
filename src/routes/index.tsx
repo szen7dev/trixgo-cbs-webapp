@@ -67,20 +67,20 @@ import ConfigListDetail from "views/pages/personal/config/components/ConfigListD
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
 // Accounting pages
-import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
-import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
-import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "views/pages/accounting/Diary";
-import AccountingInOutPage from "views/pages/accounting/ImportExport/AccountingInOutPage";
-import AccountingDebtPage from "views/pages/accounting/Debt/AccountingDebtPage";
-import AccountingVatPage from "views/pages/accounting/VAT/AccountingVatPage";
-import AccountingReportFinancePage from "views/pages/accounting/FinanceReport/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "views/pages/accounting/SupportTool/AccountingSupportToolsPage";
-import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
-import AccountingAdminPage from "views/pages/accounting/admin/AccountingAdminPage";
-import ReceivablesCustomers from "views/pages/accounting/Debt/components/ReceivablesCustomers";
-import ReceivablesCustomersCode from "views/pages/accounting/Debt/components/ReceivablesCustomersCode";
-import AccountingTBookPage from "views/pages/accounting/TBook/AccountingTBookPage";
+import AccountingDashboardPage from "views/accounting/AccountingDashboardPage";
+import AccountingTicketsPage from "views/accounting/AccountingTicketsPage";
+import AccountingDetailPage from "views/accounting/AccountingDetailPage";
+import AccountingDiaryPage from "views/accounting/Diary";
+import AccountingInOutPage from "views/accounting/ImportExport/AccountingInOutPage";
+import AccountingDebtPage from "views/accounting/Debt/AccountingDebtPage";
+import AccountingVatPage from "views/accounting/VAT/AccountingVatPage";
+import AccountingReportFinancePage from "views/accounting/FinanceReport/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/accounting/SupportTool/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "views/accounting/AccountingTicketDetailPage";
+import AccountingAdminPage from "views/accounting/admin/AccountingAdminPage";
+import ReceivablesCustomers from "views/accounting/Debt/components/ReceivablesCustomers";
+import ReceivablesCustomersCode from "views/accounting/Debt/components/ReceivablesCustomersCode";
+import AccountingTBookPage from "views/accounting/TBook/AccountingTBookPage";
 
 // Bidding pages
 import BiddingHomePage from "views/pages/bidding/BiddingHomePage";

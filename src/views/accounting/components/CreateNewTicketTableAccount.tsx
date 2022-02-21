@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState } from "react";
-import DropdownSearchable from "../../../../components/common/DropdownSearch";
+import DropdownSearchable from "../../../components/common/DropdownSearch";
 import Copy from "../../../../assets/images/icons8-copy-96.png";
-import CloseRed from "../../../../assets/icons/CloseRed";
+import CloseRed from "../../../assets/icons/CloseRed";
 import { ErrorMessage, Field, FieldArray } from "formik";
 
 import debounce from "lodash/debounce";

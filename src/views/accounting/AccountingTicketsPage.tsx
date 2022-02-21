@@ -2,8 +2,8 @@ import { FC, useCallback, useEffect, useState } from "react";
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import ActionAccountingGroup from "./components/ActionAccountingGroup";
-import Paginate from "../../../components/common/Paginate";
-import { useModal } from "../../../services/hooks/useModal";
+import Paginate from "../../components/common/Paginate";
+import { useModal } from "../../services/hooks/useModal";
 import CreateNewTicket from "./components/CreateNewTicket";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import moment from "moment";
@@ -17,9 +17,9 @@ import {
     useDeleteAccountingVoucherMutation,
 } from "services/hooks/useAccountingVoucher";
 import { NavLink } from "react-router-dom";
-import SearchInput from "../../../components/common/SearchInput";
+import SearchInput from "../../components/common/SearchInput";
 import FinancialCashFlowFilterButton from "../financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-import TriangleDown from "../../../assets/icons/TriangleDown";
+import TriangleDown from "../../assets/icons/TriangleDown";
 
 import Popover from "components/shared/Popover";
 

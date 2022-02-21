@@ -4,7 +4,7 @@ import Printer from "assets/images/icons8-print-96.png";
 import Copy from "assets/images/icons8-copy-96.png";
 import Pen from "assets/images/icons8-pencil.svg";
 import Trash from "assets/images/icons8-remove.svg";
-import { useOnClickOutside } from "../../../../services/hooks/useOnclickOutside";
+import { useOnClickOutside } from "../../../services/hooks/useOnclickOutside";
 
 type Props = {
     data?: any;

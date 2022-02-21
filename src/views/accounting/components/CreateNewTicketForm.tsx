@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import DropdownSearchable from "../../../../components/common/DropdownSearch";
+import DropdownSearchable from "../../../components/common/DropdownSearch";
 import DatePicker from "react-datepicker";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
