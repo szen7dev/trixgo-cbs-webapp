@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 import { Route, RouteComponentProps, Switch } from "react-router-dom";
-import ProjectResourcePage from "../ProjectResourcePage";
-import LayoutPrimary from "views/pages/media/layouts/LayoutPrimary";
+import ProjectResourcePage from "../screens/ProjectResourcePage";
+import LayoutPrimary from "../sharedComponents/layouts/LayoutPrimary";
 
 const ProjectResourceRoutes: FC<RouteComponentProps> = ({ match, ...props }) => {
 	const pages = [

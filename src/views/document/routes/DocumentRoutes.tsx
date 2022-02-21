@@ -1,14 +1,11 @@
 import { FC } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-// Context
-import { Provider } from '../contexts/contextModal'
-
-import { DocumentLayout } from 'shareComponents/layouts/DocumentLayout'
+import DocumentLayout from '../sharedComponents/layouts/DocumentLayout';
 import ErrorPage from 'views/authentication/Error'
 
-import DocumentDashboardPage from 'views/document/screens/DocumentDashboardPage'
-import DocumentHomePage from 'views/document/screens/DocumentHomePage'
+import DocumentDashboardPage from '../DocumentDashboardPage'
+import DocumentHomePage from 'views/document/DocumentHomePage'
 
 const DocumentRoutes: FC = () => {
 	return (
@@ -16,11 +13,7 @@ const DocumentRoutes: FC = () => {
 			<DocumentLayout>
 				<Switch>
 					<Route exact path="/document/home" component={DocumentHomePage} />
-					<Route exact path="/document/dashboard" component={() =>
-						<Provider>
-							<DocumentDashboardPage />
-						</Provider>
-					} />
+					<Route exact path="/document/dashboard" component={DocumentDashboardPage} />
 					<Route path="/document/*" component={ErrorPage} />
 				</Switch>
 			</DocumentLayout>
