@@ -8,11 +8,11 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 
-import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import GroupActions from "views/pages/document/components/projects/GroupActions";
-import ButtonCreate from "views/pages/document/components/common/ButtonCreate";
-import ButtonMore from "views/pages/document/components/common/ButtonMore";
-import DocumentDropdown from "views/pages/document/components/DocumentDropdown";
+import DropdownFilterButton from "views/document/components/DocumentFilterButton";
+import GroupActions from "views/document/components/projects/GroupActions";
+import ButtonCreate from "views/document/components/common/ButtonCreate";
+import ButtonMore from "views/document/components/common/ButtonMore";
+import DocumentDropdown from "views/document/components/DocumentDropdown";
 import ModalCreateType from "../components/ModalCreateType";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
@@ -50,7 +50,7 @@ const DatahubType: FC = () => {
 					value={pkg.title}
 					onSelectValue={setPkg}
 				/>
-				<DropdownFilterButton />
+				{/* <DropdownFilterButton /> */}
 				<GroupActions className="flex items-center flex-1" />
 
 				<ButtonCreate onClick={() => setShow(!show)} />

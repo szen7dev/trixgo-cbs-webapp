@@ -1,2 +1,2 @@
-import DatahubLayout from "views/pages/datahub/layouts/DatahubLayout";
+import DatahubLayout from "views/datahub/layouts/DatahubLayout";
 export default DatahubLayout;
