@@ -152,6 +152,7 @@ import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import MessagesLayout from "views/layouts/MessagesLayout";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 import PCMRouter from "./pcm";
+import SampleAppRouter from "./sampleApp";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -168,6 +169,7 @@ const Routes: FC = () => {
                                 <ModalProvider>
                                     <Switch>
                                         <PCMRouter />
+                                        <SampleAppRouter />
                                         <Route path="/authentication/:path?">
                                             <FullPageLayout isAuthentication>
                                                 <Switch>
