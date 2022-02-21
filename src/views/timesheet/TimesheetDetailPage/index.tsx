@@ -8,13 +8,15 @@ import FileColorIcon from "assets/icons/FileColor";
 import StarIcon from "assets/images/star.svg";
 import Thumbnail from "assets/images/thumbnail2.png";
 
-import { setMainRowCollapsed } from "redux/reducer/Timesheet";
-import Paginate from "components/common/Paginate";
-import InputWidthAdjust from "./components/InputWidthAdjust";
-import ShareButton from "./components/ShareButton";
+import Paginate from "../shareComponents/common/Paginate";
+import { InputWidthAdjust } from "../shareComponents/common/Input";
+import { ShareButton } from "../shareComponents/common/Button";
+
 import DetailMainRow from "./components/DetailMainRow";
 import AccessingUsers from "./components/AccessingUsers";
-import DetailChildRowCreateForm from "./components/DetailChildRowCreateForm";
+import { CreateRow } from "./components/Form";
+
+import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 
 import {
   useQueryDetailTimeSheetParent,
@@ -26,7 +28,7 @@ const TimeSheetDetailPage: FC = () => {
   const params = useParams<{ id: string }>();
   const id = params["id"];
 
-  const { data, error, loading, refetch } = useQueryDetailTimeSheetParent(id);
+  const { data, refetch } = useQueryDetailTimeSheetParent(id);
   const {
     data: listTimeSheetChild,
     loading: isFetchTimeSheetChild,
@@ -65,26 +67,29 @@ const TimeSheetDetailPage: FC = () => {
     [onRefreshTimeSheetChild, onUpdateTimeSheetAsync, refetch]
   );
 
-  const handleCreateTimeSheet = React.useCallback(async (values) => {
-    try {
-      if (!values.name) {
-        throw new Error('Name is required');
+  const handleCreateTimeSheet = React.useCallback(
+    async (values) => {
+      try {
+        if (!values.name) {
+          throw new Error("Name is required");
+        }
+        const isCreated = await onCreateTimeSheetAsync({
+          name: values.name,
+          parentID: id,
+        });
+        if (!isCreated.error) {
+          refetch();
+          onRefreshTimeSheetChild();
+          return true;
+        }
+        throw new Error("ERROR~");
+      } catch (err) {
+        console.error(err);
+        return false;
       }
-      const isCreated = await onCreateTimeSheetAsync({
-        name: values.name,
-        parentID: id,
-      });
-      if (!isCreated.error) {
-        refetch()
-        onRefreshTimeSheetChild();
-        return true;
-      }
-      throw new Error('ERROR~');
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
-  }, [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]);
+    },
+    [id, onCreateTimeSheetAsync, onRefreshTimeSheetChild, refetch]
+  );
 
   const dispatch = useDispatch();
 
@@ -249,16 +254,16 @@ const TimeSheetDetailPage: FC = () => {
               isFetchTimeSheetChild={isFetchTimeSheetChild}
             />
           )}
-          <DetailChildRowCreateForm onInsert={handleCreateTimeSheet} />
+          <CreateRow onInsert={handleCreateTimeSheet} />
         </div>
       </div>
-      <Paginate 
-      totalPages={totalPages}
-      totalRecord={totalRecord}
-      nextPageAction={fetchNextPage}
-      prevPageAction={fetchPrevPage}
-      isFetching={isFetchTimeSheetChild}
-      hasNextPage={hasNextPage}
+      <Paginate
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        nextPageAction={fetchNextPage}
+        prevPageAction={fetchPrevPage}
+        isFetching={isFetchTimeSheetChild}
+        hasNextPage={hasNextPage}
       />
     </div>
   );
