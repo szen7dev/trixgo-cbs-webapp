@@ -133,8 +133,7 @@ import SupportItemPage from "views/pages/support/SupportItemPage";
 import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
 // Timesheet pages
-import TimesheetHomePage from 'views/timesheet/TimesheetHomePage';
-import TimesheetDetailPage from 'views/timesheet/TimesheetDetailPage';
+import TimesheetAppRouter from './timesheet';
 
 // Ree pages
 import ReeHomePage from 'views/pages/ree/ReeHomePage';
@@ -694,22 +693,7 @@ const Routes: FC = () => {
                                             </Switch>
                                         </Route>
 
-                                        <Route path="/timesheet/:path?">
-                                            <TimesheetLayout>
-                                                <Switch>
-                                                    <ProtectedRoute
-                                                        exact
-                                                        path="/timesheet/home"
-                                                        component={TimesheetHomePage}
-                                                    />
-                                                    <ProtectedRoute
-                                                        exact
-                                                        path={"/timesheet/home/:id"}
-                                                        component={TimesheetDetailPage}
-                                                    />
-                                                </Switch>
-                                            </TimesheetLayout>
-                                        </Route>
+                                        <TimesheetAppRouter />
 
                                         <Route path="*">
                                             <FullPageLayout>

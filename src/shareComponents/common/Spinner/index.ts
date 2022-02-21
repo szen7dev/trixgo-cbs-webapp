@@ -1,1 +1,1 @@
-export * from './GlobalLoading';
+export { default as Spinner } from './GlobalLoading';

@@ -7,9 +7,8 @@ import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import SearchInput from "components/common/SearchInput";
 
-import ActionGroupButton from "./components/ActionGroupButton";
-import FilterButton from "./components/FilterButton";
-import CreateOrEditDialog from "./components/CreateOrEditDialog";
+import { ActionGroupButton, FilterButton } from "../shareComponents/common/Button";
+import DialogForm from "../shareComponents/common/DialogForm";
 
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -126,7 +125,7 @@ const TimeSheetHomePage: FC = () => {
           onClick={() =>
             openModal(
               <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-20 align-top inline-block">
-                <CreateOrEditDialog
+                <DialogForm
                   title="Tạo mới"
                   onSubmit={handleCreateTimeSheet}
                   projectName={""}
