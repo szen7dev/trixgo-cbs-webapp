@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { map as _map } from "lodash";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
@@ -10,11 +10,11 @@ import Thumbnail from "assets/images/thumbnail2.png";
 
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import Paginate from "components/common/Paginate";
-import InputWidthAdjust from "../../financial/planning/components/FinancialCashFlowDetail/InputWidthAdjust";
-import ShareButton from "../../financial/planning/components/FinancialCashFlowDetail/ShareButton";
-import DetailMainRow from "../components/DetailMainRow";
-import AccessingUsers from "../components/AccessingUsers";
-import DetailChildRowCreateForm from "../components/DetailChildRowCreateForm";
+import InputWidthAdjust from "./components/InputWidthAdjust";
+import ShareButton from "./components/ShareButton";
+import DetailMainRow from "./components/DetailMainRow";
+import AccessingUsers from "./components/AccessingUsers";
+import DetailChildRowCreateForm from "./components/DetailChildRowCreateForm";
 
 import {
   useQueryDetailTimeSheetParent,

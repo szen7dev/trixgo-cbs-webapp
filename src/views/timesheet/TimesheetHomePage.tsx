@@ -7,9 +7,9 @@ import VerifyIcon from "assets/images/icons8-verified-check-circle-for-approved-
 import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import SearchInput from "components/common/SearchInput";
 
-import ActionGroupButton from "../components/ActionGroupButton";
-import FilterButton from "../components/FilterButton";
-import CreateOrEditDialog from "../components/CreateOrEditDialog";
+import ActionGroupButton from "./components/ActionGroupButton";
+import FilterButton from "./components/FilterButton";
+import CreateOrEditDialog from "./components/CreateOrEditDialog";
 
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";

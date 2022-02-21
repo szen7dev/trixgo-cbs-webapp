@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router-dom";
 
-import TabsList from "views/pages/document/components/common/TabsList";
+import TabsList from "views/document/components/common/TabsList";
 
 import '../document.css';
 
