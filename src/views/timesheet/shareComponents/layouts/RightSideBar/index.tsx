@@ -12,7 +12,7 @@ import iconPlus from "assets/images/icons8-plus-math-24.png";
 
 import AddNewTaskDialog from "components/common/add-new-task-dialog";
 import { PersonalNotePage } from "./components";
-import ChatsOnRightSideBar from "shareComponents/common/MiniChat/ChatsOnRightSideBar";
+import {ChatsOnRightSideBar} from "shareComponents/common/MiniChat";
 
 import { useModal } from "services/hooks/useModal";
 
