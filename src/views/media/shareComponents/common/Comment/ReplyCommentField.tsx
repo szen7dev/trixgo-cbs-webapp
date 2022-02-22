@@ -6,10 +6,9 @@ import { toArray } from 'lodash';
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import PostImage from 'views/media/shareComponents/common';
-import PostFile from './post/PostFile';
+import { PostImage, PostFile } from 'views/media/shareComponents/common';
 
-import CommentContext from '../context/comment/comment.context';
+import CommentContext from 'views/media/contexts/comment/comment.context';
 import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
 import { useCommentSocial } from 'services/hooks/useSocial';

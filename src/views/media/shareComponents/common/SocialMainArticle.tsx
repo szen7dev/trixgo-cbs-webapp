@@ -16,6 +16,7 @@ type Props = {
 
 export const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 	if (!media) return null;
+
 	return (
 		<div {...props}>
 			<div className="w-full max-h-80 md:max-h-[384px]">

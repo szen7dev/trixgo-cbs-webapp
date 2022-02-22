@@ -2,12 +2,11 @@ import { FC, HTMLAttributes, useContext } from 'react';
 
 import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
-import ReplyCommentField from './ReplyCommentField';
-import RootCommentsList from './RootCommentsList';
-import { ContextModalPost } from '../../../context/post';
-// import CommentContext from '../../context/comment/comment.context';
 
-const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {
+import { RootCommentsList, ReplyCommentField } from 'views/media/shareComponents/common';
+import { ContextModalPost } from 'views/media/contexts/post';
+
+export const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	// const [reply, setReply] = useState<boolean>(false);
 	// const { state } = useContext(CommentContext);
@@ -71,5 +70,3 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = (
 		</div>
 	)
 }
-
-export default SideComments;
