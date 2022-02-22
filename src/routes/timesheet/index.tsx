@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
 import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { ProtectedRoute } from "routes/components";
 
 /*=====PAGES=====*/
 import TimesheetHomePage from 'views/timesheet/TimesheetHomePage';

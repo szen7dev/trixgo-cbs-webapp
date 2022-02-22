@@ -3,7 +3,7 @@ import cn from "classnames";
 
 import { BiddingLeftSideBar } from "./components";
 import HomeRightSideBar from "shareComponents/layouts/HomeRightSideBar";
-import MainHeader from "shareComponents/common/Header/MainHeader";
+import { MainHeader } from "shareComponents/common/Header";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";

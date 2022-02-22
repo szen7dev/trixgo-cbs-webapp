@@ -1,4 +1,6 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
+import { Link } from "react-router-dom";
 
 const ErrorPage: FC = () => {
   return (
@@ -24,12 +26,13 @@ const ErrorPage: FC = () => {
             The page you are looking for might have been removed had its name
             changed or is temporarily unavailable.
           </p>
-          <a
-            href="/"
+          <Link
+            to={`/`}
             className="mt-6 bg-secondary hover:bg-primary text-primary-light font-light py-4 px-6 rounded-full inline-block uppercase shadow-md"
           >
             Back To Homepage
-          </a>
+          </Link>
+
         </div>
       </section>
     </div>

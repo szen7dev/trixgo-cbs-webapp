@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { SearchFormDialog } from "../../../shareComponents/common/DialogForm";
 import NotificationsMenu from "../../../shareComponents/common/NotificationMenu";
-import AppsMenu from "./AppMenu";
+import { AppsMenu } from "./components";
 import UserMenu from "./UserMenu";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
@@ -21,13 +21,13 @@ const MainHeader: FC = () => {
   const socketRef: any = useSocket();
 
   useEffect(() => {
-		const socket = socketRef.current;
+    const socket = socketRef.current;
     if (!socket) return;
 
-		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
+    socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
       refetchListNotification();
-		});
-	}, []);
+    });
+  }, []);
 
   return (
     <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
@@ -45,21 +45,21 @@ const MainHeader: FC = () => {
             </div>
 
             <div className="t-header-menu flex items-center flex-wrap">
-            <Link to={`/`} className="font-bold ml-3 mr-3">
-              Home
-						</Link>
-            <Link to={`/messages`} className="font-bold ml-3 mr-3">
-              Nhắn tin
-						</Link>
-            <Link to={`/social/home`} className="font-bold ml-3 mr-3">
-              Truyền thông
-						</Link>
-            <Link to={`/bidding/home`} className="font-bold ml-3 mr-3">
-              Đấu thầu
-						</Link>
-            <Link to={`/cmcs/home`} className="font-bold ml-3 mr-3">
-              Hợp đồng
-						</Link>
+              <Link to={`/`} className="font-bold ml-3 mr-3">
+                Home
+              </Link>
+              <Link to={`/messages`} className="font-bold ml-3 mr-3">
+                Nhắn tin
+              </Link>
+              <Link to={`/social/home`} className="font-bold ml-3 mr-3">
+                Truyền thông
+              </Link>
+              <Link to={`/bidding/home`} className="font-bold ml-3 mr-3">
+                Đấu thầu
+              </Link>
+              <Link to={`/cmcs/home`} className="font-bold ml-3 mr-3">
+                Hợp đồng
+              </Link>
               {/* <a className="font-bold ml-5 mr-5 active" href="/">Home</a> */}
               {/* <a className="font-bold ml-5 mr-5" href="/">Công việc</a>
               <a className="font-bold ml-5 mr-5" href="/">Nhân sự</a>

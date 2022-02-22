@@ -3,18 +3,18 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import PersonalLayout from "views/layouts/PersonalLayout";
+import { PersonalLayout } from "views/personal/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
-import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
-import PersonalBillPage from "views/pages/personal/bill/PersonalBillPage";
-import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
-import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
-import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
-import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
-import ConfigListDetail from "views/pages/personal/config/components/ConfigListDetail"; // ??? Khai báo ko thấy dùng
-import ErrorPage from "views/pages/authentication/Error";
+import PersonalNotificationPage from "views/personal/pages/PersonalNotificationPage";
+import PersonalNotePage from "views/personal/pages/PersonalNotePage";
+import PersonalBillPage from "views/personal/pages/PersonalBillPage";
+import PersonalHomePage from "views/personal/pages/PersonalHomePage";
+import PersonalConfigPage from "views/personal/pages/PersonalConfigPage";
+import PersonalFriendPage from "views/personal/pages/PersonalFriendPage";
+import PersonalHistoryPage from "views/personal/pages/PersonalHistoryPage";
+// import ConfigListDetail from "views/personal/ConfigListDetail";
+import ErrorPage from "views/authentication/Error";
 
 const PersonalRouter: FC = () => {
     return (
