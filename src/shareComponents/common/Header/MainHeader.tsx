@@ -12,7 +12,7 @@ import { useSocket } from "services/hooks/useSocket";
 import { useNotification } from 'services/hooks/useNotification';
 import { useAuth } from "services/hooks/useAuth";
 
-const MainHeader: FC = () => {
+export const MainHeader: FC = () => {
     const { user } = useAuth();
     const { openModal } = useModal();
     const { listNotifications, refetchListNotification } = useNotification();
@@ -98,5 +98,3 @@ const MainHeader: FC = () => {
         </header>
     );
 };
-
-export default MainHeader;

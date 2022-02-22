@@ -1,8 +1,12 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
-import ProtectedRoute from "components/common/ProtectedRoute";
+/*=====LAYOUTS=====*/
 import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
+import ProtectedRoute from "components/common/ProtectedRoute";
+
+/*=====PAGES=====*/
 import TimesheetHomePage from 'views/timesheet/TimesheetHomePage';
 import TimesheetDetailPage from 'views/timesheet/TimesheetDetailPage';
 

@@ -6,7 +6,7 @@ type Props = {
   className?: string;
 };
 
-const Spinner: FC<Props> = ({ className }) => {
+export const Spinner: FC<Props> = ({ className }) => {
   return (
     <div
       className={cn(
@@ -18,5 +18,3 @@ const Spinner: FC<Props> = ({ className }) => {
     />
   );
 };
-
-export default Spinner;
