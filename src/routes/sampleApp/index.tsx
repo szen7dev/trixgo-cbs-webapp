@@ -10,9 +10,7 @@ const SampleAppRouter: FC = () => {
         <>
             <Route exact path="/">
                 <ProtectedRoute
-                    exact
-                    path="/sample-app/page1"
-                    component={SampleAppPage1}
+                    exact path="/sample-app/page1" component={SampleAppPage1}
                 />
             </Route>
         </>
