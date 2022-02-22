@@ -19,7 +19,7 @@ type ButtonProps = {
     types?: ("download" | "share" | "copy" | "email" | "edit" | "trash" | "print")[];
 }
 
-const GroupActions: FC<HTMLAttributes<HTMLDivElement> & ButtonProps> = (props) => {
+export const GroupActions: FC<HTMLAttributes<HTMLDivElement> & ButtonProps> = (props) => {
     const { onClickDownload, onClickShare, onClickCopy, onClickSendEmail, onClickPencil, onClickTrash, onClickPrint, types, ...rest } = props;
     return (
         <div {...rest}>
@@ -47,5 +47,3 @@ const GroupActions: FC<HTMLAttributes<HTMLDivElement> & ButtonProps> = (props) =
         </div>
     )
 }
-
-export default GroupActions;
