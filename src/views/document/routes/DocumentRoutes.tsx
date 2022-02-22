@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import DocumentLayout from '../sharedComponents/layouts/DocumentLayout';
 import ErrorPage from 'views/authentication/Error'
 
-import DocumentDashboardPage from 'views/document/DocumentDashboardPage';
+import DocumentDashboardPage from 'views/document/pages/DocumentDashboardPage';
 import DocumentHomePage from 'views/document/DocumentHomePage';
 
 const DocumentRoutes: FC = () => {

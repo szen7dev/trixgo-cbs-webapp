@@ -13,10 +13,10 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import cn from "classnames";
 
-import StatisticalChart from "views/document/DocumentDashboardPage/components/StatisticalChart";
+import StatisticalChart from "views/document/pages/DocumentDashboardPage/components/StatisticalChart";
 
 import iconComment from "assets/images/icon-chat-project.png";
-import SliderOver from "views/document/DocumentDashboardPage/components/SliderOver";
+import SliderOver from "views/document/pages/DocumentDashboardPage/components/SliderOver";
 
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { DATE_FORMAT } from "apis/localdb";

@@ -6,7 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import { DocumentLayout } from "views/document/sharedComponents/layouts";
 
 /*=====PAGES=====*/
-import DocumentDashboardPage from 'views/document/DocumentDashboardPage';
+import DocumentDashboardPage from 'views/document/pages/DocumentDashboardPage';
 import DocumentHomePage from 'views/document/DocumentHomePage';
 import ErrorPage from 'views/authentication/Error';
 
