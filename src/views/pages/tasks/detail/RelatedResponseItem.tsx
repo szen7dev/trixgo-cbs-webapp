@@ -21,7 +21,6 @@ type Props = {
 	expanded?: boolean;
 	isHighlight?: boolean;
 	response: ResponseProps,
-
 	onClickImage?: (images: ImageProps[], index: number) => void;
 	divRef?: LegacyRef<HTMLDivElement> | undefined
 };
@@ -54,7 +53,6 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
 		toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
 	}, 1000)
 
-	// hover:scale-125
 	return (
 		<>
 			<div className={
@@ -64,11 +62,11 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
 						: 'animate-[wiggle_1s_ease-in-out_infinite]'
 				)
 			} ref={divRef}>
-				<img src={response.userCreate.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
+				<img src={response.userCreate?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
 						<div>
-							<p className="text-[14px]">{response.userCreate.bizfullname}</p>
+							<p className="text-[14px]">{response.userCreate?.bizfullname}</p>
 							{expanded && (
 								<p className="text-[13px] text-primary-gray pb-5">
 									{response.userCreate?.position?.name}
@@ -92,14 +90,14 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
 						<span className="text-[13px]">
-							{response.comment.content}
+							{response.comment?.content}
 						</span>
 					</div>
 
 					{/* File */}
 					{expanded && (
 						<div>
-							{(response.comment.files && response.comment.files.length) ? response.comment.files.map(file => (
+							{(response.comment?.files && response.comment?.files.length) ? response.comment?.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
 										<a href="/">
@@ -156,11 +154,11 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
 							)) : ''}
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
-								{(response.comment.images && response.comment.images.length) ? response.comment.images.map((file, index) => {
+								{(response.comment?.images && response.comment?.images.length) ? response.comment?.images.map((file, index) => {
 
 									if (index < 2) {
 										return (
-											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.comment.images || [], index)}>
+											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.comment?.images || [], index)}>
 												<img src={file.path ? `${process.env.REACT_APP_URL_S3}/${file.path}` : file.url} className="w-full" alt="test" />
 											</button>
 										)
@@ -175,7 +173,7 @@ const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRe
 													alt="test"
 												/>
 												<div className="relative z-6">
-													<p className="text-4x-large text-white">+{response.comment.images && response.comment.images.length - 3}</p>
+													<p className="text-4x-large text-white">+{response.comment?.images && response.comment?.images.length - 3}</p>
 												</div>
 											</div>
 										)
