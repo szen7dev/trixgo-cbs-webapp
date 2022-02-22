@@ -18,8 +18,8 @@ import ErrorPage from "views/authentication/Error";
 
 /*=====CONFIG ROUTE=====*/
 import SampleAppRouter from "./sampleApp";
-import AuthenticationRouter from "./authentication";
 import AccountingRouter from "./accounting";
+import AuthenticationRouter from "./authentication";
 import BiddingRouter from "./bidding";
 import CmcsRouter from "./cmcs";
 import DatahubRouter from "./datahub";
@@ -59,6 +59,8 @@ const Routes: FC = () => {
                                         <AuthenticationRouter />
                                         <BiddingRouter />
                                         <CmcsRouter />
+
+                                        {/* // Fix tới đây rồi.. */}
                                         <DatahubRouter />
                                         <DocumentRouter />
                                         <FinancialRouter />

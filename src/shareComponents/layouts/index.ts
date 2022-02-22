@@ -22,3 +22,4 @@ export * from './ReeLayout';
 export * from './SupportLayout';
 export * from './TaskDashboardNavigation';
 export * from './TimesheetLayout';
+export * from './HomeRightSideBar';

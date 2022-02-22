@@ -1,14 +1,12 @@
 /*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
-/*=====LAYOUTS=====*/
-/*=====PAGES=====*/
+import { Route, Redirect } from "react-router-dom";
 
 const HomeRouter: FC = () => {
     return (
-        <>
-            
-        </>
+        <Route exact path="/">
+            <Redirect to="/pcm/home" />
+        </Route>
     )
 };
 

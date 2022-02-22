@@ -3,25 +3,24 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import CmcsLayout from "views/layouts/CmcsLayout";
-import CmcsContractLayout from "views/layouts/CmcsContractLayout";
+import { CmcsLayout, CmcsContractLayout } from "views/cmcs/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import CmcHomePage from "views/pages/cmcs/CmcHomePage";
-import CmcDashboardPage from "views/pages/cmcs/CmcDashboardPage";
-import CmcPortfolioPage from "views/pages/cmcs/CmcPortfolioPage";
-import CmcIncomePage from "views/pages/cmcs/CmcIncomePage";
-import CmcExpensePage from "views/pages/cmcs/CmcExpensePage";
-import CmcGuaranteePage from "views/pages/cmcs/CmcGuaranteePage";
-import ContractAdminPage from "views/pages/cmcs/components/views/contract/ContractAdminPage";
-import ContractHome from "views/pages/cmcs/components/views/contract/ContractHome";
-import ContractDashBoard from "views/pages/cmcs/components/views/contract/ContractDashBoard";
-import ContractEditor from "views/pages/cmcs/components/views/contract/ContractEditor";
-import ContractBill from "views/pages/cmcs/components/views/contract/ContractBill";
-import ContractBudget from "views/pages/cmcs/components/views/contract/ContractBudget";
-import ContractProduce from "views/pages/cmcs/components/views/contract/ContractProduce";
-import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc";
-import ContractProduct from "views/pages/cmcs/components/views/contract/ContractProduct";
+import CmcHomePage from "views/cmcs/CmcHomePage";
+import CmcDashboardPage from "views/cmcs/CmcDashboardPage";
+import CmcPortfolioPage from "views/cmcs/CmcPortfolioPage";
+import CmcIncomePage from "views/cmcs/CmcIncomePage";
+import CmcExpensePage from "views/cmcs/CmcExpensePage";
+import CmcGuaranteePage from "views/cmcs/CmcGuaranteePage";
+import ContractAdminPage from "views/cmcs/components/views/contract/ContractAdminPage";
+import ContractHome from "views/cmcs/components/views/contract/ContractHome";
+import ContractDashBoard from "views/cmcs/components/views/contract/ContractDashBoard";
+import ContractEditor from "views/cmcs/components/views/contract/ContractEditor";
+import ContractBill from "views/cmcs/components/views/contract/ContractBill";
+import ContractBudget from "views/cmcs/components/views/contract/ContractBudget";
+import ContractProduce from "views/cmcs/components/views/contract/ContractProduce";
+import ContractIpc from "views/cmcs/components/views/contract/ContractIpc";
+import ContractProduct from "views/cmcs/components/views/contract/ContractProduct";
 
 const CmcsRouter: FC = () => {
     return (

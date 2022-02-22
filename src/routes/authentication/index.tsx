@@ -3,13 +3,13 @@ import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import FullPageLayout from "views/layouts/FullPage";
+import { FullPageLayout } from "shareComponents/layouts/FullPage";
 
 /*=====PAGES=====*/
-import SignInPage from "views/pages/authentication/SignIn";
-import RegisterPage from "views/pages/authentication/Register";
-import ResetPasswordPage from "views/pages/authentication/ResetPassword";
-import ErrorPage from "views/pages/authentication/Error";
+import SignInPage from "views/authentication/SignIn";
+import RegisterPage from "views/authentication/Register";
+import ResetPasswordPage from "views/authentication/ResetPassword";
+import ErrorPage from "views/authentication/Error";
 
 const AuthenticationRouter: FC = () => {
     return (

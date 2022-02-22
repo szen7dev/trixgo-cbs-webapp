@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
 import ProtectedRoute from "components/common/ProtectedRoute";
-import AccountingLayout from "views/layouts/AccountingLayout";
+import { AccountingLayout } from "views/accounting/shareComponents/layouts";
 
 /*=====PAGES=====*/
 import AccountingDashboardPage from "views/accounting/AccountingDashboardPage";
