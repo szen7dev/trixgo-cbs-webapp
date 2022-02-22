@@ -1,1 +1,1 @@
-export * from './Layout1';
+export * from './HumanLayout';

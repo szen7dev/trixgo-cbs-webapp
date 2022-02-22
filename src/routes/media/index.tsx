@@ -3,15 +3,18 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import HomeLayout from "views/layouts/HomeLayout";
-import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
+import { HomeLayout } from "shareComponents/layouts/HomeLayout";
+import { SocialLayoutPrimary } from "views/media/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import SocialHomePage from "views/pages/media/screens/HomePage";
-import SocialPostPage from "views/pages/media/screens/PostPage";
-import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
-import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
-import ErrorPage from "views/pages/authentication/Error";
+import { 
+    MediaCategoryPage,
+    MediaCommentsPage,
+    MediaHomePage,
+    MediaDetailPage
+} from "views/media/pages";
+
+import ErrorPage from "views/authentication/Error";
 
 const MediaRouter: FC = () => {
     return (
@@ -24,7 +27,7 @@ const MediaRouter: FC = () => {
                             path="/media/home"
                             component={() =>
                                 <SocialLayoutPrimary>
-                                    <SocialHomePage />
+                                    <MediaHomePage />
                                 </SocialLayoutPrimary>
                             }
                         />
@@ -33,7 +36,7 @@ const MediaRouter: FC = () => {
                             path="/media/home/2"
                             component={() =>
                                 <SocialLayoutPrimary>
-                                    <SocialCategoryPage type="department" />
+                                    <MediaCategoryPage type="department" />
                                 </SocialLayoutPrimary>
                             }
                         />
@@ -42,7 +45,7 @@ const MediaRouter: FC = () => {
                             path="/media/home/3"
                             component={() =>
                                 <SocialLayoutPrimary>
-                                    <SocialCategoryPage type="digital-conversion" />
+                                    <MediaCategoryPage type="digital-conversion" />
                                 </SocialLayoutPrimary>
                             }
                         />
@@ -51,7 +54,7 @@ const MediaRouter: FC = () => {
                             path="/media/home/4"
                             component={() =>
                                 <SocialLayoutPrimary>
-                                    <SocialCategoryPage type="system" />
+                                    <MediaCategoryPage type="system" />
                                 </SocialLayoutPrimary>
                             }
                         />
@@ -60,19 +63,19 @@ const MediaRouter: FC = () => {
                             path="/media/home/5"
                             component={() =>
                                 <SocialLayoutPrimary>
-                                    <SocialCategoryPage type="just-me" />
+                                    <MediaCategoryPage type="just-me" />
                                 </SocialLayoutPrimary>
                             }
                         />
                         <Route
                             exact
                             path="/media/post/:mediaID"
-                            component={SocialPostPage}
+                            component={MediaDetailPage}
                         />
                         <Route
                             exact
                             path="/media/comments"
-                            component={SocialCommentsPage}
+                            component={MediaCommentsPage}
                         />
                         <Route path="/media/*" component={ErrorPage} />
                     </Switch>
