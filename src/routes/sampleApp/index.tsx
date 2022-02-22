@@ -7,13 +7,13 @@ import SampleAppPage1 from 'views/sampleApp/page1';
 
 const SampleAppRouter: FC = () => {
     return (
-        <Route exact path="/">
-            <ProtectedRoute
-                exact
-                path="/sample-app/page1"
-                component={SampleAppPage1}
-            />
-        </Route>
+        <>
+            <Route exact path="/">
+                <ProtectedRoute
+                    exact path="/sample-app/page1" component={SampleAppPage1}
+                />
+            </Route>
+        </>
     )
 };
 
