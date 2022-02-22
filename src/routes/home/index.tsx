@@ -1,14 +1,10 @@
 /*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-
 /*=====LAYOUTS=====*/
-
-
 /*=====PAGES=====*/
 
-
-const AuthenticationRouter: FC = () => {
+const HomeRouter: FC = () => {
     return (
         <>
             
@@ -16,4 +12,4 @@ const AuthenticationRouter: FC = () => {
     )
 };
 
-export default AuthenticationRouter;
+export default HomeRouter;

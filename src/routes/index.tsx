@@ -7,37 +7,38 @@ import AuthProvider from "services/providers/Auth";
 import ThemeProvider from "services/providers/Theme";
 import ModalProvider from "services/providers/Modal";
 import ChatProvider from "services/providers/Chat";
+import DeleteConfirmProvider from "services/providers/DeleteConfirm";
+import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts/FullPage";
 
 /*=====PAGES=====*/
 import ErrorPage from "views/authentication/Error";
-import DeleteConfirmProvider from "services/providers/DeleteConfirm";
-import RightClickMenuProvider from "services/providers/RightClickMenu";
 
-/*=====NEW ROUTE=====*/
+/*=====CONFIG ROUTE=====*/
 import SampleAppRouter from "./sampleApp";
 import AuthenticationRouter from "./authentication";
-import MessagesRouter from "./messages";
-import PersonalRouter from "./personal";
-import PcmRouter from "./pcm";
-import MediaRouter from "./media";
-import DocumentRouter from "./document";
-import HumanRouter from "./human";
-import TimesheetRouter from "./timesheet";
-import CmcsRouter from "./cmcs";
 import AccountingRouter from "./accounting";
-import FinancialRouter from "./financial";
 import BiddingRouter from "./bidding";
-import SupportRouter from "./support";
+import CmcsRouter from "./cmcs";
 import DatahubRouter from "./datahub";
-import WorkshopRouter from "./workshop";
-import OperationRouter from "./operation";
-import ReeRouter from "./ree";
+import DocumentRouter from "./document";
+import FinancialRouter from "./financial";
+import HomeRouter from './home';
+import HumanRouter from "./human";
 import MarketRouter from "./market";
-import QrcodeRouter from "./qrcode";
+import MediaRouter from "./media";
+import MessagesRouter from "./messages";
+import OperationRouter from "./operation";
 import OwnerRouter from './owner';
+import PcmRouter from "./pcm";
+import PersonalRouter from "./personal";
+import QrcodeRouter from "./qrcode";
+import ReeRouter from "./ree";
+import SupportRouter from "./support";
+import TimesheetRouter from "./timesheet";
+import WorkshopRouter from "./workshop";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -46,7 +47,7 @@ const Routes: FC = () => {
 
     return (
         <Router>
-            <AuthProvider>      {/* Xem lại chỗ này */}
+            <AuthProvider>
                 <ThemeProvider>
                     <RightClickMenuProvider>
                         <DeleteConfirmProvider>
@@ -54,26 +55,27 @@ const Routes: FC = () => {
                                 <ModalProvider>
                                     <Switch>
                                         <SampleAppRouter />
-                                        <AuthenticationRouter />
-                                        <MessagesRouter />
-                                        <PersonalRouter />
-                                        {/* <PcmRouter /> */}
-                                        <MediaRouter />
-                                        <DocumentRouter />
-                                        <HumanRouter />
-                                        <TimesheetRouter />
-                                        <CmcsRouter />
                                         <AccountingRouter />
-                                        <FinancialRouter />
+                                        <AuthenticationRouter />
                                         <BiddingRouter />
-                                        <SupportRouter />
+                                        <CmcsRouter />
                                         <DatahubRouter />
-                                        <WorkshopRouter />
-                                        <OperationRouter />
-                                        <ReeRouter />
+                                        <DocumentRouter />
+                                        <FinancialRouter />
+                                        <HomeRouter />
+                                        <HumanRouter />
                                         <MarketRouter />
-                                        <QrcodeRouter />
+                                        <MediaRouter />
+                                        <MessagesRouter />
+                                        <OperationRouter />
                                         <OwnerRouter />
+                                        <PcmRouter />
+                                        <PersonalRouter />
+                                        <QrcodeRouter />
+                                        <ReeRouter />
+                                        <SupportRouter />
+                                        <TimesheetRouter />
+                                        <WorkshopRouter />
                                         <Route path="*">
                                             <FullPageLayout>
                                                 <Route path="/*" component={ErrorPage} />

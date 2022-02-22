@@ -361,6 +361,21 @@ const PCMRouter: FC = () => {
                     <Route path="/pcm/home/*" component={ErrorPage} />
                 </Switch>
             </Route>
+
+            <Route path="/ppt/project/:id/document" component={PPTRoutes} />
+
+            <Route path="/kanban-board">
+                <KanbanBoardLayout>
+                    <Switch>
+                        <ProtectedRoute
+                            exact
+                            path="/kanban-board"
+                            component={KanbanBoardPage}
+                        />
+                        <Route path="/kanban-board/*" component={ErrorPage} />
+                    </Switch>
+                </KanbanBoardLayout>
+            </Route>
         </>
     )
 };
