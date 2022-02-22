@@ -1,1 +1,2 @@
-export * from './Layout1';
+export * from './LayoutPrimary';
+export * from './SocialLayoutPrimary';

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import SearchIcon from "../../assets/images/icons8-search-120.png";
+import SearchIcon from "assets/images/icons8-search-120.png";
 
 type Props = {
     classNameWrapper?: string;

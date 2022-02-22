@@ -6,7 +6,7 @@ import ReplyCommentField from './ReplyCommentField';
 
 import { CommentProps } from 'typings/common';
 import { FileProps } from 'typings/social';
-import SocialRepository from "apis/social";
+import SocialRepository from "apis/media";
 import CommentContext from '../context/comment/comment.context';
 import { ContextModalPost } from '../context/post';
 
