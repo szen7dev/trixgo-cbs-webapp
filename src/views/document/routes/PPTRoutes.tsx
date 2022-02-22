@@ -2,25 +2,24 @@ import { FC } from 'react'
 import { Route, Switch, RouteComponentProps } from 'react-router-dom'
 
 // Context
-import { Provider } from '../contexts/contextModal'
+import { ModalProvider } from "../contexts/modal";
 
-import DocumentLayout from 'views/layouts/DocumentLayout'
+import ModalCreateDocument from '../sharedComponents/common/ModalCreateDocument'
+import PPTLayout from '../sharedComponents/layouts/PPTLayout'
+import DocumentLayout from '../sharedComponents/layouts/DocumentLayout';
 
-import DocumentDetailPage from 'views/pages/document/screens/DocumentDetailPage'
-import ModalCreateDocument from '../components/common/ModalCreateDocument'
-import PPTLayout from '../layouts/PPTLayout'
-
-import DocumentFolderPage from "views/pages/document/screens/DocumentFolderPage";
-import DocumentHistoryPage from "views/pages/document/screens/DocumentHistoryPage";
-import DocumentProfilePage from "views/pages/document/screens/DocumentProfilePage";
-import DocumentProjectPage from "views/pages/document/screens/DocumentProjectPage";
-import DocumentReportPage from "views/pages/document/screens/DocumentReportPage";
+import DocumentDetailPage from '../DocumentDetailPage'
+import DocumentFolderPage from "../DocumentFolderPage";
+import DocumentHistoryPage from "../DocumentHistoryPage";
+import DocumentProfilePage from "../DocumentProfilePage";
+import DocumentProjectPage from "../DocumentProjectPage";
+import DocumentReportPage from "../DocumentReportPage";
 
 const PPTRoutes: FC<RouteComponentProps> = (props) => {
 	return (
 		<>
 			<DocumentLayout>
-				<Provider>
+				<ModalProvider>
 					<Switch>
 						<Route exact path={'/ppt/project/:id/document'}>
 							<PPTLayout {...props}>
@@ -50,7 +49,7 @@ const PPTRoutes: FC<RouteComponentProps> = (props) => {
 						<Route path='/ppt/project/:id/document/:docID' component={DocumentDetailPage} />
 					</Switch>
 					<ModalCreateDocument />
-				</Provider>
+				</ModalProvider>
 			</DocumentLayout>
 		</>
 	)

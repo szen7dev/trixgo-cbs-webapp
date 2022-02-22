@@ -1,5 +1,5 @@
+/*=====LIBRARY=====*/
 import { ReactNode, FC } from "react";
-
 import cn from "classnames";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   isAuthentication?: boolean;
 };
 
-export const FullPage: FC<Props> = ({ children, isAuthentication = false }) => {
+export const FullPageLayout: FC<Props> = ({ children, isAuthentication = false }) => {
   return (
     <div
       className={cn(
@@ -21,4 +21,3 @@ export const FullPage: FC<Props> = ({ children, isAuthentication = false }) => {
     </div>
   );
 };
-

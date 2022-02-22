@@ -1,9 +1,4 @@
 import React, { FC, useRef } from "react";
-import DatePicker from "react-datepicker";
-import debounce from "lodash/debounce";
-import moment from "moment";
-
-import DropdownSearchable from "components/common/DropdownSearch";
 
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 
@@ -82,8 +77,10 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
         <input
           // contentEditable={"true"}
           // suppressContentEditableWarning={true}
-          placeholder='Nhập nội dung...'
-          className={"w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"}
+          placeholder="Nhập nội dung..."
+          className={
+            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
+          }
           onBlur={async (e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.value;
             const isCreated = await handleClickUpdateTimeSheet({
@@ -99,27 +96,13 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
         className={
           "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
-      >
-        {/* <DatePicker
-          className="w-16"
-          selected={null}
-          placeholderText="Chọn thời gian"
-          onChange={(date: Date | null) => {
-            if (moment(date).isValid())
-              handleClickUpdateTimeSheet({
-                date: moment(date).toJSON(),
-              });
-          }}
-        /> */}
-      </div>
+      ></div>
       <div
         className={
           "table-cell relative box-border border border-gray-300 text-end bg-white"
         }
       >
-        <p className={"w-full h-full focus:outline-blue-600 p-2"}>
-          {/* <input type="checkbox" className="form-check-input cursor-pointer" /> */}
-        </p>
+        <p className={"w-full h-full focus:outline-blue-600 p-2"}></p>
       </div>
       <div
         className={
@@ -132,12 +115,6 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     hours: `${value}`,
-          //   });
-          // }}
         />
       </div>
       <div
@@ -151,12 +128,6 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     unitprice: `${value}`,
-          //   });
-          // }}
         />
       </div>
       <div
@@ -170,44 +141,13 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
           className={
             "w-full h-full focus:outline-blue-600 p-2 flex justify-end"
           }
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     amount: `${value}`,
-          //   });
-          // }}
         />
       </div>
       <div
         className={
           "p-2 table-cell relative box-border border border-gray-300 bg-white"
         }
-      >
-        {/* <DropdownSearchable
-          id="ticket-creator"
-          className={"w-full flex-1 py-1 px-3"}
-          bordered
-          isMultiple={false}
-          allowClearValueSingleInput
-          showTriangle
-          placeholder="Người thực hiện"
-          renderSelectedItem={(item) => <span>{item.text}</span>}
-          data={listFriend}
-          formatItem={{
-            id: "_id",
-            text: "fullname",
-          }}
-          onSearchInputChange={debounce(
-            (value) => setSearchAssigneeStr(value),
-            500
-          )}
-          onchangeValue={(value) =>
-            handleClickUpdateTimeSheet({
-              assigneeID: value,
-            })
-          }
-        /> */}
-      </div>
+      />
       <div
         className={
           "table-cell relative box-border border border-gray-300 bg-white"
@@ -217,12 +157,6 @@ const DetailChildRowCreateForm: FC<DetailChildRowCreateFormProps> = ({
           // contentEditable={"true"}
           suppressContentEditableWarning={true}
           className={"w-full h-full focus:outline-blue-600 p-2"}
-          // onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-          //   const value = e.target.innerText;
-          //   handleClickUpdateTimeSheet({
-          //     note: value,
-          //   });
-          // }}
         />
       </div>
     </div>

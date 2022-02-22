@@ -1,52 +1,48 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-
-import ProtectedRoute from "components/common/ProtectedRoute";
 import { RouteComponentProps } from 'react-router';
+import ProtectedRoute from "components/common/ProtectedRoute";
 
 /*=====LAYOUTS=====*/
-import HomeLayout from "views/layouts/HomeLayout";
+import { HomeLayout } from "shareComponents/layouts/HomeLayout"; //ok
 
-// Dashboard pages
-import DashboardPage from "views/pages/dashboard";
-
-// Project pages (Project and Construction Management)
-import ProjectAppAdminPage from "views/pages/ppt/permission/ProjectAppAdminPage";
-import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
-import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
-import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
-import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
-import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
-import ProjectSchedulePage from "views/pages/ppt/ProjectSchedulePage";
-import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
-import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
-import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
-import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
-import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
-import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
-import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
-import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
-import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
-import ProjectProductionPage from "views/pages/ppt/ProjectProductionPage";
-import ProjectOtherPage from "views/pages/ppt/ProjectOtherPage";
-// import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
-import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
-import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
-import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
-import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
-import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
-import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
-import ProjectDrawingRoutes from "views/pages/ppt/routes/ProjectDrawingRoutes";
-import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes";
-import ProjectDashboardRoutes from "views/pages/ppt/routes/ProjectDashboardRoutes";
-import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRoutes2";
-import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
-
-// Tasks pages
-import TasksHomePage from "views/pages/tasks/messageHome";
-import TaskDetailPage from "views/pages/tasks/detail";
-import ProjectLayout from "views/layouts/ProjectLayout";
-import ErrorPage from "views/pages/authentication/Error";
+/*=====PAGES=====*/
+import DashboardPage from "views/pcm/dashboard";//ok
+import ProjectAppAdminPage from "views/pcm/admin/ProjectAppAdminPage";//ok
+import ProjectCategoryPage from "views/pcm/ProjectCategoryPage";
+import ProjectDeployingPage from "views/pcm/ProjectDeployingPage";
+import ProjectHomePage from "views/pcm/ProjectHomePage";
+import ProjectDashBoardPage from "views/pcm/ProjectDashBoardPage";
+import ProjectFolderPage from "views/pcm/ProjectFolderPage";
+import ProjectSchedulePage from "views/pcm/ProjectSchedulePage";
+import ProjectBudgetPage from "views/pcm/ProjectBudgetPage";
+import ProjectBiddingPage from "views/pcm/ProjectBiddingPage";
+import ProjectPaymentPage from "views/pcm/ProjectPaymentPage";
+import ProjectDocumentPage from "views/pcm/ProjectDocumentPage";
+import ProjectPhotoPage from "views/pcm/ProjectPhotoPage";
+import ProjectRfiPage from "views/pcm/ProjectRfiPage";
+import ProjectRfaPage from "views/pcm/ProjectRfaPage";
+import ProjectInspectionPage from "views/pcm/ProjectInspectionPage";
+import ProjectPunchPage from "views/pcm/ProjectPunchPage";
+import ProjectProductionPage from "views/pcm/ProjectProductionPage";
+import ProjectOtherPage from "views/pcm/ProjectOtherPage";
+// import ProjectResourcePage from "views/pcm/ProjectResourcePage";
+import ProjectMomPage from "views/pcm/ProjectMomPage";
+import ProjectReportPage from "views/pcm/ProjectReportPage";
+import ProjectDirectoryPage from "views/pcm/ProjectDirectoryPage";
+import ProjectAdminPage from "views/pcm/ProjectAdminPage";
+// import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
+import ProjectPhotoPackagePage from "views/pcm/ProjectPhotoPackagePage";
+// import ProjectDrawingRoutes from "views/pcm/routes/ProjectDrawingRoutes";
+// import ProjectResourceRoutes from "views/pcm/routes/ProjectResourceRoutes";
+// import ProjectDashboardRoutes from "views/pcm/routes/ProjectDashboardRoutes";
+// import ProjectDashboardRoutes2 from "views/pcm/routes/ProjectDashboardRoutes2";
+// import AdminDetail from "views/pcm/permission/components/AdminDetail";
+// import TasksHomePage from "views/pages/tasks/home";
+// import TaskDetailPage from "views/pages/tasks/detail";
+// import ProjectLayout from "views/layouts/ProjectLayout";
+// import ErrorPage from "views/pages/authentication/Error";
 
 const PCMRouter: FC = () => {
     return (
@@ -66,7 +62,7 @@ const PCMRouter: FC = () => {
                             </HomeLayout>
                         )}
                     />
-                    <ProtectedRoute
+                    {/* <ProtectedRoute
                         exact
                         path={"/pcm/admin/detail/:id"}
                         component={() => (
@@ -74,10 +70,10 @@ const PCMRouter: FC = () => {
                                 <AdminDetail />
                             </HomeLayout>
                         )}
-                    />
+                    /> */}
                     <ProtectedRoute
                         exact
-                        path={"/pcm/messageHome"}
+                        path={"/pcm/home"}
                         component={() => (
                             <HomeLayout>
                                 <DashboardPage />
@@ -102,8 +98,7 @@ const PCMRouter: FC = () => {
                             </HomeLayout>
                         )}
                     />
-                    <ProtectedRoute
-                        // exact
+                    {/* <ProtectedRoute
                         path={"/pcm/dashboard-portfolio"}
                         component={({ ...props }: RouteComponentProps) => (
                             <HomeLayout>
@@ -112,16 +107,14 @@ const PCMRouter: FC = () => {
                         )}
                     />
                     <ProtectedRoute
-                        // exact
                         path={"/pcm/dashboard-task"}
                         component={({ ...props }: RouteComponentProps) => (
                             <HomeLayout>
                                 <ProjectDashboardRoutes {...props} />
-                                {/* <KanbanBoardPage /> */}
                             </HomeLayout>
                         )}
-                    />
-                    <ProtectedRoute
+                    /> */}
+                    {/* <ProtectedRoute
                         exact
                         path={"/pcm/dashboard-document"}
                         component={() => (
@@ -129,8 +122,8 @@ const PCMRouter: FC = () => {
                                 <DocumentDashboardPage />
                             </HomeLayout>
                         )}
-                    />
-                    <ProtectedRoute
+                    /> */}
+                    {/* <ProtectedRoute
                         exact
                         path={"/pcm/mine"}
                         component={() => (
@@ -168,7 +161,7 @@ const PCMRouter: FC = () => {
                     />
                     <ProtectedRoute
                         exact
-                        path={"/pcm/project/:id/messageHome"}
+                        path={"/pcm/project/:id/home"}
                         component={() => (
                             <ProjectLayout>
                                 <ProjectHomePage />
@@ -211,7 +204,6 @@ const PCMRouter: FC = () => {
                         )}
                     />
                     <ProtectedRoute
-                        // exact
                         path={"/pcm/project/:id/bidding"}
                         component={(props: RouteComponentProps) => (
                             <ProjectLayout>
@@ -229,7 +221,6 @@ const PCMRouter: FC = () => {
                         )}
                     />
                     <ProtectedRoute
-                        // exact
                         path={"/pcm/project/:id/document"}
                         component={(props: RouteComponentProps) => (
                             <ProjectLayout>
@@ -300,7 +291,6 @@ const PCMRouter: FC = () => {
                         )}
                     />
                     <ProtectedRoute
-                        // exact
                         path={"/pcm/project/:id/resource"}
                         component={(props: RouteComponentProps) => (
                             <ProjectLayout>
@@ -361,10 +351,25 @@ const PCMRouter: FC = () => {
                                 <ProjectAdminPage />
                             </ProjectLayout>
                         )}
-                    />
-                    <Route path="/pcm/home/*" component={ErrorPage} />
+                    /> */}
+                    {/* <Route path="/pcm/home/*" component={ErrorPage} /> */}
                 </Switch>
             </Route>
+
+            {/* <Route path="/ppt/project/:id/document" component={PPTRoutes} /> */}
+
+            {/* <Route path="/kanban-board">
+                <KanbanBoardLayout>
+                    <Switch>
+                        <ProtectedRoute
+                            exact
+                            path="/kanban-board"
+                            component={KanbanBoardPage}
+                        />
+                        <Route path="/kanban-board/*" component={ErrorPage} />
+                    </Switch>
+                </KanbanBoardLayout>
+            </Route> */}
         </>
     )
 };

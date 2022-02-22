@@ -20,6 +20,7 @@ function TField<A extends ElementType = 'input'>(props: Props<A>): JSX.Element {
 				{title} {required && "(*)"}
 			</div>
 			<Tag
+				placeholder={title}
 				className="py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md"
 				{...rest}
 			/>
