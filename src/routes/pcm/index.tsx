@@ -1,8 +1,9 @@
 import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { RouteComponentProps } from 'react-router';
 
 import ProtectedRoute from "components/common/ProtectedRoute";
-import { RouteComponentProps } from 'react-router';
+
 
 /*=====LAYOUTS=====*/
 import HomeLayout from "views/layouts/HomeLayout";
