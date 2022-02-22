@@ -6,7 +6,7 @@ import iconGrid from "assets/images/icons8-menu-100.png";
 import iconSearch from "assets/images/icons8-search-50.png";
 import appLogo from "assets/images/trixgo-logo.png";
 
-const AppsMenu: FC = () => {
+export const AppsMenu: FC = () => {
   const handleSearchTextKeyboardEvent = (event: any) => {
     event.stopPropagation();
   };
@@ -200,4 +200,3 @@ const AppsMenu: FC = () => {
   );
 };
 
-export default AppsMenu;

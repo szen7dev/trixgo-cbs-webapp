@@ -6,7 +6,7 @@ type Props = {
   open: boolean;
 };
 
-const EditNote: FC<Props> = ({ open }) => {
+export const EditNote: FC<Props> = ({ open }) => {
   return (
     <main className={`w-[680px] h-full ${styles.filterShadow}`}>
       <header className={`h-9 ${styles.bgBoldYellow}`}>{""}</header>
@@ -23,5 +23,3 @@ const EditNote: FC<Props> = ({ open }) => {
     </main>
   );
 };
-
-export default EditNote;

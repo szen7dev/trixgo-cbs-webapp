@@ -3,17 +3,17 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import SupportLayout from "views/layouts/SupportLayout";
+import { SupportLayout } from "views/support/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import SupportPage from "views/pages/support/components/home";
-import RegisterDashboardPage from "views/pages/support/components/register";
-import SupportCompanyPage from "views/pages/support/SupportCompanyPage";
-import SupportGrantPage from "views/pages/support/SupportGrantPage";
-import SupportMemberPage from "views/pages/support/SupportMemberPage";
-import SupportItemPage from "views/pages/support/SupportItemPage";
-import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
-import ErrorPage from "views/pages/authentication/Error";
+import SupportPage from "views/support/components/home";
+import RegisterDashboardPage from "views/support/components/register";
+import SupportCompanyPage from "views/support/SupportCompanyPage";
+import SupportGrantPage from "views/support/SupportGrantPage";
+import SupportMemberPage from "views/support/SupportMemberPage";
+import SupportItemPage from "views/support/SupportItemPage";
+import DocumentsManagement from "views/support/components/grant/DocumentsManagement";
+import ErrorPage from "views/authentication/Error";
 
 const SupportRouter: FC = () => {
     return (

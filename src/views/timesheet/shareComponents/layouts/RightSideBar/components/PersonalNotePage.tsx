@@ -5,9 +5,9 @@ import DropdownSearchable from "shareComponents/common/DropdownSearch";
 import SearchIcon from "assets/images/icons8-search-120-right.svg";
 
 import styles from "../style.module.css";
-import EditNote from "./EditNote";
+import { EditNote } from "./index";
 
-const PersonalNotePage: FC = () => {
+export const PersonalNotePage: FC = () => {
   const [openNote, setOpenNote] = useState<boolean>(false);
 
   const handleOpenNote = () => setOpenNote(!openNote);
@@ -106,4 +106,3 @@ const PersonalNotePage: FC = () => {
     </main>
   );
 };
-export default PersonalNotePage;

@@ -11,7 +11,7 @@ import icon6 from "assets/images/icons8-calendar-128.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
 
 import AddNewTaskDialog from "components/common/add-new-task-dialog";
-import PersonalNotePage from "views/personal/note/PersonalNotePage";
+import { PersonalNotePage } from "./components";
 import ChatsOnRightSideBar from "shareComponents/common/MiniChat/ChatsOnRightSideBar";
 
 import { useModal } from "services/hooks/useModal";
@@ -140,7 +140,7 @@ const HomeRightSideBar: FC = () => {
           />
         </Link>
       </div>
-      <ChatsOnRightSideBar/>
+      <ChatsOnRightSideBar />
     </div>
   );
 };
