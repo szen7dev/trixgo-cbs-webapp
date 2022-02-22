@@ -1,20 +1,30 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route } from "react-router-dom";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { Route, Switch } from "react-router-dom";
 
-// Dashboard pages
-import SampleAppPage1 from 'views/sampleApp/page1';
+/*=====LAYOUTS=====*/
+import DocumentLayout from '../sharedComponents/layouts/DocumentLayout';
 
-const SampleAppRouter: FC = () => {
+/*=====PAGES=====*/
+import DocumentDashboardPage from 'views/document/DocumentDashboardPage';
+import DocumentHomePage from 'views/document/DocumentHomePage';
+import ErrorPage from 'views/authentication/Error';
+
+
+const DocumentRouter: FC = () => {
     return (
         <>
-            <Route exact path="/">
-                <ProtectedRoute
-                    exact path="/sample-app/page1" component={SampleAppPage1}
-                />
+            <Route path="/document">
+                <DocumentLayout>
+                    <Switch>
+                        <Route exact path="/document/home" component={DocumentHomePage} />
+                        <Route exact path="/document/dashboard" component={DocumentDashboardPage} />
+                        <Route path="/document/*" component={ErrorPage} />
+                    </Switch>
+                </DocumentLayout>
             </Route>
         </>
     )
 };
 
-export default SampleAppRouter;
+export default DocumentRouter;

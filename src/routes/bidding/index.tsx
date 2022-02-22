@@ -1,20 +1,27 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route } from "react-router-dom";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { Route, Switch } from "react-router-dom";
 
-// Dashboard pages
-import SampleAppPage1 from 'views/sampleApp/page1';
+/*=====LAYOUTS=====*/
+import BiddingLayout from "views/layouts/BiddingLayout";
 
-const SampleAppRouter: FC = () => {
+/*=====PAGES=====*/
+import BiddingHomePage from "views/pages/bidding/BiddingHomePage";
+import BiddingOtherPage from "views/pages/bidding/BiddingOtherPage";
+import ErrorPage from "views/pages/authentication/Error";
+
+const BiddingRouter: FC = () => {
     return (
-        <>
-            <Route exact path="/">
-                <ProtectedRoute
-                    exact path="/sample-app/page1" component={SampleAppPage1}
-                />
-            </Route>
-        </>
+        <Route path="/bidding">
+        <BiddingLayout>
+            <Switch>
+                <Route exact path="/bidding/home" component={BiddingHomePage} />
+                <Route exact path="/bidding/exp" component={BiddingOtherPage} />
+                <Route path="/bidding/*" component={ErrorPage} />
+            </Switch>
+        </BiddingLayout>
+    </Route>
     )
 };
 
-export default SampleAppRouter;
+export default BiddingRouter;

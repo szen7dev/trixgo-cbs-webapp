@@ -1,13 +1,16 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import FullPageLayout from "views/layouts/FullPage";
+import HomeLayout from "views/layouts/HomeLayout";
+import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 
 /*=====PAGES=====*/
-import SignInPage from "views/pages/authentication/SignIn";
-import RegisterPage from "views/pages/authentication/Register";
-import ResetPasswordPage from "views/pages/authentication/ResetPassword";
+import SocialHomePage from "views/pages/media/screens/HomePage";
+import SocialPostPage from "views/pages/media/screens/PostPage";
+import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
+import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 import ErrorPage from "views/pages/authentication/Error";
 
 const MediaRouter: FC = () => {
