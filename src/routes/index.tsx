@@ -132,9 +132,6 @@ import SupportMemberPage from "views/pages/support/SupportMemberPage";
 import SupportItemPage from "views/pages/support/SupportItemPage";
 import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
-// Timesheet pages
-import TimesheetAppRouter from './timesheet';
-
 // Ree pages
 import ReeHomePage from 'views/pages/ree/ReeHomePage';
 
@@ -148,9 +145,27 @@ import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====NEW ROUTE=====*/
-import PCMRouter from "./pcm";
-import MessagesRoute from "./messages";
 import SampleAppRouter from "./sampleApp";
+import MessagesRouter from "./messages";
+import AuthenRouter from "./authen";
+import PersonalRouter from "./personal";
+import PcmRouter from "./pcm";
+import MediaRouter from "./media";
+import DocumentRouter from "./document";
+import HumanRouter from "./human";
+import TimesheetRouter from "./timesheet";
+import CmcsRouter from "./cmcs";
+import AccountingRouter from "./accounting";
+import FinancialRouter from "./financial";
+import BiddingRouter from "./bidding";
+import SupportRouter from "./support";
+import ChattingRouter from "./chatting";
+import DatahubRouter from "./datahub";
+import WorkshopRouter from "./workshop";
+import OperationRouter from "./operation";
+import ReeRouter from "./ree";
+import MarketRouter from "./market";
+import QrcodeRouter from "./qrcode";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -401,7 +416,7 @@ const Routes: FC = () => {
                                             </HumanLayout>
                                         </Route>
 
-                                        <MessagesRoute/>
+                                        <MessagesRouter/>
 
                                         <Route path="/accounting/:path?">
                                             <AccountingLayout>
