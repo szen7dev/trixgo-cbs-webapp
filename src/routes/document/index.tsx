@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import DocumentLayout from '../sharedComponents/layouts/DocumentLayout';
+import { DocumentLayout } from "views/document/sharedComponents/layouts";
 
 /*=====PAGES=====*/
 import DocumentDashboardPage from 'views/document/DocumentDashboardPage';

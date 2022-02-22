@@ -5,7 +5,7 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import { Link } from "react-router-dom";
 import { useAuth } from "services/hooks/useAuth";
 
-const LinkMenuLeftSideBar: FC = () => {
+export const LeftSideBar: FC = () => {
   const { user } = useAuth();
 
   return (
@@ -54,5 +54,3 @@ const LinkMenuLeftSideBar: FC = () => {
     </div>
   );
 };
-
-export default LinkMenuLeftSideBar;
