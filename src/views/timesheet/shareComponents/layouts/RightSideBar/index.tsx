@@ -16,7 +16,7 @@ import ChatsOnRightSideBar from "shareComponents/common/MiniChat/ChatsOnRightSid
 
 import { useModal } from "services/hooks/useModal";
 
-const HomeRightSideBar: FC = () => {
+export const RightSideBar: FC = () => {
   const [openNotes, setOpenNotes] = useState(false);
   const { openModal } = useModal();
 
@@ -144,5 +144,3 @@ const HomeRightSideBar: FC = () => {
     </div>
   );
 };
-
-export default HomeRightSideBar;
