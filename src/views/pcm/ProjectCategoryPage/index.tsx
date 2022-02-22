@@ -15,9 +15,7 @@ import SearchInput from "components/common/SearchInput";
 
 // ========== App common Components ==========
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import GroupActions from "../../sharedComponents/common/GroupActions";
-import ButtonCreate from "../../sharedComponents/common/ButtonCreate";
-import ButtonMore from "../../sharedComponents/common/ButtonMore";
+import { GroupActions, ButtonCreate, ButtonMore } from "shareComponents/common";
 import { PROJECT_STAGE } from 'apis/localdb'
 
 // Utils

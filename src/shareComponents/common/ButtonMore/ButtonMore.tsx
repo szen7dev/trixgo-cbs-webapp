@@ -17,7 +17,7 @@ interface Props {
 	onClickPrint?: () => unknown;
 }
 
-const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickCopy, onClickPrint, onClickRemove, onClickUpdate, ...props }) => {
+export const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickCopy, onClickPrint, onClickRemove, onClickUpdate, ...props }) => {
 	return (
 		<Menu as="div" {...props} className={cn("relative inline-block", props.className)}>
 			<Menu.Button className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center">
@@ -64,5 +64,3 @@ const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ onClickC
 		</Menu>
 	)
 }
-
-export default ButtonMore
