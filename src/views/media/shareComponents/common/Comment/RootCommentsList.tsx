@@ -1,12 +1,11 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
-import Comment from './Comment';
-import RootComment from './RootComment';
-
 import { CommentProps } from 'typings/common';
 import SocialRepository from "apis/media";
-import CommentContext from '../context/comment/comment.context';
-import { ContextModalPost } from '../context/post';
+
+import { Comment, RootComment } from 'views/media/shareComponents/common';
+import CommentContext from 'views/media/contexts/comment/comment.context';
+import { ContextModalPost } from 'views/media/contexts/post';
 import { Comment as CommentType } from 'typings/ppt/comment';
 
 type Props = {

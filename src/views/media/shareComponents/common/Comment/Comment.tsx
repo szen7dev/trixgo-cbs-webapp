@@ -3,9 +3,9 @@ import { FC, HTMLAttributes, useContext } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-import PostFile from './post/PostFile';
+import { PostFile } from 'views/media/shareComponents/common';
+import CommentContext from 'views/media/contexts/comment/comment.context';
 import { CommentProps } from 'typings/common';
-import CommentContext from '../context/comment/comment.context';
 import { useCommentSocial } from 'services/hooks/useSocial';
 
 type OptionsProps = {

@@ -1,4 +1,4 @@
-import modalTypes from "views/pages/media/context/post/modal.types";
+import modalTypes from "views/media/contexts/post/modal.types";
 
 import { DispatchProps } from "typings/ppt/reducer";
 import { ImageProps } from "typings/social";

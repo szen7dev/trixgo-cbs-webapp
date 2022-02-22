@@ -1,14 +1,12 @@
 import { FC, useState, useContext, useEffect } from 'react';
 
-import Comment from './Comment';
-import EditButton from './EditButton';
-import ReplyCommentField from './ReplyCommentField';
+import { EditButton, Comment, ReplyCommentField } from 'views/media/shareComponents/common';
 
 import { CommentProps } from 'typings/common';
 import { FileProps } from 'typings/social';
-import SocialRepository from "apis/social";
-import CommentContext from '../context/comment/comment.context';
-import { ContextModalPost } from '../context/post';
+import SocialRepository from "apis/media";
+import CommentContext from 'views/media/contexts/comment/comment.context';
+import { ContextModalPost } from 'views/media/contexts/post';
 
 interface Props {
 	renderNestedComment?: React.ElementType
@@ -27,7 +25,7 @@ type UpdateCommentProps = {
 	images: FileProps[] | undefined,
 }
 
-const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
+export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const { openComment, openReply } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
@@ -191,5 +189,3 @@ const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, rend
 		</>
 	)
 }
-
-export default RootComment

@@ -1,4 +1,3 @@
-import { SetComments } from "./../../../media/context/comment/comment.d";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import commentsTypes from "./comment.types";
