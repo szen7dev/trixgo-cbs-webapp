@@ -2,10 +2,8 @@ import { FC } from "react";
 
 import cn from "classnames";
 
-import SearchInput from "components/common/SearchInput";
-
+import { SearchInput } from "../../shareComponents/common";
 import styles from "../style.module.css";
-
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
 const PersonalBillPage: FC = () => {
