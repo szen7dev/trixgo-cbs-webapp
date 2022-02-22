@@ -1,5 +1,11 @@
+/*=====LIBRARY=====*/
 import React, { FC } from "react";
+
+/*=====COMPONENTS=====*/
+
+/*=====ICONS=====*/
 import SearchIcon from "../../assets/images/icons8-search-120.png";
+
 type Props = {
     classNameWrapper?: string;
     classNameInput?: string;
@@ -15,5 +21,3 @@ export const SearchInput: FC<Props> = ({ classNameWrapper, classNameInput, onCha
         </div>
     )
 };
-
-

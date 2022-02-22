@@ -31,7 +31,8 @@ const passwordValues = {
   newPass: "",
   confirmPass: "",
 };
-const PersonalHomePage: FC = () => {
+
+export const PersonalHomePage: FC = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -381,4 +382,3 @@ const PersonalHomePage: FC = () => {
     </main>
   );
 };
-export default PersonalHomePage;

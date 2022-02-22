@@ -1,12 +1,14 @@
+/*=====LIBRARY=====*/
 import { FC, Fragment, useState } from "react";
-
 import { Link } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 
+/*=====COMPONENTS=====*/
 import { useModal } from "services/hooks/useModal";
-
 import AddNewTaskDialog from "components/common/add-new-task-dialog";
+import { ChatsOnRightSideBar } from "shareComponents/common/MiniChat";
 
+/*=====ICONS=====*/
 import icon1 from "assets/images/icons8-star-96.png";
 import icon2 from "assets/images/icons8-inbox-100.png";
 import icon3 from "assets/images/icons8-note-100.png";
@@ -14,9 +16,8 @@ import icon4 from "assets/images/icons8-user-manual-64.png";
 import icon5 from "assets/images/icons8-bill-96.png";
 import icon6 from "assets/images/icons8-calendar-128.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
-import {ChatsOnRightSideBar} from "shareComponents/common/MiniChat";
 
-const HomeRightSideBar: FC = () => {
+export const HomeRightSideBar: FC = () => {
   const [openNotes, setOpenNotes] = useState(false);
   const { openModal } = useModal();
 
@@ -139,5 +140,3 @@ const HomeRightSideBar: FC = () => {
     </div>
   );
 };
-
-export default HomeRightSideBar;

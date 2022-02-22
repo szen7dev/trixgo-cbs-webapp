@@ -12,7 +12,7 @@ import NotificationTab from "./tabs/NotificationTab";
 import styles from "../style.module.css";
 import NotificationFilter from "./components/NotificationFilter";
 
-const PersonalNotificationPage: FC = () => {
+export const PersonalNotificationPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
 
   const handleToggleTab = (index: number) => {
@@ -113,4 +113,3 @@ const PersonalNotificationPage: FC = () => {
     </main>
   );
 };
-export default PersonalNotificationPage;

@@ -1,22 +1,28 @@
+/*=====1.LIBRARY=====*/
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+/*=====2.CSS=====*/
 import './style.module.css';
-import { useModal } from "services/hooks/useModal";
-import NewHumanModal from "./components/NewHumanModal";
 
+/*=====3.ICONS=====*/
+const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
 import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
-// import HumanAvatar from "assets/images/human-avatar.svg";
-// import SortIcon from "assets/images/icons8-sorting.svg";
 
-import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
+/*=====4.PAGES/COMPONENTS=====*/
+import NewHumanModal from "./components/NewHumanModal";
+import { useModal } from "services/hooks/useModal";
 import DropdownFilterButton from './components/FilterButton';
 
+/*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";
 
-const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT
+/*=====6.HOOKS/APIS=====*/
+import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
+
+/*=====7.OTHER=====*/
 
 export const HumanHomePage: FC = () => {
   const { t } = useTranslation(["human"]);

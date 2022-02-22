@@ -1,9 +1,21 @@
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
+import { Link } from 'react-router-dom';
 
+/*=====2.CSS=====*/
+
+/*=====3.ICONS=====*/
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-import { Link } from 'react-router-dom';
+
+/*=====4.PAGES/COMPONENTS=====*/
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/useAuth";
+
+/*=====7.OTHER=====*/
 
 export const HumanLeftSideBar: FC = () => {
     const { user } = useAuth();

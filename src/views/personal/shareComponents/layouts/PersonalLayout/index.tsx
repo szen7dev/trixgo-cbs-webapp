@@ -1,11 +1,14 @@
+/*=====LIBRARY=====*/
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import PersonalLeftSideBar from "views/personal/shareComponents/layouts/PersonalLayout/components/PersonalLeftSideBar";
-import HomeRightSideBar from "components/common/HomeRightSideBar";
-import MainHeader from "components/common/main-header";
-import menuIcon from "assets/images/icon-mobile-menu-black.png";
+/*=====COMPONENTS=====*/
+import { MainHeader } from "shareComponents/common/Header";
+import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
+import { PersonalLeftSideBar } from './components';
 
+/*=====ICONS=====*/
+import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 

@@ -1,32 +1,42 @@
+/*=====1.LIBRARY=====*/
 import { FC, useState, useRef, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import GeneralInfo from "./views/GeneralInfo";
-import WorkHistory from "./views/WorkHistory";
-import WorkExperience from "./views/WorkExperience";
-import ExperienceAppointment from "./views/ExperienceAppointment";
-import Education from "./views/Education";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
+/*=====2.CSS=====*/
 
+/*=====3.ICONS=====*/
 import BackIcon from "assets/images/icon-back.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical.svg";
-// import Avatar from "assets/images/avatar.jpg";
 import PrintIcon from "assets/images/icons8-print-96.png";
 import CopyIcon from "assets/images/icons8-copy-96.png";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
+
+/*=====4.PAGES/COMPONENTS=====*/
+import GeneralInfo from "./views/GeneralInfo";
+import WorkHistory from "./views/WorkHistory";
+import WorkExperience from "./views/WorkExperience";
+import ExperienceAppointment from "./views/ExperienceAppointment";
+import Education from "./views/Education";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import Loader from "components/shared/Loader";
+import NewHumanModal from "./NewHumanModal";
+import Certificate from "./views/Certificate";
+
+/*=====5.TYPINGS=====*/
+import type { Human } from "typings/human";
+
+/*=====6.HOOKS/APIS=====*/
 import {
   useFetchDetailHuman,
   useUpdateContactMutation,
 } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
-import NewHumanModal from "./NewHumanModal";
-import type { Human } from "typings/human";
-import Certificate from "./views/Certificate";
+
+/*=====7.OTHER=====*/
 
 export const HumanInfo: FC = () => {
   const [openHumanOption, setOpenHumanOption] = useState(false);
@@ -296,4 +306,3 @@ export const HumanInfo: FC = () => {
     </main>
   );
 };
-

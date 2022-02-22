@@ -13,7 +13,7 @@ import styles from "../style.module.css";
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-const PersonalHistoryPage: FC = () => {
+export const PersonalHistoryPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
   const [pageParam, setPageParam] = useState('')
   const [prevCursor, setPrevCursor] = useState(['']);
@@ -151,4 +151,3 @@ const PersonalHistoryPage: FC = () => {
     </main>
   );
 };
-export default PersonalHistoryPage;

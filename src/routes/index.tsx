@@ -1,8 +1,8 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-/*=====PROVIDERS=====*/
+/*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
 import ThemeProvider from "services/providers/Theme";
 import ModalProvider from "services/providers/Modal";
@@ -10,14 +10,11 @@ import ChatProvider from "services/providers/Chat";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
-/*=====LAYOUTS=====*/
+/*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts/FullPage";
 
-/*=====PAGES=====*/
-import ErrorPage from "views/authentication/Error";
-
-/*=====CONFIG ROUTE=====*/
-import SampleAppRouter from "./sampleApp";
+/*=====4.CONFIG ROUTE=====*/
+import SampleRouter from "./sample";
 import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
 import BiddingRouter from "./bidding";
@@ -40,6 +37,9 @@ import SupportRouter from "./support";
 import TimesheetRouter from "./timesheet";
 import WorkshopRouter from "./workshop";
 
+/*=====5.PAGES=====*/
+import ErrorPage from "views/authentication/Error";
+
 const Routes: FC = () => {
     useEffect(() => {
         document.title = "Trixgo|Quản trị doanh nghiệp";
@@ -54,7 +54,7 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
-                                        <SampleAppRouter />
+                                        <SampleRouter />
                                         <AccountingRouter />
                                         <AuthenticationRouter />
                                         <BiddingRouter />

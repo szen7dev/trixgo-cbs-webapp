@@ -2,10 +2,10 @@ import { FC } from "react";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "services/hooks/useAuth";
 
-const LinkMenuLeftSideBar: FC = () => {
+export const PersonalLeftSideBar: FC = () => {
   const { user } = useAuth();
 
   return (
@@ -27,7 +27,7 @@ const LinkMenuLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
-          <NavLink
+          <Link
             to="/personal/home"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -37,8 +37,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Trang chủ</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/friends"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -48,8 +48,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Quản lý bạn bè</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/notifications"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -59,8 +59,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Quản lý thông báo</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/bills"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -70,8 +70,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Quản lý hóa đơn</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/notes"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -81,8 +81,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Quản lý ghi chú</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/config"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -92,8 +92,8 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Cấu hình dữ liệu</span>
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             to="/personal/histories"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -103,11 +103,9 @@ const LinkMenuLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Lịch sử truy cập</span>
-          </NavLink>
+          </Link>
         </div>
       </div>
     </div>
   );
 };
-
-export default LinkMenuLeftSideBar;

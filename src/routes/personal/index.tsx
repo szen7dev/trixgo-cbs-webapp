@@ -6,15 +6,17 @@ import { Route, Switch } from "react-router-dom";
 import { PersonalLayout } from "views/personal/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import PersonalNotificationPage from "views/personal/pages/PersonalNotificationPage";
-import PersonalNotePage from "views/personal/pages/PersonalNotePage";
-import PersonalBillPage from "views/personal/pages/PersonalBillPage";
-import PersonalHomePage from "views/personal/pages/PersonalHomePage";
-import PersonalConfigPage from "views/personal/pages/PersonalConfigPage";
-import PersonalFriendPage from "views/personal/pages/PersonalFriendPage";
-import PersonalHistoryPage from "views/personal/pages/PersonalHistoryPage";
-// import ConfigListDetail from "views/personal/ConfigListDetail";
 import ErrorPage from "views/authentication/Error";
+
+import { 
+    PersonalNotificationPage, 
+    PersonalNotePage,
+    PersonalBillPage,
+    PersonalHomePage,
+    PersonalConfigPage,
+    PersonalFriendPage,
+    PersonalHistoryPage
+} from "views/personal/pages";
 
 const PersonalRouter: FC = () => {
     return (

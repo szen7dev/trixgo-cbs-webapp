@@ -1,12 +1,17 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
-/*=====LAYOUTS=====*/
-import { HumanLayout } from "views/human/shareComponents/layouts";
-import ProtectedRoute from "components/common/ProtectedRoute";
+/*=====2.PROVIDERS=====*/
 
-/*=====PAGES=====*/
+/*=====3.LAYOUTS=====*/
+import ProtectedRoute from "components/common/ProtectedRoute";
+import { HumanLayout } from "views/human/shareComponents/layouts";
+
+/*=====4.CONFIG ROUTE=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
+import ErrorPage from "views/authentication/Error";
 import { 
     HumanCetificateFilterPage, 
     HumanOtherFilterPage,
@@ -14,8 +19,6 @@ import {
     HumanHomePage,
     HumanInfo
 } from "views/human/pages";
-
-import ErrorPage from "views/authentication/Error";
 
 const HumanRouter: FC = () => {
     return (

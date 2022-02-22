@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 
 import ConfigTab from "./tabs/ConfigTab";
 
-const PersonalConfigPage: FC = () => {
+export const PersonalConfigPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
 
   const handleToggleTab = (index: number) => {
@@ -40,4 +40,3 @@ const PersonalConfigPage: FC = () => {
     </main>
   );
 };
-export default PersonalConfigPage;
