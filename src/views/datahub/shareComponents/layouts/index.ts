@@ -1,1 +1,2 @@
-export * from './Layout1';
+export * from './DatahubLayout';
+export * from './DatahubContractorLayout';

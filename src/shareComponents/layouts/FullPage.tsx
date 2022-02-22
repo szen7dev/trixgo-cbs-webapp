@@ -1,5 +1,5 @@
+/*=====LIBRARY=====*/
 import { ReactNode, FC } from "react";
-
 import cn from "classnames";
 
 type Props = {
@@ -21,4 +21,3 @@ export const FullPageLayout: FC<Props> = ({ children, isAuthentication = false }
     </div>
   );
 };
-

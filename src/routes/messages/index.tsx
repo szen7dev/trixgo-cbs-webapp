@@ -1,7 +1,7 @@
 /*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { ProtectedRoute } from "routes/components";
 
 /*=====LAYOUTS=====*/
 import { MessagesLayout } from "views/messages/shareComponents/layouts/MessagesLayout";

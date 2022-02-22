@@ -1,7 +1,7 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import PersonalLeftSideBar from "components/common/PersonalLeftSideBar";
+import PersonalLeftSideBar from "views/personal/shareComponents/layouts/PersonalLayout/components/PersonalLeftSideBar";
 import HomeRightSideBar from "components/common/HomeRightSideBar";
 import MainHeader from "components/common/main-header";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";

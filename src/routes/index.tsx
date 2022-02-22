@@ -42,7 +42,7 @@ import WorkshopRouter from "./workshop";
 
 const Routes: FC = () => {
     useEffect(() => {
-        document.title = "CBS | Quản trị doanh nghiệp";
+        document.title = "Trixgo|Quản trị doanh nghiệp";
     }, []);
 
     return (
@@ -59,8 +59,6 @@ const Routes: FC = () => {
                                         <AuthenticationRouter />
                                         <BiddingRouter />
                                         <CmcsRouter />
-
-                                        {/* // Fix tới đây rồi.. */}
                                         <DatahubRouter />
                                         <DocumentRouter />
                                         <FinancialRouter />

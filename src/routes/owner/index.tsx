@@ -3,12 +3,12 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import OwnerLayout from "views/layouts/OwnerLayout";
+import { OwnerLayout } from "views/owner/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import OwnerHomePage from "views/pages/owner/OwnerHomePage";
-import OwnerGrantPage from "views/pages/owner/OwnerGrantPage";
-import ErrorPage from "views/pages/authentication/Error";
+import OwnerHomePage from "views/owner/OwnerHomePage";
+import OwnerGrantPage from "views/owner/OwnerGrantPage";
+import ErrorPage from "views/authentication/Error";
 
 const OwnerRouter: FC = () => {
     return (

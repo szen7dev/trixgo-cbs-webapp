@@ -3,11 +3,11 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import ReeLayout from "views/layouts/ReeLayout";
+import { ReeLayout } from "views/ree/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import ReeHomePage from 'views/pages/ree/ReeHomePage';
-import ErrorPage from "views/pages/authentication/Error";
+import ReeHomePage from 'views/ree/ReeHomePage';
+import ErrorPage from "views/authentication/Error";
 
 const ReeRouter: FC = () => {
     return (
