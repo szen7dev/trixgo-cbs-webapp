@@ -1,17 +1,14 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { RouteComponentProps } from 'react-router';
-
 import ProtectedRoute from "components/common/ProtectedRoute";
-
 
 /*=====LAYOUTS=====*/
 import HomeLayout from "views/layouts/HomeLayout";
 
-// Dashboard pages
+/*=====PAGES=====*/
 import DashboardPage from "views/pages/dashboard";
-
-// Project pages (Project and Construction Management)
 import ProjectAppAdminPage from "views/pages/ppt/permission/ProjectAppAdminPage";
 import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
 import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
@@ -42,8 +39,6 @@ import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes"
 import ProjectDashboardRoutes from "views/pages/ppt/routes/ProjectDashboardRoutes";
 import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRoutes2";
 import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
-
-// Tasks pages
 import TasksHomePage from "views/pages/tasks/home";
 import TaskDetailPage from "views/pages/tasks/detail";
 import ProjectLayout from "views/layouts/ProjectLayout";
