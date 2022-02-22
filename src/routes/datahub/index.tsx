@@ -3,13 +3,12 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import DatahubLayout from '../layouts/DatahubLayout';
+import { DatahubLayout, DatahubContractorLayout }  from 'views/datahub/shareComponents/layouts';
 import LayoutPrimary from 'views/media/layouts/LayoutPrimary';
-import DatahubContractorLayout from '../layouts/DatahubContractorLayout';
 
 /*=====PAGES=====*/
 import DatahubContractorContract from 'views/datahub/DatahubContractorContract';
-import DatahubContractorDetail from '../screens/DatahubContractorDetail';
+import DatahubContractorDetail from "views/datahub/pages/DatahubContractorDetail";
 import DatahubContractorFinancial from '../screens/DatahubContractorFinancial';
 import DatahubContractorHome from '../screens/DatahubContractorHome';
 import DatahubContractorProfile from '../screens/DatahubContractorProfile';

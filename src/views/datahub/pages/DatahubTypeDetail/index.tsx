@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -13,23 +13,24 @@ import GroupActions from "views/document/components/projects/GroupActions";
 import ButtonCreate from "views/document/components/common/ButtonCreate";
 import ButtonMore from "views/document/components/common/ButtonMore";
 import DocumentDropdown from "views/document/components/DocumentDropdown";
-import ModalCreateType from "../components/ModalCreateType";
+import ModalCreateType from "../../components/ModalCreateType";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
 	title: "Thẻ lọc chính" as string | number,
 }));
 
-const DatahubType: FC = () => {
-	const [pkg, setPkg] = useState(pkgs[0]);
+export const DatahubTypeDetail: FC = () => {
 	const [show, setShow] = useState(false);
+	const [pkg, setPkg] = useState(pkgs[0]);
 
+	const history = useHistory();
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
-		setData(Array.from({ length: 30 }).map((_, index) => ({
+		setData(Array.from({ length: 5 }).map((_, index) => ({
 			id: index,
 			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
 			joined: 8,
@@ -43,7 +44,12 @@ const DatahubType: FC = () => {
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-				<span className="text-x-large mr-7">Danh sách</span>
+				<button onClick={history.goBack}>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+					</svg>
+				</button>
+				<span className="text-x-large mr-7">Tiêu đề</span>
 				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 				<DocumentDropdown
 					data={pkgs}
@@ -51,7 +57,7 @@ const DatahubType: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions types={['edit']} className="flex items-center flex-1" />
 
 				<ButtonCreate onClick={() => setShow(!show)} />
 				<ButtonMore />
@@ -90,15 +96,11 @@ const DatahubType: FC = () => {
 									worked,
 								} = props
 								return (
-									<tr key={id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={'/datahub/type/' + id} >
-												{project}
-											</Link>
-										</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{project}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
 										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{worked}</td>
 									</tr>
@@ -114,4 +116,3 @@ const DatahubType: FC = () => {
 	);
 };
 
-export default DatahubType

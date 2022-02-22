@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
 
-import CompanyFeed from '../components/CompanyFeed';
-import ProfileFeed from '../components/ProfileFeed';
+import CompanyFeed from '../../components/CompanyFeed';
+import ProfileFeed from '../../components/ProfileFeed';
 
 type Props = {
 
 }
 
-const DatahubContractorDetail: FC<Props> = (props) => {
+export const DatahubContractorDetail: FC<Props> = (props) => {
 	return (
 		<>
 			{/* ======= LIST PROFILE FEED ======= */}
@@ -16,6 +16,4 @@ const DatahubContractorDetail: FC<Props> = (props) => {
 			<CompanyFeed className='mx-3.5 flex-1' />
 		</>
 	)
-}
-
-export default DatahubContractorDetail
+};

@@ -2,7 +2,7 @@ import React, { FC, Fragment, useState } from 'react'
 import SwiperCore, { Navigation } from 'swiper';
 import { Listbox, Transition } from '@headlessui/react'
 
-import SliderRow from '../components/common/SliderRow';
+import SliderRow from '../../components/common/SliderRow';
 
 import iconDatabase from 'assets/images/icons8-database-96 2.png'
 import classNames from 'classnames';
@@ -22,7 +22,7 @@ const people = [
 	{ name: 'Hellen Schmidt' },
 ]
 
-const DatahubContractorHome: FC<Props> = (props) => {
+export const DatahubContractorHome: FC<Props> = (props) => {
 	const [selected, setSelected] = useState<typeof people[0] | null>(null)
 
 	const data = Array.from({ length: 3 }).map((_, index) => ({
@@ -167,5 +167,3 @@ const DatahubContractorHome: FC<Props> = (props) => {
 		</div >
 	)
 }
-
-export default DatahubContractorHome

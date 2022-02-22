@@ -8,12 +8,12 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import Paginate from "components/common/Paginate";
 import SearchInput from "components/common/SearchInput";
 
-import DropdownFilterButton from "views/document/components/DocumentFilterButton";
+import DropdownFilterButton from "views/document/sharedComponents/common/DocumentFilterButton";
 import GroupActions from "views/document/components/projects/GroupActions";
 import ButtonCreate from "views/document/components/common/ButtonCreate";
 import ButtonMore from "views/document/components/common/ButtonMore";
-import DocumentDropdown from "views/document/components/DocumentDropdown";
-import ModalCreateProject from "../components/ModalCreateProject";
+import DocumentDropdown from "views/document/sharedComponents/common/DocumentDropdown";
+import ModalCreateProject from "../../components/ModalCreateProject";
 
 const _data = {
 	name: "Tổ hợp chung cư cao tầng KH2",
@@ -35,7 +35,7 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	title: "Thẻ lọc chính" as string | number,
 }));
 
-const DatahubProject: FC = () => {
+export const DatahubProject: FC = () => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 
@@ -156,4 +156,3 @@ const DatahubProject: FC = () => {
 	);
 };
 
-export default DatahubProject

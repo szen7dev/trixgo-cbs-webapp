@@ -4,7 +4,7 @@ type Props = {
 
 }
 
-const DatahubContractorService: FC<Props> = (props) => {
+export const DatahubContractorService: FC<Props> = (props) => {
 	return (
 		<div className='bg-white w-full mx-3.5 py-9'>
 			<div className='flex flex-wrap gap-y-16'>
@@ -57,4 +57,3 @@ const DatahubContractorService: FC<Props> = (props) => {
 	)
 }
 
-export default DatahubContractorService

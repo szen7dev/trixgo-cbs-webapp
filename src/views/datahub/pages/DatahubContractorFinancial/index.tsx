@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import SearchInput from "components/common/SearchInput";
-import ModalCreateFinancial from "../components/ModalCreateFinancial";
+import ModalCreateFinancial from "../../components/ModalCreateFinancial";
 
 import DropdownFilterButton from "views/document/sharedComponents/common/DocumentFilterButton";
 import GroupActions from "views/document/sharedComponents/common/GroupActions";
@@ -32,7 +32,7 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	title: "Thẻ lọc chính" as string | number,
 }));
 
-const DatahubContractorFinancial: FC = () => {
+export const DatahubContractorFinancial: FC = () => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 
@@ -161,5 +161,3 @@ const DatahubContractorFinancial: FC = () => {
 		</div>
 	);
 };
-
-export default DatahubContractorFinancial

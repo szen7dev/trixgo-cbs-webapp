@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 // ======== COMPONENT IMPORT ========
-import Acoordion from '../components/common/Acoordion';
+import Acoordion from '../../components/common/Acoordion';
 
 // ======== ASSETS IMPORT ========
 import iconWallet from 'assets/images/icons8-wallet-100.png'
@@ -11,10 +11,10 @@ import appstore from 'assets/images/appstore.png'
 import chplay from 'assets/images/chplay.png'
 import datahub_banner_1 from 'assets/images/datahub-banner-1.png'
 import datahub_banner_2 from 'assets/images/datahub-banner-2.png'
-import Wallethub from '../components/common/Wallethub';
+import Wallethub from '../../components/common/Wallethub';
 import SearchIcon from 'assets/icons/SearchIcon';
 
-const DatahubHome: FC<RouteComponentProps> = () => {
+export const DatahubHome: FC<RouteComponentProps> = () => {
 	return (
 		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 pt-12 overflow-auto'>
 			<div className='flex relative'>
@@ -122,5 +122,3 @@ const DatahubHome: FC<RouteComponentProps> = () => {
 		</div >
 	)
 }
-
-export default DatahubHome

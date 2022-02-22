@@ -8,7 +8,7 @@ type Props = {
 
 const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => {
 	const { innerRef, sticky } = useScrollSticky('#datahub-contractor-detail')
-
+	
 	return (
 		<div {...props}>
 			<div ref={innerRef}></div>
