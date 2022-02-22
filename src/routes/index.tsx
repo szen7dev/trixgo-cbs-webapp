@@ -159,7 +159,6 @@ import AccountingRouter from "./accounting";
 import FinancialRouter from "./financial";
 import BiddingRouter from "./bidding";
 import SupportRouter from "./support";
-import ChattingRouter from "./chatting";
 import DatahubRouter from "./datahub";
 import WorkshopRouter from "./workshop";
 import OperationRouter from "./operation";
@@ -195,7 +194,6 @@ const Routes: FC = () => {
                                         <FinancialRouter />
                                         <BiddingRouter />
                                         <SupportRouter />
-                                        <ChattingRouter />
                                         <DatahubRouter />
                                         <WorkshopRouter />
                                         <OperationRouter />
