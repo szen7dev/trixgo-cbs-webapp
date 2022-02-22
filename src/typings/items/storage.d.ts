@@ -19,3 +19,7 @@ export type StorageQueryResponse = APIResponse & {
         nextCursor: string | null;
     }
 }
+
+export type StorageQueryDetailResponse = APIResponse & {
+    data: Storage
+}

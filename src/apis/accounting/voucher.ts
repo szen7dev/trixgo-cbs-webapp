@@ -1,6 +1,7 @@
 import API from "../repository";
 
 const APP_ACCOUNTING = "/api/accounting/voucher";
+const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
 const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
@@ -15,6 +16,21 @@ async function fetchList<T>(params: any): Promise<T> {
                 },
                 type: 1,
                 fundaID: '5e846addd7e3490be59ae8d5',
+                ...params,
+            },
+        }
+    )
+    return data
+}
+async function fetchListJournalDetail<T>(params: any): Promise<T> {
+    const { data } = await API.get(
+        `${APP_ACCOUNTING_JOURNAL}`,
+        {
+            params: {
+                populates: {
+                    "path": "debit credit customerCredit customerDebit warehouse goods contract",
+                    "select": "name description unit",
+                },
                 ...params,
             },
         }
@@ -68,6 +84,7 @@ async function requestDeleteAccountingVoucher(voucherID: string): Promise<any> {
 const AccountingVoucherIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
+    fetchListJournalDetail: async (params: any): Promise<any> => fetchListJournalDetail<any>(params),
     fetchDetailAccountingVoucher: async (params: {
         id: string;
     }): Promise<any> => fetchDetailAccountingVoucher(params),

@@ -4,7 +4,7 @@ import {
     DeleteRevokeMessagePayload, ItemMessage,
     ListMessageData,
     ListMessagePayload,
-    PinnedMessagePayload, SearchMessageInConversationByIdPayload,
+    PinnedMessagePayload, SearchMessageInConversationByIdPayload, SearchMessageInConversationByIdResponse,
     SendNormalMessagePayload,
     ShareMessageData,
     ShareMessagePayload, UpdatePinnedMessageData,
@@ -12,8 +12,8 @@ import {
     UpdateReminderMessageData,
     UpdateReminderMessagePayload
 } from "typings/apis/messages/listMessage";
-import {setLoading, setListMessage, setNextCursor, setTotalRecord, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
-import {setLoadingSearch, setListSearchMessage, setNextSearchCursor, setPrevSearchCursor, setTotalRecordBack, setTotalRecordFront} from "redux/reducer/messages/SearchMessage";
+import {setLoading, setListMessage, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
+import {setLoadingSearch, setListSearchMessage} from "redux/reducer/messages/SearchMessage";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
@@ -27,7 +27,7 @@ type UseConversationType = {
     revokeMessage: (params: DeleteRevokeMessagePayload) => Promise<{data: ItemMessage[], error: boolean}>;
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
-    goToMessagePosition: (params: SearchMessageInConversationByIdPayload) => void;
+    goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => Promise<any>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -38,9 +38,7 @@ export const UseConversation = () : UseConversationType => {
     const getListMessage = async (params: ListMessagePayload) => {
         dispatch(setLoading({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.getListMessage(params);
-        dispatch(setTotalRecord({conversationId: params.conversationID, data: data.totalRecord}));
-        dispatch(setNextCursor({conversationId: params.conversationID, data: data.nextCursor}));
-        dispatch(setListMessage({conversationId: params.conversationID, messages: data.listRecords, isFreshData: !params.lastestID}));
+        dispatch(setListMessage({conversationId: params.conversationID, data: data, isFreshData: !params.lastestID}));
         dispatch(setLoading({conversationId: params.conversationID, data: false}));
 
         return new Promise<ListMessageData>((resolve, reject) => {
@@ -125,17 +123,15 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
-    const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload) => {
+    const goToMessagePosition = async (params: SearchMessageInConversationByIdPayload, isFirstInit = true, direction = "front") => {
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.goToMessagePosition(params);
-        dispatch(setTotalRecordFront({conversationId: params.conversationID, data: data.totalRecordFront}));
-        dispatch(setTotalRecordBack({conversationId: params.conversationID, data: data.totalRecordBack}));
-        dispatch(setNextSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
-        dispatch(setPrevSearchCursor({conversationId: params.conversationID, data: data.nextCursor}));
-        dispatch(setListSearchMessage({conversationId: params.conversationID, messages: data.listRecords}));
+        dispatch(setListSearchMessage({conversationId: params.conversationID, data: data, isFirstInit, direction}));
         dispatch(setLoadingSearch({conversationId: params.conversationID, data: false}));
 
-        return data;
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
     }
 
     return {

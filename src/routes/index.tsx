@@ -22,18 +22,17 @@ import HelpCenterLayout from "views/layouts/HelpCenterLayout";
 import AccountingLayout from "views/layouts/AccountingLayout";
 import BiddingLayout from "views/layouts/BiddingLayout"; //*** */
 import CmcsLayout from "views/layouts/CmcsLayout";
-import DocumentLayout from "views/layouts/DocumentLayout";
+// import DocumentLayout from "views/layouts/DocumentLayout";
 import FinLayout from "views/layouts/FinLayout";
-import HumanLayout from "views/layouts/HumanLayout";
+import { HumanLayout } from "shareComponents/layouts/HumanLayout";
 import OperationLayout from "views/layouts/OperationLayout"; //*** */
 import PcmLayout from "views/layouts/PcmLayout";
 import PersonalLayout from "views/layouts/PersonalLayout";
 import ReeLayout from "views/layouts/ReeLayout"; //*** */
 import SupportLayout from "views/layouts/SupportLayout";
-import TimesheetLayout from "views/layouts/TimesheetLayout";
+import { TimesheetLayout } from "shareComponents/layouts/TimesheetLayout";
 import KanbanBoardLayout from "views/layouts/KanbanBoardLayout";
 import CmcsContractLayout from "views/layouts/CmcsContractLayout";
-import ProjectLayout from "views/layouts/ProjectLayout";
 import OwnerLayout from "views/layouts/OwnerLayout";
 
 /*=====PAGES=====*/
@@ -47,23 +46,12 @@ import ErrorPage from "views/pages/authentication/Error";
 import OwnerHomePage from "views/pages/owner/OwnerHomePage";
 import OwnerGrantPage from "views/pages/owner/OwnerGrantPage";
 
-// Dashboard pages
-import DashboardPage from "views/pages/dashboard";
-
-// KanbanBoardPage pages
-import KanbanBoardPage from "views/pages/kanbanBoard";
-
 // Human pages
-import HumanHomePage from "views/pages/humans/HumanHomePage";
-import HumanCetificateFilterPage from "views/pages/humans/HumanCetificateFilterPage";
-import HumanOtherFilterPage from "views/pages/humans/HumanOtherFilterPage";
-import HumanExpiredPage from "views/pages/humans/HumanExpiredPage";
-import HumanInfo from "views/pages/humans/components/HumanInfo";
-
-// Tasks pages
-import TasksHomePage from "views/pages/tasks/home";
-import TaskDetailPage from "views/pages/tasks/detail";
-import TaskDashboardType2 from "views/pages/tasks/dashboard/Type2";
+import HumanHomePage from "views/humans/HumanHomePage";
+import HumanCetificateFilterPage from "views/humans/HumanCetificateFilterPage";
+import HumanOtherFilterPage from "views/humans/HumanOtherFilterPage";
+import HumanExpiredPage from "views/humans/HumanExpiredPage";
+import HumanInfo from "views/humans/components/HumanInfo";
 
 // Personal pages
 import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
@@ -78,55 +66,21 @@ import ConfigListDetail from "views/pages/personal/config/components/ConfigListD
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
 
-// Project pages (Project and Construction Management)
-import ProjectAppAdminPage from "views/pages/ppt/permission/ProjectAppAdminPage";
-import ProjectCategoryPage from "views/pages/ppt/ProjectCategoryPage";
-import ProjectDeployingPage from "views/pages/ppt/ProjectDeployingPage";
-import ProjectPortfolioPage from "views/pages/ppt/ProjectPortfolioPage";
-import ProjectHomePage from "views/pages/ppt/ProjectHomePage";
-import ProjectDashBoardPage from "views/pages/ppt/ProjectDashBoardPage";
-import ProjectFolderPage from "views/pages/ppt/ProjectFolderPage";
-import ProjectSchedulePage from "views/pages/ppt/ProjectSchedulePage";
-import ProjectBudgetPage from "views/pages/ppt/ProjectBudgetPage";
-import ProjectBiddingPage from "views/pages/ppt/ProjectBiddingPage";
-import ProjectPaymentPage from "views/pages/ppt/ProjectPaymentPage";
-import ProjectDocumentPage from "views/pages/ppt/ProjectDocumentPage";
-import ProjectPhotoPage from "views/pages/ppt/ProjectPhotoPage";
-import ProjectRfiPage from "views/pages/ppt/ProjectRfiPage";
-import ProjectRfaPage from "views/pages/ppt/ProjectRfaPage";
-import ProjectInspectionPage from "views/pages/ppt/ProjectInspectionPage";
-import ProjectPunchPage from "views/pages/ppt/ProjectPunchPage";
-import ProjectProductionPage from "views/pages/ppt/ProjectProductionPage";
-import ProjectOtherPage from "views/pages/ppt/ProjectOtherPage";
-// import ProjectResourcePage from "views/pages/ppt/ProjectResourcePage";
-import ProjectMomPage from "views/pages/ppt/ProjectMomPage";
-import ProjectReportPage from "views/pages/ppt/ProjectReportPage";
-import ProjectDirectoryPage from "views/pages/ppt/ProjectDirectoryPage";
-import ProjectAdminPage from "views/pages/ppt/ProjectAdminPage";
-import DocumentDashboardPage from 'views/pages/document/screens/DocumentDashboardPage';
-import ProjectDashboardTaskPage from "views/pages/ppt/ProjectDashboardTaskPage";
-import ProjectPhotoPackagePage from "views/pages/ppt/ProjectPhotoPackagePage";
-import ProjectDrawingRoutes from "views/pages/ppt/routes/ProjectDrawingRoutes";
-import ProjectResourceRoutes from "views/pages/ppt/routes/ProjectResourceRoutes";
-import ProjectDashboardRoutes from "views/pages/ppt/routes/ProjectDashboardRoutes";
-import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRoutes2";
-import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
-
 // Accounting pages
-import AccountingDashboardPage from "views/pages/accounting/AccountingDashboardPage";
-import AccountingTicketsPage from "views/pages/accounting/AccountingTicketsPage";
-import AccountingDetailPage from "views/pages/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "views/pages/accounting/Diary/AccountingDiaryPage";
-import AccountingInOutPage from "views/pages/accounting/ImportExport/AccountingInOutPage";
-import AccountingDebtPage from "views/pages/accounting/Debt/AccountingDebtPage";
-import AccountingVatPage from "views/pages/accounting/VAT/AccountingVatPage";
-import AccountingReportFinancePage from "views/pages/accounting/FinanceReport/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "views/pages/accounting/SupportTool/AccountingSupportToolsPage";
-import AccountingTicketDetailPage from "views/pages/accounting/AccountingTicketDetailPage";
-import AccountingAdminPage from "views/pages/accounting/admin/AccountingAdminPage";
-import ReceivablesCustomers from "views/pages/accounting/Debt/components/ReceivablesCustomers";
-import ReceivablesCustomersCode from "views/pages/accounting/Debt/components/ReceivablesCustomersCode";
-import AccountingTBookPage from "views/pages/accounting/TBook/AccountingTBookPage";
+import AccountingDashboardPage from "views/accounting/AccountingDashboardPage";
+import AccountingTicketsPage from "views/accounting/AccountingTicketsPage";
+import AccountingDetailPage from "views/accounting/AccountingDetailPage";
+import AccountingDiaryPage from "views/accounting/Diary";
+import AccountingInOutPage from "views/accounting/ImportExport/AccountingInOutPage";
+import AccountingDebtPage from "views/accounting/Debt/AccountingDebtPage";
+import AccountingVatPage from "views/accounting/VAT/AccountingVatPage";
+import AccountingReportFinancePage from "views/accounting/FinanceReport/AccountingReportFinancePage";
+import AccountingSupportToolsPage from "views/accounting/SupportTool/AccountingSupportToolsPage";
+import AccountingTicketDetailPage from "views/accounting/AccountingTicketDetailPage";
+import AccountingAdminPage from "views/accounting/admin/AccountingAdminPage";
+import ReceivablesCustomers from "views/accounting/Debt/components/ReceivablesCustomers";
+import ReceivablesCustomersCode from "views/accounting/Debt/components/ReceivablesCustomersCode";
+import AccountingTBookPage from "views/accounting/TBook/AccountingTBookPage";
 
 // Bidding pages
 import BiddingHomePage from "views/pages/bidding/BiddingHomePage";
@@ -139,7 +93,8 @@ import SocialCommentsPage from "views/pages/media/screens/CommetsPage";
 import SocialCategoryPage from "views/pages/media/screens/CategoryPage";
 
 // Document pages
-import DocumentLayoutContainer from "views/pages/document/layouts/DocumentLayoutContainer";
+import DocumentRoutes from "views/document/routes/DocumentRoutes";
+import PPTRoutes from "views/pages/document/routes/PPTRoutes";
 
 // Datahub pages
 import DatahubRoutes from "views/pages/datahub"
@@ -178,10 +133,7 @@ import SupportItemPage from "views/pages/support/SupportItemPage";
 import DocumentsManagement from "views/pages/support/components/grant/DocumentsManagement";
 
 // Timesheet pages
-import TimesheetHomePage from 'views/pages/timesheet/home';
-import TimesheetDetailPage from 'views/pages/timesheet/detail';
-import MessageList from "../views/pages/messages/list";
-import MessagesHome from "../views/pages/messages/home/index_v2";
+import TimesheetAppRouter from './timesheet';
 
 // Ree pages
 import ReeHomePage from 'views/pages/ree/ReeHomePage';
@@ -193,9 +145,10 @@ import OperationRfsPage from 'views/pages/operation/OperationRfsPage';
 import OperationProjectPage from 'views/pages/operation/OperationProjectPage';
 import SocialLayoutPrimary from "views/pages/media/layouts/SocialLayoutPrimary";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
-import MessagesLayout from "views/layouts/MessagesLayout";
-import PopupSendFiles from "services/providers/PopupSendFiles";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
+import PCMRouter from "./pcm";
+import MessagesRoute from "./messages";
+import SampleAppRouter from "./sampleApp";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -204,13 +157,15 @@ const Routes: FC = () => {
 
     return (
         <Router>
-            <AuthProvider>
+            <AuthProvider>      {/* Xem lại chỗ này */}
                 <ThemeProvider>
                     <RightClickMenuProvider>
                         <DeleteConfirmProvider>
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
+                                        <PCMRouter />
+                                        <SampleAppRouter />
                                         <Route path="/authentication/:path?">
                                             <FullPageLayout isAuthentication>
                                                 <Switch>
@@ -283,8 +238,8 @@ const Routes: FC = () => {
                                         <Route path="/owner">
                                             <OwnerLayout>
                                                 <Switch>
-                                                    <Route exact path="/owner/home" component={OwnerHomePage}/>
-                                                    <Route exact path="/owner/grant-permission" component={OwnerGrantPage}/>
+                                                    <Route exact path="/owner/home" component={OwnerHomePage} />
+                                                    <Route exact path="/owner/grant-permission" component={OwnerGrantPage} />
                                                     <Route path="/owner /*" component={ErrorPage} />
                                                 </Switch>
                                             </OwnerLayout>
@@ -293,7 +248,7 @@ const Routes: FC = () => {
                                         <Route path="/help">
                                             <HelpCenterLayout>
                                                 <Switch>
-                                                    <Route exact path="/help/home" component={HelpCenterPage}/>
+                                                    <Route exact path="/help/home" component={HelpCenterPage} />
                                                     <Route path="/help/*" component={ErrorPage} />
                                                 </Switch>
                                             </HelpCenterLayout>
@@ -302,13 +257,13 @@ const Routes: FC = () => {
                                         <Route path="/personal">
                                             <PersonalLayout>
                                                 <Switch>
-                                                    <Route exact path="/personal/notifications" component={PersonalNotificationPage}/>
-                                                    <Route exact path="/personal/notes" component={PersonalNotePage}/>
-                                                    <Route exact path="/personal/bills" component={PersonalBillPage}/>
-                                                    <Route exact path="/personal/home" component={PersonalHomePage}/>
-                                                    <Route exact path="/personal/friends" component={PersonalFriendPage}/>
-                                                    <Route exact path="/personal/histories" component={PersonalHistoryPage}/>
-                                                    <Route exact path="/personal/config" component={PersonalConfigPage}/>
+                                                    <Route exact path="/personal/notifications" component={PersonalNotificationPage} />
+                                                    <Route exact path="/personal/notes" component={PersonalNotePage} />
+                                                    <Route exact path="/personal/bills" component={PersonalBillPage} />
+                                                    <Route exact path="/personal/home" component={PersonalHomePage} />
+                                                    <Route exact path="/personal/friends" component={PersonalFriendPage} />
+                                                    <Route exact path="/personal/histories" component={PersonalHistoryPage} />
+                                                    <Route exact path="/personal/config" component={PersonalConfigPage} />
                                                     <Route path="/personal/*" component={ErrorPage} />
                                                 </Switch>
                                             </PersonalLayout>
@@ -317,8 +272,8 @@ const Routes: FC = () => {
                                         <Route path="/bidding">
                                             <BiddingLayout>
                                                 <Switch>
-                                                    <Route exact path="/bidding/home" component={BiddingHomePage}/>
-                                                    <Route exact path="/bidding/exp" component={BiddingOtherPage}/>
+                                                    <Route exact path="/bidding/home" component={BiddingHomePage} />
+                                                    <Route exact path="/bidding/exp" component={BiddingOtherPage} />
                                                     <Route path="/bidding/*" component={ErrorPage} />
                                                 </Switch>
                                             </BiddingLayout>
@@ -327,10 +282,10 @@ const Routes: FC = () => {
                                         <Route path="/operation">
                                             <OperationLayout>
                                                 <Switch>
-                                                    <Route exact path="/operation/home" component={OperationHomePage}/>
-                                                    <Route exact path="/operation/news" component={OperationNewsPage}/>
-                                                    <Route exact path="/operation/rfs" component={OperationRfsPage}/>
-                                                    <Route exact path="/operation/project" component={OperationProjectPage}/>
+                                                    <Route exact path="/operation/home" component={OperationHomePage} />
+                                                    <Route exact path="/operation/news" component={OperationNewsPage} />
+                                                    <Route exact path="/operation/rfs" component={OperationRfsPage} />
+                                                    <Route exact path="/operation/project" component={OperationProjectPage} />
                                                     <Route path="/operation/*" component={ErrorPage} />
                                                 </Switch>
                                             </OperationLayout>
@@ -339,326 +294,11 @@ const Routes: FC = () => {
                                         <Route path="/ree">
                                             <ReeLayout>
                                                 <Switch>
-                                                    <Route exact path="/ree/home" component={ReeHomePage}/>
-                                                    <Route exact path="/ree/other" component={ReeHomePage}/>
+                                                    <Route exact path="/ree/home" component={ReeHomePage} />
+                                                    <Route exact path="/ree/other" component={ReeHomePage} />
                                                     <Route path="/ree /*" component={ErrorPage} />
                                                 </Switch>
                                             </ReeLayout>
-                                        </Route>
-
-                                        <Route exact path="/">
-                                            <Redirect to="/pcm/home" />
-                                        </Route>
-
-                                        <Route path="/pcm/:path?">
-                                            <Switch>
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/admin"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <ProjectAppAdminPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/admin/detail/:id"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <AdminDetail />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/home"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <DashboardPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/projects"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <ProjectCategoryPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/market"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <ProjectDeployingPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    // exact
-                                                    path={"/pcm/dashboard-portfolio"}
-                                                    component={({ ...props }: RouteComponentProps ) => (
-                                                        <HomeLayout>
-                                                            <ProjectDashboardRoutes2 {...props} />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    // exact
-                                                    path={"/pcm/dashboard-task"}
-                                                    component={({ ...props }: RouteComponentProps ) => (
-                                                        <HomeLayout>
-                                                            <ProjectDashboardRoutes {...props} />
-                                                            {/* <KanbanBoardPage /> */}
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/dashboard-document"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <DocumentDashboardPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/mine"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <TasksHomePage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/bookmark"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <TasksHomePage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/draft"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <TasksHomePage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/detail/:id"}
-                                                    component={() => (
-                                                        <HomeLayout>
-                                                            <TaskDetailPage />
-                                                        </HomeLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/home"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectHomePage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/dashboard"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectDashBoardPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    path={"/pcm/project/:id/folder"}
-                                                    component={({ ...props }: RouteComponentProps ) => (
-                                                        <ProjectLayout>
-                                                            <ProjectFolderPage {...props} />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/schedule"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectSchedulePage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/budget"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectBudgetPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    // exact
-                                                    path={"/pcm/project/:id/bidding"}
-                                                    component={(props: RouteComponentProps) => (
-                                                        <ProjectLayout>
-                                                            <ProjectBiddingPage {...props} />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/payment"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectPaymentPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    // exact
-                                                    path={"/pcm/project/:id/document"}
-                                                    component={(props: RouteComponentProps) => (
-                                                        <ProjectLayout>
-                                                            <ProjectDocumentPage {...props}/>
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/photo"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectPhotoPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/photo/package/:packageId"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectPhotoPackagePage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    path={"/pcm/project/:id/drawing"}
-                                                    component={(props: RouteComponentProps) => (
-                                                        <ProjectLayout>
-                                                            <ProjectDrawingRoutes {...props} />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/rfi"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectRfiPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/rfa"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectRfaPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/inspection"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectInspectionPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/punch"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectPunchPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    // exact
-                                                    path={"/pcm/project/:id/resource"}
-                                                    component={(props: RouteComponentProps) => (
-                                                        <ProjectLayout>
-                                                            <ProjectResourceRoutes {...props} />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/mom"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectMomPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/report"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectReportPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/directory"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectDirectoryPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/production"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectProductionPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/other"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectOtherPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <ProtectedRoute
-                                                    exact
-                                                    path={"/pcm/project/:id/admin"}
-                                                    component={() => (
-                                                        <ProjectLayout>
-                                                            <ProjectAdminPage />
-                                                        </ProjectLayout>
-                                                    )}
-                                                />
-                                                <Route path="/pcm/home/*" component={ErrorPage} />
-                                            </Switch>
                                         </Route>
 
                                         <Route path="/social">
@@ -725,9 +365,10 @@ const Routes: FC = () => {
                                         </Route>
 
                                         <Route path="/document">
-                                            <DocumentLayoutContainer />
+                                            <DocumentRoutes />
                                         </Route>
 
+                                        <Route path="/ppt/project/:id/document" component={PPTRoutes} />
                                         <Route path="/datahub">
                                             <DatahubRoutes />
                                         </Route>
@@ -758,15 +399,7 @@ const Routes: FC = () => {
                                             </HumanLayout>
                                         </Route>
 
-                                        <Route path="/messages/:path?">
-                                            <PopupSendFiles>
-                                                <MessagesLayout>
-                                                    <Switch>
-                                                        <ProtectedRoute exact path={"/messages"} component={MessagesHome}/>
-                                                    </Switch>
-                                                </MessagesLayout>
-                                            </PopupSendFiles>
-                                        </Route>
+                                        <MessagesRoute/>
 
                                         <Route path="/accounting/:path?">
                                             <AccountingLayout>
@@ -1060,22 +693,7 @@ const Routes: FC = () => {
                                             </Switch>
                                         </Route>
 
-                                        <Route path="/timesheet/:path?">
-                                            <TimesheetLayout>
-                                                <Switch>
-                                                    <ProtectedRoute
-                                                        exact
-                                                        path="/timesheet/home"
-                                                        component={TimesheetHomePage}
-                                                    />
-                                                    <ProtectedRoute
-                                                        exact
-                                                        path={"/timesheet/home/:id"}
-                                                        component={TimesheetDetailPage}
-                                                    />
-                                                </Switch>
-                                            </TimesheetLayout>
-                                        </Route>
+                                        <TimesheetAppRouter />
 
                                         <Route path="*">
                                             <FullPageLayout>

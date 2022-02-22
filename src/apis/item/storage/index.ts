@@ -5,10 +5,12 @@ import { Storage } from 'typings/items';
 
 interface StorageRepository {
     fetchListStorage: (params: Storage.StorageQueryPayload) => Promise<Storage.StorageQueryResponse>;
+    fetchDetailStorage: (storageID: string, params?: Storage.StorageQueryPayload) => Promise<Storage.StorageQueryDetailResponse>;
 }
 
 export const storageRepository: StorageRepository = {
     fetchListStorage: async (params) => fetchListStorage(params),
+    fetchDetailStorage: async (storageID, params) => fetchListStorage(params),
 }
 
 async function fetchListStorage(params: any) {

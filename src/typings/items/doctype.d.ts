@@ -41,3 +41,7 @@ export type DoctypeQueryResponse = APIResponse & {
         nextCursor: string | null;
     }
 }
+
+export type DoctypeQueryDetailResponse = APIResponse & {
+    data: Doctype;
+}

@@ -18,7 +18,7 @@ interface UseQueryListDepartment {
 
 export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepartment => {
     const res = useInfiniteQuery(
-        [`items.department`, {params}],
+        [`items.department`, { params }],
         async ({ pageParam }: any) =>
             DepartmentRepository.fetchListDepartment({
                 limit: params?.limit || 10,
@@ -66,24 +66,24 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
 interface UseQueryDetailDepartment {
     loading: boolean;
     detailDepartment: Department.Department,
-    onFetchDetailDepartmentAsync: (departmentID: string) => void;
+    onFetchDetailDepartmentAsync: (departmentID: string) => Promise<Department.Department>;
 }
 export const useQueryDetailDepartment = (): UseQueryDetailDepartment => {
     const [detailDepartment, setDetailDepartment] = React.useState<Department.Department | any>({});
     const [loading, setLoading] = React.useState(false);
 
     const onFetchDetailDepartment = React.useCallback(async (departmentID) => {
-       try {
-        setLoading(true);
-        const result = await DepartmentRepository.fetchDetailDepartment({ departmentID });
-        setDetailDepartment(result.data);
-        return result.data;
-       } catch(err) {
-           console.error(err);
+        try {
+            setLoading(true);
+            const result = await DepartmentRepository.fetchDetailDepartment({ departmentID });
+            setDetailDepartment(result.data);
+            return result.data;
+        } catch (err) {
+            console.error(err);
             setDetailDepartment({});
-       } finally {
-        setLoading(false)
-       }
+        } finally {
+            setLoading(false)
+        }
 
     }, []);
     return {
