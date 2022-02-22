@@ -46,7 +46,7 @@ const DatahubHome: FC<RouteComponentProps> = () => {
 					<div className='flex flex-wrap mt-9 gap-y-4'>
 						{
 							Array.from({ length: 10 }).map((_, index) =>
-								<Link key={index} to={"/datahub/home/" + index} className='w-3/12 px-2'>
+								<Link key={index} to={"/datahub/messageHome/" + index} className='w-3/12 px-2'>
 									<div>
 										<div className='bg-white px-[1.375rem] py-5 rounded-cbs'>
 											<div>

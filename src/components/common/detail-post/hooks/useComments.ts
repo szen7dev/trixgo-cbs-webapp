@@ -250,7 +250,7 @@ const useComments = (payload: Payload) => {
    *
    * @param lastestID Id of lastest reply comment
    * @param parentID Id of comment
-   * @param page page index of comment list (useInfiniteQuery)
+   * @param page page index of comment messageList (useInfiniteQuery)
    * @param commentIdx index of page's comment (useInfiniteQuery)
    */
   const fetchReplyComment = async (

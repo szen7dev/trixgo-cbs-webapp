@@ -5,10 +5,10 @@ import {
 } from "typings/user";
 import { convertObToUrl } from "helpers";
 const userURL = "/api/auth/users";
-const friendUrl = "/api/auth/users/list-friend"
+const friendUrl = "/api/auth/users/messageList-friend"
 const codeUrl = "/api/personal/friend-request/get-code"
 const checkCodeUrl = "/api/personal/friend-request/check-code"
-const requestFriendUrl = "/api/auth/users/list-user-receiver-from-friends"
+const requestFriendUrl = "/api/auth/users/messageList-user-receiver-from-friends"
 const UserRepository = {
     /**
      * MEDIA

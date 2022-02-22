@@ -12,11 +12,11 @@ import {
     MediasOfConversationPayload,
     MediasOfConversationResponse
 } from "typings/apis/messages/listConversation";
-const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
-const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
+const getListConversationURL = "/api/chatting/conversations/messageList-conversation-with-page";
+const getListMembersOfConversationURL = "/api/chatting/conversations/messageList-members-conversation";
 const checkExistConversation = "/api/chatting/conversations/check-exists-conversation";
 const createConversation = "/api/chatting/conversations/create-conversation";
-const mediasOfConversation = "/api/chatting/conversations/list-message-media-conversation";
+const mediasOfConversation = "/api/chatting/conversations/messageList-message-media-conversation";
 const generalGroupOfMember = "/api/chatting/conversations/info-general-group-by-member";
 const conversationInformation = "/api/chatting/conversations/info-conversation/";
 

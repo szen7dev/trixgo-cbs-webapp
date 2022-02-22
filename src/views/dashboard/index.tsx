@@ -153,10 +153,10 @@ const HomePage: FC = () => {
                  : ''}
                 
                 {/* outstanding news slider item */}
-                {/* <div className="t-home-slider-item w-1/3 pr-2 pl-2">
-                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
+                {/* <div className="t-messageHome-slider-item w-1/3 pr-2 pl-2">
+                  <div className="t-messageHome-slider-item-warpper relative flex items-end p-2">
                     <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg2} alt="News" />
-                    <div className="t-home-slider-item-text">
+                    <div className="t-messageHome-slider-item-text">
                       <p className="text-lg font-bold">Tin thế giới</p>
                       <div className="text-[14px]">Lãnh đạo các nước tổ chức họp G7</div>
                     </div>
@@ -237,10 +237,10 @@ const HomePage: FC = () => {
 
               {/* recent actions item */}
               {/* <div className="flex mb-4">
-                <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
-                <div className="t-home-actions-text text-secondary-gray">
+                <img className="t-messageHome-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+                <div className="t-messageHome-actions-text text-secondary-gray">
                   <div className="flex justify-between mb-1">
-                    <span className="t-home-actions-title-content text-dark">
+                    <span className="t-messageHome-actions-title-content text-dark">
                       PKT đồng ý với HSTT đợt 4, giá trị được TT lần này: 554.101.100. Kính trình ban lãnh đạo...
                     </span>
                     <span className="ml-2">07/11/21</span>
@@ -286,16 +286,16 @@ const HomePage: FC = () => {
 					<img src={imgBusiness2} alt="Business"/>
 				</div>
 
-        {/* <div className="t-home-right-block">
-          <div className="t-home-right-block-common">
+        {/* <div className="t-messageHome-right-block">
+          <div className="t-messageHome-right-block-common">
             <img src={imgProcess} alt="Process" />
-            <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Quản lý vận hành</div>
+            <div className="t-messageHome-right-block-common-text">
+              <div className="t-messageHome-right-block-common-title">Quản lý vận hành</div>
             </div>
           </div>
-          <div className="flex items-center mt-2 t-home-operation">
+          <div className="flex items-center mt-2 t-messageHome-operation">
             <img src={imgProcess2} alt="Process management" />
-            <div className="t-home-operation-text pl-4 text-dark">
+            <div className="t-messageHome-operation-text pl-4 text-dark">
               <div className="mb-5">
                 Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Thông tin về căn hộ được cung cấp tới tận tay cư dân
               </div>
@@ -377,64 +377,64 @@ const HomePage: FC = () => {
           </div>
         </div>
 
-        {/* <div className="t-home-right-block"> */}
-          {/* <div className="t-home-block-title">
+        {/* <div className="t-messageHome-right-block"> */}
+          {/* <div className="t-messageHome-block-title">
             <span>Sự kiện</span>
             <a href="/">Xem tất cả</a>
           </div> */}
-          {/* <div className="t-home-event"> */}
+          {/* <div className="t-messageHome-event"> */}
             {/* event item */}
-            {/* <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-messageHome-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
-              <div className="t-home-event-text pl-4">
+              <div className="t-messageHome-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
             </div> */}
             {/* event item */}
-            {/* <div className="t-home-event-item flex items-center mb-3">
+            {/* <div className="t-messageHome-event-item flex items-center mb-3">
               <img className="w-10" src={iconBirthday} alt="Thumbnail" />
-              <div className="t-home-event-text pl-4">
+              <div className="t-messageHome-event-text pl-4">
                 <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
               </div>
             </div> */}
           {/* </div> */}
         {/* </div> */}
 
-        {/* <div className="t-home-right-block"> */}
-          {/* <div className="t-home-block-title">
+        {/* <div className="t-messageHome-right-block"> */}
+          {/* <div className="t-messageHome-block-title">
             <span>Yêu cầu kết bạn</span>
             <a href="/">Xem tất cả</a>
           </div> */}
-          {/* <div className="t-home-actions"> */}
+          {/* <div className="t-messageHome-actions"> */}
 
             {/* friend request item */}
             {/* <div className="flex mb-4">
-              <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
-              <div className="t-home-actions-text text-secondary-gray">
+              <img className="t-messageHome-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+              <div className="t-messageHome-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
-                  <span className="t-home-actions-title-content text-dark font-bold">
+                  <span className="t-messageHome-actions-title-content text-dark font-bold">
                     Nguyễn Phan Thanh Hương-CPMI
                   </span>
                 </div>
-                <div className="t-home-actions-info">
+                <div className="t-messageHome-actions-info">
                   <button className="bg-primary h-9 text-primary-light text[14px] mr-2 pl-3 pr-3 rounded-md">Xác nhận</button>
-                  <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
+                  <button className="t-messageHome-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
             </div> */}
 
             {/* friend request item */}
             {/* <div className="flex mb-4">
-              <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
-              <div className="t-home-actions-text text-secondary-gray">
+              <img className="t-messageHome-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+              <div className="t-messageHome-actions-text text-secondary-gray">
                 <div className="flex justify-between mb-1">
-                  <span className="t-home-actions-title-content text-dark font-bold">
+                  <span className="t-messageHome-actions-title-content text-dark font-bold">
                     Nguyễn Phan Thanh Hương-CPMI
                   </span>
                 </div>
-                <div className="t-home-actions-info">
+                <div className="t-messageHome-actions-info">
                   <button className="bg-primary h-9 text-primary-light text[14px] mr-2 pl-3 pr-3 rounded-md">Xác nhận</button>
-                  <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
+                  <button className="t-messageHome-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
                 </div>
               </div>
             </div> */}

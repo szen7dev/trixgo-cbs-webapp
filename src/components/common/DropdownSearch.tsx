@@ -284,7 +284,7 @@ const DropdownSearchable: FC<Props> = ({
             disabled={disabled}
             placeholder={placeholder}
             className={
-              "inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
+              "inline-searchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
             }
             value={searchTerm}
             onChange={(e) => handleSearchingValue(e.target.value)}
@@ -311,7 +311,7 @@ const DropdownSearchable: FC<Props> = ({
           disabled={disabled}
           placeholder={placeholder}
           className={
-            "inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
+            "inline-searchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
           }
           value={searchTerm}
           onChange={(e) => handleSearchingValue(e.target.value)}
@@ -351,7 +351,7 @@ const DropdownSearchable: FC<Props> = ({
           disabled={disabled}
           placeholder={placeholder}
           className={
-            "inline-search-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
+            "inline-searchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
           }
           value={searchTerm}
           onChange={(e) => handleSearchingValue(e.target.value)}
@@ -443,7 +443,7 @@ const DropdownSearchable: FC<Props> = ({
               <input
                 disabled={disabled}
                 className={
-                  "select-search flex-1 px-3 border-b " +
+                  "select-searchMessage flex-1 px-3 border-b " +
                   (searchInputClassName ?? "")
                 }
                 placeholder={"Nhập nội dung"}

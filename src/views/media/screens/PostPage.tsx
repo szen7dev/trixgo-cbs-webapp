@@ -101,7 +101,7 @@ const SocialPost: FC = () => {
 
 	const handleDeleteMedia = async () => {
 		await deleteMedia(mediaID);
-		history.push('/social/home');
+		history.push('/social/messageHome');
 	}
 
 	const handleReactionMedia = async () => {

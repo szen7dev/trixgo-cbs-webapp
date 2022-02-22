@@ -14,8 +14,8 @@ import DatahubType from '../screens/DatahubType'
 import DatahubTypeDetail from '../screens/DatahubTypeDetail'
 
 export const routes = [
-	{ path: '/datahub/home', exact: true, name: 'Trang chủ', component: DatahubHome },
-	{ path: '/datahub/home/:d', exact: true, name: 'Trang chủ', component: DatahubHomeDetail, isPrivate: true },
+	{ path: '/datahub/messageHome', exact: true, name: 'Trang chủ', component: DatahubHome },
+	{ path: '/datahub/messageHome/:d', exact: true, name: 'Trang chủ', component: DatahubHomeDetail, isPrivate: true },
 	{
 		path: '/datahub/type', name: 'Phân loại hệ thống', layout: LayoutPrimary, type: 'state',
 		pages: [
@@ -32,10 +32,10 @@ export const routes = [
 			{ id: '2', path: '/datahub/project/map', title: 'Bản đồ', state: 2 },
 		]
 	},
-	{ path: '/datahub/contractor/home', exact: true, name: 'Năng lực nhà thầu', component: DatahubContractorHome },
-	{ path: '/datahub/contractor/home/:id', name: 'Năng lực nhà thầu', component: DatahubContractorDetail, isPrivate: true },
-	{ path: '/datahub/home', name: 'Biểu mẫu nghiệm thu' },
-	{ path: '/datahub/home', name: 'Datahub giá' },
+	{ path: '/datahub/contractor/messageHome', exact: true, name: 'Năng lực nhà thầu', component: DatahubContractorHome },
+	{ path: '/datahub/contractor/messageHome/:id', name: 'Năng lực nhà thầu', component: DatahubContractorDetail, isPrivate: true },
+	{ path: '/datahub/messageHome', name: 'Biểu mẫu nghiệm thu' },
+	{ path: '/datahub/messageHome', name: 'Datahub giá' },
 	{ path: '/datahub/*', name: 'eror', component: ErrorPage, isPrivate: true },
 ]
 const DatahubRoutes: FC = () => {

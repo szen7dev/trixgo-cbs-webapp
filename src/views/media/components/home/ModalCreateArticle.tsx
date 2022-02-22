@@ -133,7 +133,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, 
 		values.images = [];
 		values.files = [];
 
-		// Get list file uploaded
+		// Get messageList file uploaded
 		for (const [, { _id }] of Object.entries(uploads.images)) {
 			_id && (values.images = [...values.images || [], _id]);
 		}
@@ -161,7 +161,7 @@ const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, 
 				break;
 		}
 
-		// Refetch list media
+		// Refetch messageList media
 		switch (values.type) {
 			case 'company':
 				refetchListMediasCompany();

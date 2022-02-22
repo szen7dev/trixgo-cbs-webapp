@@ -38,7 +38,7 @@ const PortfolioTableContainer: FC = () => {
 							<th className="first-letter:capitalize font-normal">CỘT MỐC</th>
 							<th className="first-letter:capitalize font-normal py-0.5 w-min text-right">
 								<div className="rounded-full inline-flex bg-cbs-left-menu px-4 py-1.5 items-center h-10 w-min right-0">
-									<img src={SearchIcon} alt={"icon search"} className="w-5 h-5" />
+									<img src={SearchIcon} alt={"icon searchMessage"} className="w-5 h-5" />
 									<input placeholder="Tìm kiếm" className="bg-transparent focus:outline-none w-60" />
 								</div>
 							</th>

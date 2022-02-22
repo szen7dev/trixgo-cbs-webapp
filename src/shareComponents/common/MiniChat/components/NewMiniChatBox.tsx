@@ -8,7 +8,7 @@ import {map as _map} from "lodash"
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MiniChatContext} from "../ChatsOnRightSideBar";
 
-const NewMiniChatBox:FC = () => {
+export const NewMiniChatBox:FC = () => {
     const dispatch = useDispatch();
     const {isNewChatboxVisible} = useSelector((state: RootState) => state.miniChat.data)
     const {socketRef} = useContext(MiniChatContext);
@@ -79,4 +79,3 @@ const NewMiniChatBox:FC = () => {
         </div>
     )
 }
-export default NewMiniChatBox;

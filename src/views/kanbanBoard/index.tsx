@@ -24,7 +24,7 @@ const KanbanBoard: FC = () => {
               <div className="t-kanban-col-header-progress-green" style={{ width: "20%" }}>20</div>
             </div>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Biên soạn HĐ Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 
@@ -85,7 +85,7 @@ const KanbanBoard: FC = () => {
               <div className="t-kanban-col-header-progress-green" style={{ width: "20%" }}>20</div>
             </div>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 
@@ -146,7 +146,7 @@ const KanbanBoard: FC = () => {
               <div className="t-kanban-col-header-progress-green" style={{ width: "20%" }}>20</div>
             </div>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Biên soạn HĐ Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 
@@ -207,7 +207,7 @@ const KanbanBoard: FC = () => {
               <div className="t-kanban-col-header-progress-green" style={{ width: "20%" }}>20</div>
             </div>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Biên soạn HĐ Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 
@@ -268,7 +268,7 @@ const KanbanBoard: FC = () => {
               <div className="t-kanban-col-header-progress-green" style={{ width: "20%" }}>20</div>
             </div>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Biên soạn HĐ Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 
@@ -325,7 +325,7 @@ const KanbanBoard: FC = () => {
             </div>
             <p className="mt-3 text-primary">Tổng số: 138 công việc</p>
           </div>
-          {/* kanban board item list */}
+          {/* kanban board item messageList */}
           <KanbanBoardItem
             avatar="https://s120-ava-talk.zadn.vn/0/1/8/c/16/120/b773acbcc956e49d521e43f304a53d9f.jpg"
             title="Biên soạn HĐ Tư vấn giám sát thi công xây dựng và lắp đặt thiết bị" 

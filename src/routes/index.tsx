@@ -57,7 +57,7 @@ import HumanInfo from "views/humans/components/HumanInfo";
 import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
 import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
 import PersonalBillPage from "views/pages/personal/bill/PersonalBillPage";
-import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
+import PersonalHomePage from "views/pages/personal/messageHome/PersonalHomePage";
 import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
 import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
 import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
@@ -124,7 +124,7 @@ import ContractIpc from "views/pages/cmcs/components/views/contract/ContractIpc"
 import ContractProduct from "views/pages/cmcs/components/views/contract/ContractProduct";
 
 // Support pages
-import SupportPage from "views/pages/support/components/home";
+import SupportPage from "views/pages/support/components/messageHome";
 import RegisterDashboardPage from "views/pages/support/components/register";
 import SupportCompanyPage from "views/pages/support/SupportCompanyPage";
 import SupportGrantPage from "views/pages/support/SupportGrantPage";
@@ -525,7 +525,7 @@ const Routes: FC = () => {
                                                 <Switch>
                                                     <ProtectedRoute
                                                         exact
-                                                        path={"/fin/home"}
+                                                        path={"/fin/messageHome"}
                                                         component={FinHomePage}
                                                     />
                                                     <ProtectedRoute
@@ -702,7 +702,7 @@ const Routes: FC = () => {
                                                     />
                                                     <ProtectedRoute
                                                         exact
-                                                        path={"/timesheet/home/:id"}
+                                                        path={"/timesheet/messageHome/:id"}
                                                         component={TimesheetDetailPage}
                                                     />
                                                 </Switch>

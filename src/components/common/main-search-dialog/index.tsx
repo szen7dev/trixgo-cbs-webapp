@@ -70,7 +70,7 @@ const MainSearchDialog: FC = () => {
         </button>
       </div>
 
-      {/* search results */}
+      {/* searchMessage results */}
       <div className={cn("t-main-search-results overflow-auto pb-6 relative", {"hidden": isVisibleSearchFilter})}>
         <div className="flex items-center justify-between pl-8 pr-8 border-b border-solid border-primary-border pb-2 mb-6">
           <div className="flex items-center">
@@ -101,7 +101,7 @@ const MainSearchDialog: FC = () => {
           </div>
         </div>
 
-        {/* result type: t-main-search-result-item-good, t-main-search-result-item-incoming, t-main-search-result-item-overdue, t-main-search-result-item-normal */}
+        {/* result type: t-main-searchMessage-result-item-good, t-main-searchMessage-result-item-incoming, t-main-searchMessage-result-item-overdue, t-main-searchMessage-result-item-normal */}
         {isLoadingSearchResultList ? 
           <Loader absolute={true} className="border-primary" />
           :
@@ -157,8 +157,8 @@ const MainSearchDialog: FC = () => {
         }
       </div>
 
-      {/* search filter */}
-      <div className={cn("t-main-search-filter pl-8 pr-8 mb-5", {"hidden": !isVisibleSearchFilter})}>
+      {/* searchMessage filter */}
+      <div className={cn("t-main-searchMessage-filter pl-8 pr-8 mb-5", {"hidden": !isVisibleSearchFilter})}>
         <MainSearchFilter
           handleFilterData={onHandleFilterData}
           toggleSearchFilter={toggleSearchFilter}

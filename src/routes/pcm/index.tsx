@@ -43,7 +43,7 @@ import ProjectDashboardRoutes2 from "views/pages/ppt/routes/ProjectDashboardRout
 import AdminDetail from "views/pages/ppt/permission/components/AdminDetail";
 
 // Tasks pages
-import TasksHomePage from "views/pages/tasks/home";
+import TasksHomePage from "views/pages/tasks/messageHome";
 import TaskDetailPage from "views/pages/tasks/detail";
 import ProjectLayout from "views/layouts/ProjectLayout";
 import ErrorPage from "views/pages/authentication/Error";
@@ -77,7 +77,7 @@ const PCMRouter: FC = () => {
                     />
                     <ProtectedRoute
                         exact
-                        path={"/pcm/home"}
+                        path={"/pcm/messageHome"}
                         component={() => (
                             <HomeLayout>
                                 <DashboardPage />
@@ -168,7 +168,7 @@ const PCMRouter: FC = () => {
                     />
                     <ProtectedRoute
                         exact
-                        path={"/pcm/project/:id/home"}
+                        path={"/pcm/project/:id/messageHome"}
                         component={() => (
                             <ProjectLayout>
                                 <ProjectHomePage />

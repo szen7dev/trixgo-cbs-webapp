@@ -1,15 +1,14 @@
 import React, { FC, useState } from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import NewMiniChatBox from "./NewMiniChatBox";
+import {NewMiniChatBox} from "./NewMiniChatBox";
 import {MiniChatContext} from "../ChatsOnRightSideBar";
-import MiniChatSection from "./ChatBox/MiniChatSection";
+import {MiniChatSection} from "./chatBox";
 import {SocketController} from "views/messages/shareComponents/common/socket";
-import DeleteAndRevokeMessageConfirm from "views/messages/chattingSection/components/DeleteAndRevokeMessage";
-import PopupSendImageAndFile from "views/messages/chattingSection/components/PopupSendImageAndFile";
+import {PopupSendImageAndFile, DeleteAndRevokeMessageConfirm} from "views/messages/pages/messageHome/sections/chattingSection";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
-const MiniChatbox: FC = () => {
+export const MiniChatbox: FC = () => {
     const {isChatboxVisible, conversation} = useSelector((state: RootState) => state.miniChat.data);
 
     return (
@@ -22,5 +21,3 @@ const MiniChatbox: FC = () => {
         </div>
     );
 };
-
-export default MiniChatbox;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import {Route, Switch} from "react-router-dom";
 import ProtectedRoute from "components/common/ProtectedRoute";
-import MessagesHome from "views/messages/home";
+import {MessagesHome} from "views/messages/pages/messageHome";
 import {MessagesLayout} from "views/messages/shareComponents/layouts/MessagesLayout";
 const MessagesRoute:FC = () => {
     return (

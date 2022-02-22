@@ -144,7 +144,7 @@ const RelatedResponse: FC<Props> = ({ task }) => {
     let images: string[] = [];
 		let files: string[] = [];
 
-		// Get list file uploaded
+		// Get messageList file uploaded
 		for (const [, { _id }] of Object.entries(uploads.images)) {
 			_id && (images = [...images, _id]);
 		}

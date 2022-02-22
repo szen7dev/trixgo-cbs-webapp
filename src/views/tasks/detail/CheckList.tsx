@@ -76,7 +76,7 @@ const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
 
   return (
     <div>
-      {/* Check list header */}
+      {/* Check messageList header */}
       <div
         className={`${
           selectAll ? "mb-1" : "mb-5"
@@ -167,7 +167,7 @@ const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
       </div>
 
       <div className="rounded-sm border border-slate-400">
-        {/* Check list items */}
+        {/* Check messageList items */}
         <div className="shadow-lg">
           <div className="w-full">
             {(data || []).map((checkList) => (

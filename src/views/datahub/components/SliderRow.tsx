@@ -24,7 +24,7 @@ const SliderRow: FC<Props> = (props) => {
 				{
 					props.items.map((_item, index) => (
 						<SwiperSlide key={_item.id} className="w-1/3 rounded-[10px] overflow-hidden border-cbs-border border-[0.5px]">
-							<Link to={'/datahub/contractor/home/' + _item.id}>
+							<Link to={'/datahub/contractor/messageHome/' + _item.id}>
 								<div className='h-36'>
 									<img className="w-full h-full z-0 object-cover" src={_item.image} alt="News" />
 								</div>

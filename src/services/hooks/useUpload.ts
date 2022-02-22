@@ -95,7 +95,7 @@ export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
             }   
         }
 
-        // Generate link S3 -> get list link presigned upload -> upload S3 async
+        // Generate link S3 -> get messageList link presigned upload -> upload S3 async
         const listURLPresigned = await Promise.all(urlsPromise);
 
         listURLPresigned.length && listURLPresigned.map((link: GenerateLinkResponse) => {
