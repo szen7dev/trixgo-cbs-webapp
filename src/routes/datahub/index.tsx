@@ -8,7 +8,7 @@ import LayoutPrimary from 'views/media/layouts/LayoutPrimary';
 import DatahubContractorLayout from '../layouts/DatahubContractorLayout';
 
 /*=====PAGES=====*/
-import DatahubContractorContract from '../screens/DatahubContractorContract';
+import DatahubContractorContract from 'views/datahub/DatahubContractorContract';
 import DatahubContractorDetail from '../screens/DatahubContractorDetail';
 import DatahubContractorFinancial from '../screens/DatahubContractorFinancial';
 import DatahubContractorHome from '../screens/DatahubContractorHome';
