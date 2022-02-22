@@ -6,7 +6,7 @@ export const state = {
 
   type: "post", // post or comment
 
-  images: [] as ImageProps[], // list image
+  images: [] as ImageProps[], // messageList image
   index: 0, // index init image
 };
 

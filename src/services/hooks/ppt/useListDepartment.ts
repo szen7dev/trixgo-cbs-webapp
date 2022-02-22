@@ -60,7 +60,7 @@ export function useListDepartment<
 > {
   const { isLoading, data, refetch, fetchNextPage, hasNextPage } =
     useInfiniteQuery(
-      ["departments.list"],
+      ["departments.messageList"],
       ({ pageParam }) => DepartmentsRepository.getDepartmentList({ ...props }),
       {
         refetchOnWindowFocus: false,

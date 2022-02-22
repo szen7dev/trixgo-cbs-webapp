@@ -20,8 +20,8 @@ import {
     UpdateReminderMessageResponse
 } from "typings/apis/messages/listMessage";
 
-const getListPinMessageURL = "/api/chatting/conversations/list-message-pin-conversation-with-page";
-const getListMessageURL = "/api/chatting/conversations/list-message-conversation-with-page";
+const getListPinMessageURL = "/api/chatting/conversations/messageList-message-pin-conversation-with-page";
+const getListMessageURL = "/api/chatting/conversations/messageList-message-conversation-with-page";
 const sendNormalMessageURL = "/api/chatting/conversations/insert-message-conversation";
 const updateReminder = "/api/chatting/conversations/update-user-join-message-reminder-conversation";
 const shareMessage = "/api/chatting/conversations/share-message-conversation";
@@ -30,7 +30,7 @@ const deleteMessage = "/api/chatting/conversations/delete-message-conversation";
 const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-poll-conversation";
 const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
-const searchMessageInConversationById = "api/chatting/conversations/search-message-conversation-by-id";
+const searchMessageInConversationById = "api/chatting/conversations/searchMessage-message-conversation-by-id";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {

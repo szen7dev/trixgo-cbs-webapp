@@ -229,7 +229,7 @@ const CmcIncome: FC = () => {
                     style={{ marginLeft: "-23px" }}
                   />
                 </td>
-                <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
+                <Link to={"/cmcs/contract/" + (item._id) + "/messageHome"}>
                   <td className="py-1 px-2">
                     {item.name}
                     <p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>

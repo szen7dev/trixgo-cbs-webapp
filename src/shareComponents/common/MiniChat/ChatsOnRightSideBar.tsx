@@ -1,6 +1,5 @@
 import React, {createContext, FC, useMemo, useState} from "react";
-import MiniChatbox from "./components/MiniChatBox";
-import MiniChatGroup from "./components/ChatBox/MiniChatGroup";
+import {MiniChatbox,MiniChatGroup} from "./components";
 import Editor from "@draft-js-plugins/editor";
 import {useSocket} from "services/hooks/useSocket";
 
@@ -14,7 +13,7 @@ export const MiniChatContext = createContext<{
     setEditorRef: () => undefined,
 });
 
-const ChatsOnRightSideBar:FC = () => {
+export const ChatsOnRightSideBar:FC = () => {
     const [editorRef, setEditorRef] = useState<Editor>();
     const socketRef = useSocket();
 
@@ -30,4 +29,3 @@ const ChatsOnRightSideBar:FC = () => {
         </MiniChatContext.Provider>
     )
 }
-export default ChatsOnRightSideBar;

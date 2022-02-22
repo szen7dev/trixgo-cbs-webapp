@@ -468,7 +468,7 @@ const AddNewTaskDialog: FC = () => {
                   <div className="t-add-new-task-dialog-attachment-item px-3 py-2 mb-3 flex items-center">
                     <p className="t-add-new-task-dialog-attachment-title truncate mr-2" title="BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png">BaoCaoDanhGiaTacDongNgoaiCanhLenThietKeMau.png</p>
                     <span className="mr-2">(3.908K)</span>
-                    <div className="t-home-training-progress-bar w-1/3 mr-2">
+                    <div className="t-messageHome-training-progress-bar w-1/3 mr-2">
                       <div style={{ width: "10%" }}></div>
                     </div>
                     <button className="ml-auto"><Close /></button>
