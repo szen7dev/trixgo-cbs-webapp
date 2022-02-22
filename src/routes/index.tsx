@@ -147,7 +147,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 /*=====NEW ROUTE=====*/
 import SampleAppRouter from "./sampleApp";
 import MessagesRouter from "./messages";
-import AuthenRouter from "./authen";
+import AuthenticationRouter from "./authentication";
 import PersonalRouter from "./personal";
 import PcmRouter from "./pcm";
 import MediaRouter from "./media";
