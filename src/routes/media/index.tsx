@@ -1,20 +1,82 @@
 import { FC } from "react";
-import { Route } from "react-router-dom";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-// Dashboard pages
-import SampleAppPage1 from 'views/sampleApp/page1';
+/*=====LAYOUTS=====*/
+import FullPageLayout from "views/layouts/FullPage";
 
-const SampleAppRouter: FC = () => {
+/*=====PAGES=====*/
+import SignInPage from "views/pages/authentication/SignIn";
+import RegisterPage from "views/pages/authentication/Register";
+import ResetPasswordPage from "views/pages/authentication/ResetPassword";
+import ErrorPage from "views/pages/authentication/Error";
+
+const MediaRouter: FC = () => {
     return (
         <>
-            <Route exact path="/">
-                <ProtectedRoute
-                    exact path="/sample-app/page1" component={SampleAppPage1}
-                />
+            <Route path="/media">
+                <HomeLayout>
+                    <Switch>
+                        <Route
+                            exact
+                            path="/media/home"
+                            component={() =>
+                                <SocialLayoutPrimary>
+                                    <SocialHomePage />
+                                </SocialLayoutPrimary>
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/media/home/2"
+                            component={() =>
+                                <SocialLayoutPrimary>
+                                    <SocialCategoryPage type="department" />
+                                </SocialLayoutPrimary>
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/media/home/3"
+                            component={() =>
+                                <SocialLayoutPrimary>
+                                    <SocialCategoryPage type="digital-conversion" />
+                                </SocialLayoutPrimary>
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/media/home/4"
+                            component={() =>
+                                <SocialLayoutPrimary>
+                                    <SocialCategoryPage type="system" />
+                                </SocialLayoutPrimary>
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/media/home/5"
+                            component={() =>
+                                <SocialLayoutPrimary>
+                                    <SocialCategoryPage type="just-me" />
+                                </SocialLayoutPrimary>
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/media/post/:mediaID"
+                            component={SocialPostPage}
+                        />
+                        <Route
+                            exact
+                            path="/media/comments"
+                            component={SocialCommentsPage}
+                        />
+                        <Route path="/media/*" component={ErrorPage} />
+                    </Switch>
+                </HomeLayout>
             </Route>
         </>
     )
 };
 
-export default SampleAppRouter;
+export default MediaRouter;

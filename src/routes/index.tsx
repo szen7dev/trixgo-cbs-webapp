@@ -27,7 +27,7 @@ import FinLayout from "views/layouts/FinLayout";
 import { HumanLayout } from "shareComponents/layouts/HumanLayout";
 import OperationLayout from "views/layouts/OperationLayout"; //*** */
 import PcmLayout from "views/layouts/PcmLayout";
-import PersonalLayout from "views/layouts/PersonalLayout";
+
 import ReeLayout from "views/layouts/ReeLayout"; //*** */
 import SupportLayout from "views/layouts/SupportLayout";
 import { TimesheetLayout } from "shareComponents/layouts/TimesheetLayout";
@@ -36,10 +36,6 @@ import CmcsContractLayout from "views/layouts/CmcsContractLayout";
 import OwnerLayout from "views/layouts/OwnerLayout";
 
 /*=====PAGES=====*/
-// Authentication pages
-import SignInPage from "views/pages/authentication/SignIn";
-import RegisterPage from "views/pages/authentication/Register";
-import ResetPasswordPage from "views/pages/authentication/ResetPassword";
 import ErrorPage from "views/pages/authentication/Error";
 
 // Owner pages
@@ -54,14 +50,7 @@ import HumanExpiredPage from "views/humans/HumanExpiredPage";
 import HumanInfo from "views/humans/components/HumanInfo";
 
 // Personal pages
-import PersonalNotificationPage from "views/pages/personal/noti/PersonalNotificationPage";
-import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
-import PersonalBillPage from "views/pages/personal/bill/PersonalBillPage";
-import PersonalHomePage from "views/pages/personal/home/PersonalHomePage";
-import PersonalConfigPage from "views/pages/personal/config/PersonalConfigPage";
-import PersonalFriendPage from "views/pages/personal/friends/PersonalFriendPage";
-import PersonalHistoryPage from "views/pages/personal/history/PersonalHistoryPage";
-import ConfigListDetail from "views/pages/personal/config/components/ConfigListDetail";
+
 
 // Help pages
 import HelpCenterPage from "views/pages/help/HelpCenterPage";
@@ -159,7 +148,6 @@ import AccountingRouter from "./accounting";
 import FinancialRouter from "./financial";
 import BiddingRouter from "./bidding";
 import SupportRouter from "./support";
-import ChattingRouter from "./chatting";
 import DatahubRouter from "./datahub";
 import WorkshopRouter from "./workshop";
 import OperationRouter from "./operation";
@@ -181,12 +169,12 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
-                                        <SampleAppRouter />
-                                        <AuthenticationRouter />
-                                        <MessagesRouter />
-                                        <PersonalRouter />
-                                        <PcmRouter />
-                                        <MediaRouter />
+                                        <SampleAppRouter />   {/* ok */}
+                                        <AuthenticationRouter />     {/* ok */} 
+                                        <MessagesRouter />  {/* ok */}
+                                        <PersonalRouter />  {/* ok */}
+                                        <PcmRouter />  {/* a Hiep */}
+                                        <MediaRouter />  
                                         <DocumentRouter />
                                         <HumanRouter />
                                         <TimesheetRouter />
@@ -195,7 +183,6 @@ const Routes: FC = () => {
                                         <FinancialRouter />
                                         <BiddingRouter />
                                         <SupportRouter />
-                                        <ChattingRouter />
                                         <DatahubRouter />
                                         <WorkshopRouter />
                                         <OperationRouter />
@@ -203,32 +190,7 @@ const Routes: FC = () => {
                                         <MarketRouter />
                                         <QrcodeRouter />
                                        
-                                        <Route path="/authentication/:path?">
-                                            <FullPageLayout isAuthentication>
-                                                <Switch>
-                                                    <Route exact path="/authentication">
-                                                        <Redirect to="/authentication/sign-in" />
-                                                    </Route>
-                                                    <Route
-                                                        exact
-                                                        path="/authentication/sign-in"
-                                                        component={SignInPage}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path="/authentication/register"
-                                                        component={RegisterPage}
-                                                    />
-                                                    <Route
-                                                        exact
-                                                        path="/authentication/reset-password"
-                                                        component={ResetPasswordPage}
-                                                    />
-                                                    <Route path="/authentication/*" component={ErrorPage} />
-                                                </Switch>
-                                            </FullPageLayout>
-                                        </Route>
-
+                                        
                                         <Route path="/support">
                                             <SupportLayout>
                                                 <Switch>
@@ -291,20 +253,7 @@ const Routes: FC = () => {
                                             </HelpCenterLayout>
                                         </Route>
 
-                                        <Route path="/personal">
-                                            <PersonalLayout>
-                                                <Switch>
-                                                    <Route exact path="/personal/notifications" component={PersonalNotificationPage} />
-                                                    <Route exact path="/personal/notes" component={PersonalNotePage} />
-                                                    <Route exact path="/personal/bills" component={PersonalBillPage} />
-                                                    <Route exact path="/personal/home" component={PersonalHomePage} />
-                                                    <Route exact path="/personal/friends" component={PersonalFriendPage} />
-                                                    <Route exact path="/personal/histories" component={PersonalHistoryPage} />
-                                                    <Route exact path="/personal/config" component={PersonalConfigPage} />
-                                                    <Route path="/personal/*" component={ErrorPage} />
-                                                </Switch>
-                                            </PersonalLayout>
-                                        </Route>
+                                        
 
                                         <Route path="/bidding">
                                             <BiddingLayout>
@@ -435,8 +384,6 @@ const Routes: FC = () => {
                                                 </Switch>
                                             </HumanLayout>
                                         </Route>
-
-                                        <MessagesRouter/>
 
                                         <Route path="/accounting/:path?">
                                             <AccountingLayout>

@@ -1,20 +1,46 @@
+/*=====LIBRARY=====*/
 import { FC } from "react";
-import { Route } from "react-router-dom";
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-// Dashboard pages
-import SampleAppPage1 from 'views/sampleApp/page1';
+/*=====LAYOUTS=====*/
+import FullPageLayout from "views/layouts/FullPage";
 
-const AuthenRouter: FC = () => {
+/*=====PAGES=====*/
+import SignInPage from "views/pages/authentication/SignIn";
+import RegisterPage from "views/pages/authentication/Register";
+import ResetPasswordPage from "views/pages/authentication/ResetPassword";
+import ErrorPage from "views/pages/authentication/Error";
+
+const AuthenticationRouter: FC = () => {
     return (
         <>
-            <Route exact path="/">
-                <ProtectedRoute
-                    exact path="/sample-app/page1" component={SampleAppPage1}
-                />
+            <Route path="/authentication/:path?">
+                <FullPageLayout isAuthentication>
+                    <Switch>
+                        <Route exact path="/authentication">
+                            <Redirect to="/authentication/sign-in" />
+                        </Route>
+                        <Route
+                            exact
+                            path="/authentication/sign-in"
+                            component={SignInPage}
+                        />
+                        <Route
+                            exact
+                            path="/authentication/register"
+                            component={RegisterPage}
+                        />
+                        <Route
+                            exact
+                            path="/authentication/reset-password"
+                            component={ResetPasswordPage}
+                        />
+                        <Route path="/authentication/*" component={ErrorPage} />
+                    </Switch>
+                </FullPageLayout>
             </Route>
         </>
     )
 };
 
-export default AuthenRouter;
+export default AuthenticationRouter;
