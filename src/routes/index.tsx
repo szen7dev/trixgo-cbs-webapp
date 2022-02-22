@@ -146,8 +146,8 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====NEW ROUTE=====*/
 import SampleAppRouter from "./sampleApp";
-import MessagesRouter from "./messages";
 import AuthenticationRouter from "./authentication";
+import MessagesRouter from "./messages";
 import PersonalRouter from "./personal";
 import PcmRouter from "./pcm";
 import MediaRouter from "./media";
@@ -181,8 +181,28 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
-                                        <PCMRouter />
                                         <SampleAppRouter />
+                                        <AuthenticationRouter />
+                                        <MessagesRouter />
+                                        <PersonalRouter />
+                                        <PcmRouter />
+                                        <MediaRouter />
+                                        <DocumentRouter />
+                                        <HumanRouter />
+                                        <TimesheetRouter />
+                                        <CmcsRouter />
+                                        <AccountingRouter />
+                                        <FinancialRouter />
+                                        <BiddingRouter />
+                                        <SupportRouter />
+                                        <ChattingRouter />
+                                        <DatahubRouter />
+                                        <WorkshopRouter />
+                                        <OperationRouter />
+                                        <ReeRouter />
+                                        <MarketRouter />
+                                        <QrcodeRouter />
+                                       
                                         <Route path="/authentication/:path?">
                                             <FullPageLayout isAuthentication>
                                                 <Switch>
