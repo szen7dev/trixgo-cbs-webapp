@@ -7,7 +7,7 @@ type Props = {
   isAuthentication?: boolean;
 };
 
-export const FullPage: FC<Props> = ({ children, isAuthentication = false }) => {
+export const FullPageLayout: FC<Props> = ({ children, isAuthentication = false }) => {
   return (
     <div
       className={cn(
