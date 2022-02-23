@@ -3,7 +3,7 @@ import { map as _map } from "lodash";
 
 import { Loader } from "shareComponents/common/Loader";
 
-import { useRightClickMenu } from "services/hooks/useRightClickMenu";
+// import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 
 import MenuMainRow from "./MenuMainRow";
 import { CollapseButton } from "views/timesheet/shareComponents/common";
@@ -24,16 +24,16 @@ const DetailMainRow: FC<Props> = ({
   onUpdatedTimeSheetChild,
   isFetchTimeSheetChild,
 }) => {
-  const { closeRightClick, openRightClick } = useRightClickMenu();
+  // const { closeRightClick, openRightClick } = useRightClickMenu();
 
-  const handleContextMenu = React.useCallback((e) => {
-    e.preventDefault();
-    openRightClick({
-      content: <MenuMainRow />,
-      x: e.pageX,
-      y: e.pageY,
-    })
-  }, [openRightClick]);
+  // const handleContextMenu = React.useCallback((e) => {
+  //   e.preventDefault();
+  //   openRightClick({
+  //     content: <MenuMainRow />,
+  //     x: e.pageX,
+  //     y: e.pageY,
+  //   })
+  // }, [openRightClick]);
 
   // React.useLayoutEffect(() => {
   //   console.log('aaa')

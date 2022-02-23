@@ -7,7 +7,7 @@ import DropdownSearchable from "shareComponents/common/DropdownSearch";
 
 import MenuChildRow from "./MenuChildRow";
 
-import { useRightClickMenu } from "services/hooks/useRightClickMenu";
+// import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 
 import type {
@@ -30,7 +30,7 @@ const DetailChildRow: FC<Props> = ({
   index,
   onUpdatedTimeSheetChild,
 }) => {
-  const { closeRightClick, openRightClick } = useRightClickMenu();
+  // const { closeRightClick, openRightClick } = useRightClickMenu();
 
   const [searchAssigneeStr, setSearchAssigneeStr] = React.useState(
     rowData.assignee?.fullname || ""
@@ -50,17 +50,17 @@ const DetailChildRow: FC<Props> = ({
     [onUpdatedTimeSheetChild, rowData]
   );
 
-  const handleContextMenu = React.useCallback(
-    (e) => {
-      e.preventDefault();
-      openRightClick({
-        content: <MenuChildRow />,
-        x: e.pageX,
-        y: e.pageY,
-      });
-    },
-    [openRightClick]
-  );
+  // const handleContextMenu = React.useCallback(
+  //   (e) => {
+  //     e.preventDefault();
+  //     openRightClick({
+  //       content: <MenuChildRow />,
+  //       x: e.pageX,
+  //       y: e.pageY,
+  //     });
+  //   },
+  //   [openRightClick]
+  // );
 
   // React.useEffect(() => {
   //   document.addEventListener("click", closeRightClick);
