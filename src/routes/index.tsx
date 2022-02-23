@@ -19,13 +19,13 @@ import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
 // import CmcsRouter from "./cmcs";
 // import DatahubRouter from "./datahub";
-import DocumentRouter from "./document";
+// import DocumentRouter from "./document";
 // import FinancialRouter from "./financial";
 import HomeRouter from './home';
-import HumanRouter from "./human";
+// import HumanRouter from "./human";
 // import MarketRouter from "./market";
-import MediaRouter from "./media";
-import MessagesRouter from "./messages";
+// import MediaRouter from "./media";
+// import MessagesRouter from "./messages";
 // import OperationRouter from "./operation";
 // import OwnerRouter from './owner';
 import PcmRouter from "./pcm";
@@ -58,13 +58,13 @@ const Routes: FC = () => {
                                         {/* <BiddingRouter /> */}
                                         {/* <CmcsRouter /> */}
                                         {/* <DatahubRouter /> */}
-                                        <DocumentRouter />
+                                        {/* <DocumentRouter /> */}
                                         {/* <FinancialRouter /> */}
                                         <HomeRouter />
-                                        <HumanRouter />
+                                        {/* <HumanRouter /> */}
                                         {/* <MarketRouter /> */}
-                                        <MediaRouter />
-                                        <MessagesRouter />
+                                        {/* <MediaRouter /> */}
+                                        {/* <MessagesRouter /> */}
                                         {/* <OperationRouter /> */}
                                         {/* <OwnerRouter /> */}
                                         <PcmRouter />
