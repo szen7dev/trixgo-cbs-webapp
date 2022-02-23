@@ -35,9 +35,9 @@ import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.u
 /**
  * Types, Services
  */
-import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/social';
+import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/media';
 import { useAuth } from 'services/hooks/useAuth';
-import { useSocial } from 'services/hooks/useSocial';
+import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
@@ -61,20 +61,20 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		}] = useUploadFile({ files, images });
 
 	const { user } = useAuth();
-	const { refetchListMedias: refetchListMediasCompany } = useSocial('list_media__company', {
+	const { refetchListMedias: refetchListMediasCompany } = useMedia('list_media__company', {
 		type: 'company',
 		companyID: user?.company._id
 	});
-	const { refetchListMedias: refetchListMediasDepartment } = useSocial('list_media__department', {
+	const { refetchListMedias: refetchListMediasDepartment } = useMedia('list_media__department', {
 		type: 'department',
 		companyID: user?.company._id
 	});
-	const { refetchListMedias: refetchListMediasDigitalConversion } = useSocial('list_media__digital-conversion', { 
+	const { refetchListMedias: refetchListMediasDigitalConversion } = useMedia('list_media__digital-conversion', { 
 		type: 'digital-conversion'
 	});
 
-	const { createMedia, updateMedia } = useSocial();
-	const { addFileToUpload } = useUpload('MEDIA');
+	const { createMedia, updateMedia } = useMedia();
+	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);

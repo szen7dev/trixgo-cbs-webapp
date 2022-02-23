@@ -1,7 +1,7 @@
 import modalTypes from "views/media/contexts/post/modal.types";
 
 import { DispatchProps } from "typings/ppt/reducer";
-import { ImageProps } from "typings/social";
+import { ImageProps } from "typings/media";
 
 export const INITIAL_STATE = {
   isShow: false,

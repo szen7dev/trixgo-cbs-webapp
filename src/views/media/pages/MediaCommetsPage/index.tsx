@@ -29,7 +29,7 @@ export const MediaCommentsPage: FC = () => {
 					</div>
 					<div className="comment__header-main mx-auto flex-grow flex items-center justify-between py-1">
 						<div>Bình luận tại chủ đề của <b>Lê Văn Thành-PC1</b></div>
-						<Link className="py-2 px-5 bg-secondary-light rounded-md" onClick={toggleDeleteModal} to="/social/post">
+						<Link className="py-2 px-5 bg-secondary-light rounded-md" onClick={toggleDeleteModal} to="/media/post">
 							Xem chủ đề
 						</Link>
 					</div>

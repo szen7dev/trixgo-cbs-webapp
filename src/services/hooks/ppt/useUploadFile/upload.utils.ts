@@ -2,7 +2,7 @@ import axios, { CancelTokenSource } from "axios";
 import { size } from "lodash";
 import { v4 as uuid } from "uuid";
 
-import { FileProp } from "typings/social";
+import { FileProp } from "typings/media";
 import { IFile, ISTATE } from "./upload";
 
 export const modifyFiles = (existingFiles: IFile, files: FileList): IFile => {

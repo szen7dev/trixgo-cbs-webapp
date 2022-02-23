@@ -3,15 +3,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import iconComment from 'assets/images/icon-chat-project.png';
-import { MediaProps } from 'typings/social';
+import { MediaProps } from 'typings/media';
 import { abbreviateNumber } from 'utils';
 
-import { useSocial } from "services/hooks/useSocial";
+import { useMedia } from "services/hooks/useMedia";
 import { useAuth } from "services/hooks/useAuth";
 
 export const SocialDepartmentArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 	const { user } = useAuth();
-	const { listMedias } = useSocial('list_media__department', { 
+	const { listMedias } = useMedia('list_media__department', { 
 		type: 'department',
 		companyID: user?.company?._id
 	});
@@ -23,7 +23,7 @@ export const SocialDepartmentArticles: React.FC<React.HtmlHTMLAttributes<HTMLDiv
 				{listMedias.length ? listMedias.map((media: MediaProps) => (
 					<li key={media._id} className="border-primary-gray border-opacity-20 pt-5 pb-3.5" style={{ borderBottomWidth: '0.5px' }}>
 						<div className='max-w-xs'>
-							<Link to={`/social/post/${media._id}`} className="text-lg leading-5"><b>
+							<Link to={`/media/post/${media._id}`} className="text-lg leading-5"><b>
 								{media.title}
 							</b></Link>
 							<div className="mt-4 text-sm leading-[18px]">
