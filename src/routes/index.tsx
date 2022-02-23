@@ -15,27 +15,27 @@ import { FullPageLayout } from "shareComponents/layouts/FullPage";
 
 /*=====4.CONFIG ROUTE=====*/
 import SampleRouter from "./sample";
-import AccountingRouter from "./accounting";
+// import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
-import BiddingRouter from "./bidding";
-import CmcsRouter from "./cmcs";
-import DatahubRouter from "./datahub";
+// import BiddingRouter from "./bidding";
+// import CmcsRouter from "./cmcs";
+// import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
-import FinancialRouter from "./financial";
+// import FinancialRouter from "./financial";
 import HomeRouter from './home';
 import HumanRouter from "./human";
-import MarketRouter from "./market";
+// import MarketRouter from "./market";
 import MediaRouter from "./media";
 import MessagesRouter from "./messages";
-import OperationRouter from "./operation";
-import OwnerRouter from './owner';
+// import OperationRouter from "./operation";
+// import OwnerRouter from './owner';
 import PcmRouter from "./pcm";
-import PersonalRouter from "./personal";
-import QrcodeRouter from "./qrcode";
-import ReeRouter from "./ree";
-import SupportRouter from "./support";
-import TimesheetRouter from "./timesheet";
-import WorkshopRouter from "./workshop";
+// import PersonalRouter from "./personal";
+// import QrcodeRouter from "./qrcode";
+// import ReeRouter from "./ree";
+// import SupportRouter from "./support";
+// import TimesheetRouter from "./timesheet";
+// import WorkshopRouter from "./workshop";
 
 /*=====5.PAGES=====*/
 import ErrorPage from "views/authentication/Error";
@@ -55,27 +55,27 @@ const Routes: FC = () => {
                                 <ModalProvider>
                                     <Switch>
                                         <SampleRouter />
-                                        <AccountingRouter />
+                                        {/* <AccountingRouter /> */}
                                         <AuthenticationRouter />
-                                        <BiddingRouter />
-                                        <CmcsRouter />
-                                        <DatahubRouter />
+                                        {/* <BiddingRouter /> */}
+                                        {/* <CmcsRouter /> */}
+                                        {/* <DatahubRouter /> */}
                                         <DocumentRouter />
-                                        <FinancialRouter />
+                                        {/* <FinancialRouter /> */}
                                         <HomeRouter />
                                         <HumanRouter />
-                                        <MarketRouter />
+                                        {/* <MarketRouter /> */}
                                         <MediaRouter />
                                         <MessagesRouter />
-                                        <OperationRouter />
-                                        <OwnerRouter />
+                                        {/* <OperationRouter /> */}
+                                        {/* <OwnerRouter /> */}
                                         <PcmRouter />
-                                        <PersonalRouter />
-                                        <QrcodeRouter />
-                                        <ReeRouter />
-                                        <SupportRouter />
-                                        <TimesheetRouter />
-                                        <WorkshopRouter />
+                                        {/* <PersonalRouter /> */}
+                                        {/* <QrcodeRouter /> */}
+                                        {/* <ReeRouter /> */}
+                                        {/* <SupportRouter /> */}
+                                        {/* <TimesheetRouter /> */}
+                                        {/* <WorkshopRouter /> */}
                                         <Route path="*">
                                             <FullPageLayout>
                                                 <Route path="/*" component={ErrorPage} />
