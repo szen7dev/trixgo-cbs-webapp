@@ -2,9 +2,3 @@
     background-color: transparent;
     border: 2px solid #0060E1; 
 }
-
-.t-human-spread::after {
-    content: "|";
-    letter-spacing: 3px;
-  }
-  
