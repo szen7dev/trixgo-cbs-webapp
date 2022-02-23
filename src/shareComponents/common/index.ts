@@ -1,6 +1,5 @@
 export * from './MainHeader';
 export * from './HomeRightSideBar';
-export * from './Modal';
 export * from './Spinner';
 export * from './ButtonCreate';
 export * from './ButtonMore';
