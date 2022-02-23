@@ -1,5 +1,5 @@
 import React, { FC, HTMLAttributes } from 'react';
-import AcoordionItem from './AcoordionItem';
+import AcoordionItem from '../AcoordionItem';
 
 const items = [
 	{

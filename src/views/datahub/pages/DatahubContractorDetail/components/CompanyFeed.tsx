@@ -2,8 +2,8 @@ import React, { FC, HTMLAttributes, useContext } from 'react'
 import AuthContext from 'services/contexts/Auth'
 import ContactInfo from '../../../sharedComponents/common/ContactInfo'
 
-import TButtonMore from 'views/datahub/sharedComponents/common/t-form/TButtonMore'
-import TTextInput from 'views/datahub/sharedComponents/common/t-form/TTextInput'
+import TButtonMore from 'views/datahub/sharedComponents/common/TForm/TButtonMore'
+import TTextInput from 'views/datahub/sharedComponents/common/TForm/TTextInput'
 
 type Props = {
 

@@ -47,9 +47,12 @@ const useScrollSticky = (
       }
       lastScrollTop = this.scrollTop;
     }
-    document
-      .querySelector("#datahub-contractor-detail")
-      ?.addEventListener("scroll", handleScroll, false);
+    document.querySelector(id)?.addEventListener("scroll", handleScroll, false);
+    return () => {
+      document
+        .querySelector(id)
+        ?.removeEventListener("scroll", handleScroll, false);
+    };
   }, []);
   return { sticky, innerRef };
 };
