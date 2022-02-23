@@ -6,7 +6,7 @@ import { ProtectedRoute } from "routes/components";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { PcmHomeLayout } from "views/pcm/shareComponents/layouts";
+import { HomeLayout } from "shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 
@@ -23,9 +23,9 @@ const PCMRouter: FC = () => {
                 exact
                 path={"/pcm/home"}
                 component={() => (
-                    <PcmHomeLayout>
+                    <HomeLayout>
                         <PcmHomePage />
-                    </PcmHomeLayout>
+                    </HomeLayout>
                 )}
             />
         </Switch>
