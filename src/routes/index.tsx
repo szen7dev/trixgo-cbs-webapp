@@ -105,9 +105,7 @@ const Routes: FC = () => {
 
                                     {/* =====DATHUB===== */}
                                     <Route path="/datahub">
-                                        <HomeLayout>
-                                            <DatahubRouter />
-                                        </HomeLayout>
+																				<DatahubRouter />
                                     </Route>
 
                                     {/* =====OTHER===== */}
