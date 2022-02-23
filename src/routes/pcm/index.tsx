@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
 /*=====2.PROVIDERS=====*/

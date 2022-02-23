@@ -19,7 +19,8 @@ import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
 // import CmcsRouter from "./cmcs";
 // import DatahubRouter from "./datahub";
-// import DocumentRouter from "./document";
+import DocumentRouter from "./document";
+import PPTRouter from "./ppt";
 // import FinancialRouter from "./financial";
 // import HomeRouter from './home';
 import HumanRouter from "./human";
@@ -40,6 +41,7 @@ import PcmRouter from "./pcm";
 import ErrorPage from "views/authentication/Error";
 import { HomeLayout } from "shareComponents/layouts";
 import { HumanLayout } from "views/human/shareComponents/layouts";
+import { DocumentLayout } from 'views/document/sharedComponents/layouts';
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -77,6 +79,24 @@ const Routes: FC = () => {
                                                 <HumanRouter />
                                             </HumanLayout>
                                         </Route>
+
+                                        {/* =====DOCUMENT===== */}
+                                        <Route path="/document">
+                                            <DocumentLayout>
+                                                <DocumentRouter />
+                                            </DocumentLayout>
+                                        </Route>
+
+                                        {/* =====PPT===== */}
+				                        <Route 
+                                            path='/ppt' 
+                                            component={PPTRouter}
+                                        />
+                                        {/* <Route path="/ppt">
+                                            <DocumentLayout>
+                                                <PPTRouter />
+                                            </DocumentLayout>
+                                        </Route> */}
 
                                         {/* =====MEDIA===== */}
                                         <Route path="/media">
