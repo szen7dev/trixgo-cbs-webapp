@@ -40,7 +40,7 @@ export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
-                type: payload.type,
+                mimeType: payload.type,
                 size: payload.size as never,
                 app,
                 typeUpload: typeUpload

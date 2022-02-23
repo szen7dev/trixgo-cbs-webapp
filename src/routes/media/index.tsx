@@ -3,7 +3,6 @@ import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import { HomeLayout } from "shareComponents/layouts/HomeLayout";
 import { SocialLayoutPrimary } from "views/media/shareComponents/layouts";
 
 /*=====PAGES=====*/

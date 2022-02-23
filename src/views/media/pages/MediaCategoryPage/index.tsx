@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { SocialArticles } from "views/media/shareComponents/common";
-import { PostType } from 'typings/social';
+import { PostType } from 'typings/media';
 
 export const MediaCategoryPage: FC<{ type: PostType }> = ({ type }) => {
 

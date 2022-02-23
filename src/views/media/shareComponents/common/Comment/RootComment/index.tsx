@@ -3,8 +3,8 @@ import { FC, useState, useContext, useEffect } from 'react';
 import { EditButton, Comment, ReplyCommentField } from 'views/media/shareComponents/common';
 
 import { CommentProps } from 'typings/common';
-import { FileProps } from 'typings/social';
-import SocialRepository from "apis/social";
+import { FileProps } from 'typings/media';
+import MediaRepository from "apis/media";
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/media/contexts/post';
 
@@ -54,7 +54,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 	const handleClickViewMore = async () => {
 		const lastestID = commentsReply.length ? commentsReply[0]._id : null;
 
-		const { error, data } = await SocialRepository.listComments({
+		const { error, data } = await MediaRepository.listComments({
 			lastestID,
 			mediaID: comment.media,
 			parentID: comment._id,

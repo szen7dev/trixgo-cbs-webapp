@@ -5,7 +5,7 @@ import cn from 'classnames';
 import pdfIcon from 'assets/images/icons8-pdf-48 1.png';
 import downloadIcon from 'assets/images/icons8-download-48.png';
 
-import { FileProps, PostFileProps } from 'typings/social';
+import { FileProps, PostFileProps } from 'typings/media';
 
 export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ files, onRemove, ...props }) => {
 	if (!files?.length) return null;

@@ -15,11 +15,11 @@ import {
 } from "views/media/shareComponents/common";
 
 import { useAuth } from "services/hooks/useAuth";
-import { useSocial } from 'services/hooks/useSocial';
+import { useMedia } from 'services/hooks/useMedia';
 
 export const MediaHomePage: FC = () => {
 	const { user } = useAuth();
-	const { listMedias: listMediasCompany, isLoadingListMedias } = useSocial('list_media__company__mainpage', {
+	const { listMedias: listMediasCompany, isLoadingListMedias } = useMedia('list_media__company__mainpage', {
 		limit: 1, type: 'company', companyID: user?.company._id
 	});
 	const [isShowCreateModal, setIsShowCreateModal] = useState(false);
