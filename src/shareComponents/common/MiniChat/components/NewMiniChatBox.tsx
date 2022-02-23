@@ -28,7 +28,15 @@ export const NewMiniChatBox:FC = () => {
         }).then(data => {
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
                 conversationID: data._id,
-                select: JSON.stringify({sender: "bizfullname"})
+                select: JSON.stringify({sender: "bizfullname"}),
+                filter: JSON.stringify({
+                    author: 0,
+                    taskID: 0,
+                    links: 0,
+                    createAt: 0,
+                    __v: 0,
+                    config: 0
+                })
             });
             // getConverationInformation({
             //     conversationID: data._id,

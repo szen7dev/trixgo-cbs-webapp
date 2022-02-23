@@ -78,10 +78,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 }, 100)
             }
         }
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data.infoMessage.conversation, select: JSON.stringify({ sender:"bizfullname" }) });
     };
 
     const onReceiveConversation = (data: any) => {
+        // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
         dispatch(setListConversation(data.data.listRecords));
     }
 
