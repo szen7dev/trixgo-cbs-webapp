@@ -4,11 +4,10 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import SavedMessage from "assets/images/saved-messages.svg";
 import {map as _map} from "lodash";
 import {openChatBox, openCreateNewChatMini} from "redux/reducer/messages/MiniChat";
-import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/listCoversation";
-import {UseMessageHelper} from "../../../../../services/hooks/messages/useMessageHelper";
+import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/ListCoversation";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 export const MiniChatGroup:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";

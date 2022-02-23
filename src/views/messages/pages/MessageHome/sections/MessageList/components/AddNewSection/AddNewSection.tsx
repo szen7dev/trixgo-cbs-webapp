@@ -1,6 +1,6 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
-import {AddNewChatGroupContext} from "../headerMessageList";
+import {AddNewChatGroupContext} from "../HeaderMessageList";
 
 import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";

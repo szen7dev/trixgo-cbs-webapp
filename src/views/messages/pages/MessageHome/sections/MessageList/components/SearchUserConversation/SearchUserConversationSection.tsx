@@ -1,6 +1,6 @@
 import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import IconBackGray from "assets/images/icon-back-gray.svg";
-import {SearchUserAndConversationContext} from "../headerMessageList";
+import {SearchUserAndConversationContext} from "../HeaderMessageList";
 import SearchIcon from "assets/images/icons8-search-120.png";
 
 import {useUser} from "services/hooks/useUser";

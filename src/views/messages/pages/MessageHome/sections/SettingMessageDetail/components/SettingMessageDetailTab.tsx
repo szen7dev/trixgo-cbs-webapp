@@ -1,12 +1,12 @@
 import React, {FC, useContext, useEffect, useState} from "react";
 import {map as _map} from "lodash";
-import {ListOnlineUserInMessage} from "./members";
-import {ListMediaInMessage} from "./medias";
-import {ListFileInMessage} from "./files";
+import {ListOnlineUserInMessage} from "./Members";
+import {ListMediaInMessage} from "./Medias";
+import {ListFileInMessage} from "./Files";
 import {MessageContext} from "../../../index";
-import {ListLinksInMessage} from "./links";
+import {ListLinksInMessage} from "./Links";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {ListGeneralGroupByMember} from "./groups";
+import {ListGeneralGroupByMember} from "./Groups";
 
 type Props = {
     chat: ItemListConversation
