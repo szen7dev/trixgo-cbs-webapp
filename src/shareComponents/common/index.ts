@@ -22,4 +22,4 @@ export * from './Spinner';
 export * from './Loader';
 export * from './MainSearchFilter';
 export * from './NotificationItem';
-// export * from './Loader';
+export * from './OneSignalController';

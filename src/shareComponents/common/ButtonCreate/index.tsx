@@ -6,4 +6,4 @@ export const ButtonCreate: FC<React.HtmlHTMLAttributes<HTMLButtonElement>> = ({ 
 			Tạo mới
 		</button>
 	)
-}
+};
