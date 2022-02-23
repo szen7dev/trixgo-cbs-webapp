@@ -2,7 +2,7 @@ import { FC, ReactNode, useReducer } from "react";
 
 import ModalContext, { initialState } from "services/contexts/Modal";
 
-import Modal from "components/common/Modal";
+import { Modal } from "shareComponents/common";
 
 import { ModalState, ModalActions } from "typings/app";
 

@@ -13,33 +13,29 @@ import ErrorPage from "views/authentication/Error";
 
 const AuthenticationRouter: FC = () => {
     return (
-        <>
-            <Route path="/authentication/:path?">
-                <FullPageLayout isAuthentication>
-                    <Switch>
-                        <Route exact path="/authentication">
-                            <Redirect to="/authentication/sign-in" />
-                        </Route>
-                        <Route
-                            exact
-                            path="/authentication/sign-in"
-                            component={SignInPage}
-                        />
-                        <Route
-                            exact
-                            path="/authentication/register"
-                            component={RegisterPage}
-                        />
-                        <Route
-                            exact
-                            path="/authentication/reset-password"
-                            component={ResetPasswordPage}
-                        />
-                        <Route path="/authentication/*" component={ErrorPage} />
-                    </Switch>
-                </FullPageLayout>
-            </Route>
-        </>
+        <FullPageLayout isAuthentication>
+            <Switch>
+                <Route exact path="/authentication">
+                    <Redirect to="/authentication/sign-in" />
+                </Route>
+                <Route
+                    exact
+                    path="/authentication/sign-in"
+                    component={SignInPage}
+                />
+                <Route
+                    exact
+                    path="/authentication/register"
+                    component={RegisterPage}
+                />
+                <Route
+                    exact
+                    path="/authentication/reset-password"
+                    component={ResetPasswordPage}
+                />
+                <Route path="/authentication/*" component={ErrorPage} />
+            </Switch>
+        </FullPageLayout>
     )
 };
 

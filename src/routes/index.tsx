@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
@@ -53,27 +53,12 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
-                                        {/* <AccountingRouter /> */}
-                                        <AuthenticationRouter />
-                                        {/* <BiddingRouter /> */}
-                                        {/* <CmcsRouter /> */}
-                                        {/* <DatahubRouter /> */}
-                                        {/* <DocumentRouter /> */}
-                                        {/* <FinancialRouter /> */}
-                                        <HomeRouter />
-                                        {/* <HumanRouter /> */}
-                                        {/* <MarketRouter /> */}
-                                        {/* <MediaRouter /> */}
-                                        {/* <MessagesRouter /> */}
-                                        {/* <OperationRouter /> */}
-                                        {/* <OwnerRouter /> */}
-                                        <PcmRouter />
-                                        {/* <PersonalRouter /> */}
-                                        {/* <QrcodeRouter /> */}
-                                        {/* <ReeRouter /> */}
-                                        {/* <SupportRouter /> */}
-                                        {/* <TimesheetRouter /> */}
-                                        {/* <WorkshopRouter /> */}
+                                        <Route path="/authentication/:path?">
+                                            <AuthenticationRouter />
+                                        </Route>
+                                        <Route path="/pcm">
+                                            <PcmRouter />
+                                        </Route>
                                         <Route path="*">
                                             <FullPageLayout>
                                                 <Route path="/*" component={ErrorPage} />

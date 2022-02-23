@@ -5,8 +5,8 @@ import { Dialog, Transition } from "@headlessui/react";
 
 /*=====COMPONENTS=====*/
 import { useModal } from "services/hooks/useModal";
-import AddNewTaskDialog from "components/common/add-new-task-dialog";
-import { ChatsOnRightSideBar } from "shareComponents/common/MiniChat";
+// import AddNewTaskDialog from "components/common/add-new-task-dialog";
+// import { ChatsOnRightSideBar } from "shareComponents/common/MiniChat";
 
 /*=====ICONS=====*/
 import icon1 from "assets/images/icons8-star-96.png";
@@ -28,7 +28,7 @@ export const HomeRightSideBar: FC = () => {
           onClick={() =>
             openModal(
               <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                <AddNewTaskDialog />
+                {/* <AddNewTaskDialog /> */}
               </div>
             )
           }
@@ -136,7 +136,7 @@ export const HomeRightSideBar: FC = () => {
           />
         </Link>
       </div>
-      <ChatsOnRightSideBar/>
+      {/* <ChatsOnRightSideBar/> */}
     </div>
   );
 };

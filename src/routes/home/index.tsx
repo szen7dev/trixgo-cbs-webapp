@@ -1,12 +1,11 @@
 /*=====LIBRARY=====*/
 import { FC } from "react";
 import { Route, Redirect } from "react-router-dom";
-import PCMRouter from "routes/pcm";
 
 const HomeRouter: FC = () => {
     return (
         <Route exact path="/">
-            <PCMRouter />
+            <Redirect to="/pcm/home" />
         </Route>
     )
 };

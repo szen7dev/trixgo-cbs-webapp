@@ -1,9 +1,9 @@
-import React, { FC, ReactNode, useReducer} from "react";
+import React, { FC, ReactNode, useReducer } from "react";
 
-import DeleteConfirmContext , { initialState } from "services/contexts/DeleteConfirm";
+import DeleteConfirmContext, { initialState } from "services/contexts/DeleteConfirm";
 
 import { DeleteConfirmState, DeleteConfirmActions } from "typings/app";
-import DeleteConfirm from "components/common/DeleteConfirm";
+import { DeleteConfirm } from "shareComponents/common/DeleteConfirm";
 
 type Props = {
   children: ReactNode;
@@ -25,7 +25,7 @@ const reducer = (state: DeleteConfirmState, action: DeleteConfirmActions): Delet
         ...state,
         isDeleteConfirmOpen: false,
         deleteConfirmContent: {
-          title : "Bạn có muốn xóa không?",
+          title: "Bạn có muốn xóa không?",
           message: "Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này",
           deleteAction: () => undefined
         },
@@ -35,7 +35,7 @@ const reducer = (state: DeleteConfirmState, action: DeleteConfirmActions): Delet
   }
 };
 
-const DeleteConfirmProvider: FC<Props> = ({children
+const DeleteConfirmProvider: FC<Props> = ({ children
 }) => {
   const [state, dispatch] = useReducer<
     (state: DeleteConfirmState, action: DeleteConfirmActions) => DeleteConfirmState

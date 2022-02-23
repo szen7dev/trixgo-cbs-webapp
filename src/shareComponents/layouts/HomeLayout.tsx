@@ -1,10 +1,9 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import HomeNavigation from "components/common/HomeNavigation";
-import HomeRightSideBar from "components/common/HomeRightSideBar";
-import MainHeader from "components/common/main-header";
-import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
+import { MainHeader, HomeNavigation, HomeRightSideBar } from "shareComponents/common";
+
+// import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
@@ -82,7 +81,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
       </button>
 
       {/* Mini chatbox */}
-      {!isChatboxVisible && 
+      {!isChatboxVisible &&
         <button
           onClick={openMiniChatbox}
           className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border transition-all duration-500 ease-out"

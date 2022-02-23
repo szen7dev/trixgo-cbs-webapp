@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import OneSignalReact from "react-onesignal";
+// import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
@@ -63,72 +63,72 @@ export const useAuth = (): UseAuth => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
-    if (ONESIGNAL_APP_ID) {
-      OneSignalReact.init({
-        appId: ONESIGNAL_APP_ID,
-        notifyButton: {
-          enable: true,
-        },
-        autoResubscribe: true,
-        // notificationClickHandlerMatch: 'origin',
-        // notificationClickHandlerAction: 'focus',
-        allowLocalhostAsSecureOrigin: true,
-      })
-          .then(e => {
-            OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
-              if (isEnabled)
-                console.log("Push notifications are enabled!");
-              else {
-                console.log("Push notifications are not enabled yet.");
-                OneSignalReact.showSlidedownPrompt();
-              }
-            });
+    // if (ONESIGNAL_APP_ID) {
+    //   OneSignalReact.init({
+    //     appId: ONESIGNAL_APP_ID,
+    //     notifyButton: {
+    //       enable: true,
+    //     },
+    //     autoResubscribe: true,
+    //     // notificationClickHandlerMatch: 'origin',
+    //     // notificationClickHandlerAction: 'focus',
+    //     allowLocalhostAsSecureOrigin: true,
+    //   })
+    //       .then(e => {
+    //         OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
+    //           if (isEnabled)
+    //             console.log("Push notifications are enabled!");
+    //           else {
+    //             console.log("Push notifications are not enabled yet.");
+    //             OneSignalReact.showSlidedownPrompt();
+    //           }
+    //         });
 
-            // case 2: chờ submit allow subscribe tại màn hình hiện tại
-            OneSignalReact.on('popoverAllowClick', function() {
-              console.log('Slide ALLOW CLICK');
+    //         // case 2: chờ submit allow subscribe tại màn hình hiện tại
+    //         OneSignalReact.on('popoverAllowClick', function() {
+    //           console.log('Slide ALLOW CLICK');
 
-              OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-                console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
-                if (oneSignalWebPushID) {
-                  const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
-                  if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
-                    localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
-                    await AuthenticationRepository.updateDevice({
-                      platform: process.env.REACT_APP_PLATFORM??"1",
-                      deviceID: 'BROWSER',
-                      deviceName: 'BROWSER',
-                      registrationID: oneSignalWebPushID || '',
-                      oneSignalID: oneSignalWebPushID || '',
-                      env: "1"
-                    });
-                  }
-                }
-              })
-            });
+    //           OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+    //             console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+    //             if (oneSignalWebPushID) {
+    //               const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
+    //               if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+    //                 localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
+    //                 await AuthenticationRepository.updateDevice({
+    //                   platform: process.env.REACT_APP_PLATFORM??"1",
+    //                   deviceID: 'BROWSER',
+    //                   deviceName: 'BROWSER',
+    //                   registrationID: oneSignalWebPushID || '',
+    //                   oneSignalID: oneSignalWebPushID || '',
+    //                   env: "1"
+    //                 });
+    //               }
+    //             }
+    //           })
+    //         });
 
-            // case 1: đã subscribe page trước đó
-            OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-              console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
-              if (oneSignalWebPushID) {
-                const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
-                if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
-                  localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
-                  await AuthenticationRepository.updateDevice({
-                    platform: process.env.REACT_APP_PLATFORM??"1",
-                    deviceID: 'BROWSER',
-                    deviceName: 'BROWSER',
-                    registrationID: oneSignalWebPushID || '',
-                    oneSignalID: oneSignalWebPushID || '',
-                    env: "1"
-                  });
-                }
-              }
-            })
+    //         // case 1: đã subscribe page trước đó
+    //         OneSignalReact.getUserId(async function(oneSignalWebPushID) {
+    //           console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+    //           if (oneSignalWebPushID) {
+    //             const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
+    //             if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+    //               localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
+    //               await AuthenticationRepository.updateDevice({
+    //                 platform: process.env.REACT_APP_PLATFORM??"1",
+    //                 deviceID: 'BROWSER',
+    //                 deviceName: 'BROWSER',
+    //                 registrationID: oneSignalWebPushID || '',
+    //                 oneSignalID: oneSignalWebPushID || '',
+    //                 env: "1"
+    //               });
+    //             }
+    //           }
+    //         })
 
-          })
-          .catch(e => console.error(e));
-    }
+    //       })
+    //       .catch(e => console.error(e));
+    // }
   }
 
   const signIn = async (payload: SignInPayload) => {

@@ -2,9 +2,8 @@ import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
 // import HomeNavigation from "components/common/HomeNavigation";
-import LinkMenuLeftSideBar from "components/common/LinkMenuLeftSideBar";
-import HomeRightSideBar from "components/common/HomeRightSideBar";
-import MainHeader from "components/common/main-header";
+import { HomeRightSideBar, LinkMenuLeftSideBar } from "shareComponents/layouts";
+import { MainHeader } from "shareComponents/common";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";

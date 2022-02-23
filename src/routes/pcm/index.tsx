@@ -7,27 +7,21 @@ import { ProtectedRoute } from "routes/components";
 import { HomeLayout } from "shareComponents/layouts/HomeLayout"; //ok
 
 /*=====PAGES=====*/
-import { 
-    PcmHomePage, 
-} from "views/pcm/pages";
+import PcmHomePage from "views/pcm/pages/PcmHomePage";
 
 const PCMRouter: FC = () => {
     return (
-        <>
-            <Route path="/pcm/:path?">
-                <Switch>
-                    <ProtectedRoute 
-                        exact
-                        path={"/pcm/home"}
-                        component={() => (
-                            <HomeLayout>
-                                <PcmHomePage />
-                            </HomeLayout>
-                        )}
-                    />
-                </Switch>
-            </Route>  
-        </>
+        <Switch>
+            <ProtectedRoute
+                exact
+                path={"/pcm/home"}
+                component={() => (
+                    <HomeLayout>
+                        <PcmHomePage />
+                    </HomeLayout>
+                )}
+            />
+        </Switch>
     )
 };
 

@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "services/hooks/useAuth";
 import { SignInPayload } from "typings/auth";
 
-import Loader from "components/shared/Loader";
+import { Loader } from "shareComponents/common";
 import RegisterPage from "./Register";
 
 import SignInLogo from "assets/images/signin-logo.svg";
@@ -51,8 +51,8 @@ const LoginPage: FC = () => {
   const initialValues: SignInPayload = {
     email: "",
     password: "",
-    platform: process.env.REACT_APP_PLATFORM??"1",
-    domain: process.env.REACT_APP_DOMAIN??""
+    platform: process.env.REACT_APP_PLATFORM ?? "1",
+    domain: process.env.REACT_APP_DOMAIN ?? ""
   };
 
   const signInSchema = object().shape({
