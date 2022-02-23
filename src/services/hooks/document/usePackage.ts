@@ -11,9 +11,12 @@ interface UseQueryListPackage {
     listPackage: Array<Package>;
     refetchListPackage: () => void;
     fetchNextPagePackage: () => void;
+    nextCursor: string | null;
 }
 
 export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPackage => {
+    let nextCursor = null;
+
     const res = useInfiniteQuery(
         [`documents`, { params }],
         async ({ pageParam }: any) =>
@@ -27,6 +30,7 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
             }),
         {
             getNextPageParam: ({ data }: any) => {
+                nextCursor = data?.nextCursor;
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
@@ -42,15 +46,16 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
     } = res;
 
     const listPackage = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         loading: isLoading,
+        nextCursor,
         listPackage,
         totalRecord,
         totalPages,
