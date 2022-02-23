@@ -1,20 +1,31 @@
+/*=====1.LIBRARY=====*/
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import { MainHeader, HomeNavigation, HomeRightSideBar } from "shareComponents/common";
+/*=====2.CSS=====*/
 
-// import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
-
+/*=====3.ICONS=====*/
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import iconChat from "assets/images/icons8-chat-96.png";
 
+/*=====4.PAGES/COMPONENTS=====*/
+import { MainHeader, HomeRightSideBar } from "shareComponents/common";
+import { PcmLeftSideBar } from './components';
+// import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+
+/*=====7.OTHER=====*/
+
 type Props = {
   children: ReactNode;
 };
 
-export const HomeLayout: FC<Props> = ({ children }) => {
+export const PcmHomeLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
@@ -60,7 +71,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
       <MainHeader />
 
       {/* Left navigation */}
-      <HomeNavigation />
+      <PcmLeftSideBar />
 
       {/* Content area */}
       <main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">

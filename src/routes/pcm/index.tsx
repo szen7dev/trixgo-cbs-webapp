@@ -1,10 +1,17 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
-/*=====LAYOUTS=====*/
-import { HomeLayout } from "shareComponents/layouts/HomeLayout"; //ok
+/*=====2.PROVIDERS=====*/
+
+/*=====3.LAYOUTS=====*/
+import { PcmHomeLayout } from "views/pcm/shareComponents/layouts";
+
+/*=====4.CONFIG ROUTE=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
+// import ErrorPage from "views/authentication/Error";
 
 /*=====PAGES=====*/
 import PcmHomePage from "views/pcm/pages/PcmHomePage";
@@ -16,9 +23,9 @@ const PCMRouter: FC = () => {
                 exact
                 path={"/pcm/home"}
                 component={() => (
-                    <HomeLayout>
+                    <PcmHomeLayout>
                         <PcmHomePage />
-                    </HomeLayout>
+                    </PcmHomeLayout>
                 )}
             />
         </Switch>
