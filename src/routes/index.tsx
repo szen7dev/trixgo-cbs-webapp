@@ -14,7 +14,6 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 import { FullPageLayout } from "shareComponents/layouts/FullPage";
 
 /*=====4.CONFIG ROUTE=====*/
-import SampleRouter from "./sample";
 // import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
@@ -54,7 +53,6 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
-                                        <SampleRouter />
                                         {/* <AccountingRouter /> */}
                                         <AuthenticationRouter />
                                         {/* <BiddingRouter /> */}
