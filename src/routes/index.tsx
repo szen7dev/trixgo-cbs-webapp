@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
-import ThemeProvider from "services/providers/Theme";
 import ModalProvider from "services/providers/Modal";
 import ChatProvider from "services/providers/Chat";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
@@ -19,7 +18,8 @@ import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
 // import CmcsRouter from "./cmcs";
 // import DatahubRouter from "./datahub";
-// import DocumentRouter from "./document";
+import DocumentRouter from "./document";
+import PPTRouter from "./ppt";
 // import FinancialRouter from "./financial";
 // import HomeRouter from './home';
 import HumanRouter from "./human";
@@ -40,6 +40,7 @@ import TimesheetRouter from "./timesheet";
 import ErrorPage from "views/authentication/Error";
 import { HomeLayout } from "shareComponents/layouts";
 import { HumanLayout } from "views/human/shareComponents/layouts";
+import { DocumentLayout } from 'views/document/sharedComponents/layouts';
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -49,34 +50,51 @@ const Routes: FC = () => {
     return (
         <Router>
             <AuthProvider>
-                <ThemeProvider>
-                    <RightClickMenuProvider>
-                        <DeleteConfirmProvider>
-                            <ChatProvider>
-                                <ModalProvider>
-                                    <Switch>
+                <RightClickMenuProvider>
+                    <DeleteConfirmProvider>
+                        <ChatProvider>
+                            <ModalProvider>
+                                <Switch>
 
-                                        {/* =====HOME===== */}
-                                        <Route exact path="/">
-                                            <PcmRouter />
+                                    {/* =====HOME===== */}
+                                    <Route exact path="/">
+                                        <PcmRouter />
+                                    </Route>
+
+                                    {/* =====AUTHENTICATION===== */}
+                                    <Route path="/authentication/:path?">
+                                        <AuthenticationRouter />
+                                    </Route>
+
+                                    {/* =====PCM===== */}
+                                    <Route path="/pcm">
+                                        <PcmRouter />
+                                    </Route>
+
+                                    {/* =====HUMAN===== */}
+                                    <Route path="/human">
+                                        <HumanLayout>
+                                            <HumanRouter />
+                                        </HumanLayout>
+                                    </Route>
+
+                                        {/* =====DOCUMENT===== */}
+                                        <Route path="/document">
+                                            <DocumentLayout>
+                                                <DocumentRouter />
+                                            </DocumentLayout>
                                         </Route>
 
-                                        {/* =====AUTHENTICATION===== */}
-                                        <Route path="/authentication/:path?">
-                                            <AuthenticationRouter />
-                                        </Route>
-
-                                        {/* =====PCM===== */}
-                                        <Route path="/pcm">
-                                            <PcmRouter />
-                                        </Route>
-
-                                        {/* =====HUMAN===== */}
-                                        <Route path="/human">
-                                            <HumanLayout>
-                                                <HumanRouter />
-                                            </HumanLayout>
-                                        </Route>
+                                        {/* =====PPT===== */}
+				                        <Route 
+                                            path='/ppt' 
+                                            component={PPTRouter}
+                                        />
+                                        {/* <Route path="/ppt">
+                                            <DocumentLayout>
+                                                <PPTRouter />
+                                            </DocumentLayout>
+                                        </Route> */}
 
                                         {/* =====MEDIA===== */}
                                         <Route path="/media">
@@ -85,23 +103,22 @@ const Routes: FC = () => {
                                             </HomeLayout>
                                         </Route>
 
-                                        {/* =====MEDIA===== */}
+                                        {/* =====TIMESHEET===== */}
                                         <Route path="/timesheet">
                                             <TimesheetRouter />
                                         </Route>
 
-                                        {/* =====OTHER===== */}
-                                        <Route path="*">
-                                            <FullPageLayout>
-                                                <Route path="/*" component={ErrorPage} />
-                                            </FullPageLayout>
-                                        </Route>
-                                    </Switch>
-                                </ModalProvider>
-                            </ChatProvider>
-                        </DeleteConfirmProvider>
-                    </RightClickMenuProvider>
-                </ThemeProvider>
+                                    {/* =====OTHER===== */}
+                                    <Route path="*">
+                                        <FullPageLayout>
+                                            <Route path="/*" component={ErrorPage} />
+                                        </FullPageLayout>
+                                    </Route>
+                                </Switch>
+                            </ModalProvider>
+                        </ChatProvider>
+                    </DeleteConfirmProvider>
+                </RightClickMenuProvider>
             </AuthProvider>
         </Router>
     );

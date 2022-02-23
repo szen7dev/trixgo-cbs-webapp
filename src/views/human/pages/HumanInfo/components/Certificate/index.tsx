@@ -65,13 +65,9 @@ export const Certificate: FC<CertificateProps> = (props) => {
       setIDFileUploaded,
       removeAllFiles,
     },
-  ] = useCustomReducer(
-    uploadReducer,
-    { ...uploadActions },
-    {
-      files: {},
-    } as IFile
-  );
+  ] = useCustomReducer(uploadReducer, { ...uploadActions }, {
+    files: {},
+  } as IFile);
 
   const {
     createContactDocumentAsync,
@@ -203,28 +199,28 @@ export const Certificate: FC<CertificateProps> = (props) => {
     }
   }, []);
 
-  const handleRemoveFileUpload = useCallback(async (
-    file: FileProps | FilePropsUpload,
-    contactDocumentID: string
-  ) => {
-    if (file._id) {
-      await removeFileContractDocument({
-        contactDocumentID,
-        fileRemoveID: file._id,
-      });
-      refetchListContactDocument();
-    }
-    if ("id" in file) {
-      removeUploadedFile(file.id);
-    } else {
-      removeUploadedFile(file._id);
-    }
-  }, [refetchListContactDocument, removeFileContractDocument, removeUploadedFile]);
+  const handleRemoveFileUpload = useCallback(
+    async (file: FileProps | FilePropsUpload, contactDocumentID: string) => {
+      if (file._id) {
+        await removeFileContractDocument({
+          contactDocumentID,
+          fileRemoveID: file._id,
+        });
+        refetchListContactDocument();
+      }
+      if ("id" in file) {
+        removeUploadedFile(file.id);
+      } else {
+        removeUploadedFile(file._id);
+      }
+    },
+    [refetchListContactDocument, removeFileContractDocument, removeUploadedFile]
+  );
 
   const handleUploadFile = useCallback(
     async (_fileUploads: IFile, contactDocumentID: string) => {
       // Upload files
-      const listFileContractDocumentAsync = []
+      const listFileContractDocumentAsync = [];
       for (const [key, { file }] of Object.entries(_fileUploads)) {
         const { _id } = await addFileToUpload({
           files: file,
@@ -242,14 +238,23 @@ export const Certificate: FC<CertificateProps> = (props) => {
           setIDFileUploaded(key, _id, contactDocumentID);
         }
       }
-      Promise.all(listFileContractDocumentAsync).then(() => {
-        removeAllFiles();
-        refetchListContactDocument();
-      }).catch(err => {
-        console.error(err);
-      })
+      Promise.all(listFileContractDocumentAsync)
+        .then(() => {
+          removeAllFiles();
+          refetchListContactDocument();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
-    [addFileToUpload, refetchListContactDocument, removeAllFiles, setIDFileUploaded, setUploadFileProgress, updateFileContractDocumentAsync]
+    [
+      addFileToUpload,
+      refetchListContactDocument,
+      removeAllFiles,
+      setIDFileUploaded,
+      setUploadFileProgress,
+      updateFileContractDocumentAsync,
+    ]
   );
 
   const handleAttachFiles = useCallback(
@@ -299,7 +304,10 @@ export const Certificate: FC<CertificateProps> = (props) => {
                 <span className="t-human-spread">{contactDocument.sign}</span>
               )}
               {contactDocument.fromDate && (
-                <span>{contactDocument.fromDate}</span>
+                <span>
+                  {moment(contactDocument.fromDate).isValid() &&
+                    moment(contactDocument.fromDate).format(DATE_FORMAT)}
+                </span>
               )}
             </p>
             <p style={{ width: "10%" }}>
@@ -369,9 +377,10 @@ export const Certificate: FC<CertificateProps> = (props) => {
                           <button
                             type="button"
                             className={className(
-                              "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", {
-                              hidden: !d._id
-                            }
+                              "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center",
+                              {
+                                hidden: !d._id,
+                              }
                             )}
                             onClick={() =>
                               handleRemoveFileUpload(d, contactDocument._id)
@@ -490,8 +499,9 @@ export const Certificate: FC<CertificateProps> = (props) => {
       {totalRecord && totalRecord - listContactDocument.length > 0 ? (
         <div className="w-full flex justify-center my-5">
           <button onClick={() => fetchNextPageContactDocument()}>
-            <span className="text-primary">{`Xem thêm (${totalRecord - listContactDocument.length
-              })`}</span>
+            <span className="text-primary">{`Xem thêm (${
+              totalRecord - listContactDocument.length
+            })`}</span>
           </button>
         </div>
       ) : (

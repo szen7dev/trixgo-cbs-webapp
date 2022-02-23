@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import postTypes from "./post.types";
 
 import { DispatchAction } from "typings/ppt/reducer";
@@ -6,6 +7,7 @@ import { Comment } from "typings/ppt/comment";
 const postActions = (dispatch: DispatchAction) => ({
   // ====== MODAL ======
   openComment: (comment: Comment, index: number) => {
+    if (!comment.comment) return;
     return dispatch({
       type: postTypes.OPEN_MODAL,
       payload: {
@@ -13,6 +15,8 @@ const postActions = (dispatch: DispatchAction) => ({
         images: comment.comment.images,
         index,
         type: "comment",
+        author: comment.comment.author,
+        createAt: comment.comment.createAt,
       },
     });
   },

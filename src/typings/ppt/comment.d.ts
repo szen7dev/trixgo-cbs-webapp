@@ -19,7 +19,7 @@ export type CommentDetail = {
 export type Comment = {
   _id: string;
   media: string;
-  comment: CommentDetail;
+  comment: CommentDetail | null;
   parent: string;
   state?: number;
   file?: string;
@@ -38,7 +38,7 @@ export type Comment = {
   __v: number;
   lastestReplyID?: Comment;
 
-	loading?: boolean;
+  loading?: boolean;
 };
 
 export type CommentWithReply = Comment & {
