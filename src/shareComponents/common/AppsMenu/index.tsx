@@ -44,7 +44,7 @@ export const AppsMenu: FC = () => {
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">DataHub</span>
             </Link>
-            <Link to={`/social/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+            <Link to={`/media/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Truyền thông</span>
             </Link>
