@@ -1,4 +1,5 @@
 import { FC, HTMLAttributes } from 'react';
+import moment from 'moment';
 
 import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
@@ -31,13 +32,13 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 					{/* Header post */}
 					<div className="pt-4 text-black">
 						<div className="flex px-4">
-							<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="rounded-full w-12 h-12 mr-2" />
+							<img src={`${process.env.REACT_APP_URL_S3_USER}/${state.author?.image}`} alt="" className="rounded-full w-12 h-12 mr-2" />
 							<div>
-								<p className="text-black text-[15px] font-bold">Nguyễn Thu Hương-CPMI</p>
-								<p className="leading-[15px] mt-1">15:30 15/2/2021</p>
+								<p className="text-black text-[15px] font-bold">{state.author?.fullname}</p>
+								<p className="leading-[15px] mt-1">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 							</div>
 						</div>
-						<p className="text-[15px] pl-4 pr-5 mt-2.5 leading-4">Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn</p>
+						<p className="text-[15px] pl-4 pr-5 mt-2.5 leading-4"></p>
 					</div>
 					{/* Reaction */}
 					<div className="flex pb-2 mx-2.5 text-[15px] leading-4 mt-2 text-black">

@@ -51,8 +51,8 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		onClickImage?.(comment, index)
 	}
 
-	const images = comment.comment.images || [];
-	const files = comment.comment.files || [];
+	const images = comment.comment?.images || [];
+	const files = comment.comment?.files || [];
 
 	return (
 		<>

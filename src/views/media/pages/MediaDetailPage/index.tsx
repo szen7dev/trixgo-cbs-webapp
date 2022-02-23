@@ -39,7 +39,7 @@ import 'views/media/styles/index.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps } from "typings/media";
+import { FileProps, ImageProps, MediaAuthor } from "typings/media";
 import SocialRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
 import { abbreviateNumber } from 'utils';
@@ -70,20 +70,20 @@ const MediaDetail: FC = () => {
 			break;
 	}
 
-	const { deleteMedia, reactionMedia, listMedias } = 
+	const { deleteMedia, reactionMedia, listMedias } =
 		useMedia(`list_media__related.${mediaID}`, conditionListMedia);
 
-	const { listReactions, refetchListReactions, listSeens, totalRecordSeen } = 
+	const { listReactions, refetchListReactions, listSeens, totalRecordSeen } =
 		useMedia(mediaID, { mediaID });
 
-	const { listComments, totalRecord, limit } = 
+	const { listComments, totalRecord, limit } =
 		useCommentMedia({
 			mediaID,
 			key: `list_comments.${mediaID}`
 		});
 
 	// State manage image comments
-	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, });
+	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, createAt: '', author: undefined as undefined | MediaAuthor });
 	const [isShow, setIsShow] = useState(false);
 
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
@@ -123,7 +123,7 @@ const MediaDetail: FC = () => {
 
 	// Update view and user seen for media
 	useEffect(() => {
-		if(msUpdateView <= 0) return;
+		if (msUpdateView <= 0) return;
 
 		const timeout: NodeJS.Timeout = setTimeout(async () => {
 			await SocialRepository.updateViewMedia(mediaID);
@@ -246,7 +246,7 @@ const MediaDetail: FC = () => {
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
 											// openModal(mediaID, images, i)
-											setDefaultState({ mediaID, images, index: i })
+											setDefaultState({ mediaID, images, index: i, author: media.author, createAt: media.createAt })
 											setIsShow(true)
 										}} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />

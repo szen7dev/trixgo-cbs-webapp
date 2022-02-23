@@ -3,6 +3,7 @@ import {
   CommentBody,
   Response,
   ListRecord,
+  CommentDetail,
 } from "typings/ppt/comment.d";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
@@ -110,8 +111,10 @@ const useComments = (payload: Payload) => {
             // Create reply comment;
             if (options[0]) {
               const { page, commentIdx } = options[0];
-              old.pages[page].data.listRecords[commentIdx].comment
-                .amountCommentReply++;
+              (
+                old.pages[page].data.listRecords[commentIdx]
+                  .comment as CommentDetail
+              ).amountCommentReply++;
               old.pages[page].data.listRecords[commentIdx].listReply.data.push(
                 _data
               );
@@ -216,9 +219,11 @@ const useComments = (payload: Payload) => {
               old.pages[options.page || 0].data.listRecords[
                 options.commentIdx || 0
               ].listReply.data.splice(options.replyIdx || 0, 1);
-              old.pages[options.page || 0].data.listRecords[
-                options.commentIdx || 0
-              ].comment.amountCommentReply--;
+              (
+                old.pages[options.page || 0].data.listRecords[
+                  options.commentIdx || 0
+                ].comment as CommentDetail
+              ).amountCommentReply--;
             } else {
               // Update comment
               old.pages[0].data.totalRecord--;
