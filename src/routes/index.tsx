@@ -7,7 +7,6 @@ import AuthProvider from "services/providers/Auth";
 import ModalProvider from "services/providers/Modal";
 import ChatProvider from "services/providers/Chat";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
-import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
@@ -25,7 +24,7 @@ import PPTRouter from "./ppt";
 import HumanRouter from "./human";
 // import MarketRouter from "./market";
 import MediaRouter from "./media";
-// import MessagesRouter from "./messages";
+import MessagesRouter from "./messages";
 // import OperationRouter from "./operation";
 // import OwnerRouter from './owner';
 import PcmRouter from "./pcm";
@@ -50,70 +49,71 @@ const Routes: FC = () => {
     return (
         <Router>
             <AuthProvider>
-                <RightClickMenuProvider>
-                    <DeleteConfirmProvider>
-                        <ChatProvider>
-                            <ModalProvider>
-                                <Switch>
+                <DeleteConfirmProvider>
+                    <ChatProvider>
+                        <ModalProvider>
+                            <Switch>
 
-                                    {/* =====HOME===== */}
-                                    <Route exact path="/">
-                                        <PcmRouter />
-                                    </Route>
+                                {/* =====HOME===== */}
+                                <Route exact path="/">
+                                    <PcmRouter />
+                                </Route>
 
-                                    {/* =====AUTHENTICATION===== */}
-                                    <Route path="/authentication/:path?">
-                                        <AuthenticationRouter />
-                                    </Route>
+                                {/* =====AUTHENTICATION===== */}
+                                <Route path="/authentication/:path?">
+                                    <AuthenticationRouter />
+                                </Route>
 
-                                    {/* =====PCM===== */}
-                                    <Route path="/pcm">
-                                        <PcmRouter />
-                                    </Route>
+                                {/* =====PCM===== */}
+                                <Route path="/pcm">
+                                    <PcmRouter />
+                                </Route>
 
-                                    {/* =====HUMAN===== */}
-                                    <Route path="/human">
-                                        <HumanLayout>
-                                            <HumanRouter />
-                                        </HumanLayout>
-                                    </Route>
+                                {/* =====HUMAN===== */}
+                                <Route path="/human">
+                                    <HumanLayout>
+                                        <HumanRouter />
+                                    </HumanLayout>
+                                </Route>
 
-                                        {/* =====DOCUMENT===== */}
-                                        <Route path="/document">
-                                            <DocumentLayout>
-                                                <DocumentRouter />
-                                            </DocumentLayout>
-                                        </Route>
+                                {/* =====DOCUMENT===== */}
+                                <Route path="/document">
+                                    <DocumentLayout>
+                                        <DocumentRouter />
+                                    </DocumentLayout>
+                                </Route>
 
-                                        {/* =====PPT===== */}
-				                        <Route 
-                                            path='/ppt' 
-                                            component={PPTRouter}
-                                        />
-                                        {/* <Route path="/ppt">
-                                            <DocumentLayout>
-                                                <PPTRouter />
-                                            </DocumentLayout>
-                                        </Route> */}
+                                {/* =====PPT===== */}
+                                <Route
+                                    path='/ppt'
+                                    component={PPTRouter}
+                                />
+                                {/* <Route path="/ppt">
+                                    <DocumentLayout>
+                                        <PPTRouter />
+                                    </DocumentLayout>
+                                </Route> */}
 
-                                        {/* =====MEDIA===== */}
-                                        <Route path="/media">
-                                            <HomeLayout>
-                                                <MediaRouter />
-                                            </HomeLayout>
-                                        </Route>
+                                {/* =====MEDIA===== */}
+                                <Route path="/media">
+                                    <HomeLayout>
+                                        <MediaRouter />
+                                    </HomeLayout>
+                                </Route>
 
-                                    {/* =====OTHER===== */}
-                                    <Route path="*">
-                                        <FullPageLayout>
-                                            <Route path="/*" component={ErrorPage} />
-                                        </FullPageLayout>
-                                    </Route>
-                                </Switch>
-                            </ModalProvider>
-                        </ChatProvider>
-                    </DeleteConfirmProvider>
-                </RightClickMenuProvider>
+                                {/* =====MESSAGES===== */}
+                                <MessagesRouter/>
+
+                                {/* =====OTHER===== */}
+                                <Route path="*">
+                                    <FullPageLayout>
+                                        <Route path="/*" component={ErrorPage} />
+                                    </FullPageLayout>
+                                </Route>
+                            </Switch>
+                        </ModalProvider>
+                    </ChatProvider>
+                </DeleteConfirmProvider>
             </AuthProvider>
         </Router>
     );
