@@ -5,7 +5,7 @@ import {ChattingInput} from "./components/ChatInput";
 import {MessageContext} from "../../index";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MainSearchChatContent} from "../SearchMessage/components/MainSearchChatContent";
+import {MainSearchChatContent} from "../SearchMessage";
 
 export const ChattingSection:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);
