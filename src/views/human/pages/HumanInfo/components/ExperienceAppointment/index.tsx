@@ -27,6 +27,8 @@ import {
 import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
 
+import style from 'views/human/styles/style.module.css'
+
 import type {
   Human,
   ContactDocument,
@@ -308,7 +310,7 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
             </div>
             <p style={{ width: "13%" }}>
               {contactDocument.sign && (
-                <span className="t-human-spread">{contactDocument.sign}</span>
+                <span className={style['t-human-spread']}>{contactDocument.sign}</span>
               )}
               <span>
                 {moment(contactDocument.toDate).isValid() &&
@@ -318,12 +320,12 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
             <p style={{ width: "15%" }}>{contactDocument?.position2?.name}</p>
             <p className="w-1/5">
               {contactDocument.contract?.sign && (
-                <span className="t-human-spread">
+                <span className={style['t-human-spread']}>
                   {contactDocument.contract.sign}
                 </span>
               )}
               {contactDocument.contract?.project?.projectType && (
-                <span className="t-human-spread">
+                <span className={style['t-human-spread']}>
                   {
                     PROJECT_TYPES[
                       contactDocument?.contract?.project?.projectType
@@ -342,7 +344,7 @@ export const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
               )}
             </p>
             <p style={{ width: "12%" }}>
-              <span>{contactDocument.timeMobilize}</span>
+              <span className={style['t-human-spread']}>{contactDocument.timeMobilize}</span>
               <span>{contactDocument.factor}</span>
             </p>
             <div className="w-1/5 flex flex-col">

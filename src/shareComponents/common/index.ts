@@ -10,7 +10,7 @@ export * from './DeleteConfirm';
 export * from './HomeNavigation';
 export * from './RightClickMenuV2/components/RightClickMenuWrapper';
 export * from './RightClickMenuV2';
-export * from './Spinner';
+export * from './Loader';
 export * from './ModalContainer';
 export * from './ModalFullContainer';
 export * from './InputClearable';

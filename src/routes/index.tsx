@@ -32,7 +32,7 @@ import PcmRouter from "./pcm";
 // import QrcodeRouter from "./qrcode";
 // import ReeRouter from "./ree";
 // import SupportRouter from "./support";
-// import TimesheetRouter from "./timesheet";
+import TimesheetRouter from "./timesheet";
 // import WorkshopRouter from "./workshop";
 
 /*=====5.PAGES=====*/
@@ -104,6 +104,11 @@ const Routes: FC = () => {
                                 {/* =====DATHUB===== */}
                                 <Route path="/datahub">
                                     <DatahubRouter />
+                                </Route>
+
+                                {/* =====TIMESHEET===== */}
+                                <Route path="/timesheet">
+                                    <TimesheetRouter />
                                 </Route>
 
                                 {/* =====OTHER===== */}
