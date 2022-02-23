@@ -29,7 +29,7 @@ export const HumanHomePage: FC = () => {
 
   const [pageParam, setPageParam] = useState<any>({});
 
-  // Lấy ra data/MessageList data ngay lúc đầu vào màn hình
+  // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
 
   const { openModal } = useModal();
