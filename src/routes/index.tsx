@@ -76,38 +76,35 @@ const Routes: FC = () => {
                                     </HumanLayout>
                                 </Route>
 
-                                    {/* =====DOCUMENT===== */}
-                                    <Route path="/document">
-                                        <DocumentLayout>
-                                            <DocumentRouter />
-                                        </DocumentLayout>
-                                    </Route>
+                                {/* =====DOCUMENT===== */}
+                                <Route path="/document">
+                                    <DocumentLayout>
+                                        <DocumentRouter />
+                                    </DocumentLayout>
+                                </Route>
 
-                                    {/* =====PPT===== */}
-                                    <Route
-                                        path='/ppt'
-                                        component={PPTRouter}
-                                    />
-                                    {/* <Route path="/ppt">
+                                {/* =====PPT===== */}
+                                <Route
+                                    path='/ppt'
+                                    component={PPTRouter}
+                                />
+                                {/* <Route path="/ppt">
                                             <DocumentLayout>
                                                 <PPTRouter />
                                             </DocumentLayout>
                                         </Route> */}
 
-                                    {/* =====MEDIA===== */}
-                                    <Route path="/media">
-                                        <HomeLayout>
-                                            <MediaRouter />
-                                        </HomeLayout>
-                                    </Route>
+                                {/* =====MEDIA===== */}
+                                <Route path="/media">
+                                    <HomeLayout>
+                                        <MediaRouter />
+                                    </HomeLayout>
+                                </Route>
 
-                                    {/* =====DATHUB===== */}
-                                    <Route path="/datahub">
-																				<DatahubRouter />
-                                    </Route>
-
-                                {/* =====MESSAGES===== */}
-                                <MessagesRouter/>
+                                {/* =====DATHUB===== */}
+                                <Route path="/datahub">
+                                    <DatahubRouter />
+                                </Route>
 
                                 {/* =====TIMESHEET===== */}
                                 <Route path="/timesheet">
