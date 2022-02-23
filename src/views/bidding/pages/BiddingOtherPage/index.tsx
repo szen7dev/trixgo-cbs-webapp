@@ -32,7 +32,7 @@ const pages = [
 	{ id: 'contract', title: 'Hợp đồng minh chứng' },
 ]
 
-const BiddingOtherPage: FC = () => {
+export const BiddingOtherPage: FC = () => {
 	const [pageActive, setPageActive] = useState('info')
 	useEffect(() => {
 		document.title = "Trixgo | Note"
@@ -448,4 +448,3 @@ const BiddingOtherPage: FC = () => {
 		</div>
 	);
 };
-export default BiddingOtherPage;

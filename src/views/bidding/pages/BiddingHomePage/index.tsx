@@ -28,7 +28,7 @@ const pages = [
 	{ id: 'contractor_consulting', title: 'Tư vấn thầu' },
 ]
 
-const BiddingHomePage: FC = () => {
+export const BiddingHomePage: FC = () => {
 	const [pageActive, setPageActive] = useState('bids')
 	useEffect(() => {
 		document.title = "Trixgo | Note"
@@ -222,4 +222,3 @@ const BiddingHomePage: FC = () => {
 		</div>
 	);
 };
-export default BiddingHomePage;

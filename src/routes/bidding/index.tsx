@@ -1,14 +1,21 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
-/*=====LAYOUTS=====*/
+/*=====2.PROVIDERS=====*/
+
+/*=====3.LAYOUTS=====*/
 import { BiddingLayout } from "views/bidding/shareComponents/layouts";
 
-/*=====PAGES=====*/
-import BiddingHomePage from "views/bidding/BiddingHomePage";
-import BiddingOtherPage from "views/bidding/BiddingOtherPage";
+/*=====4.CONFIG ROUTE=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
+
+import { 
+    BiddingHomePage, 
+    BiddingOtherPage,
+} from "views/bidding/pages";
 
 const BiddingRouter: FC = () => {
     return (
