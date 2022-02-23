@@ -16,7 +16,7 @@ import { FullPageLayout } from "shareComponents/layouts";
 import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
 // import CmcsRouter from "./cmcs";
-// import DatahubRouter from "./datahub";
+import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
 // import FinancialRouter from "./financial";
@@ -89,10 +89,10 @@ const Routes: FC = () => {
                                     component={PPTRouter}
                                 />
                                 {/* <Route path="/ppt">
-                                    <DocumentLayout>
-                                        <PPTRouter />
-                                    </DocumentLayout>
-                                </Route> */}
+                                            <DocumentLayout>
+                                                <PPTRouter />
+                                            </DocumentLayout>
+                                        </Route> */}
 
                                 {/* =====MEDIA===== */}
                                 <Route path="/media">
@@ -101,8 +101,10 @@ const Routes: FC = () => {
                                     </HomeLayout>
                                 </Route>
 
-                                {/* =====MESSAGES===== */}
-                                <MessagesRouter/>
+                                {/* =====DATHUB===== */}
+                                <Route path="/datahub">
+                                    <DatahubRouter />
+                                </Route>
 
                                 {/* =====OTHER===== */}
                                 <Route path="*">
