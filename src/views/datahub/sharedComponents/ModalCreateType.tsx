@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react'
 import { ModalContainer } from 'shareComponents/common'
-import TField from 'views/datahub/sharedComponents/common/t-form/TField'
-import TSelect from 'views/datahub/sharedComponents/common/t-form/TSelect'
+import TField from 'views/datahub/sharedComponents/common/TForm/TField'
+import TSelect from 'views/datahub/sharedComponents/common/TForm/TSelect'
 import React, { FC } from 'react'
 
 type Props = {

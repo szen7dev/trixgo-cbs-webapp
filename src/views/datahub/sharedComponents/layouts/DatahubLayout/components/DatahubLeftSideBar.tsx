@@ -5,7 +5,7 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from "services/hooks/useAuth";
 
-import { routes } from "../../../../routes";
+import { routes } from "routes/datahub";
 
 const DatahubLeftSideBar: FC = () => {
 	const { user } = useAuth();
