@@ -11,14 +11,14 @@ import {
     ListCommentsPayload,
     MediaReactionPayload,
     ListSeenPayload
-} from "typings/social";
+} from "typings/media";
 import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "helpers";
 
 const mediaURL = "/api/medias";
 const commentURL = "/api/reaction";
 
-const SocialRepository = {
+const MediaRepository = {
     /**
      * MEDIA
      * @param payload
@@ -130,4 +130,4 @@ const SocialRepository = {
     },
 };
 
-export default SocialRepository;
+export default MediaRepository;

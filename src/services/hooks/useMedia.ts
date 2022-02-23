@@ -1,7 +1,7 @@
 import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
 import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
-import SocialRepository from "apis/media";
+import MediaRepository from "apis/media";
 import { 
     MediaProps, 
     MediaPayload, 
@@ -9,10 +9,10 @@ import {
     ListCommentsPayload, 
     ListMediasPayload,
     MediaReactionPayload
-} from "typings/social";
+} from "typings/media";
 import { CommentProps } from 'typings/common';
 
-type UseSocial = {
+type UseMedia = {
     // SEEN
     listSeens: Array<any>,
     totalRecordSeen: number,
@@ -37,27 +37,27 @@ type UseSocial = {
     hasNextPage: boolean | undefined,
 };
 
-export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial => {
+export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia => {
     const { current: socket }: any = useSocket();
 
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
-            SocialRepository.createMedia(payload)
+            MediaRepository.createMedia(payload)
         );
 
     const { mutateAsync: updateMediaAsync } =
         useMutation((payload: MediaPayload) =>
-            SocialRepository.updateMedia(payload)
+            MediaRepository.updateMedia(payload)
         );
 
     const { mutateAsync: deleteMediaAsync } =
         useMutation((id: string) =>
-            SocialRepository.deleteMedia(id)
+            MediaRepository.deleteMedia(id)
         );
 
     const { mutateAsync: reactionMediaAsync } =
         useMutation((payload: MediaReactionPayload) =>
-            SocialRepository.reactionMedia(payload)
+            MediaRepository.reactionMedia(payload)
         );
 
     // Get danh sách media
@@ -72,7 +72,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useInfiniteQuery(
             key || "list_medias",
             async ({ pageParam }: any) =>
-                SocialRepository.listMedias({ 
+                MediaRepository.listMedias({ 
                     lastestID: pageParam ? pageParam : "",
                     ...params,
                 }),
@@ -95,7 +95,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useInfiniteQuery(
             ["list_reactions", key],
             async ({ pageParam }: any) =>
-                SocialRepository.listReactions({ 
+                MediaRepository.listReactions({ 
                     limit: 10,
                     lastestID: pageParam ? pageParam : "",
                     populates: JSON.stringify({
@@ -123,7 +123,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
         useInfiniteQuery(
             ["list_seens_media", key],
             async ({ pageParam }: any) =>
-                SocialRepository.listSeensMedia({ 
+                MediaRepository.listSeensMedia({ 
                     limit: 20,
                     lastestID: pageParam ? pageParam : "",
                     populates: JSON.stringify({
@@ -254,7 +254,7 @@ export const useSocial = (key?: string, params?: ListMediasPayload) : UseSocial 
     };
 };
 
-type UseCommentSocial = {
+type UseCommentMedia = {
     createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
     updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
     deleteComment: (id: string) => Promise<void>,
@@ -268,20 +268,20 @@ type UseCommentSocial = {
     prevPageListComments: () => void,
 }
 
-export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSocial => {
+export const useCommentMedia = (payload?: ListCommentsPayload) : UseCommentMedia => {
     const { mutateAsync: createCommentAsync } =
         useMutation((payload: CommentPayload) =>
-            SocialRepository.createComment(payload)
+            MediaRepository.createComment(payload)
         );
 
     const { mutateAsync: deleteCommentAsync } =
         useMutation((id: string) =>
-            SocialRepository.deleteComment(id)
+            MediaRepository.deleteComment(id)
         );
 
     const { mutateAsync: updateCommentAsync } =
         useMutation((payload: CommentPayload) =>
-            SocialRepository.updateComment(payload)
+            MediaRepository.updateComment(payload)
         );
 
     const {
@@ -294,7 +294,7 @@ export const useCommentSocial = (payload?: ListCommentsPayload) : UseCommentSoci
         useInfiniteQuery(
             (payload && payload.key) || "list_comments",
             async ({ pageParams }: any) => 
-            SocialRepository.listComments({ 
+            MediaRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
                 ...payload
             }),

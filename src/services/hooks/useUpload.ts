@@ -40,7 +40,7 @@ export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
-                type: payload.type,
+                mimeType: payload.type,
                 size: payload.size as never,
                 app,
                 typeUpload: typeUpload
@@ -95,7 +95,7 @@ export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
             }   
         }
 
-        // Generate link S3 -> get messageList link presigned upload -> upload S3 async
+        // Generate link S3 -> get list link presigned upload -> upload S3 async
         const listURLPresigned = await Promise.all(urlsPromise);
 
         listURLPresigned.length && listURLPresigned.map((link: GenerateLinkResponse) => {

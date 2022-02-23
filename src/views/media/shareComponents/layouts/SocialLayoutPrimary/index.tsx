@@ -4,11 +4,11 @@ import iconFilter from 'assets/images/icons8-filter-96.png';
 import { LayoutPrimary } from "../LayoutPrimary";
 
 const pages = [
-	{ id: "0", title: 'Nội bộ công ty', path: '/social/messageHome' },
-	{ id: "1", title: 'Dự án phòng ban', path: '/social/messageHome/2' },
-	{ id: "2", title: 'Chuyển đổi số', path: '/social/messageHome/3' },
-	{ id: "3", title: 'Tin hệ thống', path: '/social/messageHome/4' },
-	{ id: "4", title: 'Lưu trữ cá nhân', path: '/social/messageHome/5' },
+	{ id: "0", title: 'Nội bộ công ty', path: '/media/home' },
+	{ id: "1", title: 'Dự án phòng ban', path: '/media/home/2' },
+	{ id: "2", title: 'Chuyển đổi số', path: '/media/home/3' },
+	{ id: "3", title: 'Tin hệ thống', path: '/media/home/4' },
+	{ id: "4", title: 'Lưu trữ cá nhân', path: '/media/home/5' },
 ]
 
 export const SocialLayoutPrimary: FC = ({ children }) => {

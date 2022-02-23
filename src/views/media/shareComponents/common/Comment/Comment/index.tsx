@@ -6,7 +6,7 @@ import moment from "moment";
 import { PostFile } from 'views/media/shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { CommentProps } from 'typings/common';
-import { useCommentSocial } from 'services/hooks/useSocial';
+import { useCommentMedia } from 'services/hooks/useMedia';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,
@@ -28,7 +28,7 @@ interface Props {
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
-	const { deleteComment } = useCommentSocial({ mediaID: comment.media });
+	const { deleteComment } = useCommentMedia({ mediaID: comment.media });
 	const { dispatch } = useContext(CommentContext);
 
 	const handleDeleteComment = () => {

@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
 import { CommentProps } from 'typings/common';
-import SocialRepository from "apis/media";
+import MediaRepository from "apis/media";
 
 import { Comment, RootComment } from 'views/media/shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
@@ -29,7 +29,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	}, [comments?.length])
 
 	const handleClickViewMore = async () => {
-		const { error, data } = await SocialRepository.listComments({
+		const { error, data } = await MediaRepository.listComments({
 			lastestID: state.comments[0]._id,
 			mediaID: mediaID,
 		});

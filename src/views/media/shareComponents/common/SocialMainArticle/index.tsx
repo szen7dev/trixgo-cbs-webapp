@@ -7,7 +7,7 @@ import image from 'assets/images/media/hoi-thao-khoa-hoc-la-gi 1.png';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconComment from 'assets/images/icon-chat-project.png';
-import { MediaProps } from 'typings/social';
+import { MediaProps } from 'typings/media';
 import { abbreviateNumber } from 'utils';
 
 type Props = {
@@ -24,7 +24,7 @@ export const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 			</div>
 			<div className="inline-flex flex-col px-5 pt-4 pb-3 w-full lg:w-min box-content" style={{ minWidth: "287px", minHeight: "363px" }}>
 				<h4 className="text-2xl leading-7 font-bold px-2.5">
-					<Link to={`/social/post/${media._id}`}>
+					<Link to={`/media/post/${media._id}`}>
 						{media.title}
 					</Link>
 				</h4>

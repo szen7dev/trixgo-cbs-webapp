@@ -1,8 +1,7 @@
 import cn from "classnames";
 import { ElementType, FC, HTMLAttributes } from "react";
 import { NavLink } from "react-router-dom";
-
-import '../style.css';
+import 'views/media/styles/index.css';
 interface PageProps {
 	id: string | number
 	path?: string

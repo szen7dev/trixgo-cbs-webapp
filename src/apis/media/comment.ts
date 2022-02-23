@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../repository";
 
-import { CommentPayload } from "typings/social";
+import { CommentPayload } from "typings/media";
 import {
   Comment,
   CommentDetail,

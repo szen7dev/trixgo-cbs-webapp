@@ -15,13 +15,13 @@ Example: useAuth
 useInfiniteQuery dùng trong trường hợp cần call API dạng danh sách trong quá trình mounting. 
 Ví dụ lấy danh sách bạn bè, danh sách dự án, công việc v.v...
 
-Example: useSocial
+Example: useMemdia
 
 ```shell
   const {isLoading, refetch, data, fetchNextPage, fetchPreviousPage } =
         useInfiniteQuery(                                                   
             "list_medias",
-            async ({ pageParams }: any) => SocialRepository.listMedias({ lastestID: pageParams ? pageParams: "" }),
+            async ({ pageParams }: any) => MediaRepository.listMedias({ lastestID: pageParams ? pageParams: "" }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;

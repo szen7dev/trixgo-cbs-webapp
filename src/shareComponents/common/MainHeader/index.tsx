@@ -49,7 +49,7 @@ export const MainHeader: FC = () => {
                             <Link to={`/messages`} className="ml-3 mr-3">
                                 Nhắn tin
                             </Link>
-                            <Link to={`/social/home`} className="ml-3 mr-3">
+                            <Link to={`/media/home`} className="ml-3 mr-3">
                                 Truyền thông
                             </Link>
                             <Link to={`/bidding/home`} className="ml-3 mr-3">

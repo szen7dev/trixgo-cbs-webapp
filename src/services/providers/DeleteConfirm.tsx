@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useReducer } from "react";
 import DeleteConfirmContext, { initialState } from "services/contexts/DeleteConfirm";
 
 import { DeleteConfirmState, DeleteConfirmActions } from "typings/app";
-import { DeleteConfirm } from "shareComponents/common/DeleteConfirm";
+import { DeleteConfirm } from "shareComponents/common";
 
 type Props = {
   children: ReactNode;

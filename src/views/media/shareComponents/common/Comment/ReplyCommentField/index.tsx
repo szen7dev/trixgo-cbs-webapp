@@ -10,8 +10,8 @@ import { PostImage, PostFile } from 'views/media/shareComponents/common';
 
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
-import { FileProps, FilePropsUpload, CommentPayload } from 'typings/social';
-import { useCommentSocial } from 'services/hooks/useSocial';
+import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
+import { useCommentMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
@@ -58,7 +58,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('MEDIA');
-	const { createComment, updateComment } = useCommentSocial({ mediaID, key: `list_comments.${mediaID}` });
+	const { createComment, updateComment } = useCommentMedia({ mediaID, key: `list_comments.${mediaID}` });
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
 
