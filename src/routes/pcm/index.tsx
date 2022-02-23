@@ -47,10 +47,6 @@ import ProjectPhotoPackagePage from "views/pcm/ProjectPhotoPackagePage";
 const PCMRouter: FC = () => {
     return (
         <>
-            <Route exact path="/">
-                <Redirect to="/pcm/home" />
-            </Route>
-
             <Route path="/pcm/:path?">
                 <Switch>
                     <ProtectedRoute
