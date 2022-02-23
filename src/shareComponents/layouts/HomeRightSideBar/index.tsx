@@ -15,7 +15,7 @@ import icon4 from "assets/images/icons8-user-manual-64.png";
 import icon5 from "assets/images/icons8-bill-96.png";
 import icon6 from "assets/images/icons8-calendar-128.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
-// import ChatsOnRightSideBar from "./mini-chatbox/ChatsOnRightSideBar";
+import {ChatsOnRightSideBar} from "shareComponents/common";
 
 export const HomeRightSideBar: FC = () => {
   const [openNotes, setOpenNotes] = useState(false);
@@ -141,7 +141,7 @@ export const HomeRightSideBar: FC = () => {
           />
         </Link>
       </div>
-      {/* <ChatsOnRightSideBar/> */}
+       <ChatsOnRightSideBar/>
     </div>
   );
 };
