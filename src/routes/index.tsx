@@ -21,10 +21,10 @@ import AuthenticationRouter from "./authentication";
 // import DatahubRouter from "./datahub";
 // import DocumentRouter from "./document";
 // import FinancialRouter from "./financial";
-import HomeRouter from './home';
+// import HomeRouter from './home';
 // import HumanRouter from "./human";
 // import MarketRouter from "./market";
-// import MediaRouter from "./media";
+import MediaRouter from "./media";
 // import MessagesRouter from "./messages";
 // import OperationRouter from "./operation";
 // import OwnerRouter from './owner';
@@ -41,7 +41,7 @@ import ErrorPage from "views/authentication/Error";
 
 const Routes: FC = () => {
     useEffect(() => {
-        document.title = "Trixgo|Quản trị doanh nghiệp";
+        document.title = "Trixgo | Quản trị doanh nghiệp";
     }, []);
 
     return (
@@ -58,6 +58,9 @@ const Routes: FC = () => {
                                         </Route>
                                         <Route path="/pcm">
                                             <PcmRouter />
+                                        </Route>
+                                        <Route path="/media">
+                                            <MediaRouter />
                                         </Route>
                                         <Route path="*">
                                             <FullPageLayout>
