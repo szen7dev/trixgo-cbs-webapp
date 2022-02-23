@@ -1,32 +1,28 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import signInEN from "./en/sign-in.json";
-import signInVN from "./vn/sign-in.json";
-import registerEN from "./en/register.json";
-import registerVN from "./vn/register.json";
-import resetPasswordEN from "./en/reset-password.json";
-import resetPasswordVN from "./vn/reset-password.json";
+import authenticationVN from "./vn/authentication";
+import pcmVN from './vn/pcm';
+import humanVN from './vn/human';
+import documentVN from './vn/document';
 
-import humanVN from './vn/human.json';
-import documentVN from './vn/document.json';
+import authenticationEN from "./en/authentication";
+import pcmEN from './en/pcm';
+import humanEN from './en/human';
+import documentEN from './en/document';
 
 export const resources = {
   en: {
-    signIn: signInEN,
-    register: registerEN,
-    resetPassword: resetPasswordEN,
-    human: humanVN,
-    document: documentVN,
-    pcm: require('./vn/pcm')
+    ...authenticationEN,
+    ...pcmEN,
+    human: humanEN,
+    document: documentEN
   },
   vn: {
-    signIn: signInVN,
-    register: registerVN,
-    resetPassword: resetPasswordVN,
+    ...authenticationVN,
+    ...pcmVN,
     human: humanVN,
-    document: documentVN,
-    pcm: require('./vn/pcm')
+    document: documentVN
   },
 } as const;
 

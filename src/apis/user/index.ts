@@ -3,7 +3,7 @@ import API from "../repository";
 import { 
     UpdateUser, UpdatePasswordUser, PostResponse, ListFriendsPayload, ListUserResponse, UserCodeResponse, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend, ListRequestsPayload
 } from "typings/user";
-import { convertObToUrl } from "helpers";
+import { convertObToUrl } from "utils";
 const userURL = "/api/auth/users";
 const friendUrl = "/api/auth/users/list-friend"
 const codeUrl = "/api/personal/friend-request/get-code"
