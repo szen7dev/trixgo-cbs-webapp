@@ -12,30 +12,16 @@ import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
-import {
-  useQueryContactDocument,
-  useMutationContactDocument,
-} from "services/hooks/useHuman";
+import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
 import { FormWorkExperience } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContactFile } from "views/human/shareComponents/common";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
-import {
-  uploadActions,
-  uploadReducer,
-  IMethodFiles,
-} from "views/human/Reducers/Upload";
-import { modifyUploadedFilesV2 } from "../WorkHistory";
-import type { IFile } from "../WorkHistory";
+import { uploadActions, uploadReducer, IMethodFiles } from "views/human/Reducers/Upload";
+import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
 
-import type {
-  ContactDocument,
-  Human,
-  FileProps,
-  FilePropsUpload,
-} from "typings/human";
-
+import type { ContactDocument, Human, FileProps, FilePropsUpload } from "typings/human";
 interface WorkExperienceProps {
   humanId: string;
   humanInfo: Human;

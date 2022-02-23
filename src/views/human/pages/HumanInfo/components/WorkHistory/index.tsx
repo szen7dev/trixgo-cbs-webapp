@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import className from "classnames";
 import toArray from "lodash/toArray";
-
 import { HumanInfoHeader } from "views/human/shareComponents/common";
+import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
@@ -13,46 +13,13 @@ import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
 import { FormWorkHistory } from "./components";
-import {
-	useQueryContactDocument,
-	useMutationContactDocument,
-} from "services/hooks/useHuman";
+import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useUpload } from "services/hooks/useUpload";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
-
-import {
-	uploadActions,
-	uploadReducer,
-} from "views/human/Reducers/Upload";
+import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
 import { ContactFile } from "views/human/shareComponents/common";
-
-import type {
-	ContactDocument,
-	FileProps,
-	FilePropsUpload,
-} from "typings/human";
-export interface IFile {
-	[key: string]: any;
-}
-
-export const modifyUploadedFilesV2 = (files: FileList, contactDocumentID: string): IFile => {
-	let currentFileIndex = 0;
-	const fileToUpload: IFile = {};
-	for (let i = 0; i < files.length; i++) {
-		currentFileIndex++;
-		const id = Number(currentFileIndex);
-		fileToUpload[id] = {
-			id,
-			file: files[i],
-			progress: 0,
-			contactDocumentID
-		};
-	}
-
-	return fileToUpload;
-};
-
+import type { ContactDocument, FileProps, FilePropsUpload } from "typings/human";
 interface PropWorkHistory {
 	humanId: string;
 }

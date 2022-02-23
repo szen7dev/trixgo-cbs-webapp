@@ -25,8 +25,7 @@ import {
   uploadReducer,
   IMethodFiles,
 } from "views/human/Reducers/Upload";
-import { modifyUploadedFilesV2 } from "../WorkHistory";           // Vlxx
-import type { IFile } from "../WorkHistory";                      // Vlxx
+import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
 
 import type {

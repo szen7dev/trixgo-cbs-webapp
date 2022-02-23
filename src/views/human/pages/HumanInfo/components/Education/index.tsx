@@ -12,29 +12,15 @@ import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useModal } from "services/hooks/useModal";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
-import {
-  useQueryContactDocument,
-  useMutationContactDocument,
-} from "services/hooks/useHuman";
+import { useQueryContactDocument, useMutationContactDocument } from "services/hooks/useHuman";
 import { FormEducation } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-import {ContactFile} from "views/human/shareComponents/common";
+import { ContactFile } from "views/human/shareComponents/common";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
-import {
-  uploadActions,
-  uploadReducer,
-  IMethodFiles,
-} from "views/human/Reducers/Upload";
-import { modifyUploadedFilesV2 } from "../WorkHistory";
-import type { IFile } from "../WorkHistory";
+import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
+import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
-
-import type {
-  ContactDocument,
-  FileProps,
-  FilePropsUpload,
-} from "typings/human";
-
+import type { ContactDocument, FileProps, FilePropsUpload } from "typings/human";
 interface EducationProps {
   humanId: string;
 }
@@ -321,8 +307,8 @@ export const Education: FC<EducationProps> = (props) => {
                             type="button"
                             className={className(
                               "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", {
-                                hidden: !d._id
-                              }
+                              hidden: !d._id
+                            }
                             )}
                             onClick={() =>
                               handleRemoveFileUpload(d, contactDocument._id)
@@ -441,9 +427,8 @@ export const Education: FC<EducationProps> = (props) => {
       {totalRecord && totalRecord - listContactDocument.length > 0 ? (
         <div className="w-full flex justify-center my-5">
           <button onClick={() => fetchNextPageContactDocument()}>
-            <span className="text-primary">{`Xem thêm (${
-              totalRecord - listContactDocument.length
-            })`}</span>
+            <span className="text-primary">{`Xem thêm (${totalRecord - listContactDocument.length
+              })`}</span>
           </button>
         </div>
       ) : (
