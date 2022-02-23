@@ -22,7 +22,7 @@ import AuthenticationRouter from "./authentication";
 // import DocumentRouter from "./document";
 // import FinancialRouter from "./financial";
 // import HomeRouter from './home';
-// import HumanRouter from "./human";
+import HumanRouter from "./human";
 // import MarketRouter from "./market";
 import MediaRouter from "./media";
 // import MessagesRouter from "./messages";
@@ -39,6 +39,7 @@ import PcmRouter from "./pcm";
 /*=====5.PAGES=====*/
 import ErrorPage from "views/authentication/Error";
 import { HomeLayout } from "shareComponents/layouts";
+import { HumanLayout } from "views/human/shareComponents/layouts";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -54,17 +55,37 @@ const Routes: FC = () => {
                             <ChatProvider>
                                 <ModalProvider>
                                     <Switch>
+
+                                        {/* =====HOME===== */}
+                                        <Route exact path="/">
+                                            <Redirect to="/pcm/home" />
+                                        </Route>
+
+                                        {/* =====AUTHENTICATION===== */}
                                         <Route path="/authentication/:path?">
                                             <AuthenticationRouter />
                                         </Route>
+
+                                        {/* =====PCM===== */}
                                         <Route path="/pcm">
                                             <PcmRouter />
                                         </Route>
+
+                                        {/* =====HUMAN===== */}
+                                        <Route path="/human">
+                                            <HumanLayout>
+                                                <HumanRouter />
+                                            </HumanLayout>
+                                        </Route>
+
+                                        {/* =====MEDIA===== */}
                                         <Route path="/media">
                                             <HomeLayout>
                                                 <MediaRouter />
                                             </HomeLayout>
                                         </Route>
+
+                                        {/* =====OTHER===== */}
                                         <Route path="*">
                                             <FullPageLayout>
                                                 <Route path="/*" component={ErrorPage} />

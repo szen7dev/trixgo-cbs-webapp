@@ -26,7 +26,7 @@ import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
 import { usePcm } from 'services/hooks/usePcm';
-// import { useSocial } from 'services/hooks/useSocial';
+import { useSocial } from 'services/hooks/useSocial';
 import PcmRepository from 'apis/pcm';
 
 export const PcmHomePage: FC = () => {
@@ -35,12 +35,12 @@ export const PcmHomePage: FC = () => {
   const { listTasks } = usePcm();
   const socketRef: any = useSocket();
 
-  // const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useSocial('list_media__digital-conversion', { 
-  //   limit: 6, type: 'digital-conversion'
-  // });
-  // const { listMedias: listMediasCompany, refetchListMedias } = useSocial('list_media__company__homepage', {
-  //   limit: 1, type: 'company', companyID: user?.company._id
-  // });
+  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useSocial('list_media__digital-conversion', { 
+    limit: 6, type: 'digital-conversion'
+  });
+  const { listMedias: listMediasCompany, refetchListMedias } = useSocial('list_media__company__homepage', {
+    limit: 1, type: 'company', companyID: user?.company._id
+  });
 
   // Kiểm soát lifeCicle của Data
   useEffect(() => {
@@ -69,7 +69,7 @@ export const PcmHomePage: FC = () => {
     centerPadding: '10px',
     beforeChange: (previousIndex: number, index: number) => {
       if(previousIndex < index){
-        //(index % 3) === 0 && nextPageListMedias();
+        (index % 3) === 0 && nextPageListMedias();
       }
     }
   };
@@ -132,7 +132,7 @@ export const PcmHomePage: FC = () => {
             <div className="t-home-slider w-full">
               <Slider {...settings}>
                 {/* outstanding news slider item */}
-                {/* {listMediasDigitalConversion.length ? 
+                {listMediasDigitalConversion.length ? 
                   listMediasDigitalConversion.map(media => (
                     <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
                       <div className="t-home-slider-item-warpper relative flex items-end p-2">
@@ -150,7 +150,7 @@ export const PcmHomePage: FC = () => {
                       </div>
                     </div>
                   ))
-                 : ''} */}
+                 : ''}
                 
                 {/* outstanding news slider item */}
                 {/* <div className="t-home-slider-item w-1/3 pr-2 pl-2">
@@ -172,7 +172,7 @@ export const PcmHomePage: FC = () => {
               <span>Truyền thông công ty</span>
               <Link to={`/social/home/1`}>Xem tất cả</Link>
             </div>
-            {/* {listMediasCompany.length ? (
+            {listMediasCompany.length ? (
               <div className="flex items-center">
                 <Link to={`/social/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
                   <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? `${process.env.REACT_APP_URL_S3}/${listMediasCompany[0].images[0].path}` : imgMedia} alt="Media" />
@@ -207,7 +207,7 @@ export const PcmHomePage: FC = () => {
                   </div>
                 </div>
               </div>
-            ) : ''} */}
+            ) : ''}
           </div>
 
           {/* recent actions */}
