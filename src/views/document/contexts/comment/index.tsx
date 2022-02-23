@@ -1,4 +1,4 @@
-import createDataContext from "../createDataContext";
+import createDataContext from 'services/contexts/createDataContext';
 import modalActions from "./comment.actions";
 
 import fileUploadReducer, { INITIAL_STATE } from "./comment.reducer";
