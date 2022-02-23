@@ -23,7 +23,14 @@ async function fetchList<T>(params: any): Promise<T> {
 
 async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${ITEM_URL}/contracts?contractID=${params.contactID}`
+        `${ITEM_URL}/contracts?contractID=${params.contactID}`, {
+        params: {
+            populates: {
+                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo",
+                "select": "name sign description"
+            },
+        },
+    }
     )
     return data
 }

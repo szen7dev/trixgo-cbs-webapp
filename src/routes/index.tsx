@@ -16,7 +16,7 @@ import { FullPageLayout } from "shareComponents/layouts";
 // import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
-// import CmcsRouter from "./cmcs";
+import CmcsRouter from "./cmcs";
 import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
@@ -72,6 +72,11 @@ const Routes: FC = () => {
                                         <PcmRouter />
                                     </Route>
 
+                                    {/* =====CMCS===== */}
+                                    <Route path="/pcm">
+                                        <CmcsRouter />
+                                    </Route>
+
                                     {/* =====HUMAN===== */}
                                     <Route path="/human">
                                         <HumanLayout>
@@ -110,7 +115,7 @@ const Routes: FC = () => {
                                     </Route>
 
                                     {/* =====MESSAGES===== */}
-                                    <MessagesRouter/>
+                                    <MessagesRouter />
 
                                     {/* =====TIMESHEET===== */}
                                     <Route path="/timesheet">
