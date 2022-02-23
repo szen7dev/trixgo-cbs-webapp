@@ -38,6 +38,7 @@ import PcmRouter from "./pcm";
 
 /*=====5.PAGES=====*/
 import ErrorPage from "views/authentication/Error";
+import { HomeLayout } from "shareComponents/layouts";
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -60,7 +61,9 @@ const Routes: FC = () => {
                                             <PcmRouter />
                                         </Route>
                                         <Route path="/media">
-                                            <MediaRouter />
+                                            <HomeLayout>
+                                                <MediaRouter />
+                                            </HomeLayout>
                                         </Route>
                                         <Route path="*">
                                             <FullPageLayout>

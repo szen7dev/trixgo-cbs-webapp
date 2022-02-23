@@ -7,7 +7,7 @@ import { HomeLayout } from "shareComponents/layouts/HomeLayout";
 import { SocialLayoutPrimary } from "views/media/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import { 
+import {
     MediaCategoryPage,
     MediaCommentsPage,
     MediaHomePage,
@@ -18,7 +18,7 @@ import ErrorPage from "views/authentication/Error";
 
 const MediaRouter: FC = () => {
     return (
-        <HomeLayout>
+        <>
             <Switch>
                 <Route
                     exact
@@ -77,7 +77,7 @@ const MediaRouter: FC = () => {
                 />
                 <Route path="/media/*" component={ErrorPage} />
             </Switch>
-        </HomeLayout>
+        </>
     )
 };
 

@@ -10,3 +10,5 @@ export * from './DeleteConfirm';
 export * from './HomeNavigation';
 export * from './RightClickMenuV2';
 export * from './Loader';
+export * from './ModalContainer';
+export * from './ModalFullContainer';

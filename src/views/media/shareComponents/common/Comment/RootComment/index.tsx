@@ -4,7 +4,7 @@ import { EditButton, Comment, ReplyCommentField } from 'views/media/shareCompone
 
 import { CommentProps } from 'typings/common';
 import { FileProps } from 'typings/social';
-import SocialRepository from "apis/media";
+import SocialRepository from "apis/social";
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/media/contexts/post';
 

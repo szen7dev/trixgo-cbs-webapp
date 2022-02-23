@@ -1,7 +1,7 @@
 import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
 import { useSocket } from 'services/hooks/useSocket';
 import { toast } from "react-toastify";
-import SocialRepository from "apis/media";
+import SocialRepository from "apis/social";
 import { 
     MediaProps, 
     MediaPayload, 

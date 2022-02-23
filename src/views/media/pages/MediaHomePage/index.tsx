@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 
-import ModalContainer from "components/common/modals/ModalContainer";
+import { ModalContainer } from "shareComponents/common";
 
 import iconPencil from 'assets/images/icons8-pencil-100 1.png';
-import '../style.css';
+import 'views/media/styles/index.css';
 
 import {
 	SocialMainArticle,

@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
 import { CommentProps } from 'typings/common';
-import SocialRepository from "apis/media";
+import SocialRepository from "apis/social";
 
 import { Comment, RootComment } from 'views/media/shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
