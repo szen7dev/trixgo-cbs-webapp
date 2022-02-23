@@ -1,3 +1,1 @@
-export * from './Filter';
-export * from './CommonComponent1';
-export * from './CommonComponent2';
+export * from './SampleCommon';
