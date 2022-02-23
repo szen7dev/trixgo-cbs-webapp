@@ -7,7 +7,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
-import DatahubLeftSideBar from "../DatahubLeftSideBar";
+import DatahubLeftSideBar from "./components";
 
 type Props = {
 	children: ReactNode;
