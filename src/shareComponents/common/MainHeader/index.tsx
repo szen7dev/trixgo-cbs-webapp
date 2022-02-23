@@ -43,27 +43,21 @@ export const MainHeader: FC = () => {
                         </div>
 
                         <div className="t-header-menu flex items-center flex-wrap">
-                            <Link to={`/`} className="font-bold ml-3 mr-3">
+                            <Link to={`/`} className="font-bold ml-3 mr-3 active">
                                 Home
                             </Link>
-                            <Link to={`/messages`} className="font-bold ml-3 mr-3">
+                            <Link to={`/messages`} className="ml-3 mr-3">
                                 Nhắn tin
                             </Link>
-                            <Link to={`/social/home`} className="font-bold ml-3 mr-3">
+                            <Link to={`/social/home`} className="ml-3 mr-3">
                                 Truyền thông
                             </Link>
-                            <Link to={`/bidding/home`} className="font-bold ml-3 mr-3">
+                            <Link to={`/bidding/home`} className="ml-3 mr-3">
                                 Đấu thầu
                             </Link>
-                            <Link to={`/cmcs/home`} className="font-bold ml-3 mr-3">
+                            <Link to={`/cmcs/home`} className="ml-3 mr-3">
                                 Hợp đồng
                             </Link>
-                            {/* <a className="font-bold ml-5 mr-5 active" href="/">Home</a> */}
-                            {/* <a className="font-bold ml-5 mr-5" href="/">Công việc</a>
-              <a className="font-bold ml-5 mr-5" href="/">Nhân sự</a>
-              <a className="font-bold ml-5 mr-5" href="/">Tài chính</a>
-              <a className="font-bold ml-5 mr-5" href="/">Hồ sơ</a>
-              <a className="font-bold ml-5 mr-5" href="/">Hợp đồng</a> */}
                         </div>
                     </div>
 
