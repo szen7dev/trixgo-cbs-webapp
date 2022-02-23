@@ -231,7 +231,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
         department: values?.department?.value,
         position: values?.position?.value,
         workingStatus: values?.workingStatus?.value,
-        contractType: values?.contractType?.id,
+        contractType: values?.contractType?.value,
       };
       const isSuccess = await onFinish(formatData);
       if (isSuccess) {
@@ -263,7 +263,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
           <Formik initialValues={defaultValues} onSubmit={handleSubmit}>
             {(formik) => {
               const { handleBlur, setFieldValue } = formik;
-              // console.log('🚀 ~ defaultValues Human', defaultValues)
+              console.log('🚀 ~ defaultValues Human', defaultValues)
               return (
                 <Form className="px-6 text-left">
                   {/* -------------- Line 1 --------------- */}
@@ -638,9 +638,8 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         Loại hợp đồng
                       </span>
                       <DropdownSearchable
-                        onchangeValue={(value) => {
+                        onchangeValue={(value) =>
                           setFieldValue("contractType", value)
-                        }
                         }
                         onSearchInputChange={debounce(
                           (value) => setSearchContractTypeValue(value),

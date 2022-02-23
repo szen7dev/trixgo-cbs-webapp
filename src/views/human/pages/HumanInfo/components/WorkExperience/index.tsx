@@ -17,11 +17,9 @@ import { FormWorkExperience } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { ContactFile } from "views/human/shareComponents/common";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
-import { uploadActions, uploadReducer } from "views/human/Reducers/Upload";
+import { uploadActions, uploadReducer, IMethodFiles } from "views/human/Reducers/Upload";
 import { IFile, modifyUploadedFilesV2 } from "views/human/utils";
 import { useUpload } from "services/hooks/useUpload";
-
-import style from 'views/human/styles/style.module.css'
 
 import type { ContactDocument, Human, FileProps, FilePropsUpload } from "typings/human";
 interface WorkExperienceProps {
@@ -284,17 +282,17 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
             <div className="w-1/5">
               <p style={{ maxWidth: "80%" }}>
                 {contactDocument.contract && (
-                  <span className={style['t-human-spread']}>
+                  <span className="t-human-spread">
                     {contactDocument.contract.name}
                   </span>
                 )}
                 {contactDocument.project && (
-                  <span className={style['t-human-spread']}>
+                  <span className="t-human-spread">
                     {contactDocument.project}
                   </span>
                 )}
                 {contactDocument.client && (
-                  <span className={style['t-human-spread']}>
+                  <span className="t-human-spread">
                     {contactDocument.client}
                   </span>
                 )}
