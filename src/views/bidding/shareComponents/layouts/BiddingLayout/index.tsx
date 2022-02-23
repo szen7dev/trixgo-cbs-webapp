@@ -1,13 +1,15 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import { BiddingLeftSideBar } from "./components";
-import HomeRightSideBar from "shareComponents/layouts/HomeRightSideBar";
-import { MainHeader } from "shareComponents/common/Header";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
+
+/*=====4.PAGES/COMPONENTS=====*/
+import { MainHeader } from "shareComponents/common/Header";
+import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
+import { BiddingLeftSideBar } from './components';
 
 type Props = {
     children: ReactNode;

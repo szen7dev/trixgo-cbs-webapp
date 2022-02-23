@@ -1,13 +1,15 @@
+/*=====1.LIBRARY=====*/
 import { FC, useEffect, useState } from "react";
 import SwiperCore, { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Paginate from "../../../components/common/Paginate";
-import SearchInput from "components/common/SearchInput";
-import TriangleDown from "assets/icons/TriangleDown";
-import cn from "classnames";
 
+/*=====2.CSS=====*/
+import cn from "classnames";
 import styles from "./style.module.css";
 import 'swiper/swiper-bundle.min.css';
+
+/*=====3.ICONS=====*/
+import TriangleDown from "assets/icons/TriangleDown";
 import image from 'assets/images/image-home-project.png';
 import logoPGI from 'assets/images/logo-pgi.png';
 import iconAddress from 'assets/images/icons8-address-961.svg';
@@ -23,6 +25,15 @@ import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import PrintIcon from "assets/images/icons8-print-96.svg";
+
+/*=====4.PAGES/COMPONENTS=====*/
+import { Paginate, SearchInput } from "shareComponents/common";
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+
+/*=====7.OTHER=====*/
 
 SwiperCore.use([Pagination]);
 

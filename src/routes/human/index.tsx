@@ -5,7 +5,7 @@ import { Route, Switch } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
+import { ProtectedRoute } from "shareComponents/common";
 import { HumanLayout } from "views/human/shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
