@@ -22,7 +22,7 @@ export enum INSURANCE_STATUS {
   'Thêm mới' = 3,
 }
 
-const RenderGeneralInfo: FC<Props> = (props) => {
+export const GeneralInfo: FC<Props> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
 
   const { info } = props;
@@ -326,5 +326,3 @@ const RenderGeneralInfo: FC<Props> = (props) => {
     </div>
   );
 };
-
-export default RenderGeneralInfo;

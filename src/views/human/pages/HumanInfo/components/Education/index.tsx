@@ -4,61 +4,42 @@ import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
 
-import HumanInfoHeader from "../layouts/HumanInfoHeader";
+import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
-import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
+import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import {
   useQueryContactDocument,
   useMutationContactDocument,
 } from "services/hooks/useHuman";
-import { FormExperienceAppointment } from "../forms";
+import { FormEducation } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-import ContactFile from "../ContactFile";
+import {ContactFile} from "views/human/shareComponents/common";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
-} from "../../Reducers/Upload";
-import { modifyUploadedFilesV2 } from "./WorkHistory";
-import type { IFile } from "./WorkHistory";
+  IMethodFiles,
+} from "views/human/Reducers/Upload";
+import { modifyUploadedFilesV2 } from "../WorkHistory";
+import type { IFile } from "../WorkHistory";
 import { useUpload } from "services/hooks/useUpload";
 
 import type {
-  Human,
   ContactDocument,
   FileProps,
   FilePropsUpload,
 } from "typings/human";
 
-const DATE_FORMAT = "DD/MM/YYYY";
-
-enum PROJECT_TYPES {
-  "Quan trọng quốc gia" = 1,
-  "Loại A" = 2,
-  "Loại B" = 3,
-  "Loại C" = 4,
-}
-
-enum BUILDING_TYPES {
-  "Công trình dân dụng" = 1,
-  "Công trình công nghiệp" = 2,
-  "Công trình giao thông" = 3,
-  "Công trình nông nghiệp và phát triển nông thôn" = 4,
-  "Công trình hạ tầng kỹ thuật" = 5,
-  "Công trình quốc phòng, an ninh" = 6,
-}
-
-interface WorkExperienceProps {
+interface EducationProps {
   humanId: string;
-  humanInfo: Human;
 }
 
-const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
+export const Education: FC<EducationProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
@@ -66,7 +47,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { addFileToUpload } = useUpload("HUMAN");
 
-  const { humanId, humanInfo } = props;
+  const { humanId } = props;
 
   const [
     uploads,
@@ -79,7 +60,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
     },
   ] = useCustomReducer(
     uploadReducer,
-    { ...uploadActions },
+    uploadActions,
     {
       files: {},
     } as IFile
@@ -94,12 +75,13 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   } = useMutationContactDocument();
 
   const {
+    // updateContractDocumentAsync,
     refetchListContactDocument,
     fetchNextPageContactDocument,
     totalRecord,
     listContactDocument,
   } = useQueryContactDocument(humanId, {
-    type: 3,
+    type: 4,
   });
 
   const [openFileOption, setOpenFileOption] = useState("");
@@ -110,7 +92,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
     async (values) => {
       const res = await createContactDocumentAsync({
         ...values,
-        type: "3",
+        type: "4",
         contactID: humanId,
       });
       if (!res.error) {
@@ -127,30 +109,25 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
     ]
   );
 
-  const handleClickAddNew = useCallback(
-    (companyID: string) => () => {
-      openModal(
-        <div
-          className={
-            "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-          }
-        >
-          <FormExperienceAppointment
-            title="Tạo mới kinh nghiệm theo quyết định bổ nhiệm"
-            onFinish={handleFinishFormCreate}
-            companyID={companyID}
-          />
-        </div>
-      );
-    },
-    [handleFinishFormCreate, openModal]
-  );
+  const handleClickAddNew = useCallback(() => {
+    openModal(
+      <div
+        className={
+          "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+        }
+      >
+        <FormEducation
+          title="Tạo mới trình độ/học vấn"
+          onFinish={handleFinishFormCreate}
+        />
+      </div>
+    );
+  }, [handleFinishFormCreate, openModal]);
 
   const handleFinishFormUpdate = useCallback(
     async (values) => {
       const res = await updateContractDocumentAsync({
         ...values,
-        type: "3",
         contactID: humanId,
       });
       if (!res.error) {
@@ -168,26 +145,23 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   );
 
   const handleClickUpdate = useCallback(
-    (companyID: string, contactDocument: ContactDocument) => () => {
+    (contactDocument: ContactDocument) => () => {
       openModal(
         <div
           className={
             "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
           }
         >
-          <FormExperienceAppointment
-            title="Cập nhật kinh nghiệm theo quyết định bổ nhiệm"
+          <FormEducation
+            title="Cập nhật trình độ/học vấn"
             onFinish={handleFinishFormUpdate}
-            companyID={companyID}
             contactDocumentID={contactDocument._id}
             defaultValues={{
-              name: contactDocument.name,
-              sign: contactDocument.sign,
               toDate: contactDocument.toDate,
-              position2: contactDocument?.position2,
-              contract: contactDocument?.contract,
-              factor: contactDocument.factor,
-              timeMobilize: contactDocument.timeMobilize,
+              workplace: contactDocument.workplace,
+              educationalBackground2:
+                contactDocument?.educationalBackground2,
+              field2: contactDocument?.field2
             }}
           />
         </div>
@@ -197,7 +171,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   );
 
   const handleClickDeleteContactDocument = useCallback(
-    (contactDocument: ContactDocument) => async () => {
+    (contactDocument: ContactDocument) => () => {
       openDeleteConfirm({
         deleteAction: async () => {
           const res = await deleteContractDocumentAsync(contactDocument._id);
@@ -271,7 +245,7 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
       async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
-        setUploadFile(files, contactDocumentID);
+        setUploadFile(files);
 
         handleUploadFile(files, contactDocumentID);
         setOpenFileOption("");
@@ -282,20 +256,15 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
       <HumanInfoHeader
-        title={i18n("experience-appointment")}
-        onClickAddNew={handleClickAddNew(humanInfo.company?._id || "")}
+        title={i18n("education")}
+        onClickAddNew={handleClickAddNew}
       />
       <div className="text-[13px]">
         <div className="flex justify-between mt-4 text-primary-gray">
-          <p className="w-1/5">{i18n("experience-appointment-name")}</p>
-          <p style={{ width: "13%" }}>{i18n("experience-appointment-sign")}</p>
-          <p style={{ width: "15%" }}>{i18n("position2")}</p>
-          <p className="w-1/5 ">
-            {i18n("experience-appointment-project-type")}
-          </p>
-          <p style={{ width: "12%" }}>
-            {i18n("experience-appointment-project-type")}
-          </p>
+          <p className="w-1/5">{i18n("educationalBackground")}</p>
+          <p className="w-1/5">{i18n("field2.1")}</p>
+          <p className="w-1/5">{i18n("Graduation-year")}</p>
+          <p className="w-1/5">{i18n("workplace2")}</p>
           <p className="w-1/5">{i18n("attactment")}</p>
         </div>
 
@@ -304,48 +273,16 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
             key={contactDocument._id}
             className="flex justify-start mt-4 relative"
           >
-            <div className="w-1/5">
-              <p style={{ maxWidth: "80%" }}>{contactDocument.name}</p>
-            </div>
-            <p style={{ width: "13%" }}>
-              {contactDocument.sign && (
-                <span className="t-human-spread">{contactDocument.sign}</span>
-              )}
-              <span>
-                {moment(contactDocument.toDate).isValid() &&
-                  moment(contactDocument.toDate).format(DATE_FORMAT)}
-              </span>
-            </p>
-            <p style={{ width: "15%" }}>{contactDocument?.position2?.name}</p>
             <p className="w-1/5">
-              {contactDocument.contract?.sign && (
-                <span className="t-human-spread">
-                  {contactDocument.contract.sign}
-                </span>
-              )}
-              {contactDocument.contract?.project?.projectType && (
-                <span className="t-human-spread">
-                  {
-                    PROJECT_TYPES[
-                      contactDocument?.contract?.project?.projectType
-                    ]
-                  }
-                </span>
-              )}
-              {contactDocument.contract?.project?.buildingGrade && (
-                <span>
-                  {
-                    BUILDING_TYPES[
-                      contactDocument?.contract?.project?.buildingGrade
-                    ]
-                  }
-                </span>
-              )}
+              {contactDocument?.educationalBackground2?.name}
             </p>
-            <p style={{ width: "12%" }}>
-              <span>{contactDocument.timeMobilize}</span>
-              <span>{contactDocument.factor}</span>
+            <p className="w-1/5">{contactDocument?.field2?.name}</p>
+            <p className="w-1/5">
+              {moment(contactDocument.toDate).isValid() &&
+                moment(contactDocument.toDate).format("YYYY")}
             </p>
+            <p className="w-1/5">{contactDocument.workplace}</p>
+
             <div className="w-1/5 flex flex-col">
               {contactDocument.files.map((elm) => (
                 <ContactFile
@@ -474,14 +411,15 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
                     />
                   </div>
                   <div
+                    onClick={handleClickUpdate(contactDocument)}
                     className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
-                    onClick={handleClickUpdate(
-                      humanInfo.company?._id || "",
-                      contactDocument
-                    )}
                   >
-                    <img src={PencilIcon} alt="Pencil" className="mr-5" />
-                    <span>Cập nhật</span>
+                    <img
+                      src={PencilIcon}
+                      alt="Pencil"
+                      className="mr-5 pointer-events-none"
+                    />
+                    <span className="pointer-events-none">Cập nhật</span>
                   </div>
                   <div
                     className="flex items-center w-full h-1/3 hover:bg-accent-light px-8 cursor-pointer"
@@ -514,5 +452,3 @@ const ExperienceAppointment: FC<WorkExperienceProps> = (props) => {
     </div>
   );
 };
-
-export default ExperienceAppointment;

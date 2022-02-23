@@ -16,15 +16,10 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import GeneralInfo from "../../components/views/GeneralInfo";
-import WorkHistory from "../../components/views/WorkHistory";
-import WorkExperience from "../../components/views/WorkExperience";
-import ExperienceAppointment from "../../components/views/ExperienceAppointment";
-import Education from "../../components/views/Education";
+import { GeneralInfo, WorkHistory, WorkExperience, ExperienceAppointment, Education, Certificate } from "./components";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { Loader } from "shareComponents/common";
-import NewHumanModal from "../../components/NewHumanModal";
-import Certificate from "../../components/views/Certificate";
+import {NewHumanModal} from "views/human/shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";

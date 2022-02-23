@@ -11,9 +11,9 @@ import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import NewHumanModal from "views/human/components/NewHumanModal";
+import { NewHumanModal } from "views/human/shareComponents/common/NewHumanModal";
 import { useModal } from "services/hooks/useModal";
-import DropdownFilterButton from "views/human/components/FilterButton";
+import { DropdownFilterButton } from "views/human/shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";
@@ -31,7 +31,7 @@ export const HumanHomePage: FC = () => {
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
-  
+
   const { openModal } = useModal();
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
@@ -49,7 +49,7 @@ export const HumanHomePage: FC = () => {
 
   const handleOnFilter = useCallback((values) => {
     // console.log(values);
-    setPageParam(() => ({...values }));
+    setPageParam(() => ({ ...values }));
     return true;
   }, []);
 
@@ -95,7 +95,7 @@ export const HumanHomePage: FC = () => {
                   "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
                 }
               >
-                <NewHumanModal 
+                <NewHumanModal
                   onFinish={handleFinishForm}
                 />
               </div>
@@ -140,14 +140,13 @@ export const HumanHomePage: FC = () => {
         })}
       </div>
       {humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
-          <div className="w-full flex justify-center my-5">
-            <button onClick={() => humans.fetchNextPageHuman()}>
-              <span className="text-primary">{`Xem thêm (${
-                humans.totalRecord - humans.listHuman.length
+        <div className="w-full flex justify-center my-5">
+          <button onClick={() => humans.fetchNextPageHuman()}>
+            <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length
               })`}</span>
-            </button>
-          </div>
-        )}
+          </button>
+        </div>
+      )}
     </section>
   );
 };

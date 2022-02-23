@@ -4,7 +4,7 @@ import moment from "moment";
 import className from "classnames";
 import toArray from "lodash/toArray";
 
-import HumanInfoHeader from "../layouts/HumanInfoHeader";
+import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
@@ -12,7 +12,7 @@ import DeleteIcon from "assets/images/icons8-remove.svg";
 import PDFIcon from "assets/images/icons8-pdf.svg";
 import { useOnClickOutside } from "services/hooks/useOnclickOutside";
 import { useModal } from "services/hooks/useModal";
-import { FormWorkHistory } from "../forms";
+import { FormWorkHistory } from "./components";
 import {
 	useQueryContactDocument,
 	useMutationContactDocument,
@@ -24,8 +24,8 @@ import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
 	uploadActions,
 	uploadReducer,
-} from "../../Reducers/Upload";
-import ContactFile from "../ContactFile";
+} from "views/human/Reducers/Upload";
+import { ContactFile } from "views/human/shareComponents/common";
 
 import type {
 	ContactDocument,
@@ -59,7 +59,7 @@ interface PropWorkHistory {
 
 const DATE_FORMAT = "DD/MM/YYYY";
 
-const WorkHistory: FC<PropWorkHistory> = (props) => {
+export const WorkHistory: FC<PropWorkHistory> = (props) => {
 	const { t: i18n } = useTranslation(["human"]);
 	const ref = useRef<HTMLDivElement>(null);
 	const { openModal, closeModal } = useModal();
@@ -478,5 +478,3 @@ const WorkHistory: FC<PropWorkHistory> = (props) => {
 		</div>
 	);
 };
-
-export default WorkHistory;

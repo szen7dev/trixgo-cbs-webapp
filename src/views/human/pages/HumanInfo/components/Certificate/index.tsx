@@ -4,7 +4,7 @@ import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
 
-import HumanInfoHeader from "../layouts/HumanInfoHeader";
+import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
 import PencilIcon from "assets/images/icons8-pencil.svg";
@@ -16,17 +16,17 @@ import {
   useQueryContactDocument,
   useMutationContactDocument,
 } from "services/hooks/useHuman";
-import { FormCertificate } from "../forms";
+import { FormCertificate } from "./components";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-import ContactFile from "../ContactFile";
+import { ContactFile } from "views/human/shareComponents/common";
 import useCustomReducer from "services/hooks/ppt/useCustomReducer";
 import {
   uploadActions,
   uploadReducer,
   IMethodFiles,
-} from "../../Reducers/Upload";
-import { modifyUploadedFilesV2 } from "./WorkHistory";
-import type { IFile } from "./WorkHistory";
+} from "views/human/Reducers/Upload";
+import { modifyUploadedFilesV2 } from "../WorkHistory";           // Vlxx
+import type { IFile } from "../WorkHistory";                      // Vlxx
 import { useUpload } from "services/hooks/useUpload";
 
 import type {
@@ -47,7 +47,7 @@ interface CertificateProps {
   humanId: string;
 }
 
-const Certificate: FC<CertificateProps> = (props) => {
+export const Certificate: FC<CertificateProps> = (props) => {
   const { t: i18n } = useTranslation(["human"]);
   const ref = useRef<HTMLDivElement>(null);
   const { openModal, closeModal } = useModal();
@@ -371,8 +371,8 @@ const Certificate: FC<CertificateProps> = (props) => {
                             type="button"
                             className={className(
                               "close-btn absolute top -top-3.5 -right-3.5 bg-white rounded-3xl h-6 w-6 flex justify-center items-center", {
-                                hidden: !d._id
-                              }
+                              hidden: !d._id
+                            }
                             )}
                             onClick={() =>
                               handleRemoveFileUpload(d, contactDocument._id)
@@ -491,9 +491,8 @@ const Certificate: FC<CertificateProps> = (props) => {
       {totalRecord && totalRecord - listContactDocument.length > 0 ? (
         <div className="w-full flex justify-center my-5">
           <button onClick={() => fetchNextPageContactDocument()}>
-            <span className="text-primary">{`Xem thêm (${
-              totalRecord - listContactDocument.length
-            })`}</span>
+            <span className="text-primary">{`Xem thêm (${totalRecord - listContactDocument.length
+              })`}</span>
           </button>
         </div>
       ) : (
@@ -502,5 +501,3 @@ const Certificate: FC<CertificateProps> = (props) => {
     </div>
   );
 };
-
-export default Certificate;

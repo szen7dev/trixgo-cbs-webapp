@@ -19,7 +19,7 @@ import { DropdownSearchable } from "shareComponents/common";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
-import { INSURANCE_STATUS, CONTACT_POLICY } from "./views/GeneralInfo";
+import { CONTACT_POLICY, INSURANCE_STATUS } from "apis/localdb";
 import {
   useQueryListDepartments,
   useQueryListDoctype,
@@ -64,7 +64,7 @@ interface NewHumanModalProps {
   title?: string;
 }
 
-const NewHumanModal: FC<NewHumanModalProps> = ({
+export const NewHumanModal: FC<NewHumanModalProps> = ({
   initialValues,
   onFinish,
   title,
@@ -1306,5 +1306,3 @@ const NewHumanModal: FC<NewHumanModalProps> = ({
     </main>
   );
 };
-
-export default NewHumanModal;

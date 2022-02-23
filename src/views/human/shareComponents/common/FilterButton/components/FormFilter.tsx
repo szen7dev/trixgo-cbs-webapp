@@ -25,7 +25,7 @@ interface FormFilterProps {
     [k: string]: any;
   };
 }
-const FormFilter: React.FC<FormFilterProps> = ({
+export const FormFilter: React.FC<FormFilterProps> = ({
   onSubmit,
   onShowFilter,
   onCancel,
@@ -205,5 +205,3 @@ const FormFilter: React.FC<FormFilterProps> = ({
     </Formik>
   );
 };
-
-export default FormFilter;

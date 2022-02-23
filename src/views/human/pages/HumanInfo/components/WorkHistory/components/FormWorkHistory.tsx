@@ -19,7 +19,7 @@ interface WorkHistoryProps {
   title: string;
 }
 
-const WorkHistory: React.FC<WorkHistoryProps> = ({
+export const FormWorkHistory: React.FC<WorkHistoryProps> = ({
   defaultValues,
   onFinish,
   contactDocumentID,
@@ -149,5 +149,3 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
     </main>
   );
 };
-
-export default WorkHistory;

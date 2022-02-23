@@ -20,7 +20,7 @@ interface ContactProps {
   onRemoveFileUpload: (data: DataRemove, contactDocumentID: string) => void;
 }
 
-const ContactFile: React.FC<ContactProps> = ({
+export const ContactFile: React.FC<ContactProps> = ({
   file,
   contactDocumentID,
   onRemoveFileUpload,
@@ -85,5 +85,3 @@ const ContactFile: React.FC<ContactProps> = ({
     </div>
   );
 };
-
-export default ContactFile;

@@ -24,7 +24,7 @@ interface WorkHistoryProps {
   contactDocumentID?: string;
 }
 
-const WorkHistory: React.FC<WorkHistoryProps> = ({
+export const FormEducation: React.FC<WorkHistoryProps> = ({
   defaultValues,
   onFinish,
   contactDocumentID,
@@ -214,5 +214,3 @@ const WorkHistory: React.FC<WorkHistoryProps> = ({
     </main>
   );
 };
-
-export default WorkHistory;

@@ -11,65 +11,63 @@ import { useModal } from "services/hooks/useModal";
 import { DropdownSearchable } from "shareComponents/common";
 import {
   useQueryListDoctype,
+  useQueryItemContract
 } from "services/hooks/useHuman";
-import { CONTACT_DOCUMENT_GRADES } from "../views/Certificate";
-import { convertEnumToArray } from "../NewHumanModal";
 
-import type { CertificateType, CertificateName,  } from "typings/human";
-interface ExperienceAppointmentProps {
-  title: string;
+import type { Position, ContractType, Field2 } from "typings/human";
+
+interface WorkExperienceProps {
   defaultValues?: {
-    name: string; // nội dung
-    place: string; // nơi cấp
-    sign: string; // ký hiệu
-    fromDate: string; // ngày tháng
-    toDate: string; // ngày hết hạn
-    certificateType: CertificateType; // loại chứng chỉ
-    certificateName: CertificateName; // lĩnh vực chứng chỉ
-    certificateGrade: number; // hạng chứng chỉ
-    number: number; // số lượng
-    store: string; // vị trí lưu trữ
-    note: string; // ghi chú
+    fromDate: string; // từ ngày
+    toDate: string; // đến ngày
+    field2: Field2; // lĩnh vực chuyên môn tham gia
+    position2: Position; // vị trí công việc đảm nhận
+    contract: ContractType; // hợp đồng
+    project: string; // dự án
+    client: string; // chủ đầu tư
   };
   onFinish?: (values: any) => void;
   contactDocumentID?: string;
+  companyID: string;
+  title: string;
 }
 
-const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
+export const FormWorkExperience: React.FC<WorkExperienceProps> = ({
   defaultValues,
   onFinish,
-  title,
   contactDocumentID,
+  companyID,
+  title
 }) => {
-  const [searchCertificateType, setSearchCertificateTypeValue] = React.useState('');
-  const [searchCertificateName, setSearchCertificateNameValue] = React.useState('');
-
+  const [searchPositionValue, setSearchPositionValue] = React.useState('');
+  const [searchFieldValue, setSearchFieldValue] = React.useState('');
+  const [searchContract, setSearchContractValue] = React.useState('');
+  
   const { closeModal } = useModal();
   const { t: i18n } = useTranslation(["human"]);
-  const { listDoctypes: listCertificateType } = useQueryListDoctype({ 
+  const { listDoctypes: listPositions } = useQueryListDoctype({ 
     limit: 50,
-    type: 14,
-    keyword: searchCertificateType
+    type: 13,
+    keyword: searchPositionValue,
   });
-  const { listDoctypes: listCertificateName } = useQueryListDoctype({ 
+  const { listDoctypes: listField2 } = useQueryListDoctype({
     limit: 50,
-    type: 15,
-    keyword: searchCertificateName
-});
+    type: 7,
+    keyword: searchFieldValue,
+  });
+  const { listContracts } = useQueryItemContract(companyID, {
+    keyword: searchContract
+  })
 
   const initialValues = React.useMemo(
     () => ({
-      name: "", // nội dung
-      place: "", // nơi cấp
-      sign: "", // ký hiệu
-      fromDate: "", // ngày tháng
-      toDate: "", // ngày hết hạn
-      certificateType: {}, // loại chứng chỉ
-      certificateName: {}, // lĩnh vực chứng chỉ
-      certificateGrade: 1, // hạng chứng chỉ
-      number: 0, // số lượng
-      store: "", // vị trí lưu trữ
-      note: "", // ghi chú
+      fromDate: "",
+      toDate: "",
+      field2: {},
+      position2: {},
+      contract: {},
+      project: "",
+      client: "",
       ...defaultValues,
     }),
     [defaultValues]
@@ -79,8 +77,10 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
     (values) => {
       const formatData = {
         ...values,
-        certificateGrade: `${values.certificateGrade}`,
-        number: `${values.number}`,
+        fromDate:
+          (moment(values.fromDate).isValid() &&
+            moment(values.fromDate).toJSON()) ||
+          "",
         toDate:
           (moment(values.toDate).isValid() && moment(values.toDate).toJSON()) ||
           "",
@@ -120,92 +120,46 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                   {/* -------------- Line 1 --------------- */}
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">
-                      <span className="w-7/12 text-primary-gray text-left">
-                        Nội dung
-                      </span>
-                      <Field
-                        type="text"
-                        name="name"
-                        placeholder="Nội dung quyết định..."
-                        className="w-full h-6 outline-none"
-                        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/4 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left text-left">
-                        Nơi cấp
-                      </span>
-                      <Field
-                        type="text"
-                        name="place"
-                        placeholder="Số hiệu..."
-                        className="w-full h-6 outline-none"
-                        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/4 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left text-left">
-                        Ký hiệu
-                      </span>
-                      <Field
-                        type="text"
-                        name="sign"
-                        placeholder="Số hiệu..."
-                        className="w-full h-6 outline-none"
-                        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/4 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left text-left">
-                        Ngày tháng
+                      <span className="w-4/12 text-primary-gray text-left">
+                        {i18n("from-date")}
                       </span>
                       <DayPickerInput
                         value={
                           initialValues.fromDate &&
-                          moment(initialValues.toDate).format("DD/MM/YYYY")
+                          moment(initialValues.fromDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) => setFieldValue("fromDate", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày tháng...",
+                          placeholder: "Từ ngày...",
                         }}
                       />
                     </div>
-                  </div>
-
-                  {/* -------------- Line 2 --------------- */}
-                  <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">
-                      <span className="w-4/12 text-primary-gray text-left text-left">
-                        Ngày hết hạn
+                      <span className="w-4/12 text-primary-gray text-left">
+                        {i18n("to-date")}
                       </span>
                       <DayPickerInput
                         value={
-                          initialValues.fromDate &&
+                          initialValues.toDate &&
                           moment(initialValues.toDate).format("DD/MM/YYYY")
                         }
                         onDayChange={(day) => setFieldValue("toDate", day)}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
-                          placeholder: "Ngày tháng...",
+                          placeholder: "Đến ngày...",
                         }}
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Loại chứng chỉ
+                        Lĩnh vực chuyên môn tham gia
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
-                          setFieldValue("certificateType", value.value)
+                          setFieldValue("field2", value.value)
                         }
-                        onSearchInputChange={debounce(value => setSearchCertificateTypeValue(value), 1000)}
+                        onSearchInputChange={debounce(value => setSearchFieldValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -218,10 +172,10 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={initialValues?.certificateType}
-                        data={listCertificateType.map((certificateType) => ({
-                          label: certificateType.name,
-                          value: certificateType._id,
+                        initialValue={initialValues?.field2}
+                        data={listField2.map((field2) => ({
+                          label: field2.name,
+                          value: field2._id,
                         }))}
                         formatItem={{
                           text: "label",
@@ -232,14 +186,13 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                     </div>
                     <div className="w-1/4 flex items-center">
                       <span className="w-7/12 text-primary-gray text-left">
-                        Lĩnh vực chứng chỉ
+                        Vị trí công việc đảm nhận
                       </span>
                       <DropdownSearchable
                         onchangeValue={(value) =>
-                          setFieldValue("certificateName", value.value)
+                          setFieldValue("position2", value.value)
                         }
-                        
-                        onSearchInputChange={debounce(value => setSearchCertificateNameValue(value), 1000)}
+                        onSearchInputChange={debounce(value => setSearchPositionValue(value), 1000)}
                         placeholder={i18n("form.classify") + "..."}
                         className="w-full pl-0 -mb-1 outline-none"
                         isMultiple={false}
@@ -252,40 +205,11 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                             <span>{item.text}</span>
                           </div>
                         )}
-                        initialValue={initialValues?.certificateName}
-                        data={listCertificateName.map((certificateName) => ({
-                          label: certificateName.name,
-                          value: certificateName._id,
+                        initialValue={initialValues?.position2}
+                        data={listPositions.map((position) => ({
+                          label: position.name,
+                          value: position._id,
                         }))}
-                        formatItem={{
-                          text: "label",
-                          id: "value",
-                        }}
-                        inlineSearch={true}
-                      />
-                    </div>
-                    <div className="w-1/4 flex items-center">
-                      <span className="w-7/12 text-primary-gray text-left">
-                        Hạng chứng chỉ
-                      </span>
-                      <DropdownSearchable
-                        onchangeValue={(value) =>
-                          setFieldValue("certificateGrade", value.value)
-                        }
-                        placeholder={i18n("form.classify") + "..."}
-                        className="w-full pl-0 -mb-1 outline-none"
-                        isMultiple={false}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => (
-                          <div className="flex items-center">
-                            <img alt="Tag" src={TagIcon} className="mr-1" />
-                            <span>{item.text}</span>
-                          </div>
-                        )}
-                        initialValue={convertEnumToArray(CONTACT_DOCUMENT_GRADES).find(elm => elm.value === initialValues?.certificateGrade)}
-                        data={convertEnumToArray(CONTACT_DOCUMENT_GRADES)}
                         formatItem={{
                           text: "label",
                           id: "value",
@@ -294,17 +218,50 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                       />
                     </div>
                   </div>
-
-                  {/* -------------- Line 3 --------------- */}
+                  
+                  {/* -------------- Line 2 --------------- */}
                   <div className="flex justify-between items-center h-10 border-b border-gray-200">
                     <div className="w-1/4 flex items-center">
-                      <span className="w-7/12 text-primary-gray text-left">
-                        Số lượng
+                      <span className="w-6/12 text-primary-gray text-left">
+                        Hợp đồng
+                      </span>
+                      <DropdownSearchable
+                        onchangeValue={(value) =>
+                          setFieldValue("contract", value.value)
+                        }
+                        onSearchInputChange={debounce(value => setSearchContractValue(value), 1000)}
+                        placeholder={i18n("form.classify") + "..."}
+                        className="w-full pl-0 -mb-1 outline-none"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item) => (
+                          <div className="flex items-center">
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        initialValue={initialValues?.contract}
+                        data={listContracts.map((contract) => ({
+                          label: contract.name,
+                          value: contract._id,
+                        }))}
+                        formatItem={{
+                          text: "label",
+                          id: "value",
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                    <div className="w-1/4 flex items-center">
+                      <span className="w-6/12 text-primary-gray text-left">
+                        Dự án
                       </span>
                       <Field
                         type="text"
-                        name="number"
-                        placeholder="..."
+                        name="project"
+                        placeholder="Thông tin người tham chiếu..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -312,27 +269,13 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
                       />
                     </div>
                     <div className="w-1/4 flex items-center">
-                      <span className="w-7/12 text-primary-gray text-left">
-                        Vị trí lưu trữ
+                      <span className="w-6/12 text-primary-gray text-left">
+                        Chủ đầu tư
                       </span>
                       <Field
                         type="text"
-                        name="store"
-                        placeholder="..."
-                        className="w-full h-6 outline-none"
-                        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/4 flex items-center">
-                      <span className="w-7/12 text-primary-gray text-left">
-                        Ghi chú
-                      </span>
-                      <Field
-                        type="text"
-                        name="note"
-                        placeholder="..."
+                        name="client"
+                        placeholder="Thông tin người tham chiếu..."
                         className="w-full h-6 outline-none"
                         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
@@ -358,5 +301,3 @@ const ExperienceAppointment: React.FC<ExperienceAppointmentProps> = ({
     </main>
   );
 };
-
-export default ExperienceAppointment;
