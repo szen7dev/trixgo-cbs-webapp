@@ -1,10 +1,11 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import HomeNavigation from "components/common/HomeNavigation";
+import { MainHeader, HomeRightSideBar } from "shareComponents/common";
+
+// import HomeNavigation from "components/common/HomeNavigation";
 import HomeRightSideBar from "components/common/HomeRightSideBar";
-import MainHeader from "components/common/main-header";
-import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
+// import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
@@ -61,7 +62,7 @@ export const HomeLayout: FC<Props> = ({ children }) => {
       <MainHeader />
 
       {/* Left navigation */}
-      <HomeNavigation />
+      {/* <HomeNavigation /> */}
 
       {/* Content area */}
       <main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">
