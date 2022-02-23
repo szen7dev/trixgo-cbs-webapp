@@ -1,26 +1,33 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
-/*=====LAYOUTS=====*/
-import ProtectedRoute from "components/common/ProtectedRoute";
+/*=====2.PROVIDERS=====*/
+
+/*=====3.LAYOUTS=====*/
+import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
 import { AccountingLayout } from "views/accounting/shareComponents/layouts";
 
-/*=====PAGES=====*/
-import AccountingDashboardPage from "views/accounting/AccountingDashboardPage";
-import AccountingTicketsPage from "views/accounting/AccountingTicketsPage";
-import AccountingDetailPage from "views/accounting/AccountingDetailPage";
-import AccountingDiaryPage from "views/accounting/Diary";
-import AccountingInOutPage from "views/accounting/ImportExport/AccountingInOutPage";
-import AccountingDebtPage from "views/accounting/Debt/AccountingDebtPage";
-import AccountingVatPage from "views/accounting/VAT/AccountingVatPage";
-import AccountingReportFinancePage from "views/accounting/FinanceReport/AccountingReportFinancePage";
-import AccountingSupportToolsPage from "views/accounting/SupportTool/AccountingSupportToolsPage";
-import AccountingTicketDetailPage from "views/accounting/AccountingTicketDetailPage";
-import AccountingAdminPage from "views/accounting/admin/AccountingAdminPage";
-import ReceivablesCustomers from "views/accounting/Debt/components/ReceivablesCustomers";
-import ReceivablesCustomersCode from "views/accounting/Debt/components/ReceivablesCustomersCode";
-import AccountingTBookPage from "views/accounting/TBook/AccountingTBookPage";
+/*=====4.CONFIG ROUTE=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
+import ErrorPage from "views/authentication/Error";
+import { 
+    AccountingDashboardPage, 
+    AccountingTicketsPage,
+    AccountingDetailPage,
+    AccountingDiaryPage,
+    AccountingInOutPage,
+    AccountingDebtPage,
+    AccountingVatPage,
+    AccountingReportFinancePage,
+    AccountingSupportToolsPage,
+    AccountingTicketDetailPage,
+    AccountingAdminPage,
+    ReceivablesCustomers,
+    ReceivablesCustomersCode,
+    AccountingTBookPage,
+} from "views/accounting/pages";
 
 const AccountingRouter: FC = () => {
     return (

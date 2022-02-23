@@ -1,12 +1,16 @@
-/*=====LIBRARY=====*/
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-/*=====LAYOUTS=====*/
+/*=====2.PROVIDERS=====*/
+
+/*=====3.LAYOUTS=====*/
+import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
 import { SampleLayout } from "views/sample/shareComponents/layouts";
-import ProtectedRoute from "components/common/ProtectedRoute";
 
-/*=====PAGES=====*/
+/*=====4.CONFIG ROUTE=====*/
+
+/*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 
 import { 
@@ -20,7 +24,7 @@ const SampleAppRouter: FC = () => {
                 <SampleLayout>
                     <Switch>
                         <ProtectedRoute exact path="/sample/home" component={SamplePage} />
-                        <Route path="/human/*" component={ErrorPage} />
+                        <Route path="/sample/*" component={ErrorPage} />
                     </Switch>
                 </SampleLayout>
             </Route>

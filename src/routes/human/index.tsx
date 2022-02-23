@@ -5,13 +5,14 @@ import { Route, Switch } from "react-router-dom";
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import ProtectedRoute from "components/common/ProtectedRoute";
+import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
 import { HumanLayout } from "views/human/shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
+
 import { 
     HumanCetificateFilterPage, 
     HumanOtherFilterPage,
