@@ -1,12 +1,24 @@
+/*=====1.LIBRARY=====*/
 import { FC } from "react";
+import { Link } from 'react-router-dom';
 
+/*=====2.CSS=====*/
+
+/*=====3.ICONS=====*/
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
 import dollarIcon from "assets/images/icons8-us-dollar-80.png";
 import chevronRight from "assets/images/icon-expand-arrow-right.png";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
+
+/*=====4.PAGES/COMPONENTS=====*/
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/useAuth";
-import { Link } from 'react-router-dom';
+
+/*=====7.OTHER=====*/
 
 export const PcmLeftSideBar: FC = () => {
   const { user } = useAuth();

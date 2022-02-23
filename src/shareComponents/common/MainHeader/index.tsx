@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
-import MainSearchDialog from "components/common/main-search-dialog";
+// import MainSearchDialog from "components/common/main-search-dialog";
 
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
@@ -78,7 +78,7 @@ export const MainHeader: FC = () => {
                             onClick={() =>
                                 openModal(
                                     <div className="t-main-search text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                                        <MainSearchDialog />
+                                        {/* <MainSearchDialog /> */}
                                     </div>
                                 )
                             }
