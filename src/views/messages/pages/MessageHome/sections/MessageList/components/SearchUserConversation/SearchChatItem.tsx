@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useContext, useRef} from "react";
 import { NavLink } from "react-router-dom";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {AvatarGroupChat} from "../listCoversation";
+import {AvatarGroupChat} from "../ListCoversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {

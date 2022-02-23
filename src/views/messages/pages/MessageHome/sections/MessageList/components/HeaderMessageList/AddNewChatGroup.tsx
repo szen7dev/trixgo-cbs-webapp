@@ -1,7 +1,7 @@
 import React, {createContext, FC, useCallback, useContext, useMemo, useState} from "react";
 import iconPencilWhite from "assets/images/icons8-pencil-64.svg";
 import arrowRightWhite from "assets/images/icon-arrow-right-white.svg";
-import {AddNewSection} from "../addNew";
+import {AddNewSection} from "../AddNewSection";
 
 import {CreateConversationPayload} from "typings/apis/messages/listConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";

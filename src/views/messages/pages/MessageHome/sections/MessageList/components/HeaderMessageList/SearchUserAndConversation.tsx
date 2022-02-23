@@ -1,6 +1,6 @@
 import React, {createContext, FC, useMemo, useState} from "react";
 import SearchIcon from "assets/images/icons8-search-120.png";
-import {SearchUserConversationSection} from "../searchUserConversation";
+import {SearchUserConversationSection} from "../SearchUserConversation";
 
 export const SearchUserAndConversationContext = createContext<{
     showSearch: boolean;

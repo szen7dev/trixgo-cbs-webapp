@@ -1,10 +1,10 @@
 import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
-import {ListChatItem} from "./components/listCoversation";
+import {ListChatItem} from "./components/ListCoversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {SearchUserAndConversation, HamLeftMenu, AddNewChatGroup} from "./components/headerMessageList";
+import {SearchUserAndConversation, HamLeftMenu, AddNewChatGroup} from "./components/HeaderMessageList";
 
 export const MessageList:FC = () => {
     const listTab = [
