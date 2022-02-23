@@ -17,7 +17,7 @@ import { FullPageLayout } from "shareComponents/layouts";
 import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
 // import CmcsRouter from "./cmcs";
-// import DatahubRouter from "./datahub";
+import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
 // import FinancialRouter from "./financial";
@@ -78,30 +78,37 @@ const Routes: FC = () => {
                                         </HumanLayout>
                                     </Route>
 
-                                        {/* =====DOCUMENT===== */}
-                                        <Route path="/document">
-                                            <DocumentLayout>
-                                                <DocumentRouter />
-                                            </DocumentLayout>
-                                        </Route>
+                                    {/* =====DOCUMENT===== */}
+                                    <Route path="/document">
+                                        <DocumentLayout>
+                                            <DocumentRouter />
+                                        </DocumentLayout>
+                                    </Route>
 
-                                        {/* =====PPT===== */}
-				                        <Route 
-                                            path='/ppt' 
-                                            component={PPTRouter}
-                                        />
-                                        {/* <Route path="/ppt">
+                                    {/* =====PPT===== */}
+                                    <Route
+                                        path='/ppt'
+                                        component={PPTRouter}
+                                    />
+                                    {/* <Route path="/ppt">
                                             <DocumentLayout>
                                                 <PPTRouter />
                                             </DocumentLayout>
                                         </Route> */}
 
-                                        {/* =====MEDIA===== */}
-                                        <Route path="/media">
-                                            <HomeLayout>
-                                                <MediaRouter />
-                                            </HomeLayout>
-                                        </Route>
+                                    {/* =====MEDIA===== */}
+                                    <Route path="/media">
+                                        <HomeLayout>
+                                            <MediaRouter />
+                                        </HomeLayout>
+                                    </Route>
+
+                                    {/* =====DATHUB===== */}
+                                    <Route path="/datahub">
+                                        <HomeLayout>
+                                            <DatahubRouter />
+                                        </HomeLayout>
+                                    </Route>
 
                                     {/* =====OTHER===== */}
                                     <Route path="*">
