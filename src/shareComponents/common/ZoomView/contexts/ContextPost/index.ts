@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext } from "react";
-import { state } from "./post.state";
+import { state, PostState } from "./post.state";
 import postReducer from "./post.reducer";
 import postActions from "./post.actions";
 import useComments from "../../hooks/useComments";
 
-export type ContextPostType = { state: typeof state } & ReturnType<
+export type ContextPostType = { state: PostState } & ReturnType<
   typeof postActions
 > &
   ReturnType<typeof useComments>;

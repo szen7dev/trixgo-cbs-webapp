@@ -20,6 +20,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	const { state: { user } } = useContext(AuthContext);
 
 	const handleSumitReply = async (data: SubmitComment, options: OptionsSubmitReply & { page: number, commentIdx: number }) => {
+		if (!options.comment.comment) return;
 		const dataInsertOrUpdate = {
 			mediaID: state.mediaID,
 			fileID: String(state.images[state.index]._id),
@@ -41,6 +42,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		}
 	};
 	const handleSumitReplyNested = async (data: SubmitComment, options: OptionsSubmitReplyNested & { page: number, commentIdx: number }) => {
+		if (!options.parent.comment) return;
 		const dataInsertOrUpdate = {
 			mediaID: state.mediaID,
 			fileID: String(state.images[state.index]._id),
@@ -71,7 +73,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 					<Fragment key={i}>
 						{
 							page.data.listRecords.map((comment, idx) => {
-								if (!comment) return null
+								if (!comment || !comment.comment) return null
 								return (
 									comment && <li key={comment._id} className='mt-2.5'>
 										<RootComment
@@ -82,6 +84,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 
 											onClickViewMore={_comment => fetchReplyComment(_comment.listReply.nextCursor, _comment._id, i, idx)}
 											onClickDelete={(_comment, index) => {
+												if (!_comment.comment) return;
 												deleteComment(_comment.comment._id, { page: i, commentIdx: idx, replyIdx: index })
 											}}
 											onClickImage={openComment}

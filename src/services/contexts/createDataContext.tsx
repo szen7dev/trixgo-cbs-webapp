@@ -4,12 +4,12 @@ import { Context, createContext, Dispatch as ReactDispatch, FC, Reducer, useEffe
 // Typescript 
 import { Dispatch, Effect, ReducerActionsProps, IR, DispatchProps, ProviderState } from 'typings/ppt/reducer';
 
-function createDataContext<R extends Reducer<any, any>, A extends Record<any, (dispatch: ReactDispatch<DispatchProps>) => any>, S>(
+function createDataContext<R extends Reducer<any, any>, A extends (dispatch: ReactDispatch<DispatchProps>) => any, S>(
 	reducer: R,
 	action: A,
 	defaultValues: S,
 	effect?: Effect<Dispatch<A>>
-): { Context: Context<{ state: S } & Dispatch<A>>, Provider: FC<ProviderState> } {
+): { Context: Context<{ state: S } & ReturnType<A>>, Provider: FC<ProviderState> } {
 	const Context = createContext(Object.assign({
 		state: defaultValues,
 	}));
@@ -17,14 +17,10 @@ function createDataContext<R extends Reducer<any, any>, A extends Record<any, (d
 	const Provider: FC<ProviderState> = ({ children, initialValue }) => {
 		const [state, dispatch] = useReducer(reducer as IR<S, ReducerActionsProps>, Object.assign(defaultValues, initialValue));
 
-		const boundActions: Record<string, any> = {}
-
-		for (const key in action) {
-			boundActions[key] = action[key](dispatch)
-		}
+		const boundActions: ReturnType<A> = action(dispatch)
 
 		useEffect(() => {
-			if (effect) effect(boundActions as Dispatch<A>);
+			if (effect) effect(boundActions);
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 

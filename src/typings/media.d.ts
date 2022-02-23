@@ -115,6 +115,24 @@ export type ListMediasPayload = {
   populates?: string;
 };
 
+export type MediaAuthor = {
+	_id: string;
+	image: string;
+	company: Array<{
+		_id: string;
+		name: string;
+	}>;
+	fullname: string;
+	department: {
+		name: string,
+		sign: string
+	};
+	position: {
+		_id: string,
+		name: string,
+	};
+}
+
 export type MediaProps = {
   _id: string;
   title: string;
@@ -129,23 +147,7 @@ export type MediaProps = {
   status: number;
   kind: number;
   state: number;
-  author: {
-    _id: string;
-    image: string;
-    company: Array<{
-      _id: string;
-      name: string;
-    }>;
-    fullname: string;
-    department: {
-      name: string,
-      sign: string
-    };
-    position: {
-      _id: string,
-      name: string,
-    };
-  };
+  author: MediaAuthor;
   location: {
     type: string;
     _id: string;

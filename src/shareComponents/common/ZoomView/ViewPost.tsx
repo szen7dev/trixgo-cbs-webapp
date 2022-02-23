@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useRef, useState } from 'react';
+import moment from 'moment';
 
 import cn from 'classnames';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -10,7 +11,7 @@ import useCustomReducer from 'services/hooks/useCustomReducer';
 import useComments from './hooks/useComments';
 
 import { ContextPost } from 'shareComponents/common/ZoomView/contexts/ContextPost';
-import { state as postState } from 'shareComponents/common/ZoomView/contexts/ContextPost/post.state';
+import { state as postState, PostState } from 'shareComponents/common/ZoomView/contexts/ContextPost/post.state';
 import postReducer from 'shareComponents/common/ZoomView/contexts/ContextPost/post.reducer';
 import postActions from 'shareComponents/common/ZoomView/contexts/ContextPost/post.actions';
 
@@ -23,12 +24,12 @@ import iconCollapse from 'assets/images/icons8-collapse-48.png';
 import iconFit from 'assets/images/icons8-fit-to-width-50.png';
 
 interface Props {
-	initialData: Partial<typeof postState>,
+	initialData: PostState,
 	toggle(): void
 }
 
 const ViewPost: FC<Props> = ({ initialData, toggle }) => {
-	const [state, actions] = useCustomReducer(postReducer, postActions, { ...postState, ...initialData });
+	const [state, actions] = useCustomReducer(postReducer, postActions, { ...postState as PostState, ...initialData });
 	const data = useComments({ mediaID: state.mediaID, fileID: String(state.images[state.index]._id) });
 
 	const [collapsed, setCollapsed] = useState<boolean>(false);
@@ -76,8 +77,8 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 								</svg>
 							</button>
 							<div>
-								<p className="text-base">Nguyễn Thu Hương-CPMI</p>
-								<p className="text-sm">Today 02:19</p>
+								<p className="text-base">{state.author?.fullname}</p>
+								<p className="text-sm">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 							</div>
 						</div>
 						<div className="flex gap-x-5">
