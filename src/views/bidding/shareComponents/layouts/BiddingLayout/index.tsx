@@ -1,8 +1,11 @@
+/*=====1.LIBRARY=====*/
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
 
-import menuIcon from "assets/images/icon-mobile-menu-black.png";
+/*=====2.CSS=====*/
 
+/*=====3.ICONS=====*/
+import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
@@ -10,6 +13,12 @@ import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import { MainHeader } from "shareComponents/common/Header";
 import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
 import { BiddingLeftSideBar } from './components';
+
+/*=====5.TYPINGS=====*/
+
+/*=====6.HOOKS/APIS=====*/
+
+/*=====7.OTHER=====*/
 
 type Props = {
     children: ReactNode;
