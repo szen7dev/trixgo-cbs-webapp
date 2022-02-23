@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
 /*=====2.PROVIDERS=====*/
@@ -19,6 +19,18 @@ import { PcmHomePage } from "views/pcm/pages";
 const PCMRouter: FC = () => {
     return (
         <Switch>
+            <ProtectedRoute
+                exact
+                path={"/"}
+                component={() => (
+                    <HomeLayout>
+                        <PcmHomePage />
+                    </HomeLayout>
+                )}
+            />
+            <Route exact path="/pcm">
+                <Redirect to="/pcm/home" />
+            </Route>
             <ProtectedRoute
                 exact
                 path={"/pcm/home"}

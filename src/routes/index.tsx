@@ -11,7 +11,7 @@ import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
-import { FullPageLayout } from "shareComponents/layouts/FullPage";
+import { FullPageLayout } from "shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 // import AccountingRouter from "./accounting";
@@ -58,7 +58,7 @@ const Routes: FC = () => {
 
                                         {/* =====HOME===== */}
                                         <Route exact path="/">
-                                            <Redirect to="/pcm/home" />
+                                            <PcmRouter />
                                         </Route>
 
                                         {/* =====AUTHENTICATION===== */}

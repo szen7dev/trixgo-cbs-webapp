@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 /*=====LAYOUTS=====*/
-import { FullPageLayout } from "shareComponents/layouts/FullPage";
+import { FullPageLayout } from "shareComponents/layouts";
 
 /*=====PAGES=====*/
 import SignInPage from "views/authentication/SignIn";
