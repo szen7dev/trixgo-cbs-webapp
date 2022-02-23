@@ -63,4 +63,4 @@ export const ButtonMore: React.FC<Props & HTMLAttributes<HTMLDivElement>> = ({ o
 			</Transition>
 		</Menu>
 	)
-}
+};
