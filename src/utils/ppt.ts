@@ -1,6 +1,6 @@
-import { DEPARTMENT_STATUS } from "helpers/constants/department";
+
 import moment from "moment";
-import { DepartmentOnBudgetKey, DepartmentOnTimeKey } from "typings/ppt";
+import { DepartmentOnBudgetKey, DepartmentOnTimeKey, DEPARTMENT_STATUS } from "typings/ppt";
 
 // Date loaded percentage
 export const dateLoadedPercentage = (

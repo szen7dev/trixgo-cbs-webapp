@@ -3,7 +3,7 @@ import API from "../repository";
 import { 
     ListHistoryResponse, ListHistoryPayload
 } from "typings/historyTraffics";
-import { convertObToUrl } from "helpers";
+import { convertObToUrl } from "utils";
 const historyTrafficsURL = "/api/analysis/history_traffics";
 const AnalysisRepository = {
     /**

@@ -1,8 +1,8 @@
 import { FC, ReactNode, useReducer } from "react";
 
-import RightClickMenuContext , { initialState } from "services/contexts/RightClickMenu";
+import RightClickMenuContext, { initialState } from "services/contexts/RightClickMenu";
 import { RightClickMenuState, RightClickMenuActions } from "typings/app";
-import RightClickMenuV2 from "components/common/RightClickMenuV2";
+import { RightClickMenuV2 } from "shareComponents/common";
 
 type Props = {
   children: ReactNode;

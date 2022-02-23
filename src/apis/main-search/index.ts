@@ -1,5 +1,5 @@
 import API from "../repository";
-import { convertObToUrl } from "helpers";
+import { convertObToUrl } from "utils";
 
 import { 
     SearchResultResponse,

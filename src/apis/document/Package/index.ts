@@ -20,8 +20,8 @@ async function fetchListPackage(params: any) {
         params: {
             select: 'name sign project numberOfDocs members author createAt modifyAt',
             populates: {
-                "path": "members  author userUpdate",
-                "select": "fullname image sign"
+                "path": "members  author",
+                "select": "fullname image"
             },
             ...params
         }
