@@ -4,14 +4,13 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
-import ThemeProvider from "services/providers/Theme";
 import ModalProvider from "services/providers/Modal";
 import ChatProvider from "services/providers/Chat";
 import DeleteConfirmProvider from "services/providers/DeleteConfirm";
 import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
-import { FullPageLayout } from "shareComponents/layouts/FullPage";
+import { FullPageLayout } from "shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 // import AccountingRouter from "./accounting";
@@ -51,34 +50,33 @@ const Routes: FC = () => {
     return (
         <Router>
             <AuthProvider>
-                <ThemeProvider>
-                    <RightClickMenuProvider>
-                        <DeleteConfirmProvider>
-                            <ChatProvider>
-                                <ModalProvider>
-                                    <Switch>
+                <RightClickMenuProvider>
+                    <DeleteConfirmProvider>
+                        <ChatProvider>
+                            <ModalProvider>
+                                <Switch>
 
-                                        {/* =====HOME===== */}
-                                        <Route exact path="/">
-                                            <Redirect to="/pcm/home" />
-                                        </Route>
+                                    {/* =====HOME===== */}
+                                    <Route exact path="/">
+                                        <PcmRouter />
+                                    </Route>
 
-                                        {/* =====AUTHENTICATION===== */}
-                                        <Route path="/authentication/:path?">
-                                            <AuthenticationRouter />
-                                        </Route>
+                                    {/* =====AUTHENTICATION===== */}
+                                    <Route path="/authentication/:path?">
+                                        <AuthenticationRouter />
+                                    </Route>
 
-                                        {/* =====PCM===== */}
-                                        <Route path="/pcm">
-                                            <PcmRouter />
-                                        </Route>
+                                    {/* =====PCM===== */}
+                                    <Route path="/pcm">
+                                        <PcmRouter />
+                                    </Route>
 
-                                        {/* =====HUMAN===== */}
-                                        <Route path="/human">
-                                            <HumanLayout>
-                                                <HumanRouter />
-                                            </HumanLayout>
-                                        </Route>
+                                    {/* =====HUMAN===== */}
+                                    <Route path="/human">
+                                        <HumanLayout>
+                                            <HumanRouter />
+                                        </HumanLayout>
+                                    </Route>
 
                                         {/* =====DOCUMENT===== */}
                                         <Route path="/document">
@@ -105,18 +103,17 @@ const Routes: FC = () => {
                                             </HomeLayout>
                                         </Route>
 
-                                        {/* =====OTHER===== */}
-                                        <Route path="*">
-                                            <FullPageLayout>
-                                                <Route path="/*" component={ErrorPage} />
-                                            </FullPageLayout>
-                                        </Route>
-                                    </Switch>
-                                </ModalProvider>
-                            </ChatProvider>
-                        </DeleteConfirmProvider>
-                    </RightClickMenuProvider>
-                </ThemeProvider>
+                                    {/* =====OTHER===== */}
+                                    <Route path="*">
+                                        <FullPageLayout>
+                                            <Route path="/*" component={ErrorPage} />
+                                        </FullPageLayout>
+                                    </Route>
+                                </Switch>
+                            </ModalProvider>
+                        </ChatProvider>
+                    </DeleteConfirmProvider>
+                </RightClickMenuProvider>
             </AuthProvider>
         </Router>
     );

@@ -13,7 +13,7 @@ import {
     ListSeenPayload
 } from "typings/media";
 import { CommentResponse, ListCommentResponse } from 'typings/common';
-import { convertObToUrl } from "helpers";
+import { convertObToUrl } from "utils";
 
 const mediaURL = "/api/medias";
 const commentURL = "/api/reaction";

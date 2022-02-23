@@ -1,5 +1,3 @@
-import { DEPARTMENT_STATUS } from "helpers/constants/department";
-
 export interface APIResponse {
   error?: boolean;
   status?: number;
@@ -12,17 +10,28 @@ export interface Populate {
 }
 
 export interface QueryParam {
-    limit?: number;
-    lastestID?: string;
-    keyword?: string;
-    populates?: Populate;
-    select?: string;
+  limit?: number;
+  lastestID?: string;
+  keyword?: string;
+  populates?: Populate;
+  select?: string;
 }
 
 export enum DepartmentEnumType {
   DEPARTMENT = 1,
   PROJECT = 2,
 }
+
+export const DEPARTMENT_STATUS = {
+  1: {
+    1: { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
+    2: { message: "Đúng tiến độ, vượt ngân sách", className: "bg-red-400" },
+  },
+  2: {
+    1: { message: "Chậm tiến độ, đúng ngân", className: "bg-red-400" },
+    2: { message: "Chậm tiến độ, vượt ngân", className: "bg-red-400" },
+  },
+};
 
 export type DepartmentOnTimeKey = keyof typeof DEPARTMENT_STATUS;
 export type DepartmentOnBudgetKey =
