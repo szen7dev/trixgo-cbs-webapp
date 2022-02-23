@@ -7,7 +7,7 @@ import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash";
 import PlusIcon from "assets/images/icons8-plus-math-96.svg";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {SearchChatItem} from "./SearchChatItem";
 
 export const SearchUserConversationSection:FC = () => {
@@ -47,7 +47,18 @@ export const SearchUserConversationSection:FC = () => {
             membersID: [memberId]
         }).then(data => {
             if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: data._id, select: JSON.stringify({ sender:"bizfullname" }) });
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+                conversationID: data._id,
+                select: JSON.stringify({ sender:"bizfullname" }) ,
+                filter: JSON.stringify({
+                    author: 0,
+                    taskID: 0,
+                    links: 0,
+                    createAt: 0,
+                    __v: 0,
+                    config: 0
+                })
+            });
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });
@@ -66,7 +77,7 @@ export const SearchUserConversationSection:FC = () => {
                         <img  src={IconBackGray} alt={"----"}/>
                     </button>
                     <div className={"relative flex items-center flex-1"}>
-                        <img  src={SearchIcon} alt={"icon searchMessage"} className={"absolute w-[24px] h-[24px] left-2"}/>
+                        <img  src={SearchIcon} alt={"icon SearchMessage"} className={"absolute w-[24px] h-[24px] left-2"}/>
                         <input
                             onChange={e => handleSearchTerm(e.target.value)}
                             ref={inputRef}

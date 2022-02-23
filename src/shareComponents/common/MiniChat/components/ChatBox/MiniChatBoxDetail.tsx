@@ -6,8 +6,8 @@ import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {MiniChatContext} from "../../ChatsOnRightSideBar";
-import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, NotificationCenter, MyMessage, OthersMessage} from "views/messages/pages/messageHome/sections/chattingSection";
+import {MiniChatContext} from "../../index";
+import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, NotificationCenter, MyMessage, OthersMessage} from "views/messages/pages/MessageHome/sections/ChattingSection";
 
 type Props = {
     chat: ItemListConversation;
@@ -126,7 +126,7 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     return (
         <div
             ref={conversationMessagesList}
-            id={"conversation-messages-messageList"}
+            id={"conversation-messages-MessageList"}
             className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
             <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
                 {memoizedValue()}

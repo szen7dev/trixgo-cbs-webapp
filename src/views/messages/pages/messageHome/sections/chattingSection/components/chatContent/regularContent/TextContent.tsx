@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useRef} from "react";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import moment from "moment";
-import {ReactionList, ReactionActions} from "../../reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../replyContent";
+import {ReactionList, ReactionActions} from "../../Reactions";
+import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
 
 type Props = {
     message: any;

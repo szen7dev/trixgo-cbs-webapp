@@ -27,7 +27,7 @@ export const Poll:FC<Props> = ({message,chat, isMini}) => {
         return userVote.length;
     }, [message])
     return (
-        <div className={"poll-center flex flex-col items-center justify-center mb-2"}>
+        <div className={"Poll-center flex flex-col items-center justify-center mb-2"}>
             <div className={"rounded-full text-xs text-gray-500 px-5 py-1 mb-2 px-[33px] flex items-center " + (isMini?"bg-gray-100":"bg-white")}>
                 <img src={PollIcon} alt={"-----"} className={"w-[14px] h-[16px] mr-2"}/>
                 <span>

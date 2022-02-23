@@ -7,7 +7,7 @@ import {dismissShare} from "redux/reducer/messages/ShareMessage";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {map as _map} from "lodash";
-import {SearchChatItem} from "../../../messageList/components/searchUserConversation";
+import {SearchChatItem} from "../../../MessageList/components/searchUserConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {SelectedShareConversationItem} from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';

@@ -2,7 +2,7 @@ import React, {FC, useContext} from "react";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {RootState} from "redux/reducer";
 
 type Props = {

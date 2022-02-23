@@ -6,13 +6,13 @@ import WordIcon from 'assets/images/CBS-Word-Icon.svg';
 import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
 import OtherIcon from 'assets/images/CBS-Other-Icon.svg';
 import {ItemMediaInMessage} from "./ItemMediaInMessage";
-import {DatePickerWithRange} from "../../../../../../shareComponents/common/datePicker";
+import {DatePickerWithRange} from "../../../../../../shareComponents/common/DatePickerWithRange";
 
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {ViewImage} from "../../../chattingSection";
+import {ViewImage} from "../../../ChattingSection";
 
 export const ListMediaInMessage:FC = () => {
     const {currentChat} = useContext(MessageContext);

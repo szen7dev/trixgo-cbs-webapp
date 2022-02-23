@@ -4,10 +4,10 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import BellIcon from "assets/images/icons8-bell-100.svg";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import {SettingMessageDetailTab} from "./components";
-import {MessageContext} from "../../MessageHome";
+import {MessageContext} from "../../index";
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "redux/reducer";
-import {AvatarGroupChat} from "../messageList";
+import {AvatarGroupChat} from "../MessageList";
 import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 

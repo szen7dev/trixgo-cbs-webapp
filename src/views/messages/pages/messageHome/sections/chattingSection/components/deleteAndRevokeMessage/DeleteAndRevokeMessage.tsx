@@ -26,7 +26,18 @@ export const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
         } else {
             deleteMessage({messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id), conversationID: conversationId})
         }
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: conversationId, select: JSON.stringify({ sender:"bizfullname" }) });
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+            conversationID: conversationId,
+            select: JSON.stringify({ sender:"bizfullname" }) ,
+            filter: JSON.stringify({
+                author: 0,
+                taskID: 0,
+                links: 0,
+                createAt: 0,
+                __v: 0,
+                config: 0
+            })
+        });
         dispatch(dismissDeleteRevoke({}))
         dispatch(removeAllSelectedMessage({conversationId: conversationId}))
     }

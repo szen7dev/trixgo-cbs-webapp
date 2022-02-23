@@ -1,12 +1,12 @@
 import React, {FC, useCallback, useContext} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {RightClickMenuWrapper} from "shareComponents/common";
-import {RightClickMessage, SelectMessageCheckbox} from "../../mainChatContent";
+import {RightClickMessage, SelectMessageCheckbox} from "../../MainChatContent";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {DeleteChatContent, ContactContent, FileChatContent, TextChatContent, ImagesContent} from "./index";
-import {NpsContent} from "../../nps";
+import {NpsContent} from "../../Nps";
 
 type Props = {
     message: ItemMessage;

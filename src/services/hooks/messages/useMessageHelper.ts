@@ -2,7 +2,7 @@ import {UseListConversation} from "./useListConversation";
 import {ReactNode, useCallback, useContext} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
-import {MessageContext} from "views/messages/pages/messageHome/MessageHome";
+import {MessageContext} from "views/messages/pages/MessageHome";
 
 type UseMessageHelperType = {
     handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;
@@ -26,7 +26,15 @@ export const UseMessageHelper = () : UseMessageHelperType => {
                 if (currentChat === data._id) return;
                 socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
                     conversationID: data._id,
-                    select: JSON.stringify({sender: "bizfullname"})
+                    select: JSON.stringify({sender: "bizfullname"}),
+                    filter: JSON.stringify({
+                        author: 0,
+                        taskID: 0,
+                        links: 0,
+                        createAt: 0,
+                        __v: 0,
+                        config: 0
+                    })
                 });
                 setCurrentChat(data._id);
             }

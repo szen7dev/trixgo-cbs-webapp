@@ -49,7 +49,18 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
             setSelectedFriends({});
             dispatch(dismissAddUserToConversation({}))
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: conversationId, select: JSON.stringify({ sender:"bizfullname" }) });
+            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+                conversationID: conversationId,
+                select: JSON.stringify({ sender:"bizfullname" }) ,
+                filter: JSON.stringify({
+                    author: 0,
+                    taskID: 0,
+                    links: 0,
+                    createAt: 0,
+                    __v: 0,
+                    config: 0
+                })
+            });
         });
     };
 

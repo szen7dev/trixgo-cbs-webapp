@@ -5,8 +5,8 @@ import {ModalFullContainer} from "shareComponents/common";
 import {ViewImage} from "./ViewImage";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {ReactionList, ReactionActions} from "../../reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../replyContent";
+import {ReactionList, ReactionActions} from "../../Reactions";
+import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
 
 type Props = {
     message: ItemMessage;

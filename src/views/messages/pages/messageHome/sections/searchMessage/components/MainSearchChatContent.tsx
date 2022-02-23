@@ -4,11 +4,11 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../MessageHome";
+import {MessageContext} from "../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
-import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../../chattingSection";
+import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../../ChattingSection";
 import moment from "moment";
 
 type Props = {
@@ -131,7 +131,7 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
         <>
             <div
                 ref={conversationMessagesList}
-                id={"conversation-messages-messageList"}
+                id={"conversation-messages-MessageList"}
                 className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>

@@ -1,6 +1,6 @@
 import React, {FC, useContext} from "react";
 import {map as _map} from "lodash";
-import {listEmoji} from "../mainChatContent/MainChatContent";
+import {listEmoji} from "../MainChatContent/MainChatContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 type Props = {
     message: ItemMessage;

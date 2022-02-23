@@ -2,7 +2,7 @@ import React, {FC, useCallback, useContext, useEffect, useRef} from "react";
 import IconPinned from "assets/icons/Pinned";
 import { NavLink } from "react-router-dom";
 import {OptionListItemRightClick} from "./OptionListItemRightClick";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 import {AvatarGroupChat} from "./AvatarGroupChat";

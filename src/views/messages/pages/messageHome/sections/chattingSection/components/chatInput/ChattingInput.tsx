@@ -126,7 +126,30 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         message['parentID'] = replyData?replyData._id:"";
         dispatch(removeReplyMessage({conversationId: chat._id}));
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: chat._id, select: JSON.stringify({ sender:"bizfullname" }) });
+        // console.log('CHATTING_CSS_GET_LIST_CONVERSATION', {
+        //     conversationID: chat._id,
+        //     select: JSON.stringify({ sender:"bizfullname" }) ,
+        //     filter: JSON.stringify({
+        //         author: 0,
+        //         taskID: 0,
+        //         links: 0,
+        //         createAt: 0,
+        //         __v: 0,
+        //         config: 0
+        //     })
+        // },  new Date())
+        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+            conversationID: chat._id,
+            select: JSON.stringify({ sender:"bizfullname" }) ,
+            filter: JSON.stringify({
+                author: 0,
+                taskID: 0,
+                links: 0,
+                createAt: 0,
+                __v: 0,
+                config: 0
+            })
+        });
     }
 
     const handleSetFiles = (filesUpload: FileList|Blob[]) => {
@@ -237,7 +260,18 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
             // console.log(willSendFileMessage)
             setTimeout(() => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
-                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', { conversationID: chat._id, select: JSON.stringify({ sender:"bizfullname" }) });
+                socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+                    conversationID: chat._id,
+                    select: JSON.stringify({ sender:"bizfullname" }) ,
+                    filter: JSON.stringify({
+                        author: 0,
+                        taskID: 0,
+                        links: 0,
+                        createAt: 0,
+                        __v: 0,
+                        config: 0
+                    })
+                });
                 setDoneUpload({});
                 setWillSendFileMessage(null);
             }, 200)
@@ -245,7 +279,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     }, [willSendFileMessage, doneUpload])
 
     const scrollToBottom = () => {
-        const conversationMessagesList = document.getElementById("conversation-messages-messageList");
+        const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
         if (conversationMessagesList) {
             conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
         }

@@ -8,7 +8,7 @@ import MemberVote from "assets/images/icons-member-vote.svg";
 
 import moment from "moment";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 
 type Props = {
     message: ItemMessage;
