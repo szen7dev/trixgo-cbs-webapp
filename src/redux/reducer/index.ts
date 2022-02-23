@@ -15,6 +15,7 @@ import AddUserToConversationSlice from './messages/AddUserToConversation';
 import SearchMessageSlice from './messages/SearchMessage';
 import MiniChatSlice from './messages/MiniChat';
 import PopUpSendFileAndImageSlice from './messages/PopupSendImageAndFile';
+import RightClickMenuSlice from './RightClickMenu';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
     searchMessage: SearchMessageSlice,
     miniChat: MiniChatSlice,
     popUpSendFileAndImage: PopUpSendFileAndImageSlice,
+    rightClickMenu: RightClickMenuSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
