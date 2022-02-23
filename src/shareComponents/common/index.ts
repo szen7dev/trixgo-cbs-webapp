@@ -8,6 +8,5 @@ export * from './Paginate';
 export * from './SearchInput';
 export * from './DeleteConfirm';
 export * from './HomeNavigation';
-export * from './HomeRightSideBar';
 export * from './RightClickMenuV2';
 export * from './Loader';

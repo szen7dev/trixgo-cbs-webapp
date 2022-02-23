@@ -14,7 +14,7 @@ import { PcmHomeLayout } from "views/pcm/shareComponents/layouts";
 // import ErrorPage from "views/authentication/Error";
 
 /*=====PAGES=====*/
-import PcmHomePage from "views/pcm/pages/PcmHomePage";
+import { PcmHomePage } from "views/pcm/pages";
 
 const PCMRouter: FC = () => {
     return (

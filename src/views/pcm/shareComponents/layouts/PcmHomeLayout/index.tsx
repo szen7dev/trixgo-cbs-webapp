@@ -11,8 +11,9 @@ import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { MainHeader, HomeRightSideBar } from "shareComponents/common";
+import { MainHeader } from "shareComponents/common";
 import { PcmLeftSideBar } from './components';
+import { HomeRightSideBar } from "shareComponents/layouts";
 // import MiniChatbox from "shareComponents/common/MiniChat/components/MiniChatBox";
 
 /*=====5.TYPINGS=====*/

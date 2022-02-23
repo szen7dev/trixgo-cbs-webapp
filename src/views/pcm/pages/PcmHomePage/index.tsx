@@ -1,352 +1,447 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, useState, useEffect } from "react";
+import moment from "moment";
+import Slider from "react-slick";
+import { Link } from 'react-router-dom';
 
-import { Link, useHistory } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import cn from "classnames";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "views/pcm/styles/PCMStyles.css";
 
-import SignInImage from "assets/images/signin-image.svg";
-import BackIcon from "assets/images/icon-back.svg";
-import MailIcon from "assets/images/icon-email-open.svg";
-import ResendIcon from "assets/images/icon-resend.svg";
-import EyeCloseIcon from "assets/images/icon-eye-close.svg";
-import EyeOpenIcon from "assets/images/icon-eye-open.svg";
+import newsImg1 from "assets/images/home-slide-img1.jpg";
+import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
+import iconComments from "assets/images/icons8-comments-48.png";
+import iconEye from "assets/images/icons8-eye-48.png";
+import imgMedia from "assets/images/home-img-media.jpg";
+import iconArrowRight from "assets/images/icon-arrow-right.svg";
+import imgSolution from "assets/images/home-img-solution.png";
+import imgBidding from "assets/images/icons8-database-96.png";
+import imgProcess from "assets/images/icons8-project-setup-80.png";
+import imgProcess2 from "assets/images/home-img-process-management.jpg";
+import iconNew from "assets/images/icons8-new-96.png";
+import imgBusiness from "assets/images/home-img-business.png";
+import imgBusiness2 from "assets/images/Business.png";
 
-import "styles/common.css";
+import { abbreviateNumber } from 'utils';
+import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from "services/hooks/useAuth";
+import { usePcm } from 'services/hooks/usePcm';
+// import { useSocial } from 'services/hooks/useSocial';
+import PcmRepository from 'apis/pcm';
 
-const step = {
-  step1: "stepResetPassword",
-  step2: "stepCheckMail",
-  step3: "stepCreatePassword",
-};
+export const PcmHomePage: FC = () => {
+  const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
+  const { user } = useAuth();
+  const { listTasks } = usePcm();
+  const socketRef: any = useSocket();
 
-const PcmHomePage: FC = () => {
-  const [currentStep, setCurrentStep] = useState("stepResetPassword");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useSocial('list_media__digital-conversion', { 
+  //   limit: 6, type: 'digital-conversion'
+  // });
+  // const { listMedias: listMediasCompany, refetchListMedias } = useSocial('list_media__company__homepage', {
+  //   limit: 1, type: 'company', companyID: user?.company._id
+  // });
 
-  const { t } = useTranslation(["signIn", "resetPassword"]);
-  const history = useHistory();
+  // Kiểm soát lifeCicle của Data
+  useEffect(() => {
+    (async () => {
+      const response = await PcmRepository.listTotalAnalysis();
+      setTaskAnalysis(response.data);
+    })();
 
-  const { step1, step2, step3 } = step;
+    const socket = socketRef.current;
+    if (!socket) return;
 
-  const initialValues = {
-    email: "",
-    otp: "",
-    password: "",
-    confirmPassword: "",
+		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
+      //refetchListMedias();
+		});
+  }, [])
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    autoPlay: true,
+    autoPlaySpeed: 5000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    className: '',
+    centerPadding: '10px',
+    beforeChange: (previousIndex: number, index: number) => {
+      if(previousIndex < index){
+        //(index % 3) === 0 && nextPageListMedias();
+      }
+    }
   };
 
-  const validationSchema =
-    currentStep === step1
-      ? Yup.object({
-          email: Yup.string()
-            .email("Please enter valid email address")
-            .required("Email required!"),
-        })
-      : currentStep === step2
-      ? Yup.object({
-          otp: Yup.string()
-            .matches(/^[0-9]+$/, "OTP must be a number")
-            .min(6, "Minimum of 6 characters")
-            .max(6, "Maximum of 6 characters")
-            .required("OTP required!"),
-        })
-      : currentStep === step3 &&
-        Yup.object({
-          password: Yup.string()
-            .min(8, "Minimum of 8 characters")
-            .required("Password Required!"),
-          confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password")], "The two passwords do not match")
-            .required("Confirm password required!"),
-        });
-
   return (
-    <section className="flex h-full w-full">
-      <div className="w-7/12">
-        <div className="flex flex-col justify-center h-full w-full lg:px-20 xl:px-40 2xl:px-72">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={() => {
-              currentStep === step1 && setCurrentStep(step2);
-              currentStep === step2 && setCurrentStep(step3);
-            }}
-          >
-            {(formik) => {
-              const { handleBlur, dirty, isValid, values } = formik;
-              const { password, confirmPassword } = values;
+    <div className="t-home flex">
+      {/* main content - left column */}
+      <div className="w-2/3 pt-4 pr-2 pl-4 pb-4">
+        <div className="t-home-col-left-wrapper mr-auto ml-auto max-w-full">
+          {/* summary block */}
+          <div className="t-home-summary flex flex-wrap items-center justify-center">
+            <div className="t-home-summary-group flex max-w-full">
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">{taskAnalysis?.amountTask || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Công việc</Link>
+                </p>
+              </div>
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">{taskAnalysis?.amountTaskIsRFa || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Phê duyệt</Link>
+                </p>
+              </div>
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">{taskAnalysis?.amountTaskIsRFis || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/mine">Yêu cầu thông tin</Link>
+                </p>
+              </div>
+            </div>
+            <div className="t-home-summary-group flex max-w-full">
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{taskAnalysis?.amountTaskIsFlags || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/bookmark">Việc quan tâm</Link>
+                </p>
+              </div>
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{taskAnalysis?.amountTaskIsAssignee || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                <Link to="/pcm/mine">Việc đã giao</Link>
+                </p>
+              </div>
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{taskAnalysis?.amountTaskIsDraft || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/draft">Việc nháp</Link>
+                </p>
+              </div>
+            </div>
+          </div>
 
-              return (
-                <Form
-                  style={{
-                    width: 510,
-                    height: 530,
-                  }}
-                  className="relative border border-gray-300 rounded-lg shadow-lg"
-                >
-                  <div
-                    className={cn("h-14 px-5 rounded-t-lg bg-accent-light", {
-                      "flex items-center justify-between":
-                        currentStep !== "stepCreatePassword",
-                      "flex items-center": currentStep === "stepCreatePassword",
-                    })}
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={BackIcon}
-                        alt="Back"
-                        className="w-5 h-4 cursor-pointer"
-                        onClick={() => {
-                          currentStep === step1 && history.goBack();
-                          currentStep === step2 && setCurrentStep(step1);
-                          currentStep === step3 && setCurrentStep(step2);
-                        }}
-                      />
-                      <span className="pl-3 font-bold">
-                        {t("resetPassword:back")}
-                      </span>
-                    </div>
-
-                    {currentStep === step1 ? (
-                      <p className="font-bold text-xl">
-                        {t("resetPassword:resetPassword")}
-                      </p>
-                    ) : currentStep === step2 ? (
-                      <p className="font-bold text-xl">
-                        {t("resetPassword:checkEmail")}
-                      </p>
-                    ) : (
-                      <p className="font-bold text-xl ml-14">
-                        {t("resetPassword:createPassword")}
-                      </p>
-                    )}
-
-                    {currentStep !== step3 && (
-                      <button
-                        type="submit"
-                        disabled={
-                          currentStep === step2 && !(dirty && isValid)
-                            ? true
-                            : false
-                        }
-                        className={
-                          currentStep === step2 && !(dirty && isValid)
-                            ? "text-secondary-gray font-bold text-lg bg-transparent cursor-not-allowed"
-                            : "font-bold text-lg text-primary"
-                        }
-                      >
-                        {t("resetPassword:next")}
-                      </button>
-                    )}
-                  </div>
-
-                  {currentStep === step1 ? (
-                    <>
-                      <p className="p-5 text-secondary-gray">
-                        {t("resetPassword:resetDescription")}
-                      </p>
-
-                      <div className="p-5 text-secondary-gray">
-                        <p className="uppercase">{t("resetPassword:email")}</p>
-                        <Field
-                          type="email"
-                          name="email"
-                          autoFocus={true}
-                          placeholder={t("signIn:emailPlaceholder")}
-                          className="w-full p-2 mt-2.5 border border-gray-300 rounded-lg outline-none"
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                          }}
-                        />
-
-                        <ErrorMessage
-                          name="email"
-                          component="span"
-                          className="font-bold text-xs text-negative"
-                        />
-                      </div>
-                    </>
-                  ) : currentStep === step2 ? (
-                    <>
-                      <div className="text-center flex justify-center mt-10">
-                        <div className="w-28 h-28 bg-accent-light rounded-3xl flex justify-center items-center">
-                          <img src={MailIcon} alt="Mail" />
-                        </div>
-                      </div>
-
-                      <p className="p-5 text-center text-secondary-gray">
-                        {t("resetPassword:checkEmailDescription")}
-                      </p>
-
-                      <div className="px-5">
-                        <p className="uppercase text-secondary-gray">
-                          {t("resetPassword:otp")}
-                        </p>
-                        <Field
-                          type="text"
-                          name="otp"
-                          autoFocus={true}
-                          placeholder={t("resetPassword:otpPlaceholder")}
-                          className="w-full p-2 mt-2.5 border border-gray-300 rounded-lg outline-none"
-                          onBlur={(e: FormEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                          }}
-                        />
-                        <ErrorMessage
-                          name="otp"
-                          component="span"
-                          className="font-bold text-xs text-negative"
-                        />
-                      </div>
-
-                      <div className="p-5 flex">
-                        <img src={ResendIcon} alt="Resend" />
-                        <span className="pl-2 text-sm text-primary">
-                          {t("resetPassword:resendOTP")}
-                        </span>
-                      </div>
-
-                      <div className="px-5 flex justify-end">
-                        <button
-                          type="submit"
-                          className="h-11 w-28 bg-primary rounded text-primary-light hover:opacity-90"
-                        >
-                          {t("resetPassword:next")}
-                        </button>
-                      </div>
-
-                      <ErrorMessage
-                        name="email"
-                        component="span"
-                        className="font-bold text-xs text-negative"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <p className="p-5 text-secondary-gray">
-                        {t("resetPassword:createPasswordDescription")}
-                      </p>
-
-                      <div>
-                        <div className="relative px-5">
-                          <p className="uppercase text-secondary-gray">
-                            {t("signIn:password")}
-                          </p>
-                          <Field
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            autoFocus={true}
-                            placeholder={t("resetPassword:passwordPlaceholder")}
-                            className="w-full p-2 mt-2.5 border border-gray-300 rounded-lg outline-none"
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
-                          <img
-                            className="absolute right-10 top-9 cursor-pointer"
-                            src={showPassword ? EyeOpenIcon : EyeCloseIcon}
-                            alt="Eye Close"
-                            onClick={() => setShowPassword(!showPassword)}
-                          />
-                          {dirty && isValid && password === "" ? (
-                            <p className="pt-1 text-xs text-secondary-gray">
-                              {t("resetPassword:passwordWarning")}
+          {/* outstanding news */}
+          <div className="t-home-block">
+            <div className="t-home-block-title">
+              <span>Chuyển đổi số</span>
+              <Link to={`/social/home/3`}>Xem tất cả</Link>
+            </div>
+            <div className="t-home-slider w-full">
+              <Slider {...settings}>
+                {/* outstanding news slider item */}
+                {/* {listMediasDigitalConversion.length ? 
+                  listMediasDigitalConversion.map(media => (
+                    <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
+                      <div className="t-home-slider-item-warpper relative flex items-end p-2">
+                        <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={(media.images && media.images.length) ? `${process.env.REACT_APP_URL_S3}/${media.images[0].path}` : newsImg1} alt="News" />
+                        <div className="t-home-slider-item-text">
+                          <Link to={`/social/post/${media._id}`}>
+                            <p className="text-lg font-bold" title={media.title}>
+                              {media.title?.length > 20 ? `${media.title?.substring(0, 20)}...` : media.title}
                             </p>
-                          ) : (
-                            <ErrorMessage
-                              name="password"
-                              component="span"
-                              className="font-bold text-xs text-negative"
-                            />
-                          )}
+                          </Link>
+                          <div className="text-[14px]">
+                            {media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content}
+                          </div>
                         </div>
                       </div>
+                    </div>
+                  ))
+                 : ''} */}
+                
+                {/* outstanding news slider item */}
+                {/* <div className="t-home-slider-item w-1/3 pr-2 pl-2">
+                  <div className="t-home-slider-item-warpper relative flex items-end p-2">
+                    <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={newsImg2} alt="News" />
+                    <div className="t-home-slider-item-text">
+                      <p className="text-lg font-bold">Tin thế giới</p>
+                      <div className="text-[14px]">Lãnh đạo các nước tổ chức họp G7</div>
+                    </div>
+                  </div>
+                </div> */}
+              </Slider>
+            </div>
+          </div>
 
-                      <div>
-                        <div className="relative p-5">
-                          <p className="uppercase text-secondary-gray">
-                            {t("resetPassword:confirmPassword")}
-                          </p>
-                          <Field
-                            id="confirmPassword"
-                            type={showConfirmPassword ? "text" : "password"}
-                            name="confirmPassword"
-                            placeholder={t(
-                              "resetPassword:confirmPasswordPlacehoder"
-                            )}
-                            className="w-full p-2 mt-2.5 border border-gray-300 rounded-lg outline-none"
-                            onBlur={(e: FormEvent<HTMLInputElement>) => {
-                              handleBlur(e);
-                            }}
-                          />
-                          <img
-                            className="absolute right-10 top-14 cursor-pointer"
-                            src={
-                              showConfirmPassword ? EyeOpenIcon : EyeCloseIcon
-                            }
-                            alt="Eye Close"
-                            onClick={() => {
-                              setShowConfirmPassword(!showConfirmPassword);
-                            }}
-                          />
-                          {dirty && isValid && confirmPassword === "" ? (
-                            <span className="text-xs text-secondary-gray">
-                              {t("resetPassword:confirmPasswordWarning")}
-                            </span>
-                          ) : (
-                            <ErrorMessage
-                              name="confirmPassword"
-                              component="span"
-                              className="font-bold text-xs text-negative"
-                            />
-                          )}
-                        </div>
+          {/* media */}
+          <div className="t-home-block">
+            <div className="t-home-block-title">
+              <span>Truyền thông công ty</span>
+              <Link to={`/social/home/1`}>Xem tất cả</Link>
+            </div>
+            {/* {listMediasCompany.length ? (
+              <div className="flex items-center">
+                <Link to={`/social/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? `${process.env.REACT_APP_URL_S3}/${listMediasCompany[0].images[0].path}` : imgMedia} alt="Media" />
+                </Link>
+                <div className="t-home-media-text text-dark">
+                  <Link to={`/social/post/${listMediasCompany[0]._id}`}>
+                    <p className="t-home-media-title font-bold"> {listMediasCompany[0].title} </p>
+                  </Link>
+                  <div className="t-home-media-description mb-4">
+                    {listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content}
+                  </div>
+                  <div className="t-home-media-info text-secondary-gray">
+                    {listMediasCompany[0].author.fullname}
+                    <span className="t-home-media-info-dot"></span>
+                    {listMediasCompany[0].author?.department?.name}
+                    <span className="t-home-media-info-dot"></span>
+                    {moment(listMediasCompany[0].createAt).fromNow()}
+                  </div>
+                  <div className="t-home-media-parameter flex justify-between text-primary-gray">
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconThumbsUp} alt="Like" /> 
+                      {abbreviateNumber(listMediasCompany[0].amountReaction)}
+                    </div>
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconComments} alt="Comment" />
+                      {abbreviateNumber(listMediasCompany[0].amountComment)}
+                    </div>
+                    <div className="t-home-media-parameter-item flex items-center">
+                      <img className="w-6 h-6 object-contain" src={iconEye} alt="Seen" />
+                      {abbreviateNumber(listMediasCompany[0].amountView)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : ''} */}
+          </div>
 
-                        <div className="absolute px-5 text-right bottom-10 right-5">
-                          <button
-                            type="submit"
-                            className="h-11 w-28 bg-primary rounded text-primary-light hover:opacity-90"
-                          >
-                            {t("resetPassword:next")}
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </Form>
-              );
-            }}
-          </Formik>
+          {/* recent actions */}
+          <div className="t-home-block">
+            <div className="t-home-block-title">
+              <span>Thông báo gần đây</span>
+              <Link to={`/personal/notification`}>Xem tất cả</Link>
+            </div>
+            <div className="t-home-actions">
+              {/* recent actions item */}
+              {listTasks.length ? listTasks.map((task: PcmPlanTaskProps) => (
+                <div key={task?._id} className="flex mb-4">
+                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${task?.lastLog?.author?.image || task?.assignee?.image}`} alt="Thumbnail" />
+                  <div className="t-home-actions-text text-secondary-gray">
+                    <div className="flex justify-between mb-1">
+                      <span className="t-home-actions-title-content text-dark">
+                        {task?.name}
+                      </span>
+                      <span className="ml-2">{moment(task?.lastLog?.createAt).format('L')}</span>
+                    </div>
+                  <div>
+                      {task?.lastLog?.content}
+                    </div>
+                  </div>
+                </div>
+              )) : ''}
 
-          <Link to="/authentication/sign-in">
-            <p className="mt-6 font-bold text-primary">
-              {t("signIn:submitButton")}
-            </p>
-          </Link>
-        </div>
-      </div>
+              {/* recent actions item */}
+              {/* <div className="flex mb-4">
+                <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+                <div className="t-home-actions-text text-secondary-gray">
+                  <div className="flex justify-between mb-1">
+                    <span className="t-home-actions-title-content text-dark">
+                      PKT đồng ý với HSTT đợt 4, giá trị được TT lần này: 554.101.100. Kính trình ban lãnh đạo...
+                    </span>
+                    <span className="ml-2">07/11/21</span>
+                  </div>
+                  <div>
+                    Phùng Thị Lan-CHG | CHG.THT-Đệ trình phê duyệt Hồ sơ thanh toán đợt 04-QLDA
+                  </div>
+                </div>
+              </div> */}
 
-      <div className="w-5/12 z-0 bg-primary">
-        <div className="relative">
-          <img
-            className="object-fill h-screen w-full"
-            src={SignInImage}
-            alt="Logo"
-          />
-
-          <div className="absolute top-0 my-80 mx-44 md:my-60 md:mx-20 lg:my-72 lg:mx-24 xl:my-72 xl:mx-32 2xl:my-80 2xl:mx-44">
-            <p className="font-bold text-5xl max-w-md leading-tight text-primary-light">
-              {t("signIn:target")}
-            </p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* main content - right column */}
+      <div className="w-1/3 pl-2 pt-4 pb-4 pr-4">
+        <div className="t-home-solution pt-1 pb-1 pl-3 pr-3 mb-4 flex items-center">
+          <div className="t-home-solution-text text-[12px] text-primary-light">
+            <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề Quản lý giá</div>
+            <div className="t-home-solution-description">Giải quyết tất cả các vấn đề liên quan tới kiểm soát giá cho Chủ đầu tư</div>
+            <div className="t-home-solution-link">
+              <a href="/" className="flex items-center text-primary-light">
+                Xem ngay
+                <img className="w-4 h-4 pl-1 pr-1 object-contain rounded-full bg-primary-light ml-2" src={iconArrowRight} alt="Arrow" />
+              </a>
+            </div>
+          </div>
+          <div className="t-home-solution-img">
+            <img className="w-full" src={imgSolution} alt="Solution" />
+          </div>
+        </div>
+
+        <div className="t-home-right-block t-home-right-block-common">
+          <img src={imgBidding} alt="Bidding" />
+          <div className="t-home-right-block-common-text">
+            <div className="t-home-right-block-common-title">Nền tảng đấu thầu online quy mô lớn</div>
+            <div className="t-home-right-block-common-description">Đấu thầu gói thầu quy mô lớn, minh bạch/bảo mật thông tin suốt quá trình</div>
+          </div>
+        </div>
+				
+				<div className="border-cbs-border rounded-[5px] border-cbs-[1px] mb-4">
+					<img src={imgBusiness2} alt="Business"/>
+				</div>
+
+        {/* <div className="t-home-right-block">
+          <div className="t-home-right-block-common">
+            <img src={imgProcess} alt="Process" />
+            <div className="t-home-right-block-common-text">
+              <div className="t-home-right-block-common-title">Quản lý vận hành</div>
+            </div>
+          </div>
+          <div className="flex items-center mt-2 t-home-operation">
+            <img src={imgProcess2} alt="Process management" />
+            <div className="t-home-operation-text pl-4 text-dark">
+              <div className="mb-5">
+                Trixgo sắp sửa ra mắt ứng dụng Quản lý vận hành công trình. Với ứng dụng này, việc bàn giao dữ liệu của Chủ đầu tư cho đơn vị vận hành trở nên cực kỳ nhanh gọn. Thông tin về căn hộ được cung cấp tới tận tay cư dân
+              </div>
+              <a className="flex items-center text-primary-gray" href="/">
+                Xem ngay
+                <span className="ml-2 rounded-full p-1 inline-block">
+                  <img src={iconArrowRight} alt="Arrow" />
+                </span>
+              </a>
+            </div>
+          </div>
+        </div> */}
+
+        <div className="t-home-right-block">
+          <div className="t-home-right-block-common">
+            <img src={iconNew} alt="New" />
+            <div className="t-home-right-block-common-text">
+              <div className="t-home-right-block-common-description">
+                <span>Trixgo ra mắt phiên bản mới v2.7.1</span>
+                <ul>
+                  <li>Nâng cấp hoàn toàn trải nghiệm mới trên nền tảng Web</li>
+                  <li>Đồng bộ hóa Mobile và Tablet app</li>
+                  <li>Cải thiện tính năng</li>
+                  <li>Hoàn thiện các bug nhỏ</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="t-home-right-block">
+          <div className="t-home-right-block-common">
+            <div className="t-home-right-block-common-text">
+              <div className="t-home-right-block-common-title">Workshop thực tế</div>
+            </div>
+          </div>
+          <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
+            <div className="t-home-training-progress pr-4 flex-grow">
+              <div className="mb-2 flex items-center">
+                <div className="t-home-training-progress-bar w-1/4">
+                  <div style={{ width: "10%" }}></div>
+                </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">08 chủ đề, 42 bài học</div>
+              </div>
+              <div className="mb-2 flex items-center">
+                <div className="t-home-training-progress-bar w-1/4">
+                  <div style={{ width: "40%" }}></div>
+                </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc dự án thực tế</div>
+              </div>
+              <div className="mb-2 flex items-center">
+                <div className="t-home-training-progress-bar w-1/4">
+                  <div style={{ width: "100%" }}></div>
+                </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Định kỳ Workshop chia sẻ kinh nghiệm </div>
+              </div>
+            </div>
+            <button className="t-home-training-btn flex-grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5 rounded-md">Tham gia</button>
+          </div>
+
+          <div className="t-home-right-block-common">
+            <div className="t-home-right-block-common-text">
+              <div className="t-home-right-block-common-title">Chuyển đổi số</div>
+            </div>
+          </div>
+          <div className="flex items-center t-home-operation t-home-business-group">
+            <img src={imgBusiness} alt="Business group" />
+            <div className="t-home-operation-text">
+              <div>
+                Chia sẻ kinh nghiệm quan trọng quyết định thành công việc chuyển đổi số của doanh nghiệp
+              </div>
+              <Link className="flex items-center text-primary-gray" to="/social/home/3">
+                Xem ngay
+                <span className="ml-2 rounded-full p-1 inline-block">
+                  <img src={iconArrowRight} alt="Arrow" />
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
+            <span>Sự kiện</span>
+            <a href="/">Xem tất cả</a>
+          </div> */}
+          {/* <div className="t-home-event"> */}
+            {/* event item */}
+            {/* <div className="t-home-event-item flex items-center mb-3">
+              <img className="w-10" src={iconBirthday} alt="Thumbnail" />
+              <div className="t-home-event-text pl-4">
+                <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
+              </div>
+            </div> */}
+            {/* event item */}
+            {/* <div className="t-home-event-item flex items-center mb-3">
+              <img className="w-10" src={iconBirthday} alt="Thumbnail" />
+              <div className="t-home-event-text pl-4">
+                <b>Nguyệt Lê</b> và <b>Nguyễn Hoàng</b> có sinh nhật ngày hôm nay
+              </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+
+        {/* <div className="t-home-right-block"> */}
+          {/* <div className="t-home-block-title">
+            <span>Yêu cầu kết bạn</span>
+            <a href="/">Xem tất cả</a>
+          </div> */}
+          {/* <div className="t-home-actions"> */}
+
+            {/* friend request item */}
+            {/* <div className="flex mb-4">
+              <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+              <div className="t-home-actions-text text-secondary-gray">
+                <div className="flex justify-between mb-1">
+                  <span className="t-home-actions-title-content text-dark font-bold">
+                    Nguyễn Phan Thanh Hương-CPMI
+                  </span>
+                </div>
+                <div className="t-home-actions-info">
+                  <button className="bg-primary h-9 text-primary-light text[14px] mr-2 pl-3 pr-3 rounded-md">Xác nhận</button>
+                  <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
+                </div>
+              </div>
+            </div> */}
+
+            {/* friend request item */}
+            {/* <div className="flex mb-4">
+              <img className="t-home-actions-img object-cover mr-4 rounded-full" src={fakeThumbnail} alt="Thumbnail" />
+              <div className="t-home-actions-text text-secondary-gray">
+                <div className="flex justify-between mb-1">
+                  <span className="t-home-actions-title-content text-dark font-bold">
+                    Nguyễn Phan Thanh Hương-CPMI
+                  </span>
+                </div>
+                <div className="t-home-actions-info">
+                  <button className="bg-primary h-9 text-primary-light text[14px] mr-2 pl-3 pr-3 rounded-md">Xác nhận</button>
+                  <button className="t-home-actions-denied h-9 text-primary-gray text[14px] mr-2 pl-3 pr-3 rounded-md">Từ chối</button>
+                </div>
+              </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+        
+      </div>
+    </div>
   );
 };
-
-export default PcmHomePage;
