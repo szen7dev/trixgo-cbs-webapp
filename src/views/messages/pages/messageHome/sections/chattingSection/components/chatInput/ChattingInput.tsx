@@ -217,7 +217,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                     quality: 0.8
                 }
             })
-            sendFiles.push(_id)
+            sendFiles.push({"._id":_id,"name":file.file.file.name})
         }
 
         sendMessage = {

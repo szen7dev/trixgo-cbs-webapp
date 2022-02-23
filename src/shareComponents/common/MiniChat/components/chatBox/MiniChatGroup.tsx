@@ -8,6 +8,7 @@ import SavedMessage from "assets/images/saved-messages.svg";
 import {map as _map} from "lodash";
 import {openChatBox, openCreateNewChatMini} from "redux/reducer/messages/MiniChat";
 import {AvatarGroupChat} from "views/messages/pages/messageHome/sections/messageList/components/listCoversation";
+import {UseMessageHelper} from "../../../../../services/hooks/messages/useMessageHelper";
 
 export const MiniChatGroup:FC = () => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
@@ -15,6 +16,7 @@ export const MiniChatGroup:FC = () => {
     const dispatch = useDispatch();
 
     const {getListConversation} = UseListConversation();
+    const {getNameConversation,getAvatarMembers} = UseMessageHelper()
 
     const mapData = useSelector((state: RootState) => state.listConversation);
     const {listConversation} = mapData.data;
@@ -54,24 +56,6 @@ export const MiniChatGroup:FC = () => {
         listConversation&&getListConversation({});
     },[]);
 
-    const getAvatarMembers = useCallback((chat: ItemListConversation) => {
-        if (chat.isPrivate) {
-            if (chat.members.length === 1) {
-                return [SavedMessage];
-            } else {
-                const members = chat.members.filter((item: any) => item._id !== profileId);
-                return [`${process.env.REACT_APP_URL_S3_USER}/${members[0].image}`];
-            }
-        }
-        const avatars: any = [];
-        if (chat.members && chat.members.length) {
-            chat.members.slice(0, 4).forEach((member: any) => {
-                avatars.push(`${process.env.REACT_APP_URL_S3_USER}/${member.image}`);
-            });
-        }
-        return avatars;
-    }, [listConversation]);
-
     const userUnreadMessage = useCallback((chat: ItemListConversation) => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
@@ -100,13 +84,14 @@ export const MiniChatGroup:FC = () => {
                 .slice(0,4)
             ,(chat) => (
                 <button
+                    title={getNameConversation(chat, profileId)}
                     onClick={() => dispatch(openChatBox({conversation: chat}))}
                     key={chat._id} className="block ml-auto mr-auto relative mb-4 relative">
                     {
                         chat.avatar?
                             <img  className={"w-10 h-10 min-w-10 min-h-10 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={chat._id}/>:
                             <AvatarGroupChat
-                                avatars={getAvatarMembers(chat)}
+                                avatars={getAvatarMembers(chat, profileId)}
                                 imageClass={"w-10 h-10 min-w-10 min-h-10"}
                                 classesMap={imageClassMap}
                             />
