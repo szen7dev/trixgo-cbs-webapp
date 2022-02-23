@@ -1,10 +1,10 @@
 import React, {FC, useContext} from "react";
 import Close from "assets/icons/Close";
 import {useDispatch} from "react-redux";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../chatContent/replyContent";
+import {ContactReply, TextReply, FileReply, ImageReply} from "../ChatContent/ReplyContent";
 
 type Props = {
     replyData: ItemMessage;

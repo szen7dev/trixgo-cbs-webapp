@@ -8,8 +8,8 @@ import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {map as _map} from "lodash";
 import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
-import {ReactionList, ReactionActions} from "../../reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../replyContent";
+import {ReactionList, ReactionActions} from "../../Reactions";
+import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
 type Props = {
     message: any;
     className?: string;

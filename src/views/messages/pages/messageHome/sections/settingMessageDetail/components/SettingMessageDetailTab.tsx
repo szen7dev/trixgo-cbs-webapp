@@ -3,7 +3,7 @@ import {map as _map} from "lodash";
 import {ListOnlineUserInMessage} from "./members";
 import {ListMediaInMessage} from "./medias";
 import {ListFileInMessage} from "./files";
-import {MessageContext} from "../../../MessageHome";
+import {MessageContext} from "../../../index";
 import {ListLinksInMessage} from "./links";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {ListGeneralGroupByMember} from "./groups";

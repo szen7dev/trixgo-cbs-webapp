@@ -3,7 +3,7 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash"
-import {listEmoji} from "../mainChatContent/MainChatContent";
+import {listEmoji} from "../MainChatContent/MainChatContent";
 
 type Props = {
     message: ItemMessage;

@@ -7,7 +7,7 @@ import { ProtectedRoute } from "routes/components";
 import { MessagesLayout } from "views/messages/shareComponents/layouts/MessagesLayout";
 
 /*=====PAGES=====*/
-import {MessagesHome} from "views/messages/pages/messageHome";
+import {MessagesHome} from "views/messages/pages/MessageHome";
 
 const MessagesRouter: FC = () => {
     return (

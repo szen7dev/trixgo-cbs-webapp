@@ -6,9 +6,9 @@ import iconClose from "assets/images/icons8-close-30.png";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {useDispatch} from "react-redux";
 import {MiniChatBoxDetail} from "./MiniChatBoxDetail";
-import {MiniChatContext} from "../../ChatsOnRightSideBar";
-import {ChattingInput} from "views/messages/pages/messageHome/sections/chattingSection";
-import {AvatarGroupChat} from "views/messages/pages/messageHome/sections/messageList/components/listCoversation";
+import {MiniChatContext} from "../../index";
+import {ChattingInput} from "views/messages/pages/MessageHome/sections/ChattingSection";
+import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/listCoversation";
 import OpenNewTab from "assets/images/icons8-external-link-96.svg";
 
 type Props = {

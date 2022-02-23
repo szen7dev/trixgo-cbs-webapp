@@ -2,10 +2,10 @@ import React, { FC, useState } from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {NewMiniChatBox} from "./NewMiniChatBox";
-import {MiniChatContext} from "../ChatsOnRightSideBar";
-import {MiniChatSection} from "./chatBox";
-import {SocketController} from "views/messages/shareComponents/common/socket";
-import {PopupSendImageAndFile, DeleteAndRevokeMessageConfirm} from "views/messages/pages/messageHome/sections/chattingSection";
+import {MiniChatContext} from "../index";
+import {MiniChatSection} from "./ChatBox";
+import {SocketController} from "views/messages/shareComponents/common/SocketController";
+import {PopupSendImageAndFile, DeleteAndRevokeMessageConfirm} from "views/messages/pages/MessageHome/sections/ChattingSection";
 import {RightClickMenuV2} from "shareComponents/common";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 

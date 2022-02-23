@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useContext, useCallback, useState} from "react";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {TextPinned, FilePinned, ImagePinned} from "../pinContent";
+import {TextPinned, FilePinned, ImagePinned} from "../PinContent";
 import Close from "assets/icons/Close";
 import {ListPinnedMessage} from "./ListPinnedMessage";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader

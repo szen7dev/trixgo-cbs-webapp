@@ -6,7 +6,7 @@ import {dismissCreateNewChatMini, openChatBox} from "redux/reducer/messages/Mini
 import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash"
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MiniChatContext} from "../ChatsOnRightSideBar";
+import {MiniChatContext} from "../index";
 
 export const NewMiniChatBox:FC = () => {
     const dispatch = useDispatch();

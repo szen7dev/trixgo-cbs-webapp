@@ -1,11 +1,11 @@
 import React, {FC, useContext} from "react";
-import {MainChatHeading} from "./components/headerConversation";
-import {MainChatContent} from "./components/mainChatContent";
-import {ChattingInput} from "./components/chatInput";
-import {MessageContext} from "../../MessageHome";
+import {MainChatHeading} from "./components/HeaderConversation";
+import {MainChatContent} from "./components/MainChatContent";
+import {ChattingInput} from "./components/ChatInput";
+import {MessageContext} from "../../index";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MainSearchChatContent} from "../searchMessage/components/MainSearchChatContent";
+import {MainSearchChatContent} from "../SearchMessage/components/MainSearchChatContent";
 
 export const ChattingSection:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);

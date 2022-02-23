@@ -12,7 +12,7 @@ import {sendContactMessageToConversation} from "redux/reducer/messages/ContactMe
 import {openCreateReminder} from "redux/reducer/messages/CreateReminder";
 import {sendNPSMessageToConversation} from "redux/reducer/messages/CreateNPSMessage";
 import {useDispatch} from "react-redux";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 
 type Props = {
     handleUploadFiles: (files: FileList|Blob[]) => void;

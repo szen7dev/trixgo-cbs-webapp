@@ -126,7 +126,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     }
 
     const scrollToBottom = () => {
-        const conversationMessagesList = document.getElementById("conversation-messages-messageList");
+        const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
         if (conversationMessagesList) {
             conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
         }

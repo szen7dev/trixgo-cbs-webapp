@@ -106,6 +106,9 @@ const Routes: FC = () => {
                                     <DatahubRouter />
                                 </Route>
 
+                                {/* =====MESSAGES===== */}
+                                <MessagesRouter/>
+
                                 {/* =====OTHER===== */}
                                 <Route path="*">
                                     <FullPageLayout>

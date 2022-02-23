@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useContext, useRef} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {RightClickMenuWrapper} from "shareComponents/common";
-import {RightClickMessage, SelectMessageCheckbox} from "../../mainChatContent";
+import {RightClickMessage, SelectMessageCheckbox} from "../../MainChatContent";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";

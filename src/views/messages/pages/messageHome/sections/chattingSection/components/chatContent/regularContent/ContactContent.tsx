@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {map as _map} from "lodash"
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
-import {ReactionList, ReactionActions} from "../../reactions";
+import {ReactionList, ReactionActions} from "../../Reactions";
 type Props = {
     message: ItemMessage;
     className?: string;

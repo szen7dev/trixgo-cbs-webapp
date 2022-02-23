@@ -1,8 +1,8 @@
 import React, {FC, useCallback, useContext} from "react";
 import {MainChatOptions} from "./MainChatOptions";
 import SearchIcon from "assets/images/icons8-search-120.png";
-import {AvatarGroupChat} from "../../../messageList";
-import {MessageContext} from "../../../../MessageHome";
+import {AvatarGroupChat} from "../../../MessageList";
+import {MessageContext} from "../../../../index";
 import {HeaderPinedMessages} from "./index";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
@@ -93,7 +93,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
                             if (!showMenu) setShowMenu(true)
                         }}
                         className={"w-[40px] h-[40px] hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200 rounded-full flex items-center justify-center"}>
-                        <img  src={SearchIcon} alt={"searchMessage icon"}/>
+                        <img  src={SearchIcon} alt={"SearchMessage icon"}/>
                     </button>
                     <MainChatOptions/>
                 </div>

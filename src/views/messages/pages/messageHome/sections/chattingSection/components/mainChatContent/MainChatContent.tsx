@@ -4,11 +4,11 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
-import {Reminder, ReminderNoti} from "../reminder";
+import {Reminder, ReminderNoti} from "../Reminder";
 import moment from "moment";
 import angered from "assets/images/emoji/angered.png";
 import dislike from "assets/images/emoji/dis-like.png";
@@ -17,8 +17,8 @@ import laugh from "assets/images/emoji/laugh.png";
 import like from "assets/images/emoji/like.png";
 import sad from "assets/images/emoji/sad.png";
 import surprise from "assets/images/emoji/surprise.png";
-import {Poll, PollNoti} from "../poll";
-import {AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../chatContent/regularContent";
+import {Poll, PollNoti} from "../Poll";
+import {AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../ChatContent/RegularContent";
 
 export const listEmoji = [
     {
@@ -188,7 +188,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
         <>
             <div
                 ref={conversationMessagesList}
-                id={"conversation-messages-messageList"}
+                id={"conversation-messages-MessageList"}
                 className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>

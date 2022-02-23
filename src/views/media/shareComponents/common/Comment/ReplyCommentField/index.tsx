@@ -115,7 +115,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		let images: string[] = [];
 		let files: string[] = [];
 
-		// Get messageList file uploaded
+		// Get MessageList file uploaded
 		for (const [, { _id }] of Object.entries(uploads.images)) {
 			_id && (images = [...images, _id]);
 		}

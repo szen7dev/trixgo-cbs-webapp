@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
-import {MessageContext} from "../../MessageHome";
+import {MessageContext} from "../../index";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import SearchIcon from "assets/images/icons8-search-120.png";
@@ -42,7 +42,7 @@ export const SearchMessage:FC = () => {
                             <Close/>
                         </button>
                         <div className={"relative flex items-center flex-1"}>
-                            <img  src={SearchIcon} alt={"icon searchMessage"} className={"absolute w-[24px] h-[24px] left-2"}/>
+                            <img  src={SearchIcon} alt={"icon SearchMessage"} className={"absolute w-[24px] h-[24px] left-2"}/>
                             <input
                                 value={searchTerm}
                                 onChange={e => handleSearchTerm(e.target.value)}

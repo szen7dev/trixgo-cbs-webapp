@@ -2,7 +2,7 @@ import {UseListConversation} from "./useListConversation";
 import {ReactNode, useCallback, useContext} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
-import {MessageContext} from "views/messages/pages/messageHome/MessageHome";
+import {MessageContext} from "views/messages/pages/MessageHome";
 
 type UseMessageHelperType = {
     handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;

@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useContext, useEffect} from "react";
 import {map as _map} from "lodash";
 import {OnlineUserInChatItem} from "./OnlineUserInChatItem";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";

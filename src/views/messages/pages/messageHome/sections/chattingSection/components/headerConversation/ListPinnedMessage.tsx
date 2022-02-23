@@ -2,10 +2,10 @@ import React, {FC, Fragment, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import BulletListIcon from "assets/images/icons8-bulleted-list-90.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {MyMessage, OthersMessage, NotificationCenter} from "../chatContent/regularContent";
+import {MyMessage, OthersMessage, NotificationCenter} from "../ChatContent/RegularContent";
 import {map as _map} from "lodash"
 import moment from "moment";
-import {MessageContext} from "../../../../MessageHome";
+import {MessageContext} from "../../../../index";
 
 type Props = {
     listPinnedMessage: ItemMessage[]
