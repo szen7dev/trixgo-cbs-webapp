@@ -15,8 +15,8 @@ import imgMedia from "assets/images/home-img-media.jpg";
 import iconArrowRight from "assets/images/icon-arrow-right.svg";
 import imgSolution from "assets/images/home-img-solution.png";
 import imgBidding from "assets/images/icons8-database-96.png";
-import imgProcess from "assets/images/icons8-project-setup-80.png";
-import imgProcess2 from "assets/images/home-img-process-management.jpg";
+// import imgProcess from "assets/images/icons8-project-setup-80.png";
+// import imgProcess2 from "assets/images/home-img-process-management.jpg";
 import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import imgBusiness2 from "assets/images/Business.png";
@@ -29,7 +29,7 @@ import { usePcm } from 'services/hooks/usePcm';
 import { useSocial } from 'services/hooks/useSocial';
 import PcmRepository from 'apis/pcm';
 
-const HomePage: FC = () => {
+export const PcmHomePage: FC = () => {
   const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
   const { user } = useAuth();
   const { listTasks } = usePcm();
@@ -445,5 +445,3 @@ const HomePage: FC = () => {
     </div>
   );
 };
-
-export default HomePage;
