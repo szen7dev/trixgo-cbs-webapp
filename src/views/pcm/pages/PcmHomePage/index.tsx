@@ -15,8 +15,6 @@ import imgMedia from "assets/images/home-img-media.jpg";
 import iconArrowRight from "assets/images/icon-arrow-right.svg";
 import imgSolution from "assets/images/home-img-solution.png";
 import imgBidding from "assets/images/icons8-database-96.png";
-import imgProcess from "assets/images/icons8-project-setup-80.png";
-import imgProcess2 from "assets/images/home-img-process-management.jpg";
 import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import imgBusiness2 from "assets/images/Business.png";
@@ -26,7 +24,7 @@ import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
 import { usePcm } from 'services/hooks/usePcm';
-import { useSocial } from 'services/hooks/useSocial';
+import { useMedia } from 'services/hooks/useMedia';
 import PcmRepository from 'apis/pcm';
 
 export const PcmHomePage: FC = () => {
@@ -35,10 +33,10 @@ export const PcmHomePage: FC = () => {
   const { listTasks } = usePcm();
   const socketRef: any = useSocket();
 
-  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useSocial('list_media__digital-conversion', { 
+  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia('list_media__digital-conversion', { 
     limit: 6, type: 'digital-conversion'
   });
-  const { listMedias: listMediasCompany, refetchListMedias } = useSocial('list_media__company__homepage', {
+  const { listMedias: listMediasCompany } = useMedia('list_media__company__homepage', {
     limit: 1, type: 'company', companyID: user?.company._id
   });
 
@@ -133,7 +131,7 @@ export const PcmHomePage: FC = () => {
               <Slider {...settings}>
                 {/* outstanding news slider item */}
                 {listMediasDigitalConversion.length ? 
-                  listMediasDigitalConversion.map(media => (
+                  listMediasDigitalConversion.map((media: any) => (
                     <div key={media._id} className="t-home-slider-item w-1/3 pr-2 pl-2">
                       <div className="t-home-slider-item-warpper relative flex items-end p-2">
                         <img className="absolute top-0 left-0 w-full h-full z-0 object-cover" src={(media.images && media.images.length) ? `${process.env.REACT_APP_URL_S3}/${media.images[0].path}` : newsImg1} alt="News" />
