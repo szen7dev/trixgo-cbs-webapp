@@ -16,7 +16,7 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import BookmarkIcon from "assets/images/icons8-bookmark-96.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import GeneralInfo from "./views/GeneralInfo";
+import { GeneralInfo } from "./components";
 import WorkHistory from "./views/WorkHistory";
 import WorkExperience from "./views/WorkExperience";
 import ExperienceAppointment from "./views/ExperienceAppointment";
