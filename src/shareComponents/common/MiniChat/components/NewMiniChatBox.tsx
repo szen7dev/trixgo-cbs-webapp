@@ -66,7 +66,7 @@ export const NewMiniChatBox:FC = () => {
             <div className="t-mini-chat-add-new-list min-h-[370px] max-h-[370px] overflow-auto">
                 {
                     _map(listFriends, friend => (
-                        <button className="t-mini-chat-add-new-list-item flex items-center text-[15px] mb-4 px-3" onClick={() => handleOpenPrivateChat(friend._id)}>
+                        <button key={friend._id} className="t-mini-chat-add-new-list-item flex items-center text-[15px] mb-4 px-3" onClick={() => handleOpenPrivateChat(friend._id)}>
                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`} alt="Thumbnail" className="rounded-full w-9 h-9 mr-3 object-cover" />
                             <span>{friend.bizfullname||friend.fullname}</span>
                         </button>

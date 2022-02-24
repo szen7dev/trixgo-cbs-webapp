@@ -126,20 +126,20 @@ export const HomeRightSideBar: FC = () => {
             </Dialog>
           </Transition>
         )}
-        <Link to={`/personal/bills`} className="mt-4">
-          <img
-            className="w-6 h-6 object-contain"
-            src={icon5}
-            alt="Left side bar"
-          />
-        </Link>
-        <Link to={`/help/home`} className="mt-4">
-          <img
-            className="w-6 h-6 object-contain"
-            src={icon4}
-            alt="Left side bar"
-          />
-        </Link>
+        {/*<Link to={`/personal/bills`} className="mt-4">*/}
+        {/*  <img*/}
+        {/*    className="w-6 h-6 object-contain"*/}
+        {/*    src={icon5}*/}
+        {/*    alt="Left side bar"*/}
+        {/*  />*/}
+        {/*</Link>*/}
+        {/*<Link to={`/help/home`} className="mt-4">*/}
+        {/*  <img*/}
+        {/*    className="w-6 h-6 object-contain"*/}
+        {/*    src={icon4}*/}
+        {/*    alt="Left side bar"*/}
+        {/*  />*/}
+        {/*</Link>*/}
       </div>
        <ChatsOnRightSideBar/>
     </div>

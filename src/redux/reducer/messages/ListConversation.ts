@@ -2,13 +2,14 @@ import {createSlice} from '@reduxjs/toolkit';
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import moment from "moment";
 
-const initialState : {data: {listConversation: {[key: string]: ItemListConversation}, totalRecord: number, nextCursor: string, hasMoreData: boolean, isLoading: boolean}} = {
+const initialState : {data: {listConversation: {[key: string]: ItemListConversation}, totalRecord: number, nextCursor: string, hasMoreData: boolean, isLoading: boolean, amountMissMessage: number}} = {
     data: {
         listConversation: {},
         totalRecord: 0,
         nextCursor: "",
         hasMoreData: true,
         isLoading: false,
+        amountMissMessage: 0
     }
 };
 
@@ -18,7 +19,7 @@ const listConversationSlice = createSlice({
     reducers: {
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
-            (action.payload??[]).forEach((conversation: ItemListConversation) => {
+            (action.payload.listRecords??[]).forEach((conversation: ItemListConversation) => {
                 const isSavedMessages = conversation.members.length === 1;
 
                 newConversationData[conversation._id] = {
@@ -31,8 +32,14 @@ const listConversationSlice = createSlice({
 
             state.data = {
                 ...state.data,
-                listConversation: newConversationData
+                listConversation: newConversationData,
+                nextCursor: action.payload.nextCursor,
+                hasMoreData : action.payload.nextCursor !== null && action.payload.nextCursor !== undefined && action.payload.nextCursor !== "",
+                amountMissMessage: action.payload.amountMissMessage
             };
+        },
+        setAmountMissMessage(state, action) {
+            state.data.amountMissMessage = action.payload
         },
         // setListConversationPined(state, action) {
         //     const newConversationPinnedData = {...state.data.listConversationPined};
@@ -82,5 +89,5 @@ const listConversationSlice = createSlice({
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

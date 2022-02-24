@@ -5,12 +5,14 @@ const initialState : {
     data: {
         isNewChatboxVisible: boolean,
         isChatboxVisible: boolean,
+        isListConversationVisible: boolean,
         conversation: ItemListConversation|null
     }
 } = {
     data: {
         isNewChatboxVisible: false,
         isChatboxVisible: false,
+        isListConversationVisible: false,
         conversation: null
     }
 };
@@ -32,6 +34,12 @@ const miniChatSlice = createSlice({
                 conversation: action.payload.conversation
             }
         },
+        openListConversation (state) {
+            state.data = {
+                ...state.data,
+                isListConversationVisible: true
+            }
+        },
         dismissCreateNewChatMini (state) {
             state.data = {
                 ...state.data,
@@ -44,10 +52,16 @@ const miniChatSlice = createSlice({
                 isChatboxVisible: false,
                 conversation: null
             }
+        },
+        dismissListConversation (state) {
+            state.data = {
+                ...state.data,
+                isListConversationVisible: false
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { openCreateNewChatMini, openChatBox, dismissCreateNewChatMini, dismissChatBox } = miniChatSlice.actions;
+export const { openCreateNewChatMini, openChatBox, dismissCreateNewChatMini, dismissChatBox, dismissListConversation, openListConversation } = miniChatSlice.actions;
 export default miniChatSlice.reducer;

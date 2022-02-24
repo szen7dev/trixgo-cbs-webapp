@@ -68,7 +68,7 @@ export const MiniChatSection:FC<Props> = ({chat}) => {
                     <span className="truncate">{getNameConversation(chat, profileId)}</span>
                     <img src={iconChevronDown} alt="Dropdown" className="w-4 h-4 object-contain ml-2 filter-white" />
                 </button>
-                <Link to={`messages#${chat._id}`} className={"mr-4"}>
+                <Link to={`/messages#${chat._id}`} className={"mr-4"}>
                     <img src={OpenNewTab} className={"w-[18px] h-[18px]"} alt={"-----"}/>
                 </Link>
                 <button

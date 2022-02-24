@@ -10,9 +10,11 @@ import {RightClickMenuWrapper} from "shareComponents/common";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
-    chat: ItemListConversation
+    chat: ItemListConversation;
+    customLink?: string;
+    customOnClick?: (chat: ItemListConversation) => void;
 }
-export const ListChatItem:FC<Props> = ({chat}) => {
+export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
@@ -96,8 +98,14 @@ export const ListChatItem:FC<Props> = ({chat}) => {
             contextMenu={<OptionListItemRightClick/>}
         >
             <NavLink
-                onClick={() => setCurrentChat(chat._id)}
-                to={`#${chat._id}`}
+                onClick={() => {
+                    if (customOnClick) {
+                        customOnClick(chat)
+                    } else {
+                        setCurrentChat(chat._id)
+                    }
+                }}
+                to={customLink??`#${chat._id}`}
                 className={"group smooth-animation flex p-[10px] cursor-pointer rounded-lg z-1 " + (currentChat===chat._id ? "bg-primary":"hover:bg-gray-100")}>
                 {
                     chat.avatar?
