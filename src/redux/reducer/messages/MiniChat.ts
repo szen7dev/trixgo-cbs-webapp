@@ -58,10 +58,16 @@ const miniChatSlice = createSlice({
                 ...state.data,
                 isListConversationVisible: false
             }
-        }
+        },
+        toggleListConversation (state) {
+            state.data = {
+                ...state.data,
+                isListConversationVisible: !state.data.isListConversationVisible
+            }
+        },
     },
     extraReducers: {}
 });
 
-export const { openCreateNewChatMini, openChatBox, dismissCreateNewChatMini, dismissChatBox, dismissListConversation, openListConversation } = miniChatSlice.actions;
+export const { openCreateNewChatMini, openChatBox, dismissCreateNewChatMini, dismissChatBox, dismissListConversation, openListConversation, toggleListConversation } = miniChatSlice.actions;
 export default miniChatSlice.reducer;

@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {map as _map} from "lodash";
-import {openChatBox, openCreateNewChatMini, openListConversation} from "redux/reducer/messages/MiniChat";
+import {openChatBox, openCreateNewChatMini, toggleListConversation} from "redux/reducer/messages/MiniChat";
 import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/ListCoversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
@@ -114,7 +114,7 @@ export const MiniChatGroup:FC = () => {
                 {
                     amountMissMessage > 0 &&
                     <button
-                    onClick={() => dispatch(openListConversation())}
+                    onClick={() => dispatch(toggleListConversation())}
                     className="block ml-auto mr-auto relative mb-4 relative bg-gray-100 w-10 h-10 min-w-10 min-h-10 rounded-full">
                         <span
                             className={"bg-negative rounded-full px-2 py-1 text-white text-xxs"}>{amountMissMessage}</span>

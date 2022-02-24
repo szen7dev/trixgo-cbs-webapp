@@ -4,7 +4,7 @@ import {RootState} from "redux/reducer";
 import {ListChatItem} from "views/messages/pages/MessageHome/sections/MessageList";
 import {map as _map} from "lodash";
 import {Link} from "react-router-dom";
-import {openChatBox} from "redux/reducer/messages/MiniChat";
+import {openChatBox, dismissListConversation} from "redux/reducer/messages/MiniChat";
 
 export const MiniListConversation:FC = () => {
     const {isListConversationVisible} = useSelector((state: RootState) => state.miniChat.data);
@@ -37,7 +37,10 @@ export const MiniListConversation:FC = () => {
                         })
                         .slice(0, 5), conversation => (
                         <ListChatItem
-                            customOnClick={chat => dispatch(openChatBox({conversation: chat}))}
+                            customOnClick={chat => {
+                                dispatch(openChatBox({conversation: chat}))
+                                dispatch(dismissListConversation())
+                            }}
                             customLink={""}
                             key={conversation._id} chat={conversation}/>
                     ))
