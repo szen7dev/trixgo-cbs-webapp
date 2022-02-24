@@ -2,7 +2,7 @@ import cn from "classnames";
 import { ElementType, FC, HTMLAttributes } from "react";
 import { NavLink } from "react-router-dom";
 import 'views/media/styles/index.css';
-interface PageProps {
+export interface PageProps {
 	id: string | number
 	path?: string
 	title: string
@@ -10,6 +10,7 @@ interface PageProps {
 	isPrivate?: boolean,
 	navExact?: boolean,
 	navStrict?: boolean,
+	isActive?: (match: any, location: any) => boolean,
 }
 type Props = {
 	rightHeader?: ElementType,
@@ -38,9 +39,9 @@ const LayoutPrimary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ value, onCl
 											: ""
 									)}
 									activeClassName={value ? "" : "border-cbs-primary text-black font-bold"}
-									style={{ minWidth: "110px" }}
 									to={{ pathname: page.path || '/', state: page.state }}
 									exact
+									isActive={page.isActive}
 								// exact={page.navExact}
 								// strict={page.navStrict}
 								>
