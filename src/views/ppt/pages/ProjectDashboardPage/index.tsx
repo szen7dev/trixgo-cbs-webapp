@@ -1,0 +1,90 @@
+import { FC, useEffect } from "react";
+import SwiperCore, { Navigation } from 'swiper';
+
+import cn from "classnames";
+import 'chartjs-adapter-moment';
+import 'moment/locale/vi';
+
+import styles from "../../style.module.css";
+import 'swiper/swiper.min.css';
+
+import ReportTimeLine from "./components/ReportTimeLine";
+import ReportTotal from "./components/ReportTotal";
+import ReportActivity from "./components/RreportActivity";
+import ReportChart from "./components/ReportChart";
+import ReportContractor from "./components/ReportContractor";
+import ReportProfile from "./components/ReportProfile";
+import ReportMainWork from "./components/ReportMainWork";
+import ReportImage from "./components/ReportImage";
+import ReportBudget from "./components/ReportBudget";
+import ReportQuickReport from "./components/ReportQuickReport";
+import ReportContractStatus from "./components/ReportContractStatus";
+import ReportMultipleChart from "./components/ReportMultipleChart";
+
+SwiperCore.use([Navigation]);
+
+const ProjectDashboardPortfolioPage: FC = () => {
+	useEffect(() => {
+		document.title = "CHG.THT-Báo cáo quản trị";
+	}, []);
+
+	return (
+		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>
+			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1 h-full")}>
+				{/* Content */}
+				<div className="flex flex-wrap -mx-2">
+					<div className="w-8/12">
+						<div className="flex flex-wrap w-full">
+							<div className="flex flex-wrap w-full">
+								{/* Timeline */}
+								<ReportTimeLine className="bg-white mx-2 py-3 px-6 flex items-end mt-4 flex-auto" />
+
+								<div className="flex flex-1">
+									{/* Total Invest */}
+									<ReportTotal className="bg-white mx-2 flex-1 py-2 pl-4 pr-5 mt-4" style={{ minWidth: "116px" }} />
+
+									{/* Activity */}
+									<ReportActivity className="bg-white mx-2 flex-1 py-2 pl-4 pr-5 mt-4" />
+								</div>
+							</div>
+
+							{/* Chartjs */}
+							<ReportChart className='bg-white mx-2 w-full mt-4' />
+
+							{/* Images */}
+							<ReportImage className="w-full px-2" />
+
+							<div className="flex flex-wrap w-full">
+								{/* Budget and Cost */}
+								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} />
+								<div className="flex flex-1">
+									{/* Contractor */}
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} />
+
+									{/* Profile */}
+									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="w-4/12">
+						<div className="w-full flex flex-wrap px-2">
+							{/* Main Work */}
+							<ReportMainWork className={cn(styles['work-wrapper'], 'bg-white h-full pl-6 pr-5 pt-5 pb-7 w-full mt-4')} />
+
+							{/* Multiple Chart */}
+							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' />
+
+							{/* Quick report */}
+							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} />
+
+							{/* Contract status */}
+							<ReportContractStatus className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4 overflow-hidden')} />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div >
+	);
+};
+export default ProjectDashboardPortfolioPage;

@@ -19,6 +19,7 @@ import AuthenticationRouter from "./authentication";
 import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
+// import PPTRouter from "views/ppt/routes/ProjectRoutes";
 // import FinancialRouter from "./financial";
 // import HomeRouter from './home';
 import HumanRouter from "./human";
