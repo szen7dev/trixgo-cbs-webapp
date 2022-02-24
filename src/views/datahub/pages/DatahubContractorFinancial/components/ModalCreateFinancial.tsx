@@ -1,7 +1,12 @@
-import { Dialog } from '@headlessui/react'
-import { ModalContainer } from 'shareComponents/common'
-import TField from 'views/datahub/sharedComponents/common/TForm/TField'
 import React, { FC } from 'react'
+import { Form, Formik } from 'formik';
+import { Dialog } from '@headlessui/react'
+
+import { ModalContainer } from 'shareComponents/common'
+import { CustomFieldFormik } from 'views/datahub/sharedComponents/common';
+import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik';
+
+import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
 	show: boolean
@@ -12,6 +17,22 @@ type Props = {
 }
 
 const ModalCreateFinancial: FC<Props> = (props) => {
+	const initialValues = {
+		year: null as Date|null,
+		asset: '',
+		liabilitiy: '',
+		netWorth: '',
+		currentAsset: '',
+		shortTermLiabilitiy: '',
+		workingCapital: '',
+		grossRevenue: '',
+		grossConstructionRevenue: '',
+		grossProfit: '',
+		grossProfitAfterTax: '',
+	}
+	const handleSubmit = (values: typeof initialValues) => {
+		console.log(values);
+	}
 	return (
 		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
 			<div
@@ -43,31 +64,38 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 						</svg>
 					</button>
 				</div>
-				<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
-					<div className="whitespace-nowrap space-y-4 py-5">
-						<TField name='year' title='Năm tài chính' as='input' required />
-						<TField name='total' title='Tổng tài sản' as='input' />
-						<TField name='total_1' title='Tổng nợ' as='input' />
-						<TField name='total_2' title='Giá trị tài sản ròng' as='input' />
-						<TField name='total_3' title='Tài sản ngắn hạn' as='input' />
-						<TField name='total_4' title='Nợ ngắn hạn' as='input' />
-						<TField name='total_5' title='Vốn lưu động' as='input' />
-						<TField name='total_6' title='Tổng doanh thu' as='input' required />
-						<TField name='total_7' title='Tổng doanh thu trong lĩnh vực xây dựng' required as='input' />
-						<TField name='profit' title='Lợi nhuận trước thuế' required as='input' />
-						<TField name='profit_1' title='Lợi nhuận sau thuế' as='input' />
-					</div>
-				</div>
-				<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
-					<div className="mr-1.5">
-						<button
-							type="submit"
-							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
-						>
-							Xác nhận
-						</button>
-					</div>
-				</div>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+				>
+					<Form>
+						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
+							<div className="whitespace-nowrap space-y-4 py-5">
+								<CustomDatePickerFormik name='year' title='Năm tài chính' required showYearPicker dateFormat="yyyy" />
+								<CustomFieldFormik name='asset' title='Tổng tài sản' />
+								<CustomFieldFormik name='liabilitiy' title='Tổng nợ' />
+								<CustomFieldFormik name='netWorth' title='Giá trị tài sản ròng' />
+								<CustomFieldFormik name='currentAsset' title='Tài sản ngắn hạn' />
+								<CustomFieldFormik name='shortTermLiabilitiy' title='Nợ ngắn hạn' />
+								<CustomFieldFormik name='workingCapital' title='Vốn lưu động' />
+								<CustomFieldFormik name='grossRevenue' title='Tổng doanh thu' required />
+								<CustomFieldFormik name='grossConstructionRevenue' title='Tổng doanh thu trong lĩnh vực xây dựng' required />
+								<CustomFieldFormik name='grossProfit' title='Lợi nhuận trước thuế' required />
+								<CustomFieldFormik name='grossProfitAfterTax' title='Lợi nhuận sau thuế' />
+							</div>
+						</div>
+						<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
+							<div className="mr-1.5">
+								<button
+									type="submit"
+									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
+								>
+									Xác nhận
+								</button>
+							</div>
+						</div>
+					</Form>
+				</Formik>
 			</div>
 		</ModalContainer>
 	)

@@ -1,8 +1,9 @@
+import React, { FC } from 'react'
 import { Dialog } from '@headlessui/react'
 import { ModalContainer } from 'shareComponents/common'
-import TField from 'views/datahub/sharedComponents/common/TForm/TField'
-import TSelect from 'views/datahub/sharedComponents/common/TForm/TSelect'
-import React, { FC } from 'react'
+
+import { Form, Formik } from 'formik'
+import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
 
 type Props = {
 	show: boolean
@@ -12,7 +13,31 @@ type Props = {
 	toggle: () => void
 }
 
+// Declare type of formValues for Formik
+type FormValues = {
+	description: string
+	content: string
+	type: any
+}
+
 const ModalCreateProject: FC<Props> = (props) => {
+	// Declare initialValues here
+	const initialValues = {
+		project: null, // Dự án
+		client: null, // Chủ dự án
+		field: null, // Lĩnh vực
+
+		name: '', // Tên hợp đồng
+		sign: '', // Mã hiệu
+
+		description: '',
+		content: '',
+		type: null
+	}
+	const handleSubmit = (values: FormValues) => {
+		console.log(values)
+	}
+
 	return (
 		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
 			<div
@@ -44,66 +69,68 @@ const ModalCreateProject: FC<Props> = (props) => {
 						</svg>
 					</button>
 				</div>
-				<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
-					<div className="whitespace-nowrap space-y-4 py-5">
-						<TSelect name='owner' title='Tính chất phổ biến' required>
-							<option className='opacity-30' disabled>Chủ đầu tư</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-						</TSelect>
-						<TField name='address' title='Địa chỉ dự án' as='input' required placeholder='Địa chỉ dự án' />
-						<TSelect name='address_project' title='Khu vực dự án' required>
-							<option className='opacity-30' disabled>Khu vực dự án</option>
-							<option>Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội</option>
-							<option>Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội</option>
-							<option>Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội</option>
-						</TSelect>
-						<TField name='location' title='Địa chỉ theo GG map' as='input' placeholder='Địa chỉ theo GG map' />
-						<TField name='name' title='Tên' as='input' required placeholder='Tên' />
-						<TField name='code' title='Mã hiệu' as='input' required placeholder='Mã hiệu' />
-						<TField name='note' title='Ghi chú' as='input' required placeholder='Ghi chú' />
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+				>
+					<Form>
+						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
+							<div className="whitespace-nowrap space-y-4 py-5">
+								<CustomAutoCompleteFormik title='Chủ đầu tư' name='owner' required data={[
+									{ name: 'Công ty Cổ phần PGI Partners' },
+									{ name: 'Công ty Cổ phần PGI Partners2' },
+									{ name: 'Công ty Cổ phần PGI Partners3' },
+								]} />
+								<CustomFieldFormik title='Địa chỉ dự án' required name='address' />
+								<CustomAutoCompleteFormik title='Khu vực dự án' name='address_project' required data={[
+									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội ' },
+									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội 2' },
+									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội 3' },
+								]} />
+								<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />
+								<CustomFieldFormik name='name' title='Tên' required />
+								<CustomFieldFormik name='sign' title='Mã hiệu' required />
+								<CustomFieldFormik name='note' title='Ghi chú' required as="textarea" />
 
-						<TSelect name='PROJECT_TYPES' title='Nhóm dự án'>
-							<option className='opacity-30' disabled>Nhóm dự án</option>
-							<option>Nhóm A</option>
-							<option>Nhóm A</option>
-							<option>Nhóm A</option>
-						</TSelect>
-						<TSelect name='BUILDING_TYPES' title='Loại công trình' defaultValue='0'>
-							<option className='opacity-30' disabled>Loại công trình</option>
-							<option>Dân dụng</option>
-							<option>Dân dụng</option>
-							<option>Dân dụng</option>
-						</TSelect>
-						<TSelect name='BUILDING_GRADES' title='Cấp công trình'>
-							<option className='opacity-30' disabled>Cấp công trình</option>
-							<option>Cấp 1</option>
-							<option>Cấp 2</option>
-							<option>Cấp 3</option>
-						</TSelect>
-						<TField name='basementNumber' title='Cấp công trình' as='input' placeholder='Cấp công trình' />
-						<TField name='basementArea' title='Diện tích tầng hầm' as='input' placeholder='Diện tích tầng hầm' />
-						<TField name='floorNumber' title='Số tầng cao' as='input' placeholder='Số tầng cao' />
-						<TField name='floorArea' title='Diện tích tầng cao' as='input' placeholder='Diện tích tầng cao' />
-						<TSelect name='BUILDING_GRADES' title='Tình trạng dự án'>
-							<option className='opacity-30' disabled>Tình trạng dự án</option>
-							<option>Đang triển khai</option>
-							<option>Đang triển khai</option>
-							<option>Đang triển khai</option>
-						</TSelect>
-					</div>
-				</div>
-				<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
-					<div className="mr-1.5">
-						<button
-							type="submit"
-							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
-						>
-							Xác nhận
-						</button>
-					</div>
-				</div>
+								<CustomAutoCompleteFormik title='Nhóm dự án' name='PROJECT_TYPES' required data={[
+									{ name: 'Nhóm A' },
+									{ name: 'Nhóm B2' },
+									{ name: 'Nhóm C3' },
+								]} />
+								<CustomAutoCompleteFormik title='Loại công trình' name='BUILDING_TYPES' required data={[
+									{ name: 'Dân dụng' },
+									{ name: 'Dân dụng' },
+									{ name: 'Dân dụng' },
+								]} />
+								<CustomAutoCompleteFormik title='Cấp công trình' name='BUILDING_GRADES' required data={[
+									{ name: 'Cấp 1' },
+									{ name: 'Cấp 2' },
+									{ name: 'Cấp 3' },
+								]} />
+
+								<CustomFieldFormik name='basementNumber' title='Cấp công trình' />
+								<CustomFieldFormik name='basementArea' title='Diện tích tầng hầm' />
+								<CustomFieldFormik name='floorNumber' title='Số tầng cao' />
+								<CustomFieldFormik name='floorArea' title='Diện tích tầng cao' />
+								<CustomAutoCompleteFormik title='Tình trạng dự án' name='status' required data={[
+									{ name: 'Đang triển khai' },
+									{ name: 'Đang triển khai' },
+									{ name: 'Đang triển khai' },
+								]} />
+							</div>
+						</div>
+						<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
+							<div className="mr-1.5">
+								<button
+									type="submit"
+									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
+								>
+									Xác nhận
+								</button>
+							</div>
+						</div>
+					</Form>
+				</Formik>
 			</div>
 		</ModalContainer>
 	)
