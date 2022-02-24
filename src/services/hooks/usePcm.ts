@@ -56,7 +56,7 @@ export const usePcm = () : UsePcm => {
     
     // console.log('==============>>>>>')
     // console.log(dataListTasks)
-    console.log(PcmRepository)
+    // console.log(PcmRepository)
 
     const listTasks = [].concat(...(dataListTasks?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListTasks?.pages[0]?.data?.totalRecord;
