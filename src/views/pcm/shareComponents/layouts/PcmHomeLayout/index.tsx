@@ -103,7 +103,7 @@ export const PcmHomeLayout: FC<Props> = ({ children }) => {
             src={iconChat}
             alt="Chat"
           />
-          <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span>
+          {/* <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span> */}
         </button>
       }
 
