@@ -1436,11 +1436,18 @@ input[type="text"] {
   padding: 0 10px;
 }
 .t-mini-chat .input-wrapper {
-  @apply bg-gray-100 rounded-full
+  border-radius: 1.5rem;
+  @apply bg-gray-100
 }
 .date-message {
   transform: translate(0, 5px);
 }
 .date-text-message {
   transform: translateX(20px);
+}
+.t-mini-chat .attach-vote,
+.t-mini-chat .attach-reminder,
+.t-mini-chat .attach-contact,
+.t-mini-chat .attach-nps {
+  display: none;
 }
