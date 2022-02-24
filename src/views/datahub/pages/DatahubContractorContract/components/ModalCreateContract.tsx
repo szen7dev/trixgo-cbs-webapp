@@ -1,8 +1,10 @@
-import { Dialog } from '@headlessui/react'
-import { ModalContainer } from 'shareComponents/common'
-import TField from 'views/datahub/sharedComponents/common/TForm/TField'
-import TSelect from 'views/datahub/sharedComponents/common/TForm/TSelect'
 import React, { FC } from 'react'
+import { Form, Formik } from 'formik'
+import { Dialog } from '@headlessui/react'
+
+import { ModalContainer } from 'shareComponents/common'
+import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik'
 
 type Props = {
 	show: boolean
@@ -13,6 +15,24 @@ type Props = {
 }
 
 const ModalCreateContract: FC<Props> = (props) => {
+	const initialValues = {
+		project: null as any,
+		client: null as any,
+		field: null as any,
+		name: '',
+		sign: '',
+		note: '',
+		value: '',
+		vatValue: '',
+		date: null as Date | null,
+		startTime: null as Date | null,
+		endTime: null as Date | null,
+		status: null as any,
+	}
+	const handleSubmit = (values: typeof initialValues) => {
+		console.log(values);
+	}
+
 	return (
 		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
 			<div
@@ -44,52 +64,55 @@ const ModalCreateContract: FC<Props> = (props) => {
 						</svg>
 					</button>
 				</div>
-				<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
-					<div className="whitespace-nowrap space-y-4 py-5">
-						<TSelect name='project' title='Dự án' required>
-							<option className='opacity-30' disabled>Tổ hợp chung cư cao tầng K2G</option>
-							<option>Tổ hợp chung cư cao tầng K2G</option>
-							<option>Tổ hợp chung cư cao tầng K2G</option>
-							<option>Tổ hợp chung cư cao tầng K2G</option>
-						</TSelect>
-						<TSelect name='owner' title='Chủ đầu tư'>
-							<option className='opacity-30' disabled>Chủ đầu tư</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-							<option>Công ty Cổ phần PGI Partners</option>
-						</TSelect>
-						<TSelect name='PROJECT_TYPES' title='Lĩnh vực'>
-							<option className='opacity-30' disabled>Lĩnh vực</option>
-							<option>Tư vấn quản lý dự án</option>
-							<option>Tư vấn quản lý dự án</option>
-							<option>Tư vấn quản lý dự án</option>
-						</TSelect>
-						<TField name='name' title='Tên hợp đồng' as='input' required />
-						<TField name='code' title='Mã hiệu' as='input' />
-						<TField name='node' title='Ghi chú' as='input' />
-						<TField name='value' title='Giá trị hợp đồng trước VAT' as='input' />
-						<TField name='vat' title='Giá trị phần VAT' as='input' required/>
-						<TField name='time' title='Ngày ký' as='input' />
-						<TField name='start' title='Ngày bắt đầu thực hiện' as='input' />
-						<TField name='end' title='Ngày kết thúc thực hiện' as='input' required />
-						<TSelect name='status' title='Tình trạng'>
-							<option className='opacity-30' disabled>Tình trạng</option>
-							<option>Đang thực hiện</option>
-							<option>Đang thực hiện</option>
-							<option>Đang thực hiện</option>
-						</TSelect>
-					</div>
-				</div>
-				<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
-					<div className="mr-1.5">
-						<button
-							type="submit"
-							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
-						>
-							Xác nhận
-						</button>
-					</div>
-				</div>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+				>
+					<Form>
+						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
+							<div className="whitespace-nowrap space-y-4 py-5">
+								<CustomAutoCompleteFormik name='project' title='Dự án' required data={[
+									{ name: 'Tổ hợp chung cư cao tầng K2G' },
+									{ name: 'Tổ hợp chung cư cao tầng K2G' },
+									{ name: 'Tổ hợp chung cư cao tầng K2G' },
+								]} />
+								<CustomAutoCompleteFormik name='client' title='Chủ đầu tư' data={[
+									{ name: 'Công ty Cổ phần PGI Partners' },
+									{ name: 'Công ty Cổ phần PGI Partners' },
+									{ name: 'Công ty Cổ phần PGI Partners' },
+								]} />
+								<CustomAutoCompleteFormik name='field' title='Lĩnh vực' data={[
+									{ name: 'Tư vấn quản lý dự án' },
+									{ name: 'Tư vấn quản lý dự án' },
+									{ name: 'Tư vấn quản lý dự án' },
+								]} />
+								<CustomFieldFormik name='name' title='Tên hợp đồng' required />
+								<CustomFieldFormik name='sign' title='Mã hiệu' />
+								<CustomFieldFormik name='note' title='Ghi chú' />
+								<CustomFieldFormik name='value' title='Giá trị hợp đồng trước VAT' />
+								<CustomFieldFormik name='vatValue' title='Giá trị phần VAT' required />
+								<CustomDatePickerFormik name='date' title='Ngày ký' />
+								<CustomDatePickerFormik name='startTime' title='Ngày bắt đầu thực hiện' />
+								<CustomDatePickerFormik name='endTime' title='Ngày kết thúc thực hiện' required />
+								<CustomAutoCompleteFormik name='status' title='Tình trạng' data={[
+									{ name: 'Đang thực hiện' },
+									{ name: 'Đang thực hiện' },
+									{ name: 'Đang thực hiện' },
+								]} />
+							</div>
+						</div>
+						<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
+							<div className="mr-1.5">
+								<button
+									type="submit"
+									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
+								>
+									Xác nhận
+								</button>
+							</div>
+						</div>
+					</Form>
+				</Formik>
 			</div>
 		</ModalContainer>
 	)

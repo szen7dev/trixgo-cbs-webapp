@@ -20,7 +20,7 @@ const DatahubContractorLayout: FC = ({ children }) => {
 		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-cbs-gray'>
 			<div className='w-full max-w-[1185px] mx-auto space-y-10'>
 				{/* ======= FIRST BLOCK ======= */}
-				<div className='bg-white border-cbs-border border-[0.5px] mx-3.5'>
+				<div className='bg-white border-cbs-border border-[0.5px] border-b-0 mx-3.5'>
 					{/* ======= BACKGROUND ======= */}
 					<div className='h-[365px]'>
 						<img className='w-full h-full object-cover' src="https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg" alt="" />
@@ -65,35 +65,37 @@ const DatahubContractorLayout: FC = ({ children }) => {
 							</div>
 						</div>
 					</div>
-					{/* ======= LIST ACTIONS ======= */}
-					<div className='flex justify-between px-4'>
-						<div className='space-x-8'>
-							<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/home/' + params.id}>Home</NavLink>
-							<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/service"}>Dịch vụ</NavLink>
-							<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/financial"}>Tài chính</NavLink>
-							<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/contract"}>Hợp đồng</NavLink>
-							<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/profile"}>HSNL</NavLink>
-						</div>
-						<div className='space-x-2 flex items-center'>
-							<button className='bg-cbs-active-comment text-cbs-primary p-1.5 rounded-cbs'>
-								<img className='inline-block w-6 h-6 mr-2' src={iconRss} alt="" />
-								Theo dõi
-							</button>
-							<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
-								<img className='inline-block w-6 h-6 mr-2' src={iconChat} alt="" />
-								Nhắn tin
-							</button>
-							<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
-								<SearchIcon className='h-6 w-6' />
-							</button>
-							<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
-								<DotsHorizontalIcon className='h-6 w-6' />
-							</button>
-						</div>
-					</div>
 				</div>
 			</div>
 
+			<div className='w-full max-w-[1185px] mx-auto space-y-10 sticky top-0 z-2'>
+				{/* ======= LIST ACTIONS ======= */}
+				<div className='bg-white sticky top-0 flex justify-between px-4 mx-3.5 border-[0.5px] border-cbs-border border-t-0'>
+					<div className='space-x-8'>
+						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/home/' + params.id}>Home</NavLink>
+						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/service"}>Dịch vụ</NavLink>
+						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/financial"}>Tài chính</NavLink>
+						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/contract"}>Hợp đồng</NavLink>
+						<NavLink exact className='inline-block py-5 border-b border-transparent' activeClassName='text-cbs-primary border-cbs-primary' to={'/datahub/contractor/' + params.id + "/profile"}>HSNL</NavLink>
+					</div>
+					<div className='space-x-2 flex items-center'>
+						<button className='bg-cbs-active-comment text-cbs-primary p-1.5 rounded-cbs'>
+							<img className='inline-block w-6 h-6 mr-2' src={iconRss} alt="" />
+							Theo dõi
+						</button>
+						<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
+							<img className='inline-block w-6 h-6 mr-2' src={iconChat} alt="" />
+							Nhắn tin
+						</button>
+						<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
+							<SearchIcon className='h-6 w-6' />
+						</button>
+						<button className='bg-cbs-gray text-cbs-subtext p-1.5 rounded-cbs'>
+							<DotsHorizontalIcon className='h-6 w-6' />
+						</button>
+					</div>
+				</div>
+			</div>
 			<div className='flex justify-center'>
 				<div className='w-full max-w-[1185px] mt-4 flex justify-center'>
 					{children}

@@ -1,7 +1,10 @@
 import React, { FC } from 'react'
 import { Dialog } from '@headlessui/react'
+
+import { Form, Formik } from 'formik'
+
 import { ModalContainer } from 'shareComponents/common'
-import TField from 'views/datahub/sharedComponents/common/TForm/TField'
+import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
 
 type Props = {
 	show: boolean
@@ -12,6 +15,14 @@ type Props = {
 }
 
 const ModalCreateInspection: FC<Props> = (props) => {
+	const initialValues = {
+		content: '',
+		name: '',
+		description: ''
+	}
+	const handleSubmit = (values: typeof initialValues) => {
+		console.log(values);
+	}
 	return (
 		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
 			<div
@@ -43,23 +54,31 @@ const ModalCreateInspection: FC<Props> = (props) => {
 						</svg>
 					</button>
 				</div>
-				<div className="px-5 pb-4 overflow-x-auto">
-					<div className="whitespace-nowrap space-y-4 py-5">
-						<TField name='content' title='Tên' as='input' required />
-						<TField name='code' title='Mã hiệu' as='input' required />
-						<TField name='description' title='Mô tả' as='input' required />
-					</div>
-				</div>
-				<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
-					<div className="mr-1.5">
-						<button
-							type="submit"
-							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
-						>
-							Xác nhận
-						</button>
-					</div>
-				</div>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+				>
+					<Form>
+						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
+							<div className="whitespace-nowrap space-y-4 py-5">
+								<CustomFieldFormik name='content' title='Tên' />
+								<CustomFieldFormik name='code' title='Mã hiệu' />
+								<CustomFieldFormik name='description' title='Mô tả' />
+							</div>
+						</div>
+
+						<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
+							<div className="mr-1.5">
+								<button
+									type="submit"
+									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
+								>
+									Xác nhận
+								</button>
+							</div>
+						</div>
+					</Form>
+				</Formik>
 			</div>
 		</ModalContainer>
 	)

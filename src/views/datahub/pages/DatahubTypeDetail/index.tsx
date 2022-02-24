@@ -13,7 +13,7 @@ import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
-import ModalCreateType from "../../sharedComponents/ModalCreateType";
+import ModalCreateType from "./components/ModalCreateType";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,

@@ -9,22 +9,23 @@ import ErrorPage from 'views/authentication/Error'
 import LayoutPrimary from 'views/datahub/sharedComponents/layouts/LayoutPrimary'
 import DatahubContractorLayout from 'views/datahub/sharedComponents/layouts/DatahubContractorLayout'
 
-import DatahubContractorContract from 'views/datahub/pages/DatahubContractorContract'
-import DatahubContractorDetail from 'views/datahub/pages/DatahubContractorDetail'
-import DatahubContractorFinancial from 'views/datahub/pages/DatahubContractorFinancial'
-import DatahubContractorHome from 'views/datahub/pages/DatahubContractorHome'
-import DatahubContractorProfile from 'views/datahub/pages/DatahubContractorProfile'
-import DatahubContractorService from 'views/datahub/pages/DatahubContractorService'
-
-import DatahubHome from 'views/datahub/pages/DatahubHome'
-import DatahubHomeDetail from 'views/datahub/pages/DatahubHomeDetail'
-import DatahubProject from 'views/datahub/pages/DatahubProject'
-import DatahubType from 'views/datahub/pages/DatahubType'
-import DatahubTypeDetail from 'views/datahub/pages/DatahubTypeDetail'
-import DatahubInspection from 'views/datahub/pages/DatahubInspection'
-import DatahubInspectionDetail from 'views/datahub/pages/DatahubInspectionDetail'
-import DatahubPrice from 'views/datahub/pages/DatahubPrice'
-import DatahubProjectMap from 'views/datahub/pages/DatahubProjectMap'
+import { 
+	DatahubContractorContract,
+	DatahubContractorDetail,
+	DatahubContractorFinancial,
+	DatahubContractorHome,
+	DatahubContractorProfile,
+	DatahubContractorService,
+	DatahubHome,
+	DatahubHomeDetail,
+	DatahubProject,
+	DatahubType,
+	DatahubTypeDetail,
+	DatahubInspection,
+	DatahubInspectionDetail,
+	DatahubPrice,
+	DatahubProjectMap
+ } from 'views/datahub/pages'
 
 type Routes = Array<{
 	path: string,

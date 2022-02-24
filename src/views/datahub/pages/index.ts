@@ -1,0 +1,16 @@
+export { default as DatahubContractorContract } from "views/datahub/pages/DatahubContractorContract";
+export { default as DatahubContractorDetail } from "views/datahub/pages/DatahubContractorDetail";
+export { default as DatahubContractorFinancial } from "views/datahub/pages/DatahubContractorFinancial";
+export { default as DatahubContractorHome } from "views/datahub/pages/DatahubContractorHome";
+export { default as DatahubContractorProfile } from "views/datahub/pages/DatahubContractorProfile";
+export { default as DatahubContractorService } from "views/datahub/pages/DatahubContractorService";
+
+export { default as DatahubHome } from "views/datahub/pages/DatahubHome";
+export { default as DatahubHomeDetail } from "views/datahub/pages/DatahubHomeDetail";
+export { default as DatahubProject } from "views/datahub/pages/DatahubProject";
+export { default as DatahubType } from "views/datahub/pages/DatahubType";
+export { default as DatahubTypeDetail } from "views/datahub/pages/DatahubTypeDetail";
+export { default as DatahubInspection } from "views/datahub/pages/DatahubInspection";
+export { default as DatahubInspectionDetail } from "views/datahub/pages/DatahubInspectionDetail";
+export { default as DatahubPrice } from "views/datahub/pages/DatahubPrice";
+export { default as DatahubProjectMap } from "views/datahub/pages/DatahubProjectMap";

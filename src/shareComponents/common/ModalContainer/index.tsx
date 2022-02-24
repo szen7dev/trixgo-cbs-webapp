@@ -8,7 +8,7 @@ interface Props {
 
 export const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children }) => {
 	return (
-		<Transition.Root appear show={isModalOpen} as={Fragment}>
+		<Transition appear show={isModalOpen} as={Fragment}>
 			<Dialog
 				as="div"
 				className="fixed inset-0 z-50 overflow-y-auto"
@@ -48,6 +48,6 @@ export const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children }) => 
 					</Transition.Child>
 				</div>
 			</Dialog>
-		</Transition.Root>
+		</Transition>
 	)
 };

@@ -13,56 +13,58 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 		<>
 			<div className='bg-white w-full mx-3.5 pt-4 pb-[50px]'>
 				<div className='flex flex-wrap gap-y-3.5'>
-					<div className='w-3/12 px-2 min-h-[330px]'>
-						<div className='h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5'>
-							<div className='flex'>
-								<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
-									<div className='w-9 h-9'>
-										<img src={FolderImage} alt="" />
+					{
+						Array.from({ length: 7 }).map((_, i) => <div key={i} className='w-3/12 px-2 min-h-[330px]'>
+							<div className='h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5'>
+								<div className='flex'>
+									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
+										<div className='w-9 h-9'>
+											<img src={FolderImage} alt="" />
+										</div>
 									</div>
+									<p className='flex-shrink font-bold text-large'>Hồ sơ năng lực công ty CONINCO-PMI năm 2022</p>
 								</div>
-								<p className='flex-shrink font-bold text-large'>Hồ sơ năng lực công ty CONINCO-PMI năm 2022</p>
-							</div>
-							<div className='pt-2.5'>
-								<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-									<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-									<div>
-										<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-										<p className='text-x-small text-cbs-subtext mt-2'>
-											<span>1.2Mb</span>
-											-
-											<span>15/2/2022</span>
-											<span>15:30</span>
-										</p>
+								<div className='pt-2.5'>
+									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
+										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
+										<div>
+											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
+											<p className='text-x-small text-cbs-subtext mt-2'>
+												<span>1.2Mb</span>
+												-
+												<span>15/2/2022</span>
+												<span>15:30</span>
+											</p>
+										</div>
 									</div>
-								</div>
-								<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-									<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-									<div>
-										<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-										<p className='text-x-small text-cbs-subtext mt-2'>
-											<span>1.2Mb</span>
-											-
-											<span>15/2/2022</span>
-											<span>15:30</span>
-										</p>
+									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
+										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
+										<div>
+											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
+											<p className='text-x-small text-cbs-subtext mt-2'>
+												<span>1.2Mb</span>
+												-
+												<span>15/2/2022</span>
+												<span>15:30</span>
+											</p>
+										</div>
 									</div>
-								</div>
-								<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-									<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-									<div>
-										<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-										<p className='text-x-small text-cbs-subtext mt-2'>
-											<span>1.2Mb</span>
-											-
-											<span>15/2/2022</span>
-											<span>15:30</span>
-										</p>
+									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
+										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
+										<div>
+											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
+											<p className='text-x-small text-cbs-subtext mt-2'>
+												<span>1.2Mb</span>
+												-
+												<span>15/2/2022</span>
+												<span>15:30</span>
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+						)}
 					<div className='w-3/12 px-2 min-h-[330px]'>
 						<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => setShow(!show)}>
 							<div>
