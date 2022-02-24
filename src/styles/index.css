@@ -1297,6 +1297,7 @@ input[type="text"] {
 #chatting-section {
   max-width: calc(100vw - 402px);
 }
+.t-mini-chat-container,
 .messages-main-content {
   font-size: 15px;
 }
