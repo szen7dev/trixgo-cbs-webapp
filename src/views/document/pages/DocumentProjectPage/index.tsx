@@ -2,6 +2,7 @@ import React, { FC, Fragment, useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
+import debounce from 'lodash/debounce';
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
@@ -11,7 +12,7 @@ import { Paginate, Loader } from "shareComponents/common";
 
 // ========== App common Components ==========
 import {
-	DocumentDropdown,
+	// DocumentDropdown,
   DropdownFilterButton,
 	ButtonCreate,
 	ButtonMore,
@@ -26,13 +27,13 @@ import { useMutationDocumentChild } from "services/hooks/document/useDocumentChi
 
 import { IPackage } from "typings/document";
 
-const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
-  id: i,
-  title: "Thẻ lọc chính",
-}));
+// const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
+//   id: i,
+//   title: "Thẻ lọc chính",
+// }));
 
 export const DocumentProjectPage: FC = () => {
-  const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
+  // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID } = useParams<{ id: string }>();
   const [pageParam, setPageParam] = useState<any>({});
@@ -155,35 +156,43 @@ export const DocumentProjectPage: FC = () => {
     <>
       {/* Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black py-1">
-          <span className="text-x-large mr-7">Danh sách</span>
-          <SearchInput
-            classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
-            onChange={() => 1}
-          />
-          <DocumentDropdown
-            data={pkgs}
-            value={pkg.title}
-            onSelectValue={setPkg}
-          />
-          <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={pageParam}
-          />
-          {Object.keys(recordSelected).length > 0 && (
-            <GroupActions
-              className="flex items-center flex-1"
-              onClickPencil={handleOnClickUpdate(recordSelected)}
+        <div className="flex flex-wrap items-center justify-between w-full px-4 gap-x-2 text-black py-1">
+          <div className="flex flex-wrap items-center">
+            <span className="text-x-large mr-7">Danh sách</span>
+            {/* <DocumentDropdown
+              data={pkgs}
+              value={pkg.title}
+              onSelectValue={setPkg}
+            /> */}
+            <DropdownFilterButton
+              onSubmit={handleOnFilter}
+              onCancel={handleOnCancelFilter}
+              initialValues={pageParam}
             />
-          )}
-
-          <ButtonCreate onClick={handleCreate} />
-          <ButtonMore />
+            {Object.keys(recordSelected).length > 0 && (
+              <GroupActions
+                className="flex items-center flex-1"
+                onClickPencil={handleOnClickUpdate(recordSelected)}
+              />
+            )}
+            <SearchInput
+              classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
+              onChange={debounce((e) => {
+                handleOnFilter({
+                  keyword: e.target.value,
+                })
+              }, 800)}
+            />
+          </div>
+          <div className="flex flex-wrap items-center">
+            <ButtonCreate onClick={handleCreate} />
+            <ButtonMore />
+          </div>
         </div>
         <div className="flex-1 overflow-y-auto">
           {loading && <Loader absolute={true} className="border-primary" />}
-          {!loading && (
+          {data.length === 0 && <h2 className="text-center">Không có kết quả được trả về</h2>}
+          {!loading && data.length > 0 && (
             <table
               className="text-black text-medium border-separate space-x-0 space-y-0"
               style={{ borderSpacing: 0 }}

@@ -2,6 +2,7 @@
 import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import debounce from 'lodash/debounce';
 
 /*=====2.CSS=====*/
 import "views/human/styles/style.module.css";
@@ -11,6 +12,7 @@ import SearchIcon from "assets/images/icons8-search.svg";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
+import { InputClearable } from "shareComponents/common";
 import { NewHumanModal } from "views/human/shareComponents/common/NewHumanModal";
 import { useModal } from "services/hooks/useModal";
 import { DropdownFilterButton } from "views/human/shareComponents/common";
@@ -29,7 +31,7 @@ export const HumanHomePage: FC = () => {
 
   const [pageParam, setPageParam] = useState<any>({});
 
-  // Lấy ra data/MessageList data ngay lúc đầu vào màn hình
+  // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
 
   const { openModal } = useModal();
@@ -62,7 +64,7 @@ export const HumanHomePage: FC = () => {
       <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
         <div className="flex items-center">
           <p className="text-lg">Danh sách</p>
-          <div className="relative px-4">
+          <div className="relative pl-4">
             <span>
               <img
                 src={SearchIcon}
@@ -70,10 +72,16 @@ export const HumanHomePage: FC = () => {
                 className="absolute top-2 left-7 w-4 h-4"
               />
             </span>
-            <input
-              type="text"
+            <InputClearable
               placeholder="Nhập từ khóa tìm kiếm"
               className="w-[296px] h-[30px] pl-10 outline-none bg-cbs-table-header"
+              onChange={debounce((value) => {
+                handleOnFilter({
+                  keyword: value,
+                })
+              }, 800)}
+              initialValue={pageParam.keyword}
+              isSlider={false}
             />
           </div>
           <DropdownFilterButton
