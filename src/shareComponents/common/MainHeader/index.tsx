@@ -44,19 +44,19 @@ export const MainHeader: FC = () => {
             <div className="t-header-menu flex items-center flex-wrap">
             <Link to={`/`} className="font-bold ml-3 mr-3 active">
               Home
-			</Link>
+			      </Link>
             <Link to={`/messages`} className="ml-3 mr-3">
               Nhắn tin
-			</Link>
+			      </Link>
             <Link to={`/media/home`} className="ml-3 mr-3">
               Truyền thông
-			</Link>
-            <Link to={`/bidding/home`} className="ml-3 mr-3">
+			      </Link>
+            {/* <Link to={`/bidding/home`} className="ml-3 mr-3">
               Đấu thầu
-			</Link>
+			      </Link>
             <Link to={`/cmcs/home`} className="ml-3 mr-3">
               Hợp đồng
-			</Link>
+			      </Link> */}
             </div>
           </div>
 

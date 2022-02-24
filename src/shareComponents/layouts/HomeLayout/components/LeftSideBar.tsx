@@ -81,12 +81,12 @@ export const LeftSideBar: FC = () => {
               <span className="truncate">Việc nháp</span>
 					</Link> */}
 
-          <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
+          {/* <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
           <div className="t-leftsidebar-menu-container">
-            {/* <a className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" href="/pcm/messageHome" >
+            <a className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" href="/pcm/messageHome" >
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý công việc</span>
-            </a> */}
+            </a>
             <Link to={`/document/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hồ sơ văn bản</span>
@@ -95,7 +95,7 @@ export const LeftSideBar: FC = () => {
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản lý hợp đồng</span>
 						</Link>
-          </div>
+          </div> */}
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
               <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm

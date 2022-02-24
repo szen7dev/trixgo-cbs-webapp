@@ -1,5 +1,5 @@
 import React, { FC, HTMLAttributes } from 'react';
-import useScrollSticky from 'views/datahub/hooks/useScrollSticky';
+import useScrollSticky from 'services/hooks/datahub/useScrollSticky';
 import Card from '../../../sharedComponents/common/Card';
 import ContactInfo from '../../../sharedComponents/common/ContactInfo';
 
