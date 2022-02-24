@@ -10,6 +10,7 @@ import {MiniChatContext} from "../../index";
 import {ChattingInput} from "views/messages/pages/MessageHome/sections/ChattingSection";
 import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/ListCoversation";
 import OpenNewTab from "assets/images/icons8-external-link-96.svg";
+import {Link} from "react-router-dom";
 
 type Props = {
     chat: ItemListConversation
@@ -67,9 +68,9 @@ export const MiniChatSection:FC<Props> = ({chat}) => {
                     <span className="truncate">{getNameConversation(chat, profileId)}</span>
                     <img src={iconChevronDown} alt="Dropdown" className="w-4 h-4 object-contain ml-2 filter-white" />
                 </button>
-                <a href={`messages#${chat._id}`} target="_blank" rel="noreferrer" className={"mr-4"}>
+                <Link to={`messages#${chat._id}`} className={"mr-4"}>
                     <img src={OpenNewTab} className={"w-[18px] h-[18px]"} alt={"-----"}/>
-                </a>
+                </Link>
                 <button
                     className="ml-auto" onClick={() => dispatch(dismissChatBox())}>
                     <img src={iconClose} alt="Close" className="w-4 h-4 object-contain filter-white" />

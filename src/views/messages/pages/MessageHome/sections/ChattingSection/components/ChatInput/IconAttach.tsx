@@ -39,12 +39,12 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
             {
                 showOption&&
                 <div className={"absolute bottom-60px right-0 rounded-md shadow-lg bg-white min-w-[216px] text-gray-500 z-100 overflow-hidden"}>
-                    <label className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"} htmlFor={"images"}>
+                    <label className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-image"} htmlFor={"images"}>
                         <img  src={ImagesIcon} alt={"images"}/>
                         <div className={"flex-1 text-left ml-6"}>Hình ảnh</div>
                         <input type="file" name="images" id="images" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
                     </label>
-                    <label className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"} htmlFor={"files"}>
+                    <label className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-file"} htmlFor={"files"}>
                         <img  src={FileIcon} alt={"add folder"} className={"rotate-45 transform"}/>
                         <div className={"flex-1 text-left ml-6"}>File</div>
                         <input type="file" name="files" id="files" className="hidden" accept="file/*" multiple onChange={event => handleSetFiles(event)} />
@@ -54,7 +54,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(openCreatePoll({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-vote"}>
                         <img  className={"mr-2"} src={FolderIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>Bỏ phiếu</div>
                     </button>
@@ -63,7 +63,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(openCreateReminder({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-reminder"}>
                         <img  className={"mr-2"} src={AlarmIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>Lời nhắc</div>
                     </button>
@@ -72,7 +72,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(sendContactMessageToConversation({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-contact"}>
                         <img  className={"mr-2"} src={AccountIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>Chia sẻ danh bạ</div>
                     </button>
@@ -81,7 +81,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(sendNPSMessageToConversation({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-nps"}>
                         <img  className={"mr-2"} src={NPSIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>NPS</div>
                     </button>
