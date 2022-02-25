@@ -145,7 +145,7 @@ export const DocumentDetailPage: FC<Props> = () => {
           {/* General Information */}
           <div className="px-3.5 pb-3 pt-5">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              1-THÔNG TIN CHUNG
+              Thông tin chung
             </h3>
             <TableGeneralInformation docInfo={detailDocument} />
           </div>
@@ -154,7 +154,7 @@ export const DocumentDetailPage: FC<Props> = () => {
         <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              2-TÀI LIỆU ĐÍNH KÈM
+              Tài liệu đính kèm
             </h3>
             <ButtonIcon
               title="Thêm"
@@ -181,7 +181,7 @@ export const DocumentDetailPage: FC<Props> = () => {
         {/* <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              3-CÔNG VIỆC
+              Công việc
             </h3>
             <ButtonMore className="mr-6" />
             <ButtonIcon
@@ -197,7 +197,7 @@ export const DocumentDetailPage: FC<Props> = () => {
         <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              3-HỒ SƠ VĂN BẢN CON
+              Hồ sơ văn bản con
             </h3>
             <ButtonMore className="mr-6" />
             <ButtonIcon
@@ -213,7 +213,7 @@ export const DocumentDetailPage: FC<Props> = () => {
         {/* <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold">
-              5-THẢO LUẬN
+              Thảo luận
             </h3>
           </div>
           <div className="py-4"></div>
