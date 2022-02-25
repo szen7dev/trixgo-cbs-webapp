@@ -6,7 +6,7 @@ import {
     setShareMessage, revokeMessageInConversation
 } from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {setListConversation, updateSingleConversation} from "redux/reducer/messages/ListConversation";
+import {setListConversation, updateSingleConversation, setAmountMissMessage} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
@@ -57,6 +57,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             getListConversation({keyword: ""});
             return;
         }
+        dispatch(setAmountMissMessage(data.amountMissMessage))
         // console.log(data)
         if (data.infoMessage?.sender?._id === profileId) {
             dispatch(updateNewMessageToConversation({
@@ -82,7 +83,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveConversation = (data: any) => {
         // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
-        dispatch(setListConversation(data.data.listRecords));
+        dispatch(setListConversation(data.data));
     }
 
     const onFireMessage = (data: any) => {

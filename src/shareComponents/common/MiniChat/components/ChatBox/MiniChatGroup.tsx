@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {map as _map} from "lodash";
-import {openChatBox, openCreateNewChatMini} from "redux/reducer/messages/MiniChat";
+import {openChatBox, openCreateNewChatMini, toggleListConversation} from "redux/reducer/messages/MiniChat";
 import {AvatarGroupChat} from "views/messages/pages/MessageHome/sections/MessageList/components/ListCoversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
@@ -18,7 +18,7 @@ export const MiniChatGroup:FC = () => {
     const {getNameConversation,getAvatarMembers} = UseMessageHelper()
 
     const mapData = useSelector((state: RootState) => state.listConversation);
-    const {listConversation} = mapData.data;
+    const {listConversation, amountMissMessage} = mapData.data;
 
     const imageClassMap = {
         "group_1": {
@@ -98,9 +98,9 @@ export const MiniChatGroup:FC = () => {
                     {
                         userUnreadMessage(chat) > 0 &&
                         <div
-                            className={"absolute bg-negative text-white text-xs w-4 h-4 rounded-full text-center z-51 border border-white"}
+                            className={"absolute bg-negative flex items-center justify-center text-white text-xxs w-4 h-4 rounded-full text-center z-51 border border-white"}
                             style={{right: -5, top: -5}}>
-                            {userUnreadMessage(chat)}
+                            <span>{userUnreadMessage(chat)}</span>
                         </div>
                     }
                 </button>
@@ -111,6 +111,15 @@ export const MiniChatGroup:FC = () => {
     return (
         <div className="absolute left-0 bottom-16 w-full">
             <div className="text-center">
+                {
+                    amountMissMessage > 0 &&
+                    <button
+                    onClick={() => dispatch(toggleListConversation())}
+                    className="block ml-auto mr-auto relative mb-4 relative bg-gray-100 w-10 h-10 min-w-10 min-h-10 rounded-full">
+                        <span
+                            className={"bg-negative rounded-full px-2 py-1 text-white text-xxs"}>{amountMissMessage}</span>
+                    </button>
+                }
                 {renderListConversation()}
             </div>
             <button

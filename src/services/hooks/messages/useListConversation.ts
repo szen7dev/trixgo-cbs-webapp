@@ -37,9 +37,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
     const getListConversation = async (params: ListConversationPayload, saveToRedux = true) => {
         saveToRedux&&dispatch(setLoading(true));
         const {data} = await ListConversationRepository.getListConversation(params);
-        saveToRedux&&dispatch(setTotalRecord(data.totalRecord));
-        saveToRedux&&dispatch(setNextCursor(data.nextCursor));
-        saveToRedux&&dispatch(setListConversation(data.listRecords));
+        saveToRedux&&dispatch(setListConversation(data));
         saveToRedux&&dispatch(setLoading(false));
 
         return data
