@@ -12,7 +12,7 @@ export const AddNewSection:FC = () => {
     const [pageParam, setPageParam] = useState('');
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
-    const params = {limit: 10, select: 'fullname email phone image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam, keyword: searchTerm}
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam, keyword: searchTerm}
     const { listFriends, nextCursor } = useUser(params, pageParam);
 
     useEffect(() => {

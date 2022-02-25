@@ -16,7 +16,7 @@ export const NewMiniChatBox:FC = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [pageParam, setPageParam] = useState('');
-    const params = {limit: 10, select: 'fullname email phone image', lastestID: pageParam, keyword: searchTerm}
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', lastestID: pageParam, keyword: searchTerm}
     const { listFriends, nextCursor } = useUser(params, pageParam);
     const {createConversation} = UseListConversation();
     const handleOpenPrivateChat = (memberId : string) => {
