@@ -93,7 +93,7 @@ export const PcmHomeLayout: FC<Props> = ({ children }) => {
       </button>
 
       {/* Mini chatbox */}
-      {!isChatboxVisible &&
+      {/* {!isChatboxVisible &&
         <button
           onClick={openMiniChatbox}
           className="btn-chat-now fixed bottom-0 z-50 flex items-center px-4 pt-3 pb-2 border border-primary-border transition-all duration-500 ease-out"
@@ -103,9 +103,9 @@ export const PcmHomeLayout: FC<Props> = ({ children }) => {
             src={iconChat}
             alt="Chat"
           />
-          {/* <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span> */}
+          <span className="text-[15px] text-dark leading-tight">Trao đổi với chuyên gia</span>
         </button>
-      }
+      } */}
 
       {/* Right side bar */}
       <HomeRightSideBar />
