@@ -1,19 +1,17 @@
 import React, {FC, Fragment, useEffect, useRef} from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "redux/reducer";
-import {closeRightClick} from "redux/reducer/RightClickMenu";
+
+import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 
 export const RightClickMenuV2: FC = () => {
-    const {isRightClickMenuOpen, rightClickMenuContent} = useSelector((state: RootState) => state.rightClickMenu.data);
-    const dispatch = useDispatch();
+    const { isRightClickMenuOpen, closeRightClick, rightClickMenuContent } = useRightClickMenu();
 
     useEffect(() => {
         const listener = (event: Event) => {
             const wrapper = document.getElementById('right-click-menu-container');
             if (wrapper && !wrapper.contains(event.target as Node)) {
-                dispatch(closeRightClick());
+                closeRightClick();
             }
         };
         document.addEventListener("mousedown", listener);
@@ -27,9 +25,7 @@ export const RightClickMenuV2: FC = () => {
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto"
-                onClose={() => {
-                    dispatch(closeRightClick());
-                }}
+                onClose={closeRightClick}
             >
                 <div className="min-h-screen relative">
                     {/* This element is to trick the focus contents. */}
@@ -45,16 +41,16 @@ export const RightClickMenuV2: FC = () => {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                           <div
-                               id={'right-click-menu-container'}
-                               className={"max-w-[216px] absolute"}
-                               style={{
-                                   top: `${rightClickMenuContent.y}px`,
-                                   left: `${rightClickMenuContent.x}px`,
-                               }}
-                           >
-                               {rightClickMenuContent.content}
-                           </div>
+                            <div
+                                id={'right-click-menu-container'}
+                                className={"max-w-[216px] absolute"}
+                                style={{
+                                    top: `${rightClickMenuContent.y}px`,
+                                    left: `${rightClickMenuContent.x}px`,
+                                }}
+                            >
+                                {rightClickMenuContent.content}
+                            </div>
                         </Transition.Child>
                     )}
                 </div>
