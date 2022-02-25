@@ -2,7 +2,7 @@ import React, { FC, Fragment, useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
-import debounce from 'lodash/debounce';
+import debounce from "lodash/debounce";
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
@@ -12,16 +12,19 @@ import { Paginate, Loader } from "shareComponents/common";
 
 // ========== App common Components ==========
 import {
-	// DocumentDropdown,
+  // DocumentDropdown,
   DropdownFilterButton,
-	ButtonCreate,
-	ButtonMore,
-	GroupActions,
-	SearchInput
-} from 'views/document/sharedComponents/common';
+  ButtonCreate,
+  ButtonMore,
+  GroupActions,
+  SearchInput,
+} from "views/document/sharedComponents/common";
 
 // ========== Components Updateable ==========
-import { useQueryListDocument, useQueryDetailDocument } from "services/hooks/ppt/useDocument";
+import {
+  useQueryListDocument,
+  useQueryDetailDocument,
+} from "services/hooks/ppt/useDocument";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 
@@ -128,12 +131,19 @@ export const DocumentProjectPage: FC = () => {
         },
       });
     },
-    [departmentID, onFetchDetailDocumentAsync, refetch, toggleModal, updateDocumentChildAsync, updateModal]
+    [
+      departmentID,
+      onFetchDetailDocumentAsync,
+      refetch,
+      toggleModal,
+      updateDocumentChildAsync,
+      updateModal,
+    ]
   );
 
   const handleOnFilter = React.useCallback((values) => {
     // console.log(values);
-    setPageParam(() => ({...values }));
+    setPageParam(() => ({ ...values }));
     return true;
   }, []);
 
@@ -164,6 +174,14 @@ export const DocumentProjectPage: FC = () => {
               value={pkg.title}
               onSelectValue={setPkg}
             /> */}
+            <SearchInput
+              classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
+              onChange={debounce((e) => {
+                handleOnFilter({
+                  keyword: e.target.value,
+                });
+              }, 800)}
+            />
             <DropdownFilterButton
               onSubmit={handleOnFilter}
               onCancel={handleOnCancelFilter}
@@ -175,14 +193,6 @@ export const DocumentProjectPage: FC = () => {
                 onClickPencil={handleOnClickUpdate(recordSelected)}
               />
             )}
-            <SearchInput
-              classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
-              onChange={debounce((e) => {
-                handleOnFilter({
-                  keyword: e.target.value,
-                })
-              }, 800)}
-            />
           </div>
           <div className="flex flex-wrap items-center">
             <ButtonCreate onClick={handleCreate} />
@@ -191,7 +201,9 @@ export const DocumentProjectPage: FC = () => {
         </div>
         <div className="flex-1 overflow-y-auto">
           {loading && <Loader absolute={true} className="border-primary" />}
-          {data.length === 0 && <h2 className="text-center">Không có kết quả được trả về</h2>}
+          {data.length === 0 && (
+            <h2 className="text-center">Không có kết quả được trả về</h2>
+          )}
           {!loading && data.length > 0 && (
             <table
               className="text-black text-medium border-separate space-x-0 space-y-0"

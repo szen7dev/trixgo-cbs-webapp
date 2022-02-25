@@ -32,7 +32,6 @@ export const DocumentFolderPage: FC = () => {
 
   const [pageParam, setPageParam] = React.useState<any>({});
   const [prevCursor, setPrevCursor] = React.useState<any>([null]);
-
   const {
     listPackage,
     totalPages,

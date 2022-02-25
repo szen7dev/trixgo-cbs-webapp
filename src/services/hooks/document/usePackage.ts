@@ -19,15 +19,17 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
 
     const res = useInfiniteQuery(
         [`documents`, { params }],
-        async ({ pageParam }: any) =>
-            PackageRepository.fetchListPackage({
+        async ({ pageParam }: any) => {
+            return PackageRepository.fetchListPackage({
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
                 keyword: params?.keyword || '',
                 select: params?.select || '',
                 ...params,
                 departmentID: params.departmentID,
-            }),
+            });
+        },
+
         {
             getNextPageParam: ({ data }: any) => {
                 nextCursor = data?.nextCursor;
@@ -47,7 +49,7 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
 
     const listPackage = []
         .concat(...(data?.pages || [])
-        .map((d: any) => d.data?.listRecords))
+            .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
