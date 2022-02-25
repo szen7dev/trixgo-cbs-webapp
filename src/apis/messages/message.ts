@@ -17,7 +17,7 @@ import {
     UpdatePollPayload,
     UpdatePollResponse,
     UpdateReminderMessagePayload,
-    UpdateReminderMessageResponse
+    UpdateReminderMessageResponse, UpdateSeenMessageConverastionResponse, UpdateSeenMessageConversationPayload
 } from "typings/apis/messages/listMessage";
 
 const getListPinMessageURL = "/api/chatting/conversations/list-message-pin-conversation-with-page";
@@ -31,6 +31,7 @@ const revokeMessage = "/api/chatting/conversations/revoke-message-conversation";
 const updatePoll = "/api/chatting/conversations/update-message-Poll-conversation";
 const addUserToConversation = "/api/chatting/conversations/add-member-conversation";
 const searchMessageInConversationById = "api/chatting/conversations/search-message-conversation-by-id";
+const updateSeenMessageConversation = "api/chatting/conversations/update-seen-message-conversation";
 
 const ListMessageRepository = {
     async getListPinMessage(payload: PinnedMessagePayload): Promise<PinnedMessageResponse> {
@@ -125,6 +126,15 @@ const ListMessageRepository = {
     async goToMessagePosition(payload: SearchMessageInConversationByIdPayload) : Promise<SearchMessageInConversationByIdResponse> {
         const {data} = await API.get(
         `${searchMessageInConversationById}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async updateSeenMessage(payload: UpdateSeenMessageConversationPayload) : Promise<UpdateSeenMessageConverastionResponse> {
+        const {data} = await API.put(
+        `${updateSeenMessageConversation}`,
+            {...payload}
         )
 
         return data;

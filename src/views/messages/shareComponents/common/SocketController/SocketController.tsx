@@ -3,13 +3,15 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
     updateNewMessageToConversation,
-    setShareMessage, revokeMessageInConversation
+    setShareMessage, revokeMessageInConversation,
+    updateSeenMessage
 } from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {setListConversation, updateSingleConversation, setAmountMissMessage} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
+import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 
 type Props = {
     context: any;
@@ -34,6 +36,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
             socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
             socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+            socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -45,6 +48,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
                 socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
                 socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+                socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -71,8 +75,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 conversationId: data.infoMessage.conversation,
                 messageId: data.infoMessage._id,
                 messageData: data.infoMessage
-            }))
-
+            }));
+            if (currentChat === data.infoMessage.conversation) {
+                dispatch(pushMoreUnreadMessage({conversationId: data.infoMessage.conversation, messagesId: [data.infoMessage._id]}));
+            }
             if (!inSearchMode){
                 setTimeout(() => {
                     scrollToBottom();
@@ -132,6 +138,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
         }
     };
+
+    const onUpdateSeenMessage = (data: any) => {
+        dispatch(updateSeenMessage({
+            conversationId: data.data.infoConversation._id,
+            messsagesId: data.data.messagesID,
+            infoUserSeen: data.data.infoUserSeen
+        }))
+    }
 
     return null;
 };

@@ -58,9 +58,7 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        if (!messagesData||Object.keys(messagesData).length===0) {
-            getListMessage({conversationID: chat._id})
-        }
+        getListMessage({conversationID: chat._id})
     },[chat._id]);
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {

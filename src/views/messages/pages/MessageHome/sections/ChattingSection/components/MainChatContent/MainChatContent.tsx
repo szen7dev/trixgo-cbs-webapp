@@ -87,9 +87,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        if (!messagesData||Object.keys(messagesData).length===0) {
-            getListMessage({conversationID: chat._id})
-        }
+        getListMessage({conversationID: chat._id})
     },[chat._id]);
 
     useEffect(() => {

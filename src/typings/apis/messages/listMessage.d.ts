@@ -421,3 +421,14 @@ export type SearchMessageInConversationByIdResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdateSeenMessageConversationPayload = {
+    conversationID: string;
+    messagesID: string[];
+}
+
+export type UpdateSeenMessageConverastionResponse = {
+    data: ItemMessage[];
+    error: boolean;
+    status: number;
+}

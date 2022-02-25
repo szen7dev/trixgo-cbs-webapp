@@ -357,6 +357,28 @@ const listMessageSlice = createSlice({
                     ...newMessage
                 },
             }
+        },
+
+        updateSeenMessage (state, action) {
+            const newMessage = {...state.data.listMessage[action.payload.conversationId]};
+            action.payload.messsagesId.forEach((messageId: string) => {
+                newMessage[messageId] = {
+                    ...newMessage[messageId],
+                    usersSeen: [
+                        ...newMessage[messageId].usersSeen,
+                        action.payload.infoUserSeen
+                    ]
+                }
+            })
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [action.payload.conversationId] : {
+                        ...newMessage
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
@@ -381,6 +403,7 @@ export const {
     removeAllSelectedMessage,
     setSelectedStateOn,
     deleteMessageInConversations,
-    revokeMessageInConversation
+    revokeMessageInConversation,
+    updateSeenMessage
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
