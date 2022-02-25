@@ -25,6 +25,7 @@ import pcmLogo from "assets/logos/pcm.png";
 import reeLogo from "assets/logos/ree.png";
 import supporterLogo from "assets/logos/supporter.png";
 import timesheetLogo from "assets/logos/timesheet.png";
+import workshopLogo from "assets/logos/workshop.png";
 
 export const AppsMenu: FC = () => {
   const handleSearchTextKeyboardEvent = (event: any) => {
@@ -63,6 +64,10 @@ export const AppsMenu: FC = () => {
               <img src={datahubLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">DataHub</span>
             </Link>
+            <Link to={`/workshop/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+              <img src={workshopLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <span className="block">Workshop</span>
+            </Link>
             <Link to={`/media/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={mediaLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Truyền thông</span>
@@ -97,7 +102,7 @@ export const AppsMenu: FC = () => {
             </Link>
             <Link to={`/ree/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={reeLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-              <span className="block">Real Estate Exchange</span>
+              <span className="block">Sàn bất động sản</span>
             </Link>
             <Link to={`/operation/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={operationLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />

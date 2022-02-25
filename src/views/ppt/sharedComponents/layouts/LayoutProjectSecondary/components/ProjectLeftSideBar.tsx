@@ -52,7 +52,7 @@ export const routes: Array<RouteItem> = [
 	},
 	{
 		path: '/pcm/project/:id/drawing',
-		name: 'Hồ sơ văn bản',
+		name: 'Bản vẽ và chỉ dẫn',
 	},
 	{
 		path: '/pcm/project/:id/resource',
@@ -61,6 +61,10 @@ export const routes: Array<RouteItem> = [
 	{
 		path: '/pcm/project/:id/inspection',
 		name: 'Nghiệm thu chất lượng',
+	},
+	{
+		path: '/pcm/project/:id/contact',
+		name: 'Danh bạ dự án',
 	},
 ]
 

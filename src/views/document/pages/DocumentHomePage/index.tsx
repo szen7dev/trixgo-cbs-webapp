@@ -52,9 +52,9 @@ export const DocumentHomePage: FC = () => {
           hasMore={true}
           loader={<div className="w-full pt-2 text-center">Loading...</div>}
           endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>Yay! You have seen it all</b>
-            </p>
+            // <p style={{ textAlign: "center" }}>
+            //   <b>Yay! You have seen it all</b>
+            // </p>
           }
           scrollableTarget="scrollable"
           className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"

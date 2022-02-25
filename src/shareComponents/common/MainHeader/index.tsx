@@ -35,9 +35,9 @@ export const MainHeader: FC = () => {
             <div className="t-header-company-name flex items-center">
               <img src={user?.company?.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${user?.company.image}` : fakeThumbnail} alt="Company avatar" className="w-10 h-10 rounded-full" />
               <div className="flex items-center truncate">
-                <span className="truncate ml-2 font-bold">
+                <Link to={`/`} className="truncate ml-2 font-bold">
                   {user?.company?.name}
-                </span>
+                </Link>
               </div>
             </div>
 

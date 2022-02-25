@@ -107,7 +107,7 @@ const PCMRouter: FC = () => {
                                 { id: '2', title: 'Kế hoạch', path: '/pcm/project/:id/budget/2' },
                             ]}>
                                 <Route exact path='/pcm/project/:id/budget' component={ProjectBudgetPage} />
-                                <Route exact path='/pcm/project/:id/budget/2' component={() => <>hello</>} />
+                                <Route exact path='/pcm/project/:id/budget/2' component={() => <>Sample Data</>} />
                             </LayoutSecondary>
                         </Route>
                         <Route exact path={['/pcm/project/:id/bidding', '/pcm/project/:id/bidding/(2|3)']}>
@@ -117,8 +117,8 @@ const PCMRouter: FC = () => {
                                 { id: '3', title: 'Tư vấn thầu', path: '/pcm/project/:id/bidding/3' },
                             ]}>
                                 <Route exact path='/pcm/project/:id/bidding' component={ProjectBiddingPage} />
-                                <Route exact path='/pcm/project/:id/bidding/2' component={() => <>hello</>} />
-                                <Route exact path='/pcm/project/:id/bidding/3' component={() => <>hello</>} />
+                                <Route exact path='/pcm/project/:id/bidding/2' component={() => <>Sample Data</>} />
+                                <Route exact path='/pcm/project/:id/bidding/3' component={() => <>Sample Data</>} />
                             </LayoutSecondary>
                         </Route>
                         <Route exact path='/pcm/project/:id/payment' component={ProjectPaymentPage} />
@@ -152,7 +152,7 @@ const PCMRouter: FC = () => {
                                 { id: '3', title: 'Quản lý phiên bản', path: '/pcm/project/:id/drawing/2' },
                             ]}>
                                 <Route exact path='/pcm/project/:id/drawing' component={ProjectDrawingPage} />
-                                <Route exact path='/pcm/project/:id/drawing/1' component={() => <>hello</>} />
+                                <Route exact path='/pcm/project/:id/drawing/1' component={() => <>Sample Data</>} />
                                 <Route exact path='/pcm/project/:id/drawing/2' component={ProjectDrawing2Page} />
                             </LayoutSecondary>
                         </Route>
@@ -163,8 +163,8 @@ const PCMRouter: FC = () => {
                                 { id: '3', title: 'Báo cáo quản trị', path: '/pcm/project/:id/resource/2' },
                             ]}>
                                 <Route exact path='/pcm/project/:id/resource' component={ProjectResourcePage} />
-                                <Route exact path='/pcm/project/:id/resource/1' component={() => <>hello</>} />
-                                <Route exact path='/pcm/project/:id/resource/2' component={() => <>hello</>} />
+                                <Route exact path='/pcm/project/:id/resource/1' component={() => <>Sample Data</>} />
+                                <Route exact path='/pcm/project/:id/resource/2' component={() => <>Sample Data</>} />
                             </LayoutSecondary>
                         </Route>
                         <Route exact path='/pcm/project/:id/inspection' component={ProjectInspectionPage} />
