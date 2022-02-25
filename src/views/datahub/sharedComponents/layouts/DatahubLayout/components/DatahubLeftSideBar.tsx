@@ -5,7 +5,46 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from "services/hooks/useAuth";
 
-import { routes } from "routes/datahub";
+type RouteItem = {
+	path: string,
+	name: string,
+	exact?: boolean,
+	strict?: boolean,
+	isActive?(match: any, location: any): boolean
+}
+
+export const routes: Array<RouteItem> = [
+	{
+		path: '/datahub/home',
+		exact: true,
+		name: 'Trang chủ',
+	},
+	{
+		path: '/datahub/type',
+		name: 'Phân loại hệ thống',
+	},
+	{
+		path: '/datahub/project',
+		name: 'Danh mục dự án',
+	},
+	{
+		path: '/datahub/contractor/home',
+		exact: true,
+		name: 'Năng lực nhà thầu',
+		isActive(match: any, location: any): boolean {
+			if (match) return true;
+			return location.pathname.includes('/datahub/contractor/');
+		}
+	},
+	{
+		path: '/datahub/inspection',
+		name: 'Biểu mẫu nghiệm thu',
+	},
+	{
+		path: '/datahub/price',
+		name: 'Datahub giá'
+	},
+]
 
 const DatahubLeftSideBar: FC = () => {
 	const { user } = useAuth();
@@ -23,13 +62,19 @@ const DatahubLeftSideBar: FC = () => {
 				<div className="t-link-menu-container">
 					{
 						routes.map((route, index) => {
-							if (!route.isPrivate) return (
-								<NavLink key={index} to={route.link ? route.link : route.path} exact={route.navExact} strict={route.navStrict} isActive={route.isActive} location={route.location} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+							return (
+								<NavLink
+									key={index}
+									to={{ pathname: route.path, }}
+									exact={route.exact}
+									strict={route.strict}
+									isActive={route.isActive}
+									className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+								>
 									<img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
 									<span className="truncate">{route.name}</span>
 								</NavLink>
 							)
-							return null
 						})
 					}
 				</div>
