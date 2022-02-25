@@ -2,6 +2,7 @@ import React, { FC, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
+import { toast } from "react-toastify";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -58,7 +59,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
-	const { createComment, updateComment } = useCommentMedia({ mediaID, key: `list_comments.${mediaID}` });
+	const { createCommentAsync, updateCommentAsync } = useCommentMedia({ 
+		key: `list_comments.${mediaID}`,
+		params: { mediaID }
+	});
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
 
@@ -132,21 +136,38 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			...{ commentID } ?? {},
 			...{ parentID } ?? {}
 		}
-		let infoAfterCreateOrUpdate;
 
-		if (defaultValue) {
-			infoAfterCreateOrUpdate = await updateComment(dataInsertOrUpdate);
-			dispatch({
-				type: 'UPDATE_COMMENT',
-				payload: {
-					commentID,
-					parent: parentID,
-					body: infoAfterCreateOrUpdate,
+		try {
+			if (defaultValue) {
+				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
+
+				if(error) {
+					return toast.error(message);
 				}
-			});
-		} else {
-			infoAfterCreateOrUpdate = await createComment(dataInsertOrUpdate);
-			dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreateOrUpdate });
+
+				dispatch({
+					type: 'UPDATE_COMMENT',
+					payload: {
+						commentID,
+						parent: parentID,
+						body: data,
+					}
+				});
+			} else {
+				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
+
+				if(error) {
+					return toast.error(message);
+				}
+
+				dispatch({ type: 'ADD_COMMENT', payload: data });
+			}
+		} catch (error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
 		}
 
 		// Clear text input

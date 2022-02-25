@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { FC, Fragment } from 'react'
+import { FC } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import DatahubLayout from 'views/datahub/sharedComponents/layouts/DatahubLayout'

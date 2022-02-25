@@ -59,6 +59,7 @@ export const useAuth = (): UseAuth => {
   const ONESIGNAL_APP_ID = process.env.REACT_APP_ENV === 'development'
       ? process.env.REACT_APP_ONESIGNAL_APP_ID_LOCAL
       : process.env.REACT_APP_ONESIGNAL_APP_ID_STAGING;
+
   const updateDevice = (_id: string) => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');

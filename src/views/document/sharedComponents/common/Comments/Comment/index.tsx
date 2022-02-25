@@ -1,4 +1,5 @@
 import { FC, HTMLAttributes } from 'react';
+import { toast } from "react-toastify";
 
 import cn from "classnames";
 import moment from "moment";
@@ -25,10 +26,18 @@ interface Props {
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	comment, small, onClickReply, onClickEdit, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
-	const { deleteComment } = useCommentMedia();
+	const { deleteCommentAsync } = useCommentMedia({});
 
-	const handleDeleteComment = () => {
-		deleteComment(comment._id);
+	const handleDeleteComment = async () => {
+		try {
+			await deleteCommentAsync(comment._id);
+		} catch (error: unknown) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
 	}
 
 	const handleEditComment = () => {

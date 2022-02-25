@@ -21,8 +21,6 @@ const commentURL = "/api/reaction";
 const MediaRepository = {
     /**
      * MEDIA
-     * @param payload
-     * @returns 
      */
     async createMedia(payload: MediaPayload): Promise<PostResponse> {
         const { data } = await API.post<PostResponse>(
@@ -53,25 +51,52 @@ const MediaRepository = {
     },
     async mediaInfo(id: string): Promise<infoMediaResponse> {
         const { data } = await API.get<infoMediaResponse>(
-            `${mediaURL}/${id}`
+            `${mediaURL}/${id}?${convertObToUrl({
+                populates: JSON.stringify({
+                    path: "files images author",
+                    select: "_id name nameOrg path size mimeType type createAt bizfullname image position department",
+                    populate: {
+                        path: "position department",
+                        select: "_id name sign"
+                    }
+                })
+            })}`
         );
         return data;
     },
     async listMedias(payload: ListMediasPayload): Promise<ListResponse> {
         const { data } = await API.get<ListResponse>(
-            `${mediaURL}?${convertObToUrl(payload)}`
+            `${mediaURL}?${convertObToUrl({
+                ...payload,
+                populates: JSON.stringify({
+                    path: "company department other author",
+                    select: "_id name sign bizfullname image"
+                })
+            })}`
         );
         return data;
     },
     async listSeensMedia(payload: ListSeenPayload): Promise<any> {
         const { data } = await API.get<any>(
-            `${mediaURL}/seens?${convertObToUrl(payload)}`
+            `${mediaURL}/seens?${convertObToUrl({
+                ...payload,
+                populates: JSON.stringify({
+                    path: "author",
+                    select: "_id bizfullname image"
+                })
+            })}`
         );
         return data;
     },
     async listReactions(payload: ListReactionPayload): Promise<ListResponse> {
         const { data } = await API.get<ListResponse>(
-            `${mediaURL}/reactions?${convertObToUrl(payload)}`
+            `${mediaURL}/reactions?${convertObToUrl({
+                ...payload,
+                populates: JSON.stringify({
+                    path: "author",
+                    select: "_id bizfullname image"
+                })
+            })}`
         );
         return data;
     },
@@ -85,8 +110,6 @@ const MediaRepository = {
 
     /**
      * COMMENT MEDIA
-     * @param payload
-     * @returns 
      */
     async createComment(payload: CommentPayload): Promise<CommentResponse> {
         const { data } = await API.post<CommentResponse>(
@@ -97,7 +120,7 @@ const MediaRepository = {
     },
     async updateComment(payload: CommentPayload): Promise<CommentResponse> {
         const { data } = await API.put<CommentResponse>(
-            `${commentURL}/comment_cores`,
+            `${commentURL}/comments`,
             payload
         );
         return data;
@@ -111,19 +134,15 @@ const MediaRepository = {
     async listComments(payload: ListCommentsPayload): Promise<ListCommentResponse> {
         const { data } = await API.get<ListCommentResponse>(
             `${mediaURL}/comments?${convertObToUrl({
+                ...payload,
                 populates: JSON.stringify({
-                    path: 'comment userCreate lastestReplyID',
-                    select: '_id fullname image parent content files images amountCommentReply amountReaction createAt',
+                    path: "author lastestReplyID files images",
+                    select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
                     populate: {
-                        path: 'files images comment userCreate lastestReplyID',
-                        select: '_id name nameOrg path size type fullname image content files images amountCommentReply amountReaction',
-                        populate: {
-                            path: 'files images',
-                            select: '_id name nameOrg path size type'
-                        }
+                        path: 'author files images',
+                        select: '_id bizfullname image name nameOrg path size mimeType type createAt'
                     }
-                }),
-                ...payload
+                })
             })}`
         );
         return data;

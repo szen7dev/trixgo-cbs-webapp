@@ -1,30 +1,23 @@
 import React, { ElementType } from 'react'
 import moment from 'moment';
-import { useAuth } from "services/hooks/useAuth";
-import { useMedia } from "services/hooks/useMedia";
 import { Link } from 'react-router-dom';
 
 import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/media';
+import { Loader } from 'shareComponents/common';
 
 type Props = {
 	headerComponent?: ElementType,
-	type: string
+	listMedias: Array<MediaProps>
 } & React.HtmlHTMLAttributes<HTMLDivElement>
 
-export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, type, ...props }) => {
-	const { user } = useAuth();
-	const { listMedias } = useMedia(`list_media__${type}`, { 
-		type, 
-		companyID: user?.company._id 
-	});
-
+export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listMedias, ...props }) => {
 	return (
 		<div {...props}>
 			{Header && <Header />}
 			<ul>
-				{listMedias.length ? listMedias.map((media: MediaProps) => media && (
-					<li className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }} key={media._id}>
+				{listMedias.length ? listMedias.map((media: MediaProps) => (
+					<li key={media._id} className="border-primary-gray border-opacity-20 pt-3.5 pb-3.5 mr-7" style={{ borderBottomWidth: '0.5px' }}>
 						<p className="font-bold text-lg leading-5">
 							<Link to={`/media/post/${media._id}`}>
 								{media.title}
@@ -52,7 +45,7 @@ export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, type,
 							</div>
 						</div>
 					</li>
-				)) : ''}
+				)) : <Loader className='border-primary' />}
 			</ul>
 		</div>
 	)

@@ -1,6 +1,4 @@
 import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
-import { useSocket } from 'services/hooks/useSocket';
-import { toast } from "react-toastify";
 import MediaRepository from "apis/media";
 import { 
     MediaProps, 
@@ -8,9 +6,12 @@ import {
     CommentPayload, 
     ListCommentsPayload, 
     ListMediasPayload,
-    MediaReactionPayload
+    MediaReactionPayload,
+    infoMediaResponse,
+    PostResponse,
+    FetchMediaPayload
 } from "typings/media";
-import { CommentProps } from 'typings/common';
+import { CommentProps, CommentResponse } from 'typings/common';
 
 type UseMedia = {
     // SEEN
@@ -19,27 +20,36 @@ type UseMedia = {
     refetchListSeens: () => void,
     nextPageListSeens: (options?: FetchNextPageOptions | undefined) => void,
     // REACTION
-    reactionMedia: (payload: MediaReactionPayload) => Promise<void>,
+    reactionMediaAsync: (payload: MediaReactionPayload) => Promise<void>,
     listReactions: Array<any>,
     refetchListReactions: () => void,
     nextPageListReactions: (options?: FetchNextPageOptions | undefined) => void,
     // MEDIA
-    createMedia: (payload: MediaPayload) => Promise<void>,
-    updateMedia: (payload: MediaPayload) => Promise<void>,
-    deleteMedia: (id: string) => Promise<void>,
+    createMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
+    updateMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
+    deleteMediaAsync: (id: string) => Promise<infoMediaResponse>,
     listMedias: Array<MediaProps>,
-    isLoadingListMedias: boolean,
+    isLoadingMedias: boolean,
     refetchListMedias: () => void,
     nextPageListMedias: (options?: FetchNextPageOptions | undefined) => void,
     prevPageListMedias: () => void,
-    totalRecord: number | undefined,
-    totalPages: number | undefined,
-    hasNextPage: boolean | undefined,
+    totalRecordMedia: number | undefined,
+    totalPagesMedia: number | undefined,
+    hasNextPageMedia: boolean | undefined,
 };
 
-export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia => {
-    const { current: socket }: any = useSocket();
+type UseMediaProps = {
+    key?: string;
+    params?: ListMediasPayload;
+} & FetchMediaPayload
 
+export const useMedia = ({ 
+    key, 
+    params = {},
+    isFetchMedias = false,
+    isFetchReactions = false,
+    isFetchSeens = false
+}: UseMediaProps) : UseMedia => {
     const { mutateAsync: createMediaAsync } =
         useMutation((payload: MediaPayload) =>
             MediaRepository.createMedia(payload)
@@ -62,15 +72,15 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
 
     // Get danh sách media
     const {
-        isLoading: isLoadingListMedias,
+        isLoading: isLoadingMedias,
         refetch: refetchListMedias,
         data: dataListMedias,
         fetchNextPage: nextPageListMedias,
         fetchPreviousPage: prevPageListMedias,
-        hasNextPage: hasNextPage
+        hasNextPage: hasNextPageMedia
     } =
         useInfiniteQuery(
-            key || "list_medias",
+            [key || "list_medias", params],
             async ({ pageParam }: any) =>
                 MediaRepository.listMedias({ 
                     lastestID: pageParam ? pageParam : "",
@@ -82,7 +92,7 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: isFetchMedias
             }
         );
 
@@ -93,15 +103,11 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
         fetchNextPage: nextPageListReactions,
     } =
         useInfiniteQuery(
-            ["list_reactions", key],
+            [key, "list_reactions", params],
             async ({ pageParam }: any) =>
                 MediaRepository.listReactions({ 
                     limit: 10,
                     lastestID: pageParam ? pageParam : "",
-                    populates: JSON.stringify({
-                        path: 'reaction userCreate',
-                        select: '_id type fullname bizfullname image'
-                    }),
                     ...params,
                 }),
             {
@@ -110,7 +116,7 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: isFetchReactions
             }
         );
 
@@ -121,13 +127,13 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
         fetchNextPage: nextPageListSeens,
     } =
         useInfiniteQuery(
-            ["list_seens_media", key],
+            [key, "list_seens", params],
             async ({ pageParam }: any) =>
                 MediaRepository.listSeensMedia({ 
                     limit: 20,
                     lastestID: pageParam ? pageParam : "",
                     populates: JSON.stringify({
-                        path: 'userCreate',
+                        path: 'author',
                         select: '_id fullname bizfullname image'
                     }),
                     ...params,
@@ -138,79 +144,9 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: isFetchSeens
             }
         );
-
-    const createMedia = async (payload: MediaPayload) => {
-        try {
-            const { error, data, message } = await createMediaAsync(payload);
-
-            if (!error) {
-                toast.success('Tạo bài viết thành công');
-                socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-                    receivers: data.receivers
-                });
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const updateMedia = async (payload: MediaPayload) => {
-        try {
-            const { error, message } = await updateMediaAsync(payload);
-
-            if (!error) {
-                toast.success('Cập nhật bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const deleteMedia = async (id: string) => {
-        try {
-            const { error, message } = await deleteMediaAsync(id);
-
-            if (!error) {
-                refetchListMedias();
-                toast.success('Xóa bài viết thành công');
-            } else {
-                toast.error(message);
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const reactionMedia = async (payload: MediaReactionPayload) => {
-        try {
-            await reactionMediaAsync(payload);
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
 
     const listMedias = []
         .concat(...(dataListMedias?.pages || [])
@@ -222,11 +158,14 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
-    const totalRecordSeen = dataListSeens?.pages[0]?.data?.totalRecord;
-    const totalRecord = dataListMedias?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListMedias?.pages[0]?.data?.totalPages;
+    const listReactions = []
+        .concat(...(dataListReactions?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
 
-    const listReactions = [].concat(...(dataListReactions?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecordSeen = dataListSeens?.pages[0]?.data?.totalRecord;
+    const totalRecordMedia = dataListMedias?.pages[0]?.data?.totalRecord;
+    const totalPagesMedia = dataListMedias?.pages[0]?.data?.totalPages;
 
     return {
         // SEEN MEDIA
@@ -235,29 +174,29 @@ export const useMedia = (key?: string, params?: ListMediasPayload) : UseMedia =>
         refetchListSeens,
         nextPageListSeens,
         // REACTION
+        reactionMediaAsync,
         listReactions,
         refetchListReactions,
         nextPageListReactions,
         // MEDIA
-        createMedia,
-        updateMedia,
-        deleteMedia,
-        reactionMedia,
+        createMediaAsync,
+        updateMediaAsync,
+        deleteMediaAsync,
         listMedias,
-        isLoadingListMedias,
+        isLoadingMedias,
         refetchListMedias,
         nextPageListMedias,
         prevPageListMedias,
-        totalRecord,
-        totalPages,
-        hasNextPage,
+        totalRecordMedia,
+        totalPagesMedia,
+        hasNextPageMedia
     };
 };
 
 type UseCommentMedia = {
-    createComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
-    updateComment: (payload: CommentPayload) => Promise<{ data: CommentProps } | undefined>,
-    deleteComment: (id: string) => Promise<void>,
+    createCommentAsync: (payload: CommentPayload) => Promise<CommentResponse>,
+    updateCommentAsync: (payload: CommentPayload) => Promise<CommentResponse>,
+    deleteCommentAsync: (id: string) => Promise<{ error: boolean; message: string; }>,
     listComments: Array<CommentProps>,
     totalRecord: number,
     limit: number,
@@ -268,7 +207,18 @@ type UseCommentMedia = {
     prevPageListComments: () => void,
 }
 
-export const useCommentMedia = (payload?: ListCommentsPayload) : UseCommentMedia => {
+type UseCommentMediaProps = {
+    key?: string,
+    params?: ListCommentsPayload,
+    isFetchComment?: boolean
+}
+
+export const useCommentMedia = ({
+    key, 
+    params = {},
+    isFetchComment = false
+}: UseCommentMediaProps) : UseCommentMedia => {
+
     const { mutateAsync: createCommentAsync } =
         useMutation((payload: CommentPayload) =>
             MediaRepository.createComment(payload)
@@ -292,63 +242,20 @@ export const useCommentMedia = (payload?: ListCommentsPayload) : UseCommentMedia
         fetchPreviousPage: prevPageListComments,
     } =
         useInfiniteQuery(
-            (payload && payload.key) || "list_comments",
+            [key || "list_comments", params],
             async ({ pageParams }: any) => 
             MediaRepository.listComments({ 
                 lastestID: pageParams ? pageParams : "",
-                ...payload
+                ...params
             }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: isFetchComment
             }
         );
-
-    const createComment = async (payload: CommentPayload) => {
-        try {
-            const { error, data, message } = await createCommentAsync(payload);
-            error && toast.error(message);
-
-            return data;
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const updateComment = async (payload: CommentPayload) => {
-        try {
-            const { error, data, message } = await updateCommentAsync(payload);
-            error && toast.error(message);
-
-            return data;
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
-
-    const deleteComment = async (id: string) => {
-        try {
-            const { error, message } = await deleteCommentAsync(id);
-            error && toast.error(message);
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
-    };
 
     const listComments = []
         .concat(...(dataListComments?.pages || [])
@@ -360,9 +267,9 @@ export const useCommentMedia = (payload?: ListCommentsPayload) : UseCommentMedia
     const limit = dataListComments?.pages[0]?.data?.limit || 5;
 
     return {
-        createComment,
-        deleteComment,
-        updateComment,
+        createCommentAsync,
+        updateCommentAsync,
+        deleteCommentAsync,
         listComments,
         limit,
         totalRecord,

@@ -259,9 +259,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
 
     // Danh sách bạn bè của mình
     const {
-        status,
         data,
-        error,
         refetch: refetchListFriends
     } = useQuery(
         ["list_friends", { pageParam }, params?.keyword],
@@ -271,7 +269,10 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
                 ...params,
             })
         },
-        { keepPreviousData: true }
+        { 
+            keepPreviousData: true,
+            refetchOnWindowFocus: false,
+        }
     );
 
     const listFriends = data?.data?.listRecords
@@ -294,7 +295,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            enabled: true
         }
     )
     // console.log(infinityQuery);

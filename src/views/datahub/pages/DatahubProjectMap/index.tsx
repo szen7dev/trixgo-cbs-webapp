@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L, { LatLngExpression, icon, Marker as MarketDefault } from 'leaflet'
 import 'leaflet/dist/leaflet.css';

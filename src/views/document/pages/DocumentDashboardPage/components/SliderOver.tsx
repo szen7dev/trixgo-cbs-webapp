@@ -19,7 +19,7 @@ interface Props {
 
 const CommentArea: FC<Props> = ({ onClose, mediaID }) => {
 	const { listComments, totalRecord, limit } = useCommentMedia({
-		mediaID,
+		params: { mediaID },
 		key: `list_comments.${mediaID}`
 	});
 

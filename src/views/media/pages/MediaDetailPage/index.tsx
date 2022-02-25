@@ -1,15 +1,16 @@
 /**
- * LIBRARIES
+ * Libraries
  */
 import React, { FC, Fragment, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 import moment from 'moment';
 import cn from 'classnames';
 
 /**
- * COMPONENTS
+ * Components
  */
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
@@ -24,7 +25,7 @@ import {
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
 
 /**
- * ASSETS
+ * Assets
  */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
@@ -39,7 +40,8 @@ import 'views/media/styles/index.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps, MediaAuthor } from "typings/media";
+import { FileProps, ImageProps, ListMediasPayload, MediaProps } from "typings/media";
+import { User } from "typings/user";
 import SocialRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
 import { abbreviateNumber } from 'utils';
@@ -51,39 +53,65 @@ import { ProviderModalPost } from "views/media/contexts/post";
 
 const MediaDetail: FC = () => {
 	const history = useHistory();
+	
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
-	const { data, refetch } = useQuery(`media_info.${mediaID}`, () => SocialRepository.mediaInfo(mediaID));
+	const { data, refetch } = useQuery(`media_info.${mediaID}`, 
+		() => SocialRepository.mediaInfo(mediaID),
+		{
+			enabled: true, 
+			refetchOnWindowFocus: false
+		});
+
 	const media = data?.data;
 
-	const conditionListMedia: any = {
+	const [paramsMedia, setParamsMedia] = useState<ListMediasPayload>({
 		type: typePostSelected(media?.type || 0),
 		mediaID,
 		isRelated: true
-	}
+	});
 
-	switch (conditionListMedia.type) {
-		case 'company':
-			conditionListMedia.companyID = user?.company._id;
-			break;
-		default:
-			break;
-	}
+	const [isFetchReactions, setIsFetchReactions] = useState(false);
+	const [isFetchSeens, setIsFetchSeens] = useState(false);
 
-	const { deleteMedia, reactionMedia, listMedias } =
-		useMedia(`list_media__related.${mediaID}`, conditionListMedia);
+	useEffect(() => {
+		if(paramsMedia.type === 'company') {
+			setParamsMedia(previousParams => ({
+				...previousParams,
+				companyID: user?.company._id
+			}))
+		}
+	}, [user])
 
-	const { listReactions, refetchListReactions, listSeens, totalRecordSeen } =
-		useMedia(mediaID, { mediaID });
+	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = useMedia({
+		key: `list_medias__related`,
+		params: paramsMedia,
+		isFetchMedias: true
+	});
+
+	const { listReactions, listSeens, totalRecordSeen } =
+		useMedia({
+			key: mediaID,
+			params: { mediaID },
+			isFetchReactions,
+			isFetchSeens
+		});
 
 	const { listComments, totalRecord, limit } =
 		useCommentMedia({
-			mediaID,
-			key: `list_comments.${mediaID}`
+			key: `list_comments.${mediaID}`,
+			params: { mediaID },
+			isFetchComment: true
 		});
 
 	// State manage image comments
-	const [defaultState, setDefaultState] = useState({ mediaID: '', images: [] as ImageProps[], index: 0, createAt: '', author: undefined as undefined | MediaAuthor });
+	const [defaultState, setDefaultState] = useState({ 
+		mediaID: '', 
+		images: [] as ImageProps[], 
+		index: 0, 
+		createAt: '', 
+		author: undefined as undefined | User
+	});
 	const [isShow, setIsShow] = useState(false);
 
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
@@ -96,20 +124,49 @@ const MediaDetail: FC = () => {
 		setModalEditMedia(!modalEditMedia);
 	};
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
-	const toggleModalReact = () => setModalShowReact(!modalShowReact);
+
+	const toggleModalReact = () => {
+		if(!modalShowReact && !isFetchReactions) {
+			setIsFetchReactions(true);
+		}
+		setModalShowReact(!modalShowReact);
+	}
+
 	const toggleModalSeen = () => {
+		if(!modalShowSeen && !isFetchSeens) {
+			setIsFetchSeens(true);
+		}
 		setModalShowSeen(!modalShowSeen);
 	}
 
 	const handleDeleteMedia = async () => {
-		await deleteMedia(mediaID);
-		history.push('/media/home');
+		try {
+			const { error, message } = await deleteMediaAsync(mediaID);
+
+			if(error) return toast.warning(message);
+
+            toast.success('Xóa bài viết thành công', { autoClose: 900 });
+			setTimeout(() => history.push('/media/home'), 1000);
+		} catch (error) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
 	}
 
 	const handleReactionMedia = async () => {
-		await reactionMedia({ mediaID });
-		refetch();
-		refetchListReactions();
+		try {
+            await reactionMediaAsync({ mediaID });
+			refetch();
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
 	}
 
 	const readingTime = () => {
@@ -307,7 +364,7 @@ const MediaDetail: FC = () => {
 						<div className="post__suggest flex-shrink-0">
 							<p>Liên quan</p>
 							<div>
-								{listMedias.length ? listMedias.map(media => (
+								{listMediasRelated.length ? listMediasRelated.map((media: MediaProps) => (
 									<React.Fragment key={media._id}>
 										<Link to="/"><div>{abbreviateNumber(media.amountView)}</div></Link>
 										<Link to={`/media/post/${media._id}`}>

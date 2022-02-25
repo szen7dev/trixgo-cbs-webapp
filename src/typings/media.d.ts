@@ -8,11 +8,11 @@ export type PostType =
   | 'system'
   | 'just-me'
 
-// Định nghĩa các kiểu dữ liệu
 export type MediaPayload = {
   mediaID?: string;
   companyID?: string;
   departmentID?: string;
+  otherID?: string;
   title: string;
   content: string;
   files?: Array<FileProps>;
@@ -106,31 +106,21 @@ export type ListMediasPayload = {
   lastestID?: string;
   limit?: number;
   type?: string;
+  keyword?: string;
   isRelated?: boolean;
   mediaID?: string;
   companyID?: string;
+  departmentID?: string;
+  otherID?: string;
   parentID?: string;
-  filter?: string;
   select?: string;
   populates?: string;
 };
 
-export type MediaAuthor = {
-	_id: string;
-	image: string;
-	company: Array<{
-		_id: string;
-		name: string;
-	}>;
-	fullname: string;
-	department: {
-		name: string,
-		sign: string
-	};
-	position: {
-		_id: string,
-		name: string,
-	};
+export type FetchMediaPayload = {
+  isFetchMedias?: boolean;
+  isFetchReactions?: boolean;
+  isFetchSeens?: boolean;
 }
 
 export type MediaProps = {
@@ -147,13 +137,18 @@ export type MediaProps = {
   status: number;
   kind: number;
   state: number;
-  author: MediaAuthor;
+  author: User;
   location: {
     type: string;
     _id: string;
     coordinates: [number, number];
   };
   company: {
+    _id: string;
+    name: string;
+    sign: string;
+  };
+  department: {
     _id: string;
     name: string;
     sign: string;
@@ -192,13 +187,11 @@ interface ModalProps {
 }
 
 export type ListCommentsPayload = {
-  key?: string,
   lastestID?: string;
   limit?: number;
   mediaID?: string;
   companyID?: string;
   parentID?: string;
-  filter?: string;
   select?: string;
   populates?: string;
 };
