@@ -8,6 +8,7 @@ import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 
 import { SearchInput, Paginate } from "shareComponents/common";
 import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { formatNumberMoney } from "utils/cmcs"
 
 import styles from 'views/cmcs/styles/styles.module.css';
 
@@ -15,8 +16,6 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 
 import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useHistoryTraffics } from "services/hooks/useContractIncome";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
-
-import { formatNumberMoney } from "utils/cmcs"
 
 export const CmcIncomePage: FC = () => {
   const [itemChecked, setItemChecked] = useState('');

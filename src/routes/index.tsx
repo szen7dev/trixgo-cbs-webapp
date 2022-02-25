@@ -73,7 +73,7 @@ const Routes: FC = () => {
                                     </Route>
 
                                     {/* =====CMCS===== */}
-                                    <Route path="/pcm">
+                                    <Route path="/cmcs">
                                         <CmcsRouter />
                                     </Route>
 

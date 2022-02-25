@@ -1,11 +1,11 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
-import { CmcsLayout } from "views/cmcs/shareComponents/layouts/CmcsLayout";
+import { CmcsLayout, CmcsContractLayout } from "views/cmcs/shareComponents/layouts";
 import { ProtectedRoute } from "routes/components";
 
 /*=====4.CONFIG ROUTE=====*/
@@ -15,6 +15,18 @@ import {
     CmcHomePage,
     CmcIncomePage,
     CmcGuaranteePage,
+    ContractHome,
+    ContractIpc,
+    ContractProduce,
+    ContractAdminPage,
+    CmcDashboardPage,
+    ContractDashBoard,
+    CmcPortfolioPage,
+    CmcExpensePage,
+    ContractEditor,
+    ContractBill,
+    ContractBudget,
+    ContractProduct
 } from "views/cmcs/pages";
 import ErrorPage from "views/authentication/Error";
 
@@ -48,44 +60,7 @@ const CmcsRouter: FC = () => {
                     </CmcsLayout>
                 )}
             />
-            {/* <Route
-                exact
-                path="/cmcs/dashboard"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcDashboardPage />
-                    </CmcsLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/portfolio"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcPortfolioPage />
-                    </CmcsLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/expenses"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcExpensePage />
-                    </CmcsLayout>
-                )}
-            />
-            
-            <Route
-                exact
-                path="/cmcs/contract/:id/admin"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractAdminPage />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
+            <ProtectedRoute
                 exact
                 path="/cmcs/contract/:id/home"
                 component={() => (
@@ -94,52 +69,7 @@ const CmcsRouter: FC = () => {
                     </CmcsContractLayout>
                 )}
             />
-            <Route
-                exact
-                path="/cmcs/contract/:id/dashboard"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractDashBoard />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/contract/:id/editor"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractEditor />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/contract/:id/bill"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractBill />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/contract/:id/budget"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractBudget />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
-                exact
-                path="/cmcs/contract/:id/produce"
-                component={() => (
-                    <CmcsContractLayout>
-                        <ContractProduce />
-                    </CmcsContractLayout>
-                )}
-            />
-            <Route
+            <ProtectedRoute
                 exact
                 path="/cmcs/contract/:id/ipc"
                 component={() => (
@@ -148,7 +78,88 @@ const CmcsRouter: FC = () => {
                     </CmcsContractLayout>
                 )}
             />
-            <Route
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/produce"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractProduce />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/admin"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractAdminPage />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/dashboard"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcDashboardPage />
+                    </CmcsLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/dashboard"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractDashBoard />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/portfolio"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcPortfolioPage />
+                    </CmcsLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/expenses"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcExpensePage />
+                    </CmcsLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/editor"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractEditor />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/bill"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractBill />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/budget"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractBudget />
+                    </CmcsContractLayout>
+                )}
+            />
+            <ProtectedRoute
                 exact
                 path="/cmcs/contract/:id/product"
                 component={() => (
@@ -156,7 +167,7 @@ const CmcsRouter: FC = () => {
                         <ContractProduct />
                     </CmcsContractLayout>
                 )}
-            /> */}
+            />
         </Switch>
     )
 };
