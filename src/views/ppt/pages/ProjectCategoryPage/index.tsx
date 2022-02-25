@@ -58,9 +58,9 @@ const ProjectCategoryPage: FC = () => {
 						Loading...
 					</div>}
 					endMessage={
-						// <p style={{ textAlign: 'center' }}>
-						// 	<b>Yay! You have seen it all</b>
-						// </p>
+						<p style={{ textAlign: 'center' }}>
+							{/* <b>Yay! You have seen it all</b> */}
+						</p>
 					}
 
 					scrollableTarget="scrollable"
