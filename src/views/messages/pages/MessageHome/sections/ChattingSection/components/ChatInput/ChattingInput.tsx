@@ -47,7 +47,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     const suggestionsData = useCallback(() => {
         return chat.members.map(member=> {
             return {
-                name: member.bizfullname||member.bizfullname,
+                name: member.bizfullname||member.fullname,
                 _id: member._id,
                 avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
             }

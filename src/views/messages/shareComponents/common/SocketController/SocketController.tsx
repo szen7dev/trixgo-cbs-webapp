@@ -3,14 +3,15 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
     updateNewMessageToConversation,
-    setShareMessage, revokeMessageInConversation
+    setShareMessage, revokeMessageInConversation,
+    updateSeenMessage
 } from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
 import {setListConversation, updateSingleConversation, setAmountMissMessage} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
-import {setUnreadMessage} from "../../../../../redux/reducer/messages/UnreadMessages";
+import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 
 type Props = {
     context: any;
@@ -75,7 +76,9 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 messageId: data.infoMessage._id,
                 messageData: data.infoMessage
             }));
-
+            if (currentChat === data.infoMessage.conversation) {
+                dispatch(pushMoreUnreadMessage({conversationId: data.infoMessage.conversation, messagesId: [data.infoMessage._id]}));
+            }
             if (!inSearchMode){
                 setTimeout(() => {
                     scrollToBottom();
@@ -137,10 +140,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     };
 
     const onUpdateSeenMessage = (data: any) => {
-        console.log("CHATTING_SSC_UPDATE_SEEN_MESSAGE", data)
-        // dispatch(updateSingleConversation({
-        //     conversationData: data.data.infoConversation
-        // }))
+        dispatch(updateSeenMessage({
+            conversationId: data.data.infoConversation._id,
+            messsagesId: data.data.messagesID,
+            infoUserSeen: data.data.infoUserSeen
+        }))
     }
 
     return null;

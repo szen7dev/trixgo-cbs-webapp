@@ -7,6 +7,7 @@ import {MiniChatSection} from "./ChatBox";
 import {SocketController} from "views/messages/shareComponents/common/SocketController";
 import {PopupSendImageAndFile, DeleteAndRevokeMessageConfirm} from "views/messages/pages/MessageHome/sections/ChattingSection";
 import {MiniListConversation} from "./MiniListConversation";
+import {UnreadMessageController} from "../../../../views/messages/pages/MessageHome/sections/UnreadMessages";
 // import iconSend from "assets/images/icons8-email-send-48.png";
 
 export const MiniChatbox: FC = () => {
@@ -20,6 +21,7 @@ export const MiniChatbox: FC = () => {
             <SocketController context={MiniChatContext} currentChat={conversation?._id||""}/>
             <DeleteAndRevokeMessageConfirm context={MiniChatContext}/>
             <PopupSendImageAndFile/>
+            <UnreadMessageController context={MiniChatContext} currentChat={conversation?._id||""}/>
         </div>
     );
 };
