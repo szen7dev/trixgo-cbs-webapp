@@ -1,11 +1,30 @@
 import { FC, Fragment } from "react";
-
+import { Link } from 'react-router-dom';
 import { Menu, Transition } from "@headlessui/react";
 
 import iconGrid from "assets/images/icons8-menu-100.png";
 import iconSearch from "assets/images/icons8-search-50.png";
-import appLogo from "assets/images/trixgo-logo.png";
-import { Link } from 'react-router-dom';
+// import appLogo from "assets/images/trixgo-logo.png";
+
+import accountingLogo from "assets/logos/accounting.png";
+import biddingLogo from "assets/logos/bidding.png";
+import cmcsLogo from "assets/logos/cmcs.png";
+import datahubLogo from "assets/logos/datahub.png";
+import documentLogo from "assets/logos/document.png";
+import financialLogo from "assets/logos/financial.png";
+import humanLogo from "assets/logos/human.png";
+// import marketingLogo from "assets/logos/marketing.png";
+import mediaLogo from "assets/logos/media.png";
+// import npsLogo from "assets/logos/nps.png";
+import operationLogo from "assets/logos/operation.png";
+// import ownerLogo from "assets/logos/owner.png";
+// import paymentLogo from "assets/logos/payment.png";
+import pcmLogo from "assets/logos/pcm.png";
+// import profileLogo from "assets/logos/profile.png";
+// import qrcodeLogo from "assets/logos/qrcode.png";
+import reeLogo from "assets/logos/ree.png";
+import supporterLogo from "assets/logos/supporter.png";
+import timesheetLogo from "assets/logos/timesheet.png";
 
 export const AppsMenu: FC = () => {
   const handleSearchTextKeyboardEvent = (event: any) => {
@@ -37,55 +56,55 @@ export const AppsMenu: FC = () => {
           </div>
           <div className="flex flex-wrap">
             <Link to={`/support/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={supporterLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Supporter</span>
             </Link>
             <Link to={`/datahub/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={datahubLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">DataHub</span>
             </Link>
             <Link to={`/media/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={mediaLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Truyền thông</span>
             </Link>
             <Link to={`/pcm/projects`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={pcmLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý dự án</span>
             </Link>
             <Link to={`/cmcs/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={cmcsLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý hợp đồng</span>
             </Link>
             <Link to={`/document/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={documentLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý hồ sơ văn bản</span>
             </Link>
             <Link to={`/bidding/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={biddingLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Đấu thầu</span>
             </Link>
             <Link to={`/fin/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={financialLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản trị tài chính</span>
             </Link>
             <Link to={`/human/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={humanLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý nhân sự</span>
             </Link>
             <Link to={`/accounting/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={accountingLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Kế toán</span>
             </Link>
             <Link to={`/ree/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={reeLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Real Estate Exchange</span>
             </Link>
             <Link to={`/operation/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={operationLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý vận hành</span>
             </Link>
             <Link to={`/timesheet/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-              <img src={appLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+              <img src={timesheetLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản lý chấm công</span>
             </Link>
           </div>
