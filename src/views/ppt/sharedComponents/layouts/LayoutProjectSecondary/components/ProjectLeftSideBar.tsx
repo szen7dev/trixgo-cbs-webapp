@@ -58,6 +58,10 @@ export const routes: Array<RouteItem> = [
 		path: '/pcm/project/:id/resource',
 		name: 'Quản lý vật tư',
 	},
+	{
+		path: '/pcm/project/:id/inspection',
+		name: 'Nghiệm thu chất lượng',
+	},
 ]
 
 const ProjectLeftSideBar: FC = () => {

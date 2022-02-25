@@ -22,7 +22,7 @@ const useScrollSticky = (
     function handleScroll(this: HTMLDivElement, event: Event) {
       if (!sticky.current || !innerRef.current) return;
       if (sticky.current.scrollHeight <= this.clientHeight)
-        return (sticky.current.style.top = "10px");
+        return (sticky.current.style.top = options.offsetTop + "px");
 
       if (type === "up" && lastScrollTop < this.scrollTop) {
         // downscroll code
