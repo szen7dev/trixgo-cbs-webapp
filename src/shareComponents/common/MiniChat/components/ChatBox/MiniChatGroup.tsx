@@ -115,9 +115,9 @@ export const MiniChatGroup:FC = () => {
                     amountMissMessage > 0 &&
                     <button
                     onClick={() => dispatch(toggleListConversation())}
-                    className="block ml-auto mr-auto relative mb-4 relative bg-gray-100 w-10 h-10 min-w-10 min-h-10 rounded-full">
+                    className="block ml-auto mr-auto relative mb-4 relative bg-gray-100 w-10 h-10 min-w-10 min-h-10 rounded-full flex items-center justify-center">
                         <span
-                            className={"bg-negative rounded-full px-2 py-1 text-white text-xxs"}>{amountMissMessage}</span>
+                            className={"bg-negative rounded-full px-2 text-white text-xxs"}>{amountMissMessage}</span>
                     </button>
                 }
                 {renderListConversation()}
