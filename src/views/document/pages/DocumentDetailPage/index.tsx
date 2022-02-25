@@ -7,11 +7,11 @@ import { ModalContext } from "views/document/contexts/modal";
 
 import {
   DropdownFilterButton,
-	ButtonCreate,
-	ButtonMore,
+  ButtonCreate,
+  ButtonMore,
   ButtonIcon,
-	GroupActions,
-} from 'views/document/sharedComponents/common';
+  GroupActions,
+} from "views/document/sharedComponents/common";
 
 import "views/document/styles/document.css";
 import { TableGeneralInformation } from "./components/TableGeneralInformation";
@@ -26,6 +26,7 @@ import iconAdd from "assets/images/icon-add.svg";
 
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
+import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface Props {
@@ -41,8 +42,17 @@ export const DocumentDetailPage: FC<Props> = () => {
 
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
+
   const docChildPayload = useQueryListDocumentChild({
     parentID: params.docID,
+  });
+
+  const {
+    documentFiles,
+    fetchNextPage: fetchNextPageDocumentFile,
+    totalRecord: totalDocumentFile,
+  } = useQueryListDocumentFile({
+    documentID: params.docID,
   });
 
   React.useEffect(() => {
@@ -51,7 +61,7 @@ export const DocumentDetailPage: FC<Props> = () => {
     }
   }, [onFetchDetailDocumentAsync, params.docID]);
 
-//   console.log(detailDocument);
+  //   console.log(detailDocument);
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -153,11 +163,22 @@ export const DocumentDetailPage: FC<Props> = () => {
               )}
             />
           </div>
-          <TableFileAttach />
+          <TableFileAttach fileAttachs={documentFiles}>
+            {Number(totalDocumentFile) - documentFiles.length > 0 && (
+              <button
+                className="text-primary text-[13px]"
+                onClick={() => fetchNextPageDocumentFile()}
+              >
+                {`Xem thêm (${
+                  Number(totalDocumentFile) - documentFiles.length
+                })`}
+              </button>
+            )}
+          </TableFileAttach>
         </div>
 
         {/* Job */}
-        <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
+        {/* <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               3-CÔNG VIỆC
@@ -171,12 +192,12 @@ export const DocumentDetailPage: FC<Props> = () => {
             />
           </div>
           <TableJobs />
-        </div>
+        </div> */}
         {/* Subtext Profile */}
         <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
-              4-HỒ SƠ VĂN BẢN CON
+              3-HỒ SƠ VĂN BẢN CON
             </h3>
             <ButtonMore className="mr-6" />
             <ButtonIcon
@@ -189,14 +210,14 @@ export const DocumentDetailPage: FC<Props> = () => {
           <TableSubtextProfile docChildPayload={docChildPayload} />
         </div>
         {/* Discussion */}
-        <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
+        {/* <div className="bg-white mt-2.5 pb-3 pt-5 px-3.5">
           <div className="flex flex-wrap">
             <h3 className="text-cbs-subtext text-x-large font-bold">
               5-THẢO LUẬN
             </h3>
           </div>
           <div className="py-4"></div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -64,8 +64,8 @@ export const FormCertificate: React.FC<FormCertificateProps> = ({
       sign: "", // ký hiệu
       fromDate: "", // ngày tháng
       toDate: "", // ngày hết hạn
-      certificateType: {}, // loại chứng chỉ
-      certificateName: {}, // lĩnh vực chứng chỉ
+      // certificateType: {}, // loại chứng chỉ
+      // certificateName: {}, // lĩnh vực chứng chỉ
       certificateGrade: 1, // hạng chứng chỉ
       number: 0, // số lượng
       store: "", // vị trí lưu trữ

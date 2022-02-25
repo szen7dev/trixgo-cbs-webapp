@@ -23,7 +23,7 @@
    */
 
   ::-webkit-scrollbar {
-    @apply w-2;
+    @apply w-2 h-2;
   }
   ::-webkit-scrollbar-thumb {
     @apply bg-secondary-gray bg-clip-padding rounded-full opacity-0 invisible;
@@ -32,7 +32,7 @@
     @apply opacity-100 visible transition duration-200
   }
   .t-scrollbar-horizontal::-webkit-scrollbar {
-    @apply h-3;
+    @apply h-2;
   }
 
   .Toastify__toast--success {
@@ -1297,6 +1297,7 @@ input[type="text"] {
 #chatting-section {
   max-width: calc(100vw - 402px);
 }
+.t-mini-chat-container,
 .messages-main-content {
   font-size: 15px;
 }
@@ -1440,7 +1441,8 @@ input[type="text"] {
   padding: 0 10px;
 }
 .t-mini-chat .input-wrapper {
-  @apply bg-gray-100 rounded-full
+  border-radius: 1.5rem;
+  @apply bg-gray-100
 }
 .date-message {
   transform: translate(0, 5px);
@@ -1469,4 +1471,14 @@ input[type="text"] {
 	background: conic-gradient(from var(--from), var(--primary) calc(var(--value) * 1%), #0000 0), conic-gradient(var(--secondary), var(--secondary));
 	mask: radial-gradient(farthest-side,#0000 calc(99% - var(--thickness)),#000 calc(100% - var(--thickness)));
 	border-radius:9999px
+}
+.t-mini-chat .attach-vote,
+.t-mini-chat .attach-reminder,
+.t-mini-chat .attach-contact,
+.t-mini-chat .attach-nps {
+  display: none;
+}
+.text-xxs {
+  font-size: 0.5rem;
+  line-height: 0.75rem;
 }

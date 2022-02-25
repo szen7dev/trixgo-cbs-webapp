@@ -10,10 +10,11 @@ import {
     ShareMessagePayload, UpdatePinnedMessageData,
     UpdatePinnedMessagePayload, UpdatePollData, UpdatePollPayload,
     UpdateReminderMessageData,
-    UpdateReminderMessagePayload
+    UpdateReminderMessagePayload, UpdateSeenMessageConversationPayload
 } from "typings/apis/messages/listMessage";
 import {setLoading, setListMessage, appendMessageToConversation, updateReminderData, setPinnedMessage, deleteMessageInConversations, revokeMessageInConversation} from "redux/reducer/messages/ListMessage";
 import {setLoadingSearch, setListSearchMessage} from "redux/reducer/messages/SearchMessage";
+import {setUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {useDispatch} from "react-redux";
 
 type UseConversationType = {
@@ -28,6 +29,7 @@ type UseConversationType = {
     updatePoll: (params: UpdatePollPayload) => Promise<UpdatePollData>;
     addUserToConversation: (params: AddUserToConversationPayload) => Promise<{ data: any, error: boolean }>;
     goToMessagePosition: (params: SearchMessageInConversationByIdPayload, isFirstInit? : boolean, direction?: "front"|"back") => Promise<any>;
+    updateSeenMessage: (params: UpdateSeenMessageConversationPayload) => Promise<any>;
 }
 
 export const UseConversation = () : UseConversationType => {
@@ -39,6 +41,25 @@ export const UseConversation = () : UseConversationType => {
         dispatch(setLoading({conversationId: params.conversationID, data: true}));
         const {data} = await ListMessageRepository.getListMessage(params);
         dispatch(setListMessage({conversationId: params.conversationID, data: data, isFreshData: !params.lastestID}));
+        const unreadMessages:string[] = [];
+        data.listRecords.forEach(message => {
+            let isUnread = true;
+            message.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+                if (typeof user === "string") {
+                    if (user === profile._id) {
+                        isUnread = false;
+                    }
+                } else{
+                    if (user._id === profile._id) {
+                        isUnread = false;
+                    }
+                }
+            });
+            if (isUnread) {
+                unreadMessages.push(message._id)
+            }
+        });
+        dispatch(setUnreadMessage({unreadMessages, conversationId: params.conversationID}));
         dispatch(setLoading({conversationId: params.conversationID, data: false}));
 
         return new Promise<ListMessageData>((resolve, reject) => {
@@ -134,6 +155,15 @@ export const UseConversation = () : UseConversationType => {
         });
     }
 
+    const updateSeenMessage = async (params: UpdateSeenMessageConversationPayload) => {
+        const {data} = await ListMessageRepository.updateSeenMessage(params);
+        dispatch(setUnreadMessage({unreadMessages: [], conversationId: params.conversationID}));
+
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     return {
         getListMessage,
         sendNormalMessage,
@@ -145,6 +175,7 @@ export const UseConversation = () : UseConversationType => {
         revokeMessage,
         updatePoll,
         addUserToConversation,
-        goToMessagePosition
+        goToMessagePosition,
+        updateSeenMessage
     }
 }

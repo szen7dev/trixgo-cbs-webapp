@@ -6,7 +6,7 @@ import {dismissCreateNewChatMini, openChatBox} from "redux/reducer/messages/Mini
 import {useUser} from "services/hooks/useUser";
 import {map as _map} from "lodash"
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MiniChatContext} from "../ChatsOnRightSideBar";
+import {MiniChatContext} from "../index";
 
 export const NewMiniChatBox:FC = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const NewMiniChatBox:FC = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [pageParam, setPageParam] = useState('');
-    const params = {limit: 10, select: 'fullname email phone image', lastestID: pageParam, keyword: searchTerm}
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', lastestID: pageParam, keyword: searchTerm}
     const { listFriends, nextCursor } = useUser(params, pageParam);
     const {createConversation} = UseListConversation();
     const handleOpenPrivateChat = (memberId : string) => {
@@ -28,7 +28,15 @@ export const NewMiniChatBox:FC = () => {
         }).then(data => {
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
                 conversationID: data._id,
-                select: JSON.stringify({sender: "bizfullname"})
+                select: JSON.stringify({sender: "bizfullname"}),
+                filter: JSON.stringify({
+                    author: 0,
+                    taskID: 0,
+                    links: 0,
+                    createAt: 0,
+                    __v: 0,
+                    config: 0
+                })
             });
             // getConverationInformation({
             //     conversationID: data._id,
@@ -58,7 +66,7 @@ export const NewMiniChatBox:FC = () => {
             <div className="t-mini-chat-add-new-list min-h-[370px] max-h-[370px] overflow-auto">
                 {
                     _map(listFriends, friend => (
-                        <button className="t-mini-chat-add-new-list-item flex items-center text-[15px] mb-4 px-3" onClick={() => handleOpenPrivateChat(friend._id)}>
+                        <button key={friend._id} className="t-mini-chat-add-new-list-item flex items-center text-[15px] mb-4 px-3" onClick={() => handleOpenPrivateChat(friend._id)}>
                             <img src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`} alt="Thumbnail" className="rounded-full w-9 h-9 mr-3 object-cover" />
                             <span>{friend.bizfullname||friend.fullname}</span>
                         </button>

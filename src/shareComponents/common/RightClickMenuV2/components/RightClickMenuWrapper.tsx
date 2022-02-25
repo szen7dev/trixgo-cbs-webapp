@@ -1,6 +1,7 @@
 import React, {FC, ReactNode, useEffect, useRef} from "react";
-import {openRightClick} from "redux/reducer/RightClickMenu";
-import {useDispatch} from "react-redux";
+// import {openRightClick} from "redux/reducer/RightClickMenu";
+// import {useDispatch} from "react-redux";
+import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 
 type Props = {
     contextMenu: ReactNode;
@@ -10,7 +11,7 @@ type Props = {
 
 export const RightClickMenuWrapper: FC <Props>= ({children, contextMenu, customRenderTag,...props}) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const dispatch = useDispatch();
+    const { openRightClick} = useRightClickMenu();
 
     useEffect(() => {
         wrapperRef.current&&wrapperRef.current.addEventListener("contextmenu", handleContextMenu);
@@ -22,11 +23,11 @@ export const RightClickMenuWrapper: FC <Props>= ({children, contextMenu, customR
 
     const handleContextMenu = (e: MouseEvent) => {
         e.preventDefault();
-        dispatch(openRightClick({
+        openRightClick({
             content: contextMenu,
             x: e.x,
             y: e.y
-        }))
+        })
     };
 
     return React.createElement(

@@ -32,7 +32,7 @@ export const FormFilter: React.FC<FormFilterProps> = ({
   initialValues,
   ...props
 }) => {
-  console.log({initialValues})
+
   const [searchValues, setSearchValues] = React.useState<{
     [k: string]: string;
   }>({});
@@ -139,6 +139,7 @@ export const FormFilter: React.FC<FormFilterProps> = ({
                 placeholder={"Nội dung tìm kiếm tại đây"}
                 className={"w-full shadow-lg rounded-md h-[45px]"}
                 onChange={(value) => setFieldValue("keyword", value)}
+                initialValue={initialValues?.keyword}
               />
               {listFieldDropdown.map((field) => {
                 return (

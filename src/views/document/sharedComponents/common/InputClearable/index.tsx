@@ -1,14 +1,16 @@
-import {FC, useState} from "react";
+import {FC, useState, useEffect} from "react";
 import Close from "assets/icons/Close";
 import SliderIcon from "assets/images/icons8-slider-96.svg"
 type Props = {
     onChange: (val: string) => void;
     className: string;
     placeholder: string;
+    initialValue?: string;
 }
 
-export const InputClearable:FC<Props> = ({onChange,className,placeholder}) => {
+export const InputClearable:FC<Props> = ({onChange,className,placeholder, initialValue}) => {
     const [value, setValue] = useState('');
+    const [isSetInitialValue, setInitialValue] = useState(false);
 
     const setInputValue = (val: string) => {
         setValue(val);
@@ -17,6 +19,13 @@ export const InputClearable:FC<Props> = ({onChange,className,placeholder}) => {
     const clearInput = () => {
         setValue('')
     }
+
+    useEffect(() => {
+        if (!isSetInitialValue && initialValue && initialValue.length > 0) {
+            setValue(initialValue)
+            setInitialValue(true)
+        }
+    }, [initialValue, isSetInitialValue]);
 
     return (
         <div className={"relative flex items-center"}>
