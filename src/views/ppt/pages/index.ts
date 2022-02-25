@@ -24,3 +24,7 @@ export { default as ProjectResourcePage } from "./ProjectResourcePage";
 export { default as ProjectRfaPage } from "./ProjectRfaPage";
 export { default as ProjectRfiPage } from "./ProjectRfiPage";
 export { default as ProjectSchedulePage } from "./ProjectSchedulePage";
+export { default as ProjectInspectionPage } from "./ProjectInspectionPage";
+export { default as ProjectInspectionTab2Page } from "./ProjectInspectionTab2Page";
+export { default as ProjectInspectionTab3Page } from "./ProjectInspectionTab3Page";
+export { default as ProjectInspectionDetailPage } from "./ProjectInspectionDetailPage";

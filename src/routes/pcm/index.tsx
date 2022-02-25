@@ -54,7 +54,11 @@ import {
     ProjectRfaPage,
     ProjectRfiPage,
     ProjectSchedulePage,
-    ProjectDashboardPage
+    ProjectInspectionPage,
+    ProjectDashboardPage,
+    ProjectInspectionTab2Page,
+		ProjectInspectionTab3Page,
+		ProjectInspectionDetailPage
 } from 'views/ppt/pages'
 
 const PCMRouter: FC = () => {
@@ -163,6 +167,18 @@ const PCMRouter: FC = () => {
                                 <Route exact path='/pcm/project/:id/resource/2' component={() => <>hello</>} />
                             </LayoutSecondary>
                         </Route>
+                        <Route exact path='/pcm/project/:id/inspection' component={ProjectInspectionPage} />
+                        <Route exact path='/pcm/project/:id/inspection/(tabs2|tabs3)'>
+                            <LayoutSecondary pages={[
+                                { id: '1', title: 'Tất cả', path: '/pcm/project/:id/inspection', navExact: true },
+                                { id: '2', title: 'Gói thầu', path: '/pcm/project/:id/inspection/tabs2' },
+                                { id: '3', title: 'Báo cáo quản trị', path: '/pcm/project/:id/inspection/tabs3' },
+                            ]}>
+                                <Route exact path='/pcm/project/:id/inspection/tabs2' component={ProjectInspectionTab2Page} />
+                                <Route exact path='/pcm/project/:id/inspection/tabs3' component={ProjectInspectionTab3Page} />
+                            </LayoutSecondary>
+                        </Route>
+                        <Route exact path='/pcm/project/:id/inspection/:item' component={ProjectInspectionDetailPage} />
                     </Switch>
                 </LayoutProjectSecondary>
             </ProtectedRoute>

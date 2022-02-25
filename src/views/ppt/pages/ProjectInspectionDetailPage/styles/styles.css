@@ -1,0 +1,14 @@
+@media print {
+	body * {
+    /* visibility: hidden; */
+		display: none;
+  }
+  #printarea, #printarea * {
+    visibility: visible;
+  }
+  #printarea {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

@@ -1305,7 +1305,11 @@ input[type="text"] {
 .cbs-checkbox {
   @apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border w-4 h-4 checked:border-cbs-primary;
 }
+.cbs-checkbox-radio {
+	@apply rounded-full focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border checked:border-cbs-primary;
+}
 .cbs-checkbox:checked,
+.cbs-checkbox-radio:checked,
 .cbs-checkbox-2:checked {
   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
 }
@@ -1445,6 +1449,28 @@ input[type="text"] {
 }
 .date-text-message {
   transform: translateX(20px);
+}
+
+.cbs-radial-progress {
+	--from: -90deg;
+	--thickness: 5px;
+	--primary: currentColor;
+	--secondary: #0000;
+	position:relative;
+	display: inline-grid;
+	place-content: center;
+}
+
+.cbs-radial-progress::before {
+	content:'';
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background: conic-gradient(from var(--from), var(--primary) calc(var(--value) * 1%), #0000 0), conic-gradient(var(--secondary), var(--secondary));
+	mask: radial-gradient(farthest-side,#0000 calc(99% - var(--thickness)),#000 calc(100% - var(--thickness)));
+	border-radius:9999px
 }
 .t-mini-chat .attach-vote,
 .t-mini-chat .attach-reminder,
