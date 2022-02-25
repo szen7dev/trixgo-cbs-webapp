@@ -11,7 +11,7 @@ import {SearchMessage} from "./sections/SearchMessage";
 import {useDispatch} from "react-redux";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {SocketController} from "views/messages/shareComponents/common/SocketController";
-import {RightClickMenuV2} from "../../../../shareComponents/common";
+import {UnreadMessageController} from "./sections/UnreadMessages";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -72,7 +72,7 @@ export const MessagesHome:FC = () => {
             <NPSCreate context={MessageContext}/>
             <AddUsersToConversation context={MessageContext}/>
             <PopupSendImageAndFile/>
-            <RightClickMenuV2 />
+            <UnreadMessageController currentChat={currentChat} context={MessageContext}/>
         </MessageContext.Provider>
     )
 }

@@ -10,6 +10,7 @@ import {setListConversation, updateSingleConversation, setAmountMissMessage} fro
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
+import {setUnreadMessage} from "../../../../../redux/reducer/messages/UnreadMessages";
 
 type Props = {
     context: any;
@@ -34,6 +35,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
             socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
             socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+            socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
@@ -45,6 +47,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
                 socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
                 socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+                socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
                 socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             }
@@ -71,7 +74,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 conversationId: data.infoMessage.conversation,
                 messageId: data.infoMessage._id,
                 messageData: data.infoMessage
-            }))
+            }));
 
             if (!inSearchMode){
                 setTimeout(() => {
@@ -132,6 +135,13 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             conversationMessagesList.scrollTo({top: conversationMessagesList.scrollHeight, behavior: "smooth" });
         }
     };
+
+    const onUpdateSeenMessage = (data: any) => {
+        console.log("CHATTING_SSC_UPDATE_SEEN_MESSAGE", data)
+        // dispatch(updateSingleConversation({
+        //     conversationData: data.data.infoConversation
+        // }))
+    }
 
     return null;
 };

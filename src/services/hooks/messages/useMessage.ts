@@ -1,6 +1,6 @@
 import {useInfiniteQuery} from "react-query";
 import ListMessageRepository from "apis/messages/message";
-import {ItemMessage} from "../../../typings/apis/messages/listMessage";
+import {ItemMessage} from "typings/apis/messages/listMessage";
 
 type UseMessageType = {
     isLoadingSearchMessage: boolean,
