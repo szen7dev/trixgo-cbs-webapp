@@ -26,7 +26,7 @@ export const useQueryListFriend = (params?: ParamsQuery): UseQueryListFriend => 
             return data?.nextCursor || undefined;
         },
         refetchOnWindowFocus: false,
-        enabled: true,
+        enabled: true
     });
     const {
         isLoading,

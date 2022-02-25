@@ -36,16 +36,16 @@ export const ModalListUser: FC<Props> = ({ isModalOpen, toggle, icon, data, tota
 					{(data && data.length) ? data.map((item: any) => (
 						<li key={item._id} className="flex justify-between pl-4 pr-2 py-2">
 							<div className="flex">
-								<img src={`${process.env.REACT_APP_URL_S3_USER}/${item?.userCreate?.image}`} alt="avatar" className="h-10 w-10 rounded-full mr-3" />
+								<img src={`${process.env.REACT_APP_URL_S3_USER}/${item?.author?.image}`} alt="avatar" className="h-10 w-10 rounded-full mr-3" />
 								<div>
-									<p className="text-black text-[15px]">{item?.userCreate?.bizfullname}</p>
+									<p className="text-black text-[15px]">{item?.author?.bizfullname}</p>
 									<p className="leading-[15px] mt-1">
-										{userID === item?.userCreate?._id ? 'Đã là bạn' : ''}
+										{userID === item?.author?._id ? 'Đã là bạn' : ''}
 									</p>
 								</div>
 							</div>
 							<div>
-								<Link to={`/messages/#${item?.userCreate?._id}`} className="flex items-center text-black py-1.5 pl-1.5 pr-4 bg-gray-100 rounded-md">
+								<Link to={`/messages/#${item?.author?._id}`} className="flex items-center text-black py-1.5 pl-1.5 pr-4 bg-gray-100 rounded-md">
 									<img src={iconComment} alt="" className="inline-block w-6 h-6 mr-1" />
 									Nhắn tin
 								</Link>

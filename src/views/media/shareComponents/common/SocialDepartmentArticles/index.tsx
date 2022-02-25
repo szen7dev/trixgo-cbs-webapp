@@ -1,20 +1,19 @@
-import React from 'react'
+import React from 'react';
 
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import iconComment from 'assets/images/icon-chat-project.png';
 import { MediaProps } from 'typings/media';
 import { abbreviateNumber } from 'utils';
+import { Loader } from 'shareComponents/common';
 
-import { useMedia } from "services/hooks/useMedia";
-import { useAuth } from "services/hooks/useAuth";
+type Props = {
+	listMedias: Array<MediaProps>,
+	isLoading: boolean
+} & React.HtmlHTMLAttributes<HTMLDivElement>
 
-export const SocialDepartmentArticles: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { user } = useAuth();
-	const { listMedias } = useMedia('list_media__department', { 
-		type: 'department',
-		companyID: user?.company?._id
-	});
+export const SocialDepartmentArticles: React.FC<Props> = ({ listMedias, isLoading, ...props }) => {
+	if(isLoading) return <Loader className="border-primary" />
 
 	return (
 		<div {...props}>
@@ -31,7 +30,7 @@ export const SocialDepartmentArticles: React.FC<React.HtmlHTMLAttributes<HTMLDiv
 								<div className="inline-flex items-center align-middle text-x-small ml-1.5">
 									<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
 									<span className="text-primary">
-									{abbreviateNumber(media.amountComment)}
+										{abbreviateNumber(media.amountComment)}
 									</span>
 								</div>
 							</div>

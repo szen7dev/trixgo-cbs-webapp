@@ -7,7 +7,6 @@ import { RootCommentsList, ReplyCommentField } from 'views/media/shareComponents
 import { ContextModalPost } from 'views/media/contexts/post';
 
 export const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	// const [reply, setReply] = useState<boolean>(false);
 	// const { state } = useContext(CommentContext);
 	const { state: statePost } = useContext(ContextModalPost);

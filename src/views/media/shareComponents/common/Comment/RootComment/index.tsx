@@ -27,7 +27,7 @@ type UpdateCommentProps = {
 
 export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
-	const { openComment, openReply } = useContext(ContextModalPost);
+	const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);

@@ -33,14 +33,24 @@ export const PcmHomePage: FC = () => {
   const { listTasks } = usePcm();
   const socketRef: any = useSocket();
 
-  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia('list_media__digital-conversion', { 
-    limit: 6, type: 'digital-conversion'
-  });
-  const { listMedias: listMediasCompany } = useMedia('list_media__company__homepage', {
-    limit: 1, type: 'company', companyID: user?.company._id
+  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia({
+    key: 'list_medias__digital-conversion',
+    params: { 
+      limit: 6, 
+      type: 'digital-conversion'
+    }
   });
 
-  // Kiểm soát lifeCicle của Data
+  const { listMedias: listMediasCompany } = useMedia({
+    key: 'list_medias__company_homepage',
+    params: { 
+      limit: 1, 
+      type: 'company',
+      companyID: user?.company._id
+    },
+    isFetchMedias: true
+  });
+
   useEffect(() => {
     (async () => {
       const response = await PcmRepository.listTotalAnalysis();

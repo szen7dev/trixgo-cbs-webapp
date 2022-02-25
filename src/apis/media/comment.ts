@@ -30,7 +30,7 @@ const CommentRepository = {
       data: CommentDetail;
       message: string;
       error: boolean;
-    }>(commentURL + "/comment_cores", payload);
+    }>(commentURL + "/comments", payload);
     return data;
   },
   async deleteComment(id: string) {

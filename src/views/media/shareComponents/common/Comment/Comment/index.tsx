@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes, useContext } from 'react';
-
+import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
@@ -28,15 +28,27 @@ interface Props {
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
-	const { deleteComment } = useCommentMedia({ mediaID: comment.media });
+	const { deleteCommentAsync } = useCommentMedia({
+		params: { mediaID: comment.media }
+	});
 	const { dispatch } = useContext(CommentContext);
 
-	const handleDeleteComment = () => {
-		deleteComment(comment._id);
-		dispatch({
-			type: "DELETE_COMMENT",
-			payload: { _id: comment._id, parent: comment?.parent }
-		});
+	const handleDeleteComment = async () => {
+		try {
+			const { error, message } = await deleteCommentAsync(comment._id);
+            if(error) return toast.warning(message);
+			
+			dispatch({
+				type: "DELETE_COMMENT",
+				payload: { _id: comment._id, parent: comment?.parent }
+			});
+		} catch (error: unknown) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
 	}
 
 	const handleEditComment = () => {

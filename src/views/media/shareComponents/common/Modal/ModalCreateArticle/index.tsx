@@ -1,16 +1,16 @@
-import React, { FC, useState } from 'react';
-
 /**
- * LIBRARIES
+ * Libraries
  */
+import React, { FC, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
+import { toast } from "react-toastify";
 import cn from "classnames";
 
 /**
- * ASSETS, COMPONENTS
+ * Assets, Components
  */
 import {
     IconFile,
@@ -28,7 +28,7 @@ import ChevronDownIcon from 'assets/icons/ChevronDown';
 import iconDown from 'assets/images/Frame 1745.png';
 
 /**
- * CONTEXTS
+ * Contexts
  */
 import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 
@@ -39,6 +39,7 @@ import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/me
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
+import { useSocket } from 'services/hooks/useSocket';
 import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
 export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, initialValues = {
@@ -61,19 +62,32 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		}] = useUploadFile({ files, images });
 
 	const { user } = useAuth();
-	const { refetchListMedias: refetchListMediasCompany } = useMedia('list_media__company', {
-		type: 'company',
-		companyID: user?.company._id
-	});
-	const { refetchListMedias: refetchListMediasDepartment } = useMedia('list_media__department', {
-		type: 'department',
-		companyID: user?.company._id
-	});
-	const { refetchListMedias: refetchListMediasDigitalConversion } = useMedia('list_media__digital-conversion', { 
-		type: 'digital-conversion'
+	const { refetchListMedias: refetchListMediasCompany } = useMedia({
+		key: `list_medias__company`,
+		params: { 
+			type: "company",
+			companyID: user?.company._id
+		},
+		isFetchMedias: true
 	});
 
-	const { createMedia, updateMedia } = useMedia();
+	const { refetchListMedias: refetchListMediasDepartment } = useMedia({
+		key: `list_medias__department`,
+		params: { 
+			type: "department",
+			companyID: user?.company._id
+		},
+		isFetchMedias: true
+	});
+
+	const { refetchListMedias: refetchListMediasDigital } = useMedia({
+		key: `list_medias__digital-conversion`,
+		params: { type: "digital-conversion" },
+		isFetchMedias: true
+	});
+
+    const { current: socket }: any = useSocket();
+	const { createMediaAsync, updateMediaAsync } = useMedia({});
 	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
@@ -145,26 +159,49 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			_id && (values.files = [...values.files || [], _id]);
 		}
 
-		// Handle api here!
-		switch (modalType) {
-			case 'create':
-				values.companyID = user?.company?._id;
-				values.departmentID = user?.department?._id;
+		try {
+			// Handle api here!
+			switch (modalType) {
+				case 'create': {
+					values.companyID = user?.company?._id;
+					values.departmentID = user?.department?._id;
 
-				// Tạo bài viết
-				await createMedia(values);
-				break;
-			case 'update':
-				values.mediaID = initialValues.mediaID;
+					// Tạo bài viết
+					const { error, data, message } = await createMediaAsync(values);
+					if(error) {
+						toast.warning(message);
+					}
+					
+					toast.success('Tạo bài viết thành công');
+					socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+						receivers: data.receivers
+					});
+					break;
+				}
+				case 'update': {
+					values.mediaID = initialValues.mediaID;
 
-				// Cập nhật bài viết
-				await updateMedia(values);
-				break;
-			default:
-				break;
-		}
+					// Cập nhật bài viết
+					const { error, message } = await updateMediaAsync(values);
+					if(error) {
+						toast.warning(message);
+					}
 
-		// Refetch MessageList media
+					toast.success('Cập nhật bài viết thành công');
+					break;
+				}
+				default:
+					break;
+			}
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+        }
+
+		// Refetch List media
 		switch (values.type) {
 			case 'company':
 				refetchListMediasCompany();
@@ -173,7 +210,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 				refetchListMediasDepartment();
 				break;
 			case 'digital-conversion':
-				refetchListMediasDigitalConversion();
+				refetchListMediasDigital();
 				break;
 			default:
 				break;
