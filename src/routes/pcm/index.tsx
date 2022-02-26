@@ -19,7 +19,6 @@ import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
 import { PcmHomePage } from "views/pcm/pages";
-import ErrorPage from 'views/authentication/Error'
 import {
     DocumentDetailPage,
     DocumentFolderPage,
@@ -57,8 +56,8 @@ import {
     ProjectInspectionPage,
     ProjectDashboardPage,
     ProjectInspectionTab2Page,
-		ProjectInspectionTab3Page,
-		ProjectInspectionDetailPage
+    ProjectInspectionTab3Page,
+    ProjectInspectionDetailPage
 } from 'views/ppt/pages'
 
 const PCMRouter: FC = () => {

@@ -15,8 +15,25 @@ import {
 import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "utils";
 
+const populatesMedia = JSON.stringify({
+    path: "company department other author files images",
+    select: "_id name sign nameOrg path size mimeType type createAt bizfullname image position department",
+    populate: {
+        path: "position department",
+        select: "_id name sign"
+    },
+})
+
+const populatesComment = JSON.stringify({
+    path: "author lastestReplyID files images",
+    select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
+    populate: {
+        path: 'author files images',
+        select: '_id bizfullname image name nameOrg path size mimeType type createAt'
+    }
+})
+
 const mediaURL = "/api/medias";
-const commentURL = "/api/reaction";
 
 const MediaRepository = {
     /**
@@ -52,14 +69,7 @@ const MediaRepository = {
     async mediaInfo(id: string): Promise<infoMediaResponse> {
         const { data } = await API.get<infoMediaResponse>(
             `${mediaURL}/${id}?${convertObToUrl({
-                populates: JSON.stringify({
-                    path: "files images author",
-                    select: "_id name nameOrg path size mimeType type createAt bizfullname image position department",
-                    populate: {
-                        path: "position department",
-                        select: "_id name sign"
-                    }
-                })
+                populates: populatesMedia
             })}`
         );
         return data;
@@ -68,10 +78,7 @@ const MediaRepository = {
         const { data } = await API.get<ListResponse>(
             `${mediaURL}?${convertObToUrl({
                 ...payload,
-                populates: JSON.stringify({
-                    path: "company department other author",
-                    select: "_id name sign bizfullname image"
-                })
+                populates: populatesMedia
             })}`
         );
         return data;
@@ -114,14 +121,20 @@ const MediaRepository = {
     async createComment(payload: CommentPayload): Promise<CommentResponse> {
         const { data } = await API.post<CommentResponse>(
             `${mediaURL}/comments`,
-            payload
+            {
+                ...payload,
+                populates: populatesComment
+            }
         );
         return data;
     },
     async updateComment(payload: CommentPayload): Promise<CommentResponse> {
         const { data } = await API.put<CommentResponse>(
-            `${commentURL}/comments`,
-            payload
+            `${mediaURL}/comments`,
+            {
+                ...payload,
+                populates: populatesComment
+            }
         );
         return data;
     },
@@ -135,14 +148,7 @@ const MediaRepository = {
         const { data } = await API.get<ListCommentResponse>(
             `${mediaURL}/comments?${convertObToUrl({
                 ...payload,
-                populates: JSON.stringify({
-                    path: "author lastestReplyID files images",
-                    select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
-                    populate: {
-                        path: 'author files images',
-                        select: '_id bizfullname image name nameOrg path size mimeType type createAt'
-                    }
-                })
+                populates: populatesComment
             })}`
         );
         return data;

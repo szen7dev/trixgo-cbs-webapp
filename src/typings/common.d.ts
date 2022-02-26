@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 import { APIResponse } from "./apis/response";
+// import { User } from "./auth";
+import { User } from "./user";
 
 export type Locale = {
   id: string;
@@ -40,27 +42,18 @@ export type NavLinkTaskDashboard = {
 
 export type CommentProps = {
   _id: string;
-  media: string;
-  comment: {
+  media: {
     _id: string;
-    content: string,
-    files: FileProps[] | undefined;
-    images: FileProps[] | undefined;
-    author: {
-      _id: string;
-      image: string;
-      fullname: string;
-    },
-    amountCommentReply: number,
-    amountReaction: number,
-    typeReactions: number[],
+    author: User;
+    createAt: string
   };
+  content: string,
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
+  author: User,
+  amountCommentReply: number,
+  amountReaction: number,
   parent: string;
-  userCreate: {
-    _id: string;
-    image: string;
-    fullname: string;
-  };
   createAt: string,
   lastestReplyID: CommentProps;
 }

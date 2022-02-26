@@ -7,10 +7,12 @@ import { FileProps } from 'typings/media';
 import MediaRepository from "apis/media";
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/media/contexts/post';
+import { Comment as CommentType } from 'typings/ppt/comment';
 
 interface Props {
 	renderNestedComment?: React.ElementType
 	onClickReply?: () => unknown;
+	onClickImage?: (comment: CommentType, index: number) => void,
 	comment: CommentProps,
 	limit: number,
 	smallImage?: boolean
@@ -30,7 +32,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 	const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
-	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);
+	const [amountReply, setAmountReply] = useState<number>(comment?.amountCommentReply - 1);
 
 	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({
 		files: [], images: [], commentID: '', content: '', parentID: ''
@@ -56,7 +58,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 
 		const { error, data } = await MediaRepository.listComments({
 			lastestID,
-			mediaID: comment.media,
+			mediaID: comment.media._id,
 			parentID: comment._id,
 		});
 		setAmountReply(amountReply - limit);
@@ -78,10 +80,10 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 
 		setInfoCommentParent({
 			parentID: '',
-			commentID: infoComment.comment?._id,
-			content: infoComment.comment?.content,
-			files: infoComment.comment?.files,
-			images: infoComment.comment?.images
+			commentID: infoComment._id,
+			content: infoComment.content,
+			files: infoComment.files,
+			images: infoComment.images
 		})
 	}
 
@@ -92,10 +94,10 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 
 		setInfoComment({
 			parentID: comment._id,
-			commentID: infoComment.comment?._id,
-			content: infoComment.comment?.content,
-			files: infoComment.comment?.files,
-			images: infoComment.comment?.images
+			commentID: infoComment._id,
+			content: infoComment.content,
+			files: infoComment.files,
+			images: infoComment.images
 		})
 	}
 
@@ -127,7 +129,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 								small={smallImage}
 								comment={commentReply}
 								onClickReply={() => setIsReply(true)}
-								onClickImage={(index: number) => console.log(index)}
+								onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index })}
 								// Callback onClickupdate
 								onClickEdit={handleClickUpdateChild}
 								renderOptions={EditButton}
@@ -148,7 +150,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 							images={infoComment.images}
 							commentID={infoComment.commentID}
 							parentID={infoComment.parentID || comment._id}
-							mediaID={comment.media}
+							mediaID={comment.media._id}
 							onSubmit={() => {
 								setIsReply(false);
 								setInfoComment({
@@ -172,7 +174,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 						images={infoCommentParent.images}
 						commentID={infoCommentParent.commentID}
 						parentID={infoCommentParent.parentID}
-						mediaID={comment.media}
+						mediaID={comment.media._id}
 						onSubmit={() => {
 							setIsReplyParent(false);
 							setInfoCommentParent({

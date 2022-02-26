@@ -66,13 +66,13 @@ const reducer = (state: CommentsState, action: CommentActions): CommentsState =>
       const cloneState = { ...state };
 
       if(key === 'commentsReply' && action.payload.parent) {
-        const index = state[key][action.payload.parent]?.findIndex(val => val.comment?._id === action.payload.commentID);
-        index !== -1 && (cloneState[key][action.payload.parent][index].comment = action.payload.body);
+        const index = state[key][action.payload.parent]?.findIndex(val => val._id === action.payload.commentID);
+        index !== -1 && (cloneState[key][action.payload.parent][index] = action.payload.body);
       }
 
       if(key === 'comments'){
-        const index = state[key].findIndex(val => val.comment?._id === action.payload.commentID);
-        index !== -1 && (cloneState[key][index].comment = action.payload.body);
+        const index = state[key].findIndex(val => val._id === action.payload.commentID);
+        index !== -1 && (cloneState[key][index] = action.payload.body);
       }
 
       return cloneState;

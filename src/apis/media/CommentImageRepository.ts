@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../repository";
 
 import {
@@ -12,14 +11,21 @@ export type CommentBody = {
   mediaID: string; // *required
   fileID: string; // *required
   content: string; // *required
-
   parentID?: string;
   files?: string[];
   images?: string[];
 };
 
+const populatesComment = JSON.stringify({
+  path: "author lastestReplyID files images",
+  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
+  populate: {
+      path: 'author files images',
+      select: '_id bizfullname image name nameOrg path size mimeType type createAt'
+  }
+})
+
 const mediaURL = "/api/medias";
-const commentURL = "/api/reaction";
 
 const CommentImageRepository = {
   /**
@@ -36,7 +42,7 @@ const CommentImageRepository = {
   },
   async updateComment(payload: CommentBody) {
     const { data } = await API.put<Response<CommentDetail>>(
-      commentURL + "/comments/file"
+      mediaURL + "/comments/file"
     );
     return data;
   },
@@ -58,20 +64,7 @@ const CommentImageRepository = {
       mediaURL + "/comments/file",
       {
         params: {
-          populates: {
-            path: "comment userCreate lastestReplyID",
-            select:
-              "_id fullname image parent content files images amountCommentReply amountReaction createAt",
-            populate: {
-              path: "files images comment userCreate lastestReplyID",
-              select:
-                "_id name nameOrg path size type fullname image content files images amountCommentReply amountReaction",
-              populate: {
-                path: "files images",
-                select: "_id name nameOrg path size type",
-              },
-            },
-          },
+          populates: populatesComment,
           mediaID: payload.mediaID,
           fileID: payload.fileID,
           lastestID: payload.lastestID,

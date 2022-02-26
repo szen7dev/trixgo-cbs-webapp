@@ -88,7 +88,7 @@ export const MiniChatGroup:FC = () => {
                     key={chat._id} className="block ml-auto mr-auto relative mb-4 relative">
                     {
                         chat.avatar?
-                            <img  className={"w-10 h-10 min-w-10 min-h-10 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={chat._id}/>:
+                            <img  className={"w-10 h-10 min-w-10 min-h-10 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={chat._id}/>:
                             <AvatarGroupChat
                                 avatars={getAvatarMembers(chat, profileId)}
                                 imageClass={"w-10 h-10 min-w-10 min-h-10"}
