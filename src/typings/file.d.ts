@@ -1,13 +1,21 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 
-export type FilePayload = Partial<File> & {
-  mimeType: string;
+export type GenerateLinkPayload = {
+  appID?: string;
+  companyID?: string;
+  projectID?: string;
+  groupID?: string;
+  packageID?: string;
+  conversationID?: string;
   type?: string;
+  typeUpload?: string;
+}
+
+export type FilePayload = Partial<File> & Partial<GenerateLinkPayload> & {
+  mimeType: string;
   name: string;
   size: string;
-  app?: string;
-  typeUpload?: string;
 };
 
 export type FileUpdatePayload = {

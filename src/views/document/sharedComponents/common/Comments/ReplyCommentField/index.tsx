@@ -59,7 +59,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	}] = useUploadFile({ files, images });
 
 	const [text, setText] = useState<string>(defaultValue || '');
-	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
+	const { addFileToUpload } = useUpload({
+		appID: '61e049c9fdebf77b072d1b13'
+	});
 	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
 		key: `list_comments.${mediaID}`,
 		params: { mediaID },

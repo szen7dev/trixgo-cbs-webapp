@@ -51,10 +51,6 @@ export const PcmHomePage: FC = () => {
     },
     isFetchMedias: true
   });
-  console.log({
-    listMediasDigitalConversion,
-    listMediasCompany
-  })
 
   useEffect(() => {
     (async () => {

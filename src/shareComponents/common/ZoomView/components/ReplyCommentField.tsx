@@ -24,6 +24,7 @@ interface Props {
 	files?: FileProps[],
 	images?: FileProps[],
 	content?: string,
+	appID?: string,
 }
 
 const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
@@ -35,6 +36,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	files,
 	images,
 	content,
+	appID,
 	...props
 }) => {
 	const [uploads, {
@@ -50,7 +52,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}] = useUploadFile({ files, images });
 
 	const [text, setText] = useState<string>(content || '');
-	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
+	const { addFileToUpload } = useUpload({ appID });
 
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
