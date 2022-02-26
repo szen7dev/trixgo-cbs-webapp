@@ -79,7 +79,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							{images.slice(0, 3).map((image, i) => {
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;
-								const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
+								const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
 
 								return (
 									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => handleClickImage(i)} >

@@ -13,7 +13,7 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 	const handleDownload = (file: FileProps | File) => {
 		if ('path' in file) {
 			const a = document.createElement('a');
-			a.href = `${process.env.REACT_APP_URL_S3}/${file.path}`;
+			a.href = `${process.env.REACT_APP_URL_S3}${file.path}`;
 			a.download = file.nameOrg;
 			document.body.appendChild(a);
 			a.click();

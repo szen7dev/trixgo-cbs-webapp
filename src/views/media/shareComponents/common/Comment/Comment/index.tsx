@@ -29,7 +29,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteCommentAsync } = useCommentMedia({
-		params: { mediaID: comment.media }
+		params: { mediaID: comment.media._id }
 	});
 	const { dispatch } = useContext(CommentContext);
 
@@ -59,8 +59,8 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		onClickImage?.(index, images, comment._id)
 	}
 
-	const images = comment?.comment?.images || [];
-	const files = comment?.comment?.files || [];
+	const images = comment.images || [];
+	const files = comment.files || [];
 
 	return (
 		<>
@@ -68,16 +68,16 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
-						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.userCreate?.image}`} alt="" className='h-9 w-9' />
+						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9' />
 					</div>
 				</div>
 				{/* Info and reply */}
 				<div className='group w-full'>
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
-							<p className="font-bold text-medium">{comment.userCreate?.fullname}</p>
+							<p className="font-bold text-medium">{comment.author?.fullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
-								{comment.comment?.content}
+								{comment.content}
 							</p>
 						</div>
 						{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
@@ -87,10 +87,10 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 							{images.length ? images.slice(0, 3).map((image, i) => {
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;
-								const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
+								const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
 
 								return (
-									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => handleClickImage(i)} >
+									<div key={id} className="mt-2 cursor-pointer relative" onClick={() => handleClickImage(i)}>
 										<img src={url} alt={name} className={cn("object-cover", small ? "w-24 h-24" : "w-[156px] h-[156px]")} />
 										{i === 2 && images.length > 3 && (
 											<div className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 text-3xl leading-9">

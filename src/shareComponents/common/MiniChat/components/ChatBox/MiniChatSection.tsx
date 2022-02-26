@@ -57,7 +57,7 @@ export const MiniChatSection:FC<Props> = ({chat}) => {
             <div className="t-mini-chat-header p-2 flex items-center bg-primary text-primary-light">
                 {
                     chat.avatar?
-                        <img  className={"w-8 h-8 min-w-8 min-h-8 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={chat._id}/>:
+                        <img  className={"w-8 h-8 min-w-8 min-h-8 rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={chat._id}/>:
                         <AvatarGroupChat
                             avatars={getAvatarMembers(chat, profileId)}
                             imageClass={"w-8 h-8 min-w-8 min-h-8"}

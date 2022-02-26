@@ -47,6 +47,8 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		_comments = (state.commentsReply[statePost.mediaID] || []).filter(Boolean);
 	}
 
+	if(!totalRecord && !_comments.length) return null;
+
 	return (
 		<>
 			{amountComment > 0 ? (

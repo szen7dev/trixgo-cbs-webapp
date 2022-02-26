@@ -83,18 +83,18 @@ const fileUploadReducer: UploadReducer<CommentsState, ActionProps> = (
 
       if (key === "commentsReply" && action.payload.parent) {
         const index = state[key][action.payload.parent]?.findIndex(
-          (val) => val.comment?._id === action.payload.commentID
+          (val) => val._id === action.payload.commentID
         );
         index !== -1 &&
-          (cloneState[key][action.payload.parent][index].comment =
+          (cloneState[key][action.payload.parent][index] =
             action.payload.body);
       }
 
       if (key === "comments") {
         const index = state[key].findIndex(
-          (val) => val.comment?._id === action.payload.commentID
+          (val) => val._id === action.payload.commentID
         );
-        index !== -1 && (cloneState[key][index].comment = action.payload.body);
+        index !== -1 && (cloneState[key][index] = action.payload.body);
       }
 
       return cloneState;

@@ -34,7 +34,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
                 className={"avatar-chat flex items-center justify-center cursor-pointer"}>
                 {
                     chat.avatar?
-                        <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
+                        <img  className={"w-[40px] h-[40px] min-w-[40px] min-h-[40px] rounded-full overflow-hidden"} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                         (
                             getAvatarMembers(chat, profileId).length === 0 ?
                                 <div className={"w-[40px] h-[40px] rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px]"} style={{background: "#8DD4D6"}}>

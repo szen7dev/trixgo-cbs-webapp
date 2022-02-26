@@ -155,7 +155,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 											}}
 											wrapperClass='inset-0 justify-center items-center'
 										>
-											<img className="max-h-full object-contain w-max" alt="..." src={process.env.REACT_APP_URL_S3 + '/' + state.images[state.index].path} />
+											<img className="max-h-full object-contain w-max" alt="..." src={`${process.env.REACT_APP_URL_S3}${state.images[state.index].path}`} />
 										</TransformComponent>
 									</React.Fragment>
 								)

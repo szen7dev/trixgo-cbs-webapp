@@ -142,7 +142,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
 
 				if(error) {
-					return toast.error(message);
+					return toast.warning(message);
 				}
 
 				dispatch({
@@ -155,9 +155,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				});
 			} else {
 				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
-
+				
 				if(error) {
-					return toast.error(message);
+					return toast.warning(message);
 				}
 
 				dispatch({ type: 'ADD_COMMENT', payload: data });

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../repository";
 
 import { CommentPayload } from "typings/media";
@@ -8,8 +7,16 @@ import {
   ListCommentResponse,
 } from "typings/ppt/comment";
 
+const populatesComment = JSON.stringify({
+  path: "author lastestReplyID files images",
+  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
+  populate: {
+      path: 'author files images',
+      select: '_id bizfullname image name nameOrg path size mimeType type createAt'
+  }
+})
+
 const mediaURL = "/api/medias";
-const commentURL = "/api/reaction";
 
 const CommentRepository = {
   /**
@@ -30,7 +37,7 @@ const CommentRepository = {
       data: CommentDetail;
       message: string;
       error: boolean;
-    }>(commentURL + "/comments", payload);
+    }>(mediaURL + "/comments", payload);
     return data;
   },
   async deleteComment(id: string) {
@@ -49,20 +56,7 @@ const CommentRepository = {
       mediaURL + "/comments",
       {
         params: {
-          populates: {
-            path: "comment userCreate lastestReplyID",
-            select:
-              "_id fullname image parent content files images amountCommentReply amountReaction createAt",
-            populate: {
-              path: "files images comment userCreate lastestReplyID",
-              select:
-                "_id name nameOrg path size type fullname image content files images amountCommentReply amountReaction",
-              populate: {
-                path: "files images",
-                select: "_id name nameOrg path size type",
-              },
-            },
-          },
+          populates: populatesComment,
           mediaID: payload.mediaID,
           lastestID: payload.lastestID,
           parentID: payload.parentID,

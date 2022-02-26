@@ -34,7 +34,7 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
             case "jpg":
             case "jpeg":
             case "png":
-                return <img  className={"w-[48px] h-[48px] rounded-md overflow-hidden"} src={file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}/${file.path}`} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px] rounded-md overflow-hidden"} src={file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${file.path}`} alt={"icon images"}/>
             default:
                 return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
@@ -90,7 +90,7 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
                             }
                         </div>
                         <div className={"flex-1 flex flex-col justify-center ml-[7px] pr-[20px]"}>
-                            <a href={`${process.env.REACT_APP_URL_S3}/${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
+                            <a href={`${process.env.REACT_APP_URL_S3}${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
                             <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
                         </div>
                         {

@@ -15,13 +15,8 @@ import cn from 'classnames';
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
 import { ModalContainer, Loader } from "shareComponents/common";
-import {
-	PostFile
-} from 'views/media/shareComponents/common';
-import {
-	ReplyCommentField,
-	RootCommentsList
-} from 'views/media/shareComponents/common/Comment';
+import { PostFile } from 'views/media/shareComponents/common';
+import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
 
 /**
@@ -120,7 +115,7 @@ const MediaDetail: FC = () => {
 	const [msUpdateView, setMsUpdateView] = useState<number>(0);
 
 	const toggleModalEditMedia = () => {
-		refetch();
+		modalEditMedia && refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
@@ -270,7 +265,7 @@ const MediaDetail: FC = () => {
 								<div className="post__author-info">
 									<p className="text-lg leading-5 font-bold">
 										<Link to="/">
-											{media.author?.fullname}
+											{media.author?.bizfullname}
 										</Link>
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
@@ -298,7 +293,7 @@ const MediaDetail: FC = () => {
 								{images.length ? images.slice(0, 3).map((image, i) => {
 									const id = image.file ? image.file._id : image._id;
 									const name = image.file ? image.file.nameOrg : image.nameOrg;
-									const url = image.file ? `${process.env.REACT_APP_URL_S3}/${image.file.path}` : `${process.env.REACT_APP_URL_S3}/${image.path}`;
+									const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
@@ -346,12 +341,13 @@ const MediaDetail: FC = () => {
 								</span>
 							</div>
 							<div className="border-b border-gray-300"></div>
-							{totalRecord ? <RootCommentsList
+							<RootCommentsList
 								className="px-5"
 								comments={listComments}
 								totalRecord={totalRecord}
 								limit={limit}
-								mediaID={mediaID} /> : ''}
+								mediaID={mediaID}
+							/>
 							<div className='flex flex-col w-full max-h-full overflow-y-auto'>
 								<ReplyCommentField
 									attachFile
@@ -379,7 +375,7 @@ const MediaDetail: FC = () => {
 					</div>
 				</div>
 			</div>
-			<ModalContainer isModalOpen={modalEditMedia} toggle={() => ''}>
+			<ModalContainer isModalOpen={modalEditMedia} toggle={toggleModalEditMedia}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
 					<ModalCreateArticle
 						modalType="update"

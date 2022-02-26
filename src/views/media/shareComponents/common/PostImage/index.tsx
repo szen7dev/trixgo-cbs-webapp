@@ -2,10 +2,10 @@ import { FC, HTMLAttributes, memo } from 'react';
 import { FileProps, FilePropsUpload, PostImageProps } from 'typings/media';
 
 const ImageUploading: FC<{ d: FilePropsUpload }> = ({ d }) => {
-	return <img src={'_id' in d.file ? `${process.env.REACT_APP_URL_S3}/${d.file.path}` : URL.createObjectURL(d.file)} alt="" />
+	return <img src={'_id' in d.file ? `${process.env.REACT_APP_URL_S3}${d.file.path}` : URL.createObjectURL(d.file)} alt="" />
 }
 const ImageUploaded: FC<{ d: FileProps }> = ({ d }) => {
-	return <img src={`${process.env.REACT_APP_URL_S3}/${d.path}`} alt="" />
+	return <img src={`${process.env.REACT_APP_URL_S3}${d.path}`} alt="" />
 }
 
 const MemoImageUploading = memo(ImageUploading, (prevProps, nextProps) => prevProps.d.id === nextProps.d.id);

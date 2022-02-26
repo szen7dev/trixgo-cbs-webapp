@@ -32,7 +32,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 	const { state, addComment, viewMoreCommentsReply } = useContext(CommentContext);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
-	const [amountReply, setAmountReply] = useState<number>(comment?.comment?.amountCommentReply - 1);
+	const [amountReply, setAmountReply] = useState<number>(comment.amountCommentReply - 1);
 
 	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({
 		files: [], images: [], commentID: '', content: '', parentID: ''
@@ -55,7 +55,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 
 		const { error, data } = await MediaRepository.listComments({
 			lastestID,
-			mediaID: comment.media,
+			mediaID: comment.media._id,
 			parentID: comment._id,
 		});
 		setAmountReply(amountReply - limit);
@@ -71,10 +71,10 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 
 		setInfoCommentParent({
 			parentID: '',
-			commentID: infoComment.comment?._id,
-			content: infoComment.comment?.content,
-			files: infoComment.comment?.files,
-			images: infoComment.comment?.images
+			commentID: infoComment._id,
+			content: infoComment.content,
+			files: infoComment.files,
+			images: infoComment.images
 		})
 	}
 
@@ -85,10 +85,10 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 
 		setInfoComment({
 			parentID: comment._id,
-			commentID: infoComment.comment?._id,
-			content: infoComment.comment?.content,
-			files: infoComment.comment?.files,
-			images: infoComment.comment?.images
+			commentID: infoComment._id,
+			content: infoComment.content,
+			files: infoComment.files,
+			images: infoComment.images
 		})
 	}
 
@@ -136,7 +136,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 							images={infoComment.images}
 							commentID={infoComment.commentID}
 							parentID={infoComment.parentID || comment._id}
-							mediaID={comment.media}
+							mediaID={comment.media._id}
 							onSubmit={() => {
 								setIsReply(false);
 								setInfoComment({
@@ -160,7 +160,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 						images={infoCommentParent.images}
 						commentID={infoCommentParent.commentID}
 						parentID={infoCommentParent.parentID}
-						mediaID={comment.media}
+						mediaID={comment.media._id}
 						onSubmit={() => {
 							setIsReplyParent(false);
 							setInfoCommentParent({

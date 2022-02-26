@@ -35,7 +35,7 @@ export const SearchChatItem:FC<Props> = ({chat, itemClickAction, avatarClassname
             className={"group flex p-[10px] cursor-pointer rounded-md hover:bg-gray-100"}>
             {
                 chat.avatar?
-                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px] min-w-[56px] min-h-[56px]")} src={`${process.env.REACT_APP_URL_S3}/${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
+                    <img  className={"rounded-full overflow-hidden " + (avatarClassname??"w-[56px] h-[56px] min-w-[56px] min-h-[56px]")} src={`${process.env.REACT_APP_URL_S3}${chat?.avatar?.path}`} alt={getNameConversation(chat, profileId)}/>:
                     (
                         getAvatarMembers(chat, profileId).length === 0 ?
                         <div className={"rounded-full flex items-center justify-center text-white font-bold text-xl min-w-[56px] min-h-[56px] " + (avatarClassname??"w-[56px] h-[56px]")} style={{background: "#8DD4D6"}}>

@@ -62,7 +62,7 @@ export const ImagesContent:FC<Props> = ({message, className,showSenderName, isMy
                 }}
                 key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
                 <img className={"w-full h-full object-cover " + classNameMap[index]["img"]}
-                     src={image.file.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}/${image.file.file.path}`}
+                     src={image.file.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.file.path}`}
                      alt={"image"}/>
                 {
                     (index === 4 && message.files.length > 5) &&
@@ -118,7 +118,7 @@ export const ImagesContent:FC<Props> = ({message, className,showSenderName, isMy
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                     <div className="flex overflow-hidden transition-all transform w-full h-full">
-                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => `${process.env.REACT_APP_URL_S3}/${file.file.file.path}`)} index={modalShowImage.index} />
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => `${process.env.REACT_APP_URL_S3}${file.file.file.path}`)} index={modalShowImage.index} />
                     </div>
                 </ModalFullContainer>
             </div>
