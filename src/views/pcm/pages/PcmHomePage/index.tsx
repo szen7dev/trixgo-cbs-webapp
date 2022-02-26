@@ -51,6 +51,10 @@ export const PcmHomePage: FC = () => {
     },
     isFetchMedias: true
   });
+  console.log({
+    listMediasDigitalConversion,
+    listMediasCompany
+  })
 
   useEffect(() => {
     (async () => {
@@ -184,7 +188,7 @@ export const PcmHomePage: FC = () => {
             {listMediasCompany.length ? (
               <div className="flex items-center">
                 <Link to={`/media/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
-                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images.length) ? `${process.env.REACT_APP_URL_S3}${listMediasCompany[0].images[0].path}` : imgMedia} alt="Media" />
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images?.length) ? `${process.env.REACT_APP_URL_S3}${listMediasCompany[0].images[0]?.path}` : imgMedia} alt="Media" />
                 </Link>
                 <div className="t-home-media-text text-dark">
                   <Link to={`/media/post/${listMediasCompany[0]._id}`}>
