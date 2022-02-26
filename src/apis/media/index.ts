@@ -25,7 +25,7 @@ const populatesMedia = JSON.stringify({
 })
 
 const populatesComment = JSON.stringify({
-    path: "author lastestReplyID files images",
+    path: "author lastestReplyID files images media",
     select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt",
     populate: {
         path: 'author files images',

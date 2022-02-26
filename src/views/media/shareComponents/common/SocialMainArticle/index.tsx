@@ -18,7 +18,7 @@ export const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 	return (
 		<div {...props}>
 			<div className="w-full max-h-80 md:max-h-[384px]">
-				<img src={(media.images && media.images.length) ? `${process.env.REACT_APP_URL_S3}${media.images[0].path}` : image} alt="" className="w-full h-full object-cover" />
+				<img src={(media.images && media.images.length) ? `${process.env.REACT_APP_URL_S3}${media?.images[0].path}` : image} alt="" className="w-full h-full object-cover" />
 			</div>
 			<div className="inline-flex flex-col px-5 pt-4 pb-3 w-full lg:w-min box-content" style={{ minWidth: "287px", minHeight: "363px" }}>
 				<h4 className="text-2xl leading-7 font-bold px-2.5">
