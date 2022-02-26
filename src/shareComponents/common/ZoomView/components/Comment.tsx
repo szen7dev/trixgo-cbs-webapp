@@ -51,8 +51,8 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		onClickImage?.(comment, index)
 	}
 
-	const images = comment.comment?.images || [];
-	const files = comment.comment?.files || [];
+	const images = comment?.images || [];
+	const files = comment?.files || [];
 
 	return (
 		<>
@@ -60,16 +60,16 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
-						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.userCreate?.image}`} alt="" className='h-9 w-9' />
+						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9' />
 					</div>
 				</div>
 				{/* Info and reply */}
 				<div className='group w-full'>
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
-							<p className="font-bold text-medium">{comment.userCreate?.fullname}</p>
+							<p className="font-bold text-medium">{comment.author?.fullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
-								{comment.comment?.content}
+								{comment?.content}
 							</p>
 						</div>
 						{showOptions && Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}

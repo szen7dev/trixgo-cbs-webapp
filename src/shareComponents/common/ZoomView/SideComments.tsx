@@ -34,7 +34,7 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 						<div className="flex px-4">
 							<img src={`${process.env.REACT_APP_URL_S3_USER}/${state.author?.image}`} alt="" className="rounded-full w-12 h-12 mr-2" />
 							<div>
-								<p className="text-black text-[15px] font-bold">{state.author?.fullname}</p>
+								<p className="text-black text-[15px] font-bold">{state.author?.bizfullname}</p>
 								<p className="leading-[15px] mt-1">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 							</div>
 						</div>

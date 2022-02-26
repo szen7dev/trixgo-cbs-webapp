@@ -111,10 +111,8 @@ const useComments = (payload: Payload) => {
             // Create reply comment;
             if (options[0]) {
               const { page, commentIdx } = options[0];
-              (
-                old.pages[page].data.listRecords[commentIdx]
-                  .comment as CommentDetail
-              ).amountCommentReply++;
+              (old.pages[page].data.listRecords[commentIdx] as CommentDetail)
+                .amountCommentReply++;
               old.pages[page].data.listRecords[commentIdx].listReply.data.push(
                 _data
               );
@@ -173,11 +171,13 @@ const useComments = (payload: Payload) => {
               // Update reply comment;
               old.pages[page].data.listRecords[commentIdx].listReply.data[
                 replyIdx
-              ].comment = _data;
+              ] = _data;
             } else {
               // Update comment
-              old.pages[page || 0].data.listRecords[commentIdx || 0].comment =
-                _data;
+              old.pages[page || 0].data.listRecords[commentIdx || 0] = {
+                ..._data,
+                listReply: { data: [], nextCursor: null },
+              };
             }
           }
           return old;
@@ -219,11 +219,9 @@ const useComments = (payload: Payload) => {
               old.pages[options.page || 0].data.listRecords[
                 options.commentIdx || 0
               ].listReply.data.splice(options.replyIdx || 0, 1);
-              (
-                old.pages[options.page || 0].data.listRecords[
-                  options.commentIdx || 0
-                ].comment as CommentDetail
-              ).amountCommentReply--;
+              old.pages[options.page || 0].data.listRecords[
+                options.commentIdx || 0
+              ].amountCommentReply--;
             } else {
               // Update comment
               old.pages[0].data.totalRecord--;

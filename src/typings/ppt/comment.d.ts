@@ -1,4 +1,5 @@
 import { APIResponse } from "typings/apis/response";
+import { CommentProps } from "typings/common";
 
 export type CommentDetail = {
   _id: string;
@@ -16,30 +17,7 @@ export type CommentDetail = {
   createAt: string;
 };
 
-export type Comment = {
-  _id: string;
-  media: string;
-  comment: CommentDetail | null;
-  parent: string;
-  state?: number;
-  file?: string;
-  userCreate: {
-    _id: string;
-    image: string;
-    fullname: string;
-    createAt: string;
-  };
-
-  modifyAt: string;
-  createAt: string;
-  createdAt: string;
-  updatedAt: string;
-
-  __v: number;
-  lastestReplyID?: Comment;
-
-  loading?: boolean;
-};
+export type Comment = CommentProps;
 
 export type CommentWithReply = Comment & {
   listReply: { data: Comment[]; nextCursor?: string | null };

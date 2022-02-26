@@ -7,16 +7,15 @@ import { Comment } from "typings/ppt/comment";
 const postActions = (dispatch: DispatchAction) => ({
   // ====== MODAL ======
   openComment: (comment: Comment, index: number) => {
-    if (!comment.comment) return;
     return dispatch({
       type: postTypes.OPEN_MODAL,
       payload: {
-        mediaID: comment.comment._id,
-        images: comment.comment.images,
+        mediaID: comment._id,
+        images: comment.images,
         index,
         type: "comment",
-        author: comment.comment.author,
-        createAt: comment.comment.createAt,
+        author: comment.author,
+        createAt: comment.createAt,
       },
     });
   },

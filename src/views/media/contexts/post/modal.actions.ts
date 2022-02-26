@@ -16,13 +16,25 @@ const modalActions = (dispatch: DispatchAction) => ({
       type: modalTypes.CLOSE_MODAL,
     });
   },
-  openPost: (payload: any) => {
+  openPost: (payload: {
+    mediaId: string;
+    images: any[];
+    index: number;
+    author: any;
+    createAt: string;
+  }) => {
     return dispatch({
       type: modalTypes.OPEN_POST,
       payload,
     });
   },
-  openComment: (payload: any) => {
+  openComment: (payload: {
+    mediaId: string;
+    images: any[];
+    index: number;
+    author: any;
+    createAt: string;
+  }) => {
     return dispatch({
       type: modalTypes.OPEN_COMMENT,
       payload,

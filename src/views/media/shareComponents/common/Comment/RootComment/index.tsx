@@ -27,7 +27,7 @@ type UpdateCommentProps = {
 	images: FileProps[] | undefined,
 }
 
-export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
+export const RootComment: FC<Props> = ({ onClickImage, disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
@@ -108,7 +108,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 				comment={comment}
 				onClickReply={() => setIsReply(true)}
 				onClickEdit={handleClickUpdateParent}
-				onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index })}
+				onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index, author: comment.author, createAt: comment.createAt })}
 				renderOptions={EditButton}
 			/>
 			<div>
@@ -129,7 +129,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, comment, limi
 								small={smallImage}
 								comment={commentReply}
 								onClickReply={() => setIsReply(true)}
-								onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index })}
+								onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index, author: commentReply.author, createAt: commentReply.createAt })}
 								// Callback onClickupdate
 								onClickEdit={handleClickUpdateChild}
 								renderOptions={EditButton}

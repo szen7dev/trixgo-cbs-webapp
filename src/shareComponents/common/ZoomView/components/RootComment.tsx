@@ -77,11 +77,11 @@ const RootComment: FC<Props> = ({
 	const handleClickDelete = (comment: CommentType, index?: number) => onClickDelete?.(comment, index);
 
 	// This function callback to parent;
-	const onClickUpdateComment = (replyComment: CommentType, index: number | undefined = undefined) => replyComment.comment && setReplyComment({
-		commentID: replyComment.comment._id, // Current comment editing
-		content: replyComment.comment?.content,
-		files: replyComment.comment?.files || [],
-		images: replyComment.comment?.images || [],
+	const onClickUpdateComment = (replyComment: CommentType, index: number | undefined = undefined) => setReplyComment({
+		commentID: replyComment._id, // Current comment editing
+		content: replyComment.content,
+		files: replyComment?.files || [],
+		images: replyComment?.images || [],
 		type: 'update',
 		index,
 		show: true,
@@ -89,11 +89,11 @@ const RootComment: FC<Props> = ({
 
 	// Onclick update button, this function will set selected comment or selected message depend on you
 	// Use context instead this way if you don't want use callback to handle Update message :)
-	const onClickUpdateReliedComment = (replyComment: CommentType, index = 0) => replyComment.comment && setReplyCommentNested({
-		commentID: replyComment.comment._id, // Current comment editing
-		content: replyComment.comment?.content,
-		files: replyComment.comment?.files || [],
-		images: replyComment.comment?.images || [],
+	const onClickUpdateReliedComment = (replyComment: CommentType, index = 0) => setReplyCommentNested({
+		commentID: replyComment._id, // Current comment editing
+		content: replyComment.content,
+		files: replyComment.files || [],
+		images: replyComment.images || [],
 		type: 'update',
 		index,
 		show: true,
@@ -163,7 +163,7 @@ const RootComment: FC<Props> = ({
 	return (
 		<>
 			<Comment
-				showOptions={author === comment.userCreate._id}
+				showOptions={author === comment.author._id}
 				small={smallImage}
 				comment={comment}
 				// Reply comment
@@ -176,11 +176,11 @@ const RootComment: FC<Props> = ({
 				renderOptions={EditButton}
 			/>
 			<div>
-				{(comment.comment?.amountCommentReply || 0 - comment.listReply.data.length) > 0 ? (
+				{(comment.amountCommentReply || 0 - comment.listReply.data.length) > 0 ? (
 					<div className="react__comments-header">
 						<div className='pl-11 mr-5'>
 							<button className='text-medium pb-2 mb-1.5 font-bold' onClick={handleClickViewMore}>
-								Xem thêm {comment.comment?.amountCommentReply || 0 - comment.listReply.data.length} bình luận
+								Xem thêm {comment.amountCommentReply || 0 - comment.listReply.data.length} bình luận
 							</button>
 						</div>
 					</div>
@@ -190,7 +190,7 @@ const RootComment: FC<Props> = ({
 					{comment.listReply && comment.listReply.data.length ? comment.listReply.data.map((commentReply, index) => (
 						<li key={commentReply._id}>
 							<div className="pl-11">{NestedComment ? <NestedComment
-								showOptions={author === commentReply.userCreate._id}
+								showOptions={author === commentReply.author._id}
 								small={smallImage}
 								comment={commentReply}
 								// Reply replied comment

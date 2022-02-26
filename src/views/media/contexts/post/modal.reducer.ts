@@ -6,6 +6,9 @@ import { ImageProps } from "typings/media";
 export const INITIAL_STATE = {
   isShow: false,
   mediaID: "",
+  author: undefined,
+  createAt: "",
+
   isPost: false,
   isComment: false,
   isReply: false,
@@ -37,6 +40,9 @@ const modalReducers = (
         mediaID: action.payload.mediaId,
         images: action.payload.images,
         index: action.payload.index,
+        author: action.payload.author,
+        createAt: action.payload.createAt,
+
         isPost: true,
         isComment: false,
         isReply: false,
@@ -48,6 +54,9 @@ const modalReducers = (
         mediaID: action.payload.mediaId,
         images: action.payload.images,
         index: action.payload.index,
+        author: action.payload.author,
+        createAt: action.payload.createAt,
+
         isPost: false,
         isComment: true,
         isReply: false,
@@ -59,6 +68,9 @@ const modalReducers = (
         mediaID: action.payload.mediaId,
         images: action.payload.images,
         index: action.payload.index,
+        author: action.payload.author,
+        createAt: action.payload.createAt,
+
         isPost: false,
         isComment: false,
         isReply: true,
