@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../repository";
 
 import {
@@ -41,7 +42,7 @@ const CommentImageRepository = {
     return data;
   },
   async updateComment(payload: CommentBody) {
-    const { data } = await API.put<Response<CommentDetail>>(
+    const { data } = await API.put<Response<Comment>>(
       mediaURL + "/comments/file"
     );
     return data;

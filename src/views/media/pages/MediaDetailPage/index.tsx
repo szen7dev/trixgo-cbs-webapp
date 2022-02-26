@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, Fragment, useContext, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { useQuery } from "react-query";
@@ -44,17 +44,18 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
 import CommentProvider from 'views/media/contexts/comment/comment.provider';
 import { ModalZoomView } from "shareComponents/common/ZoomView";
-import { ProviderModalPost } from "views/media/contexts/post";
+import { ProviderModalPost, ContextModalPost } from "views/media/contexts/post";
 
 const MediaDetail: FC = () => {
 	const history = useHistory();
-	
+	const { state, toggleModal, openPost } = useContext(ContextModalPost);
+
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
-	const { data, refetch } = useQuery(`media_info.${mediaID}`, 
+	const { data, refetch } = useQuery(`media_info.${mediaID}`,
 		() => SocialRepository.mediaInfo(mediaID),
 		{
-			enabled: true, 
+			enabled: true,
 			refetchOnWindowFocus: false
 		});
 
@@ -70,7 +71,7 @@ const MediaDetail: FC = () => {
 	const [isFetchSeens, setIsFetchSeens] = useState(false);
 
 	useEffect(() => {
-		if(paramsMedia.type === 'company') {
+		if (paramsMedia.type === 'company') {
 			setParamsMedia(previousParams => ({
 				...previousParams,
 				companyID: user?.company._id
@@ -100,11 +101,11 @@ const MediaDetail: FC = () => {
 		});
 
 	// State manage image comments
-	const [defaultState, setDefaultState] = useState({ 
-		mediaID: '', 
-		images: [] as ImageProps[], 
-		index: 0, 
-		createAt: '', 
+	const [defaultState, setDefaultState] = useState({
+		mediaID: '',
+		images: [] as ImageProps[],
+		index: 0,
+		createAt: '',
 		author: undefined as undefined | User
 	});
 	const [isShow, setIsShow] = useState(false);
@@ -121,14 +122,14 @@ const MediaDetail: FC = () => {
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
 	const toggleModalReact = () => {
-		if(!modalShowReact && !isFetchReactions) {
+		if (!modalShowReact && !isFetchReactions) {
 			setIsFetchReactions(true);
 		}
 		setModalShowReact(!modalShowReact);
 	}
 
 	const toggleModalSeen = () => {
-		if(!modalShowSeen && !isFetchSeens) {
+		if (!modalShowSeen && !isFetchSeens) {
 			setIsFetchSeens(true);
 		}
 		setModalShowSeen(!modalShowSeen);
@@ -138,30 +139,30 @@ const MediaDetail: FC = () => {
 		try {
 			const { error, message } = await deleteMediaAsync(mediaID);
 
-			if(error) return toast.warning(message);
+			if (error) return toast.warning(message);
 
-            toast.success('Xóa bài viết thành công', { autoClose: 900 });
+			toast.success('Xóa bài viết thành công', { autoClose: 900 });
 			setTimeout(() => history.push('/media/home'), 1000);
 		} catch (error) {
 			if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 	}
 
 	const handleReactionMedia = async () => {
 		try {
-            await reactionMediaAsync({ mediaID });
+			await reactionMediaAsync({ mediaID });
 			refetch();
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
+		} catch (error: unknown) {
+			if (typeof error === "string") {
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
 	}
 
 	const readingTime = () => {
@@ -297,9 +298,7 @@ const MediaDetail: FC = () => {
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
-											// openModal(mediaID, images, i)
-											setDefaultState({ mediaID, images, index: i, author: media.author, createAt: media.createAt })
-											setIsShow(true)
+											openPost({ author: media.author, images, index: i, createAt: media.createAt, mediaId: media._id })
 										}} >
 											<img src={url} alt={name} className="object-cover h-full w-full" />
 											{i === 2 && images.length > 3 && (
@@ -402,7 +401,13 @@ const MediaDetail: FC = () => {
 				data={listSeens}
 				total={totalRecordSeen}
 			/>
-			<ModalZoomView isShow={isShow} toggle={() => setIsShow(false)} initialData={defaultState} />
+			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+				createAt: state.createAt,
+				images: state.images,
+				index: state.index,
+				mediaID: state.mediaID,
+				author: state.author
+			}} />
 		</>
 	);
 };
