@@ -63,7 +63,7 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
                     }
                 }}
                 className={"transition relative duration-500 cursor-pointer message-container"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage message={message} socket={socket} editor={editor}/>}>
+                <RightClickMenuWrapper contextMenu={<RightClickMessage isMini={isMini} message={message} socket={socket} editor={editor}/>}>
                     {renderMessageContent()}
                 </RightClickMenuWrapper>
             </div>
