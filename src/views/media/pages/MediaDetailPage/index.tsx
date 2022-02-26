@@ -200,6 +200,7 @@ const MediaDetail: FC = () => {
 	}
 	const images: FileProps[] = media.images || [];
 	const files: FileProps[] = media.files || [];
+	console.log({ 'MEDIA_DETAIL_PAGE': media });
 
 	return (
 		<>

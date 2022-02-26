@@ -12,6 +12,8 @@ type Props = {
 } & React.HtmlHTMLAttributes<HTMLDivElement>
 
 export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listMedias, ...props }) => {
+	console.log({ 'SOCIAL_ARTICLES': listMedias });
+	
 	return (
 		<div {...props}>
 			{Header && <Header />}

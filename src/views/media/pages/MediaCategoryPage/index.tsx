@@ -12,7 +12,7 @@ export const MediaCategoryPage: FC<{ type: PostType }> = ({ type }) => {
 	const [params, setParams] = useState<ListMediasPayload>({ type });
 
 	const { user } = useAuth();
-	const { listMedias: listMedias, isLoadingMedias } = useMedia({
+	const { listMedias, isLoadingMedias } = useMedia({
 		key: `list_medias__${type}`,
 		params,
 		isFetchMedias: true
@@ -28,6 +28,7 @@ export const MediaCategoryPage: FC<{ type: PostType }> = ({ type }) => {
 	}, [type])
 
 	if(isLoadingMedias) return <Loader className="border-primary" />;
+	console.log({ 'MEDIA_CATEGORY_PAGE': listMedias });
 
 	return (
 		<div className='overflow-auto'>
