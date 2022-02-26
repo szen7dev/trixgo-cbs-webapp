@@ -1,16 +1,24 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 
 import cn from "classnames";
 
-import DropdownSearchable from "components/common/DropdownSearch";
-
-import styles from "../../style.module.css";
-
+import { DropdownSearchable } from "shareComponents/common";
+import { DropdownFilterButton } from "views/accounting/shareComponents/common";
+import styles from 'views/accounting/styles/styles.module.css';
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
-import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 import { Link } from "react-router-dom";
 
 const ReceivablesCustomers: FC = () => {
+  const handleOnFilter = useCallback((values) => {
+    console.log('🚀 ~ handleOnFilter ~ values', values)
+
+    // setPageParam(() => ({ ...values }));
+    return true;
+  }, []);
+
+  const handleOnCancelFilter = useCallback(() => {
+    // setPageParam({});
+  }, []);
   return (
     <main className="h-full">
       <header className="h-[50px] w-full border border-primary-border flex items-center justify-between px-6">
@@ -49,7 +57,12 @@ const ReceivablesCustomers: FC = () => {
             }}
             inlineSearch={true}
           />
-          <FinancialCashFlowFilterButton />
+
+          <DropdownFilterButton
+            onSubmit={handleOnFilter}
+            onCancel={handleOnCancelFilter}
+            initialValues={{}}
+          />
           <div className="w-10 h-10 ml-3 bg-cbs-gray rounded-full flex items-center justify-center cursor-pointer hover:bg-accent-light">
             <img src={ThreeDotVerticalIcon} alt="Three Dot" />
           </div>
