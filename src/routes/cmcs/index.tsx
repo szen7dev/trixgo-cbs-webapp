@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
@@ -168,6 +168,7 @@ const CmcsRouter: FC = () => {
                     </CmcsContractLayout>
                 )}
             />
+            <Route path="/cmcs/*" component={ErrorPage} />
         </Switch>
     )
 };
