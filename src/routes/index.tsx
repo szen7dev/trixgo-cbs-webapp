@@ -13,10 +13,10 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 import { FullPageLayout } from "shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
-// import AccountingRouter from "./accounting";
+import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
 // import BiddingRouter from "./bidding";
-// import CmcsRouter from "./cmcs";
+import CmcsRouter from "./cmcs";
 import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
@@ -42,6 +42,7 @@ import ErrorPage from "views/authentication/Error";
 import { HomeLayout } from "shareComponents/layouts";
 import { HumanLayout } from "views/human/shareComponents/layouts";
 import { DocumentLayout } from 'views/document/sharedComponents/layouts';
+import { AccountingLayout } from 'views/accounting/shareComponents/layouts';
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -70,6 +71,18 @@ const Routes: FC = () => {
                                     {/* =====PCM===== */}
                                     <Route path="/pcm">
                                         <PcmRouter />
+                                    </Route>
+
+                                    {/* =====CMCS===== */}
+                                    <Route path="/cmcs">
+                                        <CmcsRouter />
+                                    </Route>
+
+                                    {/* =====ACCOUNTING===== */}
+                                    <Route path="/accounting">
+                                        <AccountingLayout>
+                                            <AccountingRouter />
+                                        </AccountingLayout>
                                     </Route>
 
                                     {/* =====HUMAN===== */}
@@ -110,7 +123,7 @@ const Routes: FC = () => {
                                     </Route>
 
                                     {/* =====MESSAGES===== */}
-                                    <MessagesRouter/>
+                                    <MessagesRouter />
 
                                     {/* =====TIMESHEET===== */}
                                     <Route path="/timesheet">

@@ -1,0 +1,62 @@
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.active-tab {
+  box-shadow: 2px 2px 2px #0165be;
+}
+
+.bgBlueLight {
+  background: #e7f3ff;
+}
+
+.theadInput {
+  width: 3.5%;
+}
+
+.theadDate {
+  width: 4.5%;
+}
+
+.theadCode {
+  width: 6%;
+}
+
+.theadContent {
+  width: 13%;
+}
+
+.theadCusCode {
+  width: 11%;
+}
+
+.theadTenPercent {
+  width: 10%;
+}
+
+.theadDes {
+  width: calc(100% - 3.5% - 60%);
+}
+
+.tdBorderRight {
+  border-right: 1.5px solid #cccccc;
+}
+
+.theadEightteenPercent {
+  width: 18%;
+}
+
+.theadEightPercent {
+  width: 8%;
+}
+
+.tdMarginRightMinus {
+  margin-right: 0px;
+}
+
+.bgFooterYellow {
+  background: #ffffcc;
+}

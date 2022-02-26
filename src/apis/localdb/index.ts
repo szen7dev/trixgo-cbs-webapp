@@ -252,6 +252,18 @@ export const CONTRACT_COME_IN_STATUS = [
     { value: 4, text: 'Tạm dừng' },
 ]
 
+// HỢP ĐỒNG MUA VÀO BÁN RA PHÂN LOẠI CHÍNH THỨC
+export const CONTRACT_DRAFT = [
+    { value: 1, text: 'Chính thức' },
+    { value: 2, text: 'Nháp' },
+]
+
+// HỢP ĐỒNG MUA VÀO BÁN RA KHÓA HỢP ĐỒNG
+export const CONTRACT_LOCK = [
+    { value: 1, text: 'Open' },
+    { value: 2, text: 'Khóa' },
+]
+
 // HỢP ĐỒNG THỰC/ẢO-GỬI DẤU
 export const CONTRACT_TA = [
     { value: 1, text: 'T' },
