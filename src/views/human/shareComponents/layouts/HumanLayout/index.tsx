@@ -11,7 +11,7 @@ import chevronUpIcon from "assets/images/icon-chevron-up.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { MainHeader } from "shareComponents/common";
-import { HomeRightSideBar } from "shareComponents/layouts/HomeRightSideBar";
+import { HomeRightSideBar } from "shareComponents/layouts";
 import { HumanLeftSideBar } from './components';
 
 /*=====5.TYPINGS=====*/
