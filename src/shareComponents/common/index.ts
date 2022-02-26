@@ -24,3 +24,4 @@ export * from './MainSearchFilter';
 export * from './NotificationItem';
 export * from './OneSignalController';
 export * from './MiniChat';
+export * from './Popover';

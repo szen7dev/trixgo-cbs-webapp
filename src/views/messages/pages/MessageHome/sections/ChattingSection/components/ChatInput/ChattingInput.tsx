@@ -319,12 +319,13 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                     <SelectedActionGroup/>
                     <div className={"flex-1 message-input max-w-[525px] rounded-md bg-white flex items-end relative flex-col"}>
                         {/*<IconButton/>*/}
-                        <ReplyChat replyData={replyData}/>
+                        <ReplyChat replyData={replyData} currentChat={chat._id}/>
                         <InputForMessage
                             onPasteFiles={(files) => handleSetFiles(files)}
                             onPressEnter={() => handleSendMessage()}
                             mentions={suggestionsData()}
                             handleUploadFiles={((files) => handleSetFiles(files))}
+                            context={context}
                         />
                     </div>
                     <button

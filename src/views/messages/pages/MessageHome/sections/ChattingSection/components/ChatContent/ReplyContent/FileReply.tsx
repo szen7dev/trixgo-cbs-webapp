@@ -40,7 +40,7 @@ export const FileReply:FC<Props> = ({message, className}) => {
                 <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
                     {message.sender.bizfullname||message.sender.fullname}
                 </div>
-                <div className={"truncate text-gray-400"}>
+                <div className={"truncate text-gray-400 max-w-[450px]"}>
                     {message.files[0].file.file.nameOrg??message.files[0].file.file.name}
                 </div>
             </div>

@@ -12,7 +12,6 @@ import {ChattingInputContext} from "./ChattingInput";
 import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import {IconButton} from "./IconButton";
-import {MessageContext} from "../../../../index";
 import {IconAttach} from "./IconAttach";
 // import editorStyles from './editorStyles.module.css';
 
@@ -29,12 +28,13 @@ type Props = {
     onPasteFiles?: (files: FileList|Blob[]) => void;
     mentions: MentionData[];
     handleUploadFiles: (files: FileList|Blob[]) => void;
+    context: any
 }
-export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, handleUploadFiles }) => {
+export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, handleUploadFiles, context }) => {
     const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
     const [open, setOpen] = useState(true);
     const editor = useRef<Editor>(null);
-    const {setEditorRef} = useContext(MessageContext)
+    const {setEditorRef} = useContext(context)
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
