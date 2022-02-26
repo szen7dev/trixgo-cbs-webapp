@@ -57,7 +57,8 @@ import {
     ProjectDashboardPage,
     ProjectInspectionTab2Page,
     ProjectInspectionTab3Page,
-    ProjectInspectionDetailPage
+    ProjectInspectionDetailPage,
+		ProjectDirectoryPage
 } from 'views/ppt/pages'
 
 const PCMRouter: FC = () => {
@@ -177,6 +178,7 @@ const PCMRouter: FC = () => {
                                 <Route exact path='/pcm/project/:id/inspection/tabs3' component={ProjectInspectionTab3Page} />
                             </LayoutSecondary>
                         </Route>
+                        <Route exact path='/pcm/project/:id/directory' component={ProjectDirectoryPage} />
                         <Route exact path='/pcm/project/:id/inspection/:item' component={ProjectInspectionDetailPage} />
                     </Switch>
                 </LayoutProjectSecondary>

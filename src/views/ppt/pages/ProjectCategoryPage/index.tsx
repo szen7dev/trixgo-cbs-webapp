@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
+import { Link, generatePath } from "react-router-dom";
 
 // Hooks use department
 import { useListDepartment } from "services/hooks/ppt/useListDepartment";
@@ -96,7 +96,7 @@ const ProjectCategoryPage: FC = () => {
 												</div>
 											</div>
 											<h3 className="line-clamp-2 text-large text-black pt-2">
-												<Link className="" to="/pcm/project/:id/home">{record.name}</Link>
+												<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.name}</Link>
 											</h3>
 											<p className="text-x-small mt-1.5 truncate">
 												{record.company.name}

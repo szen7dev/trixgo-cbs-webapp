@@ -8,6 +8,8 @@ import { useAuth } from "services/hooks/useAuth";
 type RouteItem = {
 	path: string,
 	name: string,
+	image: string,
+
 	exact?: boolean,
 	strict?: boolean,
 	isActive?(match: any, location: any): boolean
@@ -17,54 +19,67 @@ export const routes: Array<RouteItem> = [
 	{
 		path: '/pcm/project/:id/home',
 		name: 'Trang chủ',
+		image: '/images/pcm/application.png',
 	},
 	{
 		path: '/pcm/project/:id/dashboard',
 		name: 'Báo cáo quản trị',
+		image: '/images/pcm/graph-report.png',
 	},
 	{
 		path: '/pcm/project/:id/folder',
 		name: 'Thư mục dữ liệu',
+		image: '/images/pcm/shared-folder.png',
 	},
 	{
 		path: '/pcm/project/:id/schedule',
 		name: 'Tiến độ',
+		image: '/images/pcm/gantt-chart.png',
 	},
 	{
 		path: '/pcm/project/:id/budget',
-		name: 'Ngân sách và kế hoạch'
+		name: 'Ngân sách và kế hoạch',
+		image: '/images/pcm/budget-plan.png',
 	},
 	{
 		path: '/pcm/project/:id/bidding',
-		name: 'Lựa chọn nhà thầu'
+		name: 'Lựa chọn nhà thầu',
+		image: '/images/pcm/bidding.png',
 	},
 	{
 		path: '/pcm/project/:id/payment',
 		name: 'Báo cáo',
+		image: '/images/pcm/statistic-document.png',
 	},
 	{
 		path: '/pcm/project/:id/document',
 		name: 'Hồ sơ văn bản',
+		image: '/images/pcm/paid-bill.png',
 	},
 	{
 		path: '/pcm/project/:id/photo',
 		name: 'Hình ảnh',
+		image: '/images/pcm/photo-gallery.png',
 	},
 	{
 		path: '/pcm/project/:id/drawing',
 		name: 'Bản vẽ và chỉ dẫn',
+		image: '/images/pcm/drawing-compass.png',
 	},
 	{
 		path: '/pcm/project/:id/resource',
 		name: 'Quản lý vật tư',
+		image: '/images/pcm/material.png',
 	},
 	{
 		path: '/pcm/project/:id/inspection',
 		name: 'Nghiệm thu chất lượng',
+		image: '/images/pcm/paid-bill.png',
 	},
 	{
-		path: '/pcm/project/:id/contact',
+		path: '/pcm/project/:id/directory',
 		name: 'Danh bạ dự án',
+		image: '/images/pcm/contact.png',
 	},
 ]
 
@@ -92,9 +107,9 @@ const ProjectLeftSideBar: FC = () => {
 									exact={route.exact}
 									strict={route.strict}
 									isActive={route.isActive}
-									className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+									className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
 								>
-									<img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+									<img className="w-6 h-6 object-contain mr-3" src={route.image} alt="Menu item" />
 									<span className="truncate">{route.name}</span>
 								</NavLink>
 							)
