@@ -88,7 +88,10 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
     const { current: socket }: any = useSocket();
 	const { createMediaAsync, updateMediaAsync } = useMedia({});
-	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
+	const { addFileToUpload } = useUpload({
+		appID: '5df4ce16506d9b3c587948ca',
+		companyID: user?.company._id
+	});
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
 	const [showClassifyDepartment, setShowClassifyDepartment] = useState(false);

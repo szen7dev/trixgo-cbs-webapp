@@ -37,7 +37,7 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { addFileToUpload } = useUpload("HUMAN");
+  const { addFileToUpload } = useUpload({ appID: "61e049c9fdebf77b072d1b13" });
 
   const { humanId, humanInfo } = props;
 

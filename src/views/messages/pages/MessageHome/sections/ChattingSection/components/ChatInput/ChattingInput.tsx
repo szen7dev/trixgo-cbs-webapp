@@ -5,6 +5,7 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
+import {useAuth} from 'services/hooks/useAuth';
 import {useUpload} from "services/hooks/useUpload";
 import {convertToRaw, EditorState} from "draft-js";
 import {
@@ -38,7 +39,12 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     const profileId = JSON.parse(currentUser)?._id;
     const {socketRef} = useContext(context);
     const dispatch = useDispatch();
-    const { addFileToUpload } = useUpload('CHATTING');
+	const { user } = useAuth();
+    const { addFileToUpload } = useUpload({
+        appID: "5dfe4c1b51dc622100bb9d8f",
+		companyID: user?.company._id,
+        conversationID: chat._id
+    });
 
     const [doneUpload, setDoneUpload] = useState<{[key: string] : number}>({});
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);

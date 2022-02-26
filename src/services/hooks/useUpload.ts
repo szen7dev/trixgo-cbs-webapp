@@ -8,7 +8,7 @@ import Compressor from 'compressorjs';
  * Types, APIs
  */
 import FileRepository from "apis/upload";
-import { UploadPayload, FileProps, AddFileUploadResponse } from "typings/file";
+import { UploadPayload, FileProps, AddFileUploadResponse, GenerateLinkPayload } from "typings/file";
 
 export type GenerateLinkResponse = {
     signedUrl: string,
@@ -35,15 +35,29 @@ type UseUpload = {
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
-export const useUpload = (app?: string, typeUpload?: string) : UseUpload => {
+export const useUpload = ({ 
+    appID,
+    companyID,
+    projectID,
+    groupID,
+    conversationID,
+    type,
+    typeUpload
+}: GenerateLinkPayload) : UseUpload => {
+
     const { mutateAsync: generateLinkS3Async } =
         useMutation((payload: File) =>
             FileRepository.generateLinkS3({
                 name: payload.name,
                 mimeType: payload.type,
                 size: payload.size as never,
-                app,
-                typeUpload: typeUpload
+                appID,
+                companyID,
+                projectID,
+                groupID,
+                conversationID,
+                type,
+                typeUpload
             })
         );
 

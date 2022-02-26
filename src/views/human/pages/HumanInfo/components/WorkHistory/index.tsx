@@ -32,7 +32,7 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 	const { openModal, closeModal } = useModal();
 	const inputRef = useRef<HTMLInputElement>(null);
 	const { openDeleteConfirm } = useDeleteConfirm();
-	const { addFileToUpload } = useUpload("HUMAN");
+	const { addFileToUpload } = useUpload({ appID: "61e049c9fdebf77b072d1b13" });
 
 	const { humanId } = props;
 

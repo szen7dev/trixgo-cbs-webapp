@@ -13,6 +13,7 @@ import CommentContext from 'views/media/contexts/comment/comment.context';
 import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
+import { useAuth } from 'services/hooks/useAuth';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile from 'services/hooks/ppt/useUploadFile';
 
@@ -58,7 +59,11 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	}] = useUploadFile({ files, images });
 
 	const [text, setText] = useState<string>(defaultValue || '');
-	const { addFileToUpload } = useUpload('5df4ce16506d9b3c587948ca');
+	const { user } = useAuth();
+	const { addFileToUpload } = useUpload({ 
+		appID: "5df4ce16506d9b3c587948ca",
+		companyID: user?.company._id
+	});
 	const { createCommentAsync, updateCommentAsync } = useCommentMedia({ 
 		key: `list_comments.${mediaID}`,
 		params: { mediaID }
