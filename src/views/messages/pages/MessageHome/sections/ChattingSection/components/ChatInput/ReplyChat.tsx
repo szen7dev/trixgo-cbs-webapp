@@ -1,16 +1,15 @@
 import React, {FC, useContext} from "react";
 import Close from "assets/icons/Close";
 import {useDispatch} from "react-redux";
-import {MessageContext} from "../../../../index";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {ContactReply, TextReply, FileReply, ImageReply} from "../ChatContent/ReplyContent";
 
 type Props = {
     replyData: ItemMessage;
+    currentChat: string
 }
-export const ReplyChat:FC<Props> = ({replyData}) => {
-    const {currentChat} = useContext(MessageContext);
+export const ReplyChat:FC<Props> = ({replyData,currentChat}) => {
     const dispatch = useDispatch();
 
     const renderReply = () => {
@@ -34,7 +33,7 @@ export const ReplyChat:FC<Props> = ({replyData}) => {
                 onClick={() => {
                     dispatch(removeReplyMessage({conversationId: currentChat}))
                 }}
-                className={"w-[46px] items-center justify-center flex"}>
+                className={"w-[46px] min-w-[46px] items-center justify-center flex"}>
                 <Close/>
             </button>
             <div className={"flex-1 px-[10px]"}>

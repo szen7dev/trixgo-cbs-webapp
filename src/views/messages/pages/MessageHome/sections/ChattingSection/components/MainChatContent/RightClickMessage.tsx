@@ -18,16 +18,18 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
-import {closeRightClick} from "redux/reducer/RightClickMenu";
+import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 type Props = {
     message: ItemMessage;
     socket: any;
     editor: any;
+    isMini?: boolean;
 }
 
-export const RightClickMessage:FC<Props> = ({message, socket, editor}) => {
+export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) => {
     const dispatch = useDispatch();
     const {updatePinMessage} = UseConversation();
+    const {closeRightClick} = useRightClickMenu()
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
@@ -62,7 +64,7 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor}) => {
     return (
         <>
             <div
-                className={"flex items-center mb-[5px] min-w-max bg-white rounded-full shadow-lg p-2 absolute"} style={{top: -50}}>
+                className={"flex items-center mb-[5px] min-w-max bg-white rounded-full shadow-lg p-2 absolute reaction-right-click"} style={{top: -50}}>
                 {
                     _map(listEmoji, emoji => (
                         <button
@@ -83,56 +85,65 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor}) => {
                     onClick={() => {
                         dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}));
                         editor.focus();
-                        dispatch(closeRightClick());
+                        closeRightClick();
                     }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full reply-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ForwardIcon}/>
                     <div className={"mr-2 ml-4"}>Reply</div>
                 </button>
                 <button
                     onClick={() => {
                         navigator.clipboard.writeText(message.content);
-                        dispatch(closeRightClick());
+                        closeRightClick()
                     }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full copy-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
                     <div className={"mr-2 ml-4"}>Copy Text</div>
                 </button>
                 <button
                     onClick={() => {
                         doUpdatePinMessage();
-                        dispatch(closeRightClick());
+                        closeRightClick()
                     }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full pin-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
                     <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
                 </button>
-                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full download-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>
                     <div className={"mr-2 ml-4"}>Download</div>
                 </button>
-                <button
-                    onClick={() => {
-                        // setShareMessage(message);
-                        dispatch(shareMessageToConversation({messageData: [message]}));
-                        setTimeout(() => {
-                            dispatch(closeRightClick());
-                        }, 100)
-                    }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
-                    <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>
-                    <div className={"mr-2 ml-4"}>Forward</div>
-                </button>
-                <button
-                    onClick={() => {
-                        dispatch(setSelectedMessages({selectedMessages: [message], conversationId: message.conversation}));
-                        dispatch(closeRightClick());
-                    }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
-                    <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={IconSelected}/>
-                    <div className={"mr-2 ml-4"}>Select</div>
-                </button>
-                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                {
+                    !isMini&&
+                    <button
+                        onClick={() => {
+                            // setShareMessage(message);
+                            dispatch(shareMessageToConversation({messageData: [message]}));
+                            setTimeout(() => {
+                                closeRightClick()
+                            }, 100)
+                        }}
+                        className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full forward-right-click"}>
+                        <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={ShareIcon}/>
+                        <div className={"mr-2 ml-4"}>Forward</div>
+                    </button>
+                }
+                {
+                    !isMini &&
+                    <button
+                        onClick={() => {
+                            dispatch(setSelectedMessages({
+                                selectedMessages: [message],
+                                conversationId: message.conversation
+                            }));
+                            closeRightClick()
+                        }}
+                        className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full select-right-click"}>
+                        <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={IconSelected}/>
+                        <div className={"mr-2 ml-4"}>Select</div>
+                    </button>
+                }
+                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
                     <div className={"mr-4 ml-4"}>{usersSeen().length} đã xem</div>
                     {
@@ -159,10 +170,10 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor}) => {
                     onClick={() => {
                         dispatch(deleteAndRevokeMessageOfConversation({messageIds: [message], conversationId: message.conversation}))
                         setTimeout(() => {
-                            dispatch(closeRightClick());
+                            closeRightClick()
                         }, 100)
                     }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full delete-right-click"}>
                     <img  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                     <div className={"flex-1 text-left ml-4 text-negative"}>Delete</div>
                 </button>

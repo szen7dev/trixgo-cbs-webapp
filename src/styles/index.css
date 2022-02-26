@@ -1456,3 +1456,10 @@ input[type="text"] {
   font-size: 0.5rem;
   line-height: 0.75rem;
 }
+.t-mini-chat .forward-right-click,
+.t-mini-chat .select-right-click {
+  display: none;
+}
+.t-mini-chat .reply-text-content {
+  max-width: 250px;
+}
