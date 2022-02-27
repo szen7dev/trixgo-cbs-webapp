@@ -1,14 +1,14 @@
-import API from "../repository";
+import API from "../../repository";
 
 const APP_CMCS = "/api/cmcs";
 const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contract_ipcs`,
+        `${APP_CMCS}/contract_productions`,
         {
             params: {
-                select: "name date sign acceptance timeForPayment amountPaid description createAt",
+                select: "name date sign description produce vatProduce plusProduce vatPlusProduce description createAt",
                 populates: {
                     "path": "project company",
                     "select": "name sign"
@@ -22,14 +22,14 @@ async function fetchList<T>(params: any): Promise<T> {
 
 async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contract_ipcs?contractIpcID=${params.contractIpcID}`
+        `${APP_CMCS}/contract_productions?contractProductionID=${params.contractIpcID}`
     )
     return data
 }
 
 async function requestCreateContract(formData: any): Promise<any> {
     const { data } = await API.post(
-        `${APP_CMCS}/contract_ipcs`,
+        `${APP_CMCS}/contract_productions`,
         {
             ...formData
         }
@@ -49,7 +49,7 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
 
 async function requestUpdateContract(formData: any): Promise<any> {
     const { data } = await API.put(
-        `${APP_CMCS}/contract_ipcs`,
+        `${APP_CMCS}/contract_productions`,
         {
             ...formData
         }
@@ -59,7 +59,7 @@ async function requestUpdateContract(formData: any): Promise<any> {
 
 async function requestDeleteContract(contractID: string): Promise<any> {
     const { data } = await API.delete(
-        `${APP_CMCS}/contract_ipcs?contractIpcID=${contractID}`)
+        `${APP_CMCS}/contract_productions?contractProductionID=${contractID}`)
     return data;
 }
 

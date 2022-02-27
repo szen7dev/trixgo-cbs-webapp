@@ -1,19 +1,18 @@
-import API from "../repository";
+import API from "../../repository";
 
-const ITEM_URL = "/api/item";
+const APP_CMCS = "/api/cmcs";
 const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${ITEM_URL}/contracts`,
+        `${APP_CMCS}/contract_ipcs`,
         {
             params: {
-                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+                select: "name date sign acceptance timeForPayment amountPaid description createAt",
                 populates: {
-                    "path": "project company personInCharge",
+                    "path": "project company",
                     "select": "name sign"
                 },
-                outin: 1,
                 ...params,
             },
         }
@@ -23,21 +22,14 @@ async function fetchList<T>(params: any): Promise<T> {
 
 async function fetchDetailContract<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${ITEM_URL}/contracts?contractID=${params.contactID}`, {
-        params: {
-            populates: {
-                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo",
-                "select": "name sign description"
-            },
-        },
-    }
+        `${APP_CMCS}/contract_ipcs?contractIpcID=${params.contractIpcID}`
     )
     return data
 }
 
 async function requestCreateContract(formData: any): Promise<any> {
     const { data } = await API.post(
-        `${ITEM_URL}/contracts`,
+        `${APP_CMCS}/contract_ipcs`,
         {
             ...formData
         }
@@ -57,7 +49,7 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
 
 async function requestUpdateContract(formData: any): Promise<any> {
     const { data } = await API.put(
-        `${ITEM_URL}/contracts`,
+        `${APP_CMCS}/contract_ipcs`,
         {
             ...formData
         }
@@ -67,15 +59,15 @@ async function requestUpdateContract(formData: any): Promise<any> {
 
 async function requestDeleteContract(contractID: string): Promise<any> {
     const { data } = await API.delete(
-        `${ITEM_URL}/contracts?contractID=${contractID}`)
+        `${APP_CMCS}/contract_ipcs?contractIpcID=${contractID}`)
     return data;
 }
 
-const ContractIncomeRepository = {
+const ContractIPCRepository = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fetchList: async (params: any): Promise<any> => fetchList<any>(params),
     fetchDetailContract: async (params: {
-        contactID: string;
+        contractIpcID: string;
     }): Promise<any> => fetchDetailContract(params),
     requestCreateContract,
     requestUpdateContract,
@@ -83,4 +75,4 @@ const ContractIncomeRepository = {
     requestHistoryTraffics
 };
 
-export default ContractIncomeRepository
+export default ContractIPCRepository

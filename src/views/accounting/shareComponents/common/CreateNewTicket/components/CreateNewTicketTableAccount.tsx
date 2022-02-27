@@ -13,7 +13,7 @@ import {
 	useQueryListContract,
 	useQueryListAccount,
 	useQueryListGood
-} from "services/hooks/useContractIncome";
+} from "services/hooks/cmcs/useContractIncome";
 
 const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 

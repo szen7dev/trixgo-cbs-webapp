@@ -31,7 +31,7 @@ export const formatNumberMoney = (number: number | string): string => {
   return (Number(number).toLocaleString('de-DE')) || ""
 }
 
-export const convertInitialValueDropdown = (item: any, value = '_id', label = 'name', label_2 = ''): Item | '' => {
+export const convertInitialValueDropdown = (item: any, value = '_id', label = 'name', separation = '-', label_2 = ''): Item | '' => {
   if (!item) {
     return ''
   }
@@ -42,7 +42,7 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
 
   return {
     value: item[value],
-    label: label_2 ? item[label] + " - " + item[label_2] : item[label],
+    label: label_2 ? item[label] + separation + item[label_2] : item[label],
     isInitialValue: true
   }
 }

@@ -19,7 +19,7 @@ import { string, object } from 'yup';
 
 import {
   useDetailContractProduceMutation,
-} from "services/hooks/useContractProduce";
+} from "services/hooks/cmcs/useContractProduce";
 
 interface NewContractProduceModalProps {
   defaultValues?: any;

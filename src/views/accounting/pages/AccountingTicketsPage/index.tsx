@@ -14,7 +14,7 @@ import {
   useCreateAccountingVoucherMutation,
   useUpdateAccountingVoucherMutation,
   useDeleteAccountingVoucherMutation,
-} from "services/hooks/useAccountingVoucher";
+} from "services/hooks/accounting/useAccountingVoucher";
 import { NavLink } from "react-router-dom";
 import TriangleDown from "assets/icons/TriangleDown";
 
@@ -194,7 +194,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                  <NavLink to={`/accounting/home/${item._id}`}>
+                  <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
                     <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal" >
                       <p className="text-2-line-clamp">{`${item.name}`}</p>
                     </Popover>
