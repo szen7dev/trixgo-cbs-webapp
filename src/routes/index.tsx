@@ -129,7 +129,9 @@ const Routes: FC = () => {
                                     </Route>
 
                                     {/* =====MESSAGES===== */}
-                                    <MessagesRouter />
+                                    <Route path="/messages">
+                                        <MessagesRouter />
+                                    </Route>
 
                                     {/* =====TIMESHEET===== */}
                                     <Route path="/timesheet">

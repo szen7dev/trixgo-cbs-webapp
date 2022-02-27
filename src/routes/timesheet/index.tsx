@@ -1,16 +1,16 @@
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
 /*=====LAYOUTS=====*/
 import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
 
 /*=====PAGES=====*/
-import {TimesheetHomePage, TimesheetDetailPage} from "views/timesheet/pages";
+import { TimesheetHomePage, TimesheetDetailPage } from "views/timesheet/pages";
 
 const TimesheetAppRouter: FC = () => {
   return (
-    <Route path="/timesheet/:path?">
+    <>
       <TimesheetLayout>
         <Switch>
           <ProtectedRoute
@@ -25,7 +25,7 @@ const TimesheetAppRouter: FC = () => {
           />
         </Switch>
       </TimesheetLayout>
-    </Route>
+    </>
   );
 };
 
