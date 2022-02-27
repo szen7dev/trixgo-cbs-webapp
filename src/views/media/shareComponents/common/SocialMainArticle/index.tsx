@@ -34,7 +34,7 @@ export const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 					</p>
 				</div>
 				<p className="text-[13px] leading-[15px] px-2 border-b border-primary-gray border-opacity-20 text-secondary-gray pb-2.5 mt-3">
-					{media.author.fullname}
+					{media.author.bizfullname}
 					<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
 					{media.author?.department?.name}
 					<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>

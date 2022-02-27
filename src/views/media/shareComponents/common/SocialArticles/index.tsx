@@ -32,7 +32,7 @@ export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listM
 								</p>
 								<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
 									<Link to="/">
-										{media.author.fullname}
+										{media.author?.bizfullname}
 									</Link>
 									<span className="h-0.5 w-0.5 bg-primary-gray rounded-md inline-block align-middle mx-2"></span>
 									<Link to="/">
