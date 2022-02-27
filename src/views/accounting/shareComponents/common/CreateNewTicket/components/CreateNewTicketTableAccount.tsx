@@ -67,7 +67,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	}
 
 	return (
-		<div className={"px-6 mt-3"}>
+		<div className={"px-6 mt-3 new-ticket-table"}>
 			<FieldArray name="selectedJournals">
 				{({ insert, remove, push }) => (
 					<>
@@ -131,7 +131,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.debit`, '')}
 												showTriangle={false}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchDebitValue(value),
 													500
@@ -162,7 +162,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.credit`, '')}
 												showTriangle={false}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCreditValue(value),
 													500
@@ -193,7 +193,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerDebit`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCustomerDebitValue(value),
 													500
@@ -224,7 +224,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerCredit`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCustomerDebitValue(value),
 													500
@@ -255,7 +255,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.goods`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchGoodValue(value),
 													500
@@ -281,7 +281,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchWarehouseValue(value),
 													500
@@ -337,7 +337,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.contract`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <span className="text-2-line-clamp">{item.text}</span>}
 												onSearchInputChange={debounce(
 													(value) => setSearchContractValue(value),
 													500

@@ -159,7 +159,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item: any) => <span>{item.text}</span>}
+                        renderSelectedItem={(item: any) => <span className="text-1-line-clamp">{item.text}</span>}
                         initialValue={initialValues?.type}
                         data={CONTRACT_IPC_TYPES.map(item => ({
                           value: item.value,

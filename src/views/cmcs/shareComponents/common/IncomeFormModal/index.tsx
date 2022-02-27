@@ -296,6 +296,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           500
                         )}
                         initialValue={initialValues?.projectID}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         data={listProject.map((item: any) => ({
                           label: item.sign + "." + item.name,
                           value: item._id,
@@ -328,7 +329,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         initialValue={initialValues?.subType}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         data={CONTRACT_TYPES.map(item => ({
                           value: item.value,
                           label: item.text
@@ -365,7 +366,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           styles.disabledBg
                         )}
                         initialValue={initialValues?.draft}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         data={CONTRACT_DRAFT.map(item => ({
                           value: item.value,
                           label: item.text
@@ -401,7 +402,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         onSearchInputChange={debounce(
                           (value) => setSearchFieldValue(value),
                           500
@@ -442,7 +443,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         initialValue={initialValues?.outin}
                         data={CONTRACT_OUTIN.map(item => ({
                           value: item.value,
@@ -479,7 +480,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         onSearchInputChange={debounce(
                           (value) => setSearchChairValue(value),
                           500
@@ -516,7 +517,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onClearData={() => setFieldValue("status", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         initialValue={initialValues?.status}
                         data={CONTRACT_COME_IN_STATUS.map(item => ({
                           value: item.value,
@@ -549,7 +550,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onClearData={() => setFieldValue("personInCharge", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         onSearchInputChange={debounce(
                           (value) => setSearchPersonInChargeValue(value),
                           500
@@ -590,7 +591,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         initialValue={initialValues?.real}
                         data={CONTRACT_TA.map(item => ({
                           value: item.value,
@@ -627,7 +628,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         onSearchInputChange={debounce(
                           (value) => setSearchDebtStatusValue(value),
                           500
@@ -668,7 +669,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         initialValue={initialValues?.type}
                         data={CONTRACT_TYPES.map(item => ({
                           value: item.value,
@@ -705,7 +706,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                         onSearchInputChange={debounce(
                           (value) => setSearchWarehouseValue(value),
                           500
@@ -775,7 +776,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       onClearData={() => setFieldValue("buyerInfo", '')}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                       onSearchInputChange={debounce(
                         (value) => setSearchBuyerInfoValue(value),
                         500
@@ -853,7 +854,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         "cursor-not-allowed rounded",
                         styles.disabledBg
                       )}
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                       onSearchInputChange={debounce(
                         (value) => setSearchSellerInfoValue(value),
                         500
@@ -986,7 +987,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         "cursor-not-allowed rounded",
                         styles.disabledBg
                       )}
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <span className="text-1-line-clamp">{item.text}</span>}
                       initialValue={initialValues?.lock}
                       data={CONTRACT_LOCK.map(item => ({
                         value: item.value,
