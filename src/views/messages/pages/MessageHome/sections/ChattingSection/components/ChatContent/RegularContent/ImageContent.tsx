@@ -55,6 +55,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
         const map = (message.files.length>=5)?"map_more":("map_"+message.files.length);
         const classNameMap = classMapping[map];
         return _map(message.files.slice(0,5), (image,index:number)=> {
+            if (!image.file) return null;
             return <div
                 onClick={() => {
                     if (image.file.file.isDraft) return;
@@ -118,7 +119,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                     <div className="flex overflow-hidden transition-all transform w-full h-full">
-                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => `${process.env.REACT_APP_URL_S3}${file.file.file.path}`)} index={modalShowImage.index} />
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.file.path}`:""))} index={modalShowImage.index} />
                     </div>
                 </ModalFullContainer>
             </div>
