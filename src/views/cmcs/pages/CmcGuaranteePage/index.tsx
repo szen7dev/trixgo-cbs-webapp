@@ -10,7 +10,7 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
 
-import { UseContractGuaranteeList } from "services/hooks/useContractIncome";
+import { UseContractGuaranteeList } from "services/hooks/cmcs/useContractIncome";
 
 export const CmcGuaranteePage: FC = () => {
   const [pageParam, setPageParam] = useState('');

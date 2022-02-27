@@ -31,7 +31,7 @@ import {
   useQueryListWarehouse,
   useQueryListProject,
   useDetailContractMutation
-} from "services/hooks/useContractIncome";
+} from "services/hooks/cmcs/useContractIncome";
 
 import {
   CONTRACT_TYPES, CONTRACT_DRAFT, CONTRACT_OUTIN, CONTRACT_SUB_TYPES, CONTRACT_TA,
@@ -49,7 +49,7 @@ interface NewContractIncomeModalProps {
 const mappingData = (data: any, isDataPayLoad = false) => {
   return {
     contractID: data.contractID,
-    projectID: isDataPayLoad ? data?.projectID?.value : convertInitialValueDropdown(data?.project || ''),
+    projectID: isDataPayLoad ? data?.projectID?.value : convertInitialValueDropdown(data?.project, '_id', 'sign', '.', 'name'),
     subType: isDataPayLoad ? data?.subType?.value : convertInitialValueDropdownForLocalDB(CONTRACT_TYPES, data?.subType),
     draft: isDataPayLoad ? data?.draft?.value : convertInitialValueDropdownForLocalDB(CONTRACT_DRAFT, data?.draft),
     field: isDataPayLoad ? data?.field?.value : convertInitialValueDropdown(data?.field || ''),

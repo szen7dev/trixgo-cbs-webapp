@@ -16,7 +16,7 @@ import {
 	useQueryListContact,
 	useQueryListContract,
 	useQueryListContractIPC
-} from "services/hooks/useContractIncome";
+} from "services/hooks/cmcs/useContractIncome";
 import {
 	useQueryListDoctype,
 } from "services/hooks/useHuman";

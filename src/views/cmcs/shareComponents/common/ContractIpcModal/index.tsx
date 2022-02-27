@@ -25,7 +25,7 @@ import { string, object } from 'yup';
 
 import {
   useDetailContractIPCMutation,
-} from "services/hooks/useContractIPC";
+} from "services/hooks/cmcs/useContractIPC";
 
 interface NewContractIPCModalProps {
   defaultValues?: any;

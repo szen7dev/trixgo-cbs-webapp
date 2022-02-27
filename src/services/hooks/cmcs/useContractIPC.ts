@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
-import ContractIPCRepository from 'apis/contractIPC';
+import ContractIPCRepository from 'apis/cmcs/contractIPC';
 import HumanRepository from 'apis/human';
 
 type UseContractIPCProp = {

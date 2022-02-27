@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query";
 
-import ContractProduceRepository from 'apis/contractProduce';
+import ContractProduceRepository from 'apis/cmcs/contractProduce';
 
 type UseContractProduceProp = {
     listContractProduce: Array<any>;

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import Back from "assets/icons/Back";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
-import { NavLink, useParams } from "react-router-dom"
+import { NavLink, useHistory, useParams } from "react-router-dom"
 import { ActionAccountingGroup } from "views/accounting/shareComponents/common";
 
 import LogIcon from "assets/icons/Log";
@@ -11,7 +11,7 @@ import { Paginate } from "shareComponents/common";
 
 import {
   useJournalDetailList
-} from "services/hooks/useAccountingVoucher";
+} from "services/hooks/accounting/useAccountingVoucher";
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs"
 
 import API from "apis/repository";
@@ -68,15 +68,14 @@ export const AccountingTicketDetailPage: FC = () => {
     setPageParam(journalDetailList.nextCursor)
   }
 
+  const history = useHistory();
+
   return (
     <div className={"relative min-h-full pb-10"}>
       <div className="shadow-lg flex border-b border-gray-200 align-items-center px-6 py-2 sticky top-0 bg-white z-10">
-        <NavLink
-          exact
-          to={"/accounting/home"}
-        >
+        <div className="cursor-pointer" onClick={() => history.goBack()}>
           <Back />
-        </NavLink>
+        </div>
         <button type="button" className="rounded-full h-10 w-10 flex items-center justify-center bg-gray-100 ml-5">
           <DotsVerticalIcon />
         </button>

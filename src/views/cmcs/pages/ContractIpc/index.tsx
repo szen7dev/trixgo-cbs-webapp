@@ -24,7 +24,7 @@ import {
   useCreateContractIPCMutation,
   useUpdateContractIPCMutation,
   useDeleteContractIPCMutation,
-} from "services/hooks/useContractIPC";
+} from "services/hooks/cmcs/useContractIPC";
 
 export const ContractIpc: FC = () => {
   const [itemChecked, setItemChecked] = useState('');

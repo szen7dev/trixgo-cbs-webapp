@@ -21,7 +21,7 @@ import {
   useCreateContractProduceMutation,
   useUpdateContractProduceMutation,
   useDeleteContractProduceMutation,
-} from "services/hooks/useContractProduce";
+} from "services/hooks/cmcs/useContractProduce";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useParams } from "react-router-dom";
 
