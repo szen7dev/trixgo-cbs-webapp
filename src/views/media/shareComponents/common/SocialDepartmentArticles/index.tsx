@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import iconComment from 'assets/images/icon-chat-project.png';
 import { MediaProps } from 'typings/media';
 import { abbreviateNumber } from 'utils';
+import { Loader } from 'shareComponents/common';
 
 type Props = {
 	listMedias: Array<MediaProps>,
@@ -12,7 +13,7 @@ type Props = {
 } & React.HtmlHTMLAttributes<HTMLDivElement>
 
 export const SocialDepartmentArticles: React.FC<Props> = ({ listMedias, isLoading, ...props }) => {
-	if(isLoading) return null;
+	if(isLoading) return <Loader className='border-primary' />;
 
 	return (
 		<div {...props}>

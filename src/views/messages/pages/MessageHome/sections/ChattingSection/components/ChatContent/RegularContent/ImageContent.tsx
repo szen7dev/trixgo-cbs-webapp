@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import {FC, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {ModalFullContainer} from "shareComponents/common";
@@ -19,7 +19,7 @@ type Props = {
 type ClassMatrix = {
     [key: string]: Array<any>;
 }
-export const ImagesContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context, isMini}) => {
+export const ImagesContent:FC<Props> = ({ message, className, showSenderName, isMyMessage, context, isMini }) => {
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 

@@ -173,6 +173,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 					// Tạo bài viết
 					const { error, data, message } = await createMediaAsync(values);
+					
 					if(error) {
 						toast.warning(message);
 					}
