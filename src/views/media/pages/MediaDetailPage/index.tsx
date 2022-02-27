@@ -35,8 +35,7 @@ import 'views/media/styles/index.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ImageProps, ListMediasPayload, MediaProps } from "typings/media";
-import { User } from "typings/user";
+import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
 import SocialRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
 import { abbreviateNumber } from 'utils';
@@ -79,11 +78,12 @@ const MediaDetail: FC = () => {
 		}
 	}, [user])
 
-	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = useMedia({
-		key: `list_medias__related`,
-		params: paramsMedia,
-		isFetchMedias: true
-	});
+	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = 
+		useMedia({
+			key: `list_medias__related`,
+			params: paramsMedia,
+			isFetchMedias: true
+		});
 
 	const { listReactions, listSeens, totalRecordSeen } =
 		useMedia({
@@ -100,16 +100,6 @@ const MediaDetail: FC = () => {
 			isFetchComment: true
 		});
 
-	// State manage image comments
-	const [defaultState, setDefaultState] = useState({
-		mediaID: '',
-		images: [] as ImageProps[],
-		index: 0,
-		createAt: '',
-		author: undefined as undefined | User
-	});
-	const [isShow, setIsShow] = useState(false);
-
 	const [modalEditMedia, setModalEditMedia] = useState<boolean>(false);
 	const [modalShowReact, setModalShowReact] = useState<boolean>(false);
 	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
@@ -122,16 +112,18 @@ const MediaDetail: FC = () => {
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
 	const toggleModalReact = () => {
-		if (!modalShowReact && !isFetchReactions) {
-			setIsFetchReactions(true);
-		}
+		// if (!modalShowReact && !isFetchReactions) {
+		// 	setIsFetchReactions(true);
+		// }
+		!isFetchReactions && setIsFetchReactions(true);
 		setModalShowReact(!modalShowReact);
 	}
 
 	const toggleModalSeen = () => {
-		if (!modalShowSeen && !isFetchSeens) {
-			setIsFetchSeens(true);
-		}
+		// if (!modalShowSeen && !isFetchSeens) {
+		// 	setIsFetchSeens(true);
+		// }
+		!isFetchSeens && setIsFetchSeens(true);
 		setModalShowSeen(!modalShowSeen);
 	}
 
@@ -201,7 +193,6 @@ const MediaDetail: FC = () => {
 	}
 	const images: FileProps[] = media.images || [];
 	const files: FileProps[] = media.files || [];
-	console.log({ 'MEDIA_DETAIL_PAGE': media });
 
 	return (
 		<>

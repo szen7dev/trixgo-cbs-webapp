@@ -1,6 +1,6 @@
 import Axios from "axios";
 import API from "../repository";
-import { FilePayload, FileResponse, UploadPayload, FileUpdatePayload } from "typings/file";
+import { GenerateLinkPayload, FileResponse, UploadPayload, FileUpdatePayload } from "typings/file";
 
 const BASE_URL = process.env.REACT_APP_ENV === 'development' 
   ? process.env.REACT_APP_API_DOMAIN_LOCAL
@@ -16,7 +16,7 @@ const axiosS3 = Axios.create({
 const fileURL = "/api/files";
 
 const FileRepository = {
-    async generateLinkS3(payload: FilePayload): Promise<FileResponse> {
+    async generateLinkS3(payload: GenerateLinkPayload): Promise<FileResponse> {
         const { data } = await API.post<FileResponse>(
             `${fileURL}/generate-link-s3`,
             payload

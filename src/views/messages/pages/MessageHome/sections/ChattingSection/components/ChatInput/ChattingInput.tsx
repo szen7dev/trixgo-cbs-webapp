@@ -226,6 +226,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         for (const file of sendMessage.files) {
             const {_id} = await addFileToUpload({
                 files: file.realFile,
+				fileType: 1,
                 progress: percentCompleted => {
                     console.log(`${percentCompleted}% ${file.file.file.name}`);
                     dispatch(updateFileProgressOnMessage({

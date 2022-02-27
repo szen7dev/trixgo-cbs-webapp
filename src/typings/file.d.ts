@@ -8,15 +8,19 @@ export type GenerateLinkPayload = {
   groupID?: string;
   packageID?: string;
   conversationID?: string;
-  type?: string;
   typeUpload?: string;
+  type?: number;
+  mimeType?: string;
+  name?: string;
+  size?: string;
 }
 
-export type FilePayload = Partial<File> & Partial<GenerateLinkPayload> & {
+export type FilePayload = Partial<File> & {
   mimeType: string;
   name: string;
   size: string;
-};
+  type: string;
+}
 
 export type FileUpdatePayload = {
   fileID: string,
@@ -39,7 +43,7 @@ export type FileResponse = APIResponse & {
   data: {
     infoGenerateLink: {
       error: boolean;
-      data: string
+      data: string,
     },
     infoFileAfterInsert: FileProps
   }
