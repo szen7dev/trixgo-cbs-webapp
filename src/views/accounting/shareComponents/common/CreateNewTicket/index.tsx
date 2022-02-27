@@ -91,10 +91,10 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
   })
 }
 
-export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, contractId = '' }) => {
+export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, contractId = '', type = 1 }) => {
   const { closeModal } = useModal();
 
-  const [initialValues, setInitialValues] = useState(mappingData({ contractId }));
+  const [initialValues, setInitialValues] = useState(mappingData({ contractId, type }));
 
   const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
   const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
@@ -125,7 +125,6 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
         contractId,
         selectedJournals: [...mappingSelectedJournals(selectedJournals.data?.listRecords) || []]
       }
-      console.log('🚀 ~ fetchDetailAccountingVoucher ~ dataDetail', dataDetail)
       setLastestIDJournals(selectedJournals.data?.nextCursor)
       setTotalRecord(selectedJournals.data?.totalRecord)
       !isEmpty(dataDetail) && setInitialValues(mappingData(dataDetail))

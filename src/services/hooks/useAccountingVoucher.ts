@@ -13,7 +13,7 @@ type UseAccountingVoucherProp = {
     hasNextPage: boolean | undefined
 };
 
-export const UseAccountingVoucherList = (pageParam = '', contractID = '', limit = 10): any => {
+export const UseAccountingVoucherList = (pageParam = '', type: number, limit = 10): any => {
 
     const {
         status,
@@ -27,7 +27,7 @@ export const UseAccountingVoucherList = (pageParam = '', contractID = '', limit 
             return AccountingVoucherRepository.fetchList({
                 limit,
                 lastestID: pageParam || "",
-                contractID
+                type
             })
         },
         { keepPreviousData: true }

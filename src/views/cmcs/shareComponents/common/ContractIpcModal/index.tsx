@@ -7,7 +7,7 @@ import { useModal } from "services/hooks/useModal";
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Popover } from "shareComponents/common";
 
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
@@ -159,7 +159,9 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
                         allowClearValueSingleInput={false}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item: any) => <span className="text-1-line-clamp">{item.text}</span>}
+                        renderSelectedItem={(item: any) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 whitespace-normal z-99" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         initialValue={initialValues?.type}
                         data={CONTRACT_IPC_TYPES.map(item => ({
                           value: item.value,

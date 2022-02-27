@@ -176,15 +176,14 @@ export const DropdownSearchable: FC<Props> = ({
   const handleRemoveItemSingle = () => {
     setValue(undefined);
     onClearData && onClearData();
-    inputSearchRef.current?.focus()
   };
 
-  // useEffect(() => {
-  //   if (inputSearchRef.current) {
-  //     inputSearchRef.current?.focus()
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [inputSearchRef.current])
+  useEffect(() => {
+    if (inputSearchRef.current) {
+      inputSearchRef.current?.focus()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputSearchRef.current])
 
   React.useLayoutEffect(() => {
     if (data) {

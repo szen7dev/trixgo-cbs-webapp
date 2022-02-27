@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Popover } from "shareComponents/common";
 import DatePicker from "react-datepicker";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -163,26 +163,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							onClearData={() => setFieldValue("customer", '')}
 							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => (
-								<div
-									style={{ maxWidth: '300px' }}
-									className="flex items-center"
-								>
-									<img alt="Tag" src={TagIcon} className="mr-1" />
-									<p
-										style={{
-											textOverflow: "ellipsis",
-											maxWidth: "100%",
-											minWidth: 0,
-											whiteSpace: "nowrap",
-											overflow: "hidden",
-											flex: "1 1 auto",
-										}}
-									>
-										{item.text}
-									</p>
-								</div>
-							)}
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<img alt="Tag" src={TagIcon} className="mr-1" />
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
 							onSearchInputChange={debounce(
 								(value) => setSearchCustomerValue(value),
 								500
@@ -215,26 +205,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							onClearData={() => setFieldValue("contract", '')}
 							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => (
-								<div
-									style={{ maxWidth: '300px' }}
-									className="flex items-center"
-								>
-									<img alt="Tag" src={TagIcon} className="mr-1" />
-									<p
-										style={{
-											textOverflow: "ellipsis",
-											maxWidth: "100%",
-											minWidth: 0,
-											whiteSpace: "nowrap",
-											overflow: "hidden",
-											flex: "1 1 auto",
-										}}
-									>
-										{item.text}
-									</p>
-								</div>
-							)}
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<img alt="Tag" src={TagIcon} className="mr-1" />
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
 							onSearchInputChange={debounce(
 								(value) => setSearchContractValue(value),
 								500
@@ -262,26 +242,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							onClearData={() => setFieldValue("ipc", '')}
 							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => (
-								<div
-									style={{ maxWidth: '300px' }}
-									className="flex items-center ipc-value-selected"
-								>
-									<img alt="Tag" src={TagIcon} className="mr-1" />
-									<p
-										style={{
-											textOverflow: "ellipsis",
-											maxWidth: "100%",
-											minWidth: 0,
-											whiteSpace: "nowrap",
-											overflow: "hidden",
-											flex: "1 1 auto",
-										}}
-									>
-										{item.text}
-									</p>
-								</div>
-							)}
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<img alt="Tag" src={TagIcon} className="mr-1" />
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
 							onSearchInputChange={debounce(
 								(value) => setSearchContractIPCValue(value),
 								500
@@ -309,26 +279,16 @@ const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
 							onClearData={() => setFieldValue("subtype", '')}
 							showTriangle={false}
 							maxWidthInput="max-w-none"
-							renderSelectedItem={(item) => (
-								<div
-									style={{ maxWidth: '300px' }}
-									className="flex items-center"
-								>
-									<img alt="Tag" src={TagIcon} className="mr-1" />
-									<p
-										style={{
-											textOverflow: "ellipsis",
-											maxWidth: "100%",
-											minWidth: 0,
-											whiteSpace: "nowrap",
-											overflow: "hidden",
-											flex: "1 1 auto",
-										}}
-									>
-										{item.text}
-									</p>
-								</div>
-							)}
+							renderSelectedItem={(item) => {
+								return (
+									<div className="flex">
+										<img alt="Tag" src={TagIcon} className="mr-1" />
+										<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 top-0 w-[330px] h-fit whitespace-normal" >
+											<p className="text-1-line-clamp">{`${item.text}`}</p>
+										</Popover>
+									</div>
+								)
+							}}
 							onSearchInputChange={debounce(
 								(value) => setSearchSubTypeValue(value),
 								500

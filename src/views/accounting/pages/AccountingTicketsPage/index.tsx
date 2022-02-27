@@ -20,11 +20,15 @@ import TriangleDown from "assets/icons/TriangleDown";
 
 import { Popover } from "shareComponents/common";
 
-export const AccountingTicketsPage: FC = () => {
+interface AccountingTicketsPageProps {
+  type?: number
+}
+
+export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
-  const accountingVoucher = UseAccountingVoucherList(pageParam);
+  const accountingVoucher = UseAccountingVoucherList(pageParam, type);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -87,7 +91,7 @@ export const AccountingTicketsPage: FC = () => {
 
           <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
 
-            <CreateNewTicket onFinish={handleFinishForm} isEdit={true} idEdit={data._id} contractId={data?.contract?._id} title="Cập nhật" />
+            <CreateNewTicket onFinish={handleFinishForm} type={type} isEdit={true} idEdit={data._id} contractId={data?.contract?._id} title="Cập nhật" />
           </div>
         )
         break;
@@ -136,7 +140,7 @@ export const AccountingTicketsPage: FC = () => {
           onClick={() =>
             openModal(
               <div className={"bg-white inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"}>
-                <CreateNewTicket onFinish={handleFinishForm} title="Phiếu mới" />
+                <CreateNewTicket onFinish={handleFinishForm} type={type} title="Phiếu mới" />
               </div>
             )
           }
