@@ -327,9 +327,32 @@ export const DIRECTION_TYPES = [
 
 // PHÂN LOẠI HỒ SƠ VĂN BẢN
 export const DOCUMENT_TYPES = [
-    { value: 1, text: 'Chung', key: 'key' },
+    { value: 1, text: 'Chung, khác', key: 'key' },
     { value: 2, text: 'Hợp đồng', key: 'key' },
-    { value: 3, text: 'Bản vẽ', key: 'key' },
+    { value: 3, text: 'Quyết định', key: 'key' },
+    { value: 4, text: 'Biên bản họp', key: 'key' },
+    { value: 5, text: 'Báo cáo', key: 'key' },
+    { value: 6, text: 'Báo giá, chào giá, dự thầu', key: 'key' },
+    { value: 7, text: 'Công văn', key: 'key' },
+    { value: 8, text: 'Thông báo', key: 'key' },
+    { value: 9, text: 'Bản vẽ', key: 'key' },
+    { value: 10, text: 'Yêu cầu, đề nghị', key: 'key' },
+    { value: 11, text: 'Hồ sơ thanh toán', key: 'key' },
+    { value: 12, text: 'Thư kỹ thuật', key: 'key' },
+    { value: 13, text: 'Thuyết minh', key: 'key' },
+    { value: 14, text: 'Dự toán, ngân sách', key: 'key' },
+    { value: 15, text: 'Đề cương', key: 'key' },
+    { value: 16, text: 'Tiến độ, kế hoạch', key: 'key' },
+    { value: 17, text: 'Tờ trình', key: 'key' },
+    { value: 18, text: 'Biên bản', key: 'key' },
+    { value: 19, text: 'Hồ sơ năng lực', key: 'key' },
+    { value: 20, text: 'Biểu mẫu', key: 'key' },
+    { value: 21, text: 'Hồ sơ pháp lý', key: 'key' },
+    { value: 22, text: 'Tiêu chuẩn, quy chuẩn', key: 'key' },
+    { value: 23, text: 'Quy trình', key: 'key' },
+    { value: 24, text: 'Chỉ dẫn', key: 'key' },
+    { value: 25, text: 'Nghiệm thu chất lượng', key: 'key' },
+    { value: 26, text: 'Dữ liệu', key: 'key' },
 ]
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC

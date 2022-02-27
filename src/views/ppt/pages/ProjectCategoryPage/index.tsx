@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
+import { Link, generatePath } from "react-router-dom";
 
 // Hooks use department
 import { useListDepartment } from "services/hooks/ppt/useListDepartment";
@@ -83,20 +83,19 @@ const ProjectCategoryPage: FC = () => {
 														<div
 															className="h-full bg-cbs-subtext"
 															style={{ 'width': `${Math.floor(dateLoadedPercentage(new Date(record.startTime || 0), new Date(record.expiredTime || 0), new Date()) * 100)}%` } as React.CSSProperties}>
-
 														</div>
 													</div>
 													<ul className="mt-3 text-medium">
-														<li><span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" /> Cột mốc: <b>3/12</b></li>
+														<li><span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Cột mốc: <b>3/12</b></li>
 														<li className="mt-2.5">
-															<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn:
+															<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn:{" "}
 															<span className="text-cbs-primary">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
 														</li>
 													</ul>
 												</div>
 											</div>
 											<h3 className="line-clamp-2 text-large text-black pt-2">
-												<Link className="" to="/pcm/project/:id/home">{record.name}</Link>
+												<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.name}</Link>
 											</h3>
 											<p className="text-x-small mt-1.5 truncate">
 												{record.company.name}

@@ -1,5 +1,5 @@
 import React, { FC, FormEvent, useState } from "react";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Popover } from "shareComponents/common";
 import Copy from 'assets/images/icons8-copy-96.png';
 import { ErrorMessage, Field, FieldArray } from "formik";
 
@@ -67,7 +67,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	}
 
 	return (
-		<div className={"px-6 mt-3"}>
+		<div className={"px-6 mt-3 new-ticket-table"}>
 			<FieldArray name="selectedJournals">
 				{({ insert, remove, push }) => (
 					<>
@@ -125,13 +125,17 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[120px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="TK nợ"
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.debit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.debit`, '')}
 												showTriangle={false}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) =>
+													<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0  whitespace-normal" >
+														<p className="text-2-line-clamp">{`${item.text}`}</p>
+													</Popover>
+												}
 												onSearchInputChange={debounce(
 													(value) => setSearchDebitValue(value),
 													500
@@ -156,13 +160,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[120px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="TK có"
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.credit`, '')}
 												showTriangle={false}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCreditValue(value),
 													500
@@ -187,13 +193,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[120px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Mã khách nợ"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerDebit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerDebit`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCustomerDebitValue(value),
 													500
@@ -218,13 +226,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[120px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Mã khách có"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.customerCredit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.customerCredit`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCustomerDebitValue(value),
 													500
@@ -249,13 +259,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[124px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Sản phẩm/Hàng hóa"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.goods`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.goods`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchGoodValue(value),
 													500
@@ -275,13 +287,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[120px]"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Kho bãi"
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
 												showTriangle={false}
 												allowClearValueSingleInput={true}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchWarehouseValue(value),
 													500
@@ -331,13 +345,15 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"flex-1"}
+												className={"w-[150px]"}
 												id="ticket-type" placeholder="Hợp đồng"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.contract`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.contract`, '')}
-												renderSelectedItem={(item) => <span>{item.text}</span>}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchContractValue(value),
 													500

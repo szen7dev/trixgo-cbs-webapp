@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useRef, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
 // import API from "../../apis/repository";
@@ -93,6 +93,7 @@ export const DropdownSearchable: FC<Props> = ({
 
   const [searchTerm, setSearchTerm] = useState("");
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputSearchRef = useRef<HTMLInputElement>(null);
 
   useOnClickOutside(wrapperRef, () => setShowOption(false));
 
@@ -177,10 +178,17 @@ export const DropdownSearchable: FC<Props> = ({
     onClearData && onClearData();
   };
 
+  useEffect(() => {
+    if (inputSearchRef.current) {
+      inputSearchRef.current?.focus()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputSearchRef.current])
+
   React.useLayoutEffect(() => {
     if (data) {
       setDisplayData(data);
-    //   console.log({initialValue})
+      //   console.log({initialValue})
       if (firstInit && initialValue) {
         if (isMultiple && Array.isArray(initialValue) && initialValue.every(elm => Object.keys(elm).length > 0)) {
           setValues(initialValue);
@@ -217,7 +225,7 @@ export const DropdownSearchable: FC<Props> = ({
           values?.find(
             (v) => readDataValue(v, "id") === readDataValue(option, "id")
           )) ||
-        readDataValue(option, "id") === readDataValue(value, "id") ? (
+          readDataValue(option, "id") === readDataValue(value, "id") ? (
           <img src={BlueCheck} alt={"checked"} className={"w-[15px] mr-3"} />
         ) : (
           <div className={"w-[15px] mr-3"} />
@@ -255,7 +263,7 @@ export const DropdownSearchable: FC<Props> = ({
       >
         {/*<div className={"flex flex-wrap"}>*/}
         {(typeof values === "undefined" || values?.length <= 0) &&
-        !inlineSearch ? (
+          !inlineSearch ? (
           <span className={"text-left"}>{placeholder}</span>
         ) : null}
         {_map(values, (option) => (
@@ -283,6 +291,7 @@ export const DropdownSearchable: FC<Props> = ({
           <input
             disabled={disabled}
             placeholder={placeholder}
+            ref={inputSearchRef}
             className={
               "inline-SearchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
             }
@@ -310,6 +319,7 @@ export const DropdownSearchable: FC<Props> = ({
         <input
           disabled={disabled}
           placeholder={placeholder}
+          ref={inputSearchRef}
           className={
             "inline-SearchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
           }
@@ -350,6 +360,7 @@ export const DropdownSearchable: FC<Props> = ({
         <input
           disabled={disabled}
           placeholder={placeholder}
+          ref={inputSearchRef}
           className={
             "inline-SearchMessage-dropdown flex-1 ml-1 focus:outline-none bg-transparent"
           }

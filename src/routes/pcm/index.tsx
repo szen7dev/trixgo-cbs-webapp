@@ -25,7 +25,8 @@ import {
     DocumentHistoryPage,
     DocumentProjectPage,
     DocumentProfilePage,
-    DocumentReportPage
+    DocumentReportPage,
+		DocumentDashboardPage
 } from 'views/document/pages';
 import {
     ProjectAdminPage,
@@ -35,29 +36,29 @@ import {
     ProjectDashboardPortfolioPage,
     ProjectDashboardTaskPage,
     ProjectMarketPage,
-    ProjectDocumentPage,
     ProjectDrawing2Page,
     ProjectDrawingPage,
     ProjectFolderPage,
     ProjectHomePage,
-    ProjectMomPage,
-    ProjectOtherPage,
     ProjectPaymentPage,
     ProjectPhotoPackagePage,
     ProjectPhotoPage,
-    ProjectPortfolioPage,
-    ProjectProductionPage,
-    ProjectPunchPage,
-    ProjectReportPage,
     ProjectResourcePage,
-    ProjectRfaPage,
-    ProjectRfiPage,
     ProjectSchedulePage,
     ProjectInspectionPage,
     ProjectDashboardPage,
     ProjectInspectionTab2Page,
     ProjectInspectionTab3Page,
-    ProjectInspectionDetailPage
+    ProjectInspectionDetailPage,
+		ProjectDirectoryPage,
+    ProjectDocumentPage,
+    ProjectMomPage,
+    ProjectOtherPage,
+    ProjectProductionPage,
+    ProjectPunchPage,
+    ProjectReportPage,
+    ProjectRfaPage,
+    ProjectRfiPage,
 } from 'views/ppt/pages'
 
 const PCMRouter: FC = () => {
@@ -88,7 +89,7 @@ const PCMRouter: FC = () => {
                         ]}>
                             <Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage} />
                             <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
-                            <Route exact path="/pcm/dashboard-document" component={ProjectDashboardPage} />
+                            <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />
                         </LayoutSecondary>
                     </Switch>
                 </HomeLayout>
@@ -177,6 +178,7 @@ const PCMRouter: FC = () => {
                                 <Route exact path='/pcm/project/:id/inspection/tabs3' component={ProjectInspectionTab3Page} />
                             </LayoutSecondary>
                         </Route>
+                        <Route exact path='/pcm/project/:id/directory' component={ProjectDirectoryPage} />
                         <Route exact path='/pcm/project/:id/inspection/:item' component={ProjectInspectionDetailPage} />
                     </Switch>
                 </LayoutProjectSecondary>

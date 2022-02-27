@@ -14,7 +14,6 @@ async function fetchList<T>(params: any): Promise<T> {
                     "path": "customer userCreate company",
                     "select": "name sign"
                 },
-                type: 1,
                 fundaID: '5e846addd7e3490be59ae8d5',
                 ...params,
             },

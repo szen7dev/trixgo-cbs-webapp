@@ -28,8 +28,9 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-secondary-gray bg-clip-padding rounded-full opacity-0 invisible;
   }
-  .overflow-auto:hover::-webkit-scrollbar-thumb,.overflow-y-scroll:hover::-webkit-scrollbar-thumb {
-    @apply opacity-100 visible transition duration-200
+  .overflow-auto:hover::-webkit-scrollbar-thumb,
+  .overflow-y-scroll:hover::-webkit-scrollbar-thumb {
+    @apply opacity-100 visible transition duration-200;
   }
   .t-scrollbar-horizontal::-webkit-scrollbar {
     @apply h-2;
@@ -1306,7 +1307,7 @@ input[type="text"] {
   @apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border w-4 h-4 checked:border-cbs-primary;
 }
 .cbs-checkbox-radio {
-	@apply rounded-full focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border checked:border-cbs-primary;
+  @apply rounded-full focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border checked:border-cbs-primary;
 }
 .cbs-checkbox:checked,
 .cbs-checkbox-radio:checked,
@@ -1323,7 +1324,7 @@ input[type="text"] {
 }
 
 .cbs-checkbox-2 {
-	@apply appearance-none;
+  @apply appearance-none;
 }
 
 .cbs-checkbox-2:indeterminate {
@@ -1363,13 +1364,17 @@ input[type="text"] {
   white-space: normal;
   overflow: hidden;
 }
+
+.h-fit {
+  height: fit-content;
+}
 .smooth-animation {
-  -webkit-transform: translate3d(0,0,1px);
+  -webkit-transform: translate3d(0, 0, 1px);
   -webkit-backface-visibility: hidden;
 }
 
 .aspect-ratio-1 {
-	aspect-ratio: 1;
+  aspect-ratio: 1;
 }
 .pinned-list-header .carousel .control-dots {
   display: flex;
@@ -1380,7 +1385,7 @@ input[type="text"] {
   margin: 0;
   overflow: hidden;
 }
-.pinned-list-header .carousel .control-dots .dot-pin{
+.pinned-list-header .carousel .control-dots .dot-pin {
   min-height: 15px;
   max-height: 100%;
 }
@@ -1388,7 +1393,8 @@ input[type="text"] {
   bottom: -7px;
   /*transform: translateX(80px);*/
 }
-.emoji-action, .emoji-group {
+.emoji-action,
+.emoji-group {
   transition: all 0.1s ease-in-out;
 }
 .message-container:hover .emoji-group {
@@ -1410,11 +1416,11 @@ input[type="text"] {
   right: -20px;
   bottom: 5px;
 }
-.message-container .emoji-action .other-emojis{
+.message-container .emoji-action .other-emojis {
   transition: all 0.1s ease-in-out;
   overflow: hidden;
 }
-.message-container .emoji-action:hover .other-emojis{
+.message-container .emoji-action:hover .other-emojis {
   opacity: 100;
   visibility: visible;
   height: 144px;
@@ -1442,7 +1448,7 @@ input[type="text"] {
 }
 .t-mini-chat .input-wrapper {
   border-radius: 1.5rem;
-  @apply bg-gray-100
+  @apply bg-gray-100;
 }
 .date-message {
   transform: translate(0, 5px);
@@ -1452,25 +1458,34 @@ input[type="text"] {
 }
 
 .cbs-radial-progress {
-	--from: -90deg;
-	--thickness: 5px;
-	--primary: currentColor;
-	--secondary: #0000;
-	position:relative;
-	display: inline-grid;
-	place-content: center;
+  --from: -90deg;
+  --thickness: 5px;
+  --primary: currentColor;
+  --secondary: #0000;
+  position: relative;
+  display: inline-grid;
+  place-content: center;
 }
 
 .cbs-radial-progress::before {
-	content:'';
-	position:absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	background: conic-gradient(from var(--from), var(--primary) calc(var(--value) * 1%), #0000 0), conic-gradient(var(--secondary), var(--secondary));
-	mask: radial-gradient(farthest-side,#0000 calc(99% - var(--thickness)),#000 calc(100% - var(--thickness)));
-	border-radius:9999px
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: conic-gradient(
+      from var(--from),
+      var(--primary) calc(var(--value) * 1%),
+      #0000 0
+    ),
+    conic-gradient(var(--secondary), var(--secondary));
+  mask: radial-gradient(
+    farthest-side,
+    #0000 calc(99% - var(--thickness)),
+    #000 calc(100% - var(--thickness))
+  );
+  border-radius: 9999px;
 }
 .t-mini-chat .attach-vote,
 .t-mini-chat .attach-reminder,

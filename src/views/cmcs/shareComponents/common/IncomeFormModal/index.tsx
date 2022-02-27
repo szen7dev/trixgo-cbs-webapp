@@ -13,7 +13,7 @@ import styles from 'views/cmcs/styles/styles.module.css';
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
-import { DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, Popover } from "shareComponents/common";
 
 import {
   convertDateToString,
@@ -255,7 +255,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
         {(formik) => {
           const { handleBlur, setFieldValue } = formik;
           return (
-            <Form className="max-h-[690px] py-5 overflow-y-auto text-left">
+            <Form className="max-h-[690px] py-5 overflow-y-auto  overflow-x-inherit text-left">
               <div>
                 <div
                   className="flex items-center px-7 mb-8 select-none cursor-pointer"
@@ -296,6 +296,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           500
                         )}
                         initialValue={initialValues?.projectID}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         data={listProject.map((item: any) => ({
                           label: item.sign + "." + item.name,
                           value: item._id,
@@ -328,7 +331,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         initialValue={initialValues?.subType}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         data={CONTRACT_TYPES.map(item => ({
                           value: item.value,
                           label: item.text
@@ -365,7 +370,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           styles.disabledBg
                         )}
                         initialValue={initialValues?.draft}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         data={CONTRACT_DRAFT.map(item => ({
                           value: item.value,
                           label: item.text
@@ -401,7 +408,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         onSearchInputChange={debounce(
                           (value) => setSearchFieldValue(value),
                           500
@@ -442,7 +451,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         initialValue={initialValues?.outin}
                         data={CONTRACT_OUTIN.map(item => ({
                           value: item.value,
@@ -479,7 +490,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         onSearchInputChange={debounce(
                           (value) => setSearchChairValue(value),
                           500
@@ -516,7 +529,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onClearData={() => setFieldValue("status", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         initialValue={initialValues?.status}
                         data={CONTRACT_COME_IN_STATUS.map(item => ({
                           value: item.value,
@@ -549,7 +564,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         onClearData={() => setFieldValue("personInCharge", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         onSearchInputChange={debounce(
                           (value) => setSearchPersonInChargeValue(value),
                           500
@@ -590,7 +607,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         initialValue={initialValues?.real}
                         data={CONTRACT_TA.map(item => ({
                           value: item.value,
@@ -627,7 +646,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         onSearchInputChange={debounce(
                           (value) => setSearchDebtStatusValue(value),
                           500
@@ -668,7 +689,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         initialValue={initialValues?.type}
                         data={CONTRACT_TYPES.map(item => ({
                           value: item.value,
@@ -705,7 +728,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        renderSelectedItem={(item) => <span>{item.text}</span>}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
                         onSearchInputChange={debounce(
                           (value) => setSearchWarehouseValue(value),
                           500
@@ -775,7 +800,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       onClearData={() => setFieldValue("buyerInfo", '')}
                       showTriangle={true}
                       maxWidthInput="max-w-none"
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                        <p className="text-1-line-clamp">{`${item.text}`}</p>
+                      </Popover>}
                       onSearchInputChange={debounce(
                         (value) => setSearchBuyerInfoValue(value),
                         500
@@ -853,7 +880,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         "cursor-not-allowed rounded",
                         styles.disabledBg
                       )}
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                        <p className="text-1-line-clamp">{`${item.text}`}</p>
+                      </Popover>}
                       onSearchInputChange={debounce(
                         (value) => setSearchSellerInfoValue(value),
                         500
@@ -986,7 +1015,9 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         "cursor-not-allowed rounded",
                         styles.disabledBg
                       )}
-                      renderSelectedItem={(item) => <span>{item.text}</span>}
+                      renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                        <p className="text-1-line-clamp">{`${item.text}`}</p>
+                      </Popover>}
                       initialValue={initialValues?.lock}
                       data={CONTRACT_LOCK.map(item => ({
                         value: item.value,

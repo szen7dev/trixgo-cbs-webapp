@@ -13,6 +13,7 @@ import { ProtectedRoute } from "routes/components";
 import ErrorPage from "views/authentication/Error";
 
 import {
+  AccountingHomePage,
   AccountingTicketsPage,
   AccountingDashboardPage,
   AccountingTicketDetailPage,
@@ -35,7 +36,7 @@ const AccountingRouter: FC = () => {
       <Route exact path="/accounting">
         <Redirect to="/accounting/home" />
       </Route>
-      <ProtectedRoute exact path="/accounting/home" component={AccountingTicketsPage} />
+      <ProtectedRoute exact path="/accounting/home" component={AccountingHomePage} />
       <ProtectedRoute
         exact
         path="/accounting/dashboard"
@@ -44,42 +45,42 @@ const AccountingRouter: FC = () => {
       <ProtectedRoute
         exact
         path="/accounting/accbill"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={1} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/receipt"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={2} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/payment"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={3} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/goods-import"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={4} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/goods-export"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={5} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/invoices"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={6} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/debit-note"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={7} />}
       />
       <ProtectedRoute
         exact
         path="/accounting/credit-note"
-        component={AccountingTicketsPage}
+        component={() => <AccountingTicketsPage type={8} />}
       />
       <ProtectedRoute
         exact
