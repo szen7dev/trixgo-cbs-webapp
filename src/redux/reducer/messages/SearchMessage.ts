@@ -87,7 +87,7 @@ const listSearchMessageSlice = createSlice({
                 listSearchMessage: {
                     ...state.data.listSearchMessage,
                     [conversationId] :
-                        isFirstInit?
+                        (isFirstInit||direction==="front")?
                             {
                                 ...state.data.listSearchMessage[conversationId],
                                 ...newMessageData

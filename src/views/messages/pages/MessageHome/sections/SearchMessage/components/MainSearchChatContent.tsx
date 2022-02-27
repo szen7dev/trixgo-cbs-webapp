@@ -23,6 +23,7 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
+    const [reachedBottom, setReachBottom] = useState(false);
     const messagesData = useSelector((state: RootState) => state.searchMessage.data.listSearchMessage[chat._id]);
     const hasMoreDataBack = useSelector((state: RootState) => state.searchMessage.data.hasMoreDataBack[chat._id]);
     const hasMoreDataFront = useSelector((state: RootState) => state.searchMessage.data.hasMoreDataFront[chat._id]);
@@ -44,7 +45,14 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
             goToMessagePosition({messageID: prevCursor, conversationID: chat._id}, false, "back");
             setReachTop(false);
         }
-    }, [reachedTop, prevCursor])
+    }, [reachedTop, prevCursor]);
+
+    // useEffect(() => {
+    //     if (reachedBottom && !isLoading && hasMoreDataFront) {
+    //         goToMessagePosition({messageID: prevCursor, conversationID: chat._id}, false, "front");
+    //         setReachBottom(false);
+    //     }
+    // }, [reachedBottom, nextCursor])
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
@@ -58,6 +66,12 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                 setReachTop(true)
             } else {
                 setReachTop(false);
+            }
+
+            if (scrollTop > -100) {
+                setReachBottom(true);
+            } else {
+                setReachBottom(false);
             }
         }
     };
