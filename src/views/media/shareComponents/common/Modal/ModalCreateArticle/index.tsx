@@ -90,7 +90,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	const { createMediaAsync, updateMediaAsync } = useMedia({});
 	const { addFileToUpload } = useUpload({
 		appID: '5df4ce16506d9b3c587948ca',
-		companyID: user?.company._id
+		companyID: user?.company._id,
 	});
 
 	const [showClassifyArticle, setShowClassifyArticle] = useState(false);
@@ -124,6 +124,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		for (const [key, { file }] of Object.entries(images)) {
 			const { _id } = await addFileToUpload({
 				files: file,
+				fileType: 1,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
@@ -139,6 +140,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		for (const [key, { file }] of Object.entries(files)) {
 			const { _id } = await addFileToUpload({
 				files: file,
+				fileType: 2,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)

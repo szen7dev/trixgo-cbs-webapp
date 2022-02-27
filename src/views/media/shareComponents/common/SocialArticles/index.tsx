@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import image from 'assets/images/media/image 177.png';
 import { MediaProps } from 'typings/media';
-import { Loader } from 'shareComponents/common';
 
 type Props = {
 	headerComponent?: ElementType,
@@ -12,8 +11,6 @@ type Props = {
 } & React.HtmlHTMLAttributes<HTMLDivElement>
 
 export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listMedias, ...props }) => {
-	console.log({ 'SOCIAL_ARTICLES': listMedias });
-	
 	return (
 		<div {...props}>
 			{Header && <Header />}
@@ -47,7 +44,7 @@ export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listM
 							</div>
 						</div>
 					</li>
-				)) : <Loader className='border-primary' />}
+				)) : ''}
 			</ul>
 		</div>
 	)

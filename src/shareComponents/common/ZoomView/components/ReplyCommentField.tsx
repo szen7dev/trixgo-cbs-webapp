@@ -72,6 +72,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		for (const [key, { file }] of Object.entries(images)) {
 			const { _id } = await addFileToUpload({
 				files: file,
+				fileType: 1,
 				progress: percentCompleted => {
 					// console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
@@ -84,6 +85,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		for (const [key, { file }] of Object.entries(files)) {
 			const { _id } = await addFileToUpload({
 				files: file,
+				fileType: 2,
 				progress: percentCompleted => {
 					// console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)

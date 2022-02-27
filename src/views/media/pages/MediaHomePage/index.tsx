@@ -55,9 +55,6 @@ export const MediaHomePage: FC = () => {
 
 	if (isLoadingMediasCompany) return <Loader className="border-primary" />;
 
-	console.log({ COMPONENT: 'MEDIA_HOME_PAGE' });
-	console.log({ listMediasCompany, listMediasDigital, listMediasSystem, listMediasDepartment });
-
 	return (
 		<>
 			{/* Content */}

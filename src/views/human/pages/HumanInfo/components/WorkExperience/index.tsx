@@ -214,6 +214,7 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
       for (const [key, { file }] of Object.entries(_fileUploads)) {
         const { _id } = await addFileToUpload({
           files: file,
+          fileType: 2,
           progress: (percentCompleted) => {
             setUploadFileProgress(key, percentCompleted);
           },

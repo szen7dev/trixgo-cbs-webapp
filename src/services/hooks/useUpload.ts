@@ -24,14 +24,20 @@ export type CompressConfig = {
 
 export type UploadFileProps = {
     files: File & File[],
+    fileType: number,
     progress?: (percentCompleted: number) => void,
     compressConfig?: CompressConfig;
 }
 
+type FileGenerateLink = {
+    file: File;
+    fileType: number;
+}
+
 type UseUpload = {
-    generateLinkS3: (payload: File) => Promise<GenerateLinkResponse>,
+    generateLinkS3: ({ file, fileType }: FileGenerateLink) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, progress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
+    addFileToUpload: ({ files, fileType, progress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
@@ -41,22 +47,21 @@ export const useUpload = ({
     projectID,
     groupID,
     conversationID,
-    type,
     typeUpload
 }: GenerateLinkPayload) : UseUpload => {
 
     const { mutateAsync: generateLinkS3Async } =
-        useMutation((payload: File) =>
+        useMutation(({ file, fileType }: FileGenerateLink) =>
             FileRepository.generateLinkS3({
-                name: payload.name,
-                mimeType: payload.type,
-                size: payload.size as never,
+                name: file.name,
+                mimeType: file.type,
+                size: file.size as never,
+                type: fileType,
                 appID,
                 companyID,
                 projectID,
                 groupID,
                 conversationID,
-                type,
                 typeUpload
             })
         );
@@ -66,20 +71,20 @@ export const useUpload = ({
             FileRepository.uploadFileToS3(payload)
         );
 
-    const generateLinkS3 = async (payload: File) => {
+    const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
-            const { data } = await generateLinkS3Async(payload);
+            const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 
             return {
                 signedUrl: infoGenerateLink.data,
-                file: payload,
+                file,
                 fileName: infoFileAfterInsert.name,
                 result: infoFileAfterInsert
             }
         } catch (error: unknown) {
             console.error(error);
-            return { signedUrl: '', fileName: '', file: payload };
+            return { signedUrl: '', fileName: '', file };
         }
     };
 
@@ -93,6 +98,7 @@ export const useUpload = ({
 
     const addMultiFileToUpload = async ({
         files,
+        fileType,
         progress
     }: UploadFileProps) => {
         let urlsPromise: Promise<GenerateLinkResponse>[] = [];
@@ -100,11 +106,11 @@ export const useUpload = ({
         if(!files.length) return;
 
         if(files.length === 1){
-            const infoUrl = generateLinkS3(files[0]);
+            const infoUrl = generateLinkS3({ file: files[0], fileType });
             urlsPromise = [infoUrl];
         } else{
             for (const file of files) {
-                const infoUrl = generateLinkS3(file);
+                const infoUrl = generateLinkS3({ file, fileType });
                 urlsPromise = [...urlsPromise, infoUrl];
             }   
         }
@@ -122,13 +128,14 @@ export const useUpload = ({
 
     const addFileToUpload = async ({
            files,
+           fileType,
            progress,
            compressConfig = {
                useCompress: true,
                quality: 0.8
            },
        }: UploadFileProps) => {
-        const { signedUrl, file, fileName, result } = await generateLinkS3(files);
+        const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
 
         // Handle images
         if (file.type.includes("image/") && compressConfig?.useCompress) {
