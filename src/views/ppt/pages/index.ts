@@ -5,6 +5,7 @@ export { default as ProjectCategoryPage } from "./ProjectCategoryPage";
 export { default as ProjectDashboardPage } from "./ProjectDashboardPage";
 export { default as ProjectDashboardPortfolioPage } from "./ProjectDashboardPortfolioPage";
 export { default as ProjectDashboardTaskPage } from "./ProjectDashboardTaskPage";
+export { default as ProjectDirectoryPage } from "./ProjectDirectoryPage";
 export { default as ProjectMarketPage } from "./ProjectMarketPage";
 export { default as ProjectDocumentPage } from "./ProjectDocumentPage";
 export { default as ProjectDrawing2Page } from "./ProjectDrawing2Page";
