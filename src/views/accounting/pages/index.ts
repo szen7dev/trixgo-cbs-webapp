@@ -1,3 +1,4 @@
+export * from './AccountingHomePage';
 export * from './AccountingTicketsPage';
 export * from './AccountingDashboardPage';
 export * from './AccountingTicketDetailPage';

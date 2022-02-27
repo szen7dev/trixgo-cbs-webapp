@@ -135,11 +135,11 @@ export const ContractProduce: FC = () => {
             // eslint-disable-next-line no-console
             onChange={(event) => console.log(event.target.value)}
           />
-          <DropdownFilterButton
+          {/* <DropdownFilterButton
             onSubmit={handleOnFilter}
             onCancel={handleOnCancelFilter}
             initialValues={{}}
-          />
+          /> */}
           <div className="border-l-2 border-primary-border ml-5 pl-5">
             {itemChecked && (
               <div className="border-l-2 border-primary-border ml-5 pl-5">

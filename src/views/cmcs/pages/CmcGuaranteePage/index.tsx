@@ -63,11 +63,11 @@ export const CmcGuaranteePage: FC = () => {
             // eslint-disable-next-line no-console
             onChange={(event) => console.log(event.target.value)}
           />
-          <DropdownFilterButton
+          {/* <DropdownFilterButton
             onSubmit={handleOnFilter}
             onCancel={handleOnCancelFilter}
             initialValues={{}}
-          />
+          /> */}
         </div>
         <button className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold">
           Tạo mới

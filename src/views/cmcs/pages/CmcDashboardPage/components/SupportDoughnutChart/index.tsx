@@ -1,0 +1,75 @@
+import React from "react";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Legend,
+  TimeScale,
+} from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+import getPlugins from "./DoughnutChartPlugin";
+
+interface Props {
+  _data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    datasets: Array<any>;
+  };
+  title?: string;
+  rotation?: number;
+  cutout?: number;
+}
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Legend,
+  TimeScale
+);
+
+const options = {
+  responsive: true,
+  maintainAspectRatio: true,
+};
+
+const ChartDoughnutSmall: React.FC<Props> = ({
+  _data,
+  title = "",
+  rotation,
+  cutout = 36,
+}) => {
+  const plugins = React.useMemo(
+    () =>
+      getPlugins(title, {
+        titleSize: 24,
+        bold: false,
+      }),
+    [title]
+  );
+
+  return (
+    <Doughnut
+      key={Math.random()}
+      data={_data}
+      options={{
+        ...options,
+        rotation,
+        cutout,
+        plugins: {
+          datalabels: { display: false },
+          tooltip: { enabled: true },
+        },
+      }}
+      plugins={plugins}
+    />
+  );
+};
+
+export default ChartDoughnutSmall;
