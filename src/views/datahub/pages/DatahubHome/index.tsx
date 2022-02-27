@@ -16,7 +16,7 @@ import SearchIcon from 'assets/icons/SearchIcon';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
 	return (
-		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 relative pb-24'>
+		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 relative pb-[92px]'>
 			<div className='h-full w-full  pt-12 overflow-auto'>
 				<div className='flex relative'>
 					<div className='max-w-4xl mx-auto mt-10 mb-8'>

@@ -38,7 +38,6 @@ import {
 	ProjectPaymentPage,
 	ProjectPhotoPackagePage,
 	ProjectPhotoPage,
-	ProjectPortfolioPage,
 	ProjectProductionPage,
 	ProjectPunchPage,
 	ProjectReportPage,

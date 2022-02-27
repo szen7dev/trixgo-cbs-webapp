@@ -15,12 +15,9 @@ import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 import { formatNumber } from "utils/ppt";
 
 const _data = {
-	name: 'Tư vấn quản lý dự án và Tư vấn giám sát',
-	type: 'Thi công kết cấu',
-	scale: 'Loại A. Dân dụng. Cấp I',
-	parameter: "3 hầm/15.000m2. 30 tầng nổi/60.000 m2",
-	value: 10000000000,
-	note: "1005.HDKT.QLDA.pdf",
+	year: '2019',
+	total: 10000000000,
+	note: "BaoCaoTaiChinh2020.pdf",
 	created_at: "15:30 22/12/2021",
 	updated_at: "15:30 22/12/2021",
 }
@@ -48,7 +45,7 @@ const DatahubContractorFinancial: FC = () => {
 		<div className="w-full px-3.5 ">
 			<div className="bg-white border-cbs-border border-[0.5px]">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-					<span className="text-x-large mr-7">Danh sách</span>
+					<span className="text-x-large mr-7">Năng lực tài chính</span>
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 					<DocumentDropdown
 						data={pkgs}
@@ -70,32 +67,27 @@ const DatahubContractorFinancial: FC = () => {
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
-										Hợp đồng
+										Năm tài chính
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
-										Lĩnh vực
+										Tổng tài sản
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
-										Quy mô, tính chất
+										Tổng doanh thu
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
-										Thông số
+										Doanh thu trong lĩnh vực xây dựng
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">
-										Giá trị ký
-									</span>
-								</th>
-								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
-									<span className="pl-2 border-l border-cbs-border">
-										Ngày ký
+										Lợi nhuận trước thuế
 									</span>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -114,11 +106,8 @@ const DatahubContractorFinancial: FC = () => {
 								data.map((props) => {
 									const {
 										_id,
-										name,
-										parameter,
-										scale,
-										type,
-										value,
+										year,
+										total,
 										note,
 									} = props
 									return (
@@ -126,18 +115,11 @@ const DatahubContractorFinancial: FC = () => {
 											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 												<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
-											{/* ====== Hợp đồng ====== */}
-											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border">{name}</td>
-											{/* ====== Lĩnh vực ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{type}</td>
-											{/* ====== Quy mô, tính chất ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{scale}</td>
-											{/* ====== Thông số ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{parameter}</td>
-											{/* ====== Giá trị Ngày ký ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(value)}</td>
-											{/* ====== Ngày ký ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(value)}</td>
+											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border text-left">{year}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(total)}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(total)}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(total)}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(total)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
 												<a href="./#" className="text-cbs-primary">
 													{note}

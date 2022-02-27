@@ -17,7 +17,6 @@ export { default as ProjectOtherPage } from "./ProjectOtherPage";
 export { default as ProjectPaymentPage } from "./ProjectPaymentPage";
 export { default as ProjectPhotoPackagePage } from "./ProjectPhotoPackagePage";
 export { default as ProjectPhotoPage } from "./ProjectPhotoPage";
-export { default as ProjectPortfolioPage } from "./ProjectDashboardPortfolioPage";
 export { default as ProjectProductionPage } from "./ProjectProductionPage";
 export { default as ProjectPunchPage } from "./ProjectPunchPage";
 export { default as ProjectReportPage } from "./ProjectReportPage";
