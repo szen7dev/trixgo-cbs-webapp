@@ -31,7 +31,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 				</div>
 			</div>
 			<div>
-				<Link to="/" className='text-cbs-subtext font-bold text-2xl group'>
+				<Link to="/workshop/home/category/1" className='text-cbs-subtext font-bold text-2xl group'>
 					<span className='mr-6'>
 						Quản lý dự án (92 workshop)
 					</span>
@@ -81,7 +81,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 				</div>
 			</div>
 			<div>
-				<Link to="/" className='text-cbs-subtext font-bold text-2xl group'>
+				<Link to="/workshop/home/category/1" className='text-cbs-subtext font-bold text-2xl group'>
 					<span className='mr-6'>
 						Quản lý thiết kế
 					</span>
@@ -131,7 +131,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 				</div>
 			</div>
 			<div>
-				<Link to="/" className='text-cbs-subtext font-bold text-2xl group'>
+				<Link to="/workshop/home/category/1" className='text-cbs-subtext font-bold text-2xl group'>
 					<span className='mr-6'>
 						Quản lý thiết kế
 					</span>
@@ -181,7 +181,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 				</div>
 			</div>
 			<button
-				className='fixed bottom-0 right-20 bg-cbs-primary rounded-full text-white w-14 h-14 text-3xl font-thin'
+				className='fixed bottom-5 right-20 bg-cbs-primary rounded-full text-white w-14 h-14 text-3xl font-thin'
 				onClick={() => setIsShow(true)}
 			>
 				+

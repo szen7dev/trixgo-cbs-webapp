@@ -16,8 +16,8 @@ const WorkshopRouter: FC = () => {
 	return (
 		<WorkshopLayout>
 			<Route exact path="/workshop/home" component={WorkshopCategory} />
-			<Route exact path="/workshop/list" component={WorkshopList} />
-			<Route exact path="/workshop/editor" component={WorkshopEditor} />
+			<Route exact path="/workshop/home/category/:id" component={WorkshopList} />
+			<Route exact path="/workshop/home/category/:id/:workshopID" component={WorkshopEditor} />
 		</WorkshopLayout>
 	)
 };
