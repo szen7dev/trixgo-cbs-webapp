@@ -30,6 +30,7 @@ import MessagesRouter from "./messages";
 // import OperationRouter from "./operation";
 // import OwnerRouter from './owner';
 import PcmRouter from "./pcm";
+import WorkshopRouter from "./workshop";
 // import PersonalRouter from "./personal";
 // import QrcodeRouter from "./qrcode";
 // import ReeRouter from "./ree";
@@ -115,6 +116,11 @@ const Routes: FC = () => {
                                         <HomeLayout>
                                             <MediaRouter />
                                         </HomeLayout>
+                                    </Route>
+
+                                    {/* =====WORKSHOP===== */}
+                                    <Route path="/workshop">
+                                        <WorkshopRouter />
                                     </Route>
 
                                     {/* =====DATHUB===== */}
