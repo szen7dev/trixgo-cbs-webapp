@@ -85,7 +85,7 @@ const MediaDetail: FC = () => {
 			isFetchMedias: true
 		});
 
-	const { listReactions, listSeens, totalRecordSeen } =
+	const { listReactions, listSeens, totalRecordSeen, refetchListReactions } =
 		useMedia({
 			key: mediaID,
 			params: { mediaID },
@@ -112,17 +112,11 @@ const MediaDetail: FC = () => {
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
 	const toggleModalReact = () => {
-		// if (!modalShowReact && !isFetchReactions) {
-		// 	setIsFetchReactions(true);
-		// }
 		!isFetchReactions && setIsFetchReactions(true);
 		setModalShowReact(!modalShowReact);
 	}
 
 	const toggleModalSeen = () => {
-		// if (!modalShowSeen && !isFetchSeens) {
-		// 	setIsFetchSeens(true);
-		// }
 		!isFetchSeens && setIsFetchSeens(true);
 		setModalShowSeen(!modalShowSeen);
 	}
@@ -148,6 +142,7 @@ const MediaDetail: FC = () => {
 		try {
 			await reactionMediaAsync({ mediaID });
 			refetch();
+			refetchListReactions();
 		} catch (error: unknown) {
 			if (typeof error === "string") {
 				toast.error(error);
@@ -287,6 +282,7 @@ const MediaDetail: FC = () => {
 									const id = image.file ? image.file._id : image._id;
 									const name = image.file ? image.file.nameOrg : image.nameOrg;
 									const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
+									console.log({ id, name, url })
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
@@ -325,8 +321,8 @@ const MediaDetail: FC = () => {
 									</Link>
 								</span>
 								<span>
-									<img src={iconEye} alt="View" className="inline-block mr-2" />
 									<button onClick={toggleModalSeen}>
+										<img src={iconEye} alt="View" className="inline-block mr-2" />
 										{abbreviateNumber(media.amountView)}
 									</button>
 								</span>

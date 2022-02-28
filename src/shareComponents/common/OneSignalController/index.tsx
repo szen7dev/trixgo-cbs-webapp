@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from "react";
+import {useEffect} from "react";
 import {useAuth} from "services/hooks/useAuth";
 
 export const OneSignalController = () => {
@@ -7,6 +7,6 @@ export const OneSignalController = () => {
         if (hasAuthenticated&&user) {
             updateDevice(user?._id);
         }
-    },[hasAuthenticated])
+    }, [hasAuthenticated])
     return null
 }

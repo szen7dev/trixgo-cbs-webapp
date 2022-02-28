@@ -64,6 +64,8 @@ export const useAuth = (): UseAuth => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
+    console.log({ ONESIGNAL_APP_ID });
+    
     if (ONESIGNAL_APP_ID) {
       OneSignalReact.init({
         appId: ONESIGNAL_APP_ID,
@@ -76,6 +78,7 @@ export const useAuth = (): UseAuth => {
         allowLocalhostAsSecureOrigin: true,
       })
           .then(e => {
+            console.log({ e });
             OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
               if (isEnabled)
                 console.log("Push notifications are enabled!");
@@ -87,10 +90,10 @@ export const useAuth = (): UseAuth => {
 
             // case 2: chờ submit allow subscribe tại màn hình hiện tại
             OneSignalReact.on('popoverAllowClick', function() {
-              console.log('Slide ALLOW CLICK');
+              console.log('Slide ALLOW CLICK: popoverAllowClick');
 
               OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-                console.log("🚀 ~ file: useAuth.ts ~ line 83 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+                console.log("🚀 ~ file: useAuth.ts ~ line 96 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
                 if (oneSignalWebPushID) {
                   const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
                   if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
@@ -101,7 +104,7 @@ export const useAuth = (): UseAuth => {
                       deviceName: 'BROWSER',
                       registrationID: oneSignalWebPushID || '',
                       oneSignalID: oneSignalWebPushID || '',
-                      env: "1"
+                      env: '1'
                     });
                   }
                 }
@@ -110,7 +113,7 @@ export const useAuth = (): UseAuth => {
 
             // case 1: đã subscribe page trước đó
             OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-              console.log("🚀 ~ file: useAuth.ts ~ line 76 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+              console.log("🚀 ~ file: useAuth.ts ~ line 116 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
               if (oneSignalWebPushID) {
                 const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
                 if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
@@ -121,7 +124,7 @@ export const useAuth = (): UseAuth => {
                     deviceName: 'BROWSER',
                     registrationID: oneSignalWebPushID || '',
                     oneSignalID: oneSignalWebPushID || '',
-                    env: "1"
+                    env: '1'
                   });
                 }
               }
@@ -144,7 +147,7 @@ export const useAuth = (): UseAuth => {
 
         API.defaults.headers.Authorization = `Bearer ${data.token}`;
 
-        // updateDevice();
+        // updateDevice(data.user._id);
 
         toast.success("Đăng nhập thành công");
         history.push("/");
