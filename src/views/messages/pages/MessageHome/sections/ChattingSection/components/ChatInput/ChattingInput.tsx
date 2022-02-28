@@ -17,6 +17,7 @@ import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "redux/reducer";
 import {SelectedActionGroup} from "./SelectedActionGroup";
 import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
+import {dismissSearchMode} from "../../../../../../../../redux/reducer/messages/SearchMessage";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -37,7 +38,7 @@ type Props = {
 export const ChattingInput:FC<Props> = ({chat, context}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const {socketRef} = useContext(context);
+    const {socketRef, setShowSearch} = useContext(context);
     const dispatch = useDispatch();
     const { addFileToUpload } = useUpload({
         appID: "5dfe4c1b51dc622100bb9d8f",
@@ -130,19 +131,9 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         }, 100)
         message['parentID'] = replyData?replyData._id:"";
         dispatch(removeReplyMessage({conversationId: chat._id}));
+        dispatch(dismissSearchMode({conversationId: chat._id}));
+        setShowSearch&&setShowSearch(false);
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        // console.log('CHATTING_CSS_GET_LIST_CONVERSATION', {
-        //     conversationID: chat._id,
-        //     select: JSON.stringify({ sender:"bizfullname" }) ,
-        //     filter: JSON.stringify({
-        //         author: 0,
-        //         taskID: 0,
-        //         links: 0,
-        //         createAt: 0,
-        //         __v: 0,
-        //         config: 0
-        //     })
-        // },  new Date())
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
             conversationID: chat._id,
             select: JSON.stringify({ sender:"bizfullname" }) ,
@@ -257,6 +248,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         sendMessage['parentID'] = replyData?replyData._id:"";
         setWillSendFileMessage(sendMessage);
         dispatch(removeReplyMessage({conversationId: chat._id}));
+        dispatch(dismissSearchMode({conversationId: chat._id}));
+        setShowSearch&&setShowSearch(false);
     }
 
     useEffect(() => {

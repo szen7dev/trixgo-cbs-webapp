@@ -8,6 +8,11 @@ import Close from "assets/icons/Close";
 import {ListPinnedMessage} from "./ListPinnedMessage";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import {
+    clearListMessage,
+    setShouldStartListenEvent
+} from "redux/reducer/messages/SearchMessage";
+import {useDispatch} from "react-redux";
 
 type Props = {
     listPinnedMessage: ItemMessage[]
@@ -16,6 +21,9 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
     const {currentChat} = useContext(MessageContext)
     const {getListPinMessage} = UseConversation();
     const [indexPinnedMessage, setIndexPinnedMessage] = useState(0);
+    const dispatch = useDispatch();
+    const {goToMessagePosition} = UseConversation();
+
     useEffect(() => {
         getListPinMessage({conversationID: currentChat})
         setIndexPinnedMessage(0)
@@ -36,11 +44,28 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         if (indexPinnedMessage+1 === listPinnedMessage.length) {
             setIndexPinnedMessage(0)
             moveDots(0)
+            handleGoToMessage(listPinnedMessage[0]["_id"])
         } else {
             setIndexPinnedMessage(indexPinnedMessage+1)
             moveDots(indexPinnedMessage)
+            handleGoToMessage(listPinnedMessage[indexPinnedMessage+1]["_id"])
         }
     }
+
+    const handleGoToMessage = (_id: string) => {
+        dispatch(clearListMessage({conversationId: currentChat}));
+        goToMessagePosition({conversationID: currentChat, messageID: _id}).then(data => {
+            setTimeout(() => {
+                document.getElementById(`message-${_id}`)?.scrollIntoView({block: "center", behavior: "smooth"});
+                document.getElementById(`message-${_id}`)?.classList.add("found-message");
+                dispatch(setShouldStartListenEvent({data: true, conversationId: currentChat}));
+                setTimeout(() => {
+                    document.getElementById(`message-${_id}`)?.classList.remove("found-message");
+                }, 2000)
+            }, 500)
+        })
+    }
+
     const moveDots = (index: number) => {
         const dotHeight = document.getElementsByClassName('dot-pin')[0].clientHeight;
         const dots = document.querySelectorAll<HTMLElement>('.dot-pin');
