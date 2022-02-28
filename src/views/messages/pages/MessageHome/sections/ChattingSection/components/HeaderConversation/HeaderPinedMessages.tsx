@@ -18,8 +18,9 @@ type Props = {
     listPinnedMessage: ItemMessage[]
 }
 export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
-    const {currentChat} = useContext(MessageContext)
-    const {getListPinMessage} = UseConversation();
+    const {currentChat, socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
+    const {getListPinMessage, updatePinMessage} = UseConversation();
     const [indexPinnedMessage, setIndexPinnedMessage] = useState(0);
     const dispatch = useDispatch();
     const {goToMessagePosition} = UseConversation();
@@ -28,6 +29,11 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         getListPinMessage({conversationID: currentChat})
         setIndexPinnedMessage(0)
     }, [currentChat]);
+
+    useEffect(() => {
+        setIndexPinnedMessage(0)
+    }, [listPinnedMessage])
+
     const renderPinned = (pinnedMessage: ItemMessage) => {
         if (!pinnedMessage) return null;
         switch (pinnedMessage.type) {
@@ -66,6 +72,12 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         })
     }
 
+    const doUpdatePinMessage = (_id: string) => {
+        updatePinMessage({conversationID: currentChat, messageID: _id, isPin: false}).then((data) => {
+            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
+        });
+    }
+
     const moveDots = (index: number) => {
         const dotHeight = document.getElementsByClassName('dot-pin')[0].clientHeight;
         const dots = document.querySelectorAll<HTMLElement>('.dot-pin');
@@ -102,7 +114,9 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
                     ))
                 }
             </Carousel>
-            <button className={"flex items-center justify-center ml-[20px]"}>
+            <button
+                onClick={() => doUpdatePinMessage(listPinnedMessage[indexPinnedMessage]["_id"])}
+                className={"flex items-center justify-center ml-[20px]"}>
                 <Close/>
             </button>
             <ListPinnedMessage listPinnedMessage={listPinnedMessage}/>
