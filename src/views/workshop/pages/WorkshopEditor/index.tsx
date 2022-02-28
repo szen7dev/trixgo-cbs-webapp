@@ -45,7 +45,7 @@ const WorkshopEditor: FC<Props> = () => {
 					`}
 				onSaveContent={() => console.log('hello')}
 				init={{
-					height: 'calc(100% - 1rem)',
+					height: 'calc(100% - 32.5px)',
 					menu: {
 						file: { title: 'File', items: 'newdocument restoredraft | preview | print | basicitem ' },
 						edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
