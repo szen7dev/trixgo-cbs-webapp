@@ -9,8 +9,8 @@ import ViewPost from './ViewPost';
 /**
  * Contexts
  */
-import { PostState } from 'shareComponents/common/ZoomView/contexts/ContextPost/post.state';
-import { ContextPost, ContextPostType } from 'shareComponents/common/ZoomView/contexts/ContextPost';
+import { PostState } from './contexts/ContextPost/post.state';
+import { ContextPost, ContextPostType } from './contexts/ContextPost';
 
 interface Props {
 	initialData: PostState,

@@ -16,6 +16,7 @@ import { useCommentMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from 'views/document/contexts/comment';
 import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import { APP_KEY } from 'utils/constants';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -60,7 +61,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { addFileToUpload } = useUpload({
-		appID: '61e049c9fdebf77b072d1b13'
+		appID: APP_KEY.DOCUMENT
 	});
 	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
 		key: `list_comments.${mediaID}`,

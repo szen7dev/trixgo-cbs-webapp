@@ -28,7 +28,7 @@ export const PcmLeftSideBar: FC = () => {
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* user */}
         <div className="t-leftsidebar-user flex items-center mb-6">
-          <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+          <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <div className="t-leftsidebar-user-text">
             <p className="t-leftsidebar-user-text-name font-bold mb-1">{user?.fullname}</p>
             <div className="t-leftsidebar-user-text-price flex items-center">
