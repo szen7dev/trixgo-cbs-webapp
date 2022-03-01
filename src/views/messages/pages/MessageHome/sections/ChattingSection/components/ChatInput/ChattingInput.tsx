@@ -218,7 +218,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 files: file.realFile,
 				fileType: 1,
                 progress: percentCompleted => {
-                    console.log(`${percentCompleted}% ${file.file.file.name}`);
+                    // console.log(`${percentCompleted}% ${file.file.file.name}`);
                     dispatch(updateFileProgressOnMessage({
                         conversationId: chat._id,
                         messageId: message.tmpid,
@@ -232,10 +232,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         }
                     })
                 },
-                compressConfig: {
-                    useCompress: useCompress,
-                    quality: 0.8
-                }
+                useCompress
             })
             sendFiles.push({"_id":_id,"name":file.file.file.name})
         }
@@ -256,7 +253,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         const isDone = Object.values(doneUpload).length>0&&Object.values(doneUpload).every(progress => progress === 100);
         console.log("done upload: ", isDone)
         if (isDone&&willSendFileMessage) {
-            console.log(willSendFileMessage)
+            // console.log(willSendFileMessage)
             setTimeout(() => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
                 socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {

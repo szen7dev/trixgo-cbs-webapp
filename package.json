@@ -28,6 +28,7 @@
     "@types/react-lazy-load-image-component": "^1.5.2",
     "@types/uuid": "^8.3.4",
     "axios": "^0.21.1",
+    "browser-image-compression": "^1.0.17",
     "chart.js": "^3.6.1",
     "chartjs-adapter-moment": "^1.0.0",
     "chartjs-plugin-datalabels": "^2.0.0",
