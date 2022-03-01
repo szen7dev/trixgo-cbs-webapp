@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 
 import AuthContext from "services/contexts/Auth";
@@ -29,13 +29,13 @@ export const useAuth = (): UseAuth => {
 
   useEffect(() => {
     if (
-        localStorage.getItem("currentUser") === null ||
-        localStorage.getItem("token") === null
+      localStorage.getItem("currentUser") === null ||
+      localStorage.getItem("token") === null
     ) {
       dispatch({ type: "SIGN_IN_ERROR" });
     } else {
       API.defaults.headers.Authorization = `Bearer ${JSON.parse(
-          localStorage.getItem("token") as string
+        localStorage.getItem("token") as string
       )}`;
 
       dispatch({
@@ -49,23 +49,23 @@ export const useAuth = (): UseAuth => {
   }, [dispatch]);
 
   const { data: dataUserInfo, refetch: refetchDataUserInfo } =
-      useQuery("user_info", () => AuthenticationRepository.usersInfo(), {enabled: false});
+    useQuery("user_info", () => AuthenticationRepository.usersInfo(), { enabled: false });
 
   const { mutateAsync: signInMutateAsync, isLoading: isSigningIn } =
-      useMutation((payload: SignInPayload) =>
-          AuthenticationRepository.signIn(payload)
-      );
+    useMutation((payload: SignInPayload) =>
+      AuthenticationRepository.signIn(payload)
+    );
 
   const ONESIGNAL_APP_ID = process.env.REACT_APP_ENV === 'development'
-      ? process.env.REACT_APP_ONESIGNAL_APP_ID_LOCAL
-      : process.env.REACT_APP_ONESIGNAL_APP_ID_STAGING;
+    ? process.env.REACT_APP_ONESIGNAL_APP_ID_LOCAL
+    : process.env.REACT_APP_ONESIGNAL_APP_ID_STAGING;
 
   const updateDevice = (_id: string) => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
     console.log({ ONESIGNAL_APP_ID });
-    
+
     if (ONESIGNAL_APP_ID) {
       OneSignalReact.init({
         appId: ONESIGNAL_APP_ID,
@@ -77,49 +77,29 @@ export const useAuth = (): UseAuth => {
         // notificationClickHandlerAction: 'focus',
         allowLocalhostAsSecureOrigin: true,
       })
-          .then(e => {
-            console.log({ e });
-            OneSignalReact.isPushNotificationsEnabled().then(function(isEnabled) {
-              if (isEnabled)
-                console.log("Push notifications are enabled!");
-              else {
-                console.log("Push notifications are not enabled yet.");
-                OneSignalReact.showSlidedownPrompt();
-              }
-            });
+        .then(e => {
+          console.log({ e });
+          OneSignalReact.isPushNotificationsEnabled().then(function (isEnabled) {
+            if (isEnabled)
+              console.log("Push notifications are enabled!");
+            else {
+              console.log("Push notifications are not enabled yet.");
+              OneSignalReact.showSlidedownPrompt();
+            }
+          });
 
-            // case 2: chờ submit allow subscribe tại màn hình hiện tại
-            OneSignalReact.on('popoverAllowClick', function() {
-              console.log('Slide ALLOW CLICK: popoverAllowClick');
+          // case 2: chờ submit allow subscribe tại màn hình hiện tại
+          OneSignalReact.on('popoverAllowClick', function () {
+            console.log('Slide ALLOW CLICK: popoverAllowClick');
 
-              OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-                console.log("🚀 ~ file: useAuth.ts ~ line 96 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
-                if (oneSignalWebPushID) {
-                  const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
-                  if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
-                    localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
-                    await AuthenticationRepository.updateDevice({
-                      platform: process.env.REACT_APP_PLATFORM??"1",
-                      deviceID: 'BROWSER',
-                      deviceName: 'BROWSER',
-                      registrationID: oneSignalWebPushID || '',
-                      oneSignalID: oneSignalWebPushID || '',
-                      env: '1'
-                    });
-                  }
-                }
-              })
-            });
-
-            // case 1: đã subscribe page trước đó
-            OneSignalReact.getUserId(async function(oneSignalWebPushID) {
-              console.log("🚀 ~ file: useAuth.ts ~ line 116 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+            OneSignalReact.getUserId(async function (oneSignalWebPushID) {
+              console.log("🚀 ~ file: useAuth.ts ~ line 96 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
               if (oneSignalWebPushID) {
                 const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
-                if (!oneSignalId||oneSignalId!==oneSignalWebPushID) {
+                if (!oneSignalId || oneSignalId !== oneSignalWebPushID) {
                   localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
                   await AuthenticationRepository.updateDevice({
-                    platform: process.env.REACT_APP_PLATFORM??"1",
+                    platform: process.env.REACT_APP_PLATFORM ?? "1",
                     deviceID: 'BROWSER',
                     deviceName: 'BROWSER',
                     registrationID: oneSignalWebPushID || '',
@@ -129,9 +109,29 @@ export const useAuth = (): UseAuth => {
                 }
               }
             })
+          });
 
+          // case 1: đã subscribe page trước đó
+          OneSignalReact.getUserId(async function (oneSignalWebPushID) {
+            console.log("🚀 ~ file: useAuth.ts ~ line 116 ~ OneSignalReact.getUserId ~ oneSignalWebPushID", oneSignalWebPushID)
+            if (oneSignalWebPushID) {
+              const oneSignalId = localStorage.getItem(`oneSignalId_${_id}`);
+              if (!oneSignalId || oneSignalId !== oneSignalWebPushID) {
+                localStorage.setItem(`oneSignalId_${_id}`, oneSignalWebPushID);
+                await AuthenticationRepository.updateDevice({
+                  platform: process.env.REACT_APP_PLATFORM ?? "1",
+                  deviceID: 'BROWSER',
+                  deviceName: 'BROWSER',
+                  registrationID: oneSignalWebPushID || '',
+                  oneSignalID: oneSignalWebPushID || '',
+                  env: '1'
+                });
+              }
+            }
           })
-          .catch(e => console.error(e));
+
+        })
+        .catch(e => console.error(e));
     }
   }
 
@@ -174,10 +174,10 @@ export const useAuth = (): UseAuth => {
 
   return {
     isLoading:
-    isSigningIn,
+      isSigningIn,
     hasAuthenticated:
-        !!localStorage.getItem("currentUser") &&
-        !!localStorage.getItem("token"),
+      !!localStorage.getItem("currentUser") &&
+      !!localStorage.getItem("token"),
     user: JSON.parse(localStorage.getItem("currentUser") as string) ?? null,
     token: JSON.parse(localStorage.getItem("token") as string),
     signIn,
@@ -187,3 +187,47 @@ export const useAuth = (): UseAuth => {
     updateDevice
   };
 };
+
+type UsePermission = {
+  isLoadingAppUsers: boolean;
+  refetchAppUsers: any;
+  nextPageAppUsers: any;
+  listAppOfUser: Array<{
+    _id: string,
+    app: {
+      _id: string,
+      name: string
+    }
+  }>
+}
+
+export const usePermission = (): UsePermission => {
+  const {
+    isLoading: isLoadingAppUsers,
+    refetch: refetchAppUsers,
+    data: dataReturnFromAPIAppUsers,
+    fetchNextPage: nextPageAppUsers
+  } =
+    useInfiniteQuery(
+      "app_users/list-app-of-user",
+      async ({ pageParams }: any) =>
+        AuthenticationRepository.permissionAppMenu({
+          lastestID: pageParams ? pageParams : "",
+        }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: true,
+        enabled: false
+      }
+    );
+  const listAppOfUser = [].concat(...(dataReturnFromAPIAppUsers?.pages || []).map((d: any) => d.data?.listRecords));
+
+  return {
+    isLoadingAppUsers,
+    refetchAppUsers,
+    nextPageAppUsers,
+    listAppOfUser
+  }
+}
