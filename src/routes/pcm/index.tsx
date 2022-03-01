@@ -18,7 +18,7 @@ import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutPro
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-import { Dashboard } from "views/pcm/pages";
+import { Dashboard } from "views/homepage/pages";
 import {
     DocumentDetailPage,
     DocumentFolderPage,

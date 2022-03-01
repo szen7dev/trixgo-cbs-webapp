@@ -11,7 +11,7 @@ const GroupRepository = {
                 params: {
                     select: 'name sign',
                     filter: '{"name": 1, "createAt": 1 , "project": 1, "group": 1, "assignee": 1, "expiredTime": 1, "isproposal": 1, "status": 1}',
-                    populates: '{"path": "project", "select": "name fullname image sign"}',
+                    populates: '{"path": "project", "select": "name fullname bizfullname image sign"}',
                     ...payload,
                 }
             }

@@ -44,7 +44,7 @@ export const UserMenu: FC = () => {
               </div>
 
               <div className="flex flex-1 justify-between items-center pl-3">
-                <Link to={`/pcm/mine`} className="flex flex-col">
+                <Link to={`/pcm/home`} className="flex flex-col">
                   <span className="font-bold">{user?.fullname}</span>
                   <span className="font-normal text-sm leading-4">
                     Xem công việc của bạn

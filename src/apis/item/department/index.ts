@@ -10,7 +10,7 @@ async function fetchListDepartment(params: any) {
         params: {
             populates: {
                 "path": "members",
-                "select": "fullname name sign image"
+                "select": "fullname bizfullname name sign image"
             },
             filter: { "name": 1, "description": 1, "sign": 1, "members": 0 },
             ...params

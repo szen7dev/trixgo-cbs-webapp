@@ -97,7 +97,11 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
         select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({
           path: "assignee lastLog project",
-          select: "name fullname image author content createAt sign",
+          select: "name fullname bizfullname image author content createAt sign",
+          populate: {
+            path: "author",
+            select: "_id fullname bizfullname image",
+          }
         }),
       });
     },

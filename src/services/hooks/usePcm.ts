@@ -38,11 +38,11 @@ export const usePcm = () : UsePcm => {
                 }),
                 populates: JSON.stringify({
                     value: "assignee lastLog",
-                    select: "name fullname image content author createAt",
+                    select: "name fullname bizfullname image content author createAt",
                 }),
                 populates1: JSON.stringify({
                     value: "author",
-                    select: "_id fullname image"
+                    select: "_id fullname bizfullname image"
                 }),
             }),
             {
