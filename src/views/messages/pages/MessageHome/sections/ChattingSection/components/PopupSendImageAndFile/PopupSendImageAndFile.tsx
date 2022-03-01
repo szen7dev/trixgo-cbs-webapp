@@ -10,7 +10,7 @@ import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 import {v4 as uuidv4} from "uuid";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
-import {closePopupSendFiles, setSendType} from "redux/reducer/messages/PopupSendImageAndFile"
+import {closePopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
 
 export const PopupSendImageAndFile: FC = () => {
     const {isShowPopupSendFiles, popSendFilesContent} = useSelector((state: RootState) => state.popUpSendFileAndImage.data);
@@ -60,16 +60,28 @@ export const PopupSendImageAndFile: FC = () => {
     const renderPreviewFile = () => {
         if (popSendFilesContent.sendType==="image") {
             if (popSendFilesContent.files.length === 1) {
-                return <div className={"flex items-center justify-center"}>
+                return <div className={"flex items-center justify-center relative"}>
                     <img  alt={"----"} className={"max-h-[320px] rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                    {
+                        !useCompress&&
+                        <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                            HD
+                        </div>
+                    }
                 </div>
             }
             if (popSendFilesContent.files.length === 2) {
                 return <div className={"flex flex-wrap"}>
                     {
                         _map(popSendFilesContent.files, (image,index) => (
-                            <div className={"w-1/2 p-1"} key={index}>
+                            <div className={"w-1/2 p-1 relative"} key={index}>
                                 <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                                {
+                                    !useCompress&&
+                                    <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                                        HD
+                                    </div>
+                                }
                             </div>
                         ))
                     }
@@ -77,15 +89,33 @@ export const PopupSendImageAndFile: FC = () => {
             }
             if (popSendFilesContent.files.length === 3) {
                 return <div className={"flex"}>
-                    <div className={"p-1"}>
+                    <div className={"p-1 relative"}>
                         <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                        {
+                            !useCompress&&
+                            <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                                HD
+                            </div>
+                        }
                     </div>
                     <div className={"flex"}>
-                        <div className={"p-1"}>
+                        <div className={"p-1 relative"}>
                             <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[1].file.file.url}/>
+                            {
+                                !useCompress&&
+                                <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                                    HD
+                                </div>
+                            }
                         </div>
-                        <div className={"p-1"}>
+                        <div className={"p-1 relative"}>
                             <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[2].file.file.url}/>
+                            {
+                                !useCompress&&
+                                <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                                    HD
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -93,8 +123,14 @@ export const PopupSendImageAndFile: FC = () => {
             return <div className={"flex flex-wrap"}>
                 {
                     _map(popSendFilesContent.files, (image,index) => (
-                        <div className={(imageClass[index]??"w-1/3") + " p-1"} key={index}>
+                        <div className={(imageClass[index]??"w-1/3") + " p-1 relative"} key={index}>
                             <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                            {
+                                !useCompress&&
+                                <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
+                                    HD
+                                </div>
+                            }
                         </div>
                     ))
                 }
@@ -131,11 +167,11 @@ export const PopupSendImageAndFile: FC = () => {
 
     const handleSetUseCompress = (value: boolean) => {
         setUseCompress(value);
-        if (!value) {
-            dispatch(setSendType("file"));
-        } else {
-            dispatch(setSendType("image"));
-        }
+        // if (!value) {
+        //     dispatch(setSendType("file"));
+        // } else {
+        //     dispatch(setSendType("image"));
+        // }
     }
 
     useEffect(() => {
