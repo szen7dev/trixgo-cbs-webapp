@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "views/pcm/styles/PCMStyles.css";
+import "views/pcm/styles/pcm.module.css";
 
 import newsImg1 from "assets/images/home-slide-img1.jpg";
 import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
@@ -27,7 +27,7 @@ import { usePcm } from 'services/hooks/usePcm';
 import { useMedia } from 'services/hooks/useMedia';
 import PcmRepository from 'apis/pcm';
 
-export const PcmHomePage: FC = () => {
+export const Dashboard: FC = () => {
   const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
   const { user } = useAuth();
   const { listTasks } = usePcm();

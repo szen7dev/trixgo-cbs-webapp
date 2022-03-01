@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { APIResponse } from "./apis/response";
-// import { User } from "./auth";
 import { User } from "./user";
 
 export type Locale = {
@@ -17,6 +16,12 @@ export type NavLink = {
   url: string;
   pathname: string;
   icon: ReactNode;
+};
+
+export type Company = {
+  _id: string;
+  name: string;
+  sign: string;
 };
 
 export type TaskManagementNavLink = {

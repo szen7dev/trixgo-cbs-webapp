@@ -48,7 +48,7 @@ import {
 	ProjectDashboardPage
 } from 'views/ppt/pages'
 import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutProjectSecondary'
-import { PcmHomePage } from 'views/pcm/pages';
+import { Dashboard } from 'views/pcm/pages';
 import { HomeLayout } from 'shareComponents/layouts';
 
 const PPTRoutes: FC = () => {
@@ -58,7 +58,7 @@ const PPTRoutes: FC = () => {
 				<Route exact path="/ppt/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document)">
 					<HomeLayout>
 						<Switch>
-							<Route exact path="/ppt/home" component={PcmHomePage} />
+							<Route exact path="/ppt/home" component={Dashboard} />
 							<Route exact path="/ppt/projects" component={ProjectCategoryPage} />
 							<Route exact path="/ppt/market" component={ProjectMarketPage} />
 							<LayoutSecondary pages={[

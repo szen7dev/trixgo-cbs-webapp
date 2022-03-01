@@ -89,4 +89,13 @@ export type UpdateDevicePayload = {
   oneSignalID: string,
   userID?: string,
   env?: string
-}
+};
+
+export type PermissionResponse = APIResponse & {
+  data: {
+    listRecords: Array<any>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor?: string;
+  };
+};
