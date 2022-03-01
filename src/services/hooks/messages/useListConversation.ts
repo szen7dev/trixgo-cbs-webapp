@@ -11,8 +11,9 @@ import {
     MediasOfConversationPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
-import {setNextCursor, setListConversation, setTotalRecord, setLoading} from "redux/reducer/messages/ListConversation";
+import {setListConversation, setLoading} from "redux/reducer/messages/ListConversation";
 import {setListMembers, setListMedias} from "redux/reducer/messages/ListMessage";
+import {setListFolders} from "redux/reducer/messages/ListFolders"
 import {useInfiniteQuery} from "react-query";
 
 type UseListConversationType = {
@@ -72,7 +73,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
 
     const getListFoldersConversation = async  (params: ListFoldersConversationPayload) => {
         const {data} = await ListConversationRepository.getListFoldersConversation(params);
-
+        dispatch(setListFolders(data));
         return data;
     }
 

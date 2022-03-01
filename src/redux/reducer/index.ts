@@ -18,6 +18,7 @@ import PopUpSendFileAndImageSlice from './messages/PopupSendImageAndFile';
 import RightClickMenuSlice from './RightClickMenu';
 import UnreadMessagesSlice from './messages/UnreadMessages';
 import ListFoldersSlice from './messages/ListFolders';
+import CreateUpdateFolderSlice from './messages/CreateUpdateFolder';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
     rightClickMenu: RightClickMenuSlice,
     unreadMessages: UnreadMessagesSlice,
     listFolders: ListFoldersSlice,
+    createUpdateFolder: CreateUpdateFolderSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,5 +1,5 @@
 import React, {createContext, FC, useMemo, useEffect, useState} from "react";
-import {MessageList} from "./sections/MessageList";
+import {FolderFormPopup, MessageList} from "./sections/MessageList";
 import { useLocation } from 'react-router-dom';
 import {SettingMessageDetail} from "./sections/SettingMessageDetail";
 import { useSocket } from "services/hooks/useSocket";
@@ -73,6 +73,7 @@ export const MessagesHome:FC = () => {
             <AddUsersToConversation context={MessageContext}/>
             <PopupSendImageAndFile/>
             <UnreadMessageController currentChat={currentChat} context={MessageContext}/>
+            <FolderFormPopup/>
         </MessageContext.Provider>
     )
 }

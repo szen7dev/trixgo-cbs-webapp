@@ -49,10 +49,10 @@ const listFoldersSlice = createSlice({
     initialState,
     reducers: {
         setListFolders (state, action) {
-            const {listFolders, nextCursor, totalRecord} = action.payload
+            const {listRecords, nextCursor, totalRecord} = action.payload
             state.data = {
                 ...state.data,
-                listFolders: state.data.listFolders.concat(listFolders),
+                listFolders: state.data.listFolders.concat(listRecords),
                 nextCursor,
                 totalRecord,
                 hasMoreData: nextCursor !== null && nextCursor !== "" && nextCursor !== undefined
