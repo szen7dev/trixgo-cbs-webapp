@@ -56,7 +56,7 @@ async function fetchListContactDocument<T>(params: ContactDocumentPayload): Prom
                 "select": "name sign size url userCreate createAt nameOrg",
                 "populate": {
                     "path": "userCreate project",
-                    "select": "fullname projectType buildingGrade"
+                    "select": "fullname bizfullname projectType buildingGrade"
                 }
             },
             ...params,
@@ -127,7 +127,7 @@ async function fetchListDepartment(params: DepartmentPayload) {
         params: {
             populates: {
                 "path": "members",
-                "select": "fullname name sign image"
+                "select": "fullname bizfullname name sign image"
             },
             filter: { "name": 1, "description": 1, "sign": 1, "members": 0 },
             ...params

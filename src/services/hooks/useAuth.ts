@@ -9,19 +9,7 @@ import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
 
-import { User, SignInPayload } from "typings/auth";
-
-type UseAuth = {
-  isLoading: boolean;
-  hasAuthenticated: boolean;
-  user: User | null;
-  token: string | null;
-  signIn: (payload: SignInPayload) => void;
-  signOut: () => void;
-  dataUserInfo: any;
-  refetchDataUserInfo: any;
-  updateDevice: (_id: string) => void;
-};
+import { User, SignInPayload, UseAuth, UseGetListAppOfUser, UseCheckPerAccessApp } from "typings/auth";
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
@@ -169,7 +157,7 @@ export const useAuth = (): UseAuth => {
     localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
-    window.location.reload();
+    history.push("/authentication/sign-in");
   };
 
   return {
@@ -188,20 +176,8 @@ export const useAuth = (): UseAuth => {
   };
 };
 
-type UsePermission = {
-  isLoadingAppUsers: boolean;
-  refetchAppUsers: any;
-  nextPageAppUsers: any;
-  listAppOfUser: Array<{
-    _id: string,
-    app: {
-      _id: string,
-      name: string
-    }
-  }>
-}
-
-export const usePermission = (): UsePermission => {
+// Lấy danh sách ứng dụng của 1 user được truy cập
+export const useGetListAppOfUser = (): UseGetListAppOfUser => {
   const {
     isLoading: isLoadingAppUsers,
     refetch: refetchAppUsers,
@@ -211,7 +187,7 @@ export const usePermission = (): UsePermission => {
     useInfiniteQuery(
       "app_users/list-app-of-user",
       async ({ pageParams }: any) =>
-        AuthenticationRepository.permissionAppMenu({
+        AuthenticationRepository.getListAppOfUser({
           lastestID: pageParams ? pageParams : "",
         }),
       {
@@ -230,4 +206,16 @@ export const usePermission = (): UsePermission => {
     nextPageAppUsers,
     listAppOfUser
   }
+};
+
+export const useCheckPerAccessApp = (appID: string): UseCheckPerAccessApp => {
+  const { isLoading: isLoadingAccessApp, data: dataAccessApp, refetch: refetchAccessApp } =
+    useQuery(`check-permissions-access-app?appID=${appID}`, () => AuthenticationRepository.checkPermissionsAccessApp(appID), {
+      refetchOnWindowFocus: true
+    });
+  return {
+    isLoadingAccessApp,
+    refetchAccessApp,
+    dataAccessApp
+  };
 }

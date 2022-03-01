@@ -28,8 +28,8 @@ async function fetchListDocumentChild(params : any) {
         params: {
             select: 'name sign author project parent',
             populates: {
-                "path": "author ",
-                "select": "fullname sign image"
+                "path": "author",
+                "select": "fullname bizfullname sign image"
             },
             ...params,
         }

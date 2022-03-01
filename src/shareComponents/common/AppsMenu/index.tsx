@@ -9,10 +9,10 @@ import supportLogo from "assets/logos/support.png";
 // Logic 
 import API from "apis/repository";
 import { APP_INFO } from "./components";
-import { usePermission } from "services/hooks/useAuth";
+import { useGetListAppOfUser } from "services/hooks/useAuth";
 
 export const AppsMenu: FC = () => {
-  const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = usePermission();
+  const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
 
   useEffect(() => {
     if (API.defaults.headers.Authorization) {

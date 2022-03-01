@@ -20,7 +20,7 @@ export async function fetchListTimeSheet<T>(params?: ListTimeSheetPayload): Prom
         params: {
             populates: {
                 "path": "assignee project",
-                "select": "fullname name"
+                "select": "_id fullname bizfullname name"
             },
             ...params,
         }
