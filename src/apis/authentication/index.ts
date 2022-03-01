@@ -76,7 +76,18 @@ const AuthenticationRepository = {
     return data;
   },
 
-  // 4. Check quyền truy cập vào một menu trong app
+  // 4. Lấy danh sách MENU được quyền truy cập của 1 user
+  async getListAppRoleMenu(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/app_role_menus/permission`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
+
+  // 5. Check quyền truy cập vào một menu trong app
   async checkPermissionsAccessOneMenu(payload: PermissionAccessOneMenuPayload): Promise<PermissionAccessOneMenuResponse> {
     const { data } = await API.get<PermissionAccessOneMenuResponse>(
       `${authURL}/app_role_menus/permission-to-access-one-menu-of-app`, {

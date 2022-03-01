@@ -16,15 +16,16 @@ import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useAuth, useGetListAppMenu } from "services/hooks/useAuth";
+import { useAuth, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
 import { APP_ID } from "apis/localdb";
 
 /*=====7.OTHER=====*/
 
 export const LeftSideBar: FC = () => {
   const { user } = useAuth();
-  const {listAppMenu} = useGetListAppMenu(APP_ID.PCM.id, "621dd33d5fd4c85f7c36d008");
-  console.log("listAppMenu", listAppMenu);
+  const { listAppMenu } = useGetListAppMenu(APP_ID.PCM.id, "621dd33d5fd4c85f7c36d008");
+  const { listAppRoleMenu } = useGetListAppRoleMenu(APP_ID.PCM.id, "1");
+  console.log("listAppMenu", listAppRoleMenu);
   return (
     <div className="t-leftsidebar-navigation fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
@@ -45,16 +46,23 @@ export const LeftSideBar: FC = () => {
         <div className="t-leftsidebar-menu-block mb-6">
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
           <Link to={`/pcm/admin`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản trị viên</span>
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Quản trị viên</span>
           </Link>
           {listAppMenu && listAppMenu.length ?
             <>
-              {listAppMenu.map((item: any, index: number) =>
-                <Link key={index} to={`/pcm/${item.slug}`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-                  <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                  <span className="truncate">{item.name}</span>
-                </Link>)
+              {listAppMenu.map((item: any, index: number) => {
+                const roleApp = listAppRoleMenu.filter((e: any) => e._id?.menu == item._id);
+                if (roleApp.length && roleApp[0].read == 1) {
+                  return (
+                    <Link key={index} to={`/pcm/${item.slug}`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">{item.name}</span>
+                    </Link>
+                  )
+                };
+                return <div key={index}></div>
+              })
               }
             </> : <></>
           }

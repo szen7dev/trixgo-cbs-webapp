@@ -261,7 +261,42 @@ export const useGetListAppMenu = (appID: string, parentID?: string): any => {
   }
 };
 
-// 4. Check quyền truy cập vào một menu trong app
+// 4. Lấy danh sách MENU được quyền truy cập của 1 user
+export const useGetListAppRoleMenu = (appID: string, type:  "1" | "2" | "3"): any => {
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
+  const {
+    isLoading: isLoadingGetListAppRoleMenu,
+    refetch: refetchGetListAppRoleMenu,
+    data: dataReturnFromAPIGetListAppRoleMenu,
+    fetchNextPage: nextPageGetListAppRoleMenu
+  } =
+    useInfiniteQuery(
+      `app_role_menus/permission?appID=${appID}$type=${type}`,
+      async ({ pageParams }: any) =>
+        AuthenticationRepository.getListAppRoleMenu({
+          appID: appID,
+          companyID: profile?.company?._id,
+          type
+        }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: true
+      }
+    );
+  const listAppRoleMenu = [].concat(...(dataReturnFromAPIGetListAppRoleMenu?.pages || []).map((d: any) => d.data));
+
+  return {
+    isLoadingGetListAppRoleMenu,
+    refetchGetListAppRoleMenu,
+    listAppRoleMenu,
+    nextPageGetListAppRoleMenu
+  }
+};
+
+// 5. Check quyền truy cập vào một menu trong app
 export const useCheckPerAccessOneMenu = (appID: string, menuID: string, type: "1" | "2" | "3"): UseCheckPermissionOneMenu => {
   const currentUser = localStorage.getItem("currentUser") ?? "{}";
   const profile = JSON.parse(currentUser);
