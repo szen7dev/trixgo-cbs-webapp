@@ -17,6 +17,7 @@ import MiniChatSlice from './messages/MiniChat';
 import PopUpSendFileAndImageSlice from './messages/PopupSendImageAndFile';
 import RightClickMenuSlice from './RightClickMenu';
 import UnreadMessagesSlice from './messages/UnreadMessages';
+import ListFoldersSlice from './messages/ListFolders';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     popUpSendFileAndImage: PopUpSendFileAndImageSlice,
     rightClickMenu: RightClickMenuSlice,
     unreadMessages: UnreadMessagesSlice,
+    listFolders: ListFoldersSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

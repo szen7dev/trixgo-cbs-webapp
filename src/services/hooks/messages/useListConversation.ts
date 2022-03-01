@@ -6,7 +6,7 @@ import {
     DataListConversation,
     GeneralGroupByMemberPayload,
     ItemListConversation,
-    ListConversationPayload,
+    ListConversationPayload, ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
     MediasOfConversationPayload
 } from "typings/apis/messages/listConversation";
@@ -22,6 +22,7 @@ type UseListConversationType = {
     getListMediasOfConversation: (params: MediasOfConversationPayload) => Promise<void>;
     getListGeneralGroupByMember: (params: GeneralGroupByMemberPayload) => Promise<ItemListConversation[]>;
     getConverationInformation: (payload: ConvversationInformationPayload) => Promise<ItemListConversation>;
+    getListFoldersConversation: (payload: ListFoldersConversationPayload) => void;
     isLoadingListConversations: boolean,
     refetchListConversations: () => void,
     listConversations: Array<ItemListConversation>,
@@ -69,6 +70,12 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         return data;
     }
 
+    const getListFoldersConversation = async  (params: ListFoldersConversationPayload) => {
+        const {data} = await ListConversationRepository.getListFoldersConversation(params);
+
+        return data;
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -108,6 +115,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         hasListConversationNextPage,
         totalRecordRequest,
         getListGeneralGroupByMember,
-        getConverationInformation
+        getConverationInformation,
+        getListFoldersConversation
     }
 };

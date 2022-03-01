@@ -18,7 +18,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     useEffect(() => {
-        setActiveTab("members");
+        setActiveTab(chat.isPrivate?"media":"members");
     },[currentChat])
     const listTab = [
         {

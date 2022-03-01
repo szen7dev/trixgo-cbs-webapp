@@ -196,3 +196,34 @@ export type ConversationInformarionResponse = {
     data: ItemListConversation;
     status: number;
 }
+
+export type ListFoldersConversationPayload = {
+    limit?: number
+    nextCursor?: string
+}
+
+export type ListFoldersConversation = {
+    listRecords: {
+        _id: string
+        includedConversations: string[],
+        excludedConversations: string[],
+        amountMissMessage: number,
+        state: number,
+        name: string
+        author: string
+        modifyAt: string
+        createAt: string
+        createdAt: string
+        updatedAt: string
+        __v: number
+    }[],
+    limit: number,
+    totalRecord: number;
+    nextCursor: string|null;
+}
+
+export type ListFoldersConversationResponse = {
+    error: boolean;
+    data: ListFoldersConversation;
+    status: number;
+}
