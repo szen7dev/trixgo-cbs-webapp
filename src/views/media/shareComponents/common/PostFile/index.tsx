@@ -25,6 +25,8 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 		<>
 			{
 				files.map((d) => {
+					if(!d) return;
+
 					const name = 'progress' in d ? d.file.name : (d.file ? d.file.nameOrg : d.nameOrg);
 					const size = 'progress' in d ? d.file.size : (d.file ? d.file.size : d.size);
 					const download = 'progress' in d ? d.file : (d.file ? d.file : d);

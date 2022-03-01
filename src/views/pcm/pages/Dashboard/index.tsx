@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "views/pcm/styles/PCMStyles.css";
+import "views/pcm/styles/pcm.module.css";
 
 import newsImg1 from "assets/images/home-slide-img1.jpg";
 import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
@@ -27,7 +27,7 @@ import { usePcm } from 'services/hooks/usePcm';
 import { useMedia } from 'services/hooks/useMedia';
 import PcmRepository from 'apis/pcm';
 
-export const PcmHomePage: FC = () => {
+export const Dashboard: FC = () => {
   const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
   const { user } = useAuth();
   const { listTasks } = usePcm();
@@ -152,8 +152,11 @@ export const PcmHomePage: FC = () => {
                               {media.title?.length > 20 ? `${media.title?.substring(0, 20)}...` : media.title}
                             </p>
                           </Link>
-                          <div className="text-[14px]">
-                            {media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content}
+                          <div 
+                            className="text-[14px]"
+                            dangerouslySetInnerHTML={{
+                              __html: media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content
+                            }}>
                           </div>
                         </div>
                       </div>
@@ -190,8 +193,11 @@ export const PcmHomePage: FC = () => {
                   <Link to={`/media/post/${listMediasCompany[0]._id}`}>
                     <p className="t-home-media-title font-bold"> {listMediasCompany[0].title} </p>
                   </Link>
-                  <div className="t-home-media-description mb-4">
-                    {listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content}
+                  <div 
+                    className="t-home-media-description mb-4"
+                    dangerouslySetInnerHTML={{
+                      __html: listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content
+                    }}>
                   </div>
                   <div className="t-home-media-info text-secondary-gray">
                     {listMediasCompany[0].author.bizfullname}

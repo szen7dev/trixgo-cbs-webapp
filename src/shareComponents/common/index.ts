@@ -25,3 +25,5 @@ export * from './NotificationItem';
 export * from './OneSignalController';
 export * from './MiniChat';
 export * from './Popover';
+export * from './Icon';
+export * from './ZoomView';

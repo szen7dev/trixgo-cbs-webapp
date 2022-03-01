@@ -29,8 +29,12 @@ export const SocialMainArticle: FC<Props> = ({ media, ...props }) => {
 					</Link>
 				</h4>
 				<div className="line-clamp flex-1">
-					<p className="mt-5 px-2.5 flex-1 text-base">
-						{media.content?.length > 200 ? `${media.content?.substring(0, 200)}...` : media.content}
+					<p 
+						className="mt-5 px-2.5 flex-1 text-base"
+						dangerouslySetInnerHTML={{
+							__html: media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content
+						}}
+					>
 					</p>
 				</div>
 				<p className="text-[13px] leading-[15px] px-2 border-b border-primary-gray border-opacity-20 text-secondary-gray pb-2.5 mt-3">

@@ -8,8 +8,8 @@ import { ModalProvider } from "views/document/contexts/modal";
 
 /*=====3.LAYOUTS=====*/
 import { HomeLayout } from "shareComponents/layouts";
-import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
-import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutProjectSecondary'
+import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary';
+import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutProjectSecondary';
 
 /*=====4.CONFIG ROUTE=====*/
 
@@ -18,7 +18,7 @@ import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutPro
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-import { PcmHomePage } from "views/pcm/pages";
+import { Dashboard } from "views/pcm/pages";
 import {
     DocumentDetailPage,
     DocumentFolderPage,
@@ -26,10 +26,10 @@ import {
     DocumentProjectPage,
     DocumentProfilePage,
     DocumentReportPage,
-		DocumentDashboardPage
+    DocumentDashboardPage
 } from 'views/document/pages';
+
 import {
-    ProjectAdminPage,
     ProjectBiddingPage,
     ProjectBudgetPage,
     ProjectCategoryPage,
@@ -50,7 +50,7 @@ import {
     ProjectInspectionTab2Page,
     ProjectInspectionTab3Page,
     ProjectInspectionDetailPage,
-		ProjectDirectoryPage,
+    ProjectDirectoryPage,
     ProjectDocumentPage,
     ProjectMomPage,
     ProjectOtherPage,
@@ -59,7 +59,9 @@ import {
     ProjectReportPage,
     ProjectRfaPage,
     ProjectRfiPage,
-} from 'views/ppt/pages'
+} from 'views/ppt/pages';
+
+import { PcmHome, PcmDetailTask } from 'views/pcm/pages';
 
 const PCMRouter: FC = () => {
     return (
@@ -69,17 +71,26 @@ const PCMRouter: FC = () => {
                 path={"/"}
                 component={() => (
                     <HomeLayout>
-                        <PcmHomePage />
+                        <Dashboard />
                     </HomeLayout>
                 )}
             />
             <Route exact path="/pcm">
                 <Redirect to="/pcm/home" />
             </Route>
+            <ProtectedRoute
+                exact
+                path={"/pcm/detail/:id"}
+                component={() => (
+                    <HomeLayout>
+                        <PcmDetailTask />
+                    </HomeLayout>
+                )}
+            />
             <ProtectedRoute exact path="/pcm/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document)">
                 <HomeLayout>
                     <Switch>
-                        <Route exact path="/pcm/home" component={PcmHomePage} />
+                        <Route exact path="/pcm/home" component={PcmHome} />
                         <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                         <Route exact path="/pcm/market" component={ProjectMarketPage} />
                         <LayoutSecondary pages={[
