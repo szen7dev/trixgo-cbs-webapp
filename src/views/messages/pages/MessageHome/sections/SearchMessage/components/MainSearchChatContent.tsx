@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useRef, useState} from "react";
 import {map as _map} from "lodash";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
@@ -10,6 +10,7 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
 import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../../ChattingSection";
 import moment from "moment";
+import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 
 type Props = {
     chat: ItemListConversation
@@ -19,6 +20,7 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
     const {goToMessagePosition} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const dispatch = useDispatch();
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -29,7 +31,8 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
     const hasMoreDataFront = useSelector((state: RootState) => state.searchMessage.data.hasMoreDataFront[chat._id]);
     const nextCursor = useSelector((state: RootState) => state.searchMessage.data.nextCursor[chat._id]);
     const prevCursor = useSelector((state: RootState) => state.searchMessage.data.prevCursor[chat._id]);
-    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
+    const isLoading = useSelector((state: RootState) => state.searchMessage.data.isLoading[chat._id]);
+    const shouldStartListenEvent = useSelector((state: RootState) => state.searchMessage.data.shouldStartListenEvent[chat._id]);
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
@@ -41,18 +44,18 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
     },[conversationMessagesList]);
 
     useEffect(() => {
-        if (reachedTop && !isLoading && hasMoreDataBack) {
+        if (reachedTop && !isLoading && hasMoreDataBack && shouldStartListenEvent) {
             goToMessagePosition({messageID: prevCursor, conversationID: chat._id}, false, "back");
             setReachTop(false);
         }
     }, [reachedTop, prevCursor]);
 
-    // useEffect(() => {
-    //     if (reachedBottom && !isLoading && hasMoreDataFront) {
-    //         goToMessagePosition({messageID: prevCursor, conversationID: chat._id}, false, "front");
-    //         setReachBottom(false);
-    //     }
-    // }, [reachedBottom, nextCursor])
+    useEffect(() => {
+        if (reachedBottom && !isLoading && hasMoreDataFront && shouldStartListenEvent) {
+            goToMessagePosition({messageID: nextCursor, conversationID: chat._id}, false, "front");
+            setReachBottom(false);
+        }
+    }, [reachedBottom, nextCursor])
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
@@ -80,12 +83,13 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
         if (conversationMessagesList.current) {
             conversationMessagesList.current.scrollTo({top: conversationMessagesList.current.scrollHeight, behavior: "smooth" });
         }
+        dispatch(dismissSearchMode({conversationId: chat._id}));
     }
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createdAt);
         return (
-            <div key={message._id} id={`message-${message._id}`}>
+            <div key={message._id} className={"transition-all"} id={`message-${message._id}`}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -127,6 +131,8 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
             case 108:
                 return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+            case 109:
+                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã bỏ ghim một tin nhắn`}/>
             case 111:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 112:

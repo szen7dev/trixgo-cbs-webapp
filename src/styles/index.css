@@ -1504,3 +1504,12 @@ input[type="text"] {
 .t-mini-chat .reply-text-content {
   max-width: 250px;
 }
+@keyframes change-background {
+  0%   {background-color: transparent;}
+  50%  {background-color: rgba(0,0,0,0.1);}
+  100% {background-color: transparent;}
+}
+.found-message {
+  border-radius: 15px;
+  animation: change-background 2s ease-in-out;
+}

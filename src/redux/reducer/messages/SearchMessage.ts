@@ -31,6 +31,9 @@ const initialState : {
         },
         inSearchMode: {
             [key:string] : boolean
+        },
+        shouldStartListenEvent: {
+            [key:string] : boolean
         }
     }
 } = {
@@ -44,6 +47,7 @@ const initialState : {
         hasMoreDataFront: {},
         isLoading: {},
         inSearchMode: {},
+        shouldStartListenEvent: {}
     }
 };
 
@@ -115,6 +119,12 @@ const listSearchMessageSlice = createSlice({
         setInSearchMode (state, action) {
             state.data.inSearchMode[action.payload.conversationId] = action.payload.data
         },
+        setShouldStartListenEvent (state, action) {
+            state.data.shouldStartListenEvent[action.payload.conversationId] = action.payload.data
+        },
+        clearListMessage (state, action) {
+            state.data.listSearchMessage[action.payload.conversationId] = {}
+        },
         dismissSearchMode (state, action) {
             state.data = {
                 ...state.data,
@@ -154,6 +164,10 @@ const listSearchMessageSlice = createSlice({
                     ...state.data.inSearchMode,
                     [action.payload.conversationId]: false
                 },
+                shouldStartListenEvent: {
+                    ...state.data.shouldStartListenEvent,
+                    [action.payload.conversationId]: false
+                },
             }
         }
     },
@@ -164,6 +178,8 @@ export const {
     setListSearchMessage,
     setLoadingSearch,
     setInSearchMode,
-    dismissSearchMode
+    dismissSearchMode,
+    setShouldStartListenEvent,
+    clearListMessage
 } = listSearchMessageSlice.actions;
 export default listSearchMessageSlice.reducer;
