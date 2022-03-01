@@ -98,7 +98,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             messageId: data.data._id,
             messageData: data.data
         }));
-        if (data.data.type === 108) {
+        if ([108, 109].includes(data.data.type)) {
             getListPinMessage({conversationID: data.data.conversation})
         }
         setTimeout(() => {
