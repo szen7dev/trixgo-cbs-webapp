@@ -37,6 +37,7 @@ export const PcmHome: FC = () => {
         nextPageTaskMore();
         break;
       default:
+        break;
     }
   };
 
