@@ -575,3 +575,31 @@ export const MIME_TYPES_MESSAGE = ['jpg', 'jpeg', 'png', 'gif', 'heic', 'zip', '
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const DATE_FORMAT_TIME = "DD/MM/YYYY HH:MM";
 export const LIMIT_DROPDOWN = 20;
+
+/**
+ * App ID
+ */
+
+export const APP_ID = {
+    PCM: {
+        id: "5dfe4b9051dc622100bb9d89",
+        menuApp: {
+            projects: {
+                id: "621dd3a55fd4c85f7c36d0d2",
+                name: "Dự án đang triển khai"
+            },
+            dashboard_portfolio: {
+                id: "621dd3b85fd4c85f7c36d0da",
+                name: "Báo cáo đầu tư"
+            },
+            dashboard_task: {
+                id: "621dd3ce5fd4c85f7c36d0e1",
+                name: "Báo cáo quản trị công việc",
+            },
+            dashboard_document: {
+                id: "621dd3d75fd4c85f7c36d0e4",
+                name: "Báo cáo quản trị hồ sơ",
+            }
+        }
+    }
+};

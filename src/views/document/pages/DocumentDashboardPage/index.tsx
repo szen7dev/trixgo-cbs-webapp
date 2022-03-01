@@ -7,7 +7,7 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, forwardRef, useState } from "react";
+import { FC, forwardRef, useState, useEffect } from "react";
 
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -19,7 +19,10 @@ import iconComment from "assets/images/icon-chat-project.png";
 import SliderOver from "./components/SliderOver";
 
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
-import { DATE_FORMAT } from "apis/localdb";
+import { DATE_FORMAT, APP_ID } from "apis/localdb";
+import { useHistory } from "react-router-dom";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { toast } from "react-toastify";
 // interface IData {
 // 	id: number;
 // 	name: string;
@@ -89,6 +92,19 @@ const ButtonDatePicker = forwardRef<HTMLButtonElement, any>(
 ButtonDatePicker.displayName = "ButtonDatePicker";
 
 export const DocumentDashboardPage: FC = () => {
+
+	const history = useHistory();
+	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp(APP_ID.PCM.id);
+	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(APP_ID.PCM.id, APP_ID.PCM.menuApp.dashboard_task.id, "1");
+
+	// Phân quyền theo nhóm chức năng
+	useEffect(() => {
+		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
+	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+
 	const [type, setType] = useState<string>("all");
 	const [open, setOpen] = useState<{ show: boolean; mediaId: string }>({
 		show: false,

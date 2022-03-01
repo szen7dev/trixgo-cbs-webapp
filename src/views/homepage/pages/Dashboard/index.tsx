@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from "react";
 import moment from "moment";
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
+import { useQuery } from "react-query";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,7 +29,6 @@ import { useMedia } from 'services/hooks/useMedia';
 import PcmRepository from 'apis/pcm';
 
 export const Dashboard: FC = () => {
-  const [taskAnalysis, setTaskAnalysis] = useState<listTotalAnalysisProps>();
   const { user } = useAuth();
   const { listTasks } = usePcm();
   const socketRef: any = useSocket();
@@ -52,12 +52,9 @@ export const Dashboard: FC = () => {
     isFetchMedias: true
   });
 
-  useEffect(() => {
-    (async () => {
-      const response = await PcmRepository.listTotalAnalysis();
-      setTaskAnalysis(response.data);
-    })();
+  const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
 
+  useEffect(() => {
     const socket = socketRef.current;
     if (!socket) return;
 
@@ -92,19 +89,19 @@ export const Dashboard: FC = () => {
           <div className="t-home-summary flex flex-wrap items-center justify-center">
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">{taskAnalysis?.amountTask || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-pulple">{data?.data?.amountTask || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Công việc</Link>
                 </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">{taskAnalysis?.amountTaskIsRFa || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-red">{data?.data?.amountTaskIsRFa || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Phê duyệt</Link>
                 </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">{taskAnalysis?.amountTaskIsRFis || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-blue">{data?.data?.amountTaskIsRFis || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Yêu cầu thông tin</Link>
                 </p>
@@ -112,19 +109,19 @@ export const Dashboard: FC = () => {
             </div>
             <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{taskAnalysis?.amountTaskIsFlags || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{data?.data?.amountTaskIsFlags || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Việc quan tâm</Link>
                 </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{taskAnalysis?.amountTaskIsAssignee || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{data?.data?.amountTaskIsAssignee || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                 <Link to="/pcm/home">Việc đã giao</Link>
                 </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
-                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{taskAnalysis?.amountTaskIsDraft || 0}</div>
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{data?.data?.amountTaskIsDraft || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Việc nháp</Link>
                 </p>

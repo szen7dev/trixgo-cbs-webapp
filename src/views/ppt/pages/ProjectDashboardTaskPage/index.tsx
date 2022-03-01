@@ -7,12 +7,15 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import StatisticalChart from "./components/StatisticalChart";
 
 import CaretDownIcon from "assets/images/icon-caret-down.png";
-
+import { useHistory } from "react-router-dom";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
 interface IData {
 	id: number,
 	name: string,
@@ -44,6 +47,18 @@ const getDate = (time: number): number => {
 }
 
 const ProjectDashboardTaskPage: FC = () => {
+	const history = useHistory();
+	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp(APP_ID.PCM.id);
+	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(APP_ID.PCM.id, APP_ID.PCM.menuApp.dashboard_task.id, "1");
+
+	// Phân quyền theo nhóm chức năng
+	useEffect(() => {
+		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
+	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+
 	const [type, setType] = useState<string>('all');
 	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
 
@@ -62,7 +77,7 @@ const ProjectDashboardTaskPage: FC = () => {
 			message: 'Hồ sơ dự án sao lâu không thấy cập nhật vậy chị Ngọc ơi, có vướng gì không?'
 		},
 		mediaId: i % 2 ? '61c6caf6f92c4e0d68779554' : '61c1ff7102022f1f1274edfb'
-	}))
+	}));
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const handleChange = (e: any) => { setType(e.target.value) };

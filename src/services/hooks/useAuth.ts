@@ -9,7 +9,7 @@ import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
 
-import { User, SignInPayload, UseAuth, UseGetListAppOfUser, UseCheckPerAccessApp } from "typings/auth";
+import { User, SignInPayload, UseAuth, UseGetListAppOfUser, UseCheckPermission, UseCheckPermissionOneMenu } from "typings/auth";
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
@@ -176,7 +176,7 @@ export const useAuth = (): UseAuth => {
   };
 };
 
-// Lấy danh sách ứng dụng của 1 user được truy cập
+// 1. Lấy danh sách ứng dụng của 1 user được truy cập
 export const useGetListAppOfUser = (): UseGetListAppOfUser => {
   const {
     isLoading: isLoadingAppUsers,
@@ -208,14 +208,86 @@ export const useGetListAppOfUser = (): UseGetListAppOfUser => {
   }
 };
 
-export const useCheckPerAccessApp = (appID: string): UseCheckPerAccessApp => {
-  const { isLoading: isLoadingAccessApp, data: dataAccessApp, refetch: refetchAccessApp } =
+// 2. Check quyền truy cập vào 1 app tổng
+export const useCheckPerAccessApp = (appID: string): UseCheckPermission => {
+  const { isSuccess, data } =
     useQuery(`check-permissions-access-app?appID=${appID}`, () => AuthenticationRepository.checkPermissionsAccessApp(appID), {
       refetchOnWindowFocus: true
     });
+
+  let hasPermission = true;
+  if (isSuccess && data?.data?.keyError == 'permission_denied') {
+
+    hasPermission = false;
+  }
+  console.log("check-permissions-access-app", data);
   return {
-    isLoadingAccessApp,
-    refetchAccessApp,
-    dataAccessApp
+    hasPermission,
+    isSuccess
   };
-}
+};
+
+// 3. Lấy danh sách MENU của hệ thống
+export const useGetListAppMenu = (appID: string, parentID?: string): any => {
+  const {
+    isLoading: isLoadingGetListAppMenu,
+    refetch: refetchGetListAppMenu,
+    data: dataReturnFromAPIGetListAppMenu,
+    fetchNextPage: nextPageGetListAppMenu
+  } =
+    useInfiniteQuery(
+      `app_menus?appID=${appID}$parentID=${parentID}`,
+      async ({ pageParams }: any) =>
+        AuthenticationRepository.getListAppMenu({
+          appID: appID,
+          parentID: parentID ? parentID : "",
+          select: "name slug order level",
+          lastestID: pageParams ? pageParams : "",
+        }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: true
+      }
+    );
+  const listAppMenu = [].concat(...(dataReturnFromAPIGetListAppMenu?.pages || []).map((d: any) => d.data?.listRecords));
+
+  return {
+    isLoadingGetListAppMenu,
+    refetchGetListAppMenu,
+    listAppMenu,
+    nextPageGetListAppMenu
+  }
+};
+
+// 4. Check quyền truy cập vào một menu trong app
+export const useCheckPerAccessOneMenu = (appID: string, menuID: string, type: "1" | "2" | "3"): UseCheckPermissionOneMenu => {
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
+  const { isSuccess, data } =
+    useQuery(`permission-to-access-one-menu-of-app?appID=${appID}&menuID={${menuID}}`, () => AuthenticationRepository.checkPermissionsAccessOneMenu({
+      appID: appID,
+      menuID: menuID,
+      companyID: profile?.company?._id,
+      type: type
+    }), {
+      refetchOnWindowFocus: true
+    });
+  console.log("permission-to-access-one-menu-of-app", data);
+  let hasPermission = true;
+  if (isSuccess && data?.data?.keyError == 'permission_denied') {
+    hasPermission = false;
+  }
+
+  return {
+    hasPermission,
+    isSuccess,
+    permission: data?.data || {
+      create: 0,
+      update: 0,
+      delete: 0,
+      read: 0
+    }
+  };
+};

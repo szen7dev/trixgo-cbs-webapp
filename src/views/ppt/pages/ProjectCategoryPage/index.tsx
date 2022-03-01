@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link, generatePath } from "react-router-dom";
+import { Link, generatePath, useHistory } from "react-router-dom";
 
 // Hooks use department
 import { useListDepartment } from "services/hooks/ppt/useListDepartment";
@@ -14,24 +14,39 @@ import { SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
 
 // ========== App common Components ==========
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
-import { PROJECT_STAGE } from 'apis/localdb'
+import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 
 // Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
+import { Redirect } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import 'views/document/styles/document.css'
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
 
 const ProjectCategoryPage: FC = () => {
+	const history = useHistory();
+	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp(APP_ID.PCM.id);
+	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(APP_ID.PCM.id, APP_ID.PCM.menuApp.projects.id, "1");
+
+	// Phân quyền theo nhóm chức năng
+	useEffect(() => {
+		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
+	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+
+	useEffect(() => {
+		document.title = "PPT - Danh mục dự án";
+	}, []);
+
 	const { data: _data, fetchNextPage, hasNextPage } = useListDepartment({
 		type: DepartmentEnumType.PROJECT,
 		populates: {
 			path: ['company'],
 		}
-	})
-
-	useEffect(() => {
-		document.title = "PPT - Danh mục dự án"
-	}, []);
+	});
 
 	return (
 		<div className="flex flex-col text-sm text-black overflow-hidden h-full">

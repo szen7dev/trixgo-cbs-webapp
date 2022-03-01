@@ -119,6 +119,24 @@ export type PermissionAccessAppResponse = APIResponse & {
   };
 };
 
+export type PermissionAccessOneMenuPayload = {
+  appID: string,
+  menuID: string,
+  companyID: string,
+  type: "1" | "2" | "3"
+};
+
+export type PermissionAccessOneMenuResponse = APIResponse & {
+  data: {
+    message?: string;
+    keyError?: string;
+    read: number,
+    create: number,
+    update: number,
+    delete: number
+  };
+};
+
 export type UseGetListAppOfUser = {
   isLoadingAppUsers: boolean;
   refetchAppUsers: any;
@@ -132,8 +150,18 @@ export type UseGetListAppOfUser = {
   }>
 };
 
-export type UseCheckPerAccessApp = {
-  isLoadingAccessApp: boolean;
-  refetchAccessApp: any;
-  dataAccessApp: any;
+export type UseCheckPermission = {
+  hasPermission: boolean;
+  isSuccess: boolean;
+};
+
+export type UseCheckPermissionOneMenu = {
+  hasPermission: boolean;
+  isSuccess: boolean;
+  permission: {
+    read: number,
+    create: number,
+    update: number,
+    delete: number
+  }
 };

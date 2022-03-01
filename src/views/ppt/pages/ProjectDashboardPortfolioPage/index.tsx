@@ -4,11 +4,26 @@ import cn from "classnames";
 
 import PortfolioAnalysisContainer from "./components/PortfolioAnalysisContainer";
 import PortfolioTableContainer from "./components/PortfolioTableContainer";
+import { useHistory } from "react-router-dom";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
 
 const ProjectDashboardPortfolioPage: FC = () => {
+	const history = useHistory();
+	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp(APP_ID.PCM.id);
+	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(APP_ID.PCM.id, APP_ID.PCM.menuApp.dashboard_portfolio.id, "1");
+
+	// Phân quyền theo nhóm chức năng
+	useEffect(() => {
+		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
+	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
 
 	useEffect(() => {
-		document.title = "PPT - Báo cáo đầu tư"
+		document.title = "PPT - Báo cáo đầu tư";
 	}, []);
 
 	return (
