@@ -28,27 +28,27 @@ import defaultLogo from "assets/logos/default.png";
 export const APP_INFO = new Map([
     /* Ứng dụng Operation */
     ['61e04a0dfdebf77b072d1b18', {
-        name: "Operation",
+        name: "Quản lý vận hành",
         icon: operationLogo,
         route: '/operation/home'
     }],
     /* Ứng dụng Real Estate Exchange */
     ['61e04a05fdebf77b072d1b17', {
-        name: "Real Estate Exchange",
-        icon: defaultLogo,
-        route: '/marketing/home'
+        name: "Sàn bất động sản",
+        icon: reeLogo,
+        route: '/ree/home'
     }],
     /* Ứng dụng Marketing */
     ['61e049f6fdebf77b072d1b16', {
-        name: "Marketing",
+        name: "Thị trường",
         icon: marketingLogo,
-        route: '/marketing/home'
+        route: '/market/home'
     }],
     /* Ứng dụng Training */
     ['61e049e7fdebf77b072d1b15', {
-        name: "Marketing",
-        icon: defaultLogo,
-        route: '/training/home'
+        name: "Workshop",
+        icon: workshopLogo,
+        route: '/workshop/home'
     }],
     /* Ứng dụng Timesheet */
     ['61e049cffdebf77b072d1b14', {
@@ -70,13 +70,13 @@ export const APP_INFO = new Map([
     }],
     /* Ứng dụng Supporter */
     ['61e0499efdebf77b072d1b11', {
-        name: "Timesheet",
+        name: "Support",
         icon: supporterLogo,
-        route: '/supporter/home'
+        route: '/support/home'
     }],
     /* Ứng dụng Owner */
     ['61e04989fdebf77b072d1b10', {
-        name: "Owner",
+        name: "Quản trị viên công ty",
         icon: ownerLogo,
         route: '/owner/home'
     }],
@@ -89,7 +89,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Quản lý chi phí */
     ['6131d6f83f4b736dc93253b2', {
         name: "Quản lý chi phí",
-        icon: financialLogo,
+        icon: defaultLogo,
         route: '/'
     }],
     /* Ứng dụng Datahub */
@@ -113,7 +113,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Quản lý danh mục */
     ['5f5234b2880c2f26c8df8c13', {
         name: "Quản lý danh mục",
-        icon: documentLogo,
+        icon: defaultLogo,
         route: '/'
     }],
     /* Ứng dụng Ghi chú */
@@ -138,7 +138,7 @@ export const APP_INFO = new Map([
     ['5e47867080019357cce04746', {
         name: "Quản lý hồ sơ văn bản",
         icon: documentLogo,
-        route: '/'
+        route: '/document/home'
     }],
     /* Ứng dụng Quản lý hợp đồng */
     ['5e4785eb8b50843d34481d49', {
@@ -149,7 +149,7 @@ export const APP_INFO = new Map([
     /* Ứng dụng Cộng đồng doanh nghiệp */
     ['5e0475825e30dce72849a489', {
         name: "Cộng đồng doanh nghiệp",
-        icon: workshopLogo,
+        icon: defaultLogo,
         route: '/'
     }],
     /* Ứng dụng Nhắn tin */
@@ -168,7 +168,7 @@ export const APP_INFO = new Map([
     ['5dfe4bc751dc622100bb9d8a', {
         name: "Quản trị tài chính",
         icon: financialLogo,
-        route: '/'
+        route: '/financial/home'
     }],
     /* Ứng dụng Quản lý công việc */
     ['5dfe4b9051dc622100bb9d89', {
