@@ -160,7 +160,7 @@ export const ListTable: FC<Props> = ({
                 className="p-2 border cursor-pointer"
                 onClick={() => handleClickTask(tasksNexWeek._id)}
               >
-                {`${tasksNexWeek.project.sign}.${tasksNexWeek.name}`}
+                {`${tasksNexWeek.project?.sign}.${tasksNexWeek.name}`}
               </td>
               <td className="p-2 border">
                 {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
@@ -219,7 +219,7 @@ export const ListTable: FC<Props> = ({
                 className="p-2 border cursor-pointer"
                 onClick={() => handleClickTask(taskMoreThanSevenDay._id)}
               >
-                {`${taskMoreThanSevenDay.project.sign}.${taskMoreThanSevenDay.name}`}
+                {`${taskMoreThanSevenDay.project?.sign}.${taskMoreThanSevenDay.name}`}
               </td>
               <td className="p-2 border">
                 {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
@@ -246,7 +246,7 @@ export const ListTable: FC<Props> = ({
                     {subContentHtml(taskMoreThanSevenDay.lastLog?.content)}
                     <span> - </span>
                     <span className="text-primary text-[13px]">
-                      {taskMoreThanSevenDay.lastLog?.author.fullname}
+                      {taskMoreThanSevenDay.lastLog?.author?.bizfullname}
                     </span>
                     <span className="text-primary-gray mx-2 text-[13px]">
                       {moment(taskMoreThanSevenDay.lastLog?.createAt).fromNow()}

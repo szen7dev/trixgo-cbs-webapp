@@ -48,7 +48,7 @@ import {
 	ProjectDashboardPage
 } from 'views/ppt/pages'
 import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutProjectSecondary'
-import { Dashboard } from 'views/pcm/pages';
+import { Dashboard } from 'views/homepage/pages';
 import { HomeLayout } from 'shareComponents/layouts';
 
 const PPTRoutes: FC = () => {

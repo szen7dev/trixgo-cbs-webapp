@@ -157,7 +157,7 @@ export const useAuth = (): UseAuth => {
     localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
-    window.location.reload();
+    history.push("/authentication/sign-in");
   };
 
   return {
