@@ -4,15 +4,15 @@ import { Menu, Transition } from "@headlessui/react";
 
 import iconGrid from "assets/images/icons8-menu-100.png";
 import iconSearch from "assets/images/icons8-search-50.png";
-// import appLogo from "assets/images/trixgo-logo.png";
+import supportLogo from "assets/logos/support.png";
 
 // Logic 
 import API from "apis/repository";
 import { APP_INFO } from "./components";
-import { usePermission } from "services/hooks/useAuth";
+import { useGetListAppOfUser } from "services/hooks/useAuth";
 
 export const AppsMenu: FC = () => {
-  const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = usePermission();
+  const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
 
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
@@ -55,6 +55,12 @@ export const AppsMenu: FC = () => {
               </Link>
             ))
             }
+          </div>
+          <div className="flex flex-wrap">
+              <Link key={50} to={'/support/home'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+                <img src={supportLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+                <span className="block">Support</span>
+              </Link>
           </div>
         </Menu.Items>
       </Transition>

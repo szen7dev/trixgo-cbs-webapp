@@ -19,6 +19,7 @@ import supportLogo from "assets/logos/support.png";
 import timesheetLogo from "assets/logos/timesheet.png";
 import workshopLogo from "assets/logos/workshop.png";
 import personalLogo from "assets/logos/personal.png";
+import messagesLogo from "assets/logos/messages.png";
 import defaultLogo from "assets/logos/default.png";
 
 /* createdAt:1/13/2022, 10:49:33 PM 
@@ -99,12 +100,6 @@ export const APP_INFO = new Map([
         icon: datahubLogo,
         route: '/datahub/home'
     }],
-    /* Ứng dụng Quản lý dự án */
-    ['5fe58c9b95db3c6e1534ec78', {//ok
-        name: "Quản lý dự án",
-        icon: pcmLogo,
-        route: '/pcm/home'
-    }],
     /* Ứng dụng Dữ liệu đấu thầu */
     ['5fe58b7395db3c6e1534ea81', {//OK
         name: "Đấu thầu",
@@ -129,16 +124,10 @@ export const APP_INFO = new Map([
         icon: documentLogo,
         route: '/document/home'
     }],
-    /* Ứng dụng Ứng dụng bỏ */
-    ['5e4785eb8b50843d34481d49', {//Bỏ
-        name: "Ứng dụng bỏ",
-        icon: defaultLogo,
-        route: '/'
-    }],
     /* Ứng dụng Nhắn tin */
     ['5dfe4c1b51dc622100bb9d8f', {//OK
         name: "Nhắn tin",
-        icon: defaultLogo,
+        icon: messagesLogo,
         route: '/messages'
     }],
     /* Ứng dụng Quản trị tài chính */
@@ -162,6 +151,18 @@ export const APP_INFO = new Map([
     /* Ứng dụng Quản lý danh mục */
     ['5f5234b2880c2f26c8df8c13', {//ok==============
         name: "Quản lý danh mục",
+        icon: defaultLogo,
+        route: '/'
+    }],
+    /* Ứng dụng Quản lý dự án */
+    ['5fe58c9b95db3c6e1534ec78', {//ok
+        name: "Quản lý dự án",
+        icon: defaultLogo,
+        route: '/'
+    }],
+    /* Ứng dụng Ứng dụng bỏ */
+    ['5e4785eb8b50843d34481d49', {//Bỏ
+        name: "Ứng dụng bỏ",
         icon: defaultLogo,
         route: '/'
     }],

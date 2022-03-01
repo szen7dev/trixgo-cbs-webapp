@@ -1,6 +1,6 @@
 import API from "../repository";
 
-import { SignInPayload, SignInResponse, UserInfoResponse, UpdateDevicePayload, PermissionResponse } from "typings/auth";
+import { SignInPayload, SignInResponse, UserInfoResponse, UpdateDevicePayload, GetListAppOfUserResponse, PermissionAccessAppResponse } from "typings/auth";
 
 const authURL = "/api/auth";
 
@@ -31,10 +31,8 @@ const AuthenticationRepository = {
   },
 
   // Permission - Phân quyền
-  async permissionAppMenu({ lastestID }: { lastestID: string }): Promise<PermissionResponse> {
-    // const token = localStorage.getItem("token") as string;
-    // API.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-    const { data } = await API.get<PermissionResponse>(
+  async getListAppOfUser({ lastestID }: { lastestID: string }): Promise<GetListAppOfUserResponse> {
+    const { data } = await API.get<GetListAppOfUserResponse>(
       `${authURL}/app_users/list-app-of-user`,
       {
         params: {
@@ -48,6 +46,13 @@ const AuthenticationRepository = {
         },
       }
     );
+    return data;
+  },
+
+  // Permission - Phân quyền
+  async checkPermissionsAccessApp(appID: string): Promise<PermissionAccessAppResponse> {
+    const { data } = await API.get<PermissionAccessAppResponse>(
+      `${authURL}/app_users/check-permissions-access-app?appID=${appID}`);
     return data;
   },
 };
