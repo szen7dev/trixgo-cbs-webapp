@@ -1,5 +1,17 @@
 import { APIResponse } from "./apis/response";
 
+export type UseAuth = {
+  isLoading: boolean;
+  hasAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  signIn: (payload: SignInPayload) => void;
+  signOut: () => void;
+  dataUserInfo: any;
+  refetchDataUserInfo: any;
+  updateDevice: (_id: string) => void;
+};
+
 export type User = {
   _id: string;
   email: string,
@@ -91,11 +103,37 @@ export type UpdateDevicePayload = {
   env?: string
 };
 
-export type PermissionResponse = APIResponse & {
+export type GetListAppOfUserResponse = APIResponse & {
   data: {
     listRecords: Array<any>;
     totalRecord: number;
     totalPage?: number;
     nextCursor?: string;
   };
+};
+
+export type PermissionAccessAppResponse = APIResponse & {
+  data: {
+    message: string;
+    keyError?: string;
+  };
+};
+
+export type UseGetListAppOfUser = {
+  isLoadingAppUsers: boolean;
+  refetchAppUsers: any;
+  nextPageAppUsers: any;
+  listAppOfUser: Array<{
+    _id: string,
+    app: {
+      _id: string,
+      name: string
+    }
+  }>
+};
+
+export type UseCheckPerAccessApp = {
+  isLoadingAccessApp: boolean;
+  refetchAccessApp: any;
+  dataAccessApp: any;
 };
