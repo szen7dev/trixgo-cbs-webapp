@@ -153,6 +153,7 @@ export type UseGetListAppOfUser = {
 export type UseCheckPermission = {
   hasPermission: boolean;
   isSuccess: boolean;
+  dataUserAccess?: any
 };
 
 export type UseCheckPermissionOneMenu = {
@@ -164,4 +165,18 @@ export type UseCheckPermissionOneMenu = {
     update: number,
     delete: number
   }
+};
+
+export type UseGetListAppMenu = {
+  isLoadingGetListAppMenu: boolean;
+  refetchGetListAppMenu: any;
+  listAppMenu: Array<any>;
+  nextPageGetListAppMenu: any;
+};
+
+export type UseGetListAppRoleMenu = {
+  isLoadingGetListAppRoleMenu: boolean;
+  refetchGetListAppRoleMenu: any;
+  listAppRoleMenu: Array<any>;
+  nextPageGetListAppRoleMenu: any;
 };

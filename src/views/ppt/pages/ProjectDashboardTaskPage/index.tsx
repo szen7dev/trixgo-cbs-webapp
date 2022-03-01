@@ -48,9 +48,12 @@ const getDate = (time: number): number => {
 
 const ProjectDashboardTaskPage: FC = () => {
 	const history = useHistory();
-	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp(APP_ID.PCM.id);
-	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(APP_ID.PCM.id, APP_ID.PCM.menuApp.dashboard_task.id, "1");
-
+	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
+		appID: APP_ID.PCM.id,
+		menuID: APP_ID.PCM.menuApp.dashboard_task.id,
+		type: "1"
+	});
 	// Phân quyền theo nhóm chức năng
 	useEffect(() => {
 		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
