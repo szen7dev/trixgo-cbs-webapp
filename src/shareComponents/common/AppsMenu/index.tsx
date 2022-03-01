@@ -88,7 +88,7 @@ export const AppsMenu: FC = () => {
               <img src={biddingLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Đấu thầu</span>
             </Link>
-            <Link to={`/fin/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+            <Link to={`/financial/home`} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
               <img src={financialLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
               <span className="block">Quản trị tài chính</span>
             </Link>

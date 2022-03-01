@@ -15,28 +15,25 @@ import { FullPageLayout } from "shareComponents/layouts";
 /*=====4.CONFIG ROUTE=====*/
 import AccountingRouter from "./accounting";
 import AuthenticationRouter from "./authentication";
-// import BiddingRouter from "./bidding";
+import BiddingRouter from "./bidding";
 import CmcsRouter from "./cmcs";
 import DatahubRouter from "./datahub";
 import DocumentRouter from "./document";
 import PPTRouter from "./ppt";
-// import PPTRouter from "views/ppt/routes/ProjectRoutes";
-// import FinancialRouter from "./financial";
-// import HomeRouter from './home';
+import FinancialRouter from "./financial";
 import HumanRouter from "./human";
-// import MarketRouter from "./market";
+import MarketRouter from "./market";
 import MediaRouter from "./media";
 import MessagesRouter from "./messages";
-// import OperationRouter from "./operation";
-// import OwnerRouter from './owner';
+import OperationRouter from "./operation";
+import OwnerRouter from './owner';
 import PcmRouter from "./pcm";
 import WorkshopRouter from "./workshop";
-// import PersonalRouter from "./personal";
-// import QrcodeRouter from "./qrcode";
-// import ReeRouter from "./ree";
-// import SupportRouter from "./support";
+import PersonalRouter from "./personal";
+import QrcodeRouter from "./qrcode";
+import ReeRouter from "./ree";
+import SupportRouter from "./support";
 import TimesheetRouter from "./timesheet";
-// import WorkshopRouter from "./workshop";
 
 /*=====5.PAGES=====*/
 import ErrorPage from "views/authentication/Error";
@@ -69,9 +66,16 @@ const Routes: FC = () => {
                                         <AuthenticationRouter />
                                     </Route>
 
-                                    {/* =====PCM===== */}
-                                    <Route path="/pcm">
-                                        <PcmRouter />
+                                    {/* =====ACCOUNTING===== */}
+                                    <Route path="/accounting">
+                                        <AccountingLayout>
+                                            <AccountingRouter />
+                                        </AccountingLayout>
+                                    </Route>
+                                    
+                                    {/* =====BIDDING===== */}
+                                    <Route path="/bidding">
+                                        <BiddingRouter />
                                     </Route>
 
                                     {/* =====CMCS===== */}
@@ -79,19 +83,10 @@ const Routes: FC = () => {
                                         <CmcsRouter />
                                     </Route>
 
-                                    {/* =====ACCOUNTING===== */}
-                                    <Route path="/accounting">
-                                        <AccountingLayout>
-                                            <AccountingRouter />
-                                        </AccountingLayout>
-                                    </Route>
-
-                                    {/* =====HUMAN===== */}
-                                    <Route path="/human">
-                                        <HumanLayout>
-                                            <HumanRouter />
-                                        </HumanLayout>
-                                    </Route>
+                                    {/* =====DATHUB===== */}
+                                    <Route path="/datahub">
+                                        <DatahubRouter />
+                                    </Route>    
 
                                     {/* =====DOCUMENT===== */}
                                     <Route path="/document">
@@ -100,32 +95,79 @@ const Routes: FC = () => {
                                         </DocumentLayout>
                                     </Route>
 
+                                    {/* =====PCM===== */}
+                                    <Route path="/pcm">
+                                        <PcmRouter />
+                                    </Route>
+
                                     {/* =====PPT===== */}
                                     <Route
                                         path='/ppt'
                                         component={PPTRouter}
-                                    />
-                                    {/* <Route path="/ppt">
-                                            <DocumentLayout>
-                                                <PPTRouter />
-                                            </DocumentLayout>
-                                        </Route> */}
+                                    />      
+
+                                    {/* =====FINANCIAL===== */}
+                                    <Route path="/financial">
+                                        <FinancialRouter />
+                                    </Route>   
+                                    
+                                    {/* =====HUMAN===== */}
+                                    <Route path="/human">
+                                        <HumanLayout>
+                                            <HumanRouter />
+                                        </HumanLayout>
+                                    </Route>      
+
+                                    {/* =====MARKET===== */}
+                                    <Route path="/market">
+                                        <MarketRouter />
+                                    </Route>                  
 
                                     {/* =====MEDIA===== */}
                                     <Route path="/media">
                                         <HomeLayout>
                                             <MediaRouter />
                                         </HomeLayout>
-                                    </Route>
+                                    </Route>  
+                                    
+                                    {/* =====MARKET===== */}
+                                    <Route path="/market">
+                                        <MarketRouter />
+                                    </Route>   
+
+                                    {/* =====OPERATION===== */}
+                                    <Route path="/operation">
+                                        <OperationRouter />
+                                    </Route>   
+
+                                    {/* =====OWNER===== */}
+                                    <Route path="/owner">
+                                        <OwnerRouter />
+                                    </Route> 
+
+                                    {/* =====PERSONAL===== */}
+                                    <Route path="/personal">
+                                        <PersonalRouter />
+                                    </Route> 
+
+                                    {/* =====QRCODE===== */}
+                                    <Route path="/qrcode">
+                                        <QrcodeRouter />
+                                    </Route> 
+
+                                    {/* =====REE===== */}
+                                    <Route path="/ree">
+                                        <ReeRouter />
+                                    </Route> 
+
+                                    {/* =====SUPPORT===== */}
+                                    <Route path="/support">
+                                        <SupportRouter />
+                                    </Route>                                                                                                            
 
                                     {/* =====WORKSHOP===== */}
                                     <Route path="/workshop">
                                         <WorkshopRouter />
-                                    </Route>
-
-                                    {/* =====DATHUB===== */}
-                                    <Route path="/datahub">
-                                        <DatahubRouter />
                                     </Route>
 
                                     {/* =====MESSAGES===== */}
@@ -144,6 +186,7 @@ const Routes: FC = () => {
                                             <Route path="/*" component={ErrorPage} />
                                         </FullPageLayout>
                                     </Route>
+
                                 </Switch>
                             </ModalProvider>
                         </ChatProvider>
@@ -154,4 +197,4 @@ const Routes: FC = () => {
     );
 };
 
-export default Routes;
+export default Routes
