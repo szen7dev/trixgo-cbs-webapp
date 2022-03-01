@@ -152,8 +152,11 @@ export const PcmHomePage: FC = () => {
                               {media.title?.length > 20 ? `${media.title?.substring(0, 20)}...` : media.title}
                             </p>
                           </Link>
-                          <div className="text-[14px]">
-                            {media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content}
+                          <div 
+                            className="text-[14px]"
+                            dangerouslySetInnerHTML={{
+                              __html: media.content?.length > 50 ? `${media.content?.substring(0, 50)}...` : media.content
+                            }}>
                           </div>
                         </div>
                       </div>
@@ -190,8 +193,11 @@ export const PcmHomePage: FC = () => {
                   <Link to={`/media/post/${listMediasCompany[0]._id}`}>
                     <p className="t-home-media-title font-bold"> {listMediasCompany[0].title} </p>
                   </Link>
-                  <div className="t-home-media-description mb-4">
-                    {listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content}
+                  <div 
+                    className="t-home-media-description mb-4"
+                    dangerouslySetInnerHTML={{
+                      __html: listMediasCompany[0].content?.length > 200 ? `${listMediasCompany[0].content?.substring(0, 200)}...` : listMediasCompany[0].content
+                    }}>
                   </div>
                   <div className="t-home-media-info text-secondary-gray">
                     {listMediasCompany[0].author.bizfullname}

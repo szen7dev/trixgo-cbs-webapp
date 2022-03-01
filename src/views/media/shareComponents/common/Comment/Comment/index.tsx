@@ -29,7 +29,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteCommentAsync } = useCommentMedia({
-		params: { mediaID: comment.media._id }
+		params: { mediaID: comment?.media?._id }
 	});
 	const { dispatch } = useContext(CommentContext);
 
@@ -40,7 +40,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 			
 			dispatch({
 				type: "DELETE_COMMENT",
-				payload: { _id: comment._id, parent: comment?.parent }
+				payload: { _id: comment?._id, parent: comment?.parent }
 			});
 		} catch (error: unknown) {
 			if (typeof error === "string") {

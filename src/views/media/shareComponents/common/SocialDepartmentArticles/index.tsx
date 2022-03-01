@@ -26,8 +26,12 @@ export const SocialDepartmentArticles: React.FC<Props> = ({ listMedias, isLoadin
 								{media.title}
 							</b></Link>
 							<div className="mt-4 text-sm leading-[18px]">
-								{media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content}
-								<div className="inline-flex items-center align-middle text-x-small ml-1.5">
+								<p
+									dangerouslySetInnerHTML={{
+										__html: media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content
+									}}
+								></p>
+								<div className="inline-flex items-center align-middle text-x-small ml-1.5">	
 									<img src={iconComment} alt="Comment" className="w-4 h-4 inline-block mr-2" />
 									<span className="text-primary">
 										{abbreviateNumber(media.amountComment)}

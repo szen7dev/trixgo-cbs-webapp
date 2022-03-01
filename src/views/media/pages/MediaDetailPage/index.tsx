@@ -282,7 +282,6 @@ const MediaDetail: FC = () => {
 									const id = image.file ? image.file._id : image._id;
 									const name = image.file ? image.file.nameOrg : image.nameOrg;
 									const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
-									console.log({ id, name, url })
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
@@ -301,8 +300,10 @@ const MediaDetail: FC = () => {
 							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
 								<PostFile files={files} />
 							</div>
-							<p>
-								{media.content}
+							<p
+								dangerouslySetInnerHTML={{
+									__html: media.content
+								}}>
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
 								<span>
