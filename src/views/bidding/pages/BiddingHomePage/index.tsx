@@ -1,6 +1,7 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { Link } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import cn from "classnames";
@@ -155,9 +156,9 @@ export const BiddingHomePage: FC = () => {
 								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
 									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
+								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
 									Thi công rà phá bom mìn, vật nổ
-								</div>
+								</Link>
 								<div className={"px-2 py-4 table-cell box-border border-b"}>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
 								</div>
@@ -178,9 +179,9 @@ export const BiddingHomePage: FC = () => {
 								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
 									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-									Đo đạc, cắm mốc định vị công trình
-								</div>
+								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
+									Thi công rà phá bom mìn, vật nổ
+								</Link>
 								<div className={"px-2 py-4 table-cell box-border border-b"}>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
 								</div>
@@ -201,9 +202,9 @@ export const BiddingHomePage: FC = () => {
 								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
 									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
 								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-									Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công
-								</div>
+								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
+									Thi công rà phá bom mìn, vật nổ
+								</Link>
 								<div className={"px-2 py-4 table-cell box-border border-b"}>
 									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
 								</div>
