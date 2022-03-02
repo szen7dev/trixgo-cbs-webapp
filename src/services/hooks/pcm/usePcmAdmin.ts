@@ -7,9 +7,10 @@ type UsePcmAdmin = {
     refetchPcmAdmin: () => void,
     nextPagePcmAdmin: () => void,
     prevPagePcmAdmin: () => void,
-    totalRecord: number | undefined,
-    totalPages: number | undefined,
+    totalRecord: number,
+    totalPage: number | undefined,
     hasNextPagePcmAdmin: boolean | undefined,
+    isFetchingPcmAdmin: boolean,
     listPcmAdmin: Array<any>,
     isCreateAppRole: boolean,
     createAppRolesMutateAsync: any,
@@ -62,31 +63,32 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
         data: dataPcmAdmin,
         fetchNextPage: nextPagePcmAdmin,
         fetchPreviousPage: prevPagePcmAdmin,
-        hasNextPage: hasNextPagePcmAdmin
+        hasNextPage: hasNextPagePcmAdmin,
+        isFetching: isFetchingPcmAdmin
     } =
         useInfiniteQuery(
             `app_roles?appID=${payload.appID}`,
-            async ({ pageParams }: any) =>
-                AuthenticationRepository.getListAppRole({
-                    lastestID: pageParams ? pageParams : "",
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListAppRole({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
                     select: "name app company description createAt modifyAt",
                     populates: JSON.stringify({
                         path: "userCreate userUpdate",
                         select: "bizfullname",
                     }),
-                }),
+                })
+            },
             {
-                getNextPageParam: ({ nextCursor }: any) => {
-                    return nextCursor || undefined;
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
                 },
-                refetchOnWindowFocus: false,
+                refetchOnWindowFocus: true,
                 enabled: true,
             }
         );
-
     const listPcmAdmin = [].concat(...(dataPcmAdmin?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataPcmAdmin?.pages[0]?.data?.totalRecord;
-    const totalPages = dataPcmAdmin?.pages[0]?.data?.totalPages;
+    const totalPage = dataPcmAdmin?.pages[0]?.data?.totalPage;
 
     return {
         listPcmAdmin,
@@ -95,8 +97,9 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
         nextPagePcmAdmin,
         prevPagePcmAdmin,
         hasNextPagePcmAdmin,
+        isFetchingPcmAdmin,
         totalRecord,
-        totalPages,
+        totalPage,
 
         isCreateAppRole,
         createAppRolesMutateAsync,

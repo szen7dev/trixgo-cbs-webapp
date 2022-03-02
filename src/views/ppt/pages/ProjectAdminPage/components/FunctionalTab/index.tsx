@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 
-import { SearchInput } from "shareComponents/common";
+import { Paginate, SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
@@ -20,7 +20,7 @@ import moment from "moment";
 
 const FunctionalTab: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
 	const { openModal } = useModal();
 
 	const getStateChecked = useCallback((id: string) => {
@@ -40,6 +40,7 @@ const FunctionalTab: FC = () => {
 		};
 	};
 
+	console.log("hasNextPagePcmAdmin", hasNextPagePcmAdmin);
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -179,7 +180,16 @@ const FunctionalTab: FC = () => {
 						}
 					</tbody> : <></>
 				}
+
 			</table>
+			{hasNextPagePcmAdmin && (
+				<div className="w-full flex justify-center my-5">
+					<button onClick={() => nextPagePcmAdmin()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmAdmin.length
+							})`}</span>
+					</button>
+				</div>
+			)}
 		</main>
 	);
 };

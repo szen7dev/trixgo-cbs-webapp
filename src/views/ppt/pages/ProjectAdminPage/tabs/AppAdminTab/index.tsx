@@ -5,7 +5,7 @@ import { AuthorTab, FunctionalTab } from "views/ppt/pages/ProjectAdminPage/compo
 type Props = {
   toggleTab: number;
 };
-
+ 
 const AppAdminTab: FC<Props> = (props) => {
   const { toggleTab } = props;
 

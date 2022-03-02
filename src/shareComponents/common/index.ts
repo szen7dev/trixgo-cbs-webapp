@@ -3,7 +3,6 @@ export * from './Modal';
 export * from './ButtonCreate';
 export * from './ButtonMore';
 export * from './GroupActions';
-export * from './ProtectedRoute';
 export * from './Paginate';
 export * from './SearchInput';
 export * from './DeleteConfirm';

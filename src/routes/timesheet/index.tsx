@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Switch } from "react-router-dom";
 
-import { ProtectedRoute } from "shareComponents/common/ProtectedRoute";
+import { ProtectedRoute } from "routes/components";
 /*=====LAYOUTS=====*/
 import { TimesheetLayout } from "views/timesheet/shareComponents/layouts";
 
