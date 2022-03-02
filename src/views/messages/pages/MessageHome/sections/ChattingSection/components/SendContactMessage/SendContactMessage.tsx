@@ -21,9 +21,8 @@ export const SendContactMessage:FC<Props> = ({context}) => {
     const profileId = profile?._id;
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [pageParam, setPageParam] = useState('');
-    const params = {limit: 10, select: 'fullname bizfullname email phone image', lastestID: pageParam, keyword: searchTerm}
-    const { listFriends, nextCursor } = useUser(params, pageParam);
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', keyword: searchTerm}
+    const { listFriends, nextPageListFriends, hasNextPageListFriends } = useUser(params);
     const [selectedFriends, setSelectedFriends] = useState<{[key: string]: any}>({});
 
     const {socketRef} = useContext(context);
@@ -179,10 +178,10 @@ export const SendContactMessage:FC<Props> = ({context}) => {
                                         ))
                                     }
                                     {
-                                        nextCursor&&
+                                        hasNextPageListFriends&&
                                         <div className={"flex items-center justify-center mb-5"}>
                                             <button
-                                                onClick={() => setPageParam(nextCursor)}
+                                                onClick={() => nextPageListFriends()}
                                                 className={"text-primary text-center"}
                                             >
                                                 Xem thêm
