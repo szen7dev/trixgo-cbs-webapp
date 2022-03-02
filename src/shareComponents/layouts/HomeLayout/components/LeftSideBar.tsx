@@ -16,12 +16,16 @@ import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth, useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { APP_ID } from "apis/localdb";
 
 /*=====7.OTHER=====*/
 
 export const LeftSideBar: FC = () => {
   const { user } = useAuth();
+  const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+  const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
+  const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 
   return (
     <div className="t-leftsidebar-navigation fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
@@ -42,60 +46,41 @@ export const LeftSideBar: FC = () => {
         {/* menu block */}
         <div className="t-leftsidebar-menu-block mb-6">
           <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p>
-          <Link to={`/pcm/admin`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          {hasPermission && dataUserAccess?.level == 0 ?
+            <Link to={`/pcm/admin`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị viên</span>
-					</Link>
-          <Link to={`/pcm/projects`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Dự án đang triển khai</span>
-					</Link>
-          <Link to={`/pcm/market`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Phát triển thị trường</span>
-					</Link>
-          <Link to={`/pcm/dashboard-portfolio`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Báo cáo đầu tư</span>
-					</Link>
-          <Link to={`/pcm/dashboard-task`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Báo cáo quản trị công việc</span>
-					</Link>
-          <Link to={`/pcm/dashboard-document`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Báo cáo quản trị hồ sơ</span>
-					</Link>
+            </Link> : <></>
+          }
+
+          {listAppMenu && listAppMenu.length ?
+            <>
+              {listAppMenu.map((item: any, index: number) => {
+                const roleApp = listAppRoleMenu.find((e: any) => e._id?.menu == item._id);
+                if (roleApp && roleApp.read == 1) {
+                  return (
+                    <Link key={index} to={`/pcm/${item.slug}`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">{item.name}</span>
+                    </Link>
+                  )
+                };
+                return <div key={index}></div>
+              })
+              }
+            </> : <></>
+          }
 
           <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
           <Link to={`/pcm/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Việc của tôi</span>
-					</Link>
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Việc của tôi</span>
+          </Link>
           <Link to={`/pcm/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Việc quan tâm</span>
-					</Link>
-          {/* <Link to={`/pcm/draft`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Việc nháp</span>
-					</Link> */}
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Việc quan tâm</span>
+          </Link>
 
-          {/* <p className="t-leftsidebar-menu-title mb-5">Quản trị doanh nghiệp</p>
-          <div className="t-leftsidebar-menu-container">
-            <a className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" href="/pcm/messageHome" >
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý công việc</span>
-            </a>
-            <Link to={`/document/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý hồ sơ văn bản</span>
-						</Link>
-            <Link to={`/cmcs/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray" title="Contract Management Control System">
-              <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-              <span className="truncate">Quản lý hợp đồng</span>
-						</Link>
-          </div> */}
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
               <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm

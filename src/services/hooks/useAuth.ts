@@ -9,7 +9,15 @@ import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
 
-import { User, SignInPayload, UseAuth, UseGetListAppOfUser, UseCheckPerAccessApp } from "typings/auth";
+import { 
+  SignInPayload, 
+  UseAuth, 
+  UseGetListAppOfUser, 
+  UseCheckPermission,
+  UseCheckPermissionOneMenu,
+  UseGetListAppMenu,
+  UseGetListAppRoleMenu
+  } from "typings/auth";
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
@@ -52,7 +60,7 @@ export const useAuth = (): UseAuth => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
-    console.log({ ONESIGNAL_APP_ID });
+    //console.log({ ONESIGNAL_APP_ID });
 
     if (ONESIGNAL_APP_ID) {
       OneSignalReact.init({
@@ -176,7 +184,7 @@ export const useAuth = (): UseAuth => {
   };
 };
 
-// Lấy danh sách ứng dụng của 1 user được truy cập
+// 1. Lấy danh sách ứng dụng của 1 user được truy cập
 export const useGetListAppOfUser = (): UseGetListAppOfUser => {
   const {
     isLoading: isLoadingAppUsers,
@@ -208,14 +216,122 @@ export const useGetListAppOfUser = (): UseGetListAppOfUser => {
   }
 };
 
-export const useCheckPerAccessApp = (appID: string): UseCheckPerAccessApp => {
-  const { isLoading: isLoadingAccessApp, data: dataAccessApp, refetch: refetchAccessApp } =
-    useQuery(`check-permissions-access-app?appID=${appID}`, () => AuthenticationRepository.checkPermissionsAccessApp(appID), {
+// 2. Check quyền truy cập vào 1 app tổng
+export const useCheckPerAccessApp = (payload: { appID: string }): UseCheckPermission => {
+  const { isSuccess, data } =
+    useQuery(`check-permissions-access-app?appID=${payload.appID}`, () => AuthenticationRepository.checkPermissionsAccessApp(payload.appID), {
       refetchOnWindowFocus: true
     });
+
+  let hasPermission = true;
+  if (isSuccess && data?.data?.keyError == 'permission_denied') {
+
+    hasPermission = false;
+  }
+  // console.log("check-permissions-access-app", data);
   return {
-    isLoadingAccessApp,
-    refetchAccessApp,
-    dataAccessApp
+    hasPermission,
+    isSuccess,
+    dataUserAccess: data?.data
   };
-}
+};
+
+// 3. Lấy danh sách MENU của hệ thống
+export const useGetListAppMenu = (payload: {appID: string, parentID?: string}): UseGetListAppMenu => {
+  const {
+    isLoading: isLoadingGetListAppMenu,
+    refetch: refetchGetListAppMenu,
+    data: dataReturnFromAPIGetListAppMenu,
+    fetchNextPage: nextPageGetListAppMenu
+  } =
+    useInfiniteQuery(
+      `app_menus?appID=${payload.appID}$parentID=${payload.parentID}`,
+      async ({ pageParams }: any) =>
+        AuthenticationRepository.getListAppMenu({
+          appID: payload.appID,
+          parentID: payload.parentID ? payload.parentID : "",
+          select: "name slug order level",
+          lastestID: pageParams ? pageParams : "",
+        }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: true
+      }
+    );
+  const listAppMenu = [].concat(...(dataReturnFromAPIGetListAppMenu?.pages || []).map((d: any) => d.data?.listRecords));
+
+  return {
+    isLoadingGetListAppMenu,
+    refetchGetListAppMenu,
+    listAppMenu,
+    nextPageGetListAppMenu
+  }
+};
+
+// 4. Lấy danh sách MENU được quyền truy cập của 1 user
+export const useGetListAppRoleMenu = (payload: {appID: string, type:  "1" | "2" | "3"}): UseGetListAppRoleMenu => {
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
+  const {
+    isLoading: isLoadingGetListAppRoleMenu,
+    refetch: refetchGetListAppRoleMenu,
+    data: dataReturnFromAPIGetListAppRoleMenu,
+    fetchNextPage: nextPageGetListAppRoleMenu
+  } =
+    useInfiniteQuery(
+      `app_role_menus/permission?appID=${payload.appID}$type=${payload.type}`,
+      async ({ pageParams }: any) =>
+        AuthenticationRepository.getListAppRoleMenu({
+          appID: payload.appID,
+          companyID: profile?.company?._id,
+          type: payload.type
+        }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+          return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: true
+      }
+    );
+  const listAppRoleMenu = [].concat(...(dataReturnFromAPIGetListAppRoleMenu?.pages || []).map((d: any) => d.data));
+
+  return {
+    isLoadingGetListAppRoleMenu,
+    refetchGetListAppRoleMenu,
+    listAppRoleMenu,
+    nextPageGetListAppRoleMenu
+  }
+};
+
+// 5. Check quyền truy cập vào một menu trong app
+export const useCheckPerAccessOneMenu = (payload: {appID: string, menuID: string, type: "1" | "2" | "3"}): UseCheckPermissionOneMenu => {
+  const currentUser = localStorage.getItem("currentUser") ?? "{}";
+  const profile = JSON.parse(currentUser);
+  const { isSuccess, data } =
+    useQuery(`permission-to-access-one-menu-of-app?appID=${payload.appID}&menuID={${payload.menuID}}`, () => AuthenticationRepository.checkPermissionsAccessOneMenu({
+      appID: payload.appID,
+      menuID: payload.menuID,
+      companyID: profile?.company?._id,
+      type: payload.type
+    }), {
+      refetchOnWindowFocus: true
+    });
+  // console.log("permission-to-access-one-menu-of-app", data);
+  let hasPermission = true;
+  if (isSuccess && data?.data?.keyError == 'permission_denied') {
+    hasPermission = false;
+  }
+
+  return {
+    hasPermission,
+    isSuccess,
+    permission: data?.data || {
+      create: 0,
+      update: 0,
+      delete: 0,
+      read: 0
+    }
+  };
+};
