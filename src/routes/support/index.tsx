@@ -12,23 +12,57 @@ import { SupportLayout } from "views/support/shareComponents/layouts";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-   SupportHomePage,
+    SupportHomePage,
+    SupportRegisterPage,
+    SupportCompanyPage,
+    SupportGrantPage,
+    SupportDocsManagementPage,
+    SupportItemPage,
+    SupportMemberPage
 } from "views/support/pages";
 
 const SupportRouter: FC = () => {
     return (
-        <Switch>
-            <Route
-                exact
-                path="/support/home"
-                component={() =>
-                    <SupportLayout>
-                        <SupportHomePage />
-                    </SupportLayout>
-                }
-            />
-            <Route path="/support/*" component={ErrorPage} />
-        </Switch>
+        <SupportLayout>
+            <Switch>
+                <Route
+                    exact
+                    path="/support/home"
+                    component={SupportHomePage}
+                />
+                <Route
+                    exact
+                    path="/support/register"
+                    component={SupportRegisterPage}
+                />
+                <Route
+                    exact
+                    path="/support/companies"
+                    component={SupportCompanyPage}
+                />
+                <Route
+                    exact
+                    path="/support/grant"
+                    component={SupportGrantPage}
+                />
+                <Route
+                    exact
+                    path="/support/grant/documents-management"
+                    component={SupportDocsManagementPage}
+                />
+                <Route
+                    exact
+                    path="/support/members"
+                    component={SupportMemberPage}
+                />
+                <Route
+                    exact
+                    path="/support/items"
+                    component={SupportItemPage}
+                />
+                <Route path="/support/*" component={ErrorPage} />
+            </Switch>
+        </SupportLayout>
     )
 };
 

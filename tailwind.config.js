@@ -22,14 +22,14 @@ module.exports = {
         ],
         safelist: [
             'aspect-ratio-1',
-						"cbs-schedule-yestoday",
-						"cbs-schedule-today",
-						"cbs-schedule-oneweek",
-						"cbs-schedule-twoweek",
-						"cbs-schedule-threeweek",
-						"cbs-schedule-expired",
-						"cbs-schedule-nextweek",
-						"cbs-schedule-after-7days",
+            "cbs-schedule-yestoday",
+            "cbs-schedule-today",
+            "cbs-schedule-oneweek",
+            "cbs-schedule-twoweek",
+            "cbs-schedule-threeweek",
+            "cbs-schedule-expired",
+            "cbs-schedule-nextweek",
+            "cbs-schedule-after-7days",
         ]
     },
     darkMode: "class", // or 'media' or false
