@@ -30,6 +30,7 @@ import {
 } from 'views/document/pages';
 
 import {
+    ProjectAdminPage,
     ProjectBiddingPage,
     ProjectBudgetPage,
     ProjectCategoryPage,
@@ -87,9 +88,10 @@ const PCMRouter: FC = () => {
                     </HomeLayout>
                 )}
             />
-            <ProtectedRoute exact path="/pcm/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document)">
+            <ProtectedRoute exact path="/pcm/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document|admin)">
                 <HomeLayout>
                     <Switch>
+                        <Route exact path="/pcm/admin" component={ProjectAdminPage} />
                         <Route exact path="/pcm/home" component={PcmHome} />
                         <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                         <Route exact path="/pcm/market" component={ProjectMarketPage} />

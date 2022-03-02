@@ -1,21 +1,21 @@
 import { FC, useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import { useModal } from "services/hooks/useModal";
 
 import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+import FolderIcon from "assets/images/icons8-folder.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import MemberIcon from "assets/images/member-icon.svg";
+import {Create, Update, Delete } from "../../modal";
 
-import CreateNewAdminMember from "../modal/CreateNewAdminMember";
-import { Paginate } from "shareComponents/common";
-
-const AdminDetail: FC = () => {
+const FunctionalTab: FC = () => {
 	const [itemChecked, setItemChecked] = useState(false);
 
 	const { openModal } = useModal();
@@ -24,11 +24,10 @@ const AdminDetail: FC = () => {
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Ban giám đốc</p>
+					<p className="text-lg">Nghiệm thu hoàn thành</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
-						// eslint-disable-next-line no-console
 						onChange={(event: any) => console.log(event.target.value)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
@@ -37,10 +36,36 @@ const AdminDetail: FC = () => {
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+							<div
+								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+								onClick={() =>
+									openModal(
+										<div
+											className={
+												"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+											}
+										>
+											<Update />
+										</div>
+									)
+								}
+							>
 								<img src={PencilIcon} alt="Pencil" />
 							</div>
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+							<div
+								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+								onClick={() =>
+									openModal(
+										<div
+											className={
+												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+											}
+										>
+											<Delete />
+										</div>
+									)
+								}
+							>
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
@@ -53,10 +78,10 @@ const AdminDetail: FC = () => {
 							openModal(
 								<div
 									className={
-										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
+										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<CreateNewAdminMember />
+									<Create />
 								</div>
 							)
 						}
@@ -84,61 +109,48 @@ const AdminDetail: FC = () => {
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
-						<th className="w-1/5 pb-1 pt-1">
+						<th className="w-1/3 pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Tên
+								Nội dung
 							</div>
 						</th>
-						<th className="w-1/5 pb-1 pt-1 font-normal">
+						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Công ty
+								Người tạo
 							</div>
 						</th>
-						<th className="w-1/6 pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Phòng ban
-							</div>
-						</th>
-						<th className="w-1/6 pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Chức danh
-							</div>
-						</th>
-						<th className="w-1/12 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Hành động</div>
+						<th className="w-1/3 pb-1 pt-1 font-normal">
+							<div className="font-normal pl-2">Người được truy cập</div>
 						</th>
 					</tr>
 				</thead>
 
-				<tbody className="bg-primary-light">
+				<tbody className="bg-primary-light text-left">
 					<tr className="border-b border-primary-border h-10">
 						<td className="py-1 px-2 text-center">
 							<input
 								className="form-check-input"
 								type="checkbox"
-								value=""
 								id="flexCheckDefault"
 								style={{ marginLeft: "-23px" }}
 								checked={itemChecked}
 								onClick={() => setItemChecked(!itemChecked)}
 							/>
 						</td>
-						<td className="py-1 px-2">
-							<div className="flex items-center">
-								<img
-									src={MemberIcon}
-									alt="Member"
-									className="rounded-full mr-2"
-								/>
-								<p>Nguyễn Phan Thanh Hương-CPMI</p>
-							</div>
+						<Link to="/pcm/admin/detail/:id">
+							<td className="py-1 px-2">
+								<div className="flex items-center">
+									<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+									<p>Ban giám đốc</p>
+								</div>
+							</td>
+						</Link>
+						<td className="py-1 px-2 text-primary-gray">
+							Nguyễn Thị Ngân-CPMI
 						</td>
-						<td className="py-1 px-2">
-							Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
+						<td className="py-1 px-2 text-primary-gray">
+							17:20 14/11/21 Hương-CPMI
 						</td>
-						<td className="py-1 px-2">Ban giám đốc</td>
-						<td className="py-1 px-2">Thư ký ban giám đốc</td>
-						<td className="py-1 px-2 text-negative">Xoá bỏ</td>
 					</tr>
 
 					<tr className="border-b border-primary-border h-10">
@@ -146,34 +158,50 @@ const AdminDetail: FC = () => {
 							<input
 								className="form-check-input"
 								type="checkbox"
-								value=""
 								id="flexCheckDefault"
 								style={{ marginLeft: "-23px" }}
 							/>
 						</td>
 						<td className="py-1 px-2">
 							<div className="flex items-center">
-								<img
-									src={MemberIcon}
-									alt="Member"
-									className="rounded-full mr-2"
-								/>
-								<p>Nguyễn Phan Thanh Hương-CPMI</p>
+								<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+								<p>Cán bộ công ty</p>
 							</div>
 						</td>
-						<td className="py-1 px-2">
-							Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
+						<td className="py-1 px-2 text-primary-gray">
+							Nguyễn Thị Ngân-CPMI
 						</td>
-						<td className="py-1 px-2">Ban giám đốc</td>
-						<td className="py-1 px-2">Thư ký ban giám đốc</td>
-						<td className="py-1 px-2 text-negative">Xoá bỏ</td>
+						<td className="py-1 px-2 text-primary-gray">
+							17:20 14/11/21 Hương-CPMI
+						</td>
+					</tr>
+
+					<tr className="border-b border-primary-border h-10">
+						<td className="py-1 px-2 text-center">
+							<input
+								className="form-check-input"
+								type="checkbox"
+								id="flexCheckDefault"
+								style={{ marginLeft: "-23px" }}
+							/>
+						</td>
+						<td className="py-1 px-2">
+							<div className="flex items-center">
+								<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+								<p>Khách mời</p>
+							</div>
+						</td>
+						<td className="py-1 px-2 text-primary-gray">
+							Nguyễn Thị Ngân-CPMI
+						</td>
+						<td className="py-1 px-2 text-primary-gray">
+							17:20 14/11/21 Hương-CPMI
+						</td>
 					</tr>
 				</tbody>
 			</table>
-
-			<Paginate />
 		</main>
 	);
 };
 
-export default AdminDetail;
+export default FunctionalTab;
