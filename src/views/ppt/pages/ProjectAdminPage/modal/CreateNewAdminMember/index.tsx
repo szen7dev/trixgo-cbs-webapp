@@ -38,8 +38,7 @@ const CreateNewAdminMember: FC<any> = ({ companyID }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2 mt-4 h-[460px]">
-          <div className="flex items-center mb-4">
+        <div className="flex items-center mt-4">
             <input
               className="form-check-input mr-2"
               type="checkbox"
@@ -49,7 +48,7 @@ const CreateNewAdminMember: FC<any> = ({ companyID }) => {
             />
             <img src={PolygonIcon} alt="Polygon" />
           </div>
-
+        <div className="flex flex-col gap-2 mt-4 h-[460px] overflow-auto">
           <div className="flex items-center">
             <input
               className="form-check-input mr-9"
