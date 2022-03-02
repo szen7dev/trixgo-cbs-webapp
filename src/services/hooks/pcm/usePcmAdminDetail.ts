@@ -14,8 +14,7 @@ type UsePcmAdminDetail = {
 };
 
 export const usePcmAdminDetail = (payload: { appID: string, keyword?: string }): UsePcmAdminDetail => {
-    const currentUser = localStorage.getItem("currentUser") ?? "{}";
-    const profile = JSON.parse(currentUser);
+    
     // Thêm mới 1 hoặc nhiều thành viên
     const { mutateAsync: addMembersMutateAsync } =
         useMutation((

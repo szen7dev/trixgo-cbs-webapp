@@ -1,12 +1,27 @@
+import { APP_ID } from "apis/localdb";
 import { FC } from "react";
-
-import { Paginate, DropdownSearchable } from "shareComponents/common";
+import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { useGetListAppMenu } from "services/hooks/useAuth";
+import { useHistory, useParams } from "react-router-dom";
+import { DropdownSearchable } from "shareComponents/common";
 
 const AuthorTab: FC = () => {
+	const history = useHistory();
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
+	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+	const { id } = useParams<{ id: string }>();
+	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
+
+	const data = listPcmAdmin.map(e => ({
+		_id: e._id,
+		content: e.name
+	}));
+
 	return (
 		<main className="h-full">
 			<header className="h-[50px] border border-primary-border flex items-center justify-between pl-6 pr-5">
-				<p className="text-lg">Ban giám đốc</p>
+				<p className="text-lg">{id ? nameAppRoleDetail : "Chọn nhóm chức năng"}</p>
 
 				<DropdownSearchable
 					className="w-[322px] pl-5 bg-cbs-table-header"
@@ -17,27 +32,17 @@ const AuthorTab: FC = () => {
 					maxWidthInput="max-w-none"
 					renderSelectedItem={(item: any) => <span>{item.text}</span>}
 					classNameItem="p-0"
-					data={[
-						{
-							_id: 1,
-							content: "Kết quả trả về 1",
-						},
-						{
-							_id: 2,
-							content: "Kết quả trả về 2",
-						},
-						{
-							_id: 3,
-							content: "Kết quả trả về 3",
-						},
-					]}
+					data={data}
 					formatItem={{
 						id: "_id",
 						text: "content",
 					}}
 					inlineSearch={false}
-					disableSearch={false}
+					disableSearch={true}
 					searchInputClassName="h-[40px] w-[322px] px-[46px]"
+					onchangeValue={(item) =>
+						history.push(`/pcm/admin/${item._id}/detail`)
+					}
 				/>
 			</header>
 
@@ -70,204 +75,44 @@ const AuthorTab: FC = () => {
 					</tr>
 				</thead>
 
-				<tbody className="bg-primary-light text-left">
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Cấu trúc dữ liệu</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								defaultChecked
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo đầu tư</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị công việc</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị hồ sơ</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo khác</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								defaultChecked
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-				</tbody>
+				{id ?
+					<tbody className="bg-primary-light text-left">
+						{listAppMenu.map((item, index) => (
+							<tr key={index} className="border-b border-primary-border h-10">
+								<td className="p-2">{item.name}</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+									/>
+								</td>
+							</tr>
+						))}
+					</tbody> : <></>
+				}
 			</table>
-
-			<Paginate />
 		</main>
 	);
 };

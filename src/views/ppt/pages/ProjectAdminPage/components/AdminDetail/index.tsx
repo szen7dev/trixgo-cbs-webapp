@@ -184,20 +184,22 @@ const AdminDetail: FC = () => {
 								</td>
 								<td className="py-1 px-2">{item.department?.name}</td>
 								<td className="py-1 px-2">{item.position?.name}</td>
-								<button
-									onClick={() =>
-										openModal(
-											<div
-												className={
-													"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-												}
-											>
-												<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} />
-											</div>
-										)
-									}>
-									<td className="py-1 px-2 text-negative">Xoá bỏ</td>
-								</button>
+								<td className="py-1 px-2 text-negative">
+									<button
+										onClick={() =>
+											openModal(
+												<div
+													className={
+														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+													}
+												>
+													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} />
+												</div>
+											)
+										}>
+										Xoá bỏ
+									</button>
+								</td>
 							</tr>)
 						}
 					</tbody> : <></>
