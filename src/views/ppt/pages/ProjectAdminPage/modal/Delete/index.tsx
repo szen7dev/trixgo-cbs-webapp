@@ -1,9 +1,27 @@
 import { FC } from "react";
 
 import { useModal } from "services/hooks/useModal";
+import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
 
-const Delete: FC = () => {
+const Delete: FC<any> = ({ idsChecked, setIdsChecked }) => {
   const { closeModal } = useModal();
+  const { removeManyAppRoleMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+  const onDelete = async () => {
+    const result = await removeManyAppRoleMutateAsync({
+      appRoleIDs: idsChecked
+    });
+    console.log("result", result);
+    if (!result.error) {
+      refetchPcmAdmin();
+      closeModal();
+      setIdsChecked([]);
+      toast.success('Xoá dữ liệu thành công');
+    } else {
+      toast.error(result?.data?.message);
+    }
+  };
 
   return (
     <main className="relative h-full">
@@ -13,8 +31,7 @@ const Delete: FC = () => {
 
       <section className="px-10 text-primary-gray">
         <p>
-          Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ
-          liệu này
+          Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
         </p>
       </section>
 
@@ -25,7 +42,8 @@ const Delete: FC = () => {
         >
           Hủy
         </button>
-        <button className="bg-primary text-primary-light text-base w-24 h-8 rounded">
+        <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
+          onClick={() => onDelete()}>
           Xác nhận
         </button>
       </footer>

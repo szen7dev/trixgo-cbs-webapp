@@ -97,6 +97,40 @@ const AuthenticationRepository = {
     });
     return data;
   },
+
+  // APP_ROLE - GET LIST
+  async getListAppRole(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/app_roles`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
+
+  // APP_ROLE - CREATE
+  async createAppRole(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+      `${authURL}/app_roles`, payload);
+    return data;
+  },
+
+  // APP_ROLE - UPDATE
+  async updateAppRole(payload: any): Promise<any> {
+    const { data } = await API.put<any>(
+      `${authURL}/app_roles`, payload);
+    return data;
+  },
+
+  // APP_ROLE - UPDATE
+  async removeManyAppRole(payload: any): Promise<any> {
+    const { data } = await API.delete<any>(
+      `${authURL}/app_roles/remove-many`, {
+      params: payload
+    });
+    return data;
+  },
 };
 
 export default AuthenticationRepository;

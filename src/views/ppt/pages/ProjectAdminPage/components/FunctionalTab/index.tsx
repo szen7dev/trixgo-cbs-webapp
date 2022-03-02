@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 
 import { Link } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 
-import { SearchInput } from "shareComponents/common";
+import { Paginate, SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
@@ -13,45 +13,80 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import {Create, Update, Delete } from "../../modal";
+import { Create, Update, Delete } from "../../modal";
+import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { APP_ID } from "apis/localdb";
+import moment from "moment";
 
 const FunctionalTab: FC = () => {
-	const [itemChecked, setItemChecked] = useState(false);
-
+	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
 	const { openModal } = useModal();
+
+	const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
+
+	const onClickCheckButton = (id: string) => {
+		const check = idsChecked.includes(id);
+		if (check) {
+			const newList = [...idsChecked];
+			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			setIdsChecked(newList);
+		} else {
+			const newList = [...idsChecked];
+			newList.push(id);
+			setIdsChecked(newList);
+		};
+	};
+
+	const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listPcmAdmin.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listPcmAdmin.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listPcmAdmin.map(e => e._id);
+			setIdsChecked(idsAll);
+		}
+	};
 
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Nghiệm thu hoàn thành</p>
+					<p className="text-lg">Danh sách</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
 						onChange={(event: any) => console.log(event.target.value)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
-					{itemChecked && (
+					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							<div
-								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-								onClick={() =>
-									openModal(
-										<div
-											className={
-												"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-											}
-										>
-											<Update />
-										</div>
-									)
-								}
-							>
-								<img src={PencilIcon} alt="Pencil" />
-							</div>
+							{idsChecked.length == 1 ?
+								<div
+									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+									onClick={() =>
+										openModal(
+											<div
+												className={
+													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+												}
+											>
+												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+											</div>
+										)
+									}
+								>
+									<img src={PencilIcon} alt="Pencil" />
+								</div> : <></>
+							}
 							<div
 								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
 								onClick={() =>
@@ -61,7 +96,7 @@ const FunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<Delete />
+											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
 										</div>
 									)
 								}
@@ -69,7 +104,7 @@ const FunctionalTab: FC = () => {
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
-					)}
+					) : <></>}
 				</div>
 				<div className="flex items-center">
 					<button
@@ -104,7 +139,8 @@ const FunctionalTab: FC = () => {
 									type="checkbox"
 									value=""
 									id="flexCheckDefault"
-									defaultChecked
+									checked={getStateCheckedAll()}
+									onChange={() => onClickCheckAll()}
 								/>
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
@@ -120,86 +156,54 @@ const FunctionalTab: FC = () => {
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Người được truy cập</div>
+							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
 					</tr>
 				</thead>
 
-				<tbody className="bg-primary-light text-left">
-					<tr className="border-b border-primary-border h-10">
-						<td className="py-1 px-2 text-center">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								style={{ marginLeft: "-23px" }}
-								checked={itemChecked}
-								onClick={() => setItemChecked(!itemChecked)}
-							/>
-						</td>
-						<Link to="/pcm/admin/detail/:id">
-							<td className="py-1 px-2">
-								<div className="flex items-center">
-									<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-									<p>Ban giám đốc</p>
-								</div>
-							</td>
-						</Link>
-						<td className="py-1 px-2 text-primary-gray">
-							Nguyễn Thị Ngân-CPMI
-						</td>
-						<td className="py-1 px-2 text-primary-gray">
-							17:20 14/11/21 Hương-CPMI
-						</td>
-					</tr>
+				{listPcmAdmin && listPcmAdmin.length ?
+					<tbody className="bg-primary-light text-left">
+						{listPcmAdmin.map((item, index) => (
+							<tr key={index} className="border-b border-primary-border h-10">
+								<td className="py-1 px-2 text-center">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+										style={{ marginLeft: "-23px" }}
+										checked={getStateChecked(item._id)}
+										onChange={() => onClickCheckButton(item._id)}
+									/>
+								</td>
+								<td className="py-1 px-2">
+									<Link to="/pcm/admin/detail/:id">
+										<div className="flex items-center">
+											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+											<p>{item.name}</p>
+										</div>
+									</Link>
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.userCreate?.bizfullname}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item.userUpdate?.bizfullname}
+								</td>
+							</tr>
+						))
+						}
+					</tbody> : <></>
+				}
 
-					<tr className="border-b border-primary-border h-10">
-						<td className="py-1 px-2 text-center">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								style={{ marginLeft: "-23px" }}
-							/>
-						</td>
-						<td className="py-1 px-2">
-							<div className="flex items-center">
-								<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-								<p>Cán bộ công ty</p>
-							</div>
-						</td>
-						<td className="py-1 px-2 text-primary-gray">
-							Nguyễn Thị Ngân-CPMI
-						</td>
-						<td className="py-1 px-2 text-primary-gray">
-							17:20 14/11/21 Hương-CPMI
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="py-1 px-2 text-center">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								style={{ marginLeft: "-23px" }}
-							/>
-						</td>
-						<td className="py-1 px-2">
-							<div className="flex items-center">
-								<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-								<p>Khách mời</p>
-							</div>
-						</td>
-						<td className="py-1 px-2 text-primary-gray">
-							Nguyễn Thị Ngân-CPMI
-						</td>
-						<td className="py-1 px-2 text-primary-gray">
-							17:20 14/11/21 Hương-CPMI
-						</td>
-					</tr>
-				</tbody>
 			</table>
+			{hasNextPagePcmAdmin && (
+				<div className="w-full flex justify-center my-5">
+					<button onClick={() => nextPagePcmAdmin()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmAdmin.length
+							})`}</span>
+					</button>
+				</div>
+			)}
 		</main>
 	);
 };
