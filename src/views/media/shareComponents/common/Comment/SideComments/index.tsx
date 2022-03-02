@@ -29,9 +29,9 @@ export const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string
 				<div className="flex pb-2 mx-2.5 text-[15px] leading-4 mt-2 text-black">
 					<div className="flex flex-grow gap-x-2.5">
 						<div className="flex items-center rounded-full gap-x-2 pl-3.5 pr-2.5 py-0.5 border border-gray-300">
-							<img src={iconFaceSweet} alt="" className="h-6 w-6" />
-							<img src={iconFaceSweet} alt="" className="h-6 w-6" />
-							<span>15</span>
+							{/* <img src={iconFaceSweet} alt="" className="h-6 w-6" /> */}
+							{/* <img src={iconFaceSweet} alt="" className="h-6 w-6" /> */}
+							{/* <span>15</span> */}
 						</div>
 						<div className="rounded-full border border-gray-300 p-0.5">
 							<img src={iconFacebookLike} alt="" className="h-6 w-6" />
