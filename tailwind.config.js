@@ -109,6 +109,7 @@ module.exports = {
                 "small": ["13px", "15px"],
                 "medium": ["14px", "16px"],
                 "large": ["16px", "18.4px"],
+                "s-large": ["17px", "19.92px"],
                 "x-large": ["18px", "21px"],
                 "2x-large": ["20px", "23px"],
                 "3x-large": ["24px", "27.6px"],
