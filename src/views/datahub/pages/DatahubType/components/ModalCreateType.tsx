@@ -1,9 +1,13 @@
-import React, { FC } from 'react'
-import { Form, Formik } from 'formik'
+import React, { FC, useRef } from 'react'
+import { Form, Formik, FormikHelpers, FormikBag, FormikProps } from 'formik'
 import { Dialog } from '@headlessui/react'
 
-import { ModalContainer } from 'shareComponents/common'
-import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/sharedComponents/common'
+import { ModalContainer } from 'shareComponents/common';
+import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/sharedComponents/common';
+import { string, object } from 'yup';
+import DatahubRepository from 'apis/datahub';
+import useMutationDatahubTypes from 'services/hooks/datahub/useMutationDatahubTypes';
+import { toast } from 'react-toastify';
 
 type Props = {
 	show: boolean
@@ -12,19 +16,44 @@ type Props = {
 
 	toggle: () => void
 }
+const DatahubTypesSchema = object().shape({
+	description: string()
+		.min(2, 'Too Short!')
+		.max(50, 'Too Long!')
+		.required('Required'),
+	name: string()
+		.min(2, 'Too Short!')
+		.max(50, 'Too Long!')
+		.required('Required'),
+	type: object().required('Required'),
+});
+
+type FormValues = {
+	description: string
+	name: string,
+	type: { name: string, value: number }
+}
 
 const ModalCreateType: FC<Props> = (props) => {
-	const data = [
-		{ name: 'Tính chất phổ biến', },
-		{ name: 'Tính chất không phổ biến', },
-		{ name: 'Tính chất không phổ biến 2', },
-		{ name: 'Tính chất không phổ biến 3', },
-		{ name: 'Tính chất không phổ biến 4', },
-		{ name: 'Tính chất không phổ biến 5', },
-		{ name: 'Tính chất không phổ biến 6', },
-		{ name: 'Tính chất không phổ biến 7', },
-		{ name: 'Tính chất không phổ biến 8', },
-	]
+	const initialValues = {
+		description: '',
+		name: '',
+		type: null as null | { name: string, value: number }
+	}
+	const { createDatahubTypes } = useMutationDatahubTypes();
+	const formikRef = useRef<FormikProps<FormValues>>(null);
+
+	async function handleSubmit({ description, name, type }: FormValues, actions: FormikHelpers<FormValues>) {
+		if (!type) return;
+		const data = await createDatahubTypes({ description, name, type: type.value, popular: 1 });
+		if ('code' in data) {
+			data.data.forEach((d) => { 
+				actions.setFieldError(d.field, d.message);
+			});
+		} else {
+			props.toggle();
+		}
+	}
 	return (
 		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
 			<div
@@ -46,22 +75,21 @@ const ModalCreateType: FC<Props> = (props) => {
 					</button>
 				</div>
 				<Formik
-					initialValues={{
-						description: '',
-						content: '',
-						type: null
-					}}
-					onSubmit={values => {
-						console.log(values);
-					}}
+					initialValues={initialValues as FormValues}
+					onSubmit={handleSubmit}
+					validationSchema={DatahubTypesSchema}
+					innerRef={formikRef}
 				>
 					<Form>
 						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
 							<div className="whitespace-nowrap space-y-4 py-5">
 								{/* Fisrt row */}
-								<CustomFieldFormik title='Nội dung' name='content' />
+								<CustomFieldFormik title='Nội dung' required name='name' as="textarea" />
 								<CustomFieldFormik title='Mô tả' required name='description' />
-								<CustomAutoCompleteFormik title='Tính chất phổ biến' name='type' required data={data} />
+								<CustomAutoCompleteFormik title='Tính chất phổ biến' name='type' required data={[
+									{ name: 'Phổ biến', value: 1 },
+									{ name: 'Thông thường', value: 2 },
+								]} />
 								<div className="py-0.5 h-[30px] box-content px-2">
 
 								</div>

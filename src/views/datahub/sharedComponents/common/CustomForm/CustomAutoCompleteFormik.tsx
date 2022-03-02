@@ -8,13 +8,15 @@ type Props<T extends Record<string, any>> = {
 	title: string
 	name: string
 	attribute?: string
+	valueAttribute?: string,
 
 	data: Array<T>
 	required?: boolean
 	error?: React.ComponentType<any>
-	initialData?: T
+	initialData?: string ,
 	placeholder?: string
 	renderValue?: (value: T) => string
+	onChange?: (value: string) => void
 }
 
 function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
@@ -25,12 +27,14 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	renderValue,
 	placeholder,
 	attribute = 'name',
+	valueAttribute,
 	data,
 	initialData,
+	onChange,
 	...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
 	const [selected, setSelected] = useState<null | any>();
-	const [search, setSearch] = useState(initialData ? initialData[attribute] : '');
+	const [search, setSearch] = useState(initialData || '');
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -51,35 +55,36 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 
 	return (
 		<Field name={name}>
-			{({ field, form }: FieldProps) => {
+			{({ field, form, meta }: FieldProps) => {
 				const handleSelect = (select: any) => {
 					setSelected(select);
 					setSearch(select[attribute]);
 					setIsOpen(false);
-					form.setFieldValue(field.name, select);
+					form.setFieldValue(field.name, valueAttribute ? select[valueAttribute] : select);
 				}
 
 				return (
 					<Listbox value={selected} onChange={handleSelect}>
-						<div ref={ref}>
-							<label>
+						<div>
+							<div className={classNames('focus-within:text-cbs-primary', (meta.touched && meta.error) ? 'text-red-400' : '')}>
 								<div className='mb-1.5'>
 									{title} {required && "(*)"}
 								</div>
 								{/* <div onClick={() => setIsOpen(true)} className=""> */}
-								<div className='relative'>
+								<div className='relative' ref={ref}>
 									<input
 										type="text"
-										className={classNames('focus:bg-white focus:outline-none focus:border-cbs-primary py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white resize-none rounded-md', form.errors[field.name] && 'border-cbs-red')}
+										className={classNames('focus:bg-white focus:outline-none focus:border-cbs-primary py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white resize-none rounded-md', meta.touched && meta.error && 'border-cbs-red')}
 										placeholder={placeholder ? placeholder : title}
 										value={search}
-										onClick={() => setIsOpen(true)}
+										onClick={() => setIsOpen(!isOpen)}
 										onChange={(e) => {
 											if (selected) {
 												setSelected(null);
 												form.setFieldValue(field.name, null);
 											}
-											setSearch(e.target.value)
+											setSearch(e.target.value);
+											onChange?.(e.target.value);
 										}}
 									/>
 									<span className='absolute right-2 top-1.5'>
@@ -89,7 +94,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 									</span>
 								</div>
 								{/* </div> */}
-							</label>
+							</div>
 							<div className='relative z-3'>
 								<Transition
 									as={Fragment}
@@ -99,14 +104,14 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 									show={isOpen}
 								>
 									<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
-										{dataFiltered.map((person, personIdx) => (
+										{dataFiltered.map((item, personIdx) => (
 											<Listbox.Option
 												key={personIdx}
 												className={({ active, selected }) =>
 													`hover:text-cbs-primary hover:bg-cbs-gray cursor-pointer select-none relative py-2 pl-10 pr-4 ${selected ? 'text-cbs-primary' : 'text-gray-900'
 													}`
 												}
-												value={person}
+												value={item}
 											>
 												{({ selected }) => (
 													<>
@@ -114,7 +119,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 															className={`block truncate ${selected ? 'font-medium' : 'font-normal'
 																}`}
 														>
-															{person.name}
+															{item[attribute]}
 														</span>
 														{selected ? (
 															<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
