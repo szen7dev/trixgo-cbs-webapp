@@ -1,22 +1,76 @@
 import { APP_ID } from "apis/localdb";
 import { FC } from "react";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
-import { useGetListAppMenu } from "services/hooks/useAuth";
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
 import { useHistory, useParams } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 
 const AuthorTab: FC = () => {
 	const history = useHistory();
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { id } = useParams<{ id: string }>();
 	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
+
+	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: id });
 
 	const data = listPcmAdmin.map(e => ({
 		_id: e._id,
 		content: e.name
 	}));
+
+	const getStateCheckedPermissions = (type: 'read' | 'create' | 'update' | 'delete', id: string) => {
+		const findItem = listAppRoleMenuFromAdmin.find((e: any) => e.menu == id);
+		if (findItem) {
+			switch (type) {
+				case 'read':
+					if (findItem.read == 1) return true;
+					break;
+				case 'create':
+					if (findItem.create == 1) return true;
+					break;
+				case 'update':
+					if (findItem.update == 1) return true;
+					break;
+				case 'delete':
+					if (findItem.delete == 1) return true;
+					break;
+			}
+		};
+		return false;
+	};
+
+	const onUpdatePermissions = async (type: 'read' | 'create' | 'update' | 'delete', _id: string) => {
+		// Khởi tạo dữ liệu default 
+		let query = {
+			read: type == 'read' ? 1 : 0,
+			create: type == 'create' ? 1 : 0,
+			update: type == 'update' ? 1 : 0,
+			deleteIn: type == 'delete' ? 1 : 0,
+		};
+
+		// Tìm data item đã được lưu trên database
+		const findItem = listAppRoleMenuFromAdmin.find((e: any) => e.menu == _id);
+		if (findItem) {
+			query = {
+				read: type == 'read' ? findItem.read > 0 ? 0 : 1 : findItem.read || 0,
+				create: type == 'create' ? findItem.create > 0 ? 0 : 1 : findItem.create || 0,
+				update: type == 'update' ? findItem.update > 0 ? 0 : 1 : findItem.update || 0,
+				deleteIn: type == 'delete' ? findItem.deleteIn > 0 ? 0 : 1 : findItem.deleteIn || 0,
+			}
+		}
+
+		await updatePermissionsAppRoleMenusMutateAsync({
+			...query,
+			role: id,
+			menu: _id,
+		});
+
+		refetchGetListAppRoleMenu();
+		refetchGetListAppRoleMenuFromAdmin();
+	}
 
 	return (
 		<main className="h-full">
@@ -29,6 +83,7 @@ const AuthorTab: FC = () => {
 					isMultiple={false}
 					allowClearValueSingleInput={false}
 					showTriangle={true}
+					placeholder={nameAppRoleDetail || "Lựa chọn"}
 					maxWidthInput="max-w-none"
 					renderSelectedItem={(item: any) => <span>{item.text}</span>}
 					classNameItem="p-0"
@@ -85,6 +140,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('read', item._id)}
+										onChange={() => onUpdatePermissions('read', item._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -92,6 +149,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('create', item._id)}
+										onChange={() => onUpdatePermissions('create', item._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -99,6 +158,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('update', item._id)}
+										onChange={() => onUpdatePermissions('update', item._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -106,6 +167,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('delete', item._id)}
+										onChange={() => onUpdatePermissions('delete', item._id)}
 									/>
 								</td>
 							</tr>

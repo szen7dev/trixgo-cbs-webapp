@@ -109,3 +109,65 @@ export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePc
         removeManyAppRoleMutateAsync
     };
 };
+
+export const useGetListAppRoleMenuFromAdmin = (payload: {
+    appID: string,
+    companyID: string,
+    roleID: string
+}): any => {
+
+    //  CẬP NHẬT QUYỀN TRUY CẬP MỘT CHỨC NĂNG CỦA NHÓM CHỨC NĂNG
+    const { mutateAsync: updatePermissionsAppRoleMenusMutateAsync } =
+        useMutation((
+            payload: {
+                role: string,
+                menu: string,
+                read: number,
+                create: number,
+                update: number,
+                deleteIn: number
+            }) =>
+            AuthenticationRepository.updatePermissionsAppRoleMenus(payload)
+        );
+
+    const {
+        isLoading: isLoadingGetListAppRoleMenuFromAdmin,
+        refetch: refetchGetListAppRoleMenuFromAdmin,
+        data: dataGetListAppRoleMenuFromAdmin,
+        fetchNextPage: nextPageGetListAppRoleMenuFromAdmin,
+        hasNextPage: hasNextPageGetListAppRoleMenuFromAdmin,
+        isFetching: isFetchingGetListAppRoleMenuFromAdmin
+    } =
+        useInfiniteQuery(
+            [`users?${JSON.stringify(payload)}`, payload],
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListAppRoleMenuFromAdmin({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
+                    ...payload
+                })
+            },
+            {
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true,
+            }
+        );
+    const listAppRoleMenuFromAdmin = [].concat(...(dataGetListAppRoleMenuFromAdmin?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetListAppRoleMenuFromAdmin?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetListAppRoleMenuFromAdmin?.pages[0]?.data?.totalPage;
+
+    return {
+        listAppRoleMenuFromAdmin,
+        isLoadingGetListAppRoleMenuFromAdmin,
+        refetchGetListAppRoleMenuFromAdmin,
+        nextPageGetListAppRoleMenuFromAdmin,
+        hasNextPageGetListAppRoleMenuFromAdmin,
+        isFetchingGetListAppRoleMenuFromAdmin,
+        totalRecord,
+        totalPage,
+
+        updatePermissionsAppRoleMenusMutateAsync
+    };
+};
