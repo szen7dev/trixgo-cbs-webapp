@@ -82,7 +82,7 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
                 getNextPageParam: ({ data }) => {
                     return data?.nextCursor || undefined;
                 },
-                refetchOnWindowFocus: true,
+                refetchOnWindowFocus: false,
                 enabled: true,
             }
         );

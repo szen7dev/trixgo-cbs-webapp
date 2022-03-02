@@ -1,10 +1,8 @@
 import { FC, useState } from "react";
 
 import AppAdminTab from "./tabs/AppAdminTab";
-
 const ProjectAdminPage: FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
-
   const handleToggleTab = (index: number) => {
     setToggleTab(index);
   };

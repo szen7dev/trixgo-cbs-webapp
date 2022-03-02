@@ -1,7 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useState, useCallback } from "react";
 
 import { useModal } from "services/hooks/useModal";
-
+import { useParams } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
@@ -13,18 +13,48 @@ import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 
 import { CreateNewAdminMember } from "../../modal";
-import { Paginate } from "shareComponents/common";
+import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 
 const AdminDetail: FC = () => {
-	const [itemChecked, setItemChecked] = useState(false);
-
+	const { id } = useParams<{ id: string }>();
+	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const { listMembers, nameAppRoleDetail } = usePcmAdminDetail({ appID: id });
 	const { openModal } = useModal();
+	const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
+
+	const onClickCheckButton = (id: string) => {
+		const check = idsChecked.includes(id);
+		if (check) {
+			const newList = [...idsChecked];
+			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			setIdsChecked(newList);
+		} else {
+			const newList = [...idsChecked];
+			newList.push(id);
+			setIdsChecked(newList);
+		};
+	};
+
+	const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listMembers.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listMembers.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listMembers.map(e => e._id);
+			setIdsChecked(idsAll);
+		}
+	};
 
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Ban giám đốc</p>
+					<p className="text-lg">{nameAppRoleDetail}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -32,23 +62,20 @@ const AdminDetail: FC = () => {
 						onChange={(event: any) => console.log(event.target.value)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
-					{itemChecked && (
+					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={PencilIcon} alt="Pencil" />
-							</div>
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
-					)}
+					) : <></>}
 				</div>
 				<div className="flex items-center">
 					<button
-						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[120px] h-8 rounded font-bold mr-6"
 						onClick={() =>
 							openModal(
 								<div
@@ -61,7 +88,7 @@ const AdminDetail: FC = () => {
 							)
 						}
 					>
-						Tạo mới
+						Thêm thành viên
 					</button>
 					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
@@ -79,7 +106,8 @@ const AdminDetail: FC = () => {
 									type="checkbox"
 									value=""
 									id="flexCheckDefault"
-									defaultChecked
+									checked={getStateCheckedAll()}
+									onChange={() => onClickCheckAll()}
 								/>
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
@@ -109,69 +137,42 @@ const AdminDetail: FC = () => {
 						</th>
 					</tr>
 				</thead>
-
-				<tbody className="bg-primary-light">
-					<tr className="border-b border-primary-border h-10">
-						<td className="py-1 px-2 text-center">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								value=""
-								id="flexCheckDefault"
-								style={{ marginLeft: "-23px" }}
-								checked={itemChecked}
-								onClick={() => setItemChecked(!itemChecked)}
-							/>
-						</td>
-						<td className="py-1 px-2">
-							<div className="flex items-center">
-								<img
-									src={MemberIcon}
-									alt="Member"
-									className="rounded-full mr-2"
-								/>
-								<p>Nguyễn Phan Thanh Hương-CPMI</p>
-							</div>
-						</td>
-						<td className="py-1 px-2">
-							Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-						</td>
-						<td className="py-1 px-2">Ban giám đốc</td>
-						<td className="py-1 px-2">Thư ký ban giám đốc</td>
-						<td className="py-1 px-2 text-negative">Xoá bỏ</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="py-1 px-2 text-center">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								value=""
-								id="flexCheckDefault"
-								style={{ marginLeft: "-23px" }}
-							/>
-						</td>
-						<td className="py-1 px-2">
-							<div className="flex items-center">
-								<img
-									src={MemberIcon}
-									alt="Member"
-									className="rounded-full mr-2"
-								/>
-								<p>Nguyễn Phan Thanh Hương-CPMI</p>
-							</div>
-						</td>
-						<td className="py-1 px-2">
-							Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
-						</td>
-						<td className="py-1 px-2">Ban giám đốc</td>
-						<td className="py-1 px-2">Thư ký ban giám đốc</td>
-						<td className="py-1 px-2 text-negative">Xoá bỏ</td>
-					</tr>
-				</tbody>
+				{listMembers && listMembers.length ?
+					<tbody className="bg-primary-light">
+						{listMembers.map((item, index) =>
+							<tr key={index} className="border-b border-primary-border h-10">
+								<td className="py-1 px-2 text-center">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										value=""
+										id="flexCheckDefault"
+										style={{ marginLeft: "-23px" }}
+										checked={getStateChecked(item._id)}
+										onChange={() => onClickCheckButton(item._id)}
+									/>
+								</td>
+								<td className="py-1 px-2">
+									<div className="flex items-center">
+										<img
+											src={item.image ? `${process.env.REACT_APP_URL_S3_USER}/${item.image}` : MemberIcon}
+											alt="Member"
+											className="w-6 h-6 rounded-full"
+										/>
+										<p className="px-1">{item.bizfullname}</p>
+									</div>
+								</td>
+								<td className="py-1 px-2">
+									{item.company?.name}
+								</td>
+								<td className="py-1 px-2">{item.department?.name}</td>
+								<td className="py-1 px-2">{item.position?.name}</td>
+								<td className="py-1 px-2 text-negative">Xoá bỏ</td>
+							</tr>)
+						}
+					</tbody> : <></>
+				}
 			</table>
-
-			<Paginate />
 		</main>
 	);
 };

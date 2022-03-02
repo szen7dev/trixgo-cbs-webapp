@@ -88,10 +88,10 @@ const PCMRouter: FC = () => {
                     </HomeLayout>
                 )}
             />
-            <ProtectedRoute exact path="/pcm/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document|admin)">
+            <ProtectedRoute exact path="/pcm/(home|projects|market|dashboard-portfolio|dashboard-task|dashboard-document)">
                 <HomeLayout>
                     <Switch>
-                        <Route exact path="/pcm/admin" component={ProjectAdminPage} />
+                        <Route exact path="/pcm/admin1" component={ProjectAdminPage} />
                         <Route exact path="/pcm/home" component={PcmHome} />
                         <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
                         <Route exact path="/pcm/market" component={ProjectMarketPage} />
@@ -104,6 +104,14 @@ const PCMRouter: FC = () => {
                             <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
                             <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />
                         </LayoutSecondary>
+                    </Switch>
+                </HomeLayout>
+            </ProtectedRoute>
+            <ProtectedRoute path="/pcm/admin">
+                <HomeLayout>
+                    <Switch>
+                        <Route exact path="/pcm/admin" component={ProjectAdminPage} />
+                        <Route exact path="/pcm/admin/:id/detail" component={ProjectAdminPage} />
                     </Switch>
                 </HomeLayout>
             </ProtectedRoute>

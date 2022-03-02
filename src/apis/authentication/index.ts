@@ -131,6 +131,18 @@ const AuthenticationRepository = {
     });
     return data;
   },
+
+  // ADMIN DETAIL
+  // GET INFO
+  async getInfoAppRole(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/app_roles`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
 };
 
 export default AuthenticationRepository;

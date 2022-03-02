@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 
-import { Paginate, SearchInput } from "shareComponents/common";
+import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
@@ -22,7 +22,6 @@ const FunctionalTab: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
 	const { openModal } = useModal();
-
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -176,7 +175,7 @@ const FunctionalTab: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to="/pcm/admin/detail/:id">
+									<Link to={`/pcm/admin/${item._id}/detail`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
