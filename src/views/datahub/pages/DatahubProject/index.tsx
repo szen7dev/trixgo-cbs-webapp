@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
+import useDatahubProjects from "services/hooks/datahub/useDatahubProjects";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -15,43 +16,42 @@ import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateProject from "./components/ModalCreateProject";
 
-const _data = {
-	name: "Tổ hợp chung cư cao tầng KH2",
-	code: "CHG.THT",
-	owner: "Công ty Cổ phần PGI Partners",
-	address: "Số 147 Hoàng Quốc Việt",
-	address_project: "Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội",
-	long: "1050332",
-	lat: "23045454",
-	note: "Đang triển khai",
-	created_at: "15:30 22/12/2021",
-	updated_at: "15:30 22/12/2021",
-}
-
-type DataModuleState = typeof _data & { _id: string | number }
-
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
 	title: "Thẻ lọc chính" as string | number,
 }));
 
 const DatahubProject: FC = () => {
-	const [pkg, setPkg] = useState(pkgs[0]);
-	const [show, setShow] = useState(false);
-
-	const [data, setData] = useState<DataModuleState[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const [query, setQuery] = useState('');
+	const { data, isFetching } = useDatahubProjects(['datahub_projects', query], {
+		populates: { "path": "client area1 area2 area3", select: '_id name' },
+		limit: 10,
+		keyword: query,
+		select: '_id name sign client address area3 area2 area1 location note'
+	});
+	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu";
-		setData(Array.from({ length: 30 }).map((_, index) => ({ ..._data, _id: index })));
 	}, []);
+
+	const timeoutRef = useRef<NodeJS.Timeout>();
+
+	const [pkg, setPkg] = useState(pkgs[0]);
+	const [show, setShow] = useState(false);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={(event) => {
+					if (timeoutRef.current) clearTimeout(timeoutRef.current);
+					timeoutRef.current = setTimeout(() => {
+						setQuery(event.target.value);
+					}, 300);
+					// console.log(event.target.value);
+					// if (isFetching) queryClient.cancelQueries(["datahub_projects"]);
+				}} />
 				<DocumentDropdown
 					data={pkgs}
 					value={pkg.title}
@@ -114,17 +114,18 @@ const DatahubProject: FC = () => {
 					</thead>
 					<tbody className="text-small">
 						{
-							data.map((props) => {
+							data?.data.listRecords.map((props) => {
 								const {
 									_id,
 									name,
-									code,
-									owner,
+									sign,
+									client,
 									address,
-									address_project,
-									long,
-									lat,
-									note,
+									area3,
+									area2,
+									area1,
+									location,
+									note
 								} = props
 								return (
 									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
@@ -136,11 +137,12 @@ const DatahubProject: FC = () => {
 												{name}
 											</Link>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{code}</td>
-										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{owner}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{sign}</td>
+										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{typeof client !== 'string' && client.name}</td>
 										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{address}</td>
-										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{address_project}</td>
-										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{[long, lat].join(', ')}</td>
+										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{
+											typeof area1 !== 'string' && typeof area2 !== 'string' && typeof area3 !== 'string' ? area3.name + ', ' + area2.name + ', ' + area1.name : ''}</td>
+										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{location}</td>
 										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{note}</td>
 										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right"></td>
 									</tr>
@@ -150,7 +152,14 @@ const DatahubProject: FC = () => {
 					</tbody>
 				</table>
 			</div>
-			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+			<Paginate
+				isFetching={isFetching}
+				limit={data?.data.limit || 10}
+				totalRecord={data?.data.totalRecord}
+				totalPages={data?.data.totalPage}
+				// prevPageAction
+				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
+			/>
 			<ModalCreateProject type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
 		</div >
 	);

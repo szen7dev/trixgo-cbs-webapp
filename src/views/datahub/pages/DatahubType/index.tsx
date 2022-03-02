@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -21,23 +22,14 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubType: FC = () => {
+	const { data, isFetching, } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 10, type: 1 });
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
-		setData(Array.from({ length: 30 }).map((_, index) => ({
-			id: index,
-			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-			joined: 8,
-			worked: 15,
-			created_at: "15:30 22/12/2021",
-			updated_at: "15:30 22/12/2021",
-			status: index,
-		})));
 	}, []);
 
 	return (
@@ -82,25 +74,25 @@ const DatahubType: FC = () => {
 					</thead>
 					<tbody className="text-small">
 						{
-							data.map((props) => {
+							data?.data.listRecords.map((props) => {
 								const {
-									id,
-									project,
-									joined,
-									worked,
+									_id,
+									name,
+									description,
+									popular,
 								} = props
 								return (
-									<tr key={id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
+											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={'/datahub/type/' + id} >
-												{project}
+											<Link to={'/datahub/type/' + _id} >
+												{name}
 											</Link>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{worked}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
+										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular}</td>
 									</tr>
 								)
 							})
@@ -108,7 +100,14 @@ const DatahubType: FC = () => {
 					</tbody>
 				</table>
 			</div>
-			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+			<Paginate
+				isFetching={isFetching}
+				limit={data?.data.limit || 10}
+				totalRecord={data?.data.totalRecord}
+				totalPages={data?.data.totalPage}
+				// prevPageAction
+				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
+			/>
 			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
 		</div >
 	);

@@ -22,6 +22,7 @@ export const UseMessageHelper = () : UseMessageHelperType => {
             isPrivate: true,
             membersID: [memberId]
         }).then(data => {
+            if (!data?._id) return;
             if (!redirectOnly){
                 if (currentChat === data._id) return;
                 socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {

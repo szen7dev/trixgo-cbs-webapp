@@ -13,7 +13,7 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 
-import { CreateNewAdminMember } from "../../modal";
+import { CreateNewAdminMember, DeleteMembers } from "../../modal";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 
 const AdminDetail: FC = () => {
@@ -73,7 +73,18 @@ const AdminDetail: FC = () => {
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+								onClick={() =>
+									openModal(
+										<div
+											className={
+												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+											}
+										>
+											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+										</div>
+									)
+								}>
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
@@ -89,7 +100,7 @@ const AdminDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember companyID={companyAppRoleDetail} />
+									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} />
 								</div>
 							)
 						}
@@ -173,7 +184,22 @@ const AdminDetail: FC = () => {
 								</td>
 								<td className="py-1 px-2">{item.department?.name}</td>
 								<td className="py-1 px-2">{item.position?.name}</td>
-								<td className="py-1 px-2 text-negative">Xoá bỏ</td>
+								<td className="py-1 px-2 text-negative">
+									<button
+										onClick={() =>
+											openModal(
+												<div
+													className={
+														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+													}
+												>
+													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} />
+												</div>
+											)
+										}>
+										Xoá bỏ
+									</button>
+								</td>
 							</tr>)
 						}
 					</tbody> : <></>

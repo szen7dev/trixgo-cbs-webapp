@@ -8,9 +8,10 @@ import {PollActions} from "./PollActions";
 type Props = {
     message: ItemMessage;
     chat: ItemListConversation;
-    isMini?: boolean
+    isMini?: boolean;
+    context: any
 }
-export const Poll:FC<Props> = ({message,chat, isMini}) => {
+export const Poll:FC<Props> = ({message,chat, isMini, context}) => {
     const [openVote, setOpenVote] = useState(false);
     const closeVoteModal = () => setOpenVote(false);
 
@@ -34,7 +35,7 @@ export const Poll:FC<Props> = ({message,chat, isMini}) => {
                 {message.sender.bizfullname||message.sender.fullname} đã tạo một bình chọn: <span className="text-black">{message.poll.name}</span>
                 </span>
             </div>
-            <div className={"rounded-md bg-white mb-5 " + (isMini?"w-[300px] bg-gray-100":"w-[365px] bg-white")}>
+            <div className={"rounded-md mb-5 " + (isMini?"w-[300px] border border-gray-200":"w-[365px] bg-white")}>
                 <div className={"px-[12px] py-[16px] border-b border-gray-200"}>
                     <div className={"font-bold text-lg"}>
                         {message.poll.name}
@@ -84,7 +85,7 @@ export const Poll:FC<Props> = ({message,chat, isMini}) => {
                     </button>
                 </div>
             </div>
-            <PollActions message={message} chat={chat} isOpen={openVote} setCloseVote={closeVoteModal}/>
+            <PollActions context={context} message={message} chat={chat} isOpen={openVote} setCloseVote={closeVoteModal}/>
         </div>
     )
 }

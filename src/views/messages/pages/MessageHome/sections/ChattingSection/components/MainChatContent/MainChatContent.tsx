@@ -153,7 +153,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             case 4:
                 return <Reminder context={MessageContext} message={message}/>;
             case 5:
-                return <Poll message={message} chat={chat}/>;
+                return <Poll message={message} chat={chat} context={MessageContext}/>;
             case 7:
                 if (message.sender._id === profileId) {
                     return <MyMessage context={MessageContext} message={message}/>

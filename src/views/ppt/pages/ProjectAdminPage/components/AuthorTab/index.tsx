@@ -1,12 +1,81 @@
+import { APP_ID } from "apis/localdb";
 import { FC } from "react";
-
-import { Paginate, DropdownSearchable } from "shareComponents/common";
+import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useHistory, useParams } from "react-router-dom";
+import { DropdownSearchable } from "shareComponents/common";
 
 const AuthorTab: FC = () => {
+	const history = useHistory();
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
+	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
+	const { id } = useParams<{ id: string }>();
+	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
+
+	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: id });
+
+	const data = listPcmAdmin.map(e => ({
+		_id: e._id,
+		content: e.name
+	}));
+
+	const getStateCheckedPermissions = (type: 'read' | 'create' | 'update' | 'delete', id: string) => {
+		const findItem = listAppRoleMenuFromAdmin.find((e: any) => e.menu == id);
+		if (findItem) {
+			switch (type) {
+				case 'read':
+					if (findItem.read == 1) return true;
+					break;
+				case 'create':
+					if (findItem.create == 1) return true;
+					break;
+				case 'update':
+					if (findItem.update == 1) return true;
+					break;
+				case 'delete':
+					if (findItem.delete == 1) return true;
+					break;
+			}
+		};
+		return false;
+	};
+
+	const onUpdatePermissions = async (type: 'read' | 'create' | 'update' | 'delete', _id: string) => {
+		// Khởi tạo dữ liệu default 
+		let query = {
+			read: type == 'read' ? 1 : 0,
+			create: type == 'create' ? 1 : 0,
+			update: type == 'update' ? 1 : 0,
+			deleteIn: type == 'delete' ? 1 : 0,
+		};
+
+		// Tìm data item đã được lưu trên database
+		const findItem = listAppRoleMenuFromAdmin.find((e: any) => e.menu == _id);
+		if (findItem) {
+			query = {
+				read: type == 'read' ? findItem.read > 0 ? 0 : 1 : findItem.read || 0,
+				create: type == 'create' ? findItem.create > 0 ? 0 : 1 : findItem.create || 0,
+				update: type == 'update' ? findItem.update > 0 ? 0 : 1 : findItem.update || 0,
+				deleteIn: type == 'delete' ? findItem.deleteIn > 0 ? 0 : 1 : findItem.deleteIn || 0,
+			}
+		}
+
+		await updatePermissionsAppRoleMenusMutateAsync({
+			...query,
+			role: id,
+			menu: _id,
+		});
+
+		refetchGetListAppRoleMenu();
+		refetchGetListAppRoleMenuFromAdmin();
+	}
+
 	return (
 		<main className="h-full">
 			<header className="h-[50px] border border-primary-border flex items-center justify-between pl-6 pr-5">
-				<p className="text-lg">Ban giám đốc</p>
+				<p className="text-lg">{id ? nameAppRoleDetail : "Chọn nhóm chức năng"}</p>
 
 				<DropdownSearchable
 					className="w-[322px] pl-5 bg-cbs-table-header"
@@ -14,30 +83,21 @@ const AuthorTab: FC = () => {
 					isMultiple={false}
 					allowClearValueSingleInput={false}
 					showTriangle={true}
+					placeholder={nameAppRoleDetail || "Lựa chọn"}
 					maxWidthInput="max-w-none"
 					renderSelectedItem={(item: any) => <span>{item.text}</span>}
 					classNameItem="p-0"
-					data={[
-						{
-							_id: 1,
-							content: "Kết quả trả về 1",
-						},
-						{
-							_id: 2,
-							content: "Kết quả trả về 2",
-						},
-						{
-							_id: 3,
-							content: "Kết quả trả về 3",
-						},
-					]}
+					data={data}
 					formatItem={{
 						id: "_id",
 						text: "content",
 					}}
 					inlineSearch={false}
-					disableSearch={false}
+					disableSearch={true}
 					searchInputClassName="h-[40px] w-[322px] px-[46px]"
+					onchangeValue={(item) =>
+						history.push(`/pcm/admin/${item._id}/detail`)
+					}
 				/>
 			</header>
 
@@ -70,204 +130,52 @@ const AuthorTab: FC = () => {
 					</tr>
 				</thead>
 
-				<tbody className="bg-primary-light text-left">
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Cấu trúc dữ liệu</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								defaultChecked
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo đầu tư</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị công việc</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo quản trị hồ sơ</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-
-					<tr className="border-b border-primary-border h-10">
-						<td className="p-2">Báo cáo khác</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-								defaultChecked
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-						<td className="p-2">
-							<input
-								className="form-check-input"
-								type="checkbox"
-								id="flexCheckDefault"
-							/>
-						</td>
-					</tr>
-				</tbody>
+				{id ?
+					<tbody className="bg-primary-light text-left">
+						{listAppMenu.map((item, index) => (
+							<tr key={index} className="border-b border-primary-border h-10">
+								<td className="p-2">{item.name}</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('read', item._id)}
+										onChange={() => onUpdatePermissions('read', item._id)}
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('create', item._id)}
+										onChange={() => onUpdatePermissions('create', item._id)}
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('update', item._id)}
+										onChange={() => onUpdatePermissions('update', item._id)}
+									/>
+								</td>
+								<td className="p-2">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id="flexCheckDefault"
+										checked={getStateCheckedPermissions('delete', item._id)}
+										onChange={() => onUpdatePermissions('delete', item._id)}
+									/>
+								</td>
+							</tr>
+						))}
+					</tbody> : <></>
+				}
 			</table>
-
-			<Paginate />
 		</main>
 	);
 };
