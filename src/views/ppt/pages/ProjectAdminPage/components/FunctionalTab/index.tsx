@@ -40,7 +40,19 @@ const FunctionalTab: FC = () => {
 		};
 	};
 
-	console.log("hasNextPagePcmAdmin", hasNextPagePcmAdmin);
+	const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listPcmAdmin.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listPcmAdmin.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listPcmAdmin.map(e => e._id);
+			setIdsChecked(idsAll);
+		}
+	};
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -127,6 +139,8 @@ const FunctionalTab: FC = () => {
 									type="checkbox"
 									value=""
 									id="flexCheckDefault"
+									checked={getStateCheckedAll()}
+									onChange={() => onClickCheckAll()}
 								/>
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
