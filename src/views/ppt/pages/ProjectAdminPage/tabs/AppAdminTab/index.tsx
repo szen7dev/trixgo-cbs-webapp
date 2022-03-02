@@ -1,7 +1,6 @@
 import { FC } from "react";
 
-import AuthorTab from "../components/AuthorTab";
-import FunctionalTab from "../components/FunctionalTab";
+import {AuthorTab, FunctionalTab} from "views/ppt/pages/ProjectAdminPage/components";
 
 type Props = {
   toggleTab: number;
