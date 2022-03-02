@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { UIEvent, FC, useState } from "react";
 import cn from "classnames";
 
 import { Paginate, DropdownSearchable } from "shareComponents/common";
@@ -6,15 +6,32 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 
 import styles from "views/support/styles/support.module.css";
 import { Link } from "react-router-dom";
+import { useQueryListCompany } from 'services/hooks/useCompanies';
 
 export const SupportGrantPage: FC = () => {
+  const { data: listCompanies, fetchNextPage } = useQueryListCompany();
+  const [dataCompanies, setDataCompanies] = useState(listCompanies);
+
+  const onChangeCompany = (value: any) => {
+    console.log({ value });
+  }
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom) {
+      fetchNextPage();
+      setDataCompanies(previousValue => ({ ...previousValue, ...listCompanies }));
+    }
+  }
+
   return (
     <main className="relative h-full">
       <header className="h-10 border border-primary-border flex items-center justify-between px-5">
         <p className="text-lg">
           Công ty Cổ phần CONINCO Quản lý dự án và Đầu tư
         </p>
-
         <DropdownSearchable
           placeholder="Chọn phân vùng để thực hiện"
           className="w-[322px] pl-0 bg-cbs-table-header"
@@ -25,27 +42,16 @@ export const SupportGrantPage: FC = () => {
           maxWidthInput="max-w-none"
           renderSelectedItem={(item) => <span>{item.text}</span>}
           classNameItem="p-0"
-          data={[
-            {
-              _id: 1,
-              content: "Kết quả trả về 1",
-            },
-            {
-              _id: 2,
-              content: "Kết quả trả về 2",
-            },
-            {
-              _id: 3,
-              content: "Kết quả trả về 3",
-            },
-          ]}
+          data={dataCompanies}
           formatItem={{
             id: "_id",
-            text: "content",
+            text: "name",
           }}
           inlineSearch={false}
           disableSearch={false}
           searchInputClassName="h-[40px] w-[322px] px-[46px]"
+          onScroll={handleScroll}
+          onchangeValue={onChangeCompany}
         />
       </header>
 
