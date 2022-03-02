@@ -3,6 +3,7 @@ import { FC, useState, useCallback } from "react";
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
+import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
@@ -18,7 +19,8 @@ import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 const AdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id });
+	const [keyword, setKeyword] = useState("");
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: keyword });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -58,8 +60,12 @@ const AdminDetail: FC = () => {
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
-						// eslint-disable-next-line no-console
-						onChange={(event: any) => console.log(event.target.value)}
+						onChange={debounce(
+							(event: any) => {
+								//	setKeyword(event.target.value);
+							},
+							500
+						)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
@@ -83,7 +89,7 @@ const AdminDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember companyID={companyAppRoleDetail}/>
+									<CreateNewAdminMember companyID={companyAppRoleDetail} />
 								</div>
 							)
 						}

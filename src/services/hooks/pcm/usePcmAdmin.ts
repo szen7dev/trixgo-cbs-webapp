@@ -20,7 +20,7 @@ type UsePcmAdmin = {
     removeManyAppRoleMutateAsync: any
 };
 
-export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
+export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePcmAdmin => {
     const currentUser = localStorage.getItem("currentUser") ?? "{}";
     const profile = JSON.parse(currentUser);
     // Tạo mới 1 app roles
@@ -67,7 +67,7 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
         isFetching: isFetchingPcmAdmin
     } =
         useInfiniteQuery(
-            `app_roles?appID=${payload.appID}`,
+            [`app_roles?appID=${payload.appID}`, payload.keyword],
             async (pageParam: any) => {
                 return AuthenticationRepository.getListAppRole({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
@@ -76,6 +76,7 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
                         path: "userCreate userUpdate",
                         select: "bizfullname",
                     }),
+                    keyword: payload.keyword
                 })
             },
             {

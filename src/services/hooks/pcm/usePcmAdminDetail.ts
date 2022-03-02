@@ -17,7 +17,7 @@ type UsePcmAdminDetail = {
     removeManyAppRoleMutateAsync: any
 };
 
-export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail => {
+export const usePcmAdminDetail = (payload: { appID: string, keyword?: string }): UsePcmAdminDetail => {
     const currentUser = localStorage.getItem("currentUser") ?? "{}";
     const profile = JSON.parse(currentUser);
     // Tạo mới 1 app roles
@@ -60,7 +60,7 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
         data: dataPcmAdminDetail,
     } =
         useQuery(
-            `app_roles_detail?appID=${payload.appID}`,
+           [`app_roles_detail?appID=${payload.appID}`, payload.keyword],
             async () => {
                 return AuthenticationRepository.getListAppRole({
                     select: "members name company",
@@ -72,7 +72,8 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
                             select: "name"
                         }
                     }),
-                    appRoleID: payload.appID
+                    appRoleID: payload.appID,
+                    keyword: payload.keyword
                 })
             },
             {
