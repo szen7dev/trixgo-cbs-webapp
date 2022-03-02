@@ -32,7 +32,7 @@ export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageA
     }
 
     return (
-        <div className={'min-w-24 min-h-24 absolute bottom-0 w-full border-t z-10 flex items-center justify-center py-2 bg-white'} {...props}>
+        <div className={'sticky bottom-0 min-w-24 min-h-24 absolute bottom-0 w-full border-t z-10 flex items-center justify-center py-2 bg-white'} {...props}>
             <div className="bg-white px-4 items-center flex items-center justify-center relative">
                 <div className={'inline-flex'}>
                     <button

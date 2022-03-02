@@ -1,18 +1,46 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import cn from "classnames";
+import moment from "moment";
 
-import { Paginate, SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-// import ActionGroupFinancial from "views/pages/financial/planning/components/FinancialCashFlow/ActionGroupFinancial";
-
+import { Paginate, SearchInput, ModalContainer, Loader } from "shareComponents/common";
+import { ModalCreateCompany } from 'views/support/shareComponents/common';
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import CompanyLogo from "assets/images/thumbnail1.jpg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 
 import styles from "views/support/styles/support.module.css";
+import { useQueryListCompany } from 'services/hooks/useCompanies';
 
 export const SupportCompanyPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
+	const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
+  const { 
+    data: dataListCompanies, 
+    loading: isLoading,
+    totalPages,
+    totalRecord,
+    hasNextPage,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage
+  } = useQueryListCompany();
+
+  const toggleModalCreateCompany = () => setModalCreateCompany(!modalCreateCompany);
+  const prevPageAction = () => fetchPreviousPage();
+  const nextPageAction = () => fetchNextPage();
+  const onConfirmCreateCompany = () => refetch();
+
+  const initialValues = {
+    name: "",
+    sign: "",
+    taxid: "",
+    address: "",
+    area: ""
+  }
+
+  if(isLoading) {
+    return <Loader className="border-primary" />
+  }
 
   return (
     <main className="relative h-full">
@@ -34,17 +62,7 @@ export const SupportCompanyPage: FC = () => {
         <div className="flex items-center">
           <button
             className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-            // onClick={() =>
-            //   openModal(
-            //     <div
-            //       className={
-            //         "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-            //       }
-            //     >
-            //       <IncomeFormModal />
-            //     </div>
-            //   )
-            // }
+            onClick={toggleModalCreateCompany}
           >
             Tạo mới
           </button>
@@ -53,7 +71,6 @@ export const SupportCompanyPage: FC = () => {
           </div>
         </div>
       </header>
-
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
         <thead className="bg-cbs-table-header h-[38px] border-b border-primary-border">
           <tr className="text-left text-sm">
@@ -116,111 +133,55 @@ export const SupportCompanyPage: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-                checked={itemChecked}
-                onClick={() => setItemChecked(!itemChecked)}
-              />
-            </td>
-            <td className="py-1 px-2">Công ty cổ phần dịch vụ kiểm thử</td>
-            <td className="py-1 px-2">ITEST</td>
-            <td className="py-1 px-2">
-              <img src={CompanyLogo} alt="Company" className="w-10 h-10" />
-            </td>
-            <td className="py-1 px-2">
-              Số 11, ngách 42/20, đường Yên Bình, tổ 15, Phường Yên Nghĩa
-            </td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">nameofc@gmail.com</td>
-            <td className="py-1 px-2">11/12/21 (6 tháng)</td>
-            <td className="py-1 px-2">1-10</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Công ty cổ phần dịch vụ kiểm thử</td>
-            <td className="py-1 px-2">ITEST</td>
-            <td className="py-1 px-2">
-              <img src={CompanyLogo} alt="Company" className="w-10 h-10" />
-            </td>
-            <td className="py-1 px-2">
-              Số 11, ngách 42/20, đường Yên Bình, tổ 15, Phường Yên Nghĩa
-            </td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">nameofc@gmail.com</td>
-            <td className="py-1 px-2">11/12/21 (6 tháng)</td>
-            <td className="py-1 px-2">1-10</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Công ty cổ phần dịch vụ kiểm thử</td>
-            <td className="py-1 px-2">ITEST</td>
-            <td className="py-1 px-2">
-              <img src={CompanyLogo} alt="Company" className="w-10 h-10" />
-            </td>
-            <td className="py-1 px-2">
-              Số 11, ngách 42/20, đường Yên Bình, tổ 15, Phường Yên Nghĩa
-            </td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">nameofc@gmail.com</td>
-            <td className="py-1 px-2">11/12/21 (6 tháng)</td>
-            <td className="py-1 px-2">1-10</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Công ty cổ phần dịch vụ kiểm thử</td>
-            <td className="py-1 px-2">ITEST</td>
-            <td className="py-1 px-2">
-              <img src={CompanyLogo} alt="Company" className="w-10 h-10" />
-            </td>
-            <td className="py-1 px-2">
-              Số 11, ngách 42/20, đường Yên Bình, tổ 15, Phường Yên Nghĩa
-            </td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">123456789</td>
-            <td className="py-1 px-2">nameofc@gmail.com</td>
-            <td className="py-1 px-2">11/12/21 (6 tháng)</td>
-            <td className="py-1 px-2">1-10</td>
-          </tr>
+          {dataListCompanies.length ? dataListCompanies.map(company => (
+            <tr key={company._id} className="border-b border-primary-border h-10">
+              <td className="py-1 px-2 text-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  style={{ marginLeft: "-23px" }}
+                  defaultChecked={itemChecked}
+                  onClick={() => setItemChecked(!itemChecked)}
+                />
+              </td>
+              <td className="py-1 px-2">{company.name}</td>
+              <td className="py-1 px-2">{company.sign}</td>
+              <td className="py-1 px-2">
+                <img src={company.image ? `${process.env.REACT_APP_URL_S3_COMPANY}/${company.image}` : CompanyLogo} alt="Company" className="w-10 h-10" />
+              </td>
+              <td className="py-1 px-2">
+                {company.address}
+              </td>
+              <td className="py-1 px-2">{company.taxid}</td>
+              <td className="py-1 px-2">{company.phone}</td>
+              <td className="py-1 px-2">{company.email}</td>
+              <td className="py-1 px-2">{moment(company.createAt).format('DD/MM/YYYY')}</td>
+              <td className="py-1 px-2">{company.scale}</td>
+            </tr>
+          )) : ''}
         </tbody>
       </table>
 
-      <Paginate />
+      <ModalContainer isModalOpen={modalCreateCompany} toggle={toggleModalCreateCompany}>
+        <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+          <ModalCreateCompany
+            modalType="create"
+            show={modalCreateCompany}
+            toggle={toggleModalCreateCompany}
+            initialValues={initialValues}
+            onConfirm={onConfirmCreateCompany}
+          />
+        </div>
+      </ModalContainer>
+
+      <Paginate 
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        hasNextPage={hasNextPage}
+        prevPageAction={prevPageAction}
+        nextPageAction={nextPageAction} />
     </main>
   );
 };

@@ -8,8 +8,20 @@ interface QueryParam {
 
 export interface CompanyItem {
     _id: string;
-    name: string;
-    sign: string;
+    name: string,
+    sign: string,
+    taxid: string,
+    phone: string,
+    email: string,
+    address: string,
+    cover: string,
+    image: string,
+    area: {
+        _id: string,
+        name: string,
+    },
+    scale: string,
+    createAt: string,
 }
 
 export interface Data {
@@ -24,4 +36,13 @@ export interface CompaniesResponse {
     error: boolean;
     data: Data;
     status: number;
+}
+
+export type CompanyPayload = {
+    companyID?: string,
+    name: string,
+    sign: string,
+    taxid: string,
+    address: string,
+    area: string,
 }
