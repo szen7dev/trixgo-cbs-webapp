@@ -12,24 +12,42 @@ import { BiddingLayout } from "views/bidding/shareComponents/layouts";
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
 import {
-   BiddingHomePage,
+	BiddingHomePage,
+	BiddingOtherPage,
+	BiddingDetailHomePage,
+	BiddingTechnicalRequirements,
+	BiddingMaterialRequirements,
+	BiddingFinancialProposals,
+	FinancialBiddingDocuments
 } from "views/bidding/pages";
+import LayoutSecondary from "views/bidding/shareComponents/layouts/LayoutSecondary";
 
 const BiddingRouter: FC = () => {
-    return (
-        <Switch>
-            <Route
-                exact
-                path="/bidding/home"
-                component={() =>
-                    <BiddingLayout>
-                        <BiddingHomePage />
-                    </BiddingLayout>
-                }
-            />
-            <Route path="/media/*" component={ErrorPage} />
-        </Switch>
-    )
+	return (
+		<BiddingLayout>
+			<Switch>
+				<Route exact path="/bidding/home" component={BiddingHomePage} />
+				<Route exact path="/bidding/other" component={BiddingOtherPage} />
+				<Route exact path={["/bidding/:id", '/bidding/:id/(1|2|3)']} >
+					<LayoutSecondary back pages={[
+						{ id: '1', path: '/bidding/:id', navExact: true, title: 'Home' },
+						{ id: '2', path: '/bidding/:id/1', title: 'Yêu cầu kỹ thuật' },
+						{ id: '3', path: '/bidding/:id/2', title: 'Yêu cầu vật tư thiết bị' },
+						{ id: '4', path: '/bidding/:id/3', title: 'Đề xuất tài chính' },
+					]} >
+						<Switch>
+							<Route exact path="/bidding/:id" component={BiddingDetailHomePage} />
+							<Route exact path="/bidding/:id/1" component={BiddingTechnicalRequirements} />
+							<Route exact path="/bidding/:id/2" component={BiddingMaterialRequirements} />
+							<Route exact path="/bidding/:id/3" component={BiddingFinancialProposals} />
+						</Switch>
+					</LayoutSecondary>
+				</Route>
+				<Route exact path="/bidding/:id/3/item/:itemId" component={FinancialBiddingDocuments} />
+				<Route path="/media/*" component={ErrorPage} />
+			</Switch>
+		</BiddingLayout>
+	)
 };
 
 export default BiddingRouter;

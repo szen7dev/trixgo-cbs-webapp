@@ -163,7 +163,7 @@ const Routes: FC = () => {
                                     {/* =====SUPPORT===== */}
                                     <Route path="/support">
                                         <SupportRouter />
-                                    </Route>                                                                                                            
+                                    </Route>
 
                                     {/* =====WORKSHOP===== */}
                                     <Route path="/workshop">

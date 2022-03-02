@@ -126,7 +126,7 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
 
   const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
-  const totalPages = dataListTask?.pages[0]?.data?.totalPages;
+  const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   return {
     addResponse,
@@ -212,7 +212,6 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
     fetchPreviousPage: prevPageListCheckList,
     hasNextPage,
   } = useInfiniteQuery(
-    // https://react-query.tanstack.com/reference/useInfiniteQuery
     ["list_checkList", parentID, limit],
     async ({ pageParam }: any) => {
       return TaskRepository.listCheckList({
@@ -233,7 +232,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      enabled: true,
     }
   );
 

@@ -27,6 +27,16 @@ export type CloseModal = {
 };
 export type ModalActions = OpenModal | CloseModal;
 
+export type Theme = "light" | "dark";
+export type ThemeState = {
+  theme: Theme;
+};
+export type ToggleTheme = {
+  type: "TOGGLE_THEME";
+  payload: Theme;
+};
+export type ThemeActions = ToggleTheme;
+
 export type RowPlanningFinancial = {
   collapsed: boolean;
   _id: string|number;

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
+import React, { FC, ReactNode, useEffect, useRef, useState, UIEvent } from "react";
 import { map as _map } from "lodash";
 import classNames from "classnames";
 // import API from "../../apis/repository";
@@ -49,6 +49,7 @@ type Props = {
   disableClass?: string;
   searchInputClassName?: string;
   onSearchInputChange?: (valueSearch: string) => void;
+  onScroll?: (e: UIEvent<HTMLDivElement>) => void
   bordered?: boolean;
 };
 
@@ -83,6 +84,7 @@ export const DropdownSearchable: FC<Props> = ({
   disableClass,
   searchInputClassName,
   onSearchInputChange,
+  onScroll,
   bordered = true,
 }) => {
   const [value, setValue] = useState<Item>();
@@ -466,7 +468,7 @@ export const DropdownSearchable: FC<Props> = ({
               />
             </div>
           )}
-          <div className="select-options-section overflow-auto bg-white">
+          <div className="select-options-section overflow-auto bg-white" onScroll={onScroll}>
             {renderOptions()}
           </div>
         </div>

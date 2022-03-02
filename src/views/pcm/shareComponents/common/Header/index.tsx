@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback, useState } from "react";
 import cn from "classnames";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
@@ -10,7 +10,8 @@ type Props = {
   onChangeMode: (mode: string) => void;
 };
 
-export const Header: FC<Props> = ({ currentTab, viewMode, onChangeMode }) => {
+export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
+  const [currentTab, setCurrentTab] = useState(1);
   const tabs = [
     {
       id: 1,
@@ -34,11 +35,13 @@ export const Header: FC<Props> = ({ currentTab, viewMode, onChangeMode }) => {
     },
   ];
 
+  const onClickTab = useCallback(tabID => setCurrentTab(tabID), []);
+
   return (
     <div className="flex justify-between border-b items-end">
       <div className="flex ml-2">
         {tabs.map((tab) => (
-          <button key={tab.id}>
+          <button key={tab.id} onClick={() => onClickTab(tab.id)}>
             <div
               className={`${
                 currentTab === tab.id
@@ -106,6 +109,5 @@ export const Header: FC<Props> = ({ currentTab, viewMode, onChangeMode }) => {
 };
 
 Header.defaultProps = {
-  currentTab: 1,
   viewMode: "LIST",
 };

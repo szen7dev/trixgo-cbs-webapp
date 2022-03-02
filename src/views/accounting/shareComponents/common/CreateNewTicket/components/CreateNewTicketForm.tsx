@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { DropdownSearchable, Popover } from "shareComponents/common";
 import DatePicker from "react-datepicker";
 
@@ -22,7 +22,7 @@ import {
 } from "services/hooks/useHuman";
 
 const CreateNewTicketForm: FC<any> = ({ formik, initialValues }) => {
-	const { handleBlur, setFieldValue, values } = formik;
+	const { setFieldValue, values } = formik;
 
 	const [searchCustomerValue, setSearchCustomerValue] = useState(
 		initialValues?.customer || ""

@@ -1,17 +1,39 @@
 import API from "../repository";
 import type { 
     QueryParam,
-    CompaniesResponse
+    CompaniesResponse,
+    CompanyPayload
 } from 'typings/companies';
+
+const companyURL = `/api/auth/companies`;
 
 const CompanyRepository = {
     async companyList(payload: QueryParam): Promise<CompaniesResponse> {
         const { data } = await API.get<CompaniesResponse>(
-            "/api/auth/companies", {
+            companyURL, {
                 params: {
+                    select: '_id name sign taxid email phone cover image address area scale createAt',
+                    populates: JSON.stringify({
+                        path: "area",
+                        select: "_id name"
+                    }),
                     ...payload,
                 }
             }
+        );
+        return data;
+    },
+    async createCompany(payload: CompanyPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            companyURL,
+            payload
+        );
+        return data;
+    },
+    async updateCompany(payload: CompanyPayload): Promise<any> {
+        const { data } = await API.put<any>(
+            companyURL,
+            payload
         );
         return data;
     },
