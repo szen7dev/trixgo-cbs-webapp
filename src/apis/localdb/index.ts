@@ -600,6 +600,10 @@ export const APP_ID = {
                 id: "621dd3d75fd4c85f7c36d0e4",
                 name: "Báo cáo quản trị hồ sơ",
             }
+        },
+        parentID: {
+            pcm: "621dd33d5fd4c85f7c36d008",
+            task: ""
         }
     }
 };

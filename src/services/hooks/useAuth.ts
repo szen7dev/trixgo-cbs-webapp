@@ -60,7 +60,7 @@ export const useAuth = (): UseAuth => {
     if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register('/OneSignalSDKWorker.js');
     }
-    console.log({ ONESIGNAL_APP_ID });
+    //console.log({ ONESIGNAL_APP_ID });
 
     if (ONESIGNAL_APP_ID) {
       OneSignalReact.init({
