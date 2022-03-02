@@ -14,7 +14,7 @@ const CreateNewAdminMember: FC<any> = ({ companyID }) => {
   console.log("listMembers", listMembers);
   return (
     <main className="py-[18px]">
-      <header className="flex item-center justify-between h-[50] px-[30px]">
+      <header className="flex item-center justify-between px-[30px]">
         <p className="text-xl">Thêm thành viên</p>
         <div
           className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center cursor-pointer"
@@ -38,7 +38,7 @@ const CreateNewAdminMember: FC<any> = ({ companyID }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="flex flex-col gap-2 mt-4 h-[460px]">
           <div className="flex items-center mb-4">
             <input
               className="form-check-input mr-2"
@@ -363,7 +363,7 @@ const CreateNewAdminMember: FC<any> = ({ companyID }) => {
         </div>
       </section>
 
-      <footer className="absolute bottom-0 pb-6 w-full text-right px-[30px]">
+      <footer className="pb-6 w-full text-right px-[30px]">
         <button className="w-[95px] h-8 bg-primary text-primary-light rounded font-bold hover:opacity-90">
           Xác nhận
         </button>
