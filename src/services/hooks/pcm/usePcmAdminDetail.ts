@@ -1,5 +1,5 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "react-query";
 import AuthenticationRepository from "apis/authentication";
 
 type UsePcmAdminDetail = {
@@ -7,6 +7,7 @@ type UsePcmAdminDetail = {
     isLoadingPcmAdminDetail: boolean,
     refetchPcmAdminDetail: () => void,
     listMembers: Array<any>,
+    companyAppRoleDetail: string,
 
     isCreateAppRole: boolean,
     createAppRolesMutateAsync: any,
@@ -62,7 +63,7 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
             `app_roles_detail?appID=${payload.appID}`,
             async () => {
                 return AuthenticationRepository.getListAppRole({
-                    select: "members name",
+                    select: "members name company",
                     populates: JSON.stringify({
                         path: "members",
                         select: "bizfullname position department image",
@@ -79,12 +80,14 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
                 enabled: true,
             }
         );
-    
+
     const nameAppRoleDetail = dataPcmAdminDetail?.data?.name;
+    const companyAppRoleDetail = dataPcmAdminDetail?.data?.company;
     const listMembers = dataPcmAdminDetail?.data?.members || [];
 
     return {
         nameAppRoleDetail,
+        companyAppRoleDetail,
         listMembers,
         isLoadingPcmAdminDetail,
         refetchPcmAdminDetail,
@@ -97,5 +100,50 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
 
         isManyAppRole,
         removeManyAppRoleMutateAsync
+    };
+};
+
+export const useGetUsersByCompany = (companyID: string, keyword: string): any => {
+    const {
+        isLoading: isLoadingGetUsersByCompany,
+        refetch: refetchGetUsersByCompany,
+        data: dataGetUsersByCompany,
+        fetchNextPage: nextPageGetUsersByCompany,
+        fetchPreviousPage: prevPageGetUsersByCompany,
+        hasNextPage: hasNextPageGetUsersByCompany,
+        isFetching: isFetchingGetUsersByCompany
+    } =
+        useInfiniteQuery(
+            [`users?companyID=${companyID}`, keyword],
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListUsersByCompany({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
+                    select: "bizfullname image",
+                    companyID: companyID,
+                    keyword: keyword
+                })
+            },
+            {
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true,
+            }
+        );
+    const listMembers = [].concat(...(dataGetUsersByCompany?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetUsersByCompany?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetUsersByCompany?.pages[0]?.data?.totalPage;
+
+    return {
+        listMembers,
+        isLoadingGetUsersByCompany,
+        refetchGetUsersByCompany,
+        nextPageGetUsersByCompany,
+        prevPageGetUsersByCompany,
+        hasNextPageGetUsersByCompany,
+        isFetchingGetUsersByCompany,
+        totalRecord,
+        totalPage,
     };
 };

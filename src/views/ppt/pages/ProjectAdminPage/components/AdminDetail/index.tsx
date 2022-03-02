@@ -18,7 +18,7 @@ import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 const AdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const { listMembers, nameAppRoleDetail } = usePcmAdminDetail({ appID: id });
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -83,7 +83,7 @@ const AdminDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember />
+									<CreateNewAdminMember companyID={companyAppRoleDetail}/>
 								</div>
 							)
 						}

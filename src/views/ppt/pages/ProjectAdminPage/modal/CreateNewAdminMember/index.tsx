@@ -6,13 +6,16 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
+import { useGetUsersByCompany } from "services/hooks/pcm/usePcmAdminDetail";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-const CreateNewAdminMember: FC = () => {
+const CreateNewAdminMember: FC<any> = ({ companyID }) => {
   const { closeModal } = useModal();
-
+  const { listMembers, totalRecord, fetchNextPage, hasNextPageGetUsersByCompany } = useGetUsersByCompany(companyID, "");
+  console.log("listMembers", listMembers);
   return (
     <main className="py-[18px]">
-      <header className="flex item-center justify-between h-[50] px-[100px]">
+      <header className="flex item-center justify-between h-[50] px-[30px]">
         <p className="text-xl">Thêm thành viên</p>
         <div
           className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center cursor-pointer"
@@ -48,78 +51,46 @@ const CreateNewAdminMember: FC = () => {
             <img src={PolygonIcon} alt="Polygon" />
           </div>
 
-          <div className="flex items-center">
-            <input
-              className="form-check-input mr-9"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-              defaultChecked
-            />
+          {/* Content */}
+          <div id="scrollable" className="flex-1 overflow-y-auto">
+            <InfiniteScroll
+              dataLength={totalRecord || 0}
+              next={fetchNextPage}
+              hasMore={Boolean(hasNextPageGetUsersByCompany)}
+              loader={<div className="w-full pt-2 text-center">
+                Loading...
+              </div>}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  {/* <b>Yay! You have seen it all</b> */}
+                </p>
+              }
 
-            <div className="flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="mr-4 rounded-full"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </div>
-          </div>
+              scrollableTarget="scrollable"
+              className="flex-wrap w-full px-2 pt-2 pb-20 gap-y-4 text-primary-gray"
+            >
+              {
+                listMembers.map((item: any, index: number) => (
+                  <div key={index} className="flex items-center">
+                    <input
+                      className="form-check-input mr-9"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
 
-          <div className="flex items-center">
-            <input
-              className="form-check-input mr-9"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-              defaultChecked
-            />
-
-            <div className="flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="mr-4 rounded-full"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              className="form-check-input mr-9"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
-
-            <div className="flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="mr-4 rounded-full"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              className="form-check-input mr-9"
-              type="checkbox"
-              value=""
-              id="flexCheckDefault"
-            />
-
-            <div className="flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="mr-4 rounded-full"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </div>
+                    <div className="flex items-center">
+                      <img
+                        src={MemberIcon}
+                        alt="Member"
+                        className="mr-4 rounded-full"
+                      />
+                      <p>{item.bizfullname}</p>
+                    </div>
+                  </div>
+                ))
+              }
+            </InfiniteScroll>
           </div>
         </div>
       </section>
