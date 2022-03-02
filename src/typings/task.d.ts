@@ -1,5 +1,6 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
+import { Company } from "typings/common";
 
 export type ListTaskPayload = {
   lastestID?: string;
@@ -29,6 +30,12 @@ export type Project = {
   sign: string;
 };
 
+export type Group = {
+  _id: string;
+  name: string;
+  sign: string;
+};
+
 export type Task = {
   _id: string;
   name: string;
@@ -40,6 +47,8 @@ export type Task = {
   assignee: Assignee;
   percentage: number;
   project: Project;
+  company: Company,
+  group: Group,
   amountResponse: number;
   amountResponseMarked: number;
 };

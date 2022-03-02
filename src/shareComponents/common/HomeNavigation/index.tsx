@@ -57,7 +57,7 @@ export const HomeNavigation: FC = () => {
 					</Link>
 
           <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
-          <Link to={`/pcm/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Việc của tôi</span>
 					</Link>

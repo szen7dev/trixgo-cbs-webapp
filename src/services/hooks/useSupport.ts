@@ -38,7 +38,7 @@ export const useListHistoryTraffic = (params?: ListHistoryTrafficPayload) : UseL
                 }),
                 populates: JSON.stringify({
                     path: "companyOfAuthor userCreate app menu",
-                    select: "name sign fullname image",
+                    select: "name sign fullname bizfullname image",
                 }),
                 ...params
             }),

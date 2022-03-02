@@ -2,8 +2,8 @@
  * LIBRARIES
  */
 import { useMutation } from "react-query";
-import Compressor from 'compressorjs';
-
+// import Compressor from 'compressorjs';
+import imageCompression from 'browser-image-compression';
 /**
  * Types, APIs
  */
@@ -16,17 +16,33 @@ export type GenerateLinkResponse = {
     file: File,
     result?: FileProps
 }
+export type OptionsCompress = {
+    maxSizeMB: number,          // (default: Number.POSITIVE_INFINITY)
+    maxWidthOrHeight: number,   // compressedFile will scale down by ratio to a point that width or height is smaller than maxWidthOrHeight (default: undefined)
+                                // but, automatically reduce the size to smaller than the maximum Canvas size supported by each browser.
+                                // Please check the Caveat part for details.
+    onProgress?: (progress: number) => void,       // optional, a function takes one progress argument (percentage from 0 to 100)
+    useWebWorker?: boolean,      // optional, use multi-thread web worker, fallback to run in main-thread (default: true)
 
-export type CompressConfig = {
-    useCompress: boolean;
-    quality?: number;
+    // following options are for advanced users
+    maxIteration?: number,       // optional, max number of iteration to compress the image (default: 10)
+    exifOrientation?: number,    // optional, see https://stackoverflow.com/a/32490603/10395024
+    fileType?: string,           // optional, fileType override
+    initialQuality?: number      // optional, initial quality value between 0 and 1 (default: 1)
 }
+//
+// export type CompressConfig = {
+//     useCompress: boolean;
+//     // quality?: number;
+//     options?: OptionsCompress;
+// }
 
 export type UploadFileProps = {
     files: File & File[],
     fileType: number,
     progress?: (percentCompleted: number) => void,
-    compressConfig?: CompressConfig;
+    useCompress?: boolean;
+    compressConfig?: OptionsCompress;
 }
 
 type FileGenerateLink = {
@@ -37,7 +53,7 @@ type FileGenerateLink = {
 type UseUpload = {
     generateLinkS3: ({ file, fileType }: FileGenerateLink) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, fileType, progress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
+    addFileToUpload: ({ files, fileType, progress, useCompress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
@@ -130,30 +146,42 @@ export const useUpload = ({
            files,
            fileType,
            progress,
+           useCompress,
            compressConfig = {
-               useCompress: true,
-               quality: 0.8
+               maxSizeMB: 1,
+               maxWidthOrHeight: 1920,
+               useWebWorker: true
            },
        }: UploadFileProps) => {
         const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
 
         // Handle images
-        if (file.type.includes("image/") && compressConfig?.useCompress) {
-            new Compressor(file, {
-                quality: compressConfig.quality??0.8,
-                maxWidth: 1200,
+        if (file.type.includes("image/") && useCompress) {
+            // new Compressor(file, {
+            //     quality: compressConfig.quality??0.8,
+            //     maxWidth: 1200,
+            //
+            //     // The compression process is asynchronous,
+            //     // which means you have to access the `result` in the `success` hook function.
+            //     success(result) {
+            //         const compressFile = blobToFile(result, file.name);
+            //         console.log('Sending in compress mode with quality: ' + compressConfig.quality??0.8);
+            //         uploadFileToS3({ signedUrl, file: compressFile, progress });
+            //     },
+            //     error(err) {
+            //         console.log(err.message);
+            //     },
+            // });
+            try {
+                const compressedFile = await imageCompression(file, compressConfig);
+                const compressFile = blobToFile(compressedFile, file.name);
+                console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
 
-                // The compression process is asynchronous,
-                // which means you have to access the `result` in the `success` hook function.
-                success(result) {
-                    const compressFile = blobToFile(result, file.name);
-                    console.log('Sending in compress mode with quality: ' + compressConfig.quality??0.8);
-                    uploadFileToS3({ signedUrl, file: compressFile, progress });
-                },
-                error(err) {
-                    console.log(err.message);
-                },
-            });
+                await uploadFileToS3({ signedUrl, file: compressFile, progress });
+            } catch (error) {
+                console.log("Can not compress file. Sending in HD mode")
+                await uploadFileToS3({ signedUrl, file, progress });
+            }
         } else {
             console.log('Sending in HD mode');
             await uploadFileToS3({ signedUrl, file, progress });

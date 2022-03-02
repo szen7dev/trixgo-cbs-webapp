@@ -2,6 +2,8 @@ import React, {FC, useCallback} from "react";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {UseConversation} from "services/hooks/messages/useConversation";
+import {setShouldStartListenEvent, clearListMessage} from "redux/reducer/messages/SearchMessage";
+import {useDispatch} from "react-redux";
 
 type Props = {
     message: ItemMessage
@@ -9,6 +11,7 @@ type Props = {
 export const ListSearchMessagesItem:FC<Props> = ({message}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const dispatch = useDispatch();
 
     const getDate = useCallback(() => {
         const date = moment(message.modifyAt);
@@ -61,9 +64,15 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
     const {goToMessagePosition} = UseConversation();
 
     const handleGoToMessage = (_id: string) => {
+        dispatch(clearListMessage({conversationId: message.conversation}));
         goToMessagePosition({conversationID: message.conversation, messageID: message._id}).then(data => {
             setTimeout(() => {
-                document.getElementById(`message-${message._id}`)?.scrollIntoView({block: "end", behavior: "smooth"});
+                document.getElementById(`message-${message._id}`)?.scrollIntoView({block: "center", behavior: "smooth"});
+                document.getElementById(`message-${message._id}`)?.classList.add("found-message");
+                dispatch(setShouldStartListenEvent({data: true, conversationId: message.conversation}));
+                setTimeout(() => {
+                    document.getElementById(`message-${message._id}`)?.classList.remove("found-message");
+                }, 2000)
             }, 500)
         })
     }

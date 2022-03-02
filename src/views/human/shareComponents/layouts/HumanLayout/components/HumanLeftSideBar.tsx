@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 /*=====2.CSS=====*/
 
 /*=====3.ICONS=====*/
+import humanLogo from "assets/logos/human.png";
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 
@@ -25,7 +26,7 @@ export const HumanLeftSideBar: FC = () => {
             <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
                 {/* title */}
                 <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-                    <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+                    <img src={humanLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
                     <span>Quản lý nhân sự</span>
                 </div>
 

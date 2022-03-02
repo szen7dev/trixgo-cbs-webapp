@@ -68,7 +68,6 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			type: "company",
 			companyID: user?.company._id
 		},
-		isFetchMedias: true
 	});
 
 	const { refetchListMedias: refetchListMediasDepartment } = useMedia({
@@ -77,13 +76,11 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			type: "department",
 			companyID: user?.company._id
 		},
-		isFetchMedias: true
 	});
 
 	const { refetchListMedias: refetchListMediasDigital } = useMedia({
 		key: `list_medias__digital-conversion`,
 		params: { type: "digital-conversion" },
-		isFetchMedias: true
 	});
 
     const { current: socket }: any = useSocket();

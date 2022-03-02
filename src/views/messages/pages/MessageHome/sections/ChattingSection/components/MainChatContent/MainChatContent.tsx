@@ -168,6 +168,8 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
             case 108:
                 return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
+            case 109:
+                return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã bỏ ghim một tin nhắn`}/>
             case 111:
                 return <PollNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã tham gia bình chọn: <span class="text-black">${message.poll.name}</span>`}/>
             case 112:

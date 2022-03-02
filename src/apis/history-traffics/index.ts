@@ -17,7 +17,7 @@ const AnalysisRepository = {
             {
                 params: {
                     filter: { "type": 1,"app": 1, "menu": 1, "companyOfAuthor": 1, "createdAt": 1, "userCreate": 1 },
-                    populates: {"path": "companyOfAuthor userCreate app menu", "select": "name sign fullname image"},
+                    populates: {"path": "companyOfAuthor userCreate app menu", "select": "name sign fullname bizfullname image"},
                     ...payload,
                 },
             }

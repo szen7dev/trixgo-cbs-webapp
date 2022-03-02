@@ -41,7 +41,7 @@ async function fetchListDocument(params: ListDocumentQueryPayload): Promise<List
         params: {
             populates: {
                 "path": "author project sender storage userCreate",
-                "select": "fullname sign image phone name"
+                "select": "fullname bizfullname sign image phone name"
             },
             // select: 'name sign author project sender date storeSign amount status note storage userCreate createAt',
             ...params,

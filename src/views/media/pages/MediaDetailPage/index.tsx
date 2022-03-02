@@ -77,7 +77,7 @@ const MediaDetail: FC = () => {
 			}))
 		}
 	}, [user])
-
+	
 	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = 
 		useMedia({
 			key: `list_medias__related`,

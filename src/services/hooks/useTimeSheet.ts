@@ -33,7 +33,7 @@ export const useQueryListTimeSheetParent = (): UseQueryListTimeSheetParent => {
         TimeSheetParentRepository.fetchListTimeSheet({
             populates: {
                 "path": "assignee project userCreate",
-                "select": "fullname name"
+                "select": "fullname bizfullname name"
             },
         }), {
         getNextPageParam: ({ data }: any) => {
@@ -83,7 +83,7 @@ export const useQueryDetailTimeSheetParent = (expertTimesheetID: string): UseQue
         TimeSheetParentRepository.fetchDetailTimeSheet({
             populates: {
                 "path": "assignee project userCreate",
-                "select": "fullname name"
+                "select": "fullname bizfullname name"
             },
             expertTimesheetID
         }), {

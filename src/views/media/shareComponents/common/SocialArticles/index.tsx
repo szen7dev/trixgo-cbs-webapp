@@ -27,8 +27,11 @@ export const SocialArticles: React.FC<Props> = ({ headerComponent: Header, listM
 								<img src={(media.images && media.images.length) ? `${process.env.REACT_APP_URL_S3}${media.images[0].path}` : image} alt="vaccine" className='h-full w-full object-cover' />
 							</Link>
 							<div className="flex flex-col">
-								<p className="text-sm leading-4">
-									{media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content}
+								<p 
+									className="text-sm leading-4"
+									dangerouslySetInnerHTML={{
+										__html: media?.content?.length > 200 ? `${media?.content?.substring(0, 200)}...` : media.content
+									}}>	
 								</p>
 								<p className="mt-auto text-[13px] leading-[15px] text-secondary-gray mb-1.5">
 									<Link to="/">
