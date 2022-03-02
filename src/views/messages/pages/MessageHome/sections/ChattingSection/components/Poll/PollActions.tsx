@@ -8,21 +8,21 @@ import MemberVote from "assets/images/icons-member-vote.svg";
 
 import moment from "moment";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {MessageContext} from "../../../../index";
 
 type Props = {
     message: ItemMessage;
     chat: ItemListConversation;
     isOpen: boolean;
     setCloseVote: () => void;
+    context: any
 }
-export const PollActions:FC<Props> = ({message,chat, isOpen, setCloseVote}) => {
+export const PollActions:FC<Props> = ({message,chat, isOpen, setCloseVote, context}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profile = JSON.parse(currentUser);
     const profileId = profile?._id;
     const {updatePoll} = UseConversation();
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const {socketRef} = useContext(MessageContext);
+    const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
     const mapUserVote = () => {
