@@ -1,9 +1,16 @@
-import React, { FC } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { ModalContainer } from 'shareComponents/common'
 
 import { Form, Formik } from 'formik'
 import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import useDatahubCompanies from 'services/hooks/datahub/useDatahubCompanies';
+import { string, object } from 'yup';
+
+import { PROJECT_TYPES, BUILDING_TYPES, BUILDING_GRADES, DEPARTMENT_STATUS } from 'apis/localdb'
+import useDatahubArea from 'services/hooks/datahub/useDatahubArea'
+import { toast } from 'react-toastify'
+import useMutationDatahubProject from 'services/hooks/datahub/useMutationDatahubProjects'
 
 type Props = {
 	show: boolean
@@ -13,29 +20,52 @@ type Props = {
 	toggle: () => void
 }
 
-// Declare type of formValues for Formik
-type FormValues = {
-	description: string
-	content: string
-	type: any
-}
+const DatahubProjectSchema = object().shape({
+	client: string().required('Required'),
+	address: string().required('Required'),
+	area3: string().required('Required'),
+	location: string(),
+	name: string().required('Required'),
+	sign: string().required('Required'),
+});
 
 const ModalCreateProject: FC<Props> = (props) => {
+	const [company, setCompany] = useState('');
+	const [area, setArea] = useState('');
+	const { data: listCompany } = useDatahubCompanies(['company', company], { select: '_id name', keyword: company }, { enable: props.show });
+	const { data: listAddress3 } = useDatahubArea(['area', area], { select: '_id name', keyword: company }, { enable: props.show });
+	const comapnyRef = useRef<NodeJS.Timeout>();
+	const areaRef = useRef<NodeJS.Timeout>();
+
+	const { createDatahubProject } = useMutationDatahubProject();
+
 	// Declare initialValues here
 	const initialValues = {
-		project: null, // Dự án
-		client: null, // Chủ dự án
-		field: null, // Lĩnh vực
+		project: '', // Dự án
+		client: '', // Chủ dự án
+		field: '', // Lĩnh vực
 
 		name: '', // Tên hợp đồng
 		sign: '', // Mã hiệu
+		address: '', // Địa chỉ dự án
+		area3: '', // Khu vực dự án
 
 		description: '',
 		content: '',
-		type: null
+		status: 0,
 	}
-	const handleSubmit = (values: FormValues) => {
-		console.log(values)
+	const handleSubmit = async (values: typeof initialValues) => {
+		toast.success('createSuccessfull');
+		await createDatahubProject(values);
+		props.toggle();
+	}
+	const handleChangeCompanies = (v: string) => {
+		if (comapnyRef.current) clearTimeout(comapnyRef.current);
+		comapnyRef.current = setTimeout(() => setCompany(v), 300);
+	}
+	const handleChangeArea = (v: string) => {
+		if (areaRef.current) clearTimeout(areaRef.current);
+		areaRef.current = setTimeout(() => setArea(v), 300);
 	}
 
 	return (
@@ -72,64 +102,53 @@ const ModalCreateProject: FC<Props> = (props) => {
 				<Formik
 					initialValues={initialValues}
 					onSubmit={handleSubmit}
+					validationSchema={DatahubProjectSchema}
 				>
-					<Form>
-						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
-							<div className="whitespace-nowrap space-y-4 py-5">
-								<CustomAutoCompleteFormik title='Chủ đầu tư' name='owner' required data={[
-									{ name: 'Công ty Cổ phần PGI Partners' },
-									{ name: 'Công ty Cổ phần PGI Partners2' },
-									{ name: 'Công ty Cổ phần PGI Partners3' },
-								]} />
-								<CustomFieldFormik title='Địa chỉ dự án' required name='address' />
-								<CustomAutoCompleteFormik title='Khu vực dự án' name='address_project' required data={[
-									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội ' },
-									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội 2' },
-									{ name: 'Phường Nghĩa Đô, Quận Cầu Giấy, TP Hà Nội 3' },
-								]} />
-								<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />
-								<CustomFieldFormik name='name' title='Tên' required />
-								<CustomFieldFormik name='sign' title='Mã hiệu' required />
-								<CustomFieldFormik name='note' title='Ghi chú' required as="textarea" />
+					{
+						({ isSubmitting, isValid }) => (
+							<Form >
+								<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
+									<div className="whitespace-nowrap space-y-4 py-5">
+										<CustomAutoCompleteFormik title='Chủ đầu tư' name='client' onChange={handleChangeCompanies} required data={listCompany?.data.listRecords || []} valueAttribute="_id" />
+										<CustomFieldFormik title='Địa chỉ dự án' required name='address' />
+										<CustomAutoCompleteFormik title='Khu vực dự án' name='area3' onChange={handleChangeArea} required data={listAddress3?.data.listRecords || []} valueAttribute="_id" />
+										<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />
+										<CustomFieldFormik name='name' title='Tên' required />
+										<CustomFieldFormik name='sign' title='Mã hiệu' required />
+										<CustomFieldFormik name='note' title='Ghi chú' as="textarea" />
 
-								<CustomAutoCompleteFormik title='Nhóm dự án' name='PROJECT_TYPES' required data={[
-									{ name: 'Nhóm A' },
-									{ name: 'Nhóm B2' },
-									{ name: 'Nhóm C3' },
-								]} />
-								<CustomAutoCompleteFormik title='Loại công trình' name='BUILDING_TYPES' required data={[
-									{ name: 'Dân dụng' },
-									{ name: 'Dân dụng' },
-									{ name: 'Dân dụng' },
-								]} />
-								<CustomAutoCompleteFormik title='Cấp công trình' name='BUILDING_GRADES' required data={[
-									{ name: 'Cấp 1' },
-									{ name: 'Cấp 2' },
-									{ name: 'Cấp 3' },
-								]} />
+										<CustomAutoCompleteFormik title='Nhóm dự án' name='projectType' data={PROJECT_TYPES} attribute="text" valueAttribute='value' />
+										<CustomAutoCompleteFormik title='Loại công trình' name='buildingType' data={BUILDING_TYPES} attribute="text" valueAttribute='value' />
+										<CustomAutoCompleteFormik title='Cấp công trình' name='buildingGrade' data={BUILDING_GRADES} attribute="text" valueAttribute='value' />
 
-								<CustomFieldFormik name='basementNumber' title='Cấp công trình' />
-								<CustomFieldFormik name='basementArea' title='Diện tích tầng hầm' />
-								<CustomFieldFormik name='floorNumber' title='Số tầng cao' />
-								<CustomFieldFormik name='floorArea' title='Diện tích tầng cao' />
-								<CustomAutoCompleteFormik title='Tình trạng dự án' name='status' required data={[
-									{ name: 'Đang triển khai' },
-									{ name: 'Đang triển khai' },
-									{ name: 'Đang triển khai' },
-								]} />
-							</div>
-						</div>
-						<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
-							<div className="mr-1.5">
-								<button
-									type="submit"
-									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
-								>
-									Xác nhận
-								</button>
-							</div>
-						</div>
-					</Form>
+										<CustomFieldFormik name='basementNumber' title='Cấp công trình' />
+										<CustomFieldFormik name='basementArea' title='Diện tích tầng hầm' />
+										<CustomFieldFormik name='floorNumber' title='Số tầng cao' />
+										<CustomFieldFormik name='floorArea' title='Diện tích tầng cao' />
+										<CustomAutoCompleteFormik
+											title='Tình trạng dự án'
+											name='status'
+											initialData={DEPARTMENT_STATUS.find(d => d.value === initialValues.status)?.text || ''}
+											data={DEPARTMENT_STATUS}
+											attribute="text"
+											valueAttribute='value'
+										/>
+									</div>
+								</div>
+								<div className="flex justify-end py-2 px-6 border-t border-cbs-border">
+									<div className="mr-1.5">
+										<button
+											type="submit"
+											disabled={isSubmitting || !isValid}
+											className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5 disabled:opacity-30 disabled:cursor-not-allowed"
+										>
+											Xác nhận
+										</button>
+									</div>
+								</div>
+							</Form>
+						)
+					}
 				</Formik>
 			</div>
 		</ModalContainer>

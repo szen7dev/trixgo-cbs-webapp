@@ -21,4 +21,12 @@ export type DatahubTypesParams = {
   select?: string;
   lastestID?: string;
   level?: number;
+  keyword?: string;
+};
+
+export type DatahubTypesBody = {
+  type: number;
+  popular: number;
+  name: string;
+  description: string;
 };

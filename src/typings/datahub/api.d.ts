@@ -1,4 +1,4 @@
-export type Response<T> = {
+export type ResponseList<T> = {
   error: boolean;
   status: number;
   data: {
@@ -9,3 +9,22 @@ export type Response<T> = {
     nextCursor: string;
   };
 };
+
+export type ResponseCreate<T> =
+  | {
+      error: boolean;
+      data: T;
+    }
+  | {
+      name: string;
+      message: string;
+      code: number;
+      type: string;
+      data: {
+        type: string;
+        message: string;
+        field: string;
+        nodeID: string;
+        action: string;
+      }[];
+    };

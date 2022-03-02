@@ -7,7 +7,7 @@ type Props = DatahubTypesParams;
 
 const useDatahubTypes = (props?: Props) => {
   return useQuery(
-    "datahub_types",
+    ["datahub_types", props?.type || 1],
     () => DatahubRepository.datahubTypes(props),
     {
       refetchOnMount: false,

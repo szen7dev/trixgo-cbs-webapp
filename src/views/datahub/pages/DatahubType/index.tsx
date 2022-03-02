@@ -22,7 +22,7 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubType: FC = () => {
-	const { data, isFetching } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 20, type: 1 });
+	const { data, isFetching, } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 10, type: 1 });
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 
@@ -102,10 +102,10 @@ const DatahubType: FC = () => {
 			</div>
 			<Paginate
 				isFetching={isFetching}
-				limit={20}
+				limit={data?.data.limit || 10}
 				totalRecord={data?.data.totalRecord}
 				totalPages={data?.data.totalPage}
-				prevPageAction
+				// prevPageAction
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
 			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />

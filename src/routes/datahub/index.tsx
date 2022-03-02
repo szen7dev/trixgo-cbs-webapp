@@ -20,6 +20,7 @@ import {
 	DatahubHomeDetail,
 	DatahubProject,
 	DatahubType,
+	DatahubType2,
 	DatahubTypeDetail,
 	DatahubInspection,
 	DatahubInspectionDetail,
@@ -37,11 +38,11 @@ const DatahubRoutes: FC = () => {
 					<Route path="/datahub/type">
 						<LayoutSecondary pages={[
 							{ id: '1', path: '/datahub/type', navExact: true, title: 'Lĩnh vực' },
-							{ id: '2', path: '/datahub/type/asd', title: 'Chủ đề cộng đồng' },
+							{ id: '2', path: '/datahub/type/2', title: 'Chủ đề cộng đồng' },
 						]}>
 							<Switch>
 								<Route exact path='/datahub/type' component={DatahubType} />
-								<Route exact path='/datahub/type/asd' component={() => <div>123</div>} />
+								<Route exact path='/datahub/type/2' component={DatahubType2} />
 								<Route path='/datahub/type/:id' component={DatahubTypeDetail} />
 							</Switch>
 						</LayoutSecondary>
