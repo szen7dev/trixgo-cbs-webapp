@@ -6,7 +6,6 @@ type UsePcmAdmin = {
     isLoadingPcmAdmin: boolean,
     refetchPcmAdmin: () => void,
     nextPagePcmAdmin: () => void,
-    prevPagePcmAdmin: () => void,
     totalRecord: number,
     totalPage: number | undefined,
     hasNextPagePcmAdmin: boolean | undefined,
@@ -62,7 +61,6 @@ export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePc
         refetch: refetchPcmAdmin,
         data: dataPcmAdmin,
         fetchNextPage: nextPagePcmAdmin,
-        fetchPreviousPage: prevPagePcmAdmin,
         hasNextPage: hasNextPagePcmAdmin,
         isFetching: isFetchingPcmAdmin
     } =
@@ -96,7 +94,6 @@ export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePc
         isLoadingPcmAdmin,
         refetchPcmAdmin,
         nextPagePcmAdmin,
-        prevPagePcmAdmin,
         hasNextPagePcmAdmin,
         isFetchingPcmAdmin,
         totalRecord,
