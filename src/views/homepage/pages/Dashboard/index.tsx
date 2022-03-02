@@ -24,7 +24,7 @@ import { abbreviateNumber } from 'utils';
 import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
-import { usePcm } from 'services/hooks/usePcm';
+import { usePcm } from 'services/hooks/pcm/usePcm';
 import { useMedia } from 'services/hooks/useMedia';
 import PcmRepository from 'apis/pcm';
 

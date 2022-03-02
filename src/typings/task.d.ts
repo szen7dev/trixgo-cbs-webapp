@@ -57,7 +57,7 @@ export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
     totalRecord: number;
-    totalPages?: number;
+    totalPage?: number;
     nextCursor: string;
     limit: number;
   };

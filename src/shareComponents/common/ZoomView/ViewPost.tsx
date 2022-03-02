@@ -169,7 +169,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 					</div>
 					{/* Footer Image */}
 					<div className={cn("react__images-footer absolute w-full bottom-0 text-center py-7 transition-opacity ease-in-out", isZoom ? "opacity-0 invisible" : '')} >
-						Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn....
+						{/* Chứng kiến công tác thí nghiệm thép tại công trường số 3, Hoàng Tôn.... */}
 					</div>
 				</div>
 			</div>

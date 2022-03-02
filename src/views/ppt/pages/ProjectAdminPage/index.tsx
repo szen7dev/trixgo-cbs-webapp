@@ -1,14 +1,42 @@
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
 
+import AppAdminTab from "./tabs/AppAdminTab";
 const ProjectAdminPage: FC = () => {
-	useEffect(() => {
-		document.title = "CHG.THT-Quản trị viên"
-	}, []);
+  const [toggleTab, setToggleTab] = useState(1);
+  const handleToggleTab = (index: number) => {
+    setToggleTab(index);
+  };
+  
+  return (
+    <main className="h-full">
+      <header className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300">
+        <div className="h-full">
+          <button
+            className={
+              toggleTab === 1
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full p-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(1)}
+          >
+            Nhóm chức năng
+          </button>
+          <button
+            className={
+              toggleTab === 2
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full p-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(2)}
+          >
+            Phân quyền chức năng
+          </button>
+        </div>
+      </header>
 
-	return (
-		<div>
-			<h2>Quản trị viên</h2>
-		</div>
-	);
+      <AppAdminTab toggleTab={toggleTab} />
+    </main>
+  );
 };
+
 export default ProjectAdminPage;

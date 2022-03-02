@@ -71,7 +71,7 @@ const TaskRepository = {
     payload: ResponsePayload
   ): Promise<ResponseResponse> {
     const { data } = await API.post<ResponseResponse>(
-      `${pcmURL}/pcm_plan_task_comments`,
+      `${pcmURL}/pcm_comments`,
       payload
     );
     return data;
@@ -81,7 +81,7 @@ const TaskRepository = {
     payload: { commentTemplateID: string, taskID: string, isMarked: boolean }
   ): Promise<any> {
     const { data } = await API.put<any>(
-      `${pcmURL}/pcm_plan_task_comments`,
+      `${pcmURL}/pcm_comments`,
       payload
     );
     return data;
@@ -91,11 +91,11 @@ const TaskRepository = {
     payload: ListResponsePayload
   ): Promise<any> {
     const { data } = await API.get<any>(
-      `${pcmURL}/pcm_plan_task_comments?${convertObToUrl({
-        select: "comment isMarked type task userCreate createAt",
+      `${pcmURL}/pcm_comments?${convertObToUrl({
+        select: "content task isMarked files images amountReaction author",
         populates: JSON.stringify({
-          path: "comment userCreate",
-          select: "_id bizfullname fullname image files images content",
+          path: "task files images author",
+          select: "_id bizfullname image name nameOrg path size author",
           populate: {
             path: 'images files',
             options: {
@@ -118,7 +118,7 @@ const TaskRepository = {
     payload: SearchResponsePayload
   ): Promise<any> {
     const { data } = await API.get<any>(
-      `${pcmURL}/pcm_plan_task_comments/search?${convertObToUrl({
+      `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
         select: "comment isMarked type task userCreate createAt",
         populates: JSON.stringify({
           path: "comment userCreate",
