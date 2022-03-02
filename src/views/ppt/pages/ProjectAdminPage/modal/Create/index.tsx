@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const Create: FC = () => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
-  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 
   const onCreate = async () => {
     if (!name) return;

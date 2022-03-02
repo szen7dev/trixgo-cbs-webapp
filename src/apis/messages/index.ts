@@ -6,7 +6,7 @@ import {
     CreateConversationPayload,
     CreateConversationResponse, GeneralGroupByMemberPayload, GeneralGroupByMemberResponse,
     ListConversationPayload,
-    ListConversationResponse,
+    ListConversationResponse, ListFoldersConversationPayload, ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
     ListMembersOfConversationResponse,
     MediasOfConversationPayload,
@@ -18,7 +18,8 @@ const checkExistConversation = "/api/chatting/conversations/check-exists-convers
 const createConversation = "/api/chatting/conversations/create-conversation";
 const mediasOfConversation = "/api/chatting/conversations/list-message-media-conversation";
 const generalGroupOfMember = "/api/chatting/conversations/info-general-group-by-member";
-const conversationInformation = "/api/chatting/conversations/info-conversation/";
+const conversationInformation = "/api/chatting/conversations/info-conversation";
+const listFolder = "/api/chatting/conversations/list-folder";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -73,6 +74,14 @@ const ListConversationRepository = {
     async getConverationInformation(payload: ConvversationInformationPayload): Promise<ConversationInformarionResponse> {
         const {data} = await API.get<ConversationInformarionResponse>(
             `${conversationInformation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async getListFoldersConversation(payload: ListFoldersConversationPayload) : Promise<ListFoldersConversationResponse> {
+        const {data} = await API.get(
+            `${listFolder}?${convertObToUrl(payload)}`
         )
 
         return data;
