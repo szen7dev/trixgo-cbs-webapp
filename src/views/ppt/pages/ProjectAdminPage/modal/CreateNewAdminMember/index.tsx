@@ -12,7 +12,7 @@ const CreateNewAdminMember: FC = () => {
 
   return (
     <main className="py-[18px]">
-      <header className="flex item-center justify-between h-[50] px-[30px]">
+      <header className="flex item-center justify-between h-[50] px-[100px]">
         <p className="text-xl">Thêm thành viên</p>
         <div
           className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center cursor-pointer"
