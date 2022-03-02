@@ -7,12 +7,12 @@ import { toast } from "react-toastify";
 
 const Delete: FC<any> = ({ idsChecked, setIdsChecked }) => {
   const { closeModal } = useModal();
-  const { removeManyAppRoleMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+  const { removeManyAppRoleMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
   const onDelete = async () => {
     const result = await removeManyAppRoleMutateAsync({
       appRoleIDs: idsChecked
     });
-    console.log("result", result);
+    
     if (!result.error) {
       refetchPcmAdmin();
       closeModal();

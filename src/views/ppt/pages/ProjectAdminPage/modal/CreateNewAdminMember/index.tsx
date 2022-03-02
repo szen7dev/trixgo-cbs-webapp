@@ -6,13 +6,15 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
+import { useGetUsersByCompany } from "services/hooks/pcm/usePcmAdminDetail";
 
-const CreateNewAdminMember: FC = () => {
+const CreateNewAdminMember: FC<any> = ({ companyID }) => {
   const { closeModal } = useModal();
-
+  const { listMembers } = useGetUsersByCompany(companyID, "");
+  console.log("listMembers", listMembers);
   return (
     <main className="py-[18px]">
-      <header className="flex item-center justify-between h-[50] px-[100px]">
+      <header className="flex item-center justify-between px-[30px]">
         <p className="text-xl">Thêm thành viên</p>
         <div
           className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center cursor-pointer"
@@ -36,7 +38,7 @@ const CreateNewAdminMember: FC = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="flex flex-col gap-2 mt-4 h-[460px]">
           <div className="flex items-center mb-4">
             <input
               className="form-check-input mr-2"
@@ -121,10 +123,247 @@ const CreateNewAdminMember: FC = () => {
               <p>Nguyễn Phan Thanh Hương-CPMI</p>
             </div>
           </div>
+
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <input
+              className="form-check-input mr-9"
+              type="checkbox"
+              value=""
+              id="flexCheckDefault"
+            />
+
+            <div className="flex items-center">
+              <img
+                src={MemberIcon}
+                alt="Member"
+                className="mr-4 rounded-full"
+              />
+              <p>Nguyễn Phan Thanh Hương-CPMI</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <footer className="absolute bottom-0 pb-6 w-full text-right px-[30px]">
+      <footer className="pb-6 w-full text-right px-[30px]">
         <button className="w-[95px] h-8 bg-primary text-primary-light rounded font-bold hover:opacity-90">
           Xác nhận
         </button>

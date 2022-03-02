@@ -143,6 +143,17 @@ const AuthenticationRepository = {
     });
     return data;
   },
+
+  // DANH SÁCH THÀNH VIÊN TRONG CÔNG TY
+  async getListUsersByCompany(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/users`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
 };
 
 export default AuthenticationRepository;
