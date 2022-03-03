@@ -52,7 +52,7 @@ export const MiniChatGroup:FC = () => {
     };
 
     useEffect(() => {
-        listConversation&&getListConversation({});
+        Object.keys(listConversation).length===0&&getListConversation({});
     },[]);
 
     const userUnreadMessage = useCallback((chat: ItemListConversation) => {
