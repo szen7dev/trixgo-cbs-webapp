@@ -35,7 +35,6 @@ export const SupportGrantPage: FC = () => {
     companyID: companySelected
   });
   const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany });
-  console.log({ dataAppsCompany });
 
   const toggleModalCreateOrUpdateAppCompany = () => setModalCreateOrUpdateAppCompany(!modalCreateOrUpdateAppCompany);
 
@@ -43,8 +42,6 @@ export const SupportGrantPage: FC = () => {
     setCompanyName(`${value.name} - ${value.sign}`);
     setCompanySelected(value._id);
   }
-
-  const handleConfirmCreateOrUpdateAppCompany = () => refetchAppsCompany();
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -73,6 +70,8 @@ export const SupportGrantPage: FC = () => {
   }
 
   const handleSearch = debounce((value) => setKeywordCompany(value), 500);
+
+  const handleConfirmCreateOrUpdateAppCompany = () => refetchAppsCompany();
 
   useEffect(() => {
     if(!companySelected) return;

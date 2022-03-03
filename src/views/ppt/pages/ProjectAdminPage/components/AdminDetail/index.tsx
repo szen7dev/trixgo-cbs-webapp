@@ -9,7 +9,6 @@ import debounce from "lodash/debounce";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 

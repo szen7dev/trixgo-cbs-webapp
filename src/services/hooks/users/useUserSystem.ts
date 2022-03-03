@@ -1,0 +1,77 @@
+import { useInfiniteQuery, useMutation } from "react-query";
+
+import { UserSystemRepository } from 'apis/users';
+import type { QueryParam, UserSystemProps, UserSystemPayload } from 'typings/users/userSystem';
+
+interface UseUserSystem {
+    loading: boolean;
+    data: UserSystemProps[];
+    hasNextPage?: boolean;
+    totalPages: number;
+    totalRecord: number;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    createUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
+    updateUserSystemAsync: (payload: UserSystemPayload) => Promise<any>;
+    deleteUserSystemAsync: (usersID: string[]) => Promise<any>;
+}
+
+export const useUserSystem = (params?: QueryParam): UseUserSystem => {
+    const { mutateAsync: createUserSystemAsync } =
+        useMutation((payload: UserSystemPayload) =>
+            UserSystemRepository.addUserSystem(payload)
+        );
+
+    const { mutateAsync: updateUserSystemAsync } =
+        useMutation((payload: UserSystemPayload) =>
+            UserSystemRepository.updateUserSystem(payload)
+        );
+
+    const { mutateAsync: deleteUserSystemAsync } =
+        useMutation((usersID: string[]) =>
+            UserSystemRepository.deleteUserSystem(usersID)
+        );
+
+    const result = useInfiniteQuery(
+        ['list_users', params]
+        , async ({ pageParam }: any) =>
+        UserSystemRepository.listUsersSystem({
+            lastestID: pageParam,
+            ...params
+        }), {
+        getNextPageParam: ({ data }: any) => {
+            return data?.nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: params?.isFetch || false
+    });
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = result;
+
+    const listUsers = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
+
+    return {
+        loading: isLoading,
+        data: listUsers,
+        hasNextPage,
+        totalPages,
+        totalRecord,
+        refetch,
+        fetchNextPage,
+        createUserSystemAsync,
+        updateUserSystemAsync,
+        deleteUserSystemAsync
+    }
+}

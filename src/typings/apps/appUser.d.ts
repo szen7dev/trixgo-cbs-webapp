@@ -3,10 +3,11 @@ import { User } from "typings/user";
 interface QueryParam {
     appID?: string;
     companyID?: string;
-    limit?: number;
-    select?: string;
-    lastestID?: string;
     keyword?: string;
+    select?: string;
+    populates?: string;
+    lastestID?: string;
+    limit?: number;
 }
 
 export interface DataResponse {
@@ -24,11 +25,22 @@ export interface AppUserResponse {
 }
 
 export type AppUserPayload = {
-    appCompanyID?: string,
-    maxCount: string,
-    maxData: string,
-    startTime: string,
-    endTime: string,
+    appID?: string,
+    companyID?: string,
+    userID: string,
+}
+
+export type AddMemberToUserAppPayload = {
+    appID: string,
+    companyID: string,
+    users: string[]
+}
+
+export type UpdateMemberAppUserPayload = {
+    appID: string,
+    companyID: string,
+    memberID: string,
+    level: number
 }
 
 export type AppUserProps = {
@@ -43,8 +55,9 @@ export type AppUserProps = {
         name: string,
         slug: string
     },
-    startTime: string,
+    user: User,
     endTime: string,
-    status: string,
+    numLog: number,
+    level: number,
     userCreate: User,
 }

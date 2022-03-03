@@ -3,7 +3,7 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import { AppCompanyRepository } from 'apis/app';
 import type { AppCompanyProps, QueryParam, AppCompanyPayload } from 'typings/apps/appCompany';
 
-interface UseQueryListCompany {
+interface UseAppCompany {
     createAppCompanyAsync: (payload: AppCompanyPayload) => Promise<any>,
     updateAppCompanyAsync: (payload: AppCompanyPayload) => Promise<any>,
     loading: boolean;
@@ -16,7 +16,7 @@ interface UseQueryListCompany {
     fetchPreviousPage: () => void;
 }
 
-export const useAppCompany = (params?: QueryParam): UseQueryListCompany => {
+export const useAppCompany = (params?: QueryParam): UseAppCompany => {
     const { mutateAsync: createAppCompanyAsync } =
         useMutation((payload: AppCompanyPayload) =>
             AppCompanyRepository.createAppCompany(payload)

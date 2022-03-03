@@ -34,7 +34,6 @@ export const ModalCreateGrant: FC<ModalProps> = ({ toggle, modalType, onConfirm,
   });
 
   const handleSubmit = async (values: AppCompanyPayload) => {
-    console.log({ values, modalType })
     try {
       // Handle api here!
       switch (modalType) {
