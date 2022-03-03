@@ -9,18 +9,19 @@ import debounce from "lodash/debounce";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-
+import { useGetListAppRoleMenu } from "services/hooks/useAuth";
 import { CreateNewAdminMember, DeleteMembers } from "../../modal";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { APP_ID } from "apis/localdb";
 
 const AdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: keyword });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -81,7 +82,7 @@ const AdminDetail: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 										</div>
 									)
 								}>
@@ -100,7 +101,7 @@ const AdminDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} />
+									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 								</div>
 							)
 						}
@@ -193,7 +194,7 @@ const AdminDetail: FC = () => {
 														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 													}
 												>
-													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} />
+													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 												</div>
 											)
 										}>

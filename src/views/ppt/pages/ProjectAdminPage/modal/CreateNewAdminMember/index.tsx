@@ -10,7 +10,7 @@ import { useGetUsersByCompany, usePcmAdminDetail } from "services/hooks/pcm/useP
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 
-const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID }) => {
+const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListAppRoleMenu }) => {
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
   const { listMembers, nextPageGetUsersByCompany, hasNextPageGetUsersByCompany, totalRecord } = useGetUsersByCompany(companyID, keyword);
@@ -59,6 +59,7 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID }) => {
       setIdsChecked([]);
       closeModal();
       toast.success('Thêm thành viên thành công');
+      refetchGetListAppRoleMenu();
     } else {
       toast.error(result?.data?.message);
     }

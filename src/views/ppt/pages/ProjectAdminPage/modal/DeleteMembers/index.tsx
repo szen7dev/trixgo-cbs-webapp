@@ -4,7 +4,7 @@ import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 
-const DeleteMembers: FC<any> = ({ appID, idsChecked, setIdsChecked }) => {
+const DeleteMembers: FC<any> = ({ appID, idsChecked, setIdsChecked, refetchGetListAppRoleMenu }) => {
     const { closeModal } = useModal();
     const { removeMembersMutateAsync, refetchPcmAdminDetail } = usePcmAdminDetail({ appID, keyword: "" });
 
@@ -19,6 +19,7 @@ const DeleteMembers: FC<any> = ({ appID, idsChecked, setIdsChecked }) => {
             closeModal();
             setIdsChecked([]);
             toast.success('Xoá dữ liệu thành công');
+            refetchGetListAppRoleMenu();
         } else {
             toast.error(result?.data?.message);
         }
