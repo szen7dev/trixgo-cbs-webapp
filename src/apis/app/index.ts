@@ -1,0 +1,1 @@
+export { AppCompanyRepository } from './AppCompany';

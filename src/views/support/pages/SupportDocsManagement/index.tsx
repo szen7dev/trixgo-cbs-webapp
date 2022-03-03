@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import cn from "classnames";
+import { useParams } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import { Paginate, SearchInput } from "shareComponents/common";
@@ -17,15 +18,17 @@ export const SupportDocsManagementPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
   const { openModal } = useModal();
 
+  const { appID, companyID, appName } = useParams<{ appID: string, companyID: string, appName: string }>();
+  console.log({ appID, companyID, appName });
+
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
-          <p className="text-lg">Quản lý hồ sơ văn bản</p>
+          <p className="text-lg">{appName}</p>
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            // eslint-disable-next-line no-console
             onChange={(event) => console.log(event.target.value)}
           />
           {itemChecked && (

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import cn from "classnames";
 import moment from "moment";
 
@@ -13,9 +13,9 @@ import { useQueryListCompany } from 'services/hooks/useCompanies';
 
 export const SupportCompanyPage: FC = () => {
   const [itemChecked, setItemChecked] = useState(false);
-	const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
-  const { 
-    data: dataListCompanies, 
+  const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
+  const {
+    data: dataListCompanies,
     loading: isLoading,
     totalPages,
     totalRecord,
@@ -38,7 +38,7 @@ export const SupportCompanyPage: FC = () => {
     area: ""
   }
 
-  if(isLoading) {
+  if (isLoading) {
     return <Loader className="border-primary" />
   }
 
@@ -176,7 +176,7 @@ export const SupportCompanyPage: FC = () => {
         </div>
       </ModalContainer>
 
-      <Paginate 
+      <Paginate
         totalPages={totalPages}
         totalRecord={totalRecord}
         hasNextPage={hasNextPage}
