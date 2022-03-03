@@ -33,7 +33,7 @@ type UseListConversationType = {
     totalRecordRequest: number | undefined,
 };
 
-export const UseListConversation = (params?: any) : UseListConversationType => {
+export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
     const dispatch = useDispatch();
 
     const getListConversation = async (params: ListConversationPayload, saveToRedux = true) => {
@@ -76,7 +76,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         dispatch(setListFolders(data));
         return data;
     }
-
+console.log(enableQuery)
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -97,7 +97,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
                     return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: !!enableQuery, // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
     const listConversations = [].concat(...(listConversationsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
