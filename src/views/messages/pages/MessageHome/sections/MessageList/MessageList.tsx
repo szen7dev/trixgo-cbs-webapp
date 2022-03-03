@@ -15,11 +15,11 @@ export const MessageList:FC = () => {
     const {listConversation, nextCursor, isLoading,  hasMoreData} = mapData.data;
 
     useEffect(() => {
-        listConversation&&getListConversation({});
+        Object.keys(listConversation).length===0&&getListConversation({});
     },[]);
 
     useEffect(() => {
-        if (reachedEnd && !isLoading && hasMoreData) {
+        if (reachedEnd && !isLoading && hasMoreData && nextCursor !== "" && nextCursor !== null && nextCursor !== undefined) {
             getListConversation({lastestID: nextCursor});
             setReachEnd(false);
         }

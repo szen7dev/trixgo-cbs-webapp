@@ -11,7 +11,7 @@ import {MessageContext} from "../../../../index";
 import {SearchChatItem} from "./SearchChatItem";
 
 export const SearchUserConversationSection:FC = () => {
-    const {setShowSearch} = useContext(SearchUserAndConversationContext);
+    const {setShowSearch, showSearch} = useContext(SearchUserAndConversationContext);
     const inputRef = useRef<HTMLInputElement>(null);
     const listFriendsRef = useRef<HTMLDivElement>(null);
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
@@ -36,7 +36,7 @@ export const SearchUserConversationSection:FC = () => {
     const { listFriends, nextPageListFriends , hasNextPageListFriends } = useUser(params);
 
     const paramsListConversation = {limit: 10, keyword: searchTerm};
-    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation);
+    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation, showSearch);
 
     const handleStartPrivateChat = (memberId: string) => {
         createConversation({

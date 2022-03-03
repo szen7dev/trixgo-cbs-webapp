@@ -1,4 +1,5 @@
 import Axios from "axios";
+import { toast } from "react-toastify";
 
 const BASE_URL = process.env.REACT_APP_ENV === 'development' 
   ? process.env.REACT_APP_API_DOMAIN_LOCAL
@@ -20,6 +21,7 @@ API.interceptors.response.use(
     return response;
   },
   function (error) {
+    toast.error(error?.response?.data?.message);
     return error.response;
   }
 );
