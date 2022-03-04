@@ -1,7 +1,6 @@
 import React, {FC, Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {dismissCreateUpdateFolder} from "redux/reducer/messages/CreateUpdateFolder";
-import {addSingleFolder, updateSingleFolder} from "redux/reducer/messages/ListFolders";
 import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
@@ -10,7 +9,7 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 export const FolderFormPopup:FC = () => {
     const {isCreateUpdateFolder, folder} = useSelector((state: RootState) => state.createUpdateFolder.data);
     const dispatch = useDispatch();
-    const {addFolder, updateFolder} = UseListConversation();
+    const {addFolder, updateFolder, getListFoldersConversation} = UseListConversation();
     const focusElementRef = useRef<HTMLDivElement>(null);
     const [folderName, setFolderName] = useState("")
 
@@ -27,13 +26,13 @@ export const FolderFormPopup:FC = () => {
                 folderID: folder._id,
                 name: folderName
             }).then((folder) => {
-                dispatch(addSingleFolder({folderId: folder._id, folderData: folder}))
+                getListFoldersConversation({limit: 10})
             })
         } else {
             addFolder({
                 name: folderName
             }).then((folder) => {
-                dispatch(updateSingleFolder({folderId: folder._id, folderData: folder}))
+                getListFoldersConversation({limit: 10})
             })
         }
         setFolderName("");

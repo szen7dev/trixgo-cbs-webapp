@@ -90,10 +90,28 @@ const listFoldersSlice = createSlice({
                 },
                 totalRecord: state.data.totalRecord++
             }
+        },
+        deleteSingleFolder (state, action) {
+            const {folderId} = action.payload;
+            const oldList = {...state.data.listFolders};
+            delete oldList[folderId];
+            state.data = {
+                ...state.data,
+                listFolders: {
+                    ...oldList,
+                },
+                totalRecord: state.data.totalRecord--
+            }
+        },
+        setCurrentSelectedFolders (state, action) {
+            state.data = {
+                ...state.data,
+                currentSelectedFolders: action.payload.currentSelectedFolders
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListFolders, updateSingleFolder, addSingleFolder } = listFoldersSlice.actions;
+export const { setListFolders, updateSingleFolder, addSingleFolder, deleteSingleFolder, setCurrentSelectedFolders } = listFoldersSlice.actions;
 export default listFoldersSlice.reducer;

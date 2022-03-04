@@ -4,7 +4,7 @@ import {
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation, FolderConversationItem,
+    DataListConversation, DeleteFolderPayload, FolderConversationItem,
     GeneralGroupByMemberPayload,
     ItemListConversation,
     ListConversationPayload, ListFoldersConversationPayload,
@@ -34,6 +34,7 @@ type UseListConversationType = {
     totalRecordRequest: number | undefined,
     addFolder: (payload: AddFolderPayload) => Promise<FolderConversationItem>,
     updateFolder: (payload: UpdateFolderPayload) => Promise<FolderConversationItem>,
+    deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -94,6 +95,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const deleteFolder = async (params: DeleteFolderPayload) => {
+        const {data} = await ListConversationRepository.deleteFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -136,6 +144,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         getConverationInformation,
         getListFoldersConversation,
         addFolder,
-        updateFolder
+        updateFolder,
+        deleteFolder
     }
 };

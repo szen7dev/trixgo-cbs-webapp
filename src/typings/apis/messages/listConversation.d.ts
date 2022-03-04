@@ -252,3 +252,13 @@ export type UpdateFolderResponse = {
     error: boolean;
     status: number;
 }
+
+export type DeleteFolderPayload = {
+    folderID: string;
+}
+
+export type DeleteFolderResponse = {
+    data: any;
+    error: boolean;
+    status: number;
+}

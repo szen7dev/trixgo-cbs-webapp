@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
 import {openCreateUpdateFolder} from "redux/reducer/messages/CreateUpdateFolder";
+import {openDeleteConfirmFolder} from "redux/reducer/messages/DeleteConfirmFolder";
 import {useDispatch} from "react-redux";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 
@@ -26,7 +27,10 @@ export const RightClickFolder:FC<Props> = ({folder}) => {
             </button>
             <button
                 onClick={() => {
-                    console.log('adasd')
+                    dispatch(openDeleteConfirmFolder({folderId: folder._id}))
+                    setTimeout(() => {
+                        closeRightClick()
+                    }, 500)
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full reply-right-click"}>
                 <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>

@@ -19,6 +19,7 @@ import RightClickMenuSlice from './RightClickMenu';
 import UnreadMessagesSlice from './messages/UnreadMessages';
 import ListFoldersSlice from './messages/ListFolders';
 import CreateUpdateFolderSlice from './messages/CreateUpdateFolder';
+import DeleteConfirmFolderSlice from './messages/DeleteConfirmFolder';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
     unreadMessages: UnreadMessagesSlice,
     listFolders: ListFoldersSlice,
     createUpdateFolder: CreateUpdateFolderSlice,
+    deleteConfirmFolder: DeleteConfirmFolderSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

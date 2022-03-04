@@ -1,16 +1,18 @@
 import React, {FC, useEffect, useRef} from 'react'
 import {map as _map} from "lodash";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {RightClickMenuWrapper} from "shareComponents/common";
 import {RightClickFolder} from "./RightClickFolder";
 import PlusIcon from "assets/images/icons8-plus-math-96.svg";
+import moment from "moment";
+import {setCurrentSelectedFolders} from "redux/reducer/messages/ListFolders"
 
 export const ListFolders:FC = () => {
-    const {listFolders, nextCursor, hasMoreData} = useSelector((state: RootState) => state.listFolders.data);
+    const {listFolders, nextCursor, hasMoreData, currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
     const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
-
+    const dispatch = useDispatch();
     const listFoldersRef = useRef<HTMLDivElement>(null);
     const {getListFoldersConversation} = UseListConversation();
 
@@ -40,20 +42,32 @@ export const ListFolders:FC = () => {
                 className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
             >
                 <button
-                    className={"whitespace-nowrap text-center block p-2 border-b-2 border-primary text-primary"}
+                    onClick={() => {
+                        dispatch(setCurrentSelectedFolders({
+                            currentSelectedFolders: {
+                                _id: "all",
+                                name: "All",
+                                amountMissMessage
+                            }
+                        }))
+                    }}
+                    className={"whitespace-nowrap text-center block p-2 " + ((!currentSelectedFolders||"all"===currentSelectedFolders._id)?"border-b-2 border-primary text-primary":"text-primary-gray")}
                 >
                     All
                 </button>
                 {amountMissMessage>0&&<span className={"rounded-full bg-primary text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{amountMissMessage}</span>}
             </div>
-            {_map(Object.values(listFolders), tab => (
+            {_map(Object.values(listFolders).sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1), tab => (
                 <RightClickMenuWrapper
                     className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
                     key={tab._id}
                     contextMenu={<RightClickFolder folder={tab}/>}
+                    onClick={() => {
+                        dispatch(setCurrentSelectedFolders({currentSelectedFolders: tab}))
+                    }}
                 >
                     <button
-                        className={"whitespace-nowrap text-center block p-2 " + (tab._id==="all"?"border-b-2 border-primary text-primary":"text-primary-gray")}
+                        className={"whitespace-nowrap text-center block p-2 " + ((currentSelectedFolders&&tab._id===currentSelectedFolders._id)?"border-b-2 border-primary text-primary":"text-primary-gray")}
                     >
                         {tab.name}
                     </button>
