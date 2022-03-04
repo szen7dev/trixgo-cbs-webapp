@@ -2,10 +2,9 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
 import { Task, CheckList, CheckListPayload, ResponseProps, ResponsePayload } from "typings/task";
-import { useSocket } from 'services/hooks/useSocket';
 
 type UseTask = {
-  addResponse: (payload: ResponsePayload) => Promise<{ result: ResponseProps } | undefined>;
+  addResponseAsync: (payload: ResponsePayload) => Promise<any>;
   listResponses: Array<ResponseProps>;
   totalRecordResponse: number;
   refetchListResponse: () => void;
@@ -27,36 +26,10 @@ type Props = {
 }
 
 export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask => {
-  const { current: socket }: any = useSocket();
-
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
     );
-
-  const addResponse = async (payload: ResponsePayload) => {
-    try {
-      const { error, data, message } = await addResponseAsync(payload);
-
-      if(error) {
-        toast.warning(message)
-      } else{
-        toast.success('Tạo phản hồi thành công');
-      }
-
-      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-          receivers: data.receivers
-      });
-
-      return data;
-    } catch (error: unknown) {
-      if (typeof error === "string") {
-          toast.error(error);
-      } else if (error instanceof Error) {
-          toast.error(error.message);
-      }
-    }
-  };
 
   const {
     data: dataListResponse,
@@ -129,7 +102,7 @@ export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask 
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   return {
-    addResponse,
+    addResponseAsync,
     listResponses,
     totalRecordResponse,
     refetchListResponse,

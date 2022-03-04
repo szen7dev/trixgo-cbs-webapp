@@ -56,7 +56,7 @@ export const LeftSideBar: FC = () => {
           {listAppMenu && listAppMenu.length ?
             <>
               {listAppMenu.map((item: any, index: number) => {
-                const roleApp = listAppRoleMenu.find((e: any) => e._id?.menu == item._id);
+                const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
                 if (roleApp && roleApp.read >= 1) {
                   return (
                     <Link key={index} to={`/pcm/${item.slug}`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">

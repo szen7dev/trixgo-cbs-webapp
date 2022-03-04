@@ -26,10 +26,8 @@ type Props = {
 };
 
 export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage }) => {
-	console.log({ response });
-	
 	const { mutateAsync: updateMarkResponseAsync } =
-		useMutation((payload: { commentTemplateID: string, taskID: string, official: boolean }) =>
+		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
 		);
 
@@ -40,8 +38,8 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 	const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		await updateMarkResponseAsync({
-			commentTemplateID: response._id,
-			taskID: response.task,
+			commentID: response._id,
+			taskID: response.task._id,
 			official: e.target.checked
 		})
 	}

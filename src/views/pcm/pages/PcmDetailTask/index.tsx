@@ -52,8 +52,15 @@ export const PcmDetailTask: FC = () => {
 
   useEffect(() => {
     if (infoTask?.data) {
-      setPercentComplete(`${infoTask.data.percentage}%`);
-      setConfirmUsers([infoTask.data.author, infoTask.data.assignee]);
+      const { author, assignee, percentage } = infoTask.data;
+      let confirmUsers = [author, assignee];
+
+      if(author._id === assignee._id) {
+        confirmUsers = [assignee];
+      }
+
+      setPercentComplete(`${percentage}%`);
+      setConfirmUsers(confirmUsers);
     }
   }, [infoTask]);
 

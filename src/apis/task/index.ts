@@ -27,7 +27,7 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountResponseMarked",
+        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountMarkedResponse",
         populates: JSON.stringify({
           path: "group author assignee related parent project company approver",
           select: "_id name fullname bizfullname image sign",
@@ -72,16 +72,22 @@ const TaskRepository = {
   ): Promise<ResponseResponse> {
     const { data } = await API.post<ResponseResponse>(
       `${pcmURL}/pcm_comments`,
-      payload
+      {
+        ...payload,
+        populates: JSON.stringify({
+          path: "author",
+          select: "_id bizfullname image"
+        })
+      }
     );
     return data;
   },
 
   async updateMarkResponse(
-    payload: { commentTemplateID: string, taskID: string, official: boolean }
+    payload: { commentID: string, taskID: string, official: boolean }
   ): Promise<any> {
     const { data } = await API.put<any>(
-      `${pcmURL}/pcm_comments`,
+      `${pcmURL}/pcm_comments/mark`,
       payload
     );
     return data;

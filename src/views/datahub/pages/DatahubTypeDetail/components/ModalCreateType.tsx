@@ -53,7 +53,7 @@ const ModalCreateType: FC<Props> = (props) => {
 						s: null
 					}}
 					onSubmit={values => {
-						console.log(values);
+						console.log({values});
 					}}
 				>
 					<Form>

@@ -59,7 +59,6 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
   const handleSubmit = async (values: UserSystemPayload) => {
     values.companyID = initialValues.companyID;
     values.level = +values.level;
-    console.log({ values, modalType });
 
     try {
       // Handle api here!

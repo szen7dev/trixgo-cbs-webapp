@@ -6,8 +6,8 @@ import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 
-import { Author, Assignee } from "typings/task";
-import { User } from "typings/user";
+import type { Author, Assignee } from "typings/task";
+import type { User } from "typings/user";
 
 type Props = {
   author: Author;

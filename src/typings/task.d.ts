@@ -50,7 +50,7 @@ export type Task = {
   company: Company,
   group: Group,
   amountResponse: number;
-  amountResponseMarked: number;
+  amountMarkedResponse: number;
 };
 
 export type ListTaskResponse = APIResponse & {
@@ -106,7 +106,10 @@ export type ResponseProps = {
   _id: string,
   type: number,
   official: boolean,
-  task: string,
+  task: {
+    _id: string,
+    name: string
+  },
   content: string,
   files: FileProps[] | undefined,
   images: FileProps[] | undefined,

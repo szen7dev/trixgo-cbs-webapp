@@ -16,7 +16,7 @@ export type ListNotificationResponse = APIResponse & {
     totalPages?: number;
     limit?: number;
     totalRecord?: number;
-    totalPages?: number;
+    totalPage?: number;
     nextCursor?: string;
   };
 };

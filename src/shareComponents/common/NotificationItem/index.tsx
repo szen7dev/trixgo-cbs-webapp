@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import moment from 'moment';
 
 type Props = {
   avatar: string;
@@ -30,11 +31,11 @@ export const NotificationItem: FC<Props> = ({
         <div className="flex flex-col">
           <div className="text-primary-gray font-bold">{author}</div>
           <div
-            dangerouslySetInnerHTML={{ __html: content.length > 100 ? `${content.substring(0, 100)}...` : content }}
+            dangerouslySetInnerHTML={{ __html: content?.length > 100 ? `${content.substring(0, 100)}...` : content }}
             className="max-w-[250px] text-[15px]"
           />
           <div className="font-normal text-sm leading-4 text-primary">
-            {lastActive}
+            {moment(lastActive).fromNow()}
           </div>
         </div>
       </div>
