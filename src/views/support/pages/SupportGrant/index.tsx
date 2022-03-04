@@ -42,9 +42,13 @@ export const SupportGrantPage: FC = () => {
   const toggleModalCreateOrUpdateAppCompany = () => setModalCreateOrUpdateAppCompany(!modalCreateOrUpdateAppCompany);
 
   const handleChangeCompany = (value: any) => {
-    setCompanyName(`${value.name} - ${value.sign}`);
-    setCompanySelected(value._id);
-    history.push(`#${value._id}`);
+    const nameCompany = `${value.name} - ${value.sign}`;
+    const idCompany = value._id;
+
+    setCompanyName(nameCompany);
+    setCompanySelected(idCompany);
+    history.push(`#${idCompany}`);
+    window.sessionStorage.setItem('companyName', nameCompany);
   }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -158,10 +162,15 @@ export const SupportGrantPage: FC = () => {
   }, [listChecked.length])
 
   useEffect(() => {
-    if(location.hash) {
+    if(!location.hash) return;
+
+    try {
       const companyID = location.hash.substring(1);
-      setCompanySelected(companyID);
-    }
+      const companyName = window.sessionStorage.getItem('companyName');
+      
+      companyID && setCompanySelected(companyID);
+      companyName && setCompanyName(companyName);
+    } catch (error) {console.error(error)}
   }, [location.hash])
 
   return (
