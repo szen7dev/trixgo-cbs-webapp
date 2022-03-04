@@ -42,7 +42,7 @@ const CommentImageRepository = {
     return data;
   },
   async updateComment(payload: CommentBody) {
-    const { data } = await API.put<Response<Comment>>(
+    const { data } = await API.put<Response<CommentDetail>>(
       mediaURL + "/comments/file"
     );
     return data;
@@ -57,7 +57,7 @@ const CommentImageRepository = {
   },
   async listComments(payload: {
     mediaID: string;
-    fileID: string;
+    fileID?: string;
     lastestID?: string;
     parentID?: string;
   }) {
