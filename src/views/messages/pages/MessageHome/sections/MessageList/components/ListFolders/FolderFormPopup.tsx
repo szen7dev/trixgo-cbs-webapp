@@ -1,21 +1,50 @@
-import React, {FC, Fragment, useRef, useState} from "react";
+import React, {FC, Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {dismissCreateUpdateFolder} from "redux/reducer/messages/CreateUpdateFolder";
+import {addSingleFolder, updateSingleFolder} from "redux/reducer/messages/ListFolders";
 import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 export const FolderFormPopup:FC = () => {
     const {isCreateUpdateFolder, folder} = useSelector((state: RootState) => state.createUpdateFolder.data);
     const dispatch = useDispatch();
+    const {addFolder, updateFolder} = UseListConversation();
     const focusElementRef = useRef<HTMLDivElement>(null);
-    const [folderName, setFolderName] = useState(folder?folder.name:"")
+    const [folderName, setFolderName] = useState("")
+
+    useEffect(() => {
+        if (folder) {
+            setFolderName(folder.name)
+        }
+    }, [folder])
+
+    const handlePressConfirmFolder = () => {
+        dispatch(dismissCreateUpdateFolder())
+        if (folder) {
+            updateFolder({
+                folderID: folder._id,
+                name: folderName
+            }).then((folder) => {
+                dispatch(addSingleFolder({folderId: folder._id, folderData: folder}))
+            })
+        } else {
+            addFolder({
+                name: folderName
+            }).then((folder) => {
+                dispatch(updateSingleFolder({folderId: folder._id, folderData: folder}))
+            })
+        }
+        setFolderName("");
+    }
+
     return (
         <Transition appear show={isCreateUpdateFolder} as={Fragment}>
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
-                onClose={() => dispatch(dismissCreateUpdateFolder({}))}
+                onClose={() => dispatch(dismissCreateUpdateFolder())}
                 initialFocus={focusElementRef}
             >
                 <div ref={focusElementRef} className="min-h-screen flex items-center justify-center z-51">
@@ -51,7 +80,7 @@ export const FolderFormPopup:FC = () => {
                             <div className={"flex w-full items-center p-[22px]"}>
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
-                                    onClick={() => dispatch(dismissCreateUpdateFolder({}))}
+                                    onClick={() => dispatch(dismissCreateUpdateFolder())}
                                 >
                                     <Close/>
                                 </button>
@@ -63,7 +92,7 @@ export const FolderFormPopup:FC = () => {
                                     }
                                 </div>
                                 <button
-                                    onClick={() => console.log('asdasd')}
+                                    onClick={() => handlePressConfirmFolder()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
                                     Xác nhận

@@ -1,5 +1,5 @@
 import React, {createContext, FC, useMemo, useEffect, useState} from "react";
-import {FolderFormPopup, MessageList} from "./sections/MessageList";
+import {FolderDeleteConfirmPopup, FolderFormPopup, MessageList} from "./sections/MessageList";
 import { useLocation } from 'react-router-dom';
 import {SettingMessageDetail} from "./sections/SettingMessageDetail";
 import { useSocket } from "services/hooks/useSocket";
@@ -74,6 +74,7 @@ export const MessagesHome:FC = () => {
             <PopupSendImageAndFile/>
             <UnreadMessageController currentChat={currentChat} context={MessageContext}/>
             <FolderFormPopup/>
+            <FolderDeleteConfirmPopup/>
         </MessageContext.Provider>
     )
 }
