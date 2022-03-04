@@ -15,6 +15,7 @@ import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateProject from "./components/ModalCreateProject";
+import { debounce } from 'lodash'
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -35,8 +36,6 @@ const DatahubProject: FC = () => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu";
 	}, []);
 
-	const timeoutRef = useRef<NodeJS.Timeout>();
-
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 
@@ -44,14 +43,7 @@ const DatahubProject: FC = () => {
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={(event) => {
-					if (timeoutRef.current) clearTimeout(timeoutRef.current);
-					timeoutRef.current = setTimeout(() => {
-						setQuery(event.target.value);
-					}, 300);
-					// console.log(event.target.value);
-					// if (isFetching) queryClient.cancelQueries(["datahub_projects"]);
-				}} />
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce((event: any) => setQuery(event.target.value), 300)} />
 				<DocumentDropdown
 					data={pkgs}
 					value={pkg.title}

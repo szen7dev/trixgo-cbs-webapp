@@ -13,7 +13,7 @@ type Props<T extends Record<string, any>> = {
 	data: Array<T>
 	required?: boolean
 	error?: React.ComponentType<any>
-	initialData?: string ,
+	initialData?: string,
 	placeholder?: string
 	renderValue?: (value: T) => string
 	onChange?: (value: string) => void
@@ -29,12 +29,12 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	attribute = 'name',
 	valueAttribute,
 	data,
-	initialData,
+	initialData = '',
 	onChange,
 	...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
 	const [selected, setSelected] = useState<null | any>();
-	const [search, setSearch] = useState(initialData || '');
+	const [search, setSearch] = useState(initialData);
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -52,6 +52,10 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 			document.querySelector('#headlessui-portal-root div div')?.removeEventListener('click', handleClickOutSite);
 		};
 	}, [])
+
+	useEffect(() => {
+		setSearch(initialData || '');
+	}, [initialData])
 
 	return (
 		<Field name={name}>

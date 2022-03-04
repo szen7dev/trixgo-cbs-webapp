@@ -2,8 +2,10 @@
 import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
-import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
+import { useQueryClient } from 'react-query'
+import { debounce } from 'lodash'
 
+import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import { Paginate } from "shareComponents/common";
@@ -15,6 +17,7 @@ import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateType from "./components/ModalCreateType";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -22,9 +25,14 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubType: FC = () => {
-	const { data, isFetching, } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 10, type: 1 });
+	const [query, setQuery] = useState('');
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
+	const [datahubID, setDatahubID] = useState('');
+	const [pageCursor, setPageCuror] = useState({ page: [] as string[], cursor: '' });
+
+	const { data } = useDatahubTypes({ lastestID: pageCursor.cursor, level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
+	const queryClient = useQueryClient();
 
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
@@ -32,20 +40,40 @@ const DatahubType: FC = () => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
 	}, []);
 
+	function fetchNextPage() {
+		if (data?.data.nextCursor) {
+			pageCursor.page.push(data.data.nextCursor);
+			setPageCuror({
+				page: pageCursor.page,
+				cursor: data.data.nextCursor,
+			});
+		}
+	}
+
+	function fetchPrevPage() {
+		if (pageCursor.page.length > 0) {
+			pageCursor.page.pop();
+			setPageCuror({
+				page: pageCursor.page,
+				cursor: pageCursor.page[pageCursor.page.length - 1],
+			});
+		}
+	}
+
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce((v: any) => setQuery(v.target.value), 300)} />
 				<DocumentDropdown
 					data={pkgs}
 					value={pkg.title}
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions className="flex items-center flex-1" onClickPencil={() => { setShow(true); setDatahubID('62210295cfadc00a13f3bd80') }} />
 
-				<ButtonCreate onClick={() => setShow(!show)} />
+				<ButtonCreate onClick={() => { setShow(true); setDatahubID('') }} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -82,7 +110,7 @@ const DatahubType: FC = () => {
 									popular,
 								} = props
 								return (
-									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" >
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
@@ -101,14 +129,26 @@ const DatahubType: FC = () => {
 				</table>
 			</div>
 			<Paginate
-				isFetching={isFetching}
 				limit={data?.data.limit || 10}
 				totalRecord={data?.data.totalRecord}
 				totalPages={data?.data.totalPage}
-				// prevPageAction
+				hasNextPage={Boolean(data?.data.nextCursor)}
+				prevPageAction={fetchPrevPage}
+				nextPageAction={fetchNextPage}
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalExtraLarge show={show} buttonOnly>
+				<ModalCreateType
+					datahubID={datahubID}
+					type={datahubID ? 'edit' : 'create'}
+					toggle={() => setShow(false)}
+					onSuccessCreate={data => {
+						queryClient.removeQueries(["datahub_types"], { inactive: true });
+						queryClient.refetchQueries(["datahub_types", ""]);
+						setPageCuror({ page: [], cursor: '' })
+					}}
+				/>
+			</ModalExtraLarge>
 		</div >
 	);
 };

@@ -13,6 +13,7 @@ import { SearchInput } from "shareComponents/common";
 import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateType from "../DatahubType/components/ModalCreateType";
 
@@ -108,7 +109,9 @@ const DatahubType2: FC = () => {
 				// prevPageAction
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalExtraLarge show={show} buttonOnly>
+				<ModalCreateType type='create' toggle={() => setShow(!show)} />
+			</ModalExtraLarge>
 		</div >
 	);
 };
