@@ -107,7 +107,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">
-														<span className="w-5/6">
+														<span className="w-5/6 break-all">
 															{file.nameOrg}
 														</span>
 														<div className="w-1/6 flex justify-end">
