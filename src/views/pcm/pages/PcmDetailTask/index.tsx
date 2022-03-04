@@ -27,10 +27,16 @@ import styles from "views/pcm/styles/pcm_task.module.css";
 import TaskRepository from "apis/task";
 import { useCheckList } from "services/hooks/useTask";
 import { User } from "typings/user";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+
+// Modal
+import useModal from "views/pcm/hooks/useModal";
+import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
 
 export const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
+  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModal();
 
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
@@ -104,7 +110,7 @@ export const PcmDetailTask: FC = () => {
           <button className="mx-3">
             <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button>
-          <button className="mx-3">
+          <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
           <button className="mx-3">
@@ -116,7 +122,7 @@ export const PcmDetailTask: FC = () => {
           <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button>
-          <button className="mx-3">
+          <button className="mx-3" onClick={openAddUserRelation}>
             <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
           </button>
         </div>
@@ -269,6 +275,13 @@ export const PcmDetailTask: FC = () => {
         {/*_____________task comment ______________*/}
         <div className="flex bg-white mt-2" style={{ width: 1100 }}>
           <CommentContainer className="w-[791px]" />
+          <ModalLarge
+            show={isShow}
+            className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+          >
+            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} />}
+            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
+          </ModalLarge>
         </div>
       </div>
     </>

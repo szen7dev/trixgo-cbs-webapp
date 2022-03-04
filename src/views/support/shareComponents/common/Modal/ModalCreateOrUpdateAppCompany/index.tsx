@@ -136,6 +136,7 @@ export const ModalCreateOrUpdateAppCompany: FC<ModalProps> = ({ toggle, modalTyp
                         placeholder: "Nhập ngày bắt đầu",
                         readOnly: true,
                       }}
+											style={{ width: "100%" }}
                     />
                   {/* <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="startTime" placeholder="Nhập ngày bắt đầu" {...getFieldProps('startTime')} /> */}
                   <ErrorMessage
@@ -156,7 +157,8 @@ export const ModalCreateOrUpdateAppCompany: FC<ModalProps> = ({ toggle, modalTyp
                         placeholder: "Nhập ngày kết thúc",
                         readOnly: true,
                       }}
-                    />
+											style={{ width: "100%" }}
+										/>
                   {/* <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="endTime" placeholder="Nhập ngày kết thúc" {...getFieldProps('endTime')} /> */}
                   <ErrorMessage
                     name="endTime"
