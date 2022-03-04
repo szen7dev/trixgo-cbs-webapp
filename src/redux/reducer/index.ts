@@ -20,6 +20,7 @@ import UnreadMessagesSlice from './messages/UnreadMessages';
 import ListFoldersSlice from './messages/ListFolders';
 import CreateUpdateFolderSlice from './messages/CreateUpdateFolder';
 import DeleteConfirmFolderSlice from './messages/DeleteConfirmFolder';
+import AddConversationToFolderSlice from './messages/AddConversationToFolder';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
     listFolders: ListFoldersSlice,
     createUpdateFolder: CreateUpdateFolderSlice,
     deleteConfirmFolder: DeleteConfirmFolderSlice,
+    addConversationToFolder: AddConversationToFolderSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
