@@ -1,3 +1,5 @@
+import { useContext } from "react";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   CommentWithReply,
   CommentBody,
@@ -8,11 +10,15 @@ import {
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import CommentImageRepository from "apis/media/CommentImageRepository";
+import CommentRepository from "apis/media/comment";
 import { useMemo } from "react";
+import AuthContext from "services/contexts/Auth";
+import { User } from "typings/user";
 
-type Payload = {
+type Payload<T = undefined> = {
   mediaID: string;
-  fileID: string;
+  fileID?: T;
+
   lastestID?: string | undefined;
   limit?: number | undefined;
   companyID?: string | undefined;
@@ -22,14 +28,30 @@ type Payload = {
   populates?: string | undefined;
 };
 
-const useComments = (payload: Payload) => {
-  const key = ["list_comments_image", payload.mediaID, payload.fileID];
+function useComments<T extends string | undefined>(payload: Payload<T>) {
+  const key = [
+    payload.fileID ? "list_comments_image" : "list_comments",
+    payload.mediaID,
+    payload.fileID,
+  ];
+
+  const {
+    state: { user },
+  } = useContext(AuthContext);
 
   const { mutateAsync: deleteCommentAsync, isLoading: isLoadingDelete } =
-    useMutation(CommentImageRepository.deleteComment);
+    useMutation(
+      payload.fileID
+        ? CommentImageRepository.deleteComment
+        : CommentRepository.deleteComment
+    );
 
-  const { mutateAsync: updateCommentAsync, isLoading: isLoadingUpdate } =
-    useMutation(CommentImageRepository.updateComment);
+  // const { mutateAsync: updateCommentAsync, isLoading: isLoadingUpdate } =
+  //   useMutation(
+  //     payload.fileID
+  //       ? CommentImageRepository.updateComment
+  //       : CommentRepository.updateComment
+  //   );
 
   const {
     isLoading: isLoadingList,
@@ -40,12 +62,18 @@ const useComments = (payload: Payload) => {
   } = useInfiniteQuery(
     key,
     async ({ pageParam = "" }) => {
-      const response = await CommentImageRepository.listComments({
-        lastestID: pageParam,
-        mediaID: payload.mediaID,
-        fileID: payload.fileID,
-        // ...payload,
-      });
+      const response = payload.fileID
+        ? await CommentImageRepository.listComments({
+            lastestID: pageParam,
+            mediaID: payload.mediaID,
+            fileID: payload.fileID,
+            // ...payload,
+          })
+        : await CommentRepository.listComments({
+            lastestID: pageParam,
+            mediaID: payload.mediaID,
+            // ...payload,
+          });
 
       return {
         data: {
@@ -90,15 +118,16 @@ const useComments = (payload: Payload) => {
     C extends P["parentID"] extends string
       ? [{ page: number; commentIdx: number }]
       : []
-  >(payload: P, ...options: C) {
+  >(p: P, ...options: C) {
     try {
       const {
         error,
         data: _data,
         message,
         code,
-      } = await CommentImageRepository.createComment(payload);
-
+      } = payload.fileID
+        ? await CommentImageRepository.createComment(p as any)
+        : await CommentRepository.createComment(p);
       // Promise delay two second
       // await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -113,9 +142,10 @@ const useComments = (payload: Payload) => {
               const { page, commentIdx } = options[0];
               (old.pages[page].data.listRecords[commentIdx] as CommentDetail)
                 .amountCommentReply++;
-              old.pages[page].data.listRecords[commentIdx].listReply.data.push(
-                _data
-              );
+              old.pages[page].data.listRecords[commentIdx].listReply.data.push({
+                ..._data,
+                author: user as User,
+              });
 
               // Create main;
             } else {
@@ -123,6 +153,7 @@ const useComments = (payload: Payload) => {
 
               old.pages[old.pages.length - 1].data.listRecords.push({
                 ..._data,
+                author: user as User,
                 listReply: { data: [], nextCursor: null },
               });
             }
@@ -147,6 +178,7 @@ const useComments = (payload: Payload) => {
     P extends Omit<CommentBody, "parentID"> & {
       commentID: string;
       parentID: string;
+      fileID?: string;
     },
     C extends {
       page: number;
@@ -160,7 +192,10 @@ const useComments = (payload: Payload) => {
         data: _data,
         message,
         code,
-      } = await updateCommentAsync(payload);
+        // } = await updateCommentAsync(payload);
+      } = payload.fileID
+        ? await CommentImageRepository.updateComment(payload as any)
+        : await CommentRepository.updateComment(payload);
       if (error || code) {
         if (message) return toast.error(message);
         throw new Error((_data as any)[0].message as string);
@@ -171,10 +206,16 @@ const useComments = (payload: Payload) => {
               // Update reply comment;
               old.pages[page].data.listRecords[commentIdx].listReply.data[
                 replyIdx
-              ] = _data;
+              ] = {
+                ...old.pages[page].data.listRecords[commentIdx].listReply.data[
+                  replyIdx
+                ],
+                ..._data,
+              };
             } else {
               // Update comment
               old.pages[page || 0].data.listRecords[commentIdx || 0] = {
+                ...old.pages[page || 0].data.listRecords[commentIdx || 0],
                 ..._data,
                 listReply: { data: [], nextCursor: null },
               };
@@ -294,7 +335,7 @@ const useComments = (payload: Payload) => {
     isLoadingList,
     // isLoadingCreate,
     isLoadingDelete,
-    isLoadingUpdate,
+    // isLoadingUpdate,
 
     refetchListComments,
     fetchNextPage,
@@ -303,6 +344,6 @@ const useComments = (payload: Payload) => {
 
     fetchReplyComment,
   };
-};
+}
 
 export default useComments;

@@ -9,12 +9,14 @@ import {
 
 const populatesComment = JSON.stringify({
   path: "author lastestReplyID files images media",
-  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
+  select:
+    "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
   populate: {
-      path: 'author lastestReplyID files images media',
-      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media'
-  }
-})
+    path: "author lastestReplyID files images media",
+    select:
+      "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt media",
+  },
+});
 
 const mediaURL = "/api/medias";
 
@@ -29,6 +31,7 @@ const CommentRepository = {
       data: Comment;
       message: string;
       error: boolean;
+			code?: number;
     }>(mediaURL + "/comments", payload);
     return data;
   },
@@ -37,14 +40,16 @@ const CommentRepository = {
       data: CommentDetail;
       message: string;
       error: boolean;
+      code?: number;
     }>(mediaURL + "/comments", payload);
     return data;
   },
   async deleteComment(id: string) {
-    const { data } = await API.delete<{ error: boolean; message: string }>(
-      mediaURL + "/comments",
-      { params: { commentID: id } }
-    );
+    const { data } = await API.delete<{
+      error: boolean;
+      data: any;
+      message: string;
+    }>(mediaURL + "/comments", { params: { commentID: id } });
     return data;
   },
   async listComments(payload: {

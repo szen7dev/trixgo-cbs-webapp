@@ -7,6 +7,7 @@ import { usePost } from '..';
 import { OptionsSubmitReply, OptionsSubmitReplyNested } from './RootComment';
 import { SubmitComment } from './ReplyCommentField';
 import AuthContext from 'services/contexts/Auth';
+import { InfiniteData } from 'react-query';
 
 type Props = {
 	limit?: number,
