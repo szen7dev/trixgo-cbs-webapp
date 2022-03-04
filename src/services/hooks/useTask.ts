@@ -191,7 +191,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         limit,
         lastestID: pageParam || "",
         parentID: parentID || "",
-        type: 2,
+        isChecklist: 1,
         isSortChecklist: 1,
         select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({

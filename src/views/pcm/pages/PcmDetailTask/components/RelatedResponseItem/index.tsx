@@ -100,7 +100,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							{(response.files && response.files.length) ? response.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
-										<a href="/">
+										<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
 											<div className="flex">
 												<div>
 													<img src={PDFIcon} className="w-8" alt="PDF" />
@@ -145,7 +145,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 											type="checkbox"
 											className="cbs-checkbox-2 w-3.5 h-3.5 checked:bg-cbs-completed checked:border-cbs-completed rounded-[3px] border-[1px] border-primary-border focus:ring-2 focus-visible:outline-none focus:ring-cbs-completed focus:ring-opacity-30" />
 										<div className="rounded-full p-2 border-2">
-											<a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
+											<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
 												<img src={IconDownload} alt="Avatar" className="w-6" />
 											</a>
 										</div>
@@ -155,11 +155,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
 								{(response.images && response.images.length) ? response.images.map((file, index) => {
-
 									if (index < 2) {
 										return (
 											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}/${file.path}` : file.url} className="w-full" alt="test" />
+												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : file.url} className="w-full" alt="test" />
 											</button>
 										)
 									}

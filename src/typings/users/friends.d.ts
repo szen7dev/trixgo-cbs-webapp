@@ -20,7 +20,10 @@ interface QueryParam {
 
 export interface Friend {
     _id: string;
+    bizfullname: string,
     fullname: string;
+    email: string;
+    phone: string;
     imgUrl?: string;
     company?: Company;
 }

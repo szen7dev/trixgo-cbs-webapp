@@ -39,6 +39,7 @@ export const PcmDetailTask: FC = () => {
     TaskRepository.taskInfo(id)
   );
   const { listCheckList, totalRecord, nextPageListCheckList } = useCheckList(id);
+  console.log({ listCheckList });
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -67,6 +68,7 @@ export const PcmDetailTask: FC = () => {
   if (isLoading || !infoTask || !infoTask.data) {
     return <Loader className="border-primary" />;
   }
+  console.log({ infoTask });
 
   return (
     <>

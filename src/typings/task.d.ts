@@ -73,15 +73,15 @@ export type CheckList = {
 };
 
 export type CheckListPayload = {
-  taskID?: string;
+  parentID: string;
   name: string;
-  description: string;
-  expiredTime: string;
   type: number;
-  assignee: string;
+  assigneeID: string;
+  expiredTime: string;
 };
 
 export type ListCheckListPayload = {
+  isChecklist?: number;
   lastestID?: string;
   limit?: number;
   populates?: string;

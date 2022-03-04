@@ -48,9 +48,6 @@ const NotificationsMenu: FC<Props> = ({ notifications }) => {
 
           <div className="flex justify-between items-center px-4 pt-3">
             <span className="font-bold text-lg text-dark">Mới</span>
-            <a className="text-primary" href="/">
-              Xem tất cả
-            </a>
           </div>
 
           <div className="t-header-notification-item-container overflow-auto">

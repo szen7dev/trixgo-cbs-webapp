@@ -13,9 +13,24 @@ import {
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
+const populatesResponse = JSON.stringify({
+  path: "task files images author",
+  select: "_id bizfullname image name nameOrg mimeType description path size author createAt",
+  options: {
+    limit: 5,
+  },
+  populate: {
+    path: "author",
+    select: "_id bizfullname image"
+  }
+})
+
 const pcmURL = "/api/subject_pcm";
 
 const TaskRepository = {
+  /**
+   * CHI TIẾT CÔNG VIỆC
+   */
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -38,6 +53,9 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * CHECKLIST
+   */
   async addChecklist(
     payload: CheckListPayload
   ): Promise<any> {
@@ -67,6 +85,9 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * PHẢN HỒI LIÊN QUAN
+   */
   async addResponse(
     payload: ResponsePayload
   ): Promise<ResponseResponse> {
@@ -74,10 +95,7 @@ const TaskRepository = {
       `${pcmURL}/pcm_comments`,
       {
         ...payload,
-        populates: JSON.stringify({
-          path: "author",
-          select: "_id bizfullname image"
-        })
+        populates: populatesResponse
       }
     );
     return data;
@@ -98,13 +116,7 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
-        populates: JSON.stringify({
-          path: "task files images author",
-          select: "_id bizfullname image name nameOrg path size createAt",
-          options: {
-            limit: 5,
-          },
-        }),
+        populates: populatesResponse,
         ...payload,
         type: 2
       })}`
@@ -117,14 +129,7 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
-        select: "comment official type task userCreate createAt",
-        populates: JSON.stringify({
-          path: "task files images author",
-          select: "_id bizfullname image name nameOrg path size createAt",
-          options: {
-            limit: 5,
-          },
-        }),
+        populates: populatesResponse,
         ...payload
       })}`
     );
