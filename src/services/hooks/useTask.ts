@@ -23,10 +23,10 @@ type Props = {
   taskID?: string;
   typeStatus?: number;
   type?: number;
-  isMarked?: boolean;
+  official?: boolean;
 }
 
-export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask => {
+export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask => {
   const { current: socket }: any = useSocket();
 
   const { mutateAsync: addResponseAsync } =
@@ -62,13 +62,13 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
     data: dataListResponse,
     refetch: refetchListResponse,
   } = useInfiniteQuery(
-    ["list_responses", taskID, isMarked || false],
+    ["list_responses", taskID, official || false],
     async ({ pageParam }: any) => {
       return TaskRepository.listResponse({
         taskID,
         limit: 5,
         lastestID: pageParam || "",
-        isMarked: isMarked || false,
+        official: official || false,
       });
     },
     {

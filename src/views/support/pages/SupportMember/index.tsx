@@ -1,9 +1,9 @@
-import { UIEvent, FC, useState, useCallback } from "react";
+import { UIEvent, FC, useEffect, useState, useCallback } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 
 /**
  * Components
@@ -30,7 +30,8 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryListCompany } from 'services/hooks/useCompanies';
-import { UserSystemRepository } from 'apis/users';
+import { UserSystemProps } from "typings/users/userSystem";
+// import { UserSystemRepository } from 'apis/users';
 
 export const SupportMemberPage: FC = () => {
   const { closeModal, openModal } = useModal();
@@ -40,18 +41,27 @@ export const SupportMemberPage: FC = () => {
   const [keywordCompany, setKeywordCompany] = useState('');
   const [keywordUser, setKeywordUser] = useState('');
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+  // const [infoUser, setInfoUser] = useState({});
+  const [initialValues, setInitialValues] = useState({
+    companyID: companySelected,
+    userID: "",
+    fullname: "",
+    email: "",
+    departmentID: "",
+    positionID: "",
+    level: -1,
+  });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
-  const [userID, setUserID] = useState('');
 
-  const { data } = useQuery(`info_user.${userID}`,
-		() => UserSystemRepository.infoUsersSystem(userID),
-		{
-			enabled: !!userID,
-			refetchOnWindowFocus: false
-		});
+  // const { data } = useQuery(`info_user.${initialValues.userID}`,
+	// 	() => UserSystemRepository.infoUsersSystem(initialValues.userID),
+	// 	{
+	// 		enabled: !!initialValues.userID,
+	// 		refetchOnWindowFocus: false
+	// 	});
 
-	const infoUser = data?.data;
+	// const infoUser = data?.data;
 
   const { 
     data: listUsersSystem, 
@@ -81,7 +91,7 @@ export const SupportMemberPage: FC = () => {
     const isBottom = scrollHeight - scrollTop === clientHeight;
     isBottom && fetchNextPageCompany();
   }
-
+ 
   const toggleModalCreateOrUpdateUser = () => setModalCreateOrUpdateUser(!modalCreateOrUpdateUser);
 
   const handleConfirmCreateOrUpdateUser = () => refetchUser();
@@ -92,16 +102,33 @@ export const SupportMemberPage: FC = () => {
     setKeywordUser(event.target.value);
   }, 500);
 
-  const onClickCheckButton = (userID: string) => {
-		const check = idsChecked.includes(userID);
+  const onClickCheckButton = (user: UserSystemProps) => {
+		const check = idsChecked.includes(user._id);
+    let newListIDChecked = [];
+
 		if (check) {
-			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == userID), 1);
-			setIdsChecked(newList);
+			newListIDChecked = [...idsChecked];
+			newListIDChecked.splice(newListIDChecked.findIndex((e: any) => e == user._id), 1);
+
+			setIdsChecked(newListIDChecked);
 		} else {
-			const newList = [...idsChecked, userID];
-			setIdsChecked(newList);
+			newListIDChecked = [...idsChecked, user._id];
+			setIdsChecked(newListIDChecked);
 		};
+
+    // if(newListIDChecked.length === 1) {
+    //   setInitialValues({
+    //     userID: user?._id,
+    //     companyID: companySelected,
+    //     fullname: user?.fullname,
+    //     email: user?.email,
+    //     departmentID: user?.department?._id,
+    //     positionID: user?.position?._id,
+    //     level: user?.level,
+    //   });
+    // } else{
+    //   setInitialValues(previousValue => ({ ...previousValue, userID: "" }));
+    // }
 	};
 
   const getStateChecked = useCallback((id: string) => {
@@ -131,8 +158,15 @@ export const SupportMemberPage: FC = () => {
     toast.success('Xoá dữ liệu thành công');
     closeModal();
     setIdsChecked([]);
+    setInitialValues(previousValue => ({ ...previousValue, userID: "" }));
     refetchUser();
   }
+
+  useEffect(() => {
+    if(companySelected) {
+      setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
+    }
+  }, [companySelected])
 
   return (
     <main className="relative h-full">
@@ -179,8 +213,8 @@ export const SupportMemberPage: FC = () => {
                 className="mr-3" 
                 onClick={() => {
                   toast.info('Tính năng đang bị bug, vui lòng quay lại sau');
+                  // setInitialValues(previousValue => ({ ...previousValue, userID: idsChecked[0] }));
                   // toggleModalCreateOrUpdateUser();
-                  // setUserID(idsChecked[0]);
                 }}
               >
                 <img src={iconPencil} alt="icon pencil" />
@@ -215,10 +249,7 @@ export const SupportMemberPage: FC = () => {
             {companySelected ? (
               <button 
                 className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold" 
-                onClick={() => {
-                  toggleModalCreateOrUpdateUser();
-                  setUserID("");
-                }} 
+                onClick={toggleModalCreateOrUpdateUser} 
               >
                 Tạo mới
               </button>
@@ -291,7 +322,7 @@ export const SupportMemberPage: FC = () => {
                   id="flexCheckDefault"
                   style={{ marginLeft: "-23px" }}
                   checked={getStateChecked(user._id)}
-                  onChange={() => onClickCheckButton(user._id)}
+                  onChange={() => onClickCheckButton(user)}
                 />
               </td>
               <td className="py-1 px-2">{user.fullname}</td>
@@ -315,19 +346,9 @@ export const SupportMemberPage: FC = () => {
       <ModalContainer isModalOpen={modalCreateOrUpdateUser} toggle={toggleModalCreateOrUpdateUser}>
         <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
           <ModalCreateOrUpdateUser
-            modalType={userID ? 'update' : 'create'}
+            modalType={initialValues.userID ? 'update' : 'create'}
             show={modalCreateOrUpdateUser}
-            initialValues={
-              {
-                userID: infoUser?._id,
-                fullname: infoUser?.fullname,
-                email: infoUser?.email,
-                companyID: companySelected,
-                departmentID: infoUser?.department,
-                positionID: infoUser?.position,
-                level: infoUser?.level,
-              }
-            }
+            initialValues={initialValues}
             toggle={toggleModalCreateOrUpdateUser}
             onConfirm={handleConfirmCreateOrUpdateUser}
           />

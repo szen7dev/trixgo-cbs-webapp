@@ -78,7 +78,7 @@ const TaskRepository = {
   },
 
   async updateMarkResponse(
-    payload: { commentTemplateID: string, taskID: string, isMarked: boolean }
+    payload: { commentTemplateID: string, taskID: string, official: boolean }
   ): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_comments`,
@@ -92,23 +92,15 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
-        select: "content task isMarked files images amountReaction author",
         populates: JSON.stringify({
           path: "task files images author",
-          select: "_id bizfullname image name nameOrg path size author",
-          populate: {
-            path: 'images files',
-            options: {
-              limit: 5,
-            },
-            select: '_id name nameOrg path description createAt userCreate',
-            populate: {
-              path: 'userCreate',
-              select: '_id bizfullname'
-            }
-          }
+          select: "_id bizfullname image name nameOrg path size createAt",
+          options: {
+            limit: 5,
+          },
         }),
-        ...payload
+        ...payload,
+        type: 2
       })}`
     );
     return data;
@@ -119,21 +111,13 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
-        select: "comment isMarked type task userCreate createAt",
+        select: "comment official type task userCreate createAt",
         populates: JSON.stringify({
-          path: "comment userCreate",
-          select: "_id bizfullname fullname image files images content",
-          populate: {
-            path: 'images files',
-            options: {
-              limit: 5,
-            },
-            select: '_id name nameOrg path description createAt userCreate',
-            populate: {
-              path: 'userCreate',
-              select: '_id bizfullname'
-            }
-          }
+          path: "task files images author",
+          select: "_id bizfullname image name nameOrg path size createAt",
+          options: {
+            limit: 5,
+          },
         }),
         ...payload
       })}`

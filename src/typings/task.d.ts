@@ -105,15 +105,14 @@ export type ListCheckListResponse = APIResponse & {
 export type ResponseProps = {
   _id: string,
   type: number,
-  isMarked: boolean,
+  official: boolean,
   task: string,
-  comment: {
-    content: string,
-    files: FileProps[] | undefined,
-    images: FileProps[] | undefined,
-    author: User,
-  },
-  userCreate: User,
+  content: string,
+  files: FileProps[] | undefined,
+  images: FileProps[] | undefined,
+  amountCommentReply: number,
+  amountReaction: number,
+  author: User,
   createAt: string
 }
 
@@ -136,7 +135,7 @@ export type ListResponsePayload = {
   taskID?: string;
   lastestID?: string;
   limit?: number;
-  isMarked?: boolean;
+  official?: boolean;
   populates?: string;
   select?: string;
   sortKey?: string;

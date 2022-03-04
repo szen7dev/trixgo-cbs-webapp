@@ -161,9 +161,8 @@ export const SupportDocsManagementPage: FC = () => {
                 <input
                   className="form-check-input mr-2"
                   type="checkbox"
-                  defaultChecked={false}
                   checked={getStateCheckedAll()}
-                  onClick={onClickCheckAll}
+                  onChange={onClickCheckAll}
                 />
                 <img src={PolygonIcon} alt="Polygon" />
               </div>
@@ -208,9 +207,9 @@ export const SupportDocsManagementPage: FC = () => {
               </td>
               <td className="py-1 px-2 flex items-center">
                 <img
-                  src={MemberIcon}
+                  src={appUser.user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${appUser.user?.image}` : MemberIcon}
                   alt="Member"
-                  className="rounded-full mr-2"
+                  className="rounded-full mr-2 w-[40px] h-[40px] object-cover"
                 />
                 <p>{appUser.user?.bizfullname}</p>
               </td>
@@ -219,7 +218,7 @@ export const SupportDocsManagementPage: FC = () => {
                 <input 
                   type="radio" 
                   name={`userAppLevel_${appUser._id}`} 
-                  value={`${appUser.user._id}__0`}
+                  value={`${appUser.user?._id}__0`}
                   defaultChecked={appUser.level === 0}
                   onChange={onChangeLevel}
                 />
@@ -228,7 +227,7 @@ export const SupportDocsManagementPage: FC = () => {
                 <input 
                   type="radio" 
                   name={`userAppLevel_${appUser._id}`} 
-                  value={`${appUser.user._id}__1`}
+                  value={`${appUser.user?._id}__1`}
                   defaultChecked={appUser.level === 1}
                   onChange={onChangeLevel}
                 />

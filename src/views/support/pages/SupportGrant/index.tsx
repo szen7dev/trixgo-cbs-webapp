@@ -2,9 +2,10 @@ import React, { UIEvent, FC, useState, useEffect } from "react";
 import cn from "classnames";
 import moment from "moment";
 import debounce from 'lodash/debounce';
+import { useHistory, useLocation } from "react-router-dom";
 
 import { DropdownSearchable, ModalContainer } from "shareComponents/common";
-import { ModalCreateGrant } from 'views/support/shareComponents/common';
+import { ModalCreateOrUpdateAppCompany } from 'views/support/shareComponents/common';
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import { APP_INFO } from "shareComponents/common";
 
@@ -14,6 +15,8 @@ import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { useAppCompany } from 'services/hooks/apps/useAppCompany';
 
 export const SupportGrantPage: FC = () => {
+  const location = useLocation();
+  const history = useHistory();
   const [keywordCompany, setKeywordCompany] = useState('');
   const [companySelected, setCompanySelected] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -31,7 +34,7 @@ export const SupportGrantPage: FC = () => {
     endTime: ""
   });
 
-  const { data: dataAppsCompany, refetch: refetchAppsCompany } = useAppCompany({ 
+  const { data: dataAppsCompany } = useAppCompany({ 
     companyID: companySelected
   });
   const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany });
@@ -41,6 +44,7 @@ export const SupportGrantPage: FC = () => {
   const handleChangeCompany = (value: any) => {
     setCompanyName(`${value.name} - ${value.sign}`);
     setCompanySelected(value._id);
+    history.push(`#${value._id}`);
   }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -71,7 +75,33 @@ export const SupportGrantPage: FC = () => {
 
   const handleSearch = debounce((value) => setKeywordCompany(value), 500);
 
-  const handleConfirmCreateOrUpdateAppCompany = () => refetchAppsCompany();
+  const handleConfirmCreateOrUpdateAppCompany = (values: any) => {
+    const { _id, app, company, maxCount, maxData, startTime, endTime } = values;
+
+    const listAppsCompanyRefresh = listAppsCompany.map(appCompany => {
+      if(appCompany.app._id === app) {
+        appCompany._id        = _id;
+        appCompany.maxCount   = maxCount;
+        appCompany.maxData    = maxData;
+        appCompany.startTime  = startTime;
+        appCompany.endTime    = endTime;
+      }
+
+      return appCompany;
+    });
+
+    setListChecked([]);
+    setListAppsCompany(listAppsCompanyRefresh);
+    setInitialValues({
+      appCompanyID: _id || '',
+      company: company,
+      app: app,
+      maxCount: maxCount,
+      maxData: maxData,
+      startTime: startTime,
+      endTime: endTime
+    })
+  }
 
   useEffect(() => {
     if(!companySelected) return;
@@ -92,7 +122,7 @@ export const SupportGrantPage: FC = () => {
         }
       }
     })
-
+    
     setListAppsCompany(appsCompany);
   }, [dataAppsCompany.length, companySelected])
 
@@ -104,8 +134,8 @@ export const SupportGrantPage: FC = () => {
 
         setInitialValues({
           appCompanyID: _id,
-          company: company._id,
-          app: app._id,
+          company: company?._id,
+          app: app?._id,
           maxCount,
           maxData,
           startTime: moment(startTime).format("MM/DD/YYYY"),
@@ -117,7 +147,7 @@ export const SupportGrantPage: FC = () => {
         setInitialValues({
           appCompanyID: "",
           company: companySelected,
-          app: app._id,
+          app: app?._id,
           maxCount: 0,
           maxData: 0,
           startTime: "",
@@ -126,6 +156,13 @@ export const SupportGrantPage: FC = () => {
       } 
     }
   }, [listChecked.length])
+
+  useEffect(() => {
+    if(location.hash) {
+      const companyID = location.hash.substring(1);
+      setCompanySelected(companyID);
+    }
+  }, [location.hash])
 
   return (
     <main className="relative h-full">
@@ -231,7 +268,7 @@ export const SupportGrantPage: FC = () => {
                     />
                   </td>
                   <td className="py-1 px-2">
-                    <Link to={`/support/grant/documents-management/${appCompany.app._id}/${appCompany.company._id}/${appCompany.app.name}`}>
+                    <Link to={`/support/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
                       {appCompany.app?.name}
                     </Link>
                   </td>
@@ -270,7 +307,7 @@ export const SupportGrantPage: FC = () => {
 
       <ModalContainer isModalOpen={modalCreateOrUpdateAppCompany} toggle={toggleModalCreateOrUpdateAppCompany}>
         <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-          <ModalCreateGrant
+          <ModalCreateOrUpdateAppCompany
             modalType={initialValues.appCompanyID ? 'update' : 'create'}
             show={modalCreateOrUpdateAppCompany}
             toggle={toggleModalCreateOrUpdateAppCompany}

@@ -64,7 +64,7 @@ const Response: FC<Props> = ({ task }) => {
 
   const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
   const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
-    taskID: id, isMarked: true
+    taskID: id, official: true
   });
 
   const { state, dispatch } = useContext(CommentContext);
@@ -185,7 +185,7 @@ const Response: FC<Props> = ({ task }) => {
       lastestID: state.comments[0]._id,
       taskID: id,
       limit: LIMIT_PER_RESPONSE,
-      isMarked: currentTab === 'MARKED' ? true : false,
+      official: currentTab === 'MARKED' ? true : false,
     });
 
     if (error || !data.listRecords.length) return;
@@ -199,7 +199,7 @@ const Response: FC<Props> = ({ task }) => {
       lastestID: state.comments[state.comments.length - 1]._id,
       taskID: id,
       limit: LIMIT_PER_RESPONSE,
-      isMarked: false,
+      official: false,
       sortKey: JSON.stringify({
         keys: ['createAt__1', '_id__1']
       })

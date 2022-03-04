@@ -60,6 +60,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     values.companyID = initialValues.companyID;
     values.level = +values.level;
     console.log({ values, modalType });
+
     try {
       // Handle api here!
       switch (modalType) {
@@ -113,8 +114,6 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
 
   const handleSearchDepartment = debounce((value) => setKeywordDepartment(value), 500);
   const handleSearchPosition = debounce((value) => setKeywordPosition(value), 500);
-
-  // console.log({ initialValues });
 
   return (
     <Formik

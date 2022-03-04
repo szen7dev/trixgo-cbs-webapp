@@ -15,7 +15,7 @@ import moment from 'moment';
 import { ModalProps, AppCompanyPayload } from 'typings/apps/appCompany';
 import { useAppCompany } from 'services/hooks/apps/useAppCompany';
 
-export const ModalCreateGrant: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialValues = {
+export const ModalCreateOrUpdateAppCompany: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialValues = {
   appCompanyID: "",
   company: "",
   app: "",
@@ -34,26 +34,30 @@ export const ModalCreateGrant: FC<ModalProps> = ({ toggle, modalType, onConfirm,
   });
 
   const handleSubmit = async (values: AppCompanyPayload) => {
+    let dataResponse: any = values;
+
     try {
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, message } = await createAppCompanyAsync(values);
+          const { error, data, message } = await createAppCompanyAsync(values);
 
           if (error) {
             return toast.warning(message);
           }
 
+          dataResponse = data;
           toast.success('Tạo app thành công');
           break;
         }
         case 'update': {
-          const { error, message } = await updateAppCompanyAsync(values);
+          const { error, data, message } = await updateAppCompanyAsync(values);
 
           if (error) {
             return toast.warning(message);
           }
 
+          dataResponse = data;
           toast.success('Cập nhật app thành công');
           break;
         }
@@ -68,7 +72,7 @@ export const ModalCreateGrant: FC<ModalProps> = ({ toggle, modalType, onConfirm,
       }
     }
 
-    onConfirm && onConfirm();
+    onConfirm && onConfirm(dataResponse);
     toggle();
     return [values];
   };

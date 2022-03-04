@@ -66,5 +66,5 @@ interface ModalProps {
         startTime: string,
         endTime: string,
     };
-    onConfirm?(): void
+    onConfirm?(values: AppCompanyProps): void
 }
