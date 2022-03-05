@@ -18,6 +18,8 @@ import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateType from "./components/ModalCreateType";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+import { ContextMenuWrapper, ContextMenu } from "shareComponents/common/ContextMenu";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -28,8 +30,8 @@ const DatahubType: FC = () => {
 	const [query, setQuery] = useState('');
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
-	const [datahubID, setDatahubID] = useState('');
 	const [pageCursor, setPageCuror] = useState({ page: [] as string[], cursor: '' });
+	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
 
 	const { data } = useDatahubTypes({ lastestID: pageCursor.cursor, level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
 	const queryClient = useQueryClient();
@@ -71,12 +73,21 @@ const DatahubType: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" onClickPencil={() => { setShow(true); setDatahubID('62210295cfadc00a13f3bd80') }} />
+				<GroupActions className="flex items-center flex-1" />
 
-				<ButtonCreate onClick={() => { setShow(true); setDatahubID('') }} />
+				<ButtonCreate onClick={() => { setShow(true); setSelected(null) }} />
 				<ButtonMore />
 			</div>
-			<div className="flex-1 overflow-y-auto">
+			<div className="flex-1 overflow-y-auto" id="scroller">
+				<ContextMenu scroller="scroller" >
+					<ul className="bg-white shadow-cbs-md py-0.5 max-h-32 overflow-auto rounded-cbs border-0.5 border-cbs-border">
+						<li className="hover:text-white hover:bg-cbs-secondary py-2 px-4 transition-none">
+							<button onClick={e => { setShow(true) }}>
+								Sửa {selected?.name}
+							</button>
+						</li>
+					</ul>
+				</ContextMenu>
 				<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
@@ -100,7 +111,7 @@ const DatahubType: FC = () => {
 							</th>
 						</tr>
 					</thead>
-					<tbody className="text-small">
+					<ContextMenuWrapper tag="tbody" className="text-small">
 						{
 							data?.data.listRecords.map((props) => {
 								const {
@@ -110,7 +121,7 @@ const DatahubType: FC = () => {
 									popular,
 								} = props
 								return (
-									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" >
+									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" onContextMenu={() => setSelected(props)}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
@@ -125,7 +136,7 @@ const DatahubType: FC = () => {
 								)
 							})
 						}
-					</tbody>
+					</ContextMenuWrapper>
 				</table>
 			</div>
 			<Paginate
@@ -139,8 +150,8 @@ const DatahubType: FC = () => {
 			/>
 			<ModalExtraLarge show={show} buttonOnly>
 				<ModalCreateType
-					datahubID={datahubID}
-					type={datahubID ? 'edit' : 'create'}
+					datahubID={selected?._id}
+					type={selected?._id ? 'edit' : 'create'}
 					toggle={() => setShow(false)}
 					onSuccessCreate={data => {
 						queryClient.removeQueries(["datahub_types"], { inactive: true });

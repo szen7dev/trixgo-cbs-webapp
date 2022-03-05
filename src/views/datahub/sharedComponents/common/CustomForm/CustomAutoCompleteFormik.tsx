@@ -16,7 +16,8 @@ type Props<T extends Record<string, any>> = {
 	initialData?: string,
 	placeholder?: string
 	renderValue?: (value: T) => string
-	onChange?: (value: string) => void
+	onChange?: (value: string) => void,
+	onScroll?: (e: any) => void,
 }
 
 function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
@@ -31,6 +32,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	data,
 	initialData = '',
 	onChange,
+	onScroll,
 	...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
 	const [selected, setSelected] = useState<null | any>();
@@ -107,7 +109,10 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 									leaveTo="opacity-0"
 									show={isOpen}
 								>
-									<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<Listbox.Options
+										className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
+										onScroll={onScroll}
+									>
 										{dataFiltered.map((item, personIdx) => (
 											<Listbox.Option
 												key={personIdx}

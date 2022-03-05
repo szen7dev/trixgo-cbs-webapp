@@ -54,6 +54,15 @@ const DatahubRepository = {
     return data;
   },
   // ==== DatahubProjects ====
+  async getProject<T = undefined>(
+    params: { datahubProjectID: string } & DatahubProjectsParams
+  ) {
+    const { data } = await API.get<ResponseCreate<DatahubProjects<T>>>(
+      `${url}/datahub_projects`,
+      { params }
+    );
+    return data;
+  },
   async getProjectList(params?: DatahubProjectsParams) {
     const { data } = await API.get<ResponseList<DatahubProjects>>(
       `${url}/datahub_projects`,
@@ -68,10 +77,12 @@ const DatahubRepository = {
     );
     return data;
   },
-  async updateProject(datahubProjectID: string, body: DatahubProjectsBody) {
+  async updateProject(
+    body: DatahubProjectsBody & { datahubProjectID: string }
+  ) {
     const { data } = await API.put<ResponseCreate<DatahubProjects>>(
       `${url}/datahub_projects`,
-      { datahubProjectID, ...body }
+      body
     );
     return data;
   },
