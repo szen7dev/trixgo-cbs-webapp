@@ -24,7 +24,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                     dispatch(openAddConversationToFolder({conversation: chat}))
                     setTimeout(() => {
                         closeRightClick()
-                    }, 500)
+                    }, 100)
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full add-to-folder"}>
                 <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
