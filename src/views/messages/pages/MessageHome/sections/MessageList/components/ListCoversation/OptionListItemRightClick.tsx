@@ -21,13 +21,13 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
         <div className={"bg-white rounded-md shadow-lg text-gray-500 min-w-[216px]"}>
             <button
                 onClick={() => {
-                    dispatch(openAddConversationToFolder({conversationId: chat._id}))
+                    dispatch(openAddConversationToFolder({conversation: chat}))
                     setTimeout(() => {
                         closeRightClick()
                     }, 500)
                 }}
-                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
-                <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full add-to-folder"}>
+                <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
                 <div className={"mr-2 ml-4"}>Add to folder...</div>
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>

@@ -9,19 +9,22 @@ import createMentionPlugin, {
 import "@draft-js-plugins/mention/lib/plugin.css";
 import '@draft-js-plugins/focus/lib/plugin.css';
 import {ChattingInputContext} from "./ChattingInput";
-import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
+import createEmojiPlugin  from 'draft-js-emoji-plugin';
+import {defaultTheme}  from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import {IconButton} from "./IconButton";
 import {IconAttach} from "./IconAttach";
 // import editorStyles from './editorStyles.module.css';
 
-defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
-defaultTheme.emojiSuggestionsEntry = defaultTheme.emojiSuggestionsEntry + " flex items-center";
-defaultTheme.emojiSuggestionsEntryFocused = defaultTheme.emojiSuggestionsEntryFocused + " flex items-center";
+defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-60px left-0 shadow-md rounded-md border-0";
 defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " border-0 h-full";
 defaultTheme.emojiSelectButtonPressed = defaultTheme.emojiSelectButtonPressed + " border-0 h-full";
 defaultTheme.emojiSelectPopoverEntry = defaultTheme.emojiSelectPopoverEntry + " flex items-center justify-center";
 defaultTheme.emojiSelectPopoverEntryFocused = defaultTheme.emojiSelectPopoverEntryFocused + " flex items-center justify-center";
+
+defaultTheme.emojiSuggestions = defaultTheme.emojiSuggestions + " shadow-md rounded-md border-0";
+defaultTheme.emojiSuggestionsEntry = defaultTheme.emojiSuggestionsEntry + " flex items-center";
+defaultTheme.emojiSuggestionsEntryFocused = defaultTheme.emojiSuggestionsEntryFocused + " flex items-center";
 
 type Props = {
     onPressEnter?: () => void;

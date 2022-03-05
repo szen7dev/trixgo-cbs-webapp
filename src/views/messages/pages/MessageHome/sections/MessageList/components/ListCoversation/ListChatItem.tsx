@@ -8,6 +8,8 @@ import moment from "moment";
 import {AvatarGroupChat} from "./AvatarGroupChat";
 import {RightClickMenuWrapper} from "shareComponents/common";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
 
 type Props = {
     chat: ItemListConversation;
@@ -15,6 +17,7 @@ type Props = {
     customOnClick?: (chat: ItemListConversation) => void;
 }
 export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
+    const {currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
@@ -93,8 +96,16 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         } else return (chat.lastMessage.sender.bizfullname||chat.lastMessage.sender.fullname);
     },[chat.lastMessage])
 
+    const displayClass = (!currentSelectedFolders ||
+        (
+            currentSelectedFolders&&
+            chat.folders&&
+            chat.folders.includes(currentSelectedFolders._id)
+        )) ? "block":"hidden"
+
     return (
         <RightClickMenuWrapper
+            className={displayClass}
             contextMenu={<OptionListItemRightClick chat={chat}/>}
         >
             <NavLink

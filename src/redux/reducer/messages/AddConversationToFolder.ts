@@ -1,9 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {ItemListConversation} from "typings/apis/messages/listConversation";
 
-const initialState : {data: {isOpenAddConversationToFolder: boolean, conversationId: string}} = {
+const initialState : {data: {isOpenAddConversationToFolder: boolean, conversation: ItemListConversation|null}} = {
     data: {
         isOpenAddConversationToFolder: false,
-        conversationId: ""
+        conversation: null
     }
 };
 
@@ -15,14 +16,14 @@ const addConversationToFolderSlice = createSlice({
             state.data = {
                 ...state.data,
                 isOpenAddConversationToFolder: true,
-                conversationId: action.payload.conversationId
+                conversation: action.payload.conversation
             }
         },
         dismissAddConversationToFolder (state) {
             state.data = {
                 ...state.data,
                 isOpenAddConversationToFolder: false,
-                conversationId: ""
+                conversation: null
             }
         }
     },
