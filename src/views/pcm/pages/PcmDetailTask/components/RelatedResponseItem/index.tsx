@@ -89,7 +89,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span className="text-[13px]">
+						<span className="text-small">
 							{response.content}
 						</span>
 					</div>

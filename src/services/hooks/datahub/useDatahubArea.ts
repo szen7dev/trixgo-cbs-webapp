@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { DatahubProjectsParams } from "typings/datahub/projects";
 
 type Props = DatahubProjectsParams;
@@ -10,12 +10,21 @@ const useDatahubArea = (
   props?: Props,
   options?: { enable: boolean }
 ) => {
-  return useQuery(key, () => DatahubRepository.areaList(props), {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    enabled: Boolean(options?.enable), // https://react-query.tanstack.com/guides/disabling-queries
-    keepPreviousData: true,
-  });
+  return useInfiniteQuery(
+    key,
+    ({ pageParam }) =>
+      DatahubRepository.areaList({ ...props, lastestID: pageParam }),
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      enabled: Boolean(options?.enable), // https://react-query.tanstack.com/guides/disabling-queries
+      keepPreviousData: true,
+      getNextPageParam(data) {
+        if (!data.data.nextCursor) return undefined;
+        return data.data.nextCursor;
+      },
+    }
+  );
 };
 
 export default useDatahubArea;
