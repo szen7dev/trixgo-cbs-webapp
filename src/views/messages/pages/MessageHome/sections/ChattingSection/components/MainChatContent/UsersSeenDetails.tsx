@@ -2,21 +2,20 @@ import React, {FC, Fragment, useRef} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash"
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {dismissUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
 
-type Props = {
-    usersSeen: any[];
-    isOpen: boolean;
-    setCloseDetail: () => void;
-}
-export const UsersSeenDetail:FC<Props> = ({usersSeen, isOpen, setCloseDetail}) => {
+export const UsersSeenDetail:FC = () => {
     const focusElementRef = useRef<HTMLDivElement>(null);
-
+    const {isOpenUsersSeenDetail, usersSeen} = useSelector((state: RootState) => state.usersSeenDetail.data);
+    const dispatch = useDispatch();
     return (
-        <Transition appear show={isOpen} as={Fragment}>
+        <Transition appear show={isOpenUsersSeenDetail} as={Fragment}>
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
-                onClose={() => setCloseDetail()}
+                onClose={() => dispatch(dismissUsersSeenDetail())}
                 initialFocus={focusElementRef}
             >
                 <div ref={focusElementRef} className="min-h-screen flex items-center justify-center z-51">
@@ -55,7 +54,7 @@ export const UsersSeenDetail:FC<Props> = ({usersSeen, isOpen, setCloseDetail}) =
                                 </div>
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md"}
-                                    onClick={() => setCloseDetail()}
+                                    onClick={() => dispatch(dismissUsersSeenDetail())}
                                 >
                                     <Close/>
                                 </button>

@@ -19,7 +19,8 @@ import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
-import {UsersSeenDetail} from "./UsersSeenDetails";
+import {openUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
+
 type Props = {
     message: ItemMessage;
     socket: any;
@@ -30,8 +31,7 @@ type Props = {
 export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) => {
     const dispatch = useDispatch();
     const {updatePinMessage} = UseConversation();
-    const {closeRightClick} = useRightClickMenu()
-    const [showDetailSeen, setShowDetailSeen] = useState(false);
+    const {closeRightClick} = useRightClickMenu();
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
@@ -146,7 +146,14 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                     </button>
                 }
                 <button
-                    onClick={() => setShowDetailSeen(true)}
+                    onClick={() => {
+                        dispatch(openUsersSeenDetail({
+                            usersSeen: usersSeen()
+                        }))
+                        setTimeout(() => {
+                            closeRightClick()
+                        }, 100)
+                    }}
                     className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
                     <div className={"mr-4 ml-4"}>{usersSeen().length} đã xem</div>
@@ -181,7 +188,6 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                     <img  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                     <div className={"flex-1 text-left ml-4 text-negative"}>Delete</div>
                 </button>
-                <UsersSeenDetail usersSeen={usersSeen()} isOpen={showDetailSeen} setCloseDetail={() => setShowDetailSeen(false)}/>
             </div>
         </>
     )
