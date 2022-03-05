@@ -1,6 +1,8 @@
 import classNames from 'classnames';
-import React, { FC, useEffect, useState } from 'react'
-import romanize from 'views/bidding/utils/romolize'
+import React, { FC, useEffect, useState } from 'react';
+import romanize from 'views/bidding/utils/romolize';
+
+import image from 'assets/images/media/media-default.png';
 
 type Props = {
 	index: number,
@@ -44,7 +46,7 @@ const TableRowGroup: FC<Props> = ({ show, index }) => {
 						<td>Small Heroes Kidsconceptstore</td>
 						<td>Dày 12mm, độ cứng 125K, màu sáng bóng. Mã màu tương đương</td>
 						<td>
-							<img className='w-32' src="/static/media/sustainable.png" alt="" />
+							<img className='w-32' src={image} alt="" />
 						</td>
 						<td>K558-CM</td>
 						<td>Châu âu</td>
