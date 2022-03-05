@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useEffect, useRef, useState} from "react";
+import React, {FC, Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {dismissAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
 import {updateFoldersToConversation} from "redux/reducer/messages/ListConversation";
@@ -55,6 +55,17 @@ export const FolderAddConversationPopup:FC = () => {
         }
     }
 
+    const checkDisableCondition = useCallback(() => {
+        let disabled = true;
+        if (Object.keys(selectedFolder).length>0) {
+            disabled = false;
+        } else if (Object.keys(removeFolder).length>0) {
+            disabled = false;
+        }
+
+        return disabled;
+    }, [selectedFolder, removeFolder])
+
     return (
         <Transition appear show={isOpenAddConversationToFolder} as={Fragment}>
             <Dialog
@@ -104,7 +115,7 @@ export const FolderAddConversationPopup:FC = () => {
                                     Thêm vào thư mục
                                 </div>
                                 <button
-                                    disabled={Object.keys(selectedFolder).length === 0}
+                                    disabled={checkDisableCondition()}
                                     onClick={() => handlePressConfirmFolder()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
