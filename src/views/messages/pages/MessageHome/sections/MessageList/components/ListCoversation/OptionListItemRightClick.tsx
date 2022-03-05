@@ -27,7 +27,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                     }, 500)
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
-                <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
+                <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
                 <div className={"mr-2 ml-4"}>Add to folder...</div>
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>

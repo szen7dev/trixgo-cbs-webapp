@@ -1,6 +1,7 @@
 import React, {FC, Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {dismissAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
+import {updateFoldersToConversation} from "redux/reducer/messages/ListConversation";
 import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
@@ -9,10 +10,10 @@ import {map as _map} from "lodash";
 import moment from "moment";
 
 export const FolderAddConversationPopup:FC = () => {
-    const {listFolders, hasMoreData, nextCursor} = useSelector((state: RootState) => state.listFolders.data);
-    const {isOpenAddConversationToFolder} = useSelector((state: RootState) => state.addConversationToFolder.data);
+    const {listFolders, hasMoreData, nextCursor, currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
+    const {isOpenAddConversationToFolder, conversationId} = useSelector((state: RootState) => state.addConversationToFolder.data);
     const dispatch = useDispatch();
-    const {addFolder, getListFoldersConversation} = UseListConversation();
+    const {addConversationToFolder, getListFoldersConversation} = UseListConversation();
     const [selectedFolder, setSelectedFolder] = useState<{[key: string]: any}>({});
 
     const focusElementRef = useRef<HTMLDivElement>(null);
@@ -22,6 +23,14 @@ export const FolderAddConversationPopup:FC = () => {
     }
     const handlePressConfirmFolder = () => {
         dispatch(dismissAddConversationToFolder())
+        addConversationToFolder({
+            conversationID: conversationId,
+            foldersID: Object.keys(selectedFolder),
+            isRemove: false
+        }).then(data => {
+            dispatch(updateFoldersToConversation({conversationId: data._id, folders: data.folders}))
+        })
+        setSelectedFolder({})
     }
 
     const handleSelectFolder = (value: boolean, folder: any) => {
@@ -83,6 +92,7 @@ export const FolderAddConversationPopup:FC = () => {
                                     Thêm vào thư mục
                                 </div>
                                 <button
+                                    disabled={Object.keys(selectedFolder).length === 0}
                                     onClick={() => handlePressConfirmFolder()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
@@ -90,8 +100,11 @@ export const FolderAddConversationPopup:FC = () => {
                                 </button>
                             </div>
                             <div className={"p-[22px] mb-5 min-h-[240px] max-h-[500px]"}>
-                                {_map(Object.values(listFolders).sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1),
-                                    folder => (
+                                {_map(
+                                    Object.values(listFolders)
+                                        .sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1)
+                                        .filter(folder => !currentSelectedFolders||currentSelectedFolders._id!==folder._id)
+                                    ,folder => (
                                         <div key={folder._id} className={"flex items-center mb-3"}>
                                             <input
                                                 defaultChecked={Object.values(selectedFolder).includes(folder._id)}

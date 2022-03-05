@@ -258,7 +258,19 @@ export type DeleteFolderPayload = {
 }
 
 export type DeleteFolderResponse = {
-    data: any;
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type AddConversationToFolderPayload = {
+    conversationID: string;
+    foldersID: string[];
+    isRemove: boolean
+}
+
+export type AddConversationToFolderResponse = {
+    data: ItemListConversation;
     error: boolean;
     status: number;
 }

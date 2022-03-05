@@ -71,12 +71,12 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 messageData: data?.infoMessage
             }));
         } else {
-            dispatch(appendMessageToConversation({
-                conversationId: data?.infoMessage?.conversation,
-                messageId: data?.infoMessage?._id,
-                messageData: data?.infoMessage
-            }));
             if (currentChat === data?.infoMessage?.conversation) {
+                dispatch(appendMessageToConversation({
+                    conversationId: data?.infoMessage?.conversation,
+                    messageId: data?.infoMessage?._id,
+                    messageData: data?.infoMessage
+                }));
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
             if (!inSearchMode){
