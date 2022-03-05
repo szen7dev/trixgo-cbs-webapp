@@ -44,14 +44,10 @@ export const ListFolders:FC = () => {
                 <button
                     onClick={() => {
                         dispatch(setCurrentSelectedFolders({
-                            currentSelectedFolders: {
-                                _id: "all",
-                                name: "All",
-                                amountMissMessage
-                            }
+                            currentSelectedFolders: null
                         }))
                     }}
-                    className={"whitespace-nowrap text-center block p-2 " + ((!currentSelectedFolders||"all"===currentSelectedFolders._id)?"border-b-2 border-primary text-primary":"text-primary-gray")}
+                    className={"whitespace-nowrap text-center block p-2 " + ((!currentSelectedFolders)?"border-b-2 border-primary text-primary":"text-primary-gray")}
                 >
                     All
                 </button>

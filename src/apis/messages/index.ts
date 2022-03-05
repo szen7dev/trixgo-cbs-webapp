@@ -2,6 +2,7 @@ import API from "../repository";
 import { convertObToUrl } from "utils";
 
 import {
+    AddConversationToFolderPayload, AddConversationToFolderResponse,
     AddFolderPayload,
     AddFolderResponse,
     CheckExistConversationResponse,
@@ -35,6 +36,7 @@ const listFolder = "/api/chatting/conversations/list-folder";
 const createFolder = "/api/chatting/conversations/create-folder";
 const updateFolder = "/api/chatting/conversations/update-folder";
 const deleteFolder = "/api/chatting/conversations/delete-folder";
+const addConversationToFolder = "/api/chatting/conversations//update-conversation-to-folder";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -123,6 +125,15 @@ const ListConversationRepository = {
     async deleteFolder(payload: DeleteFolderPayload) : Promise<DeleteFolderResponse> {
         const {data} = await API.delete(
             `${deleteFolder}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async addConversationToFolder(payload: AddConversationToFolderPayload) : Promise<AddConversationToFolderResponse> {
+        const {data} = await API.put(
+            `${addConversationToFolder}`,
+            {...payload}
         )
 
         return data;

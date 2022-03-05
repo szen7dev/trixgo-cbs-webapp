@@ -1,6 +1,7 @@
-import React, {FC, Fragment, useEffect, useRef, useState} from "react";
+import React, {FC, Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import {dismissAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
+import {updateFoldersToConversation} from "redux/reducer/messages/ListConversation";
 import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
@@ -9,11 +10,12 @@ import {map as _map} from "lodash";
 import moment from "moment";
 
 export const FolderAddConversationPopup:FC = () => {
-    const {listFolders, hasMoreData, nextCursor} = useSelector((state: RootState) => state.listFolders.data);
-    const {isOpenAddConversationToFolder} = useSelector((state: RootState) => state.addConversationToFolder.data);
+    const {listFolders, hasMoreData, nextCursor, currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
+    const {isOpenAddConversationToFolder, conversation} = useSelector((state: RootState) => state.addConversationToFolder.data);
     const dispatch = useDispatch();
-    const {addFolder, getListFoldersConversation} = UseListConversation();
+    const {addConversationToFolder, getListFoldersConversation} = UseListConversation();
     const [selectedFolder, setSelectedFolder] = useState<{[key: string]: any}>({});
+    const [removeFolder, setRemoveFolder] = useState<{[key: string]: any}>({});
 
     const focusElementRef = useRef<HTMLDivElement>(null);
 
@@ -21,18 +23,48 @@ export const FolderAddConversationPopup:FC = () => {
         nextCursor&&getListFoldersConversation({nextCursor: nextCursor, limit:10})
     }
     const handlePressConfirmFolder = () => {
+        if (!conversation) return;
         dispatch(dismissAddConversationToFolder())
+        addConversationToFolder({
+            conversationID: conversation._id,
+            addFoldersID: Object.keys(selectedFolder),
+            removeFoldersID: Object.keys(removeFolder),
+        }).then(data => {
+            dispatch(updateFoldersToConversation({conversationId: data._id, folders: data.folders}))
+        })
+        setSelectedFolder({})
     }
 
     const handleSelectFolder = (value: boolean, folder: any) => {
-        const selected = {...selectedFolder};
-        if (value) {
-            selected[folder._id] = folder;
+        if (conversation?.folders.includes(folder._id)) {
+            const remove = {...removeFolder};
+            if (value) {
+                delete remove[folder._id];
+            } else {
+                remove[folder._id] = folder;
+            }
+            setRemoveFolder(remove);
         } else {
-            delete selected[folder._id];
+            const selected = {...selectedFolder};
+            if (value) {
+                selected[folder._id] = folder;
+            } else {
+                delete selected[folder._id];
+            }
+            setSelectedFolder(selected);
         }
-        setSelectedFolder(selected);
     }
+
+    const checkDisableCondition = useCallback(() => {
+        let disabled = true;
+        if (Object.keys(selectedFolder).length>0) {
+            disabled = false;
+        } else if (Object.keys(removeFolder).length>0) {
+            disabled = false;
+        }
+
+        return disabled;
+    }, [selectedFolder, removeFolder])
 
     return (
         <Transition appear show={isOpenAddConversationToFolder} as={Fragment}>
@@ -83,6 +115,7 @@ export const FolderAddConversationPopup:FC = () => {
                                     Thêm vào thư mục
                                 </div>
                                 <button
+                                    disabled={checkDisableCondition()}
                                     onClick={() => handlePressConfirmFolder()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
@@ -90,15 +123,19 @@ export const FolderAddConversationPopup:FC = () => {
                                 </button>
                             </div>
                             <div className={"p-[22px] mb-5 min-h-[240px] max-h-[500px]"}>
-                                {_map(Object.values(listFolders).sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1),
-                                    folder => (
+                                {_map(
+                                    Object.values(listFolders)
+                                        .sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1)
+                                    ,folder => (
                                         <div key={folder._id} className={"flex items-center mb-3"}>
                                             <input
-                                                defaultChecked={Object.values(selectedFolder).includes(folder._id)}
+                                                defaultChecked={Object.values(selectedFolder).includes(folder._id)||conversation?.folders.includes(folder._id)}
                                                 id={folder._id}
                                                 onChange={event => handleSelectFolder(event.target.checked, folder)} type="checkbox"
-                                               className="form-check-input transition duration-200 rounded-full cursor-pointer min-w-[20px] min-h-[20px] w-[20px] h-[20px] bg-transparent border-gray-100 checked:bg-primary" />
-                                            <label htmlFor={folder._id} className={"flex-1 ml-4"}>{folder.name}</label>
+                                               className="form-check-input transition duration-200 rounded-full cursor-pointer min-w-[20px] min-h-[20px] w-[20px] h-[20px] bg-transparent border-gray-100 checked:bg-primary disabled:bg-gray-300 disabled:border-gray-100" />
+                                            <label htmlFor={folder._id} className={"flex-1 ml-4"}>
+                                                {folder.name}
+                                            </label>
                                         </div>
                                     )
                                 )}

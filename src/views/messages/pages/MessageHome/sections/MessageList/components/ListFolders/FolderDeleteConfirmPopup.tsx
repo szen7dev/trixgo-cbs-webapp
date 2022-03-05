@@ -5,6 +5,7 @@ import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {setCurrentSelectedFolders} from "redux/reducer/messages/ListFolders";
 
 export const FolderDeleteConfirmPopup:FC = () => {
     const {isOpenDeleteConfirmFolder, folderId} = useSelector((state: RootState) => state.deleteConfirmFolder.data);
@@ -14,6 +15,9 @@ export const FolderDeleteConfirmPopup:FC = () => {
 
     const handlePressConfirmFolder = () => {
         dispatch(dismissDeleteConfirmFolder())
+        dispatch(setCurrentSelectedFolders({
+            currentSelectedFolders: null
+        }))
         deleteFolder({folderID: folderId}).then(data => {
             getListFoldersConversation({limit: 10})
         })

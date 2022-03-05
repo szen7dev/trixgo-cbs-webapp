@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useContext} from "react";
+import React, {FC, useCallback, useContext, useState} from "react";
 import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -19,6 +19,8 @@ import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
+import {openUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
+
 type Props = {
     message: ItemMessage;
     socket: any;
@@ -29,7 +31,7 @@ type Props = {
 export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) => {
     const dispatch = useDispatch();
     const {updatePinMessage} = UseConversation();
-    const {closeRightClick} = useRightClickMenu()
+    const {closeRightClick} = useRightClickMenu();
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
@@ -143,7 +145,16 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                         <div className={"mr-2 ml-4"}>Select</div>
                     </button>
                 }
-                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
+                <button
+                    onClick={() => {
+                        dispatch(openUsersSeenDetail({
+                            usersSeen: usersSeen()
+                        }))
+                        setTimeout(() => {
+                            closeRightClick()
+                        }, 100)
+                    }}
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
                     <div className={"mr-4 ml-4"}>{usersSeen().length} đã xem</div>
                     {

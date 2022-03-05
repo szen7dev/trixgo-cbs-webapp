@@ -1,5 +1,6 @@
 import ListConversationRepository from "apis/messages";
 import {
+    AddConversationToFolderPayload,
     AddFolderPayload,
     ConvversationInformationPayload,
     CreateConversationPayload,
@@ -35,6 +36,7 @@ type UseListConversationType = {
     addFolder: (payload: AddFolderPayload) => Promise<FolderConversationItem>,
     updateFolder: (payload: UpdateFolderPayload) => Promise<FolderConversationItem>,
     deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
+    addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -102,6 +104,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const addConversationToFolder = async (params: AddConversationToFolderPayload) => {
+        const {data} = await ListConversationRepository.addConversationToFolder(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -145,6 +154,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         getListFoldersConversation,
         addFolder,
         updateFolder,
-        deleteFolder
+        deleteFolder,
+        addConversationToFolder
     }
 };

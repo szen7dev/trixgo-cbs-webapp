@@ -84,10 +84,23 @@ const listConversationSlice = createSlice({
                 ...state.data,
                 listConversation: newConversationData
             };
+        },
+        updateFoldersToConversation (state, action) {
+            const {conversationId, folders} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        folders
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

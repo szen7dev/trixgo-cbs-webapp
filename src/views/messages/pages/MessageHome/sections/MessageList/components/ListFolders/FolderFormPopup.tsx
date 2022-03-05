@@ -5,7 +5,7 @@ import Close from "assets/icons/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {updateSingleFolder} from "../../../../../../../../redux/reducer/messages/ListFolders";
+import {updateSingleFolder} from "redux/reducer/messages/ListFolders";
 
 export const FolderFormPopup:FC = () => {
     const {isCreateUpdateFolder, folder} = useSelector((state: RootState) => state.createUpdateFolder.data);
@@ -27,13 +27,13 @@ export const FolderFormPopup:FC = () => {
                 folderID: folder._id,
                 name: folderName
             }).then((folder) => {
-                getListFoldersConversation({limit: 10})
+                updateSingleFolder({folderId: folder._id, folderData: folder})
             })
         } else {
             addFolder({
                 name: folderName
             }).then((folder) => {
-                updateSingleFolder({folderId: folder._id, folderData: folder})
+                getListFoldersConversation({limit: 10})
             })
         }
         setFolderName("");
@@ -92,6 +92,7 @@ export const FolderFormPopup:FC = () => {
                                     }
                                 </div>
                                 <button
+                                    disabled={folderName.trim().length === 0}
                                     onClick={() => handlePressConfirmFolder()}
                                     className={"h-[36px] w-[105px] rounded-md bg-primary text-white disabled:bg-gray-300"}
                                 >
