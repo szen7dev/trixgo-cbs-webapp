@@ -296,12 +296,18 @@ function useComments<T extends string | undefined>(payload: Payload<T>) {
     commentIdx: number
   ) => {
     if (!lastestID) return;
-    const { error, data: _data } = await CommentImageRepository.listComments({
-      lastestID,
-      mediaID: payload.mediaID,
-      parentID,
-      fileID: payload.fileID,
-    });
+    const { error, data: _data } = payload.fileID
+      ? await CommentImageRepository.listComments({
+          lastestID,
+          mediaID: payload.mediaID,
+          parentID,
+          fileID: payload.fileID,
+        })
+      : await CommentRepository.listComments({
+          lastestID,
+          mediaID: payload.mediaID,
+          parentID,
+        });
 
     if (!error && _data.listRecords.length) {
       queryClient.setQueryData<typeof data>(key, (old) => {

@@ -20,7 +20,7 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 	assigned: StateObject,
 	checked: Array<S>,
 	checkboxRef: React.RefObject<HTMLInputElement>,
-	handleCheckAll: MouseEventHandler<HTMLInputElement>,
+	handleCheckAll: () => void,
 	handleChangeCheckbox: (e: undefined | null | ChangeEvent<HTMLInputElement>, data?: S) => void;
 } {
 	const [{ assigned, checked }, setChecked] = useState<{
@@ -32,12 +32,15 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 	})
 	const checkboxRef = useRef<HTMLInputElement>(null);
 
-	const handleCheckAll: MouseEventHandler<HTMLInputElement> = e => {
+	const handleCheckAll= () => {
+		if(!checkboxRef.current) return;
 		if (checked.length < initialData.length) {
-			e.currentTarget.checked = true;
+			checkboxRef.current.checked = true;
+			checkboxRef.current.indeterminate = false;
 			setChecked({ assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: true }), {}), checked: initialData })
 		} else {
-			e.currentTarget.checked = false;
+			checkboxRef.current.checked = false;
+			checkboxRef.current.indeterminate = false;
 			setChecked({ assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: false }), {}), checked: [] })
 		}
 	};
@@ -59,7 +62,11 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 				}
 			} else {
 				newAssigned[data._id] = !newAssigned[data._id];
-				newChecked = (newChecked as Array<Exclude<S, StateOne | string | number>>).filter((s) => s._id !== data._id);
+				if (newAssigned[data._id]) {
+					newChecked.push(data);
+				} else {
+					newChecked = (newChecked as Array<Exclude<S, StateOne | string | number>>).filter((s) => s._id !== data._id);
+				}
 			}
 		} else if (e && !data && e.target.checked) {
 			newAssigned[e.target.value] = true;

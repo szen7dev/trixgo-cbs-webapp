@@ -97,10 +97,17 @@ export const SideBar: FC<Props> = ({
       </div>
 
       <div className="mt-5">
-        <div className="mb-2.5">
+        <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
             Tiến trình xác nhận
           </span>
+					<button>
+            <span className="text-white bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
+							<strong>
+								Đồng ý
+							</strong>
+            </span>
+          </button>
         </div>
         <div>
           {/* TODO: user signatures to get confirm progress */}
