@@ -6,17 +6,14 @@ import NotificationIcon from "assets/images/icons8-notification-96.svg";
 import HideEyeIcon from "assets/images/icons8-hide-96.svg";
 import ExitRedIcon from "assets/images/icons8-exit-48.svg";
 import RemoveRedIcon from "assets/images/icons8-remove-48.svg";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {openAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
-import {RootState} from "redux/reducer";
-import RightIcon from "assets/images/icon-home-slider-next.png";
 
 type Props = {
     chat: any
 }
 export const OptionListItemRightClick:FC<Props> = ({chat}) => {
-    const {listFolders} = useSelector((state: RootState) => state.listFolders.data);
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
 
@@ -32,9 +29,6 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full add-to-folder"}>
                 <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
                 <div className={"mr-2 ml-4"}>Add to folder...</div>
-                {
-
-                }
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ChatIcon}/>

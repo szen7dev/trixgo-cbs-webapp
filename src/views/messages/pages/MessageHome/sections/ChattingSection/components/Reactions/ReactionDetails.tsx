@@ -53,7 +53,7 @@ export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
                         <div className={"w-[400px] rounded-md shadow-lg bg-white p-[22px] z-51"}>
                             <div className={"flex w-full items-center mb-4"}>
                                 <button
-                                    className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
+                                    className={"rounded-md mr-[10px]"}
                                     onClick={() => setCloseVote()}
                                 >
                                     <Close/>
@@ -62,7 +62,7 @@ export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
                                     Tất cả ({message.reactions.length})
                                 </div>
                             </div>
-                            <div className={"max-h-500px overflow-scroll"}>
+                            <div className={"max-h-500px overflow-auto"}>
                                 {
                                     _map(message.reactions, reaction => (
                                         <div
