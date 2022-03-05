@@ -65,6 +65,7 @@ export type ListConversationPayload = {
     keyword?: string;
     lastestID?: string|null;
     limit?: number;
+    select?: string;
 };
 
 export type ListMembersOfConversationPayload = {
@@ -265,8 +266,8 @@ export type DeleteFolderResponse = {
 
 export type AddConversationToFolderPayload = {
     conversationID: string;
-    foldersID: string[];
-    isRemove: boolean
+    addFoldersID: string[];
+    removeFoldersID: string[];
 }
 
 export type AddConversationToFolderResponse = {
