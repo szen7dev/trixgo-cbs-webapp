@@ -50,7 +50,7 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
             <div
                 onClick={() => handleStartPrivateChat(message.sender._id, isMini)}
                 className={"avt-user w-[34px] h-[34px] rounded-full overflow-hidden mr-[5px] cursor-pointer"}>
-                <img src={`${process.env.REACT_APP_URL_S3_USER}/${message.sender.image}`} alt={message.userName}/>
+                <img className={"w-full h-full object-cover"} src={`${process.env.REACT_APP_URL_S3_USER}/${message.sender.image}`} alt={message.userName}/>
             </div>
             <div
                 onClick={() => {
