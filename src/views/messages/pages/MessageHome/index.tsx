@@ -1,5 +1,5 @@
 import React, {createContext, FC, useMemo, useEffect, useState} from "react";
-import {FolderFormPopup, MessageList} from "./sections/MessageList";
+import {FolderDeleteConfirmPopup, FolderFormPopup, MessageList} from "./sections/MessageList";
 import { useLocation } from 'react-router-dom';
 import {SettingMessageDetail} from "./sections/SettingMessageDetail";
 import { useSocket } from "services/hooks/useSocket";
@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {SocketController} from "views/messages/shareComponents/common/SocketController";
 import {UnreadMessageController} from "./sections/UnreadMessages";
+import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -74,6 +75,8 @@ export const MessagesHome:FC = () => {
             <PopupSendImageAndFile/>
             <UnreadMessageController currentChat={currentChat} context={MessageContext}/>
             <FolderFormPopup/>
+            <FolderDeleteConfirmPopup/>
+            <FolderAddConversationPopup/>
         </MessageContext.Provider>
     )
 }

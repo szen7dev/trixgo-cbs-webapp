@@ -1,14 +1,15 @@
 import ListConversationRepository from "apis/messages";
 import {
+    AddFolderPayload,
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation,
+    DataListConversation, DeleteFolderPayload, FolderConversationItem,
     GeneralGroupByMemberPayload,
     ItemListConversation,
     ListConversationPayload, ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
-    MediasOfConversationPayload
+    MediasOfConversationPayload, UpdateFolderPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setListConversation, setLoading} from "redux/reducer/messages/ListConversation";
@@ -31,9 +32,12 @@ type UseListConversationType = {
     prevPageListConversations: () => void,
     hasListConversationNextPage: boolean | undefined,
     totalRecordRequest: number | undefined,
+    addFolder: (payload: AddFolderPayload) => Promise<FolderConversationItem>,
+    updateFolder: (payload: UpdateFolderPayload) => Promise<FolderConversationItem>,
+    deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
 };
 
-export const UseListConversation = (params?: any) : UseListConversationType => {
+export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
     const dispatch = useDispatch();
 
     const getListConversation = async (params: ListConversationPayload, saveToRedux = true) => {
@@ -77,6 +81,27 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         return data;
     }
 
+    const addFolder = async (params: AddFolderPayload) => {
+        const {data} = await ListConversationRepository.addFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const updateFolder = async (params: UpdateFolderPayload) => {
+        const {data} = await ListConversationRepository.updateFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteFolder = async (params: DeleteFolderPayload) => {
+        const {data} = await ListConversationRepository.deleteFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -97,7 +122,7 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
                     return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: !!enableQuery, // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
     const listConversations = [].concat(...(listConversationsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
@@ -117,6 +142,9 @@ export const UseListConversation = (params?: any) : UseListConversationType => {
         totalRecordRequest,
         getListGeneralGroupByMember,
         getConverationInformation,
-        getListFoldersConversation
+        getListFoldersConversation,
+        addFolder,
+        updateFolder,
+        deleteFolder
     }
 };

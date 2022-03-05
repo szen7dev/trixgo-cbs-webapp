@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, UIEvent, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
 import { MainSearchDialog, NotificationsMenu, AppsMenu, UserMenu } from "shareComponents/common";
@@ -14,7 +14,7 @@ import { useAuth } from "services/hooks/useAuth";
 export const MainHeader: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
-  const { listNotifications, refetchListNotification } = useNotification();
+  const { listNotifications, refetchListNotification, hasNextPage, nextPageListNotification } = useNotification();
   const socketRef: any = useSocket();
 
   useEffect(() => {
@@ -25,6 +25,15 @@ export const MainHeader: FC = () => {
       refetchListNotification();
 		});
 	}, []);
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+    
+    if(bottom && hasNextPage) {
+      nextPageListNotification();
+    }
+  }
 
   return (
     <header className="home-header relative top-0 transition-all duration-500 ease-out bg-primary-light border-b border-solid border-secondary-light shadow-sm z-30">
@@ -90,8 +99,7 @@ export const MainHeader: FC = () => {
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu notifications={listNotifications} />
-
+            <NotificationsMenu notifications={listNotifications} onScroll={handleScroll} />
             <UserMenu />
           </div>
         </div>

@@ -27,7 +27,7 @@ type Props = {
 
 export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage }) => {
 	const { mutateAsync: updateMarkResponseAsync } =
-		useMutation((payload: { commentTemplateID: string, taskID: string, isMarked: boolean }) =>
+		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
 		);
 
@@ -38,9 +38,9 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 	const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		await updateMarkResponseAsync({
-			commentTemplateID: response._id,
-			taskID: response.task,
-			isMarked: e.target.checked
+			commentID: response._id,
+			taskID: response.task._id,
+			official: e.target.checked
 		})
 	}
 
@@ -62,14 +62,14 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 						: 'animate-[wiggle_1s_ease-in-out_infinite]'
 				)
 			} ref={divRef}>
-				<img src={response.userCreate?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.userCreate?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
+				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
 						<div>
-							<p className="text-[14px]">{response.userCreate?.bizfullname}</p>
+							<p className="text-[14px]">{response.author?.bizfullname}</p>
 							{expanded && (
 								<p className="text-[13px] text-primary-gray pb-5">
-									{response.userCreate?.position?.name}
+									{response.author?.position?.name}
 								</p>
 							)}
 						</div>
@@ -77,7 +77,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							<span className="text-[13px] text-primary-gray">
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
-							<input type="checkbox" defaultChecked={response.isMarked} onChange={handleMarkChange} />
+							<input type="checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
 							<button
 								className={`${expanded ? "h-10 bg-lighter-gray" : "pl-3"
 									} text-[13px] w-10 flex justify-center items-center rounded-full`}
@@ -90,24 +90,24 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
 						<span className="text-[13px]">
-							{response.comment?.content}
+							{response.content}
 						</span>
 					</div>
 
 					{/* File */}
 					{expanded && (
 						<div>
-							{(response.comment?.files && response.comment?.files.length) ? response.comment?.files.map(file => (
+							{(response.files && response.files.length) ? response.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
-										<a href="/">
+										<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
 											<div className="flex">
 												<div>
 													<img src={PDFIcon} className="w-8" alt="PDF" />
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">
-														<span className="w-5/6">
+														<span className="w-5/6 break-all">
 															{file.nameOrg}
 														</span>
 														<div className="w-1/6 flex justify-end">
@@ -121,7 +121,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 													<div className="flex w-full mt-2 indeterminate:">
 														<span className="w-[70%] text-[13px] text-primary-gray">
-															{file.userCreate?.bizfullname}
+															{file.author?.bizfullname}
 														</span>
 														<span className="text-right w-[30%] text-[13px] text-primary-gray">
 															{moment(file.createAt).format('HH:mm DD/M/YYYY')}
@@ -145,7 +145,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 											type="checkbox"
 											className="cbs-checkbox-2 w-3.5 h-3.5 checked:bg-cbs-completed checked:border-cbs-completed rounded-[3px] border-[1px] border-primary-border focus:ring-2 focus-visible:outline-none focus:ring-cbs-completed focus:ring-opacity-30" />
 										<div className="rounded-full p-2 border-2">
-											<a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
+											<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
 												<img src={IconDownload} alt="Avatar" className="w-6" />
 											</a>
 										</div>
@@ -154,12 +154,11 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							)) : ''}
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
-								{(response.comment?.images && response.comment?.images.length) ? response.comment?.images.map((file, index) => {
-
+								{(response.images && response.images.length) ? response.images.map((file, index) => {
 									if (index < 2) {
 										return (
-											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.comment?.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}/${file.path}` : file.url} className="w-full" alt="test" />
+											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
+												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : file.url} className="w-full" alt="test" />
 											</button>
 										)
 									}
@@ -173,7 +172,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													alt="test"
 												/>
 												<div className="relative z-6">
-													<p className="text-4x-large text-white">+{response.comment?.images && response.comment?.images.length - 3}</p>
+													<p className="text-4x-large text-white">+{response.images && response.images.length - 3}</p>
 												</div>
 											</div>
 										)

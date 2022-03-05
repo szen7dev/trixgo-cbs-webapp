@@ -154,6 +154,24 @@ const AuthenticationRepository = {
     });
     return data;
   },
+
+  // DANH SÁCH QUYỀN MỘT THÀNH VIÊN ĐƯỢC TRUY CẬP
+  async getListAppRoleMenuFromAdmin(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/app_role_menus`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
+
+  // CẬP NHẬT QUYỀN TRUY CẬP MỘT CHỨC NĂNG CỦA NHÓM CHỨC NĂNG
+  async updatePermissionsAppRoleMenus(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+      `${authURL}/app_role_menus`, payload);
+    return data;
+  },
 };
 
 export default AuthenticationRepository;

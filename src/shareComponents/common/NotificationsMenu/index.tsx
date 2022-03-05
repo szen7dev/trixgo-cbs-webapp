@@ -1,6 +1,4 @@
-import { FC, Fragment } from "react";
-import moment from 'moment';
-
+import { FC, Fragment, UIEvent } from "react";
 import { Menu, Transition } from "@headlessui/react";
 
 import iconNotification from "assets/images/icons8-notification-32.png";
@@ -10,9 +8,10 @@ import { NotificationProps } from 'typings/notification';
 
 type Props = {
   notifications: NotificationProps[]
+  onScroll?: (e: UIEvent<HTMLDivElement>) => void
 }
 
-export const NotificationsMenu: FC<Props> = ({ notifications }) => {
+export const NotificationsMenu: FC<Props> = ({ notifications, onScroll }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -47,7 +46,7 @@ export const NotificationsMenu: FC<Props> = ({ notifications }) => {
             <a className="text-primary" href="/">Xem tất cả</a>
           </div>
 
-          <div className="t-header-notification-item-container overflow-auto">
+          <div className="t-header-notification-item-container overflow-auto" onScroll={onScroll}>
             {notifications.length ? notifications.map(notification => (
               <Menu.Item key={notification._id}>
                 <NotificationItem
@@ -55,7 +54,7 @@ export const NotificationsMenu: FC<Props> = ({ notifications }) => {
                   author={notification.sender.bizfullname}
                   content={notification.title}
                   path={notification.path}
-                  lastActive={moment(notification.createAt).fromNow()}
+                  lastActive={notification.createAt}
                 />
               </Menu.Item>
             )) : ''}

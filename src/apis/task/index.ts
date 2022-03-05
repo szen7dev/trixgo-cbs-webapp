@@ -13,9 +13,24 @@ import {
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
+const populatesResponse = JSON.stringify({
+  path: "task files images author",
+  select: "_id bizfullname image name nameOrg mimeType description path size author createAt",
+  options: {
+    limit: 5,
+  },
+  populate: {
+    path: "author",
+    select: "_id bizfullname image"
+  }
+})
+
 const pcmURL = "/api/subject_pcm";
 
 const TaskRepository = {
+  /**
+   * CHI TIẾT CÔNG VIỆC
+   */
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -27,7 +42,7 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountResponseMarked",
+        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountMarkedResponse",
         populates: JSON.stringify({
           path: "group author assignee related parent project company approver",
           select: "_id name fullname bizfullname image sign",
@@ -38,6 +53,9 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * CHECKLIST
+   */
   async addChecklist(
     payload: CheckListPayload
   ): Promise<any> {
@@ -67,21 +85,27 @@ const TaskRepository = {
     return data;
   },
 
+  /**
+   * PHẢN HỒI LIÊN QUAN
+   */
   async addResponse(
     payload: ResponsePayload
   ): Promise<ResponseResponse> {
     const { data } = await API.post<ResponseResponse>(
       `${pcmURL}/pcm_comments`,
-      payload
+      {
+        ...payload,
+        populates: populatesResponse
+      }
     );
     return data;
   },
 
   async updateMarkResponse(
-    payload: { commentTemplateID: string, taskID: string, isMarked: boolean }
+    payload: { commentID: string, taskID: string, official: boolean }
   ): Promise<any> {
     const { data } = await API.put<any>(
-      `${pcmURL}/pcm_comments`,
+      `${pcmURL}/pcm_comments/mark`,
       payload
     );
     return data;
@@ -92,23 +116,9 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
-        select: "content task isMarked files images amountReaction author",
-        populates: JSON.stringify({
-          path: "task files images author",
-          select: "_id bizfullname image name nameOrg path size author",
-          populate: {
-            path: 'images files',
-            options: {
-              limit: 5,
-            },
-            select: '_id name nameOrg path description createAt userCreate',
-            populate: {
-              path: 'userCreate',
-              select: '_id bizfullname'
-            }
-          }
-        }),
-        ...payload
+        populates: populatesResponse,
+        ...payload,
+        type: 2
       })}`
     );
     return data;
@@ -119,22 +129,7 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
-        select: "comment isMarked type task userCreate createAt",
-        populates: JSON.stringify({
-          path: "comment userCreate",
-          select: "_id bizfullname fullname image files images content",
-          populate: {
-            path: 'images files',
-            options: {
-              limit: 5,
-            },
-            select: '_id name nameOrg path description createAt userCreate',
-            populate: {
-              path: 'userCreate',
-              select: '_id bizfullname'
-            }
-          }
-        }),
+        populates: populatesResponse,
         ...payload
       })}`
     );

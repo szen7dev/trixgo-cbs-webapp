@@ -4,6 +4,7 @@
 import { FC, useState, useContext, useEffect, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import classNames from "classnames";
+import { toast } from "react-toastify";
 import { toArray } from "lodash";
 
 /**
@@ -54,17 +55,16 @@ type Props = {
 }
 
 const queue = new QueueUpload();
-const LIMIT_PER_RESPONSE = 5;
+const LIMIT_PER_PAGE_RESPONSE = 5;
  
 const Response: FC<Props> = ({ task }) => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
-  const { current: socket }: any = useSocket();
 
-  const { addResponse, listResponses, totalRecordResponse } = useTask({ taskID: id });
+  const { addResponseAsync, listResponses, totalRecordResponse } = useTask({ taskID: id });
   const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
-    taskID: id, isMarked: true
+    taskID: id, official: true
   });
 
   const { state, dispatch } = useContext(CommentContext);
@@ -93,6 +93,8 @@ const Response: FC<Props> = ({ task }) => {
   const [content, setContent] = useState('');
   const [amountComment, setAmountComment] = useState(totalRecordResponse);
   const [amountCommentBack, setAmountCommentBack] = useState(0);
+  const { current: socket }: any = useSocket();
+
   // State manage image comments
   const [defaultState, setDefaultState] = useState({ 
     mediaID: '', 
@@ -114,6 +116,8 @@ const Response: FC<Props> = ({ task }) => {
   }, [totalRecordResponse])
 
   useEffect(() => {
+    if(!location.hash) return;
+
     (async () => {
       const response = await TaskRepository.searchResponseById({
         taskID: id,
@@ -163,34 +167,52 @@ const Response: FC<Props> = ({ task }) => {
         _id && (files = [...files, _id]);
     }
 
-    const infoAfterCreate: any = await addResponse({
-      taskID: id,
-      type: 2,
-      content,
-      files,
-      images,
-    });
+    try {
+      const { error, data, message } = await addResponseAsync({
+        taskID: id,
+        type: 2,
+        content,
+        files,
+        images,
+      });
+      console.log({ error, data, message });
 
-    socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-      app: APP_TYPE.PCM_PLAN_TASK,
-      objectID: id,
-      infoComment: infoAfterCreate?.result
-    })
+      if(error) {
+        return toast.warning(message)
+      }
 
-    dispatch({ type: 'ADD_COMMENT', payload: infoAfterCreate.result });
+      socket?.emit('COMMENT_CSS_ADD_COMMENT', {
+        app: APP_TYPE.PCM_PLAN_TASK,
+        objectID: id,
+        infoComment: data?.result
+      })
+
+      dispatch({ type: 'ADD_COMMENT', payload: data?.result });
+
+      toast.success('Tạo phản hồi thành công');
+      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+          receivers: data.receivers
+      });
+    } catch (error: unknown) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
   }
 
   const handleViewPrevious = async () => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[0]._id,
       taskID: id,
-      limit: LIMIT_PER_RESPONSE,
-      isMarked: currentTab === 'MARKED' ? true : false,
+      limit: LIMIT_PER_PAGE_RESPONSE,
+      official: currentTab === 'MARKED' ? true : false,
     });
 
     if (error || !data.listRecords.length) return;
 
-    setAmountComment(amountComment - LIMIT_PER_RESPONSE);
+    setAmountComment(amountComment - LIMIT_PER_PAGE_RESPONSE);
     dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords });
   }
 
@@ -198,8 +220,8 @@ const Response: FC<Props> = ({ task }) => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[state.comments.length - 1]._id,
       taskID: id,
-      limit: LIMIT_PER_RESPONSE,
-      isMarked: false,
+      limit: LIMIT_PER_PAGE_RESPONSE,
+      official: false,
       sortKey: JSON.stringify({
         keys: ['createAt__1', '_id__1']
       })
@@ -207,7 +229,7 @@ const Response: FC<Props> = ({ task }) => {
 
     if (error || !data.listRecords.length) return;
 
-    setAmountCommentBack(amountCommentBack - LIMIT_PER_RESPONSE);
+    setAmountCommentBack(amountCommentBack - LIMIT_PER_PAGE_RESPONSE);
     dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
   }
 
@@ -322,7 +344,7 @@ const Response: FC<Props> = ({ task }) => {
               className={getClassTab(RelatedResponseTab.MARKED)}
               onClick={onClickTabMarked}
             >
-              <span className="text-[13px]">Đã đánh dấu ({task.amountResponseMarked || 0})</span>
+              <span className="text-[13px]">Đã đánh dấu ({task.amountMarkedResponse || 0})</span>
             </button>
           </div>
           <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
@@ -344,9 +366,9 @@ const Response: FC<Props> = ({ task }) => {
             </button>
           </div>
         </div>
-        {(amountComment && amountComment > LIMIT_PER_RESPONSE) ? (
+        {(amountComment && amountComment > LIMIT_PER_PAGE_RESPONSE) ? (
           <p className="mb-5 text-sm text-primary">
-            <button onClick={handleViewPrevious}>Xem {amountComment - LIMIT_PER_RESPONSE} phản hồi trước</button>
+            <button onClick={handleViewPrevious}>Xem {amountComment - LIMIT_PER_PAGE_RESPONSE} phản hồi trước</button>
           </p>
         ) : ''}
         <div>
@@ -366,12 +388,11 @@ const Response: FC<Props> = ({ task }) => {
             />
           )) : ''}
         </div>
-        {(amountCommentBack && amountCommentBack > LIMIT_PER_RESPONSE) ? (
+        {(amountCommentBack && amountCommentBack > LIMIT_PER_PAGE_RESPONSE) ? (
           <p className="mb-5 text-sm text-primary">
-            <button onClick={handleViewNext}>Xem {amountCommentBack - LIMIT_PER_RESPONSE} phản hồi sau</button>
+            <button onClick={handleViewNext}>Xem {amountCommentBack - LIMIT_PER_PAGE_RESPONSE} phản hồi sau</button>
           </p>
         ) : ''}
-
         {visibleForm ? (
           <div className="ml-16">
             <div className="w-full border-2 rounded my-2">

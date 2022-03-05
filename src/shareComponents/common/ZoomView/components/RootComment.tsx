@@ -118,19 +118,6 @@ const RootComment: FC<Props> = ({
 	// Handle on Submit
 	const handleSubmitComment = async (props: SubmitComment) => {
 		onSubmitReply && await onSubmitReply(props, { comment, commentID: replyComment.commentID, type: replyComment.type });
-		// const dataInsertOrUpdate = {
-		// 	mediaID: state.mediaID,
-		// 	content: props.text,
-		// 	files: props.files,
-		// 	images: props.images,
-		// 	fileID: String(state.images[state.index]._id),
-		// }
-
-		// if (replyComment.commentID) {
-		// 	await updateComment({ ...dataInsertOrUpdate, commentID: replyComment.commentID }, { commentIdx, page });
-		// } else {
-		// 	await createComment(dataInsertOrUpdate, { commentIdx, page });
-		// }
 		setReplyComment(rootState)
 	}
 
@@ -144,19 +131,6 @@ const RootComment: FC<Props> = ({
 			type: replyCommentNested.type,
 		});
 
-		// const dataInsertOrUpdate = {
-		// 	mediaID: state.mediaID,
-		// 	content: props.text,
-		// 	files: props.files,
-		// 	images: props.images,
-		// 	fileID: String(state.images[state.index]._id),
-		// }
-
-		// if (replyCommentNested.commentID) {
-		// 	await updateComment({ ...dataInsertOrUpdate, commentID: replyCommentNested.commentID }, { commentIdx, page, index: replyCommentNested.index });
-		// } else {
-		// 	await createComment(dataInsertOrUpdate, { commentIdx, page });
-		// }
 		setReplyCommentNested(rootState)
 	}
 
@@ -176,11 +150,11 @@ const RootComment: FC<Props> = ({
 				renderOptions={EditButton}
 			/>
 			<div>
-				{(comment.amountCommentReply || 0 - comment.listReply.data.length) > 0 ? (
+				{((comment.amountCommentReply || 0) - comment.listReply.data.length) > 0 ? (
 					<div className="react__comments-header">
 						<div className='pl-11 mr-5'>
 							<button className='text-medium pb-2 mb-1.5 font-bold' onClick={handleClickViewMore}>
-								Xem thêm {comment.amountCommentReply || 0 - comment.listReply.data.length} bình luận
+								Xem thêm {(comment.amountCommentReply || 0) - comment.listReply.data.length} bình luận
 							</button>
 						</div>
 					</div>

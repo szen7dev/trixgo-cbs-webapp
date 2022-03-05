@@ -47,7 +47,7 @@ const SupportRouter: FC = () => {
                 />
                 <Route
                     exact
-                    path="/support/grant/documents-management"
+                    path="/support/grant/documents-management/:appID/:companyID/:appName"
                     component={SupportDocsManagementPage}
                 />
                 <Route

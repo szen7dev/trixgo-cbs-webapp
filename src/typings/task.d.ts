@@ -50,7 +50,7 @@ export type Task = {
   company: Company,
   group: Group,
   amountResponse: number;
-  amountResponseMarked: number;
+  amountMarkedResponse: number;
 };
 
 export type ListTaskResponse = APIResponse & {
@@ -73,15 +73,15 @@ export type CheckList = {
 };
 
 export type CheckListPayload = {
-  taskID?: string;
+  parentID: string;
   name: string;
-  description: string;
-  expiredTime: string;
   type: number;
-  assignee: string;
+  assigneeID: string;
+  expiredTime: string;
 };
 
 export type ListCheckListPayload = {
+  isChecklist?: number;
   lastestID?: string;
   limit?: number;
   populates?: string;
@@ -105,15 +105,17 @@ export type ListCheckListResponse = APIResponse & {
 export type ResponseProps = {
   _id: string,
   type: number,
-  isMarked: boolean,
-  task: string,
-  comment: {
-    content: string,
-    files: FileProps[] | undefined,
-    images: FileProps[] | undefined,
-    author: User,
+  official: boolean,
+  task: {
+    _id: string,
+    name: string
   },
-  userCreate: User,
+  content: string,
+  files: FileProps[] | undefined,
+  images: FileProps[] | undefined,
+  amountCommentReply: number,
+  amountReaction: number,
+  author: User,
   createAt: string
 }
 
@@ -136,7 +138,7 @@ export type ListResponsePayload = {
   taskID?: string;
   lastestID?: string;
   limit?: number;
-  isMarked?: boolean;
+  official?: boolean;
   populates?: string;
   select?: string;
   sortKey?: string;

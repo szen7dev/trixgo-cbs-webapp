@@ -4,3 +4,4 @@ export { contactRepository as ContactRepository } from './contact';
 export { doctypeRepository as DoctypeRepository } from './doctype';
 export { storageRepository as StorageRepository } from './storage';
 export { default as ContractRepository} from './contract';
+export { PositionRepository } from './position';

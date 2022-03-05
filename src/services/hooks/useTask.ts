@@ -2,10 +2,9 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
 import { Task, CheckList, CheckListPayload, ResponseProps, ResponsePayload } from "typings/task";
-import { useSocket } from 'services/hooks/useSocket';
 
 type UseTask = {
-  addResponse: (payload: ResponsePayload) => Promise<{ result: ResponseProps } | undefined>;
+  addResponseAsync: (payload: ResponsePayload) => Promise<any>;
   listResponses: Array<ResponseProps>;
   totalRecordResponse: number;
   refetchListResponse: () => void;
@@ -23,52 +22,26 @@ type Props = {
   taskID?: string;
   typeStatus?: number;
   type?: number;
-  isMarked?: boolean;
+  official?: boolean;
 }
 
-export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask => {
-  const { current: socket }: any = useSocket();
-
+export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask => {
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
     );
 
-  const addResponse = async (payload: ResponsePayload) => {
-    try {
-      const { error, data, message } = await addResponseAsync(payload);
-
-      if(error) {
-        toast.warning(message)
-      } else{
-        toast.success('Tạo phản hồi thành công');
-      }
-
-      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-          receivers: data.receivers
-      });
-
-      return data;
-    } catch (error: unknown) {
-      if (typeof error === "string") {
-          toast.error(error);
-      } else if (error instanceof Error) {
-          toast.error(error.message);
-      }
-    }
-  };
-
   const {
     data: dataListResponse,
     refetch: refetchListResponse,
   } = useInfiniteQuery(
-    ["list_responses", taskID, isMarked || false],
+    ["list_responses", taskID, official || false],
     async ({ pageParam }: any) => {
       return TaskRepository.listResponse({
         taskID,
         limit: 5,
         lastestID: pageParam || "",
-        isMarked: isMarked || false,
+        official: official || false,
       });
     },
     {
@@ -129,7 +102,7 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   return {
-    addResponse,
+    addResponseAsync,
     listResponses,
     totalRecordResponse,
     refetchListResponse,
@@ -218,7 +191,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         limit,
         lastestID: pageParam || "",
         parentID: parentID || "",
-        type: 2,
+        isChecklist: 1,
         isSortChecklist: 1,
         select: "assignee lastLog checklist description name expiredTime percentage project",
         populates: JSON.stringify({

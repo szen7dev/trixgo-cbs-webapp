@@ -61,7 +61,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
   };
 
   const checkListSchema = object().shape({
-    name: string().required("Bạn cần nhập nội dung công việc"),
+    name: string().required("Bạn cần nhập nội dung checklist"),
     expiredTime: date()
       .required("Bạn cần nhập thời hạn")
       .typeError("Bạn cần nhập thời hạn"),
@@ -195,7 +195,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
               <Formik
                 initialValues={initialValues}
                 validationSchema={checkListSchema}
-                onSubmit={(values) => handleAddChecklist(values)}
+                onSubmit={handleAddChecklist}
               >
                 {({
                   values,
@@ -233,7 +233,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                               </div>
                             )}
                             data={listFriend.map((item) => ({
-                              label: `${item.fullname}-${item.company?.sign}`,
+                              label: item.bizfullname,
                               value: item._id,
                             }))}
                             formatItem={{

@@ -24,7 +24,7 @@ export const ShareMessage:FC<Props> = ({context,currentChat}) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const paramsListConversation = {limit: 10, keyword: searchTerm};
-    const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation);
+    const {listConversations, nextPageListConversations, hasListConversationNextPage} = UseListConversation(paramsListConversation, isOpenShare);
     const {shareMessageToConversation} = UseConversation();
 
     const [selectedConversations, setSelectedConversations] = useState<{[key: string]: ItemListConversation}>({});

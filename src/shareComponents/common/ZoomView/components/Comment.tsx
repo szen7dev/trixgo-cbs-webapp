@@ -67,7 +67,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				<div className='group w-full'>
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
-							<p className="font-bold text-medium">{comment.author?.fullname}</p>
+							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
 								{comment?.content}
 							</p>
@@ -77,6 +77,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					<div>
 						<div className="flex flex-wrap gap-x-2">
 							{images.slice(0, 3).map((image, i) => {
+								if (!image) return null;
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;
 								const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;

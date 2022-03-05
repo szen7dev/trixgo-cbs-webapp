@@ -1,52 +1,228 @@
-import { FC } from "react";
+import React, { UIEvent, FC, useState, useEffect } from "react";
 import cn from "classnames";
+import moment from "moment";
+import debounce from 'lodash/debounce';
+import { useHistory, useLocation } from "react-router-dom";
 
-import { Paginate, DropdownSearchable } from "shareComponents/common";
+import { DropdownSearchable, ModalContainer } from "shareComponents/common";
+import { ModalCreateOrUpdateAppCompany } from 'views/support/shareComponents/common';
 import PolygonIcon from "assets/images/icon-polygon.svg";
+import { APP_INFO } from "shareComponents/common";
 
 import styles from "views/support/styles/support.module.css";
 import { Link } from "react-router-dom";
+import { useQueryListCompany } from 'services/hooks/useCompanies';
+import { useAppCompany } from 'services/hooks/apps/useAppCompany';
 
 export const SupportGrantPage: FC = () => {
+  const location = useLocation();
+  const history = useHistory();
+  const [keywordCompany, setKeywordCompany] = useState('');
+  const [companySelected, setCompanySelected] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [modalCreateOrUpdateAppCompany, setModalCreateOrUpdateAppCompany] = useState<boolean>(false);
+  const [listAppsCompany, setListAppsCompany] = useState<any[]>([]);
+  const [listChecked, setListChecked] = useState<any[]>([]);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [initialValues, setInitialValues] = useState({
+    appCompanyID: "",
+    company: "",
+    app: "",
+    maxCount: 0,
+    maxData: 0,
+    startTime: "",
+    endTime: ""
+  });
+
+  const { data: dataAppsCompany } = useAppCompany({ 
+    companyID: companySelected
+  });
+  const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany });
+
+  const toggleModalCreateOrUpdateAppCompany = () => setModalCreateOrUpdateAppCompany(!modalCreateOrUpdateAppCompany);
+
+  const handleChangeCompany = (value: any) => {
+    const nameCompany = `${value.name} - ${value.sign}`;
+    const idCompany = value._id;
+
+    setCompanyName(nameCompany);
+    setCompanySelected(idCompany);
+    history.push(`#${idCompany}`);
+    window.sessionStorage.setItem('companyName', nameCompany);
+  }
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const isBottom = scrollHeight - scrollTop === clientHeight;
+    isBottom && fetchNextPage();
+  }
+
+  const handleChangeCheckBox = (appCompany: any, event: React.ChangeEvent<HTMLInputElement>) => {
+    // App đã tồn tại trong công ty
+    const hasCheckedAppUpdate = listChecked.filter(item => item._id);
+
+    if(event.currentTarget.checked) {
+      setListChecked(previousValue => ([...previousValue, appCompany]));
+
+      if(appCompany._id || hasCheckedAppUpdate.length) {
+        setIsUpdate(true);
+      }
+    } else{
+      const listCheckedNew = listChecked.filter(item => item.app?._id !== appCompany.app?._id);
+      setListChecked(listCheckedNew);
+
+      if(hasCheckedAppUpdate.length === 1 && appCompany._id) {
+        setIsUpdate(false);
+      }
+    }
+  }
+
+  const handleSearch = debounce((value) => setKeywordCompany(value), 500);
+
+  const handleConfirmCreateOrUpdateAppCompany = (values: any) => {
+    const { _id, app, company, maxCount, maxData, startTime, endTime } = values;
+
+    const listAppsCompanyRefresh = listAppsCompany.map(appCompany => {
+      if(appCompany.app._id === app) {
+        appCompany._id        = _id;
+        appCompany.maxCount   = maxCount;
+        appCompany.maxData    = maxData;
+        appCompany.startTime  = startTime;
+        appCompany.endTime    = endTime;
+      }
+
+      return appCompany;
+    });
+
+    setListChecked([]);
+    setListAppsCompany(listAppsCompanyRefresh);
+    setInitialValues({
+      appCompanyID: _id || '',
+      company: company,
+      app: app,
+      maxCount: maxCount,
+      maxData: maxData,
+      startTime: startTime,
+      endTime: endTime
+    })
+  }
+
+  useEffect(() => {
+    if(!companySelected) return;
+
+    const appsCompany: any[] = [];
+
+    Array.from(APP_INFO.entries()).map(app => {
+      const appCompany = dataAppsCompany.find(appCompany => appCompany?.app?._id === app[0]);
+
+      if(appCompany) {
+        appsCompany[appsCompany.length] = appCompany;
+      } else{
+        appsCompany[appsCompany.length] = {
+          app: {
+            _id: app[0],
+            name: app[1].name
+          }
+        }
+      }
+    })
+    
+    setListAppsCompany(appsCompany);
+  }, [dataAppsCompany.length, companySelected])
+
+  useEffect(() => {
+    if(listChecked.length === 1) {
+
+      if(listChecked[0]._id) {
+        const { _id, app, company, maxCount, maxData, startTime, endTime } = listChecked[0];
+
+        setInitialValues({
+          appCompanyID: _id,
+          company: company?._id,
+          app: app?._id,
+          maxCount,
+          maxData,
+          startTime: moment(startTime).format("MM/DD/YYYY"),
+          endTime: moment(endTime).format("MM/DD/YYYY")
+        })
+      } else{
+        const { app } = listChecked[0];
+
+        setInitialValues({
+          appCompanyID: "",
+          company: companySelected,
+          app: app?._id,
+          maxCount: 0,
+          maxData: 0,
+          startTime: "",
+          endTime: ""
+        })
+      } 
+    }
+  }, [listChecked.length])
+
+  useEffect(() => {
+    if(!location.hash) return;
+
+    try {
+      const companyID = location.hash.substring(1);
+      const companyName = window.sessionStorage.getItem('companyName');
+      
+      companyID && setCompanySelected(companyID);
+      companyName && setCompanyName(companyName);
+    } catch (error) {console.error(error)}
+  }, [location.hash])
+
   return (
     <main className="relative h-full">
       <header className="h-10 border border-primary-border flex items-center justify-between px-5">
         <p className="text-lg">
-          Công ty Cổ phần CONINCO Quản lý dự án và Đầu tư
+          {companyName}
         </p>
 
-        <DropdownSearchable
-          placeholder="Chọn phân vùng để thực hiện"
-          className="w-[322px] pl-0 bg-cbs-table-header"
-          classNameInput="h-[28px] bg-cbs-table-header"
-          isMultiple={false}
-          allowClearValueSingleInput={false}
-          showTriangle={true}
-          maxWidthInput="max-w-none"
-          renderSelectedItem={(item) => <span>{item.text}</span>}
-          classNameItem="p-0"
-          data={[
-            {
-              _id: 1,
-              content: "Kết quả trả về 1",
-            },
-            {
-              _id: 2,
-              content: "Kết quả trả về 2",
-            },
-            {
-              _id: 3,
-              content: "Kết quả trả về 3",
-            },
-          ]}
-          formatItem={{
-            id: "_id",
-            text: "content",
-          }}
-          inlineSearch={false}
-          disableSearch={false}
-          searchInputClassName="h-[40px] w-[322px] px-[46px]"
-        />
+        <div className="flex items-center justify-between">
+          <button
+            className={
+              cn("flex items-center justify-center text-primary-light bg-cbs-green px-2 h-8 rounded font-bold mr-2",
+                (listChecked.length === 1 && !isUpdate) ? "" : "hidden")
+            }
+            onClick={toggleModalCreateOrUpdateAppCompany}
+          >
+            Tạo mới
+          </button>
+          <button
+            className={
+              cn("flex items-center justify-center text-primary-light bg-cbs-green px-2 h-8 rounded font-bold mr-2",
+              (listChecked.length === 1 && isUpdate) ? "" : "hidden")
+            }
+            onClick={toggleModalCreateOrUpdateAppCompany}
+          >
+            Cập nhật
+          </button>
+          <DropdownSearchable
+            placeholder="Chọn phân vùng để thực hiện"
+            className="w-[322px] pl-0 bg-cbs-table-header"
+            classNameInput="h-[28px] bg-cbs-table-header"
+            isMultiple={false}
+            allowClearValueSingleInput={false}
+            showTriangle={true}
+            maxWidthInput="max-w-none"
+            renderSelectedItem={(item) => <span>{item.text}</span>}
+            classNameItem="p-0"
+            data={listCompanies}
+            formatItem={{
+              id: "_id",
+              text: "name",
+            }}
+            inlineSearch={false}
+            disableSearch={false}
+            searchInputClassName="h-[40px] w-[322px] px-[46px]"
+            onScroll={handleScroll}
+            onchangeValue={handleChangeCompany}
+            onSearchInputChange={handleSearch}
+          />
+        </div>
+
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -57,8 +233,6 @@ export const SupportGrantPage: FC = () => {
                 <input
                   className="form-check-input mr-2"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
                   defaultChecked
                 />
                 <img src={PolygonIcon} alt="Polygon" />
@@ -89,47 +263,68 @@ export const SupportGrantPage: FC = () => {
             </th>
           </tr>
         </thead>
-
         <tbody>
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2">Quản lý dự án</td>
-            <td className="py-1 px-2">100</td>
-            <td className="py-1 px-2">100</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">15/12/2022</td>
-          </tr>
+          {listAppsCompany.length ? listAppsCompany.map(appCompany => {
+            if(appCompany._id) {
+              return (
+                <tr key={appCompany._id} className="border-b border-primary-border h-10">
+                  <td className="py-1 px-2 text-center">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      style={{ marginLeft: "-23px" }}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
+                    />
+                  </td>
+                  <td className="py-1 px-2">
+                    <Link to={`/support/grant/documents-management/${appCompany.app._id}/${appCompany?.company?._id || appCompany.company}/${appCompany.app.name}`}>
+                      {appCompany.app?.name}
+                    </Link>
+                  </td>
+                  <td className="py-1 px-2">{appCompany.maxCount}</td>
+                  <td className="py-1 px-2">{appCompany.maxData}</td>
+                  <td className="py-1 px-2">{moment(appCompany.startTime).format('DD/MM/YYYY')}</td>
+                  <td className="py-1 px-2">{moment(appCompany.endTime).format('DD/MM/YYYY')}</td>
+                </tr>
+              )
+            }
 
-          <tr className="border-b border-primary-border h-10">
-            <td className="py-1 px-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <Link to="/support/grant/documents-management">
-              <td className="py-1 px-2">Quản lý hồ sơ văn bản</td>
-            </Link>
-            <td className="py-1 px-2">100</td>
-            <td className="py-1 px-2">100</td>
-            <td className="py-1 px-2">15/12/2021</td>
-            <td className="py-1 px-2">15/12/2022</td>
-          </tr>
+            return (
+              <tr key={appCompany.app?._id} className="border-b border-primary-border h-10">
+                <td className="py-1 px-2 text-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    style={{ marginLeft: "-23px" }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
+                  />
+                </td>
+                <td className="py-1 px-2">
+                  {appCompany.app?.name}
+                </td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+                <td className="py-1 px-2"></td>
+              </tr>
+            )
+          }) : <></>}
         </tbody>
       </table>
 
-      <Paginate />
+      <ModalContainer isModalOpen={modalCreateOrUpdateAppCompany} toggle={toggleModalCreateOrUpdateAppCompany}>
+        <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+          <ModalCreateOrUpdateAppCompany
+            modalType={initialValues.appCompanyID ? 'update' : 'create'}
+            show={modalCreateOrUpdateAppCompany}
+            toggle={toggleModalCreateOrUpdateAppCompany}
+            initialValues={initialValues}
+            onConfirm={handleConfirmCreateOrUpdateAppCompany}
+          />
+        </div>
+      </ModalContainer>
     </main>
   );
 };

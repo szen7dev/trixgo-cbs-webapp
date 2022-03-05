@@ -10,8 +10,11 @@ async function fetchListFriend<T>(params?: ListFriendPayload): Promise<T> {
     const { data } = await API.get(
         `${USER_URL}/list-friend`, {
         params: {
-            select: 'fullname image',
-            populates: '{"path": "company", "select": "name sign"}',
+            select: '_id fullname bizfullname email phone image',
+            populates: JSON.stringify({
+                path: "company",
+                select: "_id name sign"
+            }),
             ...params,
         }
     }

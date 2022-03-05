@@ -16,6 +16,8 @@ const postActions = (dispatch: DispatchAction) => ({
         type: "comment",
         author: comment.author,
         createAt: comment.createAt,
+
+        comment,
       },
     });
   },
