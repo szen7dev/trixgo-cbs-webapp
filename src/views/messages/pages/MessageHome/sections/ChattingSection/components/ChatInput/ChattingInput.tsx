@@ -5,7 +5,6 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {useAuth} from 'services/hooks/useAuth';
 import {useUpload} from "services/hooks/useUpload";
 import {convertToRaw, EditorState} from "draft-js";
 import {
@@ -17,7 +16,7 @@ import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "redux/reducer";
 import {SelectedActionGroup} from "./SelectedActionGroup";
 import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
-import {dismissSearchMode} from "../../../../../../../../redux/reducer/messages/SearchMessage";
+import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 
 export const ChattingInputContext = createContext<{
     editorState: any;

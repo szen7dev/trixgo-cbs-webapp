@@ -5,7 +5,18 @@ import {SettingMessageDetail} from "./sections/SettingMessageDetail";
 import { useSocket } from "services/hooks/useSocket";
 import '@draft-js-plugins/emoji/lib/plugin.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import {ShareMessage, DeleteAndRevokeMessageConfirm, PollCreate, ChattingSection, ReminderCreate, SendContactMessage, NPSCreate, AddUsersToConversation, PopupSendImageAndFile} from "./sections/ChattingSection";
+import {
+    ShareMessage,
+    DeleteAndRevokeMessageConfirm,
+    PollCreate,
+    ChattingSection,
+    ReminderCreate,
+    SendContactMessage,
+    NPSCreate,
+    AddUsersToConversation,
+    PopupSendImageAndFile,
+    UsersSeenDetail
+} from "./sections/ChattingSection";
 import Editor from "@draft-js-plugins/editor";
 import {SearchMessage} from "./sections/SearchMessage";
 import {useDispatch} from "react-redux";
@@ -77,6 +88,7 @@ export const MessagesHome:FC = () => {
             <FolderFormPopup/>
             <FolderDeleteConfirmPopup/>
             <FolderAddConversationPopup/>
+            <UsersSeenDetail/>
         </MessageContext.Provider>
     )
 }
