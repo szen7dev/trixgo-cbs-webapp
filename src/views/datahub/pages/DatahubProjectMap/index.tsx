@@ -67,7 +67,7 @@ function Markers() {
 const DatahubProjectMap: FC = () => {
 	const position: LatLngExpression = [21.030653, 105.847130];
 	return (
-		<MapContainer className="h-full" center={position} zoom={13} zoomAnimation >
+		<MapContainer className="h-full z-0" center={position} zoom={13} zoomAnimation >
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
