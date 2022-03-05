@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import ad from 'assets/images/media/image 175.png';
+import ad from 'assets/images/media/sustainable.png';
 
 export const SocialAdvertisement: FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 	return (

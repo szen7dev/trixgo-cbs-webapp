@@ -44,7 +44,7 @@ const TableRowGroup: FC<Props> = ({ show, index }) => {
 						<td>Small Heroes Kidsconceptstore</td>
 						<td>Dày 12mm, độ cứng 125K, màu sáng bóng. Mã màu tương đương</td>
 						<td>
-							<img className='w-32' src="/static/media/image 175.8dceee74.png" alt="" />
+							<img className='w-32' src="/static/media/sustainable.png" alt="" />
 						</td>
 						<td>K558-CM</td>
 						<td>Châu âu</td>
