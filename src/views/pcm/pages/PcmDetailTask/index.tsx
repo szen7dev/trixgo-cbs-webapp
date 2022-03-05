@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, Fragment } from "react";
+import { FC, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
@@ -49,12 +49,12 @@ export const PcmDetailTask: FC = () => {
 
   const getGroupTitle = (group: any) => {
     let title = "";
-    if (group.parent) {
-      const name = getGroupTitle(group.parent);
+    if (group?.parent) {
+      const name = getGroupTitle(group?.parent);
       title = title ? `${name} > ${title}` : name;
     }
 
-    return title ? `${title} > ${group.name}` : group.name;
+    return title ? `${title} > ${group?.name}` : group?.name;
   };
 
   useEffect(() => {
@@ -244,10 +244,20 @@ export const PcmDetailTask: FC = () => {
             </div>
             <div className="mt-8 pr-3">
               <CheckList
+                componentType="CHECKLIST"
                 task={infoTask.data}
                 data={listCheckList}
                 totalRecord={totalRecord}
                 onSeeMore={nextPageListCheckList}
+              />
+            </div>
+            <div className="mt-8 pr-3">
+              <CheckList
+                componentType="CHILDTASK"
+                task={infoTask.data}
+                data={[]}
+                totalRecord={0}
+                onSeeMore={() => ''}
               />
             </div>
             <div className="px-5 mt-5">
