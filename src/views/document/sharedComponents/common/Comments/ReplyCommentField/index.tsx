@@ -9,13 +9,11 @@ import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'views/media/shareComponents/common';
 
-import {  modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
-
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from 'views/document/contexts/comment';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile';
 import { APP_KEY } from 'utils/constants';
 
 interface Props {
@@ -133,21 +131,21 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		try {
 			if (defaultValue) {
 				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
-				if(error) return toast.warning(message);
+				if (error) return toast.warning(message);
 
 				updateCommentLocal({ commentID, parent: parentID, body: data })
 			} else {
 				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
-				if(error) return toast.warning(message);
+				if (error) return toast.warning(message);
 
 				addComment(data);
 			}
 		} catch (error) {
 			if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 
 		// Clear text input

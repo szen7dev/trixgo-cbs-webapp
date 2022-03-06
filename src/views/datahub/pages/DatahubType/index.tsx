@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import { useQueryClient } from 'react-query'
 import { debounce } from 'lodash'
 
-import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
+import { useDatahubTypes } from "services/hooks/datahub";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
 
-// import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";

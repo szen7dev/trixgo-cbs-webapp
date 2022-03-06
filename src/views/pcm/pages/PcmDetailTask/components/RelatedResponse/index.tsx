@@ -26,8 +26,7 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
 import { useSocket } from "services/hooks/useSocket";
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from "services/hooks/ppt/useUploadFile";
-import { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
+import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile";
 import { APP_TYPE, APP_KEY } from "utils/constants";
 
 /**

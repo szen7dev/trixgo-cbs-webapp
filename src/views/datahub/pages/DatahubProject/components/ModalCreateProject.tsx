@@ -3,17 +3,17 @@ import { Dialog } from '@headlessui/react'
 
 import { Form, Formik } from 'formik'
 import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
-import useDatahubCompanies from 'services/hooks/datahub/useDatahubCompanies';
 import { string, object } from 'yup';
 
 import { PROJECT_TYPES, BUILDING_TYPES, BUILDING_GRADES, DEPARTMENT_STATUS } from 'apis/localdb'
-import useDatahubArea from 'services/hooks/datahub/useDatahubArea'
-import useCreateDatahubProject from 'services/hooks/datahub/useCreateDatahubProject'
-import useUpdateDatahubProject from 'services/hooks/datahub/useUpdateDatahubProject';
-import useDatahubProject from 'services/hooks/datahub/useDatahubProject';
+
+// ======== Hooks ========
+import { useQueryClient } from 'react-query';
+import { useCreateDatahubProject, useUpdateDatahubProject, useDatahubProject, useDatahubCompanies, useDatahubArea } from 'services/hooks/datahub'
+
+// ======== Typings ========
 import { ResponseCreateSuccess } from 'typings/datahub/api';
 import { DatahubProjects } from 'typings/datahub/projects';
-import { useQueryClient } from 'react-query';
 
 type Props = {
 	type: 'create' | 'edit'

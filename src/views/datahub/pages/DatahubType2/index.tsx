@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 
 import { Link } from "react-router-dom";
-import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
+import { useDatahubTypes } from "services/hooks/datahub";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 

@@ -4,13 +4,12 @@ import { Dialog } from '@headlessui/react'
 
 import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/sharedComponents/common';
 import { string, object, number } from 'yup';
-import useUpdateDatahubType from 'services/hooks/datahub/useUpdateDatahubType';
-import useDatahubType from 'services/hooks/datahub/useDatahubType';
 import { useQueryClient } from 'react-query';
-import useCreateDatahubType from 'services/hooks/datahub/useCreateDatahubType';
 
 import { ResponseCreateSuccess } from 'typings/datahub/api';
+
 import { DatahubTypes } from 'typings/datahub/datahubtypes';
+import { useUpdateDatahubType, useDatahubType, useCreateDatahubType } from 'services/hooks/datahub';
 
 const POPULAR = [
 	{ name: 'Phổ biến', value: 1 },

@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
+import { debounce } from 'lodash'
 
-import useDatahubProjects from "services/hooks/datahub/useDatahubProjects";
+import { Paginate, GroupActions, SearchInput, ButtonCreate, ButtonMore } from "shareComponents/common";
 
+// ======== Hooks ========
+import { useQueryClient } from "react-query";
+import { useDatahubProjects } from "services/hooks/datahub";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
-import { Paginate } from "shareComponents/common";
-import { SearchInput } from "shareComponents/common";
-
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
-import { GroupActions } from "shareComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
-import ModalCreateProject from "./components/ModalCreateProject";
-import { debounce } from 'lodash'
+
+// ======== Context ========
 import { ContextMenu, ContextMenuWrapper } from "shareComponents/common/ContextMenu";
-import { DatahubProjects } from "typings/datahub/projects";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
-import { useQueryClient } from "react-query";
+import ModalCreateProject from "./components/ModalCreateProject";
+
+// ======== Typings ========
+import { DatahubProjects } from "typings/datahub/projects";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
