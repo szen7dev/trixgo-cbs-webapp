@@ -41,7 +41,7 @@ export const DeleteChatContent:FC<Props> = ({message,className,showSenderName, i
                     </div>
                 </div>
                 <div className={"date-message absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>
-                    {moment(message.createdAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    {moment(message.createAt).format("HH:mm")}<img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>
         </div>

@@ -341,7 +341,7 @@ export const Dashboard: FC = () => {
         <div className="t-home-right-block">
           <div className="t-home-right-block-common">
             <div className="t-home-right-block-common-text">
-              <div className="t-home-right-block-common-title">Workshop</div>
+              <div className="t-home-right-block-common-title">Workshop thực tế</div>
             </div>
           </div>
           <div className="t-home-training flex items-center flex-wrap pl-4 pr-4 pb-px">
@@ -350,13 +350,13 @@ export const Dashboard: FC = () => {
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "10%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">08 chủ đề, 425 workshop</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">08 chủ đề, 42 bài học</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "40%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành áp dụng thực tiễn qua nền tảng Trixgo</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành làm việc dự án thực tế</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
