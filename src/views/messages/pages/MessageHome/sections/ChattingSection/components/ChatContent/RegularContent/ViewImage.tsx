@@ -64,7 +64,7 @@ export const ViewImage: FC<Props & ModalProps> = ({ imageList, toggle, index, me
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
                             </svg>
                         </button>
-                        <a target="_blank" href={imageList[imageIndex]} download className="h-11 w-11 text-center" rel="noreferrer">
+                        <a target="_blank" href={imageList[imageIndex]} download className="h-11 w-11 text-center flex items-center" rel="noreferrer">
                             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>

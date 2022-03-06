@@ -14,7 +14,7 @@ import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useAuth } from 'services/hooks/useAuth';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;

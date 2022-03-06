@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 
@@ -32,10 +32,28 @@ export const PersonalLeftSideBar: FC = () => {
 
               {/* menu block */}
               <div className="t-link-menu-container">
-                  <Link to={`/personal/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active">
+                  <NavLink to={`/personal/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Trang chủ</span>
-                  </Link>
+                  </NavLink>
+              </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/friends`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Quản lý bạn bè</span>
+                  </NavLink>
+              </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/notifications`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Quản lý thông báo</span>
+                  </NavLink>
+              </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/bills`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Quản lý hóa đơn</span>
+                  </NavLink>
               </div>
           </div>
       </div>

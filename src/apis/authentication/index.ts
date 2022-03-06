@@ -24,7 +24,7 @@ const AuthenticationRepository = {
 
   async usersInfo(): Promise<UserInfoResponse> {
     const { data } = await API.get<UserInfoResponse>(
-      `${authURL}/users/me?select={"company": "", "department": ""}&filter={"conversationsPin": 0, "friends": 0, "recentlyFriends": 0, "devices": 0, "registrationID": 0}`
+      `${authURL}/users/me`
     );
     return data;
   },

@@ -73,7 +73,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                 </div>
                 <div className={"date-message date-text-message text-xs flex items-center w-full justify-end "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
-                    <span className={"ml-[5px]"}>{moment(message.createdAt).format("HH:mm")}</span>
+                    <span className={"ml-[5px]"}>{moment(message.createAt).format("HH:mm")}</span>
                     <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
                 </div>
             </div>

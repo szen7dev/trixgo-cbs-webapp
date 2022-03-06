@@ -16,6 +16,7 @@ import {
   DatahubProjectsBody,
   DatahubProjectsParams,
 } from "typings/datahub/projects";
+import { DatahubFinancial } from "typings/datahub/financial";
 import { DatahubCompanies } from "typings/datahub/company";
 import { DatahubArea } from "typings/datahub/area";
 
@@ -24,7 +25,7 @@ const url = "/api/datahub";
 const DatahubRepository = {
   // ==== DatahubTypes ====
   async getDatahubType<T = undefined>(
-    params: { datahubID: string } & DatahubTypesParams
+    params: { datahubTypeID: string } & DatahubTypesParams
   ) {
     const { data } = await API.get<ResponseCreate<DatahubTypes<T>>>(
       `${url}/datahub_types`,
@@ -86,9 +87,26 @@ const DatahubRepository = {
     );
     return data;
   },
+  // ==== Datahub Financial ====
+  async getDatahubFinancial(
+    params: { contractorID: string } & DatahubProjectsParams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubFinancial>>(
+      `${url}/datahub_finreports`,
+      { params }
+    );
+    return data;
+  },
   // ==== DatahubCompanies ====
   async companiesList(params?: DatahubProjectsParams) {
     const { data } = await API.get<ResponseList<DatahubCompanies>>(
+      "/api/auth/companies",
+      { params }
+    );
+    return data;
+  },
+  async getCompany(params: { companyID: string } & DatahubProjectsParams) {
+    const { data } = await API.get<ResponseCreate<DatahubCompanies>>(
       "/api/auth/companies",
       { params }
     );
