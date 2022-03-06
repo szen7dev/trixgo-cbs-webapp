@@ -7,13 +7,19 @@ type Props = DatahubTypesParams;
 
 const useDatahubTypes = (props?: Props) => {
   return useQuery(
-    ["datahub_types", props?.type || 1],
-    () => DatahubRepository.datahubTypes(props),
+    [
+      "datahub_types",
+      props?.lastestID || "",
+      props?.type || 1,
+      props?.keyword || "",
+    ],
+    () => DatahubRepository.getDatahubTypesList(props),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
       keepPreviousData: true,
+      getNextPageParam: ({ data }) => data.nextCursor,
     }
   );
 };

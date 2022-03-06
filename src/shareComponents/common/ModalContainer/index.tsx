@@ -2,13 +2,18 @@ import { FC, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 interface Props {
-	isModalOpen: boolean
-	toggle(): void
+	isModalOpen: boolean;
+	toggle(): void;
+
+	beforeEnter?(): void;
+	afterEnter?(): void;
+	beforeLeave?(): void;
+	afterLeave?(): void;
 }
 
-export const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children }) => {
+export const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children, ...rest }) => {
 	return (
-		<Transition appear show={isModalOpen} as={Fragment}>
+		<Transition appear show={isModalOpen} as={Fragment} {...rest}>
 			<Dialog
 				as="div"
 				className="fixed inset-0 z-50 overflow-y-auto"

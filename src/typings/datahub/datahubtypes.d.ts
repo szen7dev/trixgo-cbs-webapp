@@ -1,4 +1,4 @@
-export type DatahubTypes = {
+export type DatahubTypesBase = {
   _id: string;
   type: number;
   level: number;
@@ -14,6 +14,8 @@ export type DatahubTypes = {
   createdAt: DateString;
   updatedAt: DateString;
 };
+
+export type DatahubTypes<T = keyof DatahubTypesBase> =  Pick<DatahubTypesBase, T>
 
 export type DatahubTypesParams = {
   limit?: number;
