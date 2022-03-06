@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -25,8 +25,10 @@ const DatahubTypeDetail: FC = () => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 
 	const history = useHistory();
+	const params = useParams<{ id: string }>();
+
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
@@ -57,7 +59,14 @@ const DatahubTypeDetail: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions types={['edit']} className="flex items-center flex-1" />
+				<GroupActions
+					types={['edit']}
+					className="flex items-center flex-1"
+					onClickPencil={() => { alert('edit') }}
+					disabled={{
+						pencil: checked.length !== 1,
+					}}
+				/>
 
 				<ButtonCreate onClick={() => setShow(!show)} />
 				<ButtonMore />
@@ -111,7 +120,12 @@ const DatahubTypeDetail: FC = () => {
 				</table>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalCreateType
+				type='create'
+				show={show}
+				toggle={() => setShow(!show)}
+				buttonOnly
+			/>
 		</div >
 	);
 };

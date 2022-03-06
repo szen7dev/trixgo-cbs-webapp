@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
 import useDatahubProjects from "services/hooks/datahub/useDatahubProjects";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
@@ -29,15 +28,13 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 const DatahubProject: FC = () => {
 	const queryClient = useQueryClient();
 	const [query, setQuery] = useState('');
-	const [pageCursor, setPageCuror] = useState({ page: [] as string[], cursor: '' });
-	const { data, isFetching } = useDatahubProjects(['datahub_projects', pageCursor.cursor, query], {
-		lastestID: pageCursor.cursor,
+	const { data, isFetching, fetchNextPage, fetchPrevPage, resetPage } = useDatahubProjects({
 		populates: { "path": "client area1 area2 area3", select: '_id name' },
 		limit: 10,
 		keyword: query,
 		select: '_id name sign client address area3 area2 area1 location note'
 	});
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu";
@@ -47,25 +44,6 @@ const DatahubProject: FC = () => {
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubProjects | null>(null);
 
-	function fetchNextPage() {
-		if (data?.data.nextCursor) {
-			pageCursor.page.push(data.data.nextCursor);
-			setPageCuror({
-				page: pageCursor.page,
-				cursor: data.data.nextCursor,
-			});
-		}
-	}
-
-	function fetchPrevPage() {
-		if (pageCursor.page.length > 0) {
-			pageCursor.page.pop();
-			setPageCuror({
-				page: pageCursor.page,
-				cursor: pageCursor.page[pageCursor.page.length - 1],
-			});
-		}
-	}
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -77,7 +55,13 @@ const DatahubProject: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions
+					className="flex items-center flex-1"
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					disabled={{
+						pencil: checked.length !== 1,
+					}}
+				/>
 
 				<ButtonCreate onClick={() => { setShow(!show); setSelected(null) }} />
 				<ButtonMore />
@@ -160,11 +144,7 @@ const DatahubProject: FC = () => {
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={'/datahub/type/' + _id} >
-												{name}
-											</Link>
-										</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{name}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{sign}</td>
 										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{typeof client !== 'string' && client.name}</td>
 										<td className="pt-2.5 pb-3 pl-2 border-b border-cbs-border text-right">{address}</td>
@@ -198,7 +178,7 @@ const DatahubProject: FC = () => {
 					onSuccessCreate={data => {
 						queryClient.removeQueries(["datahub_projects"], { inactive: true });
 						queryClient.refetchQueries(["datahub_projects"]);
-						setPageCuror({ page: [], cursor: '' })
+						resetPage()
 					}}
 				/>
 			</ModalExtraLarge>

@@ -18,7 +18,7 @@ import SearchIcon from 'assets/icons/SearchIcon';
 import useDatahubTypes from 'services/hooks/datahub/useDatahubTypes';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
-	const { data } = useDatahubTypes({ level: 1, select: '_id name', limit: 10 });
+	const { data } = useDatahubTypes({ level: 1, select: '_id name', limit: 10, type: 1 });
 	return (
 		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 relative pb-[92px]'>
 			<div className='h-full w-full  pt-12 overflow-auto'>

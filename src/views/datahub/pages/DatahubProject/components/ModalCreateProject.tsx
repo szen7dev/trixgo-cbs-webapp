@@ -8,7 +8,6 @@ import { string, object } from 'yup';
 
 import { PROJECT_TYPES, BUILDING_TYPES, BUILDING_GRADES, DEPARTMENT_STATUS } from 'apis/localdb'
 import useDatahubArea from 'services/hooks/datahub/useDatahubArea'
-import { toast } from 'react-toastify'
 import useCreateDatahubProject from 'services/hooks/datahub/useCreateDatahubProject'
 import useUpdateDatahubProject from 'services/hooks/datahub/useUpdateDatahubProject';
 import useDatahubProject from 'services/hooks/datahub/useDatahubProject';
@@ -74,8 +73,15 @@ const ModalCreateProject: FC<Props> = (props) => {
 
 	const [company, setCompany] = useState('');
 	const [area, setArea] = useState('');
-	const { data: listCompany } = useDatahubCompanies(['company', company], { select: '_id name', keyword: company }, { enable: true });
-	const { data: listAddress3, fetchNextPage: fetchNextArea, hasNextPage: hasNextArea } = useDatahubArea(['area', area], { select: '_id name', keyword: company }, { enable: true });
+	const { data: listCompany, fetchNextPage: fetchNextCompanies, hasNextPage: hasNextCompany }
+		= useDatahubCompanies(['company', company], { select: '_id name', limit: 20, keyword: company }, { enable: true });
+	const { data: listAddress3, fetchNextPage: fetchNextArea, hasNextPage: hasNextArea }
+		= useDatahubArea(['area', area], {
+			select: '_id name parent',
+			limit: 20,
+			keyword: area,
+			populates: JSON.stringify({ "path": "parent", "select": "name sign parent level", "populate": { "path": "parent", "select": "name sign parent level" } })
+		}, { enable: true });
 
 	const comapnyRef = useRef<NodeJS.Timeout>();
 	const areaRef = useRef<NodeJS.Timeout>();
@@ -112,7 +118,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 					})
 					setDefaultValues({
 						client: data.data.client.name,
-						area3: data.data.area3.name,
+						area3: data.data.area3.name + ', ' + (data.data.area3.parent as any).name + ', ' + (data.data.area3.parent as any).parent.name,
 						projectType: data.data.projectType ? PROJECT_TYPES.find(item => item.value === data.data.projectType)?.text || '' : '',
 						buildingType: data.data.buildingType ? BUILDING_TYPES.find(item => item.value === data.data.buildingType)?.text || '' : '',
 						buildingGrade: data.data.buildingGrade ? BUILDING_GRADES.find(item => item.value === data.data.buildingGrade)?.text || '' : '',
@@ -202,9 +208,10 @@ const ModalCreateProject: FC<Props> = (props) => {
 										name='client'
 										required
 										onChange={handleChangeCompanies}
-										data={listCompany?.data.listRecords || []}
+										data={listCompany?.pages.flatMap(p => p.data.listRecords) || []}
 										valueAttribute="_id"
 										initialData={defaultValues.client}
+										onScroll={e => { hasNextCompany && (e.target.scrollTop + e.target.offsetHeight + 100 > e.target.scrollHeight) && fetchNextCompanies() }}
 									/>
 									<CustomFieldFormik title='Địa chỉ dự án' required name='address' />
 									<CustomAutoCompleteFormik
@@ -215,6 +222,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 										data={listAddress3?.pages.flatMap(p => p.data.listRecords) || []}
 										valueAttribute="_id"
 										initialData={defaultValues.area3}
+										renderValue={(item) => item.name + ', ' + (item.parent as any).name + ', ' + (item.parent as any).parent.name}
 										onScroll={e => { hasNextArea && (e.target.scrollTop + e.target.offsetHeight + 100 > e.target.scrollHeight) && fetchNextArea() }}
 									/>
 									<CustomFieldFormik name='location' title='Địa chỉ theo GG map' />

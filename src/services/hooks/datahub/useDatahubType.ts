@@ -11,18 +11,20 @@ type Options<T> = {
 const useDatahubType = (
   datahubID?: string,
   options?: Options<
-    ResponseCreate<DatahubTypes<"_id" | "type" | "name" | "description">>
+    ResponseCreate<
+      DatahubTypes<"_id" | "type" | "name" | "description" | "popular">
+    >
   >
 ) => {
   return useQuery(
     ["datahub_type"],
     () =>
-      DatahubRepository.getDatahubType<"_id" | "type" | "name" | "description">(
-        {
-          datahubID: datahubID || "",
-          select: "_id type name description",
-        }
-      ),
+      DatahubRepository.getDatahubType<
+        "_id" | "type" | "name" | "description" | "popular"
+      >({
+        datahubID: datahubID || "",
+        select: "_id type name description popular",
+      }),
     {
       refetchOnWindowFocus: false,
       enabled: Boolean(datahubID), // https://react-query.tanstack.com/guides/disabling-queries

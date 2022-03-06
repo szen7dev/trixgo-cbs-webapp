@@ -10,20 +10,25 @@ type Options<T> = {
 
 const useDatahubProject = (
   datahubProjectID?: string,
-  options?: Options<
-    ResponseCreate<DatahubProjects>
-  >
+  options?: Options<ResponseCreate<DatahubProjects>>
 ) => {
   return useQuery(
     ["datahub_type"],
     () =>
-      DatahubRepository.getProject<"_id" | "client" | "name" | "address">({
+      DatahubRepository.getProject<
+        "_id" | "client" | "name" | "address" | "area3"
+      >({
         datahubProjectID: datahubProjectID || "",
         // select: "_id client name description",
-        populates: {
-          // select:'client',
+        populates: JSON.stringify({
           path: "client area3",
-        },
+          select: "name sign parent level",
+          populate: {
+            path: "parent",
+            select: "name sign parent level",
+            populate: { path: "parent", select: "name sign parent level" },
+          },
+        }),
       }),
     {
       refetchOnWindowFocus: false,
