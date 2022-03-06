@@ -226,7 +226,7 @@ const ModalCreateProject: FC<Props> = (props) => {
 									<CustomAutoCompleteFormik title='Loại công trình' name='buildingType' data={BUILDING_TYPES} attribute="text" valueAttribute='value' initialData={defaultValues.buildingType} />
 									<CustomAutoCompleteFormik title='Cấp công trình' name='buildingGrade' data={BUILDING_GRADES} attribute="text" valueAttribute='value' initialData={defaultValues.buildingGrade} />
 
-									<CustomFieldFormik name='basementNumber' title='Cấp công trình' />
+									<CustomFieldFormik name='basementNumber' title='Số tầng hầm' />
 									<CustomFieldFormik name='basementArea' title='Diện tích tầng hầm' />
 									<CustomFieldFormik name='floorNumber' title='Số tầng cao' />
 									<CustomFieldFormik name='floorArea' title='Diện tích tầng cao' />
