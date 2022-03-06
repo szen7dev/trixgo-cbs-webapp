@@ -12,6 +12,8 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
 
+import { Loader } from "shareComponents/common";
+
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
@@ -48,7 +50,10 @@ const Routes: FC = () => {
     }, []);
 
     return (
-        <React.Suspense fallback={<span>loading</span>}>
+        <React.Suspense fallback={<div className="fixed inset-0 flex justify-center items-center">
+					<span className="cbs-clock">
+					</span>
+				</div>}>
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>

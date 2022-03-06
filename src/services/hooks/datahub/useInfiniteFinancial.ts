@@ -13,7 +13,7 @@ const useInfiniteFinancial = (
   return useInfiniteQuery(
     key,
     ({ pageParam }) =>
-      DatahubRepository.getDatahubFinancial({
+      DatahubRepository.getDatahubFinancialList({
         ...props,
         lastestID: pageParam,
         contractorID: props.contractorID,

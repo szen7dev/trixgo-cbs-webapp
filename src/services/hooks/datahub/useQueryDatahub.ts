@@ -1,50 +1,49 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import DatahubRepository from "apis/datahub";
 import { useState } from "react";
-import { useQuery } from "react-query";
-import { ResponseList, DatahubPrams } from "typings/datahub/api";
-import { DatahubFinancial } from "typings/datahub/financial";
+import {
+  useQuery,
+  UseQueryOptions,
+  QueryFunctionContext,
+  QueryKey,
+} from "react-query";
+import { ResponseList } from "typings/datahub/api";
 
-type Props = { contractorID: string } & DatahubPrams;
-type Options = {
-  onSuccess?: (data: ResponseList<DatahubFinancial>) => void;
-  refetchOnMount?: boolean;
-};
+type QueryFunction<T = unknown, TQueryKey extends QueryKey = QueryKey> = (
+  context: QueryFunctionContext<TQueryKey> & {
+    cursor: string | undefined;
+  }
+) => T | Promise<T>;
 
 // Hook gọi api chung cùng kiểu phân trang
-const useQueryFinancials = (
-	keys: string | string[],
-  props: Props,
-  options: Options = { refetchOnMount: false }
-) => {
+function useQueryDatahub<TQueryFnData = unknown, TData = TQueryFnData>(
+  keys: QueryKey,
+  queryFn: QueryFunction<ResponseList<TQueryFnData>>,
+  options?: UseQueryOptions<
+    ResponseList<TQueryFnData>,
+    unknown,
+    ResponseList<TData>,
+    QueryKey
+  >
+) {
   const [pageCursor, setPageCuror] = useState({
     page: [] as string[],
     cursor: "",
   });
-	
-  const { data, isFetching } = useQuery(
-    ["datahub_financials", pageCursor.cursor, props?.keyword],
-    () =>
-      DatahubRepository.getDatahubFinancial({
-        ...props,
-        lastestID: pageCursor.cursor,
-        contractorID: props.contractorID,
-      }),
-    {
-      refetchOnMount: options.refetchOnMount,
-      refetchOnWindowFocus: false,
-      enabled: Boolean(props.contractorID), // https://react-query.tanstack.com/guides/disabling-queries
-      keepPreviousData: true,
-      onSuccess: options?.onSuccess,
-    }
+
+  const data = useQuery(
+    typeof keys === "string"
+      ? keys + "." + pageCursor.cursor
+      : [...keys, pageCursor.cursor],
+    (context) => queryFn({ ...context, cursor: pageCursor.cursor }),
+    options
   );
 
   function fetchNextPage() {
-    if (data?.data.nextCursor) {
-      pageCursor.page.push(data.data.nextCursor);
+    if (data.data?.data.nextCursor) {
+      pageCursor.page.push(data.data.data.nextCursor);
       setPageCuror({
         page: pageCursor.page,
-        cursor: data.data.nextCursor,
+        cursor: data.data.data.nextCursor,
       });
     }
   }
@@ -62,12 +61,11 @@ const useQueryFinancials = (
     setPageCuror({ page: [], cursor: "" });
   }
   return {
-    data,
-    isFetching,
+    ...data,
     fetchNextPage,
     fetchPrevPage,
     resetPage,
   };
-};
+}
 
-export default useQueryFinancials;
+export default useQueryDatahub;
