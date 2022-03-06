@@ -6,10 +6,10 @@ import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 
 import { TypeStatusLabel } from "./components/TypeStatusLabel";
-import { CheckList } from "typings/task";
+import { CheckList, ChildTask } from "typings/task";
 
 type Props = {
-  data: CheckList;
+  data: CheckList | ChildTask;
 };
 
 export const CheckListItem: FC<Props> = ({ data }) => {

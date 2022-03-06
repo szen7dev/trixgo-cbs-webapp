@@ -28,7 +28,7 @@ export const NotificationItem: FC<Props> = ({ notification }) => {
   // }, [])
 
   return (
-    <Link to={path} className="t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent">
+    <Link to={path || '/'} className="t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent">
       <div className="relative">
         <img
           src={`${process.env.REACT_APP_URL_S3_USER}/${sender?.image}`}

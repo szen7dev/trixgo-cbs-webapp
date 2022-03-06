@@ -22,6 +22,7 @@ export interface Friend {
     _id: string;
     bizfullname: string,
     fullname: string;
+    image: string;
     email: string;
     phone: string;
     imgUrl?: string;

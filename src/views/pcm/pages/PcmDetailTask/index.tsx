@@ -25,11 +25,10 @@ import { Loader } from "shareComponents/common";
 import styles from "views/pcm/styles/pcm_task.module.css";
 
 import TaskRepository from "apis/task";
-import { useCheckList } from "services/hooks/useTask";
+import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
-// Modal
 import useModal from "views/pcm/hooks/useModal";
 import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
 
@@ -42,10 +41,16 @@ export const PcmDetailTask: FC = () => {
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
-  const { data: infoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo(id)
+  const { data: infoTask, refetch, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id),
+    { refetchOnWindowFocus: false }
   );
-  const { listCheckList, totalRecord, nextPageListCheckList } = useCheckList(id);
+  const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({ 
+    parentID: id, isFetchChecklist: true
+  });
+  const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({ 
+    parentID: id, isFetchChildTask: true
+  });
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -247,17 +252,17 @@ export const PcmDetailTask: FC = () => {
                 componentType="CHECKLIST"
                 task={infoTask.data}
                 data={listCheckList}
-                totalRecord={totalRecord}
+                totalRecord={totalRecordCheckList}
                 onSeeMore={nextPageListCheckList}
               />
             </div>
             <div className="mt-8 pr-3">
               <CheckList
-                componentType="CHILDTASK"
+                componentType="CHILD_TASK"
                 task={infoTask.data}
-                data={[]}
-                totalRecord={0}
-                onSeeMore={() => ''}
+                data={listChildTask}
+                totalRecord={totalRecordChildTask}
+                onSeeMore={nextPageListChildTask}
               />
             </div>
             <div className="px-5 mt-5">
@@ -289,7 +294,7 @@ export const PcmDetailTask: FC = () => {
             show={isShow}
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} />}
+            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} taskID={id} refetch={refetch} />}
             {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
           </ModalLarge>
         </div>

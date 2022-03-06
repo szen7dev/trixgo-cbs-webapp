@@ -11,20 +11,20 @@ import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
-import { APP_KEY } from "utils/constants";
 
 import { CheckListItem } from "../CheckListItem";
 import { DropdownSearchable } from "shareComponents/common";
 
 import { useQueryListFriend } from "services/hooks/users/useFriend";
-import { useCheckList } from "services/hooks/useTask";
+import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
-import { CheckList as CheckListType, Task } from "typings/task";
+import { useAuth } from "services/hooks/useAuth";
+import { CheckList as CheckListType, ChildTask as ChildTaskType, Task } from "typings/task";
 
 type Props = {
-  componentType: string,
+  componentType: 'CHECKLIST' | 'CHILD_TASK',
   task: Task,
-  data: Array<CheckListType>;
+  data: Array<CheckListType | ChildTaskType>;
   totalRecord?: number;
   onSeeMore: () => void;
 };
@@ -42,10 +42,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
-  const [listChecklists, setListChecklists] = useState<CheckListType[]>(data);
+  const [listData, setListData] = useState<CheckListType[] | ChildTaskType[]>([]);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
-  const { addChecklistAsync, refetchListCheckList } = useCheckList(task?._id);
+  const { addChecklistAsync } = useCheckList({ parentID: task?._id });
+  const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
   const { data: listFriend } = useQueryListFriend();
+  const { user } = useAuth();
   const { current: socket }: any = useSocket();
 
   const handleSelectAll = () => setSelectAll(!selectAll);
@@ -66,7 +68,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
     type: 2
   };
 
-  const checkListSchema = object().shape({
+  const validateSchema = object().shape({
     name: string().required("Bạn cần nhập nội dung checklist"),
     expiredTime: date()
       .required("Bạn cần nhập thời hạn")
@@ -77,19 +79,17 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const handleAddChecklist = async (values: any) => {
     try {
       const { error, data, message } = await addChecklistAsync(values);
-      console.log({ error, data, message });
 
       if (error) {
         return toast.warning(message);
       }
-
+      
       socket?.emit('SUBJECT_PCM_CSS_ADD_CHECKLIST', {
         taskID: data.parent,
         checklistID: data._id
       })
 
-      setListChecklists(previousValues => ([data, ...previousValues]))
-      // refetchListCheckList();
+      setListData(previousValues => ([data, ...previousValues]));
       setVisibleForm(false);
 
       toast.success('Tạo checklist thành công');
@@ -102,13 +102,64 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
     }
   }
 
-  useEffect(() => {
-    socket?.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (data: any) => {
-      const { infoTask, infoChecklist } = data;
+  const handleAddChildTask = async (values: any) => {
+    try {
+      values.type = 1; // VIỆC CON (type = 1)
+      const { error, data, message } = await addChildTaskAsync(values);
 
-      if(task?._id === infoTask?._id?.toString()) {
-        console.log('BOOM!!!');
+      if (error) {
+        return toast.warning(message);
       }
+
+      socket?.emit('SUBJECT_PCM_CSS_ADD_CHILD_TASK', {
+        taskID: data.parent,
+        childTaskID: data._id
+      })
+
+      setListData(previousValues => ([data, ...previousValues]));
+      setVisibleForm(false);
+
+      toast.success('Tạo việc con thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  }
+
+  useEffect(() => {
+    setListData(data);
+  }, [data.length])
+
+  useEffect(() => {
+    if(!socket) return;
+
+    socket.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (result: any) => {
+      const { error, data } = result;
+      if(error) return;
+
+      const { infoTask, infoCheckList, senderID } = data;
+
+      if(componentType !== 'CHECKLIST') return;
+      if(task?._id !== infoTask?._id?.toString()) return;
+      if(user?._id === senderID) return;
+
+      setListData(previousValues => ([infoCheckList, ...previousValues]));
+    })
+
+    socket.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', (result: any) => {
+      const { error, data } = result;
+      if(error) return;
+
+      const { infoTask, infoChildTask, senderID } = data;
+
+      if(componentType !== 'CHILD_TASK') return;
+      if(task?._id !== infoTask?._id?.toString()) return;
+      if(user?._id === senderID) return;
+
+      setListData(previousValues => ([infoChildTask, ...previousValues]));
     })
   }, [socket]);
 
@@ -208,8 +259,8 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         {/* Check messageList items */}
         <div className="shadow-lg">
           <div className="w-full">
-            {(listChecklists || []).map((checkList) => (
-              <CheckListItem key={checkList._id} data={checkList} />
+            {(listData || []).map((item) => (
+              <CheckListItem key={item._id} data={item} />
             ))}
           </div>
         </div>
@@ -230,8 +281,8 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
             <div className="shadow-lg p-5">
               <Formik
                 initialValues={initialValues}
-                validationSchema={checkListSchema}
-                onSubmit={handleAddChecklist}
+                validationSchema={validateSchema}
+                onSubmit={componentType === 'CHECKLIST' ? handleAddChecklist : handleAddChildTask}
               >
                 {({
                   values,

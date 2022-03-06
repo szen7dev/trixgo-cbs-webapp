@@ -63,6 +63,17 @@ export type ListTaskResponse = APIResponse & {
   };
 };
 
+export type AddRelationUserPayload = {
+  taskID: string,
+  related?: Array<string>;
+};
+
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 CHECKLIST   ===============================
+ * ============================ ************** ===============================
+ */
+
 export type CheckList = {
   _id: string;
   name: string;
@@ -97,11 +108,72 @@ export type ListCheckListResponse = APIResponse & {
   data: {
     listRecords: Array<CheckList>;
     totalRecord: number;
-    totalPages?: number;
+    totalPage?: number;
     nextCursor: string;
     limit: number;
   };
 };
+
+/**
+ * ============================ ************************** ===============================
+ * ============================ 	 VIỆC CON (CHILD TASK)   ===============================
+ * ============================ ************************** ===============================
+ */
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+export type ChildTask = {
+  _id: string;
+  name: string;
+  expiredTime: string;
+  typeStatus: number;
+  status: number;
+  assignee: Assignee;
+};
+
+export type ChildTaskPayload = {
+  parentID: string;
+  name: string;
+  type: number;
+  assigneeID: string;
+  expiredTime: string;
+};
+
+export type ListChildTaskPayload = {
+  isChildTask?: number;
+  lastestID?: string;
+  limit?: number;
+  populates?: string;
+  select?: string;
+  type?: number;
+  typeStatus?: number;
+  isSortChildTask: number;
+  parentID?: string;
+};
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+/**
+ * ============================ *********************** ===============================
+ * ============================ 	 PHẢN HỒI LIÊN QUAN   ===============================
+ * ============================ *********************** ===============================
+ */
 
 export type ResponseProps = {
   _id: string,
