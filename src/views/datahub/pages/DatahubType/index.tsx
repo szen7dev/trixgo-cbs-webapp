@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import { useQueryClient } from 'react-query'
 import { debounce } from 'lodash'
 
-import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
+import { useDatahubTypes } from "services/hooks/datahub";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
 
-// import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
@@ -30,37 +29,16 @@ const DatahubType: FC = () => {
 	const [query, setQuery] = useState('');
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
-	const [pageCursor, setPageCuror] = useState({ page: [] as string[], cursor: '' });
 	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
 
-	const { data } = useDatahubTypes({ lastestID: pageCursor.cursor, level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
+	const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
 	const queryClient = useQueryClient();
 
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
 	}, []);
-
-	function fetchNextPage() {
-		if (data?.data.nextCursor) {
-			pageCursor.page.push(data.data.nextCursor);
-			setPageCuror({
-				page: pageCursor.page,
-				cursor: data.data.nextCursor,
-			});
-		}
-	}
-
-	function fetchPrevPage() {
-		if (pageCursor.page.length > 0) {
-			pageCursor.page.pop();
-			setPageCuror({
-				page: pageCursor.page,
-				cursor: pageCursor.page[pageCursor.page.length - 1],
-			});
-		}
-	}
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
@@ -73,7 +51,13 @@ const DatahubType: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions
+					className="flex items-center flex-1"
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					disabled={{
+						pencil: checked.length !== 1,
+					}}
+				/>
 
 				<ButtonCreate onClick={() => { setShow(true); setSelected(null) }} />
 				<ButtonMore />
@@ -131,7 +115,7 @@ const DatahubType: FC = () => {
 											</Link>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular}</td>
+										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular ? "Thông thường" : "Phổ biến"}</td>
 									</tr>
 								)
 							})
@@ -151,12 +135,13 @@ const DatahubType: FC = () => {
 			<ModalExtraLarge show={show} buttonOnly>
 				<ModalCreateType
 					datahubID={selected?._id}
+					datahubType={1}
 					type={selected?._id ? 'edit' : 'create'}
 					toggle={() => setShow(false)}
 					onSuccessCreate={data => {
 						queryClient.removeQueries(["datahub_types"], { inactive: true });
 						queryClient.refetchQueries(["datahub_types", ""]);
-						setPageCuror({ page: [], cursor: '' })
+						resetPage();
 					}}
 				/>
 			</ModalExtraLarge>

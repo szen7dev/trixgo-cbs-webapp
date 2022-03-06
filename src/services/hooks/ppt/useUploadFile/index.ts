@@ -14,7 +14,15 @@ function useUploadFile(params?: Props) {
   return useCustomReducer(
     fileUploadReducer,
     uploadActions,
-    modifyUploadedFiles(INITIAL_STATE, params?.files||[], params?.images||[])
+    modifyUploadedFiles(
+      INITIAL_STATE,
+      params?.files || [],
+      params?.images || []
+    )
   );
 }
 export default useUploadFile;
+export * from "./upload.utils";
+export * from "./upload.types";
+export { default as uploadActions } from "./upload.actions";
+export { default as fileUploadReducer, INITIAL_STATE as fileUploadState } from "./upload.reducer";
