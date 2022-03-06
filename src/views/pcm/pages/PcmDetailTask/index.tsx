@@ -227,9 +227,7 @@ export const PcmDetailTask: FC = () => {
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
               <div className={cn(styles["dont-break-out"])}>
-                <div
-                  className={cn(styles["t-task-detail-content"], "text-[13px]")}
-                >
+                <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
                   {parse(
                     isTruncate
                       ? _truncate(infoTask.data?.description || "", { length: 300 })
@@ -245,7 +243,7 @@ export const PcmDetailTask: FC = () => {
                 )}
               </div>
 
-              <FileAttachment />
+              <FileAttachment files={infoTask.data.authorAttachs} />
             </div>
             <div className="mt-8 pr-3">
               <CheckList

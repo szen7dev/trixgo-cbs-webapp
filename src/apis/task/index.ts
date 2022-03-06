@@ -50,8 +50,12 @@ const TaskRepository = {
         taskID,
         select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountMarkedResponse",
         populates: JSON.stringify({
-          path: "group author assignee related parent project company approver",
-          select: "_id name fullname bizfullname image sign",
+          path: "group author assignee related parent project company approver authorAttachs",
+          select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt",
+          populate: {
+            path: "author",
+            select: "_id bizfullname image"
+          }
         }),
       })}`
     );

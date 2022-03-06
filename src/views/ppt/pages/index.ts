@@ -1,3 +1,4 @@
+export { default as ProjectAdminManagementPage } from "./ProjectAdminManagementPage";
 export { default as ProjectAdminPage } from "./ProjectAdminPage";
 export { default as ProjectBiddingPage } from "./ProjectBiddingPage";
 export { default as ProjectBudgetPage } from "./ProjectBudgetPage";
