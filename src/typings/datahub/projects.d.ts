@@ -71,7 +71,8 @@ export type DatahubProjectsParams = {
   populates?: {
     path: string;
     select?: string;
-  };
+		populate?: string;
+  } | string;
   keyword?: string;
 };
 

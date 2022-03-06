@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import N04BT1 from "assets/images/cmcs/N04B.T1-C2605.svg";
+import image from "assets/images/cmcs/datahub.jpg";
 
 export const CmcHomePage: FC = () => {
   return (
@@ -16,7 +16,7 @@ export const CmcHomePage: FC = () => {
       </p>
 
       <div>
-        <img src={N04BT1} alt="N04BT1" />
+        <img src={image} alt="N04BT1" />
       </div>
 
       <p className="font-bold text-2xl text-primary mt-9">

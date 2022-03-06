@@ -77,13 +77,6 @@ export const APP_INFO = new Map([
         icon: accountingLogo,
         route: '/accounting/home'
     }],
-    /* Ứng dụng Support */
-    ['61e0499efdebf77b072d1b11', {//ok
-        key: "61e0499efdebf77b072d1b11",
-        name: "Support",
-        icon: supportLogo,
-        route: '/support/home'
-    }],
     /* Ứng dụng Owner */
     ['61e04989fdebf77b072d1b10', {//ok
         key: "61e04989fdebf77b072d1b10",
@@ -154,10 +147,10 @@ export const APP_INFO = new Map([
         icon: financialLogo,
         route: '/financial/home'
     }],
-    /* Ứng dụng Quản lý công việc */
+    /* Ứng dụng Quản lý dự án */
     ['5dfe4b9051dc622100bb9d89', {//OK
         key: "5dfe4b9051dc622100bb9d89",
-        name: "Quản lý công việc",
+        name: "Quản lý dự án",
         icon: pcmLogo,
         route: '/pcm/home'
     }],
