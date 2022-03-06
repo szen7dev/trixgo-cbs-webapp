@@ -34,7 +34,7 @@ export const NotificationsMenu: FC<Props> = ({ notifications, onScroll }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2">
+        <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 z-60">
           <div className="font-bold text-2xl leading-7 text-dark px-4 pt-3">
             Thông báo {notifications.length ? `(${notifications.length})` : ''}
           </div>

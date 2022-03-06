@@ -28,7 +28,7 @@ export const MainChatHeading:FC<Props> = ({chat}) => {
     }
 
     return (
-        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-50"}>
+        <div className={"sticky top-0 bg-white h-[56px] flex px-4 py-1 z-20"}>
             <div
                 onClick={() => setShowMenu(!showMenu)}
                 className={"avatar-chat flex items-center justify-center cursor-pointer"}>

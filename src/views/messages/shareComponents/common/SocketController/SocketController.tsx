@@ -40,19 +40,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         };
-
-        return () => {
-            if (socket) {
-                socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-                socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-                socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-                socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
-                socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
-                socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
-
-                socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
-            }
-        }
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
