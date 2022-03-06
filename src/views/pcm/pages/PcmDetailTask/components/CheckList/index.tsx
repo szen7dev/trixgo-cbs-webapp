@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
+import { toast } from "react-toastify";
 import moment from "moment";
 
 import IconPlus from "assets/images/icons8-plus-math-100.png";
@@ -10,16 +11,19 @@ import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
+import { APP_KEY } from "utils/constants";
 
 import { CheckListItem } from "../CheckListItem";
 import { DropdownSearchable } from "shareComponents/common";
 
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useCheckList } from "services/hooks/useTask";
-import { CheckList as CheckListType } from "typings/task";
+import { useSocket } from "services/hooks/useSocket";
+import { CheckList as CheckListType, Task } from "typings/task";
 
 type Props = {
-  task: any,
+  componentType: string,
+  task: Task,
   data: Array<CheckListType>;
   totalRecord?: number;
   onSeeMore: () => void;
@@ -34,13 +38,15 @@ enum CheckListTab {
   MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
 }
 
-export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
+export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore }) => {
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [listChecklists, setListChecklists] = useState<CheckListType[]>(data);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
-  const { addChecklist, refetchListCheckList } = useCheckList(task._id);
+  const { addChecklistAsync, refetchListCheckList } = useCheckList(task?._id);
   const { data: listFriend } = useQueryListFriend();
+  const { current: socket }: any = useSocket();
 
   const handleSelectAll = () => setSelectAll(!selectAll);
 
@@ -53,9 +59,9 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
   const initialValues = {
     name: "",
     assigneeID: "",
-    parentID: task._id,
-    groupID: task.group._id,
-    projectID: task.project._id,
+    parentID: task?._id,
+    groupID: task?.group?._id,
+    projectID: task?.project?._id,
     expiredTime: null,
     type: 2
   };
@@ -69,10 +75,42 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
   });
 
   const handleAddChecklist = async (values: any) => {
-    await addChecklist(values);
-    refetchListCheckList();
-    setVisibleForm(false);
+    try {
+      const { error, data, message } = await addChecklistAsync(values);
+      console.log({ error, data, message });
+
+      if (error) {
+        return toast.warning(message);
+      }
+
+      socket?.emit('SUBJECT_PCM_CSS_ADD_CHECKLIST', {
+        taskID: data.parent,
+        checklistID: data._id
+      })
+
+      setListChecklists(previousValues => ([data, ...previousValues]))
+      // refetchListCheckList();
+      setVisibleForm(false);
+
+      toast.success('Tạo checklist thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
   }
+
+  useEffect(() => {
+    socket?.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (data: any) => {
+      const { infoTask, infoChecklist } = data;
+
+      if(task?._id === infoTask?._id?.toString()) {
+        console.log('BOOM!!!');
+      }
+    })
+  }, [socket]);
 
   return (
     <div>
@@ -88,7 +126,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
             checked={selectAll}
             onChange={handleSelectAll}
           />
-          {!selectAll && <span className="ml-2 text-x-large">Việc con</span>}
+          {!selectAll && <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>}
         </div>
 
         {selectAll ? (
@@ -113,7 +151,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
             </button>
           </div>
         ) : (
-          <div className="flex justify-between w-5/6">
+          <div className="flex justify-between w-5/6 hidden">
             <button
               className={`px-2 ${getClassTab(CheckListTab.ALL)}`}
               onClick={() => setCurrentTab(CheckListTab.ALL)}
@@ -170,7 +208,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
         {/* Check messageList items */}
         <div className="shadow-lg">
           <div className="w-full">
-            {(data || []).map((checkList) => (
+            {(listChecklists || []).map((checkList) => (
               <CheckListItem key={checkList._id} data={checkList} />
             ))}
           </div>
@@ -185,9 +223,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                 })`}</span>
               </button>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : <></>}
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (

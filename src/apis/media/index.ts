@@ -60,8 +60,8 @@ const MediaRepository = {
         );
         return data;
     },
-    async deleteMedia(id: string): Promise<infoMediaResponse> {
-        const { data } = await API.delete<infoMediaResponse>(
+    async deleteMedia(id: string): Promise<any> {
+        const { data } = await API.delete<any>(
             `${mediaURL}?mediaID=${id}`
         );
         return data;

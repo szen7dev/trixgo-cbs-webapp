@@ -23,9 +23,10 @@ type Props = {
   typeStatus?: number;
   type?: number;
   official?: boolean;
+  isFetch?: boolean;
 }
 
-export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask => {
+export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }: Props): UseTask => {
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
@@ -49,7 +50,7 @@ export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: isFetch,
     }
   );
 
@@ -118,7 +119,7 @@ export const useTask = ({ taskID, official, typeStatus, type }: Props): UseTask 
 };
 
 type UseCheckList = {
-  addChecklist: (payload: CheckListPayload) => void,
+  addChecklistAsync: (payload: CheckListPayload) => Promise<any>,
   updateChecklist: (payload: CheckListPayload) => void,
   listCheckList: Array<CheckList>;
   isLoadingListCheckList: boolean;
@@ -140,24 +141,6 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
     useMutation((payload: CheckListPayload) =>
       TaskRepository.updateChecklist(payload)
     );
-
-  const addChecklist = async (payload: CheckListPayload) => {
-    try {
-        const { error, message } = await addChecklistAsync(payload);
-
-        if (error) {
-          return toast.warning(message);
-        }
- 
-        toast.success('Tạo checklist thành công');
-    } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
-    }
-  };
 
   const updateChecklist = async (payload: CheckListPayload) => {
     try {
@@ -193,7 +176,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         parentID: parentID || "",
         isChecklist: 1,
         isSortChecklist: 1,
-        select: "assignee lastLog checklist description name expiredTime percentage project",
+        select: "assignee lastLog checklist status description name expiredTime percentage project",
         populates: JSON.stringify({
           path: "assignee",
           select: "name fullname bizfullname image",
@@ -218,7 +201,7 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
   const totalPages = dataListCheckList?.pages[0]?.data?.totalPages;
 
   return {
-    addChecklist,
+    addChecklistAsync,
     updateChecklist,
     listCheckList,
     isLoadingListCheckList,

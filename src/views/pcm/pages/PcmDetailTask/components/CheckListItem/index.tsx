@@ -53,7 +53,7 @@ export const CheckListItem: FC<Props> = ({ data }) => {
           </div>
         ) : (
           <div className="flex justify-end w-1/4">
-            <TypeStatusLabel status={data.typeStatus} />
+            <TypeStatusLabel status={data.status} />
             <span className="ml-2 text-[13px]">
               {moment(data.expiredTime).format("DD/MM/YYYY")}
             </span>

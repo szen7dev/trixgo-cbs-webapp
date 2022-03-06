@@ -61,7 +61,14 @@ const TaskRepository = {
   ): Promise<any> {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_plan_tasks`,
-      payload
+      {
+        select: "_id name assignee expiredTime status",
+        populates: JSON.stringify({
+          path: "assignee",
+          select: "_id bizfullname fullname image"
+        }),
+        ...payload,
+      }
     );
     return data;
   },

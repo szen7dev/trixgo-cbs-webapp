@@ -68,6 +68,7 @@ export type CheckList = {
   name: string;
   expiredTime: string;
   typeStatus: number;
+  status: number;
   checklist: string;
   assignee: Assignee;
 };
