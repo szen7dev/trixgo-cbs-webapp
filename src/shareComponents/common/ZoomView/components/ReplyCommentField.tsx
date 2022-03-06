@@ -10,7 +10,7 @@ import { PostFile, PostImage } from 'views/media/shareComponents/common';
 
 import { FileProps, FilePropsUpload } from 'typings/media';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 export interface SubmitComment { images: string[], files: string[], text: string }
 

@@ -35,7 +35,7 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { useSocket } from 'services/hooks/useSocket';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, initialValues = {
 	mediaID: "",

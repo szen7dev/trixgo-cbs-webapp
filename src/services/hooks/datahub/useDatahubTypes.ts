@@ -5,8 +5,14 @@ import { useQuery } from "react-query";
 import { DatahubTypesParams } from "typings/datahub/datahubtypes";
 
 type Props = DatahubTypesParams;
+type Options = {
+  enabled?: boolean;
+};
 
-const useDatahubTypes = (props?: Props) => {
+const useDatahubTypes = (
+  props?: Props,
+  options: Options = { enabled: true }
+) => {
   const [pageCursor, setPageCuror] = useState({
     page: [] as string[],
     cursor: "",
@@ -14,8 +20,9 @@ const useDatahubTypes = (props?: Props) => {
   const { data, isFetching } = useQuery(
     [
       "datahub_types",
-      pageCursor.cursor,
       props?.type || 1,
+      props?.parentID,
+      pageCursor.cursor,
       props?.keyword || "",
     ],
     () =>
@@ -26,7 +33,7 @@ const useDatahubTypes = (props?: Props) => {
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      enabled: options.enabled, // https://react-query.tanstack.com/guides/disabling-queries
       keepPreviousData: true,
       getNextPageParam: ({ data }) => data.nextCursor,
     }

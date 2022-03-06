@@ -13,7 +13,7 @@ import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from 'views/document/contexts/comment';
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { APP_KEY } from 'utils/constants';
 
 interface Props {

@@ -110,7 +110,7 @@ const DatahubType: FC = () => {
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={'/datahub/type/' + _id} >
+											<Link to={{ pathname: '/datahub/type/' + _id, state: { type: 1 } }} >
 												{name}
 											</Link>
 										</td>
