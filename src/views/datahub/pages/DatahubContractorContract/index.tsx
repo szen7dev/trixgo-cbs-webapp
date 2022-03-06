@@ -48,7 +48,7 @@ const DatahubContractorContract: FC = () => {
 		<div className="w-full px-3.5 ">
 			<div className="bg-white border-cbs-border border-[0.5px]">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-					<span className="text-x-large mr-7">Danh sách</span>
+					<span className="text-x-large mr-7">Hợp đồng minh chứng</span>
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 					<DocumentDropdown
 						data={pkgs}

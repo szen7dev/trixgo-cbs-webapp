@@ -5,18 +5,21 @@ import API from "../repository";
 // import { convertObToUrl } from "utils";
 
 // Khai báo chính xác kiểu trả về nếu biết
-import { ResponseList, ResponseCreate } from "typings/datahub/api";
+import {
+  ResponseList,
+  ResponseCreate,
+  DatahubPrams,
+} from "typings/datahub/api";
 import {
   DatahubTypes,
   DatahubTypesParams,
   DatahubTypesBody,
 } from "typings/datahub/datahubtypes";
+import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
 import {
-  DatahubProjects,
-  DatahubProjectsBody,
-  DatahubProjectsParams,
-} from "typings/datahub/projects";
-import { DatahubFinancial } from "typings/datahub/financial";
+  DatahubFinancial,
+  DatahubFinancialBody,
+} from "typings/datahub/financial";
 import { DatahubCompanies } from "typings/datahub/company";
 import { DatahubArea } from "typings/datahub/area";
 
@@ -56,7 +59,7 @@ const DatahubRepository = {
   },
   // ==== DatahubProjects ====
   async getProject<T = undefined>(
-    params: { datahubProjectID: string } & DatahubProjectsParams
+    params: { datahubProjectID: string } & DatahubPrams
   ) {
     const { data } = await API.get<ResponseCreate<DatahubProjects<T>>>(
       `${url}/datahub_projects`,
@@ -64,7 +67,7 @@ const DatahubRepository = {
     );
     return data;
   },
-  async getProjectList(params?: DatahubProjectsParams) {
+  async getProjectList(params?: DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubProjects>>(
       `${url}/datahub_projects`,
       { params }
@@ -88,8 +91,8 @@ const DatahubRepository = {
     return data;
   },
   // ==== Datahub Financial ====
-  async getDatahubFinancial(
-    params: { contractorID: string } & DatahubProjectsParams
+  async getDatahubFinancialList(
+    params: { contractorID: string } & DatahubPrams
   ) {
     const { data } = await API.get<ResponseList<DatahubFinancial>>(
       `${url}/datahub_finreports`,
@@ -97,22 +100,45 @@ const DatahubRepository = {
     );
     return data;
   },
+  async getDatahubFinancial(
+    params: { contractorID: string; datahubFinreportID: string } & DatahubPrams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubFinancial>>(
+      `${url}/datahub_finreports`,
+      { params }
+    );
+    return data;
+  },
+  async createDatahubFinancial(body: DatahubFinancialBody) {
+    const { data } = await API.post<ResponseCreate<DatahubFinancial>>(
+      `${url}/datahub_finreports`,
+      body
+    );
+    return data;
+  },
+  async updateDatahubFinancial(body: DatahubFinancialBody) {
+    const { data } = await API.put<ResponseCreate<DatahubFinancial>>(
+      `${url}/datahub_finreports`,
+      body
+    );
+    return data;
+  },
   // ==== DatahubCompanies ====
-  async companiesList(params?: DatahubProjectsParams) {
+  async companiesList(params?: DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubCompanies>>(
       "/api/auth/companies",
       { params }
     );
     return data;
   },
-  async getCompany(params: { companyID: string } & DatahubProjectsParams) {
+  async getCompany(params: { companyID: string } & DatahubPrams) {
     const { data } = await API.get<ResponseCreate<DatahubCompanies>>(
       "/api/auth/companies",
       { params }
     );
     return data;
   },
-  async areaList(params?: DatahubProjectsParams) {
+  async areaList(params?: DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubArea>>(
       "/api/ITEM/areas",
       { params }

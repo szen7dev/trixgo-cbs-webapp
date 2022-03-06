@@ -149,7 +149,8 @@ const DatahubContractorFinancial: FC = () => {
 				</div>
 				<ModalExtraLarge show={show} buttonOnly>
 					<ModalCreateFinancial
-						type={selected._id ? 'edit' : 'create'}
+						datahubFinreportID={selected._id}
+						contractor={company?.data._id || ''}
 
 						toggle={() => setShow(!show)}
 					/>
