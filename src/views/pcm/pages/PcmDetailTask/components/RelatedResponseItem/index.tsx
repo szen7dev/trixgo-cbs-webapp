@@ -23,11 +23,11 @@ type Props = {
 	response: ResponseProps;
 	onClickImage?: (images: ImageProps[], index: number) => void;
 	divRef?: LegacyRef<HTMLDivElement> | undefined;
-	refetchListResponse?: () => void;
+	refetchListResponseMarked?: () => void;
 	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponse, setAmountMarkedResponse }) => {
+export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -51,7 +51,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
 		}
 
-		refetchListResponse && refetchListResponse();
+		refetchListResponseMarked && refetchListResponseMarked();
 	}
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {

@@ -19,11 +19,11 @@ import { DropdownSearchable } from "shareComponents/common";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useCheckList } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
-import { CheckList as CheckListType } from "typings/task";
+import { CheckList as CheckListType, Task } from "typings/task";
 
 type Props = {
   componentType: string,
-  task: any,
+  task: Task,
   data: Array<CheckListType>;
   totalRecord?: number;
   onSeeMore: () => void;
@@ -42,6 +42,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [listChecklists, setListChecklists] = useState<CheckListType[]>(data);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
   const { addChecklistAsync, refetchListCheckList } = useCheckList(task?._id);
   const { data: listFriend } = useQueryListFriend();
@@ -87,7 +88,8 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         checklistID: data._id
       })
 
-      refetchListCheckList();
+      setListChecklists(previousValues => ([data, ...previousValues]))
+      // refetchListCheckList();
       setVisibleForm(false);
 
       toast.success('Tạo checklist thành công');
@@ -102,9 +104,13 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
   useEffect(() => {
     socket?.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (data: any) => {
-      console.log({ data });
+      const { infoTask, infoChecklist } = data;
+
+      if(task?._id === infoTask?._id?.toString()) {
+        console.log('BOOM!!!');
+      }
     })
-  }, []);
+  }, [socket]);
 
   return (
     <div>
@@ -202,7 +208,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         {/* Check messageList items */}
         <div className="shadow-lg">
           <div className="w-full">
-            {(data || []).map((checkList) => (
+            {(listChecklists || []).map((checkList) => (
               <CheckListItem key={checkList._id} data={checkList} />
             ))}
           </div>

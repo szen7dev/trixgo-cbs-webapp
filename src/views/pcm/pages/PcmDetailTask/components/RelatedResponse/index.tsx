@@ -70,8 +70,8 @@ const Response: FC<Props> = ({ task }) => {
   const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
 
   const { user } = useAuth();
-  const { addResponseAsync, listResponses, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
-  const { listResponses: listResponsesMarked, refetchListResponse, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
+  const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
+  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
     taskID: task._id, official: true, isFetch: true
   });
 
@@ -148,10 +148,14 @@ const Response: FC<Props> = ({ task }) => {
     socket?.on('COMMENT_SSC_ADD_COMMENT', (result: any) => {
       const { data, error } = result;
 
-      if(error || amountCommentBack || data?.infoObject?._id !== task._id) return;
-      if(user?._id === data?.infoComment?.author?._id) return;
+      if(error || amountCommentBack) return;
 
-      dispatch({ type: 'ADD_COMMENT', payload: data.infoComment });
+      const { infoObject, infoComment } = data;
+
+      if(infoObject?._id !== task._id) return;
+      if(user?._id === infoComment?.author?._id) return;
+
+      dispatch({ type: 'ADD_COMMENT', payload: infoComment });
     });
   }, [socket])
 
@@ -322,7 +326,8 @@ const Response: FC<Props> = ({ task }) => {
 
   const onClickTabAll = () => {
     setCurrentTab(RelatedResponseTab.ALL);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
+    refetchListResponse();
     setAmountComment(totalRecordResponse);
     setAmountCommentBack(0);
   }
@@ -330,9 +335,12 @@ const Response: FC<Props> = ({ task }) => {
   const onClickTabMarked = () => {
     setCurrentTab(RelatedResponseTab.MARKED);
     dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
+    refetchListResponseMarked();
     setAmountComment(totalRecordResponseMarked);
     setAmountCommentBack(0);
   }
+
+  const hashLocation = location.hash.substring(1);
 
   return (
     <>
@@ -386,11 +394,11 @@ const Response: FC<Props> = ({ task }) => {
               key={response._id}
               response={response}
               expanded={isExpand}
-              isHighlight={location.hash.substring(1) === response._id}
-              divRef={location.hash.substring(1) === response._id ? divRef : null}
+              isHighlight={hashLocation?.split('_')[1] === response._id}
+              divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
               setAmountMarkedResponse={setAmountMarkedResponse}
-              refetchListResponse={refetchListResponse}
-              onClickImage={(images,index) => {
+              refetchListResponseMarked={refetchListResponseMarked}
+              onClickImage={(images, index) => {
                 if (images.length) {
                   setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};
                   setIsShow(true);
