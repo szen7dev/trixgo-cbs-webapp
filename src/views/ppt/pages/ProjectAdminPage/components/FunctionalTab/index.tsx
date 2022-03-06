@@ -148,17 +148,22 @@ const FunctionalTab: FC = () => {
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1">
+						<th className="w-1/4 pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Nội dung
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="w-1/4 pb-1 pt-1">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Loại
+							</div>
+						</th>
+						<th className="w-1/4 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Người tạo
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="w-1/4 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
 					</tr>
@@ -185,6 +190,9 @@ const FunctionalTab: FC = () => {
 											<p>{item.name}</p>
 										</div>
 									</Link>
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.type}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item.userCreate?.bizfullname}
