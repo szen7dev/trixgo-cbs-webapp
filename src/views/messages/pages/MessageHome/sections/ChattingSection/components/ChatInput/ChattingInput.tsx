@@ -10,7 +10,7 @@ import {convertToRaw, EditorState} from "draft-js";
 import {
     MentionData
 } from '@draft-js-plugins/mention';
-import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
+import {modifyUploadedFilesV2} from "services/hooks/useUploadFile/upload.utils";
 import {ReplyChat} from "./ReplyChat";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "redux/reducer";

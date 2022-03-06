@@ -42,10 +42,16 @@ module.exports = {
                 wiggle: {
                     '0%, 100%': { transform: 'scale(0)' },
                     '50%': { transform: 'scale(1.25)' },
+                },
+                "cbs-skeleton": {
+                    "100%": {
+                        transform: "translateX(100%)",
+                    }
                 }
             },
             animation: {
                 wiggle: 'wiggle 1s ease-in-out infinite',
+                "cbs-skeleton": "cbs-skeleton 0.8s infinite",
             },
             colors: {
                 transparent: "transparent",
@@ -95,7 +101,7 @@ module.exports = {
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
                 "cbs-indeterminate": "#F7AF22",
-								"cbs-form-input-bg": "#F4F4F5",
+                "cbs-form-input-bg": "#F4F4F5",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",

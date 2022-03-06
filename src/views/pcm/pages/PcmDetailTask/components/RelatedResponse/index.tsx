@@ -27,7 +27,7 @@ import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile";
+import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { APP_TYPE, APP_KEY } from "utils/constants";
 
 /**

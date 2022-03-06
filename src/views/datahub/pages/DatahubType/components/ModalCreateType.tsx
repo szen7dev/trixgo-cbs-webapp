@@ -20,6 +20,7 @@ type Props = {
 	type: 'create' | 'edit',
 	datahubID?: string,
 	datahubType: 1 | 2,
+	parent?: string,
 
 	toggle: () => void
 	onSuccessCreate?: (data: ResponseCreateSuccess<DatahubTypes>) => void
@@ -56,7 +57,7 @@ const ModalCreateType: FC<Props> = ({ ...props }) => {
 		if (!popular || !props.datahubType) return;
 
 		if (props.type === 'create') {
-			createDatahubType({ description, name, type: props.datahubType, popular }, {
+			createDatahubType({ description, name, type: props.datahubType, popular, parent: props.parent }, {
 				onSuccess(data) {
 					if ('code' in data) {
 						data.data.forEach((d) => actions.setFieldError(d.field, d.message));
@@ -67,7 +68,7 @@ const ModalCreateType: FC<Props> = ({ ...props }) => {
 				}
 			});
 		} else if (props.type === 'edit') {
-			updateDatahubType({ datahubID: props.datahubID as string, description, name, type: props.datahubType, popular }, {
+			updateDatahubType({ datahubID: props.datahubID as string, description, name, type: props.datahubType, popular, parent: props.parent }, {
 				onSuccess(data) {
 					if ('code' in data) {
 						data.data.forEach((d) => actions.setFieldError(d.field, d.message));

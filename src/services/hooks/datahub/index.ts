@@ -2,6 +2,7 @@ export { default as useCreateDatahubProject } from "services/hooks/datahub/useCr
 export { default as useCreateDatahubType } from "services/hooks/datahub/useCreateDatahubType";
 export { default as useDatahubArea } from "services/hooks/datahub/useDatahubArea";
 export { default as useDatahubCompanies } from "services/hooks/datahub/useDatahubCompanies";
+export { default as useDatahubCompany } from "services/hooks/datahub/useDatahubCompany";
 export { default as useDatahubProjects } from "services/hooks/datahub/useDatahubProjects";
 export { default as useDatahubProject } from "services/hooks/datahub/useDatahubProject";
 export { default as useDatahubType } from "services/hooks/datahub/useDatahubType";

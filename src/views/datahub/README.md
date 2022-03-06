@@ -6,7 +6,7 @@ Các components liên quan đến form đã được định nghĩa, không thê
 
 ## Example
 
-```ts
+```tsx
 import React from 'react';
 import { Form, Formik } from 'formik'
 import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
