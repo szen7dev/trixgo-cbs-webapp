@@ -365,7 +365,7 @@ const listMessageSlice = createSlice({
                 newMessage[messageId] = {
                     ...newMessage[messageId],
                     usersSeen: [
-                        ...newMessage[messageId].usersSeen,
+                        ...newMessage[messageId]?.usersSeen,
                         action.payload.infoUserSeen
                     ]
                 }

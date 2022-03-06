@@ -1,5 +1,5 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "react-query";
 import AuthenticationRepository from "apis/authentication";
 
 type UsePcmAdminDetail = {
@@ -7,49 +7,32 @@ type UsePcmAdminDetail = {
     isLoadingPcmAdminDetail: boolean,
     refetchPcmAdminDetail: () => void,
     listMembers: Array<any>,
+    companyAppRoleDetail: string,
 
-    isCreateAppRole: boolean,
-    createAppRolesMutateAsync: any,
-    isUpdateAppRole: boolean,
-    updateAppRolesMutateAsync: any,
-    isManyAppRole: boolean,
-    removeManyAppRoleMutateAsync: any
+    addMembersMutateAsync: any,
+    removeMembersMutateAsync: any
 };
 
-export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail => {
-    const currentUser = localStorage.getItem("currentUser") ?? "{}";
-    const profile = JSON.parse(currentUser);
-    // Tạo mới 1 app roles
-    const { mutateAsync: createAppRolesMutateAsync, isLoading: isCreateAppRole } =
-        useMutation((
-            payload: {
-                type: 1 | 2 | 3,
-                appID: string,
-                name: string
-            }) =>
-            AuthenticationRepository.createAppRole({
-                ...payload,
-                companyID: profile?.company?._id,
-            })
-        );
+export const usePcmAdminDetail = (payload: { appID: string, keyword?: string }): UsePcmAdminDetail => {
 
-    // Chỉnh sửa 1 app roles
-    const { mutateAsync: updateAppRolesMutateAsync, isLoading: isUpdateAppRole } =
+    // Thêm mới 1 hoặc nhiều thành viên
+    const { mutateAsync: addMembersMutateAsync } =
         useMutation((
             payload: {
                 appRoleID: string,
-                name: string,
+                membersAddID: Array<string>,
             }) =>
             AuthenticationRepository.updateAppRole(payload)
         );
 
-    // Xoá 1 hoặc nhiều app roles
-    const { mutateAsync: removeManyAppRoleMutateAsync, isLoading: isManyAppRole } =
+    // Xoá 1 hoặc nhiều thành viên
+    const { mutateAsync: removeMembersMutateAsync } =
         useMutation((
             payload: {
-                appRoleIDs: Array<string>,
+                appRoleID: string,
+                membersRemoveID: Array<string>,
             }) =>
-            AuthenticationRepository.removeManyAppRole(payload)
+            AuthenticationRepository.updateAppRole(payload)
         );
 
     // Get danh sách
@@ -59,10 +42,10 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
         data: dataPcmAdminDetail,
     } =
         useQuery(
-            `app_roles_detail?appID=${payload.appID}`,
+            [`app_roles_detail?appID=${payload.appID}`, payload.keyword],
             async () => {
                 return AuthenticationRepository.getListAppRole({
-                    select: "members name",
+                    select: "members name company",
                     populates: JSON.stringify({
                         path: "members",
                         select: "bizfullname position department image",
@@ -71,7 +54,8 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
                             select: "name"
                         }
                     }),
-                    appRoleID: payload.appID
+                    appRoleID: payload.appID,
+                    keyword: payload.keyword
                 })
             },
             {
@@ -79,23 +63,62 @@ export const usePcmAdminDetail = (payload: { appID: string }): UsePcmAdminDetail
                 enabled: true,
             }
         );
-    
+
     const nameAppRoleDetail = dataPcmAdminDetail?.data?.name;
+    const companyAppRoleDetail = dataPcmAdminDetail?.data?.company;
     const listMembers = dataPcmAdminDetail?.data?.members || [];
 
     return {
         nameAppRoleDetail,
+        companyAppRoleDetail,
         listMembers,
         isLoadingPcmAdminDetail,
         refetchPcmAdminDetail,
 
-        isCreateAppRole,
-        createAppRolesMutateAsync,
+        addMembersMutateAsync,
+        removeMembersMutateAsync,
+    };
+};
 
-        isUpdateAppRole,
-        updateAppRolesMutateAsync,
+export const useGetUsersByCompany = (companyID: string, keyword: string): any => {
+    const {
+        isLoading: isLoadingGetUsersByCompany,
+        refetch: refetchGetUsersByCompany,
+        data: dataGetUsersByCompany,
+        fetchNextPage: nextPageGetUsersByCompany,
+        hasNextPage: hasNextPageGetUsersByCompany,
+        isFetching: isFetchingGetUsersByCompany
+    } =
+        useInfiniteQuery(
+            [`users?companyID=${companyID}`, keyword],
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListUsersByCompany({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
+                    select: "bizfullname image",
+                    companyID: companyID,
+                    keyword: keyword
+                })
+            },
+            {
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true,
+            }
+        );
+    const listMembers = [].concat(...(dataGetUsersByCompany?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetUsersByCompany?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetUsersByCompany?.pages[0]?.data?.totalPage;
 
-        isManyAppRole,
-        removeManyAppRoleMutateAsync
+    return {
+        listMembers,
+        isLoadingGetUsersByCompany,
+        refetchGetUsersByCompany,
+        nextPageGetUsersByCompany,
+        hasNextPageGetUsersByCompany,
+        isFetchingGetUsersByCompany,
+        totalRecord,
+        totalPage,
     };
 };

@@ -8,10 +8,9 @@ import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostFile, PostImage } from 'views/media/shareComponents/common';
 
-import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { FileProps, FilePropsUpload } from 'typings/media';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 export interface SubmitComment { images: string[], files: string[], text: string }
 

@@ -74,7 +74,6 @@ export const useAuth = (): UseAuth => {
         allowLocalhostAsSecureOrigin: true,
       })
         .then(e => {
-          console.log({ e });
           OneSignalReact.isPushNotificationsEnabled().then(function (isEnabled) {
             if (isEnabled)
               console.log("Push notifications are enabled!");

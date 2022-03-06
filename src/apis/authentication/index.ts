@@ -24,7 +24,7 @@ const AuthenticationRepository = {
 
   async usersInfo(): Promise<UserInfoResponse> {
     const { data } = await API.get<UserInfoResponse>(
-      `${authURL}/users/me?select={"company": "", "department": ""}&filter={"conversationsPin": 0, "friends": 0, "recentlyFriends": 0, "devices": 0, "registrationID": 0}`
+      `${authURL}/users/me`
     );
     return data;
   },
@@ -141,6 +141,35 @@ const AuthenticationRepository = {
         ...payload
       }
     });
+    return data;
+  },
+
+  // DANH SÁCH THÀNH VIÊN TRONG CÔNG TY
+  async getListUsersByCompany(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/users`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
+
+  // DANH SÁCH QUYỀN MỘT THÀNH VIÊN ĐƯỢC TRUY CẬP
+  async getListAppRoleMenuFromAdmin(payload: any): Promise<any> {
+    const { data } = await API.get<any>(
+      `${authURL}/app_role_menus`, {
+      params: {
+        ...payload
+      }
+    });
+    return data;
+  },
+
+  // CẬP NHẬT QUYỀN TRUY CẬP MỘT CHỨC NĂNG CỦA NHÓM CHỨC NĂNG
+  async updatePermissionsAppRoleMenus(payload: any): Promise<any> {
+    const { data } = await API.post<any>(
+      `${authURL}/app_role_menus`, payload);
     return data;
   },
 };

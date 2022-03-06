@@ -3,7 +3,7 @@ import { FC, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
-
+import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
@@ -20,7 +20,8 @@ import moment from "moment";
 
 const FunctionalTab: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+	const [keyword, setKeyword] = useState("");
+	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -60,7 +61,10 @@ const FunctionalTab: FC = () => {
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
-						onChange={(event: any) => console.log(event.target.value)}
+						onChange={debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (

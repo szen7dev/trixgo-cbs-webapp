@@ -6,8 +6,8 @@ import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 
-import { Author, Assignee } from "typings/task";
-import { User } from "typings/user";
+import type { Author, Assignee } from "typings/task";
+import type { User } from "typings/user";
 
 type Props = {
   author: Author;
@@ -97,10 +97,17 @@ export const SideBar: FC<Props> = ({
       </div>
 
       <div className="mt-5">
-        <div className="mb-2.5">
+        <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
             Tiến trình xác nhận
           </span>
+					<button>
+            <span className="text-white bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
+							<strong>
+								Đồng ý
+							</strong>
+            </span>
+          </button>
         </div>
         <div>
           {/* TODO: user signatures to get confirm progress */}

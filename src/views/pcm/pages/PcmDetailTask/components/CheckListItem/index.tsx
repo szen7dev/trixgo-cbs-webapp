@@ -6,10 +6,10 @@ import IconPencil from "assets/images/icons8-pencil.svg";
 import LinkIcon from "assets/images/icon-linking.png";
 
 import { TypeStatusLabel } from "./components/TypeStatusLabel";
-import { CheckList } from "typings/task";
+import { CheckList, ChildTask } from "typings/task";
 
 type Props = {
-  data: CheckList;
+  data: CheckList | ChildTask;
 };
 
 export const CheckListItem: FC<Props> = ({ data }) => {
@@ -53,7 +53,7 @@ export const CheckListItem: FC<Props> = ({ data }) => {
           </div>
         ) : (
           <div className="flex justify-end w-1/4">
-            <TypeStatusLabel status={data.typeStatus} />
+            <TypeStatusLabel status={data.status} />
             <span className="ml-2 text-[13px]">
               {moment(data.expiredTime).format("DD/MM/YYYY")}
             </span>

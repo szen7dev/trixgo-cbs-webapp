@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { ChangeEvent, MouseEventHandler, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 interface StateObject {
 	[key: string]: any;
@@ -20,7 +20,7 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 	assigned: StateObject,
 	checked: Array<S>,
 	checkboxRef: React.RefObject<HTMLInputElement>,
-	handleCheckAll: MouseEventHandler<HTMLInputElement>,
+	handleCheckAll: () => void,
 	handleChangeCheckbox: (e: undefined | null | ChangeEvent<HTMLInputElement>, data?: S) => void;
 } {
 	const [{ assigned, checked }, setChecked] = useState<{
@@ -30,14 +30,36 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 		assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: false }), {}),
 		checked: []
 	})
+
+	useEffect(() => {
+		if(!checkboxRef.current)return;
+		const isSomeChecked = initialData.some(c => assigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		if(isSomeChecked) {
+			const isEveryChecked = initialData.every(c => assigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+			if(isEveryChecked){
+				checkboxRef.current.checked = true;
+				checkboxRef.current.indeterminate = false;
+			} else {
+				checkboxRef.current.checked = false;
+				checkboxRef.current.indeterminate = true;
+			}
+		} else {
+			checkboxRef.current.checked = false;
+			checkboxRef.current.indeterminate = false;
+		}
+	},[initialData, assigned])
+
 	const checkboxRef = useRef<HTMLInputElement>(null);
 
-	const handleCheckAll: MouseEventHandler<HTMLInputElement> = e => {
+	const handleCheckAll= () => {
+		if(!checkboxRef.current) return;
 		if (checked.length < initialData.length) {
-			e.currentTarget.checked = true;
+			checkboxRef.current.checked = true;
+			checkboxRef.current.indeterminate = false;
 			setChecked({ assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: true }), {}), checked: initialData })
 		} else {
-			e.currentTarget.checked = false;
+			checkboxRef.current.checked = false;
+			checkboxRef.current.indeterminate = false;
 			setChecked({ assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: false }), {}), checked: [] })
 		}
 	};
@@ -59,7 +81,11 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 				}
 			} else {
 				newAssigned[data._id] = !newAssigned[data._id];
-				newChecked = (newChecked as Array<Exclude<S, StateOne | string | number>>).filter((s) => s._id !== data._id);
+				if (newAssigned[data._id]) {
+					newChecked.push(data);
+				} else {
+					newChecked = (newChecked as Array<Exclude<S, StateOne | string | number>>).filter((s) => s._id !== data._id);
+				}
 			}
 		} else if (e && !data && e.target.checked) {
 			newAssigned[e.target.value] = true;
@@ -96,17 +122,31 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 			return;
 		}
 		setChecked({ assigned: newAssigned, checked: newChecked });
-		if (checkboxRef.current) {
-			if (newChecked.length && newChecked.length < initialData.length) {
-				checkboxRef.current.indeterminate = true;
-			} else if (newChecked.length === initialData.length) {
-				checkboxRef.current.indeterminate = false;
-				checkboxRef.current.checked = true;
-			} else {
-				checkboxRef.current.indeterminate = false;
-				checkboxRef.current.checked = false;
-			}
-		}
+		// if (checkboxRef.current) {
+		// 	const isSomeChecked = initialData.some(c => newAssigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		// 	if(isSomeChecked) {
+		// 		const isEveryChecked = initialData.every(c => newAssigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		// 		if(isEveryChecked){
+		// 			checkboxRef.current.checked = true;
+		// 			checkboxRef.current.indeterminate = false;
+		// 		} else {
+		// 			checkboxRef.current.checked = false;
+		// 			checkboxRef.current.indeterminate = true;
+		// 		}
+		// 	} else {
+		// 		checkboxRef.current.checked = false;
+		// 		checkboxRef.current.indeterminate = false;
+		// 	}
+		// 	// if (newChecked.length && newChecked.length < initialData.length) {
+		// 	// 	checkboxRef.current.indeterminate = true;
+		// 	// } else if (newChecked.length === initialData.length) {
+		// 	// 	checkboxRef.current.indeterminate = false;
+		// 	// 	checkboxRef.current.checked = true;
+		// 	// } else {
+		// 	// 	checkboxRef.current.indeterminate = false;
+		// 	// 	checkboxRef.current.checked = false;
+		// 	// }
+		// }
 	}
 
 	return { assigned, checked, checkboxRef, handleCheckAll, handleChangeCheckbox }

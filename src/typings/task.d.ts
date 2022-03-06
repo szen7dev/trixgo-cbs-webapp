@@ -50,7 +50,7 @@ export type Task = {
   company: Company,
   group: Group,
   amountResponse: number;
-  amountResponseMarked: number;
+  amountMarkedResponse: number;
 };
 
 export type ListTaskResponse = APIResponse & {
@@ -63,25 +63,37 @@ export type ListTaskResponse = APIResponse & {
   };
 };
 
+export type AddRelationUserPayload = {
+  taskID: string,
+  related?: Array<string>;
+};
+
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 CHECKLIST   ===============================
+ * ============================ ************** ===============================
+ */
+
 export type CheckList = {
   _id: string;
   name: string;
   expiredTime: string;
   typeStatus: number;
+  status: number;
   checklist: string;
   assignee: Assignee;
 };
 
 export type CheckListPayload = {
-  taskID?: string;
+  parentID: string;
   name: string;
-  description: string;
-  expiredTime: string;
   type: number;
-  assignee: string;
+  assigneeID: string;
+  expiredTime: string;
 };
 
 export type ListCheckListPayload = {
+  isChecklist?: number;
   lastestID?: string;
   limit?: number;
   populates?: string;
@@ -96,24 +108,87 @@ export type ListCheckListResponse = APIResponse & {
   data: {
     listRecords: Array<CheckList>;
     totalRecord: number;
-    totalPages?: number;
+    totalPage?: number;
     nextCursor: string;
     limit: number;
   };
 };
 
+/**
+ * ============================ ************************** ===============================
+ * ============================ 	 VIỆC CON (CHILD TASK)   ===============================
+ * ============================ ************************** ===============================
+ */
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+export type ChildTask = {
+  _id: string;
+  name: string;
+  expiredTime: string;
+  typeStatus: number;
+  status: number;
+  assignee: Assignee;
+};
+
+export type ChildTaskPayload = {
+  parentID: string;
+  name: string;
+  type: number;
+  assigneeID: string;
+  expiredTime: string;
+};
+
+export type ListChildTaskPayload = {
+  isChildTask?: number;
+  lastestID?: string;
+  limit?: number;
+  populates?: string;
+  select?: string;
+  type?: number;
+  typeStatus?: number;
+  isSortChildTask: number;
+  parentID?: string;
+};
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+/**
+ * ============================ *********************** ===============================
+ * ============================ 	 PHẢN HỒI LIÊN QUAN   ===============================
+ * ============================ *********************** ===============================
+ */
+
 export type ResponseProps = {
   _id: string,
   type: number,
-  isMarked: boolean,
-  task: string,
-  comment: {
-    content: string,
-    files: FileProps[] | undefined,
-    images: FileProps[] | undefined,
-    author: User,
+  official: boolean,
+  task: {
+    _id: string,
+    name: string
   },
-  userCreate: User,
+  content: string,
+  files: FileProps[] | undefined,
+  images: FileProps[] | undefined,
+  amountCommentReply: number,
+  amountReaction: number,
+  author: User,
   createAt: string
 }
 
@@ -136,7 +211,7 @@ export type ListResponsePayload = {
   taskID?: string;
   lastestID?: string;
   limit?: number;
-  isMarked?: boolean;
+  official?: boolean;
   populates?: string;
   select?: string;
   sortKey?: string;

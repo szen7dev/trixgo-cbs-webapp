@@ -63,21 +63,21 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
         dispatch(setAmountMissMessage(data.amountMissMessage))
         // console.log(data)
-        if (data.infoMessage?.sender?._id === profileId) {
+        if (data?.infoMessage?.sender?._id === profileId) {
             dispatch(updateNewMessageToConversation({
-                conversationId: data.infoMessage.conversation,
-                newMessageId: data.infoMessage._id,
-                oldMessageId: data.tmpid,
-                messageData: data.infoMessage
+                conversationId: data?.infoMessage?.conversation,
+                newMessageId: data?.infoMessage?._id,
+                oldMessageId: data?.tmpid,
+                messageData: data?.infoMessage
             }));
         } else {
-            dispatch(appendMessageToConversation({
-                conversationId: data.infoMessage.conversation,
-                messageId: data.infoMessage._id,
-                messageData: data.infoMessage
-            }));
-            if (currentChat === data.infoMessage.conversation) {
-                dispatch(pushMoreUnreadMessage({conversationId: data.infoMessage.conversation, messagesId: [data.infoMessage._id]}));
+            if (currentChat === data?.infoMessage?.conversation) {
+                dispatch(appendMessageToConversation({
+                    conversationId: data?.infoMessage?.conversation,
+                    messageId: data?.infoMessage?._id,
+                    messageData: data?.infoMessage
+                }));
+                dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
             if (!inSearchMode){
                 setTimeout(() => {
@@ -89,17 +89,18 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveConversation = (data: any) => {
         // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
-        dispatch(setListConversation(data.data));
+        dispatch(setListConversation(data?.data));
     }
 
     const onFireMessage = (data: any) => {
+        if (!data) return;
         dispatch(appendMessageToConversation({
-            conversationId: data.data.conversation,
-            messageId: data.data._id,
-            messageData: data.data
+            conversationId: data?.data?.conversation,
+            messageId: data?.data?._id,
+            messageData: data?.data
         }));
-        if ([108, 109].includes(data.data.type)) {
-            getListPinMessage({conversationID: data.data.conversation})
+        if ([108, 109].includes(data?.data?.type)) {
+            getListPinMessage({conversationID: data?.data?.conversation})
         }
         setTimeout(() => {
             scrollToBottom();
@@ -107,28 +108,31 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     };
 
     const onReceiveShareMessage = (data: any) => {
+        if (!data) return;
         // dispatch(setShareMessage({
         //     messagesShare: data.data.listMessagesShared
         // }));
         dispatch(updateSingleConversation({
-            conversationData: data.data.infoConversation
+            conversationData: data?.data?.infoConversation
         }))
     }
 
     const onReceiveRevokeMessage = (data: any) => {
-        if (!data.data.error) {
-            dispatch(revokeMessageInConversation({messages: data.data.data}))
+        if (!data) return;
+        if (!data?.data?.error) {
+            dispatch(revokeMessageInConversation({messages: data?.data?.data}))
         } else {
-            toast.error(data.data.message);
+            toast.error(data?.data?.message);
         }
     }
 
     const onReceiveReactionMessage = (data: any) => {
+        if (!data) return;
         dispatch(updateNewMessageToConversation({
-            conversationId: data.data.conversation._id,
-            newMessageId: data.data._id,
-            oldMessageId: data.data._id,
-            messageData: {...data.data, conversation: data.data.conversation._id}
+            conversationId: data?.data?.conversation?._id,
+            newMessageId: data?.data?._id,
+            oldMessageId: data?.data?._id,
+            messageData: {...data?.data, conversation: data?.data?.conversation?._id}
         }));
     }
 
@@ -140,10 +144,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     };
 
     const onUpdateSeenMessage = (data: any) => {
+        if (!data) return;
         dispatch(updateSeenMessage({
-            conversationId: data.data.infoConversation._id,
-            messsagesId: data.data.messagesID,
-            infoUserSeen: data.data.infoUserSeen
+            conversationId: data?.data?.infoConversation?._id,
+            messsagesId: data?.data?.messagesID,
+            infoUserSeen: data?.data?.infoUserSeen
         }))
     }
 

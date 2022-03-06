@@ -19,7 +19,7 @@ const listConversationSlice = createSlice({
     reducers: {
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
-            (action.payload.listRecords??[]).forEach((conversation: ItemListConversation) => {
+            (action.payload?.listRecords??[]).forEach((conversation: ItemListConversation) => {
                 const isSavedMessages = conversation.members.length === 1;
 
                 newConversationData[conversation._id] = {
@@ -33,9 +33,9 @@ const listConversationSlice = createSlice({
             state.data = {
                 ...state.data,
                 listConversation: newConversationData,
-                nextCursor: action.payload.nextCursor,
-                hasMoreData : action.payload.nextCursor !== null && action.payload.nextCursor !== undefined && action.payload.nextCursor !== "",
-                amountMissMessage: action.payload.amountMissMessage
+                nextCursor: action.payload?.nextCursor,
+                hasMoreData : action.payload?.nextCursor !== null && action.payload?.nextCursor !== undefined && action.payload?.nextCursor !== "",
+                amountMissMessage: action.payload?.amountMissMessage
             };
         },
         setAmountMissMessage(state, action) {
@@ -84,10 +84,23 @@ const listConversationSlice = createSlice({
                 ...state.data,
                 listConversation: newConversationData
             };
+        },
+        updateFoldersToConversation (state, action) {
+            const {conversationId, folders} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        folders
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

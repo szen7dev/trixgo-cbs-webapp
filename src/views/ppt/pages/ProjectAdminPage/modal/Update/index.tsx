@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const Update: FC<any> = ({ item, setIdsChecked }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
-  const { updateAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+  const { updateAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 
   const onUpdate = async () => {
     if (!name) return;

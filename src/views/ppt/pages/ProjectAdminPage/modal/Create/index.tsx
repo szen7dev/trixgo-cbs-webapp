@@ -9,13 +9,22 @@ import { toast } from "react-toastify";
 const Create: FC = () => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
-  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id });
+  const [type, setType] = useState<any>("");
+  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 
   const onCreate = async () => {
-    if (!name) return;
+    if (!name || !type) {
+      toast.error("Vui lòng nhập đầy đủ nội dung và phân loại.");
+      return;
+    }
+    if (!["1", "2", "3"].includes(type)) {
+      toast.error("Phân loại chỉ có giá trị 1,2 hoặc 3. Vui lòng nhập lại.");
+      return;
+    };
+
     const result = await createAppRolesMutateAsync({
       appID: APP_ID.PCM.id,
-      type: 1,
+      type: parseInt(type),
       name
     });
     if (!result.error) {
@@ -30,7 +39,7 @@ const Create: FC = () => {
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-9 flex items-center justify-between">
+      <header className="px-10 py-5 flex items-center justify-between">
         <p className="font-bold text-xl">Tạo mới</p>
         <img
           src={CloseIcon}
@@ -40,7 +49,7 @@ const Create: FC = () => {
         />
       </header>
 
-      <section className="px-10 mt-2">
+      <section className="px-10 py-2">
         <input
           type="text"
           placeholder="Nhập nội dung"
@@ -50,7 +59,17 @@ const Create: FC = () => {
         />
       </section>
 
-      <footer className="absolute right-0 bottom-0 px-10 py-9">
+      <section className="px-10 mt-2">
+        <input
+          type="text"
+          placeholder="Phân loại (1,2,3)"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+      </section>
+
+      <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={() => onCreate()}>
           Xác nhận

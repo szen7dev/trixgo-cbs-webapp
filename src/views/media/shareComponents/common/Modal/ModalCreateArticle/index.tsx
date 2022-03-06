@@ -13,24 +13,19 @@ import cn from "classnames";
  * Assets, Components
  */
 import {
-    IconFile,
-    IconImage,
-    PostFile,
-    PostImage,
-    TabsClassifyArticle,
-    TabsClassifyArticleCommunity,
-    TabsClassifyDepartment,
-    TabsOverlay
+	IconFile,
+	IconImage,
+	PostFile,
+	PostImage,
+	TabsClassifyArticle,
+	TabsClassifyArticleCommunity,
+	TabsClassifyDepartment,
+	TabsOverlay
 } from 'views/media/shareComponents/common';
 import { typeTextSelected } from 'views/media/utils';
 
 import ChevronDownIcon from 'assets/icons/ChevronDown';
 import iconDown from 'assets/images/Frame 1745.png';
-
-/**
- * Contexts
- */
-import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 
 /**
  * Types, Services
@@ -40,7 +35,7 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { useSocket } from 'services/hooks/useSocket';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, images, initialValues = {
 	mediaID: "",
@@ -64,7 +59,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	const { user } = useAuth();
 	const { refetchListMedias: refetchListMediasCompany } = useMedia({
 		key: `list_medias__company`,
-		params: { 
+		params: {
 			type: "company",
 			companyID: user?.company._id
 		},
@@ -72,7 +67,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 	const { refetchListMedias: refetchListMediasDepartment } = useMedia({
 		key: `list_medias__department`,
-		params: { 
+		params: {
 			type: "department",
 			companyID: user?.company._id
 		},
@@ -83,7 +78,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		params: { type: "digital-conversion" },
 	});
 
-    const { current: socket }: any = useSocket();
+	const { current: socket }: any = useSocket();
 	const { createMediaAsync, updateMediaAsync } = useMedia({});
 	const { addFileToUpload } = useUpload({
 		appID: '5df4ce16506d9b3c587948ca',
@@ -170,11 +165,11 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 					// Tạo bài viết
 					const { error, data, message } = await createMediaAsync(values);
-					
-					if(error) {
+
+					if (error) {
 						toast.warning(message);
 					}
-					
+
 					toast.success('Tạo bài viết thành công');
 					socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
 						receivers: data.receivers
@@ -186,7 +181,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 					// Cập nhật bài viết
 					const { error, message } = await updateMediaAsync(values);
-					if(error) {
+					if (error) {
 						toast.warning(message);
 					}
 
@@ -196,13 +191,13 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 				default:
 					break;
 			}
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
-        }
+		} catch (error: unknown) {
+			if (typeof error === "string") {
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
 
 		// Refetch List media
 		switch (values.type) {

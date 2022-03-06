@@ -16,10 +16,12 @@ type UseUser = {
     getCodeUser: () => Promise<CheckCodeResponse>,
     codeUser: any;
     refetchCode: () => void,
-    totalRecord: number | undefined,
-    totalPage: number | undefined,
-    nextCursor: string,
+    totalRecordListFriends: number | undefined,
+    totalPageListFriends: number | undefined,
+    nextCursorListFriends: string,
     refetchListFriends: () => void,
+    nextPageListFriends: () => void,
+    hasNextPageListFriends: boolean | undefined
     // request friends
     isLoadingListRequestFriends: boolean,
     refetchListRequestFriends: () => void,
@@ -259,26 +261,57 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
 
     // Danh sách bạn bè của mình
     const {
-        data,
-        refetch: refetchListFriends
-    } = useQuery(
-        ["list_friends", { pageParam }, params?.keyword],
-        async () => {
-            return UserRepository.listFriends({
-                lastestID: pageParam || "",
-                ...params,
-            })
-        },
-        { 
-            keepPreviousData: true,
-            refetchOnWindowFocus: false,
-        }
-    );
-
-    const listFriends = data?.data?.listRecords
-    const totalRecord = data?.data?.totalRecord
-    const totalPage = data?.data?.totalPage
-    const nextCursor = data?.data?.nextCursor
+        refetch: refetchListFriends,
+        data: dataListFriends,
+        fetchNextPage: nextPageListFriends,
+        hasNextPage: hasNextPageListFriends
+    } =
+        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+            ["list_friends", params?.keyword],
+            async ({ pageParam }: any) =>
+                UserRepository.listFriends({
+                    lastestID: pageParam || "",
+                    ...params,
+                }),
+            {
+                getNextPageParam: (params: any) => {
+                    const nextCursor = params?.data?.nextCursor;
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+    const listFriends = [].concat(...(dataListFriends?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecordListFriends = dataListFriends?.pages[0]?.data?.totalRecord;
+    const totalPageListFriends = dataListFriends?.pages[0]?.data?.totalPage;
+    const nextCursorListFriends = dataListFriends?.pages[0]?.data?.nextCursor;
+    // const {
+    //     data,
+    //     refetch: refetchListFriends
+    // } = useQuery(
+    //     ["list_friends", { pageParam }, params?.keyword],
+    //     async () => {
+    //         return UserRepository.listFriends({
+    //             lastestID: pageParam || "",
+    //             ...params,
+    //         })
+    //     },
+    //     {
+    //         keepPreviousData: true,
+    //         refetchOnWindowFocus: false,
+    //     }
+    // );
+    //
+    // const listFriends = []
+    //     .concat(
+    //         ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+    //     ).filter(Boolean);
+    // console.log(data)
+    // console.log(listFriends)
+    // const totalRecord = data?.data?.totalRecord
+    // const totalPage = data?.data?.totalPage
+    // const nextCursor = data?.data?.nextCursor
 
     // Danh sách lời mời kết bạn
     const infinityQuery = useInfiniteQuery(
@@ -329,9 +362,11 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
         getCodeUser,
         refetchCode,
         listFriends,
-        totalRecord,
-        totalPage,
-        nextCursor,
+        totalRecordListFriends,
+        totalPageListFriends,
+        nextCursorListFriends,
+        nextPageListFriends,
+        hasNextPageListFriends,
         refetchListFriends,
         listRequestFriends,
         isLoadingListRequestFriends,

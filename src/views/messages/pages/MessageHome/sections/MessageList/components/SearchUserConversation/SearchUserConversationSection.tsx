@@ -11,7 +11,7 @@ import {MessageContext} from "../../../../index";
 import {SearchChatItem} from "./SearchChatItem";
 
 export const SearchUserConversationSection:FC = () => {
-    const {setShowSearch} = useContext(SearchUserAndConversationContext);
+    const {setShowSearch, showSearch} = useContext(SearchUserAndConversationContext);
     const inputRef = useRef<HTMLInputElement>(null);
     const listFriendsRef = useRef<HTMLDivElement>(null);
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
@@ -32,12 +32,11 @@ export const SearchUserConversationSection:FC = () => {
     }, [listFriendsRef])
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [pageParam, setPageParam] = useState('');
-    const params = {limit: 10, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', lastestID: pageParam, keyword: searchTerm}
-    const { listFriends, nextCursor } = useUser(params, pageParam);
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', populates: '{"path": "company", "select": "name"}', keyword: searchTerm}
+    const { listFriends, nextPageListFriends , hasNextPageListFriends } = useUser(params);
 
     const paramsListConversation = {limit: 10, keyword: searchTerm};
-    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation);
+    const {listConversations, nextPageListConversations, hasListConversationNextPage, createConversation} = UseListConversation(paramsListConversation, showSearch);
 
     const handleStartPrivateChat = (memberId: string) => {
         createConversation({
@@ -89,6 +88,7 @@ export const SearchUserConversationSection:FC = () => {
                     {
                         _map(listFriends, friend => (
                             <button
+                                title={friend.bizfullname||friend.fullname}
                                 key={friend._id}
                                 onClick={() => handleStartPrivateChat(friend._id)}
                                 className={"hover:bg-gray-100 rounded-lg w-[78px] flex flex-col items-center py-[15px] px-[10px]"}>
@@ -98,10 +98,10 @@ export const SearchUserConversationSection:FC = () => {
                         ))
                     }
                     {
-                        nextCursor &&
+                        hasNextPageListFriends &&
                         <button
-                            onClick={() => setPageParam(nextCursor)}
-                            className={"rounded-lg w-[78px] flex flex-col items-center py-[15px] px-[10px] justify-center"}>
+                            onClick={() => nextPageListFriends()}
+                            className={"rounded-lg w-[78px] min-w-[78px] flex flex-col items-center py-[15px] px-[10px] justify-center"}>
                             <img src={PlusIcon} className={"w-[24px] h-[24px]"} alt={"==="}/>
                         </button>
                     }

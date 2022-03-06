@@ -65,6 +65,7 @@ export type ListConversationPayload = {
     keyword?: string;
     lastestID?: string|null;
     limit?: number;
+    select?: string;
 };
 
 export type ListMembersOfConversationPayload = {
@@ -194,5 +195,83 @@ export type ConvversationInformationPayload = {
 export type ConversationInformarionResponse = {
     error: boolean;
     data: ItemListConversation;
+    status: number;
+}
+
+export type ListFoldersConversationPayload = {
+    limit?: number
+    nextCursor?: string
+}
+
+export type FolderConversationItem = {
+    _id: string
+    includedConversations: string[],
+    excludedConversations: string[],
+    amountMissMessage: number,
+    state: number,
+    name: string
+    author: string
+    modifyAt: string
+    createAt: string
+    createdAt: string
+    updatedAt: string
+    __v: number
+}
+
+export type ListFoldersConversation = {
+    listRecords: FolderConversationItem[],
+    limit: number,
+    totalRecord: number;
+    nextCursor: string|null;
+}
+
+export type ListFoldersConversationResponse = {
+    error: boolean;
+    data: ListFoldersConversation;
+    status: number;
+}
+
+
+
+export type AddFolderPayload = {
+    name: string;
+}
+
+export type AddFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateFolderPayload = {
+    name: string;
+    folderID: string;
+}
+
+export type UpdateFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type DeleteFolderPayload = {
+    folderID: string;
+}
+
+export type DeleteFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type AddConversationToFolderPayload = {
+    conversationID: string;
+    addFoldersID: string[];
+    removeFoldersID: string[];
+}
+
+export type AddConversationToFolderResponse = {
+    data: ItemListConversation;
+    error: boolean;
     status: number;
 }

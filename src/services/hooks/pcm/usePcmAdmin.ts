@@ -6,7 +6,6 @@ type UsePcmAdmin = {
     isLoadingPcmAdmin: boolean,
     refetchPcmAdmin: () => void,
     nextPagePcmAdmin: () => void,
-    prevPagePcmAdmin: () => void,
     totalRecord: number,
     totalPage: number | undefined,
     hasNextPagePcmAdmin: boolean | undefined,
@@ -20,7 +19,7 @@ type UsePcmAdmin = {
     removeManyAppRoleMutateAsync: any
 };
 
-export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
+export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePcmAdmin => {
     const currentUser = localStorage.getItem("currentUser") ?? "{}";
     const profile = JSON.parse(currentUser);
     // Tạo mới 1 app roles
@@ -62,12 +61,11 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
         refetch: refetchPcmAdmin,
         data: dataPcmAdmin,
         fetchNextPage: nextPagePcmAdmin,
-        fetchPreviousPage: prevPagePcmAdmin,
         hasNextPage: hasNextPagePcmAdmin,
         isFetching: isFetchingPcmAdmin
     } =
         useInfiniteQuery(
-            `app_roles?appID=${payload.appID}`,
+            [`app_roles?appID=${payload.appID}`, payload.keyword],
             async (pageParam: any) => {
                 return AuthenticationRepository.getListAppRole({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
@@ -76,6 +74,7 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
                         path: "userCreate userUpdate",
                         select: "bizfullname",
                     }),
+                    keyword: payload.keyword
                 })
             },
             {
@@ -95,7 +94,6 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
         isLoadingPcmAdmin,
         refetchPcmAdmin,
         nextPagePcmAdmin,
-        prevPagePcmAdmin,
         hasNextPagePcmAdmin,
         isFetchingPcmAdmin,
         totalRecord,
@@ -109,5 +107,67 @@ export const usePcmAdmin = (payload: { appID: string }): UsePcmAdmin => {
 
         isManyAppRole,
         removeManyAppRoleMutateAsync
+    };
+};
+
+export const useGetListAppRoleMenuFromAdmin = (payload: {
+    appID: string,
+    companyID: string,
+    roleID: string
+}): any => {
+
+    //  CẬP NHẬT QUYỀN TRUY CẬP MỘT CHỨC NĂNG CỦA NHÓM CHỨC NĂNG
+    const { mutateAsync: updatePermissionsAppRoleMenusMutateAsync } =
+        useMutation((
+            payload: {
+                role: string,
+                menu: string,
+                read: number,
+                create: number,
+                update: number,
+                deleteIn: number
+            }) =>
+            AuthenticationRepository.updatePermissionsAppRoleMenus(payload)
+        );
+
+    const {
+        isLoading: isLoadingGetListAppRoleMenuFromAdmin,
+        refetch: refetchGetListAppRoleMenuFromAdmin,
+        data: dataGetListAppRoleMenuFromAdmin,
+        fetchNextPage: nextPageGetListAppRoleMenuFromAdmin,
+        hasNextPage: hasNextPageGetListAppRoleMenuFromAdmin,
+        isFetching: isFetchingGetListAppRoleMenuFromAdmin
+    } =
+        useInfiniteQuery(
+            [`users?${JSON.stringify(payload)}`, payload],
+            async (pageParam: any) => {
+                return AuthenticationRepository.getListAppRoleMenuFromAdmin({
+                    lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
+                    ...payload
+                })
+            },
+            {
+                getNextPageParam: ({ data }) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: true,
+            }
+        );
+    const listAppRoleMenuFromAdmin = [].concat(...(dataGetListAppRoleMenuFromAdmin?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetListAppRoleMenuFromAdmin?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetListAppRoleMenuFromAdmin?.pages[0]?.data?.totalPage;
+
+    return {
+        listAppRoleMenuFromAdmin,
+        isLoadingGetListAppRoleMenuFromAdmin,
+        refetchGetListAppRoleMenuFromAdmin,
+        nextPageGetListAppRoleMenuFromAdmin,
+        hasNextPageGetListAppRoleMenuFromAdmin,
+        isFetchingGetListAppRoleMenuFromAdmin,
+        totalRecord,
+        totalPage,
+
+        updatePermissionsAppRoleMenusMutateAsync
     };
 };

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
 
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useDatahubType, useDatahubTypes } from "services/hooks/datahub";
 
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
@@ -13,7 +14,12 @@ import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
-import ModalCreateType from "./components/ModalCreateType";
+import ModalCreateType from "../DatahubType/components/ModalCreateType";
+
+// ======= Type =======
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+import { useQueryClient } from "react-query";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -23,22 +29,28 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 const DatahubTypeDetail: FC = () => {
 	const [show, setShow] = useState(false);
 	const [pkg, setPkg] = useState(pkgs[0]);
+	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
+	const queryClient = useQueryClient();
 
 	const history = useHistory();
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const params = useParams<{ id: string }>();
+	const location = useLocation<{ type: number } | undefined>();
+	const { data: dataDetail } = useDatahubType(params.id);
+
+	const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({
+		parentID: params.id,
+		select: '_id name description popular',
+		keyword: '',
+		limit: 10,
+		type: dataDetail?.data.type
+	}, {
+		enabled: dataDetail ? !dataDetail.error : Boolean(dataDetail)
+	});
+
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
-		setData(Array.from({ length: 5 }).map((_, index) => ({
-			id: index,
-			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-			joined: 8,
-			worked: 15,
-			created_at: "15:30 22/12/2021",
-			updated_at: "15:30 22/12/2021",
-			status: index,
-		})));
 	}, []);
 
 	return (
@@ -49,7 +61,7 @@ const DatahubTypeDetail: FC = () => {
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
 					</svg>
 				</button>
-				<span className="text-x-large mr-7">Tiêu đề</span>
+				<span className="text-x-large mr-7 max-w-sm">{dataDetail?.data.name}</span>
 				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 				<DocumentDropdown
 					data={pkgs}
@@ -57,9 +69,18 @@ const DatahubTypeDetail: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions types={['edit']} className="flex items-center flex-1" />
+				<GroupActions
+					types={['edit']}
+					className="flex items-center flex-1"
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					disabled={{
+						pencil: checked.length !== 1,
+					}}
+				/>
 
-				<ButtonCreate onClick={() => setShow(!show)} />
+				<ButtonCreate
+					disabled={dataDetail ? dataDetail.error : true}
+					onClick={() => { setShow(!show); setSelected(null) }} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -88,21 +109,21 @@ const DatahubTypeDetail: FC = () => {
 					</thead>
 					<tbody className="text-small">
 						{
-							data.map((props) => {
+							data?.data.listRecords.map((props) => {
 								const {
-									id,
-									project,
-									joined,
-									worked,
+									_id,
+									name,
+									description,
+									popular,
 								} = props
 								return (
-									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={_id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
+											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{project}</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{worked}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{name}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
+										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular ? "Thông thường" : "Phổ biến"}</td>
 									</tr>
 								)
 							})
@@ -110,8 +131,28 @@ const DatahubTypeDetail: FC = () => {
 					</tbody>
 				</table>
 			</div>
-			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<Paginate
+				limit={data?.data.limit || 10}
+				totalRecord={data?.data.totalRecord}
+				totalPages={data?.data.totalPage}
+				hasNextPage={Boolean(data?.data.nextCursor)}
+				prevPageAction={fetchPrevPage}
+				nextPageAction={fetchNextPage}
+				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
+			/>
+			<ModalExtraLarge show={show} buttonOnly>
+				<ModalCreateType
+					type={selected?._id ? 'edit' : 'create'}
+					datahubType={dataDetail?.data.type || 1}
+					datahubID={selected?._id}
+					parent={params.id}
+					toggle={() => setShow(false)}
+					onSuccessCreate={data => {
+						queryClient.removeQueries(["datahub_types", location?.state?.type || 1, params.id], { inactive: true });
+						resetPage();
+					}}
+				/>
+			</ModalExtraLarge>
 		</div >
 	);
 };

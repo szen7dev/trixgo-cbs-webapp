@@ -1,11 +1,23 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
-import { Task, CheckList, CheckListPayload, ResponseProps, ResponsePayload } from "typings/task";
-import { useSocket } from 'services/hooks/useSocket';
+import { 
+  Task, 
+  CheckList, CheckListPayload, 
+  ChildTask, ChildTaskPayload,
+  ResponseProps, ResponsePayload,
+  AddRelationUserPayload
+} from "typings/task";
+
+/**
+ * ============================ ************* ===============================
+ * ============================ 	 PCM TASK   ===============================
+ * ============================ ************* ===============================
+ */
 
 type UseTask = {
-  addResponse: (payload: ResponsePayload) => Promise<{ result: ResponseProps } | undefined>;
+  addResponseAsync: (payload: ResponsePayload) => Promise<any>;
+  addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
   listResponses: Array<ResponseProps>;
   totalRecordResponse: number;
   refetchListResponse: () => void;
@@ -19,56 +31,36 @@ type UseTask = {
   prevPageListTask: () => void;
 };
 
-type Props = {
+type UseTaskProps = {
   taskID?: string;
   typeStatus?: number;
   type?: number;
-  isMarked?: boolean;
+  official?: boolean;
+  isFetch?: boolean;
 }
 
-export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask => {
-  const { current: socket }: any = useSocket();
-
+export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
     );
 
-  const addResponse = async (payload: ResponsePayload) => {
-    try {
-      const { error, data, message } = await addResponseAsync(payload);
-
-      if(error) {
-        toast.warning(message)
-      } else{
-        toast.success('Tạo phản hồi thành công');
-      }
-
-      socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
-          receivers: data.receivers
-      });
-
-      return data;
-    } catch (error: unknown) {
-      if (typeof error === "string") {
-          toast.error(error);
-      } else if (error instanceof Error) {
-          toast.error(error.message);
-      }
-    }
-  };
+  const { mutateAsync: addRelationUserAsync } =
+    useMutation((payload: AddRelationUserPayload) =>
+      TaskRepository.addRelationUser(payload)
+    );
 
   const {
     data: dataListResponse,
     refetch: refetchListResponse,
   } = useInfiniteQuery(
-    ["list_responses", taskID, isMarked || false],
+    ["list_responses", taskID, official || false],
     async ({ pageParam }: any) => {
       return TaskRepository.listResponse({
         taskID,
         limit: 5,
         lastestID: pageParam || "",
-        isMarked: isMarked || false,
+        official: official || false,
       });
     },
     {
@@ -76,7 +68,7 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: isFetch,
     }
   );
 
@@ -129,7 +121,8 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   return {
-    addResponse,
+    addResponseAsync,
+    addRelationUserAsync,
     listResponses,
     totalRecordResponse,
     refetchListResponse,
@@ -144,8 +137,14 @@ export const useTask = ({ taskID, isMarked, typeStatus, type }: Props): UseTask 
   };
 };
 
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 CHECKLIST   ===============================
+ * ============================ ************** ===============================
+ */
+
 type UseCheckList = {
-  addChecklist: (payload: CheckListPayload) => void,
+  addChecklistAsync: (payload: CheckListPayload) => Promise<any>,
   updateChecklist: (payload: CheckListPayload) => void,
   listCheckList: Array<CheckList>;
   isLoadingListCheckList: boolean;
@@ -157,7 +156,17 @@ type UseCheckList = {
   prevPageListCheckList: () => void;
 };
 
-export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
+type UseCheckListProps = {
+  parentID?: string,
+  limit?: number,
+  isFetchChecklist?: boolean,
+}
+
+export const useCheckList = ({ 
+  parentID, 
+  limit = 5, 
+  isFetchChecklist = false
+} : UseCheckListProps): UseCheckList => {
   const { mutateAsync: addChecklistAsync } =
     useMutation((payload: CheckListPayload) =>
       TaskRepository.addChecklist(payload)
@@ -167,24 +176,6 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
     useMutation((payload: CheckListPayload) =>
       TaskRepository.updateChecklist(payload)
     );
-
-  const addChecklist = async (payload: CheckListPayload) => {
-    try {
-        const { error, message } = await addChecklistAsync(payload);
-
-        if (error) {
-          return toast.warning(message);
-        }
- 
-        toast.success('Tạo checklist thành công');
-    } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
-    }
-  };
 
   const updateChecklist = async (payload: CheckListPayload) => {
     try {
@@ -218,9 +209,9 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         limit,
         lastestID: pageParam || "",
         parentID: parentID || "",
-        type: 2,
+        isChecklist: 1,
         isSortChecklist: 1,
-        select: "assignee lastLog checklist description name expiredTime percentage project",
+        select: "assignee lastLog checklist status description name expiredTime percentage project",
         populates: JSON.stringify({
           path: "assignee",
           select: "name fullname bizfullname image",
@@ -232,20 +223,20 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: isFetchChecklist,
     }
   );
 
   const listCheckList = []
-    .concat(
-      ...(dataListCheckList?.pages || []).map((d: any) => d.data?.listRecords)
-    )
+    .concat(...(dataListCheckList?.pages || [])
+    .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
+
   const totalRecord = dataListCheckList?.pages[0]?.data?.totalRecord;
-  const totalPages = dataListCheckList?.pages[0]?.data?.totalPages;
+  const totalPages = dataListCheckList?.pages[0]?.data?.totalPage;
 
   return {
-    addChecklist,
+    addChecklistAsync,
     updateChecklist,
     listCheckList,
     isLoadingListCheckList,
@@ -255,5 +246,99 @@ export const useCheckList = (parentID?: string, limit = 5): UseCheckList => {
     refetchListCheckList,
     nextPageListCheckList,
     prevPageListCheckList,
+  };
+};
+
+/**
+ * ============================ ************************** ===============================
+ * ============================ 	 VIỆC CON (CHILD TASK)   ===============================
+ * ============================ ************************** ===============================
+ */
+
+type UseChildTask = {
+  addChildTaskAsync: (payload: ChildTaskPayload) => Promise<any>,
+  updateChildTaskAsync: (payload: ChildTaskPayload) => void,
+  listChildTask: Array<ChildTask>;
+  isLoadingListChildTask: boolean;
+  totalRecord: number | undefined;
+  totalPages: number | undefined;
+  hasNextPage: boolean | undefined;
+  refetchListChildTask: () => void;
+  nextPageListChildTask: () => void;
+  prevPageListChildTask: () => void;
+};
+
+type UseChildTaskProps = {
+  parentID?: string,
+  limit?: number,
+  isFetchChildTask?: boolean,
+}
+
+export const useChildTask = ({ 
+  parentID, 
+  limit = 5, 
+  isFetchChildTask = false
+} : UseChildTaskProps): UseChildTask => {
+  const { mutateAsync: addChildTaskAsync } =
+    useMutation((payload: ChildTaskPayload) =>
+      TaskRepository.addChildTask(payload)
+    );
+
+  const { mutateAsync: updateChildTaskAsync } =
+    useMutation((payload: ChildTaskPayload) =>
+      TaskRepository.updateChildTask(payload)
+    );
+
+  const {
+    isLoading: isLoadingListChildTask,
+    data: dataListChildTask,
+    refetch: refetchListChildTask,
+    fetchNextPage: nextPageListChildTask,
+    fetchPreviousPage: prevPageListChildTask,
+    hasNextPage,
+  } = useInfiniteQuery(
+    ["list_child_task", parentID, limit],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listChildTask({
+        limit,
+        lastestID: pageParam || "",
+        parentID: parentID || "",
+        isChildTask: 1,
+        isSortChildTask: 1,
+        select: "assignee lastLog status description name expiredTime percentage project",
+        populates: JSON.stringify({
+          path: "assignee",
+          select: "name fullname bizfullname image",
+        }),
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: isFetchChildTask,
+    }
+  );
+
+  const listChildTask = []
+    .concat(...(dataListChildTask?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecord = dataListChildTask?.pages[0]?.data?.totalRecord;
+  const totalPages = dataListChildTask?.pages[0]?.data?.totalPage;
+
+  return {
+    addChildTaskAsync,
+    updateChildTaskAsync,
+    listChildTask,
+    isLoadingListChildTask,
+    totalRecord,
+    hasNextPage,
+    totalPages,
+    refetchListChildTask,
+    nextPageListChildTask,
+    prevPageListChildTask,
   };
 };

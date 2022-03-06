@@ -123,9 +123,8 @@ const MediaDetail: FC = () => {
 
 	const handleDeleteMedia = async () => {
 		try {
-			const { error, message } = await deleteMediaAsync(mediaID);
-
-			if (error) return toast.warning(message);
+			const { error, data } = await deleteMediaAsync(mediaID);
+			if (error) return toast.warning(data.message);
 
 			toast.success('Xóa bài viết thành công', { autoClose: 900 });
 			setTimeout(() => history.push('/media/home'), 1000);

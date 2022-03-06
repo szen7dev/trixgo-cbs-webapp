@@ -56,8 +56,8 @@ export const LeftSideBar: FC = () => {
           {listAppMenu && listAppMenu.length ?
             <>
               {listAppMenu.map((item: any, index: number) => {
-                const roleApp = listAppRoleMenu.find((e: any) => e._id?.menu == item._id);
-                if (roleApp && roleApp.read == 1) {
+                const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                if (roleApp && roleApp.read >= 1) {
                   return (
                     <Link key={index} to={`/pcm/${item.slug}`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
@@ -72,14 +72,14 @@ export const LeftSideBar: FC = () => {
           }
 
           <p className="t-leftsidebar-menu-title mb-5">Công việc</p>
-          <Link to={`/pcm/mine`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          <Link to={`/pcm/home`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc của tôi</span>
           </Link>
-          <Link to={`/pcm/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
+          {/* <Link to={`/pcm/bookmark`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc quan tâm</span>
-          </Link>
+          </Link> */}
 
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">
@@ -109,7 +109,7 @@ export const LeftSideBar: FC = () => {
           <img className="block ml-auto mr-auto mb-4 w-16 h-16" src={iconBigFolder} alt="Folder" />
           <div className="font-bold text-2xl text-dark mb-4" role="none">Tùy chỉnh dữ liệu?</div>
           <p className="text-secondary-gray mb-6">Tạo và sắp xếp các dữ liệu theo cách mà bạn mong muốn</p>
-          <Link to="/personal/config">
+          <Link to="/">
             <button className="font-bold text-[14px] bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded">Thực hiện ngay</button>
           </Link>
         </div>

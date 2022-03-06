@@ -15,9 +15,8 @@ export const NewMiniChatBox:FC = () => {
     const socket = socketRef.current;
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [pageParam, setPageParam] = useState('');
-    const params = {limit: 10, select: 'fullname bizfullname email phone image', lastestID: pageParam, keyword: searchTerm}
-    const { listFriends, nextCursor } = useUser(params, pageParam);
+    const params = {limit: 10, select: 'fullname bizfullname email phone image', keyword: searchTerm}
+    const { listFriends, nextPageListFriends, hasNextPageListFriends } = useUser(params);
     const {createConversation} = UseListConversation();
     const handleOpenPrivateChat = (memberId : string) => {
         createConversation({
@@ -73,10 +72,10 @@ export const NewMiniChatBox:FC = () => {
                     ))
                 }
                 {
-                    nextCursor&&
+                    hasNextPageListFriends&&
                     <div className={"flex items-center justify-center mb-5"}>
                         <button
-                            onClick={() => setPageParam(nextCursor)}
+                            onClick={() => nextPageListFriends()}
                             className={"text-primary text-center"}
                         >
                             Xem thêm

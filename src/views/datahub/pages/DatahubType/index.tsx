@@ -2,18 +2,23 @@
 import { FC, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+import { useQueryClient } from 'react-query'
+import { debounce } from 'lodash'
 
+import { useDatahubTypes } from "services/hooks/datahub";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
 
-// import DropdownFilterButton from "views/document/components/DocumentFilterButton";
 import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateType from "./components/ModalCreateType";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+import { ContextMenuWrapper, ContextMenu } from "shareComponents/common/ContextMenu";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -21,42 +26,52 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubType: FC = () => {
+	const [query, setQuery] = useState('');
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
+	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
 
-	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
+	const queryClient = useQueryClient();
+
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
-		setData(Array.from({ length: 30 }).map((_, index) => ({
-			id: index,
-			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-			joined: 8,
-			worked: 15,
-			created_at: "15:30 22/12/2021",
-			updated_at: "15:30 22/12/2021",
-			status: index,
-		})));
 	}, []);
 
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce((v: any) => setQuery(v.target.value), 300)} />
 				<DocumentDropdown
 					data={pkgs}
 					value={pkg.title}
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions
+					className="flex items-center flex-1"
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					disabled={{
+						pencil: checked.length !== 1,
+					}}
+				/>
 
-				<ButtonCreate onClick={() => setShow(!show)} />
+				<ButtonCreate onClick={() => { setShow(true); setSelected(null) }} />
 				<ButtonMore />
 			</div>
-			<div className="flex-1 overflow-y-auto">
+			<div className="flex-1 overflow-y-auto" id="scroller">
+				<ContextMenu scroller="scroller" >
+					<ul className="bg-white shadow-cbs-md py-0.5 max-h-32 overflow-auto rounded-cbs border-0.5 border-cbs-border">
+						<li className="hover:text-white hover:bg-cbs-secondary py-2 px-4 transition-none">
+							<button onClick={e => { setShow(true) }}>
+								Sửa {selected?.name}
+							</button>
+						</li>
+					</ul>
+				</ContextMenu>
 				<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
 					<thead className="">
 						<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
@@ -80,36 +95,56 @@ const DatahubType: FC = () => {
 							</th>
 						</tr>
 					</thead>
-					<tbody className="text-small">
+					<ContextMenuWrapper tag="tbody" className="text-small">
 						{
-							data.map((props) => {
+							data?.data.listRecords.map((props) => {
 								const {
-									id,
-									project,
-									joined,
-									worked,
+									_id,
+									name,
+									description,
+									popular,
 								} = props
 								return (
-									<tr key={id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" onContextMenu={() => setSelected(props)}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
+											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={'/datahub/type/' + id} >
-												{project}
+											<Link to={{ pathname: '/datahub/type/' + _id, state: { type: 1 } }} >
+												{name}
 											</Link>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{worked}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
+										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular ? "Thông thường" : "Phổ biến"}</td>
 									</tr>
 								)
 							})
 						}
-					</tbody>
+					</ContextMenuWrapper>
 				</table>
 			</div>
-			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<Paginate
+				limit={data?.data.limit || 10}
+				totalRecord={data?.data.totalRecord}
+				totalPages={data?.data.totalPage}
+				hasNextPage={Boolean(data?.data.nextCursor)}
+				prevPageAction={fetchPrevPage}
+				nextPageAction={fetchNextPage}
+				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
+			/>
+			<ModalExtraLarge show={show} buttonOnly>
+				<ModalCreateType
+					datahubID={selected?._id}
+					datahubType={1}
+					type={selected?._id ? 'edit' : 'create'}
+					toggle={() => setShow(false)}
+					onSuccessCreate={data => {
+						queryClient.removeQueries(["datahub_types"], { inactive: true });
+						queryClient.refetchQueries(["datahub_types", ""]);
+						resetPage();
+					}}
+				/>
+			</ModalExtraLarge>
 		</div >
 	);
 };

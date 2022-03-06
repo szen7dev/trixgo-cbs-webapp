@@ -8,8 +8,8 @@ type UseNotification = {
     refetchListNotification: () => void,
     nextPageListNotification: () => void,
     prevPageListNotification: () => void,
-    totalRecord: number | undefined,
-    totalPages: number | undefined,
+    totalRecord: number,
+    totalPages: number,
     hasNextPage: boolean | undefined
 };
 
@@ -22,25 +22,30 @@ export const useNotification = (params?: any) : UseNotification => {
         fetchPreviousPage: prevPageListNotification,
         hasNextPage: hasNextPage
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_notifications",
-            async ({ pageParams }: any) => 
+        useInfiniteQuery(
+            ["list_notifications", params],
+            async ({ pageParam }: any) => 
             NotificationRepository.listNotification({ 
                 ...params,
-                lastestID: pageParams ? pageParams : "",
+                lastestID: pageParam
             }),
             {
-                getNextPageParam: ({ nextCursor }: any) => {
+                getNextPageParam: (params: any) => {
+                    const nextCursor = params?.data?.nextCursor;
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: true
             }
         );
 
-    const listNotifications = [].concat(...(dataListNotifications?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = dataListNotifications?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListNotifications?.pages[0]?.data?.totalPages;
+    const listNotifications = []
+        .concat(...(dataListNotifications?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = dataListNotifications?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = dataListNotifications?.pages[0]?.data?.totalPage || 0;
 
     return {
         listNotifications,

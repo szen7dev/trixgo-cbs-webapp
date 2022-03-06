@@ -3,22 +3,25 @@ import { FC, useState, useCallback } from "react";
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
+import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-
-import { CreateNewAdminMember } from "../../modal";
+import { useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { CreateNewAdminMember, DeleteMembers } from "../../modal";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { APP_ID } from "apis/localdb";
 
 const AdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-	const { listMembers, nameAppRoleDetail } = usePcmAdminDetail({ appID: id });
+	const [keyword, setKeyword] = useState("");
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: keyword });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -58,8 +61,12 @@ const AdminDetail: FC = () => {
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
-						// eslint-disable-next-line no-console
-						onChange={(event: any) => console.log(event.target.value)}
+						onChange={debounce(
+							(event: any) => {
+								//	setKeyword(event.target.value);
+							},
+							500
+						)}
 					/>
 					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
@@ -67,7 +74,18 @@ const AdminDetail: FC = () => {
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+								onClick={() =>
+									openModal(
+										<div
+											className={
+												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+											}
+										>
+											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
+										</div>
+									)
+								}>
 								<img src={TrashIcon} alt="Trash" />
 							</div>
 						</div>
@@ -83,7 +101,7 @@ const AdminDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember />
+									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
 								</div>
 							)
 						}
@@ -167,7 +185,22 @@ const AdminDetail: FC = () => {
 								</td>
 								<td className="py-1 px-2">{item.department?.name}</td>
 								<td className="py-1 px-2">{item.position?.name}</td>
-								<td className="py-1 px-2 text-negative">Xoá bỏ</td>
+								<td className="py-1 px-2 text-negative">
+									<button
+										onClick={() =>
+											openModal(
+												<div
+													className={
+														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+													}
+												>
+													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
+												</div>
+											)
+										}>
+										Xoá bỏ
+									</button>
+								</td>
 							</tr>)
 						}
 					</tbody> : <></>

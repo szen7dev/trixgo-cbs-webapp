@@ -18,47 +18,61 @@ import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
 import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
+import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 
-import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse } from "./components";
+import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse, CommentContainer } from "./components";
 import { Loader } from "shareComponents/common";
 import styles from "views/pcm/styles/pcm_task.module.css";
 
 import TaskRepository from "apis/task";
-import { useCheckList } from "services/hooks/useTask";
+import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { User } from "typings/user";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+
+import useModal from "views/pcm/hooks/useModal";
+import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
 
 export const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
+  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModal();
 
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
-  const { data: infoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo(id)
+  const { data: infoTask, refetch, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id),
+    { refetchOnWindowFocus: false }
   );
-  const { listCheckList, totalRecord, nextPageListCheckList } = useCheckList(id);
+  const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({ 
+    parentID: id, isFetchChecklist: true
+  });
+  const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({ 
+    parentID: id, isFetchChildTask: true
+  });
 
   const getGroupTitle = (group: any) => {
     let title = "";
-    if (group.parent) {
-      const name = getGroupTitle(group.parent);
+    if (group?.parent) {
+      const name = getGroupTitle(group?.parent);
       title = title ? `${name} > ${title}` : name;
     }
 
-    return title ? `${title} > ${group.name}` : group.name;
+    return title ? `${title} > ${group?.name}` : group?.name;
   };
 
   useEffect(() => {
     if (infoTask?.data) {
-      setPercentComplete(`${infoTask.data.percentage}%`);
-    }
-  }, [infoTask]);
+      const { author, assignee, percentage } = infoTask.data;
+      let confirmUsers = [author, assignee];
 
-  useEffect(() => {
-    if (infoTask?.data) {
-      setConfirmUsers([infoTask.data.author, infoTask.data.assignee]);
+      if (author._id === assignee._id) {
+        confirmUsers = [assignee];
+      }
+
+      setPercentComplete(`${percentage}%`);
+      setConfirmUsers(confirmUsers);
     }
   }, [infoTask]);
 
@@ -101,7 +115,7 @@ export const PcmDetailTask: FC = () => {
           <button className="mx-3">
             <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button>
-          <button className="mx-3">
+          <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
           <button className="mx-3">
@@ -112,6 +126,9 @@ export const PcmDetailTask: FC = () => {
           </button>
           <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
+          </button>
+          <button className="mx-3" onClick={openAddUserRelation}>
+            <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
           </button>
         </div>
 
@@ -130,7 +147,7 @@ export const PcmDetailTask: FC = () => {
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            {infoTask.data.name}
+            {infoTask?.data?.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -151,8 +168,8 @@ export const PcmDetailTask: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {infoTask.data.project?.sign} {">"}{" "}
-                  {getGroupTitle(infoTask.data.group)}
+                  {infoTask?.data?.project?.sign} {">"}{" "}
+                  {getGroupTitle(infoTask?.data?.group)}
                 </span>
                 <div>
                   <img
@@ -162,7 +179,7 @@ export const PcmDetailTask: FC = () => {
                   />
                 </div>
               </div>
-              {infoTask.data.parent && (
+              {infoTask?.data?.parent && (
                 <div className="flex items-end pr-2">
                   <img
                     className="w-6"
@@ -170,7 +187,7 @@ export const PcmDetailTask: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    {`Việc cha: ${infoTask.data.parent?.name}`}
+                    {`Việc cha: ${infoTask?.data?.parent?.name}`}
                   </span>
                 </div>
               )}
@@ -180,10 +197,10 @@ export const PcmDetailTask: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(infoTask.data.expiredTime).format("DD/MM/YYYY")}
+                    {moment(infoTask?.data?.expiredTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(infoTask.data.expiredTime).format("HH:mm")}
+                    {moment(infoTask?.data?.expiredTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>
@@ -215,11 +232,11 @@ export const PcmDetailTask: FC = () => {
                 >
                   {parse(
                     isTruncate
-                      ? _truncate(infoTask.data.description || "", { length: 300 })
+                      ? _truncate(infoTask.data?.description || "", { length: 300 })
                       : infoTask.data.description || ""
                   )}
                 </div>
-                {infoTask.data.description && (
+                {infoTask.data?.description && (
                   <button onClick={() => setIsTruncate(!isTruncate)}>
                     <p className="text-[13px] text-primary mt-2.5 mb-4">
                       Xem thêm/Thu gọn
@@ -232,16 +249,26 @@ export const PcmDetailTask: FC = () => {
             </div>
             <div className="mt-8 pr-3">
               <CheckList
+                componentType="CHECKLIST"
                 task={infoTask.data}
                 data={listCheckList}
-                totalRecord={totalRecord}
+                totalRecord={totalRecordCheckList}
                 onSeeMore={nextPageListCheckList}
+              />
+            </div>
+            <div className="mt-8 pr-3">
+              <CheckList
+                componentType="CHILD_TASK"
+                task={infoTask.data}
+                data={listChildTask}
+                totalRecord={totalRecordChildTask}
+                onSeeMore={nextPageListChildTask}
               />
             </div>
             <div className="px-5 mt-5">
               <PriceApprovalInfo
-                timeApproved={infoTask.data.timeApproved}
-                valueApproved={infoTask.data.valueApproved}
+                timeApproved={infoTask.data?.timeApproved}
+                valueApproved={infoTask.data?.valueApproved}
               />
             </div>
             <div className="px-5 my-5">
@@ -252,13 +279,24 @@ export const PcmDetailTask: FC = () => {
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
             <SideBar
-              author={infoTask.data.author}
-              assignee={infoTask.data.assignee}
-              createAt={infoTask.data.createAt}
-              related={infoTask.data.related}
+              author={infoTask.data?.author}
+              assignee={infoTask.data?.assignee}
+              createAt={infoTask.data?.createAt}
+              related={infoTask.data?.related}
               confirmUsers={confirmUsers}
             />
           </div>
+        </div>
+        {/*_____________task comment ______________*/}
+        <div className="flex bg-white mt-2" style={{ width: 1100 }}>
+          <CommentContainer className="w-[791px]" />
+          <ModalLarge
+            show={isShow}
+            className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+          >
+            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} taskID={id} refetch={refetch} />}
+            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
+          </ModalLarge>
         </div>
       </div>
     </>

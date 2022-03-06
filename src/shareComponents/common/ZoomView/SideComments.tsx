@@ -9,7 +9,7 @@ import ReplyCommentField, { SubmitComment } from './components/ReplyCommentField
 import RootCommentsList from './components/RootCommentsList';
 
 const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
-	const { state, createComment, data, currentComment, fetchPreviousPage } = usePost();
+	const { state, createComment, data, currentComment, fetchPreviousPage, fetchReplyComment } = usePost();
 
 	// Submit chat hiện đang hoạt động tại root comment (không truyền parentID)
 	const handleSubmitChat = async (props: SubmitComment) => {
@@ -68,7 +68,10 @@ const SideComments: FC<HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
 							? <button className="react__comments-header ml-4 mr-5 text-[15px] leading-4 pb-2 mb-1.5 font-bold" onClick={() => fetchPreviousPage()}>
 								<span>Xem {data.pages[0].data.totalRecord - currentComment} bình luận trước</span>
 							</button> : null}
-						<RootCommentsList className="px-5" smallImage />
+						<RootCommentsList
+							className="px-5"
+							smallImage
+						/>
 					</div>
 				</div>
 				{/* Footer */}

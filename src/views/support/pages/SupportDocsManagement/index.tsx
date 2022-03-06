@@ -1,10 +1,13 @@
-import { FC, useState } from "react";
+import React, { FC, useState, useCallback } from "react";
 import cn from "classnames";
+import debounce from "lodash/debounce";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
-import { Paginate, SearchInput } from "shareComponents/common";
-
-import { CreateNewMember } from "./components";
+import { SearchInput } from "shareComponents/common";
+import { ModalCreateMember, ModalConfirm } from "views/support/shareComponents/common";
+import { useAppUser } from 'services/hooks/apps/useAppUser';
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
@@ -14,25 +17,118 @@ import MemberIcon from "assets/images/member-icon.svg";
 import styles from "views/support/styles/support.module.css";
 
 export const SupportDocsManagementPage: FC = () => {
-  const [itemChecked, setItemChecked] = useState(false);
-  const { openModal } = useModal();
+  const LIMIT_PER_PAGE_USER_APP = 20;
+
+  const { appID, companyID, appName } = useParams<{ appID: string, companyID: string, appName: string }>();
+  const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+  const { openModal, closeModal } = useModal();
+
+  const { 
+    data: listUsersApp, 
+    fetchNextPage,
+    totalRecord,
+    hasNextPage,
+    refetch,
+    updateMemberAppUserAsync,
+    deleteMemberAppUserAsync
+  } = useAppUser({
+    appID, 
+    companyID, 
+    limit: LIMIT_PER_PAGE_USER_APP, 
+    keyword: ''
+  });
+
+  const onClickCheckButton = (id: string) => {
+		const check = idsChecked.includes(id);
+		if (check) {
+			const newList = [...idsChecked];
+			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			setIdsChecked(newList);
+		} else {
+			const newList = [...idsChecked];
+			newList.push(id);
+			setIdsChecked(newList);
+		};
+	};
+
+  const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
+
+  const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listUsersApp.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listUsersApp.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listUsersApp.map((e: any) => e._id);
+			setIdsChecked(idsAll);
+		}
+	};
+
+  const onChangeLevel = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [memberID, level] = event.target.value.split('__');
+    if(!memberID || !level) return;
+
+    const result = await updateMemberAppUserAsync({
+      appID,
+      companyID,
+      memberID,
+      level: +level
+    });
+
+    if(result.error) {
+        return toast.error(result?.message);
+    }
+  }
+
+  const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    toast.warn('Tính năng đang phát triển')
+    // const keyword = event.target.value;
+    // setParams(previousValue => ({ ...previousValue, keyword }));
+  }, 500);
+
+  const handleConfirmDelete = async (ids: string[]) => {
+    const result = await deleteMemberAppUserAsync(ids);
+
+    if(result.error) {
+        return toast.error(result?.data?.message);
+    }
+
+    closeModal();
+    refetch();
+    setIdsChecked([]);
+    toast.success('Xoá dữ liệu thành công');
+  }
 
   return (
     <main className="relative h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
-          <p className="text-lg">Quản lý hồ sơ văn bản</p>
+          <p className="text-lg">{appName}</p>
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            // eslint-disable-next-line no-console
-            onChange={(event) => console.log(event.target.value)}
+            onChange={onChangeSearch}
           />
-          {itemChecked && (
-            <div className="border-l-2 border-primary-border ml-5 pl-5">
+          {idsChecked.length ? (
+            <button
+              onClick={() =>
+                openModal(
+                  <div
+                    className={
+                      "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                    }
+                  >
+                    <ModalConfirm  onConfirm={() => handleConfirmDelete(idsChecked)} />
+                  </div>
+                )
+              }>
               <img src={DeleteIcon} alt="Delete" />
-            </div>
-          )}
+            </button>
+          ) : ''}
         </div>
         <div className="flex items-center">
           <button
@@ -44,7 +140,7 @@ export const SupportDocsManagementPage: FC = () => {
                     "inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
                   }
                 >
-                  <CreateNewMember />
+                  <ModalCreateMember appID={appID} companyID={companyID} />
                 </div>
               )
             }
@@ -65,9 +161,8 @@ export const SupportDocsManagementPage: FC = () => {
                 <input
                   className="form-check-input mr-2"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  defaultChecked
+                  checked={getStateCheckedAll()}
+                  onChange={onClickCheckAll}
                 />
                 <img src={PolygonIcon} alt="Polygon" />
               </div>
@@ -99,67 +194,81 @@ export const SupportDocsManagementPage: FC = () => {
         </thead>
 
         <tbody>
-          <tr className="border-b border-primary-border h-10">
-            <td className="p-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-                checked={itemChecked}
-                onClick={() => setItemChecked(!itemChecked)}
-              />
-            </td>
-            <td className="py-1 px-2 flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="rounded-full mr-2"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </td>
-            <td className="p-2">huongnpt@gmail.com</td>
-            <td className="p-2">
-              <input type="radio" defaultChecked />
-            </td>
-            <td className="p-2">
-              <input type="radio" />
-            </td>
-            <td className="p-2 text-negative">Xóa bỏ</td>
-          </tr>
-
-          <tr className="border-b border-primary-border h-10">
-            <td className="p-2 text-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-                style={{ marginLeft: "-23px" }}
-              />
-            </td>
-            <td className="py-1 px-2 flex items-center">
-              <img
-                src={MemberIcon}
-                alt="Member"
-                className="rounded-full mr-2"
-              />
-              <p>Nguyễn Phan Thanh Hương-CPMI</p>
-            </td>
-            <td className="p-2">huongnpt@gmail.com</td>
-            <td className="p-2">
-              <input type="radio" />
-            </td>
-            <td className="p-2">
-              <input type="radio" defaultChecked />
-            </td>
-            <td className="p-2 text-negative">Xóa bỏ</td>
-          </tr>
+          {listUsersApp.length ? listUsersApp.map(appUser => (
+            <tr key={appUser._id} className="border-b border-primary-border h-10">
+              <td className="p-2 text-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  style={{ marginLeft: "-23px" }}
+                  checked={getStateChecked(appUser._id)}
+                  onChange={() => onClickCheckButton(appUser._id)}
+                />
+              </td>
+              <td className="py-1 px-2 flex items-center">
+                <img
+                  src={appUser.user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${appUser.user?.image}` : MemberIcon}
+                  alt="Member"
+                  className="rounded-full mr-2 w-[40px] h-[40px] object-cover"
+                />
+                <p>{appUser.user?.bizfullname}</p>
+              </td>
+              <td className="p-2">{appUser.user?.email}</td>
+              <td className="p-2">
+                <input 
+                  type="radio" 
+                  name={`userAppLevel_${appUser._id}`} 
+                  value={`${appUser.user?._id}__0`}
+                  defaultChecked={appUser.level === 0}
+                  onChange={onChangeLevel}
+                />
+              </td>
+              <td className="p-2">
+                <input 
+                  type="radio" 
+                  name={`userAppLevel_${appUser._id}`} 
+                  value={`${appUser.user?._id}__1`}
+                  defaultChecked={appUser.level === 1}
+                  onChange={onChangeLevel}
+                />
+              </td>
+              <td className="p-2 text-negative">
+                <button
+                  onClick={() =>
+                    openModal(
+                      <div
+                        className={
+                          "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+                        }
+                      >
+                        <ModalConfirm  onConfirm={() => handleConfirmDelete([appUser._id])} />
+                      </div>
+                    )
+                  }>
+                  Xoá bỏ
+                </button>
+              </td>
+            </tr>
+          )) : <></>}
         </tbody>
       </table>
 
-      <Paginate />
+      {hasNextPage && (
+				<div className="w-full flex justify-center my-5">
+					<button onClick={fetchNextPage}>
+						<span className="text-primary">
+              {`Xem thêm (${totalRecord - listUsersApp.length})`}
+            </span>
+					</button>
+				</div>
+			)}
+
+      {/* <Paginate
+        totalPages={totalPages}
+        totalRecord={totalRecord}
+        hasNextPage={hasNextPage}
+        prevPageAction={fetchPreviousPage}
+        nextPageAction={fetchNextPage} /> */}
     </main>
   );
 };

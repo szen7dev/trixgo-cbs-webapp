@@ -1,16 +1,13 @@
 import { APIResponse } from "typings/apis/response";
 import { CommentProps } from "typings/common";
+import { User } from "typings/user";
 
 export type CommentDetail = {
   _id: string;
   content: string;
   files: FileProps[] | undefined;
   images: FileProps[] | undefined;
-  author?: {
-    _id: string;
-    image: string;
-    fullname: string;
-  };
+  author?: User;
   amountCommentReply: number;
   amountReaction: number;
   typeReactions?: number[];
@@ -25,8 +22,8 @@ export type CommentWithReply = Comment & {
 
 export type CommentBody = {
   mediaID: string; // *required
-  fileID: string; // *required
   content: string; // *required
+  fileID?: string; // *required
 
   parentID?: string;
   files?: string[];

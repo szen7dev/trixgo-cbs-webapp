@@ -28,7 +28,6 @@ export const MediaCategoryPage: FC<{ type: PostType }> = ({ type }) => {
 	}, [type])
 
 	if(isLoadingMedias) return <Loader className="border-primary" />;
-	console.log({ 'MEDIA_CATEGORY_PAGE': listMedias });
 
 	return (
 		<div className='overflow-auto'>
