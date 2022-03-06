@@ -22,6 +22,7 @@ module.exports = {
         ],
         safelist: [
             'aspect-ratio-1',
+						'cbs-clock',
             "cbs-schedule-yestoday",
             "cbs-schedule-today",
             "cbs-schedule-oneweek",
