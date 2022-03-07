@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
-import iconFolder from "assets/images/icons8-application-window-100.png";
+// import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink, useRouteMatch, generatePath } from 'react-router-dom';
 import { useAuth } from "services/hooks/useAuth";
 
@@ -9,13 +9,17 @@ type RouteItem = {
 	path: string,
 	name: string,
 	image: string,
-
 	exact?: boolean,
 	strict?: boolean,
 	isActive?(match: any, location: any): boolean
 }
 
 export const routes: Array<RouteItem> = [
+	{
+		path: '/pcm/project/:id/admin',
+		name: 'Quản trị viên',
+		image: '/images/pcm/admin.png',
+	},
 	{
 		path: '/pcm/project/:id/home',
 		name: 'Trang chủ',

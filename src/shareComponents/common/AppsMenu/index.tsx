@@ -9,12 +9,13 @@ import supportLogo from "assets/logos/support.png";
 // Logic 
 import API from "apis/repository";
 import { APP_INFO as AppInfo } from "./components";
-import { useGetListAppOfUser } from "services/hooks/useAuth";
+import { useGetListAppOfUser, useAuth } from "services/hooks/useAuth";
 
 export const APP_INFO = AppInfo;
 
 export const AppsMenu: FC = () => {
   const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (API.defaults.headers.Authorization) {
@@ -58,12 +59,16 @@ export const AppsMenu: FC = () => {
             ))
             }
           </div>
-          <div className="flex flex-wrap">
-              <Link key={50} to={'/support/home'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
-                <img src={supportLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
-                <span className="block">Support</span>
-              </Link>
-          </div>
+
+          {user && user?.email === "hiepnh@pgipartner.com" ?
+            <div className="flex flex-wrap">
+                <Link key={50} to={'/support/home'} className="w-1/3 pl-2 pr-2 mb-3 text-center leading-tight">
+                  <img src={supportLogo} alt="Filter" className="w-10 h-10 mb-1 ml-auto mr-auto" />
+                  <span className="block">Support</span>
+                </Link>
+            </div>: <></>
+          }
+          
         </Menu.Items>
       </Transition>
     </Menu>

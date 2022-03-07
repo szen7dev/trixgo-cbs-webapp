@@ -1,2 +1,2 @@
-export * from './DocumentLayout';
-export * from './PPTLayout';
+export { DocumentLayout as default } from "./DocumentLayout";
+export * from "./PPTLayout";

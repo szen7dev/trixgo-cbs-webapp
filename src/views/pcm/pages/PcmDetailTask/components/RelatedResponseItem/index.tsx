@@ -102,7 +102,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 						<span 
 							className="text-[13px]"
                             dangerouslySetInnerHTML={{
-                              __html: response.content?.length > 50 ? `${response.content?.substring(0, 50)}...` : response.content
+                              __html: response.content
                             }}>
 						</span>
 					</div>

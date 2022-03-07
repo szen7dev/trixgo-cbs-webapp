@@ -1,1 +1,1 @@
-export * from './AccountingLayout';
+export { AccountingLayout as default } from "./AccountingLayout";
