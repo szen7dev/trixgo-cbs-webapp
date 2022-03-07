@@ -23,7 +23,7 @@ import {
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     UpdateFolderPayload,
-    UpdateFolderResponse
+    UpdateFolderResponse, UpdateMuteConversationPayload, UpdateMuteConversationResponse
 } from "typings/apis/messages/listConversation";
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
@@ -36,7 +36,8 @@ const listFolder = "/api/chatting/conversations/list-folder";
 const createFolder = "/api/chatting/conversations/create-folder";
 const updateFolder = "/api/chatting/conversations/update-folder";
 const deleteFolder = "/api/chatting/conversations/delete-folder";
-const addConversationToFolder = "/api/chatting/conversations//update-conversation-to-folder";
+const addConversationToFolder = "/api/chatting/conversations/update-conversation-to-folder";
+const updateMuteConversation = "/api/chatting/conversations/update-mute-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -133,6 +134,15 @@ const ListConversationRepository = {
     async addConversationToFolder(payload: AddConversationToFolderPayload) : Promise<AddConversationToFolderResponse> {
         const {data} = await API.put(
             `${addConversationToFolder}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async updateMuteConversation(payload: UpdateMuteConversationPayload) : Promise<UpdateMuteConversationResponse> {
+        const {data} = await API.put(
+            `${updateMuteConversation}`,
             {...payload}
         )
 

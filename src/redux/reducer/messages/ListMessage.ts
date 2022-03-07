@@ -346,7 +346,7 @@ const listMessageSlice = createSlice({
 
         revokeMessageInConversation (state, action) {
             const newMessage = {...state.data.listMessage};
-            action.payload.messages.forEach((item: ItemMessage) => {
+            (action.payload.messages??[]).forEach((item: ItemMessage) => {
                 delete newMessage[item.conversation][item._id]
             });
 

@@ -10,7 +10,7 @@ import {
     ItemListConversation,
     ListConversationPayload, ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
-    MediasOfConversationPayload, UpdateFolderPayload
+    MediasOfConversationPayload, UpdateFolderPayload, UpdateMuteConversationPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setListConversation, setLoading} from "redux/reducer/messages/ListConversation";
@@ -109,6 +109,11 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         return new Promise<ItemListConversation>((resolve, reject) => {
             resolve(data);
         });
+    }
+
+    const updateMuteConversation = async (params: UpdateMuteConversationPayload) => {
+        const {data} = await ListConversationRepository.updateMuteConversation(params);
+        return data;
     }
 
     const {

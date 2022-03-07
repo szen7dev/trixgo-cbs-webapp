@@ -106,10 +106,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveRevokeMessage = (data: any) => {
         if (!data) return;
-        if (!data?.data?.error) {
-            dispatch(revokeMessageInConversation({messages: data?.data?.data}))
+        if (!data?.error) {
+            dispatch(revokeMessageInConversation({messages: data?.data}))
         } else {
-            toast.error(data?.data?.message);
+            toast.error(data?.message);
         }
     }
 
