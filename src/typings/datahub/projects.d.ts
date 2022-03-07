@@ -1,3 +1,5 @@
+import { DatahubArea } from "./area";
+
 type DatahubClient = {
   _id: string;
   field: number;
@@ -18,18 +20,6 @@ type DatahubClient = {
   modifyAt: DateString;
   createAt: DateString;
   createdAt: DateString;
-  __v: 0;
-};
-type DatahubArea = {
-  _id: string;
-  childs: string[];
-  level: number;
-  name: string;
-  sign: string;
-  parent: string;
-  modifyAt: DateString;
-  createAt: DateString;
-  userCreate: string;
   __v: 0;
 };
 

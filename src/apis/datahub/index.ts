@@ -15,11 +15,13 @@ import {
   DatahubTypesParams,
   DatahubTypesBody,
 } from "typings/datahub/datahubtypes";
-import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
 import {
   DatahubFinancial,
   DatahubFinancialBody,
 } from "typings/datahub/financial";
+import { DatahubContract, DatahubContractBody } from "typings/datahub/contract";
+import { DatahubProjects, DatahubProjectsBody } from "typings/datahub/projects";
+import { DatahubProfile, DatahubProfileBody } from "typings/datahub/profile";
 import { DatahubCompanies } from "typings/datahub/company";
 import { DatahubArea } from "typings/datahub/area";
 
@@ -123,6 +125,74 @@ const DatahubRepository = {
     );
     return data;
   },
+  // ==== Datahub Contract ====
+  async getDatahubContractList(
+    params: { contractorID: string } & DatahubPrams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubContract>>(
+      `${url}/datahub_packages`,
+      { params }
+    );
+    return data;
+  },
+  async getDatahubContract(
+    params: { contractorID: string; datahubPackageID: string } & DatahubPrams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubContract>>(
+      `${url}/datahub_packages`,
+      { params }
+    );
+    return data;
+  },
+  async createDatahubContract(body: DatahubContractBody) {
+    const { data } = await API.post<ResponseCreate<DatahubContract>>(
+      `${url}/datahub_packages`,
+      body
+    );
+    return data;
+  },
+  async updateDatahubContract(body: DatahubContractBody) {
+    const { data } = await API.put<ResponseCreate<DatahubContract>>(
+      `${url}/datahub_packages`,
+      body
+    );
+    return data;
+  },
+
+  // ==== Datahub Profiles ====
+  async getDatahubProfileList(
+    params: { company: string } & DatahubPrams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubProfile>>(
+      `${url}/datahub_profiles`,
+      { params }
+    );
+    return data;
+  },
+  async getDatahubProfile(
+    params: { datahubProfileID: string } & DatahubPrams
+  ) {
+    const { data } = await API.get<ResponseList<DatahubProfile>>(
+      `${url}/datahub_profiles`,
+      { params }
+    );
+    return data;
+  },
+  async createDatahubProfile(body: DatahubProfileBody) {
+    const { data } = await API.post<ResponseCreate<DatahubProfile>>(
+      `${url}/datahub_profiles`,
+      body
+    );
+    return data;
+  },
+  async updateDatahubProfile(body: DatahubProfileBody) {
+    const { data } = await API.put<ResponseCreate<DatahubProfile>>(
+      `${url}/datahub_profiles`,
+      body
+    );
+    return data;
+  },
+
   // ==== DatahubCompanies ====
   async companiesList(params?: DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubCompanies>>(

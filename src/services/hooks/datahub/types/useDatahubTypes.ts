@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
 import { DatahubTypesParams } from "typings/datahub/datahubtypes";
-import useQueryDatahub from "./useQueryDatahub";
+import useQueryDatahub from "../useQueryDatahub";
 
 type Props = DatahubTypesParams;
 type Options = {

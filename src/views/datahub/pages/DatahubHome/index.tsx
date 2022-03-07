@@ -15,7 +15,7 @@ import Wallethub from '../../sharedComponents/common/Wallethub';
 import SearchIcon from 'assets/icons/SearchIcon';
 
 // ======== AXIOS ========
-import useDatahubTypes from 'services/hooks/datahub/useDatahubTypes';
+import useDatahubTypes from 'services/hooks/datahub/types/useDatahubTypes';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
 	const { data } = useDatahubTypes({ level: 1, select: '_id name', limit: 10, type: 1 });

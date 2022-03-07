@@ -2,7 +2,7 @@
 import DatahubRepository from "apis/datahub";
 import { ResponseList, DatahubPrams } from "typings/datahub/api";
 import { DatahubFinancial } from "typings/datahub/financial";
-import useQueryDatahub from "./useQueryDatahub";
+import useQueryDatahub from "../useQueryDatahub";
 
 type Props = { contractorID: string } & DatahubPrams;
 type Options = {

@@ -5,7 +5,7 @@ import {
   DatahubProjects,
   DatahubProjectsParams,
 } from "typings/datahub/projects";
-import useQueryDatahub from "./useQueryDatahub";
+import useQueryDatahub from "../useQueryDatahub";
 
 type Props = DatahubProjectsParams;
 type Options = {
