@@ -1,25 +1,26 @@
-import React, { FC, Fragment, useRef, useState } from 'react'
-import { Form, Formik, FormikHelpers, FormikProps } from 'formik'
+import React, { FC, Fragment, useState } from 'react'
+import { Form, Formik, FormikHelpers } from 'formik'
 import { Dialog } from '@headlessui/react'
 
 import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/sharedComponents/common';
 import { string, object, number } from 'yup';
-import useUpdateDatahubType from 'services/hooks/datahub/useUpdateDatahubType';
-import useDatahubType from 'services/hooks/datahub/useDatahubType';
 import { useQueryClient } from 'react-query';
-import useCreateDatahubType from 'services/hooks/datahub/useCreateDatahubType';
 
 import { ResponseCreateSuccess } from 'typings/datahub/api';
-import { DatahubTypes } from 'typings/datahub/datahubtypes';
 
-const TYPES = [
+import { DatahubTypes } from 'typings/datahub/datahubtypes';
+import { useUpdateDatahubType, useDatahubType, useCreateDatahubType } from 'services/hooks/datahub';
+
+const POPULAR = [
 	{ name: 'Phổ biến', value: 1 },
 	{ name: 'Thông thường', value: 2 },
 ]
 
 type Props = {
 	type: 'create' | 'edit',
-	datahubID?: string
+	datahubID?: string,
+	datahubType: 1 | 2,
+	parent?: string,
 
 	toggle: () => void
 	onSuccessCreate?: (data: ResponseCreateSuccess<DatahubTypes>) => void
@@ -33,48 +34,41 @@ const DatahubTypesSchema = object().shape({
 		.min(2, 'Too Short!')
 		.max(50, 'Too Long!')
 		.required('Required'),
-	type: number().min(1).required('Required'),
+	popular: number().min(1).required('Required'),
 });
-
-type FormValues = {
-	description: string
-	name: string,
-	type: number
-}
 
 const ModalCreateType: FC<Props> = ({ ...props }) => {
 	const [initialValues, setInitialValues] = useState({
-		description: '', name: '', type: 0
+		description: '', name: '', popular: 0
 	})
 	const { updateDatahubType } = useUpdateDatahubType();
 	const { createDatahubType } = useCreateDatahubType({ onSuccess: props.onSuccessCreate });
-	const formikRef = useRef<FormikProps<FormValues>>(null);
 	const { isLoading } = useDatahubType(props.datahubID, {
 		onSuccess(data) {
 			if ('error' in data && !data.error) {
-				setInitialValues({ description: data.data.description, name: data.data.name, type: data.data.type })
+				setInitialValues({ description: data.data.description, name: data.data.name, popular: data.data.popular })
 			}
 		}
 	});
 
 	const queryClient = useQueryClient();
 
-	async function handleSubmit({ description, name, type }: FormValues, actions: FormikHelpers<FormValues>) {
-		if (!type) return;
+	async function handleSubmit({ description, name, popular }: typeof initialValues, actions: FormikHelpers<typeof initialValues>) {
+		if (!popular || !props.datahubType) return;
 
-		queryClient.removeQueries(['datahub_types']);
 		if (props.type === 'create') {
-			createDatahubType({ description, name, type, popular: 1 }, {
+			createDatahubType({ description, name, type: props.datahubType, popular, parent: props.parent }, {
 				onSuccess(data) {
 					if ('code' in data) {
 						data.data.forEach((d) => actions.setFieldError(d.field, d.message));
 					} else {
+						queryClient.removeQueries(['datahub_types']);
 						props.toggle();
 					}
 				}
 			});
 		} else if (props.type === 'edit') {
-			updateDatahubType({ datahubID: props.datahubID as string, description, name, type, popular: 1 }, {
+			updateDatahubType({ datahubID: props.datahubID as string, description, name, type: props.datahubType, popular, parent: props.parent }, {
 				onSuccess(data) {
 					if ('code' in data) {
 						data.data.forEach((d) => actions.setFieldError(d.field, d.message));
@@ -110,7 +104,6 @@ const ModalCreateType: FC<Props> = ({ ...props }) => {
 				initialValues={initialValues}
 				onSubmit={handleSubmit}
 				validationSchema={DatahubTypesSchema}
-				innerRef={formikRef}
 				enableReinitialize
 			>
 				{({ isSubmitting, isValid }) => (
@@ -122,11 +115,11 @@ const ModalCreateType: FC<Props> = ({ ...props }) => {
 								<CustomFieldFormik title='Mô tả' required name='description' />
 								<CustomAutoCompleteFormik
 									title='Tính chất phổ biến'
-									name='type'
+									name='popular'
 									required
 									valueAttribute='value'
-									data={TYPES}
-									initialData={TYPES.find(t => t.value === initialValues.type)?.name}
+									data={POPULAR}
+									initialData={POPULAR.find(t => t.value === initialValues.popular)?.name}
 								/>
 								<div className="py-0.5 h-[30px] box-content px-2">
 

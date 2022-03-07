@@ -40,27 +40,27 @@ export const HomeRightSideBar: FC = () => {
             className="w-6 h-6 mr-auto ml-auto rounded-full filter-blue"
           />
         </button>
-        <Link to={`/personal/notifications`} className="mt-4">
+        {/* <Link to={`/personal/notifications`} className="mt-4">
           <img
             className="w-6 h-6 object-contain"
             src={icon6}
             alt="Left side bar"
           />
-        </Link>
-        <Link to={`/pcm/mine`} className="mt-4">
+        </Link> */}
+        <Link to={`/pcm/home`} className="mt-4">
           <img
             className="w-6 h-6 object-contain"
             src={icon2}
             alt="Left side bar"
           />
         </Link>
-        <Link to={`/pcm/bookmark`} className="mt-4">
+        {/* <Link to={`/pcm/bookmark`} className="mt-4">
           <img
             className="w-6 h-6 object-contain"
             src={icon1}
             alt="Left side bar"
           />
-        </Link>
+        </Link> */}
         <div
           // to={`/personal/notes`}
           className="mt-4 cursor-pointer"
@@ -73,11 +73,11 @@ export const HomeRightSideBar: FC = () => {
             setOpenNotes(!openNotes)
           }
         >
-          <img
+          {/* <img
             className="w-6 h-6 object-contain"
             src={icon3}
             alt="Left side bar"
-          />
+          /> */}
         </div>
         {openNotes && (
           <Transition appear show={openNotes} as={Fragment}>

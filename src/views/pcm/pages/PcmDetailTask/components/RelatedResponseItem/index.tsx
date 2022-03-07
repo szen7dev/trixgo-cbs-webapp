@@ -20,12 +20,14 @@ import { ImageProps } from "typings/media";
 type Props = {
 	expanded?: boolean;
 	isHighlight?: boolean;
-	response: ResponseProps,
+	response: ResponseProps;
 	onClickImage?: (images: ImageProps[], index: number) => void;
-	divRef?: LegacyRef<HTMLDivElement> | undefined
+	divRef?: LegacyRef<HTMLDivElement> | undefined;
+	refetchListResponseMarked?: () => void;
+	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage }) => {
+export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -42,6 +44,14 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 			taskID: response.task._id,
 			official: e.target.checked
 		})
+
+		if(e.target.checked) {
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
+		} else{
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
+		}
+
+		refetchListResponseMarked && refetchListResponseMarked();
 	}
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
@@ -89,8 +99,11 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span className="text-small">
-							{response.content}
+						<span 
+							className="text-[13px]"
+                            dangerouslySetInnerHTML={{
+                              __html: response.content
+                            }}>
 						</span>
 					</div>
 

@@ -22,18 +22,19 @@ module.exports = {
         ],
         safelist: [
             'aspect-ratio-1',
-						"cbs-schedule-yestoday",
-						"cbs-schedule-today",
-						"cbs-schedule-oneweek",
-						"cbs-schedule-twoweek",
-						"cbs-schedule-threeweek",
-						"cbs-schedule-expired",
-						"cbs-schedule-nextweek",
-						"cbs-schedule-after-7days",
-						"rounded-cbs-sm",
-						"rounded-cbs",
-						"rounded-cbs-md",
-						"rounded-cbs-lg"
+						'cbs-clock',
+            "cbs-schedule-yestoday",
+            "cbs-schedule-today",
+            "cbs-schedule-oneweek",
+            "cbs-schedule-twoweek",
+            "cbs-schedule-threeweek",
+            "cbs-schedule-expired",
+            "cbs-schedule-nextweek",
+            "cbs-schedule-after-7days",
+            "rounded-cbs-sm",
+            "rounded-cbs",
+            "rounded-cbs-md",
+            "rounded-cbs-lg"
         ]
     },
     darkMode: "class", // or 'media' or false
@@ -46,10 +47,16 @@ module.exports = {
                 wiggle: {
                     '0%, 100%': { transform: 'scale(0)' },
                     '50%': { transform: 'scale(1.25)' },
+                },
+                "cbs-skeleton": {
+                    "100%": {
+                        transform: "translateX(100%)",
+                    }
                 }
             },
             animation: {
                 wiggle: 'wiggle 1s ease-in-out infinite',
+                "cbs-skeleton": "1.6s linear 0.5s infinite normal none running cbs-skeleton",
             },
             colors: {
                 transparent: "transparent",
@@ -100,7 +107,7 @@ module.exports = {
                 "cbs-pink": "#FDF3F5",
                 "cbs-green-bg": "#EBFAF2",
                 "cbs-indeterminate": "#F7AF22",
-								"cbs-form-input-bg": "#F4F4F5",
+                "cbs-form-input-bg": "#F4F4F5",
 
                 "cbs-purple": "#9B59B6",
                 "cbs-red": "#FF4242",

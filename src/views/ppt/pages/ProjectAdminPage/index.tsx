@@ -31,6 +31,16 @@ const ProjectAdminPage: FC = () => {
           >
             Phân quyền chức năng
           </button>
+          <button
+            className={
+              toggleTab === 3
+                ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full p-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(3)}
+          >
+            Dự án
+          </button>
         </div>
       </header>
 

@@ -11,7 +11,8 @@ type Props<T extends Record<string, any>> = {
 	valueAttribute?: string,
 
 	data: Array<T>
-	required?: boolean
+	required?: boolean;
+	server?: boolean;
 	error?: React.ComponentType<any>
 	initialData?: string,
 	placeholder?: string
@@ -33,6 +34,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	initialData = '',
 	onChange,
 	onScroll,
+	server = false,
 	...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
 	const [selected, setSelected] = useState<null | any>();
@@ -40,7 +42,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = React.useRef<HTMLDivElement | null>(null);
 
-	const dataFiltered = data.filter(d => d[attribute]?.toLowerCase().includes(search.toLowerCase()));
+	const dataFiltered = server ? data : data.filter(d => d[attribute]?.toLowerCase().includes(search.toLowerCase()));
 	useEffect(() => {
 		const handleClickOutSite = (e: Event) => {
 			if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -64,7 +66,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 			{({ field, form, meta }: FieldProps) => {
 				const handleSelect = (select: any) => {
 					setSelected(select);
-					setSearch(select[attribute]);
+					setSearch(renderValue ? renderValue(select) : select[attribute]);
 					setIsOpen(false);
 					form.setFieldValue(field.name, valueAttribute ? select[valueAttribute] : select);
 				}
@@ -90,6 +92,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 												form.setFieldValue(field.name, null);
 											}
 											setSearch(e.target.value);
+											setIsOpen(true);
 											onChange?.(e.target.value);
 										}}
 									/>
@@ -128,7 +131,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 															className={`block truncate ${selected ? 'font-medium' : 'font-normal'
 																}`}
 														>
-															{item[attribute]}
+															{renderValue ? renderValue(item) : item[attribute]}
 														</span>
 														{selected ? (
 															<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

@@ -120,12 +120,12 @@ export const Dashboard: FC = () => {
                 <Link to="/pcm/home">Việc đã giao</Link>
                 </p>
               </div>
-              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+              {/* <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{data?.data?.amountTaskIsDraft || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
                   <Link to="/pcm/home">Việc nháp</Link>
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -272,13 +272,13 @@ export const Dashboard: FC = () => {
       <div className="w-1/3 pl-2 pt-4 pb-4 pr-4">
         <div className="t-home-solution pt-1 pb-1 pl-3 pr-3 mb-4 flex items-center">
           <div className="t-home-solution-text text-[12px] text-primary-light">
-            <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề Quản lý giá</div>
-            <div className="t-home-solution-description">Giải quyết tất cả các vấn đề liên quan tới kiểm soát giá cho Chủ đầu tư</div>
+            <div className="text-[14px] font-bold">Giải pháp mới cho vấn đề quản lý Ngân sách/Giá các gói thầu xây dựng</div>
+            <div className="t-home-solution-description">Kiểm soát chi phí cho các gói thầu xây lắp của dự án đầu tư</div>
             <div className="t-home-solution-link">
-              <a href="/" className="flex items-center text-primary-light">
+              {/* <a href="/" className="flex items-center text-primary-light">
                 Xem ngay
                 <img className="w-4 h-4 pl-1 pr-1 object-contain rounded-full bg-primary-light ml-2" src={iconArrowRight} alt="Arrow" />
-              </a>
+              </a> */}
             </div>
           </div>
           <div className="t-home-solution-img">
@@ -326,12 +326,12 @@ export const Dashboard: FC = () => {
             <img src={iconNew} alt="New" />
             <div className="t-home-right-block-common-text">
               <div className="t-home-right-block-common-description">
-                <span>Trixgo ra mắt phiên bản mới v2.7.1</span>
+                <span>Trixgo ra mắt phiên bản mới v3.0.0</span>
                 <ul>
-                  <li>Nâng cấp hoàn toàn trải nghiệm mới trên nền tảng Web</li>
-                  <li>Đồng bộ hóa Mobile và Tablet app</li>
+                  <li>Giao diện đổi mới</li>
+                  <li>Đồng bộ hóa Mobile, Tablet và Web</li>
                   <li>Cải thiện tính năng</li>
-                  <li>Hoàn thiện các bug nhỏ</li>
+                  <li>Nâng cao trải nghiệm người dùng</li>
                 </ul>
               </div>
             </div>
@@ -350,19 +350,19 @@ export const Dashboard: FC = () => {
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "10%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">08 chủ đề, 425 workshop</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">08 chủ đề, 127 workshop</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "40%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành áp dụng thực tiễn qua nền tảng Trixgo</div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Thực hành triển khai trên nền tảng Trixgo</div>
               </div>
               <div className="mb-2 flex items-center">
                 <div className="t-home-training-progress-bar w-1/4">
                   <div style={{ width: "100%" }}></div>
                 </div>
-                <div className="w-3/4 whitespace-nowrap pl-3">Định kỳ Workshop chia sẻ kinh nghiệm </div>
+                <div className="w-3/4 whitespace-nowrap pl-3">Định kỳ workshop kinh nghiệm thực tế triển khai</div>
               </div>
             </div>
             {/* <button className="t-home-training-btn flex-grow-0 pl-5 pr-5 pt-3 pb-3 text-[14px] font-bold text-primary-light mb-5 rounded-md">Tham gia</button> */}
@@ -377,14 +377,14 @@ export const Dashboard: FC = () => {
             <img src={imgBusiness} alt="Business group" />
             <div className="t-home-operation-text">
               <div>
-                Chia sẻ kinh nghiệm quan trọng quyết định thành công việc chuyển đổi số của doanh nghiệp
+                Chia sẻ góc nhìn/vấn đề quyết định thành công chuyển đổi số của doanh nghiệp
               </div>
-              <Link className="flex items-center text-primary-gray" to="/media/home/3">
+              {/* <Link className="flex items-center text-primary-gray" to="/media/home/3">
                 Xem ngay
                 <span className="ml-2 rounded-full p-1 inline-block">
                   <img src={iconArrowRight} alt="Arrow" />
                 </span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ MarketDefault.prototype.options.icon = iconDefault;
 
 function Markers() {
 	const map = useMap();
-	const { data } = useDatahubProjects(['datahub_projects_maps', ""], {
+	const { data } = useDatahubProjects({
 		limit: 1000,
 		select: '_id name location note'
 	}, {

@@ -1,11 +1,11 @@
-import { FC, Fragment, useEffect, useState } from "react";
-import moment from "moment";
-import { useHistory } from "react-router";
-import { ButtonCreate, ButtonMore, GroupActions } from "shareComponents/common";
-import './styles/styles.css'
+import { FC, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { GroupActions } from "shareComponents/common";
+import './styles/styles.css';
 
 const ProjectInspectionDetailPage: FC = () => {
 	const history = useHistory();
+
 	useEffect(() => {
 		document.title = "CHG.THT-Nghiệm thu chất lượng"
 	}, []);

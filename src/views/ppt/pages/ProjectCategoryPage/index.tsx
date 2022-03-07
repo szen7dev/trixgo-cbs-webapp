@@ -18,7 +18,6 @@ import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 
 // Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
-import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import 'views/document/styles/document.css'

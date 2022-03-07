@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
 import { useQuery } from "react-query";
-import { ResponseCreate } from "typings/datahub/api";
+import { ResponseCreateSuccess } from "typings/datahub/api";
 import { DatahubTypes } from "typings/datahub/datahubtypes";
 
 type Options<T> = {
@@ -11,20 +11,23 @@ type Options<T> = {
 const useDatahubType = (
   datahubID?: string,
   options?: Options<
-    ResponseCreate<DatahubTypes<"_id" | "type" | "name" | "description">>
+    ResponseCreateSuccess<
+      DatahubTypes<"_id" | "type" | "name" | "description" | "popular">
+    >
   >
 ) => {
   return useQuery(
-    ["datahub_type"],
+    ["datahub_type", datahubID],
     () =>
-      DatahubRepository.getDatahubType<"_id" | "type" | "name" | "description">(
-        {
-          datahubID: datahubID || "",
-          select: "_id type name description",
-        }
-      ),
+      DatahubRepository.getDatahubType<
+        "_id" | "type" | "name" | "description" | "popular"
+      >({
+        datahubTypeID: datahubID || "",
+        select: "_id type name description popular",
+      }),
     {
       refetchOnWindowFocus: false,
+      retryOnMount: true,
       enabled: Boolean(datahubID), // https://react-query.tanstack.com/guides/disabling-queries
       onSuccess: options?.onSuccess,
     }

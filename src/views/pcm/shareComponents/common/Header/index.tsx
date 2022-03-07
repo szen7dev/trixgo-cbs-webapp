@@ -17,28 +17,28 @@ export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
       id: 1,
       title: "Việc của tôi",
     },
-    {
-      id: 2,
-      title: "Phê duyệt của tôi",
-    },
-    {
-      id: 3,
-      title: "Yêu cầu thông tin",
-    },
-    {
-      id: 4,
-      title: "Việc quan tâm",
-    },
-    {
-      id: 5,
-      title: "Báo cáo",
-    },
+    // {
+    //   id: 2,
+    //   title: "Phê duyệt của tôi",
+    // },
+    // {
+    //   id: 3,
+    //   title: "Yêu cầu thông tin",
+    // },
+    // {
+    //   id: 4,
+    //   title: "Việc quan tâm",
+    // },
+    // {
+    //   id: 5,
+    //   title: "Báo cáo",
+    // },
   ];
 
   const onClickTab = useCallback(tabID => setCurrentTab(tabID), []);
 
   return (
-    <div className="flex justify-between border-b items-end">
+    <div className="flex justify-between border-b items-end py-2">
       <div className="flex ml-2">
         {tabs.map((tab) => (
           <button key={tab.id} onClick={() => onClickTab(tab.id)}>
@@ -54,7 +54,7 @@ export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
           </button>
         ))}
       </div>
-      <div className="flex space-x-5 items-center mr-3 py-2">
+      <div className="flex space-x-5 items-center mr-3 py-2 hidden">
         <span className="text-primary-gray">|</span>
         <div className={cn("flex items-center h-full rounded-lg px-1")}>
           <button

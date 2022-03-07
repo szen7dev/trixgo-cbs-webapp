@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
 import uploadFileTypes from "./upload.types";
 
-import { ISTATE, TReducer } from "./upload.d";
+import { ISTATE, TReducer } from "./upload";
 
 export const INITIAL_STATE: ISTATE = {
   files: {
