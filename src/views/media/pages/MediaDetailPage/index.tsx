@@ -307,7 +307,7 @@ export const MediaDetailPage: FC = () => {
 							</div>
 							<p
 								dangerouslySetInnerHTML={{
-									__html: media.content
+									__html: nl2p(media.content)
 								}}>
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
