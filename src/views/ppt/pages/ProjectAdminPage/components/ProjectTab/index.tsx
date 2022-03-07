@@ -13,42 +13,32 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { CreateProject, Update, Delete } from "../../modal";
+import { CreateProject } from "../../modal";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
-import { APP_ID } from "apis/localdb";
 import moment from "moment";
 
 const ProjectTab: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin, refetchPcmAdmin } = usePcmProject({ appID: APP_ID.PCM.id, keyword: keyword });
+	const { listPcmProject, totalRecord, nextPagePcmProject, hasNextPagePcmProject, refetchPcmProject } = usePcmProject({ keyword: keyword });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
 
 	const onClickCheckButton = (id: string) => {
-		const check = idsChecked.includes(id);
-		if (check) {
-			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
-			setIdsChecked(newList);
-		} else {
-			const newList = [...idsChecked];
-			newList.push(id);
-			setIdsChecked(newList);
-		};
+		setIdsChecked([id]);
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listPcmAdmin.length;
+		return idsChecked.length == listPcmProject.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listPcmAdmin.length) {
+		if (idsChecked.length == listPcmProject.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listPcmAdmin.map(e => e._id);
+			const idsAll = listPcmProject.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -56,15 +46,8 @@ const ProjectTab: FC = () => {
 	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
 	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
 
-	const initialValues = {
-		name: "",
-		sign: "",
-		taxid: "",
-		address: "",
-		area: ""
-	}
-
-	const onConfirmCreateProject = () => refetchPcmAdmin();
+	const [initialValues, setInitialValues] = useState(null);
+	const onConfirmCreateProject = () => refetchPcmProject();
 
 	return (
 		<main className="h-full">
@@ -86,46 +69,33 @@ const ProjectTab: FC = () => {
 								<img src={DownloadIcon} alt="Download" />
 							</div>
 							{idsChecked.length == 1 ?
+								<>
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() =>
-										openModal(
-											<div
-												className={
-													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-												}
-											>
-												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
-											</div>
-										)
-									}
+									onClick={() => {
+										const item = listPcmProject.find((e: any) => e._id == idsChecked[0]);
+										setInitialValues({
+											...item,
+											startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
+											expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
+										});
+										toggleModalCreateProject();
+									}}
 								>
 									<img src={PencilIcon} alt="Pencil" />
-								</div> : <></>
+								</div>
+							</> : <></>
 							}
-							<div
-								className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-								onClick={() =>
-									openModal(
-										<div
-											className={
-												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-											}
-										>
-											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
-										</div>
-									)
-								}
-							>
-								<img src={TrashIcon} alt="Trash" />
-							</div>
 						</div>
 					) : <></>}
 				</div>
 				<div className="flex items-center">
 					<button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
-						onClick={toggleModalCreateProject}
+						onClick={() => {
+							setInitialValues(null);
+							toggleModalCreateProject();
+						}}
 					>
 						Tạo mới
 					</button>
@@ -151,25 +121,59 @@ const ProjectTab: FC = () => {
 								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1">
+						<th className="pb-1 pt-1 w-[250px]">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Nội dung
+								Tên
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
+						<th className="pb-1 pt-1 font-normal w-[150px]">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Người tạo
+								Phân loại
 							</div>
 						</th>
-						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Cập nhật lần cuối</div>
+						<th className="pb-1 pt-1 font-normal w-[150px]">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Mã hiệu
+							</div>
 						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Ngày bắt đầu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Ngày kết thúc
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Tổng số mốc
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Số mốc hoàn thành
+							</div>
+						</th>
+
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Giai đoạn
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Thành viên
+							</div>
+						</th>
+
 					</tr>
 				</thead>
 
-				{listPcmAdmin && listPcmAdmin.length ?
+				{listPcmProject && listPcmProject.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmAdmin.map((item, index) => (
+						{listPcmProject.map((item: any, index: string) => (
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -182,7 +186,7 @@ const ProjectTab: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/admin/${item._id}/detail`}>
+									<Link to={`/pcm/admin/${item._id}/project`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
@@ -190,10 +194,28 @@ const ProjectTab: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item.userCreate?.bizfullname}
+									{item.type}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item.userUpdate?.bizfullname}
+									{item.sign}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.startTime ? moment(item.startTime).format('DD/MM/YYYY') : ''}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.expiredTime ? moment(item.expiredTime).format('DD/MM/YYYY') : ''}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.milestones}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.completedMilestones}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									Đang triển khai
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.members ? item.members.length : ""}
 								</td>
 							</tr>
 						))
@@ -202,10 +224,10 @@ const ProjectTab: FC = () => {
 				}
 
 			</table>
-			{hasNextPagePcmAdmin && (
+			{hasNextPagePcmProject && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPagePcmAdmin()}>
-						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmAdmin.length
+					<button onClick={() => nextPagePcmProject()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmProject.length
 							})`}</span>
 					</button>
 				</div>
@@ -214,10 +236,10 @@ const ProjectTab: FC = () => {
 			<ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
 				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
 					<CreateProject
-						modalType="create"
+						modalType={initialValues ? "update" : "create"}
 						show={modalCreateProject}
 						toggle={toggleModalCreateProject}
-						initialValues={initialValues}
+						initialValues={initialValues ? initialValues : undefined}
 						onConfirm={onConfirmCreateProject}
 					/>
 				</div>

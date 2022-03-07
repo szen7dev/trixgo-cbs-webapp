@@ -23,27 +23,47 @@ async function fetchListDepartment(params: any) {
 async function fetchDetailDepartment(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
-            params: {
-                select: 'name sign description contracts company admins',
-                populates: {
-                    path: 'company',
-                    select: '_id name sign',
-                },
-                ...params,
-            }
+        params: {
+            select: 'name sign description contracts company admins',
+            populates: {
+                path: 'company',
+                select: '_id name sign',
+            },
+            ...params,
         }
+    }
     )
     return data;
 }
 
+async function insertDepartments(payload: any) {
+    const { data } = await API.post<any>(
+        `${ITEM_URL}/departments`,
+        payload
+    );
+    return data;
+};
+
+async function updateDepartments(payload: any) {
+    const { data } = await API.put<any>(
+        `${ITEM_URL}/departments`,
+        payload
+    );
+    return data;
+};
+
 interface DepartmentRepository {
-    fetchListDepartment: (params: Department.DepartmentPayload) =>
-        Promise<Department.DepartmentResponse>;
+    fetchListDepartment: (params: any) =>
+        Promise<any>;
     fetchDetailDepartment: (data: Department.DepartmentDetailPayload) => Promise<Department.DepartmentDetailResponse>,
+    insertDepartments: (data: any) => Promise<any>,
+    updateDepartments: (data: any) => Promise<any>,
 }
 
 export const departmentRepository: DepartmentRepository = {
     fetchListDepartment: async (params) =>
         fetchListDepartment(params),
     fetchDetailDepartment: async (data) => fetchDetailDepartment(data),
+    insertDepartments: async (payload) => insertDepartments(payload),
+    updateDepartments: async (payload) => updateDepartments(payload),
 }

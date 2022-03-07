@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { AuthorTab, AdminDetail, FunctionalTab, ProjectTab } from "views/ppt/pages/ProjectAdminPage/components";
+import { AuthorTab, AdminDetail, FunctionalTab, ProjectTab, ProjectDetail } from "views/ppt/pages/ProjectAdminPage/components";
 import { useParams } from "react-router-dom";
 type Props = {
   toggleTab: number;
@@ -23,7 +23,9 @@ const AppAdminTab: FC<Props> = (props) => {
       </div>
 
       <div className={toggleTab === 3 ? "block" : "hidden"}>
-        <ProjectTab />
+        {id ? <ProjectDetail /> :
+          <ProjectTab />
+        }
       </div>
     </section>
   );

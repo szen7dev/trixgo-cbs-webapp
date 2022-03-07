@@ -113,6 +113,9 @@ const PCMRouter: FC = () => {
                     <Switch>
                         <Route exact path="/pcm/admin" component={ProjectAdminPage} />
                         <Route exact path="/pcm/admin/:id/detail" component={ProjectAdminPage} />
+                        <Route exact path="/pcm/admin/:id/project" component={ProjectAdminPage} />
+                        <Route exact path="/pcm/admin/project" component={ProjectAdminPage} />
+                        
                     </Switch>
                 </HomeLayout>
             </ProtectedRoute>
