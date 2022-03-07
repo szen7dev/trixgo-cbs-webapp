@@ -1,6 +1,6 @@
 import { APIResponse } from "typings/apis/response";
-import { CommentProps } from "typings/common";
-import { User } from "typings/user";
+import type { CommentProps, FileProps } from "typings/common";
+import type { User } from "typings/user";
 
 export type CommentDetail = {
   _id: string;

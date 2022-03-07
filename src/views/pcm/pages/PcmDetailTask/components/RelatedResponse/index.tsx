@@ -2,7 +2,7 @@
  * Libraries
  */
 import { FC, useState, useContext, useEffect, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import { toArray } from "lodash";
@@ -10,8 +10,8 @@ import { toArray } from "lodash";
 /**
  * Context
  */
-import CommentProvider from 'views/pcm/context/response/comment.provider';
-import CommentContext from 'views/pcm/context/response/comment.context';
+import CommentProvider from 'views/pcm/contexts/response/comment.provider';
+import CommentContext from 'views/pcm/contexts/response/comment.context';
 
 /**
  * Assets
@@ -28,7 +28,7 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
-import { APP_TYPE, APP_KEY } from "utils/constants";
+import { APP_KEY } from "utils/constants";
 
 /**
  * Typings, apis
@@ -320,7 +320,7 @@ const Response: FC<Props> = ({ task }) => {
   const handleSkip = () => {
     queue.abord();
     removeAllFiles();
-    setVisibleForm(true);
+    setVisibleForm(false);
   }
 
   const onClickTabAll = () => {

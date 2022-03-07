@@ -1,6 +1,6 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
-import { Company } from "typings/common";
+import type { Company, FileProps } from "typings/common";
 
 export type ListTaskPayload = {
   lastestID?: string;
@@ -248,4 +248,61 @@ export type SearchResponsePayload = {
   commentID: string;
   select?: string;
   populates?: string;
+};
+
+/**
+ * ============================ ****************** ===============================
+ * ============================ 	 BÌNH LUẬN PCM   ===============================
+ * ============================ ****************** ===============================
+ */
+
+export type Comment = CommentProps;
+
+export type ListCommentsPayload = {
+  lastestID?: string;
+  type?: number;
+  limit?: number;
+  taskID?: string;
+  companyID?: string;
+  parentID?: string;
+  select?: string;
+  populates?: string;
+};
+
+export type CommentPayload = {
+  taskID: string;
+  commentID?: string;
+  parentID?: string;
+  type: number;
+  content: string;
+  files?: string[];
+  images?: string[];
+};
+
+export type CommentProps = {
+  _id: string;
+  task: {
+    _id: string;
+    name: string;
+    author: User;
+    createAt: string
+  };
+  type: number;
+  content: string,
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
+  author: User,
+  amountCommentReply: number,
+  amountReaction: number,
+  parent: string;
+  createAt: string,
+  lastestReplyID: CommentProps;
+}
+
+export type CommentResponse = APIResponse & {
+  data: {
+    data: CommentProps;
+    message: string;
+    error: boolean;
+  };
 };
