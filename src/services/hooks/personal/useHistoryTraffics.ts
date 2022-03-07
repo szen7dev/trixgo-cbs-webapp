@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import AnalysisRepository from "apis/history-traffics";
+import AnalysisRepository from "apis/personal/history";
 type UseHistoryTraffics = {
     listHistoryTraffics: Array<any>,
     totalRecord: number | undefined,
