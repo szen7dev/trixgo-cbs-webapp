@@ -34,10 +34,10 @@ export const PersonalLeftSideBar: FC = () => {
               <div className="t-link-menu-container">
                   <NavLink to={`/personal/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                      <span className="truncate">Trang chủ</span>
+                      <span className="truncate">Cài đặt tài khoản</span>
                   </NavLink>
               </div>
-              <div className="t-link-menu-container">
+              {/* <div className="t-link-menu-container">
                   <NavLink to={`/personal/friends`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Quản lý bạn bè</span>
@@ -55,6 +55,24 @@ export const PersonalLeftSideBar: FC = () => {
                       <span className="truncate">Quản lý hóa đơn</span>
                   </NavLink>
               </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/notes`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Quản lý ghi chú</span>
+                  </NavLink>
+              </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/config`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Quản lý dữ liệu</span>
+                  </NavLink>
+              </div>
+              <div className="t-link-menu-container">
+                  <NavLink to={`/personal/histories`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Lịch sử truy cập</span>
+                  </NavLink>
+              </div> */}
           </div>
       </div>
   );

@@ -9,7 +9,7 @@ import styles from "views/human/styles/style.module.css";
 
 /*=====5.TYPINGS=====*/
 /*=====6.HOOKS/APIS=====*/
-import { useNotification } from 'services/hooks/useNotification';
+import { useNotification } from 'services/hooks/personal/useNotification';
 /*=====7.OTHER=====*/
 import FakeUser from "assets/images/fake-user.png";
 

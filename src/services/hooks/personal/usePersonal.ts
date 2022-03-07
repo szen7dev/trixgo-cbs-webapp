@@ -1,6 +1,6 @@
 import { User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, AcceptRequestFriend, RemoveRequestFriend } from "typings/user";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { PersonalRepository } from "apis/personal";
+import { PersonalRepository } from "apis/personal/personal";
 import { toast } from "react-toastify";
 
 type UseUser = {
