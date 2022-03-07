@@ -1,109 +1,87 @@
 /**
  * Libraries
  */
-import { UIEvent, FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toast } from 'react-toastify';
-import debounce from 'lodash/debounce';
+import moment from 'moment';
 /**
  * Types, Services
  */
-import { ModalProps } from 'typings/items/area';
-import { CompanyPayload } from 'typings/companies';
-import { useAuth } from 'services/hooks/useAuth';
-import { useArea } from "services/hooks/items/useArea";
-import { useCompany } from 'services/hooks/useCompanies';
 
-const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialValues = {
-    companyID: "",
+import "react-datepicker/dist/react-datepicker.css";
+import { CustomDatePickerFormik } from 'views/datahub/sharedComponents/common';
+import { usePcmProject } from 'services/hooks/pcm/usePcmProject';
+
+const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
+    type: "",
     name: "",
     sign: "",
-    taxid: "",
-    address: "",
-    area: ""
+    startTime: "",
+    expiredTime: "",
+    milestones: "",
+    completedMilestones: ""
 } }) => {
-    const { user } = useAuth();
-    const [keywordArea, setKeywordArea] = useState('');
-    const { listAreas, nextPageList } = useArea({
-        params: {
-            keyword: keywordArea
-        },
-        isFetchAreas: true
-    });
-    const [dataAreas, setDataAreas] = useState(listAreas);
-    const { createCompanyAsync, updateCompanyAsync } = useCompany();
-
-    useEffect(() => {
-        setDataAreas(listAreas);
-    }, [listAreas.length])
+    const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
 
     const companySchema = object().shape({
-        name: string().required("Bạn cần nhập tên cho công ty"),
-        sign: string().required("Bạn cần nhập mã hiệu cho công ty"),
-        taxid: string().required("Bạn cần nhập mã số thuế của công ty"),
-        address: string().required("Bạn cần nhập địa chỉ của công ty"),
-        area: string().required("Bạn cần chọn khu vực của công ty"),
+        type: string().required("Bạn cần nhập loại cho dự án"),
+        name: string().required("Bạn cần nhập tên cho dự án"),
+        sign: string().required("Bạn cần nhập mã hiệu cho dự án"),
+        startTime: string().required("Bạn cần nhập ngày bắt đầu cho dự án"),
+        expiredTime: string().required("Bạn cần nhập ngày kết thúc cho dự án"),
+        milestones: string().required("Bạn cần nhập tổng số mốc cho dự án"),
+        completedMilestones: string().required("Bạn cần nhập số mốc hoàn thành cho dự án"),
     });
 
-    const handleSubmit = async (values: CompanyPayload) => {
-        try {
-            // Handle api here!
-            switch (modalType) {
-                case 'create': {
-                    // Tạo công ty
-                    const { error, message } = await createCompanyAsync(values);
-
-                    if (error) {
-                        return toast.warning(message);
-                    }
-
-                    toast.success('Tạo công ty thành công');
-                    break;
-                }
-                case 'update': {
-                    values.companyID = user?.company?._id;
-
-                    // Cập nhật công ty
-                    const { error, message } = await updateCompanyAsync(values);
-                    if (error) {
-                        return toast.warning(message);
-                    }
-
-                    toast.success('Cập nhật công ty thành công');
-                    break;
-                }
-                default:
-                    break;
-            }
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+    const handleSubmit = async (values: any) => {
+        if (!["1", "2"].includes(values.type)) {
+            toast.error("Phân loại chỉ có giá trị 1 hoặc 2. Vui lòng nhập lại.");
+            return;
         }
+        
+        if (modalType == 'create') {
+            const query = {
+                ...values,
+                type: parseInt(values.type),
+                milestones: parseInt(values.milestones),
+                completedMilestones: parseInt(values.completedMilestones),
+                startTime: moment(values.startTime).format('YYYY-MM-DD'),
+                expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
+            };
+           
+            const result = await createProjectMutateAsync(query);
+            if (!result.error) {
+                refetchPcmProject();
+                toggle();
+                toast.success('Tạo mới dữ liệu thành công');
+            } else {
+                toast.error(result?.data?.message);
+            }
+        };
 
-        onConfirm && onConfirm();
-        toggle();
-        return [values];
+        if (modalType == 'update') {
+            const query = {
+                ...values,
+                type: parseInt(values.type),
+                departmentID: values._id,
+                milestones: parseInt(values.milestones),
+                completedMilestones: parseInt(values.completedMilestones),
+                startTime: moment(values.startTime).format('YYYY-MM-DD'),
+                expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
+            };
+            const result = await updateProjectMutateAsync(query);
+            if (!result.error) {
+                refetchPcmProject();
+                toggle();
+                toast.success('Cập nhật dữ liệu thành công');
+            } else {
+                toast.error(result?.data?.message);
+            }
+        };
     };
-
-    const handleScroll = (e: UIEvent<HTMLDivElement>) => {
-        const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
-        const bottom = scrollHeight - scrollTop === clientHeight;
-
-        if (bottom) {
-            nextPageList();
-            setDataAreas(previousValue => ({ ...previousValue, ...listAreas }));
-        }
-    }
-
-    const handleSearchArea = debounce((value) => {
-        setKeywordArea(value);
-        // setDataAreas(listAreas);
-    }, 500);
 
     return (
         <Formik
@@ -121,7 +99,7 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                     as="h3"
                                     className="text-lg leading-6 font-bold"
                                 >
-                                    Tạo mới/Cập nhật
+                                    {modalType == 'create' ? 'Tạo mới' : 'Cập nhật'}
                                 </Dialog.Title>
                                 <button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -130,6 +108,17 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                 </button>
                             </div>
                             <div className="px-6 mt-2 pt-3.5 flex-1 flex flex-col">
+                            <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCompanyName">
+                                        Loại
+                                    </label>
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtCompanyName" placeholder="(1 là phòng ban, 2 là dự án)" {...getFieldProps('type')} />
+                                    <ErrorMessage
+                                        name="type"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtCompanyName">
                                         Tên
@@ -156,9 +145,13 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtTaxID">
                                         Ngày bắt đầu
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtTaxID" placeholder="Nhập mã số thuế" {...getFieldProps('taxid')} />
+                                    <CustomDatePickerFormik
+                                        name='startTime'
+                                        placeholder={'Nhập ngày bắt đầu'}
+                                        required
+                                    />
                                     <ErrorMessage
-                                        name="taxid"
+                                        name="startTime"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -167,9 +160,13 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtAddress">
                                         Ngày kết thúc
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập địa chỉ" {...getFieldProps('address')} />
+                                    <CustomDatePickerFormik
+                                        name='expiredTime'
+                                        placeholder={'Nhập ngày kết thúc'}
+                                        required
+                                    />
                                     <ErrorMessage
-                                        name="address"
+                                        name="expiredTime"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -179,9 +176,9 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtAddress">
                                         Tổng số mốc
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập địa chỉ" {...getFieldProps('address')} />
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập tổng số mốc" {...getFieldProps('milestones')} />
                                     <ErrorMessage
-                                        name="address"
+                                        name="milestones"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
@@ -191,9 +188,9 @@ const CreateProject: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialVa
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtAddress">
                                         Số mốc hoàn thành
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập địa chỉ" {...getFieldProps('address')} />
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập số mốc hoàn thành" {...getFieldProps('completedMilestones')} />
                                     <ErrorMessage
-                                        name="address"
+                                        name="completedMilestones"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
