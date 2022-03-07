@@ -2,14 +2,17 @@ import { FC } from "react";
 import moment from "moment";
 
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
-import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
+import { ModalAddRelationUser } from "views/pcm/pages/PcmDetailTask/components";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import useModal from "views/pcm/hooks/useModal";
 
 import type { Author, Assignee } from "typings/task";
 import type { User } from "typings/user";
 
 type Props = {
+  taskID: string;
   author: Author;
   assignee: Assignee;
   createAt: string;
@@ -18,12 +21,15 @@ type Props = {
 };
 
 export const SideBar: FC<Props> = ({
+  taskID,
   author,
   assignee,
   createAt,
   related,
   confirmUsers,
 }) => {
+  const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation  }] = useModal();
+
   return (
     <div>
       <div>
@@ -78,7 +84,7 @@ export const SideBar: FC<Props> = ({
           <span className="font-bold text-[13px] leading-4">
             Người liên quan
           </span>
-          <button>
+          <button onClick={openListUserRelation}>
             <span className="text-primary text-[13px] leading-4">
               Xem tất cả
             </span>
@@ -219,6 +225,18 @@ export const SideBar: FC<Props> = ({
         </div>
       </div> */}
 
+      <ModalLarge
+        show={isShow}
+        toggle={toggleModal}
+        className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+      >
+          <ModalAddRelationUser 
+            toggle={toggleModal} 
+            taskID={taskID} 
+            related={related}
+            modalType={'LIST_ALL_RELATION_USER'}
+          />
+      </ModalLarge>
     </div>
   );
 };

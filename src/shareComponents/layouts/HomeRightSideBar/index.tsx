@@ -5,15 +5,15 @@ import { Dialog, Transition } from "@headlessui/react";
 
 import { useModal } from "services/hooks/useModal";
 
-// import AddNewTaskDialog from "components/common/add-new-task-dialog";
+import { ModalAddNewTask } from "shareComponents/common";
 // import PersonalNotePage from "views/pages/personal/note/PersonalNotePage";
 
-import icon1 from "assets/images/icons8-star-96.png";
+// import icon1 from "assets/images/icons8-star-96.png";
 import icon2 from "assets/images/icons8-inbox-100.png";
-import icon3 from "assets/images/icons8-note-100.png";
-import icon4 from "assets/images/icons8-user-manual-64.png";
-import icon5 from "assets/images/icons8-bill-96.png";
-import icon6 from "assets/images/icons8-calendar-128.png";
+// import icon3 from "assets/images/icons8-note-100.png";
+// import icon4 from "assets/images/icons8-user-manual-64.png";
+// import icon5 from "assets/images/icons8-bill-96.png";
+// import icon6 from "assets/images/icons8-calendar-128.png";
 import iconPlus from "assets/images/icons8-plus-math-24.png";
 import {ChatsOnRightSideBar} from "shareComponents/common";
 
@@ -28,7 +28,7 @@ export const HomeRightSideBar: FC = () => {
           onClick={() =>
             openModal(
               <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                {/* <AddNewTaskDialog /> */}
+                <ModalAddNewTask />
               </div>
             )
           }

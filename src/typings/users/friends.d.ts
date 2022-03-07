@@ -31,6 +31,7 @@ export interface Friend {
 
 export interface ListFriendPayload extends QueryParam {
     select?: string;
+    isFetch?: boolean
 }
 interface QueryFriendResponse extends APIResponse {
     data: {

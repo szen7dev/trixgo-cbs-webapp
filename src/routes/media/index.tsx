@@ -5,6 +5,10 @@ import { Route, Switch } from "react-router-dom";
 /*=====LAYOUTS=====*/
 import { SocialLayoutPrimary } from "views/media/shareComponents/layouts";
 
+/*=====CONTEXTS=====*/
+import { ProviderModalPost } from "views/media/contexts/post";
+import CommentProvider from 'views/media/contexts/comment/comment.provider';
+
 /*=====PAGES=====*/
 import {
     MediaCategoryPage,
@@ -17,64 +21,68 @@ import ErrorPage from "views/authentication/Error";
 
 const MediaRouter: FC = () => {
     return (
-        <Switch>
-            <Route
-                exact
-                path="/media/home"
-                component={() =>
-                    <SocialLayoutPrimary>
-                        <MediaHomePage />
-                    </SocialLayoutPrimary>
-                }
-            />
-            <Route
-                exact
-                path="/media/home/2"
-                component={() =>
-                    <SocialLayoutPrimary>
-                        <MediaCategoryPage type="department" />
-                    </SocialLayoutPrimary>
-                }
-            />
-            <Route
-                exact
-                path="/media/home/3"
-                component={() =>
-                    <SocialLayoutPrimary>
-                        <MediaCategoryPage type="digital-conversion" />
-                    </SocialLayoutPrimary>
-                }
-            />
-            <Route
-                exact
-                path="/media/home/4"
-                component={() =>
-                    <SocialLayoutPrimary>
-                        <MediaCategoryPage type="system" />
-                    </SocialLayoutPrimary>
-                }
-            />
-            <Route
-                exact
-                path="/media/home/5"
-                component={() =>
-                    <SocialLayoutPrimary>
-                        <MediaCategoryPage type="just-me" />
-                    </SocialLayoutPrimary>
-                }
-            />
-            <Route
-                exact
-                path="/media/post/:mediaID"
-                component={MediaDetailPage}
-            />
-            <Route
-                exact
-                path="/media/comments"
-                component={MediaCommentsPage}
-            />
-            <Route path="/media/*" component={ErrorPage} />
-        </Switch>
+        <ProviderModalPost>
+			<CommentProvider>
+                <Switch>
+                    <Route
+                        exact
+                        path="/media/home"
+                        component={() =>
+                            <SocialLayoutPrimary>
+                                <MediaHomePage />
+                            </SocialLayoutPrimary>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/media/home/2"
+                        component={() =>
+                            <SocialLayoutPrimary>
+                                <MediaCategoryPage type="department" />
+                            </SocialLayoutPrimary>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/media/home/3"
+                        component={() =>
+                            <SocialLayoutPrimary>
+                                <MediaCategoryPage type="digital-conversion" />
+                            </SocialLayoutPrimary>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/media/home/4"
+                        component={() =>
+                            <SocialLayoutPrimary>
+                                <MediaCategoryPage type="system" />
+                            </SocialLayoutPrimary>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/media/home/5"
+                        component={() =>
+                            <SocialLayoutPrimary>
+                                <MediaCategoryPage type="just-me" />
+                            </SocialLayoutPrimary>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/media/post/:mediaID"
+                        component={MediaDetailPage}
+                    />
+                    <Route
+                        exact
+                        path="/media/:mediaID/comments"
+                        component={MediaCommentsPage}
+                    />
+                    <Route path="/media/*" component={ErrorPage} />
+                </Switch>
+			</CommentProvider>
+		</ProviderModalPost>
     )
 };
 

@@ -2,7 +2,7 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
 import { 
-  Task, 
+  Task,  addTaskPayload,
   CheckList, CheckListPayload, 
   ChildTask, ChildTaskPayload,
   ResponseProps, ResponsePayload,
@@ -22,6 +22,7 @@ type UseTask = {
   totalRecordResponse: number;
   refetchListResponse: () => void;
   listTasks: Array<Task>;
+  addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   isLoadingListTask: boolean;
   totalRecord: number | undefined;
   totalPages: number | undefined;
@@ -40,6 +41,11 @@ type UseTaskProps = {
 }
 
 export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
+  const { mutateAsync: addTaskAsync } =
+    useMutation((payload: addTaskPayload) =>
+      TaskRepository.addTask(payload)
+    );
+
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
@@ -126,6 +132,7 @@ export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }:
     listResponses,
     totalRecordResponse,
     refetchListResponse,
+    addTaskAsync,
     listTasks,
     isLoadingListTask,
     totalRecord,
@@ -211,7 +218,7 @@ export const useCheckList = ({
         parentID: parentID || "",
         isChecklist: 1,
         isSortChecklist: 1,
-        select: "assignee lastLog checklist status description name expiredTime percentage project",
+        select: "assignee lastLog checklist status description name expiredTime percentage project parent type",
         populates: JSON.stringify({
           path: "assignee",
           select: "name fullname bizfullname image",
@@ -305,7 +312,7 @@ export const useChildTask = ({
         parentID: parentID || "",
         isChildTask: 1,
         isSortChildTask: 1,
-        select: "assignee lastLog status description name expiredTime percentage project",
+        select: "assignee lastLog status description name expiredTime percentage project parent type",
         populates: JSON.stringify({
           path: "assignee",
           select: "name fullname bizfullname image",

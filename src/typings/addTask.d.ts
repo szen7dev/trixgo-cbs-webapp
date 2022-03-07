@@ -5,7 +5,7 @@ export interface addTaskPayload {
     fieldID: string;
     groupID: string;
     assigneeID: string;
-    isproposal: number;
+    subType: number;
     type: number;
     startTime: string;
     expiredTime: string;
@@ -21,7 +21,7 @@ export interface Data {
     template: number;
     draft: number;
     type: number;
-    isproposal: number;
+    subType: number;
     priority: number;
     status: number;
     lock: number;

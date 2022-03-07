@@ -325,6 +325,8 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							</div>
 							<TabsOverlay show={showClassifyArticle} />
 							<TabsClassifyArticle
+								isShowDigitalMedia={user?.email === 'contact@trixgo.com'}
+								isShowSystemMedia={user?.email === 'contact@trixgo.com'}
 								show={showClassifyArticle}
 								toggle={toggleClassifyArticle}
 								showMore={(type: string) => {

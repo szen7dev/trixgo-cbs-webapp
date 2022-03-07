@@ -12,6 +12,7 @@ export * from './RightClickMenuV2';
 export * from './Spinner';
 export * from './ModalContainer';
 export * from './ModalFullContainer';
+export * from './ModalAddNewTask';
 export * from './InputClearable';
 export * from './DropdownSearchable';
 export * from './UserMenu';

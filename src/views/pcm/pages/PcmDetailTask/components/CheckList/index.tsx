@@ -20,6 +20,7 @@ import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
 import { CheckList as CheckListType, ChildTask as ChildTaskType, Task } from "typings/task";
+import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
   componentType: 'CHECKLIST' | 'CHILD_TASK',
@@ -341,6 +342,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                                 <input
                                   name="expiredTime"
                                   placeholder="Thời hạn"
+                                  autoComplete="off"
                                   className="w-full h-8 placeholder-gray-300 focus:outline-none"
                                   value={
                                     values.expiredTime

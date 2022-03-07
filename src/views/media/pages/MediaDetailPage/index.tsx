@@ -28,7 +28,7 @@ import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconCopy from 'assets/images/icons8-copy-96.png';
-import iconPrint from 'assets/images/icons8-print-96.png';
+// import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import 'views/media/styles/index.css';
 
@@ -36,23 +36,22 @@ import 'views/media/styles/index.css';
  * Types, Services, Utils
  */
 import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
-import SocialRepository from "apis/media";
+import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
 import { abbreviateNumber } from 'utils';
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
-import CommentProvider from 'views/media/contexts/comment/comment.provider';
 import { ModalZoomView } from "shareComponents/common/ZoomView";
-import { ProviderModalPost, ContextModalPost } from "views/media/contexts/post";
+import { ContextModalPost } from "views/media/contexts/post";
 
-const MediaDetail: FC = () => {
+export const MediaDetailPage: FC = () => {
 	const history = useHistory();
 	const { state, toggleModal, openPost } = useContext(ContextModalPost);
 
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
 	const { data, refetch } = useQuery(`media_info.${mediaID}`,
-		() => SocialRepository.mediaInfo(mediaID),
+		() => MediaRepository.mediaInfo(mediaID),
 		{
 			enabled: true,
 			refetchOnWindowFocus: false
@@ -165,7 +164,7 @@ const MediaDetail: FC = () => {
 		if (msUpdateView <= 0) return;
 
 		const timeout: NodeJS.Timeout = setTimeout(async () => {
-			await SocialRepository.updateViewMedia(mediaID);
+			await MediaRepository.updateViewMedia(mediaID);
 		}, msUpdateView);
 
 		return () => { clearTimeout(timeout) }
@@ -214,30 +213,37 @@ const MediaDetail: FC = () => {
 									leaveTo="transform opacity-0 scale-95"
 								>
 									<Menu.Items className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-										<Menu.Item>
+										{/* <Menu.Item>
 											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 												<img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
 												In ấn
 											</button>
-										</Menu.Item>
+										</Menu.Item> */}
 										<Menu.Item>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={() => {
+												navigator.clipboard.writeText(window.location.href);
+												toast.success('Copy link bài viết thành công', { autoClose: 2000 })
+											}}>
 												<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 												Copy link
 											</button>
 										</Menu.Item>
-										<Menu.Item onClick={toggleModalEditMediaEdit}>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-												<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
-												Cập nhật
-											</button>
-										</Menu.Item>
-										<Menu.Item onClick={handleDeleteMedia}>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-												<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
-												Xóa
-											</button>
-										</Menu.Item>
+										{user?._id === media.author._id ? (
+											<>
+												<Menu.Item onClick={toggleModalEditMediaEdit}>
+													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+														<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+														Cập nhật
+													</button>
+												</Menu.Item>
+												<Menu.Item onClick={handleDeleteMedia}>
+													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+														<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
+														Xóa
+													</button>
+												</Menu.Item>
+											</>
+										) : ''}
 									</Menu.Items>
 								</Transition>
 							</Menu>
@@ -268,7 +274,7 @@ const MediaDetail: FC = () => {
 							</div>
 							<div className=" text-primary-gray">
 								<span className="mr-6">{moment(media.createAt).format('DD/MM/YYYY HH:mm')}</span>
-								<button className="post__follow">Theo dõi</button>
+								{/* <button className="post__follow">Theo dõi</button> */}
 							</div>
 						</div>
 					</div>
@@ -315,8 +321,8 @@ const MediaDetail: FC = () => {
 									</button>
 								</span>
 								<span>
-									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
-									<Link to="/media/comments">
+									<Link to={`/media/${mediaID}/comments`}>
+										<img src={iconComment} alt="Comment" className="inline-block mr-2" />
 										{abbreviateNumber(media.amountComment)}
 									</Link>
 								</span>
@@ -330,6 +336,7 @@ const MediaDetail: FC = () => {
 							<div className="border-b border-gray-300"></div>
 							<RootCommentsList
 								className="px-5"
+								userID={user?._id}
 								comments={listComments}
 								totalRecord={totalRecord}
 								limit={limit}
@@ -349,7 +356,7 @@ const MediaDetail: FC = () => {
 							<div>
 								{listMediasRelated.length ? listMediasRelated.map((media: MediaProps) => (
 									<React.Fragment key={media._id}>
-										<Link to="/"><div>{abbreviateNumber(media.amountView)}</div></Link>
+										<Link to={`/media/post/${media._id}`}><div>{abbreviateNumber(media.amountView)}</div></Link>
 										<Link to={`/media/post/${media._id}`}>
 											{media.title}
 										</Link>
@@ -399,13 +406,3 @@ const MediaDetail: FC = () => {
 		</>
 	);
 };
-
-export const MediaDetailPage: FC = () => {
-	return (
-		<ProviderModalPost>
-			<CommentProvider>
-				<MediaDetail />
-			</CommentProvider>
-		</ProviderModalPost>
-	)
-}
