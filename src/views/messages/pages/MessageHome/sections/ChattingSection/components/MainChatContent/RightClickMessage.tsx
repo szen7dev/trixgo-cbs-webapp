@@ -45,7 +45,7 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
     const usersSeen = useCallback(() => {
         if (!message.usersSeen) return [];
         const users : {_id: string; bizfullname: string; fullname: string; image: string}[] = [];
-        message.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+        message.usersSeen?.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
             if (typeof user === "string") {
                 const find = chat.members.find(member => member._id === user);
                 users.push(find);
