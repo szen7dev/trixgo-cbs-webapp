@@ -6,37 +6,32 @@ import {map as _map} from "lodash";
 type Props = {
     isShow: boolean;
     handleClose: () => void;
-    afterClose: () => void;
+    handleConfirmMute: (date: string|undefined) => void;
 }
-export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, afterClose}) => {
+export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, handleConfirmMute}) => {
     const focusElementRef = useRef<HTMLDivElement>(null);
-
     const dateOption = [
         {
             id: 1,
             text: "Trong 1 giờ",
-            date: 1,
+            date: "1",
         },
         {
             id: 2,
             text: "Trong 4 giờ",
-            date: 4,
+            date: "4",
         },
         {
             id: 3,
             text: "Cho đến 08:00AM",
-            date: 8,
+            date: "8",
         },
         {
             id: 4,
             text: "Cho đến khi mở lại",
-            date: null,
+            date: undefined,
         },
     ]
-
-    const handlePressConfirmMute = () => {
-        console.log('asdasd')
-    }
 
     return (
         <Transition appear show={isShow} as={Fragment}>
@@ -45,7 +40,6 @@ export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, afterClose
                 className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
                 onClose={() => {
                     handleClose()
-                    afterClose()
                 }}
                 initialFocus={focusElementRef}
             >
@@ -84,7 +78,6 @@ export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, afterClose
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
                                     onClick={() => {
                                         handleClose()
-                                        afterClose()
                                     }}
                                 >
                                     <Close/>
@@ -100,6 +93,7 @@ export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, afterClose
                                 {
                                     _map(dateOption, opt => (
                                         <button
+                                            onClick={() => handleConfirmMute(opt.date)}
                                             key={opt.id}
                                             className={"flex items-center hover:bg-gray-100 px-[22px] py-3 w-full"}
                                         >

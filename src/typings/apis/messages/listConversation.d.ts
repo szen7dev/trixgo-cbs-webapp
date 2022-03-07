@@ -279,7 +279,7 @@ export type AddConversationToFolderResponse = {
 export type UpdateMuteConversationPayload = {
     conversationID: string;
     isMute: boolean;
-    timeMute?: number;
+    timeMute?: string;
 }
 
 export type UpdateMuteConversationResponse = {

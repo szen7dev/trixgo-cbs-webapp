@@ -37,6 +37,7 @@ type UseListConversationType = {
     updateFolder: (payload: UpdateFolderPayload) => Promise<FolderConversationItem>,
     deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
     addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
+    updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -113,7 +114,9 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
 
     const updateMuteConversation = async (params: UpdateMuteConversationPayload) => {
         const {data} = await ListConversationRepository.updateMuteConversation(params);
-        return data;
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
     }
 
     const {
@@ -160,6 +163,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         addFolder,
         updateFolder,
         deleteFolder,
-        addConversationToFolder
+        addConversationToFolder,
+        updateMuteConversation
     }
 };
