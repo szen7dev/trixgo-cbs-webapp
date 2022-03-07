@@ -34,10 +34,10 @@ export const PersonalLeftSideBar: FC = () => {
               <div className="t-link-menu-container">
                   <NavLink to={`/personal/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                      <span className="truncate">Trang chủ</span>
+                      <span className="truncate">Cài đặt tài khoản</span>
                   </NavLink>
               </div>
-              <div className="t-link-menu-container">
+              {/* <div className="t-link-menu-container">
                   <NavLink to={`/personal/friends`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Quản lý bạn bè</span>
@@ -72,7 +72,7 @@ export const PersonalLeftSideBar: FC = () => {
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Lịch sử truy cập</span>
                   </NavLink>
-              </div>
+              </div> */}
           </div>
       </div>
   );
