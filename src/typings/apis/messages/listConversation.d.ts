@@ -275,3 +275,15 @@ export type AddConversationToFolderResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdateMuteConversationPayload = {
+    conversationID: string;
+    isMute: boolean;
+    timeMute?: string;
+}
+
+export type UpdateMuteConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}

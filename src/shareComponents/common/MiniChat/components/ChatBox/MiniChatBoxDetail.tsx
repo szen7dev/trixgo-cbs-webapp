@@ -136,5 +136,10 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
 
 const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
     if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
+    return _map(Object.values(messagesData), message => message).sort((a,b) => {
+        if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+            return 1
+        }
+        return -1
+    })
 }

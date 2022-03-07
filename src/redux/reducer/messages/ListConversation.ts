@@ -24,7 +24,7 @@ const listConversationSlice = createSlice({
 
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime(),
+                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.createAt??conversation.modifyAt).toDate().getTime(),
                     isSaved: isSavedMessages,
                     isPin: isSavedMessages?true: conversation.isPin
                 }
@@ -73,7 +73,7 @@ const listConversationSlice = createSlice({
             const isSavedMessages = action.payload.conversationData.members.length === 1;
             action.payload.conversationData = {
                 ...action.payload.conversationData,
-                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData?.lastMessage?.updatedAt??action.payload.conversationData.updatedAt).toDate().getTime(),
+                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData?.lastMessage?.createAt??action.payload.conversationData.modifyAt).toDate().getTime(),
                 isSaved: isSavedMessages,
                 isPin: isSavedMessages?true: action.payload.conversationData.isPin
             };
@@ -97,10 +97,23 @@ const listConversationSlice = createSlice({
                     }
                 }
             }
+        },
+        updateUsersMuteToConversation (state, action) {
+            const {conversationId, usersMute} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersMute
+                    }
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation, updateUsersMuteToConversation } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

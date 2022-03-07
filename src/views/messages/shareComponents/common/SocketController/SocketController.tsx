@@ -58,12 +58,12 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 messageData: data?.infoMessage
             }));
         } else {
+            dispatch(appendMessageToConversation({
+                conversationId: data?.infoMessage?.conversation,
+                messageId: data?.infoMessage?._id,
+                messageData: data?.infoMessage
+            }));
             if (currentChat === data?.infoMessage?.conversation) {
-                dispatch(appendMessageToConversation({
-                    conversationId: data?.infoMessage?.conversation,
-                    messageId: data?.infoMessage?._id,
-                    messageData: data?.infoMessage
-                }));
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
             if (!inSearchMode){
@@ -89,9 +89,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if ([108, 109].includes(data?.data?.type)) {
             getListPinMessage({conversationID: data?.data?.conversation})
         }
-        setTimeout(() => {
-            scrollToBottom();
-        }, 100)
+        if (!inSearchMode){
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100)
+        }
     };
 
     const onReceiveShareMessage = (data: any) => {
@@ -106,10 +108,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveRevokeMessage = (data: any) => {
         if (!data) return;
-        if (!data?.data?.error) {
-            dispatch(revokeMessageInConversation({messages: data?.data?.data}))
+        if (!data?.error) {
+            dispatch(revokeMessageInConversation({messages: data?.data}))
         } else {
-            toast.error(data?.data?.message);
+            toast.error(data?.message);
         }
     }
 

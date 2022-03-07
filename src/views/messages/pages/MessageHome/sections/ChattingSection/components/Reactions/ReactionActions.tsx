@@ -10,6 +10,7 @@ export const ReactionActions:FC<Props> = ({message, context}) => {
     const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
+    if (message.isFake) return null;
     return (
         <div className={"absolute emoji-action flex flex-col items-center z-10 w-fit shadow-lg rounded-full bg-white opacity-0 invisible"}>
             <div className={"flex flex-col h-0 opacity-0 invisible other-emojis"}>
