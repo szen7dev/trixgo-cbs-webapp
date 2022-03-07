@@ -146,6 +146,8 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 	// Xử lý hứng giá trị các biến từ Client truyền lên sau khi Submit
 	const handleSubmit = async (values: MediaPayload) => {
+		console.log({ values });
+		
 		values.images = [];
 		values.files = [];
 
@@ -246,7 +248,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								>
 									{initialValues.mediaID ? 'Cập nhật bài viết' : 'Bài viết mới'}
 								</Dialog.Title>
-								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
+								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={toggle}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 									</svg>
@@ -254,9 +256,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							</div>
 							<div className="px-6 mt-3">
 								<button type="button" onClick={toggleClassifyArticle} className="btn__select w-56 flex justify-between items-center">
-									<span>
-										{typeTextSelected(values.type)}
-									</span>
+									<span> {typeTextSelected(values.type)} </span>
 									<img src={iconDown} alt="icon down" className="inline-block" />
 								</button>
 							</div>
@@ -356,11 +356,11 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={handleSetFiles} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event)} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
 									</label>
 								</div>
 								<div>
@@ -387,9 +387,8 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							<TabsClassifyDepartment
 								show={showClassifyDepartment}
 								toggle={toggleClassifyDepartment}
-								afterEnter={() => {
-									toggleClassifyArticle()
-								}}
+								onSelect={(departmentID: string) => setFieldValue('departmentID', departmentID)}
+								afterEnter={toggleClassifyArticle}
 							/>
 							<TabsClassifyArticleCommunity
 								show={showClassifyArticleCommunity}
