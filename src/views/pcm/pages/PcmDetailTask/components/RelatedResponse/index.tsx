@@ -24,10 +24,10 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
  * Hooks, custom
  */
 import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from "services/hooks/ppt/useUploadFile";
-import { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
+import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { APP_TYPE, APP_KEY } from "utils/constants";
 
 /**
@@ -58,13 +58,20 @@ const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
  
 const Response: FC<Props> = ({ task }) => {
-  const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
-  const { addResponseAsync, listResponses, totalRecordResponse } = useTask({ taskID: id });
-  const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
-    taskID: id, official: true
+  const [isShow, setIsShow] = useState(false);
+  const [collapsed] = useState(false);
+  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
+
+  const [amountResponse, setAmountResponse] = useState(task.amountResponse ?? 0);
+  const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
+
+  const { user } = useAuth();
+  const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
+  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
+    taskID: task._id, official: true, isFetch: true
   });
 
   const { state, dispatch } = useContext(CommentContext);
@@ -102,13 +109,9 @@ const Response: FC<Props> = ({ task }) => {
     index: 0,
     createAt: ""
   });
-  const [isShow, setIsShow] = useState(false);
-    
-  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
-  const [collapsed] = useState(false);
 
   useEffect(() => {
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
   }, [listResponses.length])
 
   useEffect(() => {
@@ -119,9 +122,14 @@ const Response: FC<Props> = ({ task }) => {
     if(!location.hash) return;
 
     (async () => {
+      const hash = location.hash.substring(1);
+      const [prefix, commentID] = hash.split('_');
+
+      if(prefix !== 'response') return;
+
       const response = await TaskRepository.searchResponseById({
-        taskID: id,
-        commentID: location.hash.substring(1)
+        taskID: task._id,
+        commentID: commentID
       });
 
       if(response.status === 200) {
@@ -133,16 +141,20 @@ const Response: FC<Props> = ({ task }) => {
         divRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
     })();
-
   }, [location.hash])
 
   useEffect(() => {
     socket?.on('COMMENT_SSC_ADD_COMMENT', (result: any) => {
       const { data, error } = result;
 
-      if(error || !amountCommentBack) return;
+      if(error || amountCommentBack) return;
 
-      dispatch({ type: 'ADD_COMMENT', payload: data.infoComment });
+      const { infoObject, infoComment } = data;
+
+      if(infoObject?._id !== task._id) return;
+      if(user?._id === infoComment?.author?._id) return;
+
+      dispatch({ type: 'ADD_COMMENT', payload: infoComment });
     });
   }, [socket])
 
@@ -169,27 +181,27 @@ const Response: FC<Props> = ({ task }) => {
 
     try {
       const { error, data, message } = await addResponseAsync({
-        taskID: id,
+        taskID: task._id,
         type: 2,
         content,
         files,
         images,
       });
-      console.log({ error, data, message });
 
       if(error) {
         return toast.warning(message)
       }
 
+      setAmountResponse(amountResponse + 1);
+      dispatch({ type: 'ADD_COMMENT', payload: data?.result });
+      toast.success('Tạo phản hồi thành công');
+
       socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-        app: APP_TYPE.PCM_PLAN_TASK,
-        objectID: id,
+        app: APP_KEY.PCM_PLAN_TASK,
+        objectID: task._id,
         infoComment: data?.result
       })
 
-      dispatch({ type: 'ADD_COMMENT', payload: data?.result });
-
-      toast.success('Tạo phản hồi thành công');
       socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
           receivers: data.receivers
       });
@@ -205,7 +217,7 @@ const Response: FC<Props> = ({ task }) => {
   const handleViewPrevious = async () => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[0]._id,
-      taskID: id,
+      taskID: task._id,
       limit: LIMIT_PER_PAGE_RESPONSE,
       official: currentTab === 'MARKED' ? true : false,
     });
@@ -213,13 +225,13 @@ const Response: FC<Props> = ({ task }) => {
     if (error || !data.listRecords.length) return;
 
     setAmountComment(amountComment - LIMIT_PER_PAGE_RESPONSE);
-    dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords });
+    dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords.reverse() });
   }
 
   const handleViewNext = async () => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[state.comments.length - 1]._id,
-      taskID: id,
+      taskID: task._id,
       limit: LIMIT_PER_PAGE_RESPONSE,
       official: false,
       sortKey: JSON.stringify({
@@ -230,7 +242,7 @@ const Response: FC<Props> = ({ task }) => {
     if (error || !data.listRecords.length) return;
 
     setAmountCommentBack(amountCommentBack - LIMIT_PER_PAGE_RESPONSE);
-    dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
+    dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords.reverse() });
   }
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -313,17 +325,21 @@ const Response: FC<Props> = ({ task }) => {
 
   const onClickTabAll = () => {
     setCurrentTab(RelatedResponseTab.ALL);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
+    refetchListResponse();
     setAmountComment(totalRecordResponse);
     setAmountCommentBack(0);
   }
 
   const onClickTabMarked = () => {
     setCurrentTab(RelatedResponseTab.MARKED);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked });
+    dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
+    refetchListResponseMarked();
     setAmountComment(totalRecordResponseMarked);
     setAmountCommentBack(0);
   }
+
+  const hashLocation = location.hash.substring(1);
 
   return (
     <>
@@ -338,13 +354,13 @@ const Response: FC<Props> = ({ task }) => {
               className={getClassTab(RelatedResponseTab.ALL)}
               onClick={onClickTabAll}
             >
-              <span className="text-[13px]">Tất cả ({task.amountResponse || 0})</span>
+              <span className="text-[13px]">Tất cả ({amountResponse})</span>
             </button>
             <button
               className={getClassTab(RelatedResponseTab.MARKED)}
               onClick={onClickTabMarked}
             >
-              <span className="text-[13px]">Đã đánh dấu ({task.amountMarkedResponse || 0})</span>
+              <span className="text-[13px]">Đã đánh dấu ({amountMarkedResponse})</span>
             </button>
           </div>
           <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
@@ -377,11 +393,13 @@ const Response: FC<Props> = ({ task }) => {
               key={response._id}
               response={response}
               expanded={isExpand}
-              isHighlight={location.hash.substring(1) === response._id}
-              divRef={location.hash.substring(1) === response._id ? divRef : null}
-              onClickImage={(images,index) => {
+              isHighlight={hashLocation?.split('_')[1] === response._id}
+              divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
+              setAmountMarkedResponse={setAmountMarkedResponse}
+              refetchListResponseMarked={refetchListResponseMarked}
+              onClickImage={(images, index) => {
                 if (images.length) {
-                  setDefaultState({ mediaID: id, images, index, createAt: response.createAt })};
+                  setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};
                   setIsShow(true);
                 }
               }
@@ -404,9 +422,7 @@ const Response: FC<Props> = ({ task }) => {
               />
             </div>
             <div className="mt-3">
-              {
-                toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)
-              }
+              {toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)}
               <div
                 className={
                   classNames("flex flex-wrap border custom-scroll overflow-x-hidden relative rounded-md",

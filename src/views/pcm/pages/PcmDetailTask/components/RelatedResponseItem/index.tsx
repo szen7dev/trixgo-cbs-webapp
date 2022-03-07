@@ -20,12 +20,14 @@ import { ImageProps } from "typings/media";
 type Props = {
 	expanded?: boolean;
 	isHighlight?: boolean;
-	response: ResponseProps,
+	response: ResponseProps;
 	onClickImage?: (images: ImageProps[], index: number) => void;
-	divRef?: LegacyRef<HTMLDivElement> | undefined
+	divRef?: LegacyRef<HTMLDivElement> | undefined;
+	refetchListResponseMarked?: () => void;
+	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage }) => {
+export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -42,6 +44,14 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 			taskID: response.task._id,
 			official: e.target.checked
 		})
+
+		if(e.target.checked) {
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
+		} else{
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
+		}
+
+		refetchListResponseMarked && refetchListResponseMarked();
 	}
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
@@ -89,8 +99,11 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span className="text-[13px]">
-							{response.content}
+						<span 
+							className="text-[13px]"
+                            dangerouslySetInnerHTML={{
+                              __html: response.content
+                            }}>
 						</span>
 					</div>
 
@@ -158,7 +171,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 									if (index < 2) {
 										return (
 											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : file.url} className="w-full" alt="test" />
+												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full" alt="test" />
 											</button>
 										)
 									}
@@ -167,7 +180,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 										return (
 											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
 												<img
-													src={TestImage}
+													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
 													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
 													alt="test"
 												/>

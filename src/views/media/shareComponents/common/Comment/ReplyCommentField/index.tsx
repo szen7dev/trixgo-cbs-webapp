@@ -10,12 +10,11 @@ import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'views/media/shareComponents/common';
 
 import CommentContext from 'views/media/contexts/comment/comment.context';
-import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
 import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useAuth } from 'services/hooks/useAuth';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -60,11 +59,11 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
-	const { addFileToUpload } = useUpload({ 
+	const { addFileToUpload } = useUpload({
 		appID: "5df4ce16506d9b3c587948ca",
 		companyID: user?.company._id
 	});
-	const { createCommentAsync, updateCommentAsync } = useCommentMedia({ 
+	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
 		key: `list_comments.${mediaID}`,
 		params: { mediaID }
 	});
@@ -148,7 +147,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			if (defaultValue) {
 				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
 
-				if(error) {
+				if (error) {
 					return toast.warning(message);
 				}
 
@@ -162,8 +161,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				});
 			} else {
 				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
-				
-				if(error) {
+
+				if (error) {
 					return toast.warning(message);
 				}
 
@@ -171,10 +170,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			}
 		} catch (error) {
 			if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 
 		// Clear text input

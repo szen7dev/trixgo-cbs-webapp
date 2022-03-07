@@ -33,7 +33,7 @@ type DatahubArea = {
   __v: 0;
 };
 
-export type DatahubProjects = {
+export type DatahubProjectBase = {
   _id: string;
   projectType: number;
   buildingType: number;
@@ -62,6 +62,8 @@ export type DatahubProjects = {
   updatedAt: DateString;
 };
 
+export type DatahubProjects<T = keyof DatahubProjectBase> =  Pick<DatahubProjectBase, T>
+
 export type DatahubProjectsParams = {
   limit?: number;
   select?: string;
@@ -69,7 +71,8 @@ export type DatahubProjectsParams = {
   populates?: {
     path: string;
     select?: string;
-  };
+		populate?: string;
+  } | string;
   keyword?: string;
 };
 

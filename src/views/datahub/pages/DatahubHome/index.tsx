@@ -9,8 +9,8 @@ import Acoordion from '../../sharedComponents/common/Acoordion';
 import iconWallet from 'assets/images/icons8-wallet-100.png'
 import appstore from 'assets/images/appstore.png'
 import chplay from 'assets/images/chplay.png'
-import datahub_banner_1 from 'assets/images/datahub-banner-1.png'
-import datahub_banner_2 from 'assets/images/datahub-banner-2.png'
+import datahub_banner_1 from 'assets/images/datahub/banner1.png'
+import datahub_banner_2 from 'assets/images/datahub/banner2.png'
 import Wallethub from '../../sharedComponents/common/Wallethub';
 import SearchIcon from 'assets/icons/SearchIcon';
 
@@ -18,7 +18,7 @@ import SearchIcon from 'assets/icons/SearchIcon';
 import useDatahubTypes from 'services/hooks/datahub/useDatahubTypes';
 
 const DatahubHome: FC<RouteComponentProps> = () => {
-	const { data } = useDatahubTypes({ level: 1, select: '_id name', limit: 10 });
+	const { data } = useDatahubTypes({ level: 1, select: '_id name', limit: 10, type: 1 });
 	return (
 		<div className='h-full w-full bg-gradient-to-tr from-blue-300 to-blue-600 relative pb-[92px]'>
 			<div className='h-full w-full  pt-12 overflow-auto'>

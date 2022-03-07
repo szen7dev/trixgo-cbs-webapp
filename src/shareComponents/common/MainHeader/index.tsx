@@ -14,7 +14,14 @@ import { useAuth } from "services/hooks/useAuth";
 export const MainHeader: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
-  const { listNotifications, refetchListNotification, hasNextPage, nextPageListNotification } = useNotification();
+  const { 
+    listNotifications, 
+    totalRecord,
+    refetchListNotification, 
+    hasNextPage, 
+    nextPageListNotification 
+  } = useNotification();
+
   const socketRef: any = useSocket();
 
   useEffect(() => {
@@ -99,7 +106,7 @@ export const MainHeader: FC = () => {
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu notifications={listNotifications} onScroll={handleScroll} />
+            <NotificationsMenu notifications={listNotifications} total={totalRecord} onScroll={handleScroll} />
             <UserMenu />
           </div>
         </div>

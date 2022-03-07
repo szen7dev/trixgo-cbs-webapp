@@ -1,77 +1,139 @@
-import React, { FC } from 'react'
+import React, { FC, Fragment, useState } from 'react'
 import { Form, Formik } from 'formik';
-import { Dialog } from '@headlessui/react'
+import { Dialog } from '@headlessui/react';
+import { object, number, date } from 'yup'
 
-import { ModalContainer } from 'shareComponents/common'
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common';
-import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik';
+import { CustomFieldFormik, CustomDatePickerFormik } from 'views/datahub/sharedComponents/common';
+import DatahubRepository from 'apis/datahub';
+// import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik';
 
 import "react-datepicker/dist/react-datepicker.css";
+import { DatahubFinancialBody } from 'typings/datahub/financial';
+import { toast } from 'react-toastify';
+import { useQueryClient } from 'react-query';
+import useDatahubFinancial from 'services/hooks/datahub/useDatahubFinancial';
 
 type Props = {
-	show: boolean
-	buttonOnly?: boolean
-	type: 'create' | 'edit'
+	datahubFinreportID?: string;
+	contractor: string;
 
 	toggle: () => void
 }
 
+const DatahubFinancialSchema = object().shape({
+	asset: number(),
+	liabilitiy: number(),
+	netWorth: number(),
+	currentAsset: number(),
+	shortTermLiabilitiy: number(),
+	workingCapital: number(),
+	grossRevenue: number().required('Required'),
+	grossConstructionRevenue: number().required('Required'),
+	grossProfit: number().required('Required'),
+	fiscalYear: date().required('Required'),
+});
+
 const ModalCreateFinancial: FC<Props> = (props) => {
-	const initialValues = {
-		year: null as Date|null,
-		asset: '',
-		liabilitiy: '',
-		netWorth: '',
-		currentAsset: '',
-		shortTermLiabilitiy: '',
-		workingCapital: '',
-		grossRevenue: '',
-		grossConstructionRevenue: '',
-		grossProfit: '',
-		grossProfitAfterTax: '',
-	}
-	const handleSubmit = (values: typeof initialValues) => {
-		console.log(values);
+	const [initialValues, setInitialValues] = useState({
+		fiscalYear: null as Date | null,
+		asset: 0,
+		liabilitiy: 0,
+		netWorth: 0,
+		currentAsset: 0,
+		shortTermLiabilitiy: 0,
+		workingCapital: 0,
+		grossRevenue: 0,
+		grossConstructionRevenue: 0,
+		grossProfit: 0,
+		grossProfitAfterTax: 0,
+	})
+	const { isLoading } = useDatahubFinancial({
+		contractorID: props.contractor,
+		datahubFinreportID: props.datahubFinreportID
+	}, {
+		onSuccess(data) {
+			if ('error' in data && !data.error) {
+				const { fiscalYear, ...rest } = data.data;
+				const date = new Date();
+				date.setFullYear(fiscalYear);
+				setInitialValues({ fiscalYear: date, ...rest })
+			}
+		}
+	});
+
+	const queryClient = useQueryClient();
+	const handleSubmit = async (values: typeof initialValues) => {
+		const body: DatahubFinancialBody = {
+			fiscalYear: values.fiscalYear?.getFullYear(),
+			asset: Number(values.asset),
+			liabilitiy: Number(values.liabilitiy),
+			netWorth: Number(values.netWorth),
+			currentAsset: Number(values.currentAsset),
+			shortTermLiabilitiy: Number(values.shortTermLiabilitiy),
+			workingCapital: Number(values.workingCapital),
+			grossRevenue: Number(values.grossRevenue),
+			grossConstructionRevenue: Number(values.grossConstructionRevenue),
+			grossProfit: Number(values.grossProfit),
+			grossProfitAfterTax: Number(values.grossProfitAfterTax),
+			contractor: props.contractor,
+			datahubFinreportID: undefined
+		}
+
+		if (props.datahubFinreportID) {
+			body.datahubFinreportID = props.datahubFinreportID;
+			const data = await DatahubRepository.updateDatahubFinancial(body);
+
+			if ('code' in data) return;
+			toast.info("Update financial report successfully");
+		} else {
+			const data = await DatahubRepository.createDatahubFinancial(body);
+
+			if ('code' in data) return;
+			toast.success("Create financial report successfully");
+		}
+		queryClient.removeQueries(['datahub_financials'], { inactive: true })
+		queryClient.refetchQueries(['datahub_financials'], { active: true })
+		props.toggle();
 	}
 	return (
-		<ModalContainer isModalOpen={props.show} toggle={() => !props.buttonOnly && props.toggle()}>
-			<div
-				className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-2xl"
-			>
-				<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
-					<Dialog.Title as="h3" className="text-lg leading-6 font-bold">
-						{
-							props.type === 'create' ? "Tạo mới" : "Cập nhật"
-						}
-					</Dialog.Title>
-					<button
-						type="button"
-						onClick={props.toggle}
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					</button>
-				</div>
-				<Formik
-					initialValues={initialValues}
-					onSubmit={handleSubmit}
+		<Fragment>
+			<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
+				<Dialog.Title as="h3" className="text-lg leading-6 font-bold">
+					{
+						props.datahubFinreportID ? "Cập nhật" : "Tạo mới"
+					}
+				</Dialog.Title>
+				<button
+					type="button"
+					onClick={props.toggle}
 				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M6 18L18 6M6 6l12 12"
+						/>
+					</svg>
+				</button>
+			</div>
+			<Formik
+				initialValues={initialValues}
+				onSubmit={handleSubmit}
+				validationSchema={DatahubFinancialSchema}
+				enableReinitialize
+			>
+				{({ isSubmitting }) => (
 					<Form>
 						<div className="px-5 pb-4 overflow-x-auto min-h-[500px]">
 							<div className="whitespace-nowrap space-y-4 py-5">
-								<CustomDatePickerFormik name='year' title='Năm tài chính' required showYearPicker dateFormat="yyyy" />
+								<CustomDatePickerFormik name='fiscalYear' title='Năm tài chính' required showYearPicker dateFormat="yyyy" />
 								<CustomFieldFormik name='asset' title='Tổng tài sản' />
 								<CustomFieldFormik name='liabilitiy' title='Tổng nợ' />
 								<CustomFieldFormik name='netWorth' title='Giá trị tài sản ròng' />
@@ -88,16 +150,17 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 							<div className="mr-1.5">
 								<button
 									type="submit"
-									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5"
+									disabled={isSubmitting}
+									className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5 disabled:opacity-30 disabled:cursor-not-allowed"
 								>
 									Xác nhận
 								</button>
 							</div>
 						</div>
 					</Form>
-				</Formik>
-			</div>
-		</ModalContainer>
+				)}
+			</Formik>
+		</Fragment>
 	)
 }
 

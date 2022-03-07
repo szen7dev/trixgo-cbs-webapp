@@ -1,4 +1,4 @@
-import React, { FC, useState, Fragment, HTMLAttributes } from 'react'
+import { FC, useState, Fragment, HTMLAttributes } from 'react'
 
 import { useParams } from 'react-router-dom';
 
@@ -54,6 +54,7 @@ export const CommentContainer: FC<HTMLAttributes<HTMLDivElement>> = (props) => {
 
 	const handleSumitReplyNested = async (data: SubmitComment, options: OptionsSubmitReplyNested & { page: number, commentIdx: number }) => {
 		if (!options.parent) return;
+
 		const dataInsertOrUpdate = {
 			mediaID: id,
 			content: data.text,
@@ -62,13 +63,11 @@ export const CommentContainer: FC<HTMLAttributes<HTMLDivElement>> = (props) => {
 			parentID: options.parent._id
 		}
 		if (options.type === 'create') {
-			// console.log('create', options)
 			await createComment({
 				...dataInsertOrUpdate,
 				parentID: options.comment.parent
 			}, { commentIdx: options.commentIdx, page: options.page });
 		} else {
-			// console.log('update', options)
 			await updateComment({
 				...dataInsertOrUpdate,
 				parentID: options.comment.parent, commentID: options.comment._id

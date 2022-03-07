@@ -1,5 +1,6 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
+import type { User } from 'typings/user';
 
 export type PostType = 
   | 'company'

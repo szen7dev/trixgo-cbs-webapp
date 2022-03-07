@@ -53,6 +53,28 @@ export type Task = {
   amountMarkedResponse: number;
 };
 
+export interface addTaskPayload {
+  name: string;
+  description: string;
+  projectID: string;
+  fieldID: string;
+  groupID: string;
+  assigneeID: string;
+  subType: number;
+  type: number;
+  startTime: string;
+  expiredTime: string;
+  relatedIDs: string[];
+  authorAttachs: string[];
+}
+
+export interface addTaskResponse {
+  error: boolean;
+  data: Data;
+  status: number;
+  message: string;
+}
+
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
@@ -63,11 +85,25 @@ export type ListTaskResponse = APIResponse & {
   };
 };
 
+export type AddRelationUserPayload = {
+  taskID: string,
+  related?: Array<string>;
+};
+
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 CHECKLIST   ===============================
+ * ============================ ************** ===============================
+ */
+
 export type CheckList = {
   _id: string;
   name: string;
   expiredTime: string;
   typeStatus: number;
+  status: number;
+  type: number;
+  parent: string;
   checklist: string;
   assignee: Assignee;
 };
@@ -96,11 +132,74 @@ export type ListCheckListResponse = APIResponse & {
   data: {
     listRecords: Array<CheckList>;
     totalRecord: number;
-    totalPages?: number;
+    totalPage?: number;
     nextCursor: string;
     limit: number;
   };
 };
+
+/**
+ * ============================ ************************** ===============================
+ * ============================ 	 VIỆC CON (CHILD TASK)   ===============================
+ * ============================ ************************** ===============================
+ */
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+export type ChildTask = {
+  _id: string;
+  name: string;
+  expiredTime: string;
+  typeStatus: number;
+  type: number;
+  parent: string;
+  status: number;
+  assignee: Assignee;
+};
+
+export type ChildTaskPayload = {
+  parentID: string;
+  name: string;
+  type: number;
+  assigneeID: string;
+  expiredTime: string;
+};
+
+export type ListChildTaskPayload = {
+  isChildTask?: number;
+  lastestID?: string;
+  limit?: number;
+  populates?: string;
+  select?: string;
+  type?: number;
+  typeStatus?: number;
+  isSortChildTask: number;
+  parentID?: string;
+};
+
+export type ListChildTaskResponse = APIResponse & {
+  data: {
+    listRecords: Array<ChildTask>;
+    totalRecord: number;
+    totalPage?: number;
+    nextCursor: string;
+    limit: number;
+  };
+};
+
+/**
+ * ============================ *********************** ===============================
+ * ============================ 	 PHẢN HỒI LIÊN QUAN   ===============================
+ * ============================ *********************** ===============================
+ */
 
 export type ResponseProps = {
   _id: string,

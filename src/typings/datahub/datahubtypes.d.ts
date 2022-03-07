@@ -1,6 +1,6 @@
-export type DatahubTypes = {
+export type DatahubTypesBase = {
   _id: string;
-  type: number;
+  type: 1 | 2;
   level: number;
   numberOfContractors: number;
   popular: number;
@@ -15,6 +15,11 @@ export type DatahubTypes = {
   updatedAt: DateString;
 };
 
+export type DatahubTypes<T = keyof DatahubTypesBase> = Pick<
+  DatahubTypesBase,
+  T
+>;
+
 export type DatahubTypesParams = {
   limit?: number;
   type?: number;
@@ -22,6 +27,7 @@ export type DatahubTypesParams = {
   lastestID?: string;
   level?: number;
   keyword?: string;
+  parentID?: string;
 };
 
 export type DatahubTypesBody = {
@@ -29,4 +35,5 @@ export type DatahubTypesBody = {
   popular: number;
   name: string;
   description: string;
+  parent?: string;
 };

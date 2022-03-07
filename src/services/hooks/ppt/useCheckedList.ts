@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { ChangeEvent, MouseEventHandler, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 interface StateObject {
 	[key: string]: any;
@@ -30,6 +30,25 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 		assigned: initialData.reduce((d, c, i) => ({ ...d, [(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]: false }), {}),
 		checked: []
 	})
+
+	useEffect(() => {
+		if(!checkboxRef.current)return;
+		const isSomeChecked = initialData.some(c => assigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		if(isSomeChecked) {
+			const isEveryChecked = initialData.every(c => assigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+			if(isEveryChecked){
+				checkboxRef.current.checked = true;
+				checkboxRef.current.indeterminate = false;
+			} else {
+				checkboxRef.current.checked = false;
+				checkboxRef.current.indeterminate = true;
+			}
+		} else {
+			checkboxRef.current.checked = false;
+			checkboxRef.current.indeterminate = false;
+		}
+	},[initialData, assigned])
+
 	const checkboxRef = useRef<HTMLInputElement>(null);
 
 	const handleCheckAll= () => {
@@ -103,17 +122,31 @@ function useCheckedList<S extends State>(initialData: Array<S>): {
 			return;
 		}
 		setChecked({ assigned: newAssigned, checked: newChecked });
-		if (checkboxRef.current) {
-			if (newChecked.length && newChecked.length < initialData.length) {
-				checkboxRef.current.indeterminate = true;
-			} else if (newChecked.length === initialData.length) {
-				checkboxRef.current.indeterminate = false;
-				checkboxRef.current.checked = true;
-			} else {
-				checkboxRef.current.indeterminate = false;
-				checkboxRef.current.checked = false;
-			}
-		}
+		// if (checkboxRef.current) {
+		// 	const isSomeChecked = initialData.some(c => newAssigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		// 	if(isSomeChecked) {
+		// 		const isEveryChecked = initialData.every(c => newAssigned[(typeof c === 'string' || typeof c === 'number') ? c : c._id ?? c.id]);
+		// 		if(isEveryChecked){
+		// 			checkboxRef.current.checked = true;
+		// 			checkboxRef.current.indeterminate = false;
+		// 		} else {
+		// 			checkboxRef.current.checked = false;
+		// 			checkboxRef.current.indeterminate = true;
+		// 		}
+		// 	} else {
+		// 		checkboxRef.current.checked = false;
+		// 		checkboxRef.current.indeterminate = false;
+		// 	}
+		// 	// if (newChecked.length && newChecked.length < initialData.length) {
+		// 	// 	checkboxRef.current.indeterminate = true;
+		// 	// } else if (newChecked.length === initialData.length) {
+		// 	// 	checkboxRef.current.indeterminate = false;
+		// 	// 	checkboxRef.current.checked = true;
+		// 	// } else {
+		// 	// 	checkboxRef.current.indeterminate = false;
+		// 	// 	checkboxRef.current.checked = false;
+		// 	// }
+		// }
 	}
 
 	return { assigned, checked, checkboxRef, handleCheckAll, handleChangeCheckbox }

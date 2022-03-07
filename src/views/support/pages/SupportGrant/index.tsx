@@ -34,7 +34,8 @@ export const SupportGrantPage: FC = () => {
     endTime: ""
   });
 
-  const { data: dataAppsCompany } = useAppCompany({ 
+  const { data: dataAppsCompany } = useAppCompany({
+    limit: 100,
     companyID: companySelected
   });
   const { data: listCompanies, fetchNextPage } = useQueryListCompany({ keyword: keywordCompany });

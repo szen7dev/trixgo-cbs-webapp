@@ -7,7 +7,6 @@ import {
     ListCommentsPayload, 
     ListMediasPayload,
     MediaReactionPayload,
-    infoMediaResponse,
     PostResponse,
     FetchMediaPayload
 } from "typings/media";
@@ -27,7 +26,7 @@ type UseMedia = {
     // MEDIA
     createMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
     updateMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
-    deleteMediaAsync: (id: string) => Promise<infoMediaResponse>,
+    deleteMediaAsync: (id: string) => Promise<any>,
     listMedias: Array<MediaProps>,
     isLoadingMedias: boolean,
     refetchListMedias: () => void,

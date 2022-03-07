@@ -1,19 +1,46 @@
-import { FC, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { FC, useContext, useState } from "react";
+import { useQuery } from "react-query";
+import { Link, useHistory, useParams } from "react-router-dom";
 
-import { ModalContainer } from "shareComponents/common";
+import { Loader, ModalContainer, ModalZoomView } from "shareComponents/common";
 
-import {
-	ReplyCommentField,
-	RootCommentsList
-} from "views/media/shareComponents/common";
+import { ReplyCommentField, RootCommentsList } from "views/media/shareComponents/common";
+import { useCommentMedia } from 'services/hooks/useMedia';
+import { ContextModalPost } from "views/media/contexts/post";
+import { useAuth } from 'services/hooks/useAuth';
+
 import 'views/media/styles/index.css';
 
+import MediaRepository from "apis/media";
+
 export const MediaCommentsPage: FC = () => {
-	const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
 	const history = useHistory();
+	const { state, toggleModal } = useContext(ContextModalPost);
+	const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+	const { mediaID } = useParams<{ mediaID: string }>();
+	const { user } = useAuth();
+
+	const { data } = useQuery(`media_info.${mediaID}`,
+		() => MediaRepository.mediaInfo(mediaID),
+		{
+			enabled: true,
+			refetchOnWindowFocus: false
+		});
+
+	const media = data?.data;
+
+	const { listComments, totalRecord, limit, isLoadingListComments } =
+		useCommentMedia({
+			key: `list_comments.${mediaID}`,
+			params: { mediaID },
+			isFetchComment: true
+		});
 
 	const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
+
+	if (isLoadingListComments) {
+		return <Loader className="border-primary" />
+	}
 
 	return (
 		<>
@@ -21,16 +48,16 @@ export const MediaCommentsPage: FC = () => {
 				{/* Header */}
 				<div className="comment__header px-4 flex justify-between w-full">
 					<div className="py-1">
-						<button type="button" className="p-2 rounded-3xl" onClick={() => history.goBack()}>
+						<button type="button" className="p-2 rounded-3xl" onClick={history.goBack}>
 							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
 							</svg>
 						</button>
 					</div>
 					<div className="comment__header-main mx-auto flex-grow flex items-center justify-between py-1">
-						<div>Bình luận tại chủ đề của <b>Lê Văn Thành-PC1</b></div>
-						<Link className="py-2 px-5 bg-secondary-light rounded-md" onClick={toggleDeleteModal} to="/media/post">
-							Xem chủ đề
+						<div>Bình luận tại bài viết của <b>{media?.author?.bizfullname}</b></div>
+						<Link className="py-2 px-5 bg-secondary-light rounded-md" onClick={toggleDeleteModal} to={`/media/post/${mediaID}`}>
+							Xem bài viết
 						</Link>
 					</div>
 					<div className="py-1">
@@ -44,7 +71,22 @@ export const MediaCommentsPage: FC = () => {
 				{/* Content */}
 				<div className="comment__wrapper custom-scroll overflow-y-auto flex-1 z-0 text-black">
 					<div className="comment__container text-black pt-4">
-						<div className="react__comments-header px-3.5 text-[15px] leading-4 pb-2 mb-1.5 font-bold">
+						<RootCommentsList
+							className="px-5"
+							userID={user?._id}
+							comments={listComments}
+							totalRecord={totalRecord}
+							limit={limit}
+							mediaID={mediaID}
+						/>
+						<div className='flex flex-col w-full max-h-full overflow-y-auto'>
+							<ReplyCommentField
+								attachFile
+								inputContainerClassName="flex w-full p-2"
+								fileContainerClassName="border-t"
+								mediaID={mediaID} />
+						</div>
+						{/* <div className="react__comments-header px-3.5 text-[15px] leading-4 pb-2 mb-1.5 font-bold">
 							<span>Xem 152 bình luận trước</span>
 						</div>
 						<RootCommentsList className="px-3.5" />
@@ -53,7 +95,7 @@ export const MediaCommentsPage: FC = () => {
 						</div>
 						<div className='flex flex-col sticky bottom-0 bg-white w-full max-h-full overflow-y-auto'>
 							<ReplyCommentField attachFile inputContainerClassName="flex w-full p-2" fileContainerClassName="border-t" mediaID="" />
-						</div>
+						</div> */}
 					</div>
 				</div>
 			</div>
@@ -68,6 +110,13 @@ export const MediaCommentsPage: FC = () => {
 					</div>
 				</div>
 			</ModalContainer>
+			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+				createAt: state.createAt,
+				images: state.images,
+				index: state.index,
+				mediaID: state.mediaID,
+				author: state.author
+			}} />
 		</>
 	);
 };

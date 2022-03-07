@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
-import { useQuery } from "react-query";
 import { DatahubTypesParams } from "typings/datahub/datahubtypes";
+import useQueryDatahub from "./useQueryDatahub";
 
 type Props = DatahubTypesParams;
+type Options = {
+  enabled?: boolean;
+};
 
-const useDatahubTypes = (props?: Props) => {
-  return useQuery(
-    ["datahub_types", props?.type || 1],
-    () => DatahubRepository.datahubTypes(props),
+const useDatahubTypes = (
+  props?: Props,
+  options: Options = { enabled: true }
+) => {
+  return useQueryDatahub(
+    ["datahub_types", props?.type || 1, props?.parentID, props?.keyword || ""],
+    ({ cursor }) =>
+      DatahubRepository.getDatahubTypesList({ ...props, lastestID: cursor }),
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+      enabled: options.enabled, // https://react-query.tanstack.com/guides/disabling-queries
       keepPreviousData: true,
     }
   );
