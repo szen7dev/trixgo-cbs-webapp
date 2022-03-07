@@ -10,7 +10,7 @@ export const NotificationController:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     const checkedValue = useCallback(() => {
-        return !chat.usersMute.includes(profileId)
+        return !(chat.usersMute??[]).includes(profileId)
     }, [chat.usersMute])
 
     const [userMute, setUserMute] = useState(checkedValue());
@@ -35,7 +35,7 @@ export const NotificationController:FC<Props> = ({chat}) => {
             <div className={"flex-1 text-left ml-4"}>Notifications</div>
             <input
                 onChange={event => handleSetUserMute(event.target.checked)}
-                checked={userMute}
+                // checked={userMute}
                 defaultChecked={checkedValue()}
                 className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
             <NotificationMutePopup isShow={showPopupMute} handleClose={() => setShowPopupMute(false)} afterClose={() => handleCloseConfirmBox()}/>

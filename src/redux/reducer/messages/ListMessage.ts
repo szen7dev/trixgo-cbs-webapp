@@ -131,7 +131,10 @@ const listMessageSlice = createSlice({
                     ...state.data.listFakeMessage,
                     [action.payload.conversationId]: {
                         ...state.data.listFakeMessage[action.payload.conversationId],
-                        [action.payload.messageId] : action.payload.messageData
+                        [action.payload.messageId] : {
+                            ...action.payload.messageData,
+                            isFake: true
+                        }
                     }
                 },
             }

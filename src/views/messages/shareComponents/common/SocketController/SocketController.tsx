@@ -75,7 +75,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     };
 
     const onReceiveConversation = (data: any) => {
-        // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
+        console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
         dispatch(setListConversation(data?.data));
     }
 
