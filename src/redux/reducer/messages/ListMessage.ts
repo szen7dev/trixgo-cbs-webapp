@@ -365,6 +365,7 @@ const listMessageSlice = createSlice({
         updateSeenMessage (state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
             action.payload.messsagesId.forEach((messageId: string) => {
+                if (!newMessage[messageId]) return;
                 const usersSeen = newMessage[messageId].usersSeen??[];
                 const newUsersSeen = usersSeen;
                 usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
