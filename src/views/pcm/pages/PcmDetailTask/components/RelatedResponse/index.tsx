@@ -422,9 +422,7 @@ const Response: FC<Props> = ({ task }) => {
               />
             </div>
             <div className="mt-3">
-              {
-                toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)
-              }
+              {toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)}
               <div
                 className={
                   classNames("flex flex-wrap border custom-scroll overflow-x-hidden relative rounded-md",

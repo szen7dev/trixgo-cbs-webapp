@@ -20,7 +20,7 @@ export const FileAttachment: FC<Props> = ({ files }) => {
 
         return (
           <div key={file._id} className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
-            <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
+            <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
               <div className="flex">
                 <div>
                   <img src={PDFIcon} className="w-8" alt="PDF" />

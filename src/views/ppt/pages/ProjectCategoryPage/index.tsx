@@ -31,6 +31,7 @@ const ProjectCategoryPage: FC = () => {
 		menuID: APP_ID.PCM.menuApp.projects.id,
 		type: "1"
 	});
+
 	// Phân quyền theo nhóm chức năng
 	useEffect(() => {
 		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {

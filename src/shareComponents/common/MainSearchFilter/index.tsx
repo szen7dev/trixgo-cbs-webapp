@@ -298,9 +298,9 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại</p>
                   <DropdownSearchable
                     onchangeValue={(value) =>
-                      setFieldValue("isproposal", value.id)
+                      setFieldValue("subType", value.id)
                     }
-                    onClearData={() => setFieldValue("isproposal", "")}
+                    onClearData={() => setFieldValue("subType", "")}
                     placeholder={"Phân loại"}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}

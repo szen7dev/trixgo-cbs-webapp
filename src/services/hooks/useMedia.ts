@@ -7,7 +7,6 @@ import {
     ListCommentsPayload, 
     ListMediasPayload,
     MediaReactionPayload,
-    infoMediaResponse,
     PostResponse,
     FetchMediaPayload
 } from "typings/media";

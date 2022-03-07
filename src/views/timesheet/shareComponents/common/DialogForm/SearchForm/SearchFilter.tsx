@@ -363,9 +363,9 @@ const MainSearchFilter: FC<Props> = ({
                   </p>
                   <DropdownSearchable
                     onchangeValue={(value) =>
-                      setFieldValue("isproposal", value.id)
+                      setFieldValue("subType", value.id)
                     }
-                    onClearData={() => setFieldValue("isproposal", "")}
+                    onClearData={() => setFieldValue("subType", "")}
                     placeholder={"Phân loại"}
                     className={
                       "t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"

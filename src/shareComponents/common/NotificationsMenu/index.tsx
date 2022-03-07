@@ -44,10 +44,10 @@ export const NotificationsMenu: FC<Props> = ({ notifications, total, onScroll })
             <span className="font-bold text-lg text-dark">
               Mới
             </span>
-            <a className="text-primary" href="/">Xem tất cả</a>
+            {/* <a className="text-primary" href="/">Xem tất cả</a> */}
           </div>
 
-          <div className="t-header-notification-item-container overflow-auto" onScroll={onScroll}>
+          <div className="t-header-notification-item-container overflow-auto overflow-x-hidden" onScroll={onScroll}>
             {notifications.length ? notifications.map(notification => (
               <Menu.Item key={notification._id}>
                 <NotificationItem notification={notification} />

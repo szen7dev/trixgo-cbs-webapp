@@ -53,6 +53,28 @@ export type Task = {
   amountMarkedResponse: number;
 };
 
+export interface addTaskPayload {
+  name: string;
+  description: string;
+  projectID: string;
+  fieldID: string;
+  groupID: string;
+  assigneeID: string;
+  subType: number;
+  type: number;
+  startTime: string;
+  expiredTime: string;
+  relatedIDs: string[];
+  authorAttachs: string[];
+}
+
+export interface addTaskResponse {
+  error: boolean;
+  data: Data;
+  status: number;
+  message: string;
+}
+
 export type ListTaskResponse = APIResponse & {
   data: {
     listRecords: Array<Task>;
@@ -80,6 +102,8 @@ export type CheckList = {
   expiredTime: string;
   typeStatus: number;
   status: number;
+  type: number;
+  parent: string;
   checklist: string;
   assignee: Assignee;
 };
@@ -135,6 +159,8 @@ export type ChildTask = {
   name: string;
   expiredTime: string;
   typeStatus: number;
+  type: number;
+  parent: string;
   status: number;
   assignee: Assignee;
 };

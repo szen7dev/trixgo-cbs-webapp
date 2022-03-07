@@ -1,6 +1,7 @@
-import { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import cn from "classnames";
+import debounce from "lodash/debounce";
 import { UseMainSearch } from 'services/hooks/useMainSearch';
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
@@ -29,14 +30,12 @@ export const MainSearchDialog: FC = () => {
           isLoadingSearchResultList, 
         } = UseMainSearch('search_results', { keyword: searchText, lastestID: !isResultNavigation ? '' : currentID, ...filterParam });
 
-  const toggleSearchFilter = () => {
-    setIsVisibleSearchFilter(!isVisibleSearchFilter);
-  };
+  const toggleSearchFilter = () => setIsVisibleSearchFilter(!isVisibleSearchFilter);
 
-  const handleSearchInput = (val: string) => {
-    setSearchText(val);
+  const handleSearchInput = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
     setIsResultNavigation(false);
-  };
+  }, 700) 
   
   useEffect(() => {
     fetchSearchResultList();
@@ -57,8 +56,7 @@ export const MainSearchDialog: FC = () => {
       {/* Search form */}
       <div className="t-main-search-input pt-4 pl-8 pr-8 pb-3 relative">
         <input 
-          value={searchText} 
-          onChange={(e) => handleSearchInput(e.target.value)}
+          onChange={handleSearchInput}
           type="search" 
           placeholder="Tìm kiếm" 
           className="w-full focus:outline-none h-11 border border-solid border-primary-border pl-3 pr-16 rounded-md" />
