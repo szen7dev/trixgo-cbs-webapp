@@ -24,7 +24,7 @@ const listConversationSlice = createSlice({
 
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.createAt??conversation.modifyAt).toDate().getTime(),
+                    position: isSavedMessages ? 8640000000000000 : moment(conversation.modifyAt).toDate().getTime(),
                     isSaved: isSavedMessages,
                     isPin: isSavedMessages?true: conversation.isPin
                 }
@@ -73,7 +73,7 @@ const listConversationSlice = createSlice({
             const isSavedMessages = action.payload.conversationData.members.length === 1;
             action.payload.conversationData = {
                 ...action.payload.conversationData,
-                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData?.lastMessage?.createAt??action.payload.conversationData.modifyAt).toDate().getTime(),
+                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData.modifyAt).toDate().getTime(),
                 isSaved: isSavedMessages,
                 isPin: isSavedMessages?true: action.payload.conversationData.isPin
             };
