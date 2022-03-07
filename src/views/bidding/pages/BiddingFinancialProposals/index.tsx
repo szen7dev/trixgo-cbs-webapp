@@ -1,8 +1,6 @@
 import React, { FC } from 'react'
 import { Link, useHistory, useParams, generatePath } from 'react-router-dom';
-import '../../styles/style.css';
-
-import image from 'assets/images/media/media-default.png';
+import '../../styles/style.css'
 
 export const BiddingFinancialProposals: FC = () => {
 	const history = useHistory();
@@ -22,7 +20,7 @@ export const BiddingFinancialProposals: FC = () => {
 								<td key={i} className="bg-[#F2C0CC]" style={{ zIndex: -1 }}>
 									<Link to='/'>
 										<div className='relative text-left'>
-											<img className='w-14 h-14 object-cover' src={image} alt="" />
+											<img className='w-14 h-14 object-cover' src="/static/media/image 175.8dceee74.png" alt="" />
 											<p className='mt-3 text-cbs-subtext'>
 												Công ty Cổ phần CONINCO Quản lý dự án và đầu tư
 											</p>

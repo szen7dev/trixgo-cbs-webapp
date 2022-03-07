@@ -25,11 +25,10 @@ import { Loader } from "shareComponents/common";
 import styles from "views/pcm/styles/pcm_task.module.css";
 
 import TaskRepository from "apis/task";
-import { useCheckList } from "services/hooks/useTask";
+import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
-// Modal
 import useModal from "views/pcm/hooks/useModal";
 import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
 
@@ -42,10 +41,16 @@ export const PcmDetailTask: FC = () => {
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
 
-  const { data: infoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo(id)
+  const { data: infoTask, refetch, isLoading } = useQuery(`task_info.${id}`, () =>
+    TaskRepository.taskInfo(id),
+    { refetchOnWindowFocus: false }
   );
-  const { listCheckList, totalRecord, nextPageListCheckList } = useCheckList(id);
+  const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({ 
+    parentID: id, isFetchChecklist: true
+  });
+  const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({ 
+    parentID: id, isFetchChildTask: true
+  });
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -97,7 +102,7 @@ export const PcmDetailTask: FC = () => {
             </svg>
           </button>
           <span className="mx-5 text-primary-gray">|</span>
-          <button className="mx-3">
+          {/* <button className="mx-3">
             <img
               className="w-6 opacity-80"
               src={DownloadIcon}
@@ -109,19 +114,19 @@ export const PcmDetailTask: FC = () => {
           </button>
           <button className="mx-3">
             <img className="w-6" src={CopyIcon} alt="Copy icon" />
-          </button>
+          </button> */}
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
           <button className="mx-3">
             <img className="w-6" src={IconPencil} alt="Pencil icon" />
           </button>
-          <button className="mx-3">
+          {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
           </button>
           <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
-          </button>
+          </button> */}
           <button className="mx-3" onClick={openAddUserRelation}>
             <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
           </button>
@@ -182,7 +187,7 @@ export const PcmDetailTask: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    {`Việc cha: ${infoTask?.data?.parent?.name}`}
+                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${infoTask?.data?.parent?._id}`)}>{infoTask?.data?.parent?.name}</button>
                   </span>
                 </div>
               )}
@@ -222,9 +227,7 @@ export const PcmDetailTask: FC = () => {
           <div className="w-[791px]">
             <div className="pl-5 pr-8 pt-5">
               <div className={cn(styles["dont-break-out"])}>
-                <div
-                  className={cn(styles["t-task-detail-content"], "text-[13px]")}
-                >
+                <div className={cn(styles["t-task-detail-content"], "text-[13px]")}>
                   {parse(
                     isTruncate
                       ? _truncate(infoTask.data?.description || "", { length: 300 })
@@ -240,24 +243,24 @@ export const PcmDetailTask: FC = () => {
                 )}
               </div>
 
-              <FileAttachment />
+              <FileAttachment files={infoTask.data.authorAttachs} />
             </div>
             <div className="mt-8 pr-3">
               <CheckList
                 componentType="CHECKLIST"
                 task={infoTask.data}
                 data={listCheckList}
-                totalRecord={totalRecord}
+                totalRecord={totalRecordCheckList}
                 onSeeMore={nextPageListCheckList}
               />
             </div>
             <div className="mt-8 pr-3">
               <CheckList
-                componentType="CHILDTASK"
+                componentType="CHILD_TASK"
                 task={infoTask.data}
-                data={[]}
-                totalRecord={0}
-                onSeeMore={() => ''}
+                data={listChildTask}
+                totalRecord={totalRecordChildTask}
+                onSeeMore={nextPageListChildTask}
               />
             </div>
             <div className="px-5 mt-5">
@@ -274,6 +277,7 @@ export const PcmDetailTask: FC = () => {
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
             <SideBar
+              taskID={infoTask.data?._id}
               author={infoTask.data?.author}
               assignee={infoTask.data?.assignee}
               createAt={infoTask.data?.createAt}
@@ -287,9 +291,16 @@ export const PcmDetailTask: FC = () => {
           <CommentContainer className="w-[791px]" />
           <ModalLarge
             show={isShow}
+            toggle={toggleModal} 
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} />}
+            {type === 'relation' && <ModalAddRelationUser 
+              toggle={toggleModal} 
+              taskID={id} 
+              refetch={refetch} 
+              related={infoTask.data?.related}
+              modalType={'ADD_RELATION_USER'}
+            />}
             {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
           </ModalLarge>
         </div>

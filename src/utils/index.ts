@@ -66,3 +66,14 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
         isInitialValue: true
     }
 }
+
+export const nl2p = function (text: string){
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    let paragraphs = '';
+    const arr = text.split("\n");
+    for (const item of arr) { 
+        paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1">$1</a>') + '</p>'; 
+    }
+
+    return paragraphs;
+}

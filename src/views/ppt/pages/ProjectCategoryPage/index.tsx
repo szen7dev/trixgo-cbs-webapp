@@ -18,7 +18,6 @@ import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 
 // Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
-import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import 'views/document/styles/document.css'
@@ -32,6 +31,7 @@ const ProjectCategoryPage: FC = () => {
 		menuID: APP_ID.PCM.menuApp.projects.id,
 		type: "1"
 	});
+
 	// Phân quyền theo nhóm chức năng
 	useEffect(() => {
 		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {

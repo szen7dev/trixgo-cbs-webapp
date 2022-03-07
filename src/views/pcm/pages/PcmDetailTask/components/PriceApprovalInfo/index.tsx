@@ -15,7 +15,7 @@ export const PriceApprovalInfo: FC<Props> = ({
 }) => {
   return (
     <>
-      <p className="text-x-large my-5">Giá trị đệ trình/phê duyệt</p>
+      {/* <p className="text-x-large my-5">Giá trị đệ trình/phê duyệt</p>
       <div className="flex items-center rounded p-5 bg-blue-100 border-2 border-primay-border">
         <div className="w-3/4">
           <div>
@@ -54,7 +54,7 @@ export const PriceApprovalInfo: FC<Props> = ({
             Đồng ý
           </button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

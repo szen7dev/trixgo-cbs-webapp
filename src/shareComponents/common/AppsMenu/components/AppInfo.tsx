@@ -77,13 +77,6 @@ export const APP_INFO = new Map([
         icon: accountingLogo,
         route: '/accounting/home'
     }],
-    /* Ứng dụng Support */
-    ['61e0499efdebf77b072d1b11', {//ok
-        key: "61e0499efdebf77b072d1b11",
-        name: "Support",
-        icon: supportLogo,
-        route: '/support/home'
-    }],
     /* Ứng dụng Owner */
     ['61e04989fdebf77b072d1b10', {//ok
         key: "61e04989fdebf77b072d1b10",
@@ -154,10 +147,10 @@ export const APP_INFO = new Map([
         icon: financialLogo,
         route: '/financial/home'
     }],
-    /* Ứng dụng Quản lý công việc */
+    /* Ứng dụng Quản lý dự án */
     ['5dfe4b9051dc622100bb9d89', {//OK
         key: "5dfe4b9051dc622100bb9d89",
-        name: "Quản lý công việc",
+        name: "Quản lý dự án",
         icon: pcmLogo,
         route: '/pcm/home'
     }],
@@ -169,45 +162,45 @@ export const APP_INFO = new Map([
         route: '/media/home'
     }],
     /* Ứng dụng Quản lý danh mục */
-    ['5f5234b2880c2f26c8df8c13', {//ok==============
-        key: "5f5234b2880c2f26c8df8c13",
-        name: "Quản lý danh mục",
-        icon: defaultLogo,
-        route: '/'
-    }],
-    /* Ứng dụng Quản lý dự án */
-    ['5fe58c9b95db3c6e1534ec78', {//ok
-        key: "5fe58c9b95db3c6e1534ec78",
-        name: "Quản lý dự án",
-        icon: defaultLogo,
-        route: '/'
-    }],
-    /* Ứng dụng Ứng dụng bỏ */
-    ['5e4785eb8b50843d34481d49', {//Bỏ
-        key: "5e4785eb8b50843d34481d49",
-        name: "Ứng dụng bỏ",
-        icon: defaultLogo,
-        route: '/'
-    }],
-    /* Ứng dụng Ứng dụng bỏ */
-    ['5dfe4bf251dc622100bb9d8c', {//OK==============
-        key: "5dfe4bf251dc622100bb9d8c",
-        name: "Ứng dụng bỏ",
-        icon: defaultLogo,
-        route: '/'
-    }],
-    /* Ứng dụng Ứng dụng bỏ */
-    ['5e0475825e30dce72849a489', {//OK==============Bỏ
-        key: "5e0475825e30dce72849a489",
-        name: "Ứng dụng bỏ",
-        icon: defaultLogo,
-        route: '/'
-    }],
-    /* Ứng dụng Ứng dụng bỏ */
-    ['5eabfdc72171391e5f6a0468', {//OK==============Bỏ
-        key: "5eabfdc72171391e5f6a0468",
-        name: "Ứng dụng bỏ",
-        icon: defaultLogo,
-        route: '/'
-    }],
+    // ['5f5234b2880c2f26c8df8c13', {//ok==============
+    //     key: "5f5234b2880c2f26c8df8c13",
+    //     name: "Quản lý danh mục",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
+    // /* Ứng dụng Quản lý dự án */
+    // ['5fe58c9b95db3c6e1534ec78', {//ok
+    //     key: "5fe58c9b95db3c6e1534ec78",
+    //     name: "Quản lý dự án",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
+    // /* Ứng dụng Ứng dụng bỏ */
+    // ['5e4785eb8b50843d34481d49', {//Bỏ
+    //     key: "5e4785eb8b50843d34481d49",
+    //     name: "Ứng dụng bỏ",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
+    // /* Ứng dụng Ứng dụng bỏ */
+    // ['5dfe4bf251dc622100bb9d8c', {//OK==============
+    //     key: "5dfe4bf251dc622100bb9d8c",
+    //     name: "Ứng dụng bỏ",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
+    // /* Ứng dụng Ứng dụng bỏ */
+    // ['5e0475825e30dce72849a489', {//OK==============Bỏ
+    //     key: "5e0475825e30dce72849a489",
+    //     name: "Ứng dụng bỏ",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
+    // /* Ứng dụng Ứng dụng bỏ */
+    // ['5eabfdc72171391e5f6a0468', {//OK==============Bỏ
+    //     key: "5eabfdc72171391e5f6a0468",
+    //     name: "Ứng dụng bỏ",
+    //     icon: defaultLogo,
+    //     route: '/'
+    // }],
 ]);

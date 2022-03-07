@@ -105,7 +105,6 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
           <input
             className="form-check-input mr-2"
             type="checkbox"
-            value=""
             id="flexCheckDefault"
             checked={getStateCheckedAll()}
 						onChange={onClickCheckAll}
@@ -118,8 +117,6 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
               <input
                 className="form-check-input mr-9"
                 type="checkbox"
-                value=""
-                id="flexCheckDefault"
                 checked={getStateChecked(item._id)}
                 onChange={() => onClickCheckButton(item._id)}
               />

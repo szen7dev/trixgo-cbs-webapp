@@ -11,6 +11,8 @@ export type Department = {
     actualStartTime: string;
     actualFinishTime: string;
     numberFinishOfDocs: number;
+    admins: string[];
+    members: string[];
     pm: Human;
     assistant: Human;
 }

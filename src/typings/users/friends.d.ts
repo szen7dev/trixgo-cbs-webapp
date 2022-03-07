@@ -22,6 +22,7 @@ export interface Friend {
     _id: string;
     bizfullname: string,
     fullname: string;
+    image: string;
     email: string;
     phone: string;
     imgUrl?: string;
@@ -30,6 +31,7 @@ export interface Friend {
 
 export interface ListFriendPayload extends QueryParam {
     select?: string;
+    isFetch?: boolean
 }
 interface QueryFriendResponse extends APIResponse {
     data: {

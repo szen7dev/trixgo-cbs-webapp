@@ -69,7 +69,7 @@ export const usePcmAdmin = (payload: { appID: string, keyword?: string }): UsePc
             async (pageParam: any) => {
                 return AuthenticationRepository.getListAppRole({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
-                    select: "name app company description createAt modifyAt",
+                    select: "name app company description createAt modifyAt type",
                     populates: JSON.stringify({
                         path: "userCreate userUpdate",
                         select: "bizfullname",
