@@ -69,9 +69,9 @@ export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
                                             key={reaction._id}
                                             className={"flex items-center"}
                                         >
-                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${reaction.userCreate.image}`} className={"w-[40px] h-[40px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
+                                            <img src={`${process.env.REACT_APP_URL_S3_USER}/${reaction?.userCreate?.image}`} className={"w-[40px] h-[40px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
                                             <div className={"flex-1 ml-2"}>
-                                                {reaction.userCreate.bizfullname}
+                                                {reaction?.userCreate?.bizfullname}
                                             </div>
                                             <img src={listEmoji[reaction.type-1].icon} className={"w-[24px] h-[24px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
                                         </div>
