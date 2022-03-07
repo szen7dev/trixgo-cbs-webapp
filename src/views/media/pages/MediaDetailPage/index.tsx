@@ -38,7 +38,7 @@ import 'views/media/styles/index.css';
 import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
 import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
-import { abbreviateNumber } from 'utils';
+import { abbreviateNumber, nl2p } from 'utils';
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
 import { ModalZoomView } from "shareComponents/common/ZoomView";

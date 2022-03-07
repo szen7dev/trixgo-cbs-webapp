@@ -1,11 +1,8 @@
 /* eslint-disable no-var */
-import React, { FC, useRef } from 'react';
+import { FC, useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-type Props = {
-}
-
-const WorkshopEditor: FC<Props> = () => {
+const WorkshopEditor: FC = () => {
 	const editorRef = useRef<any>(null);
 	const log = () => {
 		if (editorRef.current) {

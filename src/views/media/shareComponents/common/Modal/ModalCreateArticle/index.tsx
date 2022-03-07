@@ -1,12 +1,13 @@
 /**
  * Libraries
  */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import { Editor } from '@tinymce/tinymce-react';
 import cn from "classnames";
 
 /**
@@ -43,6 +44,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	content: "",
 	type: 'just-me',
 } }) => {
+	const editorRef = useRef<any>(null);
 
 	const [uploads,
 		{
@@ -234,7 +236,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		>
 			{
 				formik => {
-					const { values } = formik;
+					const { values, setFieldValue } = formik;
 					return (
 						<Form autoComplete="off">
 							<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
@@ -259,18 +261,60 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								</button>
 							</div>
 							<div className="px-6 mt-2 pt-3.5 flex-1 md:h-[568px] flex flex-col">
-								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
+								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full mb-" {...formik.getFieldProps('title')} />
 								<ErrorMessage
 									name="title"
 									component="span"
 									className="font-normal text-sm text-negative italic"
 								/>
-								<textarea
+								<Editor
+									apiKey={process.env.REACT_APP_TINY_MCE_KEY || 'mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt'}
+									onInit={(_, editor) => editorRef.current = editor}
+									initialValue={initialValues.content}
+									onSaveContent={() => console.log('hello')}
+									onChange={() => setFieldValue('content', editorRef.current.getContent())}
+									init={{
+										height: 'calc(100% - 32.5px)',
+										menu: {
+											file: { title: 'File', items: 'newdocument restoredraft | preview | print | basicitem ' },
+											edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+											view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
+											insert: { title: 'Insert', items: 'image link media template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+											format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat' },
+											tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+											// table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
+											help: { title: 'Help', items: 'help' }
+										},
+										menubar: true,
+										plugins: [
+											'fullpage save advlist autolink lists link image charmap print preview anchor',
+											'searchreplace visualblocks code fullscreen',
+											'insertdatetime media table paste code help wordcount'
+										],
+										fullpage_default_title: 'My default page title',
+										// toolbar: 'save undo redo | formatselect | ' +
+										// 	'bold italic backcolor | alignleft aligncenter ' +
+										// 	'alignright alignjustify | bullist numlist outdent indent | ' +
+										// 	'removeformat | help',
+										// content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+										// content_css: 'document',
+										setup(editor) {
+											editor.ui.registry.addMenuItem('basicitem', {
+												text: 'Save',
+												onAction: function () {
+													editor.save()
+												},
+												icon: 'save'
+											});
+										}
+									}}
+								/>
+								{/* <textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
 									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5 flex-grow"
 									{...formik.getFieldProps('content')}
-								></textarea>
+								></textarea> */}
 								<ErrorMessage
 									name="content"
 									component="span"
