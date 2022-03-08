@@ -25,9 +25,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	const [amountComment, setAmountComment] = useState<number>(0);
 
 	useEffect(() => {
-		if(comments && comments.length) {
-			dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-		}
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
 	}, [comments?.length])
 
 	useEffect(() => {
@@ -48,12 +46,13 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 
 	let _comments: CommentProps[] = [];
 	if (!statePost.isShow || statePost.isPost) {
-		_comments = (state.comments && state.comments.length) ? state.comments : []
+		_comments = (state.comments && state.comments?.length) ? state.comments : []
 	} else if (statePost.isComment) {
 		_comments = (state.commentsReply[statePost.taskID] || []).filter(Boolean);
 	}
 
-	if(!totalRecord && !_comments.length) return null;
+	if(!totalRecord && !_comments?.length) return null;
+	console.log({ comments, _comments });
 
 	return (
 		<>

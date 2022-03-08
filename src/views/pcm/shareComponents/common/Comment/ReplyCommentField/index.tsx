@@ -67,7 +67,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const { user } = useAuth();
 	const { addFileToUpload } = useUpload({
 		appID: APP_KEY.PCM_PLAN_TASK,
-		companyID: user?.company._id,
+		companyID: user?.company?._id,
 		projectID,
 		groupID
 	});
