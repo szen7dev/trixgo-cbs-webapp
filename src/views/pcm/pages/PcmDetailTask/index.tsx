@@ -5,6 +5,7 @@ import moment from "moment";
 import parse from "html-react-parser";
 import _truncate from "lodash/truncate";
 import cn from "classnames";
+import { toast } from "react-toastify";
 
 // import DownloadIcon from "assets/images/icons8-download-48_2.png";
 // import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
@@ -26,12 +27,13 @@ import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/c
 
 import TaskRepository from "apis/task";
 import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
 import useModal from "views/pcm/hooks/useModal";
 import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
+import { APP_ID } from "apis/localdb";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
 
@@ -39,7 +41,7 @@ export const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModal();
-
+  const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
@@ -74,8 +76,15 @@ export const PcmDetailTask: FC = () => {
   };
 
   useEffect(() => {
+    if (!isSuccessApp) return;
+    if (isSuccessApp && !hasPermission) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
+
     if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
-      history.push('/');
+      history.push('/pcm/home');
+      toast.error("Bạn không có quyền truy cập công việc này!");
     }
 
     if (infoTask?.data) {
@@ -107,7 +116,7 @@ export const PcmDetailTask: FC = () => {
 
       setConfirmUsers(confirmUsers);
     }
-  }, [infoTask]);
+  }, [infoTask, isSuccessApp]);
 
   if (isLoading || !infoTask || !infoTask.data) {
     return <Loader className="border-primary" />;
