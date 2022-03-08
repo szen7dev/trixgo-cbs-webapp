@@ -10,7 +10,6 @@ import SliderRow from '../../sharedComponents/common/SliderRow';
 import iconDatabase from 'assets/images/icons8-database-96 2.png'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import Skeleton from 'shareComponents/common/Skeleton/Skeleton';
 
 type Props = {
 
@@ -197,11 +196,6 @@ const DatahubContractorHome: FC<Props> = (props) => {
 									</Fragment>
 								))
 							}
-							{isLoading && Array.from({ length: 4 }).map((_, idx) => (
-								<div key={idx} className='w-3/12 px-2 mb-3'>
-									<Skeleton style={{ height: '253px' }} className="rounded-cbs bg-gray-200" />
-								</div>
-							))}
 						</div>
 					</div>
 					: <div className='space-y-10 mt-10'>

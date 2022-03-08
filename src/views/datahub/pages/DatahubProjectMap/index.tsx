@@ -4,7 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { LatLngExpression, icon, Marker as MarketDefault } from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import useDatahubProjects from 'services/hooks/datahub/useDatahubProjects';
+import useDatahubProjects from 'services/hooks/datahub/projects/useDatahubProjects';
 
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png'

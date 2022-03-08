@@ -6,6 +6,9 @@ export const action = {
 	showMenu(e: any = {}): void { alert('Missing Wrapper') },
 }
 
+export let showContextMenu = action.showMenu;
+export let hideContextMenu = action.showMenu;
+
 type Props = {
 	preventHideOnScroll?: boolean;
 	preventHideOnResize?: boolean;
@@ -48,8 +51,8 @@ const ContextMenu: FC<Props> = (props) => {
 	}
 	const handleOutsideClick = (e: any) => {
 		if (!menuRef.current) return;
-		if (props.preventHideOnClick && menuRef.current.contains(e.target)) hideMenu();
-		else hideMenu();
+		if (props.preventHideOnClick && menuRef.current.contains(e.target)) return;
+		hideMenu();
 	}
 
 	function registerHandlers() {
@@ -73,6 +76,8 @@ const ContextMenu: FC<Props> = (props) => {
 	useEffect(() => {
 		action.hideMenu = handleHide;
 		action.showMenu = handleShow;
+		hideContextMenu = handleHide;
+		showContextMenu = handleShow;
 		return () => {
 			unregisterHandlers();
 		}

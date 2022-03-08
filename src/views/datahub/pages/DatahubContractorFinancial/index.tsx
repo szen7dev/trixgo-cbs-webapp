@@ -1,21 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
+import Skeleton from 'react-loading-skeleton'
 
+// ======= HOOKS ========
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import useQueryFinancials from "services/hooks/datahub/financial/useQueryFinancials";
 
-import { SearchInput } from "shareComponents/common";
+// ======= GLOBAL COMPONENTS ========
+import { GroupActions, ButtonCreate, ButtonMore, SearchInput } from "shareComponents/common";
+// import DropdownFilterButton from "views/document/components/DocumentFilterButton";
+
+// ======= CONTEXT ========
+import { useContractorCompany } from "views/datahub/contexts/Company";
+
+// ======= COMPONENTS ========
+import { DocumentDropdown } from "views/document/sharedComponents/common"
+
+// ======= MODAL ========
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import ModalCreateFinancial from "./components/ModalCreateFinancial";
 
-// import DropdownFilterButton from "views/document/components/DocumentFilterButton";
-import { GroupActions } from "shareComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
-import { DocumentDropdown } from "views/document/sharedComponents/common";
+// ======= ASSETS ========
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
+
 import { formatNumber } from "utils/ppt";
-import useQueryFinancials from "services/hooks/datahub/useQueryFinancials";
-import { useContractorCompany } from "views/datahub/contexts/Company";
-import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import { DatahubFinancial } from "typings/datahub/financial";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
@@ -29,7 +37,7 @@ const DatahubContractorFinancial: FC = () => {
 	const [selected, setSelected] = useState<DatahubFinancial | Record<string, any>>({});
 
 	const { data: company } = useContractorCompany();
-	const { data } = useQueryFinancials({ contractorID: company?.data._id || '' });
+	const { data, isLoading } = useQueryFinancials({ contractorID: company?.data._id || '' });
 
 	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
@@ -144,6 +152,15 @@ const DatahubContractorFinancial: FC = () => {
 									)
 								})
 							}
+							{isLoading && Array.from({ length: 4 }).map((_, i) => (
+								<tr key={i}>
+									{Array.from({ length: 8 }).map((item, index) => (
+										<td key={index} className="px-3 pt-2.5 pb-3 border-b border-cbs-border">
+											<Skeleton style={{ borderRadius: '100px' }} duration={1} />
+										</td>
+									))}
+								</tr>
+							))}
 						</tbody>
 					</table>
 				</div>

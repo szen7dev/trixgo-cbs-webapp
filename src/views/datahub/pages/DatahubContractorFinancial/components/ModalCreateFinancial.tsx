@@ -7,11 +7,11 @@ import { CustomFieldFormik, CustomDatePickerFormik } from 'views/datahub/sharedC
 import DatahubRepository from 'apis/datahub';
 // import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik';
 
-import "react-datepicker/dist/react-datepicker.css";
-import { DatahubFinancialBody } from 'typings/datahub/financial';
 import { toast } from 'react-toastify';
 import { useQueryClient } from 'react-query';
-import useDatahubFinancial from 'services/hooks/datahub/useDatahubFinancial';
+
+import useDatahubFinancial from 'services/hooks/datahub/financial/useFinancial';
+import { DatahubFinancialBody } from 'typings/datahub/financial';
 
 type Props = {
 	datahubFinreportID?: string;
@@ -47,7 +47,7 @@ const ModalCreateFinancial: FC<Props> = (props) => {
 		grossProfit: 0,
 		grossProfitAfterTax: 0,
 	})
-	const { isLoading } = useDatahubFinancial({
+	useDatahubFinancial({
 		contractorID: props.contractor,
 		datahubFinreportID: props.datahubFinreportID
 	}, {

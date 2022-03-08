@@ -95,6 +95,8 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 											setIsOpen(true);
 											onChange?.(e.target.value);
 										}}
+										name={field.name}
+										onBlur={field.onBlur}
 									/>
 									<span className='absolute right-2 top-1.5'>
 										<svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4' viewBox="0 0 320 512">

@@ -26,6 +26,7 @@ export type ResponseList<T> = {
 
 export type ResponseCreateSuccess<T> = {
   error: boolean;
+  status: number;
   data: T;
 };
 
