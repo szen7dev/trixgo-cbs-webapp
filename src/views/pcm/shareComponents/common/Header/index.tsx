@@ -5,18 +5,19 @@ import styles from "views/pcm/styles/pcm_task.module.css";
 import BulletedIcon from "assets/images/icons8-bulleted-list-96 1.png";
 
 type Props = {
+  type: number;
   currentTab?: number;
   viewMode?: string;
   onChangeMode: (mode: string) => void;
 };
 
-export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
+export const Header: FC<Props> = ({ type, viewMode, onChangeMode }) => {
   const [currentTab, setCurrentTab] = useState(1);
-  const tabs = [
-    {
-      id: 1,
-      title: "Việc của tôi",
-    },
+  // const tabs = [
+  //   {
+  //     id: 1,
+  //     title: "Việc của tôi",
+  //   },
     // {
     //   id: 2,
     //   title: "Phê duyệt của tôi",
@@ -33,14 +34,23 @@ export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
     //   id: 5,
     //   title: "Báo cáo",
     // },
-  ];
+  // ];
 
   const onClickTab = useCallback(tabID => setCurrentTab(tabID), []);
 
   return (
     <div className="flex justify-between border-b items-end py-2">
       <div className="flex ml-2">
-        {tabs.map((tab) => (
+        <button onClick={() => onClickTab(type)}>
+          <div className={`border-primary border-b-2 text-black font-bold mx-2 pb-3 px-3`}>
+            <span>
+              {type === 1 && 'Việc của tôi'}
+              {type === 2 && 'Việc giao người khác'}
+              {type === 3 && 'Việc quan tâm'}
+            </span>
+          </div>
+        </button>
+        {/* {tabs.map((tab) => (
           <button key={tab.id} onClick={() => onClickTab(tab.id)}>
             <div
               className={`${
@@ -52,7 +62,7 @@ export const Header: FC<Props> = ({ viewMode, onChangeMode }) => {
               <span>{tab.title}</span>
             </div>
           </button>
-        ))}
+        ))} */}
       </div>
       <div className="flex space-x-5 items-center mr-3 py-2 hidden">
         <span className="text-primary-gray">|</span>

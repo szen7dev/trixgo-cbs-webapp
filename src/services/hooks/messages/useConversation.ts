@@ -44,7 +44,7 @@ export const UseConversation = () : UseConversationType => {
         const unreadMessages:string[] = [];
         data.listRecords.forEach(message => {
             let isUnread = true;
-            message.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+            (message.usersSeen??[]).forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
                 if (typeof user === "string") {
                     if (user === profile._id) {
                         isUnread = false;

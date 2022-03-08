@@ -146,8 +146,6 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 
 	// Xử lý hứng giá trị các biến từ Client truyền lên sau khi Submit
 	const handleSubmit = async (values: MediaPayload) => {
-		console.log({ values });
-		
 		values.images = [];
 		values.files = [];
 
@@ -261,13 +259,13 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								</button>
 							</div>
 							<div className="px-6 mt-2 pt-3.5 flex-1 md:h-[568px] flex flex-col">
-								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full mb-" {...formik.getFieldProps('title')} />
+								<input type="text" placeholder="Tiêu đề bài viết" className="post__title focus:outline-none w-full" {...formik.getFieldProps('title')} />
 								<ErrorMessage
 									name="title"
 									component="span"
 									className="font-normal text-sm text-negative italic"
 								/>
-								<Editor
+								{/* <Editor
 									apiKey={process.env.REACT_APP_TINY_MCE_KEY || 'mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt'}
 									onInit={(_, editor) => editorRef.current = editor}
 									initialValue={initialValues.content}
@@ -308,13 +306,13 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 											});
 										}
 									}}
-								/>
-								{/* <textarea
+								/> */}
+								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
 									className="w-full border-t border-secondary focus:outline-none resize-none mt-3.5 pt-3.5 text-lg leading-5 flex-grow"
 									{...formik.getFieldProps('content')}
-								></textarea> */}
+								></textarea>
 								<ErrorMessage
 									name="content"
 									component="span"

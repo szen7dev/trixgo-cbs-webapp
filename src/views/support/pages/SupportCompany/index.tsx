@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import cn from "classnames";
 import moment from "moment";
+import debounce from 'lodash/debounce';
 
 import { Paginate, SearchInput, ModalContainer, Loader } from "shareComponents/common";
 import { ModalCreateCompany } from 'views/support/shareComponents/common';
@@ -12,6 +13,7 @@ import styles from "views/support/styles/support.module.css";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 
 export const SupportCompanyPage: FC = () => {
+  const [keyword, setKeyword] = useState('');
   const [itemChecked, setItemChecked] = useState(false);
   const [modalCreateCompany, setModalCreateCompany] = useState<boolean>(false);
   const {
@@ -23,12 +25,16 @@ export const SupportCompanyPage: FC = () => {
     refetch,
     fetchNextPage,
     fetchPreviousPage
-  } = useQueryListCompany();
+  } = useQueryListCompany({ keyword });
 
   const toggleModalCreateCompany = () => setModalCreateCompany(!modalCreateCompany);
   const prevPageAction = () => fetchPreviousPage();
   const nextPageAction = () => fetchNextPage();
   const onConfirmCreateCompany = () => refetch();
+
+  const onSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+	setKeyword(e.target.value);
+  }, 600)
 
   const initialValues = {
     name: "",
@@ -50,7 +56,7 @@ export const SupportCompanyPage: FC = () => {
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            onChange={() => ''}
+            onChange={onSearch}
           />
           {/* <FinancialCashFlowFilterButton />
           {itemChecked && (

@@ -35,7 +35,7 @@ export const SideBar: FC<Props> = ({
       <div>
         <div className="flex justify-between mb-2.5">
           <span className="font-bold text-[13px] leading-4">
-            Đệ trình và phê duyệt
+            Gửi và nhận
           </span>
           <button title="Toggle header" className="p-1 rounded bg-gray-200">
             <img className="w-3" src={ChevronUpIcon} alt="Toggle button" />
@@ -45,7 +45,7 @@ export const SideBar: FC<Props> = ({
           <div className="w-1/2">
             <div className="flex">
               <img
-                src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
+                src={`${process.env.REACT_APP_URL_S3_USER}/${author?.image}`}
                 alt="Avatar"
                 className="w-10 h-10 rounded-full object-cover"
               />
@@ -58,17 +58,17 @@ export const SideBar: FC<Props> = ({
               </div>
             </div>
             <span className="mt-2 text-[13px] leading-4">
-              {author.fullname}
+              {author?.fullname}
             </span>
           </div>
           <div className="w-1/2">
             <img
-              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee?.image}`}
               alt="Avatar"
               className="w-10 h-10 rounded-full object-cover"
             />
             <span className="mt-2 text-[13px] leading-4">
-              {assignee.fullname}
+              {assignee?.fullname}
             </span>
           </div>
         </div>
@@ -91,10 +91,10 @@ export const SideBar: FC<Props> = ({
           </button>
         </div>
         <div className="flex overflow-hidden space-x-3">
-          {(related || []).map((user) => (
+          {(related || []).map((user, index) => (
             <img
-              key={user._id}
-              src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+              key={user?._id || index}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
               alt="Avatar"
               className="w-10 h-10 rounded-full"
             />
@@ -105,7 +105,7 @@ export const SideBar: FC<Props> = ({
       <div className="mt-5">
         <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
-            Tiến trình xác nhận
+            Xác nhận
           </span>
 					<button>
             <span className="text-white bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
@@ -118,18 +118,19 @@ export const SideBar: FC<Props> = ({
         <div>
           {/* TODO: user signatures to get confirm progress */}
           {confirmUsers.map((user, index) => (
-            <div key={user._id}>
+            <div key={user?._id || index}>
               <div className="flex justify-between">
                 <div className="flex items-start">
                   <img
-                    src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+                    src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
                     alt="Avatar"
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="ml-2">
-                    <p className="text-[13px]">{user.fullname}</p>
+                    <p className="text-[13px]">{user?.bizfullname}</p>
                     <p className="text-xs text-primary-gray">
-                      13:15 28/2/21 - 2h ago
+                      {moment().format('HH:mm DD/MM/YY')} - {moment().fromNow()}
+                      {/* 13:15 28/2/21 - 2h ago */}
                     </p>
                   </div>
                 </div>

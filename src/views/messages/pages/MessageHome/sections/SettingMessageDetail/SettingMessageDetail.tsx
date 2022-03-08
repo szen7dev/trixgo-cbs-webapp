@@ -10,6 +10,7 @@ import {RootState} from "redux/reducer";
 import {AvatarGroupChat} from "../MessageList";
 import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {NotificationController} from "./components/Notification/NotificationController";
 
 export const SettingMessageDetail:FC = () => {
     const {currentChat, setShowMenu, showMenu} = useContext(MessageContext);
@@ -93,11 +94,7 @@ export const SettingMessageDetail:FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className={"flex justify-between items-center p-[17px] bg-white"}>
-                    <img  src={BellIcon} alt={"...."}/>
-                    <div className={"flex-1 text-left ml-4"}>Notifications</div>
-                    <input className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
-                </div>
+                <NotificationController chat={chat}/>
                 <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab chat={chat}/>
             </div>

@@ -15,7 +15,9 @@ import {
   SearchResponsePayload,
   AddRelationUserPayload,
   addTaskPayload,
-  addTaskResponse
+  addTaskResponse,
+  CommentPayload,
+  ListCommentsPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -29,7 +31,16 @@ const populatesResponse = JSON.stringify({
     path: "author",
     select: "_id bizfullname image"
   }
-})
+});
+
+const populatesComment = JSON.stringify({
+  path: "author lastestReplyID files images task",
+  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task",
+  populate: {
+      path: 'author lastestReplyID files images task',
+      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task'
+  }
+});
 
 const pcmURL = "/api/subject_pcm";
 
@@ -197,6 +208,47 @@ const TaskRepository = {
       `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
         populates: populatesResponse,
         ...payload
+      })}`
+    );
+    return data;
+  },
+
+  /**
+   * ============================ *********************** ===============================
+   * ============================ 	 BÌNH LUẬN CÔNG VIỆC  ===============================
+   * ============================ *********************** ===============================
+   */
+  async createComment(payload: CommentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_comments`,
+      {
+        ...payload,
+        populates: populatesComment
+      }
+    );
+    return data;
+  },
+  async updateComment(payload: CommentPayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_comments`,
+      {
+        ...payload,
+        populates: populatesComment
+      }
+    );
+    return data;
+  },
+  async deleteComment(id: string): Promise<{ error: boolean, message: string }> {
+    const { data } = await API.delete<{ error: boolean, message: string }>(
+      `${pcmURL}/pcm_comments?commentID=${id}`
+    );
+    return data;
+  },
+  async listComments(payload: ListCommentsPayload): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments?${convertObToUrl({
+          ...payload,
+          populates: populatesComment
       })}`
     );
     return data;

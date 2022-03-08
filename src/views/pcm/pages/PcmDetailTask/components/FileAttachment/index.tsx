@@ -11,11 +11,11 @@ type Props = {
 }
 
 export const FileAttachment: FC<Props> = ({ files }) => {
-  if(!files.length) return <></>;
+  if(files && !files.length) return <></>;
 
   return (
     <div className="grid grid-cols-2 gap-1">
-      {files.map(file => {
+      {files?.map(file => {
         // let iconFile = '';
 
         return (
