@@ -6,7 +6,7 @@ import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/share
 import { string, object, number } from 'yup';
 import { useQueryClient } from 'react-query';
 
-import { ResponseCreateSuccess } from 'typings/datahub/api';
+import { ResponseCreateSuccess } from "typings/apis/response";
 
 import { DatahubTypes } from 'typings/datahub/datahubtypes';
 import { useUpdateDatahubType, useDatahubType, useCreateDatahubType } from 'services/hooks/datahub';

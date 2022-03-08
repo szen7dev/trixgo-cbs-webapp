@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
 import { useQuery } from "react-query";
-import { ResponseCreate } from "typings/datahub/api";
+import { ResponseCreate } from "typings/apis/response";
 import { DatahubContract } from "typings/datahub/contract";
 
 type Options<T> = {

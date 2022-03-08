@@ -5,9 +5,8 @@ import API from "../repository";
 // import { convertObToUrl } from "utils";
 
 // Khai báo chính xác kiểu trả về nếu biết
+import { ResponseCreate,ResponseList } from "typings/apis/response";
 import {
-  ResponseList,
-  ResponseCreate,
   DatahubPrams,
 } from "typings/datahub/api";
 import {

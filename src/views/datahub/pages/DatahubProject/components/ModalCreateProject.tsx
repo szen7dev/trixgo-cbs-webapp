@@ -12,7 +12,7 @@ import { useQueryClient } from 'react-query';
 import { useCreateDatahubProject, useUpdateDatahubProject, useDatahubProject, useDatahubCompanies, useDatahubArea } from 'services/hooks/datahub'
 
 // ======== Typings ========
-import { ResponseCreateSuccess } from 'typings/datahub/api';
+import { ResponseCreateSuccess } from "typings/apis/response";
 import { DatahubProjects } from 'typings/datahub/projects';
 
 type Props = {

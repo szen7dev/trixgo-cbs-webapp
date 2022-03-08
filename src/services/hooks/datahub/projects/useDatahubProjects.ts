@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
-import { ResponseList } from "typings/datahub/api";
+import { ResponseList } from "typings/apis/response";
 import {
   DatahubProjects,
   DatahubProjectsParams,
