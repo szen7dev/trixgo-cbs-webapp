@@ -58,8 +58,6 @@ const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
  
 const Response: FC<Props> = ({ task }) => {
-  console.log({ task });
-  
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 

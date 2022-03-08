@@ -75,8 +75,14 @@ export const PcmDetailTask: FC = () => {
 
   useEffect(() => {
     if (infoTask?.data) {
-      const { author, assignee, percentage } = infoTask.data;
+      const { author, assignee, related, percentage } = infoTask.data;
       let confirmUsers = [];
+
+      console.log({ user, author, assignee, related });
+      
+      if(user?._id !== author && user?._id !== assignee && !related.includes(user?._id)) {
+        history.push('/');
+      }
 
       if(author) {
         confirmUsers[confirmUsers.length] = author;
