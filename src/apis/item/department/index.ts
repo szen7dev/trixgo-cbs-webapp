@@ -23,11 +23,27 @@ async function fetchListDepartment(params: any) {
     return data;
 }
 
+async function fetchListDepartmentIsMember(params: any) {
+    const { data } = await API.get(
+        `${ITEM_URL}/list-department-is-members`, {
+        params: {
+            select: "name description sign company startTime expiredTime milestones completedMilestones stage createAt members",
+            populates: {
+                "path": "members",
+                "select": "fullname bizfullname name sign image"
+            },
+            ...params
+        }
+    }
+    )
+    return data;
+}
+
 async function fetchDetailDepartment(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
         params: {
-            select: 'name sign description contracts company admins',
+            select: 'name sign description contracts company admins members',
             populates: {
                 path: 'company',
                 select: '_id name sign',
@@ -56,16 +72,16 @@ async function updateDepartments(payload: any) {
 };
 
 interface DepartmentRepository {
-    fetchListDepartment: (params: any) =>
-        Promise<any>;
+    fetchListDepartment: (params: any) => Promise<any>;
+    fetchListDepartmentIsMember: (params: any) => Promise<any>;
     fetchDetailDepartment: (data: Department.DepartmentDetailPayload) => Promise<Department.DepartmentDetailResponse>,
     insertDepartments: (data: any) => Promise<any>,
     updateDepartments: (data: any) => Promise<any>,
 }
 
 export const departmentRepository: DepartmentRepository = {
-    fetchListDepartment: async (params) =>
-        fetchListDepartment(params),
+    fetchListDepartment: async (params) => fetchListDepartment(params),
+    fetchListDepartmentIsMember: async (params) => fetchListDepartmentIsMember(params),
     fetchDetailDepartment: async (data) => fetchDetailDepartment(data),
     insertDepartments: async (payload) => insertDepartments(payload),
     updateDepartments: async (payload) => updateDepartments(payload),

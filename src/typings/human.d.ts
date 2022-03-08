@@ -124,6 +124,7 @@ export type Department = {
     sign: string;
     _id: string;
     description?: string;
+    members?: string[];
 }
 
 export type Human = {

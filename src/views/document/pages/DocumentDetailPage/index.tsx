@@ -2,6 +2,7 @@ import React, { FC, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 import { ModalContext } from "views/document/contexts/modal";
 
@@ -27,6 +28,7 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
+import { useAuth } from "services/hooks/useAuth";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface Props {
@@ -36,6 +38,7 @@ interface Props {
 export const DocumentDetailPage: FC<Props> = () => {
   const history = useHistory();
   const params = useParams<any>();
+  const { user } = useAuth();
   const { t } = useTranslation(["document"]);
 
   const { toggleModal } = useContext(ModalContext);
@@ -56,12 +59,20 @@ export const DocumentDetailPage: FC<Props> = () => {
   });
 
   React.useEffect(() => {
+    if(!user || !detailDocument) return;
+
+    if(!detailDocument.package?.members?.includes(user._id)) {
+      history.push('/document/home');
+      toast.error('Bạn không có quyền truy cập vào hồ sơ này');
+    }
+  }, [user, params.docID])
+
+  React.useEffect(() => {
     if (params.docID) {
       onFetchDetailDocumentAsync(params.docID);
     }
   }, [onFetchDetailDocumentAsync, params.docID]);
 
-  //   console.log(detailDocument);
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">

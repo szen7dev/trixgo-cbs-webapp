@@ -28,7 +28,7 @@ import {
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
 
-import { IPackage } from "typings/document";
+// import { IPackage } from "typings/document";
 
 // const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 //   id: i,
@@ -103,8 +103,6 @@ export const DocumentProjectPage: FC = () => {
   const handleOnClickUpdate = React.useCallback(
     (record) => async () => {
       const result = await onFetchDetailDocumentAsync(record._id);
-      // console.log(result);
-      // console.log(record);
       toggleModal();
       updateModal({
         departmentId: departmentID,
@@ -142,7 +140,6 @@ export const DocumentProjectPage: FC = () => {
   );
 
   const handleOnFilter = React.useCallback((values) => {
-    // console.log(values);
     setPageParam(() => ({ ...values }));
     return true;
   }, []);

@@ -1,7 +1,8 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useRef, useCallback } from "react";
+import { FC, useState, useRef, useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -30,6 +31,7 @@ import {
   useUpdateContactMutation,
 } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
+import { useAuth } from "services/hooks/useAuth";
 
 /*=====7.OTHER=====*/
 
@@ -40,6 +42,7 @@ export const HumanInfo: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { t: i18n } = useTranslation(["human"]);
+  const { user } = useAuth();
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
 
@@ -143,6 +146,15 @@ export const HumanInfo: FC = () => {
     },
     [handleFinishForm, openModal]
   );
+
+  useEffect(() => {
+    if(!user || !detailHuman) return;
+
+    if(!detailHuman.department?.members?.includes(user._id)) {
+      history.push('/human/home');
+      toast.error('Bạn không có quyền xem thông tin người dùng này');
+    }
+  }, [user])
 
   if (loading) {
     return <Loader className="border-primary" />;

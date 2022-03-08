@@ -34,10 +34,11 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
         `${ITEM_URL}/contacts`,
         {
             params: {
-                filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
+                // filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
+                // select: "",
                 populates: {
-                    "path": "company position",
-                    "select": "name sign"
+                    "path": "company position department",
+                    "select": "_id name sign members"
                 },
                 type: 1,
                 ...params,
@@ -336,7 +337,7 @@ const HumanRepository = {
     }): Promise<HumanInfo> => fetchListHuman<HumanInfo>({
         populates: {
             "path": `company contact contractType department workingStatus other educationalBackground major workplace position area area1 area2`,
-            "select": "name sign parent",
+            "select": "name sign parent members",
             "populate": {
                 "path": "parent",
                 "select": "name sign parent level",

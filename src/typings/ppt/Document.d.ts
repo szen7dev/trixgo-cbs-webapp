@@ -49,6 +49,7 @@ export interface Document {
     package?: {
         _id: string;
         name: string;
+        members: string[];
     };
     contract?: {
         _id: string;
