@@ -106,20 +106,32 @@ export const Dashboard: FC = () => {
                   <Link to="/pcm/home">Yêu cầu thông tin</Link>
                 </p>
               </div>
-            </div>
-            <div className="t-home-summary-group flex max-w-full">
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{data?.data?.amountTaskIsFlags || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
-                  <Link to="/pcm/home">Việc quan tâm</Link>
+                  <Link to="/pcm/bookmark">Việc quan tâm</Link>
                 </p>
               </div>
               <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{data?.data?.amountTaskIsAssignee || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
-                <Link to="/pcm/home">Việc đã giao</Link>
+                <Link to="/pcm/assign">Việc đã giao</Link>
                 </p>
               </div>
+            </div>
+            <div className="t-home-summary-group flex max-w-full">
+              {/* <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-orange">{data?.data?.amountTaskIsFlags || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                  <Link to="/pcm/bookmark">Việc quan tâm</Link>
+                </p>
+              </div>
+              <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
+                <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-green">{data?.data?.amountTaskIsAssignee || 0}</div>
+                <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
+                <Link to="/pcm/assign">Việc đã giao</Link>
+                </p>
+              </div> */}
               {/* <div className="t-home-summary-item pl-3 pr-3 text-center flex justify-center flex-wrap mb-4">
                 <div className="rounded-full border-8 color-dark flex justify-center items-center mb-4 t-home-summary-item-grey">{data?.data?.amountTaskIsDraft || 0}</div>
                 <p className="color-primary-gray text-bold bg-secondary-light pt-2 pb-2 pl-3 pr-3 mb-0 whitespace-nowrap">
@@ -179,7 +191,7 @@ export const Dashboard: FC = () => {
           <div className="t-home-block">
             <div className="t-home-block-title">
               <span>Truyền thông công ty</span>
-              <Link to={`/media/home/1`}>Xem tất cả</Link>
+              <Link to={`/media/home`}>Xem tất cả</Link>
             </div>
             {listMediasCompany.length ? (
               <div className="flex items-center">

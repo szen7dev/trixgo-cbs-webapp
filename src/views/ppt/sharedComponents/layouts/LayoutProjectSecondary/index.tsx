@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from "react";
 import cn from "classnames";
 import { useParams, useHistory } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { MainHeader } from "shareComponents/common";
@@ -29,7 +30,8 @@ const LayoutProjectSecondary: FC<Props> = ({ children }) => {
 		(async () => {
 			const infoProject = await onFetchDetailDepartmentAsync(id);
 
-			if(user && (!infoProject || !infoProject.admins.includes(user._id?.toString()))) {
+			if(user && (!infoProject || !infoProject.members?.includes(user._id?.toString()))) {
+				toast.error('Bạn không có quyền truy cập vào dự án này');
 				history.push('/');
 			}
 		})();

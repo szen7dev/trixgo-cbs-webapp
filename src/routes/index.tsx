@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import React, { FC, useEffect, lazy } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
@@ -12,7 +12,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
 
-import { Loader } from "shareComponents/common";
+// import { Loader } from "shareComponents/common";
 
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));

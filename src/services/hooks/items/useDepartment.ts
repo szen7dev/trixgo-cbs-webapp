@@ -45,10 +45,10 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
     } = res;
 
     const listDepartments = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPages || 0;
 
@@ -63,11 +63,71 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
     }
 }
 
+interface UseQueryListDepartmentIsMember {
+    loading: boolean;
+    totalRecord: number;
+    totalPages: number;
+    hasNextPage?: boolean;
+    data: Array<Department.Department>;
+    refetch: () => void;
+    fetchNextPage: () => void;
+}
+
+type ListDepartmentIsMemberProps = {
+    keyword?: string;
+    limit?: string;
+    isFetch?: boolean;
+}
+
+export const useQueryListDepartmentsIsMember = (params?: ListDepartmentIsMemberProps): UseQueryListDepartmentIsMember => {
+    const res = useInfiniteQuery(
+        [`items.department`, params],
+        async ({ pageParam }: any) =>
+            DepartmentRepository.fetchListDepartmentIsMember({
+                lastestID: pageParam || "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: params?.isFetch || false
+        }
+    );
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = res;
+
+    const listDepartments = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
+
+    return {
+        loading: isLoading,
+        data: listDepartments,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+        refetch,
+        fetchNextPage
+    }
+}
+
 interface UseQueryDetailDepartment {
     loading: boolean;
     detailDepartment: Department.Department,
     onFetchDetailDepartmentAsync: (departmentID: string) => Promise<Department.Department>;
 }
+
 export const useQueryDetailDepartment = (): UseQueryDetailDepartment => {
     const [detailDepartment, setDetailDepartment] = React.useState<Department.Department | any>({});
     const [loading, setLoading] = React.useState(false);
