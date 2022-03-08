@@ -77,8 +77,8 @@ export const CommentContainer: FC<HTMLAttributes<HTMLDivElement>> = (props) => {
 
 	return (
 		<div {...props}>
-			<div className="text-x-large py-3 px-6 font-bold">
-				Bình luận (160)
+			<div className="text-x-large">
+				Bình luận
 			</div>
 			<div className="px-6">
 				{/* Comment */}

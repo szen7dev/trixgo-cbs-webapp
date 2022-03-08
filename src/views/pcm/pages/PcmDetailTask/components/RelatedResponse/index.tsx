@@ -356,12 +356,12 @@ const Response: FC<Props> = ({ task }) => {
             >
               <span className="text-[13px]">Tất cả ({amountResponse})</span>
             </button>
-            <button
+            {/* <button
               className={getClassTab(RelatedResponseTab.MARKED)}
               onClick={onClickTabMarked}
             >
               <span className="text-[13px]">Đã đánh dấu ({amountMarkedResponse})</span>
-            </button>
+            </button> */}
           </div>
           <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
             <button className="w-full" onClick={() => setIsExpand(!isExpand)}>

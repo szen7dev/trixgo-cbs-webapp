@@ -35,7 +35,7 @@ export const SideBar: FC<Props> = ({
       <div>
         <div className="flex justify-between mb-2.5">
           <span className="font-bold text-[13px] leading-4">
-            Đệ trình và phê duyệt
+            Gửi và nhận
           </span>
           <button title="Toggle header" className="p-1 rounded bg-gray-200">
             <img className="w-3" src={ChevronUpIcon} alt="Toggle button" />
@@ -105,7 +105,7 @@ export const SideBar: FC<Props> = ({
       <div className="mt-5">
         <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
-            Tiến trình xác nhận
+            Xác nhận
           </span>
 					<button>
             <span className="text-white bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
@@ -127,7 +127,7 @@ export const SideBar: FC<Props> = ({
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="ml-2">
-                    <p className="text-[13px]">{user.fullname}</p>
+                    <p className="text-[13px]">{user.bizfullname}</p>
                     <p className="text-xs text-primary-gray">
                       13:15 28/2/21 - 2h ago
                     </p>
