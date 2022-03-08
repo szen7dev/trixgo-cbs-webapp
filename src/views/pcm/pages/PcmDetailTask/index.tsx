@@ -74,13 +74,19 @@ export const PcmDetailTask: FC = () => {
   };
 
   useEffect(() => {
+    if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
+      history.push('/');
+    }
+
     if (infoTask?.data) {
       const { author, assignee, related, percentage } = infoTask.data;
+      const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
       let confirmUsers = [];
 
-      console.log({ user, author, assignee, related });
-      
-      if(user?._id !== author && user?._id !== assignee && !related.includes(user?._id)) {
+      /**
+       * Check permission access
+       */
+      if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id)) {
         history.push('/');
       }
 
