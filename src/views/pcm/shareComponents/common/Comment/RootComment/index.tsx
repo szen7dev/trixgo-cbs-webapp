@@ -107,7 +107,10 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comme
 				userID={userID}
 				onClickReply={() => setIsReply(true)}
 				onClickEdit={handleClickUpdateParent}
-				onClickImage={(index: number, images: any, commentId: string) => openComment({ taskId: commentId, images, index, author: comment.author, createAt: comment.createAt })}
+				onClickImage={(index: number, images: any, commentId: string) => {
+					console.log({ index, images, commentId })
+					// openComment({ taskId: commentId, images, index, author: comment.author, createAt: comment.createAt })
+				}}
 				renderOptions={EditButton}
 			/>
 			<div>

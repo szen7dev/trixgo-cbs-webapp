@@ -56,7 +56,7 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
   return (
     <>
       <div>
-        <Header viewMode={viewMode} onChangeMode={setViewMode} />
+        <Header type={type} viewMode={viewMode} onChangeMode={setViewMode} />
       </div>
 
       <div className="task-management-content overflow-auto">

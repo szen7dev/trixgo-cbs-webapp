@@ -58,6 +58,8 @@ const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
  
 const Response: FC<Props> = ({ task }) => {
+  console.log({ task });
+  
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -71,7 +73,7 @@ const Response: FC<Props> = ({ task }) => {
   const { user } = useAuth();
   const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
   const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
-    taskID: task._id, official: true, isFetch: true
+    taskID: task._id, official: true, isFetch: false
   });
 
   const { state, dispatch } = useContext(CommentContext);
