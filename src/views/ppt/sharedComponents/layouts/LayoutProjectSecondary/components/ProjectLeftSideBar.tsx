@@ -15,76 +15,76 @@ type RouteItem = {
 }
 
 export const routes: Array<RouteItem> = [
-	{
-		path: '/pcm/project/:id/admin',
-		name: 'Quản trị viên',
-		image: '/images/pcm/admin.png',
-	},
-	{
-		path: '/pcm/project/:id/home',
-		name: 'Trang chủ',
-		image: '/images/pcm/application.png',
-	},
-	{
-		path: '/pcm/project/:id/dashboard',
-		name: 'Báo cáo quản trị',
-		image: '/images/pcm/graph-report.png',
-	},
-	{
-		path: '/pcm/project/:id/folder',
-		name: 'Thư mục dữ liệu',
-		image: '/images/pcm/shared-folder.png',
-	},
-	{
-		path: '/pcm/project/:id/schedule',
-		name: 'Tiến độ',
-		image: '/images/pcm/gantt-chart.png',
-	},
-	{
-		path: '/pcm/project/:id/budget',
-		name: 'Ngân sách và kế hoạch',
-		image: '/images/pcm/budget-plan.png',
-	},
-	{
-		path: '/pcm/project/:id/bidding',
-		name: 'Lựa chọn nhà thầu',
-		image: '/images/pcm/bidding.png',
-	},
-	{
-		path: '/pcm/project/:id/payment',
-		name: 'Báo cáo',
-		image: '/images/pcm/statistic-document.png',
-	},
+	// {
+	// 	path: '/pcm/project/:id/admin',
+	// 	name: 'Quản trị viên',
+	// 	image: '/images/pcm/admin.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/home',
+	// 	name: 'Trang chủ',
+	// 	image: '/images/pcm/application.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/dashboard',
+	// 	name: 'Báo cáo quản trị',
+	// 	image: '/images/pcm/graph-report.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/folder',
+	// 	name: 'Thư mục dữ liệu',
+	// 	image: '/images/pcm/shared-folder.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/schedule',
+	// 	name: 'Tiến độ',
+	// 	image: '/images/pcm/gantt-chart.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/budget',
+	// 	name: 'Ngân sách và kế hoạch',
+	// 	image: '/images/pcm/budget-plan.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/bidding',
+	// 	name: 'Lựa chọn nhà thầu',
+	// 	image: '/images/pcm/bidding.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/payment',
+	// 	name: 'Báo cáo',
+	// 	image: '/images/pcm/statistic-document.png',
+	// },
 	{
 		path: '/pcm/project/:id/document',
 		name: 'Hồ sơ văn bản',
 		image: '/images/pcm/paid-bill.png',
 	},
-	{
-		path: '/pcm/project/:id/photo',
-		name: 'Hình ảnh',
-		image: '/images/pcm/photo-gallery.png',
-	},
-	{
-		path: '/pcm/project/:id/drawing',
-		name: 'Bản vẽ và chỉ dẫn',
-		image: '/images/pcm/drawing-compass.png',
-	},
-	{
-		path: '/pcm/project/:id/resource',
-		name: 'Quản lý vật tư',
-		image: '/images/pcm/material.png',
-	},
-	{
-		path: '/pcm/project/:id/inspection',
-		name: 'Nghiệm thu chất lượng',
-		image: '/images/pcm/paid-bill.png',
-	},
-	{
-		path: '/pcm/project/:id/directory',
-		name: 'Danh bạ dự án',
-		image: '/images/pcm/contact.png',
-	},
+	// {
+	// 	path: '/pcm/project/:id/photo',
+	// 	name: 'Hình ảnh',
+	// 	image: '/images/pcm/photo-gallery.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/drawing',
+	// 	name: 'Bản vẽ và chỉ dẫn',
+	// 	image: '/images/pcm/drawing-compass.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/resource',
+	// 	name: 'Quản lý vật tư',
+	// 	image: '/images/pcm/material.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/inspection',
+	// 	name: 'Nghiệm thu chất lượng',
+	// 	image: '/images/pcm/paid-bill.png',
+	// },
+	// {
+	// 	path: '/pcm/project/:id/directory',
+	// 	name: 'Danh bạ dự án',
+	// 	image: '/images/pcm/contact.png',
+	// },
 ]
 
 const ProjectLeftSideBar: FC = () => {
