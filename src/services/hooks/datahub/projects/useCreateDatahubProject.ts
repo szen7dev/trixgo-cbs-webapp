@@ -2,7 +2,7 @@
 import DatahubRepository from "apis/datahub";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { ResponseCreateSuccess } from "typings/datahub/api";
+import { ResponseCreateSuccess } from "typings/apis/response";
 import { DatahubProjects } from "typings/datahub/projects";
 
 type Props = {

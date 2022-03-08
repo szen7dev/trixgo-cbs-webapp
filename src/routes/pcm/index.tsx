@@ -31,7 +31,6 @@ import {
 
 import {
     ProjectAdminManagementPage,
-    ProjectAdminPage,
     ProjectBiddingPage,
     ProjectBudgetPage,
     ProjectCategoryPage,
@@ -65,6 +64,12 @@ import {
 
 import { PcmHome, PcmDetailTask } from 'views/pcm/pages';
 
+import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
+import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
+import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
+import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
+import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
+
 const PCMRouter: FC = () => {
     return (
         <Switch>
@@ -80,47 +85,6 @@ const PCMRouter: FC = () => {
             <Route exact path="/pcm">
                 <Redirect to="/pcm/home" />
             </Route>
-            <ProtectedRoute
-                exact
-                path={"/pcm/detail/:id"}
-                component={() => (
-                    <HomeLayout>
-                        <PcmDetailTask />
-                    </HomeLayout>
-                )}
-            />
-            <ProtectedRoute exact path="/pcm/(home|assign|bookmark|projects|market|dashboard-portfolio|dashboard-task|dashboard-document)">
-                <HomeLayout>
-                    <Switch>
-                        {/* <Route exact path="/pcm/admin1" component={ProjectAdminPage} /> */}
-                        <Route exact path="/pcm/home" component={PcmHome} />
-                        <Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
-                        <Route exact path="/pcm/bookmark" component={() => <PcmHome type={3} />} />
-                        <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
-                        <Route exact path="/pcm/market" component={ProjectMarketPage} />
-                        <LayoutSecondary pages={[
-                            { id: '1', title: 'Dashboard1', path: '/pcm/dashboard-portfolio', },
-                            { id: '2', title: 'Dashboard2', path: '/pcm/dashboard-task', },
-                            { id: '3', title: 'Dashboard3', path: '/pcm/dashboard-document', },
-                        ]}>
-                            <Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage} />
-                            <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
-                            <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />
-                        </LayoutSecondary>
-                    </Switch>
-                </HomeLayout>
-            </ProtectedRoute>
-            <ProtectedRoute path="/pcm/admin">
-                <HomeLayout>
-                    <Switch>
-                        <Route exact path="/pcm/admin" component={ProjectAdminPage} />
-                        <Route exact path="/pcm/admin/:id/detail" component={ProjectAdminPage} />
-                        <Route exact path="/pcm/admin/:id/project" component={ProjectAdminPage} />
-                        <Route exact path="/pcm/admin/project" component={ProjectAdminPage} />
-                        
-                    </Switch>
-                </HomeLayout>
-            </ProtectedRoute>
             <ProtectedRoute path="/pcm/project/:id">
                 <LayoutProjectSecondary>
                     <Switch>
@@ -211,6 +175,44 @@ const PCMRouter: FC = () => {
                         <Route exact path='/pcm/project/:id/inspection/:item' component={ProjectInspectionDetailPage} />
                     </Switch>
                 </LayoutProjectSecondary>
+            </ProtectedRoute>
+            <ProtectedRoute path="/pcm">
+                <HomeLayout>
+                    <Switch>
+                        <Route path="/pcm/admin">
+                            <LayoutSecondary pages={[
+                                { id: '1', title: 'Nhóm chức năng', path: '/pcm/admin', navExact: true },
+                                { id: '2', title: 'Phân quyền chức năng', path: '/pcm/admin/2', },
+                                { id: '3', title: 'Dự án', path: '/pcm/admin/3', },
+                            ]}>
+                                <Route exact path="/pcm/admin" component={ProjectAdminFunctionalTab} />
+                                <Route exact path="/pcm/admin/:id/detail" component={ProjectAdminDetail} />
+                                <Route exact path="/pcm/admin/2" component={ProjectAdminAuthorTab} />
+                                <Route exact path="/pcm/admin/3" component={ProjectAdminProjectTab} />
+                                <Route exact path="/pcm/admin/:id/project" component={ProjectAdminProjectDetail} />
+                            </LayoutSecondary>
+                        </Route>
+
+                        <Route exact path="/pcm/detail/:id" component={PcmDetailTask} />
+
+                        <Route exact path="/pcm/home" component={PcmHome} />
+                        <Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
+                        <Route exact path="/pcm/bookmark" component={() => <PcmHome type={3} />} />
+                        <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
+                        <Route exact path="/pcm/market" component={ProjectMarketPage} />
+                        <Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">
+                            <LayoutSecondary pages={[
+                                { id: '1', title: 'Dashboard1', path: '/pcm/dashboard-portfolio', },
+                                { id: '2', title: 'Dashboard2', path: '/pcm/dashboard-task', },
+                                { id: '3', title: 'Dashboard3', path: '/pcm/dashboard-document', },
+                            ]}>
+                                <Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage} />
+                                <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
+                                <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />
+                            </LayoutSecondary>
+                        </Route>
+                    </Switch>
+                </HomeLayout>
             </ProtectedRoute>
         </Switch>
     )
