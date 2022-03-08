@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../../repository";
 
 import { ITEM_URL } from '../';
 
 import type { Department } from 'typings/items';
+import { ParamsApi, ResponseData, ResponseList } from "typings/apis/response";
+import { UserInCompanyContract } from "typings/auth";
 
 async function fetchListDepartment(params: any) {
     const { data } = await API.get(
@@ -66,4 +69,23 @@ export const departmentRepository: DepartmentRepository = {
     fetchDetailDepartment: async (data) => fetchDetailDepartment(data),
     insertDepartments: async (payload) => insertDepartments(payload),
     updateDepartments: async (payload) => updateDepartments(payload),
+}
+
+export const DepartmentRepositories = {
+
+	// 10. DANH SÁCH DANH BẠ CÓ LINK_USER TRONG CÔNG TY
+	async getListUserInCompanyContract(params: { companyID: string, isLinkUser?: number } & ParamsApi) {
+		const { data } = await API.get<ResponseList<UserInCompanyContract>>('/api/ITEM/contacts', { params });
+		return data;
+	},
+	// THÔNG TIN DỰ ÁN
+	async getInfoDepartment(params: { departmentID: string } & ParamsApi) {
+		const { data } = await API.get<ResponseData<Department.Department>>('/api/ITEM/departments', { params });
+		return data;
+	},
+	// 8. THÊM THÀNH VIÊN VÀO DỰ ÁN
+	async addOrRemoveMemberToDepartment(body:{ departmentID: string, members?: string[], admins?: string[], adminsRemove?: string[],membersRemove?: string[] }) {
+		const { data } = await API.put<ResponseData<Department.Department>>('/api/ITEM/departments', body);
+		return data;
+	}
 }

@@ -6,7 +6,7 @@ import {
   QueryFunctionContext,
   QueryKey,
 } from "react-query";
-import { ResponseList } from "typings/datahub/api";
+import { ResponseList } from "typings/apis/response";
 
 type QueryFunction<T = unknown, TQueryKey extends QueryKey = QueryKey> = (
   context: QueryFunctionContext<TQueryKey> & {
