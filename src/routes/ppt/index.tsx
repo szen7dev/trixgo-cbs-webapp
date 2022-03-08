@@ -21,7 +21,6 @@ import {
 	DocumentReportPage
 } from 'views/document/pages';
 import {
-	ProjectAdminPage,
 	ProjectBiddingPage,
 	ProjectBudgetPage,
 	ProjectCategoryPage,
