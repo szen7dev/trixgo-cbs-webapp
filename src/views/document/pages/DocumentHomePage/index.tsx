@@ -15,19 +15,14 @@ import {
 import projectImage from "assets/images/project.jpg";
 import "views/document/styles/document.css";
 
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 
 export const DocumentHomePage: FC = () => {
   const { toggleModal } = useContext(ModalContext);
 
-  const { listDepartments, totalRecord, fetchNextPageDepartments } =
-    useQueryListDepartments({
-      select: "image sign name company numberOfDocs",
-      populates: {
-        path: "company",
-        select: "name",
-      },
-    });
+  const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
+    useQueryListDepartmentsIsMember({ isFetch: true });
+
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
       {/* Header */}

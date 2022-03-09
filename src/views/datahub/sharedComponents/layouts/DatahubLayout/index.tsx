@@ -1,5 +1,6 @@
 import { FC, ReactNode, useState } from "react";
 import cn from "classnames";
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import { HomeRightSideBar } from "shareComponents/layouts";
 import { MainHeader } from "shareComponents/common";

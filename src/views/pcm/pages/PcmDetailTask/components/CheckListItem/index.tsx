@@ -16,7 +16,6 @@ type Props = {
 export const CheckListItem: FC<Props> = ({ data }) => {
   const history = useHistory();
   const [isHover, setIsHover] = useState(false);
-  console.log({ data });
 
   return (
     <div

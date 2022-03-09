@@ -2,9 +2,8 @@ import { useContext, useEffect } from "react";
 import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery , useQueryClient} from "react-query";
 import { toast } from "react-toastify";
-
 import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
@@ -22,6 +21,7 @@ import {
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
   const history = useHistory();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (
@@ -161,6 +161,7 @@ export const useAuth = (): UseAuth => {
     });
     const user = JSON.parse(localStorage.getItem("currentUser") as string) ?? null;
     const _id = user._id;
+    queryClient.clear();
     localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");

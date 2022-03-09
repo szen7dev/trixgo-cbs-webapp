@@ -25,6 +25,34 @@ const PcmRepository = {
         );
         return data;
     },
+
+    // Danh sách pcm_plan_group
+    async listPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups?${convertObToUrl({
+                select: "name sign members userUpdate",
+                limit: 20,
+                ...payload,
+            })}`
+        );
+        return data;
+    },
+
+    // insert pcm_plan_group
+    async insertPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_groups`, payload
+        );
+        return data;
+    },
+
+    // update pcm_plan_group
+    async updatePcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.put<any>(
+            `${pcmURL}/pcm_plan_groups`, payload
+        );
+        return data;
+    },
 };
 
 // console.log('==============>>>>>')

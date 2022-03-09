@@ -14,27 +14,27 @@ export type UseAuth = {
 
 export type User = {
   _id: string;
-  email: string,
-  phone: string,
-  fullname: string,
+  email: string;
+  phone: string;
+  fullname: string;
   company: {
-    _id: string,
-    name: string,
-    sign: string,
-    image: string
-  },
+    _id: string;
+    name: string;
+    sign: string;
+    image: string;
+  };
   department: {
-    _id: string,
-    name: string,
-    sign: string
-  },
-  signature: string,
-  status: number,
-  level: number,
-  image: string
-  gender: number,
-  lang: string,
-  birthDay: string
+    _id: string;
+    name: string;
+    sign: string;
+  };
+  signature: string;
+  status: number;
+  level: number;
+  image: string;
+  gender: number;
+  lang: string;
+  birthDay: string;
 };
 
 export type AuthState = {
@@ -94,13 +94,13 @@ export type UserInfoResponse = APIResponse & {
 };
 
 export type UpdateDevicePayload = {
-  platform: string,
-  deviceID: string,
-  deviceName: string,
-  registrationID: string,
-  oneSignalID: string,
-  userID?: string,
-  env?: string
+  platform: string;
+  deviceID: string;
+  deviceName: string;
+  registrationID: string;
+  oneSignalID: string;
+  userID?: string;
+  env?: string;
 };
 
 export type GetListAppOfUserResponse = APIResponse & {
@@ -120,20 +120,20 @@ export type PermissionAccessAppResponse = APIResponse & {
 };
 
 export type PermissionAccessOneMenuPayload = {
-  appID: string,
-  menuID: string,
-  companyID: string,
-  type: "1" | "2" | "3"
+  appID: string;
+  menuID: string;
+  companyID: string;
+  type: "1" | "2" | "3";
 };
 
 export type PermissionAccessOneMenuResponse = APIResponse & {
   data: {
     message?: string;
     keyError?: string;
-    read: number,
-    create: number,
-    update: number,
-    delete: number
+    read: number;
+    create: number;
+    update: number;
+    delete: number;
   };
 };
 
@@ -142,29 +142,29 @@ export type UseGetListAppOfUser = {
   refetchAppUsers: any;
   nextPageAppUsers: any;
   listAppOfUser: Array<{
-    _id: string,
+    _id: string;
     app: {
-      _id: string,
-      name: string
-    }
-  }>
+      _id: string;
+      name: string;
+    };
+  }>;
 };
 
 export type UseCheckPermission = {
   hasPermission: boolean;
   isSuccess: boolean;
-  dataUserAccess?: any
+  dataUserAccess?: any;
 };
 
 export type UseCheckPermissionOneMenu = {
   hasPermission: boolean;
   isSuccess: boolean;
   permission: {
-    read: number,
-    create: number,
-    update: number,
-    delete: number
-  }
+    read: number;
+    create: number;
+    update: number;
+    delete: number;
+  };
 };
 
 export type UseGetListAppMenu = {
@@ -179,4 +179,23 @@ export type UseGetListAppRoleMenu = {
   refetchGetListAppRoleMenu: any;
   listAppRoleMenu: Array<any>;
   nextPageGetListAppRoleMenu: any;
+};
+
+export type LinkUserPosition = {
+  _id: string;
+  name: string;
+};
+
+export type LinkUser = {
+  _id: string;
+  fullname: string;
+  image: string;
+  position: string | LinkUserPosition;
+};
+
+export type UserInCompanyContract = {
+  _id: string;
+  name: string;
+  image: string;
+  linkUser: string | LinkUser;
 };

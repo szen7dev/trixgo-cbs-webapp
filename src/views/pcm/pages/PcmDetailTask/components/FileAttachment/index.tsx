@@ -15,7 +15,7 @@ export const FileAttachment: FC<Props> = ({ files }) => {
 
   return (
     <div className="grid grid-cols-2 gap-1">
-      {files && files.map(file => {
+      {files?.map(file => {
         // let iconFile = '';
 
         return (

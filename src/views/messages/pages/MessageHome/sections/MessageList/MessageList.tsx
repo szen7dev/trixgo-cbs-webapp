@@ -29,8 +29,8 @@ export const MessageList:FC = () => {
 
     const onScroll = () => {
         if (listInnerRef.current) {
-            const { scrollTop } = listInnerRef.current;
-            if (scrollTop > -100) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            if (scrollTop + clientHeight === scrollHeight) {
                 setReachEnd(true);
             } else {
                 setReachEnd(false);

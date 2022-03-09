@@ -14,7 +14,7 @@ import cn from 'classnames';
  */
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
-import { ModalContainer, Loader } from "shareComponents/common";
+import { ModalContainer, Loader, ModalConfirm } from "shareComponents/common";
 import { PostFile } from 'views/media/shareComponents/common';
 import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
@@ -39,6 +39,7 @@ import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
 import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
 import { abbreviateNumber, nl2p } from 'utils';
+import { useModal } from "services/hooks/useModal";
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
 import { ModalZoomView } from "shareComponents/common/ZoomView";
@@ -46,6 +47,7 @@ import { ContextModalPost } from "views/media/contexts/post";
 
 export const MediaDetailPage: FC = () => {
 	const history = useHistory();
+	const { openModal, closeModal } = useModal();
 	const { state, toggleModal, openPost } = useContext(ContextModalPost);
 
 	const { mediaID } = useParams<{ mediaID: string }>();
@@ -104,11 +106,12 @@ export const MediaDetailPage: FC = () => {
 	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
 	const [msUpdateView, setMsUpdateView] = useState<number>(0);
 
+	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
+
 	const toggleModalEditMedia = () => {
 		modalEditMedia && refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
-	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
 	const toggleModalReact = () => {
 		!isFetchReactions && setIsFetchReactions(true);
@@ -134,6 +137,8 @@ export const MediaDetailPage: FC = () => {
 				toast.error(error.message);
 			}
 		}
+
+		closeModal();
 	}
 
 	const handleReactionMedia = async () => {
@@ -173,6 +178,36 @@ export const MediaDetailPage: FC = () => {
 	useEffect(() => {
 		readingTime();
 	}, [media?.content])
+
+	useEffect(() => {
+		if(!media) return;
+		let hasPermission = true;
+
+		switch (media.type) {
+			case 1:
+				if(user?.company._id !== media.company._id) {
+					hasPermission = false;
+				}
+				break;
+			case 2:
+				if(user?.department._id !== media.department._id) {
+					hasPermission = false;
+				}
+				break;
+			case 5:
+				if(user?._id !== media.author._id) {
+					hasPermission = false;
+				}
+				break;
+			default:
+				break;
+		}
+
+		if(!hasPermission) {
+			history.push('/media/home');
+			toast.error("Bạn không có quyền truy cập bài viết này!");
+		}
+	}, [media])
 
 	if (!media) {
 		return <Loader className="border-primary" />;
@@ -228,7 +263,7 @@ export const MediaDetailPage: FC = () => {
 												Copy link
 											</button>
 										</Menu.Item>
-										{user?._id === media.author._id ? (
+										{user?._id === media?.author?._id ? (
 											<>
 												<Menu.Item onClick={toggleModalEditMediaEdit}>
 													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
@@ -236,10 +271,22 @@ export const MediaDetailPage: FC = () => {
 														Cập nhật
 													</button>
 												</Menu.Item>
-												<Menu.Item onClick={handleDeleteMedia}>
-													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+												<Menu.Item>
+													<button
+														className="block px-8 py-2 hover:bg-gray-200 w-full text-left"
+														onClick={() =>
+															openModal(
+															<div
+																className={
+																"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+																}
+															>
+																<ModalConfirm onConfirm={handleDeleteMedia} onCancel={closeModal} />
+															</div>
+															)
+														}>
 														<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
-														Xóa
+														Xoá bỏ
 													</button>
 												</Menu.Item>
 											</>

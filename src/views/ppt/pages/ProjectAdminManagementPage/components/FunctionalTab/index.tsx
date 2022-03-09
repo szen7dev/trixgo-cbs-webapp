@@ -14,23 +14,31 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { Create, Update, Delete } from "../../modal";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
-import { APP_ID } from "apis/localdb";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
 
 const FunctionalTab: FC = () => {
+	// Cơ chế của userParams
 	const { id: projectID } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ 
-		appID: APP_ID.PCM.id, 
-		keyword: keyword 
-	});
+
+	const {   
+		isLoading,
+        refetch,
+        data: listPcmPlanGroup,
+        fetchNextPage: fetchNextPagePcmPlanGroup,
+        hasNextPage: hasNextPagePcmPlanGroup,
+        totalRecord,
+		totalPage
+        } = usePcmPlanGroup({ projectID },true);
+
 	const { openModal } = useModal();
+	
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
-
+	
 	const onClickCheckButton = (id: string) => {
 		const check = idsChecked.includes(id);
 		if (check) {
@@ -45,17 +53,21 @@ const FunctionalTab: FC = () => {
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listPcmAdmin.length;
+		return idsChecked.length == listPcmPlanGroup.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listPcmAdmin.length) {
+		if (idsChecked.length == listPcmPlanGroup.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listPcmAdmin.map(e => e._id);
+			const idsAll = listPcmPlanGroup.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
+
+	// const onSubmitCreateGroup = async() => {
+		
+	// };
 
 	return (
 		<main className="h-full">
@@ -86,7 +98,7 @@ const FunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
 											</div>
 										)
 									}
@@ -171,9 +183,9 @@ const FunctionalTab: FC = () => {
 					</tr>
 				</thead>
 
-				{listPcmAdmin && listPcmAdmin.length ?
+				{listPcmPlanGroup && listPcmPlanGroup.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmAdmin.map((item, index) => (
+						{listPcmPlanGroup.map((item: any, index: number) => (
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -194,13 +206,13 @@ const FunctionalTab: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item.userCreate?.bizfullname}
+									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									12
+								{item?.members.length}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item.userUpdate?.bizfullname}
+									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
 								</td>
 							</tr>
 						))
@@ -209,11 +221,11 @@ const FunctionalTab: FC = () => {
 				}
 			</table>
 
-			{hasNextPagePcmAdmin && (
+			{hasNextPagePcmPlanGroup && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPagePcmAdmin()}>
+					<button onClick={() => fetchNextPagePcmPlanGroup()}>
 						<span className="text-primary">
-							{`Xem thêm (${totalRecord - listPcmAdmin.length})`}
+							{`Xem thêm (${totalRecord - listPcmPlanGroup.length})`}
 						</span>
 					</button>
 				</div>

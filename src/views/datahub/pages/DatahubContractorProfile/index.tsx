@@ -1,7 +1,10 @@
 import React, { FC, useState } from 'react';
-import PDFSvg from 'assets/images/CBS-PDF-Icon-48.svg';
-import FolderImage from 'assets/images/datahub/icons8-folder-96 5.png';
 import ModalCreateProfile from './components/ModalCreateProfile';
+import useInfiniteProfile from 'services/hooks/datahub/profile/useInfiniteProfile';
+import { useContractorCompany } from 'views/datahub/contexts/Company';
+import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
+import { DatahubProfile } from 'typings/datahub/profile';
+import { ContextMenu, showContextMenu } from 'shareComponents/common/ContextMenu';
 
 type Props = {
 
@@ -9,64 +12,59 @@ type Props = {
 
 const DatahubContractorProfile: FC<Props> = (props) => {
 	const [show, setShow] = useState(false);
+	const { data: company } = useContractorCompany();
+	const [selected, setSelected] = useState<DatahubProfile | Record<string, any>>({});
+	const { data } = useInfiniteProfile(['datahub_profiles', company?.data._id], { company: company?.data._id || '' }, { enable: Boolean(company?.data._id) });
+
+	const toggle = () => setShow(!show);
 	return (
 		<>
 			<div className='bg-white w-full mx-3.5 pt-4 pb-[50px]'>
+				<ContextMenu>
+					<div className='bg-white border-0.5 border-cbs-border rounded-cbs-sm shadow-cbs-md'>
+						<button onClick={toggle}>
+							Sửa {selected.name}
+						</button>
+					</div>
+				</ContextMenu>
 				<div className='flex flex-wrap gap-y-3.5'>
 					{
-						Array.from({ length: 7 }).map((_, i) => <div key={i} className='w-3/12 px-2 min-h-[330px]'>
-							<div className='h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5'>
+						data?.pages.map((page, i) => page.data.listRecords.map(record => (<div key={record._id} className='w-3/12 px-2 min-h-[330px]'>
+							<div className='h-full border-cbs-border border-[0.5px] rounded-cbs-md pl-3.5 pr-3 pt-4 pb-5' onContextMenu={(e) => {
+								e.stopPropagation();
+								e.preventDefault();
+								setSelected(record);
+								showContextMenu({ position: { x: e.clientX, y: e.clientY } })
+							}}>
 								<div className='flex'>
 									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
 										<div className='w-9 h-9'>
-											<img src={FolderImage} alt="" />
+											<img src="/images/datahub/icons8-folder-96 5.png" alt="" />
 										</div>
 									</div>
-									<p className='flex-shrink font-bold text-large'>Hồ sơ năng lực công ty CONINCO-PMI năm 2022</p>
+									<p className='flex-shrink font-bold text-large'>{record.name}</p>
 								</div>
 								<div className='pt-2.5'>
-									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-										<div>
-											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-											<p className='text-x-small text-cbs-subtext mt-2'>
-												<span>1.2Mb</span>
-												-
-												<span>15/2/2022</span>
-												<span>15:30</span>
-											</p>
+									{record.files.map(file => (
+										<div key={file._id} className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
+											<img src='/images/CBS-PDF-Icon-48.svg' alt="" className='w-6 h-6 mr-3' />
+											<div>
+												<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
+												<p className='text-x-small text-cbs-subtext mt-2'>
+													<span>1.2Mb</span>
+													-
+													<span>15/2/2022</span>
+													<span>15:30</span>
+												</p>
+											</div>
 										</div>
-									</div>
-									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-										<div>
-											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-											<p className='text-x-small text-cbs-subtext mt-2'>
-												<span>1.2Mb</span>
-												-
-												<span>15/2/2022</span>
-												<span>15:30</span>
-											</p>
-										</div>
-									</div>
-									<div className='flex border-b-[0.5px] border-cbs-border pb-2 pt-4'>
-										<img src={PDFSvg} alt="" className='w-6 h-6 mr-3' />
-										<div>
-											<p className='text-small'>2022.CPMI-HSNL-V1.pdf</p>
-											<p className='text-x-small text-cbs-subtext mt-2'>
-												<span>1.2Mb</span>
-												-
-												<span>15/2/2022</span>
-												<span>15:30</span>
-											</p>
-										</div>
-									</div>
+									))}
 								</div>
 							</div>
 						</div>
-						)}
+						)))}
 					<div className='w-3/12 px-2 min-h-[330px]'>
-						<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => setShow(!show)}>
+						<div className='h-full flex justify-center items-center border-cbs-border border-[0.5px] rounded-cbs-md cursor-pointer' onClick={() => { toggle(); setSelected({}) }}>
 							<div>
 								<div className='mx-auto text-cbs-subtext border-cbs-subtext border-[3px] rounded-full w-[50px] h-[50px] flex items-center justify-center'>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +79,9 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 					</div>
 				</div>
 			</div>
-			<ModalCreateProfile type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalExtraLarge show={show}>
+				<ModalCreateProfile datahubProfileID={selected._id} toggle={toggle} />
+			</ModalExtraLarge>
 		</>
 	)
 }

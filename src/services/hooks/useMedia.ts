@@ -12,6 +12,12 @@ import {
 } from "typings/media";
 import { CommentProps, CommentResponse } from 'typings/common';
 
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 MEDIA     ===============================
+ * ============================ ************** ===============================
+ */
+
 type UseMedia = {
     // SEEN
     listSeens: Array<any>,
@@ -191,6 +197,12 @@ export const useMedia = ({
         hasNextPageMedia
     };
 };
+
+/**
+ * ============================ ********************** ===============================
+ * ============================ 	BÌNH LUẬN MEDIA    ===============================
+ * ============================ ********************** ===============================
+ */
 
 type UseCommentMedia = {
     createCommentAsync: (payload: CommentPayload) => Promise<CommentResponse>,

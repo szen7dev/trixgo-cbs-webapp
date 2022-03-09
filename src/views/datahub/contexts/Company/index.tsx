@@ -4,7 +4,7 @@ import { createContext, FC, useContext } from "react";
 import { useDatahubCompany } from "services/hooks/datahub";
 import { DatahubCompanies } from "typings/datahub/company";
 import { UseQueryResult } from "react-query";
-import { ResponseCreateSuccess } from "typings/datahub/api";
+import { ResponseCreateSuccess } from "typings/apis/response";
 
 const ContractorContext = createContext<UseQueryResult<ResponseCreateSuccess<DatahubCompanies>, unknown>>({} as any);
 

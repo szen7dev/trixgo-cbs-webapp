@@ -6,8 +6,10 @@ import {
   CheckList, CheckListPayload, 
   ChildTask, ChildTaskPayload,
   ResponseProps, ResponsePayload,
+  CommentPayload, ListCommentsPayload,
   AddRelationUserPayload
 } from "typings/task";
+import { CommentProps, CommentResponse } from 'typings/task';
 
 /**
  * ============================ ************* ===============================
@@ -349,3 +351,97 @@ export const useChildTask = ({
     prevPageListChildTask,
   };
 };
+
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 BÌNH LUẬN   ===============================
+ * ============================ ************** ===============================
+ */
+
+ type UseCommentPcm = {
+  createCommentAsync: (payload: CommentPayload) => Promise<any>,
+  updateCommentAsync: (payload: CommentPayload) => Promise<any>,
+  deleteCommentAsync: (id: string) => Promise<{ error: boolean; message: string; }>,
+  listComments: Array<CommentProps>,
+  totalRecord: number,
+  limit: number,
+  nextCursor: string | undefined,
+  isLoadingListComments: boolean,
+  refetchListComments: () => void,
+  nextPageListComments: () => void,
+  prevPageListComments: () => void,
+}
+
+type UseCommentPcmProps = {
+  key?: string,
+  params?: ListCommentsPayload,
+  isFetchComment?: boolean
+}
+
+export const useCommentPcm = ({
+  key, 
+  params = {},
+  isFetchComment = false
+}: UseCommentPcmProps) : UseCommentPcm => {
+
+  const { mutateAsync: createCommentAsync } =
+      useMutation((payload: CommentPayload) =>
+          TaskRepository.createComment(payload)
+      );
+
+  const { mutateAsync: deleteCommentAsync } =
+      useMutation((id: string) =>
+          TaskRepository.deleteComment(id)
+      );
+
+  const { mutateAsync: updateCommentAsync } =
+      useMutation((payload: CommentPayload) =>
+          TaskRepository.updateComment(payload)
+      );
+
+  const {
+      isLoading: isLoadingListComments,
+      refetch: refetchListComments,
+      data: dataListComments,
+      fetchNextPage: nextPageListComments,
+      fetchPreviousPage: prevPageListComments,
+  } =
+    useInfiniteQuery(
+      [key || "list_comments", params],
+      async ({ pageParams }: any) => 
+      TaskRepository.listComments({ 
+        lastestID: pageParams ? pageParams : "",
+        ...params
+      }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+            return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: isFetchComment
+      }
+    );
+
+  const listComments = []
+    .concat(...(dataListComments?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecord = dataListComments?.pages[0]?.data?.totalRecord || 0;
+  const nextCursor = dataListComments?.pages[0]?.data?.nextCursor;
+  const limit = dataListComments?.pages[0]?.data?.limit || 5;
+
+  return {
+      createCommentAsync,
+      updateCommentAsync,
+      deleteCommentAsync,
+      listComments,
+      limit,
+      totalRecord,
+      nextCursor,
+      isLoadingListComments,
+      refetchListComments,
+      nextPageListComments,
+      prevPageListComments,
+  }
+}

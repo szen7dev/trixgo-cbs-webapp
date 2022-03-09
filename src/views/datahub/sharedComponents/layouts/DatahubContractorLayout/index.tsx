@@ -1,5 +1,6 @@
 import React, { FC, useContext } from 'react'
 import AuthContext from 'services/contexts/Auth'
+import Skeleton from 'react-loading-skeleton';
 
 //
 import Wallethub from '../../common/Wallethub';
@@ -13,12 +14,10 @@ import DotsHorizontalIcon from 'assets/icons/DotsHorizontalIcon';
 import iconChat from 'assets/images/icons8-chat-room-100 1.png'
 import iconRss from 'assets/images/icons8-rss-100 (1) 1.png'
 import { ContractorProvider, useContractorCompany } from 'views/datahub/contexts/Company';
-import Skeleton from 'shareComponents/common/Skeleton/Skeleton';
 
 const DatahubContractorLayoutDetail: FC = ({ children }) => {
 	const { data, isLoading } = useContractorCompany();
 
-	const { state } = useContext(AuthContext);
 	const params = useParams<{ id: string }>();
 	return (
 		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-cbs-gray'>

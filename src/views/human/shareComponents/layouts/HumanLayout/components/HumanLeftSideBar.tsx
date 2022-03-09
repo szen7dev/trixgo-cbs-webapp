@@ -36,7 +36,7 @@ export const HumanLeftSideBar: FC = () => {
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Trang chủ</span>
                     </Link>
-                    <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                    {/* <Link to={`/human/cetificate`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Tra cứu chứng chỉ</span>
                     </Link>
@@ -47,7 +47,7 @@ export const HumanLeftSideBar: FC = () => {
                     <Link to={`/human/expired`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                         <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                         <span className="truncate">Theo dõi thời hạn</span>
-                    </Link>
+                    </Link> */}
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import { Link } from 'react-router-dom';
 import { useAuth } from "services/hooks/useAuth";
 
+import documentlLogo from "assets/logos/document.png";
+
 export const DocumentLeftSideBar: FC = () => {
     const { user } = useAuth();
 
@@ -13,8 +15,8 @@ export const DocumentLeftSideBar: FC = () => {
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* title */}
         <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-          <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
-          <span>Hồ sơ văn bản</span>
+            <img src={documentlLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+            <span>Hồ sơ văn bản</span>
         </div>
 
         {/* menu block */}
@@ -23,13 +25,13 @@ export const DocumentLeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Trang chủ</span>
           </Link>
-          <Link to={`/document/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+          {/* <Link to={`/document/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo quản trị</span>
-          </Link>
+          </Link> */}
         </div>
 
       </div>
     </div>
-  );
-};
+  )
+}

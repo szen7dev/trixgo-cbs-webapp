@@ -2,6 +2,80 @@ import { ReactNode } from "react";
 import { APIResponse } from "./apis/response";
 import { User } from "./user";
 
+/**
+ * ============================ ********* ===============================
+ * ============================ 	 FILE   ===============================
+ * ============================ ********* ===============================
+ */
+
+interface FileProp {
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+  author: User;
+  createAt: string;
+  description: string;
+}
+
+export type FileProps = {
+	file?: FileProp
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+  author: User;
+  createAt: string;
+  description: string;
+};
+
+export type ImageProps = {
+  file?: FileProp
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+};
+
+export type FilePropsUpload = {
+  _id: string;
+  id: number;
+  file: File | FileProps;
+  progress: number;
+  cancelTokenSource: CancelTokenSource;
+  proimise?: Interval;
+};
+
+export type PostFileProps = {
+  files?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+};
+
+export type PostImageProps = {
+  images?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+};
+
+/**
+ * ============================ ************ ===============================
+ * ============================ 	 COMMENT   ===============================
+ * ============================ ************ ===============================
+ */
+
+export type Comment = CommentProps;
+
+/**
+ * ============================ ********** ===============================
+ * ============================ 	 OTHER   ===============================
+ * ============================ ********** ===============================
+ */
+
 export type Locale = {
   id: string;
   code: string;
