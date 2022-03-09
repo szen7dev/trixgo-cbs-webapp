@@ -11,11 +11,13 @@ interface QueryParam {
 }
 
 export interface DataResponse {
-    listRecords: UserSystemProps[];
-    limit: number;
-    totalRecord: number;
-    totalPage: number;
-    nextCursor: string;
+    data: {
+        listRecords: UserSystemProps[];
+        limit: number;
+        totalRecord: number;
+        totalPage: number;
+        nextCursor: string;
+    }
 }
 
 export interface UserSystemResponse {
@@ -80,3 +82,12 @@ interface ModalProps {
     }
     onConfirm?(): void
 }
+
+export type ListUserInProjectPayload = {
+    projectID: string;
+    limit?: number;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+    lastestID?: string;
+}; 

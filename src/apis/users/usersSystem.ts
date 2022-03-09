@@ -1,8 +1,14 @@
 import API from "../repository";
-import type { QueryParam, UserSystemPayload } from 'typings/users/userSystem';
+import type { QueryParam, UserSystemPayload, ListUserInProjectPayload, DataResponse } from 'typings/users/userSystem';
+import { convertObToUrl } from "utils";
 import { USER_URL } from '.';
 
 export const UserSystemRepository = {
+    async listUserInProject(payload: ListUserInProjectPayload): Promise<DataResponse> {
+        const { data } = await API.get<Promise<DataResponse>>(
+            `${USER_URL}?${convertObToUrl(payload)}`);
+        return data;
+    },
     async listUsersSystem(params?: QueryParam): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {

@@ -1,5 +1,5 @@
-import { UpdateUser, UpdatePasswordUser, ListFriendsPayload, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend } from "typings/user";
-import { FetchNextPageOptions, useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { UpdateUser, UpdatePasswordUser, User, CheckCodeUser, CheckCodeResponse, AddFriendPayLoad, UnFriendPayLoad, UpdateAvatarUser, AcceptRequestFriend, RemoveRequestFriend } from "typings/user";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import UserRepository from "apis/user";
 import { toast } from "react-toastify";
 
@@ -256,7 +256,11 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
     };
 
     // Get code
-    const { data: dataUserCode, refetch: refetchCode } = useQuery("user_code", () => UserRepository.getCodeUser(), {enabled: false});
+    const { data: dataUserCode, refetch: refetchCode } = useQuery("user_code", () => 
+        UserRepository.getCodeUser(), {
+            enabled: false
+        });
+
     const codeUser = dataUserCode?.data;
 
     // Danh sách bạn bè của mình
@@ -265,8 +269,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
         data: dataListFriends,
         fetchNextPage: nextPageListFriends,
         hasNextPage: hasNextPageListFriends
-    } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+    } = useInfiniteQuery(
             ["list_friends", params?.keyword],
             async ({ pageParam }: any) =>
                 UserRepository.listFriends({
@@ -279,9 +282,10 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: true
             }
         );
+
     const listFriends = [].concat(...(dataListFriends?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecordListFriends = dataListFriends?.pages[0]?.data?.totalRecord;
     const totalPageListFriends = dataListFriends?.pages[0]?.data?.totalPage;
@@ -321,8 +325,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
                 ...params,
                 lastestID: pageParam || "",
             })
-        }
-        ,
+        },
         {
             getNextPageParam: ({ data }: any) => {
                 return data?.nextCursor || undefined;
@@ -331,7 +334,7 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
             enabled: true
         }
     )
-    // console.log(infinityQuery);
+
     const {
         isLoading: isLoadingListRequestFriends,
         refetch: refetchListRequestFriends,
@@ -342,9 +345,8 @@ export const useUser = (params?: any, pageParam = '' ) : UseUser => {
     } = infinityQuery;
 
     const listRequestFriends = []
-        .concat(
-            ...(listRequestFriendsFromAPI?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+        .concat(...(listRequestFriendsFromAPI?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
     const totalRecordRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalRecord;
     const totalPagesRequest = listRequestFriendsFromAPI?.pages[0]?.data?.totalPages;
