@@ -1,18 +1,20 @@
 import API from "../repository";
 
 import { 
-    ListResponse,
-    ListReactionPayload,
-    ListMediasPayload,
-    infoMediaResponse,
     MediaPayload,
-    PostResponse, 
+    ListMediasPayload,
+    CommentResponse,
+    ListMediaResponse,
+    ListCommentResponse,
+    MediaInfoResponse, 
+
     CommentPayload,
     ListCommentsPayload,
+
+    ListReactionPayload,
     MediaReactionPayload,
     ListSeenPayload
 } from "typings/media";
-import { CommentResponse, ListCommentResponse } from 'typings/common';
 import { convertObToUrl } from "utils";
 
 const populatesMedia = JSON.stringify({
@@ -39,22 +41,22 @@ const MediaRepository = {
     /**
      * MEDIA
      */
-    async createMedia(payload: MediaPayload): Promise<PostResponse> {
-        const { data } = await API.post<PostResponse>(
+    async createMedia(payload: MediaPayload): Promise<MediaInfoResponse> {
+        const { data } = await API.post<MediaInfoResponse>(
             `${mediaURL}`,
             payload
         );
         return data;
     },
-    async updateMedia(payload: MediaPayload): Promise<PostResponse> {
-        const { data } = await API.put<PostResponse>(
+    async updateMedia(payload: MediaPayload): Promise<MediaInfoResponse> {
+        const { data } = await API.put<MediaInfoResponse>(
             `${mediaURL}`,
             payload
         );
         return data;
     },
-    async updateViewMedia(id: string): Promise<PostResponse> {
-        const { data } = await API.put<PostResponse>(
+    async updateViewMedia(id: string): Promise<MediaInfoResponse> {
+        const { data } = await API.put<MediaInfoResponse>(
             `${mediaURL}/views`,
             { mediaID: id }
         );
@@ -66,16 +68,16 @@ const MediaRepository = {
         );
         return data;
     },
-    async mediaInfo(id: string): Promise<infoMediaResponse> {
-        const { data } = await API.get<infoMediaResponse>(
+    async mediaInfo(id: string): Promise<MediaInfoResponse> {
+        const { data } = await API.get<MediaInfoResponse>(
             `${mediaURL}/${id}?${convertObToUrl({
                 populates: populatesMedia
             })}`
         );
         return data;
     },
-    async listMedias(payload: ListMediasPayload): Promise<ListResponse> {
-        const { data } = await API.get<ListResponse>(
+    async listMedias(payload: ListMediasPayload): Promise<ListMediaResponse> {
+        const { data } = await API.get<ListMediaResponse>(
             `${mediaURL}?${convertObToUrl({
                 ...payload,
                 populates: populatesMedia
@@ -95,8 +97,8 @@ const MediaRepository = {
         );
         return data;
     },
-    async listReactions(payload: ListReactionPayload): Promise<ListResponse> {
-        const { data } = await API.get<ListResponse>(
+    async listReactions(payload: ListReactionPayload): Promise<any> {
+        const { data } = await API.get<any>(
             `${mediaURL}/reactions?${convertObToUrl({
                 ...payload,
                 populates: JSON.stringify({

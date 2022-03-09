@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes, memo } from 'react';
-import { FileProps, FilePropsUpload, PostImageProps } from 'typings/media';
+import { FileProps, FilePropsUpload, PostImageProps } from 'typings/common';
 
 const ImageUploading: FC<{ d: FilePropsUpload } & HTMLAttributes<HTMLImageElement>> = ({ d, ...props }) => {
 	return <img src={'_id' in d.file ? `${process.env.REACT_APP_URL_S3}${d.file.path}` : URL.createObjectURL(d.file)} alt="" />

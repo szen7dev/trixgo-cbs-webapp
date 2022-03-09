@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { ModalContainer } from "shareComponents/common";
-import { abbreviateNumber } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
 import iconComment from 'assets/images/icon-chat-project.png';
 
 interface Props {

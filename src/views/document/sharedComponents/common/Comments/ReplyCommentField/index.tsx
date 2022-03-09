@@ -7,10 +7,11 @@ import { toast } from "react-toastify";
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import { PostImage, PostFile } from 'views/media/shareComponents/common';
+import { PostImage, PostFile } from 'shareComponents/common';
 
-import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
-import { useCommentMedia } from 'services/hooks/useMedia';
+import { FileProps, FilePropsUpload } from 'typings/common';
+import { CommentPayload } from 'typings/document';
+import { useCommentDocument } from 'services/hooks/ppt/useDocument';
 import { useUpload } from 'services/hooks/useUpload';
 import { CommentContext } from 'views/document/contexts/comment';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
@@ -24,7 +25,7 @@ interface Props {
 	fileContainerClassName?: string;
 	commentID?: string,
 	parentID?: string,
-	mediaID: string,
+	documentID: string,
 	files?: FileProps[],
 	images?: FileProps[],
 	defaultValue?: string,
@@ -38,7 +39,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	attachFile,
 	commentID,
 	parentID,
-	mediaID,
+	documentID,
 	files,
 	images,
 	defaultValue,
@@ -61,9 +62,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const { addFileToUpload } = useUpload({
 		appID: APP_KEY.DOCUMENT
 	});
-	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
-		key: `list_comments.${mediaID}`,
-		params: { mediaID },
+	const { createCommentAsync, updateCommentAsync } = useCommentDocument({
+		key: `list_comments.${documentID}`,
+		params: { documentID },
 	});
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
@@ -120,7 +121,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 
 		const dataInsertOrUpdate: CommentPayload = {
-			mediaID,
+			documentID,
 			content: text,
 			files,
 			images,

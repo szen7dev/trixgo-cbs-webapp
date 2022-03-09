@@ -9,7 +9,7 @@ import {
   CommentPayload, ListCommentsPayload,
   AddRelationUserPayload
 } from "typings/task";
-import { CommentProps, CommentResponse } from 'typings/task';
+import { CommentProps } from 'typings/task';
 
 /**
  * ============================ ************* ===============================

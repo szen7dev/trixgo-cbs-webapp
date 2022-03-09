@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useEffect, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -7,12 +7,16 @@ import { toast } from "react-toastify";
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import { PostImage, PostFile } from 'views/media/shareComponents/common';
+import { PostImage, PostFile } from 'shareComponents/common';
+import { APP_KEY } from "utils/constants";
 
 import CommentContext from 'views/media/contexts/comment/comment.context';
-import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
+import { CommentPayload } from 'typings/media';
+
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useAuth } from 'services/hooks/useAuth';
+import { useSocket } from "services/hooks/useSocket";
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
@@ -59,8 +63,9 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
+	const { current: socket }: any = useSocket();
 	const { addFileToUpload } = useUpload({
-		appID: "5df4ce16506d9b3c587948ca",
+		appID: APP_KEY.MEDIA,
 		companyID: user?.company._id
 	});
 	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
@@ -82,6 +87,39 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	// 	if ('id' in file && refsImages.current[file.id]) clearInterval(refsImages.current[file.id])
 	// 	cancelUploadImage(file)
 	// }
+
+	const listenEventAddComment = (result: any) => {
+		if(!user || !mediaID) return;
+
+		const { data, error } = result;
+
+		if(error) return;
+
+		const { infoObject, infoComment, parentID, method } = data;
+
+		if(infoObject?._id !== mediaID) return;
+		if(user._id === infoComment?.author?._id) return;
+
+		if(method === 'UPDATE') {
+			return dispatch({
+				type: 'UPDATE_COMMENT',
+				payload: {
+					commentID: infoComment._id,
+					parent: parentID,
+					body: infoComment,
+				}
+			});
+		}
+
+		dispatch({ type: 'ADD_COMMENT', payload: infoComment });
+	}
+
+	useEffect(() => {
+		if(!socket) return;
+
+		socket.off('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
+		socket.on('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
+	}, [socket])
 
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
@@ -142,6 +180,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			...{ commentID } ?? {},
 			...{ parentID } ?? {}
 		}
+		let dataAfterInsertOrUpdate = null;
+		let method = '';
 
 		try {
 			if (defaultValue) {
@@ -151,6 +191,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					return toast.warning(message);
 				}
 
+				method = 'UPDATE';
+				dataAfterInsertOrUpdate = data;
 				dispatch({
 					type: 'UPDATE_COMMENT',
 					payload: {
@@ -166,8 +208,22 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					return toast.warning(message);
 				}
 
+				method = 'INSERT';
+				dataAfterInsertOrUpdate = data;
 				dispatch({ type: 'ADD_COMMENT', payload: data });
 			}
+
+			socket?.emit('COMMENT_CSS_ADD_COMMENT', {
+				app: APP_KEY.MEDIA,
+				objectID: mediaID,
+				method,
+				parentID,
+				infoComment: dataAfterInsertOrUpdate
+			})
+
+			socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+				receivers: dataAfterInsertOrUpdate.receivers
+			});
 		} catch (error) {
 			if (typeof error === "string") {
 				toast.error(error);

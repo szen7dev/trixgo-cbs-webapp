@@ -24,6 +24,8 @@ import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse } from "./components";
 import { Loader } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/common';
+import { ProviderModalPost } from "views/pcm/contexts/post";
+import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 import TaskRepository from "apis/task";
 import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
@@ -37,11 +39,12 @@ import { APP_ID } from "apis/localdb";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
 
-export const PcmDetailTask: FC = () => {
+const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModal();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+  const [amountComment, setAmountComment] = useState(0);
   const [percentComplete, setPercentComplete] = useState("0%");
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
@@ -76,11 +79,11 @@ export const PcmDetailTask: FC = () => {
   };
 
   useEffect(() => {
-    if (!isSuccessApp) return;
-    if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
+    // if (!isSuccessApp) return;
+    // if (isSuccessApp && !hasPermission) {
+		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
+		// 	history.push("/");
+		// };
 
     if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
       history.push('/pcm/home');
@@ -88,7 +91,7 @@ export const PcmDetailTask: FC = () => {
     }
 
     if (infoTask?.data) {
-      const { author, assignee, related, percentage } = infoTask.data;
+      const { author, assignee, related, percentage, amountComment } = infoTask.data;
       const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
       let confirmUsers = [];
 
@@ -107,6 +110,7 @@ export const PcmDetailTask: FC = () => {
         confirmUsers[confirmUsers.length] = assignee;
       }
 
+      setAmountComment(amountComment || 0);
       setPercentComplete(`${percentage}%`);
       if(!confirmUsers.length) return;
 
@@ -335,7 +339,7 @@ export const PcmDetailTask: FC = () => {
           {/* <CommentContainer className="w-[791px]" /> */}
           <div className="w-[791px]">
             <div className="text-x-large py-3 px-6 font-bold">
-              Bình luận ({totalRecord})
+              Bình luận ({amountComment})
             </div>
             <RootCommentsList
               className="px-5"
@@ -353,6 +357,7 @@ export const PcmDetailTask: FC = () => {
                 projectID={taskInfo?.project?._id}
                 groupID={taskInfo?.group?._id}
                 taskID={id}
+                onConfirm={(method?: string) => (method && method === 'INSERT') && setAmountComment(amountComment + 1)}
               />
             </div>
           </div>
@@ -375,3 +380,13 @@ export const PcmDetailTask: FC = () => {
     </>
   );
 };
+
+export const PcmDetailTaskPage: FC = () => {
+  return (
+    <ProviderModalPost>
+      <CommentProvider>
+        <PcmDetailTask />
+      </CommentProvider>
+    </ProviderModalPost>
+  )
+}

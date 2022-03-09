@@ -5,6 +5,7 @@ import cn from 'classnames';
 import pdfIcon from 'assets/images/icons8-pdf-48 1.png';
 import downloadIcon from 'assets/images/icons8-download-48.png';
 
+import { humanFileSize } from 'utils/converter';
 import { FileProps, PostFileProps } from 'typings/common';
 
 export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ files, onRemove, ...props }) => {
@@ -37,7 +38,7 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 							<div className="mr-3.5"><img src={pdfIcon} alt="pdf icon" /></div>
 							<div className="flex-1">
 								<p className="text-sm leading-4 mt-2.5">{name}</p>
-								<p className="text-secondary-gray mt-2.5" style={{ lineHeight: "13.8px" }}>{size}KB</p>
+								<p className="text-secondary-gray mt-2.5" style={{ lineHeight: "13.8px" }}>{humanFileSize(size)}</p>
 							</div>
 							<button type="button" className="btn-download text-primary" onClick={() => handleDownload(download)}>
 								{

@@ -15,7 +15,7 @@ import cn from 'classnames';
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
 import { ModalContainer, Loader, ModalConfirm } from "shareComponents/common";
-import { PostFile } from 'views/media/shareComponents/common';
+import { PostFile } from 'shareComponents/common';
 import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
 
@@ -35,10 +35,12 @@ import 'views/media/styles/index.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
+import { FileProps} from "typings/common";
+import { ListMediasPayload, MediaProps } from "typings/media";
 import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
-import { abbreviateNumber, nl2p } from 'utils';
+import { nl2p } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
@@ -176,6 +178,8 @@ export const MediaDetailPage: FC = () => {
 	}, [msUpdateView])
 
 	useEffect(() => {
+		if(!media || !media.content) return;
+
 		readingTime();
 	}, [media?.content])
 

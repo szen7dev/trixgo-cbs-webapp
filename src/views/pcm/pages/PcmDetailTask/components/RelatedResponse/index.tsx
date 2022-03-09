@@ -34,7 +34,7 @@ import { APP_KEY } from "utils/constants";
  * Typings, apis
  */
 import TaskRepository from "apis/task";
-import { FileProps, FilePropsUpload, ImageProps } from "typings/media";
+import { FileProps, FilePropsUpload, ImageProps } from "typings/common";
 import { Task } from 'typings/task';
 
 /** 

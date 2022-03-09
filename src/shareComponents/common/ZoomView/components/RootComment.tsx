@@ -5,7 +5,7 @@ import Comment from './Comment';
 import EditButton from './EditButton';
 import ReplyCommentField, { SubmitComment } from './ReplyCommentField';
 
-import { FileProps } from 'typings/media';
+import { FileProps } from 'typings/common';
 import { Comment as CommentType, CommentWithReply } from 'typings/ppt/comment';
 
 export interface OptionsSubmitReply {
@@ -161,7 +161,7 @@ const RootComment: FC<Props> = ({
 				) : ''}
 				{/* Nested comment */}
 				<ul>
-					{comment.listReply && comment.listReply.data.length ? comment.listReply.data.map((commentReply, index) => (
+					{comment.listReply && comment.listReply.data.length ? comment.listReply.data.map((commentReply: any, index: number) => (
 						<li key={commentReply._id}>
 							<div className="pl-11">{NestedComment ? <NestedComment
 								showOptions={author === commentReply.author._id}

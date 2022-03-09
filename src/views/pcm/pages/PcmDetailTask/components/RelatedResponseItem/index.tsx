@@ -15,7 +15,7 @@ import { ResponseProps } from "typings/task";
 import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
-import { ImageProps } from "typings/media";
+import { ImageProps } from "typings/common";
 
 type Props = {
 	expanded?: boolean;
