@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import API from "../../repository";
 
 import { ITEM_URL } from '../';
@@ -91,17 +90,17 @@ export const DepartmentRepositories = {
 
 	// 10. DANH SÁCH DANH BẠ CÓ LINK_USER TRONG CÔNG TY
 	async getListUserInCompanyContract(params: { companyID: string, isLinkUser?: number } & ParamsApi) {
-		const { data } = await API.get<ResponseList<UserInCompanyContract>>('/api/ITEM/contacts', { params });
+		const { data } = await API.get<ResponseList<UserInCompanyContract>>('/api/item/contacts', { params });
 		return data;
 	},
 	// THÔNG TIN DỰ ÁN
 	async getInfoDepartment(params: { departmentID: string } & ParamsApi) {
-		const { data } = await API.get<ResponseData<Department.Department>>('/api/ITEM/departments', { params });
+		const { data } = await API.get<ResponseData<Department.Department>>('/api/item/departments', { params });
 		return data;
 	},
 	// 8. THÊM THÀNH VIÊN VÀO DỰ ÁN
 	async addOrRemoveMemberToDepartment(body:{ departmentID: string, members?: string[], admins?: string[], adminsRemove?: string[],membersRemove?: string[] }) {
-		const { data } = await API.put<ResponseData<Department.Department>>('/api/ITEM/departments', body);
+		const { data } = await API.put<ResponseData<Department.Department>>('/api/item/departments', body);
 		return data;
 	}
 }
