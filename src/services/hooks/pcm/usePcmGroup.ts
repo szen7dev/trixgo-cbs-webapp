@@ -1,8 +1,8 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from 'apis/pcm';
 
-export const usePcmPlanGroup = (params: any, isFetch: boolean): any => {
+export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: boolean ): any => {
 
     const { mutateAsync: createPcmPlanGroupMutateAsync, isLoading: isLoadingCreatePcmPlanGroup } =
     useMutation((payload: any) =>
@@ -13,7 +13,14 @@ export const usePcmPlanGroup = (params: any, isFetch: boolean): any => {
         useMutation((payload: any) =>
         PcmRepository.updatePcmPlanGroup(payload)
     );
-
+    const {
+        data: infoGroup, 
+        refetch: refetchInfoGroup 
+    } = useQuery(`pcm_group_info.${params}`, () => PcmRepository.infoPcmPlanGroup(params), {
+        enabled: isFetchInfo ?? false,
+        refetchOnWindowFocus: false,
+    });
+    
     // Get danh sách
     const {
         isLoading,
@@ -44,6 +51,7 @@ export const usePcmPlanGroup = (params: any, isFetch: boolean): any => {
     const totalPage = data?.pages[0]?.data?.totalPage;
     
     return {
+        // get List
         isLoading,
         refetch,
         data: listPcmPlanGroup,
@@ -51,7 +59,11 @@ export const usePcmPlanGroup = (params: any, isFetch: boolean): any => {
         hasNextPage,
         totalRecord,
         totalPage,
+        // create update
         createPcmPlanGroupMutateAsync,
-        updatePcmPlanGroupMutateAsync
+        updatePcmPlanGroupMutateAsync,
+        // get Info
+        infoGroup,
+        refetchInfoGroup
     };
 };

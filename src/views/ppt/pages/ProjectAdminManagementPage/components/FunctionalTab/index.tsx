@@ -31,7 +31,7 @@ const FunctionalTab: FC = () => {
         hasNextPage: hasNextPagePcmPlanGroup,
         totalRecord,
 		totalPage
-        } = usePcmPlanGroup({ projectID },true);
+        } = usePcmPlanGroup({ projectID },true, false);
 
 	const { openModal } = useModal();
 	
@@ -65,10 +65,6 @@ const FunctionalTab: FC = () => {
 		}
 	};
 
-	// const onSubmitCreateGroup = async() => {
-		
-	// };
-
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -98,7 +94,7 @@ const FunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} />
 											</div>
 										)
 									}
@@ -135,7 +131,7 @@ const FunctionalTab: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create />
+									<Create projectID={projectID} />
 								</div>
 							)
 						}
@@ -220,7 +216,7 @@ const FunctionalTab: FC = () => {
 					</tbody> : <></>
 				}
 			</table>
-
+				
 			{hasNextPagePcmPlanGroup && (
 				<div className="w-full flex justify-center my-5">
 					<button onClick={() => fetchNextPagePcmPlanGroup()}>

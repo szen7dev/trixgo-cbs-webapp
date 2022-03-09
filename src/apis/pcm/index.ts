@@ -40,6 +40,7 @@ const PcmRepository = {
 
     // insert pcm_plan_group
     async insertPcmPlanGroup(payload: any): Promise<any> {
+        console.log({ payload });
         const { data } = await API.post<any>(
             `${pcmURL}/pcm_plan_groups`, payload
         );
@@ -50,6 +51,21 @@ const PcmRepository = {
     async updatePcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.put<any>(
             `${pcmURL}/pcm_plan_groups`, payload
+        );
+        return data;
+    },
+
+    // info pcm_group
+    async infoPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups?${convertObToUrl({
+                select: "name sign members userUpdate",
+                populates: JSON.stringify({
+                    path: "members",
+                    select: "_id bizfullname email level image"
+                }),
+                ...payload,
+            })}`
         );
         return data;
     },

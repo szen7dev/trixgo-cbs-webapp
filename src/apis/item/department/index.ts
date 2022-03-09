@@ -1,6 +1,7 @@
 import API from "../../repository";
 
 import { ITEM_URL } from '../';
+import { convertObToUrl } from "utils";
 
 import type { Department } from 'typings/items';
 import { ParamsApi, ResponseData, ResponseList } from "typings/apis/response";
@@ -102,5 +103,17 @@ export const DepartmentRepositories = {
 	async addOrRemoveMemberToDepartment(body:{ departmentID: string, members?: string[], admins?: string[], adminsRemove?: string[],membersRemove?: string[] }) {
 		const { data } = await API.put<ResponseData<Department.Department>>('/api/item/departments', body);
 		return data;
-	}
+	},
+
+    // DANH SÁCH THÀNH VIÊN TRONG DỰ ÁN
+    async getListUserInProject(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `/api/auth/users?${convertObToUrl({
+                select: "bizfullname email image",
+                limit: 20,
+                ...payload,
+            })}`
+        );
+        return data;
+    },
 }

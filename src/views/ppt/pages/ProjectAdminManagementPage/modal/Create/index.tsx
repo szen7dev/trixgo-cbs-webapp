@@ -1,24 +1,21 @@
 import { FC, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
-import { useParams } from "react-router-dom";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { toast } from "react-toastify";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
-const Create: FC = () => {
+const Create: FC<any> = ({ projectID }) => {
   const { closeModal } = useModal();
-	const { id: projectID } = useParams<{ id: string }>();
 
   const [name, setName] = useState("");
   const [sign, setSign] = useState("");
 
   const {   
     createPcmPlanGroupMutateAsync,
-    updatePcmPlanGroupMutateAsync,
     refetch
-  } = usePcmPlanGroup({ projectID }, false);
+  } = usePcmPlanGroup({ projectID }, false, false);
 
   const onCreate = async () => {
     if (!name || !sign) {
@@ -34,8 +31,8 @@ const Create: FC = () => {
     if (!result.error) {
       setName("");
       closeModal();
-      refetch()
       toast.success('Tạo nhóm dữ liệu thành công');
+      refetch()
     } else {
       toast.error(result?.data?.message);
     }

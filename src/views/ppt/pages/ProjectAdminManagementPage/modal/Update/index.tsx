@@ -3,36 +3,41 @@ import { FC, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-// import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
-// import { APP_ID } from "apis/localdb";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { toast } from "react-toastify";
 
-const Update: FC<any> = ({ item, setIdsChecked }) => {
+const Update: FC<any> = ({ item, setIdsChecked, projectID }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
   const [sign, setSign] = useState(item.sign);
-  // const { updateAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+
+  const {   
+    updatePcmPlanGroupMutateAsync,
+    refetch
+  } = usePcmPlanGroup({ projectID }, false, false);
 
   const onUpdate = async () => {
-    toast.info('Tính năng đang đợi cấp API');
     closeModal();
 
-    // if (!name || !sign) {
-    //   return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
-    // }
-    // const result = await updateAppRolesMutateAsync({
-    //   appRoleID: item._id,
-    //   name
-    // });
-    // if (!result.error) {
-    //   refetchPcmAdmin();
-    //   setName("");
-    //   closeModal();
-    //   setIdsChecked([]);
-    //   toast.success('Cập nhật dữ liệu thành công');
-    // } else {
-    //   toast.error(result?.data?.message);
-    // }
+    if (!name || !sign) {
+      return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
+    }
+
+    const result = await updatePcmPlanGroupMutateAsync({
+        groupID: item._id,
+        name,
+        sign
+    });
+   
+    if (!result.error) {
+      refetch();
+      setName("");
+      closeModal();
+      setIdsChecked([]);
+      toast.success('Cập nhật dữ liệu thành công');
+    } else {
+      toast.error(result?.data?.message);
+    }
   };
 
   return (

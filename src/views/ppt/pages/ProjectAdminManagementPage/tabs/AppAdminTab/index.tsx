@@ -18,7 +18,7 @@ const AppAdminTab: FC<Props> = (props) => {
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>
-        {hashParam ? <GroupMember /> : <FunctionalTab />}
+        {hashParam ? <GroupMember groupID={hashParam.substring(1)} /> : <FunctionalTab />}
       </div>
     </section>
   );
