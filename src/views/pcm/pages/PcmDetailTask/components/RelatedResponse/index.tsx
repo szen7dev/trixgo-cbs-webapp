@@ -416,7 +416,7 @@ const Response: FC<Props> = ({ task }) => {
             <div className="w-full border-2 rounded my-2">
               <textarea
                 className="w-full focus: outline-none p-3"
-                placeholder="Biên soạn nội dung (sẽ sử dụng thư viện Editor đổ vào khung này-sử dụng Tiny)"
+                placeholder="Biên soạn nội dung"
                 rows={10}
                 onChange={(e) => setContent(e.target.value)}
               />
