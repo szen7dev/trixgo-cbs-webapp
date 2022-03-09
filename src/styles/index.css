@@ -1304,7 +1304,7 @@ input[type="text"] {
 }
 
 .cbs-checkbox {
-  @apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border w-4 h-4 checked:border-cbs-primary;
+  @apply rounded-sm focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border-2 border-cbs-border w-4 h-4 checked:border-cbs-primary;
 }
 .cbs-checkbox-radio {
   @apply rounded-full focus:ring-2 focus-visible:outline-none focus:ring-cbs-primary focus:ring-opacity-30 appearance-none checked:bg-cbs-primary border border-cbs-border checked:border-cbs-primary;

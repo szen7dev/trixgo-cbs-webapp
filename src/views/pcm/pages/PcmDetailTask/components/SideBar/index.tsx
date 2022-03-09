@@ -49,7 +49,7 @@ export const SideBar: FC<Props> = ({
                 alt="Avatar"
                 className="w-10 h-10 rounded-full object-cover"
               />
-              <div className="flex items-center">
+              <div className="flex items-center flex-1">
                 <img
                   className="px-2 w-auto h-6"
                   src={LongArrowIcon}
@@ -96,7 +96,7 @@ export const SideBar: FC<Props> = ({
               key={user?._id || index}
               src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
               alt="Avatar"
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 rounded-full object-cover"
             />
           ))}
         </div>
@@ -124,7 +124,7 @@ export const SideBar: FC<Props> = ({
                   <img
                     src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
                     alt="Avatar"
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div className="ml-2">
                     <p className="text-[13px]">{user?.bizfullname}</p>

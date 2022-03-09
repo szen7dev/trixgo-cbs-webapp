@@ -100,7 +100,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
 						<span 
-							className="text-[13px]"
+							className="text-[13px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
                               __html: response.content
                             }}>
