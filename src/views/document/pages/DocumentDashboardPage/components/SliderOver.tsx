@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 
-import { useCommentMedia } from 'services/hooks/useMedia'
+import { useCommentDocument } from 'services/hooks/ppt/useDocument';
 
 import XIcon from 'assets/icons/X'
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const CommentArea: FC<Props> = ({ onClose, mediaID }) => {
-	const { listComments, totalRecord, limit } = useCommentMedia({
+	const { listComments, totalRecord, limit } = useCommentDocument({
 		params: { mediaID },
 		key: `list_comments.${mediaID}`
 	});
@@ -43,13 +43,13 @@ const CommentArea: FC<Props> = ({ onClose, mediaID }) => {
 					comments={listComments}
 					totalRecord={totalRecord}
 					limit={limit}
-					mediaID={mediaID}
+					documentID={mediaID}
 				/>
 				{/* /End replace */}
 			</div>
 			{/* Footer */}
 			<div>
-				<ReplyCommentField className='border-t border-cbs-border' inputContainerClassName="flex w-full p-2" mediaID={mediaID} />
+				<ReplyCommentField className='border-t border-cbs-border' inputContainerClassName="flex w-full p-2" documentID={mediaID} />
 			</div>
 		</CommentProvider>
 	)

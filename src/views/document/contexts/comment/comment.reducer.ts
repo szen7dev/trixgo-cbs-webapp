@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CommentProps } from "typings/common";
+import { CommentProps } from "typings/document";
 import commentTypes from "./comment.types";
 
 type CommentsState = {

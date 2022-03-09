@@ -4,7 +4,7 @@ import { FC, HTMLAttributes } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-import { PostFile } from 'views/media/shareComponents/common';
+import { PostFile } from 'shareComponents/common';
 import { Comment as CommentType } from 'typings/ppt/comment';
 
 type OptionsProps = {
@@ -76,7 +76,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					</div>
 					<div>
 						<div className="flex flex-wrap gap-x-2">
-							{images.slice(0, 3).map((image, i) => {
+							{images.slice(0, 3).map((image: any, i: any) => {
 								if (!image) return null;
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;

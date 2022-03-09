@@ -70,6 +70,23 @@ export type PostImageProps = {
 
 export type Comment = CommentProps;
 
+export type CommentResponse = APIResponse & {
+  data: CommentProps;
+  message: string;
+  error: boolean;
+};
+
+export type ListCommentResponse = APIResponse & {
+  data: {
+    listRecords: CommentProps[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string
+  };
+  message: string;
+};
+
+
 /**
  * ============================ ********** ===============================
  * ============================ 	 OTHER   ===============================
@@ -118,39 +135,3 @@ export type NavLinkTaskDashboard = {
   pathname: string;
   icon?: ReactNode;
 }
-
-export type CommentProps = {
-  _id: string;
-  media: {
-    _id: string;
-    author: User;
-    createAt: string
-  };
-  content: string,
-  files: FileProps[] | undefined;
-  images: FileProps[] | undefined;
-  author: User,
-  amountCommentReply: number,
-  amountReaction: number,
-  parent: string;
-  createAt: string,
-  lastestReplyID: CommentProps;
-}
-
-export type CommentResponse = APIResponse & {
-  data: {
-    data: CommentProps;
-    message: string;
-    error: boolean;
-  };
-};
-
-export type ListCommentResponse = APIResponse & {
-  data: {
-    listRecords: CommentProps[],
-    limit: number,
-    totalRecord: number,
-    nextCursor: string
-  };
-  message: string;
-};

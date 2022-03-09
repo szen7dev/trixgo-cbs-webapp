@@ -15,7 +15,7 @@ import cn from 'classnames';
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
 import { ModalContainer, Loader, ModalConfirm } from "shareComponents/common";
-import { PostFile } from 'views/media/shareComponents/common';
+import { PostFile } from 'shareComponents/common';
 import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
 
@@ -35,10 +35,12 @@ import 'views/media/styles/index.css';
 /**
  * Types, Services, Utils
  */
-import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
+import { FileProps} from "typings/common";
+import { ListMediasPayload, MediaProps } from "typings/media";
 import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
-import { abbreviateNumber, nl2p } from 'utils';
+import { nl2p } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
@@ -106,6 +108,56 @@ export const MediaDetailPage: FC = () => {
 	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
 	const [msUpdateView, setMsUpdateView] = useState<number>(0);
 
+	// Update view and user seen for media
+	useEffect(() => {
+		if (msUpdateView <= 0) return;
+
+		const timeout: NodeJS.Timeout = setTimeout(async () => {
+			await MediaRepository.updateViewMedia(mediaID);
+		}, msUpdateView);
+
+		return () => { clearTimeout(timeout) }
+	}, [msUpdateView])
+
+	useEffect(() => {
+		if(!media || !media.content) return;
+		readingTime();
+	}, [media, media?.content])
+
+	useEffect(() => {
+		if(!media) return;
+		let hasPermission = true;
+
+		switch (media.type) {
+			case 1:
+				if(user?.company._id !== media.company._id) {
+					hasPermission = false;
+				}
+				break;
+			case 2:
+				if(user?.department._id !== media.department._id) {
+					hasPermission = false;
+				}
+				break;
+			case 5:
+				if(user?._id !== media.author._id) {
+					hasPermission = false;
+				}
+				break;
+			default:
+				break;
+		}
+
+		if(!hasPermission) {
+			history.push('/media/home');
+			toast.error("Bạn không có quyền truy cập bài viết này!");
+		}
+	}, [media])
+
+	if (!media) {
+		return <Loader className="border-primary" />;
+	}
+
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
 	const toggleModalEditMedia = () => {
@@ -162,55 +214,6 @@ export const MediaDetailPage: FC = () => {
 		const time = Math.ceil(words / wpm);
 		const ms = time * 60000;
 		setMsUpdateView(ms);
-	}
-
-	// Update view and user seen for media
-	useEffect(() => {
-		if (msUpdateView <= 0) return;
-
-		const timeout: NodeJS.Timeout = setTimeout(async () => {
-			await MediaRepository.updateViewMedia(mediaID);
-		}, msUpdateView);
-
-		return () => { clearTimeout(timeout) }
-	}, [msUpdateView])
-
-	useEffect(() => {
-		readingTime();
-	}, [media?.content])
-
-	useEffect(() => {
-		if(!media) return;
-		let hasPermission = true;
-
-		switch (media.type) {
-			case 1:
-				if(user?.company._id !== media.company._id) {
-					hasPermission = false;
-				}
-				break;
-			case 2:
-				if(user?.department._id !== media.department._id) {
-					hasPermission = false;
-				}
-				break;
-			case 5:
-				if(user?._id !== media.author._id) {
-					hasPermission = false;
-				}
-				break;
-			default:
-				break;
-		}
-
-		if(!hasPermission) {
-			history.push('/media/home');
-			toast.error("Bạn không có quyền truy cập bài viết này!");
-		}
-	}, [media])
-
-	if (!media) {
-		return <Loader className="border-primary" />;
 	}
 
 	const initialState = {

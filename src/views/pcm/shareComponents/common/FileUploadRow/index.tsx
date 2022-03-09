@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { FC, HTMLAttributes } from 'react';
-import { FileProps, FilePropsUpload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
 
 function byteToSize(bytes: number): string {
 	if (bytes < 1024) {

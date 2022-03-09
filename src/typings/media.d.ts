@@ -1,6 +1,13 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
 import type { User } from 'typings/user';
+import type { FileProps } from 'typings/common';
+
+/**
+ * ============================ ********** ===============================
+ * ============================ 	 MEDIA   ===============================
+ * ============================ ********** ===============================
+ */
 
 export type PostType = 
   | 'company'
@@ -19,88 +26,6 @@ export type MediaPayload = {
   files?: Array<FileProps>;
   images?: Array<FileProps>;
   type: string;
-};
-
-export type MediaReactionPayload = {
-  mediaID: string;
-  typeReaction?: number;
-};
-
-export type PostResponse = APIResponse & {
-  data: MediaProps;
-  message: string;
-};
-
-export type infoMediaResponse = APIResponse & {
-  data: MediaProps;
-};
-
-export type PostFileProps = {
-  files?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
-};
-
-export type PostImageProps = {
-  images?: Array<FileProps | FilePropsUpload>;
-  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
-};
-
-interface FileProp {
-  _id: number | string;
-  path: string;
-  name: string;
-  nameOrg: string;
-  size: number;
-  type: string;
-}
-
-export type FileProps = {
-	file?: FileProp
-  _id: number | string;
-  path: string;
-  name: string;
-  nameOrg: string;
-  size: number;
-  type: string;
-};
-
-export type ImageProps = {
-  file?: FileProp
-  _id: number | string;
-  path: string;
-  name: string;
-  nameOrg: string;
-  size: number;
-  type: string;
-};
-
-export type ReactionProps = {
-  _id: number | string;
-  reaction: {
-    type: number
-  };
-  userCreate: {
-    _id: string,
-    fullname: string,
-    bizfullname: string,
-    image: string
-  };
-};
-
-export type ListSeenPayload = {
-  lastestID?: string;
-  limit?: number;
-  mediaID?: string;
-  select?: string;
-  populates?: string;
-};
-
-export type ListReactionPayload = {
-  lastestID?: string;
-  limit?: number;
-  mediaID?: string;
-  select?: string;
-  populates?: string;
 };
 
 export type ListMediasPayload = {
@@ -164,27 +89,130 @@ export type MediaProps = {
   amountView?: number,
 };
 
-export type FilePropsUpload = {
-  _id: string;
-  id: number;
-  file: File | FileProps;
-  progress: number;
-  cancelTokenSource: CancelTokenSource;
-  proimise?: Interval;
+export type MediaInfoResponse = APIResponse & {
+  data: MediaProps;
+  message: string;
 };
 
-interface ModalProps {
-  show: boolean;
-  toggle(): void;
-  modalType?: "create" | "update";
-  initialValues?: {
-    mediaID?: string;
-    title: string;
-    content: string;
-    type: string;
+export type ListMediaResponse = APIResponse & {
+  data: {
+    listRecords: Array<any>;
+    totalRecord: number;
+    totalPages?: number;
   };
-  files?: FileProps[] | undefined;
-  images?: FileProps[] | undefined;
+};
+
+// export type FilePropsUpload = {
+//   _id: string;
+//   id: number;
+//   file: File | FileProps;
+//   progress: number;
+//   cancelTokenSource: CancelTokenSource;
+//   proimise?: Interval;
+// };
+
+// export type PostFileProps = {
+//   files?: Array<FileProps | FilePropsUpload>;
+//   onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+// };
+
+// export type PostImageProps = {
+//   images?: Array<FileProps | FilePropsUpload>;
+//   onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+// };
+
+// interface FileProp {
+//   _id: number | string;
+//   path: string;
+//   name: string;
+//   nameOrg: string;
+//   size: number;
+//   type: string;
+// }
+
+// export type FileProps = {
+// 	file?: FileProp
+//   _id: number | string;
+//   path: string;
+//   name: string;
+//   nameOrg: string;
+//   size: number;
+//   type: string;
+// };
+
+// export type ImageProps = {
+//   file?: FileProp
+//   _id: number | string;
+//   path: string;
+//   name: string;
+//   nameOrg: string;
+//   size: number;
+//   type: string;
+// };
+
+/**
+ * ============================ ******************* ===============================
+ * ============================ 	 REACTION, SEEN   ===============================
+ * ============================ ******************* ===============================
+ */
+
+export type MediaReactionPayload = {
+  mediaID: string;
+  typeReaction?: number;
+};
+
+export type ReactionProps = {
+  _id: number | string;
+  reaction: {
+    type: number
+  };
+  userCreate: {
+    _id: string,
+    fullname: string,
+    bizfullname: string,
+    image: string
+  };
+};
+
+export type ListSeenPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
+};
+
+export type ListReactionPayload = {
+  lastestID?: string;
+  limit?: number;
+  mediaID?: string;
+  select?: string;
+  populates?: string;
+};
+
+/**
+ * ============================ ************ ===============================
+ * ============================ 	 COMMENT   ===============================
+ * ============================ ************ ===============================
+ */
+
+export type CommentProps = {
+  _id: string;
+  media: {
+    _id: string;
+    author: User;
+    createAt: string
+  };
+  content: string,
+  files: FileProps[] | undefined;
+  images: FileProps[] | undefined;
+  author: User,
+  amountCommentReply: number,
+  amountReaction: number,
+  parent: string;
+  createAt: string,
+  lastestReplyID: CommentProps;
+  receivers?: string[]
 }
 
 export type ListCommentsPayload = {
@@ -206,10 +234,37 @@ export type CommentPayload = {
   images?: string[];
 };
 
-export type ListResponse = APIResponse & {
-  data: {
-    listRecords: Array<any>;
-    totalRecord: number;
-    totalPages?: number;
-  };
+export type CommentResponse = APIResponse & {
+  data: CommentProps;
+  message: string;
+  error: boolean;
 };
+
+export type ListCommentResponse = APIResponse & {
+  data: {
+    listRecords: CommentProps[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string
+  };
+  message: string;
+};
+
+/**
+ * ============================ ********** ===============================
+ * ============================ 	 OTHER   ===============================
+ * ============================ ********** ===============================
+ */
+interface ModalProps {
+  show: boolean;
+  toggle(): void;
+  modalType?: "create" | "update";
+  initialValues?: {
+    mediaID?: string;
+    title: string;
+    content: string;
+    type: string;
+  };
+  files?: FileProps[] | undefined;
+  images?: FileProps[] | undefined;
+}

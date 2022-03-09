@@ -283,7 +283,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listDepartments.map((department) => ({
-                      label: department.name,
+                      label: `${department.sign}.${department.name}`,
                       value: department._id,
                     }))}
                     formatItem={{

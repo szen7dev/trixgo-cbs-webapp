@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { CommentProps } from 'typings/common';
+import { CommentProps } from 'typings/media';
 import { ContextModalPost } from 'views/media/contexts/post';
 import { ModalFullContainer } from 'shareComponents/common';
 // import ViewPost from './components/ViewPost';

@@ -3,7 +3,7 @@ import { FC, HTMLAttributes, useContext } from 'react';
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 
-import { RootCommentsList, ReplyCommentField } from 'views/media/shareComponents/common';
+import { ReplyCommentField } from 'views/media/shareComponents/common';
 import { ContextModalPost } from 'views/media/contexts/post';
 
 export const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string }> = ({ mediaID, ...props }) => {

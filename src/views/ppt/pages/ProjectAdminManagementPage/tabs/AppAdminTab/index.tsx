@@ -1,7 +1,8 @@
-import { FC, useEffect } from "react";
-
-import { AuthorTab, AdminDetail, FunctionalTab } from "views/ppt/pages/ProjectAdminManagementPage/components";
+import { FC } from "react";
 import { useLocation } from "react-router-dom";
+
+import { AdminMember, GroupMember, FunctionalTab } from "../../components";
+
 type Props = {
   toggleTab: number;
 };
@@ -13,15 +14,11 @@ const AppAdminTab: FC<Props> = (props) => {
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>
-        Demo Page
-        {/* {id ?
-          <AdminDetail /> :
-          <AuthorTab />
-        } */}
+        <AdminMember />
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>
-        {hashParam ? <AdminDetail /> : <FunctionalTab />}
+        {hashParam ? <GroupMember /> : <FunctionalTab />}
       </div>
     </section>
   );

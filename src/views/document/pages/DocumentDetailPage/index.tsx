@@ -59,13 +59,13 @@ export const DocumentDetailPage: FC<Props> = () => {
   });
 
   React.useEffect(() => {
-    if(!user || !detailDocument) return;
+    if(!user || !Object.keys(detailDocument).length) return;
 
     if(!detailDocument.package?.members?.includes(user._id)) {
       history.push('/document/home');
       toast.error('Bạn không có quyền truy cập vào hồ sơ này');
     }
-  }, [user, params.docID])
+  }, [detailDocument])
 
   React.useEffect(() => {
     if (params.docID) {
