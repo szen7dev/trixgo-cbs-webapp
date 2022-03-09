@@ -2,13 +2,13 @@ import React, {FC, Fragment, useRef} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
+import {dismissNotificationMute} from "redux/reducer/messages/NotificationMute";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
-type Props = {
-    isShow: boolean;
-    handleClose: () => void;
-    handleConfirmMute: (date: string|undefined) => void;
-}
-export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, handleConfirmMute}) => {
+export const NotificationMutePopup:FC = () => {
     const focusElementRef = useRef<HTMLDivElement>(null);
     const dateOption = [
         {
@@ -32,14 +32,29 @@ export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, handleConf
             date: undefined,
         },
     ]
-
+    const {updateMuteConversation} = UseListConversation()
+    const dispatch = useDispatch();
+    const handleConfirmMute = (date: string|undefined) => {
+        if (conversation) {
+            const payload = {
+                conversationID: conversation._id,
+                isMute: true,
+                timeMute: date?date.toString():undefined,
+            }
+            updateMuteConversation(payload).then(data => {
+                dispatch(updateUsersMuteToConversation({conversationId: data._id, usersMute: data.usersMute}))
+                dispatch(dismissNotificationMute())
+            })
+        }
+    }
+    const {isOpenNotificationMute, handleClose, conversation} = useSelector((state: RootState) => state.notificationMute.data);
     return (
-        <Transition appear show={isShow} as={Fragment}>
+        <Transition appear show={isOpenNotificationMute} as={Fragment}>
             <Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto delete-confirm"
                 onClose={() => {
-                    handleClose()
+                    handleClose&&handleClose()
                 }}
                 initialFocus={focusElementRef}
             >
@@ -77,7 +92,8 @@ export const NotificationMutePopup:FC<Props> = ({isShow, handleClose, handleConf
                                 <button
                                     className={"w-[32px] h-[32px] rounded-md mr-[10px]"}
                                     onClick={() => {
-                                        handleClose()
+                                        dispatch(dismissNotificationMute())
+                                        handleClose&&handleClose()
                                     }}
                                 >
                                     <Close/>

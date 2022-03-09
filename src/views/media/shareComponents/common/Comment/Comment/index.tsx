@@ -41,7 +41,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		try {
 			const { error, message } = await deleteCommentAsync(comment._id);
             if(error) return toast.warning(message);
-			
+
 			dispatch({
 				type: "DELETE_COMMENT",
 				payload: { _id: comment?._id, parent: comment?.parent }

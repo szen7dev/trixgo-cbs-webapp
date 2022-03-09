@@ -264,7 +264,8 @@ export const useCommentMedia = ({
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: isFetchComment
+                enabled: isFetchComment,
+                cacheTime: 60 * 1000
             }
         );
 
