@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
-import { PostFile } from 'views/media/shareComponents/common';
-import { CommentProps } from 'typings/common';
+import { PostFile } from 'shareComponents/common';
+import { CommentProps } from 'typings/document';
 import { useCommentMedia } from 'services/hooks/useMedia';
 
 type OptionsProps = {

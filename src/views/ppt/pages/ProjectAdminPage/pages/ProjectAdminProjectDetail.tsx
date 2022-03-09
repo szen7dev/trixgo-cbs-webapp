@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useCallback } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";

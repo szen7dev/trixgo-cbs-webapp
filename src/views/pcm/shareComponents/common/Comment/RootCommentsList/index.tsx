@@ -52,7 +52,6 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	}
 
 	if(!totalRecord && !_comments?.length) return null;
-	console.log({ comments, _comments });
 
 	return (
 		<>

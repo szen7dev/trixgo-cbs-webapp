@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { FileProps } from "typings/media";
+import { FileProps } from "typings/common";
 import useCustomReducer from "../ppt/useCustomReducer";
 import uploadActions from "./upload.actions";
 import fileUploadReducer, { INITIAL_STATE } from "./upload.reducer";

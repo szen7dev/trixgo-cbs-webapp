@@ -7,7 +7,7 @@ import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
-import { Editor } from '@tinymce/tinymce-react';
+// import { Editor } from '@tinymce/tinymce-react';
 import cn from "classnames";
 
 /**
@@ -16,13 +16,12 @@ import cn from "classnames";
 import {
 	IconFile,
 	IconImage,
-	PostFile,
-	PostImage,
 	TabsClassifyArticle,
 	TabsClassifyArticleCommunity,
 	TabsClassifyDepartment,
 	TabsOverlay
 } from 'views/media/shareComponents/common';
+import { PostFile, PostImage } from 'shareComponents/common';
 import { typeTextSelected } from 'views/media/utils';
 
 import ChevronDownIcon from 'assets/icons/ChevronDown';
@@ -31,7 +30,8 @@ import iconDown from 'assets/images/Frame 1745.png';
 /**
  * Types, Services
  */
-import { FileProps, FilePropsUpload, ModalProps, MediaPayload } from 'typings/media';
+import { ModalProps, MediaPayload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
@@ -44,7 +44,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	content: "",
 	type: 'just-me',
 } }) => {
-	const editorRef = useRef<any>(null);
+	// const editorRef = useRef<any>(null);
 
 	const [uploads,
 		{

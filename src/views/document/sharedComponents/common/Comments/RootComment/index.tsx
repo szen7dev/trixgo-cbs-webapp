@@ -8,9 +8,8 @@ import {
 
 import { CommentContext } from 'views/document/contexts/comment';
 
-import { CommentProps } from 'typings/common';
-import { FileProps } from 'typings/media';
-import MediaRepository from "apis/media";
+import { CommentProps } from 'typings/document';
+import { FileProps } from 'typings/common';
 
 interface Props {
 	renderNestedComment?: React.ElementType
@@ -51,18 +50,18 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 	}, [])
 
 	const handleClickViewMore = async () => {
-		const lastestID = commentsReply.length ? commentsReply[0]._id : undefined;
+		// const lastestID = commentsReply.length ? commentsReply[0]._id : undefined;
 
-		const { error, data } = await MediaRepository.listComments({
-			lastestID,
-			mediaID: comment.media._id,
-			parentID: comment._id,
-		});
-		setAmountReply(amountReply - limit);
-		// console.log({ parent: comment._id, comments: data.listRecords })
-		if (!error && data.listRecords.length) {
-			viewMoreCommentsReply({ parent: comment._id, comments: data.listRecords })
-		}
+		// const { error, data } = await DocumentRepository.listComments({
+		// 	lastestID,
+		// 	mediaID: comment.document._id,
+		// 	parentID: comment._id,
+		// });
+		// setAmountReply(amountReply - limit);
+		// // console.log({ parent: comment._id, comments: data.listRecords })
+		// if (!error && data.listRecords.length) {
+		// 	viewMoreCommentsReply({ parent: comment._id, comments: data.listRecords })
+		// }
 	}
 
 	// This function callback to parent;
@@ -136,7 +135,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 							images={infoComment.images}
 							commentID={infoComment.commentID}
 							parentID={infoComment.parentID || comment._id}
-							mediaID={comment.media._id}
+							documentID={comment.document._id}
 							onSubmit={() => {
 								setIsReply(false);
 								setInfoComment({
@@ -160,7 +159,7 @@ export const RootComment: FC<Props> = ({ smallImage, comment, limit, renderNeste
 						images={infoCommentParent.images}
 						commentID={infoCommentParent.commentID}
 						parentID={infoCommentParent.parentID}
-						mediaID={comment.media._id}
+						documentID={comment.document._id}
 						onSubmit={() => {
 							setIsReplyParent(false);
 							setInfoCommentParent({

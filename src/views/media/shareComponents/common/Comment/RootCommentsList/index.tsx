@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
-import { CommentProps } from 'typings/common';
+import { CommentProps } from 'typings/media';
 import MediaRepository from "apis/media";
 
 import { Comment, RootComment } from 'views/media/shareComponents/common';
@@ -26,9 +26,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	const [amountComment, setAmountComment] = useState<number>(0);
 
 	useEffect(() => {
-		if(comments && comments.length) {
-			dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
-		}
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
 	}, [comments?.length])
 
 	useEffect(() => {

@@ -3,7 +3,7 @@ import { FC, memo, MouseEventHandler, useEffect, useState } from "react";
 import { SearchInput, ButtonMore } from "shareComponents/common";
 
 import { ModalZoomView } from "shareComponents/common/ZoomView";
-import { ImageProps } from "typings/media";
+import { ImageProps } from "typings/common";
 
 const CardItem = memo(({ index, onClick }: { index: number, onClick: MouseEventHandler<HTMLDivElement> }) => <div className="w-32 cursor-pointer" onClick={onClick}>
 	<div className="relative w-32 h-32">

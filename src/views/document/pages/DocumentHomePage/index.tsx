@@ -23,6 +23,7 @@ export const DocumentHomePage: FC = () => {
   const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
     useQueryListDepartmentsIsMember({ isFetch: true });
 
+  console.log({ listDepartments })
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
       {/* Header */}

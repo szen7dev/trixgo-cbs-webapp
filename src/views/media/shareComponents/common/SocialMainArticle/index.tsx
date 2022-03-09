@@ -8,7 +8,7 @@ import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import { MediaProps } from 'typings/media';
-import { abbreviateNumber } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
 
 type Props = {
 	media: MediaProps

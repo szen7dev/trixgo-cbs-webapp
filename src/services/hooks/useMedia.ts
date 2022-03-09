@@ -7,10 +7,10 @@ import {
     ListCommentsPayload, 
     ListMediasPayload,
     MediaReactionPayload,
-    PostResponse,
+    MediaInfoResponse,
     FetchMediaPayload
 } from "typings/media";
-import { CommentProps, CommentResponse } from 'typings/common';
+import { CommentProps, CommentResponse } from 'typings/media';
 
 /**
  * ============================ ************** ===============================
@@ -30,8 +30,8 @@ type UseMedia = {
     refetchListReactions: () => void,
     nextPageListReactions: (options?: FetchNextPageOptions | undefined) => void,
     // MEDIA
-    createMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
-    updateMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
+    createMediaAsync: (payload: MediaPayload) => Promise<MediaInfoResponse>,
+    updateMediaAsync: (payload: MediaPayload) => Promise<MediaInfoResponse>,
     deleteMediaAsync: (id: string) => Promise<any>,
     listMedias: Array<MediaProps>,
     isLoadingMedias: boolean,
@@ -264,7 +264,8 @@ export const useCommentMedia = ({
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: isFetchComment
+                enabled: isFetchComment,
+                cacheTime: 60 * 1000
             }
         );
 

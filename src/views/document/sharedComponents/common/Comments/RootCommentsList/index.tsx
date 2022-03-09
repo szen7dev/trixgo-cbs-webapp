@@ -2,21 +2,19 @@ import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
 import { Comment, RootComment } from 'views/document/sharedComponents/common';
 
-import { CommentProps } from 'typings/common';
-import MediaRepository from "apis/media";
-
+import { CommentProps } from 'typings/document';
 import { CommentContext } from 'views/document/contexts/comment';
 
 type Props = {
 	comments?: CommentProps[],
-	mediaID?: string,
+	documentID?: string,
 	totalRecord?: number,
 	limit?: number,
 	smallImage?: boolean,
 }
 
 export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
-	smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
+	smallImage, comments, documentID, totalRecord = 0, limit = 5, ...props
 }) => {
 	const { state, setComment, viewMoreComments } = useContext(CommentContext);
 	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
@@ -26,15 +24,15 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	}, [comments?.length])
 
 	const handleClickViewMore = async () => {
-		const { error, data } = await MediaRepository.listComments({
-			lastestID: state.comments[0]._id,
-			mediaID: mediaID,
-		});
-		setAmountComment(amountComment - limit);
+		// const { error, data } = await MediaRepository.listComments({
+		// 	lastestID: state.comments[0]._id,
+		// 	documentID: documentID,
+		// });
+		// setAmountComment(amountComment - limit);
 
-		if (!error && data.listRecords.length) {
-			// viewMoreComments(data.listRecords)
-		}
+		// if (!error && data.listRecords.length) {
+		// 	// viewMoreComments(data.listRecords)
+		// }
 	}
 
 	return (

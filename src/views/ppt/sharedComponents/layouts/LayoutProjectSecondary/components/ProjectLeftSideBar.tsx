@@ -15,11 +15,11 @@ type RouteItem = {
 }
 
 export const routes: Array<RouteItem> = [
-	// {
-	// 	path: '/pcm/project/:id/admin',
-	// 	name: 'Quản trị viên',
-	// 	image: '/images/pcm/admin.png',
-	// },
+	{
+		path: '/pcm/project/:id/admin',
+		name: 'Quản trị viên',
+		image: '/images/pcm/admin.png',
+	},
 	// {
 	// 	path: '/pcm/project/:id/home',
 	// 	name: 'Trang chủ',

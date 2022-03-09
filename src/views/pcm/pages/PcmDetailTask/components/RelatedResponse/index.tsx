@@ -34,7 +34,7 @@ import { APP_KEY } from "utils/constants";
  * Typings, apis
  */
 import TaskRepository from "apis/task";
-import { FileProps, FilePropsUpload, ImageProps } from "typings/media";
+import { FileProps, FilePropsUpload, ImageProps } from "typings/common";
 import { Task } from 'typings/task';
 
 /** 
@@ -143,19 +143,24 @@ const Response: FC<Props> = ({ task }) => {
     })();
   }, [location.hash])
 
+  const listenEventAddResponse = (result: any) => {
+    const { data, error } = result;
+
+    if(error || amountCommentBack) return;
+
+    const { infoObject, infoComment } = data;
+
+    if(infoObject?._id !== task._id) return;
+    if(user?._id === infoComment?.author?._id) return;
+
+    dispatch({ type: 'ADD_COMMENT', payload: infoComment });
+  }
+
   useEffect(() => {
-    socket?.on('COMMENT_SSC_ADD_COMMENT', (result: any) => {
-      const { data, error } = result;
+    if(!socket) return;
 
-      if(error || amountCommentBack) return;
-
-      const { infoObject, infoComment } = data;
-
-      if(infoObject?._id !== task._id) return;
-      if(user?._id === infoComment?.author?._id) return;
-
-      dispatch({ type: 'ADD_COMMENT', payload: infoComment });
-    });
+    socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
+		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
   }, [socket])
 
   const getClassTab = (tab: RelatedResponseTab) => {
@@ -193,13 +198,13 @@ const Response: FC<Props> = ({ task }) => {
       }
 
       setAmountResponse(amountResponse + 1);
-      dispatch({ type: 'ADD_COMMENT', payload: data?.result });
+      dispatch({ type: 'ADD_COMMENT', payload: data });
       toast.success('Tạo phản hồi thành công');
 
       socket?.emit('COMMENT_CSS_ADD_COMMENT', {
         app: APP_KEY.PCM_PLAN_TASK,
         objectID: task._id,
-        infoComment: data?.result
+        infoComment: data
       })
 
       socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {

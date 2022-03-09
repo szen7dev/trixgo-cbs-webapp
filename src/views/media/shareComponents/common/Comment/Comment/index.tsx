@@ -4,9 +4,9 @@ import cn from "classnames";
 import moment from "moment";
 
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
-import { PostFile } from 'views/media/shareComponents/common';
+import { PostFile } from 'shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
-import { CommentProps } from 'typings/common';
+import { CommentProps } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 
 type OptionsProps = {
@@ -41,7 +41,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		try {
 			const { error, message } = await deleteCommentAsync(comment._id);
             if(error) return toast.warning(message);
-			
+
 			dispatch({
 				type: "DELETE_COMMENT",
 				payload: { _id: comment?._id, parent: comment?.parent }

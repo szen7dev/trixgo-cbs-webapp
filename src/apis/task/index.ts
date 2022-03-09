@@ -69,7 +69,7 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountMarkedResponse",
+        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse",
         populates: JSON.stringify({
           path: "group author assignee related parent project company approver authorAttachs",
           select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt",

@@ -15,7 +15,7 @@ import { CreateNewAdminMember, DeleteMembers } from "../../modal";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 import { APP_ID } from "apis/localdb";
 
-const AdminDetail: FC = () => {
+const GroupMember: FC = () => {
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<string[]>([]);
@@ -238,4 +238,4 @@ const AdminDetail: FC = () => {
 	);
 };
 
-export default AdminDetail;
+export default GroupMember;

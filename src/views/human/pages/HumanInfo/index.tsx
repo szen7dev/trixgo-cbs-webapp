@@ -149,12 +149,13 @@ export const HumanInfo: FC = () => {
 
   useEffect(() => {
     if(!user || !detailHuman) return;
+    // console.log({ user, detailHuman, check: !detailHuman.department?.members?.includes(user._id) })
 
     if(!detailHuman.department?.members?.includes(user._id)) {
       history.push('/human/home');
       toast.error('Bạn không có quyền xem thông tin người dùng này');
     }
-  }, [user])
+  }, [detailHuman])
 
   if (loading) {
     return <Loader className="border-primary" />;
