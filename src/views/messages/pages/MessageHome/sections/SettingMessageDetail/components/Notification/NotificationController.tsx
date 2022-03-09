@@ -1,10 +1,11 @@
 import React, {FC, useCallback, useContext, useEffect, useState} from "react"
 import BellIcon from "assets/images/icons8-bell-100.svg";
-import {NotificationMutePopup} from "./NotificationMutePopup";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
 import {MessageContext} from "../../../../index";
+import {openNotificationMute, dismissNotificationMute} from "redux/reducer/messages/NotificationMute";
+import {RootState} from "../../../../../../../../redux/reducer";
 
 type Props = {
     chat: any
@@ -13,39 +14,44 @@ export const NotificationController:FC<Props> = ({chat}) => {
     const currentUser = localStorage.getItem("currentUser")??"P{";
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
+    const chatData = useSelector((state: RootState) => state.listConversation.data.listConversation[chat._id]);
     const {currentChat} = useContext(MessageContext);
 
     const checkedValue = useCallback(() => {
-        return !(chat.usersMute??[]).includes(profileId)
-    }, [chat.usersMute])
+        return !(chatData.usersMute??[]).includes(profileId)
+    }, [chatData.usersMute])
+
     const {updateMuteConversation} = UseListConversation()
 
     const [userMute, setUserMute] = useState(checkedValue());
-    const [showPopupMute, setShowPopupMute] = useState(false);
 
     useEffect(() => {
         setUserMute(checkedValue())
-    }, [currentChat])
+    }, [currentChat, chatData.usersMute])
 
     const handleSetUserMute = (checked: boolean) => {
         setUserMute(checked)
         if (!checked) {
-            setShowPopupMute(true);
+            dispatch(openNotificationMute({
+                conversation: chat,
+                handleClose: () => {
+                    setUserMute(checkedValue())
+                }
+            }))
         } else {
-            setShowPopupMute(false);
-            handleConfirmMute(undefined, false);
+            dispatch(dismissNotificationMute())
+            handleTurnOffMute();
         }
     }
 
-    const handleConfirmMute = (date: string|undefined, mute: boolean) => {
+    const handleTurnOffMute = () => {
         const payload = {
             conversationID: chat._id,
-            isMute: mute,
-            timeMute: date?date.toString():undefined,
+            isMute: false,
         }
         updateMuteConversation(payload).then(data => {
             dispatch(updateUsersMuteToConversation({conversationId: data._id, usersMute: data.usersMute}))
-            setShowPopupMute(false)
+            dispatch(dismissNotificationMute())
         })
     }
 
@@ -58,13 +64,6 @@ export const NotificationController:FC<Props> = ({chat}) => {
                 checked={userMute}
                 // defaultChecked={checkedValue()}
                 className="form-switch form-check-input" type="checkbox" id="flexSwitchCheckChecked"/>
-            <NotificationMutePopup
-                isShow={showPopupMute}
-                handleClose={() => {
-                    setShowPopupMute(false);
-                    setUserMute(checkedValue())
-                }}
-                handleConfirmMute={(date) => handleConfirmMute(date, true)}/>
         </div>
     )
 }

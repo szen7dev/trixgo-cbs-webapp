@@ -24,6 +24,7 @@ import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {SocketController} from "views/messages/shareComponents/common/SocketController";
 import {UnreadMessageController} from "./sections/UnreadMessages";
 import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
+import {NotificationMutePopup} from "./sections/SettingMessageDetail/components/Notification/NotificationMutePopup";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -89,6 +90,7 @@ export const MessagesHome:FC = () => {
             <FolderDeleteConfirmPopup/>
             <FolderAddConversationPopup/>
             <UsersSeenDetail/>
+            <NotificationMutePopup/>
         </MessageContext.Provider>
     )
 }

@@ -7,7 +7,18 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import moment from "moment";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {MiniChatContext} from "../../index";
-import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, NotificationCenter, MyMessage, OthersMessage} from "views/messages/pages/MessageHome/sections/ChattingSection";
+import {
+    Reminder,
+    ReminderNoti,
+    Poll,
+    PollNoti,
+    AddUsersNoti,
+    PinMessageNoti,
+    NotificationCenter,
+    MyMessage,
+    OthersMessage,
+    ChangeNameNoti, ChangeAvatarNoti
+} from "views/messages/pages/MessageHome/sections/ChattingSection";
 
 type Props = {
     chat: ItemListConversation;
@@ -99,11 +110,13 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                     return <OthersMessage isMini={true} bgMessage={"bg-gray-100"} context={MiniChatContext} message={message}/>
                 }
             case 101:
-                // eslint-disable-next-line no-case-declarations
-                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
-                // eslint-disable-next-line no-case-declarations
-                const messsagesAdd = usersAdded.join("; ");
-                return <AddUsersNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 102:
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 103:
+                return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
+            case 104:
+                return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:

@@ -1,3 +1,5 @@
+import {ItemMessage} from "./listMessage";
+
 export type ItemListConversation = {
     _id: string;
     members: any[];
@@ -284,6 +286,19 @@ export type UpdateMuteConversationPayload = {
 
 export type UpdateMuteConversationResponse = {
     data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateConversationPayload = {
+    conversationID: string;
+    name?: string;
+    description?: string;
+    avatar?: string;
+}
+export type UpdateConversationData = { infoConversation: ItemListConversation, infoMessage: {data: ItemMessage} }
+export type UpdateConversationResponse = {
+    data: UpdateConversationData;
     error: boolean;
     status: number;
 }
