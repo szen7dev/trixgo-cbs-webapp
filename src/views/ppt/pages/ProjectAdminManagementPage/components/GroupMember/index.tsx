@@ -26,15 +26,8 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 
 	// Call api 
 	const { infoGroup } = usePcmPlanGroup({ groupID }, false, true);
-
 	const listMembers = infoGroup?.data?.members || [];
-	// const { listMembers: list, companyAppRoleDetail } = usePcmAdminDetail({ 
-	// 	appID: id, keyword: keyword 
-	// });
-
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ 
-		appID: APP_ID.PCM.id, type: "1" 
-	});
+	const projectID = infoGroup?.data?.project;
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -115,7 +108,7 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 								>
 									{/* <CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
 									{/* <CreateNewAdminMember/> */}
-									<CreateMemberGroup/>
+									<CreateMemberGroup projectID={projectID}/>
 								</div>
 							)
 						}

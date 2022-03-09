@@ -9,6 +9,7 @@ import MemberIcon from "assets/images/member-icon.svg";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
 
 import { useInfiniteQuery } from "react-query";
 import { DepartmentRepositories } from "apis/item/department";
@@ -19,45 +20,27 @@ const CreateMemberGroup: FC<any> = ({ projectID }) => {
 	const { closeModal } = useModal();
 	const [keyword, setKeyword] = useState("");
 
-	// const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-	// 	['users_in_company_contract', keyword],
-	// 	({ pageParam }) =>
-	// 		// DepartmentRepositories.getListUserInCompanyContract({
-	// 		// 	companyID,
-	// 		// 	keyword,
-	// 		// 	isLinkUser: 1,
-	// 		// 	lastestID: pageParam,
-	// 		// 	select: 'name',
-	// 		// 	populates: JSON.stringify({ "path": " linkUser", "select": "fullname image" })
-	// 		// }),
-	// 	// {
-	// 	// 	refetchOnMount: false,
-	// 	// 	refetchOnWindowFocus: false,
-	// 	// 	enabled: Boolean(companyID),
-	// 	// 	keepPreviousData: true,
-	// 	// 	getNextPageParam(data) {
-	// 	// 		if (!data.data.nextCursor) return undefined;
-	// 	// 		return data.data.nextCursor;
-	// 	// 	},
-	// 	// }
-	// );
+	const { data: listUsersProject, fetchNextPage, hasNextPage } = useUsersProject({ 
+		projectID: projectID,
+		keyword: keyword
+	  }, true);
 
-//   const records = data?.pages.flatMap(page => page.data.listRecords).filter(Boolean);
-//  const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
-//   console.log({ records })
+	const records = listUsersProject.flatMap(page => page).filter(Boolean);
+	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
 
-	// const handleAddUser = async () => {	
-	// 	if (!checked.length) return;
-	// 	const listUserID = checked.map(item => (item.linkUser as LinkUser)._id);
-	// 	const response = await DepartmentRepositories.addOrRemoveMemberToDepartment({ departmentID: appRoleID, members: listUserID })
-	// 	if (response.error === false) {
-	// 		toast.success('Thêm thành công');
-	// 		refetchGetListAppRoleMenu();
-	// 	} else {
-	// 		toast.error('Thêm thất bại');
-	// 	}
-	// 	closeModal();
-	// }
+	const handleAddUser = async () => {	
+		if (!checked.length) return;
+		
+		const listUserID = checked.map(item => item._id);
+		// const response = await DepartmentRepositories.addOrRemoveMemberToDepartment({ departmentID: appRoleID, members: listUserID })
+		// if (response.error === false) {
+		// 	toast.success('Thêm thành công');
+		// 	refetchGetListAppRoleMenu();
+		// } else {
+		// 	toast.error('Thêm thất bại');
+		// }
+		closeModal();
+	}
 
 	return (
 		<main className="py-[18px]">
@@ -95,36 +78,15 @@ const CreateMemberGroup: FC<any> = ({ projectID }) => {
 						type="checkbox"
 						value=""
 						id="flexCheckDefault"
-						// ref={checkboxRef}
-						// onClick={handleCheckAll}
+						ref={checkboxRef}
+						onClick={handleCheckAll}
 					/>
 					<img src={PolygonIcon} alt="Polygon" />
 				</div>
+
 				<div className="flex flex-col gap-2 mt-4 h-[420px] overflow-auto px-7">
-						<div key="1" className="flex items-center">
-							<input
-								className="cbs-checkbox mr-9"
-								type="checkbox"
-								value=""
-								id="1"
-								// checked={Boolean(assigned[item._id])}
-								// onChange={(e) => handleChangeCheckbox(e, item)}
-							/>
-
-							<div className="flex items-center">
-								<img
-									src={MemberIcon}
-									alt="Member"
-									className="w-10 h-10 rounded-full"
-								/>
-								<p className="px-4">Phan Van De</p>
-							</div>
-						</div>
-				</div> 
-
-				{/* <div className="flex flex-col gap-2 mt-4 h-[420px] overflow-auto px-7">
-					{data?.pages?.map((page) => (
-						page?.data?.listRecords?.map((item, index) => (
+					{
+						listUsersProject.map((item: any, index: number) => (
 							<div key={index} className="flex items-center">
 								<input
 									className="cbs-checkbox mr-9"
@@ -137,14 +99,14 @@ const CreateMemberGroup: FC<any> = ({ projectID }) => {
 
 								<div className="flex items-center">
 									<img
-										src={typeof item.linkUser !== 'string' ? `${process.env.REACT_APP_URL_S3_USER}/${item.linkUser.image}` : MemberIcon}
+										src={item?.image?`${process.env.REACT_APP_URL_S3_USER}/${item.image}` : MemberIcon}
 										alt="Member"
 										className="w-10 h-10 rounded-full"
 									/>
-									<p className="px-4">{item.name}</p>
+									<p className="px-4">{item.bizfullname}</p>
 								</div>
 							</div>
-						))))
+						))
 					}
 					{hasNextPage && (
 						<div className="w-full flex justify-center my-5">
@@ -153,12 +115,12 @@ const CreateMemberGroup: FC<any> = ({ projectID }) => {
 							</button>
 						</div>
 					)}
-				</div> */}
+				</div>
 			</section>
 
 			<footer className="pb-6 w-full text-right px-[30px]">
 				<button className="w-[95px] h-8 bg-primary text-primary-light rounded font-bold hover:opacity-90"
-					// onClick={handleAddUser}
+					onClick={handleAddUser}
 				>
 					Xác nhận
 				</button>

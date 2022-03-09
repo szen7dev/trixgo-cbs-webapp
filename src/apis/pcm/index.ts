@@ -59,7 +59,7 @@ const PcmRepository = {
     async infoPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_groups?${convertObToUrl({
-                select: "name sign members userUpdate",
+                select: "name sign members userUpdate project",
                 populates: JSON.stringify({
                     path: "members",
                     select: "_id bizfullname email level image"
