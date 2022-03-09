@@ -18,7 +18,14 @@ import like from "assets/images/emoji/like.png";
 import sad from "assets/images/emoji/sad.png";
 import surprise from "assets/images/emoji/surprise.png";
 import {Poll, PollNoti} from "../Poll";
-import {AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../ChatContent/RegularContent";
+import {
+    AddUsersNoti,
+    PinMessageNoti,
+    MyMessage,
+    OthersMessage,
+    NotificationCenter,
+    ChangeNameNoti, ChangeAvatarNoti
+} from "../ChatContent/RegularContent";
 
 export const listEmoji = [
     {
@@ -161,11 +168,13 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                     return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 101:
-                // eslint-disable-next-line no-case-declarations
-                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
-                // eslint-disable-next-line no-case-declarations
-                const messsagesAdd = usersAdded.join("; ");
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 102:
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 103:
+                return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
+            case 104:
+                return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 109:

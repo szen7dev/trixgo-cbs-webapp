@@ -5,12 +5,19 @@ import {
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation, DeleteFolderPayload, FolderConversationItem,
+    DataListConversation,
+    DeleteFolderPayload,
+    FolderConversationItem,
     GeneralGroupByMemberPayload,
     ItemListConversation,
-    ListConversationPayload, ListFoldersConversationPayload,
+    ListConversationPayload,
+    ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
-    MediasOfConversationPayload, UpdateFolderPayload, UpdateMuteConversationPayload
+    MediasOfConversationPayload,
+    UpdateConversationData,
+    UpdateConversationPayload,
+    UpdateFolderPayload,
+    UpdateMuteConversationPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setListConversation, setLoading} from "redux/reducer/messages/ListConversation";
@@ -38,6 +45,7 @@ type UseListConversationType = {
     deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
     addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
     updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
+    updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -119,6 +127,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const updateConversation = async (params: UpdateConversationPayload) => {
+        const {data} = await ListConversationRepository.updateConversation(params);
+        return new Promise<UpdateConversationData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -164,6 +179,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         updateFolder,
         deleteFolder,
         addConversationToFolder,
-        updateMuteConversation
+        updateMuteConversation,
+        updateConversation
     }
 };
