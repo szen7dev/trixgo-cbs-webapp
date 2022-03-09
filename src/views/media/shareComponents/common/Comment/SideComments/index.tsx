@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, useContext } from 'react';
 
-import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
+// import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import iconFacebookLike from 'assets/images/icons8-facebook-like-48.png';
 
 import { RootCommentsList, ReplyCommentField } from 'views/media/shareComponents/common';
@@ -52,7 +52,7 @@ export const SideComments: FC<HTMLAttributes<HTMLDivElement> & { mediaID: string
 					<div className="react__comments-header ml-4 mr-5 text-[15px] leading-4 pb-2 mb-1.5 font-bold">
 						<span>Xem 152 bình luận trước</span>
 					</div>
-					<RootCommentsList className="px-5" smallImage />
+					{/* <RootCommentsList className="px-5" smallImage /> */}
 				</div>
 			</div>
 			{/* Footer */}

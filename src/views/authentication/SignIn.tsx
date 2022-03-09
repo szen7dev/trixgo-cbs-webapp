@@ -57,12 +57,10 @@ const LoginPage: FC = () => {
 
   const signInSchema = object().shape({
     email: string()
-      .email("* Please enter valid email address")
-      .required("* Email required!"),
+      .email("* Email không hợp lệ")
+      .required("* Email bắt buộc!"),
     password: string()
-      .min(7, "* Password must be at least 8 characters")
-      .max(25, "* Password too large (25 characters max)")
-      .required("* Password required!"),
+      .required("* Password bắt buộc!"),
   });
 
   const handleClickShowRegister = () => setShowRegister(!showRegister);

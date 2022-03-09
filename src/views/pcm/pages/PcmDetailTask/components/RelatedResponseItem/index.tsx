@@ -171,7 +171,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 									if (index < 2) {
 										return (
 											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : file.url} className="w-full" alt="test" />
+												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full" alt="test" />
 											</button>
 										)
 									}
@@ -180,7 +180,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 										return (
 											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
 												<img
-													src={TestImage}
+													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
 													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
 													alt="test"
 												/>

@@ -4,26 +4,30 @@ import { Header, ListTable, ClassifyTable } from "views/pcm/shareComponents/comm
 import { useTask } from "services/hooks/useTask";
 import { Loader } from "shareComponents/common/Loader";
 
-export const PcmHome: FC = () => {
+type Props = {
+  type?: number
+}
+
+export const PcmHome: FC<Props> = ({ type = 1 }) => {
   const [viewMode, setViewMode] = useState("LIST");
   const {
     listTasks: tasksOutDate,
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
-  } = useTask({});
+  } = useTask({ type });
 
   const {
     listTasks: tasksNextWeek,
     isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
-  } = useTask({ typeStatus: 2 });
+  } = useTask({ type, typeStatus: 2 });
 
   const {
     listTasks: tasksMoreThanSevenDay,
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
-  } = useTask({ typeStatus: 3 });
+  } = useTask({ type, typeStatus: 3 });
 
   const handleSeeMore = (typeStatus: string) => {
     switch (typeStatus) {

@@ -67,7 +67,7 @@ export const PcmDetailTask: FC = () => {
       const { author, assignee, percentage } = infoTask.data;
       let confirmUsers = [author, assignee];
 
-      if (author._id === assignee._id) {
+      if (author && author._id === assignee._id) {
         confirmUsers = [assignee];
       }
 
@@ -102,7 +102,7 @@ export const PcmDetailTask: FC = () => {
             </svg>
           </button>
           <span className="mx-5 text-primary-gray">|</span>
-          <button className="mx-3">
+          {/* <button className="mx-3">
             <img
               className="w-6 opacity-80"
               src={DownloadIcon}
@@ -114,19 +114,19 @@ export const PcmDetailTask: FC = () => {
           </button>
           <button className="mx-3">
             <img className="w-6" src={CopyIcon} alt="Copy icon" />
-          </button>
+          </button> */}
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
           <button className="mx-3">
             <img className="w-6" src={IconPencil} alt="Pencil icon" />
           </button>
-          <button className="mx-3">
+          {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
           </button>
           <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
-          </button>
+          </button> */}
           <button className="mx-3" onClick={openAddUserRelation}>
             <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
           </button>
@@ -187,7 +187,7 @@ export const PcmDetailTask: FC = () => {
                     alt="Organizational icon"
                   />
                   <span className="text-[13px] text-primary-gray mx-2">
-                    {`Việc cha: ${infoTask?.data?.parent?.name}`}
+                    Việc cha: <button onClick={() => history.push(`/pcm/detail/${infoTask?.data?.parent?._id}`)}>{infoTask?.data?.parent?.name}</button>
                   </span>
                 </div>
               )}
@@ -277,6 +277,7 @@ export const PcmDetailTask: FC = () => {
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
             <SideBar
+              taskID={infoTask.data?._id}
               author={infoTask.data?.author}
               assignee={infoTask.data?.assignee}
               createAt={infoTask.data?.createAt}
@@ -290,9 +291,16 @@ export const PcmDetailTask: FC = () => {
           <CommentContainer className="w-[791px]" />
           <ModalLarge
             show={isShow}
+            toggle={toggleModal} 
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser toggle={toggleModal} taskID={id} refetch={refetch} />}
+            {type === 'relation' && <ModalAddRelationUser 
+              toggle={toggleModal} 
+              taskID={id} 
+              refetch={refetch} 
+              related={infoTask.data?.related}
+              modalType={'ADD_RELATION_USER'}
+            />}
             {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
           </ModalLarge>
         </div>

@@ -1,12 +1,13 @@
 /**
  * Libraries
  */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import { Editor } from '@tinymce/tinymce-react';
 import cn from "classnames";
 
 /**
@@ -43,6 +44,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	content: "",
 	type: 'just-me',
 } }) => {
+	const editorRef = useRef<any>(null);
 
 	const [uploads,
 		{
@@ -234,7 +236,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 		>
 			{
 				formik => {
-					const { values } = formik;
+					const { values, setFieldValue } = formik;
 					return (
 						<Form autoComplete="off">
 							<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
@@ -244,7 +246,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								>
 									{initialValues.mediaID ? 'Cập nhật bài viết' : 'Bài viết mới'}
 								</Dialog.Title>
-								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={() => toggle()}>
+								<button className="bg-primary-gray bg-opacity-20 p-2 rounded-3xl" type="button" onClick={toggle}>
 									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 									</svg>
@@ -252,9 +254,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							</div>
 							<div className="px-6 mt-3">
 								<button type="button" onClick={toggleClassifyArticle} className="btn__select w-56 flex justify-between items-center">
-									<span>
-										{typeTextSelected(values.type)}
-									</span>
+									<span> {typeTextSelected(values.type)} </span>
 									<img src={iconDown} alt="icon down" className="inline-block" />
 								</button>
 							</div>
@@ -265,6 +265,48 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 									component="span"
 									className="font-normal text-sm text-negative italic"
 								/>
+								{/* <Editor
+									apiKey={process.env.REACT_APP_TINY_MCE_KEY || 'mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt'}
+									onInit={(_, editor) => editorRef.current = editor}
+									initialValue={initialValues.content}
+									onSaveContent={() => console.log('hello')}
+									onChange={() => setFieldValue('content', editorRef.current.getContent())}
+									init={{
+										height: 'calc(100% - 32.5px)',
+										menu: {
+											file: { title: 'File', items: 'newdocument restoredraft | preview | print | basicitem ' },
+											edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+											view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
+											insert: { title: 'Insert', items: 'image link media template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+											format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat' },
+											tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+											// table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
+											help: { title: 'Help', items: 'help' }
+										},
+										menubar: true,
+										plugins: [
+											'fullpage save advlist autolink lists link image charmap print preview anchor',
+											'searchreplace visualblocks code fullscreen',
+											'insertdatetime media table paste code help wordcount'
+										],
+										fullpage_default_title: 'My default page title',
+										// toolbar: 'save undo redo | formatselect | ' +
+										// 	'bold italic backcolor | alignleft aligncenter ' +
+										// 	'alignright alignjustify | bullist numlist outdent indent | ' +
+										// 	'removeformat | help',
+										// content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+										// content_css: 'document',
+										setup(editor) {
+											editor.ui.registry.addMenuItem('basicitem', {
+												text: 'Save',
+												onAction: function () {
+													editor.save()
+												},
+												icon: 'save'
+											});
+										}
+									}}
+								/> */}
 								<textarea
 									rows={5}
 									placeholder="Biên soạn nội dung"
@@ -312,11 +354,11 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 								<div className="flex pl-11">
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
 										<IconImage />
-										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
+										<input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={handleSetFiles} />
 									</label>
 									<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
 										<IconFile />
-										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={event => handleSetFiles(event)} />
+										<input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
 									</label>
 								</div>
 								<div>
@@ -325,6 +367,8 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							</div>
 							<TabsOverlay show={showClassifyArticle} />
 							<TabsClassifyArticle
+								isShowDigitalMedia={user?.email === 'contact@trixgo.com'}
+								isShowSystemMedia={user?.email === 'contact@trixgo.com'}
 								show={showClassifyArticle}
 								toggle={toggleClassifyArticle}
 								showMore={(type: string) => {
@@ -341,9 +385,8 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 							<TabsClassifyDepartment
 								show={showClassifyDepartment}
 								toggle={toggleClassifyDepartment}
-								afterEnter={() => {
-									toggleClassifyArticle()
-								}}
+								onSelect={(departmentID: string) => setFieldValue('departmentID', departmentID)}
+								afterEnter={toggleClassifyArticle}
 							/>
 							<TabsClassifyArticleCommunity
 								show={showClassifyArticleCommunity}

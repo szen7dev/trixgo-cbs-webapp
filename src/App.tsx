@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 import "i18n/config";
 import Routes from "routes";
-
+import "react-datepicker/dist/react-datepicker.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/swiper.min.css";
 import "styles/output.css";

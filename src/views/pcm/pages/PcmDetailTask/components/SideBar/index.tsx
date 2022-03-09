@@ -2,14 +2,17 @@ import { FC } from "react";
 import moment from "moment";
 
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
-import HumanAvatar from "assets/images/human-avatar.svg";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
+import { ModalAddRelationUser } from "views/pcm/pages/PcmDetailTask/components";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import useModal from "views/pcm/hooks/useModal";
 
 import type { Author, Assignee } from "typings/task";
 import type { User } from "typings/user";
 
 type Props = {
+  taskID: string;
   author: Author;
   assignee: Assignee;
   createAt: string;
@@ -18,12 +21,15 @@ type Props = {
 };
 
 export const SideBar: FC<Props> = ({
+  taskID,
   author,
   assignee,
   createAt,
   related,
   confirmUsers,
 }) => {
+  const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation  }] = useModal();
+
   return (
     <div>
       <div>
@@ -39,7 +45,7 @@ export const SideBar: FC<Props> = ({
           <div className="w-1/2">
             <div className="flex">
               <img
-                src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
+                src={`${process.env.REACT_APP_URL_S3_USER}/${author?.image}`}
                 alt="Avatar"
                 className="w-10 h-10 rounded-full object-cover"
               />
@@ -52,17 +58,17 @@ export const SideBar: FC<Props> = ({
               </div>
             </div>
             <span className="mt-2 text-[13px] leading-4">
-              {author.fullname}
+              {author?.fullname}
             </span>
           </div>
           <div className="w-1/2">
             <img
-              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee.image}`}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${assignee?.image}`}
               alt="Avatar"
               className="w-10 h-10 rounded-full object-cover"
             />
             <span className="mt-2 text-[13px] leading-4">
-              {assignee.fullname}
+              {assignee?.fullname}
             </span>
           </div>
         </div>
@@ -78,7 +84,7 @@ export const SideBar: FC<Props> = ({
           <span className="font-bold text-[13px] leading-4">
             Người liên quan
           </span>
-          <button>
+          <button onClick={openListUserRelation}>
             <span className="text-primary text-[13px] leading-4">
               Xem tất cả
             </span>
@@ -88,7 +94,7 @@ export const SideBar: FC<Props> = ({
           {(related || []).map((user) => (
             <img
               key={user._id}
-              src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+              src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
               alt="Avatar"
               className="w-10 h-10 rounded-full"
             />
@@ -116,12 +122,12 @@ export const SideBar: FC<Props> = ({
               <div className="flex justify-between">
                 <div className="flex items-start">
                   <img
-                    src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`}
+                    src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
                     alt="Avatar"
                     className="w-10 h-10 rounded-full"
                   />
                   <div className="ml-2">
-                    <p className="text-[13px]">{user.fullname}</p>
+                    <p className="text-[13px]">{user?.fullname}</p>
                     <p className="text-xs text-primary-gray">
                       13:15 28/2/21 - 2h ago
                     </p>
@@ -219,6 +225,18 @@ export const SideBar: FC<Props> = ({
         </div>
       </div> */}
 
+      <ModalLarge
+        show={isShow}
+        toggle={toggleModal}
+        className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+      >
+          <ModalAddRelationUser 
+            toggle={toggleModal} 
+            taskID={taskID} 
+            related={related}
+            modalType={'LIST_ALL_RELATION_USER'}
+          />
+      </ModalLarge>
     </div>
   );
 };

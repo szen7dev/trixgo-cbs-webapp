@@ -11,16 +11,16 @@ type Props = {
 }
 
 export const FileAttachment: FC<Props> = ({ files }) => {
-  if(!files.length) return <></>;
+  if(files && !files.length) return <></>;
 
   return (
     <div className="grid grid-cols-2 gap-1">
-      {files.map(file => {
+      {files && files.map(file => {
         // let iconFile = '';
 
         return (
           <div key={file._id} className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
-            <a href={`${process.env.REACT_APP_URL_S3}/${file.path}`}>
+            <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
               <div className="flex">
                 <div>
                   <img src={PDFIcon} className="w-8" alt="PDF" />

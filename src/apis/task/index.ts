@@ -14,15 +14,17 @@ import {
   ListResponsePayload,
   SearchResponsePayload,
   AddRelationUserPayload,
+  addTaskPayload,
+  addTaskResponse
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
 const populatesResponse = JSON.stringify({
   path: "task files images author",
-  select: "_id bizfullname image name nameOrg mimeType description path size author createAt",
-  options: {
-    limit: 5,
-  },
+  select: "_id bizfullname image name nameOrg path size mimeType description author createAt",
+  // options: {
+  //   limit: 5,
+  // },
   populate: {
     path: "author",
     select: "_id bizfullname image"
@@ -37,6 +39,14 @@ const TaskRepository = {
    * ============================ 	 PCM TASK   ===============================
    * ============================ ************* ===============================
    */
+  async addTask(payload: addTaskPayload): Promise<addTaskResponse> {
+    const { data } = await API.post<addTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -82,7 +92,7 @@ const TaskRepository = {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_plan_tasks`,
       {
-        select: "_id name assignee expiredTime parent status",
+        select: "_id name assignee expiredTime parent status parent type",
         populates: JSON.stringify({
           path: "assignee",
           select: "_id bizfullname fullname image"
@@ -114,14 +124,14 @@ const TaskRepository = {
 
   /**
    * ============================ ************** ===============================
-   * ============================ 	 CHECKLIST   ===============================
+   * ============================ 	 CHILD TASK  ===============================
    * ============================ ************** ===============================
    */
    async addChildTask(payload: ChildTaskPayload): Promise<any> {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_plan_tasks`,
       {
-        select: "_id name assignee expiredTime parent status",
+        select: "_id name assignee expiredTime parent status parent type",
         populates: JSON.stringify({
           path: "assignee",
           select: "_id bizfullname fullname image"
