@@ -6,9 +6,9 @@ import { toArray } from 'lodash';
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import { PostFile, PostImage } from 'views/media/shareComponents/common';
+import { PostFile, PostImage } from 'shareComponents/common';
 
-import { FileProps, FilePropsUpload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 

@@ -1,4 +1,4 @@
-import { ImageProps } from "typings/media";
+import { ImageProps } from "typings/common";
 import { User } from "typings/user";
 
 export const state = {

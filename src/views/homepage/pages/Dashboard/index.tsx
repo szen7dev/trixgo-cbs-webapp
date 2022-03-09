@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import moment from "moment";
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
@@ -13,15 +13,15 @@ import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
 import iconComments from "assets/images/icons8-comments-48.png";
 import iconEye from "assets/images/icons8-eye-48.png";
 import imgMedia from "assets/images/home-img-media.jpg";
-import iconArrowRight from "assets/images/icon-arrow-right.svg";
+// import iconArrowRight from "assets/images/icon-arrow-right.svg";
 import imgSolution from "assets/images/home-img-solution.png";
 import imgBidding from "assets/images/icons8-database-96.png";
 import iconNew from "assets/images/icons8-new-96.png";
 import imgBusiness from "assets/images/home-img-business.png";
 import imgBusiness2 from "assets/images/Business.png";
 
-import { abbreviateNumber } from 'utils';
-import { PcmPlanTaskProps, listTotalAnalysisProps } from 'typings/pcm';
+import { abbreviateNumber } from 'utils/converter';
+import { PcmPlanTaskProps } from 'typings/pcm';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
 import { usePcm } from 'services/hooks/pcm/usePcm';
@@ -31,7 +31,7 @@ import PcmRepository from 'apis/pcm';
 export const Dashboard: FC = () => {
   const { user } = useAuth();
   const { listTasks } = usePcm();
-  const socketRef: any = useSocket();
+  const { current: socket }: any = useSocket();
 
   const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia({
     key: 'list_medias__digital-conversion',
@@ -55,13 +55,13 @@ export const Dashboard: FC = () => {
   const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
 
   useEffect(() => {
-    const socket = socketRef.current;
     if (!socket) return;
 
 		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
+      console.log('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION');
       //refetchListMedias();
 		});
-  }, [])
+  }, [socket])
 
   const settings = {
     dots: false,

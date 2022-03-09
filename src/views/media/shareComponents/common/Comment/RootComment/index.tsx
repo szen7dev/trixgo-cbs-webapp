@@ -2,8 +2,8 @@ import { FC, useState, useContext, useEffect } from 'react';
 
 import { EditButton, Comment, ReplyCommentField } from 'views/media/shareComponents/common';
 
-import { CommentProps } from 'typings/common';
-import { FileProps } from 'typings/media';
+import { CommentProps } from 'typings/media';
+import { FileProps } from 'typings/common';
 import MediaRepository from "apis/media";
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/media/contexts/post';

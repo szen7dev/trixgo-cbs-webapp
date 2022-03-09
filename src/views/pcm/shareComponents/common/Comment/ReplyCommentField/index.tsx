@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useEffect, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -14,13 +14,14 @@ import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { FileProps, FilePropsUpload } from 'typings/common';
 import { CommentPayload } from 'typings/task';
 import { useCommentPcm } from "services/hooks/useTask";
+import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/useAuth';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
-	onSubmit?: () => unknown;
+	onConfirm?: (method?: string) => void;
 	attachFile?: boolean;
 	inputContainerClassName?: string;
 	fileContainerClassName?: string;
@@ -37,7 +38,7 @@ interface Props {
 export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	fileContainerClassName,
 	inputContainerClassName,
-	onSubmit,
+	onConfirm,
 	onTextChange,
 	attachFile,
 	commentID,
@@ -65,6 +66,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
+	const { current: socket }: any = useSocket();
 	const { addFileToUpload } = useUpload({
 		appID: APP_KEY.PCM_PLAN_TASK,
 		companyID: user?.company?._id,
@@ -77,6 +79,41 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	});
 	const refInputComment = useRef<HTMLSpanElement | null>(null);
 	const refDivFile = useRef<HTMLDivElement | null>(null);
+
+	const listenEventAddComment = (result: any) => {
+		if(!user || !taskID) return;
+
+		const { data, error } = result;
+		console.log({ result });
+
+		if(error) return;
+
+		// const { infoObject, infoComment, parentID, method } = data;
+
+		// if(infoObject?._id !== taskID) return;
+		// if(user._id === infoComment?.author?._id) return;
+
+		// if(method === 'UPDATE') {
+		// 	return dispatch({
+		// 		type: 'UPDATE_COMMENT',
+		// 		payload: {
+		// 			commentID: infoComment._id,
+		// 			parent: parentID,
+		// 			body: infoComment,
+		// 		}
+		// 	});
+		// }
+		// console.log({ infoComment, infoObject });
+
+		// dispatch({ type: 'ADD_COMMENT', payload: infoComment });
+	}
+
+	useEffect(() => {
+		if(!socket) return;
+
+		socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+	}, [socket])
 
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
@@ -138,6 +175,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			...{ commentID } ?? {},
 			...{ parentID } ?? {}
 		}
+		let dataAfterInsertOrUpdate = null;
+		let method = '';
 
 		try {
 			if (defaultValue) {
@@ -147,6 +186,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					return toast.warning(message);
 				}
 
+				method = 'UPDATE';
+				dataAfterInsertOrUpdate = data;
 				dispatch({
 					type: 'UPDATE_COMMENT',
 					payload: {
@@ -162,8 +203,23 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					return toast.warning(message);
 				}
 
-				dispatch({ type: 'ADD_COMMENT', payload: data.result });
+				method = 'INSERT';
+				dataAfterInsertOrUpdate = data;
+				dispatch({ type: 'ADD_COMMENT', payload: data });
 			}
+
+			console.log({ dataAfterInsertOrUpdate })
+			socket?.emit('COMMENT_CSS_ADD_COMMENT', {
+				app: APP_KEY.PCM_PLAN_TASK,
+				objectID: taskID,
+				method,
+				parentID,
+				infoComment: dataAfterInsertOrUpdate
+			})
+
+			socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+				receivers: dataAfterInsertOrUpdate.receivers
+			});
 		} catch (error) {
 			if (typeof error === "string") {
 				toast.error(error);
@@ -174,7 +230,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		// Clear text input
 		removeAllFiles();
-		onSubmit && onSubmit();
+		onConfirm && onConfirm(method);
 		refInputComment.current && (refInputComment.current.innerText = '');
 
 		// Clear files, images

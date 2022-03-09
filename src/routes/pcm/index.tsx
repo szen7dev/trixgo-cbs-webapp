@@ -17,8 +17,8 @@ import LayoutProjectSecondary from 'views/ppt/sharedComponents/layouts/LayoutPro
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====CONTEXTS=====*/
-import { ProviderModalPost } from "views/pcm/contexts/post";
-import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+// import { ProviderModalPost } from "views/pcm/contexts/post";
+// import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 /*=====PAGES=====*/
 import { Dashboard } from "views/homepage/pages";
@@ -65,7 +65,7 @@ import {
 	// ProjectRfiPage,
 } from 'views/ppt/pages';
 
-import { PcmHome, PcmDetailTask } from 'views/pcm/pages';
+import { PcmHome, PcmDetailTaskPage } from 'views/pcm/pages';
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
@@ -196,7 +196,7 @@ const PCMRouter: FC = () => {
 							</LayoutSecondary>
 						</Route>
 
-						<Route exact path="/pcm/detail/:id" component={PcmDetailTask} />
+						<Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
 
 						<Route exact path="/pcm/home" component={PcmHome} />
 						<Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
