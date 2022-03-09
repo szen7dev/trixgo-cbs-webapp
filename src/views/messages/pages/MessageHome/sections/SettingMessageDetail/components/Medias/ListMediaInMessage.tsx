@@ -25,12 +25,6 @@ export const ListMediaInMessage:FC = () => {
     },[currentChat])
     const listImageInMessage = useSelector((state: RootState) => state.listMessage.data.listImages[currentChat]);
 
-    const renderListMedia = useCallback(() => {
-        return _map(listImageInMessage??[], media => (
-            <ItemMediaInMessage key={media._id} media={media} setModalShowImage={setModalShowImage}/>
-        ))
-    }, [listImageInMessage]);
-
     const listImages = useCallback(() => {
         const images : string[] = [];
         if (!listImageInMessage) return images;
@@ -45,6 +39,27 @@ export const ListMediaInMessage:FC = () => {
 
         return images;
     },[listImageInMessage]);
+
+    const listIdsImage = useCallback(() => {
+        const images : string[] = [];
+        if (!listImageInMessage) return images;
+        listImageInMessage.forEach(media => {
+            media.messages.forEach(image => {
+                if (!image) {
+                    return;
+                }
+                images.push(image?._id)
+            })
+        });
+
+        return images;
+    },[listImageInMessage]);
+
+    const renderListMedia = useCallback(() => {
+        return _map(listImageInMessage??[], media => (
+            <ItemMediaInMessage key={media._id} media={media} listImages={listIdsImage()} setModalShowImage={setModalShowImage}/>
+        ))
+    }, [listImageInMessage]);
 
     return (
         <div className={"bg-white flex-1"}>
