@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
@@ -15,12 +15,14 @@ import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { CheckListItem } from "../CheckListItem";
 import { DropdownSearchable } from "shareComponents/common";
 
+import { useUsersProject } from "services/hooks/users/useUserSystem";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
 import { CheckList as CheckListType, ChildTask as ChildTaskType, Task } from "typings/task";
 import "react-datepicker/dist/react-datepicker.css";
+import { debounce } from "lodash";
 
 type Props = {
   componentType: 'CHECKLIST' | 'CHILD_TASK',
@@ -40,6 +42,7 @@ enum CheckListTab {
 }
 
 export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore }) => {
+  const [keywordAssignee, setKeywordAssignee] = useState('');
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -47,9 +50,23 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
   const { addChecklistAsync } = useCheckList({ parentID: task?._id });
   const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
-  const { data: listFriend } = useQueryListFriend();
+  const { data: listUsersProject, fetchNextPage } = useUsersProject({ 
+    projectID: task?.project?._id,
+    keyword: keywordAssignee
+  }, true);
+
   const { user } = useAuth();
   const { current: socket }: any = useSocket();
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const isBottom = scrollHeight - scrollTop === clientHeight;
+    isBottom && fetchNextPage();
+  }
+
+  const handleSearchAssignee = debounce((keyword: string) => {
+    setKeywordAssignee(keyword);
+  }, 600);
 
   const handleSelectAll = () => setSelectAll(!selectAll);
 
@@ -320,7 +337,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                                 <span>{item.text}</span>
                               </div>
                             )}
-                            data={listFriend.map((item) => ({
+                            data={listUsersProject.map((item) => ({
                               label: item.bizfullname,
                               value: item._id,
                             }))}
@@ -329,6 +346,8 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
                               text: "label",
                             }}
                             inlineSearch={true}
+                            onScroll={handleScroll}
+                            onSearchInputChange={handleSearchAssignee}
                             onchangeValue={item => setFieldValue("assigneeID", item.id)}
                             onClearData={() => setFieldValue("assigneeID", "")}
                           />

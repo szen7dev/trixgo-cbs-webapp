@@ -7,10 +7,11 @@ import debounce from "lodash/debounce";
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { object, string } from "yup";
 
-import { useQueryListDepartments, useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDoctype } from "services/hooks/useHuman";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
+import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
 
 import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
@@ -52,8 +53,6 @@ export const ModalAddNewTask: FC = () => {
   const { addTaskAsync } = useTask({});
 
   const onSubmitFilterData = async (values: any) => {
-    console.log({ values });
-
     try {
       const { error, message, data } = await addTaskAsync(values);
 
@@ -77,10 +76,11 @@ export const ModalAddNewTask: FC = () => {
   const [searchGroupName, setSearchGroupName] = useState("");
   const [projectID, setProjectID] = useState("");
 
-  const { listDepartments } = useQueryListDepartments({
+  const { data: listDepartments } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
-  });
+    isFetch: true
+  })
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
@@ -126,7 +126,6 @@ export const ModalAddNewTask: FC = () => {
         >
           {(formik) => {
             const { setFieldValue, values } = formik;
-
             return (
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>

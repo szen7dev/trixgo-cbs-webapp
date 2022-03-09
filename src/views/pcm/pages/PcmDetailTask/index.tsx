@@ -79,11 +79,11 @@ const PcmDetailTask: FC = () => {
   };
 
   useEffect(() => {
-    // if (!isSuccessApp) return;
-    // if (isSuccessApp && !hasPermission) {
-		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
-		// 	history.push("/");
-		// };
+    if (!isSuccessApp) return;
+    if (isSuccessApp && !hasPermission) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			history.push("/");
+		};
 
     if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
       history.push('/pcm/home');

@@ -9,3 +9,5 @@ export * from "./ViewImage";
 export * from "./MyMessage";
 export * from "./OthersMessage";
 export * from "./NotificationCenter";
+export * from "./ChangeNameNoti";
+export * from "./ChangeAvatarNoti";
