@@ -23,7 +23,7 @@ import { APP_ID } from "apis/localdb";
 
 export const LeftSideBar: FC = () => {
   const { user } = useAuth();
-  // const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+  const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
   const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
   const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 
@@ -46,12 +46,12 @@ export const LeftSideBar: FC = () => {
         {/* menu block */}
         <div className="t-leftsidebar-menu-block mb-6">
           {/* <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p> */}
-          {/* {hasPermission && dataUserAccess?.level == 0 ?
+          {hasPermission && dataUserAccess?.level == 0 ?
             <Link to={`/pcm/admin`} className="t-leftsidebar-menu-item flex items-center mb-4 text-primary-gray">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị viên</span>
             </Link> : <></>
-          } */}
+          }
 
           {listAppMenu && listAppMenu.length ?
             <>
