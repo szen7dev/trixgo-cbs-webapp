@@ -43,9 +43,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 		step: 1
 	};
 
-	const toggleCollapse = () => {
-		setCollapsed(!collapsed);
-	};
+	const toggleCollapse = () => setCollapsed(!collapsed);
 
 	const handleNextImage = () => actions.setIndex(state.index + 1);
 	const handlePreviousImage = () => actions.setIndex(state.index - 1);

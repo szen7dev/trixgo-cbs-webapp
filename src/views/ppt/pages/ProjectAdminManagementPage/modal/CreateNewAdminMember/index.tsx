@@ -42,7 +42,6 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 
   const records = data?.pages.flatMap(page => page.data.listRecords).filter(Boolean);
 	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
-  console.log({ records })
 
 	const handleAddUser = async () => {
 		if (!checked.length) return;

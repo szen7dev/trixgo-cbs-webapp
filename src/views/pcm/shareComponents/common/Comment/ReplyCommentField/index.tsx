@@ -84,14 +84,13 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		if(!user || !taskID) return;
 
 		const { data, error } = result;
-		console.log({ result });
-
 		if(error) return;
 
-		// const { infoObject, infoComment, parentID, method } = data;
+		const { infoObject, infoComment, parentID, method } = data;
 
-		// if(infoObject?._id !== taskID) return;
-		// if(user._id === infoComment?.author?._id) return;
+		if(infoObject?._id !== taskID) return;
+		if(user._id === infoComment?.author?._id) return;
+		console.log({ result });
 
 		// if(method === 'UPDATE') {
 		// 	return dispatch({
@@ -103,7 +102,6 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		// 		}
 		// 	});
 		// }
-		// console.log({ infoComment, infoObject });
 
 		// dispatch({ type: 'ADD_COMMENT', payload: infoComment });
 	}
@@ -208,7 +206,6 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				dispatch({ type: 'ADD_COMMENT', payload: data });
 			}
 
-			console.log({ dataAfterInsertOrUpdate })
 			socket?.emit('COMMENT_CSS_ADD_COMMENT', {
 				app: APP_KEY.PCM_PLAN_TASK,
 				objectID: taskID,
