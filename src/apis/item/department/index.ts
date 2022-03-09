@@ -27,7 +27,7 @@ async function fetchListDepartmentIsMember(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/list-department-is-members`, {
         params: {
-            select: "name description sign company startTime expiredTime milestones completedMilestones stage createAt members",
+            select: "name description sign company startTime expiredTime milestones numberOfDocs completedMilestones stage createAt members",
             populates: {
                 "path": "members",
                 "select": "fullname bizfullname name sign image"

@@ -50,6 +50,7 @@ export const DocumentProjectPage: FC = () => {
     useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
+  console.log({ data })
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
