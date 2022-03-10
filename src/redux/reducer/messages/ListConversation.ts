@@ -154,6 +154,19 @@ const listConversationSlice = createSlice({
                 }
             }
         },
+        updateUsersMissMessageToConversation (state, action) {
+            const {conversationId, usersMissMessage} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersMissMessage
+                    }
+                }
+            }
+        },
     },
     extraReducers: {}
 });
@@ -169,6 +182,7 @@ export const {
     updateUsersMuteToConversation,
     appendFakeItemListConversation ,
     updateUsersHideToConversation,
-    updateUsersPinToConversation
+    updateUsersPinToConversation,
+    updateUsersMissMessageToConversation
 } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

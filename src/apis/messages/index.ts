@@ -20,7 +20,7 @@ import {
     ListFoldersConversationPayload,
     ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
-    ListMembersOfConversationResponse,
+    ListMembersOfConversationResponse, MarkReadConversationPayload, MarkReadConversationResponse,
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     PinConversationPayload,
@@ -48,6 +48,7 @@ const updateMuteConversation = "/api/chatting/conversations/update-mute-conversa
 const updateConversation = "/api/chatting/conversations/update-conversation";
 const pinConversation = "/api/chatting/conversations/update-pin-conversation";
 const hideConversation = "/api/chatting/conversations/update-hide-conversation";
+const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -181,6 +182,14 @@ const ListConversationRepository = {
         const {data} = await API.put(
             `${hideConversation}`,
             {...payload}
+        )
+
+        return data;
+    },
+
+    async markReadConversation(payload: MarkReadConversationPayload) : Promise<MarkReadConversationResponse> {
+        const {data} = await API.get(
+            `${markReadConversation}?${convertObToUrl(payload)}`,
         )
 
         return data;

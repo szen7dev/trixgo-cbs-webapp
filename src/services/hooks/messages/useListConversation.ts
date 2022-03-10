@@ -12,7 +12,7 @@ import {
     ItemListConversation,
     ListConversationPayload,
     ListFoldersConversationPayload,
-    ListMembersOfConversationPayload,
+    ListMembersOfConversationPayload, MarkReadConversationPayload,
     MediasOfConversationPayload, PinConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
@@ -48,6 +48,7 @@ type UseListConversationType = {
     updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
     pinConversation: (payload: PinConversationPayload) => Promise<any>,
     hideConversation: (payload: HideConversationPayload) => Promise<ItemListConversation>,
+    markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -150,6 +151,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const markReadConversation = async (params: MarkReadConversationPayload) => {
+        const {data} = await ListConversationRepository.markReadConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -198,6 +206,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         updateMuteConversation,
         updateConversation,
         pinConversation,
-        hideConversation
+        hideConversation,
+        markReadConversation
     }
 };

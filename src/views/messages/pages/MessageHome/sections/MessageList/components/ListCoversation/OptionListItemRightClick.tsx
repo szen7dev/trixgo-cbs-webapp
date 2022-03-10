@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {openAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {updateUsersMuteToConversation, updateUsersHideToConversation, updateUsersPinToConversation} from "redux/reducer/messages/ListConversation";
+import {updateUsersMuteToConversation, updateUsersHideToConversation, updateUsersPinToConversation, updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {RootState} from "redux/reducer";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -31,8 +31,12 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
     const checkedValue = useCallback(() => {
         return !(chatData.usersMute??[]).includes(profileId)
     }, [chatData.usersMute])
+    const userUnreadMessage = useCallback(() => {
+        const userUnread = chatData?.usersMissMessage?.find(unread => unread.userID === profileId)
+        return userUnread?.amount??0
+    }, [chatData.usersMissMessage])
 
-    const {updateMuteConversation, pinConversation, hideConversation} = UseListConversation()
+    const {updateMuteConversation, pinConversation, hideConversation, markReadConversation} = UseListConversation()
 
     const handleTurnOffMute = () => {
         const payload = {
@@ -58,7 +62,16 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                 <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
                 <div className={"mr-2 ml-4"}>Thêm vào thư mục...</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    markReadConversation({
+                        conversationID: chat._id
+                    }).then(data => {
+                        closeRightClick();
+                        dispatch(updateUsersMissMessageToConversation({conversationId: chat._id, usersMissMessage: data.usersMissMessage}))
+                    })
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + (userUnreadMessage()>0?"":"hidden")}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ChatIcon}/>
                 <div className={"mr-2 ml-4"}>Đánh dấu đã đọc</div>
             </button>
