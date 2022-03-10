@@ -21,13 +21,23 @@ import PrintIcon from "assets/images/icons8-print-96.svg";
 import SortingIcon from "assets/images/icons8-sorting-100.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput } from "shareComponents/common";
+import { SearchInput, Paginate } from "shareComponents/common";
+import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
 
 /*=====7.OTHER=====*/
+
+function getStatus(status: number) {
+	if (status === 1)
+		return "Chưa triển khai";
+	if (status === 2)
+		return "Đang triển khai";
+
+	return "Đã hoàn thành";
+}
 
 const pages = [
 	{ id: 'bids', title: 'Hồ sơ dự thầu' },
@@ -36,14 +46,26 @@ const pages = [
 ]
 
 export const BiddingHomePage: FC = () => {
-	const [pageActive, setPageActive] = useState('bids')
+	const [pageActive, setPageActive] = useState('bids');
+	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
+	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
+
 	useEffect(() => {
 		document.title = "Trixgo | Note"
+		setData(Array.from({ length: 30 }).map((_, index) => ({
+			id: index,
+			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+			joined: 8,
+			worked: 15,
+			created_at: "15:30 22/12/2021",
+			updated_at: "15:30 22/12/2021",
+			status: index,
+		})));
 	}, []);
 
 	return (
 		<div className={cn(styles.content, "bg-cbs-gray min-h-full")}>
-			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1")}>
+			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto px-4 pt-0 flex-1")}>
 				<div className="flex flex-wrap">
 					<div className="p-8 mt-4 flex bg-white mr-4 flex-1">
 						<div className="mr-[100px]">
@@ -81,13 +103,19 @@ export const BiddingHomePage: FC = () => {
 						</div>
 					</div>
 				</div>
-				<div className={"paginate-wrapper relative bg-white mt-4"}>
-					<div className="flex px-7 border border-cbs-border">
-						{pages.map(page => <div key={page.id} className={cn(styles.navigator, { [styles.active]: page.id === pageActive }, 'py-3')}>
-							<button onClick={() => setPageActive(page.id)}>
+				<div className={"relative bg-white mt-4"}>
+					<div className="px-4 flex justify-between w-full text-primary-gray bg-white border-b border-cbs-border">
+						<div className="flex flex-1 text-medium">
+							{/* <div className="flex px-7 border border-cbs-border"> */}
+							{pages.map(page => <button
+								key={page.id}
+								className={cn('flex items-center justify-center border-b-2 border-transparent mx-2 leading-4 py-3',
+									{ 'border-cbs-primary text-black font-bold': page.id === pageActive })}
+								onClick={() => setPageActive(page.id)}
+							>
 								{page.title}
-							</button>
-						</div>)}
+							</button>)}
+						</div>
 					</div>
 					<div className={"financial-cashflow-listing-heading flex items-center border-b py-2 px-6"}>
 						<div className={"flex items-center flex-1"}>
@@ -124,107 +152,85 @@ export const BiddingHomePage: FC = () => {
 							<img alt={"Icon"} src={ThreeDotsVertical} />
 						</button>
 					</div>
-					<div className={"financial-cashflow-table"}>
-						<div className={"relative table border-collapse w-full"}>
-							<div className={"header bg-cbs-table-header flex table-row sticky z-10"}>
-								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-									<div className={"flex items-center"}>
-										<input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault" />
-										<TriangleDown />
-									</div>
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top w-2/12 text-gray-500"}>
-									Gói thầu
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
-									Thuộc dự án
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
-									Chủ đầu tư
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
-									<span className="inline-block w-max">Thời điểm mời thầu</span>
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500 min-w-max"}>
-									<span className="inline-block w-max">Thời điểm nộp thầu</span>
-								</div>
-								<div className={"px-2 pt-3 pb-[6px] leading-4 table-cell box-border border-b align-top text-gray-500"}>
-									Trạng thái
-								</div>
-							</div>
-							<div className={"body-table row flex table-row"}>
-								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-								</div>
-								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
-									Thi công rà phá bom mìn, vật nổ
-								</Link>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Công ty cổ phần đầu tư ABC
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Chưa triển khai
-								</div>
-							</div>
-							<div className={"body-table row flex table-row"}>
-								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-								</div>
-								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
-									Thi công rà phá bom mìn, vật nổ
-								</Link>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Công ty cổ phần đầu tư ABC
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Đang triển khai
-								</div>
-							</div>
-							<div className={"body-table row flex table-row"}>
-								<div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-									<input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-								</div>
-								<Link to={`/bidding/12345`} className="px-2 py-4 table-cell box-border border-b align-middle w-2/12">
-									Thi công rà phá bom mìn, vật nổ
-								</Link>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây...
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Công ty cổ phần đầu tư ABC
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									15:30 22/12/2021
-								</div>
-								<div className={"px-2 py-4 table-cell box-border border-b"}>
-									Đã hoàn thành
-								</div>
-							</div>
-						</div>
-					</div>
-					{/* <Paginate  hasNextPage={hasNextPage} totalRecord={totalRecord} totalPages={totalPages} isFetching={isLoadingListMedias} nextPageAction={nextPageListMedias} prevPageAction={prevPageListMedias}/> */}
+					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+						<thead className="">
+							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
+									<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
+									<button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
+										<TriangleDown className='inline-block' />
+									</button>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+									<span className="pl-2 border-l border-cbs-border">
+										Gói thầu
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+									<span className="pl-2 border-l border-cbs-border">
+										Thuộc dự án
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+									<span className="pl-2 border-l border-cbs-border">
+										Chủ đầu tư
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+									<span className="pl-2 border-l border-cbs-border">
+										Thời điểm mời thầu
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+									<span className="pl-2 border-l border-cbs-border">
+										Thời điểm nộp thầu
+									</span>
+								</th>
+								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+									<span className="pl-2 border-l border-cbs-border">
+										Trạng thái
+									</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody className="text-small">
+							{
+								data.map(({
+									id,
+									project,
+									joined,
+									worked,
+									created_at,
+									updated_at,
+									status,
+								}) => {
+									return (
+										<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+											<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+												<input className="cbs-checkbox" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
+											</td>
+											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{project}</td>
+											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{joined}</td>
+											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{worked}</td>
+											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{created_at}</td>
+											<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{updated_at}</td>
+											<td className={cn("pt-2.5 pb-3 px-2 border-b border-cbs-border", { "text-cbs-primary": status === 1, "text-cbs-completed": status >= 2 })}>
+												{getStatus(status)}
+											</td>
+										</tr>
+									)
+								})
+							}
+						</tbody>
+					</table>
 				</div>
+			</div>
+			<div
+				className="sticky bottom-0 min-w-24 min-h-24 w-full z-10 flex items-center justify-center px-4"
+			>
+				<Paginate
+					className="bg-white w-full border-t py-2 "
+				/>
 			</div>
 		</div>
 	);

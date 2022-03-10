@@ -75,7 +75,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
-						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9' />
+						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9 object-cover' />
 					</div>
 				</div>
 				{/* Info and reply */}

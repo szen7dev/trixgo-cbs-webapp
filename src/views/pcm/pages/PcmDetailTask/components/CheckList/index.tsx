@@ -182,7 +182,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   }, [socket]);
 
   return (
-    <div>
+    <div className="border-b-0.5 border-cbs-border">
       {/* Check messageList header */}
       <div
         className={`${
@@ -192,6 +192,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         <div className={`${selectAll ? "" : "w-1/6"} `}>
           <input
             type="checkbox"
+						className="cbs-checkbox"
             checked={selectAll}
             onChange={handleSelectAll}
           />
@@ -273,10 +274,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         )}
       </div>
 
-      <div className="rounded-sm border border-slate-400">
+      <div className="overflow-hidden">
         {/* Check messageList items */}
-        <div className="shadow-lg">
-          <div className="w-full">
+        <div className="">
+          <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
             {(listData || []).map((item) => (
               <CheckListItem key={item._id} data={item} />
             ))}
@@ -296,7 +297,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (
-            <div className="shadow-lg p-5">
+            <div className="shadow-cbs-md rounded-cbs-sm p-5">
               <Formik
                 initialValues={initialValues}
                 validationSchema={validateSchema}
