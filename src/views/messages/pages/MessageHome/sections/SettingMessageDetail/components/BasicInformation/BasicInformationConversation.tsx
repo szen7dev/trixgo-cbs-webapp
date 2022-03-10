@@ -50,16 +50,15 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
             const { _id } = await addFileToUpload({
                 files: file,
                 fileType: 1,
-                progress: percentCompleted => {
-                    // if (percentCompleted === 100) {
-                    //
-                    // }
+                progress: (percentCompleted, _id) => {
+                   if (percentCompleted === 100) {
+                       updateConversationAction({
+                           conversationID: chat._id,
+                           avatar: _id
+                       })
+                   }
                 },
                 useCompress: true
-            })
-            updateConversationAction({
-                conversationID: chat._id,
-                avatar: _id
             })
         }
     }
