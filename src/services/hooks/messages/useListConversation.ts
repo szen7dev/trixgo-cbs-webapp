@@ -8,7 +8,7 @@ import {
     DataListConversation,
     DeleteFolderPayload,
     FolderConversationItem,
-    GeneralGroupByMemberPayload,
+    GeneralGroupByMemberPayload, HideConversationPayload,
     ItemListConversation,
     ListConversationPayload,
     ListFoldersConversationPayload,
@@ -47,6 +47,7 @@ type UseListConversationType = {
     updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
     updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
     pinConversation: (payload: PinConversationPayload) => Promise<any>,
+    hideConversation: (payload: HideConversationPayload) => Promise<ItemListConversation>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -142,6 +143,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const hideConversation = async (params: HideConversationPayload) => {
+        const {data} = await ListConversationRepository.hideConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -189,6 +197,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         addConversationToFolder,
         updateMuteConversation,
         updateConversation,
-        pinConversation
+        pinConversation,
+        hideConversation
     }
 };

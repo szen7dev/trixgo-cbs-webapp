@@ -313,3 +313,14 @@ export type PinConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type HideConversationPayload = {
+    conversationID: string;
+    isHide: boolean;
+}
+
+export type HideConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}

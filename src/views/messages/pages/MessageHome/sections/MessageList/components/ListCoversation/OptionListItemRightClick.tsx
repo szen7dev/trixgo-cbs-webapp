@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {openAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
+import {updateUsersMuteToConversation, updateUsersHideToConversation, updateUsersPinToConversation} from "redux/reducer/messages/ListConversation";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {RootState} from "redux/reducer";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -18,10 +18,8 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 
 type Props = {
     chat: ItemListConversation;
-    socketRef: any
 }
-export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
-    const socket = socketRef.current;
+export const OptionListItemRightClick:FC<Props> = ({chat}) => {
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
 
@@ -34,7 +32,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
         return !(chatData.usersMute??[]).includes(profileId)
     }, [chatData.usersMute])
 
-    const {updateMuteConversation, pinConversation} = UseListConversation()
+    const {updateMuteConversation, pinConversation, hideConversation} = UseListConversation()
 
     const handleTurnOffMute = () => {
         const payload = {
@@ -60,34 +58,23 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
                 <img alt={"======"} className={"mr-2 w-[24px] h-[24px]"} src={AddFolderIcon}/>
                 <div className={"mr-2 ml-4"}>Thêm vào thư mục...</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full hidden"}>
+            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ChatIcon}/>
-                <div className={"mr-2 ml-4"}>Mark as unread</div>
+                <div className={"mr-2 ml-4"}>Đánh dấu đã đọc</div>
             </button>
             <button
                 onClick={() => {
                     pinConversation({
                         conversationID: chat._id,
-                        isPin: !chat.isPin
+                        isPin: !chatData.isPin
                     }).then(data => {
                         closeRightClick();
-                        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-                            conversationID: chat._id,
-                            select: JSON.stringify({ sender:"bizfullname" }) ,
-                            filter: JSON.stringify({
-                                author: 0,
-                                taskID: 0,
-                                links: 0,
-                                createAt: 0,
-                                __v: 0,
-                                config: 0
-                            })
-                        });
+                        dispatch(updateUsersPinToConversation({conversationId: chat._id, isPin: data?.conversationsPin?.includes(chat._id)}))
                     })
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + (chat.isSaved?"hidden":"")}>
-                <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={chat.isPin?UnPinnedIcon:PinIcon}/>
-                <div className={"mr-2 ml-4"}>{chat.isPin?"Bỏ ghim hội thoại":"Ghim hội thoại"}</div>
+                <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={chatData.isPin?UnPinnedIcon:PinIcon}/>
+                <div className={"mr-2 ml-4"}>{chatData.isPin?"Bỏ ghim hội thoại":"Ghim hội thoại"}</div>
             </button>
             <button
                 onClick={() => {
@@ -106,9 +93,19 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={NotificationIcon}/>
                 <div className={"mr-2 ml-4"}>{checkedValue()?"Tắt thông báo":"Bật thông báo"}</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    hideConversation({
+                        conversationID: chat._id,
+                        isHide: true
+                    }).then(data => {
+                        closeRightClick()
+                        dispatch(updateUsersHideToConversation({conversationId: data._id, usersHide: data.usersHide}))
+                    })
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={HideEyeIcon}/>
-                <div className={"mr-2 ml-4"}>Ẩn cuộc hội thoại</div>
+                <div className={"mr-2 ml-4"}>{"Ẩn cuộc hội thoại"}</div>
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ExitRedIcon}/>

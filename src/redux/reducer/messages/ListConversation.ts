@@ -127,10 +127,48 @@ const listConversationSlice = createSlice({
                     ...newConversationData
                 }
             }
-        }
+        },
+        updateUsersHideToConversation (state, action) {
+            const {conversationId, usersHide} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersHide
+                    }
+                }
+            }
+        },
+        updateUsersPinToConversation (state, action) {
+            const {conversationId, isPin} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        isPin
+                    }
+                }
+            }
+        },
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation, updateUsersMuteToConversation, appendFakeItemListConversation } = listConversationSlice.actions;
+export const {
+    setListConversation,
+    setTotalRecord,
+    setNextCursor,
+    setLoading,
+    updateSingleConversation,
+    setAmountMissMessage,
+    updateFoldersToConversation,
+    updateUsersMuteToConversation,
+    appendFakeItemListConversation ,
+    updateUsersHideToConversation,
+    updateUsersPinToConversation
+} = listConversationSlice.actions;
 export default listConversationSlice.reducer;

@@ -14,7 +14,7 @@ import {
     DeleteFolderPayload,
     DeleteFolderResponse,
     GeneralGroupByMemberPayload,
-    GeneralGroupByMemberResponse,
+    GeneralGroupByMemberResponse, HideConversationPayload, HideConversationResponse,
     ListConversationPayload,
     ListConversationResponse,
     ListFoldersConversationPayload,
@@ -47,6 +47,7 @@ const addConversationToFolder = "/api/chatting/conversations/update-conversation
 const updateMuteConversation = "/api/chatting/conversations/update-mute-conversation";
 const updateConversation = "/api/chatting/conversations/update-conversation";
 const pinConversation = "/api/chatting/conversations/update-pin-conversation";
+const hideConversation = "/api/chatting/conversations/update-hide-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -170,6 +171,15 @@ const ListConversationRepository = {
     async pinConversation(payload: PinConversationPayload) : Promise<PinConversationResponse> {
         const {data} = await API.put(
             `${pinConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async hideConversation(payload: HideConversationPayload) : Promise<HideConversationResponse> {
+        const {data} = await API.put(
+            `${hideConversation}`,
             {...payload}
         )
 

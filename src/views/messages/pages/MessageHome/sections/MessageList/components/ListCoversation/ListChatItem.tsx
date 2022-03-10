@@ -96,17 +96,22 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         } else return (chat.lastMessage.sender.bizfullname||chat.lastMessage.sender.fullname);
     },[chat.lastMessage])
 
-    const displayClass = (!currentSelectedFolders ||
+    const displayClass = (
+        !chat.usersHide.includes(profileId) &&
         (
-            currentSelectedFolders&&
-            chat.folders&&
-            chat.folders.includes(currentSelectedFolders._id)
-        )) ? "block":"hidden"
+            !currentSelectedFolders ||
+            (
+                currentSelectedFolders&&
+                chat.folders&&
+                chat.folders.includes(currentSelectedFolders._id)
+            )
+        )
+    ) ? "block":"hidden"
 
     return (
         <RightClickMenuWrapper
             className={displayClass}
-            contextMenu={<OptionListItemRightClick chat={chat} socketRef={socketRef}/>}
+            contextMenu={<OptionListItemRightClick chat={chat}/>}
         >
             <NavLink
                 onClick={() => {
