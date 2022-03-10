@@ -13,7 +13,7 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update, Delete } from "../../modal";
+import { Create, Update, DeleteGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
 
@@ -31,7 +31,7 @@ const FunctionalTab: FC = () => {
         hasNextPage: hasNextPagePcmPlanGroup,
         totalRecord,
 		totalPage
-        } = usePcmPlanGroup({ projectID },true, false);
+        } = usePcmPlanGroup({ projectID, keyword },true, false);
 
 	const { openModal } = useModal();
 	
@@ -94,7 +94,7 @@ const FunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} />
+												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword}/>
 											</div>
 										)
 									}
@@ -111,7 +111,7 @@ const FunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+											<DeleteGroup idsChecked={idsChecked} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword} />
 										</div>
 									)
 								}
@@ -131,7 +131,7 @@ const FunctionalTab: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create projectID={projectID} />
+									<Create projectID={projectID} keyword={keyword} />
 								</div>
 							)
 						}

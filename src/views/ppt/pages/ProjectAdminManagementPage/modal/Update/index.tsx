@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { toast } from "react-toastify";
 
-const Update: FC<any> = ({ item, setIdsChecked, projectID }) => {
+const Update: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
   const [sign, setSign] = useState(item.sign);
@@ -14,7 +14,7 @@ const Update: FC<any> = ({ item, setIdsChecked, projectID }) => {
   const {   
     updatePcmPlanGroupMutateAsync,
     refetch
-  } = usePcmPlanGroup({ projectID }, false, false);
+  } = usePcmPlanGroup({ projectID, keyword }, false, false);
 
   const onUpdate = async () => {
     closeModal();

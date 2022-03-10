@@ -3,16 +3,22 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from 'apis/pcm';
 
 export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: boolean ): any => {
-
+    // Tạo group
     const { mutateAsync: createPcmPlanGroupMutateAsync, isLoading: isLoadingCreatePcmPlanGroup } =
-    useMutation((payload: any) =>
-        PcmRepository.insertPcmPlanGroup(payload)
+        useMutation((payload: any) => PcmRepository.insertPcmPlanGroup(payload)
     );
 
+    // Sửa group
     const { mutateAsync: updatePcmPlanGroupMutateAsync, isLoading: isLoadingUpdatePcmPlanGroup } =
-        useMutation((payload: any) =>
-        PcmRepository.updatePcmPlanGroup(payload)
+        useMutation((payload: any) =>PcmRepository.updatePcmPlanGroup(payload)
     );
+
+    // Xoá group
+    const { mutateAsync: removeManyPcmPlanGroupMutateAsync, isLoading: isManyAppRole } =
+        useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)
+    );
+
+    // info group 
     const {
         data: infoGroup, 
         refetch: refetchInfoGroup 
@@ -21,7 +27,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
         refetchOnWindowFocus: false,
     });
     
-    // Get danh sách
+    // Danh sách group
     const {
         isLoading,
         refetch,
@@ -59,9 +65,10 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
         hasNextPage,
         totalRecord,
         totalPage,
-        // create update
+        // create update remove
         createPcmPlanGroupMutateAsync,
         updatePcmPlanGroupMutateAsync,
+        removeManyPcmPlanGroupMutateAsync,
         // get Info
         infoGroup,
         refetchInfoGroup

@@ -54,12 +54,20 @@ const PcmRepository = {
         );
         return data;
     },
+    
+    // remove many pcm_plan_group
+    async removeManyPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.delete<any>(
+            `${pcmURL}/pcm_plan_groups/remove-many`, { params: payload }
+        );
+        return data;
+    },
 
     // info pcm_group
     async infoPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_groups?${convertObToUrl({
-                select: "name sign members userUpdate project",
+                select: "name sign members admins userUpdate project",
                 populates: JSON.stringify({
                     path: "members",
                     select: "_id bizfullname email level image"

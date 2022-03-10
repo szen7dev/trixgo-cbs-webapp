@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { toast } from "react-toastify";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
-const Create: FC<any> = ({ projectID }) => {
+const Create: FC<any> = ({ projectID, keyword }) => {
   const { closeModal } = useModal();
 
   const [name, setName] = useState("");
@@ -15,7 +15,7 @@ const Create: FC<any> = ({ projectID }) => {
   const {   
     createPcmPlanGroupMutateAsync,
     refetch
-  } = usePcmPlanGroup({ projectID }, false, false);
+  } = usePcmPlanGroup({ projectID, keyword }, false, false);
 
   const onCreate = async () => {
     if (!name || !sign) {

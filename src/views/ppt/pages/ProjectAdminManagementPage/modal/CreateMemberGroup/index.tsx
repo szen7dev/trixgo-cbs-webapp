@@ -10,36 +10,33 @@ import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { useUsersProject } from "services/hooks/users/useUserSystem";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
 import { useInfiniteQuery } from "react-query";
 import { DepartmentRepositories } from "apis/item/department";
 import { LinkUser } from "typings/auth";
 
-// const CreateMemberGroup: FC<any> = ({ appRoleID, companyID, refetchGetListAppRoleMenu }) => {
-const CreateMemberGroup: FC<any> = ({ projectID }) => {
+const CreateMemberGroup: FC<any> = ({ projectID, groupID }) => {
 	const { closeModal } = useModal();
 	const [keyword, setKeyword] = useState("");
+	// HOOK PCM_GROUP
+	const { updatePcmPlanGroupMutateAsync, refetchInfoGroup } = usePcmPlanGroup({ groupID }, false, false);
 
 	const { data: listUsersProject, fetchNextPage, hasNextPage } = useUsersProject({ 
-		projectID: projectID,
+		projectID,
 		keyword: keyword
-	  }, true);
+	}, true);
 
 	const records = listUsersProject.flatMap(page => page).filter(Boolean);
 	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
 
-	const handleAddUser = async () => {	
+	const HandleAddMemberInGroup = async () => {	
 		if (!checked.length) return;
-		
 		const listUserID = checked.map(item => item._id);
-		// const response = await DepartmentRepositories.addOrRemoveMemberToDepartment({ departmentID: appRoleID, members: listUserID })
-		// if (response.error === false) {
-		// 	toast.success('Thêm thành công');
-		// 	refetchGetListAppRoleMenu();
-		// } else {
-		// 	toast.error('Thêm thất bại');
-		// }
-		closeModal();
+		await updatePcmPlanGroupMutateAsync({ groupID, members: listUserID });
+		// Gọi lại hàm getinfo 
+		refetchInfoGroup()
+		return closeModal();
 	}
 
 	return (
@@ -120,7 +117,7 @@ const CreateMemberGroup: FC<any> = ({ projectID }) => {
 
 			<footer className="pb-6 w-full text-right px-[30px]">
 				<button className="w-[95px] h-8 bg-primary text-primary-light rounded font-bold hover:opacity-90"
-					onClick={handleAddUser}
+					onClick={HandleAddMemberInGroup}
 				>
 					Xác nhận
 				</button>

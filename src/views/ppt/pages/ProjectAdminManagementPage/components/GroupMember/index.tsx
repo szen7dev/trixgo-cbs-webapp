@@ -11,7 +11,7 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { useGetListAppRoleMenu } from "services/hooks/useAuth";
-import { CreateNewAdminMember, DeleteMembers } from "../../modal";
+import { CreateNewAdminMember, DeleteMembers, DeleteMembersGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { APP_ID } from "apis/localdb";
 
@@ -25,8 +25,10 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 	const { openModal } = useModal();
 
 	// Call api 
-	const { infoGroup } = usePcmPlanGroup({ groupID }, false, true);
+	const { infoGroup, updatePcmPlanGroupMutateAsync, refetchInfoGroup } = usePcmPlanGroup({ groupID }, false, true);
 	const listMembers = infoGroup?.data?.members || [];
+	const listMembersOfGroup = listMembers?.map((item: any) => item._id)
+	const listAdminOfGroup = infoGroup?.data?.admins || [];
 	const projectID = infoGroup?.data?.project;
 
 	const getStateChecked = useCallback((id: string) => {
@@ -58,6 +60,32 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	const onChangeAdmin = async (target: any) => {
+		const status = target.checked;
+		const userID = target.id;
+		if(status == true){
+			const admins = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, admins })
+		}else{
+			const adminsRemove = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, adminsRemove })
+		}
+		// refetchInfoGroup()
+	}
+
+	const onChangeMember = async (target: any) => {
+		const status = target.checked;
+		const userID = target.id;
+		if(status == true){
+			const members = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, members })
+		}else{
+			const membersRemove = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, membersRemove })
+		}
+		// refetchInfoGroup()
+	}
 
 	return (
 		<main className="h-full">
@@ -108,7 +136,7 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 								>
 									{/* <CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
 									{/* <CreateNewAdminMember/> */}
-									<CreateMemberGroup projectID={projectID}/>
+									<CreateMemberGroup projectID={projectID} groupID={groupID}/>
 								</div>
 							)
 						}
@@ -191,18 +219,18 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 								</td>
 								<td className="p-2">
 									<input 
-										type="radio" 
-										name={`userAppLevel_${item._id}`} 
-										value={0}
-										defaultChecked={item.level === 0}
+										type="checkbox" 
+										id={`${item._id}`} 
+										defaultChecked={listAdminOfGroup.includes(item._id)}
+										onChange={(e)=>onChangeAdmin(e.target) }
 									/>
 								</td>
 								<td className="p-2">
 									<input 
-										type="radio" 
-										name={`userAppLevel_${item._id}`} 
-										value={1}
-										defaultChecked={item.level === 1}
+										type="checkbox" 
+										id={`${item._id}`} 
+										defaultChecked={listMembersOfGroup.includes(item._id)}
+										onChange={(e) => onChangeMember(e.target)}
 									/>
 								</td>
 								<td className="py-1 px-2 text-negative">
@@ -214,7 +242,7 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 													}
 												>
-													{/* <DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu} /> */}
+													<DeleteMembersGroup idsChecked={[item._id]} setIdsChecked={setIdsChecked} groupID={groupID} />
 												</div>
 											)
 										}>
