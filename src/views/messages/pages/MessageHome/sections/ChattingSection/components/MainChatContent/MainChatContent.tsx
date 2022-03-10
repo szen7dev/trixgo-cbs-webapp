@@ -11,7 +11,6 @@ import 'react-circular-progressbar/dist/styles.css';
 import {Reminder, ReminderNoti} from "../Reminder";
 import moment from "moment";
 import angered from "assets/images/emoji/angered.png";
-import dislike from "assets/images/emoji/dis-like.png";
 import heart from "assets/images/emoji/heart.png";
 import laugh from "assets/images/emoji/laugh.png";
 import like from "assets/images/emoji/like.png";
@@ -30,38 +29,33 @@ import {
 export const listEmoji = [
     {
         id: 1,
-        icon: heart,
+        icon: like,
         value: 1
     },
     {
         id: 2,
-        icon: laugh,
+        icon: heart,
         value: 2
     },
     {
         id: 3,
-        icon: surprise,
+        icon: laugh,
         value: 3
     },
     {
         id: 4,
-        icon: sad,
+        icon: surprise,
         value: 4
     },
     {
         id: 5,
-        icon: angered,
+        icon: sad,
         value: 5
     },
     {
         id: 6,
-        icon: like,
+        icon: angered,
         value: 6
-    },
-    {
-        id: 7,
-        icon: dislike,
-        value: 7
     }
 ];
 
