@@ -6,7 +6,6 @@ import iconGrid from "assets/images/icons8-menu-100.png";
 import iconSearch from "assets/images/icons8-search-50.png";
 import supportLogo from "assets/logos/support.png";
 
-// Logic 
 import API from "apis/repository";
 import { APP_INFO as AppInfo } from "./components";
 import { useGetListAppOfUser, useAuth } from "services/hooks/useAuth";
@@ -14,7 +13,7 @@ import { useGetListAppOfUser, useAuth } from "services/hooks/useAuth";
 export const APP_INFO = AppInfo;
 
 export const AppsMenu: FC = () => {
-  const { isLoadingAppUsers, listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
+  const { listAppOfUser, refetchAppUsers } = useGetListAppOfUser();
   const { user } = useAuth();
 
   useEffect(() => {

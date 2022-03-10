@@ -2,6 +2,7 @@ import React, { FC, useRef, useState } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
+import { toast } from "react-toastify";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -95,6 +96,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleSubmit = async () => {
+		toast.info('Tính năng đang phát triển');
 		// Clear text input
 		removeAllFiles();
 

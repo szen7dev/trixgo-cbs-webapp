@@ -68,21 +68,23 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
     return (
         <>
             <div
-                className={"flex items-center mb-[5px] min-w-max bg-white rounded-full shadow-lg p-2 absolute reaction-right-click"} style={{top: -50}}>
-                {
-                    _map(listEmoji, emoji => (
-                        <button
-                            onClick={() => {
-                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
-                                setTimeout(() => {
-                                    closeRightClick();
-                                }, 100)
-                            }}
-                            key={emoji.id} className={"mr-[5px]"}>
-                            <img src={emoji.icon} className={"w-[24px] h-[24px]"} alt={"-----"}/>
-                        </button>
-                    ))
-                }
+                className={"flex items-center justify-center mb-[5px] min-w-max absolute reaction-right-click w-[216px]"} style={{top: -50}}>
+                <div className={"bg-white rounded-full shadow-lg p-2 flex items-center"}>
+                    {
+                        _map(listEmoji, emoji => (
+                            <button
+                                onClick={() => {
+                                    socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
+                                    setTimeout(() => {
+                                        closeRightClick();
+                                    }, 100)
+                                }}
+                                key={emoji.id} className={"mr-[5px]"}>
+                                <img src={emoji.icon} className={"w-[24px] h-[24px]"} alt={"-----"}/>
+                            </button>
+                        ))
+                    }
+                </div>
             </div>
             <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
                 <button

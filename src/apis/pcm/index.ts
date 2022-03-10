@@ -25,6 +25,58 @@ const PcmRepository = {
         );
         return data;
     },
+
+    // Danh sách pcm_plan_group
+    async listPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups?${convertObToUrl({
+                select: "name sign members userUpdate",
+                limit: 20,
+                ...payload,
+            })}`
+        );
+        return data;
+    },
+
+    // insert pcm_plan_group
+    async insertPcmPlanGroup(payload: any): Promise<any> {
+        console.log({ payload });
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_groups`, payload
+        );
+        return data;
+    },
+
+    // update pcm_plan_group
+    async updatePcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.put<any>(
+            `${pcmURL}/pcm_plan_groups`, payload
+        );
+        return data;
+    },
+    
+    // remove many pcm_plan_group
+    async removeManyPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.delete<any>(
+            `${pcmURL}/pcm_plan_groups/remove-many`, { params: payload }
+        );
+        return data;
+    },
+
+    // info pcm_group
+    async infoPcmPlanGroup(payload: any): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_groups?${convertObToUrl({
+                select: "name sign members admins userUpdate project",
+                populates: JSON.stringify({
+                    path: "members",
+                    select: "_id bizfullname email level image"
+                }),
+                ...payload,
+            })}`
+        );
+        return data;
+    },
 };
 
 // console.log('==============>>>>>')

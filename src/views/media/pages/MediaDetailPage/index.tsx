@@ -54,6 +54,7 @@ export const MediaDetailPage: FC = () => {
 
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
+	
 	const { data, refetch } = useQuery(`media_info.${mediaID}`,
 		() => MediaRepository.mediaInfo(mediaID),
 		{
@@ -80,7 +81,7 @@ export const MediaDetailPage: FC = () => {
 			}))
 		}
 	}, [user])
-
+	
 	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = 
 		useMedia({
 			key: `list_medias__related`,
@@ -125,17 +126,17 @@ export const MediaDetailPage: FC = () => {
 	}, [media, media?.content])
 
 	useEffect(() => {
-		if(!media) return;
+		if(!media || !user) return;
 		let hasPermission = true;
 
 		switch (media.type) {
 			case 1:
-				if(user?.company._id !== media.company._id) {
+				if(user?.company._id !== media.company?._id) {
 					hasPermission = false;
 				}
 				break;
 			case 2:
-				if(user?.department._id !== media.department._id) {
+				if(!media.department?.members.includes(user._id)) {
 					hasPermission = false;
 				}
 				break;
@@ -337,6 +338,7 @@ export const MediaDetailPage: FC = () => {
 									const id = image.file ? image.file._id : image._id;
 									const name = image.file ? image.file.nameOrg : image.nameOrg;
 									const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
+									console.log({ id, name, url })
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
@@ -352,7 +354,7 @@ export const MediaDetailPage: FC = () => {
 									)
 								}) : ''}
 							</div>
-							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
+							<div className={cn("pl-6 pr-8", { "pb-10": files?.length })}>
 								<PostFile files={files} />
 							</div>
 							<p

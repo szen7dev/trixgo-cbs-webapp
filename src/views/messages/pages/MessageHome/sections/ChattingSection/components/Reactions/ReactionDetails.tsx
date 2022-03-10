@@ -73,7 +73,7 @@ export const ReactionDetails:FC<Props> = ({message, isOpen, setCloseVote}) => {
                                             <div className={"flex-1 ml-2"}>
                                                 {reaction?.userCreate?.bizfullname}
                                             </div>
-                                            <img src={listEmoji[reaction.type-1].icon} className={"w-[24px] h-[24px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
+                                            <img src={listEmoji[reaction?.type-1].icon} className={"w-[24px] h-[24px] rounded-full overflow-hidden border border-white"} alt={"---"}/>
                                         </div>
                                     ))
                                 }
