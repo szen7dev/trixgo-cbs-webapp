@@ -20,7 +20,7 @@ export const MainHeader: FC = () => {
     refetchListNotification, 
     hasNextPage, 
     nextPageListNotification 
-  } = useNotification();
+  } = useNotification({}, true);
 
   const socketRef: any = useSocket();
 

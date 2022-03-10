@@ -7,7 +7,6 @@ import { usePost } from '..';
 import { OptionsSubmitReply, OptionsSubmitReplyNested } from './RootComment';
 import { SubmitComment } from './ReplyCommentField';
 import AuthContext from 'services/contexts/Auth';
-import { InfiniteData } from 'react-query';
 
 type Props = {
 	limit?: number,
@@ -42,6 +41,7 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 			}, { commentIdx: options.commentIdx, page: options.page });
 		}
 	};
+
 	const handleSumitReplyNested = async (data: SubmitComment, options: OptionsSubmitReplyNested & { page: number, commentIdx: number }) => {
 		if (!options.parent) return;
 		const dataInsertOrUpdate = {
@@ -53,7 +53,6 @@ const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 			parentID: options.parent._id
 		}
 		if (options.type === 'create') {
-			// console.log('create', options)
 			await createComment({
 				...dataInsertOrUpdate,
 				parentID: options.comment.parent

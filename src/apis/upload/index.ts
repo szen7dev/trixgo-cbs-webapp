@@ -32,7 +32,7 @@ const FileRepository = {
             {
                 onUploadProgress: function(progressEvent) {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    payload.progress && payload.progress(percentCompleted);
+                    payload.progress && payload.progress(percentCompleted, payload._id??"");
                 }
             }
         );

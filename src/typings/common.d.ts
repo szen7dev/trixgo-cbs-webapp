@@ -41,6 +41,9 @@ export type ImageProps = {
   nameOrg: string;
   size: number;
   type: string;
+  author?: User;
+  createAt?: string;
+  description?: string;
 };
 
 export type FilePropsUpload = {

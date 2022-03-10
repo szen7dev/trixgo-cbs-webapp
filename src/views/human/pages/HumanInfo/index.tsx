@@ -26,10 +26,7 @@ import {NewHumanModal} from "views/human/shareComponents/common";
 import type { Human } from "typings/human";
 
 /*=====6.HOOKS/APIS=====*/
-import {
-  useFetchDetailHuman,
-  useUpdateContactMutation,
-} from "services/hooks/useHuman";
+import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from "services/hooks/useAuth";
 
@@ -46,9 +43,7 @@ export const HumanInfo: FC = () => {
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
 
-  useOnClickOutside(refMenuDropdown, () =>
-    setOpenHumanOption(!openHumanOption)
-  );
+  useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption))
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
   const handleFinishForm = useCallback(
@@ -148,7 +143,7 @@ export const HumanInfo: FC = () => {
   );
 
   useEffect(() => {
-    if(!user || !detailHuman) return;
+    if(!user || !Object.keys(detailHuman).length) return;
     // console.log({ user, detailHuman, check: !detailHuman.department?.members?.includes(user._id) })
 
     if(!detailHuman.department?.members?.includes(user._id)) {

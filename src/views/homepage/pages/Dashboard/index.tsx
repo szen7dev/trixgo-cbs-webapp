@@ -21,16 +21,15 @@ import imgBusiness from "assets/images/home-img-business.png";
 import imgBusiness2 from "assets/images/Business.png";
 
 import { abbreviateNumber } from 'utils/converter';
-import { PcmPlanTaskProps } from 'typings/pcm';
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
-import { usePcm } from 'services/hooks/pcm/usePcm';
 import { useMedia } from 'services/hooks/useMedia';
+import { useNotification } from 'services/hooks/useNotification';
 import PcmRepository from 'apis/pcm';
+import { NotificationProps } from "typings/notification";
 
 export const Dashboard: FC = () => {
   const { user } = useAuth();
-  const { listTasks } = usePcm();
   const { current: socket }: any = useSocket();
 
   const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia({
@@ -52,6 +51,14 @@ export const Dashboard: FC = () => {
     isFetchMedias: true
   });
 
+  const { 
+    listNotifications, 
+    totalRecord,
+    // refetchListNotification, 
+    hasNextPage: hasNextPageNotification, 
+    nextPageListNotification 
+  } = useNotification({ limit: 5 }, true);
+
   const { data } = useQuery("pcm_plan_tasks/badge", () => PcmRepository.listTotalAnalysis());
 
   useEffect(() => {
@@ -60,6 +67,7 @@ export const Dashboard: FC = () => {
 		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
       console.log('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION');
       //refetchListMedias();
+      //refetchListNotification();
 		});
   }, [socket])
 
@@ -238,26 +246,36 @@ export const Dashboard: FC = () => {
           <div className="t-home-block">
             <div className="t-home-block-title">
               <span>Thông báo gần đây</span>
-              <Link to={`/personal/notification`}>Xem tất cả</Link>
+              {/* <Link to={`/personal/notification`}>Xem tất cả</Link> */}
             </div>
             <div className="t-home-actions">
               {/* recent actions item */}
-              {listTasks.length ? listTasks.map((task: PcmPlanTaskProps) => (
-                <div key={task?._id} className="flex mb-4">
-                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${task?.lastLog?.author?.image || task?.assignee?.image}`} alt="Thumbnail" />
+              {listNotifications.length ? listNotifications.map((notification: NotificationProps) => (
+                <div key={notification._id} className="flex mb-4">
+                  <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender?.image}`} alt="Thumbnail" />
                   <div className="t-home-actions-text text-secondary-gray">
                     <div className="flex justify-between mb-1">
                       <span className="t-home-actions-title-content text-dark">
-                        {task?.name}
+                        {notification.sender?.bizfullname}
                       </span>
-                      <span className="ml-2">{moment(task?.lastLog?.createAt).format('L')}</span>
+                      <span className="ml-2">{moment(notification.createAt).format('L')}</span>
                     </div>
                   <div>
-                      {task?.lastLog?.content}
+                      {notification.content}
                     </div>
                   </div>
                 </div>
               )) : ''}
+
+              {hasNextPageNotification && (
+                <div className="w-full flex justify-center my-5">
+                  <button onClick={() => nextPageListNotification()}>
+                    <span className="text-primary">
+                      Xem thêm ({totalRecord - listNotifications.length})
+                    </span>
+                  </button>
+                </div>
+              )}
 
               {/* recent actions item */}
               {/* <div className="flex mb-4">
