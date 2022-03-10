@@ -1,8 +1,9 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import NotificationRepository from "apis/notification";
-import { NotificationProps } from "typings/notification";
+import { NotificationProps, UpdateNotificationPayload } from "typings/notification";
 
 type UseNotification = {
+    updateNotificationAsync: (payload: UpdateNotificationPayload) => Promise<any>,
     listNotifications: Array<NotificationProps>,
     isLoadingListNotification: boolean,
     refetchListNotification: () => void,
@@ -13,7 +14,12 @@ type UseNotification = {
     hasNextPage: boolean | undefined
 };
 
-export const useNotification = (params?: any) : UseNotification => {
+export const useNotification = (params?: any, isFetch?: boolean) : UseNotification => {
+    const { mutateAsync: updateNotificationAsync } =
+        useMutation((payload: UpdateNotificationPayload) =>
+            NotificationRepository.updateNotification(payload)
+        );
+
     const {
         isLoading: isLoadingListNotification,
         refetch: refetchListNotification,
@@ -35,7 +41,7 @@ export const useNotification = (params?: any) : UseNotification => {
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true
+                enabled: isFetch ?? false
             }
         );
 
@@ -48,6 +54,7 @@ export const useNotification = (params?: any) : UseNotification => {
     const totalPages = dataListNotifications?.pages[0]?.data?.totalPage || 0;
 
     return {
+        updateNotificationAsync,
         listNotifications,
         isLoadingListNotification,
         refetchListNotification,

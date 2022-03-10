@@ -19,7 +19,7 @@ import { convertObToUrl } from "utils";
 
 const populatesMedia = JSON.stringify({
     path: "company department other author files images",
-    select: "_id name sign nameOrg path size mimeType type createAt bizfullname image position department",
+    select: "_id name sign nameOrg path size mimeType type createAt bizfullname image position department members",
     populate: {
         path: "position department",
         select: "_id name sign"

@@ -50,7 +50,6 @@ export const HumanHomePage: FC = () => {
   }, [createContactMutateAsync, humans]);
 
   const handleOnFilter = useCallback((values) => {
-    // console.log(values);
     setPageParam(() => ({ ...values }));
     return true;
   }, []);

@@ -1,34 +1,45 @@
 import { FC, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import moment from 'moment';
+import cn from 'classnames';
 import { NotificationProps } from "typings/notification";
-// import { APP_INFO } from "shareComponents/common";
+// import { APP_KEY } from "utils/constants";
 
 type Props = {
-  notification: NotificationProps
+  notification: NotificationProps;
+  onClick?: (notification: NotificationProps) => void;
 };
 
-export const NotificationItem: FC<Props> = ({ notification }) => {
+export const NotificationItem: FC<Props> = ({ notification, onClick }) => {
   // const [title, setTitle] = useState('');
+  // const [status, setStatus] = useState(0);
   if(!notification) return <></>;
 
-  const { sender, content, path, createAt } = notification;
+  const { sender, content, createAt } = notification;
 
   // useEffect(() => {
   //   if(!app) return;
 
   //   switch (app) {
-  //     case APP_INFO.get(app)?.key:
+  //     case APP_KEY.MEDIA:
         
   //       break;
     
   //     default:
   //       break;
   //   }
-  // }, [])
+  // }, [app])
+
+  const handleClickNotification = () => {
+    onClick && onClick(notification);
+  }
 
   return (
-    <Link to={path || '/'} className="t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent">
+    <button 
+      onClick={handleClickNotification}
+      className={cn("w-full t-header-notification-item flex items-center cursor-pointer p-3 hover:bg-accent", {
+        // "bg-accent": status === 0
+      })}
+    >
       <div className="relative">
         <img
           src={`${process.env.REACT_APP_URL_S3_USER}/${sender?.image}`}
@@ -38,7 +49,7 @@ export const NotificationItem: FC<Props> = ({ notification }) => {
       </div>
 
       <div className="flex flex-1 justify-between items-center pl-3">
-        <div className="flex flex-col">
+        <div className="flex flex-col text-left">
           <div className="text-primary-gray font-bold">{sender.bizfullname}</div>
           <div
             dangerouslySetInnerHTML={{ __html: content?.length > 100 ? `${content.substring(0, 100)}...` : content }}
@@ -49,6 +60,6 @@ export const NotificationItem: FC<Props> = ({ notification }) => {
           </div>
         </div>
       </div>
-    </Link>
+    </button>
   );
 };

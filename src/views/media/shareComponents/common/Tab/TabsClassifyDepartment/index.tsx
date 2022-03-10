@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Dialog, Transition, TransitionEvents } from '@headlessui/react';
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import debounce from 'lodash/debounce';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 export const TabsClassifyDepartment: FC<TransitionEvents & Props> = ({ show, toggle, showMore, onSelect, ...props }) => {
 	const [keyword, setKeyword] = useState('');
-    const { listDepartments } = useQueryListDepartments({ keyword });
+    const { data: listDepartments } = useQueryListDepartmentsIsMember({ keyword, isFetch: true });
 
 	const onSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
 		setKeyword(e.target.value);
