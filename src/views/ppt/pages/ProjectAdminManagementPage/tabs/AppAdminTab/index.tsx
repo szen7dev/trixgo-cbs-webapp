@@ -10,7 +10,7 @@ type Props = {
 const AppAdminTab: FC<Props> = (props) => {
   const { toggleTab } = props;
   const { hash: hashParam } = useLocation();
-
+  console.log({ hashParam })
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>
@@ -18,7 +18,7 @@ const AppAdminTab: FC<Props> = (props) => {
       </div>
 
       <div className={toggleTab === 2 ? "block" : "hidden"}>
-        {hashParam ? <GroupMember /> : <FunctionalTab />}
+        {hashParam ? <GroupMember groupID={hashParam.substring(1)} /> : <FunctionalTab />}
       </div>
     </section>
   );

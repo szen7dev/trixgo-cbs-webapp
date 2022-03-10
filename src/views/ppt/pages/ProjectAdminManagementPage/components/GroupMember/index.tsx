@@ -1,7 +1,7 @@
 import { FC, useState, useCallback } from "react";
 
 import { useModal } from "services/hooks/useModal";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 
@@ -11,34 +11,25 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { useGetListAppRoleMenu } from "services/hooks/useAuth";
-import { CreateNewAdminMember, DeleteMembers } from "../../modal";
-import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { CreateNewAdminMember, DeleteMembers, DeleteMembersGroup } from "../../modal";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { APP_ID } from "apis/localdb";
 
-const GroupMember: FC = () => {
+import CreateMemberGroup from "./../../modal/CreateMemberGroup";
+
+const GroupMember: FC<any>  = ({ groupID }) => {
+
 	const history = useHistory();
-	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<string[]>([]);
 	const [keyword, setKeyword] = useState("");
 	const { openModal } = useModal();
 
-	const listMembers = [
-		{
-			_id: "1",
-			bizfullname: 'Vũ Huỳnh Minh-TRX',
-			email: 'vuhuynhminh9221@gmail.com',
-			level: 0,
-			image: ''
-		}
-	]
-
-	const { listMembers: list, companyAppRoleDetail } = usePcmAdminDetail({ 
-		appID: id, keyword: keyword 
-	});
-
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ 
-		appID: APP_ID.PCM.id, type: "1" 
-	});
+	// Call api 
+	const { infoGroup, updatePcmPlanGroupMutateAsync, refetchInfoGroup } = usePcmPlanGroup({ groupID }, false, true);
+	const listMembers = infoGroup?.data?.members || [];
+	const listMembersOfGroup = listMembers?.map((item: any) => item._id)
+	const listAdminOfGroup = infoGroup?.data?.admins || [];
+	const projectID = infoGroup?.data?.project;
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -65,10 +56,36 @@ const GroupMember: FC = () => {
 		if (idsChecked.length == listMembers.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listMembers.map(e => e._id);
+			const idsAll = listMembers.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
+
+	const onChangeAdmin = async (target: any) => {
+		const status = target.checked;
+		const userID = target.id;
+		if(status == true){
+			const admins = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, admins })
+		}else{
+			const adminsRemove = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, adminsRemove })
+		}
+		// refetchInfoGroup()
+	}
+
+	const onChangeMember = async (target: any) => {
+		const status = target.checked;
+		const userID = target.id;
+		if(status == true){
+			const members = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, members })
+		}else{
+			const membersRemove = [userID];
+			await updatePcmPlanGroupMutateAsync({ groupID, membersRemove })
+		}
+		// refetchInfoGroup()
+	}
 
 	return (
 		<main className="h-full">
@@ -77,7 +94,7 @@ const GroupMember: FC = () => {
 					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</button>
-					<p className="text-lg ml-4">Nhóm dữ liệu 1</p>
+					<p className="text-lg ml-4">{infoGroup?.data?.name}</p>
 					{/* <SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -98,7 +115,7 @@ const GroupMember: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
+											{/* <DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
 										</div>
 									)
 								}>
@@ -117,7 +134,9 @@ const GroupMember: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/>
+									{/* <CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
+									{/* <CreateNewAdminMember/> */}
+									<CreateMemberGroup projectID={projectID} groupID={groupID}/>
 								</div>
 							)
 						}
@@ -171,9 +190,10 @@ const GroupMember: FC = () => {
 						</th>
 					</tr>
 				</thead>
-				{listMembers && listMembers.length ?
+				{
+					listMembers && listMembers.length ?
 					<tbody className="bg-primary-light">
-						{listMembers.map((item, index) =>
+						{listMembers.map((item: any, index: any) =>
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -199,18 +219,18 @@ const GroupMember: FC = () => {
 								</td>
 								<td className="p-2">
 									<input 
-										type="radio" 
-										name={`userAppLevel_${item._id}`} 
-										value={0}
-										defaultChecked={item.level === 0}
+										type="checkbox" 
+										id={`${item._id}`} 
+										defaultChecked={listAdminOfGroup.includes(item._id)}
+										onChange={(e)=>onChangeAdmin(e.target) }
 									/>
 								</td>
 								<td className="p-2">
 									<input 
-										type="radio" 
-										name={`userAppLevel_${item._id}`} 
-										value={1}
-										defaultChecked={item.level === 1}
+										type="checkbox" 
+										id={`${item._id}`} 
+										defaultChecked={listMembersOfGroup.includes(item._id)}
+										onChange={(e) => onChangeMember(e.target)}
 									/>
 								</td>
 								<td className="py-1 px-2 text-negative">
@@ -222,7 +242,7 @@ const GroupMember: FC = () => {
 														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 													}
 												>
-													<DeleteMembers appID={id} idsChecked={[item._id]} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu} />
+													<DeleteMembersGroup idsChecked={[item._id]} setIdsChecked={setIdsChecked} groupID={groupID} />
 												</div>
 											)
 										}>

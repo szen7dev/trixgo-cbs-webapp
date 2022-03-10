@@ -4,32 +4,38 @@ import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { toast } from "react-toastify";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
-const Create: FC = () => {
+const Create: FC<any> = ({ projectID, keyword }) => {
   const { closeModal } = useModal();
+
   const [name, setName] = useState("");
   const [sign, setSign] = useState("");
+
+  const {   
+    createPcmPlanGroupMutateAsync,
+    refetch
+  } = usePcmPlanGroup({ projectID, keyword }, false, false);
 
   const onCreate = async () => {
     if (!name || !sign) {
       return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
     }
 
-    toast.info('Tính năng đang đợi cấp API');
-    closeModal();
-    // const result = await createAppRolesMutateAsync({
-    //   appID: APP_ID.PCM.id,
-    //   sign: parseInt(sign),
-    //   name
-    // });
+    const result = await createPcmPlanGroupMutateAsync({
+        projectID,
+        name,
+        sign
+    });
 
-    // if (!result.error) {
-    //   setName("");
-    //   closeModal();
-    //   toast.success('Tạo nhóm dữ liệu thành công');
-    // } else {
-    //   toast.error(result?.data?.message);
-    // }
+    if (!result.error) {
+      setName("");
+      closeModal();
+      toast.success('Tạo nhóm dữ liệu thành công');
+      refetch()
+    } else {
+      toast.error(result?.data?.message);
+    }
   };
 
   return (
