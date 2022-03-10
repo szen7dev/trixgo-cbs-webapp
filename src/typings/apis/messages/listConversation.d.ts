@@ -302,3 +302,14 @@ export type UpdateConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type PinConversationPayload = {
+    conversationID: string;
+    isPin: boolean;
+}
+
+export type PinConversationResponse = {
+    data: any,
+    error: boolean;
+    status: number;
+}

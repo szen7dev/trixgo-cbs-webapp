@@ -18,7 +18,7 @@ type Props = {
 }
 export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     const {currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
-    const {currentChat, setCurrentChat} = useContext(MessageContext);
+    const {currentChat, setCurrentChat, socketRef} = useContext(MessageContext);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -106,7 +106,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     return (
         <RightClickMenuWrapper
             className={displayClass}
-            contextMenu={<OptionListItemRightClick chat={chat}/>}
+            contextMenu={<OptionListItemRightClick chat={chat} socketRef={socketRef}/>}
         >
             <NavLink
                 onClick={() => {

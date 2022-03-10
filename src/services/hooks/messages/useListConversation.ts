@@ -13,7 +13,7 @@ import {
     ListConversationPayload,
     ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
-    MediasOfConversationPayload,
+    MediasOfConversationPayload, PinConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
     UpdateFolderPayload,
@@ -46,6 +46,7 @@ type UseListConversationType = {
     addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
     updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
     updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
+    pinConversation: (payload: PinConversationPayload) => Promise<any>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -134,6 +135,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const pinConversation = async (params: PinConversationPayload) => {
+        const {data} = await ListConversationRepository.pinConversation(params);
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -180,6 +188,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         deleteFolder,
         addConversationToFolder,
         updateMuteConversation,
-        updateConversation
+        updateConversation,
+        pinConversation
     }
 };

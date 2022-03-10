@@ -2,7 +2,8 @@ import API from "../repository";
 import { convertObToUrl } from "utils";
 
 import {
-    AddConversationToFolderPayload, AddConversationToFolderResponse,
+    AddConversationToFolderPayload,
+    AddConversationToFolderResponse,
     AddFolderPayload,
     AddFolderResponse,
     CheckExistConversationResponse,
@@ -21,9 +22,15 @@ import {
     ListMembersOfConversationPayload,
     ListMembersOfConversationResponse,
     MediasOfConversationPayload,
-    MediasOfConversationResponse, UpdateConversationPayload, UpdateConversationResponse,
+    MediasOfConversationResponse,
+    PinConversationPayload,
+    PinConversationResponse,
+    UpdateConversationPayload,
+    UpdateConversationResponse,
     UpdateFolderPayload,
-    UpdateFolderResponse, UpdateMuteConversationPayload, UpdateMuteConversationResponse
+    UpdateFolderResponse,
+    UpdateMuteConversationPayload,
+    UpdateMuteConversationResponse
 } from "typings/apis/messages/listConversation";
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
@@ -39,6 +46,7 @@ const deleteFolder = "/api/chatting/conversations/delete-folder";
 const addConversationToFolder = "/api/chatting/conversations/update-conversation-to-folder";
 const updateMuteConversation = "/api/chatting/conversations/update-mute-conversation";
 const updateConversation = "/api/chatting/conversations/update-conversation";
+const pinConversation = "/api/chatting/conversations/update-pin-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -155,6 +163,15 @@ const ListConversationRepository = {
             `${updateConversation}`,
             {...payload}
         );
+
+        return data;
+    },
+
+    async pinConversation(payload: PinConversationPayload) : Promise<PinConversationResponse> {
+        const {data} = await API.put(
+            `${pinConversation}`,
+            {...payload}
+        )
 
         return data;
     }
