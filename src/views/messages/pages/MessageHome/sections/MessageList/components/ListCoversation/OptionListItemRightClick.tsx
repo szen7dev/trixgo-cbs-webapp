@@ -15,6 +15,7 @@ import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messa
 import {RootState} from "redux/reducer";
 import PinIcon from "assets/images/icons8-pin-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
+import {useDeleteConfirm} from "../../../../../../../../services/hooks/useDeleteConfirm";
 
 type Props = {
     chat: ItemListConversation;
@@ -27,6 +28,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     const chatData = useSelector((state: RootState) => state.listConversation.data.listConversation[chat._id]);
+    const {openDeleteConfirm} = useDeleteConfirm();
 
     const checkedValue = useCallback(() => {
         return !(chatData.usersMute??[]).includes(profileId)
@@ -36,7 +38,13 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
         return userUnread?.amount??0
     }, [chatData.usersMissMessage])
 
-    const {updateMuteConversation, pinConversation, hideConversation, markReadConversation} = UseListConversation()
+    const {
+        updateMuteConversation,
+        pinConversation,
+        hideConversation,
+        markReadConversation,
+        deleteHistoryConversation
+    } = UseListConversation()
 
     const handleTurnOffMute = () => {
         const payload = {
@@ -119,6 +127,25 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={HideEyeIcon}/>
                 <div className={"mr-2 ml-4"}>{"Ẩn cuộc hội thoại"}</div>
+            </button>
+            <button
+                onClick={() => {
+                    closeRightClick()
+                    openDeleteConfirm({
+                        title: "Xoá lịch sử cuộc hội thoại",
+                        message: "Bạn có chắc muốn xoá toàn bộ lịch sử cuộc hội thoại không?",
+                        deleteAction: () => {
+                            deleteHistoryConversation({
+                                conversationID: chat._id
+                            }).then(data => {
+                                console.log(data)
+                            })
+                        }
+                    })
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+                <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>
+                <div className={"text-negative mr-2 ml-4"}>Xoá lịch sử</div>
             </button>
             <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ExitRedIcon}/>

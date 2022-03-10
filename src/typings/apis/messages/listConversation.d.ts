@@ -334,3 +334,13 @@ export type MarkReadConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type DeleteHistoryConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteHistoryConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}

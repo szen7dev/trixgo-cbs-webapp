@@ -6,7 +6,7 @@ import {
     CreateConversationPayload,
     CreateConversationResponseBodyData,
     DataListConversation,
-    DeleteFolderPayload,
+    DeleteFolderPayload, DeleteHistoryConversationPayload,
     FolderConversationItem,
     GeneralGroupByMemberPayload, HideConversationPayload,
     ItemListConversation,
@@ -49,6 +49,7 @@ type UseListConversationType = {
     pinConversation: (payload: PinConversationPayload) => Promise<any>,
     hideConversation: (payload: HideConversationPayload) => Promise<ItemListConversation>,
     markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
+    deleteHistoryConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -158,6 +159,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const deleteHistoryConversation = async (params: DeleteHistoryConversationPayload) => {
+        const {data} = await ListConversationRepository.deleteHistoryConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -207,6 +215,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         updateConversation,
         pinConversation,
         hideConversation,
-        markReadConversation
+        markReadConversation,
+        deleteHistoryConversation
     }
 };

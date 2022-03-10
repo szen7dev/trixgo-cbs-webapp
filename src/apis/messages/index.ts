@@ -12,7 +12,7 @@ import {
     CreateConversationPayload,
     CreateConversationResponse,
     DeleteFolderPayload,
-    DeleteFolderResponse,
+    DeleteFolderResponse, DeleteHistoryConversationPayload, DeleteHistoryConversationResponse,
     GeneralGroupByMemberPayload,
     GeneralGroupByMemberResponse, HideConversationPayload, HideConversationResponse,
     ListConversationPayload,
@@ -49,6 +49,7 @@ const updateConversation = "/api/chatting/conversations/update-conversation";
 const pinConversation = "/api/chatting/conversations/update-pin-conversation";
 const hideConversation = "/api/chatting/conversations/update-hide-conversation";
 const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
+const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -190,6 +191,14 @@ const ListConversationRepository = {
     async markReadConversation(payload: MarkReadConversationPayload) : Promise<MarkReadConversationResponse> {
         const {data} = await API.get(
             `${markReadConversation}?${convertObToUrl(payload)}`,
+        )
+
+        return data;
+    },
+
+    async deleteHistoryConversation(payload: DeleteHistoryConversationPayload) : Promise<DeleteHistoryConversationResponse> {
+        const {data} = await API.get(
+            `${deleteHistoryConversation}?${convertObToUrl(payload)}`,
         )
 
         return data;
