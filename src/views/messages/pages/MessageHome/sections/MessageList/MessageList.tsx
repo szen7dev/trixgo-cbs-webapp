@@ -30,7 +30,7 @@ export const MessageList:FC = () => {
     const onScroll = () => {
         if (listInnerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-            if (scrollTop + clientHeight === scrollHeight) {
+            if (scrollTop + clientHeight >= scrollHeight) {
                 setReachEnd(true);
             } else {
                 setReachEnd(false);
@@ -45,6 +45,7 @@ export const MessageList:FC = () => {
     const renderListConversation = useCallback(() => {
         return _map(Object.values(listConversation)
             // .sort((a,b) => b.isSaved ? 1 : -1)
+            .filter(item => !item.isFake)
             .sort((a,b) => {
                 if (b.position > a.position) {
                     return 1
