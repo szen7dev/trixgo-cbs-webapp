@@ -23,9 +23,9 @@ export const CheckListItem: FC<Props> = ({ data }) => {
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <div className="flex justify-between px-5 pt-4 pb-3">
+      <div className="flex justify-between pt-4 pb-3">
         <div className="flex items-start w-3/4">
-          <input type="checkbox" />
+          <input type="checkbox" className="cbs-checkbox" />
           <div className="ml-2 truncate">
             <span className="text-[13px]">{data.name}</span>
 
@@ -33,7 +33,7 @@ export const CheckListItem: FC<Props> = ({ data }) => {
               <img
                 src={`${process.env.REACT_APP_URL_S3_USER}/${data.assignee.image}`}
                 alt="Avatar"
-                className="w-5 h-5 rounded-full"
+                className="w-5 h-5 rounded-full object-cover"
               />
               <span className="text-primary-gray text-[13px] ml-2">
                 {data.assignee.bizfullname || data.assignee.fullname}
@@ -66,7 +66,7 @@ export const CheckListItem: FC<Props> = ({ data }) => {
           </div>
         )}
       </div>
-      <div className="w-full h-px bg-gray-200" />
+      {/* <div className="w-full h-px bg-gray-200" /> */}
     </div>
   );
 };

@@ -86,6 +86,9 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 		}
 		setZoom(v);
 	}
+	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+		console.log(e)
+	}
 
 	return (
 		<ContextPost.Provider value={{ state, ...actions, ...data }}>
@@ -140,6 +143,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 							onMouseUp={handleMouseUp}
 							onMouseMove={handleMouseMove}
 							onMouseLeave={handleMouseUp}
+							onScroll={handleScroll}
 							draggable={false}
 						>
 							<div
