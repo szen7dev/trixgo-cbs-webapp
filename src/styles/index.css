@@ -1423,7 +1423,7 @@ input[type="text"] {
 .message-container .emoji-action:hover .other-emojis {
   opacity: 100;
   visibility: visible;
-  height: 144px;
+  height: 120px;
 }
 .message-container.my-message .emoji-action {
   left: -20px;
