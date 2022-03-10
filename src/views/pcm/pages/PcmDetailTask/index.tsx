@@ -373,7 +373,7 @@ const PcmDetailTask: FC = () => {
               related={taskInfo?.related}
               modalType={'ADD_RELATION_USER'}
             />}
-            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
+            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} task={taskInfo} />}
           </ModalLarge>
         </div>
       </div>

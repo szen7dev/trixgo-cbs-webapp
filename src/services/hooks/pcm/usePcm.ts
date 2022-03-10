@@ -1,9 +1,10 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import PcmRepository from "apis/pcm";
-import { PcmPlanTaskProps } from "typings/pcm";
+import { PcmPlanTaskProps, SendMailTaskPayload } from "typings/pcm";
 
 type UsePcm = {
+    sendMailDetailTaskAsync: (payload: SendMailTaskPayload) => Promise<any>,
     listTasks: Array<PcmPlanTaskProps>,
     isLoadingListTasks: boolean,
     refetchListTasks: () => void,
@@ -14,9 +15,12 @@ type UsePcm = {
     hasNextPage: boolean | undefined
 };
 
-export const usePcm = () : UsePcm => {
+export const usePcm = (params?: any, isFetch?: boolean) : UsePcm => {
+    const { mutateAsync: sendMailDetailTaskAsync } =
+        useMutation((payload: SendMailTaskPayload) =>
+            PcmRepository.sendMailDetailTask(payload)
+        ); 
 
-    // Get danh sách
     const {
         isLoading: isLoadingListTasks,
         refetch: refetchListTasks,
@@ -25,44 +29,28 @@ export const usePcm = () : UsePcm => {
         fetchPreviousPage: prevPageListTasks,
         hasNextPage: hasNextPage
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+        useInfiniteQuery(
             "list_tasks",
             async ({ pageParams }: any) => 
             PcmRepository.listTasks({ 
                 lastestID: pageParams ? pageParams : "",
-                filter: JSON.stringify({ 
-                    _id: 1,
-                    name: 1,
-                    assignee: 1, 
-                    lastLog: 1,
-                }),
-                populates: JSON.stringify({
-                    value: "assignee lastLog",
-                    select: "name fullname bizfullname image content author createAt",
-                }),
-                populates1: JSON.stringify({
-                    value: "author",
-                    select: "_id fullname bizfullname image"
-                }),
+                ...params
             }),
             {
-                getNextPageParam: ({ nextCursor }: any) => {
-                    return nextCursor || undefined;
+                getNextPageParam: ({ data }: any) => {
+                    return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: isFetch ?? false
             }
         );
-    
-    // console.log('==============>>>>>')
-    // console.log(dataListTasks)
-    // console.log(PcmRepository)
 
     const listTasks = [].concat(...(dataListTasks?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataListTasks?.pages[0]?.data?.totalRecord;
     const totalPages = dataListTasks?.pages[0]?.data?.totalPages;
 
     return {
+        sendMailDetailTaskAsync,
         listTasks,
         isLoadingListTasks,
         refetchListTasks,
