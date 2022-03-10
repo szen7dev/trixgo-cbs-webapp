@@ -78,6 +78,7 @@ export type MediaProps = {
     _id: string;
     name: string;
     sign: string;
+    members: string[];
   };
   modifyAt: string;
   createAt: string;

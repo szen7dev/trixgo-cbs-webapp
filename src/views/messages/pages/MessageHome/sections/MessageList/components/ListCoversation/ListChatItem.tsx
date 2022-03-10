@@ -42,7 +42,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[250px]"}>
+                    return <p className={"flex items-center max-w-[250px] truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
@@ -57,14 +57,14 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
                         </span>
                     </p>
                 case 1:
-                    return <p className={"flex items-center"}>
+                    return <p className={"flex items-center truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px]"}>
                         [Hình ảnh]
                         </span>
                     </p>;
                 case 2:
-                    return <p className={"flex items-center"}>
+                    return <p className={"flex items-center truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px]"}>
                         [Tệp tin]

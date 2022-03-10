@@ -5,6 +5,11 @@ export type ListNotificationPayload = {
   companyID?: string;
 };
 
+export type UpdateNotificationPayload = {
+  notificationID: string;
+  status: number;
+}
+
 export type NotificationResponse = APIResponse & {
   data: NotificationProps;
   message: string;

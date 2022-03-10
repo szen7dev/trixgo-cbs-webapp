@@ -110,10 +110,27 @@ const listConversationSlice = createSlice({
                     }
                 }
             }
+        },
+        appendFakeItemListConversation (state, action) {
+            const {conversationId, conversation} = action.payload;
+            const newConversationData = {...state.data.listConversation};
+            if (!newConversationData[conversationId]) {
+                newConversationData[conversationId] = {
+                    ...conversation,
+                    isFake: true
+                }
+            }
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    ...newConversationData
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation, updateUsersMuteToConversation } = listConversationSlice.actions;
+export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation, updateUsersMuteToConversation, appendFakeItemListConversation } = listConversationSlice.actions;
 export default listConversationSlice.reducer;

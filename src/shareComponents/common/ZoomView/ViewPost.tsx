@@ -86,6 +86,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 		}
 		setZoom(v);
 	}
+
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		console.log(e)
 	}
@@ -104,7 +105,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 							</svg>
 						</button>
 						<div>
-							<p className="text-base">{state.author?.bizfullname}</p>
+							<p className="text-base">{state?.author?.bizfullname || state.images[state.index]?.author?.bizfullname}</p>
 							<p className="text-sm">{moment(state.createAt).format('HH:mm DD/M/yyyy')}</p>
 						</div>
 					</div>

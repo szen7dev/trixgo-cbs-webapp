@@ -5,7 +5,8 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
 
-import { useQueryListDepartments, useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
@@ -30,9 +31,10 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
   const [searchFriendName, setSearchFriendName] = useState("");
   const [searchCompanyName, setSearchCompanyName] = useState("");
 
-  const { listDepartments } = useQueryListDepartments({
+  const { data: listDepartments } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
+    isFetch: true
   });
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,

@@ -54,6 +54,7 @@ export const MediaDetailPage: FC = () => {
 
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
+	
 	const { data, refetch } = useQuery(`media_info.${mediaID}`,
 		() => MediaRepository.mediaInfo(mediaID),
 		{
@@ -125,17 +126,17 @@ export const MediaDetailPage: FC = () => {
 	}, [media, media?.content])
 
 	useEffect(() => {
-		if(!media) return;
+		if(!media || !user) return;
 		let hasPermission = true;
 
 		switch (media.type) {
 			case 1:
-				if(user?.company._id !== media.company._id) {
+				if(user?.company._id !== media.company?._id) {
 					hasPermission = false;
 				}
 				break;
 			case 2:
-				if(user?.department._id !== media.department._id) {
+				if(!media.department?.members.includes(user._id)) {
 					hasPermission = false;
 				}
 				break;

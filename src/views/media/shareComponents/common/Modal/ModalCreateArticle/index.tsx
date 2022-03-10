@@ -23,6 +23,7 @@ import {
 } from 'views/media/shareComponents/common';
 import { PostFile, PostImage } from 'shareComponents/common';
 import { typeTextSelected } from 'views/media/utils';
+import { APP_KEY } from 'utils/constants';
 
 import ChevronDownIcon from 'assets/icons/ChevronDown';
 import iconDown from 'assets/images/Frame 1745.png';
@@ -83,7 +84,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 	const { current: socket }: any = useSocket();
 	const { createMediaAsync, updateMediaAsync } = useMedia({});
 	const { addFileToUpload } = useUpload({
-		appID: '5df4ce16506d9b3c587948ca',
+		appID: APP_KEY.MEDIA,
 		companyID: user?.company._id,
 	});
 
@@ -163,7 +164,6 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			switch (modalType) {
 				case 'create': {
 					values.companyID = user?.company?._id;
-					values.departmentID = user?.department?._id;
 
 					// Tạo bài viết
 					const { error, data, message } = await createMediaAsync(values);
