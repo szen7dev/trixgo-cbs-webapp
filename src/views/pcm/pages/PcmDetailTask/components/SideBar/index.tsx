@@ -234,6 +234,7 @@ export const SideBar: FC<Props> = ({
           <ModalAddRelationUser 
             toggle={toggleModal} 
             taskID={taskID} 
+            projectID=""
             related={related}
             modalType={'LIST_ALL_RELATION_USER'}
           />

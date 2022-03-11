@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, UIEvent, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -84,15 +84,28 @@ export const ModalAddNewTask: FC = () => {
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
-    keyword: otherFieldValue,
+    keyword: otherFieldValue
   });
   const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName,
+    keyword: searchFriendName
   });
-  const { data: listGroup } = useQueryListGroup({
+  const { 
+    data: listGroup, 
+    hasNextPage: hasNextPageListGroup, 
+    fetchNextPage: fetchNextPageListGroup 
+  } = useQueryListGroup({
     keyword: searchGroupName,
-    projectID: projectID,
-  });
+    projectID: projectID
+  }, !!projectID);
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListGroup) {
+      fetchNextPageListGroup();
+    }
+  }
 
   const initialValues: InitialValues = {
     projectID: "",
@@ -204,6 +217,7 @@ export const ModalAddNewTask: FC = () => {
                           (value) => setSearchGroupName(value),
                           500
                         )}
+                        onScroll={handleScroll}
                         className={"w-full flex-1"}
                         placeholder="Nhóm"
                         isMultiple={false}
@@ -231,7 +245,7 @@ export const ModalAddNewTask: FC = () => {
                           </div>
                         )}
                         data={listGroup.map((groupItem) => ({
-                          label: groupItem.name,
+                          label: `${groupItem.sign}.${groupItem.name}`,
                           value: groupItem._id,
                         }))}
                         formatItem={{

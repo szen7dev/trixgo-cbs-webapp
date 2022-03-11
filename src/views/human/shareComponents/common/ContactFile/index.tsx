@@ -27,9 +27,10 @@ export const ContactFile: React.FC<ContactProps> = ({
   children,
 }) => {
   const handleDownloadFile = React.useCallback((_file) => () => {
-    window.open(_file.url)
+    const path = `${process.env.REACT_APP_URL_S3}${_file.path}`
+    window.open(path)
   }, []);
-
+  
   return (
     <div key={file._id} className="flex justify-between items-center ">
       <div className="flex relative">

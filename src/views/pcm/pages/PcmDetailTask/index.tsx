@@ -100,6 +100,7 @@ const PcmDetailTask: FC = () => {
        */
       if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id)) {
         history.push('/');
+        toast.error("Bạn không có quyền truy cập công việc này!");
       }
 
       if(author) {
@@ -369,11 +370,12 @@ const PcmDetailTask: FC = () => {
             {type === 'relation' && <ModalAddRelationUser 
               toggle={toggleModal} 
               taskID={id} 
+              projectID={taskInfo?.project?._id || ''}
               refetch={refetch} 
               related={taskInfo?.related}
               modalType={'ADD_RELATION_USER'}
             />}
-            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} />}
+            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} task={taskInfo} />}
           </ModalLarge>
         </div>
       </div>

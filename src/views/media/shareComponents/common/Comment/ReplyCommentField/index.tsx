@@ -137,6 +137,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 1,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
@@ -150,6 +151,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 2,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)
