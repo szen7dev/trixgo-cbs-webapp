@@ -302,3 +302,57 @@ export type UpdateConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type PinConversationPayload = {
+    conversationID: string;
+    isPin: boolean;
+}
+
+export type PinConversationResponse = {
+    data: any,
+    error: boolean;
+    status: number;
+}
+
+export type HideConversationPayload = {
+    conversationID: string;
+    isHide: boolean;
+}
+
+export type HideConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type MarkReadConversationPayload = {
+    conversationID: string;
+}
+
+export type MarkReadConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type DeleteHistoryConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteHistoryConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type DeleteConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteConversationData = ItemListConversation
+
+export type DeleteConversationResponse = {
+    data: DeleteConversationData;
+    error: boolean;
+    status: number;
+}
