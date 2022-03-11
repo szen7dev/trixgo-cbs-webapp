@@ -176,6 +176,7 @@ export const useUpload = ({
                 const compressedFile = await imageCompression(file, compressConfig);
                 const compressFile = blobToFile(compressedFile, file.name);
                 console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
+                console.log('Sending in COMPRESS mode');
 
                 await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id });
             } catch (error) {

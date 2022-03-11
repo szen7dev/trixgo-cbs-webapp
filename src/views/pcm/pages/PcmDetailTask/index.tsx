@@ -100,6 +100,7 @@ const PcmDetailTask: FC = () => {
        */
       if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id)) {
         history.push('/');
+        toast.error("Bạn không có quyền truy cập công việc này!");
       }
 
       if(author) {

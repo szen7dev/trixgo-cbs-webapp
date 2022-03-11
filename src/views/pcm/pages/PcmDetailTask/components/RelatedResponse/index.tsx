@@ -267,15 +267,13 @@ const Response: FC<Props> = ({ task }) => {
       key: 'FILE' + key,
       promise: async () => {
         const { _id } = await addFileToUpload({
-            files: file,
-            fileType: 1,
-            progress: percentCompleted => {
-                console.log(`${percentCompleted}%`, key);
-                setUploadImageProgress(key, percentCompleted)
-            },
-            // compressConfig: {
-            // 	useCompress: false
-            // }
+          files: file,
+          fileType: 1,
+          useCompress: true,
+          progress: percentCompleted => {
+              console.log(`${percentCompleted}%`, key);
+              setUploadImageProgress(key, percentCompleted)
+          },
         })
 
         setIDImageUploaded(key, _id);
@@ -295,13 +293,14 @@ const Response: FC<Props> = ({ task }) => {
         //   }
         // })
         const { _id } = await addFileToUpload({
-          files: file,
+            files: file,
             fileType: 2,
+            useCompress: true,
             progress: percentCompleted => {
-            console.log(`${percentCompleted}%`, key);
-            setUploadFileProgress(key, percentCompleted)
-          }
-        })
+              console.log(`${percentCompleted}%`, key);
+              setUploadFileProgress(key, percentCompleted)
+            }
+          })
 
         setIDFileUploaded(key, _id);
         return false;
@@ -336,13 +335,13 @@ const Response: FC<Props> = ({ task }) => {
     setAmountCommentBack(0);
   }
 
-  const onClickTabMarked = () => {
-    setCurrentTab(RelatedResponseTab.MARKED);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
-    refetchListResponseMarked();
-    setAmountComment(totalRecordResponseMarked);
-    setAmountCommentBack(0);
-  }
+  // const onClickTabMarked = () => {
+  //   setCurrentTab(RelatedResponseTab.MARKED);
+  //   dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
+  //   refetchListResponseMarked();
+  //   setAmountComment(totalRecordResponseMarked);
+  //   setAmountCommentBack(0);
+  // }
 
   const hashLocation = location.hash.substring(1);
 

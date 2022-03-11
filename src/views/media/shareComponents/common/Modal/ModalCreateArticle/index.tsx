@@ -120,13 +120,11 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 1,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
 				},
-				// compressConfig: {
-				// 	useCompress: false
-				// }
 			})
 			setIDImageUploaded(key, _id);
 		}
@@ -136,6 +134,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 2,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)
