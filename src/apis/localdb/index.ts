@@ -603,10 +603,18 @@ export const APP_ID = {
         },
         parentID: {
             pcm: "621dd33d5fd4c85f7c36d008",
-            task: ""
         }
     },
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
-    }
+    },
+    CMCS: {
+        id: "6131d6f83f4b736dc93253b2",
+        menuApp: {
+            income: {
+                id: "5e3f93fa1969583819518362",
+                name: "Hợp đồng bán ra"
+            },
+        },
+    },
 };

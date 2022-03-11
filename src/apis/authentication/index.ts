@@ -12,6 +12,7 @@ import {
 } from "typings/auth";
 
 const authURL = "/api/auth";
+const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 const AuthenticationRepository = {
   async signIn(payload: SignInPayload): Promise<SignInResponse> {
@@ -172,6 +173,14 @@ const AuthenticationRepository = {
       `${authURL}/app_role_menus`, payload);
     return data;
   },
+
+  async requestHistoryTraffics(parame: any): Promise<any> {
+    const { data } = await API.post(
+        `${HISTORY_TRAFFICS}`,
+        parame
+    )
+    return data;
+  }
 };
 
 export default AuthenticationRepository;
