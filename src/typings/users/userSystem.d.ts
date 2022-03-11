@@ -55,6 +55,7 @@ export type UserSystemProps = {
     },
     email: string,
     phone: string,
+    image: string,
     fullname: string,
     bizfullname: string,
     birthday: string,

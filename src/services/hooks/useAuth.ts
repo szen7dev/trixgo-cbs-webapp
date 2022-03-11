@@ -225,7 +225,6 @@ export const useCheckPerAccessApp = (payload: { appID: string }): UseCheckPermis
 
   let hasPermission = true;
   if (isSuccess && data?.data?.keyError == 'permission_denied') {
-
     hasPermission = false;
   }
   // console.log("check-permissions-access-app", data);
@@ -335,3 +334,16 @@ export const useCheckPerAccessOneMenu = (payload: {appID: string, menuID: string
     }
   };
 };
+
+export const useHistoryTraffics = (): {
+  createHistoryTraffics: (payload: any) => Promise<any>;
+  loading: boolean;
+} => {
+  const { mutateAsync, isLoading } = useMutation((payload: any) =>
+    AuthenticationRepository.requestHistoryTraffics(payload)
+  );
+  return {
+      createHistoryTraffics: mutateAsync,
+      loading: isLoading,
+  }
+}

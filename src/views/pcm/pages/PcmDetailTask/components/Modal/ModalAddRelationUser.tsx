@@ -3,28 +3,32 @@ import debounce from 'lodash/debounce';
 import SearchIcon from 'assets/icons/SearchIcon';
 import TriangleDown from 'assets/icons/TriangleDown';
 import { toast } from "react-toastify";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useTask } from "services/hooks/useTask";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
 import type { User } from "typings/user";
+import { UserSystemProps } from 'typings/users/userSystem';
 
 type Props = {
 	modalType: 'ADD_RELATION_USER' | 'LIST_ALL_RELATION_USER',
 	toggle: () => void,
 	refetch?: () => void,
 	taskID: string,
+	projectID: string,
 	related?: Array<User>
 }
 
-const ModalAddRelationUser: FC<Props> = ({ taskID, related, modalType, refetch, toggle }) => {
+const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType, refetch, toggle }) => {
 	const relatedsID = related?.map(user => user._id.toString());
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
 	const [keyword, setKeyword] = useState("");
 	const [idsChecked, setIdsChecked] = useState<Array<string>>(relatedsID || []);
 
-	const { data: listFriend, hasNextPage, fetchNextPage, totalRecord } = useQueryListFriend({ 
-		keyword, isFetch: modalType === 'ADD_RELATION_USER'
-	});
+	const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUsersProject({ 
+		projectID,
+		keyword
+	}, modalType === 'ADD_RELATION_USER');
+
 	const { addRelationUserAsync } = useTask({ taskID });
 
 	const getStateChecked = useCallback((id: string) => {
@@ -47,13 +51,13 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, related, modalType, refetch, 
 		};
 	};
 
-	const getStateCheckedAll = useCallback(() => idsChecked.length == listFriend.length, [idsChecked]);
+	const getStateCheckedAll = useCallback(() => idsChecked.length == listUsersProject.length, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listFriend.length) {
+		if (idsChecked.length == listUsersProject.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listFriend.map((e: any) => e._id);
+			const idsAll = listUsersProject.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -142,25 +146,25 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, related, modalType, refetch, 
 							</thead>
 							<tbody className='overflow-y-auto'>
 								{
-									(listFriend.length && isShow) ? listFriend.map(friend => (
-										<tr key={friend._id}>
+									(listUsersProject.length && isShow) ? listUsersProject.map((user: UserSystemProps) => (
+										<tr key={user._id}>
 											<td className='px-1.5 align-middle'>
 												<input 
 													type='checkbox' 
 													className='cbs-checkbox'
-													checked={getStateChecked(friend._id)}
-													onChange={() => onClickCheckButton(friend._id)}
-													// checked={Boolean(assigned[friend._id]false 
-													// onChange={e => handleChangeCheckbox(null, friend)}
+													checked={getStateChecked(user._id)}
+													onChange={() => onClickCheckButton(user._id)}
+													// checked={Boolean(assigned[user._id]false 
+													// onChange={e => handleChangeCheckbox(null, user)}
 												/>
 											</td>
 											<td>
 												<div className='flex items-center py-1'>
 													<div className='w-10 h-10 object-cover rounded-full overflow-hidden mr-4'>
-														<img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${friend.image}`} alt="" />
+														<img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt="" />
 													</div>
 													<div>
-														{friend.bizfullname}
+														{user.bizfullname}
 													</div>
 												</div>
 											</td>
@@ -173,7 +177,7 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, related, modalType, refetch, 
 						{hasNextPage && (
 							<div className="w-full flex justify-center my-5">
 							<button onClick={fetchNextPage}>
-								<span className="text-primary">{`Xem thêm (${totalRecord - listFriend.length
+								<span className="text-primary">{`Xem thêm (${totalRecord - listUsersProject.length
 								})`}</span>
 							</button>
 							</div>

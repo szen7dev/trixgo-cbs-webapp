@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC, useCallback, useState } from "react";
+import { FC, useEffect, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import debounce from 'lodash/debounce';
@@ -22,8 +22,10 @@ import type { Human } from "typings/human";
 
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
+import { useHistoryTraffics } from "services/hooks/useAuth";
 
 /*=====7.OTHER=====*/
+import { APP_ID } from "apis/localdb"
 const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT;
 
 export const HumanHomePage: FC = () => {
@@ -39,6 +41,18 @@ export const HumanHomePage: FC = () => {
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
   const { createContactMutateAsync } = useCreateContactMutation();
+
+  const { createHistoryTraffics } = useHistoryTraffics();
+
+  useEffect(() => {
+    createHistoryTraffics(
+      {
+        "appID": APP_ID.HUMAN.id,
+        "menuID": APP_ID.CMCS.menuApp.income.id,
+        "type": 1
+      }
+    )
+  }, [])
 
   const handleFinishForm = useCallback(async (values) => {
     const res = await createContactMutateAsync(values);

@@ -36,7 +36,7 @@ export const MainHeader: FC = () => {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
-    
+
     if(bottom && hasNextPage) {
       nextPageListNotification();
     }

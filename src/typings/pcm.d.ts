@@ -1,5 +1,12 @@
 import { APIResponse } from "./apis/response";
 
+export type SendMailTaskPayload = {
+  taskID: string;
+  title: string;
+  notice: string;
+  members: string[];
+}
+
 // Kiểu dữ liệu từ client truyền lên server để lấy data API
 export type ListTasksPayload = {
   lastestID?: string;

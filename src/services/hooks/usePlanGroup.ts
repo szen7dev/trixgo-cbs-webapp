@@ -13,7 +13,7 @@ interface UseQueryListGroup {
     fetchNextPage: () => void;
 }
 
-export const useQueryListGroup = (params?: QueryParam): UseQueryListGroup => {
+export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQueryListGroup => {
     const result = useInfiniteQuery(
         `plan_group.${params?.projectID}${params?.keyword}`, 
         async ({ pageParam }: any) =>
@@ -26,8 +26,9 @@ export const useQueryListGroup = (params?: QueryParam): UseQueryListGroup => {
             return data?.nextCursor || undefined;
         },
         refetchOnWindowFocus: false,
-        enabled: true,
+        enabled: isFetch ?? false,
     });
+
     const {
         isLoading,
         data,
@@ -37,13 +38,12 @@ export const useQueryListGroup = (params?: QueryParam): UseQueryListGroup => {
     } = result;
 
     const listGroup = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
+
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
-
     return {
         loading: isLoading,
         data: listGroup,

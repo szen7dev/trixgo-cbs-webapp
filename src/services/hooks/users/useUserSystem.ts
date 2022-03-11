@@ -88,7 +88,7 @@ interface UseUsersProject {
 
 export const useUsersProject = (params: ListUserInProjectPayload, isFetch?: boolean): UseUsersProject => {
     const result = useInfiniteQuery(
-        ['list_users', params]
+        ['list_users_project', params]
         , async ({ pageParam }: any) =>
         UserSystemRepository.listUserInProject({
             lastestID: pageParam,

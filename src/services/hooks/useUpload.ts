@@ -175,15 +175,16 @@ export const useUpload = ({
             try {
                 const compressedFile = await imageCompression(file, compressConfig);
                 const compressFile = blobToFile(compressedFile, file.name);
-                console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
+                // console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
+                // console.log('Sending in COMPRESS mode');
 
                 await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id });
             } catch (error) {
-                console.log("Can not compress file. Sending in HD mode")
+                // console.log("Can not compress file. Sending in HD mode")
                 await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
             }
         } else {
-            console.log('Sending in HD mode');
+            // console.log('Sending in HD mode');
             await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
         }
 

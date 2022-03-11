@@ -1,7 +1,6 @@
 import API from "../../repository";
 
 const ITEM_URL = "/api/item";
-const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
@@ -45,16 +44,6 @@ async function requestCreateContract(formData: any): Promise<any> {
     return data;
 }
 
-async function requestHistoryTraffics(parame: any): Promise<any> {
-    const { data } = await API.post(
-        `${HISTORY_TRAFFICS}`,
-        {
-            ...parame
-        }
-    )
-    return data;
-}
-
 async function requestUpdateContract(formData: any): Promise<any> {
     const { data } = await API.put(
         `${ITEM_URL}/contracts`,
@@ -80,7 +69,6 @@ const ContractIncomeRepository = {
     requestCreateContract,
     requestUpdateContract,
     requestDeleteContract,
-    requestHistoryTraffics
 };
 
 export default ContractIncomeRepository

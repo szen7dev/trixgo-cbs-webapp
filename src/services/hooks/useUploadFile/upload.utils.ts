@@ -139,6 +139,7 @@ export class QueueUpload<
     promise: (...args: any[]) => Promise<any>;
   }> = [];
   private _running: Record<string | number, () => void> = {};
+  public tasksDone: Array<string> = [];
   public isRunning = false;
 
   add(tasks: T): void {
@@ -151,7 +152,8 @@ export class QueueUpload<
       const queue = this._queue.shift();
       if (queue) {
         const { key, promise } = queue;
-        console.log("Runing queue id", key);
+        // console.log("Runing queue id", key);
+        this.tasksDone.push(key);
         const wrappedPromise = new Promise((resolve, reject) => {
           this._running[key] = reject;
           return promise().then(resolve).catch(reject);
@@ -170,7 +172,8 @@ export class QueueUpload<
       }
     } else {
       this.isRunning = false;
-      console.log("no more task");
+      this.tasksDone = [];
+      // console.log("no more task");
     }
   }
   cancel(key: string): void {
@@ -195,6 +198,7 @@ export class QueueUpload<
     });
     this._running = {};
     this._queue = [];
+    this.tasksDone = [];
     this.isRunning = false;
   }
 }
