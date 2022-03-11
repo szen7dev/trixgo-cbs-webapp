@@ -143,7 +143,7 @@ const FunctionalTab: FC = () => {
 					</button>
 				</div>
 			</header>
-
+			
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
@@ -178,7 +178,7 @@ const FunctionalTab: FC = () => {
 						</th>
 					</tr>
 				</thead>
-
+				
 				{listPcmPlanGroup && listPcmPlanGroup.length ?
 					<tbody className="bg-primary-light text-left">
 						{listPcmPlanGroup.map((item: any, index: number) => (
@@ -205,7 +205,7 @@ const FunctionalTab: FC = () => {
 									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-								{item?.members.length}
+									{item?.members.length}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
@@ -216,7 +216,7 @@ const FunctionalTab: FC = () => {
 					</tbody> : <></>
 				}
 			</table>
-				
+			
 			{hasNextPagePcmPlanGroup && (
 				<div className="w-full flex justify-center my-5">
 					<button onClick={() => fetchNextPagePcmPlanGroup()}>
