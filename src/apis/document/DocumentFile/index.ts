@@ -21,7 +21,7 @@ async function fetchListDocumentFile(params: any) {
             select: 'name document file createAt',
             populates: {
                 "path": "file",
-                "select": "app name nameOrg url size",
+                "select": "app name nameOrg size path",
                 "populate": {
                     "path": "author",
                     "select": "fullname image bizfullname"
