@@ -7,7 +7,13 @@ import {
     updateSeenMessage
 } from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {setListConversation, updateSingleConversation, setAmountMissMessage, deleteConversationAction} from "redux/reducer/messages/ListConversation";
+import {
+    setListConversation,
+    updateSingleConversation,
+    setAmountMissMessage,
+    deleteConversationAction,
+    decreaseAmountMissMessage
+} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
@@ -140,6 +146,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             messsagesId: data?.data?.messagesID,
             infoUserSeen: data?.data?.infoUserSeen
         }))
+        dispatch(decreaseAmountMissMessage({decrease: data?.data?.messagesID.length, conversationId: data?.data?.infoConversation?._id, profileId: profileId}))
     }
 
     const onRemoveConversation = (data: any) => {

@@ -178,6 +178,34 @@ const listConversationSlice = createSlice({
                     ...newConversationData
                 }
             }
+        },
+        decreaseAmountMissMessage (state, action) {
+            const {decrease, conversationId, profileId} = action.payload;
+            const newConversationData = {...state.data.listConversation[conversationId]};
+            const oldUsersMissMessage = (newConversationData.usersMissMessage??[]);
+            const usersMissMessage:{amount: number; userID: string;}[] = [];
+            oldUsersMissMessage.forEach(item => {
+                if (item.userID === profileId) {
+                    usersMissMessage.push({
+                        ...item,
+                        amount: (item.amount - decrease <= 0) ? 0:(item.amount - decrease)
+                    })
+                } else {
+                    usersMissMessage.push(item)
+                }
+            })
+
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId] : {
+                        ...state.data.listConversation[conversationId],
+                        usersMissMessage
+                    }
+                },
+                amountMissMessage: (state.data.amountMissMessage - decrease <= 0)?0:(state.data.amountMissMessage - decrease)
+            }
         }
     },
     extraReducers: {}
@@ -196,6 +224,7 @@ export const {
     updateUsersHideToConversation,
     updateUsersPinToConversation,
     updateUsersMissMessageToConversation,
-    deleteConversationAction
+    deleteConversationAction,
+    decreaseAmountMissMessage
 } = listConversationSlice.actions;
 export default listConversationSlice.reducer;
