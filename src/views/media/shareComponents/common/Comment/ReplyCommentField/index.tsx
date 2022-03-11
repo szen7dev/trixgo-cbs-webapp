@@ -215,6 +215,17 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				dispatch({ type: 'ADD_COMMENT', payload: data });
 			}
 
+			console.log({
+				app: APP_KEY.MEDIA,
+				objectID: mediaID,
+				method,
+				parentID,
+				infoComment: dataAfterInsertOrUpdate,
+				populates: JSON.stringify({
+					path: 'project author'
+				})
+			})
+
 			socket?.emit('COMMENT_CSS_ADD_COMMENT', {
 				app: APP_KEY.MEDIA,
 				objectID: mediaID,
