@@ -43,7 +43,7 @@ export const HumanInfo: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
-  const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+  const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
 
   useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 

@@ -39,13 +39,13 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
-    keyword: otherFieldValue,
+    keyword: otherFieldValue
   });
   const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName,
+    keyword: searchFriendName
   });
   const { data: listCompany } = useQueryListCompany({
-    keyword: searchCompanyName,
+    keyword: searchCompanyName
   });
 
   return (
@@ -98,7 +98,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
@@ -234,7 +234,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
