@@ -98,7 +98,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
@@ -234,7 +234,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
