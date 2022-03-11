@@ -52,11 +52,11 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
   };
 
   useEffect(() => {
-    if (!isSuccessApp) return;
-    if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
+    // if (!isSuccessApp) return;
+    // if (isSuccessApp && !hasPermission) {
+		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
+		// 	history.push("/");
+		// };
 
     document.title = "Quản lý công việc";
   }, [isSuccessApp]);  
