@@ -209,7 +209,10 @@ const Response: FC<Props> = ({ task }) => {
       socket?.emit('COMMENT_CSS_ADD_COMMENT', {
         app: APP_KEY.PCM_PLAN_TASK,
         objectID: task._id,
-        infoComment: data
+        infoComment: data,
+        populates: JSON.stringify({
+          path: 'project author'
+        })
       })
 
       socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
