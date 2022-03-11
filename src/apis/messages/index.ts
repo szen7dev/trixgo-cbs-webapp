@@ -197,7 +197,7 @@ const ListConversationRepository = {
     },
 
     async deleteHistoryConversation(payload: DeleteHistoryConversationPayload) : Promise<DeleteHistoryConversationResponse> {
-        const {data} = await API.get(
+        const {data} = await API.delete(
             `${deleteHistoryConversation}?${convertObToUrl(payload)}`,
         )
 

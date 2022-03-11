@@ -11,11 +11,12 @@ import {openAddConversationToFolder} from "redux/reducer/messages/AddConversatio
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {updateUsersMuteToConversation, updateUsersHideToConversation, updateUsersPinToConversation, updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {deleteAllMessagesInConversation} from "redux/reducer/messages/ListMessage";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {RootState} from "redux/reducer";
 import PinIcon from "assets/images/icons8-pin-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {useDeleteConfirm} from "../../../../../../../../services/hooks/useDeleteConfirm";
+import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
 
 type Props = {
     chat: ItemListConversation;
@@ -130,7 +131,6 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
             </button>
             <button
                 onClick={() => {
-                    closeRightClick()
                     openDeleteConfirm({
                         title: "Xoá lịch sử cuộc hội thoại",
                         message: "Bạn có chắc muốn xoá toàn bộ lịch sử cuộc hội thoại không?",
@@ -138,10 +138,14 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                             deleteHistoryConversation({
                                 conversationID: chat._id
                             }).then(data => {
-                                console.log(data)
+                                const successDelete = data.usersDeleteHistory.find((user:{userID: string}) => user.userID === profileId);
+                                successDelete&&dispatch(deleteAllMessagesInConversation({conversationId: data._id}))
                             })
                         }
                     })
+                    setTimeout(() => {
+                        closeRightClick()
+                    }, 100)
                 }}
                 className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>

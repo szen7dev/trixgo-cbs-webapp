@@ -57,8 +57,8 @@ const Routes: FC = () => {
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>
-                        <DeleteConfirmProvider>
-                            <ChatProvider>
+                        {/*<DeleteConfirmProvider>*/}
+                        {/*    <ChatProvider>*/}
                                 <ModalProvider>
                                     <Switch>
 
@@ -195,8 +195,8 @@ const Routes: FC = () => {
 
                                     </Switch>
                                 </ModalProvider>
-                            </ChatProvider>
-                        </DeleteConfirmProvider>
+                            {/*</ChatProvider>*/}
+                        {/*</DeleteConfirmProvider>*/}
                     </RightClickMenuProvider>
                 </AuthProvider>
             </Router>

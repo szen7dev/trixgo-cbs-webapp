@@ -116,6 +116,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     }
 
     const onReceiveReactionMessage = (data: any) => {
+        console.log(data)
         if (!data) return;
         dispatch(updateNewMessageToConversation({
             conversationId: data?.data?.conversation?._id,

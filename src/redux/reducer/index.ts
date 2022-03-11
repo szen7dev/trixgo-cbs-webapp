@@ -23,6 +23,7 @@ import DeleteConfirmFolderSlice from './messages/DeleteConfirmFolder';
 import AddConversationToFolderSlice from './messages/AddConversationToFolder';
 import UsersSeenDetailSlice from './messages/UsersSeenDetail';
 import NotificationMuteSlice from './messages/NotificationMute';
+import DeleteConfirmSlice from './DeleteConfirm';
 
 const rootReducer = combineReducers({
     demo: DemoSlice,
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
     addConversationToFolder: AddConversationToFolderSlice,
     usersSeenDetail: UsersSeenDetailSlice,
     notificationMute: NotificationMuteSlice,
+    deleteConfirm: DeleteConfirmSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

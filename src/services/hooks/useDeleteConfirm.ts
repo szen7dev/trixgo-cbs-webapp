@@ -1,35 +1,25 @@
-import { useContext } from "react";
-
-import DeleteConfirmContext from "services/contexts/DeleteConfirm";
 import {DeleteConfirmContent} from "typings/app";
+import {useDispatch} from "react-redux";
+import {openDeleteConfirmAction, closeDeleteConfirmAction} from "redux/reducer/DeleteConfirm"
 
 type UseDeleteConfirm = {
-  isDeleteConfirmOpen: boolean;
   openDeleteConfirm: (payload: DeleteConfirmContent) => void;
   closeDeleteConfirm: () => void;
-  deleteConfirmContent: DeleteConfirmContent;
 };
 
 export const useDeleteConfirm = (): UseDeleteConfirm => {
-  const { dispatch, state } = useContext(DeleteConfirmContext);
+  const dispatch = useDispatch();
 
   const openDeleteConfirm = (payload: DeleteConfirmContent) => {
-    dispatch({
-      type: "OPEN_DELETE_CONFIRM",
-      payload,
-    });
+    dispatch(openDeleteConfirmAction(payload));
   };
 
   const closeDeleteConfirm = () => {
-    dispatch({
-      type: "CLOSE_DELETE_CONFIRM",
-    });
+    dispatch(closeDeleteConfirmAction());
   };
 
   return {
-    isDeleteConfirmOpen: state.isDeleteConfirmOpen,
     openDeleteConfirm,
     closeDeleteConfirm,
-    deleteConfirmContent: state.deleteConfirmContent,
   };
 };
