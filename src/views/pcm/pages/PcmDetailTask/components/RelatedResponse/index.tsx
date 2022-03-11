@@ -206,15 +206,6 @@ const Response: FC<Props> = ({ task }) => {
       dispatch({ type: 'ADD_COMMENT', payload: data });
       toast.success('Tạo phản hồi thành công');
 
-      console.log({
-        app: APP_KEY.PCM_PLAN_TASK,
-        objectID: task._id,
-        infoComment: data,
-        populates: JSON.stringify({
-          path: 'project author'
-        })
-      })
-
       socket?.emit('COMMENT_CSS_ADD_COMMENT', {
         app: APP_KEY.PCM_PLAN_TASK,
         objectID: task._id,
