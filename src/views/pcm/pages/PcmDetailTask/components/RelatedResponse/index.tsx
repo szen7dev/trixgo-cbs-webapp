@@ -61,6 +61,7 @@ const Response: FC<Props> = ({ task }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
+  const [isUpload, setIsUpload] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [collapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
@@ -111,7 +112,7 @@ const Response: FC<Props> = ({ task }) => {
   });
 
   useEffect(() => {
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
+    listResponses && dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
   }, [listResponses.length])
 
   useEffect(() => {
@@ -159,7 +160,7 @@ const Response: FC<Props> = ({ task }) => {
   useEffect(() => {
     if(!socket) return;
 
-    socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
+    // socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
 		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
   }, [socket])
 
@@ -170,6 +171,10 @@ const Response: FC<Props> = ({ task }) => {
   };
 
   const handleAddResponse = async () => {
+    if(!content) {
+      return toast.warning('Bạn chưa nhập nội dung cho phản hồi');
+    }
+
     setVisibleForm(false);
 
     let images: string[] = [];
@@ -261,6 +266,9 @@ const Response: FC<Props> = ({ task }) => {
 
     setUploadImage(images);
     setUploadFile(files);
+    setIsUpload(true);
+
+    const filesLength = Object.entries(images).length + Object.entries(files).length;
 
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
@@ -276,6 +284,11 @@ const Response: FC<Props> = ({ task }) => {
           },
         })
 
+        console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
+        // if(queue.tasksDone.length === Object.entries(images).length) {
+        //   setIsUpload(false);
+        // }
+
         setIDImageUploaded(key, _id);
       }
     })));
@@ -284,23 +297,20 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        // const { _id } = await uploadImageWithProgressPromise(file, {
-        //   id: 'FILE' + key,
-        //   timer,
-        //   speed: 300,
-        //   onUploadProgress(progress) {
-        //     setUploadFileProgress(key, progress);
-        //   }
-        // })
         const { _id } = await addFileToUpload({
-            files: file,
-            fileType: 2,
-            useCompress: true,
-            progress: percentCompleted => {
-              console.log(`${percentCompleted}%`, key);
-              setUploadFileProgress(key, percentCompleted)
-            }
-          })
+          files: file,
+          fileType: 2,
+          useCompress: true,
+          progress: percentCompleted => {
+            console.log(`${percentCompleted}%`, key);
+            setUploadFileProgress(key, percentCompleted)
+          }
+        })
+
+        console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
+        // if(queue.tasksDone.length === Object.entries(files).length) {
+        //   setIsUpload(false);
+        // }
 
         setIDFileUploaded(key, _id);
         return false;
@@ -456,7 +466,13 @@ const Response: FC<Props> = ({ task }) => {
                 </div>
                 <div>
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
-                  <button type="button" className="mx-3 px-3 py-2 rounded bg-primary text-white" onClick={handleAddResponse}>Xác nhận</button>
+                  <button 
+                    type="button" 
+                    className="mx-3 px-3 py-2 rounded bg-primary text-white" 
+                    onClick={handleAddResponse} 
+                    disabled={isUpload}>
+                      Xác nhận
+                  </button>
                 </div>
               </div>
             </div>

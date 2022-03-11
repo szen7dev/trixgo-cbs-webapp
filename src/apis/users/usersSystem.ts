@@ -1,18 +1,27 @@
 import API from "../repository";
 import type { QueryParam, UserSystemPayload, ListUserInProjectPayload, DataResponse } from 'typings/users/userSystem';
-import { convertObToUrl } from "utils";
 import { USER_URL } from '.';
 
 export const UserSystemRepository = {
-    async listUserInProject(payload: ListUserInProjectPayload): Promise<DataResponse> {
+    async listUserInProject(params: ListUserInProjectPayload): Promise<DataResponse> {
         const { data } = await API.get<Promise<DataResponse>>(
-            `${USER_URL}?${convertObToUrl(payload)}`);
+            USER_URL, {
+            params: {
+                select: "_id bizfullname email image company department position",
+                populates: JSON.stringify({
+                    path: "company department position",
+                    select: "_id name sign"
+                }),
+                ...params,
+            }
+        })
         return data;
     },
     async listUsersSystem(params?: QueryParam): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
             params: {
+                select: "_id bizfullname email image company department position",
                 populates: JSON.stringify({
                     path: "company department position",
                     select: "_id name sign"
@@ -27,7 +36,7 @@ export const UserSystemRepository = {
             USER_URL, {
             params: {
                 userID,
-                // select: "_id fullname email company department position level"
+                select: "_id bizfullname email company department position level"
             }
         })
         return data;
