@@ -389,6 +389,30 @@ const listMessageSlice = createSlice({
                     }
                 }
             }
+        },
+
+        deleteAllMessagesInConversation (state, action) {
+            const {conversationId} = action.payload;
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [conversationId]: {}
+                },
+                nextCursor: {
+                    ...state.data.nextCursor,
+                    [conversationId]: null
+                },
+                hasMoreData: {
+                    ...state.data.hasMoreData,
+                    [conversationId]: false
+                },
+                listFakeMessage: {
+                    ...state.data.listFakeMessage,
+                    [conversationId] : {}
+                }
+            }
         }
     },
     extraReducers: {}
@@ -414,6 +438,7 @@ export const {
     setSelectedStateOn,
     deleteMessageInConversations,
     revokeMessageInConversation,
-    updateSeenMessage
+    updateSeenMessage,
+    deleteAllMessagesInConversation
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

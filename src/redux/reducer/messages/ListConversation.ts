@@ -127,10 +127,75 @@ const listConversationSlice = createSlice({
                     ...newConversationData
                 }
             }
+        },
+        updateUsersHideToConversation (state, action) {
+            const {conversationId, usersHide} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersHide
+                    }
+                }
+            }
+        },
+        updateUsersPinToConversation (state, action) {
+            const {conversationId, isPin} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        isPin
+                    }
+                }
+            }
+        },
+        updateUsersMissMessageToConversation (state, action) {
+            const {conversationId, usersMissMessage} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersMissMessage
+                    }
+                }
+            }
+        },
+        deleteConversationAction (state, action) {
+            const {conversationId} = action.payload;
+            const newConversationData = {...state.data.listConversation};
+            delete newConversationData[conversationId];
+
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...newConversationData
+                }
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage, updateFoldersToConversation, updateUsersMuteToConversation, appendFakeItemListConversation } = listConversationSlice.actions;
+export const {
+    setListConversation,
+    setTotalRecord,
+    setNextCursor,
+    setLoading,
+    updateSingleConversation,
+    setAmountMissMessage,
+    updateFoldersToConversation,
+    updateUsersMuteToConversation,
+    appendFakeItemListConversation ,
+    updateUsersHideToConversation,
+    updateUsersPinToConversation,
+    updateUsersMissMessageToConversation,
+    deleteConversationAction
+} = listConversationSlice.actions;
 export default listConversationSlice.reducer;

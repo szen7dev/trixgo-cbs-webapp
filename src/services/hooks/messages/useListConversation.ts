@@ -5,15 +5,15 @@ import {
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation,
-    DeleteFolderPayload,
+    DataListConversation, DeleteConversationData, DeleteConversationPayload,
+    DeleteFolderPayload, DeleteHistoryConversationPayload,
     FolderConversationItem,
-    GeneralGroupByMemberPayload,
+    GeneralGroupByMemberPayload, HideConversationPayload,
     ItemListConversation,
     ListConversationPayload,
     ListFoldersConversationPayload,
-    ListMembersOfConversationPayload,
-    MediasOfConversationPayload,
+    ListMembersOfConversationPayload, MarkReadConversationPayload,
+    MediasOfConversationPayload, PinConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
     UpdateFolderPayload,
@@ -46,6 +46,11 @@ type UseListConversationType = {
     addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
     updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
     updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
+    pinConversation: (payload: PinConversationPayload) => Promise<any>,
+    hideConversation: (payload: HideConversationPayload) => Promise<ItemListConversation>,
+    markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
+    deleteHistoryConversation: (payload: DeleteHistoryConversationPayload) => Promise<ItemListConversation>,
+    deleteConversation: (payload: DeleteConversationPayload) => Promise<DeleteConversationData>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -134,6 +139,41 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         });
     }
 
+    const pinConversation = async (params: PinConversationPayload) => {
+        const {data} = await ListConversationRepository.pinConversation(params);
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const hideConversation = async (params: HideConversationPayload) => {
+        const {data} = await ListConversationRepository.hideConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const markReadConversation = async (params: MarkReadConversationPayload) => {
+        const {data} = await ListConversationRepository.markReadConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteHistoryConversation = async (params: DeleteHistoryConversationPayload) => {
+        const {data} = await ListConversationRepository.deleteHistoryConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteConversation = async (params: DeleteConversationPayload) => {
+        const {data} = await ListConversationRepository.deleteConversation(params);
+        return new Promise<DeleteConversationData>((resolve, reject) => {
+            resolve(data);
+        })
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -180,6 +220,11 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         deleteFolder,
         addConversationToFolder,
         updateMuteConversation,
-        updateConversation
+        updateConversation,
+        pinConversation,
+        hideConversation,
+        markReadConversation,
+        deleteHistoryConversation,
+        deleteConversation
     }
 };

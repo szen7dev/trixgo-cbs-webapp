@@ -2,28 +2,35 @@ import API from "../repository";
 import { convertObToUrl } from "utils";
 
 import {
-    AddConversationToFolderPayload, AddConversationToFolderResponse,
+    AddConversationToFolderPayload,
+    AddConversationToFolderResponse,
     AddFolderPayload,
     AddFolderResponse,
     CheckExistConversationResponse,
     ConversationInformarionResponse,
     ConvversationInformationPayload,
     CreateConversationPayload,
-    CreateConversationResponse,
+    CreateConversationResponse, DeleteConversationPayload, DeleteConversationResponse,
     DeleteFolderPayload,
-    DeleteFolderResponse,
+    DeleteFolderResponse, DeleteHistoryConversationPayload, DeleteHistoryConversationResponse,
     GeneralGroupByMemberPayload,
-    GeneralGroupByMemberResponse,
+    GeneralGroupByMemberResponse, HideConversationPayload, HideConversationResponse,
     ListConversationPayload,
     ListConversationResponse,
     ListFoldersConversationPayload,
     ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
-    ListMembersOfConversationResponse,
+    ListMembersOfConversationResponse, MarkReadConversationPayload, MarkReadConversationResponse,
     MediasOfConversationPayload,
-    MediasOfConversationResponse, UpdateConversationPayload, UpdateConversationResponse,
+    MediasOfConversationResponse,
+    PinConversationPayload,
+    PinConversationResponse,
+    UpdateConversationPayload,
+    UpdateConversationResponse,
     UpdateFolderPayload,
-    UpdateFolderResponse, UpdateMuteConversationPayload, UpdateMuteConversationResponse
+    UpdateFolderResponse,
+    UpdateMuteConversationPayload,
+    UpdateMuteConversationResponse
 } from "typings/apis/messages/listConversation";
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
@@ -39,6 +46,11 @@ const deleteFolder = "/api/chatting/conversations/delete-folder";
 const addConversationToFolder = "/api/chatting/conversations/update-conversation-to-folder";
 const updateMuteConversation = "/api/chatting/conversations/update-mute-conversation";
 const updateConversation = "/api/chatting/conversations/update-conversation";
+const pinConversation = "/api/chatting/conversations/update-pin-conversation";
+const hideConversation = "/api/chatting/conversations/update-hide-conversation";
+const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
+const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
+const deleteConversation = "/api/chatting/conversations/delete-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -155,6 +167,48 @@ const ListConversationRepository = {
             `${updateConversation}`,
             {...payload}
         );
+
+        return data;
+    },
+
+    async pinConversation(payload: PinConversationPayload) : Promise<PinConversationResponse> {
+        const {data} = await API.put(
+            `${pinConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async hideConversation(payload: HideConversationPayload) : Promise<HideConversationResponse> {
+        const {data} = await API.put(
+            `${hideConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async markReadConversation(payload: MarkReadConversationPayload) : Promise<MarkReadConversationResponse> {
+        const {data} = await API.get(
+            `${markReadConversation}?${convertObToUrl(payload)}`,
+        )
+
+        return data;
+    },
+
+    async deleteHistoryConversation(payload: DeleteHistoryConversationPayload) : Promise<DeleteHistoryConversationResponse> {
+        const {data} = await API.delete(
+            `${deleteHistoryConversation}?${convertObToUrl(payload)}`,
+        )
+
+        return data;
+    },
+
+    async deleteConversation(payload: DeleteConversationPayload) : Promise<DeleteConversationResponse> {
+        const {data} = await API.delete(
+            `${deleteConversation}?${convertObToUrl(payload)}`
+        )
 
         return data;
     }
