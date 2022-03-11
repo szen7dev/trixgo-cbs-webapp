@@ -44,7 +44,6 @@ export const useQueryListGroup = (params?: QueryParam, isFetch?: boolean): UseQu
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
-
     return {
         loading: isLoading,
         data: listGroup,

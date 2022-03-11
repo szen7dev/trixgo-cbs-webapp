@@ -13,9 +13,10 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update, DeleteGroup } from "../../modal";
-import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
+import {  UpdatePackage, DeletePackage } from "../../modal";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import moment from "moment";
+import CreatePackage from "../../modal/CreatePackage";
 
 const PackageDocument: FC = () => {
 	// Cơ chế của userParams
@@ -25,14 +26,13 @@ const PackageDocument: FC = () => {
 
 	const {   
 		isLoading,
-        refetch,
-        data: listPcmPlanGroup,
-        fetchNextPage: fetchNextPagePcmPlanGroup,
-        hasNextPage: hasNextPagePcmPlanGroup,
-        totalRecord,
+		refetch,
+		data: listDocumentPackage,
+		fetchNextPage: fetchNextPageDocumentPackage,
+		hasNextPage: hasNextPageDocumentPackage,
+		totalRecord,
 		totalPage
-        } = usePcmPlanGroup({ projectID, keyword },true, false);
-
+	} = useDocumentPackage({ departmentID: projectID, keyword },true, false);
 	const { openModal } = useModal();
 	
 	const getStateChecked = useCallback((id: string) => {
@@ -53,14 +53,14 @@ const PackageDocument: FC = () => {
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listPcmPlanGroup.length;
+		return idsChecked.length == listDocumentPackage.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listPcmPlanGroup.length) {
+		if (idsChecked.length == listDocumentPackage.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listPcmPlanGroup.map((e: any) => e._id);
+			const idsAll = listDocumentPackage.map((e: any) => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -94,7 +94,7 @@ const PackageDocument: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword}/>
+												<UpdatePackage item={listDocumentPackage.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword}/>
 											</div>
 										)
 									}
@@ -111,7 +111,7 @@ const PackageDocument: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteGroup idsChecked={idsChecked} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword} />
+											<DeletePackage idsChecked={idsChecked} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword} />
 										</div>
 									)
 								}
@@ -131,7 +131,7 @@ const PackageDocument: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create projectID={projectID} keyword={keyword} />
+									<CreatePackage projectID={projectID} keyword={keyword} />
 								</div>
 							)
 						}
@@ -179,9 +179,9 @@ const PackageDocument: FC = () => {
 					</tr>
 				</thead>
 				
-				{listPcmPlanGroup && listPcmPlanGroup.length ?
+				{listDocumentPackage && listDocumentPackage.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmPlanGroup.map((item: any, index: number) => (
+						{listDocumentPackage.map((item: any, index: number) => (
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -217,11 +217,11 @@ const PackageDocument: FC = () => {
 				}
 			</table>
 			
-			{hasNextPagePcmPlanGroup && (
+			{hasNextPageDocumentPackage && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => fetchNextPagePcmPlanGroup()}>
+					<button onClick={() => fetchNextPageDocumentPackage()}>
 						<span className="text-primary">
-							{`Xem thêm (${totalRecord - listPcmPlanGroup.length})`}
+							{`Xem thêm (${totalRecord - listDocumentPackage.length})`}
 						</span>
 					</button>
 				</div>

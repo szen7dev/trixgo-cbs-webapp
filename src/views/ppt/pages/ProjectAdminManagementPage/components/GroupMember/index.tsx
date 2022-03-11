@@ -115,7 +115,7 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											{/* <DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
+											<DeleteMembersGroup idsChecked={idsChecked} setIdsChecked={setIdsChecked} groupID={groupID} />
 										</div>
 									)
 								}>
@@ -134,9 +134,7 @@ const GroupMember: FC<any>  = ({ groupID }) => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									{/* <CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
-									{/* <CreateNewAdminMember/> */}
-									<CreateMemberGroup projectID={projectID} groupID={groupID}/>
+									<CreateMemberGroup projectID={projectID} groupID={groupID} listIDMember={listMembersOfGroup}/>
 								</div>
 							)
 						}

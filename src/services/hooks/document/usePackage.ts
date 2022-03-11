@@ -50,7 +50,7 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
 
     const listPackage = []
         .concat(...(data?.pages || [])
-            .map((d: any) => d.data?.listRecords))
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;

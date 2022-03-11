@@ -11,13 +11,14 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { useGetListAppRoleMenu } from "services/hooks/useAuth";
-import { CreateNewAdminMember, DeleteMembers, DeleteMembersGroup } from "../../modal";
+import { CreateMemberPackage, DeleteMembersPackage } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
+import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import { APP_ID } from "apis/localdb";
 
 import CreateMemberGroup from "../../modal/CreateMemberGroup";
 
-const PackageDocumentMember: FC<any>  = ({ groupID }) => {
+const PackageDocumentMember: FC<any>  = ({ packageID }) => {
 
 	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<string[]>([]);
@@ -25,11 +26,11 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 	const { openModal } = useModal();
 
 	// Call api 
-	const { infoGroup, updatePcmPlanGroupMutateAsync, refetchInfoGroup } = usePcmPlanGroup({ groupID }, false, true);
-	const listMembers = infoGroup?.data?.members || [];
+	const { infoPackage } = useDocumentPackage({ packageID }, false, true);
+	const listMembers = infoPackage?.data?.members || [];
 	const listMembersOfGroup = listMembers?.map((item: any) => item._id)
-	const listAdminOfGroup = infoGroup?.data?.admins || [];
-	const projectID = infoGroup?.data?.project;
+	const listAdminOfGroup = infoPackage?.data?.admins || [];
+	const projectID = infoPackage?.data?.project;
 
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -61,32 +62,6 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 		}
 	};
 
-	const onChangeAdmin = async (target: any) => {
-		const status = target.checked;
-		const userID = target.id;
-		if(status == true){
-			const admins = [userID];
-			await updatePcmPlanGroupMutateAsync({ groupID, admins })
-		}else{
-			const adminsRemove = [userID];
-			await updatePcmPlanGroupMutateAsync({ groupID, adminsRemove })
-		}
-		// refetchInfoGroup()
-	}
-
-	const onChangeMember = async (target: any) => {
-		const status = target.checked;
-		const userID = target.id;
-		if(status == true){
-			const members = [userID];
-			await updatePcmPlanGroupMutateAsync({ groupID, members })
-		}else{
-			const membersRemove = [userID];
-			await updatePcmPlanGroupMutateAsync({ groupID, membersRemove })
-		}
-		// refetchInfoGroup()
-	}
-
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -94,7 +69,7 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</button>
-					<p className="text-lg ml-4">{infoGroup?.data?.name}</p>
+					<p className="text-lg ml-4">{infoPackage?.data?.name}</p>
 					{/* <SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -115,7 +90,7 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											{/* <DeleteMembers appID={id} idsChecked={idsChecked} setIdsChecked={setIdsChecked} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
+											<DeleteMembersPackage idsChecked={idsChecked} setIdsChecked={setIdsChecked} packageID={packageID} />
 										</div>
 									)
 								}>
@@ -136,7 +111,7 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 								>
 									{/* <CreateNewAdminMember appRoleID={id} companyID={companyAppRoleDetail} refetchGetListAppRoleMenu={refetchGetListAppRoleMenu}/> */}
 									{/* <CreateNewAdminMember/> */}
-									<CreateMemberGroup projectID={projectID} groupID={groupID}/>
+									<CreateMemberPackage projectID={projectID} packageID={packageID}/>
 								</div>
 							)
 						}
@@ -175,16 +150,6 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 								Email
 							</div>
 						</th>
-						<th className="w-1/6 pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Admin
-							</div>
-						</th>
-						<th className="w-1/6 pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Member
-							</div>
-						</th>
 						<th className="w-1/12 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Hành động</div>
 						</th>
@@ -217,22 +182,6 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 								<td className="py-1 px-2">
 									{item.email}
 								</td>
-								<td className="p-2">
-									<input 
-										type="checkbox" 
-										id={`${item._id}`} 
-										defaultChecked={listAdminOfGroup.includes(item._id)}
-										onChange={(e)=>onChangeAdmin(e.target) }
-									/>
-								</td>
-								<td className="p-2">
-									<input 
-										type="checkbox" 
-										id={`${item._id}`} 
-										defaultChecked={listMembersOfGroup.includes(item._id)}
-										onChange={(e) => onChangeMember(e.target)}
-									/>
-								</td>
 								<td className="py-1 px-2 text-negative">
 									<button
 										onClick={() =>
@@ -242,7 +191,7 @@ const PackageDocumentMember: FC<any>  = ({ groupID }) => {
 														"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 													}
 												>
-													<DeleteMembersGroup idsChecked={[item._id]} setIdsChecked={setIdsChecked} groupID={groupID} />
+													<DeleteMembersPackage idsChecked={[item._id]} setIdsChecked={setIdsChecked} packageID={packageID} />
 												</div>
 											)
 										}>
