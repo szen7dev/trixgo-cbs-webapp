@@ -334,3 +334,16 @@ export const useCheckPerAccessOneMenu = (payload: {appID: string, menuID: string
     }
   };
 };
+
+export const useHistoryTraffics = (): {
+  createHistoryTraffics: (payload: any) => Promise<any>;
+  loading: boolean;
+} => {
+  const { mutateAsync, isLoading } = useMutation((payload: any) =>
+    AuthenticationRepository.requestHistoryTraffics(payload)
+  );
+  return {
+      createHistoryTraffics: mutateAsync,
+      loading: isLoading,
+  }
+}

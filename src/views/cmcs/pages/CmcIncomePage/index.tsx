@@ -9,12 +9,14 @@ import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 import { SearchInput, Paginate } from "shareComponents/common";
 import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
+import { APP_ID } from "apis/localdb"
 
 import styles from 'views/cmcs/styles/styles.module.css';
 
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
-import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation, useHistoryTraffics } from "services/hooks/cmcs/useContractIncome";
+import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
+import { useHistoryTraffics } from "services/hooks/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 export const CmcIncomePage: FC = () => {
@@ -35,8 +37,8 @@ export const CmcIncomePage: FC = () => {
   useEffect(() => {
     createHistoryTraffics(
       {
-        "appID": "5e4785eb8b50843d34481d49",
-        "menuID": "5e3f93fa1969583819518362",
+        "appID": APP_ID.CMCS.id,
+        "menuID": APP_ID.CMCS.menuApp.income.id,
         "type": 1
       }
     )
