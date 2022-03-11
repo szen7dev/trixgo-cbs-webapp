@@ -45,7 +45,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	return (
 		<div>
 			<div className="flex items-center px-6 py-2.5 justify-between">
-				<h3 className="text-2x-large font-bold" >
+				<h3 className="text-2x-large font-bold">
 					Thông báo email
 				</h3>
 				<button

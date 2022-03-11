@@ -5,6 +5,7 @@ interface FileProps {
     name: string;
     nameOrg: string;
     size: number;
+    path: string;
     author: {
         _id: string;
         bizfullname: string;
