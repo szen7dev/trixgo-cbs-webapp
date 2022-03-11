@@ -10,7 +10,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {openAddConversationToFolder} from "redux/reducer/messages/AddConversationToFolder";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {updateUsersMuteToConversation, updateUsersHideToConversation, updateUsersPinToConversation, updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {
+    updateUsersMuteToConversation,
+    updateUsersHideToConversation,
+    updateUsersPinToConversation,
+    updateUsersMissMessageToConversation,
+    deleteConversationAction
+} from "redux/reducer/messages/ListConversation";
 import {deleteAllMessagesInConversation} from "redux/reducer/messages/ListMessage";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {RootState} from "redux/reducer";
@@ -20,8 +26,10 @@ import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
 
 type Props = {
     chat: ItemListConversation;
+    socketRef: any
 }
-export const OptionListItemRightClick:FC<Props> = ({chat}) => {
+export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
+    const socket = socketRef.current;
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
 
@@ -33,7 +41,8 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
 
     const checkedValue = useCallback(() => {
         return !(chatData.usersMute??[]).includes(profileId)
-    }, [chatData.usersMute])
+    }, [chatData.usersMute]);
+
     const userUnreadMessage = useCallback(() => {
         const userUnread = chatData?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
@@ -44,7 +53,8 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
         pinConversation,
         hideConversation,
         markReadConversation,
-        deleteHistoryConversation
+        deleteHistoryConversation,
+        deleteConversation
     } = UseListConversation()
 
     const handleTurnOffMute = () => {
@@ -155,7 +165,26 @@ export const OptionListItemRightClick:FC<Props> = ({chat}) => {
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ExitRedIcon}/>
                 <div className={"text-negative mr-2 ml-4"}>Rời cuộc hội thoại</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + (chat.author !== profileId?"hidden":"")}>
+            <button
+                onClick={() => {
+                    openDeleteConfirm({
+                        title: "Xoá cuộc hội thoại",
+                        message: "Bạn có chắc muốn giải tán cuộc hội thoại này không?",
+                        deleteAction: () => {
+                            deleteConversation({
+                                conversationID: chat._id
+                            }).then(data => {
+                                dispatch(deleteConversationAction({conversationId: data._id}))
+                                window.location.hash = "";
+                                socket.emit("CHATTING_CSS_REMOVE_CONVERSATION",{infoConversation: data})
+                            })
+                        }
+                    })
+                    setTimeout(() => {
+                        closeRightClick()
+                    }, 100)
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + ((chatData.authors.includes(profileId)||chatData.author === profileId)?"":"hidden")}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>
                 <div className={"text-negative mr-2 ml-4"}>Xoá cuộc hội thoại</div>
             </button>

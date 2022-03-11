@@ -344,3 +344,15 @@ export type DeleteHistoryConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type DeleteConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteConversationData = ItemListConversation
+
+export type DeleteConversationResponse = {
+    data: DeleteConversationData;
+    error: boolean;
+    status: number;
+}

@@ -111,7 +111,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     return (
         <RightClickMenuWrapper
             className={displayClass}
-            contextMenu={<OptionListItemRightClick chat={chat}/>}
+            contextMenu={<OptionListItemRightClick chat={chat} socketRef={socketRef}/>}
         >
             <NavLink
                 onClick={() => {

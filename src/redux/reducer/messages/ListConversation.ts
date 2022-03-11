@@ -167,6 +167,18 @@ const listConversationSlice = createSlice({
                 }
             }
         },
+        deleteConversationAction (state, action) {
+            const {conversationId} = action.payload;
+            const newConversationData = {...state.data.listConversation};
+            delete newConversationData[conversationId];
+
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...newConversationData
+                }
+            }
+        }
     },
     extraReducers: {}
 });
@@ -183,6 +195,7 @@ export const {
     appendFakeItemListConversation ,
     updateUsersHideToConversation,
     updateUsersPinToConversation,
-    updateUsersMissMessageToConversation
+    updateUsersMissMessageToConversation,
+    deleteConversationAction
 } = listConversationSlice.actions;
 export default listConversationSlice.reducer;
