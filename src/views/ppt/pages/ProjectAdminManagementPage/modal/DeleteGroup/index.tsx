@@ -14,7 +14,7 @@ const DeleteGroup: FC<any> = ({ idsChecked, setIdsChecked, projectID, keyword })
     refetch()
     closeModal();
   };
-
+  
   return (
     <main className="relative h-full">
       <header className="px-10 py-4">

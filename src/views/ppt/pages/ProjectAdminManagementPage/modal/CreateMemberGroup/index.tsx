@@ -16,7 +16,7 @@ import { useInfiniteQuery } from "react-query";
 import { DepartmentRepositories } from "apis/item/department";
 import { LinkUser } from "typings/auth";
 
-const CreateMemberGroup: FC<any> = ({ projectID, groupID }) => {
+const CreateMemberGroup: FC<any> = ({ projectID, groupID, listIDMember }) => {
 	const { closeModal } = useModal();
 	const [keyword, setKeyword] = useState("");
 	// HOOK PCM_GROUP

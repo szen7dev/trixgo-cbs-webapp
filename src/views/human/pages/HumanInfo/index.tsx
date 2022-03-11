@@ -173,7 +173,7 @@ export const HumanInfo: FC = () => {
   if (loading) {
     return <Loader className="border-primary" />;
   }
-
+  
   return (
     <main className="mb-4">
       <div className="flex items-center justify-between px-4 h-12 border border-gray-200">

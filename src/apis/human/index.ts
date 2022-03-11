@@ -51,18 +51,18 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
 async function fetchListContactDocument<T>(params: ContactDocumentPayload): Promise<T> {
     const { data } = await API.get(
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
-        params: {
-            populates: {
-                "path": "company contact files contract position2 educationalBackground2 field2",
-                "select": "name sign size url userCreate createAt nameOrg",
-                "populate": {
-                    "path": "userCreate project",
-                    "select": "fullname bizfullname projectType buildingGrade"
-                }
-            },
-            ...params,
+            params: {
+                populates: {
+                    "path": "company contact files contract position2 educationalBackground2 field2",
+                    "select": "name sign size url userCreate createAt nameOrg path",
+                    "populate": {
+                        "path": "userCreate project",
+                        "select": "fullname bizfullname projectType buildingGrade"
+                    }
+                },
+                ...params,
+            }
         }
-    }
     );
     return data;
 }
@@ -349,8 +349,8 @@ const HumanRepository = {
         },
         ...params,
     }),
-    fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> =>
-        fetchListContactDocument<ContactDocumentResponse>(params),
+
+    fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> => fetchListContactDocument<ContactDocumentResponse>(params),
     requestCreateContactDocument: async (body: CreateContactDocumentPayload): Promise<MutationContactDocument> => requestCreateContactDocument(body),
     requestUpdateContactDocument: async (body: UpdateContactDocumentPayload): Promise<MutationContactDocument> => requestUpdateContactDocument(body),
     requestDeleteContactDocument,
