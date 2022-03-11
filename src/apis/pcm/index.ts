@@ -4,12 +4,19 @@ import API from "../repository";
 import { convertObToUrl } from "utils";
 
 // Khai báo chính xác kiểu trả về nếu biết
-import { ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse } from "typings/pcm";
+import { ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload } from "typings/pcm";
 
 // Đường dẫn Endpoint
 const pcmURL = "/api/subject_pcm";
 
 const PcmRepository = {
+    async sendMailDetailTask(payload: SendMailTaskPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_tasks/send-email-to-member-in-task`, payload
+        );
+        return data;
+    },
+
     // Data 1
     async listTasks(payload: ListTasksPayload): Promise<ListTasksResponse> {
         const { data } = await API.get<ListTasksResponse>(
@@ -40,7 +47,6 @@ const PcmRepository = {
 
     // insert pcm_plan_group
     async insertPcmPlanGroup(payload: any): Promise<any> {
-        console.log({ payload });
         const { data } = await API.post<any>(
             `${pcmURL}/pcm_plan_groups`, payload
         );
