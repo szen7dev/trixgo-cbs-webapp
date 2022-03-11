@@ -225,7 +225,6 @@ export const useCheckPerAccessApp = (payload: { appID: string }): UseCheckPermis
 
   let hasPermission = true;
   if (isSuccess && data?.data?.keyError == 'permission_denied') {
-
     hasPermission = false;
   }
   // console.log("check-permissions-access-app", data);

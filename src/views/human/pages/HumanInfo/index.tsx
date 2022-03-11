@@ -24,11 +24,12 @@ import {NewHumanModal} from "views/human/shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";
+import { APP_ID } from "apis/localdb";
 
 /*=====6.HOOKS/APIS=====*/
 import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
 
 /*=====7.OTHER=====*/
 
@@ -42,8 +43,9 @@ export const HumanInfo: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
+  const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
-  useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption))
+  useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
   const handleFinishForm = useCallback(
@@ -142,15 +144,31 @@ export const HumanInfo: FC = () => {
     [handleFinishForm, openModal]
   );
 
-  useEffect(() => {
-    if(!user || !Object.keys(detailHuman).length) return;
-    // console.log({ user, detailHuman, check: !detailHuman.department?.members?.includes(user._id) })
+  // useEffect(() => {
+  //   if (!isSuccessApp) return;
+    
+  //   if(dataUserAccess)
 
-    if(!detailHuman.department?.members?.includes(user._id)) {
+  //   if (isSuccessApp && !hasPermission) {
+	// 		toast.error("Bạn không có quyền truy cập tính năng này!");
+	// 		// history.push("/");
+	// 	};
+  // }, [dataUserAccess])
+
+  useEffect(() => {
+    if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
+    console.log({ 
+      user, 
+      detailHuman, 
+      level: dataUserAccess?.level, 
+      check: !detailHuman.department?.members?.includes(user._id)
+    })
+
+    if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
       history.push('/human/home');
       toast.error('Bạn không có quyền xem thông tin người dùng này');
     }
-  }, [detailHuman])
+  }, [detailHuman, dataUserAccess])
 
   if (loading) {
     return <Loader className="border-primary" />;

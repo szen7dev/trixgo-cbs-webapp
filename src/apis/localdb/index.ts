@@ -605,5 +605,8 @@ export const APP_ID = {
             pcm: "621dd33d5fd4c85f7c36d008",
             task: ""
         }
+    },
+    HUMAN: {
+        id: "61e049c9fdebf77b072d1b13",
     }
 };
