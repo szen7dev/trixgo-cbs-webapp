@@ -153,7 +153,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onRemoveConversation = (data: any) => {
         if (!data) return;
-        dispatch(deleteConversationAction({conversationId: data?.infoConversation?._id}))
+        dispatch(deleteConversationAction({conversationId: data?.data?._id}))
     }
 
     return null;
