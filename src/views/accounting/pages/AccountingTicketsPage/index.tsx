@@ -19,6 +19,7 @@ import { NavLink } from "react-router-dom";
 import TriangleDown from "assets/icons/TriangleDown";
 
 import { Popover } from "shareComponents/common";
+import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -29,6 +30,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
   const accountingVoucher = UseAccountingVoucherList(pageParam, type);
+	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
   const { updateAccountingVoucherMutateAsync } = useUpdateAccountingVoucherMutation();
@@ -151,86 +153,91 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
           <img alt={"Icon"} src={ThreeDotsVertical} />
         </button>
       </div>
-      <div className={"financial-cashflow-table"}>
-        <div className={"relative table border-collapse w-full"}>
-          <div className={"header flex table-row sticky z-10"}>
-            <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-              <div className={"flex items-center"}>
-                <input className="form-check-input mr-2" type="checkbox" value="" id="flexCheckDefault" />
-                <TriangleDown />
-              </div>
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12 text-gray-500"}>
-              Nội dung
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Ngày chứng từ
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Loại phiếu
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Số hiệu
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Mã khách
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Hợp đồng
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Giá trị/Thành tiền
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-              Ghi chú
-            </div>
-            <div className={"px-2 py-4 table-cell box-border border-b align-middle text-gray-500"}>
-            </div>
-          </div>
-          {accountingVoucher?.listAccountingVoucher?.map((item: any) => {
-            return (
-              <div key={item._id} className={"body-table row flex table-row"}>
-                <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
-                  <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b align-middle w-2/12"}>
-                  <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
-                    <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal" >
-                      <p className="text-2-line-clamp">{`${item.name}`}</p>
-                    </Popover>
-                  </NavLink>
-
-                  <p className={"mt-1 text-gray-500"}>{item.userCreate.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {VOUCHER_TYPES.find(element => element.value === item.type)?.text}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {item.sign}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {item.customer.name}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {item.contract?.name}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {formatNumberMoney(item.amount)}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  {item.note}
-                </div>
-                <div className={"px-2 py-4 table-cell box-border border-b"}>
-                  <ActionAccountingGroup data={item} handleAction={handleAction} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
+			<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
+				<thead className="">
+					<tr className="text-primary-gray whitespace-nowrap align-middle text-left relative z-1">
+						<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
+							<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
+							<button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
+								<TriangleDown className='inline-block' />
+							</button>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<span className="pl-2 border-l border-cbs-border">
+								Nội dung
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<span className="pl-2 border-l border-cbs-border">
+								Ngày chứng từ
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<span className="pl-2 border-l border-cbs-border">
+								Loại phiếu
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+							<span className="pl-2 border-l border-cbs-border">
+								Số hiệu
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<span className="pl-2 border-l border-cbs-border">
+								Mã khách
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<span className="pl-2 border-l border-cbs-border">
+								Hợp đồng
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<span className="pl-2 border-l border-cbs-border">
+								Giá trị/Thành tiền
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ minWidth: "150px" }}>
+							<span className="pl-2 border-l border-cbs-border">
+								Ghi chú
+							</span>
+						</th>
+						<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-min px-2">
+						</th>
+					</tr>
+				</thead>
+				<tbody className="text-small">
+					{
+						accountingVoucher?.listAccountingVoucher?.map((item: any) => {
+							return (
+								<tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+									<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
+										<input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
+									</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '250px' }}>
+										<NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
+											<Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal" >
+												<p className="text-2-line-clamp">{`${item.name}`}</p>
+											</Popover>
+										</NavLink>
+										<p className={"mt-1 text-gray-500"}>{item.userCreate.fullname} {moment(item.createAt).isValid() && moment(item.createAt).format(DATE_FORMAT_TIME)}</p>
+									</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{VOUCHER_TYPES.find(element => element.value === item.type)?.text}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.sign}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.customer.name}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
+									<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
+									<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border">
+										<ActionAccountingGroup data={item} handleAction={handleAction} />
+									</td>
+								</tr>
+							)
+						})
+					}
+				</tbody>
+			</table>
       <Paginate
         totalPages={accountingVoucher.totalPage}
         totalRecord={accountingVoucher.totalRecord} hasNextPage

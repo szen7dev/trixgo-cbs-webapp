@@ -1,7 +1,8 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import debounce from "lodash/debounce";
 
 import { ModalContext } from "views/document/contexts/modal";
 
@@ -19,11 +20,11 @@ import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartm
 
 export const DocumentHomePage: FC = () => {
   const { toggleModal } = useContext(ModalContext);
+  const [keyword, setKeyword] = useState("");
 
   const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
-    useQueryListDepartmentsIsMember({ isFetch: true });
+  useQueryListDepartmentsIsMember({ keyword, isFetch: true });
 
-  console.log({ listDepartments })
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
       {/* Header */}
@@ -32,7 +33,7 @@ export const DocumentHomePage: FC = () => {
           <span className="text-x-large mr-7 text-black">Danh sách</span>
           <SearchInput
             classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
-            onChange={() => 1}
+            onChange={debounce((event: any) => setKeyword(event.target.value), 500)}
           />
           <DropdownFilterButton />
         </div>
