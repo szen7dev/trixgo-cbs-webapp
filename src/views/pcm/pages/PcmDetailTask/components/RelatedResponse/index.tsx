@@ -271,7 +271,7 @@ const Response: FC<Props> = ({ task }) => {
     setUploadFile(files);
     setIsUpload(true);
 
-    const filesLength = Object.entries(images).length + Object.entries(files).length;
+    // const filesLength = Object.entries(images).length + Object.entries(files).length;
 
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
@@ -287,7 +287,7 @@ const Response: FC<Props> = ({ task }) => {
           },
         })
 
-        console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
+        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
         // if(queue.tasksDone.length === Object.entries(images).length) {
         //   setIsUpload(false);
         // }
@@ -310,7 +310,7 @@ const Response: FC<Props> = ({ task }) => {
           }
         })
 
-        console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
+        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
         // if(queue.tasksDone.length === Object.entries(files).length) {
         //   setIsUpload(false);
         // }
