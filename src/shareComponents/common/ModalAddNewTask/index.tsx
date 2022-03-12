@@ -471,8 +471,8 @@ export const ModalAddNewTask: FC = () => {
                     <div className={"w-1/4 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn</div>
                       <DayPickerInput
-                        value={values.expiredTime && moment(values.expiredTime).format("DD-MM-YYYY")}
-                        onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("DD-MM-YYYY"))}
+                        value={values.expiredTime && moment(values.expiredTime).format("MM/DD/YYYY")}
+                        onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Thời hạn",
