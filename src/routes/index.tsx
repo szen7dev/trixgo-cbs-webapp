@@ -11,6 +11,7 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
+import Policy from "views/authentication/Policy";
 
 // import { Loader } from "shareComponents/common";
 
@@ -51,151 +52,158 @@ const Routes: FC = () => {
 
     return (
         <React.Suspense fallback={<div className="fixed inset-0 flex justify-center items-center">
-					<span className="cbs-clock">
-					</span>
-				</div>}>
+            <span className="cbs-clock">
+            </span>
+        </div>}>
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>
                         {/*<DeleteConfirmProvider>*/}
                         {/*    <ChatProvider>*/}
-                                <ModalProvider>
-                                    <Switch>
+                        <ModalProvider>
+                            <Switch>
 
-                                        {/* =====HOME===== */}
-                                        <Route exact path="/">
-                                            <PcmRouter />
-                                        </Route>
+                                {/* =====HOME===== */}
+                                <Route exact path="/">
+                                    <PcmRouter />
+                                </Route>
 
-                                        {/* =====AUTHENTICATION===== */}
-                                        <Route path="/authentication/:path?">
-                                            <AuthenticationRouter />
-                                        </Route>
+                                {/* =====AUTHENTICATION===== */}
+                                <Route path="/authentication/:path?">
+                                    <AuthenticationRouter />
+                                </Route>
 
-                                        {/* =====ACCOUNTING===== */}
-                                        <Route path="/accounting">
-                                            <AccountingLayout>
-                                                <AccountingRouter />
-                                            </AccountingLayout>
-                                        </Route>
+                                {/* =====ACCOUNTING===== */}
+                                <Route path="/accounting">
+                                    <AccountingLayout>
+                                        <AccountingRouter />
+                                    </AccountingLayout>
+                                </Route>
 
-                                        {/* =====BIDDING===== */}
-                                        <Route path="/bidding">
-                                            <BiddingRouter />
-                                        </Route>
+                                {/* =====BIDDING===== */}
+                                <Route path="/bidding">
+                                    <BiddingRouter />
+                                </Route>
 
-                                        {/* =====CMCS===== */}
-                                        <Route path="/cmcs">
-                                            <CmcsRouter />
-                                        </Route>
+                                {/* =====CMCS===== */}
+                                <Route path="/cmcs">
+                                    <CmcsRouter />
+                                </Route>
 
-                                        {/* =====DATHUB===== */}
-                                        <Route path="/datahub">
-                                            <DatahubRouter />
-                                        </Route>
+                                {/* =====DATHUB===== */}
+                                <Route path="/datahub">
+                                    <DatahubRouter />
+                                </Route>
 
-                                        {/* =====DOCUMENT===== */}
-                                        <Route path="/document">
-                                            <DocumentLayout>
-                                                <DocumentRouter />
-                                            </DocumentLayout>
-                                        </Route>
+                                {/* =====DOCUMENT===== */}
+                                <Route path="/document">
+                                    <DocumentLayout>
+                                        <DocumentRouter />
+                                    </DocumentLayout>
+                                </Route>
 
-                                        {/* =====PCM===== */}
-                                        <Route path="/pcm">
-                                            <PcmRouter />
-                                        </Route>
+                                {/* =====PCM===== */}
+                                <Route path="/pcm">
+                                    <PcmRouter />
+                                </Route>
 
-                                        {/* =====PPT===== */}
-                                        <Route
-                                            path='/ppt'
-                                            component={PPTRouter}
-                                        />
+                                {/* =====PPT===== */}
+                                <Route
+                                    path='/ppt'
+                                    component={PPTRouter}
+                                />
 
-                                        {/* =====FINANCIAL===== */}
-                                        <Route path="/financial">
-                                            <FinancialRouter />
-                                        </Route>
+                                {/* =====FINANCIAL===== */}
+                                <Route path="/financial">
+                                    <FinancialRouter />
+                                </Route>
 
-                                        {/* =====HUMAN===== */}
-                                        <Route path="/human">
-                                            <HumanLayout>
-                                                <HumanRouter />
-                                            </HumanLayout>
-                                        </Route>
+                                {/* =====HUMAN===== */}
+                                <Route path="/human">
+                                    <HumanLayout>
+                                        <HumanRouter />
+                                    </HumanLayout>
+                                </Route>
 
-                                        {/* =====MARKET===== */}
-                                        <Route path="/market">
-                                            <MarketRouter />
-                                        </Route>
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouter />
+                                </Route>
 
-                                        {/* =====MEDIA===== */}
-                                        <Route path="/media">
-                                            <HomeLayout>
-                                                <MediaRouter />
-                                            </HomeLayout>
-                                        </Route>
+                                {/* =====MEDIA===== */}
+                                <Route path="/media">
+                                    <HomeLayout>
+                                        <MediaRouter />
+                                    </HomeLayout>
+                                </Route>
 
-                                        {/* =====MARKET===== */}
-                                        <Route path="/market">
-                                            <MarketRouter />
-                                        </Route>
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouter />
+                                </Route>
 
-                                        {/* =====OPERATION===== */}
-                                        <Route path="/operation">
-                                            <OperationRouter />
-                                        </Route>
+                                {/* =====OPERATION===== */}
+                                <Route path="/operation">
+                                    <OperationRouter />
+                                </Route>
 
-                                        {/* =====OWNER===== */}
-                                        <Route path="/owner">
-                                            <OwnerRouter />
-                                        </Route>
+                                {/* =====OWNER===== */}
+                                <Route path="/owner">
+                                    <OwnerRouter />
+                                </Route>
 
-                                        {/* =====PERSONAL===== */}
-                                        <Route path="/personal">
-                                            <PersonalRouter />
-                                        </Route>
+                                {/* =====PERSONAL===== */}
+                                <Route path="/personal">
+                                    <PersonalRouter />
+                                </Route>
 
-                                        {/* =====QRCODE===== */}
-                                        <Route path="/qrcode">
-                                            <QrcodeRouter />
-                                        </Route>
+                                {/* =====QRCODE===== */}
+                                <Route path="/qrcode">
+                                    <QrcodeRouter />
+                                </Route>
 
-                                        {/* =====REE===== */}
-                                        <Route path="/ree">
-                                            <ReeRouter />
-                                        </Route>
+                                {/* =====REE===== */}
+                                <Route path="/ree">
+                                    <ReeRouter />
+                                </Route>
 
-                                        {/* =====SUPPORT===== */}
-                                        <Route path="/support">
-                                            <SupportRouter />
-                                        </Route>
+                                {/* =====SUPPORT===== */}
+                                <Route path="/support">
+                                    <SupportRouter />
+                                </Route>
 
-                                        {/* =====WORKSHOP===== */}
-                                        <Route path="/workshop">
-                                            <WorkshopRouter />
-                                        </Route>
+                                {/* =====WORKSHOP===== */}
+                                <Route path="/workshop">
+                                    <WorkshopRouter />
+                                </Route>
 
-                                        {/* =====MESSAGES===== */}
-                                        <Route path="/messages">
-                                            <MessagesRouter />
-                                        </Route>
+                                {/* =====MESSAGES===== */}
+                                <Route path="/messages">
+                                    <MessagesRouter />
+                                </Route>
 
-                                        {/* =====TIMESHEET===== */}
-                                        <Route path="/timesheet">
-                                            <TimesheetRouter />
-                                        </Route>
+                                {/* =====TIMESHEET===== */}
+                                <Route path="/timesheet">
+                                    <TimesheetRouter />
+                                </Route>
 
-                                        {/* =====OTHER===== */}
-                                        <Route path="*">
-                                            <FullPageLayout>
-                                                <Route path="/*" component={ErrorPage} />
-                                            </FullPageLayout>
-                                        </Route>
+                                {/* =====POLICY===== */}
+                                <Route
+                                    exact
+                                    path="/policy"
+                                    component={Policy}
+                                />
 
-                                    </Switch>
-                                </ModalProvider>
-                            {/*</ChatProvider>*/}
+                                {/* =====OTHER===== */}
+                                <Route path="*">
+                                    <FullPageLayout>
+                                        <Route path="/*" component={ErrorPage} />
+                                    </FullPageLayout>
+                                </Route>
+
+                            </Switch>
+                        </ModalProvider>
+                        {/*</ChatProvider>*/}
                         {/*</DeleteConfirmProvider>*/}
                     </RightClickMenuProvider>
                 </AuthProvider>
