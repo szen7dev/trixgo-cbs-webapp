@@ -269,7 +269,7 @@ const Response: FC<Props> = ({ task }) => {
 
     setUploadImage(images);
     setUploadFile(files);
-    setIsUpload(true);
+    // setIsUpload(true);
 
     // const filesLength = Object.entries(images).length + Object.entries(files).length;
 
