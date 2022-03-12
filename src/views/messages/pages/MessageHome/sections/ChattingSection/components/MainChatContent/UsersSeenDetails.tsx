@@ -59,7 +59,7 @@ export const UsersSeenDetail:FC = () => {
                                     <Close/>
                                 </button>
                             </div>
-                            <div className={"max-h-500px overflow-auto pb-4"}>
+                            <div className={"max-h-[500px] overflow-auto pb-4"}>
                                 {
                                     _map(usersSeen, user => (
                                         <div

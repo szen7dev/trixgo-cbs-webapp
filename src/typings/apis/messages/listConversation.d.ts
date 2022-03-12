@@ -356,3 +356,15 @@ export type DeleteConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type ListReactionMessagePayload = {
+    messageID: string;
+    select?: string;
+    populates?: string;
+    lastestID?: string;
+}
+export type ListReactionMessageResponse = {
+    data: any;
+    error: boolean;
+    status: number;
+}
