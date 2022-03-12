@@ -109,7 +109,7 @@ export const ListTable: FC<Props> = ({
                 {`${taskOutDate.project.sign}.${taskOutDate.name}`}
               </td>
               <td className="p-2 border">
-                {moment(taskOutDate.expiredTime).format("DD/MM/YYYY")}
+                {moment(taskOutDate.actualFinishTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
                 <Executor color="bg-red-500" assignee={taskOutDate.assignee} />
@@ -163,7 +163,7 @@ export const ListTable: FC<Props> = ({
                 {`${tasksNexWeek.project?.sign}.${tasksNexWeek.name}`}
               </td>
               <td className="p-2 border">
-                {moment(tasksNexWeek.expiredTime).format("DD/MM/YYYY")}
+                {moment(tasksNexWeek.actualFinishTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
                 <Executor
@@ -222,7 +222,7 @@ export const ListTable: FC<Props> = ({
                 {`${taskMoreThanSevenDay.project?.sign}.${taskMoreThanSevenDay.name}`}
               </td>
               <td className="p-2 border">
-                {moment(taskMoreThanSevenDay.expiredTime).format("DD/MM/YYYY")}
+                {moment(taskMoreThanSevenDay.actualFinishTime).format("DD/MM/YYYY")}
               </td>
               <td className="p-2 border">
                 <Executor
