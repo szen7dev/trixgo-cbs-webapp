@@ -14,7 +14,7 @@ const Update: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => {
   const {   
     updatePcmPlanGroupMutateAsync,
     refetch
-  } = usePcmPlanGroup({ projectID, keyword }, false, false);
+  } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword }, false, false);
 
   const onUpdate = async () => {
     closeModal();

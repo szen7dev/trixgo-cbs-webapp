@@ -8,7 +8,8 @@ export type ListTaskPayload = {
   populates?: string;
   select?: string;
   type?: numer;
-  typeStatus?: number;
+  typeStatus?: string;
+  statusNe?: string,
 };
 
 export type Assignee = User;
