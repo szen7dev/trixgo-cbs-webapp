@@ -76,7 +76,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
 						<div>
-							<p className="text-[14px]">{response.author?.bizfullname}</p>
+							<p className="text-[14px] font-bold">{response.author?.bizfullname}</p>
 							{expanded && (
 								<p className="text-[13px] text-primary-gray pb-5">
 									{response.author?.position?.name}
@@ -87,9 +87,9 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							<span className="text-[13px] text-primary-gray">
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
-							<input type="checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
+							<input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
 							<button
-								className={`${expanded ? "h-10 bg-lighter-gray" : "pl-3"
+								className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
 									} text-[13px] w-10 flex justify-center items-center rounded-full`}
 							>
 								<DotsVerticalIcon />
@@ -120,7 +120,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">
-														<span className="w-5/6 break-all">
+														<span className="w-5/6 break-all text-cbs-highlight-color">
 															{file.nameOrg}
 														</span>
 														<div className="w-1/6 flex justify-end">
