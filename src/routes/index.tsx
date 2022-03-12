@@ -14,7 +14,6 @@ import { FullPageLayout } from "shareComponents/layouts";
 import Policy from "views/authentication/Policy";
 
 // import { Loader } from "shareComponents/common";
-
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
