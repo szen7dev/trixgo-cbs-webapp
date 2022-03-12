@@ -19,7 +19,7 @@ export const ReactionActions:FC<Props> = ({message, context}) => {
                         <button
                             key={emoji.id}
                             onClick={() => {
-                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
+                                socket.emit('CHATTING_CSS_REACTION_MESSAGE', { messageID: message._id, typeReaction: emoji.value });
                             }}
                             className={"emoji-item px-[5px] py-[2px]"}>
                             <img className={"w-[20px] h-[20px]"} src={emoji.icon} alt={"-----"}/>
@@ -29,7 +29,7 @@ export const ReactionActions:FC<Props> = ({message, context}) => {
             </div>
             <button
                 onClick={() => {
-                    socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: listEmoji[0].value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
+                    socket.emit('CHATTING_CSS_REACTION_MESSAGE', { messageID: message._id, typeReaction: listEmoji[0].value });
                 }}
                 className={"emoji-item px-[5px] py-[2px]"}>
                 <img className={"w-[20px] h-[20px]"} src={listEmoji[0].icon} alt={"-----"}/>

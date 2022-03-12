@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from "react";
+import {FC, useContext, useEffect} from "react";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
@@ -123,12 +123,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     }
 
     const onReceiveReactionMessage = (data: any) => {
-        if (!data) return;
+        if (!data || data.error) return;
+        const { _id: messageID, conversation } = data?.data;
+
         dispatch(updateNewMessageToConversation({
-            conversationId: data?.data?.conversation?._id,
-            newMessageId: data?.data?._id,
-            oldMessageId: data?.data?._id,
-            messageData: {...data?.data, conversation: data?.data?.conversation?._id}
+            conversationId: conversation?._id,
+            newMessageId: messageID,
+            oldMessageId: messageID,
+            messageData: {...data?.data, conversation: conversation?._id}
         }));
     }
 
