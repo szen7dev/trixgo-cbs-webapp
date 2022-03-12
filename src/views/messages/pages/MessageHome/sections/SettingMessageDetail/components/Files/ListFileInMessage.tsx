@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from "react";
+import React, {FC, useCallback, useContext, useEffect} from "react";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import {DropdownSearchable} from "shareComponents/common/DropdownSearchable";
 import WordIcon from "assets/images/CBS-Word-Icon.svg";
@@ -12,17 +12,50 @@ import {MessageContext} from "../../../../index";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {UseInformationMessage} from "../../../../../../../../services/hooks/messages/useInformationMessage";
+import {ItemFileMessage} from "../../../../../../../../typings/apis/messages/listConversation";
+import moment from "moment";
 
 type Props = {
     isActive: boolean
 }
 export const ListFileInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
-    const {getListMediasOfConversation} = UseListConversation();
-    useEffect(() => {
-        getListMediasOfConversation({conversationID: currentChat, typeMessage: 2})
-    },[currentChat]);
-    const listFileInMessage = useSelector((state: RootState) => state.listMessage.data.listFiles[currentChat]);
+    const params = {conversationID: currentChat, type: 2};
+    const {listFilesMessage, hasListFilesNextPage, nextPageListFiles} = UseInformationMessage(params, isActive, "files");
+
+    const groupByDate = useCallback(() : {
+        dateFormat: string,
+        files: ItemFileMessage[]
+    }[] => {
+        const group : {[key: string]: ItemFileMessage[]} = {};
+        if (!listFilesMessage) return [];
+        listFilesMessage.forEach(media => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")] = [];
+        });
+        listFilesMessage.forEach((media, index) => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")].push({...media, index});
+        })
+
+        const listAfterGroup: {
+            dateFormat: string,
+            files: ItemFileMessage[]
+        }[] = [];
+        Object.keys(group).forEach(key => {
+            listAfterGroup.push({
+                dateFormat: key,
+                files: group[key]
+            })
+        })
+        return listAfterGroup;
+    }, [listFilesMessage])
+
     return (
         <div className={"bg-white flex-1"}>
             <div className={"sticky bg-white top-110px w-full z-10 flex items-center p-[10px]"}>
@@ -68,8 +101,8 @@ export const ListFileInMessage:FC<Props> = ({isActive}) => {
             </div>
             <div className={"h-full"}>
                 {
-                    _map(listFileInMessage, file => (
-                        <ItemFileInMessage key={file._id} file={file}/>
+                    _map(groupByDate(), file => (
+                        <ItemFileInMessage key={file.dateFormat} file={file}/>
                     ))
                 }
             </div>

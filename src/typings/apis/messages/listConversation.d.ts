@@ -443,6 +443,7 @@ export type ItemLinkMessage = {
     createdAt: string,
     updatedAt: string,
     __v: number
+    [key: string]: any
 }
 
 export type ListLinksMessageData = {

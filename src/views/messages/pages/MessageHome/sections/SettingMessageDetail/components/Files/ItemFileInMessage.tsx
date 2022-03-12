@@ -4,11 +4,14 @@ import WordIcon from "assets/images/CBS-Word-Icon.svg";
 import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
 import OtherIcon from "assets/images/CBS-Other-Icon.svg";
 
-import {ItemMediaOfConversation} from "typings/apis/messages/listConversation";
+import {ItemFileMessage, ItemMediaOfConversation} from "typings/apis/messages/listConversation";
 import {map as _map} from "lodash";
 import SampleImage from "assets/images/icons8-image-256.svg";
 type Props = {
-    file: ItemMediaOfConversation
+    file: {
+        dateFormat: string,
+        files: ItemFileMessage[]
+    }
 }
 export const ItemFileInMessage:FC<Props> = ({file}) => {
     const renderFileTypeImage = (filename: string) => {
@@ -45,9 +48,9 @@ export const ItemFileInMessage:FC<Props> = ({file}) => {
 
     return (
         <div className={"mb-3"}>
-            <div className={"px-[10px] py-[15px] font-bold"}>{file.dataFormat}</div>
+            <div className={"px-[10px] py-[15px] font-bold"}>{file.dateFormat}</div>
             {
-                _map(file.messages, f => (
+                _map(file.files, f => (
                     <div key={f._id} className={"flex media-item-message py-[10px] px-[21px] relative hover:bg-gray-200"}>
                         {renderFileTypeImage(f.name)}
                         <div className={"flex-1 ml-2"}>
