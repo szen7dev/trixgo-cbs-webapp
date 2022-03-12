@@ -9,9 +9,10 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 
 type Props = {
     chat: ItemListConversation;
+    isActive: boolean
 }
 
-export const ListOnlineUserInMessage:FC<Props> = ({chat}) => {
+export const ListOnlineUserInMessage:FC<Props> = ({chat, isActive}) => {
     const {currentChat} = useContext(MessageContext);
     const {getListMembersOfConversation} = UseListConversation();
     useEffect(() => {

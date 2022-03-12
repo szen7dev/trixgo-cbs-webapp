@@ -1,19 +1,17 @@
 import {useInfiniteQuery} from "react-query";
-import ListConversationRepository from "apis/messages";
-import {ItemListConversation} from "typings/apis/messages/listConversation";
-import ReactionMessageRepository from "../../../apis/messages/reactionMessage";
+import ReactionMessageRepository from "apis/messages/reactionMessage";
 
-type UseConversationType = {
+type UseReactionMessageType = {
     isLoadingListReaction: boolean,
     refetchListReaction: () => void,
-    listReactionsMessage: Array<ItemListConversation>,
+    listReactionsMessage: Array<any>,
     nextPageListReaction: () => void,
     prevPageListReaction: () => void,
     hasListReactionNextPage: boolean | undefined,
     totalRecordRequest: number | undefined,
 }
 
-export const UseReactMessage = (params: any, enableQuery: boolean) : UseConversationType => {
+export const UseReactMessage = (params: any, enableQuery: boolean) : UseReactionMessageType => {
 
     const {
         isLoading: isLoadingListReaction,

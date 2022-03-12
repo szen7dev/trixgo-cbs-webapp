@@ -13,7 +13,10 @@ import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {ItemLinkInMessage} from "./ItemLinkInMessage";
 
-export const ListLinksInMessage:FC = () => {
+type Props = {
+    isActive: boolean
+}
+export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
     const {getListMediasOfConversation} = UseListConversation();
     useEffect(() => {

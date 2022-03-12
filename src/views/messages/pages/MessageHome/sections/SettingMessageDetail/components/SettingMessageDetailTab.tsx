@@ -67,19 +67,19 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
             </div>
             {
                 activeTab==="members" &&
-                <ListOnlineUserInMessage chat={chat}/>
+                <ListOnlineUserInMessage isActive={activeTab==="members"} chat={chat}/>
             }
             {
                 activeTab==="media" &&
-                <ListMediaInMessage/>
+                <ListMediaInMessage isActive={activeTab==="media"}/>
             }
             {
                 activeTab==="files" &&
-                <ListFileInMessage/>
+                <ListFileInMessage isActive={activeTab==="files"}/>
             }
             {
                 activeTab==="links"&&
-                <ListLinksInMessage/>
+                <ListLinksInMessage isActive={activeTab==="links"}/>
             }
             {
                 activeTab==="groups"&&

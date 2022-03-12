@@ -13,7 +13,10 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 
-export const ListFileInMessage:FC = () => {
+type Props = {
+    isActive: boolean
+}
+export const ListFileInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
     const {getListMediasOfConversation} = UseListConversation();
     useEffect(() => {
