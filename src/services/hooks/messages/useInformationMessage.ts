@@ -3,8 +3,8 @@ import ListConversationRepository from "apis/messages";
 import {
     ItemFileMessage,
     ItemLinkMessage,
-    ItemListConversation,
-    ListFileMessagePayload, ListLinksMessagePayload
+    ItemListConversation, ItemMemberMessage,
+    ListFileMessagePayload, ListLinksMessagePayload, ListMembersMessagePayload
 } from "typings/apis/messages/listConversation";
 import ReactionMessageRepository from "../../../apis/messages/reactionMessage";
 import InformationMessageRepository from "../../../apis/messages/informationMessage";
@@ -25,9 +25,17 @@ type UseInformationMessageType = {
     prevPageListLinks: () => void,
     hasListLinksNextPage: boolean | undefined,
     totalRecordRequestLinks: number | undefined,
+
+    isLoadingListMembers: boolean,
+    refetchListMembers: () => void,
+    listMembersMessage: Array<ItemMemberMessage>,
+    nextPageListMembers: () => void,
+    prevPageListMembers: () => void,
+    hasListMembersNextPage: boolean | undefined,
+    totalRecordRequestMembers: number | undefined,
 }
 
-export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMessagePayload, enableQuery: boolean, type: string) : UseInformationMessageType => {
+export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMessagePayload|ListMembersMessagePayload, enableQuery: boolean, type: string) : UseInformationMessageType => {
 
     const {
         isLoading: isLoadingListFiles,
@@ -81,6 +89,32 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
     const listLinksMessage = [].concat(...(listLinksFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecordRequestLinks = listLinksFromAPI?.pages[0]?.data?.totalRecord;
 
+    const {
+        isLoading: isLoadingListMembers,
+        refetch: refetchListMembers,
+        data: listMembersFromAPI, // dataListContracts
+        fetchNextPage: nextPageListMembers,
+        fetchPreviousPage: prevPageListMembers,
+        hasNextPage: hasListMembersNextPage
+    } =
+        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+            [`list_members_message_${params.conversationID}`, params], // Key để phân biệt vùng tác động bởi data thay đổi
+            async ({pageParam} : any) =>
+                InformationMessageRepository.getListMembersMessage({
+                    lastestID: pageParam||"",
+                    ...params
+                }),
+            {
+                getNextPageParam: ({data} : any) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: enableQuery&&type==="members", // https://react-query.tanstack.com/guides/disabling-queries
+            }
+        );
+    const listMembersMessage = [].concat(...(listMembersFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecordRequestMembers = listMembersFromAPI?.pages[0]?.data?.totalRecord;
+
     return {
         listFilesMessage,
         totalRecordRequest,
@@ -97,5 +131,13 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
         prevPageListLinks,
         hasListLinksNextPage,
         totalRecordRequestLinks,
+
+        isLoadingListMembers,
+        refetchListMembers,
+        listMembersMessage,
+        nextPageListMembers,
+        prevPageListMembers,
+        hasListMembersNextPage,
+        totalRecordRequestMembers,
     }
 }

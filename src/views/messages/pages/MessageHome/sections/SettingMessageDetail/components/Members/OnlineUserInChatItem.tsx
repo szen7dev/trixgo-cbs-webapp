@@ -1,29 +1,34 @@
-import React, {FC, useContext} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import DotsHorizontalGrayIcon from "assets/icons/DotsHorizontalGray";
 import RemoveIcon from "assets/images/icons8-remove-100.svg";
 import AddAdminIcon from "assets/images/icons8-admin-settings-male-96.svg";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {ItemMemberMessage} from "typings/apis/messages/listConversation";
+import moment from "moment";
 
 type Props = {
-    user: any,
+    user: ItemMemberMessage,
     index: number
 }
 export const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
+    const isOnline = useCallback(() => {
+        return !user.timeLastSeen||(moment().toDate().getTime() - user.timeLastSeen <= 24)
+    }, [user])
     return (
         <div
             className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>
             <img
                 onClick={() => handleStartPrivateChat(user._id)}
                 className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
-                src={`${process.env.REACT_APP_URL_S3_USER}/${user.image}`} alt={user.bizfullname||user.fullname}/>
+                src={`${process.env.REACT_APP_URL_S3_USER}/${user?.member?.image}`} alt={user?.member?.bizfullname}/>
             <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                 <span
                     onClick={() => handleStartPrivateChat(user._id)}
                     className={"font-bold"}>
-                    {user.bizfullname||user.fullname}
+                    {user?.member?.bizfullname}
                 </span>
-                <span className={"truncate "+(user.status===1?"text-primary":"text-gray-400")}>{user.status===1?"online":"offline"}</span>
+                <span className={"truncate text-xs "+(isOnline()?"text-primary":"text-gray-400")}>{isOnline()?"online":moment(user.timeLastSeen).fromNow()}</span>
             </div>
             <div
                 className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>

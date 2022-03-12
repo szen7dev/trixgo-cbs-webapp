@@ -458,3 +458,46 @@ export type ListLinksMessageResponse = {
     error: boolean;
     status: number;
 }
+
+export type ListMembersMessagePayload = {
+    conversationID: string;
+    lastestID?: string;
+    type?: owner|admin|member;
+    select?: string;
+    populates?: string;
+    limit?: number;
+    [key: string]: any
+}
+
+export type ItemMemberMessage = {
+    _id: string,
+    member: {
+        _id: string,
+        image: string,
+        bizfullname: string
+        [key: string]: any
+    },
+    conversation: string,
+    addedBy: {
+        _id: string,
+        image: string,
+        bizfullname: string
+        [key: string]: any
+    },
+    type: string,
+    timeLastSeen: number
+    [key: string]: any
+}
+
+export type ListMembersMessageData = {
+    listRecords: ItemMemberMessage[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string|null
+}
+
+export type ListMembersMessageResponse = {
+    data: ListMembersMessageData;
+    error: boolean;
+    status: number;
+}

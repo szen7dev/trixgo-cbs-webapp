@@ -1,15 +1,10 @@
-import React, {FC, useCallback, useContext} from "react";
-import Close from "assets/icons/Close";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import BellIcon from "assets/images/icons8-bell-100.svg";
+import React, {FC, useContext} from "react";
 import AddUserToGroup from "assets/images/icons8-add-user-group-man-man-96.svg";
 import {SettingMessageDetailTab} from "./components";
 import {MessageContext} from "../../index";
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "redux/reducer";
-import {AvatarGroupChat} from "../MessageList";
 import {openAddUserToConversation} from "redux/reducer/messages/AddUserToConversation";
-import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {NotificationController} from "./components/Notification/NotificationController";
 import {BasicInformationConversation} from "./components/BasicInformation";
 
@@ -17,6 +12,8 @@ export const SettingMessageDetail:FC = () => {
     const {currentChat, showMenu} = useContext(MessageContext);
     const dispatch = useDispatch()
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
 
     if (!chat) return null
     return (
@@ -27,7 +24,7 @@ export const SettingMessageDetail:FC = () => {
                 <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab chat={chat}/>
             </div>
-            {!chat.isPrivate&&
+            {!chat.isPrivate&&(chat.authors.includes(profileId)||chat.author === profileId)&&
                 <button
                     onClick={() => dispatch(openAddUserToConversation({conversationId: currentChat}))}
                     className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>

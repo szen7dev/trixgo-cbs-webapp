@@ -6,6 +6,7 @@ import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 
 type Props = {
     chat: ItemListConversation;
@@ -14,22 +15,27 @@ type Props = {
 
 export const ListOnlineUserInMessage:FC<Props> = ({chat, isActive}) => {
     const {currentChat} = useContext(MessageContext);
-    const {getListMembersOfConversation} = UseListConversation();
-    useEffect(() => {
-        getListMembersOfConversation({conversationID: currentChat})
-    },[currentChat, chat.members.length])
 
-    const listUserInMessage = useSelector((state: RootState) => state.listMessage.data.listMembers[currentChat]);
+    const params = {conversationID: currentChat, type: "member", populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
+    const {listMembersMessage, hasListMembersNextPage, nextPageListMembers} = UseInformationMessage(params, isActive, "members");
 
     const renderListOnlineUser = useCallback(() => {
-        return  _map(listUserInMessage??[], (user,index) => (
+        return  _map(listMembersMessage, (user,index) => (
             <OnlineUserInChatItem key={user._id} user={user} index={index}/>
         ))
-    }, [listUserInMessage]);
+    }, [listMembersMessage]);
 
     return (
         <div className={"bg-white flex-1"}>
             {renderListOnlineUser()}
+            {
+                hasListMembersNextPage &&
+                <button
+                    onClick={() => nextPageListMembers()}
+                    className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
+                    Xem thêm
+                </button>
+            }
         </div>
     )
 }
