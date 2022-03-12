@@ -1,5 +1,6 @@
 import React, {createContext, FC, useCallback, useContext, useEffect, useState} from "react";
 import {map as _map} from "lodash";
+import {mapValues as _mapValues} from "lodash";
 import {DropdownSearchable,ModalFullContainer} from "shareComponents/common";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import WordIcon from 'assets/images/CBS-Word-Icon.svg';
@@ -9,57 +10,72 @@ import {ItemMediaInMessage} from "./ItemMediaInMessage";
 import {DatePickerWithRange} from "../../../../../../shareComponents/common/DatePickerWithRange";
 
 import {MessageContext} from "../../../../index";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useSelector} from "react-redux";
-import {RootState} from "redux/reducer";
 import {ViewImage} from "../../../ChattingSection";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
+import {ItemFileMessage} from "typings/apis/messages/listConversation";
+import moment from "moment";
 
-export const ListMediaInMessage:FC = () => {
+type Props = {
+    isActive: boolean
+}
+export const ListMediaInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
-    const {getListMediasOfConversation} = UseListConversation();
     const [modalShowImage, setModalShowImage] = useState<{ show: boolean, index: number }>({ show: false, index: 0 });
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
-    useEffect(() => {
-        getListMediasOfConversation({conversationID: currentChat, typeMessage: 1})
-    },[currentChat])
-    const listImageInMessage = useSelector((state: RootState) => state.listMessage.data.listImages[currentChat]);
+    const params = {conversationID: currentChat, type: 1};
+    const {listFilesMessage, hasListFilesNextPage, nextPageListFiles} = UseInformationMessage(params, isActive, "images");
+
+    const groupByDate = useCallback(() : {
+        dateFormat: string,
+        files: ItemFileMessage[]
+    }[] => {
+        const group : {[key: string]: ItemFileMessage[]} = {};
+        if (!listFilesMessage) return [];
+        listFilesMessage.forEach(media => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")] = [];
+        });
+        listFilesMessage.forEach((media, index) => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")].push({...media, index});
+        })
+
+        const listAfterGroup: {
+            dateFormat: string,
+            files: ItemFileMessage[]
+        }[] = [];
+        Object.keys(group).forEach(key => {
+            listAfterGroup.push({
+                dateFormat: key,
+                files: group[key]
+            })
+        })
+        return listAfterGroup;
+    }, [listFilesMessage])
 
     const listImages = useCallback(() => {
         const images : string[] = [];
-        if (!listImageInMessage) return images;
-        listImageInMessage.forEach(media => {
-            media.messages.forEach(image => {
-                if (!image) {
-                    return;
-                }
-                images.push(`${process.env.REACT_APP_URL_S3}${image?.path}`)
-            })
+        if (!listFilesMessage) return images;
+        listFilesMessage.forEach(media => {
+            if (!media) {
+                return;
+            }
+            images.push(`${process.env.REACT_APP_URL_S3}${media?.path}`)
         });
 
         return images;
-    },[listImageInMessage]);
+    },[listFilesMessage]);
 
-    const listIdsImage = useCallback(() => {
-        const images : string[] = [];
-        if (!listImageInMessage) return images;
-        listImageInMessage.forEach(media => {
-            media.messages.forEach(image => {
-                if (!image) {
-                    return;
-                }
-                images.push(image?._id)
-            })
-        });
-
-        return images;
-    },[listImageInMessage]);
-
-    const renderListMedia = useCallback(() => {
-        return _map(listImageInMessage??[], media => (
-            <ItemMediaInMessage key={media._id} media={media} listImages={listIdsImage()} setModalShowImage={setModalShowImage}/>
+    const renderListMedia = () => {
+        return _map(groupByDate(), media => (
+            <ItemMediaInMessage key={media.dateFormat} media={media} setModalShowImage={setModalShowImage}/>
         ))
-    }, [listImageInMessage]);
+    };
 
     return (
         <div className={"bg-white flex-1"}>
@@ -105,6 +121,14 @@ export const ListMediaInMessage:FC = () => {
                 <DatePickerWithRange/>
             </div>
             {renderListMedia()}
+            {
+                hasListFilesNextPage &&
+                <button
+                    onClick={() => nextPageListFiles()}
+                    className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
+                    Xem thêm
+                </button>
+            }
             <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                 <div className="flex overflow-hidden transition-all transform w-full h-full">
                     <ViewImage show={modalShowImage.show} toggle={closeModalImage} imageList={[...listImages()]} index={modalShowImage.index} />
