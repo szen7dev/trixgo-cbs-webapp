@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from "react";
+import React, {FC, useCallback, useContext, useEffect} from "react";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
 import {DropdownSearchable} from "shareComponents/common/DropdownSearchable";
 import WordIcon from "assets/images/CBS-Word-Icon.svg";
@@ -8,18 +8,50 @@ import {DatePickerWithRange} from "../../../../../../shareComponents/common/Date
 import {map as _map} from "lodash";
 
 import {MessageContext} from "../../../../index";
-import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useSelector} from "react-redux";
-import {RootState} from "redux/reducer";
 import {ItemLinkInMessage} from "./ItemLinkInMessage";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
+import {ItemLinkMessage} from "typings/apis/messages/listConversation";
+import moment from "moment";
 
-export const ListLinksInMessage:FC = () => {
+type Props = {
+    isActive: boolean
+}
+export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
-    const {getListMediasOfConversation} = UseListConversation();
-    useEffect(() => {
-        getListMediasOfConversation({conversationID: currentChat, typeMessage: 3})
-    },[currentChat]);
-    const listLinksInMessage = useSelector((state: RootState) => state.listMessage.data.listLinks[currentChat]);
+    const params = {conversationID: currentChat};
+    const {listLinksMessage, hasListLinksNextPage, nextPageListLinks} = UseInformationMessage(params, isActive, "links");
+
+    const groupByDate = useCallback(() : {
+        dateFormat: string,
+        links: ItemLinkMessage[]
+    }[] => {
+        const group : {[key: string]: ItemLinkMessage[]} = {};
+        if (!listLinksMessage) return [];
+        listLinksMessage.forEach(media => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")] = [];
+        });
+        listLinksMessage.forEach((media, index) => {
+            if (!media) {
+                return;
+            }
+            group[moment(media.createAt).format("DD/MM/YYYY")].push({...media, index});
+        })
+
+        const listAfterGroup: {
+            dateFormat: string,
+            links: ItemLinkMessage[]
+        }[] = [];
+        Object.keys(group).forEach(key => {
+            listAfterGroup.push({
+                dateFormat: key,
+                links: group[key]
+            })
+        })
+        return listAfterGroup;
+    }, [listLinksMessage])
 
     return (
         <div className={"bg-white flex-1"}>
@@ -66,9 +98,17 @@ export const ListLinksInMessage:FC = () => {
             </div>
             <div className={"h-full"}>
                 {
-                    _map(listLinksInMessage, link => (
-                        <ItemLinkInMessage key={link._id} link={link}/>
+                    _map(groupByDate(), link => (
+                        <ItemLinkInMessage key={link.dateFormat} link={link}/>
                     ))
+                }
+                {
+                    hasListLinksNextPage &&
+                    <button
+                        onClick={() => nextPageListLinks()}
+                        className={"rounded-lg w-full flex flex-col items-center py-[15px] px-[10px] justify-center text-primary font-semibold"}>
+                        Xem thêm
+                    </button>
                 }
             </div>
         </div>
