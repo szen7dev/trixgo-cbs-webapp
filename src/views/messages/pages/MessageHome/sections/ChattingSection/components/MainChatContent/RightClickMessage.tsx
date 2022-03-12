@@ -74,7 +74,7 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                         _map(listEmoji, emoji => (
                             <button
                                 onClick={() => {
-                                    socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
+                                    socket.emit('CHATTING_CSS_REACTION_MESSAGE', { messageID: message._id, typeReaction: emoji.value });
                                     setTimeout(() => {
                                         closeRightClick();
                                     }, 100)

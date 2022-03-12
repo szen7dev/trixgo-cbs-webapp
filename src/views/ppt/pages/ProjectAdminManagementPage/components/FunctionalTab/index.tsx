@@ -31,7 +31,7 @@ const FunctionalTab: FC = () => {
         hasNextPage: hasNextPagePcmPlanGroup,
         totalRecord,
 		totalPage
-        } = usePcmPlanGroup({ projectID, keyword },true, false);
+        } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword },true, false);
 
 	const { openModal } = useModal();
 	
