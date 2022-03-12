@@ -32,7 +32,7 @@ const PackageDocument: FC = () => {
 		hasNextPage: hasNextPageDocumentPackage,
 		totalRecord,
 		totalPage
-	} = useDocumentPackage({ departmentID: projectID, keyword },true, false);
+	} = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword },true, false);
 	const { openModal } = useModal();
 	
 	const getStateChecked = useCallback((id: string) => {

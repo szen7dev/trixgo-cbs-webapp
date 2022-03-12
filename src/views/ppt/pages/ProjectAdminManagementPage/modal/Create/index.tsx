@@ -15,7 +15,7 @@ const Create: FC<any> = ({ projectID, keyword }) => {
   const {   
     createPcmPlanGroupMutateAsync,
     refetch
-  } = usePcmPlanGroup({ projectID, keyword }, false, false);
+  } = usePcmPlanGroup({ projectID,  isShowAll: "1", keyword }, false, false);
 
   const onCreate = async () => {
     if (!name || !sign) {

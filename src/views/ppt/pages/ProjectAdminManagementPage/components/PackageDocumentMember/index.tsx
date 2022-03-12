@@ -12,7 +12,6 @@ import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { useGetListAppRoleMenu } from "services/hooks/useAuth";
 import { CreateMemberPackage, DeleteMembersPackage } from "../../modal";
-import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import { APP_ID } from "apis/localdb";
 
@@ -28,8 +27,6 @@ const PackageDocumentMember: FC<any>  = ({ packageID }) => {
 	// Call api 
 	const { infoPackage } = useDocumentPackage({ packageID }, false, true);
 	const listMembers = infoPackage?.data?.members || [];
-	const listMembersOfGroup = listMembers?.map((item: any) => item._id)
-	const listAdminOfGroup = infoPackage?.data?.admins || [];
 	const projectID = infoPackage?.data?.project;
 
 	const getStateChecked = useCallback((id: string) => {

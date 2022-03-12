@@ -14,7 +14,7 @@ const UpdatePackage: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => 
   const {   
     updateDocumentPackageMutateAsync,
     refetch
-  } = useDocumentPackage({ departmentID: projectID, keyword }, false, false);
+  } = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword }, false, false);
 
   const onUpdate = async () => {
     closeModal();

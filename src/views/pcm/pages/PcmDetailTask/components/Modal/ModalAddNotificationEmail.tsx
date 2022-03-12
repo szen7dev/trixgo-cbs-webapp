@@ -32,7 +32,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 			notice: content,
 			members: listReceiversID
 		}
-
+		
 		const result = await sendMailDetailTaskAsync(body);
 		if(result.error) {
 			return toast.error('Gửi email thất bại');
