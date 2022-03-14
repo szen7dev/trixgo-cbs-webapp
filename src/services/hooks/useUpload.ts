@@ -2,6 +2,7 @@
  * LIBRARIES
  */
 import { useMutation } from "react-query";
+import MimeType from "mimetype";
 // import Compressor from 'compressorjs';
 import imageCompression from 'browser-image-compression';
 /**
@@ -38,7 +39,7 @@ export type OptionsCompress = {
 // }
 
 export type UploadFileProps = {
-    files: any, // File & File[],
+    files: File & File[],
     fileType: number,
     progress?: (percentCompleted: number, _id?: string) => void,
     useCompress?: boolean;
@@ -70,7 +71,7 @@ export const useUpload = ({
         useMutation(({ file, fileType }: FileGenerateLink) =>
             FileRepository.generateLinkS3({
                 name: file.name,
-                mimeType: file.type,
+                mimeType: file.type || MimeType.lookup(file.name),
                 size: file.size as never,
                 type: fileType,
                 appID,

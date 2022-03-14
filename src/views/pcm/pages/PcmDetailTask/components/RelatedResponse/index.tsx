@@ -286,7 +286,6 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(images).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        console.log({ key, image: file })
         const { _id } = await addFileToUpload({
           files: file,
           fileType: 1,
@@ -310,7 +309,6 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        console.log({ key, file })
         const { _id } = await addFileToUpload({
           files: file,
           fileType: 2,
