@@ -33,7 +33,7 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
     const {updatePinMessage} = UseConversation();
     const {closeRightClick} = useRightClickMenu();
     const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[message.conversation]);
-    const currentMessageData = messagesData[message._id];
+    const currentMessageData = messagesData?messagesData[message._id]:null;
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
@@ -45,9 +45,9 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
     }, [message, listPinnedMessage]);
 
     const usersSeen = useCallback(() => {
-        if (!currentMessageData.usersSeen) return [];
+        if (!currentMessageData?.usersSeen) return [];
         const users : {_id: string; bizfullname: string; fullname: string; image: string}[] = [];
-        currentMessageData.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+        currentMessageData?.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
             if (typeof user === "string") {
                 const find = chat.members.find(member => member._id === user);
                 users.push(find);

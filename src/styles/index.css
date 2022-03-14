@@ -1560,3 +1560,41 @@ input[type="text"] {
 		 transform: rotate(360deg);
 	}
 }
+
+.cbs-clock.message-sending {
+  width: 10px;
+  height: 10px;
+  border-width: 1px;
+}
+
+.cbs-clock.message-sending:before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 4px;
+  top: 1px;
+  left: 4px;
+  background: #0060e1;
+  border-radius: 2px;
+  -webkit-transform-origin: bottom;
+  transform-origin: bottom;
+  -webkit-animation: cbs-clock-t59zy9 2s linear infinite;
+  animation: cbs-clock-t59zy9 2s linear infinite;
+  margin-bottom: 1px;
+}
+
+.cbs-clock.message-sending:after {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 3px;
+  top: 2px;
+  left: 4px;
+  background: #0060e1;
+  border-radius: 2px;
+  -webkit-transform-origin: bottom;
+  transform-origin: bottom;
+  -webkit-animation: cbs-clock-t59zy9 12s linear infinite;
+  animation: cbs-clock-t59zy9 12s linear infinite;
+  margin-bottom: 1px;
+}

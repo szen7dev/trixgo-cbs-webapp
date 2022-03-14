@@ -60,12 +60,22 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
-        return _map(value, (message, index) => renderMessage(message, value[index-1]))
+        return _map(value.sort((a,b) => {
+            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+                return 1
+            }
+            return -1
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
         const value = parseMessageData(fakeMessagesData);
-        return _map(value, (message, index) => renderMessage(message, null, false))
+        return _map(value.sort((a,b) => {
+            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+                return 1
+            }
+            return -1
+        }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
     useEffect(() => {
@@ -149,10 +159,5 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
 
 const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
     if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message).sort((a,b) => {
-        if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
-            return 1
-        }
-        return -1
-    })
+    return _map(Object.values(messagesData), message => message)
 }
