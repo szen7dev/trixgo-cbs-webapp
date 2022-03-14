@@ -116,39 +116,49 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
-		const [files, images] = modifyUploadedFilesV2({
-			imgLastKey: Object.keys(uploads.images).length || null,
-			fileLastKey: Object.keys(uploads.files).length || null,
-		}, event.target.files);
+		const { _id } = await addFileToUpload({
+			files: event.target.files[0],
+			fileType: 2,
+			progress: percentCompleted => {
+				console.log(`${percentCompleted}%`);
+				// setUploadFileProgress(key, percentCompleted)
+			}
+		})
+		console.log({ _id })
 
-		setUploadImage(images);
-		setUploadFile(files);
+		// const [files, images] = modifyUploadedFilesV2({
+		// 	imgLastKey: Object.keys(uploads.images).length || null,
+		// 	fileLastKey: Object.keys(uploads.files).length || null,
+		// }, event.target.files);
 
-		// Upload images
-		for (const [key, { file }] of Object.entries(images)) {
-			const { _id } = await addFileToUpload({
-				files: file,
-				fileType: 1,
-				progress: percentCompleted => {
-					console.log(`${percentCompleted}%`, key);
-					setUploadImageProgress(key, percentCompleted)
-				}
-			})
-			setIDImageUploaded(key, _id);
-		}
+		// setUploadImage(images);
+		// setUploadFile(files);
 
-		// Upload files
-		for (const [key, { file }] of Object.entries(files)) {
-			const { _id } = await addFileToUpload({
-				files: file,
-				fileType: 2,
-				progress: percentCompleted => {
-					console.log(`${percentCompleted}%`, key);
-					setUploadFileProgress(key, percentCompleted)
-				}
-			})
-			setIDFileUploaded(key, _id);
-		}
+		// // Upload images
+		// for (const [key, { file }] of Object.entries(images)) {
+		// 	const { _id } = await addFileToUpload({
+		// 		files: file,
+		// 		fileType: 1,
+		// 		progress: percentCompleted => {
+		// 			console.log(`${percentCompleted}%`, key);
+		// 			setUploadImageProgress(key, percentCompleted)
+		// 		}
+		// 	})
+		// 	setIDImageUploaded(key, _id);
+		// }
+
+		// // Upload files
+		// for (const [key, { file }] of Object.entries(files)) {
+		// 	const { _id } = await addFileToUpload({
+		// 		files: file,
+		// 		fileType: 2,
+		// 		progress: percentCompleted => {
+		// 			console.log(`${percentCompleted}%`, key);
+		// 			setUploadFileProgress(key, percentCompleted)
+		// 		}
+		// 	})
+		// 	setIDFileUploaded(key, _id);
+		// }
 	}
 
 	const handleSubmit = async () => {

@@ -66,6 +66,7 @@ export const modifyUploadedFilesV2 = (
   const imageToUpload: IFile = {};
   const fileToUpload: IFile = {};
   for (let i = 0; i < files.length; i++) {
+    console.log({ fileType: files[i].type.toLowerCase() })
     if (files[i].type.toLowerCase().indexOf("image") !== -1) {
       currentImageIndex++;
       const id = Number(imgLastKey) + currentImageIndex;
