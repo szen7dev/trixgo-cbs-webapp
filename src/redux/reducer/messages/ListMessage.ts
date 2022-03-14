@@ -370,9 +370,14 @@ const listMessageSlice = createSlice({
                 const newUsersSeen = usersSeen;
                 usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
                     if (typeof user === "string") {
-                        newUsersSeen.push(action.payload.infoUserSeen._id);
+                        if (!newUsersSeen.includes(action.payload.infoUserSeen._id)) {
+                            newUsersSeen.push(action.payload.infoUserSeen._id);
+                        }
                     } else {
-                        newUsersSeen.push(action.payload.infoUserSeen)
+                        const currentIds = newUsersSeen.map((user: {_id: string; bizfullname: string; fullname: string; image: string}) => user._id);
+                        if (!currentIds.includes(action.payload.infoUserSeen._id)) {
+                            newUsersSeen.push(action.payload.infoUserSeen)
+                        }
                     }
                 })
                 newMessage[messageId] = {

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import React, {FC, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {ModalFullContainer} from "shareComponents/common";
@@ -7,6 +7,7 @@ import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {ReactionList, ReactionActions} from "../../Reactions";
 import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {MessageStatus} from "./MessageStatus";
 
 type Props = {
     message: ItemMessage;
@@ -114,7 +115,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                     <ReactionList message={message}/>
                     <div className={"date-message-image bg-gray-100 bg-opacity-80 px-[4px] rounded-full flex items-center ml-[5px]"}>
                         <span>{moment(message.createAt).format("HH:mm")}</span>
-                        <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                        <MessageStatus message={message}/>
                     </div>
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>

@@ -3,6 +3,7 @@ import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
 import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {MessageStatus} from "./MessageStatus";
 
 type Props = {
     message: any;
@@ -74,7 +75,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                 <div className={"date-message date-text-message text-xs flex items-center w-full justify-end "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
                     <span className={"ml-[5px]"}>{moment(message.createAt).format("HH:mm")}</span>
-                    <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    <MessageStatus message={message}/>
                 </div>
             </div>
             <ReactionActions context={context} message={message}/>

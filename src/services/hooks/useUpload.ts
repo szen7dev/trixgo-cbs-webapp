@@ -38,7 +38,7 @@ export type OptionsCompress = {
 // }
 
 export type UploadFileProps = {
-    files: File & File[],
+    files: any, // File & File[],
     fileType: number,
     progress?: (percentCompleted: number, _id?: string) => void,
     useCompress?: boolean;
@@ -89,6 +89,7 @@ export const useUpload = ({
 
     const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
+            console.log({ file, fileType })
             const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 
