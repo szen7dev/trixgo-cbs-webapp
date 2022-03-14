@@ -36,13 +36,14 @@ type UseTask = {
 
 type UseTaskProps = {
   taskID?: string;
-  typeStatus?: number;
+  typeStatus?: string;
+  statusNe?: string;
   type?: number;
   official?: boolean;
   isFetch?: boolean;
 }
 
-export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
+export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
       TaskRepository.addTask(payload)
@@ -69,6 +70,7 @@ export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }:
         limit: 5,
         lastestID: pageParam || "",
         official: official || false,
+        ...pageParam
       });
     },
     {
@@ -92,9 +94,10 @@ export const useTask = ({ taskID, official, typeStatus, type, isFetch = false }:
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
         lastestID: pageParam || "",
-        type: type || 1,
-        typeStatus: typeStatus || 4,
-        select: "assignee lastLog checklist description name expiredTime percentage project",
+        type: type || "",
+        statusNe: statusNe || "",
+        typeStatus: typeStatus || "",
+        select: "assignee lastLog checklist description name expiredTime percentage project actualFinishTime",
         populates: JSON.stringify({
           path: "assignee lastLog project",
           select: "name fullname bizfullname image author content createAt sign",

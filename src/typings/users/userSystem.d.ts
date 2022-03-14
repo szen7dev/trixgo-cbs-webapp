@@ -1,6 +1,7 @@
 import { User } from "typings/user";
 
 interface QueryParam {
+    arrayID?: string;
     companyID?: string;
     keyword?: string;
     select?: string;

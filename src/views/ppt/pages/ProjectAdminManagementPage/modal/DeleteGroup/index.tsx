@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const DeleteGroup: FC<any> = ({ idsChecked, setIdsChecked, projectID, keyword }) => {
   const { closeModal } = useModal();
-  const { removeManyPcmPlanGroupMutateAsync, refetch } = usePcmPlanGroup({ projectID, keyword }, false, false);
+  const { removeManyPcmPlanGroupMutateAsync, refetch } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword }, false, false);
 
   const onDelete = async () => {
     const infoAfterRemove = await removeManyPcmPlanGroupMutateAsync({ groupsID: idsChecked });

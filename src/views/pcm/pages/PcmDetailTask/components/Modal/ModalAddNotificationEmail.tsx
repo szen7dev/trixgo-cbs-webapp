@@ -4,6 +4,9 @@ import { toast } from "react-toastify";
 import SearchIcon from 'assets/icons/SearchIcon';
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
 import { usePcm } from 'services/hooks/pcm/usePcm';
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
+import debounce from "lodash/debounce";
+
 // import TriangleDown from 'assets/icons/TriangleDown';
 // import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
 
@@ -14,16 +17,34 @@ type Props = {
 
 const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 	const data = unionBy([task.author, task.assignee, ...task?.related], '_id');
-
 	const { sendMailDetailTaskAsync } = usePcm();
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
+	const [keyword, setKeyword] = useState('');
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
+	const {
+		data: listUsersSystem, 
+		hasNextPage, 
+		totalRecord, 
+		refetch: refetchUser,
+		fetchNextPage: fetchNextPageUser,
+		deleteUserSystemAsync,
+	} = useUserSystem({
+		arrayID: JSON.stringify(data.map(item => item._id)),
+		keyword,
+		isFetch: true,
+		limit: 20
+	});
 
 	const handleSubmit = async () => {
-		if(!checked || !checked.length) {
+		if(!checked || !checked.length)
 			return toast.warning('Vui lòng chọn người gửi mail');
-		}
+
+		if(!title)
+			return toast.warning('Vui lòng nhập tiêu đề');
+
+		if(!content)
+			return toast.warning('Vui lòng nhập nội dung');
 
 		const listReceiversID = checked.map(user => user._id);
 		const body = {
@@ -32,7 +53,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 			notice: content,
 			members: listReceiversID
 		}
-
+		
 		const result = await sendMailDetailTaskAsync(body);
 		if(result.error) {
 			return toast.error('Gửi email thất bại');
@@ -85,7 +106,12 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 
 				<div className='relative border-cbs-border border-0.5 flex items-center mt-4'>
 					<SearchIcon className='absolute left-3 w-4 h-4' />
-					<input type="text" placeholder='Nhập từ khóa tìm kiếm' className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header' />
+					<input 
+						type="text"
+					 	placeholder='Nhập từ khóa tìm kiếm' 
+						className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header' 
+						onChange={debounce((e: any) => setKeyword(e.target.value), 600)}
+					/>
 				</div>
 				<div className='text-small overflow-auto' style={{ height: '470px' }}>
 					<table>
@@ -104,7 +130,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 						</thead>
 						<tbody className='overflow-y-auto'>
 							{
-								data.map((item, index) => (
+								listUsersSystem.map((item, index) => (
 									<tr key={index}>
 										<td className='px-1.5 align-middle'>
 											<input type='checkbox' className='cbs-checkbox' checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(null, item)} />

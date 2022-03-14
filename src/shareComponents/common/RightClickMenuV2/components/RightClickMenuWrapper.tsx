@@ -23,6 +23,7 @@ export const RightClickMenuWrapper: FC <Props>= ({children, contextMenu, customR
 
     const handleContextMenu = (e: MouseEvent) => {
         e.preventDefault();
+        if (props.disabled) return;
         openRightClick({
             content: contextMenu,
             x: e.x,

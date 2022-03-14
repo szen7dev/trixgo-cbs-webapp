@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const DeletePackage: FC<any> = ({ idsChecked, setIdsChecked, projectID, keyword }) => {
   const { closeModal } = useModal();
-  const { removeManyDocumentPackage, refetch } = useDocumentPackage({ departmentID: projectID, keyword }, false, false);
+  const { removeManyDocumentPackage, refetch } = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword }, false, false);
 
   const onDelete = async () => {
     const infoAfterRemove = await removeManyDocumentPackage({ packagesID: idsChecked });

@@ -16,24 +16,28 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+
+  // Việc quá hạn
   const {
     listTasks: tasksOutDate,
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
-  } = useTask({ type });
+  } = useTask({ type, typeStatus: "1", statusNe: "3" });
 
+  // Việc tuần tới
   const {
     listTasks: tasksNextWeek,
     isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
-  } = useTask({ type, typeStatus: 2 });
+  } = useTask({ type, typeStatus: "2",  statusNe: "3" });
 
+  // Việc 7 ngày tới
   const {
     listTasks: tasksMoreThanSevenDay,
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
-  } = useTask({ type, typeStatus: 3 });
+  } = useTask({ type, typeStatus: "3",  statusNe: "3"});
 
   const handleSeeMore = (typeStatus: string) => {
     switch (typeStatus) {
@@ -52,11 +56,11 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
   };
 
   useEffect(() => {
-    if (!isSuccessApp) return;
-    if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
+    // if (!isSuccessApp) return;
+    // if (isSuccessApp && !hasPermission) {
+		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
+		// 	history.push("/");
+		// };
 
     document.title = "Quản lý công việc";
   }, [isSuccessApp]);  

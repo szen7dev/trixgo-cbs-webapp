@@ -1,8 +1,9 @@
-import React, {FC, useEffect, useRef} from "react";
-import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
+import React, {FC, ReactNode, useEffect, useRef} from "react";
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
 import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {MessageStatus} from "./MessageStatus";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     message: any;
@@ -14,6 +15,19 @@ type Props = {
 }
 export const TextChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage, context, isMini}) => {
     const textContentRef = useRef<HTMLDivElement>(null);
+    const {handleStartPrivateChat} = UseMessageHelper()
+    useEffect(() => {
+        const listener = (event: Event) => {
+            const node = event.target as HTMLSpanElement;
+            if(node && node.classList.contains("user-tag-in-content")) {
+                node.dataset.userid&&handleStartPrivateChat(node.dataset.userid, isMini)
+            }
+        };
+        document.addEventListener("click", listener);
+        return () => {
+            document.removeEventListener("click", listener);
+        };
+    },[]);
     useEffect(() => {
         if (textContentRef && textContentRef.current) {
             textContentRef.current.innerHTML = message.content
@@ -23,7 +37,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                     if (matchs) {
                         const fullName = matchs[1];
                         const userId = matchs[2];
-                        return `<a class="text-primary" href="${userId}">@${fullName}</a>`;
+                        return `<span class="text-primary cursor-pointer user-tag-in-content" data-userId="${userId}">@${fullName}</span>`;
                     } else {
                         return replacement;
                     }
@@ -74,7 +88,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
                 <div className={"date-message date-text-message text-xs flex items-center w-full justify-end "  + (isMyMessage?"text-primary":"text-gray-500")}>
                     <ReactionList message={message}/>
                     <span className={"ml-[5px]"}>{moment(message.createAt).format("HH:mm")}</span>
-                    <img  className={"ml-1"} src={DoubleTickIcon} alt={"tick"}/>
+                    <MessageStatus message={message}/>
                 </div>
             </div>
             <ReactionActions context={context} message={message}/>

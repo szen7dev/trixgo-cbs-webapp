@@ -15,7 +15,7 @@ const CreatePackage: FC<any> = ({ projectID, keyword }) => {
   const {
     createDocumentPackageMutateAsync,
     refetch
-  } = useDocumentPackage({ departmentID: projectID, keyword }, false, false);
+  } = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword }, false, false);
 
   const onCreate = async () => {
     if (!name || !sign) {

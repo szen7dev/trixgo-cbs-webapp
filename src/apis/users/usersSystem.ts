@@ -17,6 +17,7 @@ export const UserSystemRepository = {
         })
         return data;
     },
+
     async listUsersSystem(params?: QueryParam): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
@@ -31,6 +32,7 @@ export const UserSystemRepository = {
         })
         return data;
     },
+
     async infoUsersSystem(userID: string): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
@@ -41,6 +43,7 @@ export const UserSystemRepository = {
         })
         return data;
     },
+
     async addUserSystem(payload: UserSystemPayload): Promise<any> {
         const { data } = await API.post<Promise<any>>(
             USER_URL,
@@ -48,6 +51,7 @@ export const UserSystemRepository = {
         )
         return data;
     },
+
     async updateUserSystem(payload: UserSystemPayload): Promise<any> {
         const { data } = await API.put<Promise<any>>(
             USER_URL,
@@ -55,6 +59,7 @@ export const UserSystemRepository = {
         )
         return data;
     },
+    
     async deleteUserSystem(usersID: string[]): Promise<any> {
         const { data } = await API.delete<Promise<any>>(
             USER_URL, {
