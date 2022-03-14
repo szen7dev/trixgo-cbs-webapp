@@ -140,26 +140,47 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef, currentChat
     }
 
     const userLeaveConversation = () => {
-        openDeleteConfirm({
-            title: "Rời khỏi cuộc hội thoại",
-            message: "Bạn có chắc muốn rời khỏi cuộc hội thoại này không?",
-            deleteAction: () => {
-                leaveConversation({
-                    conversationID: chat._id
-                }).then(({data, error}) => {
-                    if (!error) {
-                        dispatch(deleteConversationAction({conversationId: data.infoConversation._id}))
+        if (isAuthor(chat, profileId)) {
+            openDeleteConfirm({
+                title: "Xoá cuộc hội thoại",
+                message: "Vì bạn là người tạo cuộc hội thoại việc rời đi tương đương giải tán nhóm. Bạn có chắc muốn giải tán cuộc hội thoại này không?",
+                deleteAction: () => {
+                    deleteConversation({
+                        conversationID: chat._id
+                    }).then(data => {
+                        dispatch(deleteConversationAction({conversationId: data._id}))
                         if (currentChat===chat._id) {
                             window.location.hash = ""
                         }
-                        socket.emit('CHATTING_CSS_MEMBER_LEAVE_CONVERSATION', {conversationID: data.infoConversation._id, memberID: profileId});
-                        socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-                    } else {
-                        toast.error(data.message);
-                    }
-                })
-            }
-        })
+                        socket.emit("CHATTING_CSS_REMOVE_CONVERSATION",{infoConversation: data})
+                    })
+                }
+            })
+        } else {
+            openDeleteConfirm({
+                title: "Rời khỏi cuộc hội thoại",
+                message: "Bạn có chắc muốn rời khỏi cuộc hội thoại này không?",
+                deleteAction: () => {
+                    leaveConversation({
+                        conversationID: chat._id
+                    }).then(({data, error}) => {
+                        if (!error) {
+                            dispatch(deleteConversationAction({conversationId: data.infoConversation._id}))
+                            if (currentChat === chat._id) {
+                                window.location.hash = ""
+                            }
+                            socket.emit('CHATTING_CSS_MEMBER_LEAVE_CONVERSATION', {
+                                conversationID: data.infoConversation._id,
+                                memberID: profileId
+                            });
+                            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
+                        } else {
+                            toast.error(data.message);
+                        }
+                    })
+                }
+            })
+        }
         setTimeout(() => {
             closeRightClick()
         }, 100)
