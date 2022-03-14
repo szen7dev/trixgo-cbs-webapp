@@ -46,6 +46,8 @@ export const DocumentDetailPage: FC<Props> = () => {
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
 
+  console.log({ detailDocument })
+  
   const docChildPayload = useQueryListDocumentChild({
     parentID: params.docID,
   });
@@ -118,7 +120,7 @@ export const DocumentDetailPage: FC<Props> = () => {
                 alt=""
               />
               <span className="mr-2.5">
-                CHG.THT {">"} Tư vấn thiết kế 112 {">"} Hồ sơ thanh toán
+              {detailDocument?.project?.sign} {">"} {detailDocument?.package?.name} {">"}  {detailDocument?.parent?.name}
               </span>
               <img src={iconMove} className="h-6 w-6 inline" alt="" />
             </div>

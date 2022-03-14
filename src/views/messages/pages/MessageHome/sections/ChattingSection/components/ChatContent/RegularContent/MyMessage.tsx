@@ -56,8 +56,8 @@ export const MyMessage:FC<Props> = ({message, context, isMini}) => {
                         }
                     }
                 }}
-                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage isMini={isMini} message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
+                className={"flex justify-end items-end flex-1 transition duration-500 relative " + (selectedState ? "cursor-pointer":"")}>
+                <RightClickMenuWrapper disabled={message.isFake} contextMenu={<RightClickMessage isMini={isMini} message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
                     <div className={"message-container my-message"}>
                         {renderMessageContent()}
                     </div>

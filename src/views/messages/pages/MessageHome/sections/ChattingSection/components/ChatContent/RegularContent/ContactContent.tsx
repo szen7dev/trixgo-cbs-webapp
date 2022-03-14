@@ -3,6 +3,7 @@ import {ItemMessage} from "typings/apis/messages/listMessage";
 import {map as _map} from "lodash"
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {ReactionList, ReactionActions} from "../../Reactions";
+import {MessageStatus} from "./MessageStatus";
 type Props = {
     message: ItemMessage;
     className?: string;
@@ -24,12 +25,15 @@ export const ContactContent:FC<Props> = ({message, className, borderClass, conte
                                 <div className={"text-xs h-[16px]"}>{user?.phone}</div>
                             </div>
                         </div>
-                        <div className={"flex items-center justify-center py-[10px]"}>
+                        <div className={"flex items-center justify-center py-[10px] relative"}>
                             <button
                                 onClick={() => handleStartPrivateChat(user._id, isMini)}
                                 className={"text-primary"}>
                                 Nhắn tin
                             </button>
+                            <div className={"absolute right-1 " + (!message.isFake ? "hidden":"")}>
+                                <MessageStatus message={message}/>
+                            </div>
                         </div>
                     </div>
                     <div className={"absolute right-2 z-10"} style={{bottom: -5}}>

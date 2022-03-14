@@ -47,7 +47,6 @@ export const ModalAddNewTask: FC = () => {
     projectID: string().required("Vui lòng nhập tên dự án!"),
     assigneeID: string().required("Vui lòng nhập tên người nhận!"),
     name: string().required("Vui lòng nhập tiêu đề!"),
-    description: string().required("Vui lòng nhập nội dung!"),
   });
 
   const { addTaskAsync } = useTask({});
@@ -106,14 +105,14 @@ export const ModalAddNewTask: FC = () => {
       fetchNextPageListGroup();
     }
   }
-
+  
   const initialValues: InitialValues = {
     projectID: "",
     groupID: "",
     fieldID: "",
     assigneeID: "",
     name: "",
-    startTime: moment().format('DD-MM-YYYY'),
+    startTime: moment().format('MM/DD/YYYY'),
     expiredTime: "",
     description: "",
     authorAttachs: [],
@@ -533,10 +532,10 @@ export const ModalAddNewTask: FC = () => {
                       multiple
                     />
                   </label> */}
-                  <div className={"flex items-center ml-4"}>
+                  {/* <div className={"flex items-center ml-4"}>
                     <input type="checkbox" id="email-notice" className={"form-check-input mt-0"}/>
                     <label htmlFor="email-notice" className={"text-left ml-2 whitespace-nowrap"}>Thông báo email</label>
-                  </div>
+                  </div> */}
                   <button type="submit" className="btn btn-primary ml-auto">Xác nhận</button>
                 </div>
               </Form>

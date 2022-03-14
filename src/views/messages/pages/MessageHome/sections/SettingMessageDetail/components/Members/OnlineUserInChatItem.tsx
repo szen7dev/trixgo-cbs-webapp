@@ -12,8 +12,23 @@ type Props = {
 }
 export const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
     const {handleStartPrivateChat} = UseMessageHelper();
-    const isOnline = useCallback(() => {
-        return !user.timeLastSeen||(moment().toDate().getTime() - user.timeLastSeen <= 24)
+    const onlineStatus = useCallback(() => {
+        if (!user.timeLastSeen) {
+            return {
+                isOnline: false,
+                text: "Offline"
+            }
+        }
+        if (moment().toDate().getTime() - user.timeLastSeen <= 24) {
+            return {
+                isOnline: true,
+                text: "Online"
+            }
+        }
+        return {
+            isOnline: false,
+            text: moment(user.timeLastSeen).fromNow()
+        }
     }, [user])
     return (
         <div
@@ -28,7 +43,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index}) => {
                     className={"font-bold"}>
                     {user?.member?.bizfullname}
                 </span>
-                <span className={"truncate text-xs "+(isOnline()?"text-primary":"text-gray-400")}>{isOnline()?"online":moment(user.timeLastSeen).fromNow()}</span>
+                <span className={"truncate text-xs "+(onlineStatus().isOnline?"text-primary":"text-gray-400")}>{onlineStatus().text}</span>
             </div>
             <div
                 className={"action-button cursor-pointer relative w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center opacity-0 invisible transition duration-500"}>
