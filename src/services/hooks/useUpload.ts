@@ -89,6 +89,7 @@ export const useUpload = ({
 
     const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
+            console.log({ file, fileType })
             const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 

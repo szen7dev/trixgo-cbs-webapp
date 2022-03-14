@@ -260,6 +260,7 @@ const Response: FC<Props> = ({ task }) => {
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) return;
+    console.log({ files: event.target.files })
 
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({
@@ -460,7 +461,8 @@ const Response: FC<Props> = ({ task }) => {
                 <div className="flex">
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                     <IconPaperClip className="-rotate-45" />
-                    <input type="file" name="files" id="file" className="hidden" accept="application/*" multiple onChange={event => handleSetFiles(event)} />
+                    {/* accept="application/*" */}
+                    <input type="file" name="files" id="file" className="hidden" multiple onChange={event => handleSetFiles(event)} />
                   </label>
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
                     <IconImage />
