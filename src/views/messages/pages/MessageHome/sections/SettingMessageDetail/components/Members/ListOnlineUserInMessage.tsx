@@ -16,7 +16,7 @@ type Props = {
 export const ListOnlineUserInMessage:FC<Props> = ({chat, isActive}) => {
     const {currentChat} = useContext(MessageContext);
 
-    const params = {conversationID: currentChat, type: "member", populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
+    const params = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
     const {listMembersMessage, hasListMembersNextPage, nextPageListMembers} = UseInformationMessage(params, isActive, "members");
 
     const renderListOnlineUser = useCallback(() => {

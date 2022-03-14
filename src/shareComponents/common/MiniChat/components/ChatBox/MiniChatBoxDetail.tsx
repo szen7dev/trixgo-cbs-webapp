@@ -127,6 +127,8 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
                 return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
             case 104:
                 return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
+            case 107:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:

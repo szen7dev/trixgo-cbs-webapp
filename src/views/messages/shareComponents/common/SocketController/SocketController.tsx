@@ -18,6 +18,7 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 
 type Props = {
     context: any;
@@ -34,6 +35,8 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
     const {getListPinMessage} = UseConversation();
+    const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
+    const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
 
     useEffect(() => {
         if (socket) {
@@ -46,6 +49,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+            socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
+            socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
+            socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
+            socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
         };
     },[socket]);
 
@@ -95,6 +102,9 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }));
         if ([108, 109].includes(data?.data?.type)) {
             getListPinMessage({conversationID: data?.data?.conversation})
+        }
+        if ([101, 102, 107].includes(data?.data?.type)) {
+            refetchListMembers();
         }
         if (!inSearchMode){
             setTimeout(() => {
@@ -154,6 +164,34 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const onRemoveConversation = (data: any) => {
         if (!data) return;
         dispatch(deleteConversationAction({conversationId: data?.data?._id}))
+    }
+
+    const onCreateConversation = (data: any) => {
+        if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onUserLeaveConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onAddMemberConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onRemoveMemberConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
     }
 
     return null;
