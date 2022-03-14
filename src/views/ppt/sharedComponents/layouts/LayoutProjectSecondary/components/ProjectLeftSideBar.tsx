@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 // import iconFolder from "assets/images/icons8-application-window-100.png";
-import { NavLink, useRouteMatch, generatePath } from 'react-router-dom';
+import { NavLink, useRouteMatch, generatePath, useParams } from 'react-router-dom';
 import { useAuth } from "services/hooks/useAuth";
 
 type RouteItem = {
@@ -90,7 +90,8 @@ export const routes: Array<RouteItem> = [
 const ProjectLeftSideBar: FC = () => {
 	const { user } = useAuth();
 	const match = useRouteMatch<{ id: string }>();
-
+	const { id: projectID } = useParams<{ id: string }>();
+	console.log({ projectID });
 	return (
 		<div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
 			<div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">

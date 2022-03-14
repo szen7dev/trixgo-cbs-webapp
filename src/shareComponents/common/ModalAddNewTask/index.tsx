@@ -105,7 +105,7 @@ export const ModalAddNewTask: FC = () => {
       fetchNextPageListGroup();
     }
   }
-
+  
   const initialValues: InitialValues = {
     projectID: "",
     groupID: "",
