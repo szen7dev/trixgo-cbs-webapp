@@ -68,7 +68,7 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====AUTHENTICATION===== */}
-                                <Route path="/authentication/:path?">
+                                <Route path="/">
                                     <AuthenticationRouter />
                                 </Route>
 
