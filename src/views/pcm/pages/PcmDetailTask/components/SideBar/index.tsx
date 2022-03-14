@@ -102,7 +102,7 @@ export const SideBar: FC<Props> = ({
         </div>
       </div>
 
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
             Xác nhận
@@ -116,7 +116,7 @@ export const SideBar: FC<Props> = ({
           </button>
         </div>
         <div>
-          {/* TODO: user signatures to get confirm progress */}
+          
           {confirmUsers.map((user, index) => (
             <div key={user?._id || index}>
               <div className="flex justify-between">
@@ -130,7 +130,7 @@ export const SideBar: FC<Props> = ({
                     <p className="text-[13px]">{user?.bizfullname}</p>
                     <p className="text-xs text-primary-gray">
                       {moment().format('HH:mm DD/MM/YY')} - {moment().fromNow()}
-                      {/* 13:15 28/2/21 - 2h ago */}
+                     
                     </p>
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export const SideBar: FC<Props> = ({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="mt-5">
         <div className="mb-2.5">

@@ -61,7 +61,11 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
         <tbody>
           {docChildPayload.listDocumentChild.map((doc, i) => (
             <tr key={i}>
-              <td className="py-3 px-3">{doc.name || ''}</td>
+              <td className="py-3 px-3">
+                <a href={`/ppt/project/61c41cca87808f16744773ec/document/${doc._id}`} target="_blank" rel="noreferrer"> 
+                  {doc.name || ''}
+                 </a>
+                </td>
               <td className="py-3 px-3">{doc.sign || ''}</td>
               <td className="py-3 px-3">{moment(doc.date).isValid() && moment(doc.date).format('DD/MM/YYYY') || ''}</td>
               <td className="py-3 px-3">{doc.sender?.name || ''}</td>
