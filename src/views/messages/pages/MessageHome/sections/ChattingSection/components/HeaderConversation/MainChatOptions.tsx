@@ -11,11 +11,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {MessageContext} from "../../../../index";
 import {RootState} from "redux/reducer";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
-import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
+import {deleteConversationAction, updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {toast} from "react-toastify";
 
 export const MainChatOptions:FC = () => {
-    const {currentChat} = useContext(MessageContext)
+    const {currentChat, socketRef} = useContext(MessageContext);
+    const socket = socketRef.current;
     const {openDeleteConfirm} = useDeleteConfirm();
     const dispatch = useDispatch();
 
@@ -27,8 +30,8 @@ export const MainChatOptions:FC = () => {
         return !(chatData.usersMute??[]).includes(profileId)
     }, [chatData.usersMute])
 
-    const {updateMuteConversation} = UseListConversation();
-
+    const {updateMuteConversation, deleteConversation, leaveConversation} = UseListConversation();
+    const {isAuthor} = UseMessageHelper()
     const handleTurnOffMute = () => {
         const payload = {
             conversationID: currentChat,
@@ -37,6 +40,68 @@ export const MainChatOptions:FC = () => {
         updateMuteConversation(payload).then(data => {
             dispatch(updateUsersMuteToConversation({conversationId: data._id, usersMute: data.usersMute}))
             dispatch(dismissNotificationMute())
+        })
+    }
+
+    const userLeaveConversation = () => {
+        if (isAuthor(chatData, profileId)) {
+            openDeleteConfirm({
+                title: "Xoá cuộc hội thoại",
+                message: "Vì bạn là người tạo cuộc hội thoại việc rời đi tương đương giải tán nhóm. Bạn có chắc muốn giải tán cuộc hội thoại này không?",
+                deleteAction: () => {
+                    deleteConversation({
+                        conversationID: chatData._id
+                    }).then(data => {
+                        dispatch(deleteConversationAction({conversationId: data._id}))
+                        if (currentChat===chatData._id) {
+                            window.location.hash = ""
+                        }
+                        socket.emit("CHATTING_CSS_REMOVE_CONVERSATION",{infoConversation: data})
+                    })
+                }
+            })
+        } else {
+            openDeleteConfirm({
+                title: "Rời khỏi cuộc hội thoại",
+                message: "Bạn có chắc muốn rời khỏi cuộc hội thoại này không?",
+                deleteAction: () => {
+                    leaveConversation({
+                        conversationID: chatData._id
+                    }).then(({data, error}) => {
+                        if (!error) {
+                            dispatch(deleteConversationAction({conversationId: data.infoConversation._id}))
+                            if (currentChat === chatData._id) {
+                                window.location.hash = ""
+                            }
+                            socket.emit('CHATTING_CSS_MEMBER_LEAVE_CONVERSATION', {
+                                conversationID: data.infoConversation._id,
+                                memberID: profileId
+                            });
+                            socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
+                        } else {
+                            toast.error(data.message);
+                        }
+                    })
+                }
+            })
+        }
+    }
+
+    const userDeleteConversation = () => {
+        openDeleteConfirm({
+            title: "Xoá cuộc hội thoại",
+            message: "Bạn có chắc muốn giải tán cuộc hội thoại này không?",
+            deleteAction: () => {
+                deleteConversation({
+                    conversationID: chatData._id
+                }).then(data => {
+                    dispatch(deleteConversationAction({conversationId: data._id}))
+                    if (currentChat===chatData._id) {
+                        window.location.hash = ""
+                    }
+                    socket.emit("CHATTING_CSS_REMOVE_CONVERSATION",{infoConversation: data})
+                })
+            }
         })
     }
 
@@ -72,20 +137,18 @@ export const MainChatOptions:FC = () => {
                         <div className={"flex-1 text-left ml-4"}>Lựa chọn tin nhắn</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item
+                    onClick={() => userLeaveConversation()}
+                >
                     <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={ExitRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Rời cuộc hội thoại</div>
                     </div>
                 </Menu.Item>
-                <Menu.Item>
-                    <div
-                        onClick={() => openDeleteConfirm({
-                            deleteAction: () => console.log('hiiii'),
-                            // title: "Hello",
-                            // message: "Oh shit"
-                        })}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + ((chatData.authors.includes(profileId)||chatData.author === profileId)?"":"hidden")}>
+                <Menu.Item
+                    onClick={() => userDeleteConversation()}
+                >
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + (isAuthor(chatData, profileId)?"":"hidden")}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Xoá cuộc hội thoại</div>
                     </div>

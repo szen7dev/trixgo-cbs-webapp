@@ -49,6 +49,7 @@ export const AddNewChatGroup:FC = () => {
                 isPrivate: true,
                 membersID: []
             });
+            socket.emit('CHATTING_CSS_NEW_CONVERSATION',{conversationID: data._id})
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
                 conversationID: data._id,
                 select: JSON.stringify({ sender:"bizfullname" }) ,

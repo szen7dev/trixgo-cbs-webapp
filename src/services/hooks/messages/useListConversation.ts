@@ -5,15 +5,25 @@ import {
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation, DeleteConversationData, DeleteConversationPayload,
-    DeleteFolderPayload, DeleteHistoryConversationPayload,
+    DataListConversation,
+    DeleteConversationData,
+    DeleteConversationPayload,
+    DeleteFolderPayload,
+    DeleteHistoryConversationPayload,
     FolderConversationItem,
-    GeneralGroupByMemberPayload, HideConversationPayload,
+    GeneralGroupByMemberPayload,
+    HideConversationPayload,
     ItemListConversation,
+    LeaveConversationData,
+    LeaveConversationPayload,
     ListConversationPayload,
     ListFoldersConversationPayload,
-    ListMembersOfConversationPayload, MarkReadConversationPayload,
-    MediasOfConversationPayload, PinConversationPayload,
+    ListMembersOfConversationPayload,
+    MarkReadConversationPayload,
+    MediasOfConversationPayload,
+    PinConversationPayload,
+    RemoveMemberFromConversationData,
+    RemoveMemberFromConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
     UpdateFolderPayload,
@@ -51,6 +61,8 @@ type UseListConversationType = {
     markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
     deleteHistoryConversation: (payload: DeleteHistoryConversationPayload) => Promise<ItemListConversation>,
     deleteConversation: (payload: DeleteConversationPayload) => Promise<DeleteConversationData>,
+    leaveConversation: (payload: LeaveConversationPayload) => Promise<{data: LeaveConversationData, error: boolean}>,
+    removeMemberFromConversation: (payload: RemoveMemberFromConversationPayload) => Promise<{data: RemoveMemberFromConversationData, error: boolean}>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -174,6 +186,20 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         })
     }
 
+    const leaveConversation = async (params: LeaveConversationPayload) => {
+        const {data, error} = await ListConversationRepository.leaveConversation(params);
+        return new Promise<{data: LeaveConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const removeMemberFromConversation = async (params: RemoveMemberFromConversationPayload) => {
+        const {data, error} = await ListConversationRepository.removeMemberFromConversation(params);
+        return new Promise<{data: RemoveMemberFromConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -225,6 +251,8 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         hideConversation,
         markReadConversation,
         deleteHistoryConversation,
-        deleteConversation
+        deleteConversation,
+        leaveConversation,
+        removeMemberFromConversation
     }
 };

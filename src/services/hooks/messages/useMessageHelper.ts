@@ -10,6 +10,7 @@ type UseMessageHelperType = {
     handleStartPrivateChat: (memberId: string, redirectOnly?: boolean) => void;
     getAvatarMembers: (chat: ItemListConversation, profileId: string) => string[];
     getNameConversation: (chat: ItemListConversation, profileId: string) => string;
+    isAuthor: (chat: ItemListConversation, profileId: string) => boolean;
 }
 
 export const UseMessageHelper = () : UseMessageHelperType => {
@@ -75,11 +76,16 @@ export const UseMessageHelper = () : UseMessageHelperType => {
         }
 
         return chat.name||"";
+    };
+
+    const isAuthor = (chat: ItemListConversation, profileId: string) : boolean => {
+        return (chat.authors.includes(profileId)||chat.author === profileId);
     }
 
     return {
         handleStartPrivateChat,
         getAvatarMembers,
-        getNameConversation
+        getNameConversation,
+        isAuthor
     }
 };
