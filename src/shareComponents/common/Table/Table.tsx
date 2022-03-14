@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { PropsWithChildren, ReactElement } from 'react'
-import { useTable, TableOptions, useRowSelect, Column } from 'react-table'
+import { useTable, TableOptions, useRowSelect, Column, RowPropGetter, Meta, Row } from 'react-table'
+import { TableRowProps } from 'react-virtualized'
 import { IndeterminateCheckbox } from './IndeterminateCheckbox'
+
+type RowProps =
+	| ((...props: any) => (React.HTMLAttributes<HTMLTableRowElement>))
+	| React.HTMLAttributes<HTMLTableRowElement>
 
 export interface TableProperties<D extends object> extends Omit<TableOptions<D>, 'columns'>, React.HTMLAttributes<HTMLDivElement> {
 	columns: ReadonlyArray<Column<D> & {
@@ -16,13 +21,13 @@ export interface TableProperties<D extends object> extends Omit<TableOptions<D>,
 
 	tableProps?: React.HTMLAttributes<HTMLTableElement>
 	bodyProps?: React.HTMLAttributes<HTMLBodyElement>
-	tableRowProps?: React.HTMLAttributes<HTMLTableRowElement>
+	tableRowProps?: RowProps;
 
 	tableRowHeadProps?: React.HTMLAttributes<HTMLHeadElement>
 	wrapperComponent?: (props: PropsWithChildren<{ state: any, selectedFlatRows: any }>) => ReactElement
 }
 
-const Table = <D extends Record<string, unknown>>(props: PropsWithChildren<TableProperties<D>>): ReactElement => {
+const Table = <D extends object = Record<string, unknown>>(props: PropsWithChildren<TableProperties<D>>): ReactElement => {
 	const {
 		tableProps,
 		tableHeadSelectorProps,

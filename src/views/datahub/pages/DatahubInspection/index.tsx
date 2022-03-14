@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Global components
@@ -16,6 +16,10 @@ import useQueryDatahub from 'services/hooks/datahub/useQueryDatahub';
 
 // API
 import DatahubRepository from 'apis/datahub';
+import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
+import moment from 'moment';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -24,16 +28,16 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 
 const headCellProps = { className: 'py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border' }
 
-const getColumns = (): TableProperties<any>['columns'] => ([
+const getColumns = (): TableProperties<DatahubInspection>['columns'] => ([
 	{
-		accessor: 'content',
+		accessor: 'name',
 		Header: <span className="pl-2 border-l border-cbs-border">Nội dung</span>,
 		headCellProps,
 		cellProps: { className: 'pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary' },
 		Cell: ({ row, value }: any) => <Link to={'/datahub/inspection/' + row.id}>{value}</Link>
 	},
 	{
-		accessor: 'code',
+		accessor: 'sign',
 		Header: <span className="pl-2 border-l border-cbs-border">Mã hiệu</span>,
 		headCellProps,
 		cellProps: { className: 'pt-2.5 pb-3 px-2 border-b border-cbs-border' }
@@ -49,26 +53,32 @@ const getColumns = (): TableProperties<any>['columns'] => ([
 		Header: <span className="pl-2 border-l border-cbs-border">Cập nhật</span>,
 		headCellProps,
 		cellProps: { className: 'pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border' },
-		Cell: ({ row }: any) => <>
-			<span className='mr-3'>Nguyễn Văn A-TRX</span>
-			<span className='text-cbs-subtext'>15:30 12/8/2021</span>
-		</>
+		Cell: ({ row }: any) => {
+			return <>
+				<span className='mr-3'>{row.original.userCreate?.bizfullname}</span>
+				<span className='text-cbs-subtext'>{moment(row.updatedAt).format('hh:mm DD/MM/YYYY')}</span>
+			</>
+		}
 	},
 ])
 
-const DatahubInspection: FC = (props) => {
+const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 	const [keyword, setKeyword] = useState('');
 
-	const { data } = useQueryDatahub(
-		["datahub_inspection", keyword],
+	const [selected, setSlected] = useState<DatahubInspection | null>();
+	const queryClient = useQueryClient();
+
+	const { data, resetPage } = useQueryDatahub(
+		["datahub_inspection", type, keyword],
 		({ cursor }) =>
-			DatahubRepository.getProjectList({
-				populates: { "path": "client area1 area2 area3", select: '_id name' },
+			DatahubRepository.getDatahubInspection({
+				populates: { "path": "userCreate", select: '_id bizfullname' },
+				type,
 				limit: 10,
 				keyword: keyword,
-				select: '_id name sign client address area3 area2 area1 location note',
+				// select: '_id name sign client address area3 area2 area1 location note',
 				lastestID: cursor
 			}),
 		{
@@ -79,6 +89,17 @@ const DatahubInspection: FC = (props) => {
 			keepPreviousData: true,
 		}
 	);
+
+	const handleDeleteItem = useCallback(async (selectedRow: any) => {
+		try {
+			await DatahubRepository.deleteDatahubInspection({ inspectionDocID: selectedRow._id });
+			queryClient.removeQueries(['datahub_inspection', type]);
+			setKeyword('');
+			resetPage();
+		} catch (error: any) {
+			toast.error(error.message)
+		}
+	}, [])
 
 	const columns = useMemo(getColumns, []);
 
@@ -94,14 +115,28 @@ const DatahubInspection: FC = (props) => {
 					return <div className="flex flex-col h-full overflow-hidden">
 						<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 							<span className="text-x-large mr-7">Danh sách</span>
-							<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
+							<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={(e) => setKeyword(e.target.value)} />
 							<DocumentDropdown
 								data={pkgs}
 								value={pkg.title}
 								onSelectValue={setPkg}
 							/>
 							{/* <DropdownFilterButton /> */}
-							<GroupActions className="flex items-center flex-1" />
+							<GroupActions
+								className="flex items-center flex-1"
+								onClickPencil={() => {
+									if (!selectedFlatRows.length) return
+									setSlected(selectedFlatRows[0].original);
+									setShow(true);
+								}}
+								onClickTrash={() => {
+									handleDeleteItem(selectedFlatRows[0].original);
+								}}
+								disabled={{
+									pencil: selectedFlatRows.length !== 1,
+									trash: selectedFlatRows.length !== 1,
+								}}
+							/>
 
 							<ButtonCreate onClick={() => setShow(!show)} />
 							<ButtonMore />
@@ -128,10 +163,18 @@ const DatahubInspection: FC = (props) => {
 				tableCellSelectorInputProps={{ className: 'cbs-checkbox' }}
 
 				tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
+				tableRowProps={(props, { row }) => ({ onContextMenu(e) { e.preventDefault(); console.log(row.id) } })}
 
 				columns={columns}
 			/>
-			<ModalCreateInspection type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalExtraLarge show={show}>
+				<ModalCreateInspection
+					inspectionDocID={selected?._id}
+					type={type}
+
+					toggle={() => setShow(!show)}
+				/>
+			</ModalExtraLarge>
 		</>
 	);
 }
