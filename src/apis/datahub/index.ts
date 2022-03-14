@@ -5,10 +5,8 @@ import API from "../repository";
 // import { convertObToUrl } from "utils";
 
 // Khai báo chính xác kiểu trả về nếu biết
-import { ResponseCreate,ResponseList } from "typings/apis/response";
-import {
-  DatahubPrams,
-} from "typings/datahub/api";
+import { ResponseCreate, ResponseList } from "typings/apis/response";
+import { DatahubPrams } from "typings/datahub/api";
 import {
   DatahubTypes,
   DatahubTypesParams,
@@ -124,6 +122,7 @@ const DatahubRepository = {
     );
     return data;
   },
+
   // ==== Datahub Contract ====
   async getDatahubContractList(
     params: { contractorID: string } & DatahubPrams
@@ -158,19 +157,47 @@ const DatahubRepository = {
     return data;
   },
 
-  // ==== Datahub Profiles ====
-  async getDatahubProfileList(
-    params: { company: string } & DatahubPrams
+  // ==== Datahub Contract ====
+  async getDatahubInspection<T extends{ inspectionDocID?: string } & DatahubPrams >( // Get List and Specific item
+    params: T
   ) {
+    const { data } = await API.get<T['inspectionDocID'] extends string ? ResponseCreate<DatahubInspection> : ResponseList<DatahubInspection>>(
+      `${url}/datahub_inspection_docs`,
+      { params }
+    );
+    return data;
+  },
+  async createDatahubInspection(body: DatahubInspectionBody) { // Create new item
+    const { data } = await API.post<ResponseCreate<DatahubInspection>>(
+      `${url}/datahub_inspection_docs`,
+      body
+    );
+    return data;
+  },
+  async updateDatahubInspection(body: DatahubInspectionBody) { // Update item
+    const { data } = await API.put<ResponseCreate<DatahubInspection>>(
+      `${url}/datahub_inspection_docs`,
+      body
+    );
+    return data;
+  },
+  async deleteDatahubInspection(params: { inspectionDocID: string }) { // Remove one item
+    const { data } = await API.delete<ResponseCreate<DatahubInspection>>(
+      `${url}/datahub_inspection_docs`,
+      { params }
+    );
+    return data;
+  },
+
+  // ==== Datahub Profiles ====
+  async getDatahubProfileList(params: { company: string } & DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubProfile>>(
       `${url}/datahub_profiles`,
       { params }
     );
     return data;
   },
-  async getDatahubProfile(
-    params: { datahubProfileID: string } & DatahubPrams
-  ) {
+  async getDatahubProfile(params: { datahubProfileID: string } & DatahubPrams) {
     const { data } = await API.get<ResponseList<DatahubProfile>>(
       `${url}/datahub_profiles`,
       { params }
