@@ -7,9 +7,6 @@ import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redu
 import {useDispatch, useSelector} from "react-redux";
 import {useUpload} from "services/hooks/useUpload";
 import {convertToRaw, EditorState} from "draft-js";
-import {
-    MentionData
-} from '@draft-js-plugins/mention';
 import {modifyUploadedFilesV2} from "services/hooks/useUploadFile/upload.utils";
 import {ReplyChat} from "./ReplyChat";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
@@ -21,13 +18,9 @@ import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 export const ChattingInputContext = createContext<{
     editorState: any;
     onChangeCallback: (editorState: any) => void;
-    suggestions: MentionData[];
-    setSuggestions: React.Dispatch<React.SetStateAction<MentionData[]>>;
 }>({
     editorState: EditorState.createEmpty(),
     onChangeCallback: (editorState: any) => undefined,
-    suggestions: [],
-    setSuggestions: () => undefined
 });
 
 type Props = {
@@ -49,18 +42,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const [realValue, setRealValue] = useState("");
 
-    const suggestionsData = useCallback(() => {
-        return chat.members.map(member=> {
-            return {
-                name: member.bizfullname||member.fullname,
-                _id: member._id,
-                avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-            }
-        });
-    },[chat])
-
-    const [suggestions, setSuggestions] = useState<MentionData[]>(suggestionsData());
-
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     );
@@ -76,8 +57,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     }, [editorState]);
 
     const value = useMemo(
-        () => ({ editorState, onChangeCallback, suggestions, setSuggestions }),
-        [editorState, onChangeCallback, suggestions, setSuggestions]
+        () => ({ editorState, onChangeCallback}),
+        [editorState, onChangeCallback]
     );
 
     const socket = socketRef.current;
@@ -318,7 +299,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         <InputForMessage
                             onPasteFiles={(files) => handleSetFiles(files)}
                             onPressEnter={() => handleSendMessage()}
-                            mentions={suggestionsData()}
                             handleUploadFiles={((files) => handleSetFiles(files))}
                             context={context}
                         />
