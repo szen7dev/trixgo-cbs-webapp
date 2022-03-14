@@ -79,6 +79,7 @@ export const Poll:FC<Props> = ({message,chat, isMini, context}) => {
                 </div>
                 <div className={"flex items-center justify-center py-[16px]"}>
                     <button
+                        disabled={message.isFake}
                         onClick={() => setOpenVote(true)}
                         className={"text-primary"}>
                         Bình chọn

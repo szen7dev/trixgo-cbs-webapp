@@ -45,6 +45,7 @@ export const Reminder:FC<Props> = ({message, context, isMini}) => {
     }, [message]);
 
     const reminderAction = (isJoin: boolean) => {
+        if (message.isFake) return;
         const reminderData = {...message.reminder};
         if (isJoin) {
             reminderData.accepts =  [...reminderData.accepts, profileId];
@@ -101,12 +102,14 @@ export const Reminder:FC<Props> = ({message, context, isMini}) => {
                     (!checkUserAccept().didTakeAction)?
                     <div className={"flex justify-around py-[11px] border-t border-gray-200"}>
                         <button
+                            disabled={message.isFake}
                             onClick={() => reminderAction(true)}
                             className={"w-[126px] rounded-full h-[36px] flex items-center py-2 bg-gray-100 text-center justify-center"}>
                             <img alt={"-----"} src={IconCheck} className={"w-[16px] h-[16px] mr-[5px]"}/>
                             <span>Tham gia</span>
                         </button>
                         <button
+                            disabled={message.isFake}
                             onClick={() => reminderAction(false)}
                             className={"w-[126px] rounded-full h-[36px] flex items-center py-2 bg-gray-100 text-center justify-center"}>
                             <img alt={"-----"} src={IconRedClose} className={"w-[16px] h-[16px] mr-[5px]"}/>
