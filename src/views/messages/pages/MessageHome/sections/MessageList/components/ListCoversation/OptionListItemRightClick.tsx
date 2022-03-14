@@ -23,12 +23,15 @@ import {RootState} from "redux/reducer";
 import PinIcon from "assets/images/icons8-pin-96.svg";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {toast} from "react-toastify";
 
 type Props = {
     chat: ItemListConversation;
-    socketRef: any
+    socketRef: any;
+    currentChat: string;
 }
-export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
+export const OptionListItemRightClick:FC<Props> = ({chat, socketRef, currentChat}) => {
     const socket = socketRef.current;
     const dispatch = useDispatch();
     const {closeRightClick} = useRightClickMenu();
@@ -38,7 +41,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
 
     const chatData = useSelector((state: RootState) => state.listConversation.data.listConversation[chat._id]);
     const {openDeleteConfirm} = useDeleteConfirm();
-
+    const {isAuthor} = UseMessageHelper();
     const checkedValue = useCallback(() => {
         return !(chatData.usersMute??[]).includes(profileId)
     }, [chatData.usersMute]);
@@ -54,7 +57,8 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
         hideConversation,
         markReadConversation,
         deleteHistoryConversation,
-        deleteConversation
+        deleteConversation,
+        leaveConversation
     } = UseListConversation()
 
     const handleTurnOffMute = () => {
@@ -161,7 +165,32 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>
                 <div className={"text-negative mr-2 ml-4"}>Xoá lịch sử</div>
             </button>
-            <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
+            <button
+                onClick={() => {
+                    openDeleteConfirm({
+                        title: "Rời khỏi cuộc hội thoại",
+                        message: "Bạn có chắc muốn rời khỏi cuộc hội thoại này không?",
+                        deleteAction: () => {
+                            leaveConversation({
+                                conversationID: chat._id
+                            }).then(({data, error}) => {
+                                if (!error) {
+                                    dispatch(deleteConversationAction({conversationId: data.infoConversation._id}))
+                                    if (currentChat===chat._id) {
+                                        window.location.href = "/messages"
+                                    }
+                                    socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
+                                } else {
+                                    toast.error(data.message);
+                                }
+                            })
+                        }
+                    })
+                    setTimeout(() => {
+                        closeRightClick()
+                    }, 100)
+                }}
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full"}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={ExitRedIcon}/>
                 <div className={"text-negative mr-2 ml-4"}>Rời cuộc hội thoại</div>
             </button>
@@ -175,7 +204,9 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
                                 conversationID: chat._id
                             }).then(data => {
                                 dispatch(deleteConversationAction({conversationId: data._id}))
-                                window.location.hash = "";
+                                if (currentChat===chat._id) {
+                                    window.location.href = "/messages"
+                                }
                                 socket.emit("CHATTING_CSS_REMOVE_CONVERSATION",{infoConversation: data})
                             })
                         }
@@ -184,7 +215,7 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef}) => {
                         closeRightClick()
                     }, 100)
                 }}
-                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + ((chatData.authors.includes(profileId)||chatData.author === profileId)?"":"hidden")}>
+                className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full " + (isAuthor(chatData, profileId)?"":"hidden")}>
                 <img alt={"======"}  className={"mr-2 w-[24px] h-[24px]"} src={RemoveRedIcon}/>
                 <div className={"text-negative mr-2 ml-4"}>Xoá cuộc hội thoại</div>
             </button>

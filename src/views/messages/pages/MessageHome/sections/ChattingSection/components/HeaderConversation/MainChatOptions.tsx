@@ -13,6 +13,7 @@ import {RootState} from "redux/reducer";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 export const MainChatOptions:FC = () => {
     const {currentChat} = useContext(MessageContext)
@@ -28,7 +29,7 @@ export const MainChatOptions:FC = () => {
     }, [chatData.usersMute])
 
     const {updateMuteConversation} = UseListConversation();
-
+    const {isAuthor} = UseMessageHelper()
     const handleTurnOffMute = () => {
         const payload = {
             conversationID: currentChat,
@@ -85,7 +86,7 @@ export const MainChatOptions:FC = () => {
                             // title: "Hello",
                             // message: "Oh shit"
                         })}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + ((chatData.authors.includes(profileId)||chatData.author === profileId)?"":"hidden")}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + (isAuthor(chatData, profileId)?"":"hidden")}>
                         <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={RemoveRedIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4 text-negative"}>Xoá cuộc hội thoại</div>
                     </div>

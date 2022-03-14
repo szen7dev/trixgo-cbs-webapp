@@ -10,17 +10,27 @@ import {
     ConversationInformarionResponse,
     ConvversationInformationPayload,
     CreateConversationPayload,
-    CreateConversationResponse, DeleteConversationPayload, DeleteConversationResponse,
+    CreateConversationResponse,
+    DeleteConversationPayload,
+    DeleteConversationResponse,
     DeleteFolderPayload,
-    DeleteFolderResponse, DeleteHistoryConversationPayload, DeleteHistoryConversationResponse,
+    DeleteFolderResponse,
+    DeleteHistoryConversationPayload,
+    DeleteHistoryConversationResponse,
     GeneralGroupByMemberPayload,
-    GeneralGroupByMemberResponse, HideConversationPayload, HideConversationResponse,
+    GeneralGroupByMemberResponse,
+    HideConversationPayload,
+    HideConversationResponse,
+    LeaveConversationPayload,
+    LeaveConversationResponse,
     ListConversationPayload,
     ListConversationResponse,
     ListFoldersConversationPayload,
     ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
-    ListMembersOfConversationResponse, MarkReadConversationPayload, MarkReadConversationResponse,
+    ListMembersOfConversationResponse,
+    MarkReadConversationPayload,
+    MarkReadConversationResponse,
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     PinConversationPayload,
@@ -51,6 +61,7 @@ const hideConversation = "/api/chatting/conversations/update-hide-conversation";
 const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
 const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
 const deleteConversation = "/api/chatting/conversations/delete-conversation";
+const leaveConversation = "/api/chatting/conversations/member-leave-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -208,6 +219,14 @@ const ListConversationRepository = {
     async deleteConversation(payload: DeleteConversationPayload) : Promise<DeleteConversationResponse> {
         const {data} = await API.delete(
             `${deleteConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async leaveConversation(payload: LeaveConversationPayload) : Promise<LeaveConversationResponse> {
+        const {data} = await API.get(
+            `${leaveConversation}?${convertObToUrl(payload)}`
         )
 
         return data;

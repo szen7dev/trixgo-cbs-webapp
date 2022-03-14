@@ -21,7 +21,7 @@ export const ListOnlineUserInMessage:FC<Props> = ({chat, isActive}) => {
 
     const renderListOnlineUser = useCallback(() => {
         return  _map(listMembersMessage, (user,index) => (
-            <OnlineUserInChatItem key={user._id} user={user} index={index}/>
+            <OnlineUserInChatItem chat={chat} key={user._id} user={user} index={index}/>
         ))
     }, [listMembersMessage]);
 

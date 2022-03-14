@@ -501,3 +501,21 @@ export type ListMembersMessageResponse = {
     error: boolean;
     status: number;
 }
+
+export type LeaveConversationPayload = {
+    conversationID: string;
+}
+export type LeaveConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type LeaveConversationResponse = {
+    data: LeaveConversationData;
+    error: boolean;
+    status: number;
+}
