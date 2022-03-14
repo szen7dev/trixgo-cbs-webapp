@@ -43,7 +43,7 @@ export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUpl
     const {listMembersMessage} = UseInformationMessage(params, open, "members");
     const mentions = listMembersMessage.map(user => {
         return {
-            _id: user._id,
+            _id: user?.member?._id,
             name: user?.member?.bizfullname,
             avatar: `${process.env.REACT_APP_URL_S3_USER}/${user?.member?.image}`
         }

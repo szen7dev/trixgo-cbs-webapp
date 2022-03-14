@@ -20,7 +20,7 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
         const listener = (event: Event) => {
             const node = event.target as HTMLSpanElement;
             if(node && node.classList.contains("user-tag-in-content")) {
-                node.dataset.userid&&handleStartPrivateChat(node.dataset.userid)
+                node.dataset.userid&&handleStartPrivateChat(node.dataset.userid, isMini)
             }
         };
         document.addEventListener("click", listener);
