@@ -38,7 +38,7 @@ export type OptionsCompress = {
 // }
 
 export type UploadFileProps = {
-    files: File & File[],
+    files: any, // File & File[],
     fileType: number,
     progress?: (percentCompleted: number, _id?: string) => void,
     useCompress?: boolean;

@@ -44,6 +44,7 @@ import { RelatedResponseItem } from "../RelatedResponseItem";
 import { LoadImage } from "views/pcm/shareComponents/common";
 import { FileUploadRow } from "views/pcm/shareComponents/common";
 import { ModalZoomView } from "shareComponents/common";
+import AddConversationToFolder from "redux/reducer/messages/AddConversationToFolder";
 
 enum RelatedResponseTab {
   ALL = "ALL",
@@ -260,13 +261,20 @@ const Response: FC<Props> = ({ task }) => {
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) return;
+
+    console.log('BEFORE modifyUploadedFilesV2')
     console.log({ files: event.target.files })
+    console.log('=================================')
 
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length ? Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] : null,
       fileLastKey: Object.keys(uploads.files).length ? Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] : null,
     }, event.target.files);
+
+    console.log('AFTER modifyUploadedFilesV2')
+    console.log({ files, images })
+    console.log('=================================')
 
     setUploadImage(images);
     setUploadFile(files);
@@ -278,6 +286,7 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(images).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
+        console.log({ key, image: file })
         const { _id } = await addFileToUpload({
           files: file,
           fileType: 1,
@@ -301,6 +310,7 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
+        console.log({ key, file })
         const { _id } = await addFileToUpload({
           files: file,
           fileType: 2,
@@ -462,11 +472,11 @@ const Response: FC<Props> = ({ task }) => {
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                     <IconPaperClip className="-rotate-45" />
                     {/* accept="application/*" */}
-                    <input type="file" name="files" id="file" className="hidden" multiple onChange={event => handleSetFiles(event)} />
+                    <input type="file" name="files" className="hidden" multiple onChange={handleSetFiles} />
                   </label>
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
                     <IconImage />
-                    <input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
+                    <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={handleSetFiles} />
                   </label>
                 </div>
                 <div>
