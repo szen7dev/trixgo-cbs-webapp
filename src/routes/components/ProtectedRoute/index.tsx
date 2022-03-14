@@ -9,6 +9,6 @@ export const ProtectedRoute: FC<RouteProps> = ({ ...routeProps }) => {
     if (hasAuthenticated) {
         return <Route {...routeProps} />;
     } else {
-        return <Redirect to="/authentication/sign-in" />;
+        return <Redirect to="/login" />;
     }
 };

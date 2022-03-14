@@ -27,7 +27,7 @@ export const resources = {
 } as const;
 
 i18n.use(initReactI18next).init({
-  lng: "en",
+  lng: "vn",
   ns: ["signIn", "register", "resetPassword", "human"],
   resources,
 });

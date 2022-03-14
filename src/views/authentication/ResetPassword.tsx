@@ -322,7 +322,7 @@ const ResetPasswordPage: FC = () => {
             }}
           </Formik>
 
-          <Link to="/authentication/sign-in">
+          <Link to="/login">
             <p className="mt-6 font-bold text-primary">
               {t("signIn:submitButton")}
             </p>
