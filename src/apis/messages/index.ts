@@ -34,7 +34,7 @@ import {
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     PinConversationPayload,
-    PinConversationResponse,
+    PinConversationResponse, RemoveMemberFromConversationPayload, RemoveMemberFromConversationResponse,
     UpdateConversationPayload,
     UpdateConversationResponse,
     UpdateFolderPayload,
@@ -62,6 +62,7 @@ const markReadConversation = "/api/chatting/conversations/mark-read-conversation
 const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
 const deleteConversation = "/api/chatting/conversations/delete-conversation";
 const leaveConversation = "/api/chatting/conversations/member-leave-conversation";
+const removeFromConversation = "/api/chatting/conversations/remove-member-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -227,6 +228,14 @@ const ListConversationRepository = {
     async leaveConversation(payload: LeaveConversationPayload) : Promise<LeaveConversationResponse> {
         const {data} = await API.get(
             `${leaveConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async removeMemberFromConversation(payload: RemoveMemberFromConversationPayload) : Promise<RemoveMemberFromConversationResponse> {
+        const {data} = await API.delete(
+            `${removeFromConversation}?${convertObToUrl(payload)}`
         )
 
         return data;

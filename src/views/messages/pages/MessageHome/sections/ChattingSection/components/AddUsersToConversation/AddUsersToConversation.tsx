@@ -7,7 +7,6 @@ import {dismissAddUserToConversation} from "redux/reducer/messages/AddUserToConv
 import {map as _map} from "lodash";
 import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {toast} from "react-toastify";
 
 type Props = {
@@ -43,8 +42,7 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
         }
         setSelectedFriends(selected);
     }
-    const paramsRefetchListMember = {conversationID: conversationId, type: "member", populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
-    const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members")
+
     const forwardMessagesToConversation = () => {
         const membersId = Object.keys(selectedFriends);
         addUserToConversation({conversationID: conversationId, membersID: membersId}).then(({error,data}) => {
@@ -69,7 +67,6 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
                     config: 0
                 })
             });
-            refetchListMembers()
         });
     };
 

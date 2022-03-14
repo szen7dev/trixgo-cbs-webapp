@@ -519,3 +519,22 @@ export type LeaveConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type RemoveMemberFromConversationPayload = {
+    conversationID: string;
+    memberID: string
+}
+export type RemoveMemberFromConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type RemoveMemberFromConversationResponse = {
+    data: RemoveMemberFromConversationData;
+    error: boolean;
+    status: number;
+}
