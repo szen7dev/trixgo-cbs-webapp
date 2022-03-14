@@ -122,11 +122,13 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
             case 101:
                 return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
             case 102:
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
             case 103:
                 return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
             case 104:
                 return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
+            case 107:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti isMini={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 111:

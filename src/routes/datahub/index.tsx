@@ -80,11 +80,11 @@ const DatahubRoutes: FC = () => {
 							{ id: '5', path: '/datahub/inspection/4', title: 'Cảnh quan' },
 						]}>
 							<Switch>
-								<Route exact path='/datahub/inspection' component={DatahubInspection} />
-								<Route exact path='/datahub/inspection/1' component={DatahubInspection} />
-								<Route exact path='/datahub/inspection/2' component={DatahubInspection} />
-								<Route exact path='/datahub/inspection/3' component={DatahubInspection} />
-								<Route exact path='/datahub/inspection/4' component={DatahubInspection} />
+								<Route exact path='/datahub/inspection' component={()=><DatahubInspection type={1} />} />
+								<Route exact path='/datahub/inspection/1' component={()=><DatahubInspection type={2} />} />
+								<Route exact path='/datahub/inspection/2' component={()=><DatahubInspection type={3} />} />
+								<Route exact path='/datahub/inspection/3' component={()=><DatahubInspection type={4} />} />
+								<Route exact path='/datahub/inspection/4' component={()=><DatahubInspection type={5} />} />
 								<Route exact path='/datahub/inspection/:id' component={DatahubInspectionDetail} />
 							</Switch>
 						</LayoutSecondary>

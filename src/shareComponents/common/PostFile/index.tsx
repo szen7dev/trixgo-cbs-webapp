@@ -16,6 +16,7 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 			const a = document.createElement('a');
 			a.href = `${process.env.REACT_APP_URL_S3}${file.path}`;
 			a.download = file.nameOrg;
+			a.target = '_blank';
 			document.body.appendChild(a);
 			a.click();
 			document.body.removeChild(a);

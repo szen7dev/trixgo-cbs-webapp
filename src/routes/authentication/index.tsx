@@ -16,11 +16,14 @@ const AuthenticationRouter: FC = () => {
         <FullPageLayout isAuthentication>
             <Switch>
                 <Route exact path="/authentication">
-                    <Redirect to="/authentication/sign-in" />
+                    <Redirect to="/login" />
+                </Route>
+                <Route exact path="/authentication/sign-in">
+                    <Redirect to="/login" />
                 </Route>
                 <Route
                     exact
-                    path="/authentication/sign-in"
+                    path="/login"
                     component={SignInPage}
                 />
                 <Route

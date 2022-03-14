@@ -17,9 +17,12 @@ function CustomFieldFormik<A extends ElementType = 'input'>(props: Props<A>): JS
 	return (
 		<Field name={name} as={Tag}>
 			{({ field, form, meta }: FieldProps) => (
-				<label className={classNames('block focus-within:text-cbs-primary', { 'text-red-400': meta.touched && meta.error  })}>
-					<div className='mb-1.5'>
-						{title} {required && "(*)"}
+				<label className={classNames('block focus-within:text-cbs-primary', { 'text-red-400': meta.touched && meta.error })}>
+					<div className='mb-1.5 flex justify-between '>
+						<span>
+							{title} {required && "(*)"}
+						</span>
+						<span>{meta.touched && meta.error}</span>
 					</div>
 					<Tag
 						className={classNames("text-black py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-md",
