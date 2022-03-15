@@ -538,3 +538,15 @@ export type RemoveMemberFromConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdateConfigConversationPayload = {
+    conversationID: string;
+    typeConfig: number;
+    valueConfig: number
+}
+
+export type UpdateConfigConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}

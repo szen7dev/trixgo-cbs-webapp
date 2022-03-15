@@ -14,7 +14,7 @@ type Props = {
 export const ListFileInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
 
-    const [author, setAuthor] = useState();
+    const [author, setAuthor] = useState("");
     const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
     const params = {conversationID: currentChat, type: 2, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listFilesMessage, hasListFilesNextPage, nextPageListFiles} = UseInformationMessage(params, isActive, "files");

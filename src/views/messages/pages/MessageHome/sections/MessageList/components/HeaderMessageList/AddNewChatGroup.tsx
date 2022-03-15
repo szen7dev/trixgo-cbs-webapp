@@ -59,7 +59,7 @@ export const AddNewChatGroup:FC = () => {
                     links: 0,
                     createAt: 0,
                     __v: 0,
-                    config: 0
+                    // config: 0
                 })
             });
             setCurrentChat(data._id);

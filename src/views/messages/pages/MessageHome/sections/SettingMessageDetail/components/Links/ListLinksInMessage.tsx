@@ -14,7 +14,7 @@ type Props = {
 export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
 
-    const [author, setAuthor] = useState();
+    const [author, setAuthor] = useState("");
     const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
     const params = {conversationID: currentChat, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listLinksMessage, hasListLinksNextPage, nextPageListLinks} = UseInformationMessage(params, isActive, "links");

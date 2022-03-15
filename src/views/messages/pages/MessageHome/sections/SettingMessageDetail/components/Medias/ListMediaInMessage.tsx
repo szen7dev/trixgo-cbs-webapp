@@ -18,7 +18,7 @@ export const ListMediaInMessage:FC<Props> = ({isActive}) => {
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
     const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
-    const [author, setAuthor] = useState();
+    const [author, setAuthor] = useState("");
     const params = {conversationID: currentChat, type: 1, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listMediasMessage, hasListMediasNextPage, nextPageListMedias} = UseInformationMessage(params, isActive, "images");
 
