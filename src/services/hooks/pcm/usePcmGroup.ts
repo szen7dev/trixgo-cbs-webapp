@@ -17,7 +17,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
     const { mutateAsync: removeManyPcmPlanGroupMutateAsync, isLoading: isManyAppRole } =
         useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)
     );
-
+    
     // info group 
     const {
         data: infoGroup, 

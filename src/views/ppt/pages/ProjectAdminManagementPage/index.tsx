@@ -1,10 +1,30 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
+import {  useParams, useHistory, Redirect  } from 'react-router-dom';
+import { DepartmentRepository } from 'apis/item';
 
 import AppAdminTab from "./tabs/AppAdminTab";
+import { useAuth } from "services/hooks/useAuth";
+import { toast } from "react-toastify";
 
-const ProjectAdminManagementPage: FC = () => {
+const ProjectAdminManagementPage: FC = (): any => {
   const [toggleTab, setToggleTab] = useState(1);
   const handleToggleTab = (index: number) => setToggleTab(index);
+	const { id: projectID } = useParams<{ id: string }>();
+  const { user } = useAuth();
+  const history = useHistory();
+
+  // Call trực tiếp api
+	React.useEffect(() => {
+		if (projectID) {
+        (async () =>  {
+          const infoDepartment = await DepartmentRepository.fetchDetailDepartment({ departmentID: projectID });
+          if(!infoDepartment?.data?.admins?.includes(user?._id || "")){
+            toast.error("Bạn không có quyền truy cập");
+            return history.push("/");
+          }
+        })();
+		}
+	}, [projectID]);
 
   return (
     <main className="h-full">
