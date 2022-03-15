@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import { UIEvent, FC, useState, useEffect } from 'react';
+import { UIEvent, FC, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
@@ -22,28 +22,25 @@ import { useAuth } from 'services/hooks/useAuth';
 import { useArea } from "services/hooks/items/useArea";
 import { useCompany } from 'services/hooks/useCompanies';
 
-export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialValues = {
+export const ModalCreateOrUpdateCompany: FC<ModalProps> = ({ toggle, modalType, onConfirm, initialValues = {
   companyID: "",
   name: "",
   sign: "",
   taxid: "",
   address: "",
-  area: ""
+  area: "",
+  phone: "",
+  email: "",
 } }) => {
   const { user } = useAuth();
   const [keywordArea, setKeywordArea] = useState('');
-  const { listAreas, nextPageList } = useArea({
+  const { listAreas, nextPageList: nextPageListArea } = useArea({
     params: {
       keyword: keywordArea
     },
     isFetchAreas: true
   });
-  const [dataAreas, setDataAreas] = useState(listAreas);
   const { createCompanyAsync, updateCompanyAsync } = useCompany();
-
-  useEffect(() => {
-    setDataAreas(listAreas);
-  }, [listAreas.length])
 
   const companySchema = object().shape({
     name: string().required("Bạn cần nhập tên cho công ty"),
@@ -51,15 +48,26 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
     taxid: string().required("Bạn cần nhập mã số thuế của công ty"),
     address: string().required("Bạn cần nhập địa chỉ của công ty"),
     area: string().required("Bạn cần chọn khu vực của công ty"),
+    email: string().email('Email không hợp lệ'),
   });
 
   const handleSubmit = async (values: CompanyPayload) => {
     try {
+      const dataCreateOrUpdate: CompanyPayload = {
+        companyID: values.companyID,
+        name: values.name,
+        sign: values.sign,
+        taxid: values.taxid,
+        area: values.area,
+        address: values.address,
+        email: values.email,
+        phone: values.phone,
+      }
+
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          // Tạo công ty
-          const { error, message } = await createCompanyAsync(values);
+          const { error, message } = await createCompanyAsync(dataCreateOrUpdate);
 
           if (error) {
             return toast.warning(message);
@@ -69,10 +77,7 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
           break;
         }
         case 'update': {
-          values.companyID = user?.company?._id;
-
-          // Cập nhật công ty
-          const { error, message } = await updateCompanyAsync(values);
+          const { error, message } = await updateCompanyAsync(dataCreateOrUpdate);
           if (error) {
             return toast.warning(message);
           }
@@ -99,17 +104,10 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
-
-    if (bottom) {
-      nextPageList();
-      setDataAreas(previousValue => ({ ...previousValue, ...listAreas }));
-    }
+    bottom && nextPageListArea();
   }
 
-  const handleSearchArea = debounce((value) => {
-    setKeywordArea(value);
-    // setDataAreas(listAreas);
-  }, 500);
+  const handleSearchArea = debounce((value) => setKeywordArea(value), 500);
 
   return (
     <Formik
@@ -181,7 +179,7 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
                   />
                 </div>
 
-                <div>
+                <div className='mb-4'>
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Khu vực công ty
                   </label>
@@ -195,10 +193,14 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
                     maxWidthInput="max-w-none"
                     renderSelectedItem={(item: any) => <span>{item.text}</span>}
                     classNameItem="p-0"
-                    data={dataAreas}
+                    data={listAreas}
                     formatItem={{
                       id: "_id",
                       text: "name",
+                    }}
+                    initialValue={{ 
+                      _id: initialValues.area, 
+                      name: initialValues.areaName
                     }}
                     inlineSearch={true}
                     onSearchInputChange={handleSearchArea}
@@ -208,6 +210,28 @@ export const ModalCreateCompany: FC<ModalProps> = ({ toggle, modalType, onConfir
                   />
                   <ErrorMessage
                     name="area"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtPhone">
+                    Số điện thoại
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtPhone" placeholder="Nhập số điện thoại" {...getFieldProps('phone')} />
+                  <ErrorMessage
+                    name="phone"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtEmail">
+                    Email
+                  </label>
+                  <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtEmail" placeholder="Nhập email" {...getFieldProps('email')} />
+                  <ErrorMessage
+                    name="email"
                     component="span"
                     className="font-normal leading-7 text-sm text-negative"
                   />

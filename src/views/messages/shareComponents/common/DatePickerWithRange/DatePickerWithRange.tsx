@@ -7,13 +7,14 @@ import cn from "classnames";
 import DateIcon from "assets/images/icons8-calendar-100.svg";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import Close from "../../../../../assets/icons/Close";
 
 type Props = {
     onValueChange?: (value: {
         id: number,
         text: string,
-        startDate: string,
-        endDate: string
+        fromDate: string,
+        toDate: string
     }) => void
 }
 export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
@@ -21,8 +22,8 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
     const [value, setValue] = useState({
         id: 0,
         text: "",
-        startDate: "",
-        endDate: ""
+        fromDate: "",
+        toDate: ""
     })
     const wrapperRef = useRef<HTMLDivElement>(null);
     useOnClickOutside(wrapperRef, () => setShowOption(false));
@@ -31,28 +32,28 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
         {
             id: 1,
             text: "Trong vòng 24h",
-            startDate: moment().subtract(1, 'days').format("DD/MM/yyyy"),
-            endDate: moment().format("DD/MM/yyyy")
+            fromDate: moment().subtract(1, 'days').format("yyyy-MM-DD"),
+            toDate: moment().format("yyyy-MM-DD")
         },
         {
             id: 2,
             text: "Trong vòng 1 tuần",
-            startDate: moment().subtract(1, 'weeks').format("DD/MM/yyyy"),
-            endDate: moment().format("DD/MM/yyyy")
+            fromDate: moment().subtract(1, 'weeks').format("yyyy-MM-DD"),
+            toDate: moment().format("yyyy-MM-DD")
         },
         {
             id: 3,
             text: "Trong vòng 1 tháng",
-            startDate: moment().subtract(1, 'months').format("DD/MM/yyyy"),
-            endDate: moment().format("DD/MM/yyyy")
+            fromDate: moment().subtract(1, 'months').format("yyyy-MM-DD"),
+            toDate: moment().format("yyyy-MM-DD")
         },
     ]
 
     const setOptionValue = (value: {
         id: number,
         text: string,
-        startDate: string,
-        endDate: string
+        fromDate: string,
+        toDate: string
     }, hideOptions = true) => {
         setValue(value)
         hideOptions&&setShowOption(false);
@@ -69,7 +70,28 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                             value.text
                     }
                 </div>
-                <TriangleDown className={"mr-2"}/>
+                <div
+                    onClick={() => {
+                        setOptionValue({
+                            id: 0,
+                            text: "",
+                            fromDate: "",
+                            toDate: ""
+                        })
+                        setShowOption(false);
+                        onValueChange&&onValueChange({
+                            id: 0,
+                            text: "",
+                            fromDate: "",
+                            toDate: ""
+                        })
+                    }}
+                    className={"ml-1 mr-1 cursor-pointer " + (value.id===0?"hidden":"")}>
+                    <Close/>
+                </div>
+                <div>
+                    <TriangleDown className={"mr-2"}/>
+                </div>
             </button>
             {
                 showOption&&
@@ -98,8 +120,8 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                         onClick={() => setOptionValue({
                             id: 4,
                             text: "Chọn khoảng thời gian",
-                            startDate: moment().format("DD/MM/yyyy"),
-                            endDate: moment().format("DD/MM/yyyy"),
+                            fromDate: moment().format("DD/MM/yyyy"),
+                            toDate: moment().format("DD/MM/yyyy"),
                         }, false)}
                         className={"w-full cursor-pointer py-3 px-4"}>
                         <div className={"flex"}>
@@ -115,14 +137,14 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                             value.id === 4 &&
                             <div className={"flex mt-3"}>
                                 <DatePicker
-                                    name="startDate"
+                                    name="fromDate"
                                     selected={null}
                                     onChange={(date: Date | null) =>
                                         setOptionValue({
                                             ...value,
                                             id: 4,
                                             text: "Chọn khoảng thời gian",
-                                            startDate: moment(date).format("DD/MM/yyyy")
+                                            fromDate: moment(date).format("DD/MM/yyyy")
                                         }, false)
                                     }
                                     wrapperClassName={"flex-1 mr-1"}
@@ -132,9 +154,9 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                             className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
                                             <div>Từ</div>
                                             <input
-                                                value={value.startDate}
+                                                value={value.fromDate}
                                                 type="text"
-                                                name="startDate"
+                                                name="fromDate"
                                                 className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
                                             />
                                             <div className={"h-full flex align-items-center pr-2"}>
@@ -144,14 +166,14 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                     }
                                 />
                                 <DatePicker
-                                    name="endDate"
+                                    name="toDate"
                                     selected={null}
                                     onChange={(date: Date | null) =>
                                         setOptionValue({
                                             ...value,
                                             id: 4,
                                             text: "Chọn khoảng thời gian",
-                                            endDate: moment(date).format("DD/MM/yyyy")
+                                            toDate: moment(date).format("DD/MM/yyyy")
                                         }, false)
                                     }
                                     wrapperClassName={"flex-1 ml-1"}
@@ -161,9 +183,9 @@ export const DatePickerWithRange:FC<Props> = ({onValueChange}) => {
                                             className={"relative pl-2 min-h-fit border border-gray-200 rounded-md flex items-center"}>
                                             <div>Đến</div>
                                             <input
-                                                value={value.endDate}
+                                                value={value.toDate}
                                                 type="text"
-                                                name="startDate"
+                                                name="fromDate"
                                                 className="p-1 pl-2 pr-2 w-full focus:outline-none focus:border-primary"
                                             />
                                             <div className={"h-full flex align-items-center pr-2"}>

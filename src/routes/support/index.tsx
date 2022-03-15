@@ -29,9 +29,9 @@ const SupportRouter: FC = () => {
     useEffect(() => {
         if(!user) return;
 
-        if(user.email !== 'contact@trixgo.com') {
-            history.push('/');
-        }
+        // if(user.email !== 'contact@trixgo.com') {
+        //     history.push('/');
+        // }
     }, [user])
 
     return (

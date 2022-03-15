@@ -8,6 +8,7 @@ import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
 import { PostImage, PostFile } from 'shareComponents/common';
+import { nl2p } from 'utils';
 import { APP_KEY } from 'utils/constants';
 
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
@@ -109,7 +110,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	useEffect(() => {
 		if(!socket) return;
 
-		socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
+		// socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
 		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
 	}, [socket])
 
@@ -241,8 +242,14 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 	}
 
-	const handleKeyPressInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-		event.key === "Enter" && handleSubmit();
+	const handleKeyUpInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+		if (event.key === 'Enter') {      
+			if(event.shiftKey) {
+				return;
+			}
+
+			handleSubmit();
+		}
 	}
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
@@ -294,14 +301,16 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 							ref={refInputComment}
 							style={{ color: 'black' }}
 							suppressContentEditableWarning={true}
-							onKeyPress={handleKeyPressInput}
-							// Handle change text
+							onKeyUp={handleKeyUpInput}
 							onInput={e =>
 								onTextChange
 									? onTextChange(e)
 									: setText(e.currentTarget.innerText)
 							}
-						>{defaultValue}</span>
+							dangerouslySetInnerHTML={{
+								__html: nl2p(defaultValue || '')
+							}}
+						></span>
 						<label className="flex items-center justify-center flex-shrink-0 self-end">
 							<img src={iconAttach} alt="Icon attach" className="h-6 w-6" />
 							<input

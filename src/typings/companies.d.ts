@@ -45,4 +45,7 @@ export type CompanyPayload = {
     taxid: string,
     address: string,
     area: string,
+    email?: string,
+    phone?: string,
+    areaName?: string
 }
