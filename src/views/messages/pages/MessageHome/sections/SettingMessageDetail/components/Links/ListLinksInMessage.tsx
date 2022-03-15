@@ -13,8 +13,10 @@ type Props = {
 }
 export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
+
+    const [author, setAuthor] = useState();
     const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
-    const params = {conversationID: currentChat, fromDate: dateRange.fromDate, toDate: dateRange.toDate};
+    const params = {conversationID: currentChat, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listLinksMessage, hasListLinksNextPage, nextPageListLinks} = UseInformationMessage(params, isActive, "links");
 
     const [searchUser, setSearchUser] = useState("");
@@ -107,9 +109,11 @@ export const ListLinksInMessage:FC<Props> = ({isActive}) => {
                             ...member,
                             id: member.member._id,
                             text: member.member.bizfullname,
-                            imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${member?.member?.image}`
+                            imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${member?.member?.image}`,
+                            _id: member.member._id
                         }
                     })}
+                    onchangeValue={({_id}) => setAuthor(_id)}
                 />
                 <DropdownSearchable
                     placeholder={"Ngày gửi"}
