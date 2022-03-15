@@ -40,8 +40,7 @@ export const SupportMemberPage: FC = () => {
   const [companyName, setCompanyName] = useState('');
   const [keywordCompany, setKeywordCompany] = useState('');
   const [keywordUser, setKeywordUser] = useState('');
-  const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
-  // const [infoUser, setInfoUser] = useState({});
+  const [usersChecked, setUsersChecked] = useState<Array<UserSystemProps>>([]);
   const [initialValues, setInitialValues] = useState({
     companyID: companySelected,
     userID: "",
@@ -50,18 +49,11 @@ export const SupportMemberPage: FC = () => {
     departmentID: "",
     positionID: "",
     level: -1,
+    positionName: "",
+    departmentName: "",
   });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
-
-  // const { data } = useQuery(`info_user.${initialValues.userID}`,
-	// 	() => UserSystemRepository.infoUsersSystem(initialValues.userID),
-	// 	{
-	// 		enabled: !!initialValues.userID,
-	// 		refetchOnWindowFocus: false
-	// 	});
-
-	// const infoUser = data?.data;
 
   const { 
     data: listUsersSystem, 
@@ -102,53 +94,69 @@ export const SupportMemberPage: FC = () => {
     setKeywordUser(event.target.value);
   }, 500);
 
+  const clearData = () => {
+    setInitialValues(previousValue => ({
+      ...previousValue,
+      userID: "",
+      fullname: "",
+      email: "",
+      departmentID: "",
+      positionID: "",
+      level: -1,
+      positionName: "",
+      departmentName: "",
+    }))
+  }
+
   const onClickCheckButton = (user: UserSystemProps) => {
-		const check = idsChecked.includes(user._id);
+    const check = usersChecked.find(item => item._id === user._id);
     let newListIDChecked = [];
 
 		if (check) {
-			newListIDChecked = [...idsChecked];
-			newListIDChecked.splice(newListIDChecked.findIndex((e: any) => e == user._id), 1);
-
-			setIdsChecked(newListIDChecked);
+      newListIDChecked = usersChecked.filter(item => item._id !== user._id)
+			setUsersChecked(newListIDChecked);
 		} else {
-			newListIDChecked = [...idsChecked, user._id];
-			setIdsChecked(newListIDChecked);
+			newListIDChecked = [...usersChecked, user];
+			setUsersChecked(newListIDChecked);
 		};
 
-    // if(newListIDChecked.length === 1) {
-    //   setInitialValues({
-    //     userID: user?._id,
-    //     companyID: companySelected,
-    //     fullname: user?.fullname,
-    //     email: user?.email,
-    //     departmentID: user?.department?._id,
-    //     positionID: user?.position?._id,
-    //     level: user?.level,
-    //   });
-    // } else{
-    //   setInitialValues(previousValue => ({ ...previousValue, userID: "" }));
-    // }
+    if(newListIDChecked.length === 1) {
+      const { _id, fullname, email, department, position, level } = newListIDChecked[0];
+      setInitialValues({
+        userID: _id,
+        companyID: companySelected,
+        fullname: fullname,
+        email: email,
+        departmentID: department?._id,
+        positionID: position?._id,
+        level: level,
+        positionName: position?.name,
+        departmentName: department?.name
+      });
+    } else{
+      clearData();
+    }
 	};
 
   const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
+    const user = usersChecked.find(item => item._id === id);
+		return user ? true : false;
+	}, [usersChecked]);
 
   const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listUsersSystem.length;
-	}, [idsChecked]);
+		return usersChecked.length == listUsersSystem.length;
+	}, [usersChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listUsersSystem.length) {
-			setIdsChecked([]);
+		if (usersChecked.length == listUsersSystem.length) {
+			setUsersChecked([]);
 		} else {
-			const idsAll = listUsersSystem.map((e: any) => e._id);
-			setIdsChecked(idsAll);
+			setUsersChecked(listUsersSystem);
 		}
 	};
 
-  const handleConfirmDelete = async (ids: string[]) => {
+  const handleConfirmDelete = async () => {
+    const ids = usersChecked.map(item => item._id);
     const result = await deleteUserSystemAsync(ids);
 
     if(result.error) {
@@ -157,15 +165,13 @@ export const SupportMemberPage: FC = () => {
 
     toast.success('Xoá dữ liệu thành công');
     closeModal();
-    setIdsChecked([]);
-    setInitialValues(previousValue => ({ ...previousValue, userID: "" }));
+    setUsersChecked([]);
+    clearData();
     refetchUser();
   }
 
   useEffect(() => {
-    if(companySelected) {
-      setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
-    }
+    companySelected && setInitialValues(previousValue => ({ ...previousValue, companyID: companySelected }));
   }, [companySelected])
 
   return (
@@ -208,20 +214,19 @@ export const SupportMemberPage: FC = () => {
               onChange={onChangeSearchUser}
             />
 
-            {idsChecked.length === 1 ? (
+            {usersChecked.length === 1 ? (
               <button 
                 className="mr-3" 
                 onClick={() => {
-                  toast.info('Tính năng đang bị bug, vui lòng quay lại sau');
-                  // setInitialValues(previousValue => ({ ...previousValue, userID: idsChecked[0] }));
-                  // toggleModalCreateOrUpdateUser();
+                  setUsersChecked([]);
+                  toggleModalCreateOrUpdateUser();
                 }}
               >
                 <img src={iconPencil} alt="icon pencil" />
               </button>
             ) : ''}
 
-            {idsChecked.length ? (
+            {usersChecked.length ? (
               <button
                 onClick={() =>
                   openModal(
@@ -230,7 +235,7 @@ export const SupportMemberPage: FC = () => {
                         "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
                       }
                     >
-                      <ModalConfirm onConfirm={() => handleConfirmDelete(idsChecked)} />
+                      <ModalConfirm onConfirm={handleConfirmDelete} />
                     </div>
                   )
                 }>
@@ -249,7 +254,11 @@ export const SupportMemberPage: FC = () => {
             {companySelected ? (
               <button 
                 className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold" 
-                onClick={toggleModalCreateOrUpdateUser} 
+                onClick={() => {
+                  setUsersChecked([]);
+                  clearData();
+                  toggleModalCreateOrUpdateUser();
+                }} 
               >
                 Tạo mới
               </button>
