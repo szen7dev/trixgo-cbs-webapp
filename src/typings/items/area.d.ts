@@ -32,7 +32,10 @@ interface ModalProps {
         sign: string,
         taxid: string,
         address: string,
-        area: string
+        area: string,
+        phone?: string,
+        email?: string,
+        areaName?: string,
     };
     onConfirm?(): void
 }

@@ -49,7 +49,7 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
 
 export const nl2p = function (text: string){
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const arr = text.split("\n");
+    const arr = text?.split("\n") ?? [];
     let paragraphs = '';
 
     for (const item of arr) { 
