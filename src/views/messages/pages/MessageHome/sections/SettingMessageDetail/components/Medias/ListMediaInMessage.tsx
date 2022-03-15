@@ -18,7 +18,7 @@ export const ListMediaInMessage:FC<Props> = ({isActive}) => {
     const closeModalImage = () => setModalShowImage({ show: false, index: 0 });
 
     const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
-    const [author, setAuthor] = useState();
+    const [author, setAuthor] = useState("");
     const params = {conversationID: currentChat, type: 1, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listMediasMessage, hasListMediasNextPage, nextPageListMedias} = UseInformationMessage(params, isActive, "images");
 
@@ -117,8 +117,8 @@ export const ListMediaInMessage:FC<Props> = ({isActive}) => {
                 {/*/>*/}
                 <DropdownSearchable
                     placeholder={"Người gửi"}
-                    className={"bg-gray-100 rounded-full flex-1 mr-2"}
-                    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}
+                    className={"bg-gray-100 rounded-full flex-1 mr-2 text-xs"}
+                    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px] focus:border-primary"}
                     allowClearValueSingleInput={true}
                     bordered={false}
                     onSearchInputChange={valueSearch => setSearchUser(valueSearch)}
@@ -132,10 +132,13 @@ export const ListMediaInMessage:FC<Props> = ({isActive}) => {
                         }
                     })}
                     onchangeValue={({_id}) => setAuthor(_id)}
+                    onClearData={() => {
+                        setAuthor("");
+                    }}
                 />
                 <DropdownSearchable
                     placeholder={"Ngày gửi"}
-                    className={"bg-gray-100 rounded-full flex-1 mr-2"}
+                    className={"bg-gray-100 rounded-full flex-1 mr-2 text-xs"}
                     allowClearValueSingleInput={true}
                     bordered={false}
                     data={[
@@ -160,6 +163,9 @@ export const ListMediaInMessage:FC<Props> = ({isActive}) => {
                     ]}
                     disableSearch={true}
                     onchangeValue={({fromDate, toDate}) => setDateRage({fromDate, toDate})}
+                    onClearData={() => {
+                        setDateRage({fromDate: "", toDate:""});
+                    }}
                 />
             </div>
             {renderListMedia()}

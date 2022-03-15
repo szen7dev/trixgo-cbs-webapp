@@ -37,7 +37,6 @@ const AdminMember: FC = () => {
 		}),
 		{ refetchOnMount: false, refetchOnWindowFocus: false });
 	const queryClient = useQueryClient();
-
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList((data?.data.members || []) as any[]);
 	const { openModal } = useModal();
 

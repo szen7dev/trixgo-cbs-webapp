@@ -20,6 +20,7 @@ import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
 import {openUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     message: ItemMessage;
@@ -29,6 +30,9 @@ type Props = {
 }
 
 export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) => {
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const dispatch = useDispatch();
     const {updatePinMessage} = UseConversation();
     const {closeRightClick} = useRightClickMenu();
@@ -64,6 +68,7 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
         });
     }
+    const {hasPermission} = UseMessageHelper();
 
     return (
         <>
@@ -106,15 +111,18 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
                     <div className={"mr-2 ml-4"}>Copy Text</div>
                 </button>
-                <button
-                    onClick={() => {
-                        doUpdatePinMessage();
-                        closeRightClick()
-                    }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full pin-right-click"}>
-                    <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
-                    <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
-                </button>
+                {
+                    hasPermission(chat, profileId, "configPinMessage")&&
+                    <button
+                        onClick={() => {
+                            doUpdatePinMessage();
+                            closeRightClick()
+                        }}
+                        className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full pin-right-click"}>
+                        <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
+                        <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
+                    </button>
+                }
                 <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full download-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>
                     <div className={"mr-2 ml-4"}>Download</div>
