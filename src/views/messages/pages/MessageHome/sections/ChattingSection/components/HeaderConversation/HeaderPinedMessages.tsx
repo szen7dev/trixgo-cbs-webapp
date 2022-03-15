@@ -12,18 +12,25 @@ import {
     clearListMessage,
     setShouldStartListenEvent
 } from "redux/reducer/messages/SearchMessage";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 type Props = {
     listPinnedMessage: ItemMessage[]
 }
 export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const {currentChat, socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
     const {getListPinMessage, updatePinMessage} = UseConversation();
     const [indexPinnedMessage, setIndexPinnedMessage] = useState(0);
     const dispatch = useDispatch();
     const {goToMessagePosition} = UseConversation();
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
+    const {hasPermission} = UseMessageHelper();
 
     useEffect(() => {
         getListPinMessage({conversationID: currentChat})
@@ -114,11 +121,14 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
                     ))
                 }
             </Carousel>
-            <button
-                onClick={() => doUpdatePinMessage(listPinnedMessage[indexPinnedMessage]["_id"])}
-                className={"flex items-center justify-center ml-[20px]"}>
-                <Close/>
-            </button>
+            {
+                hasPermission(chat, profileId, "configPinMessage")&&
+                <button
+                    onClick={() => doUpdatePinMessage(listPinnedMessage[indexPinnedMessage]["_id"])}
+                    className={"flex items-center justify-center ml-[20px]"}>
+                    <Close/>
+                </button>
+            }
             <ListPinnedMessage listPinnedMessage={listPinnedMessage}/>
         </div>
     )

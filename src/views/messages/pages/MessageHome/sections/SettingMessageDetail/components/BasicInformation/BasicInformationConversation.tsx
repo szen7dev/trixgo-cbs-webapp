@@ -7,8 +7,8 @@ import Close from "assets/icons/Close";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import {MessageContext} from "../../../../index";
 import {useUpload} from "services/hooks/useUpload";
-import {modifyUploadedFilesV2} from "../../../../../../../../services/hooks/useUploadFile";
-import {UseListConversation} from "../../../../../../../../services/hooks/messages/useListConversation";
+import {modifyUploadedFilesV2} from "services/hooks/useUploadFile";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 type Props = {
     chat: ItemListConversation
@@ -36,6 +36,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
     const [isEditting, setIsEditting] = useState(false);
     const {setShowMenu, socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const {hasPermission} = UseMessageHelper();
 
     const handleChangeAvatar = async (event:  React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files.length) return;
@@ -79,6 +80,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                 </button>
                 {
                     !chat.isPrivate&&
+                    hasPermission(chat, profileId, "configEditInfo") &&
                     <button
                         onClick={() => {
                             setIsEditting(!isEditting)

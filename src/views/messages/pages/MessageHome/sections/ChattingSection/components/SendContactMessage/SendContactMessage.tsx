@@ -77,7 +77,7 @@ export const SendContactMessage:FC<Props> = ({context}) => {
                 links: 0,
                 createAt: 0,
                 __v: 0,
-                config: 0
+                // config: 0
             })
         });
     };
