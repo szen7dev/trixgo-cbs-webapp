@@ -58,7 +58,7 @@ export const SearchUserConversationSection:FC = () => {
                     links: 0,
                     createAt: 0,
                     __v: 0,
-                    config: 0
+                    // config: 0
                 })
             });
             dispatch(appendFakeItemListConversation({conversationId: data._id, conversation: data}))
