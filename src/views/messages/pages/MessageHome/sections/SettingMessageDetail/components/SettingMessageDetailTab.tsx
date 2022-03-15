@@ -44,7 +44,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
         {
             text: "Groups",
             tabId: "groups",
-            isShow: chat.isPrivate
+            isShow: chat.isPrivate&&chat?.members.find((item: any) => item._id !== profileId)?._id
         },
     ]
 
