@@ -24,8 +24,10 @@ import AddConversationToFolderSlice from './messages/AddConversationToFolder';
 import UsersSeenDetailSlice from './messages/UsersSeenDetail';
 import NotificationMuteSlice from './messages/NotificationMute';
 import DeleteConfirmSlice from './DeleteConfirm';
+import ConfigConversationSlice from './messages/ConversationConfigModal';
+import UserSlice from './UserInfo';
 
-const rootReducer = combineReducers({
+const combinedReducer = combineReducers({
     demo: DemoSlice,
     financialPlanningDetails: FinancialPlanningDetailSlice,
     timesheetDetail: TimesheetDetailSlice,
@@ -51,7 +53,14 @@ const rootReducer = combineReducers({
     usersSeenDetail: UsersSeenDetailSlice,
     notificationMute: NotificationMuteSlice,
     deleteConfirm: DeleteConfirmSlice,
+    configConversation: ConfigConversationSlice,
+    user: UserSlice,
 });
-
+const rootReducer = (state: any, action: any) => {
+    if (action.type === 'user/logout') {
+        state = undefined;
+    }
+    return combinedReducer(state, action);
+};
 export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

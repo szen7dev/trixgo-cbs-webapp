@@ -1288,9 +1288,9 @@ input[type="text"] {
   visibility: visible;
 }
 .message-list-height {
-  height: calc(100vh - 150px);
-  max-height: calc(100vh - 150px);
-  min-height: calc(100vh - 150px);
+  height: calc(100vh - 116px);
+  max-height: calc(100vh - 116px);
+  min-height: calc(100vh - 116px);
 }
 
 .messages-right-bar.right--402px,

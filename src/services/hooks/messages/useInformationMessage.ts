@@ -54,7 +54,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
         hasNextPage: hasListMediasNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            [`list_medias_message_${params.conversationID}_${params.type}`, params], // Key để phân biệt vùng tác động bởi data thay đổi
+            [`list_medias_message_${params.conversationID}_${params.type}`, params.fromDate, params.toDate, params.authorID], // Key để phân biệt vùng tác động bởi data thay đổi
             async ({pageParam} : any) =>
                 InformationMessageRepository.getListFilesMessage({
                     lastestID: pageParam||"",
@@ -65,7 +65,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
                     return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: (enableQuery&&["files","images"].includes(type)), // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: (enableQuery&&type==="images"), // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
     const listMediasMessage = [].concat(...(listMediasFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
@@ -80,7 +80,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
         hasNextPage: hasListFilesNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            [`list_files_message_${params.conversationID}_${params.type}`, params], // Key để phân biệt vùng tác động bởi data thay đổi
+            [`list_files_message_${params.conversationID}_${params.type}`, params.fromDate, params.toDate, params.authorID], // Key để phân biệt vùng tác động bởi data thay đổi
             async ({pageParam} : any) =>
                 InformationMessageRepository.getListFilesMessage({
                     lastestID: pageParam||"",
@@ -91,7 +91,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
                     return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: (enableQuery&&["files","images"].includes(type)), // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: (enableQuery&&type==="files"), // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
     const listFilesMessage = [].concat(...(listFilesFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
@@ -106,7 +106,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
         hasNextPage: hasListLinksNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            [`list_links_message_${params.conversationID}`, params], // Key để phân biệt vùng tác động bởi data thay đổi
+            [`list_links_message_${params.conversationID}`, params.fromDate, params.toDate, params.authorID], // Key để phân biệt vùng tác động bởi data thay đổi
             async ({pageParam} : any) =>
                 InformationMessageRepository.getListLinksMessage({
                     lastestID: pageParam||"",
@@ -132,7 +132,7 @@ export const UseInformationMessage = (params: ListFileMessagePayload|ListLinksMe
         hasNextPage: hasListMembersNextPage
     } =
         useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            [`list_members_message_${params.conversationID}`, params], // Key để phân biệt vùng tác động bởi data thay đổi
+            [`list_members_message_${params.conversationID}`, params.keyword], // Key để phân biệt vùng tác động bởi data thay đổi
             async ({pageParam} : any) =>
                 InformationMessageRepository.getListMembersMessage({
                     lastestID: pageParam||"",

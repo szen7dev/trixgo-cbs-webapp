@@ -7,8 +7,8 @@ import Close from "assets/icons/Close";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import {MessageContext} from "../../../../index";
 import {useUpload} from "services/hooks/useUpload";
-import {modifyUploadedFilesV2} from "../../../../../../../../services/hooks/useUploadFile";
-import {UseListConversation} from "../../../../../../../../services/hooks/messages/useListConversation";
+import {modifyUploadedFilesV2} from "services/hooks/useUploadFile";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 type Props = {
     chat: ItemListConversation
@@ -36,6 +36,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
     const [isEditting, setIsEditting] = useState(false);
     const {setShowMenu, socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
+    const {hasPermission} = UseMessageHelper();
 
     const handleChangeAvatar = async (event:  React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files.length) return;
@@ -66,18 +67,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
     const updateConversationAction = (payload: UpdateConversationPayload) => {
         updateConversation(payload).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-                conversationID: chat._id,
-                select: JSON.stringify({ sender:"bizfullname" }) ,
-                filter: JSON.stringify({
-                    author: 0,
-                    taskID: 0,
-                    links: 0,
-                    createAt: 0,
-                    __v: 0,
-                    config: 0
-                })
-            });
+            socket.emit('CHATTING_CSS_UPDATE_INFO_CONVERSATION', {conversationID: chat._id});
             setIsEditting(false)
         })
     }
@@ -90,6 +80,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                 </button>
                 {
                     !chat.isPrivate&&
+                    hasPermission(chat, profileId, "configEditInfo") &&
                     <button
                         onClick={() => {
                             setIsEditting(!isEditting)
@@ -167,7 +158,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                          suppressContentEditableWarning={true}
                          onBlur={() => updateConversationAction({
                              conversationID: chat._id,
-                             name: chatName
+                             name: chatName.trimEnd().trimStart()
                          })}
                          onInput={event => setChatName(event.currentTarget.innerText)}
                     >

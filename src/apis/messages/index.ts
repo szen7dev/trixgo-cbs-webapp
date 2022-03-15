@@ -34,7 +34,10 @@ import {
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     PinConversationPayload,
-    PinConversationResponse, RemoveMemberFromConversationPayload, RemoveMemberFromConversationResponse,
+    PinConversationResponse,
+    RemoveMemberFromConversationPayload,
+    RemoveMemberFromConversationResponse,
+    UpdateConfigConversationPayload, UpdateConfigConversationResponse,
     UpdateConversationPayload,
     UpdateConversationResponse,
     UpdateFolderPayload,
@@ -63,6 +66,7 @@ const deleteHistoryConversation = "/api/chatting/conversations/delete-history-co
 const deleteConversation = "/api/chatting/conversations/delete-conversation";
 const leaveConversation = "/api/chatting/conversations/member-leave-conversation";
 const removeFromConversation = "/api/chatting/conversations/remove-member-conversation";
+const updateConfigConversation = "/api/chatting/conversations/update-config-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -236,6 +240,15 @@ const ListConversationRepository = {
     async removeMemberFromConversation(payload: RemoveMemberFromConversationPayload) : Promise<RemoveMemberFromConversationResponse> {
         const {data} = await API.delete(
             `${removeFromConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async updateConfigConversation(payload: UpdateConfigConversationPayload) : Promise<UpdateConfigConversationResponse> {
+        const {data} = await API.put(
+            `${updateConfigConversation}`,
+            {...payload}
         )
 
         return data;

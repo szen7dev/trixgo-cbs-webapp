@@ -9,7 +9,7 @@ import MemberIcon from "assets/images/member-icon.svg";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
-
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 import { useInfiniteQuery } from "react-query";
 import { DepartmentRepositories } from "apis/item/department";
 import { LinkUser } from "typings/auth";
@@ -17,35 +17,54 @@ import { LinkUser } from "typings/auth";
 const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListAppRoleMenu }) => {
 	const { closeModal } = useModal();
 	const [keyword, setKeyword] = useState("");
-	const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-		['users_in_company_contract', keyword],
-		({ pageParam }) =>
-			DepartmentRepositories.getListUserInCompanyContract({
-				companyID,
-				keyword,
-				isLinkUser: 1,
-				lastestID: pageParam,
-				select: 'name',
-				populates: JSON.stringify({ "path": " linkUser", "select": "fullname image" })
-			}),
-		{
-			refetchOnMount: false,
-			refetchOnWindowFocus: false,
-			enabled: Boolean(companyID),
-			keepPreviousData: true,
-			getNextPageParam(data) {
-				if (!data.data.nextCursor) return undefined;
-				return data.data.nextCursor;
-			},
-		}
-	);
 
-  const records = data?.pages.flatMap(page => page.data.listRecords).filter(Boolean);
+	const { 
+		data: listUsersSystem, 
+		hasNextPage, 
+		totalRecord, 
+		refetch,
+		fetchNextPage,
+		deleteUserSystemAsync,
+	  } = useUserSystem({
+		keyword,
+		isFetch: true,
+		limit: 20
+	  });
+
+	  console.log({ listUsersSystem })
+	// const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
+	// 	['users_in_company_contract', keyword],
+	// 	({ pageParam }) =>
+	// 		DepartmentRepositories.getListUserInCompanyContract({
+	// 			companyID,
+	// 			keyword,
+	// 			isLinkUser: 1,
+	// 			lastestID: pageParam,
+	// 			select: 'name',
+	// 			populates: JSON.stringify({ "path": " linkUser", "select": "fullname image" })
+	// 		}),
+	// 	{
+	// 		refetchOnMount: false,
+	// 		refetchOnWindowFocus: false,
+	// 		enabled: Boolean(companyID),
+	// 		keepPreviousData: true,
+	// 		getNextPageParam(data) {
+	// 			if (!data.data.nextCursor) return undefined;
+	// 			return data.data.nextCursor;
+	// 		},
+	// 	}
+	// );
+
+  	// const records = data?.pages.flatMap(page => page.data.listRecords).filter(Boolean);
+	// const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
+
+	const records = listUsersSystem.flatMap(page => page).filter(Boolean);
 	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(records || []);
 
 	const handleAddUser = async () => {
+		console.log({ checked });
 		if (!checked.length) return;
-		const listUserID = checked.map(item => (item.linkUser as LinkUser)._id);
+		const listUserID = checked.map(item => item._id);
 		const response = await DepartmentRepositories.addOrRemoveMemberToDepartment({ departmentID: appRoleID, members: listUserID })
 		if (response.error === false) {
 			toast.success('Thêm thành công');
@@ -92,13 +111,13 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 						type="checkbox"
 						value=""
 						id="flexCheckDefault"
-						ref={checkboxRef}
+						// ref={checkboxRef}
 						onClick={handleCheckAll}
 					/>
 					<img src={PolygonIcon} alt="Polygon" />
 				</div>
 				<div className="flex flex-col gap-2 mt-4 h-[420px] overflow-auto px-7">
-					{data?.pages?.map((page) => (
+					{/* {data?.pages?.map((page) => (
 						page?.data?.listRecords?.map((item, index) => (
 							<div key={index} className="flex items-center">
 								<input
@@ -120,6 +139,30 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 								</div>
 							</div>
 						))))
+					} */}
+
+					{
+						listUsersSystem?.map((item, index) => (
+							<div key={index} className="flex items-center">
+								<input
+									className="cbs-checkbox mr-9"
+									type="checkbox"
+									value=""
+									id={item._id}
+									// checked={Boolean(assigned[item._id])}
+									onChange={(e) => handleChangeCheckbox(e, item)}
+								/>
+
+								<div className="flex items-center">
+									<img
+										src={`${process.env.REACT_APP_URL_S3_USER}/${item.image}`}
+										alt="Member"
+										className="w-10 h-10 rounded-full"
+									/>
+									<p className="px-4">{item.bizfullname}</p>
+								</div>
+							</div>
+						))
 					}
 					{hasNextPage && (
 						<div className="w-full flex justify-center my-5">

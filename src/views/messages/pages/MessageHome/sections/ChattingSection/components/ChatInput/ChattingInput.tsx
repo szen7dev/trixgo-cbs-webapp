@@ -14,6 +14,7 @@ import {RootState} from "redux/reducer";
 import {SelectedActionGroup} from "./SelectedActionGroup";
 import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -123,7 +124,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 links: 0,
                 createAt: 0,
                 __v: 0,
-                config: 0
+                // config: 0
             })
         });
     }
@@ -245,7 +246,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         links: 0,
                         createAt: 0,
                         __v: 0,
-                        config: 0
+                        // config: 0
                     })
                 });
                 setDoneUpload({});
@@ -288,6 +289,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         }
     },[])
 
+    const {hasPermission} = UseMessageHelper();
+    if (!hasPermission(chat, profileId, "configSendMessage")) return null;
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px] chatting-input-container"}>
