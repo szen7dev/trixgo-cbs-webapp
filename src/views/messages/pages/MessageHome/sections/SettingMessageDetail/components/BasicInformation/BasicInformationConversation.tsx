@@ -66,18 +66,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
     const updateConversationAction = (payload: UpdateConversationPayload) => {
         updateConversation(payload).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-                conversationID: chat._id,
-                select: JSON.stringify({ sender:"bizfullname" }) ,
-                filter: JSON.stringify({
-                    author: 0,
-                    taskID: 0,
-                    links: 0,
-                    createAt: 0,
-                    __v: 0,
-                    config: 0
-                })
-            });
+            socket.emit('CHATTING_CSS_UPDATE_INFO_CONVERSATION', {conversationID: chat._id});
             setIsEditting(false)
         })
     }
@@ -167,7 +156,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                          suppressContentEditableWarning={true}
                          onBlur={() => updateConversationAction({
                              conversationID: chat._id,
-                             name: chatName
+                             name: chatName.trimEnd().trimStart()
                          })}
                          onInput={event => setChatName(event.currentTarget.innerText)}
                     >
