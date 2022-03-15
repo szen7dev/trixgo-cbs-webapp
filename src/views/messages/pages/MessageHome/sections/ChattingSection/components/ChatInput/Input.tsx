@@ -40,7 +40,7 @@ export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUpl
 
     const [searchMember, setSearchMember] = useState("");
     const params = {conversationID: currentChat, type: "member", populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"}), keyword: searchMember};
-    const {listMembersMessage} = UseInformationMessage(params, open&&searchMember.length>0, "members");
+    const {listMembersMessage} = UseInformationMessage(params, open, "members");
     const mentions = listMembersMessage.map(user => {
         return {
             _id: user?.member?._id,
