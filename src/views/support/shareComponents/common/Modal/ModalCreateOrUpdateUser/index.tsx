@@ -57,14 +57,22 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
   });
 
   const handleSubmit = async (values: UserSystemPayload) => {
-    values.companyID = initialValues.companyID;
-    values.level = +values.level;
+
+    const dataCreateOrUpdate: UserSystemPayload = {
+      companyID: initialValues.companyID,
+      userID: values.userID,
+      departmentID: values.departmentID,
+      positionID: values.positionID,
+      email: values.email,
+      fullname: values.fullname,
+      level: +values.level,
+    }
 
     try {
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, message } = await createUserSystemAsync(values);
+          const { error, message } = await createUserSystemAsync(dataCreateOrUpdate);
 
           if (error) {
             return toast.warning(message);
@@ -74,7 +82,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
           break;
         }
         case 'update': {
-          const { error, message } = await updateUserSystemAsync(values);
+          const { error, message } = await updateUserSystemAsync(dataCreateOrUpdate);
 
           if (error) {
             return toast.warning(message);
@@ -182,7 +190,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     }}
                     initialValue={{ 
                       _id: initialValues.departmentID, 
-                      text: initialValues.departmentName
+                      name: initialValues.departmentName
                     }}
                     inlineSearch={true}
                     onSearchInputChange={handleSearchDepartment}
@@ -217,7 +225,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                     }}
                     initialValue={{ 
                       _id: initialValues.positionID, 
-                      text: initialValues.positionName
+                      name: initialValues.positionName,
                     }}
                     inlineSearch={true}
                     onSearchInputChange={handleSearchPosition}

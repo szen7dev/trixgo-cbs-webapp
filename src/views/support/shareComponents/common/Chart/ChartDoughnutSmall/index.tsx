@@ -9,6 +9,7 @@ import {
   Title,
   Legend,
   TimeScale,
+  ArcElement
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
@@ -30,7 +31,8 @@ ChartJS.register(
   LineElement,
   Title,
   Legend,
-  TimeScale
+  TimeScale,
+  ArcElement
 );
 
 const options = {
@@ -55,7 +57,7 @@ export const ChartDoughnutSmall: React.FC<Props> = ({
 
   return (
     <Doughnut
-        key={Math.random()}
+      key={Math.random()}
       data={_data}
       options={{
         ...options,
