@@ -54,6 +54,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
             socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
             socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
+            socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
         };
     },[socket]);
 
@@ -207,6 +208,13 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
            }))
        }
 
+    }
+
+    const onUpdateAdminConversation = (data: any) => {
+        if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
     }
 
     return null;
