@@ -550,3 +550,25 @@ export type UpdateConfigConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type SetASAdminConversationPayload = {
+    conversationID: string;
+    memberID: string;
+    isSetAdmin: boolean
+}
+
+export type SetASAdminConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+
+export type SetASAdminConversationResponse = {
+    data: SetASAdminConversationData;
+    error: boolean;
+    status: number;
+}
