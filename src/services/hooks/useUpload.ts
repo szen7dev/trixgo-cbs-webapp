@@ -42,6 +42,7 @@ export type UploadFileProps = {
     files: File & File[],
     fileType: number,
     progress?: (percentCompleted: number, _id?: string) => void,
+    source?: any,
     useCompress?: boolean;
     compressConfig?: OptionsCompress;
 }
@@ -149,6 +150,7 @@ export const useUpload = ({
            fileType,
            progress,
            useCompress,
+           source,
            compressConfig = {
                maxSizeMB: 1,
                maxWidthOrHeight: 1920,
@@ -180,14 +182,14 @@ export const useUpload = ({
                 // console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
                 // console.log('Sending in COMPRESS mode');
 
-                await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id });
+                await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id, source });
             } catch (error) {
                 // console.log("Can not compress file. Sending in HD mode")
-                await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
+                await uploadFileToS3({ signedUrl, file, progress, _id: result?._id, source });
             }
         } else {
             // console.log('Sending in HD mode');
-            await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
+            await uploadFileToS3({ signedUrl, file, progress, _id: result?._id, source });
         }
 
         return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };

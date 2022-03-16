@@ -63,7 +63,7 @@ const Response: FC<Props> = ({ task }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [isUpload, setIsUpload] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [collapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
@@ -275,9 +275,7 @@ const Response: FC<Props> = ({ task }) => {
 
     setUploadImage(images);
     setUploadFile(files);
-    // setIsUpload(true);
-
-    // const filesLength = Object.entries(images).length + Object.entries(files).length;
+    setIsUploading(true);
 
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
@@ -288,16 +286,14 @@ const Response: FC<Props> = ({ task }) => {
           fileType: 1,
           useCompress: true,
           progress: percentCompleted => {
-              console.log(`${percentCompleted}%`, key);
-              setUploadImageProgress(key, percentCompleted)
+            console.log(`${percentCompleted}%`, key);
+            setUploadImageProgress(key, percentCompleted)
           },
         })
 
-        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
-        // if(queue.tasksDone.length === Object.entries(images).length) {
-        //   setIsUpload(false);
-        // }
-
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDImageUploaded(key, _id);
       }
     })));
@@ -324,13 +320,10 @@ const Response: FC<Props> = ({ task }) => {
           }
         })
 
-        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
-        // if(queue.tasksDone.length === Object.entries(files).length) {
-        //   setIsUpload(false);
-        // }
-
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDFileUploaded(key, _id);
-        return false;
       }
     })));
 
@@ -486,9 +479,11 @@ const Response: FC<Props> = ({ task }) => {
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
                   <button
                     type="button"
-                    className="mx-3 px-3 py-2 rounded bg-primary text-white"
-                    onClick={handleAddResponse}
-                    disabled={isUpload}>
+                    className={classNames('mx-3 px-3 py-2 rounded bg-primary text-white', {
+                      'disabled:opacity-60': isUploading
+                    })}
+                    disabled={isUploading}
+                    onClick={handleAddResponse}>
                       Xác nhận
                   </button>
                 </div>

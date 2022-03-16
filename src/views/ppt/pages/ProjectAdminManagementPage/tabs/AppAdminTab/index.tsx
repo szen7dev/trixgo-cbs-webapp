@@ -10,7 +10,7 @@ type Props = {
 const AppAdminTab: FC<Props> = (props) => {
   const { toggleTab } = props;
   const { hash: hashParam } = useLocation();
-  console.log({ hashParam, toggleTab })
+
   return (
     <section>
       <div className={toggleTab === 1 ? "block" : "hidden"}>

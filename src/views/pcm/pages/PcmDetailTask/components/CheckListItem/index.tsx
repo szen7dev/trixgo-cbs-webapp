@@ -33,8 +33,8 @@ export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
   return (
     <div
       className="w-full"
-      onMouseEnter={() => !isDisabled && setIsHover(true)}
-      onMouseLeave={() => !isDisabled && setIsHover(false)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <div className="flex justify-between pt-4 pb-3">
         <div className="flex items-start w-3/4">
@@ -62,22 +62,26 @@ export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
             </div>
           </div>
         </div>
-        {(isHover && !isDisabled) ? (
-          <div className="flex w-1/4 justify-end">
+        {isHover ? (
+          <>
+            {(data.type === 2 && !isDisabled) ? (
+              <div className="flex w-1/4 justify-end">
+                <button className="mx-2">
+                  <img className="w-6" src={IconPencil} alt="Pencil icon" />
+                </button>
+              </div>
+            ) : ''}
+            {data.type === 1 ? (
+              <div className="flex w-1/4 justify-end">
+                <button className="mx-2" onClick={() => history.push(`/pcm/detail/${data._id}`)}>
+                  <img className="w-6" src={LinkIcon} alt="Link icon" />
+                </button>
+              </div>
+            ) : ''}
             {/* <button className="mx-2">
               <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
             </button> */}
-            {data.type === 2 ? (
-              <button className="mx-2">
-                <img className="w-6" src={IconPencil} alt="Pencil icon" />
-              </button>
-            ) : ''}
-            {data.type === 1 ? (
-              <button className="mx-2" onClick={() => history.push(`/pcm/detail/${data._id}`)}>
-                <img className="w-6" src={LinkIcon} alt="Link icon" />
-              </button>
-            ) : ''}
-          </div>
+          </>
         ) : (
           <div className="flex justify-end w-1/4">
             {!isDisabled && (<TypeStatusLabel status={data.status} />)}

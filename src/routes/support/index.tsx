@@ -2,8 +2,6 @@
 import { FC, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 
-/*=====2.PROVIDERS=====*/
-
 /*=====3.LAYOUTS=====*/
 import { SupportLayout } from "views/support/shareComponents/layouts";
 
