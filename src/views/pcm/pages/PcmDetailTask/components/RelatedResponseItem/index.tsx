@@ -5,6 +5,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
+import { nl2p } from 'utils';
 import HumanAvatar from "assets/images/human-avatar.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import PDFIcon from "assets/images/icons8-pdf-48 1.png";
@@ -99,10 +100,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span 
+						<span
 							className="text-[13px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
-                              __html: response.content
+                              __html: nl2p(response.content)
                             }}>
 						</span>
 					</div>

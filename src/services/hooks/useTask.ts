@@ -1,13 +1,15 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
-import { 
+import {
   Task,  addTaskPayload,
-  CheckList, CheckListPayload, 
+  CheckList, CheckListPayload,
+  UpdateCheckListPayload,
   ChildTask, ChildTaskPayload,
   ResponseProps, ResponsePayload,
   CommentPayload, ListCommentsPayload,
-  AddRelationUserPayload
+  AddRelationUserPayload,
+  UpdateStatusCheckListPayload
 } from "typings/task";
 import { CommentProps } from 'typings/task';
 
@@ -157,7 +159,8 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
 
 type UseCheckList = {
   addChecklistAsync: (payload: CheckListPayload) => Promise<any>,
-  updateChecklist: (payload: CheckListPayload) => void,
+  updateChecklistAsync: (payload: UpdateCheckListPayload) => Promise<any>,
+  updateStatusChecklistAsync: (payload: UpdateStatusCheckListPayload) => Promise<any>,
   listCheckList: Array<CheckList>;
   isLoadingListCheckList: boolean;
   totalRecord: number | undefined;
@@ -174,9 +177,9 @@ type UseCheckListProps = {
   isFetchChecklist?: boolean,
 }
 
-export const useCheckList = ({ 
-  parentID, 
-  limit = 5, 
+export const useCheckList = ({
+  parentID,
+  limit = 5,
   isFetchChecklist = false
 } : UseCheckListProps): UseCheckList => {
   const { mutateAsync: addChecklistAsync } =
@@ -185,27 +188,14 @@ export const useCheckList = ({
     );
 
   const { mutateAsync: updateChecklistAsync } =
-    useMutation((payload: CheckListPayload) =>
+    useMutation((payload: UpdateCheckListPayload) =>
       TaskRepository.updateChecklist(payload)
     );
 
-  const updateChecklist = async (payload: CheckListPayload) => {
-    try {
-        const { error, message } = await updateChecklistAsync(payload);
-
-        if (error) {
-          return toast.warning(message);
-        }
- 
-        toast.success('Cập nhật checklist thành công');
-    } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
-    }
-  };
+  const { mutateAsync: updateStatusChecklistAsync } =
+    useMutation((payload: UpdateStatusCheckListPayload) =>
+      TaskRepository.updateStatusChecklist(payload)
+    );
 
   const {
     isLoading: isLoadingListCheckList,
@@ -249,7 +239,8 @@ export const useCheckList = ({
 
   return {
     addChecklistAsync,
-    updateChecklist,
+    updateChecklistAsync,
+    updateStatusChecklistAsync,
     listCheckList,
     isLoadingListCheckList,
     totalRecord,
@@ -286,9 +277,9 @@ type UseChildTaskProps = {
   isFetchChildTask?: boolean,
 }
 
-export const useChildTask = ({ 
-  parentID, 
-  limit = 5, 
+export const useChildTask = ({
+  parentID,
+  limit = 5,
   isFetchChildTask = false
 } : UseChildTaskProps): UseChildTask => {
   const { mutateAsync: addChildTaskAsync } =
@@ -382,7 +373,7 @@ type UseCommentPcmProps = {
 }
 
 export const useCommentPcm = ({
-  key, 
+  key,
   params = {},
   isFetchComment = false
 }: UseCommentPcmProps) : UseCommentPcm => {
@@ -411,8 +402,8 @@ export const useCommentPcm = ({
   } =
     useInfiniteQuery(
       [key || "list_comments", params],
-      async ({ pageParams }: any) => 
-      TaskRepository.listComments({ 
+      async ({ pageParams }: any) =>
+      TaskRepository.listComments({
         lastestID: pageParams ? pageParams : "",
         ...params
       }),
