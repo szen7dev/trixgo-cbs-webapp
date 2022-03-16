@@ -150,14 +150,21 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 return {
                     file: {
                         file: {
-                            fakeUrl: window.URL.createObjectURL(file.file),
-                            url: window.URL.createObjectURL(file.file),
-                            name: file.file.name,
-                            size: file.file.size,
-                            _id: uuidv4(),
-                            type: file.file.type,
-                            isDraft: true,
-                        }
+                            // fakeUrl: window.URL.createObjectURL(file.file),
+                            // url: window.URL.createObjectURL(file.file),
+                            // name: file.file.name,
+                            // size: file.file.size,
+                            // _id: uuidv4(),
+                            // type: file.file.type,
+                            // isDraft: true,
+                        },
+                        fakeUrl: window.URL.createObjectURL(file.file),
+                        url: window.URL.createObjectURL(file.file),
+                        name: file.file.name,
+                        size: file.file.size,
+                        _id: uuidv4(),
+                        type: file.file.type,
+                        isDraft: true,
                     },
                     progress: 0,
                     _id: uuidv4(),
@@ -215,7 +222,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 },
                 useCompress
             })
-            sendFiles.push({"_id":_id,"name":file.file.file.name})
+            sendFiles.push({"_id":_id,"name":file.file.name})
         }
 
         sendMessage = {

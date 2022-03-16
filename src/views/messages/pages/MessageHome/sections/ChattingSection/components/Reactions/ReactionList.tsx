@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useRef, useState} from "react";
 import {map as _map} from "lodash";
-import {listEmoji} from "../MainChatContent/MainChatContent";
+import {listEmoji} from "../MainChatContent";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {ReactionDetails} from "./ReactionDetails";
@@ -12,7 +12,7 @@ export const ReactionList:FC<Props> = ({message}) => {
     const reactionWrapper = useRef<HTMLDivElement>(null)
     useOnClickOutside(reactionWrapper, () => setShowReactionGroup(false))
     const arrayReaction = useCallback(() => {
-        if (!message.reactions) return [];
+        if (!message.reactions) return {};
         const uniqueChars : {[key: string]: { icon: string; number: number } } = {};
         listEmoji.forEach(emoji => {
             uniqueChars[`emoji_${emoji.id}`] = {
@@ -21,6 +21,7 @@ export const ReactionList:FC<Props> = ({message}) => {
             };
         })
         message.reactions.forEach((c) => {
+            if (!c.type) return;
             uniqueChars[`emoji_${c.type}`].number ++;
         });
         return uniqueChars;

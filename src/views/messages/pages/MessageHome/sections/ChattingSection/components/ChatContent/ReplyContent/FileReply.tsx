@@ -11,7 +11,7 @@ type Props = {
 }
 export const FileReply:FC<Props> = ({message, className}) => {
     const renderFileTypeImage = (file:any) => {
-        const filename = file.name;
+        const filename = file.name??file.file.name;
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
@@ -34,14 +34,14 @@ export const FileReply:FC<Props> = ({message, className}) => {
     return (
         <div className={"reply-content border-l-2 border-primary pl-[7px] flex " + (className??"")}>
             <div className={"flex items-center justify-center mr-1 rounded-md overflow-hidden"}>
-                {renderFileTypeImage(message.files[0].file.file)}
+                {renderFileTypeImage(message.files[0].file)}
             </div>
             <div className={"flex-1"}>
                 <div className={"reply-user-name text-blue-900"} style={{color: message.themeColor}}>
                     {message.sender.bizfullname||message.sender.fullname}
                 </div>
                 <div className={"truncate reply-content-text text-gray-400 max-w-[250px]"}>
-                    {message.files[0].file.file.nameOrg??message.files[0].file.file.name}
+                    {message.files[0].file.nameOrg??message.files[0].file.file.nameOrg}
                 </div>
             </div>
         </div>

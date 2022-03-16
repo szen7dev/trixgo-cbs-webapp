@@ -59,12 +59,12 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
             if (!image.file) return null;
             return <div
                 onClick={() => {
-                    if (image.file.file.isDraft) return;
+                    if (image.file.isDraft) return;
                     setModalShowImage({show: true, index: index})
                 }}
                 key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
                 <img className={"w-full h-full object-cover " + classNameMap[index]["img"]}
-                     src={image.file.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.file.path}`}
+                     src={image.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.path??image.file.file.path}`}
                      alt={"image"}/>
                 {
                     (index === 4 && message.files.length > 5) &&
@@ -120,7 +120,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                     <div className="flex overflow-hidden transition-all transform w-full h-full">
-                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.file.path}`:""))} index={modalShowImage.index} />
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.path??file.file.file.path}`:""))} index={modalShowImage.index} />
                     </div>
                 </ModalFullContainer>
             </div>
