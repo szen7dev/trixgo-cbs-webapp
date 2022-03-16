@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef, useState, useContext } from 'react';
 
-import cn from 'classnames';
+import Axios from 'axios';
+import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
 
@@ -65,6 +66,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		removeAllFiles
 	}] = useUploadFile({ files, images });
 
+	const [tokens, setTokens] = useState<any[]>([]);
+	const [isUploading, setIsUploading] = useState(false);
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
 	const { current: socket }: any = useSocket();
@@ -114,6 +117,22 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddComment);
 	}, [socket])
 
+	const getCancelTokenRequest = (key: string, file: any) => {
+		const CancelToken = Axios.CancelToken;
+		const source = CancelToken.source();
+
+		setTokens(previousValue => ([
+			...previousValue,
+			{
+				key,
+				file,
+				source
+			}
+		]))
+
+		return source;
+	}
+
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
@@ -124,12 +143,15 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		setUploadImage(images);
 		setUploadFile(files);
+		// setIsUploading(true);
 
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
+			const source = getCancelTokenRequest(key, file);
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 1,
+				source,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
@@ -140,9 +162,11 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		// Upload files
 		for (const [key, { file }] of Object.entries(files)) {
+			const source = getCancelTokenRequest(key, file);
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 2,
+				source,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)
@@ -164,6 +188,8 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		for (const [, { _id }] of Object.entries(uploads.files)) {
 			_id && (files = [...files, _id]);
 		}
+
+		if(!files.length && !images.length && !text || isUploading) return;
 
 		const dataInsertOrUpdate: CommentPayload = {
 			taskID,
@@ -243,19 +269,25 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	}
 
 	const handleKeyUpInput = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-		if (event.key === 'Enter') {      
+		if (event.key === 'Enter') {
 			if(event.shiftKey) {
 				return;
 			}
 
-			handleSubmit();
+			!isUploading && handleSubmit();
 		}
 	}
 
 	const handleRemoveUpload = (file: FileProps | FilePropsUpload, type: 'FILE' | 'IMAGE') => {
 		if ('id' in file) {
+			const token = tokens.find(item => (item.key == file.id) && (item?.file?.name === file?.file?.name))
+			token && token?.source?.cancel('Operation request canceled by the user.');
+
 			type === 'IMAGE' ? removeUploadedImage(file.id) : removeUploadedFile(file.id);
 		} else {
+			const token = tokens.find(item => (item.key == file._id) && (item?.file?.name === file?.name))
+			token && token?.source?.cancel('Operation request canceled by the user.');
+
 			type === 'IMAGE' ? removeUploadedImage(file._id) : removeUploadedFile(file._id);
 		}
 	}
@@ -264,7 +296,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		<div {...props}>
 			<div
 				className={
-					cn("flex flex-wrap custom-scroll overflow-x-hidden overflow-y-auto pl-3.5",
+					classNames("flex flex-wrap custom-scroll overflow-x-hidden overflow-y-auto pl-3.5",
 						fileContainerClassName,
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "post__files pt-2 pb-6")
 				}
@@ -326,7 +358,13 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button className="flex items-center justify-center h-9 w-9" onClick={handleSubmit}>
+					<button 
+						className={classNames('flex items-center justify-center h-9 w-9', {
+							'disabled:opacity-60': isUploading
+						})}
+						disabled={isUploading}
+						onClick={handleSubmit}
+					>
 						<img src={iconEmailSend} alt="Icon attach" className="h-9 w-9" />
 					</button>
 				</div>

@@ -32,6 +32,7 @@ export type UploadPayload = {
   signedUrl: string;
   file: File;
   progress?: (percentCompleted: number, _id?: string) => void;
+  source?: any;
   _id?: string
 }
 

@@ -2,7 +2,7 @@ import Axios from "axios";
 import API from "../repository";
 import { GenerateLinkPayload, FileResponse, UploadPayload, FileUpdatePayload } from "typings/file";
 
-const BASE_URL = process.env.REACT_APP_ENV === 'development' 
+const BASE_URL = process.env.REACT_APP_ENV === 'development'
   ? process.env.REACT_APP_API_DOMAIN_LOCAL
   : process.env.REACT_APP_API_DOMAIN_STAGING
 
@@ -33,7 +33,8 @@ const FileRepository = {
                 onUploadProgress: function(progressEvent) {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                     payload.progress && payload.progress(percentCompleted, payload._id??"");
-                }
+                },
+                cancelToken: payload?.source?.token
             }
         );
         return data;

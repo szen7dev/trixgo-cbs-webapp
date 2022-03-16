@@ -37,14 +37,13 @@ import TaskRepository from "apis/task";
 import { FileProps, FilePropsUpload, ImageProps } from "typings/common";
 import { Task } from 'typings/task';
 
-/** 
+/**
  * Component
  */
 import { RelatedResponseItem } from "../RelatedResponseItem";
 import { LoadImage } from "views/pcm/shareComponents/common";
 import { FileUploadRow } from "views/pcm/shareComponents/common";
 import { ModalZoomView } from "shareComponents/common";
-import AddConversationToFolder from "redux/reducer/messages/AddConversationToFolder";
 
 enum RelatedResponseTab {
   ALL = "ALL",
@@ -57,12 +56,12 @@ type Props = {
 
 const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
- 
+
 const Response: FC<Props> = ({ task }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
-  const [isUpload, setIsUpload] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [collapsed] = useState(false);
   const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
@@ -72,7 +71,7 @@ const Response: FC<Props> = ({ task }) => {
 
   const { user } = useAuth();
   const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
-  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
+  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
     taskID: task._id, official: true, isFetch: false
   });
 
@@ -105,9 +104,9 @@ const Response: FC<Props> = ({ task }) => {
   const { current: socket }: any = useSocket();
 
   // State manage image comments
-  const [defaultState, setDefaultState] = useState({ 
-    mediaID: '', 
-    images: [] as ImageProps[], 
+  const [defaultState, setDefaultState] = useState({
+    mediaID: '',
+    images: [] as ImageProps[],
     index: 0,
     createAt: ""
   });
@@ -262,25 +261,15 @@ const Response: FC<Props> = ({ task }) => {
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) return;
 
-    console.log('BEFORE modifyUploadedFilesV2')
-    console.log({ files: event.target.files })
-    console.log('=================================')
-
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length ? Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] : null,
       fileLastKey: Object.keys(uploads.files).length ? Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] : null,
     }, event.target.files);
 
-    console.log('AFTER modifyUploadedFilesV2')
-    console.log({ files, images })
-    console.log('=================================')
-
     setUploadImage(images);
     setUploadFile(files);
-    // setIsUpload(true);
-
-    // const filesLength = Object.entries(images).length + Object.entries(files).length;
+    setIsUploading(true);
 
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
@@ -291,16 +280,14 @@ const Response: FC<Props> = ({ task }) => {
           fileType: 1,
           useCompress: true,
           progress: percentCompleted => {
-              console.log(`${percentCompleted}%`, key);
-              setUploadImageProgress(key, percentCompleted)
+            console.log(`${percentCompleted}%`, key);
+            setUploadImageProgress(key, percentCompleted)
           },
         })
 
-        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
-        // if(queue.tasksDone.length === Object.entries(images).length) {
-        //   setIsUpload(false);
-        // }
-
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDImageUploaded(key, _id);
       }
     })));
@@ -319,13 +306,10 @@ const Response: FC<Props> = ({ task }) => {
           }
         })
 
-        // console.log({ tasks: queue.tasksDone, filesLength, running: queue.isRunning })
-        // if(queue.tasksDone.length === Object.entries(files).length) {
-        //   setIsUpload(false);
-        // }
-
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDFileUploaded(key, _id);
-        return false;
       }
     })));
 
@@ -415,7 +399,7 @@ const Response: FC<Props> = ({ task }) => {
         ) : ''}
         <div>
           {state.comments.length ? state.comments.map(response => (
-            <RelatedResponseItem 
+            <RelatedResponseItem
               key={response._id}
               response={response}
               expanded={isExpand}
@@ -479,11 +463,13 @@ const Response: FC<Props> = ({ task }) => {
                 </div>
                 <div>
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
-                  <button 
-                    type="button" 
-                    className="mx-3 px-3 py-2 rounded bg-primary text-white" 
-                    onClick={handleAddResponse} 
-                    disabled={isUpload}>
+                  <button
+                    type="button"
+                    className={classNames('mx-3 px-3 py-2 rounded bg-primary text-white', {
+                      'disabled:opacity-60': isUploading
+                    })}
+                    disabled={isUploading}
+                    onClick={handleAddResponse}>
                       Xác nhận
                   </button>
                 </div>
@@ -506,7 +492,7 @@ const Response: FC<Props> = ({ task }) => {
     </>
   );
 };
- 
+
 export const RelatedResponse: FC<Props> = ({ task }) => {
   return (
     <CommentProvider>
