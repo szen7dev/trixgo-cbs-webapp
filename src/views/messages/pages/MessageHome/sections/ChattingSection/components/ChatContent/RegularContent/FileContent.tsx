@@ -9,7 +9,7 @@ import {map as _map} from "lodash";
 import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
 import {MessageStatus} from "./MessageStatus";
 type Props = {
     message: any;
@@ -41,7 +41,12 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
         }
     }
 
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
     const renderReply = () => {
+        if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return <DeleteReply message={message} />
+        }
         switch (message.parent.type) {
             case 0:
                 return <TextReply message={message.parent}/>;
