@@ -117,6 +117,18 @@ export type CheckListPayload = {
   expiredTime: string;
 };
 
+export type UpdateStatusCheckListPayload = {
+  checklistID: string,
+  status: number,
+}
+
+export type UpdateCheckListPayload = {
+  checklistID: string,
+  name: string;
+  assigneeID: string;
+  expiredTime: string;
+}
+
 export type ListCheckListPayload = {
   isChecklist?: number;
   lastestID?: string;

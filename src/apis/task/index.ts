@@ -6,6 +6,7 @@ import {
   ListCheckListPayload,
   ListCheckListResponse,
   CheckListPayload,
+  UpdateCheckListPayload,
   ChildTaskPayload,
   ListChildTaskPayload,
   ListChildTaskResponse,
@@ -17,7 +18,8 @@ import {
   addTaskPayload,
   addTaskResponse,
   CommentPayload,
-  ListCommentsPayload
+  ListCommentsPayload,
+  UpdateStatusCheckListPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -115,11 +117,24 @@ const TaskRepository = {
   },
 
   async updateChecklist(
-    payload: CheckListPayload
+    payload: UpdateCheckListPayload
   ): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
       payload
+    );
+    return data;
+  },
+
+  async updateStatusChecklist(
+    payload: UpdateStatusCheckListPayload
+  ): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      {
+        taskID: payload.checklistID,
+        status: payload.status
+      }
     );
     return data;
   },
