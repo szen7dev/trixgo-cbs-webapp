@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef} from "react";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import moment from "moment";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
 import {ReactionList} from "../../Reactions";
 import {MessageStatus} from "./MessageStatus";
 
@@ -12,7 +12,12 @@ type Props = {
     isMyMessage?: boolean;
 }
 export const DeleteChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage}) => {
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
     const renderReply = () => {
+        if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return <DeleteReply message={message} />
+        }
         switch (message.parent.type) {
             case 0:
                 return <TextReply message={message.parent}/>;
