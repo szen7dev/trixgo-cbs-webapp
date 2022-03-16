@@ -154,15 +154,26 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                     }
                 </div>
                 <div className={"flex flex-col px-[25px] pb-[15px] w-full items-center mt-[10px]"}>
-                    <div className={"text-xl"} contentEditable={isEditting}
-                         suppressContentEditableWarning={true}
-                         onBlur={() => updateConversationAction({
-                             conversationID: chat._id,
-                             name: chatName.trimEnd().trimStart()
-                         })}
-                         onInput={event => setChatName(event.currentTarget.innerText)}
-                    >
-                        {getNameConversation(chat, profileId)}
+                    <div className={"text-xl flex items-center"}>
+                        <div
+                            contentEditable={isEditting}
+                            suppressContentEditableWarning={true}
+                            onInput={event => setChatName(event.currentTarget.innerText)}
+                        >
+                            {getNameConversation(chat, profileId)}
+                        </div>
+                        {
+                            isEditting&&
+                            <button
+                                onClick={() => {
+                                    if (chatName.trimEnd().trimStart().length <= 0) return;
+                                    updateConversationAction({
+                                        conversationID: chat._id,
+                                        name: chatName.trimEnd().trimStart()
+                                    })
+                                }}
+                                className={"bg-primary text-white text-xs px-2 py-1 rounded-md ml-3 disabled:bg-gray-100"} disabled={chatName.trimEnd().trimStart().length <= 0}>Lưu</button>
+                        }
                     </div>
                     <div className={"text-gray-400"}>
                         {chat.members.length} thành viên

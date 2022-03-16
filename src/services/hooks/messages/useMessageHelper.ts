@@ -11,6 +11,7 @@ type UseMessageHelperType = {
     getAvatarMembers: (chat: ItemListConversation, profileId: string) => string[];
     getNameConversation: (chat: ItemListConversation, profileId: string) => string;
     isAuthor: (chat: ItemListConversation, profileId: string) => boolean;
+    isMasterAuthor: (chat: ItemListConversation, profileId: string) => boolean;
     hasPermission: (chat: ItemListConversation, profileId: string, permission: string) => boolean;
 }
 
@@ -83,6 +84,10 @@ export const UseMessageHelper = () : UseMessageHelperType => {
         return (chat.authors.includes(profileId)||chat.author === profileId);
     };
 
+    const isMasterAuthor = (chat: ItemListConversation, profileId: string) : boolean => {
+        return chat.author === profileId;
+    }
+
     const hasPermission = (chat: ItemListConversation, profileId: string, permission: string) : boolean => {
         if (chat.isPrivate) return true;
         const value = chat.config?chat.config[permission]:1;
@@ -94,6 +99,7 @@ export const UseMessageHelper = () : UseMessageHelperType => {
         getAvatarMembers,
         getNameConversation,
         isAuthor,
+        isMasterAuthor,
         hasPermission
     }
 };

@@ -97,7 +97,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     },[chat.lastMessage])
 
     const displayClass = (
-        !chat.usersHide.includes(profileId) &&
+        !chat?.usersHide?.includes(profileId) &&
         (
             !currentSelectedFolders ||
             (

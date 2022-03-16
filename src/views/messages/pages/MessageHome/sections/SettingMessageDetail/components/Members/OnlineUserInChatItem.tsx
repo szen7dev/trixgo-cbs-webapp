@@ -22,7 +22,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
     const {socketRef} = useContext(MessageContext);
     const socket = socketRef.current;
 
-    const {handleStartPrivateChat, isAuthor} = UseMessageHelper();
+    const {handleStartPrivateChat, isAuthor, isMasterAuthor} = UseMessageHelper();
     const [showOption, setShowOption] = useState(false);
     const wrapper = useRef<HTMLDivElement>(null);
     useOnClickOutside(wrapper, () => setShowOption(false));
@@ -47,7 +47,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
     }, [user]);
 
     const {openDeleteConfirm} = useDeleteConfirm();
-    const {removeMemberFromConversation} = UseListConversation();
+    const {removeMemberFromConversation, setAsAdmin} = UseListConversation();
     const removeUser = () => {
         setShowOption(false)
         openDeleteConfirm({
@@ -80,6 +80,27 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
             }
         })
     }
+
+    const setAsAdminAction = (isSetAdmin: boolean) => {
+        setShowOption(false)
+        setAsAdmin({
+            conversationID: chat._id,
+            memberID: user.member._id,
+            isSetAdmin
+        }).then(({data, error}) => {
+            if (error) {
+                toast.error(data.message)
+            } else {
+                socket.emit('CHATTING_CSS_UPDATE_ADMIN_CONVERSATION', {
+                    conversationID: chat._id,
+                    memberID: user.member._id,
+                    isSetAdmin
+                });
+                socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
+            }
+        })
+    }
+
     return (
         <div className={"relative"} ref={wrapper}>
             <div
@@ -97,7 +118,10 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                     <span className={"truncate text-xs "+(onlineStatus().isOnline?"text-primary":"text-gray-400")}>{onlineStatus().text}</span>
                 </div>
                 {
-                    isAuthor(chat, profileId)&&
+                    //Phải là admin
+                    //Không được tự xóa quyền bản thân
+                    //Không được xóa quyền của Chủ cuộc hội thoại
+                    isAuthor(chat, profileId)&&!isMasterAuthor(chat, user.member._id)&&profileId!==user.member._id&&
                     <div
                         onClick={() => setShowOption(!showOption)}
                         className={"cursor-pointer w-[30px] h-[30px] bg-white border rounded-full flex items-center justify-center "}>
@@ -106,7 +130,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                 }
             </div>
             {
-                showOption&&isAuthor(chat, profileId)&&
+                showOption&&isAuthor(chat, profileId)&&!isMasterAuthor(chat, user.member._id)&&profileId!==user.member._id&&
                 <div
                 className={"absolute z-10 top-40px right-30px max-w-fit"}>
                     <div
@@ -117,9 +141,11 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                             <img src={RemoveIcon} alt={"bookmark"}/>
                             <div className={"flex-1 text-left ml-4"}>Xoá khỏi cuộc hội thoại</div>
                         </button>
-                        <button className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                        <button
+                            onClick={() => setAsAdminAction(!isAuthor(chat, user.member._id))}
+                            className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                             <img src={AddAdminIcon} alt={"add folder"}/>
-                            <div className={"flex-1 text-left ml-4"}>Set as a Mod</div>
+                            <div className={"flex-1 text-left ml-4"}>{isAuthor(chat, user.member._id)?"Xóa vai trò Admin":"Đặt làm Admin"}</div>
                         </button>
                     </div>
                 </div>
