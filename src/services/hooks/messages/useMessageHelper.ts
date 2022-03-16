@@ -84,7 +84,8 @@ export const UseMessageHelper = () : UseMessageHelperType => {
     };
 
     const hasPermission = (chat: ItemListConversation, profileId: string, permission: string) : boolean => {
-        const value = chat.config?chat.config[permission]:2;
+        if (chat.isPrivate) return true;
+        const value = chat.config?chat.config[permission]:1;
         return (value===1||isAuthor(chat, profileId))
     }
 
