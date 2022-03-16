@@ -3,7 +3,7 @@ import {ReactNode, useCallback, useContext} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
 import {MessageContext} from "views/messages/pages/MessageHome";
-import {appendFakeItemListConversation} from "../../../redux/reducer/messages/ListConversation";
+import {appendFakeItemListConversation} from "redux/reducer/messages/ListConversation";
 import {useDispatch} from "react-redux";
 
 type UseMessageHelperType = {
@@ -11,6 +11,8 @@ type UseMessageHelperType = {
     getAvatarMembers: (chat: ItemListConversation, profileId: string) => string[];
     getNameConversation: (chat: ItemListConversation, profileId: string) => string;
     isAuthor: (chat: ItemListConversation, profileId: string) => boolean;
+    isMasterAuthor: (chat: ItemListConversation, profileId: string) => boolean;
+    hasPermission: (chat: ItemListConversation, profileId: string, permission: string) => boolean;
 }
 
 export const UseMessageHelper = () : UseMessageHelperType => {
@@ -39,7 +41,7 @@ export const UseMessageHelper = () : UseMessageHelperType => {
                         links: 0,
                         createAt: 0,
                         __v: 0,
-                        config: 0
+                        // config: 0
                     })
                 });
                 setCurrentChat(data._id);
@@ -80,12 +82,24 @@ export const UseMessageHelper = () : UseMessageHelperType => {
 
     const isAuthor = (chat: ItemListConversation, profileId: string) : boolean => {
         return (chat.authors.includes(profileId)||chat.author === profileId);
+    };
+
+    const isMasterAuthor = (chat: ItemListConversation, profileId: string) : boolean => {
+        return chat.author === profileId;
+    }
+
+    const hasPermission = (chat: ItemListConversation, profileId: string, permission: string) : boolean => {
+        if (chat.isPrivate) return true;
+        const value = chat.config?chat.config[permission]:1;
+        return (value===1||isAuthor(chat, profileId))
     }
 
     return {
         handleStartPrivateChat,
         getAvatarMembers,
         getNameConversation,
-        isAuthor
+        isAuthor,
+        isMasterAuthor,
+        hasPermission
     }
 };

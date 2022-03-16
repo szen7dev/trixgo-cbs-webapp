@@ -43,7 +43,7 @@ async function fetchDetailDepartment(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
         params: {
-            select: 'name sign description contracts company admins members',
+            select: 'name sign description contracts company admins members image',
             populates: {
                 path: 'company',
                 select: '_id name sign',

@@ -15,6 +15,7 @@ import {deleteConversationAction, updateUsersMuteToConversation} from "redux/red
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {toast} from "react-toastify";
+import {openConfigConversation} from "redux/reducer/messages/ConversationConfigModal";
 
 export const MainChatOptions:FC = () => {
     const {currentChat, socketRef} = useContext(MessageContext);
@@ -111,6 +112,14 @@ export const MainChatOptions:FC = () => {
                 <DotsVerticalIcon/>
             </Menu.Button>
             <Menu.Items className={"absolute top-55px right-3 rounded-md shadow-lg bg-white min-w-[272px] text-gray-500 cursor-pointer"}>
+                <Menu.Item
+                    onClick={() => dispatch(openConfigConversation({conversationId: currentChat}))}
+                >
+                    <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 " + ((isAuthor(chatData, profileId)&&!chatData.isPrivate)?"":"hidden")}>
+                        <img className={"w-[24px] h-[24px] min-w-[24px] min-h-[24px]"} src={"/images/messages/icons8-settings-48.png"} alt={"exit"}/>
+                        <div className={"flex-1 text-left ml-4"}>Cài đặt hội thoại</div>
+                    </div>
+                </Menu.Item>
                 <Menu.Item
                     onClick={() => {
                         if (checkedValue()) {

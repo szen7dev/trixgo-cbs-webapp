@@ -538,3 +538,37 @@ export type RemoveMemberFromConversationResponse = {
     error: boolean;
     status: number;
 }
+
+export type UpdateConfigConversationPayload = {
+    conversationID: string;
+    typeConfig: number;
+    valueConfig: number
+}
+
+export type UpdateConfigConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type SetASAdminConversationPayload = {
+    conversationID: string;
+    memberID: string;
+    isSetAdmin: boolean
+}
+
+export type SetASAdminConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+
+export type SetASAdminConversationResponse = {
+    data: SetASAdminConversationData;
+    error: boolean;
+    status: number;
+}
