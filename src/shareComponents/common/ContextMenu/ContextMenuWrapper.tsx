@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from './ContextMenu'
+import { actions } from './ContextMenu'
 
 type PropsComponent<A> = {
 	tag: A;
@@ -20,14 +20,15 @@ export default class ContextMenuWrapper<T extends React.ElementType = 'div'> ext
 
 	handleContextClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void {
 		if (this.props.disable) return;
+		const action = actions.get('open');
+		if (action) {
+			event.preventDefault();
+			event.stopPropagation();
 
-		event.preventDefault();
-		event.stopPropagation();
-
-		// action.hideMenu();
-		action.showMenu({
-			position: { x: event.clientX, y: event.clientY },
-		});
+			actions.get('open')?.({
+				position: { x: event.clientX, y: event.clientY },
+			});
+		}
 	}
 
 	handleContextMenu(e: React.MouseEvent<HTMLElement, MouseEvent>): void {

@@ -20,6 +20,7 @@ import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/Mo
 import moment from 'moment';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
+import { ContextMenu, ContextMenuWrapper } from 'shareComponents/common/ContextMenu';
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -93,6 +94,7 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 	const handleDeleteItem = useCallback(async (selectedRow: any) => {
 		try {
 			await DatahubRepository.deleteDatahubInspection({ inspectionDocID: selectedRow._id });
+			toast.info('Xóa thành công');
 			queryClient.removeQueries(['datahub_inspection', type]);
 			setKeyword('');
 			resetPage();
@@ -109,6 +111,15 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 
 	return (
 		<>
+			<ContextMenu scroller='scroller' >
+				<ul className="bg-white shadow-cbs-md py-0.5 max-h-32 overflow-auto rounded-cbs border-0.5 border-cbs-border">
+					<li className="hover:text-white hover:bg-cbs-secondary py-2 px-4 transition-none">
+						<button onClick={e => { setShow(true) }}>
+							Sửa {selected?.name}
+						</button>
+					</li>
+				</ul>
+			</ContextMenu>
 			<Table
 				wrapperComponent={({ children, state, selectedFlatRows }) => {
 					// console.log(state, selectedFlatRows)
@@ -141,14 +152,13 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 							<ButtonCreate onClick={() => setShow(!show)} />
 							<ButtonMore />
 						</div>
-						<div className='flex-1 overflow-y-auto'>
+						<div className='flex-1 overflow-y-auto' id='scroller' >
 							{children}
 						</div>
 						{/* </div> */}
 						<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
 					</div>
-				}
-				}
+				}}
 				data={data?.data?.listRecords || []}
 				tableProps={{
 					className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
@@ -156,6 +166,7 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 				}}
 
 				getRowId={(row) => row._id}
+				enableMenuContext
 
 				tableHeadSelectorProps={{ className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" }}
 				tableHeadSelectorInputProps={{ className: 'cbs-checkbox' }}
@@ -163,7 +174,12 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 				tableCellSelectorInputProps={{ className: 'cbs-checkbox' }}
 
 				tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
-				tableRowProps={(props, { row }) => ({ onContextMenu(e) { e.preventDefault(); console.log(row.id) } })}
+				tableRowProps={(props, { row }) => ({
+					onContextMenu(e) {
+						e.preventDefault();
+						setSlected(row.original)
+					}
+				})}
 
 				columns={columns}
 			/>

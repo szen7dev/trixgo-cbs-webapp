@@ -34,7 +34,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 								e.stopPropagation();
 								e.preventDefault();
 								setSelected(record);
-								showContextMenu({ position: { x: e.clientX, y: e.clientY } })
+								showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
 							}}>
 								<div className='flex'>
 									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>

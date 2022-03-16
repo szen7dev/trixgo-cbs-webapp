@@ -1,13 +1,17 @@
-/* eslint-disable prefer-const */
 import React, { FC, useEffect, useState } from 'react';
 
-export const action = {
-	hideMenu(e: any = {}): void { alert('Missing Wrapper') },
-	showMenu(e: any = {}): void { alert('Missing Wrapper') },
-}
+const createShareVariables = (): Map<"open" | "close", (...props: any) => void> => {
+	const actions = new Map();
+	actions.set("open", () => alert("not implemented"));
+	actions.set("close", () => alert("not implemented"));
 
-export let showContextMenu = action.showMenu;
-export let hideContextMenu = action.showMenu;
+	return actions;
+};
+
+export const actions = createShareVariables();
+
+export const showContextMenu = actions.get('open');
+export const hideContextMenu = actions.get('close');
 
 type Props = {
 	preventHideOnScroll?: boolean;
@@ -18,6 +22,7 @@ type Props = {
 }
 
 const ContextMenu: FC<Props> = (props) => {
+	// const { isVisible, setIsVisible, setPosition, position } = useStore(state => state)
 	const [isVisible, setIsVisible] = useState(false);
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const menuRef = React.useRef<HTMLElement>(null);
@@ -27,7 +32,11 @@ const ContextMenu: FC<Props> = (props) => {
 		(menuRef.current as HTMLElement).style.zIndex = '10'
 		if (props.scroller) {
 			const container = document.querySelector('#' + props.scroller);
-			if (!container) return setPosition(e.position);
+			if (!container) {
+				setPosition(e.position)
+				registerHandlers();
+				return;
+			};
 
 			const { clientWidth, clientHeight } = (menuRef.current as HTMLElement);
 			const reactContianer = container.getBoundingClientRect();
@@ -74,12 +83,16 @@ const ContextMenu: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		action.hideMenu = handleHide;
-		action.showMenu = handleShow;
-		hideContextMenu = handleHide;
-		showContextMenu = handleShow;
+		actions.set('open', handleShow);
+		actions.set('close', handleHide);
 		return () => {
 			unregisterHandlers();
+			if (process.env.NODE_ENV === 'production') {
+				actions.clear();
+			} else {
+				actions.set('open', () => alert("not implemented"));
+				actions.set('close', () => alert("not implemented"));
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
