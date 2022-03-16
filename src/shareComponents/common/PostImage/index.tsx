@@ -12,12 +12,16 @@ const MemoImageUploading = memo(ImageUploading, (prevProps, nextProps) => prevPr
 const MemoImageUploaded = memo(ImageUploaded, (prevProps, nextProps) => prevProps.d._id === nextProps.d._id);
 
 export const PostImage: FC<PostImageProps & HTMLAttributes<HTMLDivElement>> = ({ images, onRemove, ...props }) => {
-	if (!images?.length) return null;
+	if (!images?.length) return <></>;
+	const isHide = images.every(image => Object.keys(image).length === 1);
+	if(isHide) return <></>;
 
 	return (
 		<div {...props}>
 			{
 				images.map((d, _index) => {
+					if(Object.keys(d).length === 1) return <></>;
+
 					if ('id' in d) {
 						return (
 							<div key={d.id} className="post__files-image">

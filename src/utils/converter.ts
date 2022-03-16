@@ -48,3 +48,17 @@ export const humanFileSize = (bytes = 0, si = true, dp = 1) => {
 
     return bytes.toFixed(dp) + ' ' + units[u];
 }
+
+/**
+ * Convert Blob to File again
+ */
+export const blobToFile = (theBlob: Blob, fileName: string): File => {
+  const b: any = theBlob;
+  // A Blob() is almost a File() - it's just missing the two properties below which we will add
+  b.lastModified = Date.now();
+  b.lastModifiedDate = new Date();
+  b.name = fileName;
+
+  // Cast to a File() type
+  return <File>theBlob;
+}
