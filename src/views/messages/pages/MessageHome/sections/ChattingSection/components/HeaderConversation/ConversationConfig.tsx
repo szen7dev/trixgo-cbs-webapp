@@ -30,7 +30,7 @@ export const ConversationConfig:FC = () => {
     }
 
     const checkedValue = useCallback(() => {
-        if (!chat) return {
+        if (!chat||!chat.config) return {
             1: true,
             2: true,
             3: true,
