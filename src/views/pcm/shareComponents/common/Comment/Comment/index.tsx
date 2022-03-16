@@ -4,6 +4,7 @@ import cn from "classnames";
 import moment from "moment";
 
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
+import { nl2p } from 'utils';
 import { PostFile } from 'shareComponents/common';
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { CommentProps } from 'typings/task';
@@ -82,9 +83,12 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				<div className='group w-full'>
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
-							<p className="font-bold text-medium">{comment.author?.fullname}</p>
-							<p className="mt-0.5 text-[15px] leading-4">
-								{comment.content}
+							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
+							<p
+								className="mt-0.5 text-[15px] leading-4"
+								dangerouslySetInnerHTML={{
+									__html: nl2p(comment.content)
+								}}>
 							</p>
 						</div>
 						{Options && <Options 

@@ -44,7 +44,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
         {
             text: "Groups",
             tabId: "groups",
-            isShow: chat.isPrivate
+            isShow: chat.isPrivate&&chat?.members.find((item: any) => item._id !== profileId)?._id
         },
     ]
 
@@ -83,7 +83,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
             }
             {
                 activeTab==="groups"&&
-                <ListGeneralGroupByMember memberId={chat?.members.find((item: any) => item._id !== profileId)?._id}/>
+                <ListGeneralGroupByMember isActive={activeTab==="groups"} memberId={chat?.members.find((item: any) => item._id !== profileId)?._id}/>
             }
         </>
     )

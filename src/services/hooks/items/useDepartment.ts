@@ -146,6 +146,7 @@ export const useQueryDetailDepartment = (): UseQueryDetailDepartment => {
         }
 
     }, []);
+
     return {
         onFetchDetailDepartmentAsync: onFetchDetailDepartment,
         loading,

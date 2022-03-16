@@ -4,6 +4,7 @@ import { FC, HTMLAttributes } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
+import { nl2p } from 'utils';
 import { PostFile } from 'shareComponents/common';
 import { Comment as CommentType } from 'typings/ppt/comment';
 
@@ -68,8 +69,11 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
 							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
-							<p className="mt-0.5 text-[15px] leading-4">
-								{comment?.content}
+							<p
+								className="mt-0.5 text-[15px] leading-4"
+								dangerouslySetInnerHTML={{
+									__html: nl2p(comment.content)
+								}}>
 							</p>
 						</div>
 						{showOptions && Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}

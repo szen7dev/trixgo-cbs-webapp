@@ -3,13 +3,14 @@
  */
 import { useMutation } from "react-query";
 import MimeType from "mimetype";
-// import Compressor from 'compressorjs';
 import imageCompression from 'browser-image-compression';
+
 /**
  * Types, APIs
  */
 import FileRepository from "apis/upload";
 import { UploadPayload, FileProps, AddFileUploadResponse, GenerateLinkPayload } from "typings/file";
+import { blobToFile } from "utils/converter";
 
 export type GenerateLinkResponse = {
     signedUrl: string,
@@ -42,6 +43,7 @@ export type UploadFileProps = {
     files: File & File[],
     fileType: number,
     progress?: (percentCompleted: number, _id?: string) => void,
+    source?: any,
     useCompress?: boolean;
     compressConfig?: OptionsCompress;
 }
@@ -58,7 +60,7 @@ type UseUpload = {
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
-export const useUpload = ({ 
+export const useUpload = ({
     appID,
     companyID,
     projectID,
@@ -90,7 +92,7 @@ export const useUpload = ({
 
     const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
-            console.log({ file, fileType })
+            console.log({ generateLinkS3: file, fileType })
             const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 
@@ -130,7 +132,7 @@ export const useUpload = ({
             for (const file of files) {
                 const infoUrl = generateLinkS3({ file, fileType });
                 urlsPromise = [...urlsPromise, infoUrl];
-            }   
+            }
         }
 
         // Generate link S3 -> get list link presigned upload -> upload S3 async
@@ -149,12 +151,20 @@ export const useUpload = ({
            fileType,
            progress,
            useCompress,
+           source,
            compressConfig = {
                maxSizeMB: 1,
                maxWidthOrHeight: 1920,
                useWebWorker: true
            },
        }: UploadFileProps) => {
+
+        if (files.type === "") {
+            const blob = new Blob([files], { type: MimeType.lookup(files.name) });
+            const newFile: any = blobToFile(blob, files.name);
+            files = newFile;
+        }
+
         const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
 
         // Handle images
@@ -176,24 +186,24 @@ export const useUpload = ({
             // });
             try {
                 const compressedFile = await imageCompression(file, compressConfig);
-                const compressFile = blobToFile(compressedFile, file.name);
+                const compressFile = convertBlobToFile(compressedFile, file.name);
                 // console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
                 // console.log('Sending in COMPRESS mode');
 
-                await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id });
+                await uploadFileToS3({ signedUrl, file: compressFile, progress, _id: result?._id, source });
             } catch (error) {
                 // console.log("Can not compress file. Sending in HD mode")
-                await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
+                await uploadFileToS3({ signedUrl, file, progress, _id: result?._id, source });
             }
         } else {
             // console.log('Sending in HD mode');
-            await uploadFileToS3({ signedUrl, file, progress, _id: result?._id });
+            await uploadFileToS3({ signedUrl, file, progress, _id: result?._id, source });
         }
 
         return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };
     }
 
-    const blobToFile = (theBlob: Blob, fileName: string): File => {
+    const convertBlobToFile = (theBlob: Blob, fileName: string): File => {
         const b: any = theBlob;
         // A Blob() is almost a File() - it's just missing the two properties below which we will add
         b._lastModifiedDate = new Date();

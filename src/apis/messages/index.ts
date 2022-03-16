@@ -10,21 +10,34 @@ import {
     ConversationInformarionResponse,
     ConvversationInformationPayload,
     CreateConversationPayload,
-    CreateConversationResponse, DeleteConversationPayload, DeleteConversationResponse,
+    CreateConversationResponse,
+    DeleteConversationPayload,
+    DeleteConversationResponse,
     DeleteFolderPayload,
-    DeleteFolderResponse, DeleteHistoryConversationPayload, DeleteHistoryConversationResponse,
+    DeleteFolderResponse,
+    DeleteHistoryConversationPayload,
+    DeleteHistoryConversationResponse,
     GeneralGroupByMemberPayload,
-    GeneralGroupByMemberResponse, HideConversationPayload, HideConversationResponse,
+    GeneralGroupByMemberResponse,
+    HideConversationPayload,
+    HideConversationResponse,
+    LeaveConversationPayload,
+    LeaveConversationResponse,
     ListConversationPayload,
     ListConversationResponse,
     ListFoldersConversationPayload,
     ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
-    ListMembersOfConversationResponse, MarkReadConversationPayload, MarkReadConversationResponse,
+    ListMembersOfConversationResponse,
+    MarkReadConversationPayload,
+    MarkReadConversationResponse,
     MediasOfConversationPayload,
     MediasOfConversationResponse,
     PinConversationPayload,
     PinConversationResponse,
+    RemoveMemberFromConversationPayload,
+    RemoveMemberFromConversationResponse, SetASAdminConversationPayload, SetASAdminConversationResponse,
+    UpdateConfigConversationPayload, UpdateConfigConversationResponse,
     UpdateConversationPayload,
     UpdateConversationResponse,
     UpdateFolderPayload,
@@ -51,6 +64,10 @@ const hideConversation = "/api/chatting/conversations/update-hide-conversation";
 const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
 const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
 const deleteConversation = "/api/chatting/conversations/delete-conversation";
+const leaveConversation = "/api/chatting/conversations/member-leave-conversation";
+const removeFromConversation = "/api/chatting/conversations/remove-member-conversation";
+const updateConfigConversation = "/api/chatting/conversations/update-config-conversation";
+const setAsAdminConversation = "/api/chatting/conversations/update-admin-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -208,6 +225,40 @@ const ListConversationRepository = {
     async deleteConversation(payload: DeleteConversationPayload) : Promise<DeleteConversationResponse> {
         const {data} = await API.delete(
             `${deleteConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async leaveConversation(payload: LeaveConversationPayload) : Promise<LeaveConversationResponse> {
+        const {data} = await API.get(
+            `${leaveConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async removeMemberFromConversation(payload: RemoveMemberFromConversationPayload) : Promise<RemoveMemberFromConversationResponse> {
+        const {data} = await API.delete(
+            `${removeFromConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async updateConfigConversation(payload: UpdateConfigConversationPayload) : Promise<UpdateConfigConversationResponse> {
+        const {data} = await API.put(
+            `${updateConfigConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async setAsAdmin(payload: SetASAdminConversationPayload) : Promise<SetASAdminConversationResponse> {
+        const {data} = await API.put(
+            `${setAsAdminConversation}`,
+            {...payload}
         )
 
         return data;

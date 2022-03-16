@@ -1,10 +1,5 @@
-import React, {FC, useCallback, useContext, useEffect} from "react";
-import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
+import React, {FC, useCallback, useContext, useState} from "react";
 import {DropdownSearchable} from "shareComponents/common/DropdownSearchable";
-import WordIcon from "assets/images/CBS-Word-Icon.svg";
-import ExcelIcon from "assets/images/CBS-Excel-Icon.svg";
-import OtherIcon from "assets/images/CBS-Other-Icon.svg";
-import {DatePickerWithRange} from "../../../../../../shareComponents/common/DatePickerWithRange";
 import {map as _map} from "lodash";
 
 import {MessageContext} from "../../../../index";
@@ -18,8 +13,15 @@ type Props = {
 }
 export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     const {currentChat} = useContext(MessageContext);
-    const params = {conversationID: currentChat};
+
+    const [author, setAuthor] = useState("");
+    const [dateRange, setDateRage] = useState({fromDate: "", toDate:""});
+    const params = {conversationID: currentChat, fromDate: dateRange.fromDate, toDate: dateRange.toDate, authorID: author};
     const {listLinksMessage, hasListLinksNextPage, nextPageListLinks} = UseInformationMessage(params, isActive, "links");
+
+    const [searchUser, setSearchUser] = useState("");
+    const paramsListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"}), keyword: searchUser};
+    const {listMembersMessage} = UseInformationMessage(paramsListMember, isActive, "members");
 
     const groupByDate = useCallback(() : {
         dateFormat: string,
@@ -56,45 +58,97 @@ export const ListLinksInMessage:FC<Props> = ({isActive}) => {
     return (
         <div className={"bg-white flex-1"}>
             <div className={"sticky bg-white top-110px w-full z-10 flex items-center p-[10px]"}>
+                {/*<DropdownSearchable*/}
+                {/*    placeholder={"Loại"}*/}
+                {/*    className={"bg-gray-100 rounded-full flex-1 mr-2"}*/}
+                {/*    data={[*/}
+                {/*        {*/}
+                {/*            id: 1,*/}
+                {/*            imageUrl: PDFIcon,*/}
+                {/*            text: "PDF"*/}
+                {/*        },*/}
+                {/*        {*/}
+                {/*            id: 2,*/}
+                {/*            imageUrl: WordIcon,*/}
+                {/*            text: "Word"*/}
+                {/*        },*/}
+                {/*        {*/}
+                {/*            id: 3,*/}
+                {/*            imageUrl: ExcelIcon,*/}
+                {/*            text: "Excel"*/}
+                {/*        },*/}
+                {/*        {*/}
+                {/*            id: 4,*/}
+                {/*            imageUrl: OtherIcon,*/}
+                {/*            text: "Other"*/}
+                {/*        }*/}
+                {/*    ]}*/}
+                {/*    renderItem={(item) => (*/}
+                {/*        <div className={"flex align-items-center text-left"}>*/}
+                {/*            <img  alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>*/}
+                {/*            <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>*/}
+                {/*        </div>*/}
+                {/*    )}*/}
+                {/*    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}*/}
+                {/*/>*/}
+                {/*<DropdownSearchable*/}
+                {/*    placeholder={"Người gửi"}*/}
+                {/*    className={"bg-gray-100 rounded-full flex-1 mr-2"}*/}
+                {/*    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}*/}
+                {/*/>*/}
+                {/*<DatePickerWithRange/>*/}
                 <DropdownSearchable
-                    placeholder={"Loại"}
-                    className={"bg-gray-100 rounded-full flex-1 mr-2"}
+                    placeholder={"Người gửi"}
+                    className={"bg-gray-100 rounded-full flex-1 mr-2 text-xs"}
+                    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px] focus:border-primary"}
+                    allowClearValueSingleInput={true}
+                    bordered={false}
+                    onSearchInputChange={valueSearch => setSearchUser(valueSearch)}
+                    data={listMembersMessage.map(member => {
+                        return {
+                            ...member,
+                            id: member.member._id,
+                            text: member.member.bizfullname,
+                            imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${member?.member?.image}`,
+                            _id: member.member._id
+                        }
+                    })}
+                    onchangeValue={({_id}) => setAuthor(_id)}
+                    onClearData={() => {
+                        setAuthor("");
+                    }}
+                />
+                <DropdownSearchable
+                    placeholder={"Ngày gửi"}
+                    className={"bg-gray-100 rounded-full flex-1 mr-2 text-xs"}
+                    allowClearValueSingleInput={true}
+                    bordered={false}
                     data={[
                         {
                             id: 1,
-                            imageUrl: PDFIcon,
-                            text: "PDF"
+                            text: "Trong vòng 24h",
+                            fromDate: moment().subtract(1, 'days').format("yyyy-MM-DD"),
+                            toDate: moment().format("yyyy-MM-DD")
                         },
                         {
                             id: 2,
-                            imageUrl: WordIcon,
-                            text: "Word"
+                            text: "Trong vòng 1 tuần",
+                            fromDate: moment().subtract(1, 'weeks').format("yyyy-MM-DD"),
+                            toDate: moment().format("yyyy-MM-DD")
                         },
                         {
                             id: 3,
-                            imageUrl: ExcelIcon,
-                            text: "Excel"
+                            text: "Trong vòng 1 tháng",
+                            fromDate: moment().subtract(1, 'months').format("yyyy-MM-DD"),
+                            toDate: moment().format("yyyy-MM-DD")
                         },
-                        {
-                            id: 4,
-                            imageUrl: OtherIcon,
-                            text: "Other"
-                        }
                     ]}
-                    renderItem={(item) => (
-                        <div className={"flex align-items-center text-left"}>
-                            <img  alt={"Avt"} src={item.imageUrl} className={"w-9 h-9 object-cover mr-3"}/>
-                            <span className={"flex-1 ml-1 mr-1"}>{item.text}</span>
-                        </div>
-                    )}
-                    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}
+                    disableSearch={true}
+                    onchangeValue={({fromDate, toDate}) => setDateRage({fromDate, toDate})}
+                    onClearData={() => {
+                        setDateRage({fromDate: "", toDate:""});
+                    }}
                 />
-                <DropdownSearchable
-                    placeholder={"Người gửi"}
-                    className={"bg-gray-100 rounded-full flex-1 mr-2"}
-                    searchInputClassName={"border rounded-full h-[28px] p-0 border-gray-300 mx-[10px]"}
-                />
-                <DatePickerWithRange/>
             </div>
             <div className={"h-full"}>
                 {

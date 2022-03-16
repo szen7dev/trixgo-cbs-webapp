@@ -35,9 +35,16 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         return userUnread?.amount??0
     }, [chat.usersMissMessage])
 
+    const isDeleted = useCallback(() => {
+        if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (chat.lastMessage.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [chat.lastMessage])
+
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
-            if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
+            if (isDeleted()) {
                 return "Tin nhắn đã xóa";
             }
             switch (chat.lastMessage.type) {
@@ -97,7 +104,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     },[chat.lastMessage])
 
     const displayClass = (
-        !chat.usersHide.includes(profileId) &&
+        !chat?.usersHide?.includes(profileId) &&
         (
             !currentSelectedFolders ||
             (
@@ -111,7 +118,7 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
     return (
         <RightClickMenuWrapper
             className={displayClass}
-            contextMenu={<OptionListItemRightClick chat={chat} socketRef={socketRef}/>}
+            contextMenu={<OptionListItemRightClick currentChat={currentChat} chat={chat} socketRef={socketRef}/>}
         >
             <NavLink
                 onClick={() => {

@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useCallback, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {ModalFullContainer} from "shareComponents/common";
@@ -6,7 +6,7 @@ import {ViewImage} from "./ViewImage";
 import moment from "moment";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {ReactionList, ReactionActions} from "../../Reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
 import {MessageStatus} from "./MessageStatus";
 
 type Props = {
@@ -59,12 +59,12 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
             if (!image.file) return null;
             return <div
                 onClick={() => {
-                    if (image.file.file.isDraft) return;
+                    if (image.file.isDraft) return;
                     setModalShowImage({show: true, index: index})
                 }}
                 key={image._id} className={"relative cursor-pointer " + classNameMap[index]["wrapper"]}>
                 <img className={"w-full h-full object-cover " + classNameMap[index]["img"]}
-                     src={image.file.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.file.path}`}
+                     src={image.file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${image.file.path??image.file.file.path}`}
                      alt={"image"}/>
                 {
                     (index === 4 && message.files.length > 5) &&
@@ -88,7 +88,18 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
         })
     }
 
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
+    const isDeleted = useCallback(() => {
+        if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
     const renderReply = () => {
+        if (isDeleted()) {
+            return <DeleteReply message={message} />
+        }
         switch (message.parent.type) {
             case 0:
                 return <TextReply message={message.parent}/>;
@@ -120,7 +131,7 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
                 </div>
                 <ModalFullContainer isModalOpen={modalShowImage.show} toggle={closeModalImage}>
                     <div className="flex overflow-hidden transition-all transform w-full h-full">
-                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.file.path}`:""))} index={modalShowImage.index} />
+                        <ViewImage message={message} show={modalShowImage.show} toggle={closeModalImage} imageList={message.files.map(file => (file.file?`${process.env.REACT_APP_URL_S3}${file.file.path??file.file.file.path}`:""))} index={modalShowImage.index} />
                     </div>
                 </ModalFullContainer>
             </div>

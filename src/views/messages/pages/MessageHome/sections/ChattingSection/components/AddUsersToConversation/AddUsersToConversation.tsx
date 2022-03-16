@@ -7,7 +7,6 @@ import {dismissAddUserToConversation} from "redux/reducer/messages/AddUserToConv
 import {map as _map} from "lodash";
 import {useUser} from "services/hooks/useUser";
 import {UseConversation} from "services/hooks/messages/useConversation";
-import {UseInformationMessage} from "../../../../../../../../services/hooks/messages/useInformationMessage";
 import {toast} from "react-toastify";
 
 type Props = {
@@ -43,10 +42,10 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
         }
         setSelectedFriends(selected);
     }
-    const paramsRefetchListMember = {conversationID: conversationId, type: "member", populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
-    const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members")
+
     const forwardMessagesToConversation = () => {
-        addUserToConversation({conversationID: conversationId, membersID: Object.keys(selectedFriends)}).then(({error,data}) => {
+        const membersId = Object.keys(selectedFriends);
+        addUserToConversation({conversationID: conversationId, membersID: membersId}).then(({error,data}) => {
             if (error) {
                 toast.error(data?.message);
                 return;
@@ -54,6 +53,7 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
             setSearchTerm("");
             setSelectedFriends({});
             dispatch(dismissAddUserToConversation({}))
+            socket.emit('CHATTING_CSS_ADD_MEMBER_CONVERSATION', {conversationID: conversationId, membersID: membersId})
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
             socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
                 conversationID: conversationId,
@@ -64,10 +64,9 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
                     links: 0,
                     createAt: 0,
                     __v: 0,
-                    config: 0
+                    // config: 0
                 })
             });
-            refetchListMembers()
         });
     };
 

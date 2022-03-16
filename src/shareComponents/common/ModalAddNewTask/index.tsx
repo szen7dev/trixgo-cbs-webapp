@@ -8,13 +8,13 @@ import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { object, string } from "yup";
 
 import { useQueryListDoctype } from "services/hooks/useHuman";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
 
 import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
 
 // import AttachIcon from "assets/images/icons8-attach-50.png";
 import Close from "assets/icons/Close";
@@ -71,7 +71,7 @@ export const ModalAddNewTask: FC = () => {
 
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [otherFieldValue, setOtherFieldValue] = useState("");
-  const [searchFriendName, setSearchFriendName] = useState("");
+  const [searchMemberName, setSearchMemberName] = useState("");
   const [searchGroupName, setSearchGroupName] = useState("");
   const [projectID, setProjectID] = useState("");
 
@@ -80,22 +80,35 @@ export const ModalAddNewTask: FC = () => {
     keyword: searchDepartmentValue,
     isFetch: true
   })
-  const { listDoctypes } = useQueryListDoctype({ 
+  const { listDoctypes } = useQueryListDoctype({
     limit: 50,
     type: 2,
     keyword: otherFieldValue
   });
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName
-  });
-  const { 
-    data: listGroup, 
-    hasNextPage: hasNextPageListGroup, 
-    fetchNextPage: fetchNextPageListGroup 
+
+  const { data: listMembersInProject, fetchNextPage: fetchNextPageListMembers, hasNextPage: hasNextPageListMembers } = useUsersProject({
+    projectID,
+    keyword: searchMemberName
+  }, !!projectID);
+  console.log({ listMembersInProject })
+
+  const {
+    data: listGroup,
+    hasNextPage: hasNextPageListGroup,
+    fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
     keyword: searchGroupName,
     projectID: projectID
   }, !!projectID);
+
+  const handleScrollMembers = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListMembers) {
+      fetchNextPageListMembers();
+    }
+  }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -105,7 +118,7 @@ export const ModalAddNewTask: FC = () => {
       fetchNextPageListGroup();
     }
   }
-  
+
   const initialValues: InitialValues = {
     projectID: "",
     groupID: "",
@@ -338,12 +351,12 @@ export const ModalAddNewTask: FC = () => {
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
                               setFieldValue("assigneeID", value?.id);
-                              setSearchFriendName("");
+                              setSearchMemberName("");
                             }
                           }
                           onClearData={() => setFieldValue("assigneeID", "")}
                           onSearchInputChange={debounce(
-                            (value) => setSearchFriendName(value),
+                            (value) => setSearchMemberName(value),
                             500
                           )}
                           className={"w-full flex-1"}
@@ -372,15 +385,16 @@ export const ModalAddNewTask: FC = () => {
                               </p>
                             </div>
                           )}
-                          data={listFriend.map((item) => ({
+                          data={listMembersInProject.map((item) => ({
                             label: item.bizfullname,
                             value: item._id,
-                            imgUrl: item.imgUrl,
+                            imgUrl: `${process.env.REACT_APP_URL_S3_USER}/${item.image}`,
                           }))}
                           formatItem={{
                             id: "value",
                             text: "label",
                           }}
+                          onScroll={handleScrollMembers}
                           inlineSearch={true}
                         />
                         <ErrorMessage
@@ -397,7 +411,7 @@ export const ModalAddNewTask: FC = () => {
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
                             setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
-                            setSearchFriendName("");
+                            setSearchMemberName("");
                           }
                         }
                         onMultipleRemoveValue={(id: any) => {
@@ -408,7 +422,7 @@ export const ModalAddNewTask: FC = () => {
                         }}
                         onClearData={() => setFieldValue("relatedIDs", [])}
                         onSearchInputChange={debounce(
-                          (value) => setSearchFriendName(value),
+                          (value) => setSearchMemberName(value),
                           500
                         )}
                         className={"w-full flex-1"}
@@ -437,11 +451,12 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
-                        data={listFriend.map((item) => ({
+                        data={listMembersInProject.map((item) => ({
                           label: item.bizfullname,
                           value: item._id,
-                          imgUrl: item.imgUrl,
+                          imgUrl: `${process.env.REACT_APP_URL_S3_USER}/${item.image}`,
                         }))}
+                        onScroll={handleScrollMembers}
                         formatItem={{
                           id: "value",
                           text: "label",
@@ -457,7 +472,7 @@ export const ModalAddNewTask: FC = () => {
                         <input
                           placeholder="Tiêu đề"
                           type="text"
-                          className="border-0 flex-grow outline-none px-3 mt-0.5"
+                          className="border-0 w-full flex-grow outline-none px-3 mt-0.5"
                           onChange={(event) => setFieldValue("name", event.target.value)}
                         />
                         <ErrorMessage
@@ -543,7 +558,7 @@ export const ModalAddNewTask: FC = () => {
           }}
         </Formik>
       </div>
-      
+
     </>
   );
 };

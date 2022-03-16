@@ -5,15 +5,28 @@ import {
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
-    DataListConversation, DeleteConversationData, DeleteConversationPayload,
-    DeleteFolderPayload, DeleteHistoryConversationPayload,
+    DataListConversation,
+    DeleteConversationData,
+    DeleteConversationPayload,
+    DeleteFolderPayload,
+    DeleteHistoryConversationPayload,
     FolderConversationItem,
-    GeneralGroupByMemberPayload, HideConversationPayload,
+    GeneralGroupByMemberPayload,
+    HideConversationPayload,
     ItemListConversation,
+    LeaveConversationData,
+    LeaveConversationPayload,
     ListConversationPayload,
     ListFoldersConversationPayload,
-    ListMembersOfConversationPayload, MarkReadConversationPayload,
-    MediasOfConversationPayload, PinConversationPayload,
+    ListMembersOfConversationPayload,
+    MarkReadConversationPayload,
+    MediasOfConversationPayload,
+    PinConversationPayload,
+    RemoveMemberFromConversationData,
+    RemoveMemberFromConversationPayload,
+    SetASAdminConversationData,
+    SetASAdminConversationPayload,
+    UpdateConfigConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
     UpdateFolderPayload,
@@ -51,6 +64,10 @@ type UseListConversationType = {
     markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
     deleteHistoryConversation: (payload: DeleteHistoryConversationPayload) => Promise<ItemListConversation>,
     deleteConversation: (payload: DeleteConversationPayload) => Promise<DeleteConversationData>,
+    leaveConversation: (payload: LeaveConversationPayload) => Promise<{data: LeaveConversationData, error: boolean}>,
+    removeMemberFromConversation: (payload: RemoveMemberFromConversationPayload) => Promise<{data: RemoveMemberFromConversationData, error: boolean}>,
+    updateConfigConversation: (payload: UpdateConfigConversationPayload) => Promise<{data: ItemListConversation, error: boolean}>,
+    setAsAdmin: (payload: SetASAdminConversationPayload) => Promise<{data: SetASAdminConversationData, error: boolean}>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -174,6 +191,34 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         })
     }
 
+    const leaveConversation = async (params: LeaveConversationPayload) => {
+        const {data, error} = await ListConversationRepository.leaveConversation(params);
+        return new Promise<{data: LeaveConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const removeMemberFromConversation = async (params: RemoveMemberFromConversationPayload) => {
+        const {data, error} = await ListConversationRepository.removeMemberFromConversation(params);
+        return new Promise<{data: RemoveMemberFromConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const updateConfigConversation = async (params: UpdateConfigConversationPayload) => {
+        const {data, error} = await ListConversationRepository.updateConfigConversation(params);
+        return new Promise<{data: ItemListConversation, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const setAsAdmin = async (params: SetASAdminConversationPayload) => {
+        const {data, error} = await ListConversationRepository.setAsAdmin(params);
+        return new Promise<{data: SetASAdminConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -225,6 +270,10 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         hideConversation,
         markReadConversation,
         deleteHistoryConversation,
-        deleteConversation
+        deleteConversation,
+        leaveConversation,
+        removeMemberFromConversation,
+        updateConfigConversation,
+        setAsAdmin
     }
 };

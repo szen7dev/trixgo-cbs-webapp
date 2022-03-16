@@ -501,3 +501,74 @@ export type ListMembersMessageResponse = {
     error: boolean;
     status: number;
 }
+
+export type LeaveConversationPayload = {
+    conversationID: string;
+}
+export type LeaveConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type LeaveConversationResponse = {
+    data: LeaveConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type RemoveMemberFromConversationPayload = {
+    conversationID: string;
+    memberID: string
+}
+export type RemoveMemberFromConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type RemoveMemberFromConversationResponse = {
+    data: RemoveMemberFromConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateConfigConversationPayload = {
+    conversationID: string;
+    typeConfig: number;
+    valueConfig: number
+}
+
+export type UpdateConfigConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type SetASAdminConversationPayload = {
+    conversationID: string;
+    memberID: string;
+    isSetAdmin: boolean
+}
+
+export type SetASAdminConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+
+export type SetASAdminConversationResponse = {
+    data: SetASAdminConversationData;
+    error: boolean;
+    status: number;
+}

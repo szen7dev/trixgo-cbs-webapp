@@ -18,7 +18,7 @@ export type ItemMessage = {
         conversation: string;
         createAt: string;
         createdAt: string;
-        files: {status: number; usersDelete: any[]; _id: string; file: string}[];
+        files: {status: number; usersDelete: any[]; _id: string; file: any; [key: string]: any;}[];
         modifyAt: string;
         reactions: string[];
         receivers: string[];
@@ -83,7 +83,6 @@ export type ItemMessage = {
         usersDelete: any[];
         _id: string;
         file: {
-            _id: string;
             file: {
                 _id: string;
                 status: number;
@@ -102,6 +101,22 @@ export type ItemMessage = {
                 path: string;
                 isDraft: boolean;
             };
+            _id: string;
+            status: number;
+            app: string;
+            name: string;
+            url: string;
+            fakeUrl: string;
+            size: number;
+            userCreate: string;
+            modifyAt: string;
+            createAt: string;
+            createdAt: string;
+            updatedAt: string;
+            __v: number;
+            nameOrg: string;
+            path: string;
+            isDraft: boolean;
         };
         [key: string]: any;
     }[];

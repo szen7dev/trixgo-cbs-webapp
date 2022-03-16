@@ -139,21 +139,21 @@ export class QueueUpload<
     promise: (...args: any[]) => Promise<any>;
   }> = [];
   private _running: Record<string | number, () => void> = {};
-  public tasksDone: Array<string> = [];
+  public queueLength = 0;
   public isRunning = false;
 
   add(tasks: T): void {
     this._queue.push(...tasks);
+    this.queueLength = this._queue.length;
   }
 
   run(): void {
     if (this._queue.length) {
       this.isRunning = true;
       const queue = this._queue.shift();
+      --this.queueLength;
       if (queue) {
         const { key, promise } = queue;
-        // console.log("Runing queue id", key);
-        this.tasksDone.push(key);
         const wrappedPromise = new Promise((resolve, reject) => {
           this._running[key] = reject;
           return promise().then(resolve).catch(reject);
@@ -172,7 +172,6 @@ export class QueueUpload<
       }
     } else {
       this.isRunning = false;
-      this.tasksDone = [];
       // console.log("no more task");
     }
   }
@@ -181,10 +180,11 @@ export class QueueUpload<
       this._running[key]();
       delete this._running[key];
     } else if (this._queue.findIndex((item) => item.key === key) !== -1) {
-      this._queue.splice(
+      const queues = this._queue.splice(
         this._queue.findIndex((item) => item.key === key),
         1
       );
+      this.queueLength -= queues.length;
     }
     if (this._queue.length === 0) {
       this.isRunning = false;
@@ -198,7 +198,7 @@ export class QueueUpload<
     });
     this._running = {};
     this._queue = [];
-    this.tasksDone = [];
+    this.queueLength = 0;
     this.isRunning = false;
   }
 }
