@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useCallback} from "react";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import WordIcon from 'assets/images/CBS-Word-Icon.svg';
 import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
@@ -43,8 +43,14 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
 
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const renderReply = () => {
+    const isDeleted = useCallback(() => {
         if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderReply = () => {
+        if (isDeleted()) {
             return <DeleteReply message={message} />
         }
         switch (message.parent.type) {

@@ -18,7 +18,7 @@ export type ItemMessage = {
         conversation: string;
         createAt: string;
         createdAt: string;
-        files: {status: number; usersDelete: any[]; _id: string; file: string}[];
+        files: {status: number; usersDelete: any[]; _id: string; file: any; [key: string]: any;}[];
         modifyAt: string;
         reactions: string[];
         receivers: string[];

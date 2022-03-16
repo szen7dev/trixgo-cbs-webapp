@@ -20,12 +20,17 @@ export const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
     const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const handleConfirm = () => {
         const fileIds : string[] = [];
         deleteAndRevokeMessage.forEach((item: ItemMessage) => {
             if (item.files&&item.files.length>0) {
                 item.files.forEach(file => {
-                    fileIds.push(file._id)
+                    if (!file.usersDelete||!file.usersDelete.includes(profileId)) {
+                        fileIds.push(file._id)
+                    }
                 })
             }
         })
