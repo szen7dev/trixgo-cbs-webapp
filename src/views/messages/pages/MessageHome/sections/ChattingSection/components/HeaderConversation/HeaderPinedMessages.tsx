@@ -3,7 +3,7 @@ import {UseConversation} from "services/hooks/messages/useConversation";
 import {MessageContext} from "../../../../index";
 import {map as _map} from "lodash";
 import {ItemMessage} from "typings/apis/messages/listMessage";
-import {TextPinned, FilePinned, ImagePinned} from "../PinContent";
+import {TextPinned, FilePinned, ImagePinned, DeletedPinned} from "../PinContent";
 import Close from "assets/icons/Close";
 import {ListPinnedMessage} from "./ListPinnedMessage";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -41,8 +41,19 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         setIndexPinnedMessage(0)
     }, [listPinnedMessage])
 
+    const isDeleted = useCallback((pinnedMessage: ItemMessage) => {
+        if (!pinnedMessage) return false;
+        if (pinnedMessage.usersDelete&&pinnedMessage.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (pinnedMessage.files??[]).some(file => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [indexPinnedMessage])
+
     const renderPinned = (pinnedMessage: ItemMessage) => {
         if (!pinnedMessage) return null;
+        if (isDeleted(pinnedMessage)) {
+            return <DeletedPinned message={pinnedMessage}/>;
+        }
         switch (pinnedMessage.type) {
             case 0:
                 return <TextPinned message={pinnedMessage}/>;

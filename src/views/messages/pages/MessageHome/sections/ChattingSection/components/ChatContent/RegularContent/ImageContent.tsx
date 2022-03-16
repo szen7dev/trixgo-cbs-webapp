@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useCallback, useState} from "react";
 import {map as _map} from "lodash";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import {ModalFullContainer} from "shareComponents/common";
@@ -90,8 +90,14 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
 
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const renderReply = () => {
+    const isDeleted = useCallback(() => {
         if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderReply = () => {
+        if (isDeleted()) {
             return <DeleteReply message={message} />
         }
         switch (message.parent.type) {

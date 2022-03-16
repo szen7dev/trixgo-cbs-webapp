@@ -8,17 +8,18 @@ import {SearchChatItem} from "../../../MessageList";
 
 type Props = {
     memberId: string;
+    isActive: boolean;
 }
 
-export const ListGeneralGroupByMember:FC<Props> = ({memberId}) => {
+export const ListGeneralGroupByMember:FC<Props> = ({memberId, isActive}) => {
     const {currentChat, setCurrentChat} = useContext(MessageContext);
     const {getListGeneralGroupByMember} = UseListConversation();
     const [listGroup, setListGroup] = useState<ItemListConversation[]>([])
     useEffect(() => {
-        getListGeneralGroupByMember({memberID: memberId}).then(data => {
+        isActive&&getListGeneralGroupByMember({memberID: memberId}).then(data => {
             setListGroup(data)
         })
-    },[currentChat]);
+    },[currentChat, isActive]);
 
     return (
         <div className={"bg-white flex-1"}>

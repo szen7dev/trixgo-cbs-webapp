@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef} from "react";
+import React, {FC, useCallback, useEffect, useRef} from "react";
 import DoubleTickIcon from "assets/images/icons8-double-tick-96.svg";
 import moment from "moment";
 import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
@@ -10,12 +10,20 @@ type Props = {
     className?: string;
     showSenderName?: boolean;
     isMyMessage?: boolean;
+    isMini?: boolean;
 }
-export const DeleteChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage}) => {
+export const DeleteChatContent:FC<Props> = ({message,className,showSenderName, isMyMessage, isMini}) => {
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const renderReply = () => {
+
+    const isDeleted = useCallback(() => {
         if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderReply = () => {
+        if (isDeleted()) {
             return <DeleteReply message={message} />
         }
         switch (message.parent.type) {

@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useEffect, useRef} from "react";
+import React, {FC, ReactNode, useCallback, useEffect, useRef} from "react";
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
 import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
@@ -58,8 +58,14 @@ export const TextChatContent:FC<Props> = ({message,className,showSenderName, isM
 
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
-    const renderReply = () => {
+    const isDeleted = useCallback(() => {
         if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderReply = () => {
+        if (isDeleted()) {
             return <DeleteReply message={message} />
         }
         switch (message.parent.type) {

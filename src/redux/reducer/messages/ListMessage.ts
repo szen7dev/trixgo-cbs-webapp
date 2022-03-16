@@ -334,10 +334,25 @@ const listMessageSlice = createSlice({
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
             action.payload.messageData.forEach((item: ItemMessage) => {
                 if (item) {
-                    newMessage[item._id] = {
+                    const newMessageData = {
                         ...newMessage[item._id],
                         usersDelete: item.usersDelete
                     };
+                    if (item.files&&item.files.length > 0) {
+                        const newFiles : any[] = [];
+                        item.files.forEach(file => {
+                            newMessageData.files.forEach(oldFile => {
+                                if (oldFile._id === file._id) {
+                                    newFiles.push({
+                                        ...oldFile,
+                                        usersDelete: file.usersDelete
+                                    })
+                                }
+                            })
+                        })
+                        newMessageData["files"] = newFiles;
+                    }
+                    newMessage[item._id] = newMessageData
                 }
             });
             state.data = {
