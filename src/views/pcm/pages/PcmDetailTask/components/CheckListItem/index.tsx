@@ -33,8 +33,8 @@ export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
   return (
     <div
       className="w-full"
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={() => !isDisabled && setIsHover(true)}
+      onMouseLeave={() => !isDisabled && setIsHover(false)}
     >
       <div className="flex justify-between pt-4 pb-3">
         <div className="flex items-start w-3/4">

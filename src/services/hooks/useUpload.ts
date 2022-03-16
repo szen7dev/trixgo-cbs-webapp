@@ -3,8 +3,8 @@
  */
 import { useMutation } from "react-query";
 import MimeType from "mimetype";
-// import Compressor from 'compressorjs';
 import imageCompression from 'browser-image-compression';
+
 /**
  * Types, APIs
  */
@@ -58,7 +58,7 @@ type UseUpload = {
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
-export const useUpload = ({ 
+export const useUpload = ({
     appID,
     companyID,
     projectID,
@@ -130,7 +130,7 @@ export const useUpload = ({
             for (const file of files) {
                 const infoUrl = generateLinkS3({ file, fileType });
                 urlsPromise = [...urlsPromise, infoUrl];
-            }   
+            }
         }
 
         // Generate link S3 -> get list link presigned upload -> upload S3 async

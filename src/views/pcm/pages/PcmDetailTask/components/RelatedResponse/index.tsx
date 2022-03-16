@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import { toArray } from "lodash";
+import MimeType from "mimetype";
 
 /**
  * Context
@@ -23,6 +24,7 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
 /**
  * Hooks, custom
  */
+import { blobToFile } from "utils/converter";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
@@ -37,14 +39,13 @@ import TaskRepository from "apis/task";
 import { FileProps, FilePropsUpload, ImageProps } from "typings/common";
 import { Task } from 'typings/task';
 
-/** 
+/**
  * Component
  */
 import { RelatedResponseItem } from "../RelatedResponseItem";
 import { LoadImage } from "views/pcm/shareComponents/common";
 import { FileUploadRow } from "views/pcm/shareComponents/common";
 import { ModalZoomView } from "shareComponents/common";
-import AddConversationToFolder from "redux/reducer/messages/AddConversationToFolder";
 
 enum RelatedResponseTab {
   ALL = "ALL",
@@ -57,7 +58,7 @@ type Props = {
 
 const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
- 
+
 const Response: FC<Props> = ({ task }) => {
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
@@ -72,7 +73,7 @@ const Response: FC<Props> = ({ task }) => {
 
   const { user } = useAuth();
   const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
-  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
+  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
     taskID: task._id, official: true, isFetch: false
   });
 
@@ -105,9 +106,9 @@ const Response: FC<Props> = ({ task }) => {
   const { current: socket }: any = useSocket();
 
   // State manage image comments
-  const [defaultState, setDefaultState] = useState({ 
-    mediaID: '', 
-    images: [] as ImageProps[], 
+  const [defaultState, setDefaultState] = useState({
+    mediaID: '',
+    images: [] as ImageProps[],
     index: 0,
     createAt: ""
   });
@@ -262,19 +263,15 @@ const Response: FC<Props> = ({ task }) => {
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files.length) return;
 
-    console.log('BEFORE modifyUploadedFilesV2')
-    console.log({ files: event.target.files })
-    console.log('=================================')
+    // console.log('BEFORE modifyUploadedFilesV2')
+    // console.log({ files: event.target.files })
+    // console.log('=================================')
 
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length ? Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] : null,
       fileLastKey: Object.keys(uploads.files).length ? Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] : null,
     }, event.target.files);
-
-    console.log('AFTER modifyUploadedFilesV2')
-    console.log({ files, images })
-    console.log('=================================')
 
     setUploadImage(images);
     setUploadFile(files);
@@ -309,6 +306,14 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
+        console.log({ BEFORE: file })
+        if (file.type === "") {
+          const blob = new Blob([file], { type: MimeType.lookup(file.name) });
+          const new_file = blobToFile(blob, file.name);
+          file = new_file;
+        }
+        console.log({ AFTER: file })
+
         const { _id } = await addFileToUpload({
           files: file,
           fileType: 2,
@@ -415,7 +420,7 @@ const Response: FC<Props> = ({ task }) => {
         ) : ''}
         <div>
           {state.comments.length ? state.comments.map(response => (
-            <RelatedResponseItem 
+            <RelatedResponseItem
               key={response._id}
               response={response}
               expanded={isExpand}
@@ -479,10 +484,10 @@ const Response: FC<Props> = ({ task }) => {
                 </div>
                 <div>
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
-                  <button 
-                    type="button" 
-                    className="mx-3 px-3 py-2 rounded bg-primary text-white" 
-                    onClick={handleAddResponse} 
+                  <button
+                    type="button"
+                    className="mx-3 px-3 py-2 rounded bg-primary text-white"
+                    onClick={handleAddResponse}
                     disabled={isUpload}>
                       Xác nhận
                   </button>
@@ -506,7 +511,7 @@ const Response: FC<Props> = ({ task }) => {
     </>
   );
 };
- 
+
 export const RelatedResponse: FC<Props> = ({ task }) => {
   return (
     <CommentProvider>

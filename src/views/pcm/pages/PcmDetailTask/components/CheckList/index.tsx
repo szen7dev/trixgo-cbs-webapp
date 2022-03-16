@@ -19,7 +19,7 @@ import { useUsersProject } from "services/hooks/users/useUserSystem";
 import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
-import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateCheckListPayload, UpdateStatusCheckListPayload } from "typings/task";
+import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateStatusCheckListPayload } from "typings/task";
 import "react-datepicker/dist/react-datepicker.css";
 import { debounce } from "lodash";
 
