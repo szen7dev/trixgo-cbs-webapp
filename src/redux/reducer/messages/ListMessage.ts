@@ -333,6 +333,7 @@ const listMessageSlice = createSlice({
         deleteMessageInConversations (state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
             action.payload.messageData.forEach((item: ItemMessage) => {
+                if (!item) return;
                 newMessage[item._id] = {
                     ...newMessage[item._id],
                     usersDelete: item.usersDelete
