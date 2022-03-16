@@ -10,6 +10,7 @@ import imageCompression from 'browser-image-compression';
  */
 import FileRepository from "apis/upload";
 import { UploadPayload, FileProps, AddFileUploadResponse, GenerateLinkPayload } from "typings/file";
+import { blobToFile } from "utils/converter";
 
 export type GenerateLinkResponse = {
     signedUrl: string,
@@ -91,7 +92,7 @@ export const useUpload = ({
 
     const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
-            console.log({ file, fileType })
+            console.log({ generateLinkS3: file, fileType })
             const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 
@@ -157,6 +158,13 @@ export const useUpload = ({
                useWebWorker: true
            },
        }: UploadFileProps) => {
+
+        if (files.type === "") {
+            const blob = new Blob([files], { type: MimeType.lookup(files.name) });
+            const newFile: any = blobToFile(blob, files.name);
+            files = newFile;
+        }
+
         const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
 
         // Handle images
@@ -178,7 +186,7 @@ export const useUpload = ({
             // });
             try {
                 const compressedFile = await imageCompression(file, compressConfig);
-                const compressFile = blobToFile(compressedFile, file.name);
+                const compressFile = convertBlobToFile(compressedFile, file.name);
                 // console.log(`compressedFile size ${compressedFile.size / 1024 } KB`); // smaller than maxSizeMB
                 // console.log('Sending in COMPRESS mode');
 
@@ -195,7 +203,7 @@ export const useUpload = ({
         return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };
     }
 
-    const blobToFile = (theBlob: Blob, fileName: string): File => {
+    const convertBlobToFile = (theBlob: Blob, fileName: string): File => {
         const b: any = theBlob;
         // A Blob() is almost a File() - it's just missing the two properties below which we will add
         b._lastModifiedDate = new Date();

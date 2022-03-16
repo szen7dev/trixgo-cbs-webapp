@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import { toArray } from "lodash";
-import MimeType from "mimetype";
 
 /**
  * Context
@@ -24,7 +23,6 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
 /**
  * Hooks, custom
  */
-import { blobToFile } from "utils/converter";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
@@ -302,13 +300,13 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        console.log({ BEFORE: file })
-        if (file.type === "") {
-          const blob = new Blob([file], { type: MimeType.lookup(file.name) });
-          const new_file = blobToFile(blob, file.name);
-          file = new_file;
-        }
-        console.log({ AFTER: file })
+        // console.log({ BEFORE: file })
+        // if (file.type === "") {
+        //   const blob = new Blob([file], { type: MimeType.lookup(file.name) });
+        //   const new_file = blobToFile(blob, file.name);
+        //   file = new_file;
+        // }
+        // console.log({ AFTER: file })
 
         const { _id } = await addFileToUpload({
           files: file,
