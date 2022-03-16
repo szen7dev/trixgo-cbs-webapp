@@ -1,18 +1,30 @@
-import React, {FC, useContext} from "react";
+import React, {FC, useCallback, useContext} from "react";
 import Close from "assets/icons/Close";
 import {useDispatch} from "react-redux";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../ChatContent/ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ChatContent/ReplyContent";
+import {DeleteChatContent} from "../ChatContent/RegularContent";
 
 type Props = {
     replyData: ItemMessage;
     currentChat: string
 }
 export const ReplyChat:FC<Props> = ({replyData,currentChat}) => {
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
 
+    const isDeleted = useCallback(() => {
+        if (replyData.usersDelete&&replyData.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (replyData.files??[]).some(file => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [replyData])
     const renderReply = () => {
+        if (isDeleted()) {
+            return <DeleteReply message={replyData} className={"text-xs"}/>
+        }
         switch (replyData.type) {
             case 0:
                 return <TextReply message={replyData} className={"text-xs"}/>;

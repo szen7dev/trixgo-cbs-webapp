@@ -26,9 +26,15 @@ export const OthersMessage:FC<Props> = ({message,bgMessage, context, isMini}) =>
     const profileId = JSON.parse(currentUser)?._id;
     const dispatch = useDispatch();
 
-    const renderMessageContent = useCallback(() => {
+    const isDeleted = useCallback(() => {
         if (message.usersDelete&&message.usersDelete.includes(profileId)) {
-            return <DeleteChatContent message={message} showSenderName={true} className={bgMessage??"bg-white"}/>
+            return true
+        }
+        return (message.files??[]).some(file => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderMessageContent = useCallback(() => {
+        if (isDeleted()) {
+            return <DeleteChatContent isMini={isMini} message={message} showSenderName={true} className={bgMessage??"bg-white"}/>
         }
         switch (message.type) {
             case 0:

@@ -78,7 +78,7 @@ export const MessageList:FC = () => {
                     <ListFolders/>
                 </div>
                 <div
-                    className={"overflow-auto message-list-height px-[5px]"}
+                    className={"overflow-auto message-list-height px-[5px] pb-10"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
                     {renderListConversation()}
