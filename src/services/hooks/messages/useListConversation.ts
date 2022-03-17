@@ -23,7 +23,10 @@ import {
     MediasOfConversationPayload,
     PinConversationPayload,
     RemoveMemberFromConversationData,
-    RemoveMemberFromConversationPayload, UpdateConfigConversationPayload,
+    RemoveMemberFromConversationPayload,
+    SetASAdminConversationData,
+    SetASAdminConversationPayload,
+    UpdateConfigConversationPayload,
     UpdateConversationData,
     UpdateConversationPayload,
     UpdateFolderPayload,
@@ -64,6 +67,7 @@ type UseListConversationType = {
     leaveConversation: (payload: LeaveConversationPayload) => Promise<{data: LeaveConversationData, error: boolean}>,
     removeMemberFromConversation: (payload: RemoveMemberFromConversationPayload) => Promise<{data: RemoveMemberFromConversationData, error: boolean}>,
     updateConfigConversation: (payload: UpdateConfigConversationPayload) => Promise<{data: ItemListConversation, error: boolean}>,
+    setAsAdmin: (payload: SetASAdminConversationPayload) => Promise<{data: SetASAdminConversationData, error: boolean}>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -208,6 +212,13 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         })
     }
 
+    const setAsAdmin = async (params: SetASAdminConversationPayload) => {
+        const {data, error} = await ListConversationRepository.setAsAdmin(params);
+        return new Promise<{data: SetASAdminConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -262,6 +273,7 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         deleteConversation,
         leaveConversation,
         removeMemberFromConversation,
-        updateConfigConversation
+        updateConfigConversation,
+        setAsAdmin
     }
 };

@@ -5,6 +5,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
+import { nl2p } from 'utils';
 import HumanAvatar from "assets/images/human-avatar.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import PDFIcon from "assets/images/icons8-pdf-48 1.png";
@@ -99,10 +100,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span 
+						<span
 							className="text-[13px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
-                              __html: response.content
+                              __html: nl2p(response.content)
                             }}>
 						</span>
 					</div>
@@ -113,23 +114,32 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							{(response.files && response.files.length) ? response.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
-										<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
+										<div>
 											<div className="flex">
 												<div>
 													<img src={PDFIcon} className="w-8" alt="PDF" />
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">
-														<span className="w-5/6 break-all text-cbs-highlight-color">
+														<a
+															href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank"
+															className="w-5/6 break-all text-cbs-highlight-color"
+														>
 															{file.nameOrg}
-														</span>
-														<div className="w-1/6 flex justify-end">
+														</a>
+														<button
+															className="w-1/6 flex justify-end"
+															onClick={() => {
+																navigator.clipboard.writeText(`${process.env.REACT_APP_URL_S3}${file.path}`);
+																toast.success('Copy link download thành công', { autoClose: 2000 })
+															}}
+														>
 															<img
 																src={CopyIcon}
 																className="w-[24px] h-[24px]"
 																alt="Copy"
 															/>
-														</div>
+														</button>
 													</div>
 
 													<div className="flex w-full mt-2 indeterminate:">
@@ -142,7 +152,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													</div>
 												</div>
 											</div>
-										</a>
+										</div>
 									</div>
 									<div className="w-2/8 px-3 pt-3">
 										<textarea

@@ -1,4 +1,4 @@
-import { FC, UIEvent, useEffect, useState } from "react";
+import React, { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
@@ -16,11 +16,10 @@ import { CheckListItem } from "../CheckListItem";
 import { DropdownSearchable } from "shareComponents/common";
 
 import { useUsersProject } from "services/hooks/users/useUserSystem";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useCheckList, useChildTask } from "services/hooks/useTask";
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/useAuth";
-import { CheckList as CheckListType, ChildTask as ChildTaskType, Task } from "typings/task";
+import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateStatusCheckListPayload } from "typings/task";
 import "react-datepicker/dist/react-datepicker.css";
 import { debounce } from "lodash";
 
@@ -48,7 +47,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
   const [listData, setListData] = useState<CheckListType[] | ChildTaskType[]>([]);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
-  const { addChecklistAsync } = useCheckList({ parentID: task?._id });
+  const { addChecklistAsync, updateStatusChecklistAsync } = useCheckList({ parentID: task?._id });
   const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
   const { data: listUsersProject, fetchNextPage } = useUsersProject({ 
     projectID: task?.project?._id,
@@ -138,6 +137,24 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       setVisibleForm(false);
 
       toast.success('Tạo việc con thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  }
+
+  const handleUpdateStatusCheckList = async (payload: UpdateStatusCheckListPayload) => {
+    try {
+      const { error, message } = await updateStatusChecklistAsync(payload);
+
+      if (error) {
+        return toast.warning(message);
+      }
+
+      toast.success('Cập nhật checklist thành công');
     } catch (error: unknown) {
         if (typeof error === "string") {
             toast.error(error);
@@ -279,7 +296,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         <div className="">
           <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
             {(listData || []).map((item) => (
-              <CheckListItem key={item._id} data={item} />
+              <CheckListItem key={item._id} data={item} onUpdateStatusCheckList={handleUpdateStatusCheckList} />
             ))}
           </div>
         </div>

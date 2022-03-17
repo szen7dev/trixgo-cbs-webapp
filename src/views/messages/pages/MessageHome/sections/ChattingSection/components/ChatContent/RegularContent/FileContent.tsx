@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useCallback} from "react";
 import PDFIcon from 'assets/images/CBS-PDF-Icon-48.svg';
 import WordIcon from 'assets/images/CBS-Word-Icon.svg';
 import ExcelIcon from 'assets/images/CBS-Excel-Icon.svg';
@@ -9,7 +9,7 @@ import {map as _map} from "lodash";
 import { CircularProgressbar , buildStyles } from 'react-circular-progressbar';
 import moment from "moment";
 import {ReactionList, ReactionActions} from "../../Reactions";
-import {ContactReply, TextReply, FileReply, ImageReply} from "../ReplyContent";
+import {ContactReply, TextReply, FileReply, ImageReply, DeleteReply} from "../ReplyContent";
 import {MessageStatus} from "./MessageStatus";
 type Props = {
     message: any;
@@ -21,7 +21,7 @@ type Props = {
 }
 export const FileChatContent:FC<Props> = ({message, className,showSenderName, isMyMessage, context, isMini}) => {
     const renderFileTypeImage = (file:any) => {
-        const filename = file.name;
+        const filename = file.name??file.file.name;
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
@@ -35,13 +35,24 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
             case "jpg":
             case "jpeg":
             case "png":
-                return <img  className={"w-[48px] h-[48px] rounded-md overflow-hidden"} src={file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${file.path}`} alt={"icon images"}/>
+                return <img  className={"w-[48px] h-[48px] rounded-md overflow-hidden object-cover"} src={file.fakeUrl ?? `${process.env.REACT_APP_URL_S3}${file.path??file.file.path}`} alt={"icon images"}/>
             default:
                 return <img  className={"w-[48px] h-[48px]"} src={OtherIcon} alt={"icon other"}/>
         }
     }
 
+    const currentUser = localStorage.getItem("currentUser")??"{}";
+    const profileId = JSON.parse(currentUser)?._id;
+    const isDeleted = useCallback(() => {
+        if (message.parent.usersDelete&&message.parent.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (message.parent.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
     const renderReply = () => {
+        if (isDeleted()) {
+            return <DeleteReply message={message} />
+        }
         switch (message.parent.type) {
             case 0:
                 return <TextReply message={message.parent}/>;
@@ -76,23 +87,26 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
             }
             {
                 message.parent&&
-                renderReply()
+                    <div className={"pb-2"}>
+                        {renderReply()}
+                    </div>
+            }
+            {
+                message.content.length>0&&
+                <div className={"p-[7px]"}>
+                    {message.content}
+                </div>
             }
             {
                 message.files&&
                 _map(message.files, file => (
                     <div key={file._id} className={"message-file-content flex mb-1"}>
                         <div className={"relative"}>
-                            {renderFileTypeImage(file.file.file)}
-                            {
-                                message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&
-                                <div className={"absolute w-full flex items-center justify-center top-0 h-full bg-black bg-opacity-60 rounded-md"}>
-                                </div>
-                            }
+                            {renderFileTypeImage(file.file)}
                         </div>
                         <div className={"flex-1 flex flex-col justify-center ml-[7px] pr-[20px]"}>
-                            <a href={`${process.env.REACT_APP_URL_S3}${file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.file.nameOrg??file.file.file.name}</a>
-                            <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.file.size)}</div>
+                            <a href={`${process.env.REACT_APP_URL_S3}${file.file.path??file.file.file.path}`} download className={"mb-[2px] hover:text-primary break-all"}>{file.file.nameOrg??file.file.file.nameOrg}</a>
+                            <div className={"text-gray-400 text-xs"}>{formatBytes(file.file.size??file.file.file.size)}</div>
                         </div>
                         {
                             message.fileProgress !== undefined && message.fileProgress[file._id] !== undefined && message.fileProgress[file._id] < 100 &&

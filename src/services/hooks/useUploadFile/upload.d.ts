@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DispatchProps } from "typings/ppt/reducer";
-interface IFile {
+export interface IFile {
   [key: string]: any;
 }
 

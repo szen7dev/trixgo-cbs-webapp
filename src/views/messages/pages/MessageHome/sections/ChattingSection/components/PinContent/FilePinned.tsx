@@ -11,7 +11,7 @@ type Props = {
 }
 export const FilePinned:FC<Props> = ({message}) => {
     const renderFileTypeImage = useCallback(() => {
-        const filename = message.files[0].file.file.name;
+        const filename = message?.files[0]?.file?.name??message?.files[0]?.file?.file?.name;
         const extension = filename.split(".").pop();
         switch (extension){
             case "pdf":
@@ -37,7 +37,7 @@ export const FilePinned:FC<Props> = ({message}) => {
             <div className={"flex-1 max-w-[185px] ml-[5px] flex flex-col justify-start"}>
                 <div className={"text-primary text-left"}>Tin đã ghim</div>
                 <div className={"truncate text-left"}>
-                    {message.files[0].file.file.nameOrg??message.files[0].file.file.name}
+                    {message?.files[0]?.file?.nameOrg??message?.files[0]?.file?.file?.nameOrg}
                 </div>
             </div>
         </>

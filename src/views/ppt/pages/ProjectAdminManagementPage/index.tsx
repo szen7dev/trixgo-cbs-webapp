@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import {  useParams, useHistory, Redirect  } from 'react-router-dom';
+import {  useParams, useHistory } from 'react-router-dom';
 import { DepartmentRepository } from 'apis/item';
 
 import AppAdminTab from "./tabs/AppAdminTab";

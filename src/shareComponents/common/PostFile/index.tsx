@@ -9,7 +9,9 @@ import { humanFileSize } from 'utils/converter';
 import { FileProps, PostFileProps } from 'typings/common';
 
 export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> = ({ files, onRemove, ...props }) => {
-	if (!files?.length) return null;
+	if (!files?.length) return <></>;
+	const isHide = files.every(file => Object.keys(file).length === 1);
+	if(isHide) return <></>;
 
 	const handleDownload = (file: FileProps | File) => {
 		if ('path' in file) {
@@ -27,10 +29,10 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 		<>
 			{
 				files.map((d) => {
-					if(!d) return;
+					if(!d || Object.keys(d).length === 1) return;
 
-					const name = 'progress' in d ? d.file.name : (d.file ? d.file.nameOrg : d.nameOrg);
-					const size = 'progress' in d ? d.file.size : (d.file ? d.file.size : d.size);
+					const name = 'progress' in d ? d.file?.name : (d.file ? d.file?.nameOrg : d.nameOrg);
+					const size = 'progress' in d ? d.file?.size : (d.file ? d.file?.size : d.size);
 					const download = 'progress' in d ? d.file : (d.file ? d.file : d);
 					const key = 'progress' in d ? d.id : d._id;
 
