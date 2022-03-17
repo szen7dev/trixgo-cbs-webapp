@@ -1,7 +1,5 @@
-interface DatahubInspection {
-  type: number;
+interface DatahubCommonInspection {
   state: number;
-  _id: string;
   name: string;
   userCreate: string;
   sign: string;
@@ -12,10 +10,20 @@ interface DatahubInspection {
   updatedAt: string;
 }
 
+interface DatahubInspection extends DatahubCommonInspection {
+  _id: string;
+  type: number;
+}
+
+interface DatahubInspectionCheckList extends DatahubCommonInspection {
+  _id: string;
+}
+
 interface DatahubInspectionBody {
   type: number;
   name: string;
   sign: string;
   description: string;
   inspectionDocID?: string;
+  inspectionChecklistID?: string;
 }

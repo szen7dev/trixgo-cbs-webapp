@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { PropsWithChildren, ReactElement } from 'react'
-import { useTable, TableOptions, useRowSelect, Column, RowPropGetter, Meta, Row } from 'react-table'
-import { TableRowProps } from 'react-virtualized'
+import { useTable, TableOptions, useRowSelect, Column } from 'react-table'
+import { ContextMenuWrapper } from '../ContextMenu'
 import { IndeterminateCheckbox } from './IndeterminateCheckbox'
 
 type RowProps =
@@ -25,6 +25,7 @@ export interface TableProperties<D extends object> extends Omit<TableOptions<D>,
 
 	tableRowHeadProps?: React.HTMLAttributes<HTMLHeadElement>
 	wrapperComponent?: (props: PropsWithChildren<{ state: any, selectedFlatRows: any }>) => ReactElement
+	enableMenuContext?: boolean
 }
 
 const Table = <D extends object = Record<string, unknown>>(props: PropsWithChildren<TableProperties<D>>): ReactElement => {
@@ -38,12 +39,11 @@ const Table = <D extends object = Record<string, unknown>>(props: PropsWithChild
 		tableRowHeadProps,
 		tableRowProps,
 		wrapperComponent,
-		// ...rest
+		enableMenuContext,
+		...rest
 	} = props;
 	const instance = useTable(
-		{
-			...props
-		},
+		{ ...rest },
 		useRowSelect,
 		hooks => {
 			hooks.visibleColumns.push(columns => [
@@ -90,12 +90,12 @@ const Table = <D extends object = Record<string, unknown>>(props: PropsWithChild
 					}
 
 				</thead>
-				<tbody {...getTableBodyProps(bodyProps)}>
+				<ContextMenuWrapper tag='tbody' disable={!enableMenuContext} {...getTableBodyProps(bodyProps)}>
 					{rows.map((row, i) => {
 						prepareRow(row)
-						const { key, ...rest } = row.getRowProps(tableRowProps)
+						const { key, ...rest } = row.getRowProps();
 						return (
-							<tr key={key} {...rest}>
+							<tr {...rest} {...row.getRowProps(tableRowProps)} key={key} >
 								{row.cells.map(cell => {
 									const { key: cellKey, ...rest } = cell.getCellProps((cell.column as any).cellProps)
 									return <td key={cellKey} {...rest}>{cell.render('Cell')}</td>
@@ -103,7 +103,7 @@ const Table = <D extends object = Record<string, unknown>>(props: PropsWithChild
 							</tr>
 						)
 					})}
-				</tbody>
+				</ContextMenuWrapper>
 			</table>
 		</Wrapper>
 	)
