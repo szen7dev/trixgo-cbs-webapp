@@ -25,7 +25,7 @@ const ProjectAdminManagementPage: FC = (): any => {
         })();
 		}
 	}, [projectID]);
-
+  
   return (
     <main className="h-full">
       <header className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300">

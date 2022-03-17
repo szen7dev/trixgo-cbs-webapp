@@ -3,6 +3,8 @@ import { User } from "typings/user";
 import type { Company, FileProps } from "typings/common";
 
 export type ListTaskPayload = {
+  keyword?: string,
+  groupID?:string,
   lastestID?: string;
   limit?: number;
   populates?: string;
@@ -10,6 +12,7 @@ export type ListTaskPayload = {
   type?: numer;
   typeStatus?: string;
   statusNe?: string,
+  status?: string,
 };
 
 export type Assignee = User;

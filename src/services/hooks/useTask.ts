@@ -37,15 +37,19 @@ type UseTask = {
 };
 
 type UseTaskProps = {
+  keyword?: string;
   taskID?: string;
   typeStatus?: string;
   statusNe?: string;
+  groupID?: string;
   type?: number;
+  status?: string;
   official?: boolean;
   isFetch?: boolean;
+  isFetchTask?: boolean;
 }
 
-export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
+export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typeStatus, type, status="", isFetch = false, isFetchTask = false }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
       TaskRepository.addTask(payload)
@@ -92,12 +96,15 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
   } = useInfiniteQuery(
-    ["list_tasks", type, typeStatus],
+    ["list_tasks", type, typeStatus, groupID],
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
+        keyword,
+        groupID: groupID || "",
         lastestID: pageParam || "",
         type: type || "",
         statusNe: statusNe || "",
+        status,
         typeStatus: typeStatus || "",
         select: "assignee lastLog checklist description name expiredTime percentage project actualFinishTime",
         populates: JSON.stringify({
@@ -115,7 +122,7 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: isFetchTask ?? false,
     }
   );
 
@@ -132,7 +139,6 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
   const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
-
   return {
     addResponseAsync,
     addRelationUserAsync,

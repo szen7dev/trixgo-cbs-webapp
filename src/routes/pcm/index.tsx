@@ -65,7 +65,12 @@ import {
 	// ProjectRfiPage,
 } from 'views/ppt/pages';
 
-import { PcmHome, PcmDetailTaskPage } from 'views/pcm/pages';
+import { 
+	PcmHome, 
+	PcmDetailTaskPage,
+	PcmGroupPage,
+	PcmTaskGroupPage
+} from 'views/pcm/pages';
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
@@ -138,6 +143,8 @@ const PCMRouter: FC = () => {
 								</ModalProvider>
 							</LayoutSecondary>
 						</Route>
+						<Route exact path='/pcm/project/:id/group' component={PcmGroupPage} />
+						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
 						<Route exact path='/pcm/project/:id/document/:docID' component={DocumentDetailPage} />
 						<Route exact path='/pcm/project/:id/photo' component={ProjectPhotoPage} />
 						<Route exact path='/pcm/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />

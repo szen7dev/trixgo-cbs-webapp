@@ -97,8 +97,6 @@ export const ModalAddNewTask: FC = () => {
     keyword: searchFriendName
   }, true);
 
-  // console.log({ projectID, searchFriendName,  listUsersProject })
-  
   const { 
     data: listGroup, 
     hasNextPage: hasNextPageListGroup, 
