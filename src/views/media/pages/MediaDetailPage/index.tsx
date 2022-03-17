@@ -24,6 +24,7 @@ import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/c
  */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
+import iconThumbFill from 'assets/images/icons8-Material Sharp-Thumbs Up.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
@@ -54,7 +55,7 @@ export const MediaDetailPage: FC = () => {
 
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
-	
+
 	const { data, refetch } = useQuery(`media_info.${mediaID}`,
 		() => MediaRepository.mediaInfo(mediaID),
 		{
@@ -70,19 +71,36 @@ export const MediaDetailPage: FC = () => {
 		isRelated: true
 	});
 
+	const [isReaction, setIsReaction] = useState(!!media?.reaction);
 	const [isFetchReactions, setIsFetchReactions] = useState(false);
 	const [isFetchSeens, setIsFetchSeens] = useState(false);
 
 	useEffect(() => {
-		if (paramsMedia.type === 'company') {
-			setParamsMedia(previousParams => ({
-				...previousParams,
-				companyID: user?.company._id
-			}))
+		if(!media || !user) return;
+
+		const mediaType = typePostSelected(media.type || 0);
+
+		switch (mediaType) {
+			case 'company':
+				setParamsMedia(previousParams => ({
+					...previousParams,
+					companyID: user.company?._id
+				}))
+				break;
+			case 'department':
+				setParamsMedia(previousParams => ({
+					...previousParams,
+					departmentID: media.department._id
+				}))
+				break;
+			default:
+				break;
 		}
-	}, [user])
-	
-	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = 
+
+		setIsReaction(!!media.reaction);
+	}, [Object.keys(media || {}).length])
+
+	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } =
 		useMedia({
 			key: `list_medias__related`,
 			params: paramsMedia,
@@ -166,7 +184,7 @@ export const MediaDetailPage: FC = () => {
 		setModalEditMedia(!modalEditMedia);
 	};
 
-	const toggleModalReact = () => {
+	const toggleModalReaction = () => {
 		!isFetchReactions && setIsFetchReactions(true);
 		setModalShowReact(!modalShowReact);
 	}
@@ -196,6 +214,8 @@ export const MediaDetailPage: FC = () => {
 
 	const handleReactionMedia = async () => {
 		try {
+			setIsReaction(!isReaction);
+
 			await reactionMediaAsync({ mediaID });
 			refetch();
 			refetchListReactions();
@@ -366,9 +386,10 @@ export const MediaDetailPage: FC = () => {
 								<span>
 									<button onClick={handleReactionMedia}>
 										{/* <img src={iconLike} alt="Like" className="inline-block mr-2" style={{ width: '30px' }} /> */}
-										<img src={iconThumb} alt="Like" className="inline-block mr-2" />
+										<img src={isReaction ? iconThumbFill : iconThumb} alt="Like" className="inline-block mr-2 w-[24px]" />
+										{/* <img src={iconThumb} alt="Like" className="inline-block mr-2 w-[24px]" /> */}
 									</button>
-									<button onClick={toggleModalReact}>
+									<button onClick={toggleModalReaction}>
 										{abbreviateNumber(media.amountReaction)}
 									</button>
 								</span>
@@ -434,7 +455,7 @@ export const MediaDetailPage: FC = () => {
 			</ModalContainer>
 			<ModalListUser
 				isModalOpen={modalShowReact}
-				toggle={toggleModalReact}
+				toggle={toggleModalReaction}
 				icon={iconThumb}
 				userID={user?._id}
 				data={listReactions}
