@@ -94,8 +94,10 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
             <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
                 <button
                     onClick={() => {
+                        setTimeout(() => {
+                            editor.focus();
+                        }, 100)
                         dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}));
-                        editor.focus();
                         closeRightClick();
                     }}
                     className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full reply-right-click"}>
