@@ -33,3 +33,39 @@ export const getMessageTimeDuration = (modifyAt: string): string => {
 
   return "Just now";
 };
+
+export const addDate = (days: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+export const calculateExpireTime = (currentTimestamp: any, expireTimestamp: any, type: any) => {
+  const currentDate = new Date(currentTimestamp);
+  const expireDate  = new Date(expireTimestamp);
+
+  // Get Hours
+  const minutesCurrent = currentDate.getMinutes();
+  const minutesExpire = expireDate.getMinutes();
+
+  // Get Hours
+  const hoursCurrent = currentDate.getHours();
+  const hoursExpire = expireDate.getHours();
+
+  // Get date
+  const dateCurrent = currentDate.getDate();
+  const dateExpire = expireDate.getDate();
+
+  // Get month
+  const monthCurrent = currentDate.getMonth();
+  const montExpire = expireDate.getMonth();
+
+  // Get year
+  const yearCurrent = currentDate.getFullYear();
+  const yearExpire = expireDate.getFullYear();
+
+  const current = moment([yearCurrent, monthCurrent, dateCurrent, hoursCurrent, minutesCurrent]);
+  const expire = moment([yearExpire, montExpire, dateExpire, hoursExpire, minutesExpire]);
+
+  return expire.diff(current, type);
+}

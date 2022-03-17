@@ -19,7 +19,9 @@ import {
   addTaskResponse,
   CommentPayload,
   ListCommentsPayload,
-  UpdateStatusCheckListPayload
+  UpdateStatusCheckListPayload,
+  ReactionCommentPayload,
+  ListReactionPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -74,7 +76,7 @@ const TaskRepository = {
         select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse",
         populates: JSON.stringify({
           path: "group author assignee related parent project company approver authorAttachs",
-          select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt",
+          select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
           populate: {
             path: "author",
             select: "_id bizfullname image"
@@ -264,6 +266,26 @@ const TaskRepository = {
       `${pcmURL}/pcm_comments?${convertObToUrl({
           ...payload,
           populates: populatesComment
+      })}`
+    );
+    return data;
+  },
+
+  async reactionComment(payload: ReactionCommentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_comments/reactions`,
+      payload
+    );
+    return data;
+  },
+  async listReactionsComment(payload: ListReactionPayload): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments/reactions?${convertObToUrl({
+          ...payload,
+          populates: JSON.stringify({
+            path: 'author',
+            select: "_id bizfullname image"
+          })
       })}`
     );
     return data;

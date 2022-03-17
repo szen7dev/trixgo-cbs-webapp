@@ -3,6 +3,8 @@ import { User } from "typings/user";
 import type { Company, FileProps } from "typings/common";
 
 export type ListTaskPayload = {
+  keyword?: string,
+  groupID?:string,
   lastestID?: string;
   limit?: number;
   populates?: string;
@@ -10,6 +12,7 @@ export type ListTaskPayload = {
   type?: numer;
   typeStatus?: string;
   statusNe?: string,
+  status?: string,
 };
 
 export type Assignee = User;
@@ -107,6 +110,7 @@ export type CheckList = {
   parent: string;
   checklist: string;
   assignee: Assignee;
+  actualFinishTime: string;
 };
 
 export type CheckListPayload = {
@@ -176,6 +180,7 @@ export type ChildTask = {
   parent: string;
   status: number;
   assignee: Assignee;
+  actualFinishTime: string;
 };
 
 export type ChildTaskPayload = {
@@ -310,6 +315,9 @@ export type CommentProps = {
   parent: string;
   createAt: string,
   lastestReplyID: CommentProps;
+  reaction?: {
+    type: number
+  };
 }
 
 export type CommentResponse = APIResponse & {
@@ -319,3 +327,31 @@ export type CommentResponse = APIResponse & {
     error: boolean;
   };
 };
+
+/**
+ * ============================ ****************** ===============================
+ * ============================ 	 REACTION BÌNH LUẬN PCM   ===============================
+ * ============================ ****************** ===============================
+ */
+
+export type ReactionCommentPayload = {
+  commentID: string,
+  typeReaction?: number
+}
+
+export type ListReactionPayload = {
+  lastestID?: string;
+  type?: number;
+  limit?: number;
+  commentID?: string;
+  select?: string;
+  populates?: string;
+  isGetTotal?: string;
+};
+
+export type ReactionCommentProps = {
+  _id: string;
+  comment: string;
+  type: number;
+  author: User;
+}

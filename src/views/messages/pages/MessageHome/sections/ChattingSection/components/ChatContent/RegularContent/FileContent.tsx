@@ -87,7 +87,15 @@ export const FileChatContent:FC<Props> = ({message, className,showSenderName, is
             }
             {
                 message.parent&&
-                renderReply()
+                    <div className={"pb-2"}>
+                        {renderReply()}
+                    </div>
+            }
+            {
+                message.content.length>0&&
+                <div className={"p-[7px]"}>
+                    {message.content}
+                </div>
             }
             {
                 message.files&&

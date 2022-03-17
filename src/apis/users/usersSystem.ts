@@ -17,7 +17,7 @@ export const UserSystemRepository = {
         })
         return data;
     },
-
+    
     async listUsersSystem(params?: QueryParam): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {

@@ -1,44 +1,47 @@
 import { FC } from "react";
+import { calculateExpireTime } from "utils/time";
 
 type Props = {
-  status: number;
+  expiredTime: string;
 };
 
-export const TypeStatusLabel: FC<Props> = ({ status }) => {
+export const TypeStatusLabel: FC<Props> = ({ expiredTime }) => {
+  const compare = calculateExpireTime(Date.now(), new Date(expiredTime).getTime(), 'days');
+
   const labels = [
     {
-      id: 1,
+      id: compare === 0,
       name: "Ngày nay",
       textColor: "text-green-500",
       bgColor: "bg-green-100",
     },
+    // {
+    //   id: compare === 7,
+    //   name: "Tuần tới",
+    //   textColor: "text-yellow-500",
+    //   bgColor: "bg-yellow-100",
+    // },
     {
-      id: 2,
-      name: "Tuần tới",
-      textColor: "text-yellow-500",
-      bgColor: "bg-yellow-100",
-    },
-    {
-      id: 3,
+      id: compare > 7,
       name: "> 7 ngày",
       textColor: "text-green-500",
       bgColor: "bg-green-100",
     },
     {
-      id: 4,
+      id: compare < 0,
       name: "Quá hạn",
       textColor: "text-red-500",
       bgColor: "bg-red-100",
     },
     {
-      id: 5,
+      id: compare > 0,
       name: "Chưa tới hạn",
       textColor: "text-green-500",
       bgColor: "bg-green-100",
     },
   ];
 
-  const label = labels.find((item) => item.id === status);
+  const label = labels.find((item) => item.id === true);
 
   return (
     <div>
