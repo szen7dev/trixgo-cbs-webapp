@@ -62,15 +62,15 @@ export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
             </div>
           </div>
         </div>
-        {isHover ? (
+        {(isHover && data.type !== 2) ? (
           <>
-            {(data.type === 2 && !isDisabled) ? (
+            {/* {(data.type === 2 && !isDisabled) ? (
               <div className="flex w-1/4 justify-end">
                 <button className="mx-2">
                   <img className="w-6" src={IconPencil} alt="Pencil icon" />
                 </button>
               </div>
-            ) : ''}
+            ) : ''} */}
             {data.type === 1 ? (
               <div className="flex w-1/4 justify-end">
                 <button className="mx-2" onClick={() => history.push(`/pcm/detail/${data._id}`)}>
@@ -84,7 +84,7 @@ export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
           </>
         ) : (
           <div className="flex justify-end w-1/4">
-            {!isDisabled && (<TypeStatusLabel status={data.status} />)}
+            {!isDisabled && (<TypeStatusLabel expiredTime={data.expiredTime} />)}
             <span
               className={cn('ml-2 text-[13px]', {
                 'text-green-300': isDisabled

@@ -19,7 +19,9 @@ import {
   addTaskResponse,
   CommentPayload,
   ListCommentsPayload,
-  UpdateStatusCheckListPayload
+  UpdateStatusCheckListPayload,
+  ReactionCommentPayload,
+  ListReactionPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -264,6 +266,26 @@ const TaskRepository = {
       `${pcmURL}/pcm_comments?${convertObToUrl({
           ...payload,
           populates: populatesComment
+      })}`
+    );
+    return data;
+  },
+
+  async reactionComment(payload: ReactionCommentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_comments/reactions`,
+      payload
+    );
+    return data;
+  },
+  async listReactionsComment(payload: ListReactionPayload): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments/reactions?${convertObToUrl({
+          ...payload,
+          populates: JSON.stringify({
+            path: 'author',
+            select: "_id bizfullname image"
+          })
       })}`
     );
     return data;
