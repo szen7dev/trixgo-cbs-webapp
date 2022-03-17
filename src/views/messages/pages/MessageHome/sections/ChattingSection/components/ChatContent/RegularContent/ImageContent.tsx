@@ -114,12 +114,20 @@ export const ImagesContent:FC<Props> = ({ message, className, showSenderName, is
 
     return (
         <div className={"min-w-[70px] relative " + (className??"") + (isMini?" max-w-[250px]":" max-w-[366px]")}>
-            <div className={"overflow-hidden rounded-lg"}>
+            <div className={"overflow-hidden rounded-lg " + (isMyMessage?"bg-cbs-active-comment":"bg-white")}>
                 {
                     message.parent&&
-                    renderReply()
+                    <div className={"p-2"}>
+                        {renderReply()}
+                    </div>
                 }
-                <div className={"flex flex-wrap bg-white"}>
+                {
+                    message.content.length>0&&
+                    <div className={"p-[7px]"}>
+                        {message.content}
+                    </div>
+                }
+                <div className={"flex flex-wrap"}>
                     {renderImageDisplay()}
                 </div>
                 <div className={"absolute bottom-3px right-4px text-xs flex items-center "  + (isMyMessage?"text-primary":"text-gray-500")}>

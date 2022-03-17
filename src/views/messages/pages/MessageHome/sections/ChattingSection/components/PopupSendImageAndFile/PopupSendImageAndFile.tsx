@@ -1,5 +1,5 @@
 import React, {FC, Fragment, useEffect, useRef, useState} from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
@@ -23,6 +23,10 @@ export const PopupSendImageAndFile: FC = () => {
 
     const [content, setContent] = useState("");
     const [useCompress, setUseCompress] = useState(true);
+
+    useEffect(() => {
+        isShowPopupSendFiles&&setContent("");
+    },[isShowPopupSendFiles])
 
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
@@ -268,9 +272,10 @@ export const PopupSendImageAndFile: FC = () => {
                                     </div>
                                 }
                                 <input
+                                    autoFocus={true}
                                     value={content}
                                     onChange={event => setContent(event.target.value)}
-                                    className={"rounded-md h-[50px] border w-full border-gray-300 mt-4 px-[10px]"} placeholder={"Nội dung"}/>
+                                    className={"rounded-md h-[50px] border w-full border-gray-300 mt-4 px-[10px] focus:outline-none focus:border-primary"} placeholder={"Nội dung"}/>
                             </div>
                         </Transition.Child>
                     )}
