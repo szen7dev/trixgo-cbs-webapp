@@ -54,9 +54,11 @@ const PcmDetailTask: FC = () => {
     TaskRepository.taskInfo(id),
     { refetchOnWindowFocus: false }
   );
+
   const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({ 
     parentID: id, isFetchChecklist: true
   });
+
   const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({ 
     parentID: id, isFetchChildTask: true
   });
@@ -82,26 +84,26 @@ const PcmDetailTask: FC = () => {
     if (!isSuccessApp) return;
     if (isSuccessApp && !hasPermission) {
 			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
+			return history.push("/");
 		};
 
     if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
-      history.push('/pcm/home');
       toast.error("Bạn không có quyền truy cập công việc này!");
+      return history.push('/pcm/home');
     }
 
     if (infoTask?.data) {
-      const { author, assignee, related, percentage, amountComment } = infoTask.data;
+      const { author, assignee, related, percentage, amountComment, group } = infoTask.data;
       const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
+      const membersID = group?.members?.map((user: any) => user?.toString()) || [];
       let confirmUsers = [];
-
       /**
        * Check permission access
        */
-      if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id)) {
-        history.push('/');
-        toast.error("Bạn không có quyền truy cập công việc này!");
-      }
+      // if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id) && !membersID.includes(user?._id)) {
+      //   history.push('/');
+      //   toast.error("Bạn không có quyền truy cập công việc này!");
+      // }
 
       if(author) {
         confirmUsers[confirmUsers.length] = author;

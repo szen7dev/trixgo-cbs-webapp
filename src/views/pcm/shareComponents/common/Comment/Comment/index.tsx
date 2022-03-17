@@ -1,11 +1,12 @@
-import { FC, HTMLAttributes, useContext } from 'react';
+import { FC, HTMLAttributes, useContext, useState } from 'react';
 import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
+import iconLike from "assets/images/emoji/like.png";
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
 import { nl2p } from 'utils';
-import { PostFile } from 'shareComponents/common';
+import { PostFile, ModalReactions } from 'shareComponents/common';
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { CommentProps } from 'typings/task';
 import { useCommentPcm } from 'services/hooks/useTask';
@@ -33,21 +34,65 @@ interface Props {
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, userID, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
-	const { deleteCommentAsync } = useCommentPcm({
+	const [isOpenModalReactions, setIsOpenModalReactions] = useState(false);
+	const [isReaction, setIsReaction] = useState(!!comment.reaction);
+	const [amountReaction, setAmountReaction] = useState(comment.amountReaction);
+	const { deleteCommentAsync, reactionCommentAsync } = useCommentPcm({
 		params: { taskID: comment?.task?._id }
 	});
 	const { dispatch } = useContext(CommentContext);
+	const [paramsReactions, setParamReactions] = useState({
+		params: { commentID: comment._id },
+		isFetchCommentReaction: false,
+	});
+
+	const {
+		listReactionsComment,
+		hasNextPageReactions,
+		nextPageListReactions,
+		totalRecordReactions
+	} = useCommentPcm(paramsReactions)
+
+	const toggleModalReaction = () => {
+		setParamReactions(previousValue => ({
+			...previousValue,
+			isFetchCommentReaction: true,
+		}))
+		setIsOpenModalReactions(!isOpenModalReactions)
+	}
 
 	const handleDeleteComment = async () => {
 		try {
 			const { error, message } = await deleteCommentAsync(comment._id);
             if(error) return toast.warning(message);
-			
+
 			dispatch({
 				type: "DELETE_COMMENT",
 				payload: { _id: comment?._id, parent: comment?.parent }
 			});
 		} catch (error: unknown) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}
+
+	const handleReactionComment = async () => {
+		try {
+			if(isReaction) {
+				setAmountReaction(amountReaction - 1);
+			} else{
+				setAmountReaction(amountReaction + 1);
+			}
+			setIsReaction(!isReaction);
+
+			await reactionCommentAsync({
+				commentID: comment._id,
+				typeReaction: 1
+			})
+		} catch (error) {
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {
@@ -91,10 +136,10 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								}}>
 							</p>
 						</div>
-						{Options && <Options 
-							className="opacity-0 group-hover:opacity-100" 
-							onUpdate={handleEditComment} 
-							onDelete={handleDeleteComment} 
+						{Options && <Options
+							className="opacity-0 group-hover:opacity-100"
+							onUpdate={handleEditComment}
+							onDelete={handleDeleteComment}
 							hasPermissionUpdate={hasPermissionUpdate}
 							hasPermissionDelete={hasPermissionDelete}
 						/>}
@@ -130,18 +175,40 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								<li className="inline-block mr-2">
 									{moment(comment.createAt).format('DD/MM/YYYY HH:mm')}
 								</li>
-								{/* <li className="inline-block mr-2"><button className="font-bold">Thích</button></li> */}
-								{!disableReply && <li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>}
+								<li className="inline-block mr-2">
+									<button className={cn("font-bold", {
+										"text-blue-600": isReaction
+									})} onClick={handleReactionComment}>
+										{isReaction ? 'Bỏ thích' : 'Thích'}
+									</button>
+								</li>
+								{!disableReply && (
+									<li className="inline-block">
+										<button className="font-bold" onClick={onClickReply}>Phản hồi</button>
+									</li>
+								)}
 							</ul>
-							{/* <div>
-								<span className='align-middle text-secondary-gray mr-0.5'>215</span>
-								<span className='relative z-10 -mr-3'><img src={iconFaceSweet} alt="" className='inline' /></span>
-								<span><img src={iconFaceSweet} alt="" className='inline' /></span>
-							</div> */}
+							{amountReaction ? (
+								<div>
+									<span className='align-middle text-secondary-gray mr-0.5'>{amountReaction}</span>
+									<button className='relative z-10 -mr-3' onClick={toggleModalReaction}>
+										<img src={iconLike} alt="Emoji" className="inline w-[20px]" />
+									</button>
+									{/* <span><img src={iconFaceSweet} alt="" className='inline' /></span> */}
+								</div>
+							) : ''}
 						</div>
 					}
 				</div>
 			</div>
+			<ModalReactions
+				data={listReactionsComment}
+				isOpen={isOpenModalReactions}
+				setClose={toggleModalReaction}
+				fetchNextPage={nextPageListReactions}
+				hasNextPage={hasNextPageReactions}
+				totalRecords={totalRecordReactions}
+			/>
 		</>
 	)
 }

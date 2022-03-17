@@ -88,6 +88,9 @@ export type MediaProps = {
   amountReaction?: number,
   amountComment?: number,
   amountView?: number,
+  reaction?: {
+    type: number
+  },
 };
 
 export type MediaInfoResponse = APIResponse & {

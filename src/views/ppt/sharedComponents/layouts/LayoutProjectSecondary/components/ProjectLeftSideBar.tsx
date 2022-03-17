@@ -61,6 +61,12 @@ export const routes: Array<RouteItem> = [
 		name: 'Hồ sơ văn bản',
 		image: '/images/pcm/paid-bill.png',
 	},
+
+	{
+		path: '/pcm/project/:id/group',
+		name: 'Thư mục dữ liệu',
+		image: '/images/pcm/folder.png',
+	},
 	// {
 	// 	path: '/pcm/project/:id/photo',
 	// 	name: 'Hình ảnh',
@@ -112,7 +118,7 @@ const ProjectLeftSideBar: FC = () => {
 
 				{/* menu block */}
 				<div className="t-link-menu-container">
-					{
+					{	
 						routes.map((route, index) => {
 							// Nếu không phải admin thì không hiển thị tab quản trị viên
 							if(!detailDepartment?.admins?.includes(user?._id || "") && index == 0){
