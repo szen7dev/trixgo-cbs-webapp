@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 
-const createShareVariables = (): Map<"open" | "close", (...props: any) => void> => {
+type Key = "open" | "close"
+type Fn = ((...props: any) => void) | any
+
+const createState = (): Map<Key, Fn> => {
 	const actions = new Map();
 	actions.set("open", () => alert("not implemented"));
 	actions.set("close", () => alert("not implemented"));
@@ -8,10 +11,22 @@ const createShareVariables = (): Map<"open" | "close", (...props: any) => void> 
 	return actions;
 };
 
-export const actions = createShareVariables();
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const createContextMenu = () => {
+	const actions = createState();
+	const useContextMenu = () => {
+		return {
+			open: actions.get('open'),
+			close: actions.get('close'),
+			set(key: Key, cb: Fn) { actions.set(key, cb) },
+			get: actions.get.bind(actions),
+			clear() { actions.clear() },
+		}
+	};
+	return useContextMenu;
+}
 
-export const showContextMenu = actions.get('open');
-export const hideContextMenu = actions.get('close');
+export const useContextMenu = createContextMenu();
 
 type Props = {
 	preventHideOnScroll?: boolean;
@@ -26,6 +41,7 @@ const ContextMenu: FC<Props> = (props) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const menuRef = React.useRef<HTMLElement>(null);
+	const { set, clear } = useContextMenu();
 
 	function handleShow(e: { position: { x: number, y: number } }): void {
 		setIsVisible(true);
@@ -83,15 +99,16 @@ const ContextMenu: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		actions.set('open', handleShow);
-		actions.set('close', handleHide);
+		set('open', handleShow);
+		set('close', handleHide);
+
 		return () => {
 			unregisterHandlers();
 			if (process.env.NODE_ENV === 'production') {
-				actions.clear();
+				clear();
 			} else {
-				actions.set('open', () => alert("not implemented"));
-				actions.set('close', () => alert("not implemented"));
+				set('open', () => alert("not implemented"));
+				set('close', () => alert("not implemented"));
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

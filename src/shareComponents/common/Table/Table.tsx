@@ -40,12 +40,10 @@ const Table = <D extends object = Record<string, unknown>>(props: PropsWithChild
 		tableRowProps,
 		wrapperComponent,
 		enableMenuContext,
-		// ...rest
+		...rest
 	} = props;
 	const instance = useTable(
-		{
-			...props
-		},
+		{ ...rest },
 		useRowSelect,
 		hooks => {
 			hooks.visibleColumns.push(columns => [
@@ -96,7 +94,6 @@ const Table = <D extends object = Record<string, unknown>>(props: PropsWithChild
 					{rows.map((row, i) => {
 						prepareRow(row)
 						const { key, ...rest } = row.getRowProps();
-						// console.log(rest);
 						return (
 							<tr {...rest} {...row.getRowProps(tableRowProps)} key={key} >
 								{row.cells.map(cell => {

@@ -4,7 +4,7 @@ import useInfiniteProfile from 'services/hooks/datahub/profile/useInfiniteProfil
 import { useContractorCompany } from 'views/datahub/contexts/Company';
 import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 import { DatahubProfile } from 'typings/datahub/profile';
-import { ContextMenu, showContextMenu } from 'shareComponents/common/ContextMenu';
+import { ContextMenu } from 'shareComponents/common/ContextMenu';
 
 type Props = {
 
@@ -34,7 +34,7 @@ const DatahubContractorProfile: FC<Props> = (props) => {
 								e.stopPropagation();
 								e.preventDefault();
 								setSelected(record);
-								showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
+								// showContextMenu?.({ position: { x: e.clientX, y: e.clientY } })
 							}}>
 								<div className='flex'>
 									<div className='bg-[#EDFCFF] px-[18px] py-6 mr-3.5'>
