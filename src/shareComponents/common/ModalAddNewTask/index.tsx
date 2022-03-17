@@ -1,4 +1,4 @@
-import { FC, UIEvent, useState } from "react";
+import { FC, UIEvent, useState, useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useHistory } from 'react-router-dom';
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -12,6 +12,7 @@ import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
+import { useUserSystem } from "services/hooks/users/useUserSystem";
 
 import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
@@ -48,7 +49,7 @@ export const ModalAddNewTask: FC = () => {
     assigneeID: string().required("Vui lòng nhập tên người nhận!"),
     name: string().required("Vui lòng nhập tiêu đề!"),
   });
-
+  
   const { addTaskAsync } = useTask({});
 
   const onSubmitFilterData = async (values: any) => {
@@ -70,24 +71,34 @@ export const ModalAddNewTask: FC = () => {
   };
 
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [otherFieldValue, setOtherFieldValue] = useState("");
-  const [searchFriendName, setSearchFriendName] = useState("");
-  const [searchGroupName, setSearchGroupName] = useState("");
-  const [projectID, setProjectID] = useState("");
+  const [otherFieldValue, setOtherFieldValue]             = useState("");
+  const [searchFriendName, setSearchFriendName]           = useState("");
+  const [searchGroupName, setSearchGroupName]             = useState("");
+  const [projectID, setProjectID]                         = useState("");
 
   const { data: listDepartments } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
     isFetch: true
   })
+
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
     keyword: otherFieldValue
   });
+
   const { data: listFriend } = useQueryListFriend({
     keyword: searchFriendName
   });
+
+  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
+    projectID,
+    keyword: searchFriendName
+  }, true);
+
+  // console.log({ projectID, searchFriendName,  listUsersProject })
+  
   const { 
     data: listGroup, 
     hasNextPage: hasNextPageListGroup, 
