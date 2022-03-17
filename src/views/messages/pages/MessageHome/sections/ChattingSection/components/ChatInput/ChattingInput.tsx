@@ -240,9 +240,9 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
 
     useEffect(() => {
         const isDone = Object.values(doneUpload).length>0&&Object.values(doneUpload).every(progress => progress === 100);
-        console.log("done upload: ", isDone)
+        // console.log("done upload: ", isDone)
         if (isDone&&willSendFileMessage) {
-            console.log(willSendFileMessage)
+            // console.log(willSendFileMessage)
             setTimeout(() => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
                 socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
