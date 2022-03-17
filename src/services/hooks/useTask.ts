@@ -9,7 +9,10 @@ import {
   ResponseProps, ResponsePayload,
   CommentPayload, ListCommentsPayload,
   AddRelationUserPayload,
-  UpdateStatusCheckListPayload
+  UpdateStatusCheckListPayload,
+  ReactionCommentPayload,
+  ListReactionPayload,
+  ReactionCommentProps
 } from "typings/task";
 import { CommentProps } from 'typings/task';
 
@@ -37,15 +40,19 @@ type UseTask = {
 };
 
 type UseTaskProps = {
+  keyword?: string;
   taskID?: string;
   typeStatus?: string;
   statusNe?: string;
+  groupID?: string;
   type?: number;
+  status?: string;
   official?: boolean;
   isFetch?: boolean;
+  isFetchTask?: boolean;
 }
 
-export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch = false }: UseTaskProps): UseTask => {
+export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typeStatus, type, status="", isFetch = false, isFetchTask = false }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
       TaskRepository.addTask(payload)
@@ -92,12 +99,15 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
   } = useInfiniteQuery(
-    ["list_tasks", type, typeStatus],
+    ["list_tasks", type, typeStatus, groupID],
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
+        keyword,
+        groupID: groupID || "",
         lastestID: pageParam || "",
         type: type || "",
         statusNe: statusNe || "",
+        status,
         typeStatus: typeStatus || "",
         select: "assignee lastLog checklist description name expiredTime percentage project actualFinishTime",
         populates: JSON.stringify({
@@ -115,7 +125,7 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: true,
+      enabled: isFetchTask ?? false,
     }
   );
 
@@ -132,7 +142,6 @@ export const useTask = ({ taskID, official, statusNe, typeStatus, type, isFetch 
   const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
-
   return {
     addResponseAsync,
     addRelationUserAsync,
@@ -353,6 +362,15 @@ export const useChildTask = ({
  */
 
  type UseCommentPcm = {
+  // REACTION COMMENT
+  reactionCommentAsync: (payload: ReactionCommentPayload) => Promise<any>,
+  listReactionsComment: Array<ReactionCommentProps>,
+  totalRecordReactions: number,
+  isLoadingListReactions: boolean,
+  refetchListReactions: () => void,
+  nextPageListReactions: () => void,
+  hasNextPageReactions: boolean | undefined,
+  // COMMENT
   createCommentAsync: (payload: CommentPayload) => Promise<any>,
   updateCommentAsync: (payload: CommentPayload) => Promise<any>,
   deleteCommentAsync: (id: string) => Promise<{ error: boolean; message: string; }>,
@@ -368,14 +386,16 @@ export const useChildTask = ({
 
 type UseCommentPcmProps = {
   key?: string,
-  params?: ListCommentsPayload,
-  isFetchComment?: boolean
+  params?: ListCommentsPayload | ListReactionPayload,
+  isFetchComment?: boolean,
+  isFetchCommentReaction?: boolean
 }
 
 export const useCommentPcm = ({
   key,
   params = {},
-  isFetchComment = false
+  isFetchComment = false,
+  isFetchCommentReaction = false
 }: UseCommentPcmProps) : UseCommentPcm => {
 
   const { mutateAsync: createCommentAsync } =
@@ -391,6 +411,11 @@ export const useCommentPcm = ({
   const { mutateAsync: updateCommentAsync } =
       useMutation((payload: CommentPayload) =>
           TaskRepository.updateComment(payload)
+      );
+
+  const { mutateAsync: reactionCommentAsync } =
+      useMutation((payload: ReactionCommentPayload) =>
+          TaskRepository.reactionComment(payload)
       );
 
   const {
@@ -416,6 +441,36 @@ export const useCommentPcm = ({
       }
     );
 
+  const {
+    isLoading: isLoadingListReactions,
+    refetch: refetchListReactions,
+    data: dataListReactions,
+    hasNextPage: hasNextPageReactions,
+    fetchNextPage: nextPageListReactions,
+  } =
+    useInfiniteQuery(
+      ["list_reactions_comment", params],
+      async ({ pageParams }: any) =>
+      TaskRepository.listReactionsComment({
+        lastestID: pageParams ? pageParams : "",
+        ...params
+      }),
+      {
+        getNextPageParam: ({ nextCursor }: any) => {
+            return nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: isFetchCommentReaction
+      }
+    );
+
+  const listReactionsComment = []
+    .concat(...(dataListReactions?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecordReactions = dataListReactions?.pages[0]?.data?.totalRecord || 0;
+
   const listComments = []
     .concat(...(dataListComments?.pages || [])
     .map((d: any) => d.data?.listRecords))
@@ -426,16 +481,25 @@ export const useCommentPcm = ({
   const limit = dataListComments?.pages[0]?.data?.limit || 5;
 
   return {
-      createCommentAsync,
-      updateCommentAsync,
-      deleteCommentAsync,
-      listComments,
-      limit,
-      totalRecord,
-      nextCursor,
-      isLoadingListComments,
-      refetchListComments,
-      nextPageListComments,
-      prevPageListComments,
+    // REACTION COMMENT
+    reactionCommentAsync,
+    listReactionsComment,
+    totalRecordReactions,
+    isLoadingListReactions,
+    hasNextPageReactions,
+    refetchListReactions,
+    nextPageListReactions,
+    // COMMENT
+    createCommentAsync,
+    updateCommentAsync,
+    deleteCommentAsync,
+    listComments,
+    limit,
+    totalRecord,
+    nextCursor,
+    isLoadingListComments,
+    refetchListComments,
+    nextPageListComments,
+    prevPageListComments,
   }
 }

@@ -17,6 +17,7 @@ type Props = {
   outDateData: Task;
   nextWeekData: Task;
   moreThanSevenDayData: Task;
+  taskSuccessData?: Task;
   onClickMore: (typeStatus: string) => void;
 };
 
@@ -24,21 +25,21 @@ export const ListTable: FC<Props> = ({
   outDateData,
   nextWeekData,
   moreThanSevenDayData,
+  taskSuccessData,
   onClickMore,
 }) => {
   const history = useHistory();
-
   const handleClickTask = (id: string) => {
     history.push(`/pcm/detail/${id}`);
   };
 
-  const renderSeeMoreButton = (taskData: Task) => {
+  const renderSeeMoreButton = (taskData: Task,  keySeeMore: string) => {
     const condition =
       taskData.totalRecord && taskData.totalRecord - taskData.data.length > 0;
     return condition ? (
       <button
         className="text-primary text-[13px]"
-        onClick={() => onClickMore("OUT_DATE")}
+        onClick={() => onClickMore(keySeeMore)}
       >
         {`Xem thêm (${Number(taskData.totalRecord) - taskData.data.length})`}
       </button>
@@ -94,7 +95,7 @@ export const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC QUÁ HẠN</span>
-              {renderSeeMoreButton(outDateData)}
+              {renderSeeMoreButton(outDateData, "OUT_DATE")}
             </div>
           </td>
         </tr>
@@ -148,7 +149,7 @@ export const ListTable: FC<Props> = ({
           <td colSpan={6} className="p-2 border-l">
             <div className="flex justify-between items-center">
               <span className="text-[13px] font-bold">VIỆC TUẦN TỚI</span>
-              {renderSeeMoreButton(nextWeekData)}
+              {renderSeeMoreButton(nextWeekData, "NEXT_WEEK")}
             </div>
           </td>
         </tr>
@@ -207,7 +208,7 @@ export const ListTable: FC<Props> = ({
               <span className="text-[13px] font-bold">
                 {"VIỆC > 7 NGÀY TIẾP THEO"}
               </span>
-              {renderSeeMoreButton(moreThanSevenDayData)}
+              {renderSeeMoreButton(moreThanSevenDayData, "MORE_THAN_SEVEN_DAY")}
             </div>
           </td>
         </tr>

@@ -22,7 +22,7 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
     listTasks: tasksOutDate,
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
-  } = useTask({ type, typeStatus: "1", statusNe: "3" });
+  } = useTask({ type, typeStatus: "1", statusNe: "3", isFetchTask: true });
 
   // Việc tuần tới
   const {
@@ -30,14 +30,14 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
     isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
-  } = useTask({ type, typeStatus: "2",  statusNe: "3" });
+  } = useTask({ type, typeStatus: "2",  statusNe: "3", isFetchTask: true });
 
   // Việc 7 ngày tới
   const {
     listTasks: tasksMoreThanSevenDay,
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
-  } = useTask({ type, typeStatus: "3",  statusNe: "3"});
+  } = useTask({ type, typeStatus: "3",  statusNe: "3",  isFetchTask: true});
 
   const handleSeeMore = (typeStatus: string) => {
     switch (typeStatus) {
@@ -88,6 +88,10 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
               moreThanSevenDayData={{
                 data: tasksMoreThanSevenDay,
                 totalRecord: moreSevenDayRecord,
+              }}
+              taskSuccessData={{
+                data: [],
+                totalRecord: 0,
               }}
               onClickMore={handleSeeMore}
             />

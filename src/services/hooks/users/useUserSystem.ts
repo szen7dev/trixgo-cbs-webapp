@@ -16,7 +16,7 @@ interface UseUserSystem {
     deleteUserSystemAsync: (usersID: string[]) => Promise<any>;
 }
 
-export const useUserSystem = (params?: QueryParam): UseUserSystem => {
+export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSystem => {
     const { mutateAsync: createUserSystemAsync } =
         useMutation((payload: UserSystemPayload) =>
             UserSystemRepository.addUserSystem(payload)
@@ -31,7 +31,7 @@ export const useUserSystem = (params?: QueryParam): UseUserSystem => {
         useMutation((usersID: string[]) =>
             UserSystemRepository.deleteUserSystem(usersID)
         );
-
+    
     const result = useInfiniteQuery(
         ['list_users', params]
         , async ({ pageParam }: any) =>
@@ -43,7 +43,7 @@ export const useUserSystem = (params?: QueryParam): UseUserSystem => {
             return data?.nextCursor || undefined;
         },
         refetchOnWindowFocus: false,
-        enabled: params?.isFetch || false
+        enabled: isFetch ?? false
     });
 
     const {

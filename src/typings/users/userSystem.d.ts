@@ -3,6 +3,7 @@ import { User } from "typings/user";
 interface QueryParam {
     arrayID?: string;
     companyID?: string;
+    projectID?: string;
     keyword?: string;
     select?: string;
     populates?: string;

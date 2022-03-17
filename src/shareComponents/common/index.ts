@@ -14,6 +14,7 @@ export * from './ModalContainer';
 export * from './ModalFullContainer';
 export * from './ModalAddNewTask';
 export * from './ModalConfirm';
+export * from './ModalReactions';
 export * from './InputClearable';
 export * from './DropdownSearchable';
 export * from './UserMenu';
