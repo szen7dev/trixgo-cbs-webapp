@@ -44,8 +44,7 @@ export const DocumentProjectPage: FC = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [recordSelected, setSelectRecord] = useState<any>({});
 
-  const { data, totalRecord, totalPages, loading, nextCursor, refetch } =
-    useQueryListDocument(departmentID, pageParam);
+  const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
   const { inserDocumentChildAsync, updateDocumentChildAsync } =
     useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
@@ -178,7 +177,7 @@ export const DocumentProjectPage: FC = () => {
                 handleOnFilter({
                   keyword: e.target.value,
                 });
-              }, 800)}
+              }, 500)}
             />
             <DropdownFilterButton
               onSubmit={handleOnFilter}
