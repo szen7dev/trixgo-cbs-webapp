@@ -29,8 +29,8 @@ export const MessageList:FC = () => {
 
     const onScroll = () => {
         if (listInnerRef.current) {
-            const { scrollTop } = listInnerRef.current;
-            if (scrollTop > -100) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            if (scrollTop + clientHeight >= scrollHeight) {
                 setReachEnd(true);
             } else {
                 setReachEnd(false);
@@ -45,6 +45,7 @@ export const MessageList:FC = () => {
     const renderListConversation = useCallback(() => {
         return _map(Object.values(listConversation)
             // .sort((a,b) => b.isSaved ? 1 : -1)
+            .filter(item => !item.isFake)
             .sort((a,b) => {
                 if (b.position > a.position) {
                     return 1
@@ -77,7 +78,7 @@ export const MessageList:FC = () => {
                     <ListFolders/>
                 </div>
                 <div
-                    className={"overflow-auto message-list-height px-[5px]"}
+                    className={"overflow-auto message-list-height px-[5px] pb-10"}
                     ref={listInnerRef}
                     id={'list-conversation'}>
                     {renderListConversation()}

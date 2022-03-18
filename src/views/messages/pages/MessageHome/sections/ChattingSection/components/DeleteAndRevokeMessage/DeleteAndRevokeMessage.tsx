@@ -20,11 +20,32 @@ export const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
     const {socketRef} = useContext(context);
     const socket = socketRef.current;
 
+    // const currentUser = localStorage.getItem("currentUser")??"{}";
+    // const profileId = JSON.parse(currentUser)?._id;
+
     const handleConfirm = () => {
+        // const fileIds : string[] = [];
+        // deleteAndRevokeMessage.forEach((item: ItemMessage) => {
+        //     if (item.files&&item.files.length>0) {
+        //         item.files.forEach(file => {
+        //             // if (!file.usersDelete||!file.usersDelete.includes(profileId)) {
+        //                 fileIds.push(file._id)
+        //             // }
+        //         })
+        //     }
+        // })
         if (isRevoke) {
-            socket.emit("CHATTING_CSS_REVOKE_MESSAGE",{conversationID: conversationId, messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id)})
+            socket.emit("CHATTING_CSS_REVOKE_MESSAGE",{
+                conversationID: conversationId,
+                messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id),
+                // filesID: fileIds
+            })
         } else {
-            deleteMessage({messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id), conversationID: conversationId})
+            deleteMessage({
+                messagesID: deleteAndRevokeMessage.map((item:ItemMessage) => item._id),
+                conversationID: conversationId,
+                // filesID: fileIds
+            })
         }
         socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
             conversationID: conversationId,
@@ -35,11 +56,12 @@ export const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
                 links: 0,
                 createAt: 0,
                 __v: 0,
-                config: 0
+                // config: 0
             })
         });
         dispatch(dismissDeleteRevoke({}))
         dispatch(removeAllSelectedMessage({conversationId: conversationId}))
+        setIsRevoke(false)
     }
     return (
         <Transition appear show={isOpenDeleteRevoke} as={Fragment}>

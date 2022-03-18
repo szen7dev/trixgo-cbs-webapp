@@ -14,6 +14,7 @@ import { Paginate, SearchInput } from "shareComponents/common";
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
 import { GroupActions, ButtonCreate, ButtonMore } from 'shareComponents/common'
 import ModalExample from "views/ppt/sharedComponents/common/ModalExample";
+import TriangleDown from "assets/icons/TriangleDown";
 
 // ========== Components Updateable ==========
 
@@ -63,6 +64,9 @@ const ProjectBiddingPage: FC = () => {
 							<tr className="text-primary-gray whitespace-nowrap align-middle text-left">
 								<th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1">
 									<input className="cbs-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={handleCheckAll} ref={checkboxRef} />
+									<button onClick={e => { e.stopPropagation(); }} className="ml-1.5 align-top">
+										<TriangleDown className='inline-block' />
+									</button>
 								</th>
 								<th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
 									<span className="pl-2 border-l border-cbs-border">

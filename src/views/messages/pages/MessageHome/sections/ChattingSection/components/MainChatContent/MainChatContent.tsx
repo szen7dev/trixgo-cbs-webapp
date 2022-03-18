@@ -11,50 +11,51 @@ import 'react-circular-progressbar/dist/styles.css';
 import {Reminder, ReminderNoti} from "../Reminder";
 import moment from "moment";
 import angered from "assets/images/emoji/angered.png";
-import dislike from "assets/images/emoji/dis-like.png";
 import heart from "assets/images/emoji/heart.png";
 import laugh from "assets/images/emoji/laugh.png";
 import like from "assets/images/emoji/like.png";
 import sad from "assets/images/emoji/sad.png";
 import surprise from "assets/images/emoji/surprise.png";
 import {Poll, PollNoti} from "../Poll";
-import {AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../ChatContent/RegularContent";
+import {
+    AddUsersNoti,
+    PinMessageNoti,
+    MyMessage,
+    OthersMessage,
+    NotificationCenter,
+    ChangeNameNoti, ChangeAvatarNoti
+} from "../ChatContent/RegularContent";
 
 export const listEmoji = [
     {
         id: 1,
-        icon: heart,
+        icon: like,
         value: 1
     },
     {
         id: 2,
-        icon: laugh,
+        icon: heart,
         value: 2
     },
     {
         id: 3,
-        icon: surprise,
+        icon: laugh,
         value: 3
     },
     {
         id: 4,
-        icon: sad,
+        icon: surprise,
         value: 4
     },
     {
         id: 5,
-        icon: angered,
+        icon: sad,
         value: 5
     },
     {
         id: 6,
-        icon: like,
+        icon: angered,
         value: 6
-    },
-    {
-        id: 7,
-        icon: dislike,
-        value: 7
     }
 ];
 
@@ -78,12 +79,22 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
-        return _map(value, (message, index) => renderMessage(message, value[index-1]))
+        return _map(value.sort((a,b) => {
+            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+                return 1
+            }
+            return -1
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
         const value = parseMessageData(fakeMessagesData);
-        return _map(value, (message, index) => renderMessage(message, null, false))
+        return _map(value.sort((a,b) => {
+            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+                return 1
+            }
+            return -1
+        }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
     useEffect(() => {
@@ -124,11 +135,11 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     }
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
-        const messageCreatedAt = moment(message.createdAt);
+        const messageCreatedAt = moment(message.createAt);
         return (
             <div key={message._id} id={`message-${message._id}`}>
                 {
-                    shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
+                    shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
                         (
                             shouldRenderDate&&!previousMessage?
@@ -161,11 +172,19 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                     return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 101:
-                // eslint-disable-next-line no-case-declarations
-                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
-                // eslint-disable-next-line no-case-declarations
-                const messsagesAdd = usersAdded.join("; ");
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 102:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 103:
+                return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
+            case 104:
+                return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
+            case 105:
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đặt: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với trai trò Admin`}/>;
+            case 106:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xóa: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với vai trò Admin`}/>
+            case 107:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 109:

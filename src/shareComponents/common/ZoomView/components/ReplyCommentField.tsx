@@ -2,16 +2,16 @@ import React, { FC, useRef, useState } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
+import { toast } from "react-toastify";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import { PostFile, PostImage } from 'views/media/shareComponents/common';
+import { PostFile, PostImage } from 'shareComponents/common';
 
-import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
-import { FileProps, FilePropsUpload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 export interface SubmitComment { images: string[], files: string[], text: string }
 
@@ -96,6 +96,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleSubmit = async () => {
+		toast.info('Tính năng đang phát triển');
 		// Clear text input
 		removeAllFiles();
 

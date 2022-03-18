@@ -2,15 +2,48 @@ import API from "../repository";
 import { convertObToUrl } from "utils";
 
 import {
-    CheckExistConversationResponse, ConversationInformarionResponse, ConvversationInformationPayload,
+    AddConversationToFolderPayload,
+    AddConversationToFolderResponse,
+    AddFolderPayload,
+    AddFolderResponse,
+    CheckExistConversationResponse,
+    ConversationInformarionResponse,
+    ConvversationInformationPayload,
     CreateConversationPayload,
-    CreateConversationResponse, GeneralGroupByMemberPayload, GeneralGroupByMemberResponse,
+    CreateConversationResponse,
+    DeleteConversationPayload,
+    DeleteConversationResponse,
+    DeleteFolderPayload,
+    DeleteFolderResponse,
+    DeleteHistoryConversationPayload,
+    DeleteHistoryConversationResponse,
+    GeneralGroupByMemberPayload,
+    GeneralGroupByMemberResponse,
+    HideConversationPayload,
+    HideConversationResponse,
+    LeaveConversationPayload,
+    LeaveConversationResponse,
     ListConversationPayload,
-    ListConversationResponse, ListFoldersConversationPayload, ListFoldersConversationResponse,
+    ListConversationResponse,
+    ListFoldersConversationPayload,
+    ListFoldersConversationResponse,
     ListMembersOfConversationPayload,
     ListMembersOfConversationResponse,
+    MarkReadConversationPayload,
+    MarkReadConversationResponse,
     MediasOfConversationPayload,
-    MediasOfConversationResponse
+    MediasOfConversationResponse,
+    PinConversationPayload,
+    PinConversationResponse,
+    RemoveMemberFromConversationPayload,
+    RemoveMemberFromConversationResponse, SetASAdminConversationPayload, SetASAdminConversationResponse,
+    UpdateConfigConversationPayload, UpdateConfigConversationResponse,
+    UpdateConversationPayload,
+    UpdateConversationResponse,
+    UpdateFolderPayload,
+    UpdateFolderResponse,
+    UpdateMuteConversationPayload,
+    UpdateMuteConversationResponse
 } from "typings/apis/messages/listConversation";
 const getListConversationURL = "/api/chatting/conversations/list-conversation-with-page";
 const getListMembersOfConversationURL = "/api/chatting/conversations/list-members-conversation";
@@ -20,6 +53,21 @@ const mediasOfConversation = "/api/chatting/conversations/list-message-media-con
 const generalGroupOfMember = "/api/chatting/conversations/info-general-group-by-member";
 const conversationInformation = "/api/chatting/conversations/info-conversation";
 const listFolder = "/api/chatting/conversations/list-folder";
+const createFolder = "/api/chatting/conversations/create-folder";
+const updateFolder = "/api/chatting/conversations/update-folder";
+const deleteFolder = "/api/chatting/conversations/delete-folder";
+const addConversationToFolder = "/api/chatting/conversations/update-conversation-to-folder";
+const updateMuteConversation = "/api/chatting/conversations/update-mute-conversation";
+const updateConversation = "/api/chatting/conversations/update-conversation";
+const pinConversation = "/api/chatting/conversations/update-pin-conversation";
+const hideConversation = "/api/chatting/conversations/update-hide-conversation";
+const markReadConversation = "/api/chatting/conversations/mark-read-conversation";
+const deleteHistoryConversation = "/api/chatting/conversations/delete-history-conversation";
+const deleteConversation = "/api/chatting/conversations/delete-conversation";
+const leaveConversation = "/api/chatting/conversations/member-leave-conversation";
+const removeFromConversation = "/api/chatting/conversations/remove-member-conversation";
+const updateConfigConversation = "/api/chatting/conversations/update-config-conversation";
+const setAsAdminConversation = "/api/chatting/conversations/update-admin-conversation";
 
 const ListConversationRepository = {
     async getListConversation(payload: ListConversationPayload): Promise<ListConversationResponse> {
@@ -85,8 +133,136 @@ const ListConversationRepository = {
         )
 
         return data;
-    }
+    },
 
+    async addFolder(payload: AddFolderPayload) : Promise<AddFolderResponse> {
+        const {data} = await API.post(
+            `${createFolder}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async updateFolder(payload: UpdateFolderPayload) : Promise<UpdateFolderResponse> {
+        const {data} = await API.put(
+            `${updateFolder}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async deleteFolder(payload: DeleteFolderPayload) : Promise<DeleteFolderResponse> {
+        const {data} = await API.delete(
+            `${deleteFolder}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async addConversationToFolder(payload: AddConversationToFolderPayload) : Promise<AddConversationToFolderResponse> {
+        const {data} = await API.put(
+            `${addConversationToFolder}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async updateMuteConversation(payload: UpdateMuteConversationPayload) : Promise<UpdateMuteConversationResponse> {
+        const {data} = await API.put(
+            `${updateMuteConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async updateConversation(payload: UpdateConversationPayload) : Promise<UpdateConversationResponse> {
+        const {data} = await API.put(
+            `${updateConversation}`,
+            {...payload}
+        );
+
+        return data;
+    },
+
+    async pinConversation(payload: PinConversationPayload) : Promise<PinConversationResponse> {
+        const {data} = await API.put(
+            `${pinConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async hideConversation(payload: HideConversationPayload) : Promise<HideConversationResponse> {
+        const {data} = await API.put(
+            `${hideConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async markReadConversation(payload: MarkReadConversationPayload) : Promise<MarkReadConversationResponse> {
+        const {data} = await API.get(
+            `${markReadConversation}?${convertObToUrl(payload)}`,
+        )
+
+        return data;
+    },
+
+    async deleteHistoryConversation(payload: DeleteHistoryConversationPayload) : Promise<DeleteHistoryConversationResponse> {
+        const {data} = await API.delete(
+            `${deleteHistoryConversation}?${convertObToUrl(payload)}`,
+        )
+
+        return data;
+    },
+
+    async deleteConversation(payload: DeleteConversationPayload) : Promise<DeleteConversationResponse> {
+        const {data} = await API.delete(
+            `${deleteConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async leaveConversation(payload: LeaveConversationPayload) : Promise<LeaveConversationResponse> {
+        const {data} = await API.get(
+            `${leaveConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async removeMemberFromConversation(payload: RemoveMemberFromConversationPayload) : Promise<RemoveMemberFromConversationResponse> {
+        const {data} = await API.delete(
+            `${removeFromConversation}?${convertObToUrl(payload)}`
+        )
+
+        return data;
+    },
+
+    async updateConfigConversation(payload: UpdateConfigConversationPayload) : Promise<UpdateConfigConversationResponse> {
+        const {data} = await API.put(
+            `${updateConfigConversation}`,
+            {...payload}
+        )
+
+        return data;
+    },
+
+    async setAsAdmin(payload: SetASAdminConversationPayload) : Promise<SetASAdminConversationResponse> {
+        const {data} = await API.put(
+            `${setAsAdminConversation}`,
+            {...payload}
+        )
+
+        return data;
+    }
 };
 
 export default ListConversationRepository;

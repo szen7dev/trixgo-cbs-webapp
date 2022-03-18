@@ -1,7 +1,9 @@
 import { User } from "typings/user";
 
 interface QueryParam {
+    arrayID?: string;
     companyID?: string;
+    projectID?: string;
     keyword?: string;
     select?: string;
     populates?: string;
@@ -11,11 +13,13 @@ interface QueryParam {
 }
 
 export interface DataResponse {
-    listRecords: UserSystemProps[];
-    limit: number;
-    totalRecord: number;
-    totalPage: number;
-    nextCursor: string;
+    data: {
+        listRecords: UserSystemProps[];
+        limit: number;
+        totalRecord: number;
+        totalPage: number;
+        nextCursor: string;
+    }
 }
 
 export interface UserSystemResponse {
@@ -53,6 +57,7 @@ export type UserSystemProps = {
     },
     email: string,
     phone: string,
+    image: string,
     fullname: string,
     bizfullname: string,
     birthday: string,
@@ -80,3 +85,12 @@ interface ModalProps {
     }
     onConfirm?(): void
 }
+
+export type ListUserInProjectPayload = {
+    projectID: string;
+    limit?: number;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+    lastestID?: string;
+}; 

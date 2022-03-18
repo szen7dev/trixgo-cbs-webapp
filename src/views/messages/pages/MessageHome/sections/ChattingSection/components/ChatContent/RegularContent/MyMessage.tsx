@@ -5,7 +5,7 @@ import {RightClickMessage, SelectMessageCheckbox} from "../../MainChatContent";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {removeSelectedMessage, setSelectedMessages} from "redux/reducer/messages/ListMessage";
-import {DeleteChatContent, ContactContent, FileChatContent, TextChatContent, ImagesContent} from "./index";
+import {ContactContent, DeleteChatContent, FileChatContent, ImagesContent, TextChatContent} from "./index";
 import {NpsContent} from "../../Nps";
 
 type Props = {
@@ -24,10 +24,15 @@ export const MyMessage:FC<Props> = ({message, context, isMini}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     const dispatch = useDispatch();
-
-    const renderMessageContent = useCallback(() => {
+    const isDeleted = useCallback(() => {
         if (message.usersDelete&&message.usersDelete.includes(profileId)) {
-            return <DeleteChatContent message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>
+            return true
+        }
+        return (message.files??[]).some(file => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [message])
+    const renderMessageContent = useCallback(() => {
+        if (isDeleted()) {
+            return <DeleteChatContent isMini={isMini} message={message} className={"bg-cbs-active-comment"} isMyMessage={true}/>
         }
         switch (message.type) {
             case 0:
@@ -56,8 +61,8 @@ export const MyMessage:FC<Props> = ({message, context, isMini}) => {
                         }
                     }
                 }}
-                className={"flex justify-end items-end flex-1 transition duration-500 cursor-pointer relative"}>
-                <RightClickMenuWrapper contextMenu={<RightClickMessage isMini={isMini} message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
+                className={"flex justify-end items-end flex-1 transition duration-500 relative " + (selectedState ? "cursor-pointer":"")}>
+                <RightClickMenuWrapper disabled={message.isFake} contextMenu={<RightClickMessage isMini={isMini} message={message} socket={socket} editor={editor}/>} className={"mb-2 transition duration-500"}>
                     <div className={"message-container my-message"}>
                         {renderMessageContent()}
                     </div>

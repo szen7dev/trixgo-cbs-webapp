@@ -115,7 +115,7 @@ export const DocumentDashboardPage: FC = () => {
 		mediaId: "",
 	});
 
-	const { listDepartments, totalRecord, fetchNextPageDepartments } =
+	const { listDepartments } =
 		useQueryListDepartments({
 			select:
 				"lastChange assistant pm numberOfDocs name numberFinishOfDocs actualStartTime actualFinishTime",

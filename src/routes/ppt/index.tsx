@@ -11,7 +11,7 @@ import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 import { ModalCreateDocument } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
-import ErrorPage from 'views/authentication/Error'
+// import ErrorPage from 'views/authentication/Error'
 import {
 	DocumentDetailPage,
 	DocumentFolderPage,
@@ -21,7 +21,6 @@ import {
 	DocumentReportPage
 } from 'views/document/pages';
 import {
-	ProjectAdminPage,
 	ProjectBiddingPage,
 	ProjectBudgetPage,
 	ProjectCategoryPage,

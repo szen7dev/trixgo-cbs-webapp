@@ -2,8 +2,8 @@ import { FC, useState, useContext, useEffect } from 'react';
 
 import { EditButton, Comment, ReplyCommentField } from 'views/media/shareComponents/common';
 
-import { CommentProps } from 'typings/common';
-import { FileProps } from 'typings/media';
+import { CommentProps } from 'typings/media';
+import { FileProps } from 'typings/common';
 import MediaRepository from "apis/media";
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/media/contexts/post';
@@ -11,8 +11,9 @@ import { Comment as CommentType } from 'typings/ppt/comment';
 
 interface Props {
 	renderNestedComment?: React.ElementType
-	onClickReply?: () => unknown;
+	onClickReply?: () => unknown,
 	onClickImage?: (comment: CommentType, index: number) => void,
+	userID: string | undefined,
 	comment: CommentProps,
 	limit: number,
 	smallImage?: boolean
@@ -27,12 +28,12 @@ type UpdateCommentProps = {
 	images: FileProps[] | undefined,
 }
 
-export const RootComment: FC<Props> = ({ onClickImage, disableReply, smallImage, comment, limit, renderNestedComment: NestedComment }) => {
+export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
-	const [amountReply, setAmountReply] = useState<number>(comment?.amountCommentReply - 1);
+	const [amountReply, setAmountReply] = useState<number>(comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0);
 
 	const [infoCommentParent, setInfoCommentParent] = useState<UpdateCommentProps>({
 		files: [], images: [], commentID: '', content: '', parentID: ''
@@ -58,17 +59,17 @@ export const RootComment: FC<Props> = ({ onClickImage, disableReply, smallImage,
 
 		const { error, data } = await MediaRepository.listComments({
 			lastestID,
-			mediaID: comment.media._id,
+			mediaID: comment.media?._id,
 			parentID: comment._id,
 		});
 		setAmountReply(amountReply - limit);
 
-		if (!error && data.listRecords.length) {
+		if (!error && data?.listRecords?.length) {
 			dispatch({
 				type: 'VIEW_MORE_COMMENTS_REPLY',
 				payload: {
 					parent: comment._id,
-					comments: data.listRecords
+					comments: data?.listRecords?.reverse()
 				}
 			});
 		}
@@ -106,6 +107,7 @@ export const RootComment: FC<Props> = ({ onClickImage, disableReply, smallImage,
 			<Comment
 				small={smallImage}
 				comment={comment}
+				userID={userID}
 				onClickReply={() => setIsReply(true)}
 				onClickEdit={handleClickUpdateParent}
 				onClickImage={(index: number, images: any, commentId: string) => openComment({ mediaId: commentId, images, index, author: comment.author, createAt: comment.createAt })}
@@ -116,7 +118,7 @@ export const RootComment: FC<Props> = ({ onClickImage, disableReply, smallImage,
 					<div className="react__comments-header">
 						<div className='pl-11 mr-5'>
 							<button className='text-medium pb-2 mb-1.5 font-bold' onClick={handleClickViewMore}>
-								View more {amountReply} comment
+								Xem thêm {amountReply} bình luận
 							</button>
 						</div>
 					</div>

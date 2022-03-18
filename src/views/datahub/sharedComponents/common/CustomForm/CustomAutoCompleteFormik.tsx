@@ -11,12 +11,14 @@ type Props<T extends Record<string, any>> = {
 	valueAttribute?: string,
 
 	data: Array<T>
-	required?: boolean
+	required?: boolean;
+	server?: boolean;
 	error?: React.ComponentType<any>
-	initialData?: string ,
+	initialData?: string,
 	placeholder?: string
 	renderValue?: (value: T) => string
-	onChange?: (value: string) => void
+	onChange?: (value: string) => void,
+	onScroll?: (e: any) => void,
 }
 
 function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
@@ -29,16 +31,18 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 	attribute = 'name',
 	valueAttribute,
 	data,
-	initialData,
+	initialData = '',
 	onChange,
+	onScroll,
+	server = false,
 	...rest
 }: PropsWithChildren<Props<T>>): JSX.Element {
 	const [selected, setSelected] = useState<null | any>();
-	const [search, setSearch] = useState(initialData || '');
+	const [search, setSearch] = useState(initialData);
 	const [isOpen, setIsOpen] = useState(false);
 	const ref = React.useRef<HTMLDivElement | null>(null);
 
-	const dataFiltered = data.filter(d => d[attribute]?.toLowerCase().includes(search.toLowerCase()));
+	const dataFiltered = server ? data : data.filter(d => d[attribute]?.toLowerCase().includes(search.toLowerCase()));
 	useEffect(() => {
 		const handleClickOutSite = (e: Event) => {
 			if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -53,12 +57,16 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 		};
 	}, [])
 
+	useEffect(() => {
+		setSearch(initialData || '');
+	}, [initialData])
+
 	return (
 		<Field name={name}>
 			{({ field, form, meta }: FieldProps) => {
 				const handleSelect = (select: any) => {
 					setSelected(select);
-					setSearch(select[attribute]);
+					setSearch(renderValue ? renderValue(select) : select[attribute]);
 					setIsOpen(false);
 					form.setFieldValue(field.name, valueAttribute ? select[valueAttribute] : select);
 				}
@@ -84,8 +92,11 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 												form.setFieldValue(field.name, null);
 											}
 											setSearch(e.target.value);
+											setIsOpen(true);
 											onChange?.(e.target.value);
 										}}
+										name={field.name}
+										onBlur={field.onBlur}
 									/>
 									<span className='absolute right-2 top-1.5'>
 										<svg xmlns="http://www.w3.org/2000/svg" className='w-4 h-4' viewBox="0 0 320 512">
@@ -103,7 +114,10 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 									leaveTo="opacity-0"
 									show={isOpen}
 								>
-									<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none">
+									<Listbox.Options
+										className="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
+										onScroll={onScroll}
+									>
 										{dataFiltered.map((item, personIdx) => (
 											<Listbox.Option
 												key={personIdx}
@@ -119,7 +133,7 @@ function CustomAutoCompleteFormik<T extends Record<string, any>>({ name,
 															className={`block truncate ${selected ? 'font-medium' : 'font-normal'
 																}`}
 														>
-															{item[attribute]}
+															{renderValue ? renderValue(item) : item[attribute]}
 														</span>
 														{selected ? (
 															<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

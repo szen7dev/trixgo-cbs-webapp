@@ -49,6 +49,8 @@ export interface Document {
     package?: {
         _id: string;
         name: string;
+        sign: string;
+        members: string[];
     };
     contract?: {
         _id: string;
@@ -69,6 +71,11 @@ export interface Document {
     expiredResponse?: string;
     approver?: string;
     value?: string;
+    parent: {
+        _id: string;
+        name: string;
+        sign: string;
+    },
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {

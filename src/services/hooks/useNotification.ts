@@ -1,19 +1,25 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import NotificationRepository from "apis/notification";
-import { NotificationProps } from "typings/notification";
+import { NotificationProps, UpdateNotificationPayload } from "typings/notification";
 
 type UseNotification = {
+    updateNotificationAsync: (payload: UpdateNotificationPayload) => Promise<any>,
     listNotifications: Array<NotificationProps>,
     isLoadingListNotification: boolean,
     refetchListNotification: () => void,
     nextPageListNotification: () => void,
     prevPageListNotification: () => void,
-    totalRecord: number | undefined,
-    totalPages: number | undefined,
+    totalRecord: number,
+    totalPages: number,
     hasNextPage: boolean | undefined
 };
 
-export const useNotification = (params?: any) : UseNotification => {
+export const useNotification = (params?: any, isFetch?: boolean) : UseNotification => {
+    const { mutateAsync: updateNotificationAsync } =
+        useMutation((payload: UpdateNotificationPayload) =>
+            NotificationRepository.updateNotification(payload)
+        );
+
     const {
         isLoading: isLoadingListNotification,
         refetch: refetchListNotification,
@@ -35,7 +41,7 @@ export const useNotification = (params?: any) : UseNotification => {
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true
+                enabled: isFetch ?? false
             }
         );
 
@@ -44,10 +50,11 @@ export const useNotification = (params?: any) : UseNotification => {
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
-    const totalRecord = dataListNotifications?.pages[0]?.data?.totalRecord;
-    const totalPages = dataListNotifications?.pages[0]?.data?.totalPage;
+    const totalRecord = dataListNotifications?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = dataListNotifications?.pages[0]?.data?.totalPage || 0;
 
     return {
+        updateNotificationAsync,
         listNotifications,
         isLoadingListNotification,
         refetchListNotification,

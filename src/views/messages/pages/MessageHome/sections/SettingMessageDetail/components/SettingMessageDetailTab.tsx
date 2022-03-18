@@ -44,7 +44,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
         {
             text: "Groups",
             tabId: "groups",
-            isShow: chat.isPrivate
+            isShow: chat.isPrivate&&chat?.members.find((item: any) => item._id !== profileId)?._id
         },
     ]
 
@@ -67,23 +67,23 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
             </div>
             {
                 activeTab==="members" &&
-                <ListOnlineUserInMessage chat={chat}/>
+                <ListOnlineUserInMessage isActive={activeTab==="members"} chat={chat}/>
             }
             {
                 activeTab==="media" &&
-                <ListMediaInMessage/>
+                <ListMediaInMessage isActive={activeTab==="media"}/>
             }
             {
                 activeTab==="files" &&
-                <ListFileInMessage/>
+                <ListFileInMessage isActive={activeTab==="files"}/>
             }
             {
                 activeTab==="links"&&
-                <ListLinksInMessage/>
+                <ListLinksInMessage isActive={activeTab==="links"}/>
             }
             {
                 activeTab==="groups"&&
-                <ListGeneralGroupByMember memberId={chat?.members.find((item: any) => item._id !== profileId)?._id}/>
+                <ListGeneralGroupByMember isActive={activeTab==="groups"} memberId={chat?.members.find((item: any) => item._id !== profileId)?._id}/>
             }
         </>
     )

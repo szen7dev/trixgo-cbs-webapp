@@ -1,14 +1,36 @@
 import ListConversationRepository from "apis/messages";
 import {
+    AddConversationToFolderPayload,
+    AddFolderPayload,
     ConvversationInformationPayload,
     CreateConversationPayload,
     CreateConversationResponseBodyData,
     DataListConversation,
+    DeleteConversationData,
+    DeleteConversationPayload,
+    DeleteFolderPayload,
+    DeleteHistoryConversationPayload,
+    FolderConversationItem,
     GeneralGroupByMemberPayload,
+    HideConversationPayload,
     ItemListConversation,
-    ListConversationPayload, ListFoldersConversationPayload,
+    LeaveConversationData,
+    LeaveConversationPayload,
+    ListConversationPayload,
+    ListFoldersConversationPayload,
     ListMembersOfConversationPayload,
-    MediasOfConversationPayload
+    MarkReadConversationPayload,
+    MediasOfConversationPayload,
+    PinConversationPayload,
+    RemoveMemberFromConversationData,
+    RemoveMemberFromConversationPayload,
+    SetASAdminConversationData,
+    SetASAdminConversationPayload,
+    UpdateConfigConversationPayload,
+    UpdateConversationData,
+    UpdateConversationPayload,
+    UpdateFolderPayload,
+    UpdateMuteConversationPayload
 } from "typings/apis/messages/listConversation";
 import {useDispatch} from "react-redux";
 import {setListConversation, setLoading} from "redux/reducer/messages/ListConversation";
@@ -31,6 +53,21 @@ type UseListConversationType = {
     prevPageListConversations: () => void,
     hasListConversationNextPage: boolean | undefined,
     totalRecordRequest: number | undefined,
+    addFolder: (payload: AddFolderPayload) => Promise<FolderConversationItem>,
+    updateFolder: (payload: UpdateFolderPayload) => Promise<FolderConversationItem>,
+    deleteFolder: (payload: DeleteFolderPayload) => Promise<FolderConversationItem>,
+    addConversationToFolder: (payload: AddConversationToFolderPayload) => Promise<ItemListConversation>,
+    updateMuteConversation: (payload: UpdateMuteConversationPayload) => Promise<ItemListConversation>,
+    updateConversation: (payload: UpdateConversationPayload) => Promise<UpdateConversationData>,
+    pinConversation: (payload: PinConversationPayload) => Promise<any>,
+    hideConversation: (payload: HideConversationPayload) => Promise<ItemListConversation>,
+    markReadConversation: (payload: MarkReadConversationPayload) => Promise<ItemListConversation>,
+    deleteHistoryConversation: (payload: DeleteHistoryConversationPayload) => Promise<ItemListConversation>,
+    deleteConversation: (payload: DeleteConversationPayload) => Promise<DeleteConversationData>,
+    leaveConversation: (payload: LeaveConversationPayload) => Promise<{data: LeaveConversationData, error: boolean}>,
+    removeMemberFromConversation: (payload: RemoveMemberFromConversationPayload) => Promise<{data: RemoveMemberFromConversationData, error: boolean}>,
+    updateConfigConversation: (payload: UpdateConfigConversationPayload) => Promise<{data: ItemListConversation, error: boolean}>,
+    setAsAdmin: (payload: SetASAdminConversationPayload) => Promise<{data: SetASAdminConversationData, error: boolean}>,
 };
 
 export const UseListConversation = (params?: any, enableQuery?: boolean) : UseListConversationType => {
@@ -76,7 +113,112 @@ export const UseListConversation = (params?: any, enableQuery?: boolean) : UseLi
         dispatch(setListFolders(data));
         return data;
     }
-console.log(enableQuery)
+
+    const addFolder = async (params: AddFolderPayload) => {
+        const {data} = await ListConversationRepository.addFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const updateFolder = async (params: UpdateFolderPayload) => {
+        const {data} = await ListConversationRepository.updateFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteFolder = async (params: DeleteFolderPayload) => {
+        const {data} = await ListConversationRepository.deleteFolder(params);
+        return new Promise<FolderConversationItem>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const addConversationToFolder = async (params: AddConversationToFolderPayload) => {
+        const {data} = await ListConversationRepository.addConversationToFolder(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const updateMuteConversation = async (params: UpdateMuteConversationPayload) => {
+        const {data} = await ListConversationRepository.updateMuteConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const updateConversation = async (params: UpdateConversationPayload) => {
+        const {data} = await ListConversationRepository.updateConversation(params);
+        return new Promise<UpdateConversationData>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const pinConversation = async (params: PinConversationPayload) => {
+        const {data} = await ListConversationRepository.pinConversation(params);
+        return new Promise<any>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const hideConversation = async (params: HideConversationPayload) => {
+        const {data} = await ListConversationRepository.hideConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const markReadConversation = async (params: MarkReadConversationPayload) => {
+        const {data} = await ListConversationRepository.markReadConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteHistoryConversation = async (params: DeleteHistoryConversationPayload) => {
+        const {data} = await ListConversationRepository.deleteHistoryConversation(params);
+        return new Promise<ItemListConversation>((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    const deleteConversation = async (params: DeleteConversationPayload) => {
+        const {data} = await ListConversationRepository.deleteConversation(params);
+        return new Promise<DeleteConversationData>((resolve, reject) => {
+            resolve(data);
+        })
+    }
+
+    const leaveConversation = async (params: LeaveConversationPayload) => {
+        const {data, error} = await ListConversationRepository.leaveConversation(params);
+        return new Promise<{data: LeaveConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const removeMemberFromConversation = async (params: RemoveMemberFromConversationPayload) => {
+        const {data, error} = await ListConversationRepository.removeMemberFromConversation(params);
+        return new Promise<{data: RemoveMemberFromConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const updateConfigConversation = async (params: UpdateConfigConversationPayload) => {
+        const {data, error} = await ListConversationRepository.updateConfigConversation(params);
+        return new Promise<{data: ItemListConversation, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
+    const setAsAdmin = async (params: SetASAdminConversationPayload) => {
+        const {data, error} = await ListConversationRepository.setAsAdmin(params);
+        return new Promise<{data: SetASAdminConversationData, error: boolean}>((resolve, reject) => {
+            resolve({data, error});
+        })
+    }
+
     const {
         isLoading: isLoadingListConversations,
         refetch: refetchListConversations,
@@ -117,6 +259,21 @@ console.log(enableQuery)
         totalRecordRequest,
         getListGeneralGroupByMember,
         getConverationInformation,
-        getListFoldersConversation
+        getListFoldersConversation,
+        addFolder,
+        updateFolder,
+        deleteFolder,
+        addConversationToFolder,
+        updateMuteConversation,
+        updateConversation,
+        pinConversation,
+        hideConversation,
+        markReadConversation,
+        deleteHistoryConversation,
+        deleteConversation,
+        leaveConversation,
+        removeMemberFromConversation,
+        updateConfigConversation,
+        setAsAdmin
     }
 };

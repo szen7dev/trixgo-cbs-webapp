@@ -10,6 +10,11 @@ interface TableFileAttachProps extends HTMLAttributes<HTMLTableElement> {
   fileAttachs: DocumentFileProps[];
 }
 
+const showOpenFile = (file: any) => {
+  const path = `${process.env.REACT_APP_URL_S3}${file.file.path}` 
+  window.open(path);
+}
+
 export const TableFileAttach: FC<TableFileAttachProps> = ({
   fileAttachs,
   children,
@@ -28,7 +33,7 @@ export const TableFileAttach: FC<TableFileAttachProps> = ({
                     alt=""
                     className="h-6 w-6 px-1 box-content"
                   />
-                  <span>{fileAttach?.file?.name || "-"}</span>
+                  <a href={`${process.env.REACT_APP_URL_S3}${fileAttach?.file?.path}`} target="_blank" rel="noreferrer"> {fileAttach?.file?.nameOrg || "-"} </a>
                 </div>
               </td>
               <td className="py-2 align-middle">

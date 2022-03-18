@@ -1,5 +1,6 @@
 import React, { FC, useContext } from 'react'
 import AuthContext from 'services/contexts/Auth'
+import Skeleton from 'react-loading-skeleton';
 
 //
 import Wallethub from '../../common/Wallethub';
@@ -12,9 +13,11 @@ import SearchIcon from 'assets/icons/SearchIcon';
 import DotsHorizontalIcon from 'assets/icons/DotsHorizontalIcon';
 import iconChat from 'assets/images/icons8-chat-room-100 1.png'
 import iconRss from 'assets/images/icons8-rss-100 (1) 1.png'
+import { ContractorProvider, useContractorCompany } from 'views/datahub/contexts/Company';
 
-const DatahubContractorLayout: FC = ({ children }) => {
-	const { state } = useContext(AuthContext);
+const DatahubContractorLayoutDetail: FC = ({ children }) => {
+	const { data, isLoading } = useContractorCompany();
+
 	const params = useParams<{ id: string }>();
 	return (
 		<div id="datahub-contractor-detail" className='h-full w-full overflow-scroll bg-cbs-gray'>
@@ -38,8 +41,12 @@ const DatahubContractorLayout: FC = ({ children }) => {
 							<div className='mt-0 h-0 flex items-center'>
 								<div className='flex w-full'>
 									<div className='w-4/12'></div>
-									<div className='w-4/12 bg-white rounded-full p-1'>
-										<img className='h-[8.25rem] w-[8.25rem] object-cover border-cbs-border border-[0.5px] rounded-full' src={process.env.REACT_APP_URL_S3_USER + '/' + state.user?.image} alt="" />
+									<div className='w-4/12 bg-white rounded-full p-1 aspect-ratio-1'>
+										{
+											isLoading
+												? <Skeleton className='h-full w-full border-cbs-border border-[0.5px] rounded-full bg-gray-600' />
+												: <img className='w-full h-full object-cover border-cbs-border border-[0.5px] rounded-full' src={process.env.REACT_APP_URL_S3_COMPANY + '/' + data?.data.image} alt="" />
+										}
 									</div>
 									<div className='whitespace-nowrap w-4/12 self-end pb-2.5 px-2.5'>
 										<p>Quản lý dự án, Tư vấn giám sát</p>
@@ -49,7 +56,11 @@ const DatahubContractorLayout: FC = ({ children }) => {
 							</div>
 							<div className='pt-16 max-w-xs mx-auto text-2x-large'>
 								<p className='pt-4 line-clamp-2 text-center'>
-									CPMI.Công ty Cổ phần CONINCO Quản lý dự án và đầu tư...
+									{
+										data
+											? data.data.sign + "." + data.data.name
+											: ''
+									}
 								</p>
 							</div>
 						</div>
@@ -103,6 +114,13 @@ const DatahubContractorLayout: FC = ({ children }) => {
 			</div>
 		</div >
 	)
+}
+const DatahubContractorLayout: FC = ({ children }) => {
+	return <ContractorProvider>
+		<DatahubContractorLayoutDetail>
+			{children}
+		</DatahubContractorLayoutDetail>
+	</ContractorProvider>
 }
 
 export default DatahubContractorLayout

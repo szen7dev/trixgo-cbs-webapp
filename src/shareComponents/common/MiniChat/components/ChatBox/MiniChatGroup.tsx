@@ -64,6 +64,7 @@ export const MiniChatGroup:FC = () => {
         return _map(Object.values(listConversation)
                 // .sort((a,b) => b.isSaved ? 1 : -1)
                 .filter(item => !item.isSaved)
+                .filter(item => !item.isFake)
                 .sort((a,b) => {
                     if (b.position > a.position) {
                         return 1

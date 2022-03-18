@@ -2,6 +2,100 @@ import { ReactNode } from "react";
 import { APIResponse } from "./apis/response";
 import { User } from "./user";
 
+/**
+ * ============================ ********* ===============================
+ * ============================ 	 FILE   ===============================
+ * ============================ ********* ===============================
+ */
+
+interface FileProp {
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+  author: User;
+  createAt: string;
+  description: string;
+}
+
+export type FileProps = {
+	file?: FileProp
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+  author: User;
+  createAt: string;
+  description: string;
+};
+
+export type ImageProps = {
+  file?: FileProp
+  _id: number | string;
+  path: string;
+  name: string;
+  nameOrg: string;
+  size: number;
+  type: string;
+  author?: User;
+  createAt?: string;
+  description?: string;
+};
+
+export type FilePropsUpload = {
+  _id: string;
+  id: number;
+  file: File | FileProps;
+  progress: number;
+  cancelTokenSource: CancelTokenSource;
+  proimise?: Interval;
+};
+
+export type PostFileProps = {
+  files?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+};
+
+export type PostImageProps = {
+  images?: Array<FileProps | FilePropsUpload>;
+  onRemove?(file: FileProps | FilePropsUpload, type: 'IMAGE' | 'FILE'): void;
+};
+
+/**
+ * ============================ ************ ===============================
+ * ============================ 	 COMMENT   ===============================
+ * ============================ ************ ===============================
+ */
+
+export type Comment = CommentProps;
+
+export type CommentResponse = APIResponse & {
+  data: CommentProps;
+  message: string;
+  error: boolean;
+};
+
+export type ListCommentResponse = APIResponse & {
+  data: {
+    listRecords: CommentProps[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string
+  };
+  message: string;
+};
+
+
+/**
+ * ============================ ********** ===============================
+ * ============================ 	 OTHER   ===============================
+ * ============================ ********** ===============================
+ */
+
 export type Locale = {
   id: string;
   code: string;
@@ -44,39 +138,3 @@ export type NavLinkTaskDashboard = {
   pathname: string;
   icon?: ReactNode;
 }
-
-export type CommentProps = {
-  _id: string;
-  media: {
-    _id: string;
-    author: User;
-    createAt: string
-  };
-  content: string,
-  files: FileProps[] | undefined;
-  images: FileProps[] | undefined;
-  author: User,
-  amountCommentReply: number,
-  amountReaction: number,
-  parent: string;
-  createAt: string,
-  lastestReplyID: CommentProps;
-}
-
-export type CommentResponse = APIResponse & {
-  data: {
-    data: CommentProps;
-    message: string;
-    error: boolean;
-  };
-};
-
-export type ListCommentResponse = APIResponse & {
-  data: {
-    listRecords: CommentProps[],
-    limit: number,
-    totalRecord: number,
-    nextCursor: string
-  };
-  message: string;
-};

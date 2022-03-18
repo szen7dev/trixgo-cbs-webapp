@@ -13,7 +13,7 @@ interface UseQueryListFriend {
     fetchNextPage: () => void;
 }
 
-type ParamsQuery = Pick<ListFriendPayload, 'limit' | 'keyword'>;
+type ParamsQuery = Pick<ListFriendPayload, 'limit' | 'keyword' | 'isFetch'>;
 
 export const useQueryListFriend = (params?: ParamsQuery): UseQueryListFriend => {
     const result = useInfiniteQuery(
@@ -26,7 +26,7 @@ export const useQueryListFriend = (params?: ParamsQuery): UseQueryListFriend => 
             return data?.nextCursor || undefined;
         },
         refetchOnWindowFocus: false,
-        enabled: true
+        enabled: params?.isFetch || true
     });
     const {
         isLoading,

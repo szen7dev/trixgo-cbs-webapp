@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import React, { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
+import { toast } from "react-toastify";
 import moment from "moment";
 
 import IconPlus from "assets/images/icons8-plus-math-100.png";
@@ -14,13 +15,18 @@ import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import { CheckListItem } from "../CheckListItem";
 import { DropdownSearchable } from "shareComponents/common";
 
-import { useQueryListFriend } from "services/hooks/users/useFriend";
-import { useCheckList } from "services/hooks/useTask";
-import { CheckList as CheckListType } from "typings/task";
+import { useUsersProject } from "services/hooks/users/useUserSystem";
+import { useCheckList, useChildTask } from "services/hooks/useTask";
+import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from "services/hooks/useAuth";
+import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateStatusCheckListPayload } from "typings/task";
+import "react-datepicker/dist/react-datepicker.css";
+import { debounce } from "lodash";
 
 type Props = {
-  task: any,
-  data: Array<CheckListType>;
+  componentType: 'CHECKLIST' | 'CHILD_TASK',
+  task: Task,
+  data: Array<CheckListType | ChildTaskType>;
   totalRecord?: number;
   onSeeMore: () => void;
 };
@@ -34,13 +40,32 @@ enum CheckListTab {
   MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
 }
 
-export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => {
+export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore }) => {
+  const [keywordAssignee, setKeywordAssignee] = useState('');
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [listData, setListData] = useState<CheckListType[] | ChildTaskType[]>([]);
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
-  const { addChecklist, refetchListCheckList } = useCheckList(task._id);
-  const { data: listFriend } = useQueryListFriend();
+  const { addChecklistAsync, updateStatusChecklistAsync } = useCheckList({ parentID: task?._id });
+  const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
+  const { data: listUsersProject, fetchNextPage } = useUsersProject({ 
+    projectID: task?.project?._id,
+    keyword: keywordAssignee
+  }, true);
+
+  const { user } = useAuth();
+  const { current: socket }: any = useSocket();
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const isBottom = scrollHeight - scrollTop === clientHeight;
+    isBottom && fetchNextPage();
+  }
+
+  const handleSearchAssignee = debounce((keyword: string) => {
+    setKeywordAssignee(keyword);
+  }, 600);
 
   const handleSelectAll = () => setSelectAll(!selectAll);
 
@@ -53,14 +78,14 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
   const initialValues = {
     name: "",
     assigneeID: "",
-    parentID: task._id,
-    groupID: task.group._id,
-    projectID: task.project._id,
+    parentID: task?._id,
+    groupID: task?.group?._id,
+    projectID: task?.project?._id,
     expiredTime: null,
     type: 2
   };
 
-  const checkListSchema = object().shape({
+  const validateSchema = object().shape({
     name: string().required("Bạn cần nhập nội dung checklist"),
     expiredTime: date()
       .required("Bạn cần nhập thời hạn")
@@ -69,13 +94,112 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
   });
 
   const handleAddChecklist = async (values: any) => {
-    await addChecklist(values);
-    refetchListCheckList();
-    setVisibleForm(false);
+    try {
+      const { error, data, message } = await addChecklistAsync(values);
+
+      if (error) {
+        return toast.warning(message);
+      }
+      
+      socket?.emit('SUBJECT_PCM_CSS_ADD_CHECKLIST', {
+        taskID: data.parent,
+        checklistID: data._id
+      })
+
+      setListData(previousValues => ([data, ...previousValues]));
+      setVisibleForm(false);
+
+      toast.success('Tạo checklist thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
   }
 
+  const handleAddChildTask = async (values: any) => {
+    try {
+      values.type = 1; // VIỆC CON (type = 1)
+      const { error, data, message } = await addChildTaskAsync(values);
+
+      if (error) {
+        return toast.warning(message);
+      }
+
+      socket?.emit('SUBJECT_PCM_CSS_ADD_CHILD_TASK', {
+        taskID: data.parent,
+        childTaskID: data._id
+      })
+
+      setListData(previousValues => ([data, ...previousValues]));
+      setVisibleForm(false);
+
+      toast.success('Tạo việc con thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  }
+
+  const handleUpdateStatusCheckList = async (payload: UpdateStatusCheckListPayload) => {
+    try {
+      const { error, message } = await updateStatusChecklistAsync(payload);
+
+      if (error) {
+        return toast.warning(message);
+      }
+
+      toast.success('Cập nhật checklist thành công');
+    } catch (error: unknown) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
+  }
+
+  useEffect(() => {
+    setListData(data);
+  }, [data.length])
+
+  useEffect(() => {
+    if(!socket) return;
+
+    socket.on('SUBJECT_PCM_SSC_ADD_CHECKLIST', (result: any) => {
+      const { error, data } = result;
+      if(error) return;
+
+      const { infoTask, infoCheckList, senderID } = data;
+
+      if(componentType !== 'CHECKLIST') return;
+      if(task?._id !== infoTask?._id?.toString()) return;
+      if(user?._id === senderID) return;
+
+      setListData(previousValues => ([infoCheckList, ...previousValues]));
+    })
+
+    socket.on('SUBJECT_PCM_SSC_ADD_CHILD_TASK', (result: any) => {
+      const { error, data } = result;
+      if(error) return;
+
+      const { infoTask, infoChildTask, senderID } = data;
+
+      if(componentType !== 'CHILD_TASK') return;
+      if(task?._id !== infoTask?._id?.toString()) return;
+      if(user?._id === senderID) return;
+
+      setListData(previousValues => ([infoChildTask, ...previousValues]));
+    })
+  }, [socket]);
+
   return (
-    <div>
+    <div className="border-b-0.5 border-cbs-border">
       {/* Check messageList header */}
       <div
         className={`${
@@ -85,10 +209,11 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
         <div className={`${selectAll ? "" : "w-1/6"} `}>
           <input
             type="checkbox"
+						className="cbs-checkbox"
             checked={selectAll}
             onChange={handleSelectAll}
           />
-          {!selectAll && <span className="ml-2 text-x-large">Việc con</span>}
+          {!selectAll && <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>}
         </div>
 
         {selectAll ? (
@@ -113,7 +238,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
             </button>
           </div>
         ) : (
-          <div className="flex justify-between w-5/6">
+          <div className="flex justify-between w-5/6 hidden">
             <button
               className={`px-2 ${getClassTab(CheckListTab.ALL)}`}
               onClick={() => setCurrentTab(CheckListTab.ALL)}
@@ -166,12 +291,12 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
         )}
       </div>
 
-      <div className="rounded-sm border border-slate-400">
+      <div className="overflow-hidden">
         {/* Check messageList items */}
-        <div className="shadow-lg">
-          <div className="w-full">
-            {(data || []).map((checkList) => (
-              <CheckListItem key={checkList._id} data={checkList} />
+        <div className="">
+          <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
+            {(listData || []).map((item) => (
+              <CheckListItem key={item._id} data={item} onUpdateStatusCheckList={handleUpdateStatusCheckList} />
             ))}
           </div>
         </div>
@@ -185,17 +310,15 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                 })`}</span>
               </button>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : <></>}
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (
-            <div className="shadow-lg p-5">
+            <div className="shadow-cbs-md rounded-cbs-sm p-5">
               <Formik
                 initialValues={initialValues}
-                validationSchema={checkListSchema}
-                onSubmit={handleAddChecklist}
+                validationSchema={validateSchema}
+                onSubmit={componentType === 'CHECKLIST' ? handleAddChecklist : handleAddChildTask}
               >
                 {({
                   values,
@@ -232,7 +355,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                                 <span>{item.text}</span>
                               </div>
                             )}
-                            data={listFriend.map((item) => ({
+                            data={listUsersProject.map((item) => ({
                               label: item.bizfullname,
                               value: item._id,
                             }))}
@@ -241,6 +364,8 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                               text: "label",
                             }}
                             inlineSearch={true}
+                            onScroll={handleScroll}
+                            onSearchInputChange={handleSearchAssignee}
                             onchangeValue={item => setFieldValue("assigneeID", item.id)}
                             onClearData={() => setFieldValue("assigneeID", "")}
                           />
@@ -254,6 +379,7 @@ export const CheckList: FC<Props> = ({ task, data, totalRecord, onSeeMore }) => 
                                 <input
                                   name="expiredTime"
                                   placeholder="Thời hạn"
+                                  autoComplete="off"
                                   className="w-full h-8 placeholder-gray-300 focus:outline-none"
                                   value={
                                     values.expiredTime

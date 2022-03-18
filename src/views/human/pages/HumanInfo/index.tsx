@@ -1,7 +1,8 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useRef, useCallback } from "react";
+import { FC, useState, useRef, useCallback, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 /*=====2.CSS=====*/
 
@@ -23,13 +24,12 @@ import {NewHumanModal} from "views/human/shareComponents/common";
 
 /*=====5.TYPINGS=====*/
 import type { Human } from "typings/human";
+import { APP_ID } from "apis/localdb";
 
 /*=====6.HOOKS/APIS=====*/
-import {
-  useFetchDetailHuman,
-  useUpdateContactMutation,
-} from "services/hooks/useHuman";
+import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
+import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
 
 /*=====7.OTHER=====*/
 
@@ -40,12 +40,12 @@ export const HumanInfo: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { t: i18n } = useTranslation(["human"]);
+  const { user } = useAuth();
   const { openModal } = useModal();
   const { updateContactMutateAsync } = useUpdateContactMutation();
+  const { dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.HUMAN.id });
 
-  useOnClickOutside(refMenuDropdown, () =>
-    setOpenHumanOption(!openHumanOption)
-  );
+  useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
   const handleFinishForm = useCallback(
@@ -144,10 +144,36 @@ export const HumanInfo: FC = () => {
     [handleFinishForm, openModal]
   );
 
+  // useEffect(() => {
+  //   if (!isSuccessApp) return;
+    
+  //   if(dataUserAccess)
+
+  //   if (isSuccessApp && !hasPermission) {
+	// 		toast.error("Bạn không có quyền truy cập tính năng này!");
+	// 		// history.push("/");
+	// 	};
+  // }, [dataUserAccess])
+
+  useEffect(() => {
+    if(!user || !Object.keys(detailHuman).length || !dataUserAccess) return;
+    console.log({ 
+      user, 
+      detailHuman, 
+      level: dataUserAccess?.level, 
+      check: !detailHuman.department?.members?.includes(user._id)
+    })
+
+    if(!detailHuman.department?.members?.includes(user._id) && dataUserAccess?.level !== 0) {
+      history.push('/human/home');
+      toast.error('Bạn không có quyền xem thông tin người dùng này');
+    }
+  }, [detailHuman, dataUserAccess])
+
   if (loading) {
     return <Loader className="border-primary" />;
   }
-
+  
   return (
     <main className="mb-4">
       <div className="flex items-center justify-between px-4 h-12 border border-gray-200">

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useContext} from "react";
+import React, {FC, useCallback, useContext, useState} from "react";
 import ForwardIcon from "assets/images/icons8-reply-arrow-100.svg";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import PinIcon from "assets/images/icons8-pin-96.svg";
@@ -19,6 +19,9 @@ import {RootState} from "redux/reducer";
 import {map as _map} from "lodash";
 import {listEmoji} from "./MainChatContent";
 import {useRightClickMenu} from "services/hooks/useRightClickMenu";
+import {openUsersSeenDetail} from "redux/reducer/messages/UsersSeenDetail"
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+
 type Props = {
     message: ItemMessage;
     socket: any;
@@ -27,9 +30,14 @@ type Props = {
 }
 
 export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) => {
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
+
     const dispatch = useDispatch();
     const {updatePinMessage} = UseConversation();
-    const {closeRightClick} = useRightClickMenu()
+    const {closeRightClick} = useRightClickMenu();
+    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[message.conversation]);
+    const currentMessageData = messagesData?messagesData[message._id]:null;
 
     const listPinnedMessage = useSelector((state: RootState) => state.listMessage.data.listMessagePinned[message.conversation]);
     const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[message.conversation]);
@@ -41,9 +49,9 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
     }, [message, listPinnedMessage]);
 
     const usersSeen = useCallback(() => {
-        if (!message.usersSeen) return [];
+        if (!currentMessageData?.usersSeen) return [];
         const users : {_id: string; bizfullname: string; fullname: string; image: string}[] = [];
-        message.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+        currentMessageData?.usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
             if (typeof user === "string") {
                 const find = chat.members.find(member => member._id === user);
                 users.push(find);
@@ -53,38 +61,43 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
         })
 
         return  users;
-    }, [message])
+    }, [currentMessageData])
 
     const doUpdatePinMessage = () => {
         updatePinMessage({conversationID: message.conversation, messageID: message._id, isPin: !isPin()}).then((data) => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage);
         });
     }
+    const {hasPermission} = UseMessageHelper();
 
     return (
         <>
             <div
-                className={"flex items-center mb-[5px] min-w-max bg-white rounded-full shadow-lg p-2 absolute reaction-right-click"} style={{top: -50}}>
-                {
-                    _map(listEmoji, emoji => (
-                        <button
-                            onClick={() => {
-                                socket.emit('CHATTING_CSS_REACTION_MESSAGE',{messageID: message._id, typeReaction: emoji.value, select: JSON.stringify({reactions: {userCreate:"bizfullname"}})});
-                                setTimeout(() => {
-                                    closeRightClick();
-                                }, 100)
-                            }}
-                            key={emoji.id} className={"mr-[5px]"}>
-                            <img src={emoji.icon} className={"w-[24px] h-[24px]"} alt={"-----"}/>
-                        </button>
-                    ))
-                }
+                className={"flex items-center justify-center mb-[5px] min-w-max absolute reaction-right-click w-[216px]"} style={{top: -50}}>
+                <div className={"bg-white rounded-full shadow-lg p-2 flex items-center"}>
+                    {
+                        _map(listEmoji, emoji => (
+                            <button
+                                onClick={() => {
+                                    socket.emit('CHATTING_CSS_REACTION_MESSAGE', { messageID: message._id, typeReaction: emoji.value });
+                                    setTimeout(() => {
+                                        closeRightClick();
+                                    }, 100)
+                                }}
+                                key={emoji.id} className={"mr-[5px]"}>
+                                <img src={emoji.icon} className={"w-[24px] h-[24px]"} alt={"-----"}/>
+                            </button>
+                        ))
+                    }
+                </div>
             </div>
             <div className={"rounded-md shadow-lg bg-white w-[216px] text-gray-500"}>
                 <button
                     onClick={() => {
+                        setTimeout(() => {
+                            editor.focus();
+                        }, 100)
                         dispatch(setReplyMessage({conversationId: message.conversation, messageData: message}));
-                        editor.focus();
                         closeRightClick();
                     }}
                     className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full reply-right-click"}>
@@ -100,15 +113,18 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={CopyIcon}/>
                     <div className={"mr-2 ml-4"}>Copy Text</div>
                 </button>
-                <button
-                    onClick={() => {
-                        doUpdatePinMessage();
-                        closeRightClick()
-                    }}
-                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full pin-right-click"}>
-                    <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
-                    <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
-                </button>
+                {
+                    hasPermission(chat, profileId, "configPinMessage")&&
+                    <button
+                        onClick={() => {
+                            doUpdatePinMessage();
+                            closeRightClick()
+                        }}
+                        className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full pin-right-click"}>
+                        <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={isPin()?UnPinnedIcon:PinIcon}/>
+                        <div className={"mr-2 ml-4"}>{isPin()?"Unpin":"Pin"}</div>
+                    </button>
+                }
                 <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full download-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={DownloadIcon}/>
                     <div className={"mr-2 ml-4"}>Download</div>
@@ -143,7 +159,16 @@ export const RightClickMessage:FC<Props> = ({message, socket, editor, isMini}) =
                         <div className={"mr-2 ml-4"}>Select</div>
                     </button>
                 }
-                <button className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
+                <button
+                    onClick={() => {
+                        dispatch(openUsersSeenDetail({
+                            usersSeen: usersSeen()
+                        }))
+                        setTimeout(() => {
+                            closeRightClick()
+                        }, 100)
+                    }}
+                    className={"flex py-2 px-4 items-center hover:bg-gray-100 w-full user-seen-right-click"}>
                     <img alt={"------"} className={"mr-2 w-[24px] h-[24px]"} src={GroupIcon}/>
                     <div className={"mr-4 ml-4"}>{usersSeen().length} đã xem</div>
                     {

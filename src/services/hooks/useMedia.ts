@@ -7,11 +7,16 @@ import {
     ListCommentsPayload, 
     ListMediasPayload,
     MediaReactionPayload,
-    infoMediaResponse,
-    PostResponse,
+    MediaInfoResponse,
     FetchMediaPayload
 } from "typings/media";
-import { CommentProps, CommentResponse } from 'typings/common';
+import { CommentProps, CommentResponse } from 'typings/media';
+
+/**
+ * ============================ ************** ===============================
+ * ============================ 	 MEDIA     ===============================
+ * ============================ ************** ===============================
+ */
 
 type UseMedia = {
     // SEEN
@@ -25,9 +30,9 @@ type UseMedia = {
     refetchListReactions: () => void,
     nextPageListReactions: (options?: FetchNextPageOptions | undefined) => void,
     // MEDIA
-    createMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
-    updateMediaAsync: (payload: MediaPayload) => Promise<PostResponse>,
-    deleteMediaAsync: (id: string) => Promise<infoMediaResponse>,
+    createMediaAsync: (payload: MediaPayload) => Promise<MediaInfoResponse>,
+    updateMediaAsync: (payload: MediaPayload) => Promise<MediaInfoResponse>,
+    deleteMediaAsync: (id: string) => Promise<any>,
     listMedias: Array<MediaProps>,
     isLoadingMedias: boolean,
     refetchListMedias: () => void,
@@ -193,6 +198,12 @@ export const useMedia = ({
     };
 };
 
+/**
+ * ============================ ********************** ===============================
+ * ============================ 	BÌNH LUẬN MEDIA    ===============================
+ * ============================ ********************** ===============================
+ */
+
 type UseCommentMedia = {
     createCommentAsync: (payload: CommentPayload) => Promise<CommentResponse>,
     updateCommentAsync: (payload: CommentPayload) => Promise<CommentResponse>,
@@ -253,7 +264,8 @@ export const useCommentMedia = ({
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: isFetchComment
+                enabled: isFetchComment,
+                cacheTime: 60 * 1000
             }
         );
 

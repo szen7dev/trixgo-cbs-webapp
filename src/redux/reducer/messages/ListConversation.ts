@@ -19,12 +19,12 @@ const listConversationSlice = createSlice({
     reducers: {
         setListConversation(state, action) {
             const newConversationData = {...state.data.listConversation};
-            (action.payload.listRecords??[]).forEach((conversation: ItemListConversation) => {
+            (action.payload?.listRecords??[]).forEach((conversation: ItemListConversation) => {
                 const isSavedMessages = conversation.members.length === 1;
 
                 newConversationData[conversation._id] = {
                     ...conversation,
-                    position: isSavedMessages ? 8640000000000000 : moment(conversation?.lastMessage?.updatedAt??conversation.updatedAt).toDate().getTime(),
+                    position: isSavedMessages ? 8640000000000000 : moment(conversation.modifyAt).toDate().getTime(),
                     isSaved: isSavedMessages,
                     isPin: isSavedMessages?true: conversation.isPin
                 }
@@ -33,9 +33,9 @@ const listConversationSlice = createSlice({
             state.data = {
                 ...state.data,
                 listConversation: newConversationData,
-                nextCursor: action.payload.nextCursor,
-                hasMoreData : action.payload.nextCursor !== null && action.payload.nextCursor !== undefined && action.payload.nextCursor !== "",
-                amountMissMessage: action.payload.amountMissMessage
+                nextCursor: action.payload?.nextCursor,
+                hasMoreData : action.payload?.nextCursor !== null && action.payload?.nextCursor !== undefined && action.payload?.nextCursor !== "",
+                amountMissMessage: action.payload?.amountMissMessage
             };
         },
         setAmountMissMessage(state, action) {
@@ -73,7 +73,7 @@ const listConversationSlice = createSlice({
             const isSavedMessages = action.payload.conversationData.members.length === 1;
             action.payload.conversationData = {
                 ...action.payload.conversationData,
-                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData?.lastMessage?.updatedAt??action.payload.conversationData.updatedAt).toDate().getTime(),
+                position: isSavedMessages ? 8640000000000000 : moment(action.payload.conversationData.modifyAt).toDate().getTime(),
                 isSaved: isSavedMessages,
                 isPin: isSavedMessages?true: action.payload.conversationData.isPin
             };
@@ -84,10 +84,147 @@ const listConversationSlice = createSlice({
                 ...state.data,
                 listConversation: newConversationData
             };
+        },
+        updateFoldersToConversation (state, action) {
+            const {conversationId, folders} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        folders
+                    }
+                }
+            }
+        },
+        updateUsersMuteToConversation (state, action) {
+            const {conversationId, usersMute} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersMute
+                    }
+                }
+            }
+        },
+        appendFakeItemListConversation (state, action) {
+            const {conversationId, conversation} = action.payload;
+            const newConversationData = {...state.data.listConversation};
+            if (!newConversationData[conversationId]) {
+                newConversationData[conversationId] = {
+                    ...conversation,
+                    isFake: true
+                }
+            }
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    ...newConversationData
+                }
+            }
+        },
+        updateUsersHideToConversation (state, action) {
+            const {conversationId, usersHide} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersHide
+                    }
+                }
+            }
+        },
+        updateUsersPinToConversation (state, action) {
+            const {conversationId, isPin} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        isPin
+                    }
+                }
+            }
+        },
+        updateUsersMissMessageToConversation (state, action) {
+            const {conversationId, usersMissMessage} = action.payload
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId]: {
+                        ...state.data.listConversation[conversationId],
+                        usersMissMessage
+                    }
+                }
+            }
+        },
+        deleteConversationAction (state, action) {
+            const {conversationId} = action.payload;
+            const newConversationData = {...state.data.listConversation};
+            delete newConversationData[conversationId];
+
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...newConversationData
+                }
+            }
+        },
+        decreaseAmountMissMessage (state, action) {
+            const {decrease, conversationId, profileId} = action.payload;
+            const newConversationData = {...state.data.listConversation[conversationId]};
+            const oldUsersMissMessage = (newConversationData.usersMissMessage??[]);
+            const usersMissMessage:{amount: number; userID: string;}[] = [];
+            oldUsersMissMessage.forEach(item => {
+                if (item.userID === profileId) {
+                    usersMissMessage.push({
+                        ...item,
+                        amount: (item.amount - decrease <= 0) ? 0:(item.amount - decrease)
+                    })
+                } else {
+                    usersMissMessage.push(item)
+                }
+            })
+
+            state.data = {
+                ...state.data,
+                listConversation: {
+                    ...state.data.listConversation,
+                    [conversationId] : {
+                        ...state.data.listConversation[conversationId],
+                        usersMissMessage
+                    }
+                },
+                amountMissMessage: (state.data.amountMissMessage - decrease <= 0)?0:(state.data.amountMissMessage - decrease)
+            }
         }
     },
     extraReducers: {}
 });
 
-export const { setListConversation, setTotalRecord, setNextCursor, setLoading, updateSingleConversation, setAmountMissMessage } = listConversationSlice.actions;
+export const {
+    setListConversation,
+    setTotalRecord,
+    setNextCursor,
+    setLoading,
+    updateSingleConversation,
+    setAmountMissMessage,
+    updateFoldersToConversation,
+    updateUsersMuteToConversation,
+    appendFakeItemListConversation ,
+    updateUsersHideToConversation,
+    updateUsersPinToConversation,
+    updateUsersMissMessageToConversation,
+    deleteConversationAction,
+    decreaseAmountMissMessage
+} = listConversationSlice.actions;
 export default listConversationSlice.reducer;

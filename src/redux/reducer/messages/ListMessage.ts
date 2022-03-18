@@ -131,7 +131,10 @@ const listMessageSlice = createSlice({
                     ...state.data.listFakeMessage,
                     [action.payload.conversationId]: {
                         ...state.data.listFakeMessage[action.payload.conversationId],
-                        [action.payload.messageId] : action.payload.messageData
+                        [action.payload.messageId] : {
+                            ...action.payload.messageData,
+                            isFake: true
+                        }
                     }
                 },
             }
@@ -330,10 +333,27 @@ const listMessageSlice = createSlice({
         deleteMessageInConversations (state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
             action.payload.messageData.forEach((item: ItemMessage) => {
-                newMessage[item._id] = {
-                    ...newMessage[item._id],
-                    usersDelete: item.usersDelete
-                };
+                if (item) {
+                    const newMessageData = {
+                        ...newMessage[item._id],
+                        usersDelete: item.usersDelete
+                    };
+                    if (item.files&&item.files.length > 0) {
+                        const newFiles : any[] = [];
+                        item.files.forEach(file => {
+                            newMessageData.files.forEach(oldFile => {
+                                if (oldFile._id === file._id) {
+                                    newFiles.push({
+                                        ...oldFile,
+                                        usersDelete: file.usersDelete
+                                    })
+                                }
+                            })
+                        })
+                        newMessageData["files"] = newFiles;
+                    }
+                    newMessage[item._id] = newMessageData
+                }
             });
             state.data = {
                 ...state.data,
@@ -346,7 +366,7 @@ const listMessageSlice = createSlice({
 
         revokeMessageInConversation (state, action) {
             const newMessage = {...state.data.listMessage};
-            action.payload.messages.forEach((item: ItemMessage) => {
+            (action.payload.messages??[]).forEach((item: ItemMessage) => {
                 delete newMessage[item.conversation][item._id]
             });
 
@@ -362,12 +382,24 @@ const listMessageSlice = createSlice({
         updateSeenMessage (state, action) {
             const newMessage = {...state.data.listMessage[action.payload.conversationId]};
             action.payload.messsagesId.forEach((messageId: string) => {
+                if (!newMessage[messageId]) return;
+                const usersSeen = newMessage[messageId].usersSeen??[];
+                const newUsersSeen = usersSeen;
+                usersSeen.forEach((user: string|{_id: string; bizfullname: string; fullname: string; image: string}) => {
+                    if (typeof user === "string") {
+                        if (!newUsersSeen.includes(action.payload.infoUserSeen._id)) {
+                            newUsersSeen.push(action.payload.infoUserSeen._id);
+                        }
+                    } else {
+                        const currentIds = newUsersSeen.map((user: {_id: string; bizfullname: string; fullname: string; image: string}) => user._id);
+                        if (!currentIds.includes(action.payload.infoUserSeen._id)) {
+                            newUsersSeen.push(action.payload.infoUserSeen)
+                        }
+                    }
+                })
                 newMessage[messageId] = {
                     ...newMessage[messageId],
-                    usersSeen: [
-                        ...newMessage[messageId]?.usersSeen,
-                        action.payload.infoUserSeen
-                    ]
+                    usersSeen: newUsersSeen
                 }
             })
             state.data = {
@@ -377,6 +409,30 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId] : {
                         ...newMessage
                     }
+                }
+            }
+        },
+
+        deleteAllMessagesInConversation (state, action) {
+            const {conversationId} = action.payload;
+
+            state.data = {
+                ...state.data,
+                listMessage: {
+                    ...state.data.listMessage,
+                    [conversationId]: {}
+                },
+                nextCursor: {
+                    ...state.data.nextCursor,
+                    [conversationId]: null
+                },
+                hasMoreData: {
+                    ...state.data.hasMoreData,
+                    [conversationId]: false
+                },
+                listFakeMessage: {
+                    ...state.data.listFakeMessage,
+                    [conversationId] : {}
                 }
             }
         }
@@ -404,6 +460,7 @@ export const {
     setSelectedStateOn,
     deleteMessageInConversations,
     revokeMessageInConversation,
-    updateSeenMessage
+    updateSeenMessage,
+    deleteAllMessagesInConversation
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;

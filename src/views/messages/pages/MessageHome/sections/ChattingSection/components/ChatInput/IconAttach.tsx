@@ -11,15 +11,21 @@ import {openCreatePoll} from "redux/reducer/messages/CreatePoll";
 import {sendContactMessageToConversation} from "redux/reducer/messages/ContactMessage";
 import {openCreateReminder} from "redux/reducer/messages/CreateReminder";
 import {sendNPSMessageToConversation} from "redux/reducer/messages/CreateNPSMessage";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {MessageContext} from "../../../../index";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {RootState} from "redux/reducer";
 
 type Props = {
     handleUploadFiles: (files: FileList|Blob[]) => void;
 }
 
 export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
+    const currentUser = localStorage.getItem("currentUser")??"P{";
+    const profileId = JSON.parse(currentUser)?._id;
     const {currentChat} = useContext(MessageContext);
+    const chat = useSelector((state: RootState) => state.listConversation.data.listConversation[currentChat]);
+
     const dispatch = useDispatch();
     const [showOption, setShowOption] = useState(false);
     const el = useRef<HTMLDivElement>(null);
@@ -30,6 +36,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
         setShowOption(false)
         handleUploadFiles(event.target.files);
     }
+    const {hasPermission} = UseMessageHelper();
 
     return (
         <div ref={el} className={"relative"}>
@@ -49,24 +56,30 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                         <div className={"flex-1 text-left ml-6"}>File</div>
                         <input type="file" name="files" id="files" className="hidden" accept="file/*" multiple onChange={event => handleSetFiles(event)} />
                     </label>
-                    <button
-                        onClick={() => {
-                            setShowOption(false)
-                            dispatch(openCreatePoll({conversationId: currentChat}))
-                        }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-vote"}>
-                        <img  className={"mr-2"} src={FolderIcon} alt={"exit"}/>
-                        <div className={"flex-1 text-left ml-4"}>Bỏ phiếu</div>
-                    </button>
-                    <button
-                        onClick={() => {
-                            setShowOption(false)
-                            dispatch(openCreateReminder({conversationId: currentChat}))
-                        }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-reminder"}>
-                        <img  className={"mr-2"} src={AlarmIcon} alt={"exit"}/>
-                        <div className={"flex-1 text-left ml-4"}>Lời nhắc</div>
-                    </button>
+                    {
+                        hasPermission(chat, profileId, "configCreatePoll")&&
+                        <button
+                            onClick={() => {
+                                setShowOption(false)
+                                dispatch(openCreatePoll({conversationId: currentChat}))
+                            }}
+                            className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-vote"}>
+                            <img  className={"mr-2"} src={FolderIcon} alt={"exit"}/>
+                            <div className={"flex-1 text-left ml-4"}>Bỏ phiếu</div>
+                        </button>
+                    }
+                    {
+                        hasPermission(chat, profileId, "configCreateNote")&&
+                        <button
+                            onClick={() => {
+                                setShowOption(false)
+                                dispatch(openCreateReminder({conversationId: currentChat}))
+                            }}
+                            className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-reminder"}>
+                            <img  className={"mr-2"} src={AlarmIcon} alt={"exit"}/>
+                            <div className={"flex-1 text-left ml-4"}>Lời nhắc</div>
+                        </button>
+                    }
                     <button
                         onClick={() => {
                             setShowOption(false)
@@ -81,7 +94,7 @@ export const IconAttach:FC<Props> = ({handleUploadFiles}) => {
                             setShowOption(false)
                             dispatch(sendNPSMessageToConversation({conversationId: currentChat}))
                         }}
-                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-nps"}>
+                        className={"w-full hover:bg-gray-100 flex items-center px-4 py-2 attach-nps hidden"}>
                         <img  className={"mr-2"} src={NPSIcon} alt={"exit"}/>
                         <div className={"flex-1 text-left ml-4"}>NPS</div>
                     </button>

@@ -438,7 +438,7 @@ export const useQueryItemContract = (companyID: string, typeParam?: Pick<QueryCo
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
-
+            
     return {
         fetchNextPageContract,
         refetchListContracts,

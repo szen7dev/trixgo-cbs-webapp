@@ -123,11 +123,11 @@ export const DropdownSearchable: FC<Props> = ({
   };
 
   const handleSetValue = (item: Item) => {
-    setShowOption(false);
     setSearchTerm("");
     if (isMultiple) {
       setValues((oldValues) => [...(oldValues ?? []), item]);
     } else {
+      setShowOption(false);
       setValue(item);
     }
     if (onchangeValue) {
@@ -184,7 +184,6 @@ export const DropdownSearchable: FC<Props> = ({
     if (inputSearchRef.current) {
       inputSearchRef.current?.focus()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputSearchRef.current])
 
   React.useLayoutEffect(() => {
@@ -334,7 +333,7 @@ export const DropdownSearchable: FC<Props> = ({
     ) : (
       <div
         className={classNames(
-          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 bg-white ",
+          "flex text-left relative py-0.5 pl-2 pr-8 mb-1 mt-1 ",
           {
             "text-gray-300": !value,
             border: bordered,

@@ -1,13 +1,12 @@
 /*=====1.LIBRARY=====*/
-import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
-
-/*=====2.PROVIDERS=====*/
+import { FC, useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 
 /*=====3.LAYOUTS=====*/
 import { SupportLayout } from "views/support/shareComponents/layouts";
 
-/*=====4.CONFIG ROUTE=====*/
+/*=====4.HOOK=====*/
+import { useAuth } from 'services/hooks/useAuth';
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
@@ -22,6 +21,17 @@ import {
 } from "views/support/pages";
 
 const SupportRouter: FC = () => {
+    const history = useHistory();
+    const { user } = useAuth();
+
+    useEffect(() => {
+        if(!user) return;
+
+        if(user.email !== 'contact@trixgo.com') {
+            history.push('/');
+        }
+    }, [user])
+
     return (
         <SupportLayout>
             <Switch>

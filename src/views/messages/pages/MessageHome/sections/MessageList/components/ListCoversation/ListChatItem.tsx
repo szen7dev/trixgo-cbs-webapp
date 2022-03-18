@@ -8,6 +8,8 @@ import moment from "moment";
 import {AvatarGroupChat} from "./AvatarGroupChat";
 import {RightClickMenuWrapper} from "shareComponents/common";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
+import {useSelector} from "react-redux";
+import {RootState} from "redux/reducer";
 
 type Props = {
     chat: ItemListConversation;
@@ -15,7 +17,8 @@ type Props = {
     customOnClick?: (chat: ItemListConversation) => void;
 }
 export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
-    const {currentChat, setCurrentChat} = useContext(MessageContext);
+    const {currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
+    const {currentChat, setCurrentChat, socketRef} = useContext(MessageContext);
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -32,14 +35,21 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         return userUnread?.amount??0
     }, [chat.usersMissMessage])
 
+    const isDeleted = useCallback(() => {
+        if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
+            return true
+        }
+        return (chat.lastMessage.files??[]).some((file: { usersDelete: string | any[]; }) => file.usersDelete && file.usersDelete.includes(profileId));
+    }, [chat.lastMessage])
+
     const getLastMessage = useCallback(() => {
         if (chat.lastMessage) {
-            if (chat.lastMessage.usersDelete&&chat.lastMessage.usersDelete.includes(profileId)) {
+            if (isDeleted()) {
                 return "Tin nhắn đã xóa";
             }
             switch (chat.lastMessage.type) {
                 case 0:
-                    return <p className={"flex items-center max-w-[250px]"}>
+                    return <p className={"flex items-center max-w-[250px] truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ?"text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px] truncate max-w-full"}>
                             {chat.lastMessage.content.replaceAll(/[@]\[(.*?)\]\((.*?)\)/g, (replacement: string) => {
@@ -54,14 +64,14 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
                         </span>
                     </p>
                 case 1:
-                    return <p className={"flex items-center"}>
+                    return <p className={"flex items-center truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px]"}>
                         [Hình ảnh]
                         </span>
                     </p>;
                 case 2:
-                    return <p className={"flex items-center"}>
+                    return <p className={"flex items-center truncate"}>
                         <span className={"whitespace-nowrap "+(currentChat===chat._id ? "text-white":"text-black")}>{getSenderName()}</span>:
                         <span className={"ml-[5px]"}>
                         [Tệp tin]
@@ -93,9 +103,22 @@ export const ListChatItem:FC<Props> = ({chat, customLink, customOnClick}) => {
         } else return (chat.lastMessage.sender.bizfullname||chat.lastMessage.sender.fullname);
     },[chat.lastMessage])
 
+    const displayClass = (
+        !chat?.usersHide?.includes(profileId) &&
+        (
+            !currentSelectedFolders ||
+            (
+                currentSelectedFolders&&
+                chat.folders&&
+                chat.folders.includes(currentSelectedFolders._id)
+            )
+        )
+    ) ? "block":"hidden"
+
     return (
         <RightClickMenuWrapper
-            contextMenu={<OptionListItemRightClick/>}
+            className={displayClass}
+            contextMenu={<OptionListItemRightClick currentChat={currentChat} chat={chat} socketRef={socketRef}/>}
         >
             <NavLink
                 onClick={() => {

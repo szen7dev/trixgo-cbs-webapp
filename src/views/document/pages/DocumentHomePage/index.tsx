@@ -1,7 +1,8 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import debounce from "lodash/debounce";
 
 import { ModalContext } from "views/document/contexts/modal";
 
@@ -15,19 +16,15 @@ import {
 import projectImage from "assets/images/project.jpg";
 import "views/document/styles/document.css";
 
-import { useQueryListDepartments } from "services/hooks/items/useDepartment";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 
 export const DocumentHomePage: FC = () => {
   const { toggleModal } = useContext(ModalContext);
+  const [keyword, setKeyword] = useState("");
 
-  const { listDepartments, totalRecord, fetchNextPageDepartments } =
-    useQueryListDepartments({
-      select: "image sign name company numberOfDocs",
-      populates: {
-        path: "company",
-        select: "name",
-      },
-    });
+  const { data: listDepartments, totalRecord, fetchNextPage: fetchNextPageDepartments } =
+  useQueryListDepartmentsIsMember({ keyword, isFetch: true });
+
   return (
     <div className="flex flex-col text-sm text-black overflow-hidden h-full">
       {/* Header */}
@@ -36,7 +33,7 @@ export const DocumentHomePage: FC = () => {
           <span className="text-x-large mr-7 text-black">Danh sách</span>
           <SearchInput
             classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
-            onChange={() => 1}
+            onChange={debounce((event: any) => setKeyword(event.target.value), 500)}
           />
           <DropdownFilterButton />
         </div>

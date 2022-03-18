@@ -134,14 +134,14 @@ const AuthorTab: FC = () => {
 					<tbody className="bg-primary-light text-left">
 						{listAppMenu.map((item, index) => (
 							<tr key={index} className="border-b border-primary-border h-10">
-								<td className="p-2">{item.name}</td>
+								<td className="p-2">{item?.name}</td>
 								<td className="p-2">
 									<input
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
-										checked={getStateCheckedPermissions('read', item._id)}
-										onChange={() => onUpdatePermissions('read', item._id)}
+										checked={getStateCheckedPermissions('read', item?._id)}
+										onChange={() => onUpdatePermissions('read', item?._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -149,8 +149,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
-										checked={getStateCheckedPermissions('create', item._id)}
-										onChange={() => onUpdatePermissions('create', item._id)}
+										checked={getStateCheckedPermissions('create', item?._id)}
+										onChange={() => onUpdatePermissions('create', item?._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -158,8 +158,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
-										checked={getStateCheckedPermissions('update', item._id)}
-										onChange={() => onUpdatePermissions('update', item._id)}
+										checked={getStateCheckedPermissions('update', item?._id)}
+										onChange={() => onUpdatePermissions('update', item?._id)}
 									/>
 								</td>
 								<td className="p-2">
@@ -167,8 +167,8 @@ const AuthorTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
-										checked={getStateCheckedPermissions('delete', item._id)}
-										onChange={() => onUpdatePermissions('delete', item._id)}
+										checked={getStateCheckedPermissions('delete', item?._id)}
+										onChange={() => onUpdatePermissions('delete', item?._id)}
 									/>
 								</td>
 							</tr>

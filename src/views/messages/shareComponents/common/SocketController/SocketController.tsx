@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from "react";
+import {FC, useContext, useEffect} from "react";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
@@ -7,11 +7,18 @@ import {
     updateSeenMessage
 } from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {setListConversation, updateSingleConversation, setAmountMissMessage} from "redux/reducer/messages/ListConversation";
+import {
+    setListConversation,
+    updateSingleConversation,
+    setAmountMissMessage,
+    deleteConversationAction,
+    decreaseAmountMissMessage
+} from "redux/reducer/messages/ListConversation";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 
 type Props = {
     context: any;
@@ -28,6 +35,8 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
     const {getListPinMessage} = UseConversation();
+    const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
+    const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
 
     useEffect(() => {
         if (socket) {
@@ -39,20 +48,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
             socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+            socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+            socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
+            socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
+            socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
+            socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
+            socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
+            socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
         };
-
-        return () => {
-            if (socket) {
-                socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-                socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-                socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-                socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
-                socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
-                socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
-
-                socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
-            }
-        }
     },[socket]);
 
     const onReceiveMessage = (data: any) => {
@@ -89,6 +92,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveConversation = (data: any) => {
         // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
+        if (!data) return;
         dispatch(setListConversation(data?.data));
     }
 
@@ -102,9 +106,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if ([108, 109].includes(data?.data?.type)) {
             getListPinMessage({conversationID: data?.data?.conversation})
         }
-        setTimeout(() => {
-            scrollToBottom();
-        }, 100)
+        if ([101, 102, 107].includes(data?.data?.type)) {
+            refetchListMembers();
+        }
+        if (!inSearchMode){
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100)
+        }
     };
 
     const onReceiveShareMessage = (data: any) => {
@@ -119,20 +128,22 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onReceiveRevokeMessage = (data: any) => {
         if (!data) return;
-        if (!data?.data?.error) {
-            dispatch(revokeMessageInConversation({messages: data?.data?.data}))
+        if (!data?.error) {
+            dispatch(revokeMessageInConversation({messages: data?.data}))
         } else {
-            toast.error(data?.data?.message);
+            toast.error(data?.message);
         }
     }
 
     const onReceiveReactionMessage = (data: any) => {
-        if (!data) return;
+        if (!data || data.error) return;
+        const { _id: messageID, conversation } = data?.data;
+
         dispatch(updateNewMessageToConversation({
-            conversationId: data?.data?.conversation?._id,
-            newMessageId: data?.data?._id,
-            oldMessageId: data?.data?._id,
-            messageData: {...data?.data, conversation: data?.data?.conversation?._id}
+            conversationId: conversation?._id,
+            newMessageId: messageID,
+            oldMessageId: messageID,
+            messageData: {...data?.data, conversation: conversation?._id}
         }));
     }
 
@@ -149,6 +160,60 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             conversationId: data?.data?.infoConversation?._id,
             messsagesId: data?.data?.messagesID,
             infoUserSeen: data?.data?.infoUserSeen
+        }))
+        dispatch(decreaseAmountMissMessage({decrease: data?.data?.messagesID.length, conversationId: data?.data?.infoConversation?._id, profileId: profileId}))
+    }
+
+    const onRemoveConversation = (data: any) => {
+        if (!data) return;
+        dispatch(deleteConversationAction({conversationId: data?.data?._id}))
+    }
+
+    const onCreateConversation = (data: any) => {
+        if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onUserLeaveConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onAddMemberConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
+        }))
+    }
+
+    const onUpdateInforConversation = (data: any) => {
+       if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data
+        }))
+    }
+
+    const onRemoveMemberConversation = (data: any) => {
+       if (!data) return;
+       const youGotDeleted = data?.data?.removedMember.some((member: {_id: string, [key: string]: any}) => member._id === profileId);
+       if (youGotDeleted) {
+           dispatch(deleteConversationAction({conversationId: data?.data?.infoConversation?._id}))
+       } else {
+           dispatch(updateSingleConversation({
+               conversationData: data?.data?.infoConversation
+           }))
+       }
+
+    }
+
+    const onUpdateAdminConversation = (data: any) => {
+        if (!data) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data?.infoConversation
         }))
     }
 

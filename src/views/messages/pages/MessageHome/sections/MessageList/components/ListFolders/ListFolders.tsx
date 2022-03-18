@@ -1,24 +1,28 @@
 import React, {FC, useEffect, useRef} from 'react'
 import {map as _map} from "lodash";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
+import {RightClickMenuWrapper} from "shareComponents/common";
+import {RightClickFolder} from "./RightClickFolder";
+import PlusIcon from "assets/images/icons8-plus-math-96.svg";
+import moment from "moment";
+import {setCurrentSelectedFolders} from "redux/reducer/messages/ListFolders"
 
 export const ListFolders:FC = () => {
-    const {listFolders, nextCursor, hasMoreData} = useSelector((state: RootState) => state.listFolders.data);
+    const {listFolders, nextCursor, hasMoreData, currentSelectedFolders} = useSelector((state: RootState) => state.listFolders.data);
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
+    const dispatch = useDispatch();
     const listFoldersRef = useRef<HTMLDivElement>(null);
     const {getListFoldersConversation} = UseListConversation();
-    useEffect(() => {
-        getListFoldersConversation({limit: 10})
-    }, []);
 
-    const listTab = [
-        {
-            text: "All",
-            tabId: "all",
-            unread: 0
-        }
-    ];
+    const nexListFolder = () => {
+        nextCursor&&getListFoldersConversation({nextCursor: nextCursor, limit:10})
+    }
+
+    useEffect(() => {
+        Object.keys(listFolders).length===0&&getListFoldersConversation({limit:10})
+    }, []);
 
     useEffect(() => {
         if (listFoldersRef.current) {
@@ -31,22 +35,49 @@ export const ListFolders:FC = () => {
         }
     }, [listFoldersRef])
 
-    if (listFolders.length <= 0) return null;
+    if (Object.keys(listFolders).length <= 0) return null;
     return (
         <div ref={listFoldersRef} className={"flex overflow-auto max-w-full border-b border-gray-100 no-webkit-scrollbar"}>
-            {_map(listTab, tab => (
-                <div
+            <div
+                className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
+            >
+                <button
+                    onClick={() => {
+                        dispatch(setCurrentSelectedFolders({
+                            currentSelectedFolders: null
+                        }))
+                    }}
+                    className={"whitespace-nowrap text-center block p-2 " + ((!currentSelectedFolders)?"border-b-2 border-primary text-primary":"text-primary-gray")}
+                >
+                    All
+                </button>
+                {amountMissMessage>0&&<span className={"rounded-full bg-primary text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{amountMissMessage}</span>}
+            </div>
+            {_map(Object.values(listFolders).sort((a,b) => (moment(b.createdAt).toDate().getTime() > moment(a.createdAt).toDate().getTime())?1:-1), tab => (
+                <RightClickMenuWrapper
                     className={"flex items-center px-4 hover:bg-gray-100 rounded-tl-md rounded-tr-md"}
-                    key={tab.tabId}
+                    key={tab._id}
+                    contextMenu={<RightClickFolder folder={tab}/>}
+                    onClick={() => {
+                        dispatch(setCurrentSelectedFolders({currentSelectedFolders: tab}))
+                    }}
                 >
                     <button
-                        className={"whitespace-nowrap text-center block p-2 " + (tab.tabId==="all"?"border-b-2 border-primary text-primary":"text-primary-gray")}
+                        className={"whitespace-nowrap text-center block p-2 " + ((currentSelectedFolders&&tab._id===currentSelectedFolders._id)?"border-b-2 border-primary text-primary":"text-primary-gray")}
                     >
-                        {tab.text}
+                        {tab.name}
                     </button>
-                    {tab.unread>0&&<span className={"rounded-full bg-primary text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{tab.unread}</span>}
-                </div>
+                    {tab.amountMissMessage>0&&<span className={"rounded-full bg-primary text-xs text-white w-[18px] h-[18px] text-center leading-[18px]"}>{tab.amountMissMessage}</span>}
+                </RightClickMenuWrapper>
             ))}
+            {
+                hasMoreData &&
+                <button
+                    onClick={() => nexListFolder()}
+                    className={"rounded-lg flex flex-col items-center justify-center"}>
+                    <img src={PlusIcon} className={"w-[20px] h-[20px]"} alt={"==="}/>
+                </button>
+            }
         </div>
     )
 }

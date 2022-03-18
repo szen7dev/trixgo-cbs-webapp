@@ -1,5 +1,5 @@
 import React, {FC, Fragment, useEffect, useRef, useState} from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
 import PDFIcon from "assets/images/CBS-PDF-Icon-48.svg";
@@ -23,6 +23,10 @@ export const PopupSendImageAndFile: FC = () => {
 
     const [content, setContent] = useState("");
     const [useCompress, setUseCompress] = useState(true);
+
+    useEffect(() => {
+        isShowPopupSendFiles&&setContent("");
+    },[isShowPopupSendFiles])
 
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
@@ -61,7 +65,7 @@ export const PopupSendImageAndFile: FC = () => {
         if (popSendFilesContent.sendType==="image") {
             if (popSendFilesContent.files.length === 1) {
                 return <div className={"flex items-center justify-center relative"}>
-                    <img  alt={"----"} className={"max-h-[320px] rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                    <img  alt={"----"} className={"max-h-[320px] rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.url}/>
                     {
                         !useCompress&&
                         <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -75,7 +79,7 @@ export const PopupSendImageAndFile: FC = () => {
                     {
                         _map(popSendFilesContent.files, (image,index) => (
                             <div className={"w-1/2 p-1 relative"} key={index}>
-                                <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                                <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.url}/>
                                 {
                                     !useCompress&&
                                     <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -90,7 +94,7 @@ export const PopupSendImageAndFile: FC = () => {
             if (popSendFilesContent.files.length === 3) {
                 return <div className={"flex"}>
                     <div className={"p-1 relative"}>
-                        <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.file.url}/>
+                        <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[0].file.url}/>
                         {
                             !useCompress&&
                             <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -100,7 +104,7 @@ export const PopupSendImageAndFile: FC = () => {
                     </div>
                     <div className={"flex"}>
                         <div className={"p-1 relative"}>
-                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[1].file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[1].file.url}/>
                             {
                                 !useCompress&&
                                 <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -109,7 +113,7 @@ export const PopupSendImageAndFile: FC = () => {
                             }
                         </div>
                         <div className={"p-1 relative"}>
-                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[2].file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={popSendFilesContent.files[2].file.url}/>
                             {
                                 !useCompress&&
                                 <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -124,7 +128,7 @@ export const PopupSendImageAndFile: FC = () => {
                 {
                     _map(popSendFilesContent.files, (image,index) => (
                         <div className={(imageClass[index]??"w-1/3") + " p-1 relative"} key={index}>
-                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.file.url}/>
+                            <img  alt={"----"} className={"w-full rounded-lg overflow-hidden"} src={image.file.url}/>
                             {
                                 !useCompress&&
                                 <div className={"bg-gray-300 bg-opacity-60 absolute top-2 right-2 px-2 py-1 rounded-md font-bold"}>
@@ -138,10 +142,10 @@ export const PopupSendImageAndFile: FC = () => {
         } else {
             return _map(popSendFilesContent.files, file => (
                 <div key={file._id} className={"message-file-content flex mb-1"}>
-                    {renderFileTypeImage(file.file.file)}
+                    {renderFileTypeImage(file.file)}
                     <div className={"flex-1 flex flex-col justify-center ml-[7px]"}>
-                        <a href={file.file.file.url} download className={"mb-[2px] hover:text-primary"}>{file.file.file.name}</a>
-                        <div className={"text-primary"}>{formatBytes(file.file.file.size)}</div>
+                        <a href={file.file.url} download className={"mb-[2px] hover:text-primary"}>{file.file.name}</a>
+                        <div className={"text-primary"}>{formatBytes(file.file.size)}</div>
                     </div>
                 </div>
             ))
@@ -268,9 +272,10 @@ export const PopupSendImageAndFile: FC = () => {
                                     </div>
                                 }
                                 <input
+                                    autoFocus={true}
                                     value={content}
                                     onChange={event => setContent(event.target.value)}
-                                    className={"rounded-md h-[50px] border w-full border-gray-300 mt-4 px-[10px]"} placeholder={"Nội dung"}/>
+                                    className={"rounded-md h-[50px] border w-full border-gray-300 mt-4 px-[10px] focus:outline-none focus:border-primary"} placeholder={"Nội dung"}/>
                             </div>
                         </Transition.Child>
                     )}

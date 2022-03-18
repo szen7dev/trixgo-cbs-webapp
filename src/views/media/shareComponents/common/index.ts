@@ -11,7 +11,5 @@ export * from './Comment';
 export * from './Icon';
 export * from './Tab';
 
-export * from './PostFile';
-export * from './PostImage';
 export * from './PostImageV2';
 export * from './EditButton';

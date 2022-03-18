@@ -1,3 +1,5 @@
+import { DatahubArea } from "./area";
+
 type DatahubClient = {
   _id: string;
   field: number;
@@ -20,20 +22,8 @@ type DatahubClient = {
   createdAt: DateString;
   __v: 0;
 };
-type DatahubArea = {
-  _id: string;
-  childs: string[];
-  level: number;
-  name: string;
-  sign: string;
-  parent: string;
-  modifyAt: DateString;
-  createAt: DateString;
-  userCreate: string;
-  __v: 0;
-};
 
-export type DatahubProjects = {
+export type DatahubProjectBase = {
   _id: string;
   projectType: number;
   buildingType: number;
@@ -62,6 +52,8 @@ export type DatahubProjects = {
   updatedAt: DateString;
 };
 
+export type DatahubProjects<T = keyof DatahubProjectBase> =  Pick<DatahubProjectBase, T>
+
 export type DatahubProjectsParams = {
   limit?: number;
   select?: string;
@@ -69,7 +61,8 @@ export type DatahubProjectsParams = {
   populates?: {
     path: string;
     select?: string;
-  };
+		populate?: string;
+  } | string;
   keyword?: string;
 };
 

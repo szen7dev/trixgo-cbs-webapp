@@ -29,15 +29,15 @@ const LOCALES: Locale[] = [
     id: "en-locale",
     code: "en",
     name: "english",
-    flag: <USFlagIcon className="w-8 h-8" />,
-    grayFlag: <USFlagGrayIcon className="w-8 h-8" />,
+    flag: <VNFlagIcon className="w-8 h-8" />,
+    grayFlag: <VNFlagGrayIcon className="w-8 h-8" />,
   },
   {
     id: "vn-locale",
     code: "vn",
     name: "vietnamese",
-    flag: <VNFlagIcon className="w-8 h-8" />,
-    grayFlag: <VNFlagGrayIcon className="w-8 h-8" />,
+    flag: <USFlagIcon className="w-8 h-8" />,
+    grayFlag: <USFlagGrayIcon className="w-8 h-8" />,
   },
 ];
 
@@ -45,7 +45,7 @@ const LoginPage: FC = () => {
   const { t, i18n } = useTranslation(["signIn"]);
   const { isLoading, signIn } = useAuth();
 
-  const [selectedLocale, setSelectedLocale] = useState(LOCALES[0].id);
+  const [selectedLocale, setSelectedLocale] = useState(LOCALES[1].id);
   const [showRegister, setShowRegister] = useState(false);
 
   const initialValues: SignInPayload = {
@@ -57,12 +57,10 @@ const LoginPage: FC = () => {
 
   const signInSchema = object().shape({
     email: string()
-      .email("* Please enter valid email address")
-      .required("* Email required!"),
+      .email("* Email không hợp lệ")
+      .required("* Email bắt buộc!"),
     password: string()
-      .min(7, "* Password must be at least 8 characters")
-      .max(25, "* Password too large (25 characters max)")
-      .required("* Password required!"),
+      .required("* Password bắt buộc!"),
   });
 
   const handleClickShowRegister = () => setShowRegister(!showRegister);
@@ -153,7 +151,7 @@ const LoginPage: FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-between max-w-lg mt-14">
+                    {/* <div className="flex justify-between max-w-lg mt-14">
                       <div>
                         <span className="text-secondary-gray">
                           {t("signIn:registerQuestion")}{" "}
@@ -174,7 +172,7 @@ const LoginPage: FC = () => {
                           {t("signIn:forgotPassword")}
                         </p>
                       </Link>
-                    </div>
+                    </div> */}
 
                     <div className="flex justify-between max-w-lg mt-14">
                       <button

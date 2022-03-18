@@ -1,1 +1,1 @@
-export * from './HumanLayout';
+export { HumanLayout as default } from "./HumanLayout";

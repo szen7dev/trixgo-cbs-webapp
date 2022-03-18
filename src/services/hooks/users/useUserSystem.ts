@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation } from "react-query";
 
 import { UserSystemRepository } from 'apis/users';
-import type { QueryParam, UserSystemProps, UserSystemPayload } from 'typings/users/userSystem';
+import type { QueryParam, UserSystemProps, UserSystemPayload, ListUserInProjectPayload } from 'typings/users/userSystem';
 
 interface UseUserSystem {
     loading: boolean;
@@ -16,7 +16,7 @@ interface UseUserSystem {
     deleteUserSystemAsync: (usersID: string[]) => Promise<any>;
 }
 
-export const useUserSystem = (params?: QueryParam): UseUserSystem => {
+export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSystem => {
     const { mutateAsync: createUserSystemAsync } =
         useMutation((payload: UserSystemPayload) =>
             UserSystemRepository.addUserSystem(payload)
@@ -31,7 +31,7 @@ export const useUserSystem = (params?: QueryParam): UseUserSystem => {
         useMutation((usersID: string[]) =>
             UserSystemRepository.deleteUserSystem(usersID)
         );
-
+    
     const result = useInfiniteQuery(
         ['list_users', params]
         , async ({ pageParam }: any) =>
@@ -43,7 +43,7 @@ export const useUserSystem = (params?: QueryParam): UseUserSystem => {
             return data?.nextCursor || undefined;
         },
         refetchOnWindowFocus: false,
-        enabled: params?.isFetch || false
+        enabled: isFetch ?? false
     });
 
     const {
@@ -73,5 +73,57 @@ export const useUserSystem = (params?: QueryParam): UseUserSystem => {
         createUserSystemAsync,
         updateUserSystemAsync,
         deleteUserSystemAsync
+    }
+}
+
+interface UseUsersProject {
+    loading: boolean;
+    data: UserSystemProps[];
+    hasNextPage?: boolean;
+    totalPages: number;
+    totalRecord: number;
+    refetch: () => void;
+    fetchNextPage: () => void;
+}
+
+export const useUsersProject = (params: ListUserInProjectPayload, isFetch?: boolean): UseUsersProject => {
+    const result = useInfiniteQuery(
+        ['list_users_project', params]
+        , async ({ pageParam }: any) =>
+        UserSystemRepository.listUserInProject({
+            lastestID: pageParam,
+            ...params,
+        }), {
+        getNextPageParam: ({ data }: any) => {
+            return data?.nextCursor || undefined;
+        },
+        refetchOnWindowFocus: false,
+        enabled: isFetch ?? false
+    });
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = result;
+
+    const listUsers = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
+
+    return {
+        loading: isLoading,
+        data: listUsers,
+        hasNextPage,
+        totalPages,
+        totalRecord,
+        refetch,
+        fetchNextPage
     }
 }

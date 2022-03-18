@@ -12,6 +12,7 @@ import {
 } from "typings/auth";
 
 const authURL = "/api/auth";
+const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 const AuthenticationRepository = {
   async signIn(payload: SignInPayload): Promise<SignInResponse> {
@@ -24,7 +25,7 @@ const AuthenticationRepository = {
 
   async usersInfo(): Promise<UserInfoResponse> {
     const { data } = await API.get<UserInfoResponse>(
-      `${authURL}/users/me?select={"company": "", "department": ""}&filter={"conversationsPin": 0, "friends": 0, "recentlyFriends": 0, "devices": 0, "registrationID": 0}`
+      `${authURL}/users/me`
     );
     return data;
   },
@@ -172,6 +173,14 @@ const AuthenticationRepository = {
       `${authURL}/app_role_menus`, payload);
     return data;
   },
+
+  async requestHistoryTraffics(parame: any): Promise<any> {
+    const { data } = await API.post(
+        `${HISTORY_TRAFFICS}`,
+        parame
+    )
+    return data;
+  }
 };
 
 export default AuthenticationRepository;

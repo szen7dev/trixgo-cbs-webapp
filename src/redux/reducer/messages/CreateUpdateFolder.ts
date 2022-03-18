@@ -36,7 +36,7 @@ const createUpdateFolderSlice = createSlice({
                 folder: action.payload.folder??null
             }
         },
-        dismissCreateUpdateFolder (state, action) {
+        dismissCreateUpdateFolder (state) {
             state.data = {
                 ...state.data,
                 isCreateUpdateFolder: false,

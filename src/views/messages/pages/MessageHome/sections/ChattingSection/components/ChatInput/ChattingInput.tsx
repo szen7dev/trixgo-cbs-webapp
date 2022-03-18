@@ -5,30 +5,23 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation, updateFileProgressOnMessage} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {useAuth} from 'services/hooks/useAuth';
 import {useUpload} from "services/hooks/useUpload";
 import {convertToRaw, EditorState} from "draft-js";
-import {
-    MentionData
-} from '@draft-js-plugins/mention';
-import {modifyUploadedFilesV2} from "services/hooks/ppt/useUploadFile/upload.utils";
+import {modifyUploadedFilesV2} from "services/hooks/useUploadFile/upload.utils";
 import {ReplyChat} from "./ReplyChat";
 import {removeReplyMessage} from "redux/reducer/messages/ListMessage";
 import {RootState} from "redux/reducer";
 import {SelectedActionGroup} from "./SelectedActionGroup";
 import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
-import {dismissSearchMode} from "../../../../../../../../redux/reducer/messages/SearchMessage";
+import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
+import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
     onChangeCallback: (editorState: any) => void;
-    suggestions: MentionData[];
-    setSuggestions: React.Dispatch<React.SetStateAction<MentionData[]>>;
 }>({
     editorState: EditorState.createEmpty(),
     onChangeCallback: (editorState: any) => undefined,
-    suggestions: [],
-    setSuggestions: () => undefined
 });
 
 type Props = {
@@ -50,18 +43,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     const [willSendFileMessage, setWillSendFileMessage] = useState(null);
     const [realValue, setRealValue] = useState("");
 
-    const suggestionsData = useCallback(() => {
-        return chat.members.map(member=> {
-            return {
-                name: member.bizfullname||member.fullname,
-                _id: member._id,
-                avatar: `${process.env.REACT_APP_URL_S3_USER}/${member.image}`
-            }
-        });
-    },[chat])
-
-    const [suggestions, setSuggestions] = useState<MentionData[]>(suggestionsData());
-
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     );
@@ -77,8 +58,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     }, [editorState]);
 
     const value = useMemo(
-        () => ({ editorState, onChangeCallback, suggestions, setSuggestions }),
-        [editorState, onChangeCallback, suggestions, setSuggestions]
+        () => ({ editorState, onChangeCallback}),
+        [editorState, onChangeCallback]
     );
 
     const socket = socketRef.current;
@@ -143,7 +124,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 links: 0,
                 createAt: 0,
                 __v: 0,
-                config: 0
+                // config: 0
             })
         });
     }
@@ -169,14 +150,21 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 return {
                     file: {
                         file: {
-                            fakeUrl: window.URL.createObjectURL(file.file),
-                            url: window.URL.createObjectURL(file.file),
-                            name: file.file.name,
-                            size: file.file.size,
-                            _id: uuidv4(),
-                            type: file.file.type,
-                            isDraft: true,
-                        }
+                            // fakeUrl: window.URL.createObjectURL(file.file),
+                            // url: window.URL.createObjectURL(file.file),
+                            // name: file.file.name,
+                            // size: file.file.size,
+                            // _id: uuidv4(),
+                            // type: file.file.type,
+                            // isDraft: true,
+                        },
+                        fakeUrl: window.URL.createObjectURL(file.file),
+                        url: window.URL.createObjectURL(file.file),
+                        name: file.file.name,
+                        size: file.file.size,
+                        _id: uuidv4(),
+                        type: file.file.type,
+                        isDraft: true,
                     },
                     progress: 0,
                     _id: uuidv4(),
@@ -192,18 +180,21 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
     }
 
     const handleUploadFile = async (message: any, useCompress = true) => {
-        const uploadMap : {[key:string]: number} = {}
+        const uploadMap : {[key:string]: number} = {};
+        const replyDataBk = replyData;
         message.files.forEach((file:any) => {
             uploadMap[file._id] = file.progress
         })
         setDoneUpload(uploadMap);
+        dispatch(removeReplyMessage({conversationId: chat._id}));
+        dispatch(dismissSearchMode({conversationId: chat._id}));
         dispatch(appendFakeMessageToConversation({
             conversationId: chat._id,
             messageId: message.tmpid,
             messageData: {
                 ...message,
                 _id: message.tmpid,
-                parent: replyData,
+                parent: replyDataBk,
                 fileProgress: uploadMap
             }
         }));
@@ -234,7 +225,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 },
                 useCompress
             })
-            sendFiles.push({"_id":_id,"name":file.file.file.name})
+            sendFiles.push({"_id":_id,"name":file.file.name})
         }
 
         sendMessage = {
@@ -242,16 +233,14 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
             // _id: sendMessage.tmpid,
             files: sendFiles,
         }
-        sendMessage['parentID'] = replyData?replyData._id:"";
+        sendMessage['parentID'] = replyDataBk?replyDataBk._id:"";
         setWillSendFileMessage(sendMessage);
-        dispatch(removeReplyMessage({conversationId: chat._id}));
-        dispatch(dismissSearchMode({conversationId: chat._id}));
         setShowSearch&&setShowSearch(false);
     }
 
     useEffect(() => {
         const isDone = Object.values(doneUpload).length>0&&Object.values(doneUpload).every(progress => progress === 100);
-        console.log("done upload: ", isDone)
+        // console.log("done upload: ", isDone)
         if (isDone&&willSendFileMessage) {
             // console.log(willSendFileMessage)
             setTimeout(() => {
@@ -265,7 +254,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         links: 0,
                         createAt: 0,
                         __v: 0,
-                        config: 0
+                        // config: 0
                     })
                 });
                 setDoneUpload({});
@@ -308,6 +297,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         }
     },[])
 
+    const {hasPermission} = UseMessageHelper();
+    if (!hasPermission(chat, profileId, "configSendMessage")) return null;
     return (
         <ChattingInputContext.Provider value={value}>
             <div className={"w-full px-[20px] flex justify-center bg-transparent py-[10px] chatting-input-container"}>
@@ -319,7 +310,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         <InputForMessage
                             onPasteFiles={(files) => handleSetFiles(files)}
                             onPressEnter={() => handleSendMessage()}
-                            mentions={suggestionsData()}
                             handleUploadFiles={((files) => handleSetFiles(files))}
                             context={context}
                         />

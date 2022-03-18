@@ -1,3 +1,5 @@
+import {ItemMessage} from "./listMessage";
+
 export type ItemListConversation = {
     _id: string;
     members: any[];
@@ -65,6 +67,7 @@ export type ListConversationPayload = {
     keyword?: string;
     lastestID?: string|null;
     limit?: number;
+    select?: string;
 };
 
 export type ListMembersOfConversationPayload = {
@@ -202,21 +205,23 @@ export type ListFoldersConversationPayload = {
     nextCursor?: string
 }
 
+export type FolderConversationItem = {
+    _id: string
+    includedConversations: string[],
+    excludedConversations: string[],
+    amountMissMessage: number,
+    state: number,
+    name: string
+    author: string
+    modifyAt: string
+    createAt: string
+    createdAt: string
+    updatedAt: string
+    __v: number
+}
+
 export type ListFoldersConversation = {
-    listRecords: {
-        _id: string
-        includedConversations: string[],
-        excludedConversations: string[],
-        amountMissMessage: number,
-        state: number,
-        name: string
-        author: string
-        modifyAt: string
-        createAt: string
-        createdAt: string
-        updatedAt: string
-        __v: number
-    }[],
+    listRecords: FolderConversationItem[],
     limit: number,
     totalRecord: number;
     nextCursor: string|null;
@@ -225,5 +230,345 @@ export type ListFoldersConversation = {
 export type ListFoldersConversationResponse = {
     error: boolean;
     data: ListFoldersConversation;
+    status: number;
+}
+
+
+
+export type AddFolderPayload = {
+    name: string;
+}
+
+export type AddFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateFolderPayload = {
+    name: string;
+    folderID: string;
+}
+
+export type UpdateFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type DeleteFolderPayload = {
+    folderID: string;
+}
+
+export type DeleteFolderResponse = {
+    data: FolderConversationItem;
+    error: boolean;
+    status: number;
+}
+
+export type AddConversationToFolderPayload = {
+    conversationID: string;
+    addFoldersID: string[];
+    removeFoldersID: string[];
+}
+
+export type AddConversationToFolderResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateMuteConversationPayload = {
+    conversationID: string;
+    isMute: boolean;
+    timeMute?: string;
+}
+
+export type UpdateMuteConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateConversationPayload = {
+    conversationID: string;
+    name?: string;
+    description?: string;
+    avatar?: string;
+}
+export type UpdateConversationData = { infoConversation: ItemListConversation, infoMessage: {data: ItemMessage} }
+export type UpdateConversationResponse = {
+    data: UpdateConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type PinConversationPayload = {
+    conversationID: string;
+    isPin: boolean;
+}
+
+export type PinConversationResponse = {
+    data: any,
+    error: boolean;
+    status: number;
+}
+
+export type HideConversationPayload = {
+    conversationID: string;
+    isHide: boolean;
+}
+
+export type HideConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type MarkReadConversationPayload = {
+    conversationID: string;
+}
+
+export type MarkReadConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type DeleteHistoryConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteHistoryConversationResponse = {
+    data: ItemListConversation,
+    error: boolean;
+    status: number;
+}
+
+export type DeleteConversationPayload = {
+    conversationID: string;
+}
+
+export type DeleteConversationData = ItemListConversation
+
+export type DeleteConversationResponse = {
+    data: DeleteConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type ListReactionMessagePayload = {
+    messageID: string;
+    select?: string;
+    populates?: string;
+    lastestID?: string;
+}
+export type ListReactionMessageResponse = {
+    data: any;
+    error: boolean;
+    status: number;
+}
+
+export type ListFileMessagePayload = {
+    conversationID: string;
+    lastestID?: string;
+    authorID?: string;
+    fromDate?: string;
+    toDate?: string;
+    type?: number;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+    limit?: number;
+}
+
+export type ItemFileMessage = {
+    app: string
+    author: string
+    company: string
+    conversation: string
+    createAt: string
+    createdAt: string
+    file: string
+    mimeType: string
+    modifyAt: string
+    name: string
+    nameOrg: string
+    path: string
+    size: number
+    state: number
+    type: number
+    updatedAt: string
+    __v: number
+    _id: string
+    [key: string]: any
+}
+
+export type ListFileMessageData = {
+    listRecords: ItemFileMessage[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string|null
+}
+
+export type ListFileMessageResponse = {
+    data: ListFileMessageData;
+    error: boolean;
+    status: number;
+}
+
+export type ListLinksMessagePayload = {
+    conversationID: string;
+    lastestID?: string;
+    authorID?: string;
+    fromDate?: string;
+    toDate?: string;
+    type?: number;
+    keyword?: string;
+    select?: string;
+    populates?: string;
+    limit?: number;
+    [key: string]: any
+}
+
+export type ItemLinkMessage = {
+    _id: string,
+    state: number,
+    conversation: string,
+    message: string,
+    author: string,
+    link: string,
+    modifyAt: string,
+    createAt: string,
+    createdAt: string,
+    updatedAt: string,
+    __v: number
+    [key: string]: any
+}
+
+export type ListLinksMessageData = {
+    listRecords: ItemLinkMessage[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string|null
+}
+
+export type ListLinksMessageResponse = {
+    data: ListLinksMessageData;
+    error: boolean;
+    status: number;
+}
+
+export type ListMembersMessagePayload = {
+    conversationID: string;
+    lastestID?: string;
+    type?: owner|admin|member;
+    select?: string;
+    populates?: string;
+    limit?: number;
+    [key: string]: any
+}
+
+export type ItemMemberMessage = {
+    _id: string,
+    member: {
+        _id: string,
+        image: string,
+        bizfullname: string
+        [key: string]: any
+    },
+    conversation: string,
+    addedBy: {
+        _id: string,
+        image: string,
+        bizfullname: string
+        [key: string]: any
+    },
+    type: string,
+    timeLastSeen: number
+    [key: string]: any
+}
+
+export type ListMembersMessageData = {
+    listRecords: ItemMemberMessage[],
+    limit: number,
+    totalRecord: number,
+    nextCursor: string|null
+}
+
+export type ListMembersMessageResponse = {
+    data: ListMembersMessageData;
+    error: boolean;
+    status: number;
+}
+
+export type LeaveConversationPayload = {
+    conversationID: string;
+}
+export type LeaveConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type LeaveConversationResponse = {
+    data: LeaveConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type RemoveMemberFromConversationPayload = {
+    conversationID: string;
+    memberID: string
+}
+export type RemoveMemberFromConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+export type RemoveMemberFromConversationResponse = {
+    data: RemoveMemberFromConversationData;
+    error: boolean;
+    status: number;
+}
+
+export type UpdateConfigConversationPayload = {
+    conversationID: string;
+    typeConfig: number;
+    valueConfig: number
+}
+
+export type UpdateConfigConversationResponse = {
+    data: ItemListConversation;
+    error: boolean;
+    status: number;
+}
+
+export type SetASAdminConversationPayload = {
+    conversationID: string;
+    memberID: string;
+    isSetAdmin: boolean
+}
+
+export type SetASAdminConversationData = {
+    infoConversation: ItemListConversation,
+    infoMessage: {
+        data: ItemMessage,
+        error: boolean,
+        status: number
+    }
+    [key: string]: any
+}
+
+export type SetASAdminConversationResponse = {
+    data: SetASAdminConversationData;
+    error: boolean;
     status: number;
 }

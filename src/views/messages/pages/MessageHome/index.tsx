@@ -1,17 +1,31 @@
 import React, {createContext, FC, useMemo, useEffect, useState} from "react";
-import {FolderFormPopup, MessageList} from "./sections/MessageList";
+import {FolderDeleteConfirmPopup, FolderFormPopup, MessageList} from "./sections/MessageList";
 import { useLocation } from 'react-router-dom';
 import {SettingMessageDetail} from "./sections/SettingMessageDetail";
 import { useSocket } from "services/hooks/useSocket";
 import '@draft-js-plugins/emoji/lib/plugin.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import {ShareMessage, DeleteAndRevokeMessageConfirm, PollCreate, ChattingSection, ReminderCreate, SendContactMessage, NPSCreate, AddUsersToConversation, PopupSendImageAndFile} from "./sections/ChattingSection";
+import {
+    ShareMessage,
+    DeleteAndRevokeMessageConfirm,
+    PollCreate,
+    ChattingSection,
+    ReminderCreate,
+    SendContactMessage,
+    NPSCreate,
+    AddUsersToConversation,
+    PopupSendImageAndFile,
+    UsersSeenDetail
+} from "./sections/ChattingSection";
 import Editor from "@draft-js-plugins/editor";
 import {SearchMessage} from "./sections/SearchMessage";
 import {useDispatch} from "react-redux";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {SocketController} from "views/messages/shareComponents/common/SocketController";
 import {UnreadMessageController} from "./sections/UnreadMessages";
+import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
+import {NotificationMutePopup} from "./sections/SettingMessageDetail/components/Notification/NotificationMutePopup";
+import {ConversationConfig} from "./sections/ChattingSection/components/HeaderConversation/ConversationConfig";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -74,6 +88,11 @@ export const MessagesHome:FC = () => {
             <PopupSendImageAndFile/>
             <UnreadMessageController currentChat={currentChat} context={MessageContext}/>
             <FolderFormPopup/>
+            <FolderDeleteConfirmPopup/>
+            <FolderAddConversationPopup/>
+            <UsersSeenDetail/>
+            <NotificationMutePopup/>
+            <ConversationConfig/>
         </MessageContext.Provider>
     )
 }

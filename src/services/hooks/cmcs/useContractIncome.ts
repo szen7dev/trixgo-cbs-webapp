@@ -3,16 +3,6 @@ import { ContractIncome } from "typings/contractIncome";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
-type UseContractIncomeProp = {
-    listContractIncome: Array<ContractIncome>;
-    isLoading: boolean;
-    fetchNextPage: () => void,
-    fetchPreviousPage: () => void,
-    totalRecord: number | undefined,
-    totalPage: number | undefined,
-    hasNextPage: boolean | undefined
-};
-
 export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
 
     const {
@@ -88,19 +78,6 @@ export const useCreateContractMutation = (): {
     );
     return {
         createContractMutateAsync: mutateAsync,
-        loading: isLoading,
-    }
-}
-
-export const useHistoryTraffics = (): {
-    createHistoryTraffics: (payload: any) => Promise<any>;
-    loading: boolean;
-} => {
-    const { mutateAsync, isLoading } = useMutation((payload: any) =>
-        ContractIncomeRepository.requestHistoryTraffics(payload)
-    );
-    return {
-        createHistoryTraffics: mutateAsync,
         loading: isLoading,
     }
 }

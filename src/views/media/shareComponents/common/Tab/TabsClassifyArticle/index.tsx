@@ -6,13 +6,15 @@ import { Dialog, Transition, TransitionEvents } from '@headlessui/react';
 import iconChecked from 'assets/images/icons8-checked-40.png';
 
 interface Props {
+	isShowDigitalMedia?: boolean
+	isShowSystemMedia?: boolean
 	show: boolean
 	toggle(): void
 	onSelect?(): unknown
 	showMore?(type: string): unknown
 }
 
-export const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showMore, onSelect, ...props }) => {
+export const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle, showMore, onSelect, isShowDigitalMedia = true, isShowSystemMedia = true, ...props }) => {
 	return (
 		<Transition
 			show={show}
@@ -66,31 +68,35 @@ export const TabsClassifyArticle: FC<TransitionEvents & Props> = ({ show, toggle
 						</svg>
 					</div>
 				</label>
-				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="digital-conversion" name="type" className="post__classify-type" onClick={() => showMore && showMore('community')} />
-					<div className="mr-3">
-						<img src={iconChecked} alt="icon Checked" />
-					</div>
-					<div>
-						<p className="text-black text-base leading-5">Chuyển đổi số</p>
-						<p className="text-secondary-gray text-sm leading-4">Chuyển đổi số</p>
-					</div>
-					<div className="ml-auto text-primary-gray">
-						<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-						</svg>
-					</div>
-				</label>
-				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
-					<Field type="radio" value="system" name="type" className="post__classify-type" />
-					<div className="mr-3">
-						<img src={iconChecked} alt="icon Checked" />
-					</div>
-					<div>
-						<p className="text-black text-base leading-5">Tin hệ thống</p>
-						<p className="text-secondary-gray text-sm leading-4">Thông báo từ hệ thống</p>
-					</div>
-				</label>
+				{isShowDigitalMedia ? (
+					<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
+						<Field type="radio" value="digital-conversion" name="type" className="post__classify-type" onClick={() => showMore && showMore('community')} />
+						<div className="mr-3">
+							<img src={iconChecked} alt="icon Checked" />
+						</div>
+						<div>
+							<p className="text-black text-base leading-5">Chuyển đổi số</p>
+							<p className="text-secondary-gray text-sm leading-4">Chuyển đổi số</p>
+						</div>
+						<div className="ml-auto text-primary-gray">
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+							</svg>
+						</div>
+					</label>
+				) : ''}
+				{isShowSystemMedia ? (
+					<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
+						<Field type="radio" value="system" name="type" className="post__classify-type" />
+						<div className="mr-3">
+							<img src={iconChecked} alt="icon Checked" />
+						</div>
+						<div>
+							<p className="text-black text-base leading-5">Tin hệ thống</p>
+							<p className="text-secondary-gray text-sm leading-4">Thông báo từ hệ thống</p>
+						</div>
+					</label>
+				) : ''}
 				<label className="flex items-center mt-4 pb-3.5 cursor-pointer">
 					<Field type="radio" value="just-me" name="type" className="post__classify-type" />
 					<div className="mr-3">

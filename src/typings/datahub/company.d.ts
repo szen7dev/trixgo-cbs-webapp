@@ -8,11 +8,14 @@ export type DatahubCompanies = {
   supporters: string[];
   adreport: string[];
   humanreport: string[];
+  image: string;
   name: string;
   sign: string;
   taxid: string;
   phone: string;
   address: string;
+  email: string;
+  website: string;
   slogan: string;
   userCreate: string;
   modifyAt: DateString;

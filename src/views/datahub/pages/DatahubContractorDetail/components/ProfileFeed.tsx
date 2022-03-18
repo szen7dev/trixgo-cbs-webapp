@@ -1,5 +1,6 @@
 import React, { FC, HTMLAttributes } from 'react';
 import useScrollSticky from 'services/hooks/datahub/useScrollSticky';
+import { useContractorCompany } from 'views/datahub/contexts/Company';
 import Card from '../../../sharedComponents/common/Card';
 import ContactInfo from '../../../sharedComponents/common/ContactInfo';
 
@@ -7,6 +8,7 @@ type Props = {
 }
 
 const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => {
+	const { data } = useContractorCompany();
 	const { innerRef, sticky } = useScrollSticky('#datahub-contractor-detail', { offsetTop: 70.5, offsetBottom: 10 })
 
 	return (
@@ -17,16 +19,18 @@ const ProfileFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = (props, ref) => 
 					<div className='p-4'>
 						<div className='border-b-[0.5px] border-cbs-border pb-5'>
 							<p className='line-clamp-3 text-justify'>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aut laboriosam dolorum beatae officia animi voluptatem incidunt veniam suscipit qui repudiandae a, obcaecati perferendis minima doloribus tempore corrupti sit consequatur?
+								{/* {data?.data.into} */}
+								Không có field into
+								{/* Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aut laboriosam dolorum beatae officia animi voluptatem incidunt veniam suscipit qui repudiandae a, obcaecati perferendis minima doloribus tempore corrupti sit consequatur? */}
 							</p>
 						</div>
 						<div className='space-y-3 pt-3 pb-2'>
-							<ContactInfo value='Tên: Công ty Cổ phần CONINCO Quản lý dự án và Đầu tư' />
-							<ContactInfo value='Mã số thuế: 123456789' />
-							<ContactInfo value='Địa chỉ: <Địa chỉ công ty>' />
-							<ContactInfo value='0955112777' link='/' />
-							<ContactInfo value='contact@conincopmi.com' link='contact@conincopmi.com' />
-							<ContactInfo value='https://conincopmi.vn' link='https://conincopmi.vn' />
+							<ContactInfo value={'Tên: ' + data?.data.name || ''} />
+							<ContactInfo value={'Mã số thuế: ' + data?.data.taxid || ''} />
+							<ContactInfo value={'Địa chỉ: ' + data?.data.address || ''} />
+							<ContactInfo value={data?.data.phone || ''} link='/' />
+							<ContactInfo value={data?.data.email || ''} link='contact@conincopmi.com' />
+							<ContactInfo value={data?.data.website || ''} link='https://conincopmi.vn' />
 						</div>
 					</div>
 				</Card>

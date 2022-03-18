@@ -5,7 +5,8 @@ import moment from "moment";
 import debounce from "lodash/debounce";
 import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
 
-import { useQueryListDepartments, useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
@@ -30,20 +31,21 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
   const [searchFriendName, setSearchFriendName] = useState("");
   const [searchCompanyName, setSearchCompanyName] = useState("");
 
-  const { listDepartments } = useQueryListDepartments({
+  const { data: listDepartments } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
+    isFetch: true
   });
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
-    keyword: otherFieldValue,
+    keyword: otherFieldValue
   });
   const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName,
+    keyword: searchFriendName
   });
   const { data: listCompany } = useQueryListCompany({
-    keyword: searchCompanyName,
+    keyword: searchCompanyName
   });
 
   return (
@@ -96,7 +98,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
@@ -232,7 +234,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listFriend.map((item) => ({
-                      label: item.fullname,
+                      label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
                     }))}
@@ -283,7 +285,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                       </div>
                     )}
                     data={listDepartments.map((department) => ({
-                      label: department.name,
+                      label: `${department.sign}.${department.name}`,
                       value: department._id,
                     }))}
                     formatItem={{
@@ -298,9 +300,9 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại</p>
                   <DropdownSearchable
                     onchangeValue={(value) =>
-                      setFieldValue("isproposal", value.id)
+                      setFieldValue("subType", value.id)
                     }
-                    onClearData={() => setFieldValue("isproposal", "")}
+                    onClearData={() => setFieldValue("subType", "")}
                     placeholder={"Phân loại"}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}

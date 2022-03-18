@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
-import { FC, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import React, { FC, useEffect, lazy } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 import AuthProvider from "services/providers/Auth";
@@ -11,36 +11,38 @@ import RightClickMenuProvider from "services/providers/RightClickMenu";
 
 /*=====3.LAYOUTS=====*/
 import { FullPageLayout } from "shareComponents/layouts";
+import Policy from "views/authentication/Policy";
 
+// import { Loader } from "shareComponents/common";
 /*=====4.CONFIG ROUTE=====*/
-import AccountingRouter from "./accounting";
-import AuthenticationRouter from "./authentication";
-import BiddingRouter from "./bidding";
-import CmcsRouter from "./cmcs";
-import DatahubRouter from "./datahub";
-import DocumentRouter from "./document";
-import PPTRouter from "./ppt";
-import FinancialRouter from "./financial";
-import HumanRouter from "./human";
-import MarketRouter from "./market";
-import MediaRouter from "./media";
-import MessagesRouter from "./messages";
-import OperationRouter from "./operation";
-import OwnerRouter from './owner';
-import PcmRouter from "./pcm";
-import WorkshopRouter from "./workshop";
-import PersonalRouter from "./personal";
-import QrcodeRouter from "./qrcode";
-import ReeRouter from "./ree";
-import SupportRouter from "./support";
-import TimesheetRouter from "./timesheet";
+const AccountingRouter = lazy(() => import("./accounting"));
+const AuthenticationRouter = lazy(() => import("./authentication"));
+const BiddingRouter = lazy(() => import("./bidding"));
+const CmcsRouter = lazy(() => import("./cmcs"));
+const DatahubRouter = lazy(() => import("./datahub"));
+const DocumentRouter = lazy(() => import("./document"));
+const PPTRouter = lazy(() => import("./ppt"));
+const FinancialRouter = lazy(() => import("./financial"));
+const HumanRouter = lazy(() => import("./human"));
+const MarketRouter = lazy(() => import("./market"));
+const MediaRouter = lazy(() => import("./media"));
+const MessagesRouter = lazy(() => import("./messages"));
+const OperationRouter = lazy(() => import("./operation"));
+const OwnerRouter = lazy(() => import('./owner'));
+const PcmRouter = lazy(() => import('./pcm'));
+const WorkshopRouter = lazy(() => import('./workshop'));
+const PersonalRouter = lazy(() => import("./personal"));
+const QrcodeRouter = lazy(() => import("./qrcode"));
+const ReeRouter = lazy(() => import("./ree"));
+const SupportRouter = lazy(() => import("./support"));
+const TimesheetRouter = lazy(() => import("./timesheet"));
 
 /*=====5.PAGES=====*/
-import ErrorPage from "views/authentication/Error";
-import { HomeLayout } from "shareComponents/layouts";
-import { HumanLayout } from "views/human/shareComponents/layouts";
-import { DocumentLayout } from 'views/document/sharedComponents/layouts';
-import { AccountingLayout } from 'views/accounting/shareComponents/layouts';
+const ErrorPage = lazy(() => import("views/authentication/Error"));
+const HomeLayout = lazy(() => import("shareComponents/layouts"));
+const HumanLayout = lazy(() => import("views/human/shareComponents/layouts"));
+const DocumentLayout = lazy(() => import('views/document/sharedComponents/layouts'));
+const AccountingLayout = lazy(() => import('views/accounting/shareComponents/layouts'));
 
 const Routes: FC = () => {
     useEffect(() => {
@@ -48,152 +50,164 @@ const Routes: FC = () => {
     }, []);
 
     return (
-        <Router>
-            <AuthProvider>
-                <RightClickMenuProvider>
-                    <DeleteConfirmProvider>
-                        <ChatProvider>
-                            <ModalProvider>
-                                <Switch>
+        <React.Suspense fallback={<div className="fixed inset-0 flex justify-center items-center">
+            <span className="cbs-clock">
+            </span>
+        </div>}>
+            <Router>
+                <AuthProvider>
+                    <RightClickMenuProvider>
+                        {/*<DeleteConfirmProvider>*/}
+                        {/*    <ChatProvider>*/}
+                        <ModalProvider>
+                            <Switch>
 
-                                    {/* =====HOME===== */}
-                                    <Route exact path="/">
-                                        <PcmRouter />
-                                    </Route>
+                                {/* =====HOME===== */}
+                                <Route exact path="/">
+                                    <PcmRouter />
+                                </Route>
 
-                                    {/* =====AUTHENTICATION===== */}
-                                    <Route path="/authentication/:path?">
-                                        <AuthenticationRouter />
-                                    </Route>
+                                {/* =====AUTHENTICATION===== */}
+                                <Route path="/(authentication|login)/:path?">
+                                    <AuthenticationRouter />
+                                </Route>
 
-                                    {/* =====ACCOUNTING===== */}
-                                    <Route path="/accounting">
-                                        <AccountingLayout>
-                                            <AccountingRouter />
-                                        </AccountingLayout>
-                                    </Route>
-                                    
-                                    {/* =====BIDDING===== */}
-                                    <Route path="/bidding">
-                                        <BiddingRouter />
-                                    </Route>
+                                {/* =====ACCOUNTING===== */}
+                                <Route path="/accounting">
+                                    <AccountingLayout>
+                                        <AccountingRouter />
+                                    </AccountingLayout>
+                                </Route>
 
-                                    {/* =====CMCS===== */}
-                                    <Route path="/cmcs">
-                                        <CmcsRouter />
-                                    </Route>
+                                {/* =====BIDDING===== */}
+                                <Route path="/bidding">
+                                    <BiddingRouter />
+                                </Route>
 
-                                    {/* =====DATHUB===== */}
-                                    <Route path="/datahub">
-                                        <DatahubRouter />
-                                    </Route>    
+                                {/* =====CMCS===== */}
+                                <Route path="/cmcs">
+                                    <CmcsRouter />
+                                </Route>
 
-                                    {/* =====DOCUMENT===== */}
-                                    <Route path="/document">
-                                        <DocumentLayout>
-                                            <DocumentRouter />
-                                        </DocumentLayout>
-                                    </Route>
+                                {/* =====DATHUB===== */}
+                                <Route path="/datahub">
+                                    <DatahubRouter />
+                                </Route>
 
-                                    {/* =====PCM===== */}
-                                    <Route path="/pcm">
-                                        <PcmRouter />
-                                    </Route>
+                                {/* =====DOCUMENT===== */}
+                                <Route path="/document">
+                                    <DocumentLayout>
+                                        <DocumentRouter />
+                                    </DocumentLayout>
+                                </Route>
 
-                                    {/* =====PPT===== */}
-                                    <Route
-                                        path='/ppt'
-                                        component={PPTRouter}
-                                    />      
+                                {/* =====PCM===== */}
+                                <Route path="/pcm">
+                                    <PcmRouter />
+                                </Route>
 
-                                    {/* =====FINANCIAL===== */}
-                                    <Route path="/financial">
-                                        <FinancialRouter />
-                                    </Route>   
-                                    
-                                    {/* =====HUMAN===== */}
-                                    <Route path="/human">
-                                        <HumanLayout>
-                                            <HumanRouter />
-                                        </HumanLayout>
-                                    </Route>      
+                                {/* =====PPT===== */}
+                                <Route
+                                    path='/ppt'
+                                    component={PPTRouter}
+                                />
 
-                                    {/* =====MARKET===== */}
-                                    <Route path="/market">
-                                        <MarketRouter />
-                                    </Route>                  
+                                {/* =====FINANCIAL===== */}
+                                <Route path="/financial">
+                                    <FinancialRouter />
+                                </Route>
 
-                                    {/* =====MEDIA===== */}
-                                    <Route path="/media">
-                                        <HomeLayout>
-                                            <MediaRouter />
-                                        </HomeLayout>
-                                    </Route>  
-                                    
-                                    {/* =====MARKET===== */}
-                                    <Route path="/market">
-                                        <MarketRouter />
-                                    </Route>   
+                                {/* =====HUMAN===== */}
+                                <Route path="/human">
+                                    <HumanLayout>
+                                        <HumanRouter />
+                                    </HumanLayout>
+                                </Route>
 
-                                    {/* =====OPERATION===== */}
-                                    <Route path="/operation">
-                                        <OperationRouter />
-                                    </Route>   
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouter />
+                                </Route>
 
-                                    {/* =====OWNER===== */}
-                                    <Route path="/owner">
-                                        <OwnerRouter />
-                                    </Route> 
+                                {/* =====MEDIA===== */}
+                                <Route path="/media">
+                                    <HomeLayout>
+                                        <MediaRouter />
+                                    </HomeLayout>
+                                </Route>
 
-                                    {/* =====PERSONAL===== */}
-                                    <Route path="/personal">
-                                        <PersonalRouter />
-                                    </Route> 
+                                {/* =====MARKET===== */}
+                                <Route path="/market">
+                                    <MarketRouter />
+                                </Route>
 
-                                    {/* =====QRCODE===== */}
-                                    <Route path="/qrcode">
-                                        <QrcodeRouter />
-                                    </Route> 
+                                {/* =====OPERATION===== */}
+                                <Route path="/operation">
+                                    <OperationRouter />
+                                </Route>
 
-                                    {/* =====REE===== */}
-                                    <Route path="/ree">
-                                        <ReeRouter />
-                                    </Route> 
+                                {/* =====OWNER===== */}
+                                <Route path="/owner">
+                                    <OwnerRouter />
+                                </Route>
 
-                                    {/* =====SUPPORT===== */}
-                                    <Route path="/support">
-                                        <SupportRouter />
-                                    </Route>
+                                {/* =====PERSONAL===== */}
+                                <Route path="/personal">
+                                    <PersonalRouter />
+                                </Route>
 
-                                    {/* =====WORKSHOP===== */}
-                                    <Route path="/workshop">
-                                        <WorkshopRouter />
-                                    </Route>
+                                {/* =====QRCODE===== */}
+                                <Route path="/qrcode">
+                                    <QrcodeRouter />
+                                </Route>
 
-                                    {/* =====MESSAGES===== */}
-                                    <Route path="/messages">
-                                        <MessagesRouter />
-                                    </Route>
+                                {/* =====REE===== */}
+                                <Route path="/ree">
+                                    <ReeRouter />
+                                </Route>
 
-                                    {/* =====TIMESHEET===== */}
-                                    <Route path="/timesheet">
-                                        <TimesheetRouter />
-                                    </Route>
+                                {/* =====SUPPORT===== */}
+                                <Route path="/support">
+                                    <SupportRouter />
+                                </Route>
 
-                                    {/* =====OTHER===== */}
-                                    <Route path="*">
-                                        <FullPageLayout>
-                                            <Route path="/*" component={ErrorPage} />
-                                        </FullPageLayout>
-                                    </Route>
+                                {/* =====WORKSHOP===== */}
+                                <Route path="/workshop">
+                                    <WorkshopRouter />
+                                </Route>
 
-                                </Switch>
-                            </ModalProvider>
-                        </ChatProvider>
-                    </DeleteConfirmProvider>
-                </RightClickMenuProvider>
-            </AuthProvider>
-        </Router>
+                                {/* =====MESSAGES===== */}
+                                <Route path="/messages">
+                                    <MessagesRouter />
+                                </Route>
+
+                                {/* =====TIMESHEET===== */}
+                                <Route path="/timesheet">
+                                    <TimesheetRouter />
+                                </Route>
+
+                                {/* =====POLICY===== */}
+                                <Route
+                                    exact
+                                    path="/policy"
+                                    component={Policy}
+                                />
+
+                                {/* =====OTHER===== */}
+                                <Route path="*">
+                                    <FullPageLayout>
+                                        <Route path="/*" component={ErrorPage} />
+                                    </FullPageLayout>
+                                </Route>
+
+                            </Switch>
+                        </ModalProvider>
+                        {/*</ChatProvider>*/}
+                        {/*</DeleteConfirmProvider>*/}
+                    </RightClickMenuProvider>
+                </AuthProvider>
+            </Router>
+        </React.Suspense>
     );
 };
 

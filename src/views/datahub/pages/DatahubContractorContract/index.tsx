@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
+import moment from 'moment';
+import Skeleton from "react-loading-skeleton";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -13,19 +15,11 @@ import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 import { formatNumber } from "utils/ppt";
-
-const _data = {
-	name: 'Tư vấn quản lý dự án và Tư vấn giám sát',
-	type: 'Thi công kết cấu',
-	scale: 'Loại A. Dân dụng. Cấp I',
-	parameter: "3 hầm/15.000m2. 30 tầng nổi/60.000 m2",
-	value: 10000000000,
-	note: "1005.HDKT.QLDA.pdf",
-	created_at: "15:30 22/12/2021",
-	updated_at: "15:30 22/12/2021",
-}
-
-type DataModuleState = typeof _data & { _id: string | number }
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+import { DatahubContract } from "typings/datahub/contract";
+import { useContractorCompany } from "views/datahub/contexts/Company";
+import useInfinitePackage from "services/hooks/datahub/package/useInfinitePackage";
+import { BUILDING_GRADES, BUILDING_TYPES, PROJECT_TYPES } from "apis/localdb";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -35,20 +29,28 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 const DatahubContractorContract: FC = () => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
+	const [keyword, setKeyword] = useState('');
 
-	const [data, setData] = useState<DataModuleState[]>([])
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data);
+	const { data: company } = useContractorCompany();
+	const { data, isLoading } = useInfinitePackage(
+		['datahub_packages', keyword],
+		{ keyword, contractorID: company?.data._id || '', populates: JSON.stringify({ path: 'field' }) },
+		{ enable: Boolean(company?.data._id) }
+	);
+
+	const [selected, setSelected] = useState<DatahubContract | Record<string, any>>({});
+
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data ? data.pages.flatMap(page => page.data.listRecords) : []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu";
-		setData(Array.from({ length: 30 }).map((_, index) => ({ ..._data, _id: index })));
 	}, []);
 
 	return (
 		<div className="w-full px-3.5 ">
 			<div className="bg-white border-cbs-border border-[0.5px]">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-					<span className="text-x-large mr-7">Danh sách</span>
+					<span className="text-x-large mr-7">Hợp đồng minh chứng</span>
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 					<DocumentDropdown
 						data={pkgs}
@@ -56,9 +58,15 @@ const DatahubContractorContract: FC = () => {
 						onSelectValue={setPkg}
 					/>
 					{/* <DropdownFilterButton /> */}
-					<GroupActions className="flex items-center flex-1" />
+					<GroupActions
+						className="flex items-center flex-1"
+						onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+						disabled={{
+							pencil: checked.length !== 1,
+						}}
+					/>
 
-					<ButtonCreate onClick={() => setShow(!show)} />
+					<ButtonCreate onClick={() => { setShow(!show); setSelected({}) }} />
 					<ButtonMore />
 				</div>
 				<div className="overflow-auto relative">
@@ -111,15 +119,25 @@ const DatahubContractorContract: FC = () => {
 						</thead>
 						<tbody className="text-small">
 							{
-								data.map((props) => {
+								data?.pages.map(page => page.data.listRecords.map((props) => {
 									const {
 										_id,
 										name,
-										parameter,
-										scale,
-										type,
+										field,
+										projectType,
+										buildingType,
+										buildingGrade,
+
+										basementNumber,
+										basementArea,
+										floorNumber,
+										floorArea,
+
 										value,
-										note,
+										vatValue,
+
+										date,
+										files,
 									} = props
 									return (
 										<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer">
@@ -129,19 +147,31 @@ const DatahubContractorContract: FC = () => {
 											{/* ====== Hợp đồng ====== */}
 											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border">{name}</td>
 											{/* ====== Lĩnh vực ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{type}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{(field && typeof field !== 'string') ? field.name : ''}</td>
 											{/* ====== Quy mô, tính chất ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{scale}</td>
-											{/* ====== Thông số ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">{parameter}</td>
-											{/* ====== Giá trị Ngày ký ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(value)}</td>
-											{/* ====== Ngày ký ====== */}
-											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(value)}</td>
 											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
-												<a href="./#" className="text-cbs-primary">
-													{note}
-												</a>
+												<p>{PROJECT_TYPES.find(item => item.value === projectType)?.text}</p>
+												<p>{BUILDING_TYPES.find(item => item.value === buildingType)?.text}</p>
+												<p>{BUILDING_GRADES.find(item => item.value === buildingGrade)?.text}</p>
+											</td>
+											{/* ====== Thông số ====== */}
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
+												<p>{basementNumber + ' hầm/' + basementArea + 'm2'}</p>
+												<p>{floorNumber + ' tầng nổi/' + floorArea + 'm2'}</p>
+											</td>
+											{/* ====== Giá trị Ngày ký ====== */}
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{formatNumber(value + vatValue)}</td>
+											{/* ====== Ngày ký ====== */}
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border text-right">{moment(date).format('DD/MM/yyyy')}</td>
+											<td className="pt-2.5 pb-3 pl-3 border-b border-cbs-border">
+												{
+													files?.map((file, index) => {
+														return <p key={index} className="text-cbs-primary">
+															{/* {note} */}
+															this is files
+														</p>
+													})
+												}
 											</td>
 											<td className="pt-2.5 pb-3 px-3 border-b border-cbs-border text-right">
 												<button className=" w-6 h-6">
@@ -150,13 +180,29 @@ const DatahubContractorContract: FC = () => {
 											</td>
 										</tr>
 									)
-								})
+								}))
 							}
+							{isLoading && Array.from({ length: 4 }).map((_, i) => (
+								<tr key={i}>
+									{Array.from({ length: 9 }).map((item, index) => (
+										<td key={index} className="px-3 pt-2.5 pb-3 border-b border-cbs-border">
+											<Skeleton style={{ borderRadius: '100px' }} duration={1} />
+										</td>
+									))}
+								</tr>
+							))}
 						</tbody>
 					</table>
 				</div>
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}
-				<ModalCreateContract type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+				<ModalExtraLarge show={show}>
+					<ModalCreateContract
+						contractor={company?.data._id || ''}
+						datahubPackageID={selected._id}
+
+						toggle={() => setShow(!show)}
+					/>
+				</ModalExtraLarge>
 			</div>
 		</div>
 	);

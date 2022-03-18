@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 
 import { Link } from "react-router-dom";
-import useDatahubTypes from "services/hooks/datahub/useDatahubTypes";
+import { useDatahubTypes } from "services/hooks/datahub";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 
@@ -13,6 +14,8 @@ import { SearchInput } from "shareComponents/common";
 import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateType from "../DatahubType/components/ModalCreateType";
 
@@ -22,11 +25,13 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubType2: FC = () => {
-	const { data, isFetching, } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 20, type: 2 });
+	const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', limit: 20, type: 2 });
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
+	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
+	const queryClient = useQueryClient();
 
-	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
@@ -43,9 +48,19 @@ const DatahubType2: FC = () => {
 					onSelectValue={setPkg}
 				/>
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				<GroupActions
+					className="flex items-center flex-1"
+					onClickDownload={() => { alert('download button') }}
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					onClickTrash={() => { alert('Delete button') }}
+					disabled={{
+						download: checked.length === 0,
+						pencil: checked.length !== 1,
+						trash: checked.length !== 1,
+					}}
+				/>
 
-				<ButtonCreate onClick={() => setShow(!show)} />
+				<ButtonCreate onClick={() => { setShow(!show); setSelected(null) }} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -92,7 +107,7 @@ const DatahubType2: FC = () => {
 											</Link>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular}</td>
+										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular ? "Thông thường" : "Phổ biến"}</td>
 									</tr>
 								)
 							})
@@ -101,14 +116,27 @@ const DatahubType2: FC = () => {
 				</table>
 			</div>
 			<Paginate
-				isFetching={isFetching}
-				limit={20}
+				limit={data?.data.limit || 10}
 				totalRecord={data?.data.totalRecord}
 				totalPages={data?.data.totalPage}
-				// prevPageAction
+				hasNextPage={Boolean(data?.data.nextCursor)}
+				prevPageAction={fetchPrevPage}
+				nextPageAction={fetchNextPage}
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
-			<ModalCreateType type='create' show={show} toggle={() => setShow(!show)} buttonOnly />
+			<ModalExtraLarge show={show} buttonOnly>
+				<ModalCreateType
+					type={selected?._id ? 'edit' : 'create'}
+					datahubType={2}
+					datahubID={selected?._id}
+					toggle={() => setShow(false)}
+					onSuccessCreate={data => {
+						queryClient.removeQueries(["datahub_types"], { inactive: true });
+						// queryClient.refetchQueries(["datahub_types", ""]);
+						resetPage();
+					}}
+				/>
+			</ModalExtraLarge>
 		</div >
 	);
 };

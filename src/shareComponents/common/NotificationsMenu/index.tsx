@@ -1,24 +1,39 @@
 import { FC, Fragment, UIEvent } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { useHistory } from "react-router-dom";
 
 import iconNotification from "assets/images/icons8-notification-32.png";
 
+import { useNotification } from "services/hooks/useNotification";
 import { NotificationItem } from "shareComponents/common";
 import { NotificationProps } from 'typings/notification';
 
 type Props = {
-  notifications: NotificationProps[]
+  notifications: NotificationProps[],
+  total: number,
   onScroll?: (e: UIEvent<HTMLDivElement>) => void
 }
 
-export const NotificationsMenu: FC<Props> = ({ notifications, onScroll }) => {
+export const NotificationsMenu: FC<Props> = ({ notifications, total, onScroll }) => {
+  const history = useHistory();
+  const { updateNotificationAsync } = useNotification({}, false);
+
+  const handleClickNoti = async (notification: NotificationProps) => {
+    updateNotificationAsync({
+      notificationID: notification._id,
+      status: 3
+    })
+
+    history.push(notification.path || '/')
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
-          {notifications.length ? (
-            <span className="absolute top-0 right-0 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
-              {notifications.length}
+          {total ? (
+            <span className="absolute z-10 top-0 right-0 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
+              {total}
             </span>
           ) : ''}
           <img src={iconNotification} alt="Filter" className="w-6 h-6 filter-secondary-gray" />
@@ -34,28 +49,22 @@ export const NotificationsMenu: FC<Props> = ({ notifications, onScroll }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2">
+        <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 z-60">
           <div className="font-bold text-2xl leading-7 text-dark px-4 pt-3">
-            Thông báo {notifications.length ? `(${notifications.length})` : ''}
+            Thông báo {total ? `(${total})` : ''}
           </div>
 
           <div className="flex justify-between items-center px-4 pt-3">
             <span className="font-bold text-lg text-dark">
               Mới
             </span>
-            <a className="text-primary" href="/">Xem tất cả</a>
+            {/* <a className="text-primary" href="/">Xem tất cả</a> */}
           </div>
 
-          <div className="t-header-notification-item-container overflow-auto" onScroll={onScroll}>
+          <div className="t-header-notification-item-container overflow-auto overflow-x-hidden" onScroll={onScroll}>
             {notifications.length ? notifications.map(notification => (
               <Menu.Item key={notification._id}>
-                <NotificationItem
-                  avatar={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender.image}`}
-                  author={notification.sender.bizfullname}
-                  content={notification.title}
-                  path={notification.path}
-                  lastActive={notification.createAt}
-                />
+                <NotificationItem notification={notification} onClick={handleClickNoti} />
               </Menu.Item>
             )) : ''}
           </div>

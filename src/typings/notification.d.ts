@@ -1,8 +1,14 @@
 import { APIResponse } from "./apis/response";
+import { User } from "./user";
 
 export type ListNotificationPayload = {
   companyID?: string;
 };
+
+export type UpdateNotificationPayload = {
+  notificationID: string;
+  status: number;
+}
 
 export type NotificationResponse = APIResponse & {
   data: NotificationProps;
@@ -25,15 +31,20 @@ export type NotificationProps = {
   _id: string,
   type: number,
   status: number,
-  sender: {
-    _id: string;
-    bizfullname: string,
-    fullname: string,
-    image: string
-  },
-  receiver: string,
-  title: string,
+  app: string,
+  languageKey: string,
+  project: string,
+  sender: User,
+  receiver: User,
   content: string,
   path: string,
+  mainColl: {
+    kind: string,
+    item: any
+  },
+  subColl: {
+    kind: string,
+    item: any
+  },
   createAt: string
 };

@@ -9,6 +9,8 @@ import PlusIcon from "assets/images/icons8-plus-math-96.svg";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {MessageContext} from "../../../../index";
 import {SearchChatItem} from "./SearchChatItem";
+import {useDispatch} from "react-redux";
+import {appendFakeItemListConversation} from "redux/reducer/messages/ListConversation";
 
 export const SearchUserConversationSection:FC = () => {
     const {setShowSearch, showSearch} = useContext(SearchUserAndConversationContext);
@@ -16,6 +18,7 @@ export const SearchUserConversationSection:FC = () => {
     const listFriendsRef = useRef<HTMLDivElement>(null);
     const {socketRef,setCurrentChat, currentChat} = useContext(MessageContext);
     const socket = socketRef.current;
+    const dispatch = useDispatch();
 
     useEffect(() => {
         inputRef.current&&inputRef.current.focus()
@@ -55,9 +58,10 @@ export const SearchUserConversationSection:FC = () => {
                     links: 0,
                     createAt: 0,
                     __v: 0,
-                    config: 0
+                    // config: 0
                 })
             });
+            dispatch(appendFakeItemListConversation({conversationId: data._id, conversation: data}))
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });
@@ -113,6 +117,7 @@ export const SearchUserConversationSection:FC = () => {
                     _map(listConversations, conversation => (
                         <SearchChatItem
                             itemClickAction={(chat) => {
+                                dispatch(appendFakeItemListConversation({conversationId: chat._id, conversation: chat}))
                                 setCurrentChat(chat._id);
                                 setShowSearch(false)
                             }}

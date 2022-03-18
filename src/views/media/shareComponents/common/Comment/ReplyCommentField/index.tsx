@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useContext } from 'react';
+import React, { FC, useEffect, useRef, useState, useContext } from 'react';
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -7,15 +7,18 @@ import { toast } from "react-toastify";
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
 import iconEmailSend from 'assets/images/icon-email-send.png';
-import { PostImage, PostFile } from 'views/media/shareComponents/common';
+import { PostImage, PostFile } from 'shareComponents/common';
+import { APP_KEY } from "utils/constants";
 
 import CommentContext from 'views/media/contexts/comment/comment.context';
-import { modifyUploadedFilesV2 } from 'services/hooks/ppt/useUploadFile/upload.utils';
-import { FileProps, FilePropsUpload, CommentPayload } from 'typings/media';
+import { FileProps, FilePropsUpload } from 'typings/common';
+import { CommentPayload } from 'typings/media';
+
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { useAuth } from 'services/hooks/useAuth';
+import { useSocket } from "services/hooks/useSocket";
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from 'services/hooks/ppt/useUploadFile';
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -60,11 +63,12 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
-	const { addFileToUpload } = useUpload({ 
-		appID: "5df4ce16506d9b3c587948ca",
+	const { current: socket }: any = useSocket();
+	const { addFileToUpload } = useUpload({
+		appID: APP_KEY.MEDIA,
 		companyID: user?.company._id
 	});
-	const { createCommentAsync, updateCommentAsync } = useCommentMedia({ 
+	const { createCommentAsync, updateCommentAsync } = useCommentMedia({
 		key: `list_comments.${mediaID}`,
 		params: { mediaID }
 	});
@@ -84,6 +88,39 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	// 	cancelUploadImage(file)
 	// }
 
+	const listenEventAddComment = (result: any) => {
+		if(!user || !mediaID) return;
+
+		const { data, error } = result;
+
+		if(error) return;
+
+		const { infoObject, infoComment, parentID, method } = data;
+
+		if(infoObject?._id !== mediaID) return;
+		if(user._id === infoComment?.author?._id) return;
+
+		if(method === 'UPDATE') {
+			return dispatch({
+				type: 'UPDATE_COMMENT',
+				payload: {
+					commentID: infoComment._id,
+					parent: parentID,
+					body: infoComment,
+				}
+			});
+		}
+
+		dispatch({ type: 'ADD_COMMENT', payload: infoComment });
+	}
+
+	useEffect(() => {
+		if(!socket) return;
+
+		socket.off('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
+		socket.on('COMMENT_SSC_ADD_COMMENT', listenEventAddComment);
+	}, [socket])
+
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
@@ -100,6 +137,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 1,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadImageProgress(key, percentCompleted)
@@ -113,6 +151,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			const { _id } = await addFileToUpload({
 				files: file,
 				fileType: 2,
+				useCompress: true,
 				progress: percentCompleted => {
 					console.log(`${percentCompleted}%`, key);
 					setUploadFileProgress(key, percentCompleted)
@@ -143,15 +182,19 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			...{ commentID } ?? {},
 			...{ parentID } ?? {}
 		}
+		let dataAfterInsertOrUpdate = null;
+		let method = '';
 
 		try {
 			if (defaultValue) {
 				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
 
-				if(error) {
+				if (error) {
 					return toast.warning(message);
 				}
 
+				method = 'UPDATE';
+				dataAfterInsertOrUpdate = data;
 				dispatch({
 					type: 'UPDATE_COMMENT',
 					payload: {
@@ -162,19 +205,36 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				});
 			} else {
 				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
-				
-				if(error) {
+
+				if (error) {
 					return toast.warning(message);
 				}
 
+				method = 'INSERT';
+				dataAfterInsertOrUpdate = data;
 				dispatch({ type: 'ADD_COMMENT', payload: data });
 			}
+
+			socket?.emit('COMMENT_CSS_ADD_COMMENT', {
+				app: APP_KEY.MEDIA,
+				objectID: mediaID,
+				method,
+				parentID,
+				infoComment: dataAfterInsertOrUpdate,
+				populates: JSON.stringify({
+					path: 'project author'
+				})
+			})
+
+			socket?.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
+				receivers: dataAfterInsertOrUpdate.receivers
+			});
 		} catch (error) {
 			if (typeof error === "string") {
-                toast.error(error);
-            } else if (error instanceof Error) {
-                toast.error(error.message);
-            }
+				toast.error(error);
+			} else if (error instanceof Error) {
+				toast.error(error.message);
+			}
 		}
 
 		// Clear text input

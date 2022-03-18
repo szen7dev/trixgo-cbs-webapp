@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import iconComment from 'assets/images/icon-chat-project.png';
 import { MediaProps } from 'typings/media';
-import { abbreviateNumber } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
 import { Loader } from 'shareComponents/common';
 
 type Props = {

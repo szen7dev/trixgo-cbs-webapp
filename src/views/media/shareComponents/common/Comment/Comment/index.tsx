@@ -3,14 +3,17 @@ import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
-import { PostFile } from 'views/media/shareComponents/common';
+// import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
+import { PostFile } from 'shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
-import { CommentProps } from 'typings/common';
+import { CommentProps } from 'typings/media';
 import { useCommentMedia } from 'services/hooks/useMedia';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,
 	onDelete?: () => unknown,
+	hasPermissionUpdate?: boolean,
+	hasPermissionDelete?: boolean,
 }
 
 interface Props {
@@ -20,13 +23,14 @@ interface Props {
 	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
+	userID: string | undefined,
 	comment: CommentProps,
 	small?: boolean,
 	disableReply?: boolean
 }
 
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
-	disableReply, comment, small, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
+	disableReply, comment, small, userID, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const { deleteCommentAsync } = useCommentMedia({
 		params: { mediaID: comment?.media?._id }
@@ -37,7 +41,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		try {
 			const { error, message } = await deleteCommentAsync(comment._id);
             if(error) return toast.warning(message);
-			
+
 			dispatch({
 				type: "DELETE_COMMENT",
 				payload: { _id: comment?._id, parent: comment?.parent }
@@ -62,6 +66,9 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	const images = comment.images || [];
 	const files = comment.files || [];
 
+	const hasPermissionUpdate = userID === comment.author._id;
+	const hasPermissionDelete = userID === comment.author._id;
+
 	return (
 		<>
 			<div {...props} className={cn("flex pb-1.5", props.className)}>
@@ -75,12 +82,18 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				<div className='group w-full'>
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
-							<p className="font-bold text-medium">{comment.author?.fullname}</p>
+							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
 							<p className="mt-0.5 text-[15px] leading-4">
 								{comment.content}
 							</p>
 						</div>
-						{Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
+						{Options && <Options 
+							className="opacity-0 group-hover:opacity-100" 
+							onUpdate={handleEditComment} 
+							onDelete={handleDeleteComment} 
+							hasPermissionUpdate={hasPermissionUpdate}
+							hasPermissionDelete={hasPermissionDelete}
+						/>}
 					</div>
 					<div>
 						<div className="flex flex-wrap gap-x-2">
@@ -111,7 +124,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 						<div className="flex justify-between mt-1">
 							<ul className="inline-block">
 								<li className="inline-block mr-2">
-									<a href="/">{moment(comment.createAt).format('DD/MM/YYYY HH:mm')}</a>
+									{moment(comment.createAt).format('DD/MM/YYYY HH:mm')}
 								</li>
 								{/* <li className="inline-block mr-2"><button className="font-bold">Thích</button></li> */}
 								{!disableReply && <li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>}

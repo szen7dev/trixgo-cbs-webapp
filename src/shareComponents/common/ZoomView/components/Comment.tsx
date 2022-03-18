@@ -4,7 +4,8 @@ import { FC, HTMLAttributes } from 'react';
 import cn from "classnames";
 import moment from "moment";
 
-import { PostFile } from 'views/media/shareComponents/common';
+import { nl2p } from 'utils';
+import { PostFile } from 'shareComponents/common';
 import { Comment as CommentType } from 'typings/ppt/comment';
 
 type OptionsProps = {
@@ -60,7 +61,7 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">
-						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9' />
+						<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author?.image}`} alt="" className='h-9 w-9 object-cover' />
 					</div>
 				</div>
 				{/* Info and reply */}
@@ -68,15 +69,18 @@ const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					<div className="flex items-center">
 						<div className='bg-gray-100 rounded-xl p-2 hover:bg-primary hover:bg-opacity-10 '>
 							<p className="font-bold text-medium">{comment.author?.bizfullname}</p>
-							<p className="mt-0.5 text-[15px] leading-4">
-								{comment?.content}
+							<p
+								className="mt-0.5 text-[15px] leading-4"
+								dangerouslySetInnerHTML={{
+									__html: nl2p(comment.content)
+								}}>
 							</p>
 						</div>
 						{showOptions && Options && <Options className="opacity-0 group-hover:opacity-100" onUpdate={handleEditComment} onDelete={handleDeleteComment} />}
 					</div>
 					<div>
 						<div className="flex flex-wrap gap-x-2">
-							{images.slice(0, 3).map((image, i) => {
+							{images.slice(0, 3).map((image: any, i: any) => {
 								if (!image) return null;
 								const id = image.file ? image.file._id : image._id;
 								const name = image.file ? image.file.name : image.name;

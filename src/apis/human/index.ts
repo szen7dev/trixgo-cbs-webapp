@@ -34,10 +34,11 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
         `${ITEM_URL}/contacts`,
         {
             params: {
-                filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
+                // filter: { "company": 1, "name": 1, "createAt": 1, "image": 1 },
+                // select: "",
                 populates: {
-                    "path": "company position",
-                    "select": "name sign"
+                    "path": "company position department",
+                    "select": "_id name sign members"
                 },
                 type: 1,
                 ...params,
@@ -50,18 +51,18 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
 async function fetchListContactDocument<T>(params: ContactDocumentPayload): Promise<T> {
     const { data } = await API.get(
         `${CONTACT_DOCUMENT_URL}/contact_documents`, {
-        params: {
-            populates: {
-                "path": "company contact files contract position2 educationalBackground2 field2",
-                "select": "name sign size url userCreate createAt nameOrg",
-                "populate": {
-                    "path": "userCreate project",
-                    "select": "fullname bizfullname projectType buildingGrade"
-                }
-            },
-            ...params,
+            params: {
+                populates: {
+                    "path": "company contact files contract position2 educationalBackground2 field2",
+                    "select": "name sign size url userCreate createAt nameOrg path",
+                    "populate": {
+                        "path": "userCreate project",
+                        "select": "fullname bizfullname projectType buildingGrade"
+                    }
+                },
+                ...params,
+            }
         }
-    }
     );
     return data;
 }
@@ -336,7 +337,7 @@ const HumanRepository = {
     }): Promise<HumanInfo> => fetchListHuman<HumanInfo>({
         populates: {
             "path": `company contact contractType department workingStatus other educationalBackground major workplace position area area1 area2`,
-            "select": "name sign parent",
+            "select": "name sign parent members",
             "populate": {
                 "path": "parent",
                 "select": "name sign parent level",
@@ -348,8 +349,8 @@ const HumanRepository = {
         },
         ...params,
     }),
-    fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> =>
-        fetchListContactDocument<ContactDocumentResponse>(params),
+
+    fetchListContactDocument: async (params: ContactDocumentPayload): Promise<ContactDocumentResponse> => fetchListContactDocument<ContactDocumentResponse>(params),
     requestCreateContactDocument: async (body: CreateContactDocumentPayload): Promise<MutationContactDocument> => requestCreateContactDocument(body),
     requestUpdateContactDocument: async (body: UpdateContactDocumentPayload): Promise<MutationContactDocument> => requestUpdateContactDocument(body),
     requestDeleteContactDocument,

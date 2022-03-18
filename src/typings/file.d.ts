@@ -31,7 +31,9 @@ export type FileUpdatePayload = {
 export type UploadPayload = {
   signedUrl: string;
   file: File;
-  progress?: (percentCompleted: number) => void
+  progress?: (percentCompleted: number, _id?: string) => void;
+  source?: any;
+  _id?: string
 }
 
 export type AddFileUploadResponse = {

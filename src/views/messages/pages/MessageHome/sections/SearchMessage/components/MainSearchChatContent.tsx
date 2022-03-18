@@ -8,7 +8,18 @@ import {MessageContext} from "../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
 import {ItemMessage} from "typings/apis/messages/listMessage";
 import 'react-circular-progressbar/dist/styles.css';
-import {Reminder, ReminderNoti, Poll, PollNoti, AddUsersNoti, PinMessageNoti, MyMessage, OthersMessage, NotificationCenter} from "../../ChattingSection";
+import {
+    Reminder,
+    ReminderNoti,
+    Poll,
+    PollNoti,
+    AddUsersNoti,
+    PinMessageNoti,
+    MyMessage,
+    OthersMessage,
+    NotificationCenter,
+    ChangeNameNoti, ChangeAvatarNoti
+} from "../../ChattingSection";
 import moment from "moment";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 
@@ -36,7 +47,12 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
-        return _map(value, (message, index) => renderMessage(message, value[index-1]))
+        return _map(value.sort((a,b) => {
+            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+                return 1
+            }
+            return -1
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     useEffect(() => {
@@ -124,11 +140,19 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
                     return <OthersMessage context={MessageContext} message={message}/>
                 }
             case 101:
-                // eslint-disable-next-line no-case-declarations
-                const usersAdded = message.usersAssigned.map(user => user.bizfullname);
-                // eslint-disable-next-line no-case-declarations
-                const messsagesAdd = usersAdded.join("; ");
-                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${messsagesAdd}</span>`}/>
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã thêm: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 102:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xoá: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span>`}/>
+            case 103:
+                return <ChangeNameNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi tên cuộc hội thoại`}/>;
+            case 104:
+                return <ChangeAvatarNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đổi ảnh đại diện cuộc hội thoại`}/>;
+            case 105:
+                return <AddUsersNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã đặt: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với trai trò Admin`}/>;
+            case 106:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã xóa: <span class="text-black">${message.usersAssigned.map(user => user.bizfullname).join("; ")}</span> với vai trò Admin`}/>
+            case 107:
+                return <AddUsersNoti isLeave={true} content={`${(message.sender.bizfullname||message.sender.fullname)} đã rời khỏi cuộc hội thoại`}/>;
             case 108:
                 return <PinMessageNoti content={`${(message.sender.bizfullname||message.sender.fullname)} đã ghim một tin nhắn`}/>
             case 109:

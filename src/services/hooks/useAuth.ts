@@ -2,13 +2,12 @@ import { useContext, useEffect } from "react";
 import OneSignalReact from "react-onesignal";
 
 import { useHistory } from "react-router-dom";
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery , useQueryClient} from "react-query";
 import { toast } from "react-toastify";
-
 import AuthContext from "services/contexts/Auth";
 import API from "apis/repository";
 import AuthenticationRepository from "apis/authentication";
-
+import {logout} from "redux/reducer/UserInfo"
 import { 
   SignInPayload, 
   UseAuth, 
@@ -18,11 +17,13 @@ import {
   UseGetListAppMenu,
   UseGetListAppRoleMenu
   } from "typings/auth";
+import {useDispatch} from "react-redux";
 
 export const useAuth = (): UseAuth => {
   const { dispatch } = useContext(AuthContext);
   const history = useHistory();
-
+  const queryClient = useQueryClient();
+  const dispatchRedux = useDispatch()
   useEffect(() => {
     if (
       localStorage.getItem("currentUser") === null ||
@@ -161,10 +162,12 @@ export const useAuth = (): UseAuth => {
     });
     const user = JSON.parse(localStorage.getItem("currentUser") as string) ?? null;
     const _id = user._id;
+    queryClient.clear();
+    dispatchRedux(logout());
     localStorage.removeItem(`oneSignalId_${_id}`);
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
-    history.push("/authentication/sign-in");
+    history.push("/login");
   };
 
   return {
@@ -224,7 +227,6 @@ export const useCheckPerAccessApp = (payload: { appID: string }): UseCheckPermis
 
   let hasPermission = true;
   if (isSuccess && data?.data?.keyError == 'permission_denied') {
-
     hasPermission = false;
   }
   // console.log("check-permissions-access-app", data);
@@ -334,3 +336,16 @@ export const useCheckPerAccessOneMenu = (payload: {appID: string, menuID: string
     }
   };
 };
+
+export const useHistoryTraffics = (): {
+  createHistoryTraffics: (payload: any) => Promise<any>;
+  loading: boolean;
+} => {
+  const { mutateAsync, isLoading } = useMutation((payload: any) =>
+    AuthenticationRepository.requestHistoryTraffics(payload)
+  );
+  return {
+      createHistoryTraffics: mutateAsync,
+      loading: isLoading,
+  }
+}

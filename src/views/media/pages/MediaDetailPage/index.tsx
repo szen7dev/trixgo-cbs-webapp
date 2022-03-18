@@ -14,8 +14,8 @@ import cn from 'classnames';
  */
 // import ModalFullContainer from "../components/ModalFullContainer";
 // import ViewPost from "../components/post/ViewPost";
-import { ModalContainer, Loader } from "shareComponents/common";
-import { PostFile } from 'views/media/shareComponents/common';
+import { ModalContainer, Loader, ModalConfirm } from "shareComponents/common";
+import { PostFile } from 'shareComponents/common';
 import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
 
@@ -24,35 +24,40 @@ import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/c
  */
 import avatar from 'assets/images/avatar.jpg';
 import iconThumb from 'assets/images/icons8-thumbs-up-96 1.png';
+import iconThumbFill from 'assets/images/icons8-Material Sharp-Thumbs Up.png';
 import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconCopy from 'assets/images/icons8-copy-96.png';
-import iconPrint from 'assets/images/icons8-print-96.png';
+// import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
 import 'views/media/styles/index.css';
 
 /**
  * Types, Services, Utils
  */
-import { FileProps, ListMediasPayload, MediaProps } from "typings/media";
-import SocialRepository from "apis/media";
+import { FileProps} from "typings/common";
+import { ListMediasPayload, MediaProps } from "typings/media";
+import MediaRepository from "apis/media";
 import { typePostSelected } from 'views/media/utils';
-import { abbreviateNumber } from 'utils';
+import { nl2p } from 'utils';
+import { abbreviateNumber } from 'utils/converter';
+import { useModal } from "services/hooks/useModal";
 import { useAuth } from 'services/hooks/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
-import CommentProvider from 'views/media/contexts/comment/comment.provider';
 import { ModalZoomView } from "shareComponents/common/ZoomView";
-import { ProviderModalPost, ContextModalPost } from "views/media/contexts/post";
+import { ContextModalPost } from "views/media/contexts/post";
 
-const MediaDetail: FC = () => {
+export const MediaDetailPage: FC = () => {
 	const history = useHistory();
+	const { openModal, closeModal } = useModal();
 	const { state, toggleModal, openPost } = useContext(ContextModalPost);
 
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
+
 	const { data, refetch } = useQuery(`media_info.${mediaID}`,
-		() => SocialRepository.mediaInfo(mediaID),
+		() => MediaRepository.mediaInfo(mediaID),
 		{
 			enabled: true,
 			refetchOnWindowFocus: false
@@ -66,19 +71,36 @@ const MediaDetail: FC = () => {
 		isRelated: true
 	});
 
+	const [isReaction, setIsReaction] = useState(!!media?.reaction);
 	const [isFetchReactions, setIsFetchReactions] = useState(false);
 	const [isFetchSeens, setIsFetchSeens] = useState(false);
 
 	useEffect(() => {
-		if (paramsMedia.type === 'company') {
-			setParamsMedia(previousParams => ({
-				...previousParams,
-				companyID: user?.company._id
-			}))
-		}
-	}, [user])
+		if(!media || !user) return;
 
-	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } = 
+		const mediaType = typePostSelected(media.type || 0);
+
+		switch (mediaType) {
+			case 'company':
+				setParamsMedia(previousParams => ({
+					...previousParams,
+					companyID: user.company?._id
+				}))
+				break;
+			case 'department':
+				setParamsMedia(previousParams => ({
+					...previousParams,
+					departmentID: media.department._id
+				}))
+				break;
+			default:
+				break;
+		}
+
+		setIsReaction(!!media.reaction);
+	}, [Object.keys(media || {}).length])
+
+	const { deleteMediaAsync, reactionMediaAsync, listMedias: listMediasRelated } =
 		useMedia({
 			key: `list_medias__related`,
 			params: paramsMedia,
@@ -105,13 +127,64 @@ const MediaDetail: FC = () => {
 	const [modalShowSeen, setModalShowSeen] = useState<boolean>(false);
 	const [msUpdateView, setMsUpdateView] = useState<number>(0);
 
+	// Update view and user seen for media
+	useEffect(() => {
+		if (msUpdateView <= 0) return;
+
+		const timeout: NodeJS.Timeout = setTimeout(async () => {
+			await MediaRepository.updateViewMedia(mediaID);
+		}, msUpdateView);
+
+		return () => { clearTimeout(timeout) }
+	}, [msUpdateView])
+
+	useEffect(() => {
+		if(!media || !media.content) return;
+		readingTime();
+	}, [media, media?.content])
+
+	useEffect(() => {
+		if(!media || !user) return;
+		let hasPermission = true;
+
+		switch (media.type) {
+			case 1:
+				if(user?.company._id !== media.company?._id) {
+					hasPermission = false;
+				}
+				break;
+			case 2:
+				if(!media.department?.members.includes(user._id)) {
+					hasPermission = false;
+				}
+				break;
+			case 5:
+				if(user?._id !== media.author._id) {
+					hasPermission = false;
+				}
+				break;
+			default:
+				break;
+		}
+
+		if(!hasPermission) {
+			history.push('/media/home');
+			toast.error("Bạn không có quyền truy cập bài viết này!");
+		}
+	}, [media])
+
+	if (!media) {
+		return <Loader className="border-primary" />;
+	}
+
+	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
+
 	const toggleModalEditMedia = () => {
 		modalEditMedia && refetch();
 		setModalEditMedia(!modalEditMedia);
 	};
-	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
-	const toggleModalReact = () => {
+	const toggleModalReaction = () => {
 		!isFetchReactions && setIsFetchReactions(true);
 		setModalShowReact(!modalShowReact);
 	}
@@ -123,9 +196,8 @@ const MediaDetail: FC = () => {
 
 	const handleDeleteMedia = async () => {
 		try {
-			const { error, message } = await deleteMediaAsync(mediaID);
-
-			if (error) return toast.warning(message);
+			const { error, data } = await deleteMediaAsync(mediaID);
+			if (error) return toast.warning(data.message);
 
 			toast.success('Xóa bài viết thành công', { autoClose: 900 });
 			setTimeout(() => history.push('/media/home'), 1000);
@@ -136,10 +208,14 @@ const MediaDetail: FC = () => {
 				toast.error(error.message);
 			}
 		}
+
+		closeModal();
 	}
 
 	const handleReactionMedia = async () => {
 		try {
+			setIsReaction(!isReaction);
+
 			await reactionMediaAsync({ mediaID });
 			refetch();
 			refetchListReactions();
@@ -159,25 +235,6 @@ const MediaDetail: FC = () => {
 		const time = Math.ceil(words / wpm);
 		const ms = time * 60000;
 		setMsUpdateView(ms);
-	}
-
-	// Update view and user seen for media
-	useEffect(() => {
-		if (msUpdateView <= 0) return;
-
-		const timeout: NodeJS.Timeout = setTimeout(async () => {
-			await SocialRepository.updateViewMedia(mediaID);
-		}, msUpdateView);
-
-		return () => { clearTimeout(timeout) }
-	}, [msUpdateView])
-
-	useEffect(() => {
-		readingTime();
-	}, [media?.content])
-
-	if (!media) {
-		return <Loader className="border-primary" />;
 	}
 
 	const initialState = {
@@ -215,30 +272,49 @@ const MediaDetail: FC = () => {
 									leaveTo="transform opacity-0 scale-95"
 								>
 									<Menu.Items className="z-10 absolute right-0 mt-2 text-right origin-top-right border border-gray-300 bg-white divide-y divide-gray-100 rounded-md whitespace-nowrap" style={{ width: "264px" }}>
-										<Menu.Item>
+										{/* <Menu.Item>
 											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
 												<img src={iconPrint} alt="Icon Edit" className="inline-block mr-6" />
 												In ấn
 											</button>
-										</Menu.Item>
+										</Menu.Item> */}
 										<Menu.Item>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left" onClick={() => {
+												navigator.clipboard.writeText(window.location.href);
+												toast.success('Copy link bài viết thành công', { autoClose: 2000 })
+											}}>
 												<img src={iconCopy} alt="Icon Edit" className="inline-block mr-6" />
 												Copy link
 											</button>
 										</Menu.Item>
-										<Menu.Item onClick={toggleModalEditMediaEdit}>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-												<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
-												Cập nhật
-											</button>
-										</Menu.Item>
-										<Menu.Item onClick={handleDeleteMedia}>
-											<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
-												<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
-												Xóa
-											</button>
-										</Menu.Item>
+										{user?._id === media?.author?._id ? (
+											<>
+												<Menu.Item onClick={toggleModalEditMediaEdit}>
+													<button className="block px-8 py-2 hover:bg-gray-200 w-full text-left">
+														<img src={iconPencil} alt="Icon Edit" className="inline-block mr-6" />
+														Cập nhật
+													</button>
+												</Menu.Item>
+												<Menu.Item>
+													<button
+														className="block px-8 py-2 hover:bg-gray-200 w-full text-left"
+														onClick={() =>
+															openModal(
+															<div
+																className={
+																"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+																}
+															>
+																<ModalConfirm onConfirm={handleDeleteMedia} onCancel={closeModal} />
+															</div>
+															)
+														}>
+														<img src={iconTrash} alt="Icon trash" className="inline-block mr-6" />
+														Xoá bỏ
+													</button>
+												</Menu.Item>
+											</>
+										) : ''}
 									</Menu.Items>
 								</Transition>
 							</Menu>
@@ -269,7 +345,7 @@ const MediaDetail: FC = () => {
 							</div>
 							<div className=" text-primary-gray">
 								<span className="mr-6">{moment(media.createAt).format('DD/MM/YYYY HH:mm')}</span>
-								<button className="post__follow">Theo dõi</button>
+								{/* <button className="post__follow">Theo dõi</button> */}
 							</div>
 						</div>
 					</div>
@@ -282,6 +358,7 @@ const MediaDetail: FC = () => {
 									const id = image.file ? image.file._id : image._id;
 									const name = image.file ? image.file.nameOrg : image.nameOrg;
 									const url = image.file ? `${process.env.REACT_APP_URL_S3}${image.file.path}` : `${process.env.REACT_APP_URL_S3}${image.path}`;
+									console.log({ id, name, url })
 
 									return (
 										<div key={id} className="mt-4 mb-9 cursor-pointer relative" onClick={() => {
@@ -297,27 +374,28 @@ const MediaDetail: FC = () => {
 									)
 								}) : ''}
 							</div>
-							<div className={cn("pl-6 pr-8", { "pb-10": files.length })}>
+							<div className={cn("pl-6 pr-8", { "pb-10": files?.length })}>
 								<PostFile files={files} />
 							</div>
 							<p
 								dangerouslySetInnerHTML={{
-									__html: media.content
+									__html: nl2p(media.content)
 								}}>
 							</p>
 							<div className="flex justify-between text-primary-gray mt-7 px-6 text-[13px] leading-[15px] pb-2.5">
 								<span>
 									<button onClick={handleReactionMedia}>
 										{/* <img src={iconLike} alt="Like" className="inline-block mr-2" style={{ width: '30px' }} /> */}
-										<img src={iconThumb} alt="Like" className="inline-block mr-2" />
+										<img src={isReaction ? iconThumbFill : iconThumb} alt="Like" className="inline-block mr-2 w-[24px]" />
+										{/* <img src={iconThumb} alt="Like" className="inline-block mr-2 w-[24px]" /> */}
 									</button>
-									<button onClick={toggleModalReact}>
+									<button onClick={toggleModalReaction}>
 										{abbreviateNumber(media.amountReaction)}
 									</button>
 								</span>
 								<span>
-									<img src={iconComment} alt="Comment" className="inline-block mr-2" />
-									<Link to="/media/comments">
+									<Link to={`/media/${mediaID}/comments`}>
+										<img src={iconComment} alt="Comment" className="inline-block mr-2" />
 										{abbreviateNumber(media.amountComment)}
 									</Link>
 								</span>
@@ -331,6 +409,7 @@ const MediaDetail: FC = () => {
 							<div className="border-b border-gray-300"></div>
 							<RootCommentsList
 								className="px-5"
+								userID={user?._id}
 								comments={listComments}
 								totalRecord={totalRecord}
 								limit={limit}
@@ -350,7 +429,7 @@ const MediaDetail: FC = () => {
 							<div>
 								{listMediasRelated.length ? listMediasRelated.map((media: MediaProps) => (
 									<React.Fragment key={media._id}>
-										<Link to="/"><div>{abbreviateNumber(media.amountView)}</div></Link>
+										<Link to={`/media/post/${media._id}`}><div>{abbreviateNumber(media.amountView)}</div></Link>
 										<Link to={`/media/post/${media._id}`}>
 											{media.title}
 										</Link>
@@ -376,7 +455,7 @@ const MediaDetail: FC = () => {
 			</ModalContainer>
 			<ModalListUser
 				isModalOpen={modalShowReact}
-				toggle={toggleModalReact}
+				toggle={toggleModalReaction}
 				icon={iconThumb}
 				userID={user?._id}
 				data={listReactions}
@@ -400,13 +479,3 @@ const MediaDetail: FC = () => {
 		</>
 	);
 };
-
-export const MediaDetailPage: FC = () => {
-	return (
-		<ProviderModalPost>
-			<CommentProvider>
-				<MediaDetail />
-			</CommentProvider>
-		</ProviderModalPost>
-	)
-}

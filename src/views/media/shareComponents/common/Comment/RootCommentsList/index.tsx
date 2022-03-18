@@ -1,6 +1,6 @@
 import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
 
-import { CommentProps } from 'typings/common';
+import { CommentProps } from 'typings/media';
 import MediaRepository from "apis/media";
 
 import { Comment, RootComment } from 'views/media/shareComponents/common';
@@ -10,6 +10,7 @@ import { Comment as CommentType } from 'typings/ppt/comment';
 
 type Props = {
 	comments?: CommentProps[],
+	userID: string | undefined,
 	mediaID?: string,
 	totalRecord?: number,
 	limit?: number,
@@ -18,25 +19,29 @@ type Props = {
 }
 
 export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
-	onClickImage, smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
+	onClickImage, userID, smallImage, comments, mediaID, totalRecord = 0, limit = 5, ...props
 }) => {
 	const { state, dispatch } = useContext(CommentContext);
 	const { state: statePost } = useContext(ContextModalPost);
-	const [amountComment, setAmountComment] = useState<number>(totalRecord - limit);
+	const [amountComment, setAmountComment] = useState<number>(0);
 
 	useEffect(() => {
-		comments && dispatch({ type: 'SET_COMMENTS', payload: comments });
+		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
 	}, [comments?.length])
+
+	useEffect(() => {
+		setAmountComment(totalRecord - limit);
+	}, [totalRecord])
 
 	const handleClickViewMore = async () => {
 		const { error, data } = await MediaRepository.listComments({
-			lastestID: state.comments[0]._id,
+			lastestID: state.comments[0]?._id,
 			mediaID: mediaID,
 		});
 		setAmountComment(amountComment - limit);
 
-		if (!error && data.listRecords.length) {
-			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
+		if (!error && data?.listRecords?.length) {
+			dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data?.listRecords?.reverse() });
 		}
 	}
 
@@ -55,7 +60,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 				<div className="react__comments-header mt-3">
 					<div className='pl-11 mr-5'>
 						<button className='text-medium pb-2 mb-1.5 font-bold' onClick={handleClickViewMore}>
-							View more {amountComment} comment
+							Xem thêm {amountComment} bình luận
 						</button>
 					</div>
 				</div>
@@ -67,6 +72,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 							<RootComment
 								comment={comment}
 								limit={limit}
+								userID={userID}
 								smallImage={smallImage}
 								renderNestedComment={Comment}
 								disableReply={statePost.isShow && statePost.isReply}

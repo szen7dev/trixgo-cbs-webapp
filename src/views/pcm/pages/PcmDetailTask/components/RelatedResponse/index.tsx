@@ -2,7 +2,7 @@
  * Libraries
  */
 import { FC, useState, useContext, useEffect, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import { toArray } from "lodash";
@@ -10,8 +10,8 @@ import { toArray } from "lodash";
 /**
  * Context
  */
-import CommentProvider from 'views/pcm/context/response/comment.provider';
-import CommentContext from 'views/pcm/context/response/comment.context';
+import CommentProvider from 'views/pcm/contexts/response/comment.provider';
+import CommentContext from 'views/pcm/contexts/response/comment.context';
 
 /**
  * Assets
@@ -24,20 +24,20 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
  * Hooks, custom
  */
 import { useSocket } from "services/hooks/useSocket";
+import { useAuth } from 'services/hooks/useAuth';
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
-import useUploadFile from "services/hooks/ppt/useUploadFile";
-import { modifyUploadedFilesV2, QueueUpload } from "services/hooks/ppt/useUploadFile/upload.utils";
-import { APP_TYPE, APP_KEY } from "utils/constants";
+import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
+import { APP_KEY } from "utils/constants";
 
 /**
  * Typings, apis
  */
 import TaskRepository from "apis/task";
-import { FileProps, FilePropsUpload, ImageProps } from "typings/media";
+import { FileProps, FilePropsUpload, ImageProps } from "typings/common";
 import { Task } from 'typings/task';
 
-/** 
+/**
  * Component
  */
 import { RelatedResponseItem } from "../RelatedResponseItem";
@@ -56,15 +56,23 @@ type Props = {
 
 const queue = new QueueUpload();
 const LIMIT_PER_PAGE_RESPONSE = 5;
- 
+
 const Response: FC<Props> = ({ task }) => {
-  const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const divRef = useRef<HTMLDivElement>(null);
 
-  const { addResponseAsync, listResponses, totalRecordResponse } = useTask({ taskID: id });
-  const { listResponses: listResponsesMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({ 
-    taskID: id, official: true
+  const [isUploading, setIsUploading] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [collapsed] = useState(false);
+  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
+
+  const [amountResponse, setAmountResponse] = useState(task.amountResponse ?? 0);
+  const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
+
+  const { user } = useAuth();
+  const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
+  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
+    taskID: task._id, official: true, isFetch: false
   });
 
   const { state, dispatch } = useContext(CommentContext);
@@ -96,19 +104,15 @@ const Response: FC<Props> = ({ task }) => {
   const { current: socket }: any = useSocket();
 
   // State manage image comments
-  const [defaultState, setDefaultState] = useState({ 
-    mediaID: '', 
-    images: [] as ImageProps[], 
+  const [defaultState, setDefaultState] = useState({
+    mediaID: '',
+    images: [] as ImageProps[],
     index: 0,
     createAt: ""
   });
-  const [isShow, setIsShow] = useState(false);
-    
-  const [currentTab, setCurrentTab] = useState(RelatedResponseTab.ALL);
-  const [collapsed] = useState(false);
 
   useEffect(() => {
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    listResponses && dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
   }, [listResponses.length])
 
   useEffect(() => {
@@ -119,9 +123,14 @@ const Response: FC<Props> = ({ task }) => {
     if(!location.hash) return;
 
     (async () => {
+      const hash = location.hash.substring(1);
+      const [prefix, commentID] = hash.split('_');
+
+      if(prefix !== 'response') return;
+
       const response = await TaskRepository.searchResponseById({
-        taskID: id,
-        commentID: location.hash.substring(1)
+        taskID: task._id,
+        commentID: commentID
       });
 
       if(response.status === 200) {
@@ -133,17 +142,26 @@ const Response: FC<Props> = ({ task }) => {
         divRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
     })();
-
   }, [location.hash])
 
+  const listenEventAddResponse = (result: any) => {
+    const { data, error } = result;
+
+    if(error || amountCommentBack) return;
+
+    const { infoObject, infoComment } = data;
+
+    if(infoObject?._id !== task._id) return;
+    if(user?._id === infoComment?.author?._id) return;
+
+    dispatch({ type: 'ADD_COMMENT', payload: infoComment });
+  }
+
   useEffect(() => {
-    socket?.on('COMMENT_SSC_ADD_COMMENT', (result: any) => {
-      const { data, error } = result;
+    if(!socket) return;
 
-      if(error || !amountCommentBack) return;
-
-      dispatch({ type: 'ADD_COMMENT', payload: data.infoComment });
-    });
+    // socket.off("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
+		socket.on("COMMENT_SSC_ADD_COMMENT", listenEventAddResponse);
   }, [socket])
 
   const getClassTab = (tab: RelatedResponseTab) => {
@@ -153,6 +171,10 @@ const Response: FC<Props> = ({ task }) => {
   };
 
   const handleAddResponse = async () => {
+    if(!content) {
+      return toast.warning('Bạn chưa nhập nội dung cho phản hồi');
+    }
+
     setVisibleForm(false);
 
     let images: string[] = [];
@@ -169,27 +191,30 @@ const Response: FC<Props> = ({ task }) => {
 
     try {
       const { error, data, message } = await addResponseAsync({
-        taskID: id,
+        taskID: task._id,
         type: 2,
         content,
         files,
         images,
       });
-      console.log({ error, data, message });
 
       if(error) {
         return toast.warning(message)
       }
 
+      setAmountResponse(amountResponse + 1);
+      dispatch({ type: 'ADD_COMMENT', payload: data });
+      toast.success('Tạo phản hồi thành công');
+
       socket?.emit('COMMENT_CSS_ADD_COMMENT', {
-        app: APP_TYPE.PCM_PLAN_TASK,
-        objectID: id,
-        infoComment: data?.result
+        app: APP_KEY.PCM_PLAN_TASK,
+        objectID: task._id,
+        infoComment: data,
+        populates: JSON.stringify({
+          path: 'project author'
+        })
       })
 
-      dispatch({ type: 'ADD_COMMENT', payload: data?.result });
-
-      toast.success('Tạo phản hồi thành công');
       socket.emit('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', {
           receivers: data.receivers
       });
@@ -205,7 +230,7 @@ const Response: FC<Props> = ({ task }) => {
   const handleViewPrevious = async () => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[0]._id,
-      taskID: id,
+      taskID: task._id,
       limit: LIMIT_PER_PAGE_RESPONSE,
       official: currentTab === 'MARKED' ? true : false,
     });
@@ -213,13 +238,13 @@ const Response: FC<Props> = ({ task }) => {
     if (error || !data.listRecords.length) return;
 
     setAmountComment(amountComment - LIMIT_PER_PAGE_RESPONSE);
-    dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords });
+    dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords.reverse() });
   }
 
   const handleViewNext = async () => {
     const { error, data } = await TaskRepository.listResponse({
       lastestID: state.comments[state.comments.length - 1]._id,
-      taskID: id,
+      taskID: task._id,
       limit: LIMIT_PER_PAGE_RESPONSE,
       official: false,
       sortKey: JSON.stringify({
@@ -230,7 +255,7 @@ const Response: FC<Props> = ({ task }) => {
     if (error || !data.listRecords.length) return;
 
     setAmountCommentBack(amountCommentBack - LIMIT_PER_PAGE_RESPONSE);
-    dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords });
+    dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords.reverse() });
   }
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -244,23 +269,25 @@ const Response: FC<Props> = ({ task }) => {
 
     setUploadImage(images);
     setUploadFile(files);
+    setIsUploading(true);
 
     // Upload images
     queue.add(Object.entries(images).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
         const { _id } = await addFileToUpload({
-            files: file,
-            fileType: 1,
-            progress: percentCompleted => {
-                console.log(`${percentCompleted}%`, key);
-                setUploadImageProgress(key, percentCompleted)
-            },
-            // compressConfig: {
-            // 	useCompress: false
-            // }
+          files: file,
+          fileType: 1,
+          useCompress: true,
+          progress: percentCompleted => {
+            console.log(`${percentCompleted}%`, key);
+            setUploadImageProgress(key, percentCompleted)
+          },
         })
 
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDImageUploaded(key, _id);
       }
     })));
@@ -269,25 +296,20 @@ const Response: FC<Props> = ({ task }) => {
     queue.add(Object.entries(files).map(([key, { file }]) => ({
       key: 'FILE' + key,
       promise: async () => {
-        // const { _id } = await uploadImageWithProgressPromise(file, {
-        //   id: 'FILE' + key,
-        //   timer,
-        //   speed: 300,
-        //   onUploadProgress(progress) {
-        //     setUploadFileProgress(key, progress);
-        //   }
-        // })
         const { _id } = await addFileToUpload({
           files: file,
-            fileType: 2,
-            progress: percentCompleted => {
+          fileType: 2,
+          useCompress: true,
+          progress: percentCompleted => {
             console.log(`${percentCompleted}%`, key);
             setUploadFileProgress(key, percentCompleted)
           }
         })
 
+        if(queue.queueLength === 0) {
+          setIsUploading(false);
+        }
         setIDFileUploaded(key, _id);
-        return false;
       }
     })));
 
@@ -308,22 +330,26 @@ const Response: FC<Props> = ({ task }) => {
   const handleSkip = () => {
     queue.abord();
     removeAllFiles();
-    setVisibleForm(true);
+    setVisibleForm(false);
   }
 
   const onClickTabAll = () => {
     setCurrentTab(RelatedResponseTab.ALL);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponses });
+    dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
+    refetchListResponse();
     setAmountComment(totalRecordResponse);
     setAmountCommentBack(0);
   }
 
-  const onClickTabMarked = () => {
-    setCurrentTab(RelatedResponseTab.MARKED);
-    dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked });
-    setAmountComment(totalRecordResponseMarked);
-    setAmountCommentBack(0);
-  }
+  // const onClickTabMarked = () => {
+  //   setCurrentTab(RelatedResponseTab.MARKED);
+  //   dispatch({ type: 'SET_COMMENTS', payload: listResponsesMarked.reverse() });
+  //   refetchListResponseMarked();
+  //   setAmountComment(totalRecordResponseMarked);
+  //   setAmountCommentBack(0);
+  // }
+
+  const hashLocation = location.hash.substring(1);
 
   return (
     <>
@@ -338,14 +364,14 @@ const Response: FC<Props> = ({ task }) => {
               className={getClassTab(RelatedResponseTab.ALL)}
               onClick={onClickTabAll}
             >
-              <span className="text-[13px]">Tất cả ({task.amountResponse || 0})</span>
+              <span className="text-[13px]">Tất cả ({amountResponse})</span>
             </button>
-            <button
+            {/* <button
               className={getClassTab(RelatedResponseTab.MARKED)}
               onClick={onClickTabMarked}
             >
-              <span className="text-[13px]">Đã đánh dấu ({task.amountMarkedResponse || 0})</span>
-            </button>
+              <span className="text-[13px]">Đã đánh dấu ({amountMarkedResponse})</span>
+            </button> */}
           </div>
           <div className="flex justify-center w-10 h-10 rounded-full bg-gray-200">
             <button className="w-full" onClick={() => setIsExpand(!isExpand)}>
@@ -373,15 +399,17 @@ const Response: FC<Props> = ({ task }) => {
         ) : ''}
         <div>
           {state.comments.length ? state.comments.map(response => (
-            <RelatedResponseItem 
+            <RelatedResponseItem
               key={response._id}
               response={response}
               expanded={isExpand}
-              isHighlight={location.hash.substring(1) === response._id}
-              divRef={location.hash.substring(1) === response._id ? divRef : null}
-              onClickImage={(images,index) => {
+              isHighlight={hashLocation?.split('_')[1] === response._id}
+              divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
+              setAmountMarkedResponse={setAmountMarkedResponse}
+              refetchListResponseMarked={refetchListResponseMarked}
+              onClickImage={(images, index) => {
                 if (images.length) {
-                  setDefaultState({ mediaID: id, images, index, createAt: response.createAt })};
+                  setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};
                   setIsShow(true);
                 }
               }
@@ -398,15 +426,13 @@ const Response: FC<Props> = ({ task }) => {
             <div className="w-full border-2 rounded my-2">
               <textarea
                 className="w-full focus: outline-none p-3"
-                placeholder="Biên soạn nội dung (sẽ sử dụng thư viện Editor đổ vào khung này-sử dụng Tiny)"
+                placeholder="Biên soạn nội dung"
                 rows={10}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
             <div className="mt-3">
-              {
-                toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)
-              }
+              {toArray(uploads.files).map((_, index) => <FileUploadRow key={index} index={index} onRemove={handleRemoveUpload} data={_} />)}
               <div
                 className={
                   classNames("flex flex-wrap border custom-scroll overflow-x-hidden relative rounded-md",
@@ -427,16 +453,25 @@ const Response: FC<Props> = ({ task }) => {
                 <div className="flex">
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                     <IconPaperClip className="-rotate-45" />
-                    <input type="file" name="files" id="file" className="hidden" accept="application/*" multiple onChange={event => handleSetFiles(event)} />
+                    {/* accept="application/*" */}
+                    <input type="file" name="files" className="hidden" multiple onChange={handleSetFiles} />
                   </label>
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
                     <IconImage />
-                    <input type="file" name="files" id="file" className="hidden" accept="image/*" multiple onChange={event => handleSetFiles(event)} />
+                    <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={handleSetFiles} />
                   </label>
                 </div>
                 <div>
                   <button type="button" className="mx-3 px-3 py-2 rounded bg-gray-300 text-primary-gray" onClick={handleSkip}>Bỏ qua</button>
-                  <button type="button" className="mx-3 px-3 py-2 rounded bg-primary text-white" onClick={handleAddResponse}>Xác nhận</button>
+                  <button
+                    type="button"
+                    className={classNames('mx-3 px-3 py-2 rounded bg-primary text-white', {
+                      'disabled:opacity-60': isUploading
+                    })}
+                    disabled={isUploading}
+                    onClick={handleAddResponse}>
+                      Xác nhận
+                  </button>
                 </div>
               </div>
             </div>
@@ -457,7 +492,7 @@ const Response: FC<Props> = ({ task }) => {
     </>
   );
 };
- 
+
 export const RelatedResponse: FC<Props> = ({ task }) => {
   return (
     <CommentProvider>

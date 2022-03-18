@@ -1,40 +1,53 @@
 import React, {FC, useState, useCallback, useMemo, useContext, useRef, useEffect} from "react";
 import {getDefaultKeyBinding, DraftHandleValue} from "draft-js"
 import Editor from "@draft-js-plugins/editor";
-import createMentionPlugin, {
-    defaultSuggestionsFilter,
-    MentionData,
-} from '@draft-js-plugins/mention';
-
+import createMentionPlugin from '@draft-js-plugins/mention';
+import {defaultTheme as defaultThemeMentions} from "@draft-js-plugins/mention";
 import "@draft-js-plugins/mention/lib/plugin.css";
 import '@draft-js-plugins/focus/lib/plugin.css';
 import {ChattingInputContext} from "./ChattingInput";
-import createEmojiPlugin,{defaultTheme } from '@draft-js-plugins/emoji';
+import createEmojiPlugin  from 'draft-js-emoji-plugin';
+import {defaultTheme}  from '@draft-js-plugins/emoji';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import {IconButton} from "./IconButton";
 import {IconAttach} from "./IconAttach";
+import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 // import editorStyles from './editorStyles.module.css';
 
-defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-70px left-0";
-defaultTheme.emojiSuggestionsEntry = defaultTheme.emojiSuggestionsEntry + " flex items-center";
-defaultTheme.emojiSuggestionsEntryFocused = defaultTheme.emojiSuggestionsEntryFocused + " flex items-center";
+defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-60px left-0 shadow-md rounded-md border-0";
 defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " border-0 h-full";
 defaultTheme.emojiSelectButtonPressed = defaultTheme.emojiSelectButtonPressed + " border-0 h-full";
 defaultTheme.emojiSelectPopoverEntry = defaultTheme.emojiSelectPopoverEntry + " flex items-center justify-center";
 defaultTheme.emojiSelectPopoverEntryFocused = defaultTheme.emojiSelectPopoverEntryFocused + " flex items-center justify-center";
 
+defaultTheme.emojiSuggestions = defaultTheme.emojiSuggestions + " shadow-md rounded-md border-0";
+defaultTheme.emojiSuggestionsEntry = defaultTheme.emojiSuggestionsEntry + " flex items-center";
+defaultTheme.emojiSuggestionsEntryFocused = defaultTheme.emojiSuggestionsEntryFocused + " flex items-center";
+
+defaultThemeMentions.mentionSuggestionsPopup = defaultThemeMentions.mentionSuggestionsPopup + " shadow-md border-0 rounded-md";
+defaultThemeMentions.mention = defaultThemeMentions.mention + " bg-primary bg-opacity-25 text-black";
 type Props = {
     onPressEnter?: () => void;
     onPasteFiles?: (files: FileList|Blob[]) => void;
-    mentions: MentionData[];
     handleUploadFiles: (files: FileList|Blob[]) => void;
     context: any
 }
-export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions, handleUploadFiles, context }) => {
-    const {editorState, onChangeCallback, setSuggestions} = useContext(ChattingInputContext);
-    const [open, setOpen] = useState(true);
+export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUploadFiles, context }) => {
+    const {editorState, onChangeCallback} = useContext(ChattingInputContext);
+    const [open, setOpen] = useState(false);
     const editor = useRef<Editor>(null);
-    const {setEditorRef} = useContext(context)
+    const {setEditorRef, currentChat} = useContext(context)
+
+    const [searchMember, setSearchMember] = useState("");
+    const params = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"}), keyword: searchMember};
+    const {listMembersMessage} = UseInformationMessage(params, open, "members");
+    const mentions = listMembersMessage.map(user => {
+        return {
+            _id: user?.member?._id,
+            name: user?.member?.bizfullname,
+            avatar: `${process.env.REACT_APP_URL_S3_USER}/${user?.member?.image}`
+        }
+    });
 
     const { MentionSuggestions, plugins , EmojiSuggestions, EmojiSelect } = useMemo(() => {
         const mentionPlugin = createMentionPlugin({
@@ -75,7 +88,7 @@ export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, mentions,
     }, []);
 
     const onSearchChange = useCallback(({ value }: { value: string }) => {
-        setSuggestions(defaultSuggestionsFilter(value, mentions));
+        setSearchMember(value)
     }, []);
 
     const myKeyBindingFn = (e: any): string | null => {

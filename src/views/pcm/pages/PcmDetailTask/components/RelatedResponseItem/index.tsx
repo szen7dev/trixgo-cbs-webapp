@@ -5,6 +5,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
+import { nl2p } from 'utils';
 import HumanAvatar from "assets/images/human-avatar.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import PDFIcon from "assets/images/icons8-pdf-48 1.png";
@@ -15,17 +16,19 @@ import { ResponseProps } from "typings/task";
 import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
-import { ImageProps } from "typings/media";
+import { ImageProps } from "typings/common";
 
 type Props = {
 	expanded?: boolean;
 	isHighlight?: boolean;
-	response: ResponseProps,
+	response: ResponseProps;
 	onClickImage?: (images: ImageProps[], index: number) => void;
-	divRef?: LegacyRef<HTMLDivElement> | undefined
+	divRef?: LegacyRef<HTMLDivElement> | undefined;
+	refetchListResponseMarked?: () => void;
+	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage }) => {
+export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -42,6 +45,14 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 			taskID: response.task._id,
 			official: e.target.checked
 		})
+
+		if(e.target.checked) {
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
+		} else{
+			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
+		}
+
+		refetchListResponseMarked && refetchListResponseMarked();
 	}
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
@@ -66,7 +77,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
 						<div>
-							<p className="text-[14px]">{response.author?.bizfullname}</p>
+							<p className="text-[14px] font-bold">{response.author?.bizfullname}</p>
 							{expanded && (
 								<p className="text-[13px] text-primary-gray pb-5">
 									{response.author?.position?.name}
@@ -77,9 +88,9 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							<span className="text-[13px] text-primary-gray">
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
-							<input type="checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
+							<input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
 							<button
-								className={`${expanded ? "h-10 bg-lighter-gray" : "pl-3"
+								className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
 									} text-[13px] w-10 flex justify-center items-center rounded-full`}
 							>
 								<DotsVerticalIcon />
@@ -89,8 +100,11 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 					{/* Content */}
 					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
-						<span className="text-[13px]">
-							{response.content}
+						<span
+							className="text-[13px] whitespace-normal break-words"
+                            dangerouslySetInnerHTML={{
+                              __html: nl2p(response.content)
+                            }}>
 						</span>
 					</div>
 
@@ -100,23 +114,32 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							{(response.files && response.files.length) ? response.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
-										<a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
+										<div>
 											<div className="flex">
 												<div>
 													<img src={PDFIcon} className="w-8" alt="PDF" />
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">
-														<span className="w-5/6 break-all">
+														<a
+															href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank"
+															className="w-5/6 break-all text-cbs-highlight-color"
+														>
 															{file.nameOrg}
-														</span>
-														<div className="w-1/6 flex justify-end">
+														</a>
+														<button
+															className="w-1/6 flex justify-end"
+															onClick={() => {
+																navigator.clipboard.writeText(`${process.env.REACT_APP_URL_S3}${file.path}`);
+																toast.success('Copy link download thành công', { autoClose: 2000 })
+															}}
+														>
 															<img
 																src={CopyIcon}
 																className="w-[24px] h-[24px]"
 																alt="Copy"
 															/>
-														</div>
+														</button>
 													</div>
 
 													<div className="flex w-full mt-2 indeterminate:">
@@ -129,7 +152,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													</div>
 												</div>
 											</div>
-										</a>
+										</div>
 									</div>
 									<div className="w-2/8 px-3 pt-3">
 										<textarea
@@ -158,7 +181,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 									if (index < 2) {
 										return (
 											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : file.url} className="w-full" alt="test" />
+												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full" alt="test" />
 											</button>
 										)
 									}
@@ -167,7 +190,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 										return (
 											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
 												<img
-													src={TestImage}
+													src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage}
 													className="absolute top-0 left-0 w-full h-full z-0 object-cover opacity-40"
 													alt="test"
 												/>

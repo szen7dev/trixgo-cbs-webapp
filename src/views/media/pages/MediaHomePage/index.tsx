@@ -24,7 +24,7 @@ export const MediaHomePage: FC = () => {
 	const { listMedias: listMediasCompany, isLoadingMedias: isLoadingMediasCompany } = useMedia({
 		key: 'list_medias__company',
 		params: {
-			type: 'company', 
+			type: 'company',
 			companyID: user?.company?._id
 		},
 		isFetchMedias: true

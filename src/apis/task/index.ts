@@ -6,31 +6,62 @@ import {
   ListCheckListPayload,
   ListCheckListResponse,
   CheckListPayload,
+  UpdateCheckListPayload,
+  ChildTaskPayload,
+  ListChildTaskPayload,
+  ListChildTaskResponse,
   ResponsePayload,
   ResponseResponse,
   ListResponsePayload,
   SearchResponsePayload,
+  AddRelationUserPayload,
+  addTaskPayload,
+  addTaskResponse,
+  CommentPayload,
+  ListCommentsPayload,
+  UpdateStatusCheckListPayload,
+  ReactionCommentPayload,
+  ListReactionPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
 const populatesResponse = JSON.stringify({
   path: "task files images author",
-  select: "_id bizfullname image name nameOrg mimeType description path size author createAt",
-  options: {
-    limit: 5,
-  },
+  select: "_id bizfullname image name nameOrg path size mimeType description author createAt",
+  // options: {
+  //   limit: 5,
+  // },
   populate: {
     path: "author",
     select: "_id bizfullname image"
   }
-})
+});
+
+const populatesComment = JSON.stringify({
+  path: "author lastestReplyID files images task",
+  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task",
+  populate: {
+      path: 'author lastestReplyID files images task',
+      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task'
+  }
+});
 
 const pcmURL = "/api/subject_pcm";
 
 const TaskRepository = {
   /**
-   * CHI TIẾT CÔNG VIỆC
+   * ============================ ************* ===============================
+   * ============================ 	 PCM TASK   ===============================
+   * ============================ ************* ===============================
    */
+  async addTask(payload: addTaskPayload): Promise<addTaskResponse> {
+    const { data } = await API.post<addTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -42,10 +73,14 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountResponse amountMarkedResponse",
+        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse",
         populates: JSON.stringify({
-          path: "group author assignee related parent project company approver",
-          select: "_id name fullname bizfullname image sign",
+          path: "group author assignee related parent project company approver authorAttachs",
+          select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
+          populate: {
+            path: "author",
+            select: "_id bizfullname image"
+          }
         }),
       })}`
     );
@@ -53,25 +88,55 @@ const TaskRepository = {
     return data;
   },
 
-  /**
-   * CHECKLIST
-   */
-  async addChecklist(
-    payload: CheckListPayload
-  ): Promise<any> {
-    const { data } = await API.post<any>(
+  async addRelationUser(payload: AddRelationUserPayload): Promise<any> {
+    const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
       payload
     );
     return data;
   },
 
-  async updateChecklist(
+  /**
+   * ============================ ************** ===============================
+   * ============================ 	 CHECKLIST   ===============================
+   * ============================ ************** ===============================
+   */
+  async addChecklist(
     payload: CheckListPayload
+  ): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      {
+        select: "_id name assignee expiredTime parent status parent type",
+        populates: JSON.stringify({
+          path: "assignee",
+          select: "_id bizfullname fullname image"
+        }),
+        ...payload,
+      }
+    );
+    return data;
+  },
+
+  async updateChecklist(
+    payload: UpdateCheckListPayload
   ): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
       payload
+    );
+    return data;
+  },
+
+  async updateStatusChecklist(
+    payload: UpdateStatusCheckListPayload
+  ): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      {
+        taskID: payload.checklistID,
+        status: payload.status
+      }
     );
     return data;
   },
@@ -86,11 +151,46 @@ const TaskRepository = {
   },
 
   /**
-   * PHẢN HỒI LIÊN QUAN
+   * ============================ ************** ===============================
+   * ============================ 	 CHILD TASK  ===============================
+   * ============================ ************** ===============================
    */
-  async addResponse(
-    payload: ResponsePayload
-  ): Promise<ResponseResponse> {
+   async addChildTask(payload: ChildTaskPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      {
+        select: "_id name assignee expiredTime parent status parent type",
+        populates: JSON.stringify({
+          path: "assignee",
+          select: "_id bizfullname fullname image"
+        }),
+        ...payload,
+      }
+    );
+    return data;
+  },
+
+  async updateChildTask(payload: ChildTaskPayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
+  async listChildTask(payload: ListChildTaskPayload): Promise<ListChildTaskResponse> {
+    const { data } = await API.get<ListChildTaskResponse>(
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
+
+  /**
+   * ============================ *********************** ===============================
+   * ============================ 	 PHẢN HỒI LIÊN QUAN   ===============================
+   * ============================ *********************** ===============================
+   */
+  async addResponse(payload: ResponsePayload): Promise<ResponseResponse> {
     const { data } = await API.post<ResponseResponse>(
       `${pcmURL}/pcm_comments`,
       {
@@ -101,9 +201,7 @@ const TaskRepository = {
     return data;
   },
 
-  async updateMarkResponse(
-    payload: { commentID: string, taskID: string, official: boolean }
-  ): Promise<any> {
+  async updateMarkResponse(payload: { commentID: string, taskID: string, official: boolean }): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_comments/mark`,
       payload
@@ -111,9 +209,7 @@ const TaskRepository = {
     return data;
   },
 
-  async listResponse(
-    payload: ListResponsePayload
-  ): Promise<any> {
+  async listResponse(payload: ListResponsePayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
         populates: populatesResponse,
@@ -124,13 +220,72 @@ const TaskRepository = {
     return data;
   },
 
-  async searchResponseById(
-    payload: SearchResponsePayload
-  ): Promise<any> {
+  async searchResponseById(payload: SearchResponsePayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/search-by-id?${convertObToUrl({
         populates: populatesResponse,
         ...payload
+      })}`
+    );
+    return data;
+  },
+
+  /**
+   * ============================ *********************** ===============================
+   * ============================ 	 BÌNH LUẬN CÔNG VIỆC  ===============================
+   * ============================ *********************** ===============================
+   */
+  async createComment(payload: CommentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_comments`,
+      {
+        ...payload,
+        populates: populatesComment
+      }
+    );
+    return data;
+  },
+  async updateComment(payload: CommentPayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_comments`,
+      {
+        ...payload,
+        populates: populatesComment
+      }
+    );
+    return data;
+  },
+  async deleteComment(id: string): Promise<{ error: boolean, message: string }> {
+    const { data } = await API.delete<{ error: boolean, message: string }>(
+      `${pcmURL}/pcm_comments?commentID=${id}`
+    );
+    return data;
+  },
+  async listComments(payload: ListCommentsPayload): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments?${convertObToUrl({
+          ...payload,
+          populates: populatesComment
+      })}`
+    );
+    return data;
+  },
+
+  async reactionComment(payload: ReactionCommentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_comments/reactions`,
+      payload
+    );
+    return data;
+  },
+  async listReactionsComment(payload: ListReactionPayload): Promise<any> {
+    const { data } = await API.get<any>(
+      `${pcmURL}/pcm_comments/reactions?${convertObToUrl({
+          ...payload,
+          populates: JSON.stringify({
+            path: 'author',
+            select: "_id bizfullname image"
+          })
       })}`
     );
     return data;

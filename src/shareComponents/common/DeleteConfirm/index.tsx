@@ -3,10 +3,13 @@ import {FC, Fragment, useRef} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../redux/reducer";
 
 export const DeleteConfirm: FC = () => {
-  const { isDeleteConfirmOpen, closeDeleteConfirm, deleteConfirmContent } = useDeleteConfirm();
+  const { closeDeleteConfirm } = useDeleteConfirm();
   const focusElementRef = useRef<HTMLDivElement>(null);
+  const {isDeleteConfirmOpen, deleteConfirmContent} = useSelector((state: RootState) => state.deleteConfirm.data);
 
   const handleConfirm = () => {
     deleteConfirmContent.deleteAction();
@@ -65,7 +68,7 @@ export const DeleteConfirm: FC = () => {
                       </button>
                       <button
                           onClick={() => handleConfirm()}
-                          className={"w-[95px] h-[32px] rounded-md bg-primary text-white"}
+                          className={"w-[95px] h-[32px] rounded-md bg-negative text-white"}
                       >
                         Xác nhận
                       </button>

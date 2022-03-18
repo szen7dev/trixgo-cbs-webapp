@@ -1,40 +1,72 @@
-import SearchIcon from 'assets/icons/SearchIcon'
-import TriangleDown from 'assets/icons/TriangleDown'
-import React, { FC, useState } from 'react'
-import useCheckedList from 'services/hooks/ppt/useCheckedList'
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import { FC, useState } from 'react';
+import { unionBy } from 'lodash';
+import { toast } from "react-toastify";
+import SearchIcon from 'assets/icons/SearchIcon';
+import useCheckedList from 'services/hooks/ppt/useCheckedList';
+import { usePcm } from 'services/hooks/pcm/usePcm';
+import { useUserSystem } from 'services/hooks/users/useUserSystem';
+import debounce from "lodash/debounce";
+
+// import TriangleDown from 'assets/icons/TriangleDown';
+// import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
 
 type Props = {
-	toggle: () => void
+	toggle: () => void,
+	task: any
 }
-const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
-	const data = [
-		{ _id: 1, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 2, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 3, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 4, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 5, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 6, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 7, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 8, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-		{ _id: 9, name: 'Nguyễn Phan Thanh Hương-CPMI' },
-	]
-	const [isShow, setIsShow] = useState(false);
+
+const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
+	const data = unionBy([task.author, task.assignee, ...task?.related], '_id');
+	const { sendMailDetailTaskAsync } = usePcm();
 	const [title, setTitle] = useState('');
 	const [content, setContent] = useState('');
+	const [keyword, setKeyword] = useState('');
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList(data);
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		console.log({
+	const {
+		data: listUsersSystem, 
+		hasNextPage, 
+		totalRecord, 
+		refetch: refetchUser,
+		fetchNextPage: fetchNextPageUser,
+		deleteUserSystemAsync,
+	} = useUserSystem({
+		arrayID: JSON.stringify(data.map(item => item._id)),
+		keyword,
+		isFetch: true,
+		limit: 20
+	});
+
+	const handleSubmit = async () => {
+		if(!checked || !checked.length)
+			return toast.warning('Vui lòng chọn người gửi mail');
+
+		if(!title)
+			return toast.warning('Vui lòng nhập tiêu đề');
+
+		if(!content)
+			return toast.warning('Vui lòng nhập nội dung');
+
+		const listReceiversID = checked.map(user => user._id);
+		const body = {
+			taskID: task._id,
 			title,
-			content,
-			checked
-		})
+			notice: content,
+			members: listReceiversID
+		}
+		
+		const result = await sendMailDetailTaskAsync(body);
+		if(result.error) {
+			return toast.error('Gửi email thất bại');
+		}
+
+		toast.success('Gửi email thành công');
+		toggle();
 	}
 
 	return (
 		<div>
 			<div className="flex items-center px-6 py-2.5 justify-between">
-				<h3 className="text-2x-large font-bold" >
+				<h3 className="text-2x-large font-bold">
 					Thông báo email
 				</h3>
 				<button
@@ -58,7 +90,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 					</svg>
 				</button>
 			</div>
-			<form className='px-[30px] mt-2' onSubmit={handleSubmit}>
+			<form className='px-[30px] mt-2'>
 				<input type="text"
 					className="text-black py-1.5 px-3 w-full border-0.5 placeholder-shown:bg-cbs-gray border-cbs-border bg-white focus:bg-white focus:border-cbs-primary focus:outline-none resize-none rounded-cbs-sm"
 					placeholder="Tiêu đề email"
@@ -74,7 +106,12 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 
 				<div className='relative border-cbs-border border-0.5 flex items-center mt-4'>
 					<SearchIcon className='absolute left-3 w-4 h-4' />
-					<input type="text" placeholder='Nhập từ khóa tìm kiếm' className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header' />
+					<input 
+						type="text"
+					 	placeholder='Nhập từ khóa tìm kiếm' 
+						className='pl-9 py-3 text-medium w-full focus:outline-none bg-cbs-table-header' 
+						onChange={debounce((e: any) => setKeyword(e.target.value), 600)}
+					/>
 				</div>
 				<div className='text-small overflow-auto' style={{ height: '470px' }}>
 					<table>
@@ -83,9 +120,9 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 								<th className='px-1.5'>
 									<div className='flex items-center'>
 										<input type='checkbox' className='cbs-checkbox inline-block' ref={checkboxRef} />
-										<button onClick={e => { e.stopPropagation(); setIsShow(!isShow) }} className="ml-1.5">
+										{/* <button onClick={e => { e.stopPropagation(); setIsShow(!isShow) }} className="ml-1.5">
 											<TriangleDown className='inline-block' />
-										</button>
+										</button> */}
 									</div>
 								</th>
 								<th className='font-normal py-4'>Chọn tất cả</th>
@@ -93,7 +130,7 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 						</thead>
 						<tbody className='overflow-y-auto'>
 							{
-								isShow && data.map((item, index) => (
+								listUsersSystem.map((item, index) => (
 									<tr key={index}>
 										<td className='px-1.5 align-middle'>
 											<input type='checkbox' className='cbs-checkbox' checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(null, item)} />
@@ -101,10 +138,10 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 										<td>
 											<div className='flex items-center py-1'>
 												<div className='w-10 h-10 object-cover rounded-full overflow-hidden mr-4'>
-													<img className='w-full h-full' src="https://dntdurzwr12tp.cloudfront.net/files/db/users/4f3f2758-676b-4e41-b533-fb5841b360a5.jpg" alt="" />
+													<img className='w-full h-full' src={`${process.env.REACT_APP_URL_S3_USER}/${item.image}`} alt="" />
 												</div>
 												<div>
-													{item.name}
+													{item.bizfullname}
 												</div>
 											</div>
 										</td>
@@ -117,8 +154,9 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle }) => {
 				<div className="flex justify-end py-2 px-6">
 					<div className="mr-1.5">
 						<button
-							type="submit"
+							type="button"
 							className="px-4 py-2 rounded-md bg-primary text-white text-small leading-5 disabled:opacity-30 disabled:cursor-not-allowed"
+							onClick={handleSubmit}
 						>
 							Xác nhận
 						</button>
