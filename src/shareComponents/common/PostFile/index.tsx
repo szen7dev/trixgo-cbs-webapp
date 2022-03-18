@@ -39,7 +39,7 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 
 					return (
 						<div key={key}  {...props} className={cn("post__files-file flex pl-3.5 py-2.5 pr-6", props.className, { loading: 'progress' in d && d.progress < 100 })}>
-							<div className="mr-3.5"><img src={iconFile} className="w-[30px] h-[30px]" alt="pdf icon" /></div>
+							<div className="mr-3.5"><img src={iconFile} className="w-[35px] h-[35px]" alt="pdf icon" /></div>
 							<div className="flex-1">
 								<p className="text-sm leading-4 mt-2.5">{name}</p>
 								<p className="text-secondary-gray mt-2.5" style={{ lineHeight: "13.8px" }}>{humanFileSize(size)}</p>
