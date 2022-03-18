@@ -81,11 +81,11 @@ const PcmDetailTask: FC = () => {
   };
 
   useEffect(() => {
-    if (!isSuccessApp) return;
-    if (isSuccessApp && !hasPermission) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			return history.push("/");
-		};
+    // if (!isSuccessApp) return;
+    // if (isSuccessApp && !hasPermission) {
+		// 	toast.error("Bạn không có quyền truy cập tính năng này!");
+		// 	return history.push("/");
+		// };
 
     if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
       toast.error("Bạn không có quyền truy cập công việc này!");
@@ -94,8 +94,8 @@ const PcmDetailTask: FC = () => {
 
     if (infoTask?.data) {
       const { author, assignee, related, percentage, amountComment, group } = infoTask.data;
-      const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
-      const membersID = group?.members?.map((user: any) => user?.toString()) || [];
+      // const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
+      // const membersID = group?.members?.map((user: any) => user?.toString()) || [];
       let confirmUsers = [];
       /**
        * Check permission access

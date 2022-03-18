@@ -18,7 +18,8 @@ import {
 	DocumentHistoryPage,
 	DocumentProjectPage,
 	DocumentProfilePage,
-	DocumentReportPage
+	DocumentReportPage,
+	DocumentOfPackagePage
 } from 'views/document/pages';
 import {
 	ProjectBiddingPage,
@@ -102,11 +103,11 @@ const PPTRoutes: FC = () => {
 							<Route exact path='/ppt/project/:id/payment' component={ProjectPaymentPage} />
 							<Route exact path={['/ppt/project/:id/document', '/ppt/project/:id/document/(1|2|3|4)']}>
 								<LayoutSecondary pages={[
-									{ id: '1', title: 'Hồ sơ dự thầu', path: '/ppt/project/:id/document', navExact: true },
+									{ id: '1', title: 'Danh sách', path: '/ppt/project/:id/document', navExact: true },
 									{ id: '2', title: 'Phân loại', path: '/ppt/project/:id/document/1' },
 									{ id: '3', title: 'Thư mục', path: '/ppt/project/:id/document/2' },
-									{ id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
-									{ id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
+									// { id: '4', title: 'Báo cáo', path: '/ppt/project/:id/document/3' },
+									// { id: '5', title: 'Lịch sử upload file', path: '/ppt/project/:id/document/4' },
 								]}>
 									<ModalProvider>
 										<Switch>
