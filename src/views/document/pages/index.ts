@@ -6,3 +6,4 @@ export * from './DocumentHomePage';
 export * from './DocumentProfilePage';
 export * from './DocumentProjectPage';
 export * from './DocumentReportPage';
+export * from './DocumentOfPackagePage';

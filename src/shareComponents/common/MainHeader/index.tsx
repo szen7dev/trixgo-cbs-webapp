@@ -14,21 +14,20 @@ import { useAuth } from "services/hooks/useAuth";
 export const MainHeader: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
+  const { current: socket }: any = useSocket();
   const { 
     listNotifications, 
-    totalRecord,
+    totalRecordSendSuccess,
     refetchListNotification, 
     hasNextPage, 
     nextPageListNotification 
   } = useNotification({}, true);
 
-  const socketRef: any = useSocket();
-
   useEffect(() => {
-		const socket = socketRef.current;
     if (!socket) return;
 
 		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
+      console.log('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION');
       refetchListNotification();
 		});
 	}, []);
@@ -106,7 +105,7 @@ export const MainHeader: FC = () => {
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu notifications={listNotifications} total={totalRecord} onScroll={handleScroll} />
+            <NotificationsMenu notifications={listNotifications} total={totalRecordSendSuccess} onScroll={handleScroll} />
             <UserMenu />
           </div>
         </div>

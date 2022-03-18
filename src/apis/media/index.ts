@@ -11,8 +11,11 @@ import {
     CommentPayload,
     ListCommentsPayload,
 
-    ListReactionPayload,
     MediaReactionPayload,
+    ListReactionMediaPayload,
+    ReactionCommentPayload,
+    ListReactionCommentPayload,
+
     ListSeenPayload
 } from "typings/media";
 import { convertObToUrl } from "utils";
@@ -97,7 +100,7 @@ const MediaRepository = {
         );
         return data;
     },
-    async listReactions(payload: ListReactionPayload): Promise<any> {
+    async listReactions(payload: ListReactionMediaPayload): Promise<any> {
         const { data } = await API.get<any>(
             `${mediaURL}/reactions?${convertObToUrl({
                 ...payload,
@@ -151,6 +154,36 @@ const MediaRepository = {
             `${mediaURL}/comments?${convertObToUrl({
                 ...payload,
                 populates: populatesComment
+            })}`
+        );
+        return data;
+    },
+
+    /**
+     * REACTION COMMENT
+     */
+    async reactionCommentMedia(payload: ReactionCommentPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${mediaURL}/reactions/comments/media`,
+            payload
+        );
+        return data;
+    },
+    async reactionCommentFile(payload: ReactionCommentPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${mediaURL}/reactions/comments/file`,
+            payload
+        );
+        return data;
+    },
+    async listReactionsComment(payload: ListReactionCommentPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${mediaURL}/reactions/comments?${convertObToUrl({
+                ...payload,
+                populates: JSON.stringify({
+                path: 'author',
+                select: "_id bizfullname image"
+                })
             })}`
         );
         return data;

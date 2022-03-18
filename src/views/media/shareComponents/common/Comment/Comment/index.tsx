@@ -1,13 +1,14 @@
-import { FC, HTMLAttributes, useContext } from 'react';
+import { FC, HTMLAttributes, useContext, useState } from 'react';
 import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
 
 // import iconFaceSweet from 'assets/images/icons8-grinning-face-with-sweat-48.png';
-import { PostFile } from 'shareComponents/common';
+import iconLike from "assets/images/emoji/like.png";
+import { PostFile, ModalReactions } from 'shareComponents/common';
 import CommentContext from 'views/media/contexts/comment/comment.context';
 import { CommentProps } from 'typings/media';
-import { useCommentMedia } from 'services/hooks/useMedia';
+import { useCommentMedia, useReactionCommentMedia } from 'services/hooks/useMedia';
 
 type OptionsProps = {
 	onUpdate?: () => unknown,
@@ -32,10 +33,30 @@ interface Props {
 export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, userID, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
+	const [isOpenModalReactions, setIsOpenModalReactions] = useState(false);
+	const [isReaction, setIsReaction] = useState(!!comment.reaction);
+	const [amountReaction, setAmountReaction] = useState(comment.amountReaction);
+	const [isFetchReactionComment, setIsFetchReactionComment] = useState(false);
+
 	const { deleteCommentAsync } = useCommentMedia({
 		params: { mediaID: comment?.media?._id }
 	});
+	const {
+		reactionCommentMediaAsync,
+		listReactionsComment,
+		hasNextPageReactionsComment,
+		fetchNextPageReactionsComment,
+		totalRecord
+	} = useReactionCommentMedia({
+		params: { commentID: comment._id },
+		isFetchReaction: isFetchReactionComment
+	});
 	const { dispatch } = useContext(CommentContext);
+
+	const toggleModalReaction = () => {
+		setIsFetchReactionComment(true);
+		setIsOpenModalReactions(!isOpenModalReactions);
+	}
 
 	const handleDeleteComment = async () => {
 		try {
@@ -47,6 +68,28 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				payload: { _id: comment?._id, parent: comment?.parent }
 			});
 		} catch (error: unknown) {
+			if (typeof error === "string") {
+                toast.error(error);
+            } else if (error instanceof Error) {
+                toast.error(error.message);
+            }
+		}
+	}
+
+	const handleReactionComment = async () => {
+		try {
+			if(isReaction) {
+				setAmountReaction(amountReaction - 1);
+			} else{
+				setAmountReaction(amountReaction + 1);
+			}
+			setIsReaction(!isReaction);
+
+			await reactionCommentMediaAsync({
+				commentID: comment._id,
+				typeReaction: 1
+			})
+		} catch (error) {
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {
@@ -126,9 +169,23 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								<li className="inline-block mr-2">
 									{moment(comment.createAt).format('DD/MM/YYYY HH:mm')}
 								</li>
-								{/* <li className="inline-block mr-2"><button className="font-bold">Thích</button></li> */}
+								<li className="inline-block mr-2">
+									<button className={cn("font-bold", {
+										"text-blue-600": isReaction
+									})} onClick={handleReactionComment}>
+										{isReaction ? 'Bỏ thích' : 'Thích'}
+									</button>
+								</li>
 								{!disableReply && <li className="inline-block"><button className="font-bold" onClick={onClickReply}>Phản hồi</button></li>}
 							</ul>
+							{amountReaction ? (
+								<div>
+									<span className='align-middle text-secondary-gray mr-0.5'>{amountReaction}</span>
+									<button className='relative z-10 -mr-3' onClick={toggleModalReaction}>
+										<img src={iconLike} alt="Emoji" className="inline w-[20px]" />
+									</button>
+								</div>
+							) : ''}
 							{/* <div>
 								<span className='align-middle text-secondary-gray mr-0.5'>215</span>
 								<span className='relative z-10 -mr-3'><img src={iconFaceSweet} alt="" className='inline' /></span>
@@ -138,6 +195,14 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 					}
 				</div>
 			</div>
+			<ModalReactions
+				data={listReactionsComment}
+				isOpen={isOpenModalReactions}
+				setClose={toggleModalReaction}
+				fetchNextPage={fetchNextPageReactionsComment}
+				hasNextPage={hasNextPageReactionsComment}
+				totalRecords={totalRecord}
+			/>
 		</>
 	)
 }

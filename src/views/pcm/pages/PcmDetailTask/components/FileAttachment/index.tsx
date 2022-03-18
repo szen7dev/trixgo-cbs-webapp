@@ -1,10 +1,10 @@
 import { FC } from "react";
 import moment from 'moment';
 
-import PDFIcon from "assets/images/icons8-pdf-48 1.png";
 import ImageIcon from "assets/images/icons8-image-48.png";
 import WordIcon from "assets/images/icons8-microsoft-word-96.png";
 import ExcelIcon from "assets/images/icons8-microsoft-excel-2019-48.png";
+import { getFileIcon } from 'utils/file';
 
 type Props = {
   files: any[]
@@ -16,14 +16,14 @@ export const FileAttachment: FC<Props> = ({ files }) => {
   return (
     <div className="grid grid-cols-2 gap-1">
       {files?.map(file => {
-        // let iconFile = '';
+        const iconFile = getFileIcon(file.mimeType);
 
         return (
           <div key={file._id} className="flex justify-between items-center bg-gray-100 p-2 rounded-sm border border-slate-400">
             <a href={`${process.env.REACT_APP_URL_S3}${file.path}`} target="__blank">
               <div className="flex">
                 <div>
-                  <img src={PDFIcon} className="w-8" alt="PDF" />
+                  <img src={iconFile} className="w-8 w-[30px] h-[30px]" alt="PDF" />
                 </div>
                 <div className="ml-2">
                   <p>
