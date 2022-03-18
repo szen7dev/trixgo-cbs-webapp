@@ -466,7 +466,7 @@ export const ModalAddNewTask: FC = () => {
                         <input
                           placeholder="Tiêu đề"
                           type="text"
-                          className="border-0 flex-grow outline-none px-3 mt-0.5"
+                          className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
                           onChange={(event) => setFieldValue("name", event.target.value)}
                         />
                         <ErrorMessage

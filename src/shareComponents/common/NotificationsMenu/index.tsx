@@ -1,4 +1,4 @@
-import { FC, Fragment, UIEvent } from "react";
+import { FC, Fragment, UIEvent, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useHistory } from "react-router-dom";
 
@@ -16,7 +16,13 @@ type Props = {
 
 export const NotificationsMenu: FC<Props> = ({ notifications, total, onScroll }) => {
   const history = useHistory();
+  const [totalNoti, setTotalNoti] = useState(total);
   const { updateNotificationAsync } = useNotification({}, false);
+
+  useEffect(() => {
+    if(!total) return;
+    setTotalNoti(total);
+  }, [total])
 
   const handleClickNoti = async (notification: NotificationProps) => {
     updateNotificationAsync({
@@ -27,13 +33,23 @@ export const NotificationsMenu: FC<Props> = ({ notifications, total, onScroll })
     history.push(notification.path || '/')
   }
 
+  const handleUpdateStatusNoti = () => {
+    if(total > 0) {
+      updateNotificationAsync({
+        isUpdateSendSuccess: true,
+        status: 2
+      });
+      setTotalNoti(0);
+    }
+  }
+
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left" >
       <div>
-        <Menu.Button className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6">
-          {total ? (
+        <Menu.Button as="button" className="w-10 h-10 inline-flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-full focus:outline-none ml-6" onPointerDown={handleUpdateStatusNoti}>
+          {totalNoti ? (
             <span className="absolute z-10 top-0 right-0 bg-negative pl-1 pr-1 rounded-full text-center text-xs text-primary-light">
-              {total}
+              {totalNoti}
             </span>
           ) : ''}
           <img src={iconNotification} alt="Filter" className="w-6 h-6 filter-secondary-gray" />
@@ -51,7 +67,7 @@ export const NotificationsMenu: FC<Props> = ({ notifications, total, onScroll })
       >
         <Menu.Items className="absolute -right-3 w-96 origin-top-right bg-primary-light rounded-md shadow-lg ring-1 ring-dark ring-opacity-5 focus:outline-none mt-2 z-60">
           <div className="font-bold text-2xl leading-7 text-dark px-4 pt-3">
-            Thông báo {total ? `(${total})` : ''}
+            Thông báo {totalNoti ? `(${totalNoti})` : ''}
           </div>
 
           <div className="flex justify-between items-center px-4 pt-3">
