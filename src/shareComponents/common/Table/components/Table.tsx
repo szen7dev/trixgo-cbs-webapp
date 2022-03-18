@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import React, { PropsWithChildren, ReactElement } from 'react'
 import { useTable, TableOptions, useRowSelect, Column } from 'react-table'
-import { ContextMenuWrapper } from '../ContextMenu'
+import { ContextMenuWrapper } from '../../ContextMenu'
 import { IndeterminateCheckbox } from './IndeterminateCheckbox'
 
 type RowProps =

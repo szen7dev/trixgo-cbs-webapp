@@ -1,2 +1,2 @@
-export { default } from "./useTableData";
-export { default as TableWithoutContext } from "./TableWithoutContext";
+export { default } from "./hooks/useTableData";
+export { default as TableWithoutContext } from "./components/TableWithoutContext";

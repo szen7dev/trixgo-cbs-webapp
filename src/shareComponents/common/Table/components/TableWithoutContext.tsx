@@ -2,7 +2,7 @@
 import React, { PropsWithChildren, ReactElement } from 'react'
 import Skeleton from 'react-loading-skeleton'
 
-import { ReturnUseTableData } from './useTableData'
+import { ReturnUseTableData } from '../hooks/useTableData'
 
 type Props<D extends object = {}> = {
 	instance: ReturnUseTableData<D>,

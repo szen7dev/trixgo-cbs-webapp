@@ -1,6 +1,6 @@
 import moment from "moment"
 import { Link } from "react-router-dom"
-import { TableProperties } from "shareComponents/common/Table/Table"
+import { TableProperties } from "shareComponents/common/Table/components/Table"
 
 const headCellProps = { className: 'py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border' }
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { PropsWithChildren, useMemo } from "react";
 import { useTable, TableOptions, useRowSelect, Column, TableInstance, UseRowSelectState, UseRowSelectInstanceProps } from 'react-table'
-import { IndeterminateCheckbox } from "./IndeterminateCheckbox";
+import { IndeterminateCheckbox } from "../components/IndeterminateCheckbox";
 
 export interface TableProperties<D extends object> extends Omit<TableOptions<D>, 'columns'>, React.HTMLAttributes<HTMLDivElement> {
 	columns: ReadonlyArray<Column<D> & {
