@@ -21,7 +21,7 @@ export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPa
         [`documents`, { params }],
         async ({ pageParam }: any) => {
             return PackageRepository.fetchListPackage({
-                limit: params?.limit || 10,
+                limit: params?.limit || 20,
                 lastestID: pageParam || "",
                 keyword: params?.keyword || '',
                 select: params?.select || '',

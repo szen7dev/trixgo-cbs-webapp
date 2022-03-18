@@ -29,7 +29,8 @@ import {
 	DocumentProjectPage,
 	DocumentProfilePage,
 	DocumentReportPage,
-	DocumentDashboardPage
+	DocumentDashboardPage,
+	DocumentOfPackagePage
 } from 'views/document/pages';
 
 import {
@@ -125,24 +126,27 @@ const PCMRouter: FC = () => {
 						<Route exact path='/pcm/project/:id/payment' component={ProjectPaymentPage} />
 						<Route exact path={['/pcm/project/:id/document', '/pcm/project/:id/document/(1|2|3|4)']}>
 							<LayoutSecondary pages={[
-								{ id: '1', title: 'Hồ sơ dự thầu', path: '/pcm/project/:id/document', navExact: true },
+								{ id: '1', title: 'Danh sách', path: '/pcm/project/:id/document', navExact: true },
 								{ id: '2', title: 'Phân loại', path: '/pcm/project/:id/document/1' },
 								{ id: '3', title: 'Thư mục', path: '/pcm/project/:id/document/2' },
-								{ id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
-								{ id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
+								// { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
+								// { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
 							]}>
 								<ModalProvider>
 									<Switch>
 										<Route exact path='/pcm/project/:id/document' component={DocumentProjectPage} />
 										<Route exact path='/pcm/project/:id/document/1' component={DocumentProfilePage} />
 										<Route exact path='/pcm/project/:id/document/2' component={DocumentFolderPage} />
-										<Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-										<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} />
+										{/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
+										<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
 									</Switch>
 									<ModalCreateDocument />
+
 								</ModalProvider>
+
 							</LayoutSecondary>
 						</Route>
+						<Route exact path='/pcm/project/:id/package/:packageID' component={DocumentOfPackagePage} />
 						<Route exact path='/pcm/project/:id/group' component={PcmGroupPage} />
 						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
 						<Route exact path='/pcm/project/:id/document/:docID' component={DocumentDetailPage} />
