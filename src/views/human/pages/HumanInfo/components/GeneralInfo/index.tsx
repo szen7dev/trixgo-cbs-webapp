@@ -137,7 +137,7 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("area2")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.area2?.name}
+                {info?.area2?.name}, {info?.area2?.parent?.name}, {info?.area2?.parent?.parent?.name}
               </td>
             </tr>
 
@@ -146,7 +146,7 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("area1")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.area1?.name}
+                {info?.area1?.name}, {info?.area1?.parent?.name}, {info?.area1?.parent?.parent?.name}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("workplace")}
@@ -167,7 +167,7 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("major")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.major?.map(elm => elm.name)}
+                {info?.documents?.map((elm: any) => elm?.field2?.name ? elm?.field2?.name +",": "")}
               </td>
             </tr>
 
@@ -176,7 +176,7 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("educationalBackground")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.educationalBackground?.map(elm => elm.name)}
+                {info?.documents?.map((elm: any) => elm?.educationalBackground2?.name ?  elm?.educationalBackground2?.name +"," : "" )}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("insuranceDate")}
@@ -191,13 +191,13 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("insuranceStatus")}
               </td>
               <td className="border w-2/6 pl-4">
-                {`${info?.insuranceNumber} - ${INSURANCE_STATUS[info?.insuranceStatus || 1]}`}
+                {`${info?.insuranceNumber + "- "} ${INSURANCE_STATUS[info?.insuranceStatus || 1]}`}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("sallarySubFactor")}
               </td>
               <td className="border w-2/6 pl-4">
-                {info?.sallarySubFactor}
+                {info?.sallarySubFactor}/{info?.sallaryBasic}
               </td>
             </tr>
 

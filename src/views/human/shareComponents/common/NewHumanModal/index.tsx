@@ -1114,12 +1114,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-5/12 text-primary-gray">
-                        Người ký sa thải
+                        Người ký chấm dứt
                       </span>
                       <Field
                         type="text"
                         name="signerOut"
-                        placeholder="Người ký sa thải..."
+                        placeholder="Người ký chấm dứt..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
