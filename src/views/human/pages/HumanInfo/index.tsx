@@ -48,6 +48,9 @@ export const HumanInfo: FC = () => {
   useOnClickOutside(refMenuDropdown, () => setOpenHumanOption(!openHumanOption));
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
+
+  console.log({ detailHuman })
+
   const handleFinishForm = useCallback(
     async (values) => {
       const res = await updateContactMutateAsync({
@@ -313,6 +316,8 @@ export const HumanInfo: FC = () => {
             family: detailHuman.family,
             signerIn: detailHuman.signerIn,
             signerOut: detailHuman.signerOut,
+            sallaryBasic: detailHuman.sallaryBasic,
+            documents: detailHuman.documents
           }}
         />
         <WorkHistory humanId={id} />

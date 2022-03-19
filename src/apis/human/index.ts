@@ -336,10 +336,10 @@ const HumanRepository = {
         contactID: string;
     }): Promise<HumanInfo> => fetchListHuman<HumanInfo>({
         populates: {
-            "path": `company contact contractType department workingStatus other educationalBackground major workplace position area area1 area2`,
-            "select": "name sign parent members",
+            "path": `company contact contractType department workingStatus other educationalBackground major workplace position area area1 area2 documents`,
+            "select": "name sign parent members educationalBackground2 field2",
             "populate": {
-                "path": "parent",
+                "path": "parent educationalBackground2 field2",
                 "select": "name sign parent level",
                 populate: {
                     "path": "parent",
