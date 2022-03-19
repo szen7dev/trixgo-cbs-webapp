@@ -9,7 +9,7 @@ const dataNew =  {
   datasets: [
     {
       data: [0, 0, 0],
-      backgroundColor: ["#2a90fb", "#0060E1", "#10b981"],
+      backgroundColor: ["rgb(234 179 8)", "#0060E1", "#10b981"],
       borderWidth: 0,
     },
   ],
@@ -47,8 +47,8 @@ const SortByDeviceSupport: FC = () => {
 
         <div className="flex flex-col gap-1">
           <div className="flex items-center">
-            <div className="h-2 w-2 rounded-full bg-secondary mr-1" />
-            <span className="text-sm text-secondary">Mobile</span>
+            <div className="h-2 w-2 rounded-full bg-warning mr-1" />
+            <span className="text-sm text-yellow-600">Mobile</span>
           </div>
 
           <div className="flex items-center">
