@@ -1,6 +1,8 @@
-export const getFileIcon = (mimeType: string) => {
+export const getFileIcon = (mimeType?: string) => {
     const PATH_FILE = `${process.env.PUBLIC_URL}/images/common/files`;
     let iconFile = `${PATH_FILE}/attach.png`;
+
+    if(!mimeType) return iconFile;
 
     switch (mimeType) {
         case 'application/pdf':
