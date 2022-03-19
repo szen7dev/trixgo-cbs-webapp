@@ -17,6 +17,7 @@ import { FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
 import { ImageProps } from "typings/common";
+import { getFileIcon } from 'utils/file';
 
 type Props = {
 	expanded?: boolean;
@@ -117,7 +118,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 										<div>
 											<div className="flex">
 												<div>
-													<img src={PDFIcon} className="w-8" alt="PDF" />
+													<img src={getFileIcon(file?.mimeType)} className="w-8" alt="PDF" />
 												</div>
 												<div className="ml-3 w-full">
 													<div className="flex">

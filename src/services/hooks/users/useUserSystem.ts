@@ -31,9 +31,9 @@ export const useUserSystem = (params?: QueryParam, isFetch?: boolean): UseUserSy
         useMutation((usersID: string[]) =>
             UserSystemRepository.deleteUserSystem(usersID)
         );
-    
+
     const result = useInfiniteQuery(
-        ['list_users', params]
+        ['list_users_system', params]
         , async ({ pageParam }: any) =>
         UserSystemRepository.listUsersSystem({
             lastestID: pageParam,
