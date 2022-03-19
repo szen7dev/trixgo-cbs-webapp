@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
+import { useRowSelect, useTable } from "react-table";
 
 import { useHistory, useParams } from "react-router-dom";
 
@@ -11,7 +12,7 @@ import getColumnsInspection from "views/datahub/utils/getColumnsInspection";
 import ModalCreateInspectionDetail from "./components/ModalCreateInspectionDetail";
 
 // Custom talbe
-import useTableData, { TableWithoutContext } from 'shareComponents/common/Table';
+import { TableWithoutContext } from 'shareComponents/common/Table';
 import useQueryDatahub from "services/hooks/datahub/useQueryDatahub";
 import InspectionCheckListRepository from "apis/datahub/InspectionCheckListRepository";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
@@ -62,15 +63,11 @@ const DatahubInspectionDetail: FC = () => {
 
 	const columns = useMemo(() => getColumnsInspection(), []);
 	const _data = useMemo(() => data?.data?.listRecords || [], [data?.data.listRecords]);
-	const instance = useTableData({
+	const instance = useTable({
 		columns,
 		data: _data,
-		tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
-		tableHeadSelectorInputProps: { className: 'cbs-checkbox' },
-		tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
-		tableCellSelectorInputProps: { className: 'cbs-checkbox' },
 		getRowId: (row) => row._id
-	})
+	}, useRowSelect)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
@@ -112,18 +109,16 @@ const DatahubInspectionDetail: FC = () => {
 						className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
 						style: { borderSpacing: 0 }
 					}}
-					tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
-					tableRowProps={(props, data) => {
-						return {
-							onContextMenu(e) {
-								if (!data) return;
-								e.preventDefault();
-								e.stopPropagation();
-								setSlected(data.row.original)
-								open({ position: { x: e.clientX, y: e.clientY } });
-							}
+					getHeaderProps={() => ({ className: 'text-primary-gray whitespace-nowrap align-middle text-left' })}
+					getRowProps={(row) => ({
+						onContextMenu(e) {
+							if (!row) return;
+							e.preventDefault();
+							e.stopPropagation();
+							setSlected(row.original);
+							open({ position: { x: e.clientX, y: e.clientY } });
 						}
-					}}
+					})}
 				/>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />

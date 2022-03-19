@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTable, useRowSelect } from 'react-table';
 
 // Global components
 import { ButtonCreate, ButtonMore, GroupActions, Paginate, SearchInput } from 'shareComponents/common';
@@ -12,7 +13,7 @@ import ModalCreateInspection from './components/ModalCreateInspection';
 
 // Hooks
 import useQueryDatahub from 'services/hooks/datahub/useQueryDatahub';
-import useTableData, { TableWithoutContext } from 'shareComponents/common/Table';
+import { TableWithoutContext } from 'shareComponents/common/Table';
 
 // API
 import DatahubRepository from 'apis/datahub';
@@ -58,15 +59,11 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 	);
 
 	const columns = useMemo(() => getColumnsInspection(true), []);
-	const instance = useTableData({
+	const instance = useTable({
 		columns,
 		data: data?.data?.listRecords || [],
-		tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
-		tableHeadSelectorInputProps: { className: 'cbs-checkbox' },
-		tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
-		tableCellSelectorInputProps: { className: 'cbs-checkbox' },
 		getRowId: (row) => row._id
-	})
+	}, useRowSelect)
 
 	const handleDeleteItem = useCallback(async (selectedRow: any) => {
 		try {
@@ -133,16 +130,14 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 							className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
 							style: { borderSpacing: 0 }
 						}}
-						tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
-						tableRowProps={(props, data) => {
-							return {
-								onContextMenu(e) {
-									if (!data) return;
-									e.preventDefault();
-									setSlected(data.row.original)
-								}
+						getHeaderProps={() => ({ className: 'text-primary-gray whitespace-nowrap align-middle text-left' })}
+						getRowProps={(row) => ({
+							onContextMenu(e) {
+								if (!row) return;
+								e.preventDefault();
+								setSlected(row.original)
 							}
-						}}
+						})}
 					/>
 				</div>
 				<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
