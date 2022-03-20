@@ -22,7 +22,7 @@ export const UserSystemRepository = {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
             params: {
-                select: "_id bizfullname fullname email image company department position level",
+                select: "_id bizfullname fullname email image company department position level status",
                 populates: JSON.stringify({
                     path: "company department position",
                     select: "_id name sign"

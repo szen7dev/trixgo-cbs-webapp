@@ -14,7 +14,7 @@ interface UsePosition {
     fetchPreviousPage: () => void;
 }
 
-export const usePosition = (params?: QueryParam): UsePosition => {
+export const usePosition = (params?: QueryParam, isFetch?: boolean): UsePosition => {
     const result = useInfiniteQuery(
         ['list_positions', params],
         async ({ pageParam }: any) =>
@@ -27,7 +27,7 @@ export const usePosition = (params?: QueryParam): UsePosition => {
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: params?.isFetch,
+            enabled: isFetch ?? false,
         });
 
     const {
