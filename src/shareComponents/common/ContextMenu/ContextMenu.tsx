@@ -1,26 +1,27 @@
 import React, { FC, useEffect, useState } from 'react';
 
-type Key = "open" | "close"
+type Key = "open" | "close" | 'test'
 type Fn = ((...props: any) => void) | any
 
-const createState = (): Map<Key, Fn> => {
-	const actions = new Map();
-	actions.set("open", () => alert("not implemented"));
-	actions.set("close", () => alert("not implemented"));
-
-	return actions;
-};
+function notImplemented() { alert("not implemented") }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const createContextMenu = () => {
-	const actions = createState();
+	const actions: Map<Key, Fn> = new Map([
+		["open", notImplemented],
+		["close", notImplemented],
+	]);
+
 	const useContextMenu = () => {
 		return {
 			open: actions.get('open'),
 			close: actions.get('close'),
 			set(key: Key, cb: Fn) { actions.set(key, cb) },
 			get: actions.get.bind(actions),
-			clear() { actions.clear() },
+			reset() {
+				actions.set("open", notImplemented);
+				actions.set("close", notImplemented);
+			},
 		}
 	};
 	return useContextMenu;
@@ -35,15 +36,16 @@ type Props = {
 	preventHideOnClick?: boolean;
 	scroller?: string;
 }
-
 const ContextMenu: FC<Props> = (props) => {
 	// const { isVisible, setIsVisible, setPosition, position } = useStore(state => state)
 	const [isVisible, setIsVisible] = useState(false);
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const menuRef = React.useRef<HTMLElement>(null);
-	const { set, clear } = useContextMenu();
+	const isCreated = React.useRef(false);
 
+	const { set, reset } = useContextMenu();
 	function handleShow(e: { position: { x: number, y: number } }): void {
+		if (!menuRef.current) return alert('something wrong');
 		setIsVisible(true);
 		(menuRef.current as HTMLElement).style.zIndex = '10'
 		if (props.scroller) {
@@ -99,30 +101,30 @@ const ContextMenu: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		set('open', handleShow);
-		set('close', handleHide);
-
+		isCreated.current = true;
 		return () => {
+			isCreated.current = false;
 			unregisterHandlers();
-			if (process.env.NODE_ENV === 'production') {
-				clear();
-			} else {
-				set('open', () => alert("not implemented"));
-				set('close', () => alert("not implemented"));
-			}
+			reset();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+	if (!isCreated.current) {
+		set('open', handleShow);
+		set('close', handleHide);
+	}
 
 	return (
-		<nav
-			ref={menuRef}
-			style={{ position: 'fixed', opacity: !isVisible ? 0 : 1, top: position.y, left: position.x }}
-			className="transition-opacity"
-			onTransitionEnd={e => !isVisible ? e.currentTarget.style.zIndex = "-10" : null}
-		>
-			{props.children}
-		</nav>
+		<>
+			<nav
+				ref={menuRef}
+				style={{ position: 'fixed', opacity: !isVisible ? 0 : 1, top: position.y, left: position.x }}
+				className="transition-opacity"
+				onTransitionEnd={e => !isVisible ? e.currentTarget.style.zIndex = "-10" : null}
+			>
+				{props.children}
+			</nav>
+		</>
 	)
 }
 

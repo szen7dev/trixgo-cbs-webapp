@@ -1,25 +1,29 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { useRowSelect, useTable } from "react-table";
+import Skeleton from "react-loading-skeleton";
 
 import { useHistory, useParams } from "react-router-dom";
 
-import { Paginate } from "shareComponents/common";
-
+// Component
 // import DropdownFilterButton froeComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
-import getColumnsInspection from "views/datahub/utils/getColumnsInspection";
+import { Paginate, ButtonCreate, ButtonMore } from "shareComponents/common";
 import ModalCreateInspectionDetail from "./components/ModalCreateInspectionDetail";
+import { ContextMenu, useContextMenu } from "shareComponents/common/ContextMenu";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+
+// Utils
+import getColumnsInspection from "views/datahub/utils/getColumnsInspection";
+
+// Hooks
+import { useQuery } from "react-query";
+import useQueryCustom from "services/hooks/useQueryCustom";
 
 // Custom talbe
 import { TableWithoutContext } from 'shareComponents/common/Table';
-import useQueryDatahub from "services/hooks/datahub/useQueryDatahub";
 import InspectionCheckListRepository from "apis/datahub/InspectionCheckListRepository";
-import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
-import { useQuery } from "react-query";
+
+// API
 import DatahubRepository from "apis/datahub";
-import Skeleton from "react-loading-skeleton";
-import { ContextMenu, useContextMenu } from "shareComponents/common/ContextMenu";
 
 const DatahubInspectionDetail: FC = () => {
 	const [show, setShow] = useState(false);
@@ -42,7 +46,7 @@ const DatahubInspectionDetail: FC = () => {
 		}
 	);
 
-	const { data, isLoading: isLoadingList } = useQueryDatahub(
+	const { data, isLoading: isLoadingList } = useQueryCustom(
 		["datahub_inspection_checklist", _d && '_id' in _d.data ? _d.data._id : '', keyword],
 		({ cursor }) =>
 			InspectionCheckListRepository.get({

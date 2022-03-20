@@ -1,26 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTable, useRowSelect } from 'react-table';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 
 // Global components
 import { ButtonCreate, ButtonMore, GroupActions, Paginate, SearchInput } from 'shareComponents/common';
+import { ContextMenu } from 'shareComponents/common/ContextMenu';
 
 // App components
 import { DocumentDropdown } from 'views/document/sharedComponents/common';
 
 // Page component
 import ModalCreateInspection from './components/ModalCreateInspection';
+import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
 
 // Hooks
-import useQueryDatahub from 'services/hooks/datahub/useQueryDatahub';
+import useQueryCustom from 'services/hooks/useQueryCustom';
 import { TableWithoutContext } from 'shareComponents/common/Table';
 
 // API
 import DatahubRepository from 'apis/datahub';
-import ModalExtraLarge from 'shareComponents/common/ModalContainer/components/ModalExtraLarge';
-import { useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
-import { ContextMenu } from 'shareComponents/common/ContextMenu';
 
 // utils
 import getColumnsInspection from 'views/datahub/utils/getColumnsInspection';
@@ -38,7 +38,7 @@ const DatahubInspection: FC<{ type: number }> = ({ type }) => {
 	const [selected, setSlected] = useState<DatahubInspection | null>();
 	const queryClient = useQueryClient();
 
-	const { data, resetPage, isLoading } = useQueryDatahub(
+	const { data, resetPage, isLoading } = useQueryCustom(
 		["datahub_inspection", type, keyword],
 		({ cursor }) =>
 			DatahubRepository.getDatahubInspection({

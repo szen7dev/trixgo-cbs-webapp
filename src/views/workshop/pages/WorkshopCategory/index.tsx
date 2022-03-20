@@ -2,6 +2,7 @@ import SearchIcon from 'assets/icons/SearchIcon'
 import React, { FC, useState } from 'react'
 import { Link, generatePath } from 'react-router-dom'
 import ArrowRight from 'views/workshop/sharedComponents/common/Icons/ArrowRight'
+import CardLession from './components/CardLession'
 import ModalCreateCategory from './components/ModalCreateCategory'
 
 type Props = {
@@ -43,40 +44,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 					{
 						Array.from({ length: 4 }).map((_, i) => (
 							<Link key={i} to={generatePath("/workshop/home/category/:id/:workshopID", { id: i, workshopID: 1 })}>
-								<div className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3'>
-									<div className='h-[133px] w-full object-cover overflow-hidden'>
-										<img src="/images/workshop/workshop.png" alt="" />
-									</div>
-									{/* TAGS */}
-									<div className='space-y-5 mt-5'>
-										<div className='mt-4 text-x-small'>
-											<span className='pl-2.5 pr-3 bg-[#FFEED9] py-1.5'>
-												<span className='inline-block w-2.5 h-2.5 rounded-full bg-cbs-schedule-oneweek mr-2'></span>
-												<span>Development</span>
-											</span>
-										</div>
-										<p className='text-x-large'><strong>English Fluency | How to Sound Like Nattive</strong></p>
-										<div>
-											<img className='inline mr-2 w-6 h-6' src="/images/workshop/google-presentation.png" alt="" />
-											<span>92 Workshops</span>
-										</div>
-										<div className='h-[3px] bg-cbs-schedule-after-7days'></div>
-										<div className='flex justify-between text-medium py-3'>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/love.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/view.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/user.png" alt="" />
-												<span>690</span>
-											</div>
-										</div>
-									</div>
-								</div>
+								<CardLession data={{}} className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3' />
 							</Link>
 						))
 					}
@@ -95,40 +63,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 					{
 						Array.from({ length: 3 }).map((_, i) => (
 							<Link key={i} to={generatePath("/workshop/home/category/:id/:workshopID", { id: i, workshopID: 1 })}>
-								<div className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3'>
-									<div className='h-[133px] w-full object-cover overflow-hidden'>
-										<img src="/images/workshop/workshop.png" alt="" />
-									</div>
-									{/* TAGS */}
-									<div className='space-y-5 mt-5'>
-										<div className='mt-4 text-x-small'>
-											<span className='pl-2.5 pr-3 bg-[#FFEED9] py-1.5'>
-												<span className='inline-block w-2.5 h-2.5 rounded-full bg-cbs-schedule-oneweek mr-2'></span>
-												<span>Development</span>
-											</span>
-										</div>
-										<p className='text-x-large'><strong>English Fluency | How to Sound Like Nattive</strong></p>
-										<div>
-											<img className='inline mr-2 w-6 h-6' src="/images/workshop/google-presentation.png" alt="" />
-											<span>92 Workshops</span>
-										</div>
-										<div className='h-[3px] bg-cbs-schedule-after-7days'></div>
-										<div className='flex justify-between text-medium py-3'>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/love.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/view.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/user.png" alt="" />
-												<span>690</span>
-											</div>
-										</div>
-									</div>
-								</div>
+								<CardLession data={{}} className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3' />
 							</Link>
 						))
 					}
@@ -147,40 +82,7 @@ const WorkshopCategory: FC<Props> = (props) => {
 					{
 						Array.from({ length: 2 }).map((_, i) => (
 							<Link key={i} to={generatePath("/workshop/home/category/:id/:workshopID", { id: i, workshopID: 1 })}>
-								<div className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3'>
-									<div className='h-[133px] w-full object-cover overflow-hidden'>
-										<img src="/images/workshop/workshop.png" alt="" />
-									</div>
-									{/* TAGS */}
-									<div className='space-y-5 mt-5'>
-										<div className='mt-4 text-x-small'>
-											<span className='pl-2.5 pr-3 bg-[#FFEED9] py-1.5'>
-												<span className='inline-block w-2.5 h-2.5 rounded-full bg-cbs-schedule-oneweek mr-2'></span>
-												<span>Development</span>
-											</span>
-										</div>
-										<p className='text-x-large'><strong>English Fluency | How to Sound Like Nattive</strong></p>
-										<div>
-											<img className='inline mr-2 w-6 h-6' src="/images/workshop/google-presentation.png" alt="" />
-											<span>92 Workshops</span>
-										</div>
-										<div className='h-[3px] bg-cbs-schedule-after-7days'></div>
-										<div className='flex justify-between text-medium py-3'>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/love.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/view.png" alt="" />
-												<span>690</span>
-											</div>
-											<div>
-												<img className='inline-block w-[18px] h-[18px]' src="/images/workshop/user.png" alt="" />
-												<span>690</span>
-											</div>
-										</div>
-									</div>
-								</div>
+								<CardLession data={{}} className='border-cbs-border border-0.5 rounded-cbs-md px-3.5 pb-3' />
 							</Link>
 						))
 					}

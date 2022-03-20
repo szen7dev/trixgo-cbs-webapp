@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
+import useQueryCustom from "services/hooks/useQueryCustom";
 import { ResponseList } from "typings/apis/response";
 import { DatahubPrams } from "typings/datahub/api";
 import { DatahubFinancial } from "typings/datahub/financial";
-import useQueryDatahub from "../useQueryDatahub";
 
 type Props = { contractorID: string } & DatahubPrams;
 type Options = {
@@ -15,7 +15,7 @@ const useQueryFinancials = (
   props: Props,
   options: Options = { refetchOnMount: false }
 ) => {
-  return useQueryDatahub(
+  return useQueryCustom(
     ["datahub_financials", props?.keyword],
     ({ cursor }) =>
       DatahubRepository.getDatahubFinancialList({ ...props, lastestID: cursor }),
