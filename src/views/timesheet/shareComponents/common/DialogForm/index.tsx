@@ -46,7 +46,7 @@ const CreateOrEditDialog: FC<CreateOrEditDialogProps> = ({
   });
   const { listDepartments } = useQueryListDepartments({
     keyword: searchhDepartmentStr,
-  });
+  }, true);
 
   const initialValues = {
     name: "",

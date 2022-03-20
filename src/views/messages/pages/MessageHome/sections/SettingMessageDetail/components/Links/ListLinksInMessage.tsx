@@ -104,13 +104,13 @@ export const ListLinksInMessage:FC<Props> = ({isActive}) => {
                     allowClearValueSingleInput={true}
                     bordered={false}
                     onSearchInputChange={valueSearch => setSearchUser(valueSearch)}
-                    data={listMembersMessage.map(member => {
+                    data={listMembersMessage.filter(member => member).map(member => {
                         return {
                             ...member,
-                            id: member.member._id,
-                            text: member.member.bizfullname,
+                            id: member?.member?._id,
+                            text: member?.member?.bizfullname,
                             imageUrl: `${process.env.REACT_APP_URL_S3_USER}/${member?.member?.image}`,
-                            _id: member.member._id
+                            _id: member?.member?._id
                         }
                     })}
                     onchangeValue={({_id}) => setAuthor(_id)}
