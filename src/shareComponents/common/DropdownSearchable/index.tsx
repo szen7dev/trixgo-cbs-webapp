@@ -174,7 +174,7 @@ export const DropdownSearchable: FC<Props> = ({
       onClearData && onClearData();
     }
   };
-
+  
   const handleRemoveItemSingle = () => {
     setValue(undefined);
     onClearData && onClearData();

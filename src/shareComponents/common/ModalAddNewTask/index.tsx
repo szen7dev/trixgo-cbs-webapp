@@ -88,14 +88,9 @@ export const ModalAddNewTask: FC = () => {
     keyword: otherFieldValue
   });
 
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName
-  });
-
-  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
-    projectID,
-    keyword: searchFriendName
-  }, true);
+  // const { data: listFriend } = useQueryListFriend({
+  //   keyword: searchFriendName
+  // });
 
   const { 
     data: listGroup, 
@@ -130,6 +125,11 @@ export const ModalAddNewTask: FC = () => {
     subType: "",
   };
 
+  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
+    projectID,
+    keyword: searchFriendName
+  }, true);
+
   return (
     <>
       <div className={"flex flex-col"}>
@@ -160,15 +160,20 @@ export const ModalAddNewTask: FC = () => {
                             setProjectID(`${value?.id}`);
                             setSearchDepartmentValue("");
                             setFieldValue("groupID", "");
+                            setFieldValue("assigneeID", "");
+                            setFieldValue("relatedIDs", "");
                           }}
                           onClearData={() => {
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
+                            setFieldValue("assigneeID", "");
+                            setFieldValue("relatedIDs", "");
                           }}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchDepartmentValue(value),
-                            500
-                          )}
+                          onSearchInputChange={
+                            debounce(
+                              (value) => setSearchDepartmentValue(value),
+                            500)
+                          }
                           className={"w-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
@@ -381,7 +386,7 @@ export const ModalAddNewTask: FC = () => {
                               </p>
                             </div>
                           )}
-                          data={listFriend.map((item) => ({
+                          data={listUsersProject.map((item) => ({
                             label: item.bizfullname,
                             value: item._id,
                             imgUrl: item.imgUrl,
@@ -446,7 +451,7 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
-                        data={listFriend.map((item) => ({
+                        data={listUsersProject.map((item) => ({
                           label: item.bizfullname,
                           value: item._id,
                           imgUrl: item.imgUrl,
