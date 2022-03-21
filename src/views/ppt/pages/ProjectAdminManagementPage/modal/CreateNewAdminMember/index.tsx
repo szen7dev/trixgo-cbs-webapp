@@ -30,7 +30,7 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 		isFetch: true,
 		limit: 20
 	});
-
+	
 	useEffect(() => {
 		refetch()
 	}, [keyword]);

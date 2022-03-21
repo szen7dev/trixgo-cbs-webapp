@@ -66,6 +66,7 @@ export type UserSystemProps = {
     lastLog: string,
     numLog: number,
     lang: string,
+    imgUrl?: string;
 }
 
 interface ModalProps {
