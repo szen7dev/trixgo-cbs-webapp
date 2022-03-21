@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import { useModal } from "services/hooks/useModal";
 
@@ -29,9 +29,11 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 		keyword,
 		isFetch: true,
 		limit: 20
-	  });
+	});
 
-	  console.log({ listUsersSystem })
+	useEffect(() => {
+		refetch()
+	}, [keyword]);
 	// const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
 	// 	['users_in_company_contract', keyword],
 	// 	({ pageParam }) =>
@@ -47,7 +49,6 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
 	// 		refetchOnMount: false,
 	// 		refetchOnWindowFocus: false,
 	// 		enabled: Boolean(companyID),
-	// 		keepPreviousData: true,
 	// 		getNextPageParam(data) {
 	// 			if (!data.data.nextCursor) return undefined;
 	// 			return data.data.nextCursor;
