@@ -1,4 +1,4 @@
-import {FC, useContext, useEffect} from "react";
+import {FC, useContext, useEffect, useRef, useState} from "react";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
@@ -38,6 +38,8 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
     const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
 
+    const audioRef = useRef<HTMLAudioElement>(null)
+
     useEffect(() => {
         if (socket) {
             socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
@@ -74,6 +76,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 messageData: data?.infoMessage
             }));
         } else {
+            playSound();
             dispatch(appendMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
                 messageId: data?.infoMessage?._id,
@@ -217,5 +220,15 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }))
     }
 
-    return null;
+    const playSound = () => {
+        if (audioRef.current) {
+            if (!(audioRef.current.paused && audioRef.current.currentTime > 0 && !audioRef.current.ended)) {
+                audioRef.current.play();
+            }
+        }
+    }
+
+    return <>
+        <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
+    </>;
 };
