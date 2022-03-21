@@ -14,7 +14,7 @@ export const AvatarGroupChat:FC<Props> = ({avatars, classesMap, imageClass}) => 
         <div className={`rounded-full flex items-center justify-center text-white font-bold text-xl relative ${imageClass}`}>
             {
                 _map(avatars, (avatar,index) => (
-                    <img  key={index} className={`${classObj["imgWidth"]} ${classObj["groupPosition"][index]} rounded-full bg-gray-100 ring-2 ring-white`} src={avatar} alt={"---"}/>
+                    <img  key={index} className={`${classObj["imgWidth"]} ${classObj["groupPosition"][index]} rounded-full bg-gray-100 ring-2 ring-white object-cover`} src={avatar} alt={"---"}/>
                 ))
             }
         </div>

@@ -49,18 +49,18 @@ export const SearchUserConversationSection:FC = () => {
             membersID: [memberId]
         }).then(data => {
             if (currentChat === data._id) return;
-            socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-                conversationID: data._id,
-                select: JSON.stringify({ sender:"bizfullname" }) ,
-                filter: JSON.stringify({
-                    author: 0,
-                    taskID: 0,
-                    links: 0,
-                    createAt: 0,
-                    __v: 0,
-                    // config: 0
-                })
-            });
+            // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+            //     conversationID: data._id,
+            //     select: JSON.stringify({ sender:"bizfullname" }) ,
+            //     filter: JSON.stringify({
+            //         author: 0,
+            //         taskID: 0,
+            //         links: 0,
+            //         createAt: 0,
+            //         __v: 0,
+            //         // config: 0
+            //     })
+            // });
             dispatch(appendFakeItemListConversation({conversationId: data._id, conversation: data}))
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
