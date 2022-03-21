@@ -107,7 +107,7 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                 className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>
                 <img
                     onClick={() => handleStartPrivateChat(user?.member?._id)}
-                    className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
+                    className={"w-[56px] h-[56px] rounded-full overflow-hidden object-cover"}
                     src={`${process.env.REACT_APP_URL_S3_USER}/${user?.member?.image}`} alt={user?.member?.bizfullname}/>
                 <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                     <span
