@@ -104,7 +104,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
             messageData: {
                 ...message,
                 _id: message.tmpid,
-                parent: replyData
+                parent: replyData,
+                noAnimation: true
             }
         }));
         setTimeout(() => {
@@ -295,7 +296,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                 }
             });
         }
-    },[])
+    },[chat._id])
 
     const {hasPermission} = UseMessageHelper();
     if (!hasPermission(chat, profileId, "configSendMessage")) return null;

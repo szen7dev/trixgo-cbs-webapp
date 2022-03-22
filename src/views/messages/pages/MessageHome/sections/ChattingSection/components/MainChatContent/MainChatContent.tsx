@@ -25,6 +25,7 @@ import {
     NotificationCenter,
     ChangeNameNoti, ChangeAvatarNoti
 } from "../ChatContent/RegularContent";
+import { Oval } from  'react-loader-spinner'
 
 export const listEmoji = [
     {
@@ -85,7 +86,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, value[index-1]))
+        }), (message, index) => renderMessage(message, null, false))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
@@ -137,8 +138,13 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
+        const isOut = message.sender._id === profileId;
+        let classOrigin = (isOut ? "is-out":"is-in");
+        if (![0,1,2,7].includes(message.type)) {
+            classOrigin = "is-middle"
+        }
         return (
-            <div key={message._id} id={`message-${message._id}`}>
+            <div key={message._id} id={`message-${message._id}`} className={(message.noAnimation?"":"bubble-animation") + " " + classOrigin}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -206,6 +212,14 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     }
     return (
         <>
+            {
+                isLoading&&
+                <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation transition-all"}>
+                    <div className={"bg-white rounded-full p-1"}>
+                        <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
+                    </div>
+                </div>
+            }
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-MessageList"}

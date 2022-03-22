@@ -22,6 +22,7 @@ import {
 } from "../../ChattingSection";
 import moment from "moment";
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
+import {Oval} from "react-loader-spinner";
 
 type Props = {
     chat: ItemListConversation
@@ -104,8 +105,13 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createdAt);
+        const isOut = message.sender._id === profileId;
+        let classOrigin = (isOut ? "is-out":"is-in");
+        if (![0,1,2,7].includes(message.type)) {
+            classOrigin = "is-middle"
+        }
         return (
-            <div key={message._id} className={"transition-all"} id={`message-${message._id}`}>
+            <div key={message._id} className={"transition-all bubble-animation " + classOrigin} id={`message-${message._id}`}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createdAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -173,6 +179,14 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
     }
     return (
         <>
+            {
+                isLoading&&
+                <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation transition-all"}>
+                    <div className={"bg-white rounded-full p-1"}>
+                        <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
+                    </div>
+                </div>
+            }
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-MessageList"}
