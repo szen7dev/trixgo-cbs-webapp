@@ -66,7 +66,6 @@ export const ModalAddNewTask: FC = () => {
           toast.error(error.message);
       }
     }
-
     closeModal();
   };
 
