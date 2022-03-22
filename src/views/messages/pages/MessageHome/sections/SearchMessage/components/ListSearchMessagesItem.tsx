@@ -68,9 +68,9 @@ export const ListSearchMessagesItem:FC<Props> = ({message}) => {
         goToMessagePosition({conversationID: message.conversation, messageID: message._id}).then(data => {
             setTimeout(() => {
                 document.getElementById(`message-${message._id}`)?.scrollIntoView({block: "center", behavior: "smooth"});
-                dispatch(setShouldStartListenEvent({data: true, conversationId: message.conversation}));
                 setTimeout(() => {
                     document.getElementById(`message-${message._id}`)?.classList.add("found-message");
+                    dispatch(setShouldStartListenEvent({data: true, conversationId: message.conversation}));
                 }, 250)
             }, 500)
         })

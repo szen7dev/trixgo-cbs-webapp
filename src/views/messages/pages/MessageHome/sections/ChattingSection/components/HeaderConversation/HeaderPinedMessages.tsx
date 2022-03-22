@@ -81,9 +81,9 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         goToMessagePosition({conversationID: currentChat, messageID: _id}).then(data => {
             setTimeout(() => {
                 document.getElementById(`message-${_id}`)?.scrollIntoView({block: "center", behavior: "smooth"});
-                dispatch(setShouldStartListenEvent({data: true, conversationId: currentChat}));
                 setTimeout(() => {
                     document.getElementById(`message-${_id}`)?.classList.add("found-message");
+                    dispatch(setShouldStartListenEvent({data: true, conversationId: currentChat}));
                 }, 250)
             }, 500)
         })

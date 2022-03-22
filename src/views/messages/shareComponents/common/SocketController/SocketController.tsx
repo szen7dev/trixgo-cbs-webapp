@@ -31,6 +31,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const {socketRef} = useContext(context);
 
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
 
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
@@ -59,6 +60,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
         };
     },[socket]);
+
+    useEffect(() => {
+        if (amountMissMessage > 0) {
+            document.title = `(${amountMissMessage}) tin nhắn`
+        } else {
+            document.title = `${process.env.REACT_APP_WEBSITE_NAME}`
+        }
+    }, [amountMissMessage])
 
     const onReceiveMessage = (data: any) => {
         if (data?.infoMessage?.error) {

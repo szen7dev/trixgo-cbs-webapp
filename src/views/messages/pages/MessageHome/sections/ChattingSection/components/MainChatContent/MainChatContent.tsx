@@ -139,8 +139,12 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
         const isOut = message.sender._id === profileId;
+        let classOrigin = (isOut ? "is-out":"is-in");
+        if (![0,1,2,7].includes(message.type)) {
+            classOrigin = "is-middle"
+        }
         return (
-            <div key={message._id} id={`message-${message._id}`} className={(message.noAnimation?"":"bubble-animation") + " " + (isOut ? "is-out":"is-in")}>
+            <div key={message._id} id={`message-${message._id}`} className={(message.noAnimation?"":"bubble-animation") + " " + classOrigin}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:

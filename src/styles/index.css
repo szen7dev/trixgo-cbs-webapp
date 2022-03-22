@@ -1608,6 +1608,9 @@ input[type="text"] {
 .bubble-animation.is-out {
   transform-origin: bottom right;
 }
+.bubble-animation.is-middle {
+  transform-origin: bottom center;
+}
 @keyframes cbs-bubbles {
   0% {
     opacity: 0.4;
@@ -1624,6 +1627,11 @@ input[type="text"] {
   top: 70px;
   animation: cbs-spinner-enter 0.2s ease-in-out;
 }
+.spinner-animation.from-bottom {
+  bottom: 70px;
+  top: unset;
+  animation: cbs-spinner-enter-from-bottom 0.2s ease-in-out;
+}
 @keyframes cbs-spinner-enter {
   0% {
     top: -150px;
@@ -1632,6 +1640,17 @@ input[type="text"] {
 
   100% {
     top: 70px;
+    opacity: 1;
+  }
+}
+@keyframes cbs-spinner-enter-from-bottom {
+  0% {
+    bottom: -150px;
+    opacity: 0;
+  }
+
+  100% {
+    bottom: 70px;
     opacity: 1;
   }
 }
