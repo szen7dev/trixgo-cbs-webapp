@@ -104,7 +104,8 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
             messageData: {
                 ...message,
                 _id: message.tmpid,
-                parent: replyData
+                parent: replyData,
+                noAnimation: true
             }
         }));
         setTimeout(() => {

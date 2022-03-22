@@ -73,14 +73,20 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 conversationId: data?.infoMessage?.conversation,
                 newMessageId: data?.infoMessage?._id,
                 oldMessageId: data?.tmpid,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
         } else {
             playSound();
             dispatch(appendMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
                 messageId: data?.infoMessage?._id,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
             if (currentChat === data?.infoMessage?.conversation) {
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));

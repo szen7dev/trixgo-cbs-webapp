@@ -81,11 +81,10 @@ export const HeaderPinedMessages:FC<Props> = ({listPinnedMessage}) => {
         goToMessagePosition({conversationID: currentChat, messageID: _id}).then(data => {
             setTimeout(() => {
                 document.getElementById(`message-${_id}`)?.scrollIntoView({block: "center", behavior: "smooth"});
-                document.getElementById(`message-${_id}`)?.classList.add("found-message");
                 dispatch(setShouldStartListenEvent({data: true, conversationId: currentChat}));
                 setTimeout(() => {
-                    document.getElementById(`message-${_id}`)?.classList.remove("found-message");
-                }, 2000)
+                    document.getElementById(`message-${_id}`)?.classList.add("found-message");
+                }, 250)
             }, 500)
         })
     }

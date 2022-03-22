@@ -85,7 +85,7 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
         return (
-            <div key={message._id}>
+            <div key={message._id} id={`message-${message._id}`} className={"bubble-animation"}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
