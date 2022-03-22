@@ -25,6 +25,8 @@ import {
     NotificationCenter,
     ChangeNameNoti, ChangeAvatarNoti
 } from "../ChatContent/RegularContent";
+import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 export const listEmoji = [
     {
@@ -80,23 +82,23 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
-        return _map(value.sort((a,b) => {
+        return value.sort((a,b) => {
             if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, value[index-1]))
+        })
     },[messagesData]);
 
-    const memoizedFakeValue = useCallback(() => {
-        const value = parseMessageData(fakeMessagesData);
-        return _map(value.sort((a,b) => {
-            if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
-                return 1
-            }
-            return -1
-        }), (message, index) => renderMessage(message, null, false))
-    },[fakeMessagesData]);
+    // const memoizedFakeValue = useCallback(() => {
+    //     const value = parseMessageData(fakeMessagesData);
+    //     return _map(value.sort((a,b) => {
+    //         if (moment(b.createAt).toDate().getTime() < moment(a.createAt).toDate().getTime()) {
+    //             return 1
+    //         }
+    //         return -1
+    //     }), (message, index) => renderMessage(message, null, false))
+    // },[fakeMessagesData]);
 
     useEffect(() => {
         getListMessage({conversationID: currentChat})
@@ -135,10 +137,14 @@ export const MainChatContent:FC<Props> = ({chat}) => {
         }
     }
 
-    const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
+    const renderMessage = ({index, style}:{index: number, style: any}) => {
+        const message = memoizedValue()[index];
+        const previousMessage = memoizedValue()[index-1];
+        const shouldRenderDate = !previousMessage;
         const messageCreatedAt = moment(message.createAt);
+        console.log(message)
         return (
-            <div key={message._id} id={`message-${message._id}`}>
+            <div key={message._id} id={`message-${message._id}`} style={{...style, height: 'auto'}}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -211,9 +217,20 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 id={"conversation-messages-MessageList"}
                 className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
             >
-                <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
-                    {memoizedValue()}
-                    {memoizedFakeValue()}
+                <div className={"w-full h-full max-w-[645px] pt-[20px] px-[20px]"}>
+                    <AutoSizer>
+                        {({ height, width }) => (
+                            <List
+                                height={height}
+                                width={width}
+                                itemSize={500}
+                                itemCount={memoizedValue().length}
+                            >
+                                {renderMessage}
+                            </List>
+                        )}
+                    </AutoSizer>
+                    {/*{memoizedFakeValue()}*/}
                 </div>
                 <div style={{ float:"left", clear: "both" }} ref={messagesEndRef} />
             </div>

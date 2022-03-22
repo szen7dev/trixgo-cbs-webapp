@@ -85,7 +85,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             if (currentChat === data?.infoMessage?.conversation) {
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
-            if (!inSearchMode){
+            if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
                 setTimeout(() => {
                     scrollToBottom();
                 }, 100)
@@ -112,7 +112,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if ([101, 102, 107].includes(data?.data?.type)) {
             refetchListMembers();
         }
-        if (!inSearchMode){
+        if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
             setTimeout(() => {
                 scrollToBottom();
             }, 100)
