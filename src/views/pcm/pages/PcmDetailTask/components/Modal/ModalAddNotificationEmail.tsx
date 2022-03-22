@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { unionBy } from 'lodash';
 import { toast } from "react-toastify";
 import SearchIcon from 'assets/icons/SearchIcon';
@@ -36,6 +36,10 @@ const ModalAddNotificationEmail: FC<Props> = ({ toggle, task }) => {
 		limit: 20
 	});
 
+	useEffect(()=> {
+		refetchUser()
+	}, [keyword])
+	console.log({ listUsersSystem })
 	const handleSubmit = async () => {
 		if(!checked || !checked.length)
 			return toast.warning('Vui lòng chọn người gửi mail');
