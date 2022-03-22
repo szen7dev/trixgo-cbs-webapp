@@ -83,7 +83,7 @@ const dataNew = {
   datasets: [
     {
       data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
-      backgroundColor: "#2a90fb",
+      backgroundColor: "rgb(234 179 8)",
       barThickness: 8,
     },
     {
@@ -105,6 +105,7 @@ const StatisticsByDeviceSupport: FC<Props> = (props) => {
   const { typeYear } = props;
   const listParam : ListDevicePayload = { year: typeYear}
   const { listDevice } = useFetchSupport(listParam);
+
   for (const element of listDevice) {
     if(Number(element._id.month) === 1) {
       dataNew.datasets[0].data[0] = element.data[0] ? Number(element.data[0].amountAccesses) : Number(0);
@@ -182,8 +183,8 @@ const StatisticsByDeviceSupport: FC<Props> = (props) => {
         <div className="w-1/12 absolute flex justify-center right-0 bottom-5">
           <div className="flex flex-col gap-1">
             <div className="flex items-center">
-              <div className="h-2 w-2 rounded-full bg-secondary mr-1" />
-              <span className="text-sm text-secondary">Mobile</span>
+              <div className="h-2 w-2 rounded-full bg-warning mr-1" />
+              <span className="text-sm text-yellow-600">Mobile</span>
             </div>
 
             <div className="flex items-center">

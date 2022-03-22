@@ -123,7 +123,7 @@ export const DocumentDashboardPage: FC = () => {
 				path: "pm assistant",
 				select: "fullname image",
 			},
-		});
+		}, true);
 	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
 	// 	id: i,
 	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',

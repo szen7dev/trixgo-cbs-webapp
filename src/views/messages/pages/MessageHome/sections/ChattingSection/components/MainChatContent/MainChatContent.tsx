@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState, Fragment} from "react";
+import React, {FC, useCallback, useEffect, useRef, useState, useContext} from "react";
 import {map as _map} from "lodash";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
@@ -67,15 +67,16 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const {currentChat} = useContext(MessageContext);
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
-    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
-    const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[chat._id]);
-    const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
-    const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
-    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
+    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[currentChat]);
+    const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[currentChat]);
+    const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[currentChat]);
+    const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[currentChat]);
+    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[currentChat]);
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
@@ -98,8 +99,8 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        getListMessage({conversationID: chat._id})
-    },[chat._id]);
+        getListMessage({conversationID: currentChat})
+    },[currentChat]);
 
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
@@ -107,7 +108,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreData) {
-            getListMessage({lastestID: nextCursor, conversationID: chat._id});
+            getListMessage({lastestID: nextCursor, conversationID: currentChat});
             setReachTop(false);
         }
     }, [reachedTop, nextCursor])

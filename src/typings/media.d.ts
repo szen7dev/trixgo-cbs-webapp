@@ -170,12 +170,7 @@ export type ReactionProps = {
   reaction: {
     type: number
   };
-  userCreate: {
-    _id: string,
-    fullname: string,
-    bizfullname: string,
-    image: string
-  };
+  author: User
 };
 
 export type ListSeenPayload = {
@@ -186,7 +181,7 @@ export type ListSeenPayload = {
   populates?: string;
 };
 
-export type ListReactionPayload = {
+export type ListReactionMediaPayload = {
   lastestID?: string;
   limit?: number;
   mediaID?: string;
@@ -216,7 +211,10 @@ export type CommentProps = {
   parent: string;
   createAt: string,
   lastestReplyID: CommentProps;
-  receivers?: string[]
+  receivers?: string[],
+  reaction?: {
+    type: number
+  }
 }
 
 export type ListCommentsPayload = {
@@ -253,6 +251,36 @@ export type ListCommentResponse = APIResponse & {
   };
   message: string;
 };
+
+
+/**
+ * ============================ *********************************** ===============================
+ * ============================ 	 REACTION BÌNH LUẬN MEDIA, FILE   ===============================
+ * ============================ *********************************** ===============================
+ */
+
+export type ReactionCommentPayload = {
+  commentID: string,
+  typeReaction?: number
+}
+
+export type ListReactionCommentPayload = {
+  lastestID?: string;
+  type?: number;
+  limit?: number;
+  commentID?: string;
+  select?: string;
+  populates?: string;
+  isGetTotal?: string;
+};
+
+export type ReactionCommentProps = {
+  _id: string;
+  comment: string;
+  type: number;
+  author: User;
+}
+
 
 /**
  * ============================ ********** ===============================

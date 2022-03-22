@@ -6,8 +6,9 @@ export type ListNotificationPayload = {
 };
 
 export type UpdateNotificationPayload = {
-  notificationID: string;
+  notificationID?: string;
   status: number;
+  isUpdateSendSuccess?: boolean
 }
 
 export type NotificationResponse = APIResponse & {
@@ -17,14 +18,13 @@ export type NotificationResponse = APIResponse & {
 
 export type ListNotificationResponse = APIResponse & {
   data: {
-    listRecords: Array<any>;
+    listRecords: Array<NotificationProps>;
     totalRecord: number;
-    totalPages?: number;
+    totalRecordSendSuccess: number;
     limit?: number;
-    totalRecord?: number;
-    totalPage?: number;
     nextCursor?: string;
   };
+  error: boolean
 };
 
 export type NotificationProps = {

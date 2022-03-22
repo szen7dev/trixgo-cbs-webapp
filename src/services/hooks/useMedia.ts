@@ -1,14 +1,18 @@
 import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
 import MediaRepository from "apis/media";
-import { 
-    MediaProps, 
-    MediaPayload, 
-    CommentPayload, 
-    ListCommentsPayload, 
+import {
+    MediaProps,
+    MediaPayload,
+    CommentPayload,
+    ListCommentsPayload,
     ListMediasPayload,
     MediaReactionPayload,
     MediaInfoResponse,
-    FetchMediaPayload
+    FetchMediaPayload,
+
+    ReactionCommentPayload,
+    ListReactionCommentPayload,
+    ReactionCommentProps,
 } from "typings/media";
 import { CommentProps, CommentResponse } from 'typings/media';
 
@@ -48,8 +52,8 @@ type UseMediaProps = {
     params?: ListMediasPayload;
 } & FetchMediaPayload
 
-export const useMedia = ({ 
-    key, 
+export const useMedia = ({
+    key,
     params = {},
     isFetchMedias = false,
     isFetchReactions = false,
@@ -87,7 +91,7 @@ export const useMedia = ({
         useInfiniteQuery(
             [key || "list_medias", params],
             async ({ pageParam }: any) =>
-                MediaRepository.listMedias({ 
+                MediaRepository.listMedias({
                     lastestID: pageParam ? pageParam : "",
                     ...params,
                 }),
@@ -110,7 +114,7 @@ export const useMedia = ({
         useInfiniteQuery(
             [key, "list_reactions", params],
             async ({ pageParam }: any) =>
-                MediaRepository.listReactions({ 
+                MediaRepository.listReactions({
                     limit: 10,
                     lastestID: pageParam ? pageParam : "",
                     ...params,
@@ -134,7 +138,7 @@ export const useMedia = ({
         useInfiniteQuery(
             [key, "list_seens", params],
             async ({ pageParam }: any) =>
-                MediaRepository.listSeensMedia({ 
+                MediaRepository.listSeensMedia({
                     limit: 20,
                     lastestID: pageParam ? pageParam : "",
                     populates: JSON.stringify({
@@ -225,7 +229,7 @@ type UseCommentMediaProps = {
 }
 
 export const useCommentMedia = ({
-    key, 
+    key,
     params = {},
     isFetchComment = false
 }: UseCommentMediaProps) : UseCommentMedia => {
@@ -254,8 +258,8 @@ export const useCommentMedia = ({
     } =
         useInfiniteQuery(
             [key || "list_comments", params],
-            async ({ pageParams }: any) => 
-            MediaRepository.listComments({ 
+            async ({ pageParams }: any) =>
+            MediaRepository.listComments({
                 lastestID: pageParams ? pageParams : "",
                 ...params
             }),
@@ -290,5 +294,86 @@ export const useCommentMedia = ({
         refetchListComments,
         nextPageListComments,
         prevPageListComments,
+    }
+}
+
+/**
+ * ============================ ****************************** ===============================
+ * ============================ 	REACTION BÌNH LUẬN MEDIA   ===============================
+ * ============================ ****************************** ===============================
+ */
+
+type UseReactionCommentMedia = {
+    reactionCommentMediaAsync: (payload: ReactionCommentPayload) => Promise<any>,
+    reactionCommentFileAsync: (payload: ReactionCommentPayload) => Promise<any>,
+    listReactionsComment: Array<ReactionCommentProps>,
+    totalRecord: number,
+    isLoadingReactionsComment: boolean,
+    refetchReactionsComment: () => void,
+    fetchNextPageReactionsComment: () => void,
+    hasNextPageReactionsComment: boolean | undefined
+}
+
+type UseReactionCommentProps = {
+    key?: string,
+    params?: ListReactionCommentPayload,
+    isFetchReaction?: boolean
+}
+
+export const useReactionCommentMedia = ({
+    key,
+    params = {},
+    isFetchReaction = false
+}: UseReactionCommentProps) : UseReactionCommentMedia => {
+
+    const { mutateAsync: reactionCommentMediaAsync } =
+        useMutation((payload: ReactionCommentPayload) =>
+            MediaRepository.reactionCommentMedia(payload)
+        );
+
+    const { mutateAsync: reactionCommentFileAsync } =
+        useMutation((payload: ReactionCommentPayload) =>
+            MediaRepository.reactionCommentFile(payload)
+        );
+
+    const {
+        isLoading: isLoadingReactionsComment,
+        refetch: refetchReactionsComment,
+        data: dataListReactionsComment,
+        hasNextPage: hasNextPageReactionsComment,
+        fetchNextPage: fetchNextPageReactionsComment,
+    } =
+        useInfiniteQuery(
+            [key || "list_reactions_comment", params],
+            async ({ pageParams }: any) =>
+            MediaRepository.listReactionsComment({
+                lastestID: pageParams ? pageParams : "",
+                ...params
+            }),
+            {
+                getNextPageParam: ({ nextCursor }: any) => {
+                    return nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: isFetchReaction,
+            }
+        );
+
+    const listReactionsComment = []
+        .concat(...(dataListReactionsComment?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = dataListReactionsComment?.pages[0]?.data?.totalRecord || 0;
+
+    return {
+        reactionCommentMediaAsync,
+        reactionCommentFileAsync,
+        listReactionsComment,
+        totalRecord,
+        isLoadingReactionsComment,
+        refetchReactionsComment,
+        hasNextPageReactionsComment,
+        fetchNextPageReactionsComment
     }
 }

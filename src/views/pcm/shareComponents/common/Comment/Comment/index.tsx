@@ -37,7 +37,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	const [isOpenModalReactions, setIsOpenModalReactions] = useState(false);
 	const [isReaction, setIsReaction] = useState(!!comment.reaction);
 	const [amountReaction, setAmountReaction] = useState(comment.amountReaction);
-	const { deleteCommentAsync, reactionCommentAsync } = useCommentPcm({
+	const { deleteCommentAsync } = useCommentPcm({
 		params: { taskID: comment?.task?._id }
 	});
 	const { dispatch } = useContext(CommentContext);
@@ -47,6 +47,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	});
 
 	const {
+		reactionCommentAsync,
 		listReactionsComment,
 		hasNextPageReactions,
 		nextPageListReactions,

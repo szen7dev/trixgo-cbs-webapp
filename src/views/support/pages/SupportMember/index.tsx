@@ -55,22 +55,21 @@ export const SupportMemberPage: FC = () => {
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
 
-  const { 
-    data: listUsersSystem, 
-    hasNextPage, 
-    totalRecord, 
+  const {
+    data: listUsersSystem,
+    hasNextPage,
+    totalRecord,
     refetch: refetchUser,
     fetchNextPage: fetchNextPageUser,
     deleteUserSystemAsync,
   } = useUserSystem({
     companyID: companySelected,
     keyword: keywordUser,
-    isFetch: !!companySelected,
     limit: LIMIT_PER_PAGE_USER
-  });
+  }, !!companySelected);
 
-  const { data: listCompanies, fetchNextPage: fetchNextPageCompany } = useQueryListCompany({ 
-    keyword: keywordCompany 
+  const { data: listCompanies, fetchNextPage: fetchNextPageCompany } = useQueryListCompany({
+    keyword: keywordCompany
   });
 
   const handleChangeCompany = (value: any) => {
@@ -83,7 +82,7 @@ export const SupportMemberPage: FC = () => {
     const isBottom = scrollHeight - scrollTop === clientHeight;
     isBottom && fetchNextPageCompany();
   }
- 
+
   const toggleModalCreateOrUpdateUser = () => setModalCreateOrUpdateUser(!modalCreateOrUpdateUser);
 
   const handleConfirmCreateOrUpdateUser = () => refetchUser();
@@ -215,8 +214,8 @@ export const SupportMemberPage: FC = () => {
             />
 
             {usersChecked.length === 1 ? (
-              <button 
-                className="mr-3" 
+              <button
+                className="mr-3"
                 onClick={() => {
                   setUsersChecked([]);
                   toggleModalCreateOrUpdateUser();
@@ -252,13 +251,13 @@ export const SupportMemberPage: FC = () => {
           </div>
           <div className="flex items-center">
             {companySelected ? (
-              <button 
-                className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold" 
+              <button
+                className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
                 onClick={() => {
                   setUsersChecked([]);
                   clearData();
                   toggleModalCreateOrUpdateUser();
-                }} 
+                }}
               >
                 Tạo mới
               </button>

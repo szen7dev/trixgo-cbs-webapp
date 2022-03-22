@@ -16,16 +16,13 @@ interface UseQueryListDepartment {
     fetchNextPageDepartments: () => void;
 }
 
-export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepartment => {
+export const useQueryListDepartments = (params?: ParamsQuery, isFetch?: boolean): UseQueryListDepartment => {
     const res = useInfiniteQuery(
         [`items.department`, { params }],
         async ({ pageParam }: any) =>
             DepartmentRepository.fetchListDepartment({
-                limit: params?.limit || 10,
                 lastestID: pageParam || "",
                 type: 1,
-                keyword: params?.keyword || '',
-                select: params?.select || '',
                 ...params,
             }),
         {
@@ -33,9 +30,10 @@ export const useQueryListDepartments = (params?: ParamsQuery): UseQueryListDepar
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            enabled: isFetch ?? false
         }
     );
+
     const {
         isLoading,
         data,

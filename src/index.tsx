@@ -8,7 +8,7 @@ import Store from "redux/store";
 import App from "App";
 
 import reportWebVitals from "reportWebVitals";
-import * as serviceWorker from "./serviceWorker";
+// import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>

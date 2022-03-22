@@ -94,8 +94,8 @@ const PcmDetailTask: FC = () => {
 
     if (infoTask?.data) {
       const { author, assignee, related, percentage, amountComment, group } = infoTask.data;
-      const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
-      const membersID = group?.members?.map((user: any) => user?.toString()) || [];
+      // const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
+      // const membersID = group?.members?.map((user: any) => user?.toString()) || [];
       let confirmUsers = [];
       /**
        * Check permission access
