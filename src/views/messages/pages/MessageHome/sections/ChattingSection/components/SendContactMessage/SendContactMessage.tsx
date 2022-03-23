@@ -8,6 +8,7 @@ import {map as _map} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {appendFakeMessageToConversation} from "redux/reducer/messages/ListMessage";
 import {useUser} from "services/hooks/useUser";
+import {populates} from "../../../../index";
 
 type Props = {
     context: any
@@ -68,18 +69,10 @@ export const SendContactMessage:FC<Props> = ({context}) => {
         })
         setSelectedFriends({});
         dispatch(dismissSendContactMessage({}));
-        // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-        //     conversationID: conversationId,
-        //     select: JSON.stringify({ sender:"bizfullname" }) ,
-        //     filter: JSON.stringify({
-        //         author: 0,
-        //         taskID: 0,
-        //         links: 0,
-        //         createAt: 0,
-        //         __v: 0,
-        //         // config: 0
-        //     })
-        // });
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+            conversationID: conversationId,
+            populates
+        });
     };
 
     return (

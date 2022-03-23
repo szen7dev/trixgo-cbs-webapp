@@ -25,6 +25,7 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {toast} from "react-toastify";
+import {populates} from "../../../../index";
 
 type Props = {
     chat: ItemListConversation;
@@ -169,9 +170,9 @@ export const OptionListItemRightClick:FC<Props> = ({chat, socketRef, currentChat
                             if (currentChat === chat._id) {
                                 window.location.hash = ""
                             }
-                            socket.emit('CHATTING_CSS_MEMBER_LEAVE_CONVERSATION', {
+                            socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                                 conversationID: data.infoConversation._id,
-                                memberID: profileId
+                                populates
                             });
                             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
                         } else {

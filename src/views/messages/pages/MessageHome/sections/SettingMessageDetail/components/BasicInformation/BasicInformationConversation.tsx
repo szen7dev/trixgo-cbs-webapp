@@ -5,7 +5,7 @@ import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import ImagesIcon from "assets/images/icons8-photo-gallery-96.svg";
 import Close from "assets/icons/Close";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import {MessageContext} from "../../../../index";
+import {MessageContext, populates} from "../../../../index";
 import {useUpload} from "services/hooks/useUpload";
 import {modifyUploadedFilesV2} from "services/hooks/useUploadFile";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
@@ -67,7 +67,10 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
     const updateConversationAction = (payload: UpdateConversationPayload) => {
         updateConversation(payload).then(data => {
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-            socket.emit('CHATTING_CSS_UPDATE_INFO_CONVERSATION', {conversationID: chat._id});
+            socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+                conversationID: chat._id,
+                populates
+            });
             setIsEditting(false)
         })
     }

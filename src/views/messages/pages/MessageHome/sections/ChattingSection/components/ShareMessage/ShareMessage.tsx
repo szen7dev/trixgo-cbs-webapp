@@ -12,6 +12,7 @@ import {ItemListConversation} from "typings/apis/messages/listConversation";
 import {SelectedShareConversationItem} from "./SelectedShareConversationItem";
 import CheckIcon from 'assets/images/blue-check.svg';
 import {UseConversation} from "services/hooks/messages/useConversation";
+import {populates} from "../../../../index";
 
 type Props = {
     context: any;
@@ -54,16 +55,12 @@ export const ShareMessage:FC<Props> = ({context,currentChat}) => {
             conversationsID: Object.keys(selectedConversations),
             messagesID: Object.keys(shareMessage)
         }).then((data) => {
-            const messsageIds : string[] = [];
-            data.forEach(mess => {
-                mess.results.forEach(res => {
-                    messsageIds.push(res._id)
-                })
+            Object.keys(selectedConversations).forEach(conversationId => {
+                socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+                    conversationID: conversationId,
+                    populates
+                });
             })
-            socket.emit('CHATTING_CSS_SHARE_MESSAGE', {
-                conversationsID: Object.keys(selectedConversations),
-                messagesID: messsageIds
-            });
         });
 
         setSelectedConversations({});
