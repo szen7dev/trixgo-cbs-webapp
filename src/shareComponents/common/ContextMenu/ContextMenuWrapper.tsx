@@ -16,7 +16,6 @@ export default function ContextMenuWrapper<T extends React.ElementType = 'div'>(
 		e.stopPropagation();
 		open({ position: { x: e.clientX, y: e.clientY } });
 	}
-
 	return <Tag onContextMenu={handleContextMenu}>
 		{children}
 	</Tag>

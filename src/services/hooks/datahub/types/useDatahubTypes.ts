@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import DatahubRepository from "apis/datahub";
+import useQueryCustom from "services/hooks/useQueryCustom";
 import { DatahubTypesParams } from "typings/datahub/datahubtypes";
-import useQueryDatahub from "../useQueryDatahub";
 
 type Props = DatahubTypesParams;
 type Options = {
@@ -12,7 +12,7 @@ const useDatahubTypes = (
   props?: Props,
   options: Options = { enabled: true }
 ) => {
-  return useQueryDatahub(
+  return useQueryCustom(
     ["datahub_types", props?.type || 1, props?.parentID, props?.keyword || ""],
     ({ cursor }) =>
       DatahubRepository.getDatahubTypesList({ ...props, lastestID: cursor }),

@@ -168,7 +168,7 @@ export const useUpload = ({
         const { signedUrl, file, fileName, result } = await generateLinkS3({ file: files, fileType });
 
         // Handle images
-        if (file.type.includes("image/") && useCompress) {
+        if (file.type.includes("image/") && useCompress && files.type !== 'image/gif') {
             // new Compressor(file, {
             //     quality: compressConfig.quality??0.8,
             //     maxWidth: 1200,

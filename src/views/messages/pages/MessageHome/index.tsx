@@ -48,7 +48,17 @@ export const MessageContext = createContext<{
     showSearch: false,
     setShowSearch: () => undefined
 });
-
+export const populates = JSON.stringify({
+    path: 'lastMessage members avatar',
+    option: {
+        limit: 4
+    },
+    select: 'content conversation createAt createdAt file sender type image bizfullname path',
+    populate: {
+        path: 'files sender members',
+        select: 'bizfullname email image createdAt image bizfullname',
+    }
+});
 export const MessagesHome:FC = () => {
     const location = useLocation();
     const [currentChat, setCurrentChat] = useState(location.hash.replace("#",""));
