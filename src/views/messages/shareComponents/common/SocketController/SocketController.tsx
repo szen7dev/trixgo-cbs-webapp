@@ -31,6 +31,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const {socketRef} = useContext(context);
 
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
 
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
@@ -60,6 +61,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         };
     },[socket]);
 
+    useEffect(() => {
+        if (amountMissMessage > 0) {
+            document.title = `(${amountMissMessage}) tin nhắn`
+        } else {
+            document.title = `${process.env.REACT_APP_WEBSITE_NAME}`
+        }
+    }, [amountMissMessage])
+
     const onReceiveMessage = (data: any) => {
         if (data?.infoMessage?.error) {
             // Alert.alert(t('notification'), data.infoMessage.message);
@@ -73,19 +82,25 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 conversationId: data?.infoMessage?.conversation,
                 newMessageId: data?.infoMessage?._id,
                 oldMessageId: data?.tmpid,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
         } else {
             playSound();
             dispatch(appendMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
                 messageId: data?.infoMessage?._id,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
             if (currentChat === data?.infoMessage?.conversation) {
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
-            if (!inSearchMode){
+            if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
                 setTimeout(() => {
                     scrollToBottom();
                 }, 100)
@@ -112,7 +127,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if ([101, 102, 107].includes(data?.data?.type)) {
             refetchListMembers();
         }
-        if (!inSearchMode){
+        if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
             setTimeout(() => {
                 scrollToBottom();
             }, 100)

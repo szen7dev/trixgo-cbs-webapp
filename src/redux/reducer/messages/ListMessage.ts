@@ -89,7 +89,6 @@ const listMessageSlice = createSlice({
                     [action.payload.conversationId] :
                         action.payload.isFreshData?
                         {
-                            ...state.data.listMessage[action.payload.conversationId],
                             ...newMessageData
                         }
                         :
