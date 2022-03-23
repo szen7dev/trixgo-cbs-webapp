@@ -58,6 +58,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
             socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
             socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
+            socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
         };
     },[socket]);
 
@@ -241,6 +242,14 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
                 audioRef.current.play();
             }
         }
+    }
+
+    const onGetInfoConversation = (data: any) => {
+        if (!data) return;
+        if (data.error) return;
+        dispatch(updateSingleConversation({
+            conversationData: data?.data
+        }))
     }
 
     return <>
