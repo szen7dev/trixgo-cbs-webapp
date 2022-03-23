@@ -2,7 +2,7 @@ import {UseListConversation} from "./useListConversation";
 import {ReactNode, useCallback, useContext} from "react";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
 import SavedMessage from "assets/images/saved-messages.svg";
-import {MessageContext} from "views/messages/pages/MessageHome";
+import {MessageContext, populates} from "views/messages/pages/MessageHome";
 import {appendFakeItemListConversation} from "redux/reducer/messages/ListConversation";
 import {useDispatch} from "react-redux";
 
@@ -32,18 +32,10 @@ export const UseMessageHelper = () : UseMessageHelperType => {
             dispatch(appendFakeItemListConversation({conversationId: data._id, conversation: data}))
             if (!redirectOnly){
                 if (currentChat === data._id) return;
-                // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-                //     conversationID: data._id,
-                //     select: JSON.stringify({sender: "bizfullname"}),
-                //     filter: JSON.stringify({
-                //         author: 0,
-                //         taskID: 0,
-                //         links: 0,
-                //         createAt: 0,
-                //         __v: 0,
-                //         // config: 0
-                //     })
-                // });
+                socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+                    conversationID: data._id,
+                    populates
+                });
                 setCurrentChat(data._id);
             }
             window.location.href = window.location.origin + "/messages#" + data._id;
@@ -73,8 +65,8 @@ export const UseMessageHelper = () : UseMessageHelperType => {
             return "Saved Messages";
         }
         if (chat.members && chat.members.length === 2) {
-            const userInConversation = chat?.members.find((item: any) => item._id != profileId);
-            return (userInConversation.bizfullname||userInConversation.fullname).trim();
+            const userInConversation = chat?.members.find((item: any) => item._id !== profileId);
+            return (userInConversation?.bizfullname||userInConversation?.fullname).trim();
         }
 
         return chat.name||"";

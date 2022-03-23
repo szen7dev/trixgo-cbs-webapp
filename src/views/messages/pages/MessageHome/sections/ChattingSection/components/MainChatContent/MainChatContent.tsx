@@ -100,7 +100,9 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        getListMessage({conversationID: currentChat})
+        getListMessage({conversationID: currentChat}).then(() => {
+            scrollToBottom()
+        })
     },[currentChat]);
 
     useEffect(() => {
