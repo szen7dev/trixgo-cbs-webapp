@@ -10,4 +10,5 @@ export type DatahubPrams = {
       }
     | string;
   keyword?: string;
+  nextCursor?: string | null;
 };

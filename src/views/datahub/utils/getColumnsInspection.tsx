@@ -1,11 +1,18 @@
 import moment from "moment"
 import { Link } from "react-router-dom"
-import { TableProperties } from "shareComponents/common/Table/Table"
+import { TableOptions } from "react-table"
+import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn"
 
 const headCellProps = { className: 'py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border' }
 
-function getColumnsInspection<T extends boolean>(navigate?: T): TableProperties<T extends true ? DatahubInspection : DatahubInspectionCheckList>['columns'] {
+function getColumnsInspection<T extends boolean>(navigate?: T): TableOptions<T extends true ? DatahubInspection : DatahubInspectionCheckList>['columns'] {
 	return ([
+		SelectionColumn({
+			tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
+			tableHeadSelectorInputProps: { className: 'cbs-checkbox' },
+			tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
+			tableCellSelectorInputProps: { className: 'cbs-checkbox' }
+		}),
 		{
 			accessor: 'name',
 			Header: <span className="pl-2 border-l border-cbs-border">Nội dung</span>,
