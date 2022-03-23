@@ -5,7 +5,7 @@ import {AddNewSection} from "../AddNewSection";
 
 import {CreateConversationPayload} from "typings/apis/messages/listConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../../../index";
+import {MessageContext, populates} from "../../../../index";
 
 export const AddNewChatGroupContext = createContext<{
     showAddNew: boolean;
@@ -49,19 +49,11 @@ export const AddNewChatGroup:FC = () => {
                 isPrivate: true,
                 membersID: []
             });
-            socket.emit('CHATTING_CSS_NEW_CONVERSATION',{conversationID: data._id})
-            // socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
-            //     conversationID: data._id,
-            //     select: JSON.stringify({ sender:"bizfullname" }) ,
-            //     filter: JSON.stringify({
-            //         author: 0,
-            //         taskID: 0,
-            //         links: 0,
-            //         createAt: 0,
-            //         __v: 0,
-            //         // config: 0
-            //     })
-            // });
+            // socket.emit('CHATTING_CSS_NEW_CONVERSATION',{conversationID: data._id})
+            socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+                conversationID: data._id,
+                populates
+            });
             setCurrentChat(data._id);
             window.location.hash = `#${data._id}`
         });

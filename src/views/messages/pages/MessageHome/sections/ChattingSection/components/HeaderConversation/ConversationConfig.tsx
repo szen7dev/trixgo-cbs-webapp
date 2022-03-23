@@ -6,7 +6,7 @@ import {RootState} from "redux/reducer";
 import {dismissConfigConversation} from "redux/reducer/messages/ConversationConfigModal";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
-import {MessageContext} from "../../../../index";
+import {MessageContext, populates} from "../../../../index";
 
 export const ConversationConfig:FC = () => {
     const dispatch = useDispatch();
@@ -75,7 +75,10 @@ export const ConversationConfig:FC = () => {
             typeConfig,
             valueConfig: formatTrueValue(value)
         }).then(({data, error}) => {
-            socket.emit('CHATTING_CSS_UPDATE_INFO_CONVERSATION', {conversationID: conversationId});
+            socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+                conversationID: conversationId,
+                populates
+            });
         })
     }
 

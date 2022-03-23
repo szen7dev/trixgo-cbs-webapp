@@ -6,6 +6,7 @@ import {RootState} from "redux/reducer";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {SearchUserAndConversation, HamLeftMenu, AddNewChatGroup} from "./components/HeaderMessageList";
 import {ListFolders} from "./components/ListFolders";
+import {Oval} from "react-loader-spinner";
 
 export const MessageList:FC = () => {
     const [reachedEnd, setReachEnd] = useState(false);
@@ -82,6 +83,14 @@ export const MessageList:FC = () => {
                     ref={listInnerRef}
                     id={'list-conversation'}>
                     {renderListConversation()}
+                    {
+                        isLoading&&
+                        <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation from-bottom transition-all"}>
+                            <div className={"bg-white rounded-full p-1"}>
+                                <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
+                            </div>
+                        </div>
+                    }
                 </div>
             <AddNewChatGroup/>
         </div>
