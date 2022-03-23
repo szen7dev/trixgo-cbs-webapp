@@ -42,24 +42,42 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const audioRef = useRef<HTMLAudioElement>(null)
 
     useEffect(() => {
-        if (socket) {
-            socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-            socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-            socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-            socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
-            socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
-            socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
+        if (!socket) return;
+        socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+        socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+        socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+        socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+        socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+        socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
-            socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
-            socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
-            socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
-            socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
-            socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
-            socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
-            socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
-            socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
-            socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
-        };
+        socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+        socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+        socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
+        socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
+        socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
+        socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
+        socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
+        socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
+        socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
+            socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+            socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+            socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
+
+            socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
+            socket.off('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+            socket.off('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
+            socket.off('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
+            socket.off('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
+            socket.off('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
+            socket.off('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
+            socket.off('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
+            socket.off('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
+        }
     },[socket]);
 
     useEffect(() => {
