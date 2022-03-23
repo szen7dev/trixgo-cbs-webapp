@@ -8,7 +8,7 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import { Menu } from '@headlessui/react'
 import {setSelectedStateOn} from "redux/reducer/messages/ListMessage";
 import {useDispatch, useSelector} from "react-redux";
-import {MessageContext} from "../../../../index";
+import {MessageContext, populates} from "../../../../index";
 import {RootState} from "redux/reducer";
 import {dismissNotificationMute, openNotificationMute} from "redux/reducer/messages/NotificationMute";
 import {deleteConversationAction, updateUsersMuteToConversation} from "redux/reducer/messages/ListConversation";
@@ -74,9 +74,9 @@ export const MainChatOptions:FC = () => {
                             if (currentChat === chatData._id) {
                                 window.location.hash = ""
                             }
-                            socket.emit('CHATTING_CSS_MEMBER_LEAVE_CONVERSATION', {
+                            socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                                 conversationID: data.infoConversation._id,
-                                memberID: profileId
+                                populates
                             });
                             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
                         } else {

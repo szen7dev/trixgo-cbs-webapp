@@ -45,37 +45,23 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if (!socket) return;
         socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
         socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-        socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
         socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
         socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
         socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
-        socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
         socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
-        socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
-        socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
-        socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
         socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
-        socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
-        socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
         socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
 
         return () => {
             socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
             socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-            socket.off('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
             socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
             socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
             socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
 
-            socket.off('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
             socket.off('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
-            socket.off('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
-            socket.off('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
-            socket.off('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
             socket.off('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
-            socket.off('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
-            socket.off('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
             socket.off('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
         }
     },[socket]);
@@ -127,11 +113,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
     };
 
-    const onReceiveConversation = (data: any) => {
-        // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
-        if (!data) return;
-        dispatch(setListConversation(data?.data));
-    }
+    // const onReceiveConversation = (data: any) => {
+    //     // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
+    //     if (!data) return;
+    //     dispatch(setListConversation(data?.data));
+    // }
 
     const onFireMessage = (data: any) => {
         if (!data) return;
@@ -153,15 +139,15 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
     };
 
-    const onReceiveShareMessage = (data: any) => {
-        if (!data) return;
-        // dispatch(setShareMessage({
-        //     messagesShare: data.data.listMessagesShared
-        // }));
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onReceiveShareMessage = (data: any) => {
+    //     if (!data) return;
+    //     // dispatch(setShareMessage({
+    //     //     messagesShare: data.data.listMessagesShared
+    //     // }));
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
     const onReceiveRevokeMessage = (data: any) => {
         if (!data) return;
@@ -206,33 +192,33 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         dispatch(deleteConversationAction({conversationId: data?.data?._id}))
     }
 
-    const onCreateConversation = (data: any) => {
-        if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onCreateConversation = (data: any) => {
+    //     if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onUserLeaveConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onUserLeaveConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onAddMemberConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onAddMemberConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onUpdateInforConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data
-        }))
-    }
+    // const onUpdateInforConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data
+    //     }))
+    // }
 
     const onRemoveMemberConversation = (data: any) => {
        if (!data) return;
@@ -247,12 +233,12 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     }
 
-    const onUpdateAdminConversation = (data: any) => {
-        if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onUpdateAdminConversation = (data: any) => {
+    //     if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
     const playSound = () => {
         if (audioRef.current) {

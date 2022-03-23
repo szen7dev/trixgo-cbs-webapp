@@ -61,12 +61,12 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                     if (error) {
                         toast.error(data.message)
                     } else {
-                        socket.emit('CHATTING_CSS_REMOVE_MEMBER_CONVERSATION', {conversationID: chat._id, memberID: user.member._id})
                         socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
                         socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                             conversationID: chat._id,
                             populates
                         });
+                        socket.emit('CHATTING_CSS_REMOVE_MEMBER_CONVERSATION', {conversationID: chat._id, memberID: user.member._id})
                     }
                 })
             }
@@ -83,10 +83,9 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
             if (error) {
                 toast.error(data.message)
             } else {
-                socket.emit('CHATTING_CSS_UPDATE_ADMIN_CONVERSATION', {
+                socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                     conversationID: chat._id,
-                    memberID: user.member._id,
-                    isSetAdmin
+                    populates
                 });
                 socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
             }

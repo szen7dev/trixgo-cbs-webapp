@@ -54,7 +54,6 @@ export const AddUsersToConversation:FC<Props> = ({context}) => {
             setSearchTerm("");
             setSelectedFriends({});
             dispatch(dismissAddUserToConversation({}))
-            socket.emit('CHATTING_CSS_ADD_MEMBER_CONVERSATION', {conversationID: conversationId, membersID: membersId})
             socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
             socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                 conversationID: conversationId,
