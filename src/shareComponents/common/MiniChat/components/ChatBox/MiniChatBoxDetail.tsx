@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {map as _map} from "lodash";
@@ -20,12 +20,17 @@ import {
     ChangeNameNoti, ChangeAvatarNoti
 } from "views/messages/pages/MessageHome/sections/ChattingSection";
 import {Oval} from "react-loader-spinner";
+import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 type Props = {
     chat: ItemListConversation;
 }
 export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
+    const {markReadConversation} = UseListConversation();
+    const dispatch = useDispatch();
+
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -79,9 +84,28 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const userUnreadMessage = useCallback(() => {
+        const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
+        return userUnread?.amount??0
+    }, [chat, profileId])
+
     useEffect(() => {
+        if (userUnreadMessage()>0) {
+            markAsRead()
+        }
         getListMessage({conversationID: chat._id})
     },[chat._id]);
+
+    const markAsRead = () => {
+        markReadConversation({
+            conversationID: chat._id
+        }).then(data => {
+            dispatch(updateUsersMissMessageToConversation({
+                conversationId: chat._id,
+                usersMissMessage: data.usersMissMessage
+            }))
+        })
+    }
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
