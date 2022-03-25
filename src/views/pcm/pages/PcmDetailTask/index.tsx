@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Redirect } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -21,19 +21,21 @@ import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 
-import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse } from "./components";
+import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
 import { Loader } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/common';
 import { ProviderModalPost } from "views/pcm/contexts/post";
 import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 import TaskRepository from "apis/task";
+import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
 import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
-import useModal from "views/pcm/hooks/useModal";
+import { useModal } from "services/hooks/useModal";
+import useModalPcm from "views/pcm/hooks/useModal";
 import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Modal";
 import { APP_ID } from "apis/localdb";
 
@@ -42,24 +44,31 @@ import styles from "views/pcm/styles/pcm_task.module.css";
 const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
-  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModal();
+  const { openModal } = useModal();
+  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-  const [amountComment, setAmountComment] = useState(0);
-  const [percentComplete, setPercentComplete] = useState("0%");
+  const [taskData, setTaskData] = useState({
+    percentComplete: "0%",
+    amountComment: 0,
+    status: 1,
+    priority: 1
+  });
+
+  const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
   const [isTruncate, setIsTruncate] = useState(true);
   const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
   const { user } = useAuth();
 
-  const { data: infoTask, refetch, isLoading } = useQuery(`task_info.${id}`, () =>
+  const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id),
     { refetchOnWindowFocus: false }
   );
 
-  const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({ 
+  const { listCheckList, totalRecord: totalRecordCheckList, nextPageListCheckList } = useCheckList({
     parentID: id, isFetchChecklist: true
   });
 
-  const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({ 
+  const { listChildTask, totalRecord: totalRecordChildTask, nextPageListChildTask } = useChildTask({
     parentID: id, isFetchChildTask: true
   });
 
@@ -80,8 +89,16 @@ const PcmDetailTask: FC = () => {
     return title ? `${title} > ${group?.name}` : group?.name;
   };
 
+  const toggleModalUpdateTaskStatus = () => setIsShowModalUpdateTaskStatus(!isShowModalUpdateTaskStatus);
+
+  const handleConfirmUpdateTaskStatus = (status: number) => {
+    setTaskData(previous => ({ ...previous, status }));
+  }
+
+  const handleConfirmUpdateTask = () => refetchInfoTask();
+
   useEffect(() => {
-    if (!isSuccessApp) return;
+    if (!isSuccessApp || !infoTask) return;
     if (isSuccessApp && !hasPermission) {
 			toast.error("Bạn không có quyền truy cập tính năng này!");
 			return history.push("/");
@@ -93,17 +110,8 @@ const PcmDetailTask: FC = () => {
     }
 
     if (infoTask?.data) {
-      const { author, assignee, related, percentage, amountComment, group } = infoTask.data;
-      // const relatedsID = related?.map((user: any) => user?._id?.toString()) || [];
-      // const membersID = group?.members?.map((user: any) => user?.toString()) || [];
+      const { author, assignee, percentage, amountComment, status, priority } = infoTask.data;
       let confirmUsers = [];
-      /**
-       * Check permission access
-       */
-      // if(user?._id !== author?._id && user?._id !== assignee?._id && !relatedsID.includes(user?._id) && !membersID.includes(user?._id)) {
-      //   history.push('/');
-      //   toast.error("Bạn không có quyền truy cập công việc này!");
-      // }
 
       if(author) {
         confirmUsers[confirmUsers.length] = author;
@@ -113,8 +121,13 @@ const PcmDetailTask: FC = () => {
         confirmUsers[confirmUsers.length] = assignee;
       }
 
-      setAmountComment(amountComment || 0);
-      setPercentComplete(`${percentage}%`);
+      setTaskData({
+        percentComplete: `${percentage}%`,
+        amountComment,
+        status,
+        priority
+      });
+
       if(!confirmUsers.length) return;
 
       if (author?._id === assignee?._id) {
@@ -125,8 +138,12 @@ const PcmDetailTask: FC = () => {
     }
   }, [infoTask, isSuccessApp]);
 
-  if (isLoading || !infoTask || !infoTask.data) {
+  if (isLoading) {
     return <Loader className="border-primary" />;
+  }
+
+  if(!infoTask || !infoTask.data) {
+    return <Redirect to="/pcm/home" />
   }
 
   const taskInfo = infoTask?.data;
@@ -169,7 +186,16 @@ const PcmDetailTask: FC = () => {
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
-          <button className="mx-3">
+          <button 
+            className="mx-3"
+            onClick={() => {
+              openModal(
+                <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                  <ModalUpdateTask task={taskInfo} onConfirm={handleConfirmUpdateTask} />
+                </div>
+              )
+            }}
+          >
             <img className="w-6" src={IconPencil} alt="Pencil icon" />
           </button>
           {/* <button className="mx-3">
@@ -198,7 +224,7 @@ const PcmDetailTask: FC = () => {
           style={{ width: 1100 }}
         >
           <span className="text-3x-large leading-8">
-            {infoTask?.data?.name}
+            {taskInfo?.name}
             <span className="mx-2">
               <img
                 className="inline h-[24px] w-[24px]"
@@ -206,11 +232,14 @@ const PcmDetailTask: FC = () => {
                 alt="Star"
               />
             </span>
-            <span className="inline-block text-white text-xs bg-blue-500 rounded-xl px-2 py-1 mx-3">
-              Đang triển khai
-            </span>
-            <span className="inline-block text-white text-xs rounded-xl px-2 py-1 bg-red-500">
-              Cao
+            <button
+              className={cn('inline-block text-white text-xs rounded-xl px-2 py-1 mx-3', PCM_STATUS_TASK[taskData.status - 1].class)}
+              onClick={toggleModalUpdateTaskStatus}
+            >
+              {taskData.status && PCM_STATUS_TASK[taskData.status - 1].text}
+            </button>
+            <span className={cn('inline-block text-white text-xs rounded-xl px-2 py-1', PCM_PRIORITY_TASK[taskData.priority - 1].class)}>
+              {taskData.priority && PCM_PRIORITY_TASK[taskData.priority - 1].text}
             </span>
           </span>
 
@@ -219,8 +248,8 @@ const PcmDetailTask: FC = () => {
               <div className="flex items-end">
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
-                  {infoTask?.data?.project?.sign} {">"}{" "}
-                  {getGroupTitle(infoTask?.data?.group)}
+                  {taskInfo?.project?.sign} {">"}{" "}
+                  {getGroupTitle(taskInfo?.group)}
                 </span>
                 <div>
                   <img
@@ -230,7 +259,7 @@ const PcmDetailTask: FC = () => {
                   />
                 </div>
               </div>
-              {infoTask?.data?.parent && (
+              {taskInfo?.parent && (
                 <div className="flex items-end pr-2">
                   <img
                     className="w-6"
@@ -256,14 +285,14 @@ const PcmDetailTask: FC = () => {
                 </div>
                 <div>
                   <span className="text-[13px] text-primary-gray">
-                    {percentComplete}
+                    {taskData.percentComplete}
                   </span>
                 </div>
               </div>
               <div className="relative pt-1">
                 <div className="overflow-hidden h-1.5 text-[13px] flex rounded border">
                   <div
-                    style={{ width: percentComplete }}
+                    style={{ width: taskData.percentComplete }}
                     className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
                   ></div>
                 </div>
@@ -342,7 +371,7 @@ const PcmDetailTask: FC = () => {
           {/* <CommentContainer className="w-[791px]" /> */}
           <div className="w-[791px]">
             <div className="text-x-large py-3 px-6 font-bold">
-              Bình luận ({amountComment})
+              Bình luận {taskData.amountComment > 0 ? `(${taskData.amountComment})` : ''}
             </div>
             <RootCommentsList
               className="px-5"
@@ -360,25 +389,36 @@ const PcmDetailTask: FC = () => {
                 projectID={taskInfo?.project?._id}
                 groupID={taskInfo?.group?._id}
                 taskID={id}
-                onConfirm={(method?: string) => (method && method === 'INSERT') && setAmountComment(amountComment + 1)}
+                onConfirm={(method?: string) => {
+                  if(method && method === 'INSERT') {
+                    setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                  }
+                }}
               />
             </div>
           </div>
           <ModalLarge
             show={isShow}
-            toggle={toggleModal} 
+            toggle={toggleModal}
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser 
-              toggle={toggleModal} 
-              taskID={id} 
+            {type === 'relation' && <ModalAddRelationUser
+              toggle={toggleModal}
+              taskID={id}
               projectID={taskInfo?.project?._id || ''}
-              refetch={refetch} 
+              refetch={refetchInfoTask}
               related={taskInfo?.related}
               modalType={'ADD_RELATION_USER'}
             />}
             {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} task={taskInfo} />}
           </ModalLarge>
+          <ModalUpdateTaskStatus
+            taskID={taskInfo._id}
+            status={taskInfo.status}
+            isShow={isShowModalUpdateTaskStatus}
+            onClose={toggleModalUpdateTaskStatus}
+            onConfirm={handleConfirmUpdateTaskStatus}
+          />
         </div>
       </div>
     </>
