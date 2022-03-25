@@ -65,6 +65,10 @@ export type Task = {
   subType: number,
   type: number,
   related: Array<User>;
+  signatures: {
+    author: User,
+    createAt: string
+  };
   amountResponse: number;
   amountMarkedResponse: number;
 };
@@ -90,6 +94,7 @@ export interface updateTaskPayload {
   status?: number;
   priority?: number;
   expiredTime?: string
+  isAddSignature?: boolean
 }
 
 export interface addTaskResponse {

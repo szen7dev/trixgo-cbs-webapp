@@ -27,7 +27,7 @@ import {
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group author assignee related parent project company field approver authorAttachs",
+  path: "group author assignee related parent project company field approver authorAttachs signatures",
   select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
   populate: {
     path: "author",

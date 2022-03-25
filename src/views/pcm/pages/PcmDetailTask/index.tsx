@@ -56,7 +56,7 @@ const PcmDetailTask: FC = () => {
 
   const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
   const [isTruncate, setIsTruncate] = useState(true);
-  const [confirmUsers, setConfirmUsers] = useState<Array<User>>([]);
+  const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
   const { user } = useAuth();
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
@@ -97,6 +97,16 @@ const PcmDetailTask: FC = () => {
 
   const handleConfirmUpdateTask = () => refetchInfoTask();
 
+  const handleConfirmSign = () => {
+    setConfirmUsers(previous => ([
+      ...previous,
+      {
+        author: user as User,
+        createAt: new Date()
+      }
+    ]))
+  }
+
   useEffect(() => {
     if (!isSuccessApp || !infoTask) return;
     if (isSuccessApp && !hasPermission) {
@@ -110,16 +120,8 @@ const PcmDetailTask: FC = () => {
     }
 
     if (infoTask?.data) {
-      const { author, assignee, percentage, amountComment, status, priority } = infoTask.data;
-      let confirmUsers = [];
-
-      if(author) {
-        confirmUsers[confirmUsers.length] = author;
-      }
-
-      if(assignee) {
-        confirmUsers[confirmUsers.length] = assignee;
-      }
+      const { percentage, amountComment, status, priority, signatures } = infoTask.data;
+      const confirmUsers = signatures?.map((signature: any) => ({ author: signature.author, createAt: signature.createAt })) ?? [];
 
       setTaskData({
         percentComplete: `${percentage}%`,
@@ -127,13 +129,6 @@ const PcmDetailTask: FC = () => {
         status,
         priority
       });
-
-      if(!confirmUsers.length) return;
-
-      if (author?._id === assignee?._id) {
-        confirmUsers = [assignee];
-      }
-
       setConfirmUsers(confirmUsers);
     }
   }, [infoTask, isSuccessApp]);
@@ -357,12 +352,14 @@ const PcmDetailTask: FC = () => {
           {/*_____________task sidebar______________*/}
           <div className="w-[309px] px-5 pt-5">
             <SideBar
+              userID={user?._id}
               taskID={taskInfo?._id}
               author={taskInfo?.author}
               assignee={taskInfo?.assignee}
               createAt={taskInfo?.createAt}
               related={taskInfo?.related}
               confirmUsers={confirmUsers}
+              onConfirmSign={handleConfirmSign}
             />
           </div>
         </div>
