@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useMutation } from "react-query";
-import { toast } from "react-toastify";
 import TaskRepository from "apis/task";
 import {
   Task,  addTaskPayload,
@@ -12,9 +11,10 @@ import {
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
   ListReactionPayload,
-  ReactionCommentProps
+  ReactionCommentProps,
+  updateTaskPayload,
+  CommentProps
 } from "typings/task";
-import { CommentProps } from 'typings/task';
 
 /**
  * ============================ ************* ===============================
@@ -30,6 +30,7 @@ type UseTask = {
   refetchListResponse: () => void;
   listTasks: Array<Task>;
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
+  updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
   isLoadingListTask: boolean;
   totalRecord: number | undefined;
   totalPages: number | undefined;
@@ -56,6 +57,11 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
       TaskRepository.addTask(payload)
+    );
+
+  const { mutateAsync: updateTaskAsync } =
+    useMutation((payload: updateTaskPayload) =>
+      TaskRepository.updateTask(payload)
     );
 
   const { mutateAsync: addResponseAsync } =
@@ -142,12 +148,14 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
   const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
+
   return {
     addResponseAsync,
     addRelationUserAsync,
     listResponses,
     totalRecordResponse,
     refetchListResponse,
+    updateTaskAsync,
     addTaskAsync,
     listTasks,
     isLoadingListTask,
@@ -361,7 +369,7 @@ export const useChildTask = ({
  * ============================ ************** ===============================
  */
 
- type UseCommentPcm = {
+type UseCommentPcm = {
   // REACTION COMMENT
   reactionCommentAsync: (payload: ReactionCommentPayload) => Promise<any>,
   listReactionsComment: Array<ReactionCommentProps>,

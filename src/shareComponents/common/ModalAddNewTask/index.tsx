@@ -8,7 +8,6 @@ import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { object, string } from "yup";
 
 import { useQueryListDoctype } from "services/hooks/useHuman";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
@@ -86,10 +85,6 @@ export const ModalAddNewTask: FC = () => {
     type: 2,
     keyword: otherFieldValue
   });
-
-  // const { data: listFriend } = useQueryListFriend({
-  //   keyword: searchFriendName
-  // });
 
   const { 
     data: listGroup, 
