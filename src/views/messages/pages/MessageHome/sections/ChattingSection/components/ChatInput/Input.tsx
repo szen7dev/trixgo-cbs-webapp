@@ -118,7 +118,7 @@ export const InputForMessage:FC<Props> = ({onPressEnter, onPasteFiles, handleUpl
             <EmojiSelect />
             <div className={"flex-1 flex input-wrapper"}>
                 <Editor
-                    // placeholder={"Tin nhắn"}
+                    placeholder={"Tin nhắn"}
                     editorState={editorState}
                     onChange={onChangeCallback}
                     plugins={plugins}
