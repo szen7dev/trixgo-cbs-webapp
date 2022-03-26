@@ -30,6 +30,7 @@ type Props = {
 };
 
 export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
+	const inputRef = React.useRef<HTMLInputElement>(null);
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -67,6 +68,15 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 	return (
 		<>
+			<input
+				type='file'
+				ref={inputRef}
+				className="hidden"
+				accept="image/*"
+				onChange={e=>{
+					alert('upload file')
+				}}
+			/>
 			<div className={
 				classNames("flex",
 					isHighlight
@@ -93,8 +103,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							<button
 								className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
 									} text-[13px] w-10 flex justify-center items-center rounded-full`}
+								onClick={e=>inputRef.current?.click()}
 							>
-								<DotsVerticalIcon />
+								{/* <DotsVerticalIcon /> */}
+								<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
 							</button>
 						</div>
 					</div>
@@ -179,7 +191,6 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
 								{(response.images && response.images.length) ? response.images.map((file, index) => {
-									console.log(index)
 									if (index < 2) {
 										return (
 											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
