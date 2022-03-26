@@ -21,16 +21,23 @@ import {
   ListCommentsPayload,
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
-  ListReactionPayload
+  ListReactionPayload,
+  updateTaskPayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
+
+const populatesTask = JSON.stringify({
+  path: "group author assignee related parent project company field approver authorAttachs signatures",
+  select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
+  populate: {
+    path: "author",
+    select: "_id bizfullname image"
+  }
+})
 
 const populatesResponse = JSON.stringify({
   path: "task files images author",
   select: "_id bizfullname image name nameOrg path size mimeType description author createAt",
-  // options: {
-  //   limit: 5,
-  // },
   populate: {
     path: "author",
     select: "_id bizfullname image"
@@ -62,6 +69,14 @@ const TaskRepository = {
     return data;
   },
 
+  async updateTask(payload: updateTaskPayload): Promise<any> {
+    const { data } = await API.put<any>(
+      `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -73,15 +88,8 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus project parent checklist createAt group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse",
-        populates: JSON.stringify({
-          path: "group author assignee related parent project company approver authorAttachs",
-          select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
-          populate: {
-            path: "author",
-            select: "_id bizfullname image"
-          }
-        }),
+        select: "name description type typeStatus status priority project parent checklist createAt field group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType",
+        populates: populatesTask,
       })}`
     );
 

@@ -19,6 +19,7 @@ import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
+import {populates} from "../../../pages/MessageHome";
 
 type Props = {
     context: any;
@@ -82,6 +83,10 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
         dispatch(setAmountMissMessage(data.amountMissMessage))
         // console.log(data)
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+            conversationID: data?.infoMessage?.conversation,
+            populates
+        });
         if (data?.infoMessage?.sender?._id === profileId) {
             dispatch(updateNewMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
@@ -124,8 +129,15 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         dispatch(appendMessageToConversation({
             conversationId: data?.data?.conversation,
             messageId: data?.data?._id,
-            messageData: data?.data
+            messageData: {
+                ...data?.data,
+                noAnimation: true
+            }
         }));
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+            conversationID: data?.data?.conversation,
+            populates
+        });
         if ([108, 109].includes(data?.data?.type)) {
             getListPinMessage({conversationID: data?.data?.conversation})
         }
@@ -166,7 +178,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             conversationId: conversation?._id,
             newMessageId: messageID,
             oldMessageId: messageID,
-            messageData: {...data?.data, conversation: conversation?._id}
+            messageData: {
+                ...data?.data,
+                conversation: conversation?._id,
+                noAnimation: true
+            }
         }));
     }
 
@@ -222,6 +238,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const onRemoveMemberConversation = (data: any) => {
        if (!data) return;
+       console.log(data.data)
        const youGotDeleted = data?.data?.removedMember.some((member: {_id: string, [key: string]: any}) => member._id === profileId);
        if (youGotDeleted) {
            dispatch(deleteConversationAction({conversationId: data?.data?.infoConversation?._id}))

@@ -40,6 +40,13 @@ export type Group = {
   sign: string;
 };
 
+export type Field = {
+  _id: string;
+  name: string;
+  type: string;
+  description: string;
+};
+
 export type Task = {
   _id: string;
   name: string;
@@ -53,6 +60,15 @@ export type Task = {
   project: Project;
   company: Company,
   group: Group,
+  field: Field,
+  startTime: string,
+  subType: number,
+  type: number,
+  related: Array<User>;
+  signatures: {
+    author: User,
+    createAt: string
+  };
   amountResponse: number;
   amountMarkedResponse: number;
 };
@@ -70,6 +86,15 @@ export interface addTaskPayload {
   expiredTime: string;
   relatedIDs: string[];
   authorAttachs: string[];
+}
+
+export interface updateTaskPayload {
+  taskID: string;
+  name?: string;
+  status?: number;
+  priority?: number;
+  expiredTime?: string
+  isAddSignature?: boolean
 }
 
 export interface addTaskResponse {

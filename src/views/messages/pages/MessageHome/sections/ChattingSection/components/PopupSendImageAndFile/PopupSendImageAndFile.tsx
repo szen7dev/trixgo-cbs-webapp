@@ -25,7 +25,6 @@ export const PopupSendImageAndFile: FC = () => {
     const [useCompress, setUseCompress] = useState(true);
     const inputDescription = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        isShowPopupSendFiles&&setContent("");
         isShowPopupSendFiles&&setTimeout(() => {
             if (inputDescription&&inputDescription.current) {
                 inputDescription.current.focus()
@@ -161,7 +160,7 @@ export const PopupSendImageAndFile: FC = () => {
         const message: any = {
             tmpid: uuidv4(),
             conversationID: popSendFilesContent.conversationID,
-            content: content,
+            content: inputDescription?.current?.value,
             sender: {
                 _id: profileId
             },
@@ -171,7 +170,8 @@ export const PopupSendImageAndFile: FC = () => {
             files: popSendFilesContent.files
         };
         dispatch(closePopupSendFiles());
-        popSendFilesContent.handleSendFile(message,useCompress)
+        popSendFilesContent.handleSendFile({...message},useCompress);
+        setContent("");
     }
 
     const handleSetUseCompress = (value: boolean) => {
