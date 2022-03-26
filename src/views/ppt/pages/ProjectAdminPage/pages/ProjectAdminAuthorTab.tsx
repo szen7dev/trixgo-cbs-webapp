@@ -1,17 +1,28 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { APP_ID } from "apis/localdb";
 import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 
 const ProjectAdminAuthorTab: FC = () => {
+	// Should remove this
 	const history = useHistory();
+
+	// Remove this thing too
+	const { id } = useParams<{ id: string }>();
+	
+	// Use location.state instead of params
+	// Get location first
+	const location = useLocation<string | null>();
+	// Pass location.state as initial value
+	const [state, setState] = useState<string | null>(location.state);
+	// state now is id of project (change to id or something you want)
+
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
 	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
-	const { id } = useParams<{ id: string }>();
 	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
 
 	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: id });
@@ -96,7 +107,9 @@ const ProjectAdminAuthorTab: FC = () => {
 					disableSearch={true}
 					searchInputClassName="h-[40px] w-[322px] px-[46px]"
 					onchangeValue={(item) =>
-						history.push(`/pcm/admin/${item._id}/detail`)
+						// history.push(`/pcm/admin/${item._id}/detail`)
+						// Don't use history.push;
+						setState(item._id)
 					}
 				/>
 			</header>
