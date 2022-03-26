@@ -322,24 +322,16 @@ export const MediaDetailPage: FC = () => {
 						<div className="flex justify-between items-center mt-4">
 							<div className="post__author">
 								<div className="post__author-avt">
-									<Link to="/">
-										<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
-									</Link>
+									<img src={media.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${media.author?.image}` : avatar} alt="" className="object-cover" />
 								</div>
 								<div className="post__author-info">
 									<p className="text-lg leading-5 font-bold">
-										<Link to="/">
-											{media.author?.bizfullname}
-										</Link>
+										{media.author?.bizfullname}
 									</p>
 									<p className="text-primary-gray text-base leading-[18px] mt-1.5">
-										<Link to="/">
-											{media.author?.department?.name}
-										</Link>
+										{media.author?.department?.name}
 										<span className="mx-2">•</span>
-										<Link to="/">
-											{media.author?.position?.name}
-										</Link>
+										{media.author?.position?.name}
 									</p>
 								</div>
 							</div>

@@ -2,16 +2,19 @@ import API from "../repository";
 import type { QueryParam, UserSystemPayload, ListUserInProjectPayload, DataResponse } from 'typings/users/userSystem';
 import { USER_URL } from '.';
 
+const selectUserProperties = "_id bizfullname fullname email image company department position level lastLog numLog";
+const populateUserProperties = JSON.stringify({
+    path: "company department position",
+    select: "_id name sign"
+})
+
 export const UserSystemRepository = {
     async listUserInProject(params: ListUserInProjectPayload): Promise<DataResponse> {
         const { data } = await API.get<Promise<DataResponse>>(
             USER_URL, {
             params: {
-                select: "_id bizfullname fullname email image company department position level",
-                populates: JSON.stringify({
-                    path: "company department position",
-                    select: "_id name sign"
-                }),
+                select: selectUserProperties,
+                populates: populateUserProperties,
                 ...params,
             }
         })
@@ -22,11 +25,8 @@ export const UserSystemRepository = {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
             params: {
-                select: "_id bizfullname fullname email image company department position level status",
-                populates: JSON.stringify({
-                    path: "company department position",
-                    select: "_id name sign"
-                }),
+                select: selectUserProperties,
+                populates: populateUserProperties,
                 ...params,
             }
         })
@@ -38,7 +38,7 @@ export const UserSystemRepository = {
             USER_URL, {
             params: {
                 userID,
-                select: "_id bizfullname fullname email company department position level"
+                select: selectUserProperties
             }
         })
         return data;
