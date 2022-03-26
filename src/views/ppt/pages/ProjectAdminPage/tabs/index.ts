@@ -1,1 +1,0 @@
-export { default as AppAdminTab } from "./AppAdminTab";
