@@ -11,9 +11,11 @@ import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
 import { DropdownSearchable } from "shareComponents/common";
+import { ModalCreateResultSearch } from "./components";
 
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";
+import { useModal } from "services/hooks/useModal";
 
 type Props = {
   handleFilterData: (filterData: any) => void,
@@ -25,6 +27,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
     handleFilterData(values);
     toggleSearchFilter();
   };
+  const { openModal } = useModal();
 
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [otherFieldValue, setOtherFieldValue] = useState("");
@@ -437,19 +440,39 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   />
                 </div>
 
-                <div className="text-right pt-12">
+                <div className="flex justify-between pt-12">
+                  <div>
                   <button
-                    onClick={toggleSearchFilter}
-                    className="rounded font-bold text-primary-gray py-3 px-7 bg-lighter-gray"
-                  >
-                    Bỏ qua
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded font-bold text-primary-light py-3 px-7 bg-blue ml-2"
-                  >
-                    Tìm kiếm
-                  </button>
+                      onClick={() => {
+                        openModal(
+                          <div
+                            className={
+                              "inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                            }
+                          >
+                            <ModalCreateResultSearch />
+                          </div>
+                        )
+                      }}
+                      className="rounded text-white font-bold py-3 px-7 bg-green-500"
+                    >
+                      Lưu kết quả
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      onClick={toggleSearchFilter}
+                      className="rounded font-bold text-primary-gray py-3 px-7 bg-lighter-gray"
+                    >
+                      Bỏ qua
+                    </button>
+                    <button
+                      type="submit"
+                      className="rounded font-bold text-primary-light py-3 px-7 bg-blue ml-2"
+                    >
+                      Tìm kiếm
+                    </button>
+                  </div>
                 </div>
               </Form>
             );

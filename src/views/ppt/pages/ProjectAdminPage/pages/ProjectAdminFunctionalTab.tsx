@@ -9,7 +9,6 @@ import { SearchInput } from "shareComponents/common";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
@@ -138,14 +137,11 @@ const ProjectAdminFunctionalTab: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1">
@@ -178,7 +174,6 @@ const ProjectAdminFunctionalTab: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>

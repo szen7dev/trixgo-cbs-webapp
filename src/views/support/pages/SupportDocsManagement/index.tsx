@@ -9,7 +9,6 @@ import { SearchInput } from "shareComponents/common";
 import { ModalCreateMember, ModalConfirm } from "views/support/shareComponents/common";
 import { useAppUser } from 'services/hooks/apps/useAppUser';
 
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 import MemberIcon from "assets/images/member-icon.svg";
@@ -160,12 +159,11 @@ export const SupportDocsManagementPage: FC = () => {
             <th className={cn("py-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
                   checked={getStateCheckedAll()}
                   onChange={onClickCheckAll}
                 />
-                <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
             <th className="w-1/5 py-1">
@@ -201,7 +199,6 @@ export const SupportDocsManagementPage: FC = () => {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  style={{ marginLeft: "-23px" }}
                   checked={getStateChecked(appUser._id)}
                   onChange={() => onClickCheckButton(appUser._id)}
                 />

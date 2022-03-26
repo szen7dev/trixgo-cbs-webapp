@@ -157,7 +157,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								)
 							}) : ''}
 						</div>
-						<div >
+						<div>
 							<PostFile files={files} className='px-0' />
 						</div>
 					</div>
