@@ -2,7 +2,7 @@ import API from "../repository";
 import type { QueryParam, UserSystemPayload, ListUserInProjectPayload, DataResponse } from 'typings/users/userSystem';
 import { USER_URL } from '.';
 
-const selectUserProperties = "_id bizfullname fullname email image company department position level lastLog numLog";
+const selectUserProperties = "_id bizfullname fullname email image company department position level status lastLog numLog";
 const populateUserProperties = JSON.stringify({
     path: "company department position",
     select: "_id name sign"
@@ -20,7 +20,7 @@ export const UserSystemRepository = {
         })
         return data;
     },
-    
+
     async listUsersSystem(params?: QueryParam): Promise<any> {
         const { data } = await API.get<Promise<any>>(
             USER_URL, {
@@ -59,7 +59,7 @@ export const UserSystemRepository = {
         )
         return data;
     },
-    
+
     async deleteUserSystem(usersID: string[]): Promise<any> {
         const { data } = await API.delete<Promise<any>>(
             USER_URL, {
