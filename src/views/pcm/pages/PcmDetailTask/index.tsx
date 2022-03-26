@@ -40,6 +40,8 @@ import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Mo
 import { APP_ID } from "apis/localdb";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
+import OwnerUploadedFile from "./components/OwnerUploadedFile";
+import CreatorUploadedFile from "./components/CreatorUploadedFile";
 
 const PcmDetailTask: FC = () => {
   const history = useHistory();
@@ -320,6 +322,7 @@ const PcmDetailTask: FC = () => {
 
               <FileAttachment files={taskInfo?.authorAttachs} />
             </div>
+						<CreatorUploadedFile className="p-5"/>
             <div className="mt-8 pr-3">
               <CheckList
                 componentType="CHECKLIST"
@@ -344,6 +347,7 @@ const PcmDetailTask: FC = () => {
                 valueApproved={taskInfo?.valueApproved}
               />
             </div>
+						<OwnerUploadedFile className="p-5"/>
             <div className="px-5 my-5">
               <RelatedResponse task={taskInfo} />
             </div>

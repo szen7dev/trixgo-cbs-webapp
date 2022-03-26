@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, matchPath } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
 /*=====2.PROVIDERS=====*/
@@ -188,7 +188,11 @@ const PCMRouter: FC = () => {
 						<Route path="/pcm/admin">
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Nhóm chức năng', path: '/pcm/admin', navExact: true },
-								{ id: '2', title: 'Phân quyền chức năng', path: '/pcm/admin/2', },
+								{ id: '2', title: 'Phân quyền chức năng', path: '/pcm/admin/2', location: (location) => {
+									// Get match params
+									const match = matchPath<{id:string}>(location.pathname, {path:'/pcm/admin/:id/detail'})
+									// Push to state
+									return({ pathname:'/pcm/admin/2', state: match? match.params.id : null })} },
 								{ id: '3', title: 'Dự án', path: '/pcm/admin/3', },
 							]}>
 								<Route exact path="/pcm/admin" component={ProjectAdminFunctionalTab} />

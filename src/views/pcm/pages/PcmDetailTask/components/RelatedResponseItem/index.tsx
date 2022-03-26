@@ -30,6 +30,7 @@ type Props = {
 };
 
 export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
+	const inputRef = React.useRef<HTMLInputElement>(null);
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -67,6 +68,15 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 	return (
 		<>
+			<input
+				type='file'
+				ref={inputRef}
+				className="hidden"
+				accept="image/*"
+				onChange={e=>{
+					alert('upload file')
+				}}
+			/>
 			<div className={
 				classNames("flex",
 					isHighlight
@@ -93,8 +103,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							<button
 								className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
 									} text-[13px] w-10 flex justify-center items-center rounded-full`}
+								onClick={e=>inputRef.current?.click()}
 							>
-								<DotsVerticalIcon />
+								{/* <DotsVerticalIcon /> */}
+								<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
 							</button>
 						</div>
 					</div>
@@ -181,13 +193,17 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 								{(response.images && response.images.length) ? response.images.map((file, index) => {
 									if (index < 2) {
 										return (
-											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full" alt="test" />
+											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
+												<div className="pb-[100%]">
+													<div className="absolute inset-0">
+														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt="test" />
+													</div>
+												</div>
 											</button>
 										)
 									}
 
-									if (index === 3) {
+									if (index === 2) {
 										return (
 											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
 												<img
@@ -196,7 +212,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													alt="test"
 												/>
 												<div className="relative z-6">
-													<p className="text-4x-large text-white">+{response.images && response.images.length - 3}</p>
+													<p className="text-4x-large text-white">+{response.images && response.images.length - 2}</p>
 												</div>
 											</div>
 										)
