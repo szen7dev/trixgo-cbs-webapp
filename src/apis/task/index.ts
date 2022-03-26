@@ -37,10 +37,10 @@ const populatesTask = JSON.stringify({
 
 const populatesResponse = JSON.stringify({
   path: "task files images author",
-  select: "_id bizfullname image name nameOrg path size mimeType description author createAt",
+  select: "_id bizfullname image position name nameOrg path size mimeType description author createAt",
   populate: {
-    path: "author",
-    select: "_id bizfullname image"
+    path: "author position",
+    select: "_id bizfullname image name sign"
   }
 });
 

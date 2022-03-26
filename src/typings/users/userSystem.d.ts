@@ -35,7 +35,8 @@ export type UserSystemPayload = {
     companyID: string,
     departmentID: string,
     positionID: string,
-    level: number
+    level: number,
+    status: number,
 }
 
 export type UserSystemProps = {
@@ -82,7 +83,8 @@ interface ModalProps {
         positionID: string,
         level: number,
         departmentName?: string,
-        positionName?: string
+        positionName?: string,
+        status: number
     }
     onConfirm?(): void
 }

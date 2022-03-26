@@ -32,9 +32,10 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     companyID: "",
     departmentID: "",
     positionID: "",
-    level: -1,
+    level: 1,
     departmentName: "",
     positionName: "",
+    status: 1,
   }
 }) => {
   const [keywordDepartment, setKeywordDepartment] = useState('');
@@ -69,6 +70,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       email: values.email,
       fullname: values.fullname,
       level: +values.level,
+      status: +values.status
     }
 
     try {
@@ -214,7 +216,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="endTime">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Chức danh
                   </label>
                   <DropdownSearchable
@@ -249,7 +251,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
                 <div className='mb-4'>
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="endTime">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Phân quyền
                   </label>
                   <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
@@ -257,25 +259,58 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                         {...getFieldProps('level')}
                         value={0}
                         type="radio"
-                        id="option-1"
+                        id="level-1"
                         name={"level"}
                         defaultChecked={initialValues.level === 0 ? true : false}
                         className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
                       />
-                      <label htmlFor="option-1" className={"text-left ml-3 mr-3 text-primary"}>Admin</label>
+                      <label htmlFor="level-1" className={"text-left ml-3 mr-3 text-primary"}>Admin</label>
                       <input
                         {...getFieldProps('level')}
                         value={1}
                         type="radio"
-                        id="option-2"
+                        id="level-2"
                         name={"level"}
                         defaultChecked={initialValues.level === 1 ? true : false}
                         className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
                       />
-                      <label htmlFor="option-2" className={"text-left ml-3 text-primary"}>Member</label>
+                      <label htmlFor="level-2" className={"text-left ml-3 text-primary"}>Member</label>
                   </div>
                   <ErrorMessage
                     name="level"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+
+                <div className='mb-4'>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Trạng thái
+                  </label>
+                  <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
+                      <input
+                        {...getFieldProps('status')}
+                        value={1}
+                        type="radio"
+                        id="status-1"
+                        name={"status"}
+                        defaultChecked={initialValues.status === 1 ? true : false}
+                        className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
+                      />
+                      <label htmlFor="status-1" className={"text-left ml-3 mr-3 text-primary"}>Hoạt động</label>
+                      <input
+                        {...getFieldProps('status')}
+                        value={0}
+                        type="radio"
+                        id="status-2"
+                        name={"status"}
+                        defaultChecked={initialValues.status === 0 ? true : false}
+                        className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
+                      />
+                      <label htmlFor="status-2" className={"text-left ml-3 text-primary"}>Khóa</label>
+                  </div>
+                  <ErrorMessage
+                    name="status"
                     component="span"
                     className="font-normal leading-7 text-sm text-negative"
                   />
