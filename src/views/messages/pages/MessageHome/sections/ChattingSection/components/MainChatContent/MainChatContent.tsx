@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useRef, useState, useContext} from "r
 import {map as _map} from "lodash";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
@@ -26,6 +26,8 @@ import {
     ChangeNameNoti, ChangeAvatarNoti
 } from "../ChatContent/RegularContent";
 import { Oval } from  'react-loader-spinner'
+import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 export const listEmoji = [
     {
@@ -66,6 +68,9 @@ type Props = {
 
 export const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
+    const {markReadConversation} = UseListConversation();
+    const dispatch = useDispatch();
+
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
     const {currentChat} = useContext(MessageContext);
@@ -100,6 +105,9 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
+        if (userUnreadMessage()>0) {
+            markAsRead()
+        }
         getListMessage({conversationID: currentChat}).then(() => {
             scrollToBottom()
         })
@@ -115,6 +123,17 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             setReachTop(false);
         }
     }, [reachedTop, nextCursor])
+
+    const markAsRead = () => {
+        markReadConversation({
+            conversationID: chat._id
+        }).then(data => {
+            dispatch(updateUsersMissMessageToConversation({
+                conversationId: chat._id,
+                usersMissMessage: data.usersMissMessage
+            }))
+        })
+    }
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
@@ -236,7 +255,10 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             {
                 userUnreadMessage()>0 &&
                 <button
-                    onClick={() => scrollToBottom()}
+                    onClick={() => {
+                        scrollToBottom()
+                        markAsRead()
+                    }}
                     className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
                     <img  src={ArrowDown} alt={"arrow down"}/>
                     <span

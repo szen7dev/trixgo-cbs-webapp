@@ -15,7 +15,6 @@ import {SelectedActionGroup} from "./SelectedActionGroup";
 import {openPopupSendFiles} from "redux/reducer/messages/PopupSendImageAndFile"
 import {dismissSearchMode} from "redux/reducer/messages/SearchMessage";
 import {UseMessageHelper} from "services/hooks/messages/useMessageHelper";
-import {populates} from "../../../../index";
 
 export const ChattingInputContext = createContext<{
     editorState: any;
@@ -117,10 +116,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
         dispatch(dismissSearchMode({conversationId: chat._id}));
         setShowSearch&&setShowSearch(false);
         socket.emit('CHATTING_CSS_SEND_MESSAGE', message);
-        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
-            conversationID: chat._id,
-            populates
-        });
     }
 
     const handleSetFiles = (filesUpload: FileList|Blob[]) => {
@@ -239,10 +234,6 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
             // console.log(willSendFileMessage)
             setTimeout(() => {
                 socket.emit('CHATTING_CSS_SEND_MESSAGE', willSendFileMessage);
-                socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
-                    conversationID: chat._id,
-                    populates
-                });
                 setDoneUpload({});
                 setWillSendFileMessage(null);
             }, 200)
