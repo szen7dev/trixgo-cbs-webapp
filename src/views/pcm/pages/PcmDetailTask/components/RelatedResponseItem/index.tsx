@@ -179,15 +179,20 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
 								{(response.images && response.images.length) ? response.images.map((file, index) => {
+									console.log(index)
 									if (index < 2) {
 										return (
-											<button className="w-1/3" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
-												<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full" alt="test" />
+											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
+												<div className="pb-[100%]">
+													<div className="absolute inset-0">
+														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt="test" />
+													</div>
+												</div>
 											</button>
 										)
 									}
 
-									if (index === 3) {
+									if (index === 2) {
 										return (
 											<div className="w-1/3 relative bg-black flex items-center justify-center" key={file._id}>
 												<img
@@ -196,7 +201,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													alt="test"
 												/>
 												<div className="relative z-6">
-													<p className="text-4x-large text-white">+{response.images && response.images.length - 3}</p>
+													<p className="text-4x-large text-white">+{response.images && response.images.length - 2}</p>
 												</div>
 											</div>
 										)
