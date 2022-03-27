@@ -320,14 +320,15 @@ export const HumanInfo: FC = () => {
             documents: detailHuman.documents
           }}
         />
-        <WorkHistory humanId={id} />
+        <WorkHistory humanId={id} companyID={detailHuman?.company?._id}/>
         <WorkExperience
           humanId={id}
           humanInfo={detailHuman}
+          companyID={detailHuman?.company?._id}
         />
-        <ExperienceAppointment humanId={id} humanInfo={detailHuman} />
-        <Education humanId={id} />
-        <Certificate humanId={id} />
+        <ExperienceAppointment humanId={id} humanInfo={detailHuman} companyID={detailHuman?.company?._id}/>
+        <Education humanId={id} companyID={detailHuman?.company?._id} />
+        <Certificate humanId={id} companyID={detailHuman?.company?._id}/>
       </section>
     </main>
   );

@@ -91,7 +91,7 @@ export const DocumentDetailPage: FC<Props> = () => {
     try {
         if (!event.target.files || !event.target.files.length) return;
         const arrFileID = []
-
+        
         // Upload files
         for (const [key, file] of Object.entries(event.target.files)) {
           const { _id } = await addFileToUpload({
@@ -144,10 +144,10 @@ export const DocumentDetailPage: FC<Props> = () => {
             />
           </svg>
         </button>
-        <DropdownFilterButton />
+        {/* <DropdownFilterButton /> */}
         <GroupActions className="flex items-center flex-1" />
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <ButtonMore />
+        {/* <ButtonMore /> */}
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
