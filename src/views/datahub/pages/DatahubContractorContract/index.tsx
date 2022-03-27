@@ -77,7 +77,7 @@ const DatahubContractorContract: FC = () => {
 						instance={instance}
 						rowLoading={4}
 						tableProps={{
-							className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
+							className: "text-black text-medium border-separate space-x-0 space-y-0 w-full text-left",
 							style: { borderSpacing: 0 }
 						}}
 						// ={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
