@@ -1,6 +1,6 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, matchPath } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
@@ -29,10 +29,42 @@ import {
     ContractProduct
 } from "views/cmcs/pages";
 import ErrorPage from "views/authentication/Error";
+import CmcsAdminFunctionalTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminFunctionalTab";
+import CmcsAdminDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminDetail";
+import CmcsAdminAuthorTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminAuthorTab";
+import LayoutSecondary from "views/cmcs/shareComponents/layouts/LayoutSecondary";
 
 const CmcsRouter: FC = () => {
     return (
         <Switch>
+            <ProtectedRoute
+                exact
+                path="/cmcs/admin"
+                component={() => (
+                    <CmcsLayout>
+                        <Switch>
+                            <Route path="/cmcs/admin">
+                                <LayoutSecondary pages={[
+                                    { id: '1', title: 'Nhóm chức năng', path: '/cmcs/admin', navExact: true },
+                                    {
+                                        id: '2', title: 'Phân quyền chức năng', path: '/cmcs/admin/2', location: (location) => {
+                                            // Get match params
+                                            const match = matchPath<{ id: string }>(location.pathname, { path: '/cmcs/admin/:id/detail' })
+                                            // Push to state
+                                            return ({ pathname: '/cmcs/admin/2', state: match ? match.params.id : null })
+                                        }
+                                    }
+                                ]}>
+                                    <Route exact path="/cmcs/admin" component={CmcsAdminFunctionalTab} />
+                                    <Route exact path="/cmcs/admin/:id/detail" component={CmcsAdminDetail} />
+                                    <Route exact path="/cmcs/admin/2" component={CmcsAdminAuthorTab} />
+                                </LayoutSecondary>
+                            </Route>
+                        </Switch>
+
+                    </CmcsLayout>
+                )}
+            />
             <ProtectedRoute
                 exact
                 path="/cmcs/home"

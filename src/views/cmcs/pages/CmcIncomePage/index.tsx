@@ -38,7 +38,7 @@ export const CmcIncomePage: FC = () => {
     createHistoryTraffics(
       {
         "appID": APP_ID.CMCS.id,
-        "menuID": APP_ID.CMCS.menuApp.income.id,
+        "menuID": APP_ID.CMCS.menuCmcsApp.income.id,
         "type": 1
       }
     )
