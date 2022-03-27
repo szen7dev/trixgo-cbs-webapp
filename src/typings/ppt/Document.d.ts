@@ -67,7 +67,7 @@ export interface Document {
     type?: number;
     amountDelivery?: number;
     requestResponse?: boolean;
-    completeStatus?: boolean;
+    completeStatus?: number;
     expiredResponse?: string;
     approver?: string;
     value?: string;

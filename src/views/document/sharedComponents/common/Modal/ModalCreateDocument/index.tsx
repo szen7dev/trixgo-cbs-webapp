@@ -1,10 +1,11 @@
 import { Dialog } from "@headlessui/react";
 import moment from "moment";
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import cn from "classnames";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Formik, Form, Field } from "formik";
 import uniqBy from "lodash/uniqBy";
+import debounce from "lodash/debounce";
 
 import { ModalContext } from "views/document/contexts/modal";
 import iconAttach from "assets/images/icons8-attach-96.png";
@@ -33,7 +34,6 @@ const fieldInputByRow = [
 		name: "expiredResponse",
 		type: "datepicker",
 	},
-
 	{
 		title: "Mã hiệu",
 		name: "sign",
@@ -50,7 +50,6 @@ const fieldInputByRow = [
 		type: "text",
 	},
 	{ title: "Giá trị", name: "value", type: "text" },
-
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
 	{ title: "Ngày văn bản", name: "date", type: "datepicker" },
@@ -61,21 +60,28 @@ const fieldInputByRow = [
 	},
 ];
 
-const useInitialValues = (departmentID: string, companyID: string) => {
-	const { listPackage } = useQueryListPackage({ departmentID });
-	const { listContact } = useQueryContact({ companyID });
-	const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID }); // lĩnh vực
+const useInitialValues = (
+	departmentID: string, companyID: string, keywordPackage?: string,
+	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
+	keywordContract?: string, keywordStorage?: string, keywordFields?: string ) => {
+
+	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
+	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
+	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
+	const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
 	const { listDoctypes: properties } = useQueryListDoctype({
+		keyword: keywordProperty,
 		type: 2,
 		companyID,
 	}); // tính chất
-	const { listStorages } = useQueryListStorage({ companyID });
-	const { listContracts } = useQueryItemContract(companyID);
+	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
+	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 
 	if (!companyID || !departmentID) {
 		return {
 			listPackage: [],
-			listContact: [],
+			listContactSender: [],
+			listContactReceiver: [],
 			fields: [],
 			properties: [],
 			listStorages: [],
@@ -85,7 +91,8 @@ const useInitialValues = (departmentID: string, companyID: string) => {
 
 	return {
 		listPackage,
-		listContact,
+		listContactSender,
+		listContactReceiver,
 		fields,
 		properties,
 		listStorages,
@@ -110,18 +117,34 @@ export const ModalCreateDocument: React.FC = () => {
 		}
 	}, [state.initialValues]);
 
+	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
+	const  [ keywordSender,  setKeywordSender 		] = useState("");
+	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
+	const  [ keywordProperty,  setKeywordProperty ]   = useState("");
+	const  [ keywordContract,  setKeywordContract ]   = useState("");
+	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
+	const  [ keywordFields,  setKeywordFields ]       = useState("");
+
 	const {
 		fields,
-		listContact,
+		listContactSender,
+		listContactReceiver,
 		listPackage,
 		listContracts,
 		listStorages,
 		properties,
 	} = useInitialValues(
 		state.departmentId,
-		state?.departmentInfo?.company?._id || ""
+		state?.departmentInfo?.company?._id || "",
+		keywordPackage,
+		keywordSender,
+		keywordReceiver,
+		keywordProperty,
+		keywordContract,
+		keywordStorage,
+		keywordFields
 	);
-
+	
 	const listFormFieldsDropdown = React.useMemo((): {
 		title: string;
 		name: string;
@@ -137,9 +160,8 @@ export const ModalCreateDocument: React.FC = () => {
 				})),
 				name: "direction",
 			},
-			{ title: "Ban hành", data: listContact, name: "sender" },
-			{ title: "Nhận", data: listContact, name: "receiver" },
-
+			{ title: "Ban hành", data: listContactSender, name: "sender" },
+			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
 			{ title: "Tính chất", data: properties, name: "property" },
 			{
 				title: "Phân loại",
@@ -152,7 +174,7 @@ export const ModalCreateDocument: React.FC = () => {
 			{ title: "Hợp đồng", data: listContracts, name: "contract" },
 			{ title: "Lưu trữ", data: listStorages, name: "storage" },
 		];
-	}, [listContact, listContracts, listPackage, listStorages, properties]);
+	}, [listContactSender, listContactReceiver , listContracts, listPackage, listStorages, properties]);
 
 	const handleSubmit = React.useCallback(
 		(values) => {
@@ -168,6 +190,13 @@ export const ModalCreateDocument: React.FC = () => {
 			if (moment(values.receivedDate).isValid()) {
 				formatValues.receivedDate = moment(values.receivedDate).toJSON();
 			}
+
+			if (values.completeStatus == true) {
+				formatValues.completeStatus = 1
+			}else{
+				formatValues.completeStatus = 0
+			}
+			
 			if (state.onSubmit) {
 				try {
 					state.onSubmit({
@@ -248,6 +277,33 @@ export const ModalCreateDocument: React.FC = () => {
 												[...item.data].concat(initialValue),
 												"_id"
 											).filter(elm => elm._id);
+
+											const fnKeyword = (value: string) => {
+												if(item.name == "package"){
+													return setKeywordPackage(value);
+												}
+
+												if(item.name == "sender"){
+													return setKeywordSender(value);
+												}
+
+												if(item.name == "receiver"){
+													return setKeywordReceiver(value);
+												}
+
+												if(item.name == "property"){
+													return setKeywordProperty(value);
+												}
+
+												if(item.name == "contract"){
+													return setKeywordContract(value);
+												}
+
+												if(item.name == "storage"){
+													return setKeywordStorage(value);
+												}
+											}
+											
 											return (
 												<Fragment key={item.title}>
 													<div className="py-1.5 h-[30px] box-content">
@@ -265,14 +321,19 @@ export const ModalCreateDocument: React.FC = () => {
 															isMultiple={false}
 															allowClearValueSingleInput={true}
 															renderSelectedItem={(item) => (
-																<div className={"flex items-center"}>
+																<div className={"flex items-center"} >
 																	<img alt={"tag icon"} src={itemTag} />
-																	<span>{item.text}</span>
+																	<span>{item.sign}{item?.sign ? ".": ""}{item.text}</span>
 																</div>
 															)}
 															onchangeValue={(value) =>
 																setFieldValue(item.name, value._id)
 															}
+															onSearchInputChange={debounce(
+																(value) => 
+																	fnKeyword(value),
+																500
+															)}
 															initialValue={
 																['direction', 'type'].includes(item.name)
 																	? item.data.find((elm) => {
@@ -284,6 +345,7 @@ export const ModalCreateDocument: React.FC = () => {
 															formatItem={{
 																id: "_id",
 																text: "name",
+																sign: "sign",
 															}}
 															inlineSearch={true}
 														/>
@@ -312,13 +374,13 @@ export const ModalCreateDocument: React.FC = () => {
 																	}}
 																/>
 																{/* {item.type === "text" ? (
-                                  ) : (
-                                    <input
-                                      type={item.type}
-                                      value={item.value}
-                                      checked={item.checked}
-                                    />
-                                  )} */}
+																) : (
+																	<input
+																	type={item.type}
+																	value={item.value}
+																	checked={item.checked}
+																	/>
+																)} */}
 															</div>
 														</div>
 													</Fragment>
@@ -432,6 +494,13 @@ export const ModalCreateDocument: React.FC = () => {
 												onchangeValue={(value) =>
 													setFieldValue("field", value._id)
 												}
+												onSearchInputChange={
+													debounce(
+														(value) => (
+															setKeywordFields(value)
+														),
+													500
+												)}
 												initialValue={
 													state?.initialValues['field']
 												}
@@ -487,14 +556,14 @@ export const ModalCreateDocument: React.FC = () => {
 												)}
 											</Field>
 											{/* <textarea
-                          rows={10}
-                          placeholder="Biên soạn nội dung"
-                          className="w-full focus:outline-none resize-none lex-grow py-2"
-                          // {...formik.getFieldProps('content')}
-                        ></textarea> */}
+											rows={10}
+											placeholder="Biên soạn nội dung"
+											className="w-full focus:outline-none resize-none lex-grow py-2"
+											// {...formik.getFieldProps('content')}
+											></textarea> */}
 										</div>
 										{/* File uploaded */}
-										{Array.from({ length: 3 }).map((_, index) => (
+										{Array.from({ length: 0 }).map((_, index) => (
 											<div
 												key={index}
 												className="col-span-8 py-1 pl-2 pr-1 max-w-md flex mb-3"
@@ -550,7 +619,7 @@ export const ModalCreateDocument: React.FC = () => {
 								</div>
 								<div className="flex justify-between pt-3 px-6 pb-3.5 border-t border-cbs-border">
 									<div className="flex items-center">
-										<label className="w-6 h-6 rounded-md flex justify-center items-center cursor-pointer mr-8">
+										{/* <label className="w-6 h-6 rounded-md flex justify-center items-center cursor-pointer mr-8">
 											<img src={iconAttach} alt="" />
 											<input
 												type="file"
@@ -561,8 +630,8 @@ export const ModalCreateDocument: React.FC = () => {
 												multiple
 												onChange={(event) => false}
 											/>
-										</label>
-										<label>
+										</label> */}
+										{/* <label>
 											<input
 												type="checkbox"
 												value="send-mail"
@@ -571,7 +640,7 @@ export const ModalCreateDocument: React.FC = () => {
 											<span className="select-none align-middle ">
 												Thông báo email
 											</span>
-										</label>
+										</label> */}
 									</div>
 									<div className="mr-1.5">
 										<button

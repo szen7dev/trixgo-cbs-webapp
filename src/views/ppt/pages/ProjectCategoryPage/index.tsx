@@ -28,7 +28,7 @@ const ProjectCategoryPage: FC = () => {
 	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
 		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuApp.projects.id,
+		menuID: APP_ID.PCM.menuPcmApp.projects.id,
 		type: "1"
 	});
 

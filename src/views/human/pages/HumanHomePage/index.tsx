@@ -48,7 +48,7 @@ export const HumanHomePage: FC = () => {
     createHistoryTraffics(
       {
         "appID": APP_ID.HUMAN.id,
-        "menuID": APP_ID.CMCS.menuApp.income.id,
+        "menuID": APP_ID.CMCS.menuCmcsApp.income.id,
         "type": 1
       }
     )

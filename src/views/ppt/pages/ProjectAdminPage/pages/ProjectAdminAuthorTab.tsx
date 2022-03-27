@@ -9,10 +9,10 @@ import { DropdownSearchable } from "shareComponents/common";
 const ProjectAdminAuthorTab: FC = () => {
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
+	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = usePcmAdminDetail({ appID: funcID, keyword: "" }); 
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: typeAppRoleDetail == "1" ? APP_ID.PCM.menuPcmApp.id : APP_ID.PCM.menuPcmProject.id });
 	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
-	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: funcID, keyword: "" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: typeAppRoleDetail });
 
 	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: funcID });
 

@@ -583,7 +583,8 @@ export const LIMIT_DROPDOWN = 20;
 export const APP_ID = {
     PCM: {
         id: "5dfe4b9051dc622100bb9d89",
-        menuApp: {
+        menuPcmApp: {                                       // type = 1
+            id: "623ef213e998e94feda0ccd8",
             projects: {
                 id: "623ef363e998e94feda0ccde",
                 name: "Dự án đang triển khai"
@@ -601,10 +602,8 @@ export const APP_ID = {
                 name: "Báo cáo quản trị hồ sơ",
             }
         },
-        parentID: {
-            pcm: "623ef213e998e94feda0ccd8",
-        },
-        menuProject: {
+        menuPcmProject: {                                    // type = 2
+            id: "623f04cce998e94feda0cd32",
             dashboard: {
                 id: "623f05f9e998e94feda0cd33",
                 name: "Báo cáo quản trị"
@@ -629,21 +628,50 @@ export const APP_ID = {
                 id: "623f066ae998e94feda0cd38",
                 name: "Bản vẽ",
             }
+        }
+    },
+    CMCS: {
+        id: "6131d6f83f4b736dc93253b2",
+        menuCmcsApp: {
+            id: "623f22b1e998e94feda0cd8b",                   // type = 1
+            dashboard: {
+                id: "623f22c2e998e94feda0cd90",
+                name: "Báo cáo quản trị"
+            },
+            income: {
+                id: "623f22d1e998e94feda0cd91",
+                name: "Hợp đồng bán ra"
+            },
+            expense: {
+                id: "623f22dee998e94feda0cd92",
+                name: "Hợp đồng mua vào"
+            },
+            guarantee: {
+                id: "623f22eae998e94feda0cd93",
+                name: "Theo dõi bảo lãnh"
+            },
         },
-        projectParentID: {
-            pcm: "623f04cce998e94feda0cd32",
+        menuCmcsContract: {
+            id: "623f22ffe998e94feda0cd94",                    // type = 3
+            dashboard: {
+                id: "623f2311e998e94feda0cd95",
+                name: "Báo cáo quản trị"
+            },
+            produce: {
+                id: "623f231de998e94feda0cd96",
+                name: "Sản lượng"
+            },
+            ipc: {
+                id: "623f2338e998e94feda0cd97",
+                name: "Nghiệm thu hoàn thành"
+            },
+            payment: {
+                id: "623f2344e998e94feda0cd98",
+                name: "Tiền về"
+            },
         }
     },
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
-    },
-    CMCS: {
-        id: "6131d6f83f4b736dc93253b2",
-        menuApp: {
-            income: {
-                id: "5e3f93fa1969583819518362",
-                name: "Hợp đồng bán ra"
-            },
-        },
-    },
+    }
 };
