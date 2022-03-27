@@ -323,7 +323,7 @@ const PcmDetailTask: FC = () => {
               <FileAttachment files={taskInfo?.authorAttachs} />
             </div>
 						<CreatorUploadedFile className="p-5"/>
-            <div className="mt-8 pr-3">
+            <div className="">
               <CheckList
                 componentType="CHECKLIST"
                 task={taskInfo}
