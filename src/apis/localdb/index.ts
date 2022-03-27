@@ -603,6 +603,35 @@ export const APP_ID = {
         },
         parentID: {
             pcm: "623ef213e998e94feda0ccd8",
+        },
+        menuProject: {
+            dashboard: {
+                id: "623f05f9e998e94feda0cd33",
+                name: "Báo cáo quản trị"
+            },
+            folder: {
+                id: "623f061de998e94feda0cd34",
+                name: "Thư mục dữ liệu"
+            },
+            document: {
+                id: "623f062fe998e94feda0cd35",
+                name: "Hồ sơ văn bản",
+            },
+            budget: {
+                id: "623f063be998e94feda0cd36",
+                name: "Ngân sách và hợp đồng",
+            },
+            photo: {
+                id: "623f0657e998e94feda0cd37",
+                name: "Hình ảnh",
+            },
+            drawing: {
+                id: "623f066ae998e94feda0cd38",
+                name: "Bản vẽ",
+            }
+        },
+        projectParentID: {
+            pcm: "623f04cce998e94feda0cd32",
         }
     },
     HUMAN: {

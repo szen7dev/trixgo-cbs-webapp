@@ -11,80 +11,80 @@ MENU DỰ ÁN REE/menu-ree-project (type=2): 623f1e24e998e94feda0cd65
 
 ============MARKET: 61e049f6fdebf77b072d1b16
 MENU ỨNG DỤNG MARKET/menu-market-app (type=1): 623f1e40e998e94feda0cd66
-Báo cáo quản trị/dashboard: 623f1e6de998e94feda0cd67
++++Báo cáo quản trị/dashboard: 623f1e6de998e94feda0cd67
 
 ============WORKSHOP: 61e049e7fdebf77b072d1b15
 MENU ỨNG DỤNG WORKSHOP/menu-workshop-app (type=1): 623f1e92e998e94feda0cd68
 
 ============TIMESHEET: 61e049cffdebf77b072d1b14
 MENU ỨNG DỤNG TIMESHEET/menu-timesheet-app (type=1): 623f1ecae998e94feda0cd70
-Báo cáo quản trị/dashboard: 623f1ee2e998e94feda0cd71
++++Báo cáo quản trị/dashboard: 623f1ee2e998e94feda0cd71
 
 ============HUMAN: 61e049c9fdebf77b072d1b13
 MENU ỨNG DỤNG HUMAN/menu-human-app (type=1): 623f1f0de998e94feda0cd72
-Báo cáo quản trị/dashboard: 623f1f1fe998e94feda0cd73
++++Báo cáo quản trị/dashboard: 623f1f1fe998e94feda0cd73
 
 ============ACCOUNTING: 61e049aefdebf77b072d1b12
 MENU ỨNG DỤNG ACCOUNTING/menu-accounting-app (type=1): 623f1f49e998e94feda0cd74
-Báo cáo quản trị/dashboard: 623f1f63e998e94feda0cd75
-Phiếu kế toán/accbill: 623f1f80e998e94feda0cd76
-Phiếu thu/receipt: 623f1f8ce998e94feda0cd77
-Phiếu chi/payment: 623f1f9be998e94feda0cd78
-Phiếu nhập/goods-import: 623f1fabe998e94feda0cd79
-Phiếu xuất/goods-export: 623f201de998e94feda0cd7a
-Hóa đơn dịch vụ/invoices: 623f202ae998e94feda0cd7b
-Giấy báo nợ/debit-note: 623f2038e998e94feda0cd7c
-Giấy báo có/credit-note: 623f2046e998e94feda0cd7d
-Chi tiết tài khoản/detail: 623f2056e998e94feda0cd7e
-Sổ tổng hợp chữ T/tbook: 623f2073e998e94feda0cd7f
-Sổ nhật ký chung/diary: 623f2081e998e94feda0cd80
-Nhập xuất tồn/import-export: 623f208fe998e94feda0cd81
-Theo dõi công nợ/debt-tracking: 623f209ce998e94feda0cd82
-Bảng kê VAT/vat: 623f20a8e998e94feda0cd83
-Báo cáo tài chính/financial-report: 623f20b5e998e94feda0cd84
-Công cụ hỗ trợ/support-tools: 623f20c2e998e94feda0cd85
++++Báo cáo quản trị/dashboard: 623f1f63e998e94feda0cd75
++++Phiếu kế toán/accbill: 623f1f80e998e94feda0cd76
++++Phiếu thu/receipt: 623f1f8ce998e94feda0cd77
++++Phiếu chi/payment: 623f1f9be998e94feda0cd78
++++Phiếu nhập/goods-import: 623f1fabe998e94feda0cd79
++++Phiếu xuất/goods-export: 623f201de998e94feda0cd7a
++++Hóa đơn dịch vụ/invoices: 623f202ae998e94feda0cd7b
++++Giấy báo nợ/debit-note: 623f2038e998e94feda0cd7c
++++Giấy báo có/credit-note: 623f2046e998e94feda0cd7d
++++Chi tiết tài khoản/detail: 623f2056e998e94feda0cd7e
++++Sổ tổng hợp chữ T/tbook: 623f2073e998e94feda0cd7f
++++Sổ nhật ký chung/diary: 623f2081e998e94feda0cd80
++++Nhập xuất tồn/import-export: 623f208fe998e94feda0cd81
++++Theo dõi công nợ/debt-tracking: 623f209ce998e94feda0cd82
++++Bảng kê VAT/vat: 623f20a8e998e94feda0cd83
++++Báo cáo tài chính/financial-report: 623f20b5e998e94feda0cd84
++++Công cụ hỗ trợ/support-tools: 623f20c2e998e94feda0cd85
 
 
 ============OWNER: 61e04989fdebf77b072d1b10
 MENU ỨNG DỤNG OWNER/menu-owner-app (type=1): 623f216ae998e94feda0cd86
-Tài khoản thành viên/members: 623f217ce998e94feda0cd87
-Phân quyền ứng dụng/grant: 623f2188e998e94feda0cd88
++++Tài khoản thành viên/members: 623f217ce998e94feda0cd87
++++Phân quyền ứng dụng/grant: 623f2188e998e94feda0cd88
 
 ============PAYMENT: 61e04971fdebf77b072d1b0f
 MENU ỨNG DỤNG PAYMENT/menu-payment-app (type=1): 623f21bce998e94feda0cd89
-Báo cáo quản trị/dashboard: 623f21cde998e94feda0cd8a
++++Báo cáo quản trị/dashboard: 623f21cde998e94feda0cd8a
 
 ============CMCS: 6131d6f83f4b736dc93253b2
 MENU ỨNG DỤNG CMCS/menu-cmcs-app (type=1): 623f22b1e998e94feda0cd8b
-Báo cáo quản trị/dashboard: 623f22c2e998e94feda0cd90
-Hợp đồng bán ra/income: 623f22d1e998e94feda0cd91
-Hợp đồng mua vào/expense: 623f22dee998e94feda0cd92
-Theo dõi bảo lãnh/guarantee: 623f22eae998e94feda0cd93
++++Báo cáo quản trị/dashboard: 623f22c2e998e94feda0cd90
++++Hợp đồng bán ra/income: 623f22d1e998e94feda0cd91
++++Hợp đồng mua vào/expense: 623f22dee998e94feda0cd92
++++Theo dõi bảo lãnh/guarantee: 623f22eae998e94feda0cd93
 
 
 MENU HỢP ĐỒNG ĐỒNG CMCS/menu-cmcs-contract (type=3): 623f22ffe998e94feda0cd94
-Báo cáo quản trị/dashboard: 623f2311e998e94feda0cd95
-Sản lượng/produce: 623f231de998e94feda0cd96
-Nghiệm thu hoàn thành/ipc: 623f2338e998e94feda0cd97
-Tiền về/payment: 623f2344e998e94feda0cd98
++++Báo cáo quản trị/dashboard: 623f2311e998e94feda0cd95
++++Sản lượng/produce: 623f231de998e94feda0cd96
++++Nghiệm thu hoàn thành/ipc: 623f2338e998e94feda0cd97
++++Tiền về/payment: 623f2344e998e94feda0cd98
 
 ============DATAHUB: 60390cb12b367a1cdd9f3fb2
 MENU ỨNG DỤNG DATAHUB/menu-datahub-app (type=1): 623f2362e998e94feda0cd99
-Phân loại hệ thống/type: 623f2376e998e94feda0cd9a
-Danh mục dự án/project: 623f2384e998e94feda0cd9b
-Năng lực nhà thầu/contractor: 623f238fe998e94feda0cd9c
-Biểu mẫu nghiệm thu/inspection: 623f239fe998e94feda0cd9f
-Datahub giá/price: 623f23aae998e94feda0cda1
++++Phân loại hệ thống/type: 623f2376e998e94feda0cd9a
++++Danh mục dự án/project: 623f2384e998e94feda0cd9b
++++Năng lực nhà thầu/contractor: 623f238fe998e94feda0cd9c
++++Biểu mẫu nghiệm thu/inspection: 623f239fe998e94feda0cd9f
++++Datahub giá/price: 623f23aae998e94feda0cda1
 
 
 ============BIDDING: 5fe58b7395db3c6e1534ea81
 MENU ỨNG DỤNG BIDDING/menu-bidding-app (type=1): 623f23c5e998e94feda0cda2
-Báo cáo quản trị/dashboard: 623f23d7e998e94feda0cda3
++++Báo cáo quản trị/dashboard: 623f23d7e998e94feda0cda3
 
 
 ============DOCUMENT: 5e47867080019357cce04746
 MENU ỨNG DỤNG DOCUMENT/menu-document-app (type=1): 623f23f1e998e94feda0cda4
-Báo cáo quản trị/dashboard: 623f2404e998e94feda0cda6
++++Báo cáo quản trị/dashboard: 623f2404e998e94feda0cda6
 
 MENU DỰ ÁN DOCUMENT/menu-document-project (type=2): 
 
@@ -93,24 +93,24 @@ MENU ỨNG DỤNG MESSAGES/menu-messages-app (type=1): 623f2430e998e94feda0cda8
 
 ============FINANCIAL: 5dfe4bc751dc622100bb9d8a
 MENU ỨNG DỤNG FINANCIAL/menu-financial-app (type=1): 623f2448e998e94feda0cda9
-Báo cáo quản trị/dashboard: 623f2465e998e94feda0cdaa
-Theo dõi sổ quỹ/cashbook: 623f2472e998e94feda0cdab
-Kế hoạch dòng tiền/cashflow: 623f247fe998e94feda0cdac
++++Báo cáo quản trị/dashboard: 623f2465e998e94feda0cdaa
++++Theo dõi sổ quỹ/cashbook: 623f2472e998e94feda0cdab
++++Kế hoạch dòng tiền/cashflow: 623f247fe998e94feda0cdac
 
 ============PCM: 5dfe4b9051dc622100bb9d89
 MENU ỨNG DỤNG PCM/menu-pcm-app (type=1): 623ef213e998e94feda0ccd8
-Danh sách dự án/projects: 623ef363e998e94feda0ccde
-Báo cáo đầu tư/dashboard-portfolio: 623efd30e998e94feda0cd1b
-Báo cáo quản trị công việc/dashboard-task: 623efd51e998e94feda0cd1c
-Báo cáo quản trị hồ sơ/dashboard-document: 623efd64e998e94feda0cd1d
++++Danh sách dự án/projects: 623ef363e998e94feda0ccde
++++Báo cáo đầu tư/dashboard-portfolio: 623efd30e998e94feda0cd1b
++++Báo cáo quản trị công việc/dashboard-task: 623efd51e998e94feda0cd1c
++++Báo cáo quản trị hồ sơ/dashboard-document: 623efd64e998e94feda0cd1d
 
 MENU DỰ ÁN PCM/menu-pcm-project (type=2): 623f04cce998e94feda0cd32
-Báo cáo quản trị/dashboard: 623f05f9e998e94feda0cd33
-Thư mục dữ liệu/folder: 623f061de998e94feda0cd34
-Hồ sơ văn bản/document: 623f062fe998e94feda0cd35
-Ngân sách và hợp đồng/budget: 623f063be998e94feda0cd36
-Hình ảnh/photo: 623f0657e998e94feda0cd37
-Bản vẽ/drawing: 623f066ae998e94feda0cd38
++++Báo cáo quản trị/dashboard: 623f05f9e998e94feda0cd33
++++Thư mục dữ liệu/folder: 623f061de998e94feda0cd34
++++Hồ sơ văn bản/document: 623f062fe998e94feda0cd35
++++Ngân sách và hợp đồng/budget: 623f063be998e94feda0cd36
++++Hình ảnh/photo: 623f0657e998e94feda0cd37
++++Bản vẽ/drawing: 623f066ae998e94feda0cd38
 
 
 ============MEDIA: 5df4ce16506d9b3c587948ca
@@ -122,7 +122,4 @@ MENU ỨNG DỤNG QRCODE/menu-qrcode-app (type=1): 623f24b8e998e94feda0cdae
 
 ============ITEM: 5f5234b2880c2f26c8df8c13
 MENU ỨNG DỤNG ITEM/menu-item-app (type=1): 623f24cce998e94feda0cdaf
-Thẻ phân loại/type: 623f24e8e998e94feda0cdb0
-
-
-
++++Thẻ phân loại/type: 623f24e8e998e94feda0cdb0
