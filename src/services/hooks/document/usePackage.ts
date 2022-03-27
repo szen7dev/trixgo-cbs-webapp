@@ -16,7 +16,7 @@ interface UseQueryListPackage {
 
 export const useQueryListPackage = (params: PackageQueryPayload): UseQueryListPackage => {
     let nextCursor = null;
-
+    
     const res = useInfiniteQuery(
         [`documents`, { params }],
         async ({ pageParam }: any) => {

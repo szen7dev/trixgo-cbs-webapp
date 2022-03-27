@@ -3,8 +3,12 @@ import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+import { useUpload } from 'services/hooks/useUpload';
 
+import { IconFile } from 'views/media/shareComponents/common';
 import { ModalContext } from "views/document/contexts/modal";
+import { APP_KEY } from 'utils/constants';
 
 import {
   DropdownFilterButton,
@@ -29,6 +33,8 @@ import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
 import { useAuth } from "services/hooks/useAuth";
+import { File } from "source-map-explorer/lib/types";
+import { FileProps } from "typings/file";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface Props {
@@ -42,22 +48,28 @@ export const DocumentDetailPage: FC<Props> = () => {
   const { t } = useTranslation(["document"]);
 
   const { toggleModal } = useContext(ModalContext);
-
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
 
-  console.log({ detailDocument })
-  
   const docChildPayload = useQueryListDocumentChild({
     parentID: params.docID,
   });
 
   const {
+    createDocumentFileMutateAsync,
     documentFiles,
+    refetch,
     fetchNextPage: fetchNextPageDocumentFile,
     totalRecord: totalDocumentFile,
   } = useQueryListDocumentFile({
     documentID: params.docID,
+  });
+
+  const { addFileToUpload } = useUpload({
+    appID: APP_KEY.DOCUMENT,
+    companyID: user?.company._id,
+    projectID:  detailDocument?.project?._id,
+    packageID:  detailDocument?.package?._id,
   });
 
   React.useEffect(() => {
@@ -74,6 +86,40 @@ export const DocumentDetailPage: FC<Props> = () => {
       onFetchDetailDocumentAsync(params.docID);
     }
   }, [onFetchDetailDocumentAsync, params.docID]);
+
+  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+        if (!event.target.files || !event.target.files.length) return;
+        const arrFileID = []
+
+        // Upload files
+        for (const [key, file] of Object.entries(event.target.files)) {
+          const { _id } = await addFileToUpload({
+            files: file as any,
+            fileType: 2,
+            useCompress: true,
+            // progress: percentCompleted => {
+            // }
+          })
+          arrFileID.push(_id)
+        }
+
+        // Update db
+        const result = await createDocumentFileMutateAsync({
+            documentID: params.docID,
+            filesID: arrFileID,
+        });
+    
+        if (!result.error) {
+          toast.success('Thêm file thành công');
+          refetch()
+        } else {
+          toast.error(result?.data?.message);
+        }
+    } catch (error) {
+      console.log({ error })
+    }
+	}
 
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
@@ -100,7 +146,6 @@ export const DocumentDetailPage: FC<Props> = () => {
         </button>
         <DropdownFilterButton />
         <GroupActions className="flex items-center flex-1" />
-
         <ButtonCreate onClick={toggleModal} />
         <ButtonMore />
       </div>
@@ -169,12 +214,16 @@ export const DocumentDetailPage: FC<Props> = () => {
             <h3 className="text-cbs-subtext text-x-large font-bold flex-1">
               Tài liệu đính kèm
             </h3>
-            <ButtonIcon
+            {/* <ButtonIcon
               title="Thêm"
               icon={() => (
                 <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
               )}
-            />
+            /> */}
+            	<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
+                <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
+                <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
+              </label>
           </div>
           <TableFileAttach fileAttachs={documentFiles}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (

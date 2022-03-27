@@ -49,7 +49,6 @@ export const DocumentProjectPage: FC = () => {
     useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
-  console.log({ data })
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
@@ -143,7 +142,7 @@ export const DocumentProjectPage: FC = () => {
     setPageParam(() => ({ ...values }));
     return true;
   }, []);
-
+  
   const handleOnCancelFilter = React.useCallback(() => {
     setPageParam({});
   }, []);

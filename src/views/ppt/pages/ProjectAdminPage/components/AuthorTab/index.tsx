@@ -8,7 +8,7 @@ import { DropdownSearchable } from "shareComponents/common";
 
 const AuthorTab: FC = () => {
 	const history = useHistory();
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.pcmParentID });
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmApp.id });
 	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { id } = useParams<{ id: string }>();
