@@ -3,12 +3,15 @@ import { FC } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 
 export const CmcsLeftSideBar: FC = () => {
   const { user } = useAuth();
+  const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
@@ -87,17 +90,19 @@ export const CmcsLeftSideBar: FC = () => {
             />
             <span className="truncate">Theo dõi bảo lãnh</span>
           </NavLink>
-          <NavLink
-            to={`/cmcs/admin`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Quản trị viên</span>
-          </NavLink>
+          {hasPermission && dataUserAccess?.level == 0 ?
+            <NavLink
+              to={`/cmcs/admin`}
+              className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+            >
+              <img
+                className="w-6 h-6 object-contain mr-3"
+                src={iconFolder}
+                alt="Menu item"
+              />
+              <span className="truncate">Quản trị viên</span>
+            </NavLink> : <></>
+          }
         </div>
       </div>
     </div>

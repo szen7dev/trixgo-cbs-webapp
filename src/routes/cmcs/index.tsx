@@ -38,7 +38,6 @@ const CmcsRouter: FC = () => {
     return (
         <Switch>
             <ProtectedRoute
-                exact
                 path="/cmcs/admin"
                 component={() => (
                     <CmcsLayout>

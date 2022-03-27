@@ -20,8 +20,7 @@ import moment from "moment";
 const CmcsAdminFunctionalTab: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	console.log("APP_ID.CMCS.id", APP_ID.CMCS.id);
-	const { listAppRoles: listPcmAdmin, totalRecord, nextPageListAppRoles: nextPagePcmAdmin, hasNextPageListAppRoles: hasNextPagePcmAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
+	const { listAppRoles: listCmcsAdmin, totalRecord, nextPageListAppRoles: nextPageCmcsAdmin, hasNextPageListAppRoles: hasNextPageCmcsAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -41,14 +40,14 @@ const CmcsAdminFunctionalTab: FC = () => {
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listPcmAdmin.length;
+		return idsChecked.length == listCmcsAdmin.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listPcmAdmin.length) {
+		if (idsChecked.length == listCmcsAdmin.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listPcmAdmin.map(e => e._id);
+			const idsAll = listCmcsAdmin.map(e => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
@@ -82,7 +81,7 @@ const CmcsAdminFunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												<Update item={listCmcsAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
 											</div>
 										)
 									}
@@ -166,9 +165,9 @@ const CmcsAdminFunctionalTab: FC = () => {
 					</tr>
 				</thead>
 
-				{listPcmAdmin && listPcmAdmin.length ?
+				{listCmcsAdmin && listCmcsAdmin.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmAdmin.map((item, index) => (
+						{listCmcsAdmin.map((item, index) => (
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -180,7 +179,7 @@ const CmcsAdminFunctionalTab: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/admin/${item._id}/detail`}>
+									<Link to={`/cmcs/admin/${item._id}/detail`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
@@ -203,10 +202,10 @@ const CmcsAdminFunctionalTab: FC = () => {
 				}
 
 			</table>
-			{hasNextPagePcmAdmin && (
+			{hasNextPageCmcsAdmin && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPagePcmAdmin()}>
-						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmAdmin.length
+					<button onClick={() => nextPageCmcsAdmin()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listCmcsAdmin.length
 							})`}</span>
 					</button>
 				</div>

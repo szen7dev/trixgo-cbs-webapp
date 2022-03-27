@@ -54,6 +54,7 @@ export const useAdmin = (payload: { appID: string, keyword?: string }): UseAdmin
             payload: {
                 appRoleID: string,
                 name: string,
+                type: "1" | "2" | "3"
             }) =>
             AuthenticationRepository.updateAppRole(payload)
         );

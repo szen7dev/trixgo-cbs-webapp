@@ -17,8 +17,8 @@ const Create: FC = () => {
       toast.error("Vui lòng nhập đầy đủ nội dung và phân loại.");
       return;
     }
-    if (!["1", "2", "3"].includes(type)) {
-      toast.error("Phân loại chỉ có giá trị 1,2 hoặc 3. Vui lòng nhập lại.");
+    if (!["1", "3"].includes(type)) {
+      toast.error("Phân loại chỉ có giá trị 1 hoặc 3. Vui lòng nhập lại.");
       return;
     };
 
@@ -62,7 +62,7 @@ const Create: FC = () => {
       <section className="px-10 mt-2">
         <input
           type="text"
-          placeholder="Phân loại (1,2,3)"
+          placeholder="Phân loại (1,3)"
           className="h-12 w-full border border-primary-border outline-none px-8"
           value={type}
           onChange={(e) => setType(e.target.value)}

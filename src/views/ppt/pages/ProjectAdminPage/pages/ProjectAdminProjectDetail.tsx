@@ -13,7 +13,7 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 
-import { CreateNewAdminMember, DeleteMembers } from "../modal";
+import { CreateNewProjectAdminMember, DeleteProjectMembers } from "../modal";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { DepartmentRepositories } from "apis/item/department";
 import { ResponseData } from "typings/apis/response";
@@ -109,7 +109,7 @@ const ProjectAdminProjectDetail: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+											<DeleteProjectMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
 										</div>
 									)
 								}>
@@ -128,7 +128,7 @@ const ProjectAdminProjectDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetch} />
+									<CreateNewProjectAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetch} />
 								</div>
 							)
 						}
@@ -234,7 +234,7 @@ const ProjectAdminProjectDetail: FC = () => {
 													"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 												}
 											>
-												<DeleteMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+												<DeleteProjectMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
 											</div>
 										)
 									}>
