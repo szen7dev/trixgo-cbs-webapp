@@ -146,7 +146,7 @@ export const DocumentDetailPage: FC<Props> = () => {
         </button>
         <DropdownFilterButton />
         <GroupActions className="flex items-center flex-1" />
-        <ButtonCreate onClick={toggleModal} />
+        {/* <ButtonCreate onClick={toggleModal} /> */}
         <ButtonMore />
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
@@ -220,10 +220,10 @@ export const DocumentDetailPage: FC<Props> = () => {
                 <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
               )}
             /> */}
-            	<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
-                <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
-                <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
-              </label>
+            <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
+              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
+              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
+            </label>
           </div>
           <TableFileAttach fileAttachs={documentFiles}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (
