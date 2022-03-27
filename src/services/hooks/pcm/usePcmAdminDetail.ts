@@ -4,10 +4,11 @@ import AuthenticationRepository from "apis/authentication";
 
 type UsePcmAdminDetail = {
     nameAppRoleDetail: string,
+    companyAppRoleDetail: string,
+    typeAppRoleDetail: "1" | "2" | "3",
     isLoadingPcmAdminDetail: boolean,
     refetchPcmAdminDetail: () => void,
     listMembers: Array<any>,
-    companyAppRoleDetail: string,
 
     addMembersMutateAsync: any,
     removeMembersMutateAsync: any
@@ -45,7 +46,7 @@ export const usePcmAdminDetail = (payload: { appID: string, keyword?: string }):
             [`app_roles_detail?appID=${payload.appID}`, payload.keyword],
             async () => {
                 return AuthenticationRepository.getListAppRole({
-                    select: "members name company",
+                    select: "members name company type",
                     populates: JSON.stringify({
                         path: "members",
                         select: "bizfullname position department image",
@@ -66,11 +67,13 @@ export const usePcmAdminDetail = (payload: { appID: string, keyword?: string }):
 
     const nameAppRoleDetail = dataPcmAdminDetail?.data?.name;
     const companyAppRoleDetail = dataPcmAdminDetail?.data?.company;
+    const typeAppRoleDetail = dataPcmAdminDetail?.data?.type ? dataPcmAdminDetail?.data?.type.toString() : "1";
     const listMembers = dataPcmAdminDetail?.data?.members || [];
 
     return {
         nameAppRoleDetail,
         companyAppRoleDetail,
+        typeAppRoleDetail,
         listMembers,
         isLoadingPcmAdminDetail,
         refetchPcmAdminDetail,
