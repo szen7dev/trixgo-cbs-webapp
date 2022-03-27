@@ -376,7 +376,7 @@ export const useQueryContactDocument = (humanId: string, typeParam: TypeParam): 
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-
+        
     const listContactDocument = []
         .concat(
             ...(data?.pages || []).map((d: any) => d.data?.listRecords)

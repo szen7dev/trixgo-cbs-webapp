@@ -194,13 +194,14 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 	}, [refetchListContactDocument, removeFileContractDocument, removeUploadedFile]);
 
 	const handleUploadFile = useCallback(
-		async (_fileUploads: IFile, contactDocumentID: string) => {
+		async (_fileUploads: IFile, contactDocumentID: string, companyID: string) => {
 			// Upload files
 			const listFileContractDocumentAsync = []
 			for (const [key, { file }] of Object.entries(_fileUploads)) {
 				const { _id } = await addFileToUpload({
 					files: file,
 					fileType: 2,
+					companyID,
 					progress: (percentCompleted) => {
 						setUploadFileProgress(key, percentCompleted);
 					},
@@ -226,13 +227,12 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 	);
 
 	const handleAttachFiles = useCallback(
-		(contactDocumentID: string) =>
+		(contactDocumentID: string, companyID: any) =>
 			async (e: React.ChangeEvent<HTMLInputElement>) => {
 				if (!e.target.files) return;
 				const files = modifyUploadedFilesV2(e.target.files, contactDocumentID);
 				setUploadFile(files, contactDocumentID);
-
-				handleUploadFile(files, contactDocumentID);
+				handleUploadFile(files, contactDocumentID, companyID);
 				setOpenFileOptionById("");
 			},
 		[handleUploadFile, setUploadFile]
@@ -399,7 +399,7 @@ export const WorkHistory: FC<PropWorkHistory> = (props) => {
 												accept="*"
 												multiple
 												className="hidden"
-												onChange={handleAttachFiles(contactDocument._id)}
+												onChange={handleAttachFiles(contactDocument._id, contactDocument.company._id)}
 											/>
 										</div>
 										<div

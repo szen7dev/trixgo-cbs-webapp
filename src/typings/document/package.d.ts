@@ -18,6 +18,7 @@ export interface Package {
 
 export type PackageQueryPayload = QueryParam & {
     departmentID?: string;
+    keyword?: string;
 }
 
 export type PackageQueryListResponse = APIResponse & {

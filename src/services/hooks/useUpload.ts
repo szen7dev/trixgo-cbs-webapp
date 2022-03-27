@@ -46,6 +46,8 @@ export type UploadFileProps = {
     source?: any,
     useCompress?: boolean;
     compressConfig?: OptionsCompress;
+    appID?: string;
+    companyID?: string;
 }
 
 type FileGenerateLink = {
@@ -56,7 +58,7 @@ type FileGenerateLink = {
 type UseUpload = {
     generateLinkS3: ({ file, fileType }: FileGenerateLink) => Promise<GenerateLinkResponse>,
     uploadFileToS3: (payload: UploadPayload) => Promise<void>,
-    addFileToUpload: ({ files, fileType, progress, useCompress, compressConfig }: UploadFileProps) => Promise<AddFileUploadResponse>,
+    addFileToUpload: ({ files, fileType, progress, useCompress, compressConfig, appID, companyID }: UploadFileProps) => Promise<AddFileUploadResponse>,
     addMultiFileToUpload: ({ files, progress }: UploadFileProps) => Promise<GenerateLinkResponse[] | undefined>,
 };
 
@@ -65,6 +67,7 @@ export const useUpload = ({
     companyID,
     projectID,
     groupID,
+    packageID,
     conversationID,
     typeUpload
 }: GenerateLinkPayload) : UseUpload => {
@@ -80,6 +83,7 @@ export const useUpload = ({
                 companyID,
                 projectID,
                 groupID,
+                packageID,
                 conversationID,
                 typeUpload
             })
