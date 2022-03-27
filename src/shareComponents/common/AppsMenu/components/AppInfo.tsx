@@ -112,20 +112,6 @@ export const APP_INFO = new Map([
         icon: biddingLogo,
         route: '/bidding/home'
     }],
-    /* Ứng dụng Quản lý cá nhân */
-    ['5f52341f880c2f26c8df8c10', {//OK
-        key: "5f52341f880c2f26c8df8c10",
-        name: "Quản lý cá nhân",
-        icon: personalLogo,
-        route: '/personal/home'
-    }],
-    /* Ứng dụng Qrcode */
-    ['5f5233d0880c2f26c8df8c0c', {//OK
-        key: "5f5233d0880c2f26c8df8c0c",
-        name: "Qrcode",
-        icon: qrcodeLogo,
-        route: '/qrcode/home'
-    }],
     /* Ứng dụng Quản lý hồ sơ văn bản */
     ['5e47867080019357cce04746', {//OK
         key: "5e47867080019357cce04746",
@@ -161,46 +147,18 @@ export const APP_INFO = new Map([
         icon: mediaLogo,
         route: '/media/home'
     }],
+    /* Ứng dụng Qrcode */
+    ['5f5233d0880c2f26c8df8c0c', {//OK
+        key: "5f5233d0880c2f26c8df8c0c",
+        name: "Qrcode",
+        icon: qrcodeLogo,
+        route: '/qrcode/home'
+    }],    
     /* Ứng dụng Quản lý danh mục */
-    // ['5f5234b2880c2f26c8df8c13', {//ok==============
-    //     key: "5f5234b2880c2f26c8df8c13",
-    //     name: "Quản lý danh mục",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
-    // /* Ứng dụng Quản lý dự án */
-    // ['5fe58c9b95db3c6e1534ec78', {//ok
-    //     key: "5fe58c9b95db3c6e1534ec78",
-    //     name: "Quản lý dự án",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
-    // /* Ứng dụng Ứng dụng bỏ */
-    // ['5e4785eb8b50843d34481d49', {//Bỏ
-    //     key: "5e4785eb8b50843d34481d49",
-    //     name: "Ứng dụng bỏ",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
-    // /* Ứng dụng Ứng dụng bỏ */
-    // ['5dfe4bf251dc622100bb9d8c', {//OK==============
-    //     key: "5dfe4bf251dc622100bb9d8c",
-    //     name: "Ứng dụng bỏ",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
-    // /* Ứng dụng Ứng dụng bỏ */
-    // ['5e0475825e30dce72849a489', {//OK==============Bỏ
-    //     key: "5e0475825e30dce72849a489",
-    //     name: "Ứng dụng bỏ",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
-    // /* Ứng dụng Ứng dụng bỏ */
-    // ['5eabfdc72171391e5f6a0468', {//OK==============Bỏ
-    //     key: "5eabfdc72171391e5f6a0468",
-    //     name: "Ứng dụng bỏ",
-    //     icon: defaultLogo,
-    //     route: '/'
-    // }],
+    ['5f5234b2880c2f26c8df8c13', {//ok==============
+        key: "5f5234b2880c2f26c8df8c13",
+        name: "Quản lý danh mục",
+        icon: defaultLogo,
+        route: '/item/home'
+    }],
 ]);

@@ -15,10 +15,12 @@ interface UseQueryListDocument {
     // fetchNextPage: () => void;
     // fetchPreviousPage: () => void;
 }
-export const useQueryListDocument = (departmentID: string, pageParam: any): UseQueryListDocument => {
+export const useQueryListDocument = (departmentID: string, pageParam: any,  packageID?: string, limit?: string): UseQueryListDocument => {
     const result = useQuery(
         [`list_document`, { pageParam }], async () =>
         DocumentRepository.fetchListDocument({
+            packageID,
+            limit,
             departmentID,
             ...pageParam
         }), {

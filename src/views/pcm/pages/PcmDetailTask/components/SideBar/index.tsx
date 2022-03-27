@@ -1,34 +1,65 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import moment from "moment";
 
+import HumanAvatar from "assets/images/human-avatar.svg";
 import ChevronUpIcon from "assets/images/icon-chevron-up.png";
 import LineConnector from "assets/images/line-connector.svg";
 import LongArrowIcon from "assets/images/icon-long-arrow.svg";
 import { ModalAddRelationUser } from "views/pcm/pages/PcmDetailTask/components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+
+import { useTask } from "services/hooks/useTask";
 import useModal from "views/pcm/hooks/useModal";
 
 import type { Author, Assignee } from "typings/task";
 import type { User } from "typings/user";
+import { toast } from "react-toastify";
 
 type Props = {
   taskID: string;
+  userID: string | undefined;
   author: Author;
   assignee: Assignee;
   createAt: string;
   related?: Array<User>;
-  confirmUsers: Array<User>;
+  confirmUsers: Array<{ author: User, createAt: string | Date }>;
+  onConfirmSign?: () => void
 };
 
 export const SideBar: FC<Props> = ({
   taskID,
+  userID,
   author,
   assignee,
   createAt,
   related,
   confirmUsers,
+  onConfirmSign,
 }) => {
-  const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation  }] = useModal();
+  const [{ isShow }, { toggleModal, openAddUserRelation: openListUserRelation }] = useModal();
+  const { updateTaskAsync } = useTask({});
+  const isSigned = confirmUsers.find(({ author }) => author._id === userID);
+
+  const handleConfirmSignature = useCallback(async () => {
+    try {
+      const { error, message } = await updateTaskAsync({
+        taskID,
+        isAddSignature: true
+      })
+
+      if(error) {
+        return toast.warning(message);
+      }
+
+      onConfirmSign && onConfirmSign();
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
+  }, [])
 
   return (
     <div>
@@ -102,35 +133,33 @@ export const SideBar: FC<Props> = ({
         </div>
       </div>
 
-      {/* <div className="mt-5">
+      <div className="mt-5">
         <div className="flex justify-between items-center mb-2.5">
           <span className="font-bold text-[13px] leading-4">
             Xác nhận
           </span>
-					<button>
-            <span className="text-white bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
-							<strong>
-								Đồng ý
-							</strong>
-            </span>
-          </button>
+          {!isSigned && (
+            <button onClick={handleConfirmSignature}>
+              <span className="text-white font-bold bg-cbs-completed text-small px-4 py-2 rounded-cbs-sm">
+                Đồng ý
+              </span>
+            </button>
+          )}
         </div>
         <div>
-          
-          {confirmUsers.map((user, index) => (
-            <div key={user?._id || index}>
+          {(confirmUsers && confirmUsers.length) ? confirmUsers.map(({ author, createAt }, index) => (
+            <div key={author._id}>
               <div className="flex justify-between">
                 <div className="flex items-start">
                   <img
-                    src={`${process.env.REACT_APP_URL_S3_USER}/${user?.image}`}
+                    src={`${process.env.REACT_APP_URL_S3_USER}/${author.image}`}
                     alt="Avatar"
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <div className="ml-2">
-                    <p className="text-[13px]">{user?.bizfullname}</p>
+                    <p className="text-[13px]">{author.bizfullname}</p>
                     <p className="text-xs text-primary-gray">
-                      {moment().format('HH:mm DD/MM/YY')} - {moment().fromNow()}
-                     
+                      {moment(createAt).format('HH:mm DD/MM/YY')} - {moment(createAt).fromNow()}
                     </p>
                   </div>
                 </div>
@@ -138,7 +167,7 @@ export const SideBar: FC<Props> = ({
                   Đã đồng ý
                 </span>
               </div>
-              {index !== confirmUsers?.length - 1 && (
+              {index !== confirmUsers.length - 1 && (
                 <img
                   className="w-10 h-6"
                   src={LineConnector}
@@ -146,9 +175,9 @@ export const SideBar: FC<Props> = ({
                 />
               )}
             </div>
-          ))}
+          )) : ''}
         </div>
-      </div> */}
+      </div>
 
       {/* <div className="mt-5">
         <div className="mb-2.5">
@@ -231,9 +260,9 @@ export const SideBar: FC<Props> = ({
         toggle={toggleModal}
         className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
       >
-          <ModalAddRelationUser 
-            toggle={toggleModal} 
-            taskID={taskID} 
+          <ModalAddRelationUser
+            toggle={toggleModal}
+            taskID={taskID}
             projectID=""
             related={related}
             modalType={'LIST_ALL_RELATION_USER'}

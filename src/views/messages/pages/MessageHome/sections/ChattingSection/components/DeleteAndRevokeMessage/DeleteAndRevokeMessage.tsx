@@ -7,6 +7,7 @@ import {dismissDeleteRevoke} from "redux/reducer/messages/DeleteAndRevokeMessage
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {removeAllSelectedMessage} from "redux/reducer/messages/ListMessage";
 import {ItemMessage} from "typings/apis/messages/listMessage";
+import {populates} from "../../../../index";
 
 type Props = {
     context: any
@@ -47,17 +48,9 @@ export const DeleteAndRevokeMessageConfirm: FC<Props> = ({context}) => {
                 // filesID: fileIds
             })
         }
-        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
             conversationID: conversationId,
-            select: JSON.stringify({ sender:"bizfullname" }) ,
-            filter: JSON.stringify({
-                author: 0,
-                taskID: 0,
-                links: 0,
-                createAt: 0,
-                __v: 0,
-                // config: 0
-            })
+            populates
         });
         dispatch(dismissDeleteRevoke({}))
         dispatch(removeAllSelectedMessage({conversationId: conversationId}))

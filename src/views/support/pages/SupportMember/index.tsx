@@ -18,7 +18,6 @@ import { ModalCreateOrUpdateUser } from 'views/support/shareComponents/common';
 /**
  * Assets
  */
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
@@ -31,7 +30,6 @@ import { useModal } from "services/hooks/useModal";
 import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { UserSystemProps } from "typings/users/userSystem";
-// import { UserSystemRepository } from 'apis/users';
 
 export const SupportMemberPage: FC = () => {
   const { closeModal, openModal } = useModal();
@@ -48,29 +46,29 @@ export const SupportMemberPage: FC = () => {
     email: "",
     departmentID: "",
     positionID: "",
-    level: -1,
+    level: 1,
     positionName: "",
     departmentName: "",
+    status: 1
   });
 
   const [modalCreateOrUpdateUser, setModalCreateOrUpdateUser] = useState<boolean>(false);
 
-  const { 
-    data: listUsersSystem, 
-    hasNextPage, 
-    totalRecord, 
+  const {
+    data: listUsersSystem,
+    hasNextPage,
+    totalRecord,
     refetch: refetchUser,
     fetchNextPage: fetchNextPageUser,
     deleteUserSystemAsync,
   } = useUserSystem({
     companyID: companySelected,
     keyword: keywordUser,
-    isFetch: !!companySelected,
     limit: LIMIT_PER_PAGE_USER
-  });
+  }, !!companySelected);
 
-  const { data: listCompanies, fetchNextPage: fetchNextPageCompany } = useQueryListCompany({ 
-    keyword: keywordCompany 
+  const { data: listCompanies, fetchNextPage: fetchNextPageCompany } = useQueryListCompany({
+    keyword: keywordCompany
   });
 
   const handleChangeCompany = (value: any) => {
@@ -83,7 +81,7 @@ export const SupportMemberPage: FC = () => {
     const isBottom = scrollHeight - scrollTop === clientHeight;
     isBottom && fetchNextPageCompany();
   }
- 
+
   const toggleModalCreateOrUpdateUser = () => setModalCreateOrUpdateUser(!modalCreateOrUpdateUser);
 
   const handleConfirmCreateOrUpdateUser = () => refetchUser();
@@ -105,6 +103,7 @@ export const SupportMemberPage: FC = () => {
       level: -1,
       positionName: "",
       departmentName: "",
+      status: 1
     }))
   }
 
@@ -121,7 +120,7 @@ export const SupportMemberPage: FC = () => {
 		};
 
     if(newListIDChecked.length === 1) {
-      const { _id, fullname, email, department, position, level } = newListIDChecked[0];
+      const { _id, fullname, email, department, position, level, status } = newListIDChecked[0];
       setInitialValues({
         userID: _id,
         companyID: companySelected,
@@ -131,7 +130,8 @@ export const SupportMemberPage: FC = () => {
         positionID: position?._id,
         level: level,
         positionName: position?.name,
-        departmentName: department?.name
+        departmentName: department?.name,
+        status
       });
     } else{
       clearData();
@@ -215,8 +215,8 @@ export const SupportMemberPage: FC = () => {
             />
 
             {usersChecked.length === 1 ? (
-              <button 
-                className="mr-3" 
+              <button
+                className="mr-3"
                 onClick={() => {
                   setUsersChecked([]);
                   toggleModalCreateOrUpdateUser();
@@ -252,13 +252,13 @@ export const SupportMemberPage: FC = () => {
           </div>
           <div className="flex items-center">
             {companySelected ? (
-              <button 
-                className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold" 
+              <button
+                className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
                 onClick={() => {
                   setUsersChecked([]);
                   clearData();
                   toggleModalCreateOrUpdateUser();
-                }} 
+                }}
               >
                 Tạo mới
               </button>
@@ -276,12 +276,11 @@ export const SupportMemberPage: FC = () => {
             <th className={cn("py-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked={getStateCheckedAll()}
                   onClick={onClickCheckAll}
                 />
-                <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
             <th className="w-1/6 py-1">
@@ -327,9 +326,6 @@ export const SupportMemberPage: FC = () => {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  style={{ marginLeft: "-23px" }}
                   checked={getStateChecked(user._id)}
                   onChange={() => onClickCheckButton(user)}
                 />

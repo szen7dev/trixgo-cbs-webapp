@@ -3,29 +3,18 @@ import { APP_ID } from "apis/localdb";
 import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
 import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
-import { useHistory, useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 
 const ProjectAdminAuthorTab: FC = () => {
-	// Should remove this
-	const history = useHistory();
-
-	// Remove this thing too
-	const { id } = useParams<{ id: string }>();
-	
-	// Use location.state instead of params
-	// Get location first
 	const location = useLocation<string | null>();
-	// Pass location.state as initial value
-	const [state, setState] = useState<string | null>(location.state);
-	// state now is id of project (change to id or something you want)
-
+	const [funcID, setFuncID] = useState<string>(location.state || "");
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.parentID.pcm });
 	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
-	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
+	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: funcID, keyword: "" });
 
-	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: id });
+	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: funcID });
 
 	const data = listPcmAdmin.map(e => ({
 		_id: e._id,
@@ -75,7 +64,7 @@ const ProjectAdminAuthorTab: FC = () => {
 
 		await updatePermissionsAppRoleMenusMutateAsync({
 			...query,
-			role: id,
+			role: funcID,
 			menu: _id,
 		});
 
@@ -86,7 +75,7 @@ const ProjectAdminAuthorTab: FC = () => {
 	return (
 		<main className="h-full overflow-auto">
 			<header className="h-[50px] border border-primary-border flex items-center justify-between pl-6 pr-5">
-				<p className="text-lg">{id ? nameAppRoleDetail : "Chọn nhóm chức năng"}</p>
+				<p className="text-lg">{funcID ? nameAppRoleDetail : "Chọn nhóm chức năng"}</p>
 
 				<DropdownSearchable
 					className="w-[322px] pl-5 bg-cbs-table-header"
@@ -109,7 +98,7 @@ const ProjectAdminAuthorTab: FC = () => {
 					onchangeValue={(item) =>
 						// history.push(`/pcm/admin/${item._id}/detail`)
 						// Don't use history.push;
-						setState(item._id)
+						setFuncID(item._id)
 					}
 				/>
 			</header>
@@ -143,7 +132,7 @@ const ProjectAdminAuthorTab: FC = () => {
 					</tr>
 				</thead>
 
-				{id ?
+				{funcID ?
 					<tbody className="bg-primary-light text-left">
 						{listAppMenu.map((item, index) => (
 							<tr key={index} className="border-b border-primary-border h-10">

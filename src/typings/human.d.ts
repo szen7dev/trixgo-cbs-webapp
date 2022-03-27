@@ -127,6 +127,14 @@ export type Department = {
     members?: string[];
 }
 
+type documents = {
+    name: string;
+    _id: string;
+    educationalBackground2: {
+        name: tring
+    }
+}
+
 export type Human = {
     type?: number;
     company?: Company;
@@ -177,6 +185,7 @@ export type Human = {
     signerIn?: string;
     signerOut?: string;
     insuanceDate?: string;
+    documents?: any;
 }
 
 export interface HumanPayload extends QueryParam {

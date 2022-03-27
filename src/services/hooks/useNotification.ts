@@ -9,8 +9,8 @@ type UseNotification = {
     refetchListNotification: () => void,
     nextPageListNotification: () => void,
     prevPageListNotification: () => void,
+    totalRecordSendSuccess: number,
     totalRecord: number,
-    totalPages: number,
     hasNextPage: boolean | undefined
 };
 
@@ -30,8 +30,8 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
     } =
         useInfiniteQuery(
             ["list_notifications", params],
-            async ({ pageParam }: any) => 
-            NotificationRepository.listNotification({ 
+            async ({ pageParam }: any) =>
+            NotificationRepository.listNotification({
                 ...params,
                 lastestID: pageParam
             }),
@@ -41,7 +41,9 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: isFetch ?? false
+                enabled: isFetch ?? false,
+                cacheTime: 0,
+                retry: false
             }
         );
 
@@ -51,7 +53,7 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
         .filter(Boolean);
 
     const totalRecord = dataListNotifications?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = dataListNotifications?.pages[0]?.data?.totalPage || 0;
+    const totalRecordSendSuccess = dataListNotifications?.pages[0]?.data?.totalRecordSendSuccess || 0;
 
     return {
         updateNotificationAsync,
@@ -60,8 +62,8 @@ export const useNotification = (params?: any, isFetch?: boolean) : UseNotificati
         refetchListNotification,
         nextPageListNotification,
         prevPageListNotification,
+        totalRecordSendSuccess,
         totalRecord,
-        totalPages,
         hasNextPage
     };
 };

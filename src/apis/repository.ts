@@ -14,6 +14,14 @@ const API = Axios.create({
   data: {}
 });
 
+API.interceptors.request.use(async function (config) {
+  return config;
+}, function (error) {
+  // Do something with request error
+  // toast.error(error?.response?.data?.message);
+  return error;
+});
+
 // Add a response interceptor
 API.interceptors.response.use(
   function (response) {
@@ -21,7 +29,15 @@ API.interceptors.response.use(
     return response;
   },
   function (error) {
-    toast.error(error?.response?.data?.message);
+    const errorMessage = ['jwt expired', 'user_blocked'];
+
+    if(errorMessage.includes(error?.response?.data?.message)) {
+      localStorage.clear();
+      window.location.replace('/login');
+    } else{
+      toast.error(error?.response?.data?.message);
+    }
+
     return error.response;
   }
 );

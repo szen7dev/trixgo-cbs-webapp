@@ -21,10 +21,10 @@ import { useUserSystem } from 'services/hooks/users/useUserSystem';
 import { useQueryListDepartments } from 'services/hooks/items/useDepartment';
 import { usePosition } from 'services/hooks/items/usePosition';
 
-export const ModalCreateOrUpdateUser: FC<ModalProps> = ({ 
-  toggle, 
-  modalType, 
-  onConfirm, 
+export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
+  toggle,
+  modalType,
+  onConfirm,
   initialValues = {
     userID: "",
     email: "",
@@ -32,21 +32,25 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
     companyID: "",
     departmentID: "",
     positionID: "",
-    level: -1,
+    level: 1,
     departmentName: "",
     positionName: "",
+    status: 1,
   }
 }) => {
   const [keywordDepartment, setKeywordDepartment] = useState('');
   const [keywordPosition, setKeywordPosition] = useState('');
   const { updateUserSystemAsync, createUserSystemAsync } = useUserSystem();
-  const { listDepartments, fetchNextPageDepartments } = useQueryListDepartments({ 
-    keyword: keywordDepartment
-  });
-  const { data: listPositions, fetchNextPage: fetchNextPagePosition } = usePosition({ 
-    isFetch: true,
+
+  const { listDepartments, fetchNextPageDepartments, hasNextPage: hasNextPageDepartments } = useQueryListDepartments({
+    keyword: keywordDepartment,
+    companyID: initialValues.companyID,
+  }, !!initialValues.companyID);
+
+  const { data: listPositions, fetchNextPage: fetchNextPagePosition, hasNextPage: hasNextPagePositions } = usePosition({
+    companyID: initialValues.companyID,
     keyword: keywordPosition
-  });
+  }, !!initialValues.companyID);
 
   const userSchema = object().shape({
     email: string().email('Email không hợp lệ').required("Bạn cần nhập email"),
@@ -66,6 +70,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
       email: values.email,
       fullname: values.fullname,
       level: +values.level,
+      status: +values.status
     }
 
     try {
@@ -110,13 +115,19 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
   const handleScrollDepartment = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const isBottom = scrollHeight - scrollTop === clientHeight;
-    isBottom && fetchNextPageDepartments();
+
+    if(hasNextPageDepartments && isBottom) {
+      fetchNextPageDepartments();
+    }
   }
 
   const handleScrollPosition = (e: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const isBottom = scrollHeight - scrollTop === clientHeight;
-    isBottom && fetchNextPagePosition();
+
+    if(hasNextPagePositions && isBottom) {
+      fetchNextPagePosition();
+    }
   }
 
   const handleSearchDepartment = debounce((value) => setKeywordDepartment(value), 500);
@@ -188,8 +199,8 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                       id: "_id",
                       text: "name",
                     }}
-                    initialValue={{ 
-                      _id: initialValues.departmentID, 
+                    initialValue={{
+                      _id: initialValues.departmentID,
                       name: initialValues.departmentName
                     }}
                     inlineSearch={true}
@@ -205,7 +216,7 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="endTime">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Chức danh
                   </label>
                   <DropdownSearchable
@@ -223,8 +234,8 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                       id: "_id",
                       text: "name",
                     }}
-                    initialValue={{ 
-                      _id: initialValues.positionID, 
+                    initialValue={{
+                      _id: initialValues.positionID,
                       name: initialValues.positionName,
                     }}
                     inlineSearch={true}
@@ -240,33 +251,66 @@ export const ModalCreateOrUpdateUser: FC<ModalProps> = ({
                   />
                 </div>
                 <div className='mb-4'>
-                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="endTime">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
                     Phân quyền
                   </label>
                   <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
                       <input
                         {...getFieldProps('level')}
-                        value={0} 
-                        type="radio" 
-                        id="option-1" 
-                        name={"level"} 
+                        value={0}
+                        type="radio"
+                        id="level-1"
+                        name={"level"}
                         defaultChecked={initialValues.level === 0 ? true : false}
                         className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
                       />
-                      <label htmlFor="option-1" className={"text-left ml-3 mr-3 text-primary"}>Admin</label>
+                      <label htmlFor="level-1" className={"text-left ml-3 mr-3 text-primary"}>Admin</label>
                       <input
                         {...getFieldProps('level')}
-                        value={1} 
-                        type="radio" 
-                        id="option-2" 
-                        name={"level"} 
+                        value={1}
+                        type="radio"
+                        id="level-2"
+                        name={"level"}
                         defaultChecked={initialValues.level === 1 ? true : false}
                         className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
                       />
-                      <label htmlFor="option-2" className={"text-left ml-3 text-primary"}>Member</label>
+                      <label htmlFor="level-2" className={"text-left ml-3 text-primary"}>Member</label>
                   </div>
                   <ErrorMessage
                     name="level"
+                    component="span"
+                    className="font-normal leading-7 text-sm text-negative"
+                  />
+                </div>
+
+                <div className='mb-4'>
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Trạng thái
+                  </label>
+                  <div className={"w-full flex items-center border border-gray-100 rounded-md px-[14px] py-[8px] mb-[15px]"}>
+                      <input
+                        {...getFieldProps('status')}
+                        value={1}
+                        type="radio"
+                        id="status-1"
+                        name={"status"}
+                        defaultChecked={initialValues.status === 1 ? true : false}
+                        className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
+                      />
+                      <label htmlFor="status-1" className={"text-left ml-3 mr-3 text-primary"}>Hoạt động</label>
+                      <input
+                        {...getFieldProps('status')}
+                        value={0}
+                        type="radio"
+                        id="status-2"
+                        name={"status"}
+                        defaultChecked={initialValues.status === 0 ? true : false}
+                        className={"form-check-input mt-0 w-[24px] h-[24px] min-w-[24px] min-h-[24px]"}
+                      />
+                      <label htmlFor="status-2" className={"text-left ml-3 text-primary"}>Khóa</label>
+                  </div>
+                  <ErrorMessage
+                    name="status"
                     component="span"
                     className="font-normal leading-7 text-sm text-negative"
                   />

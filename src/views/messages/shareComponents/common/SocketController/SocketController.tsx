@@ -1,4 +1,4 @@
-import {FC, useContext, useEffect} from "react";
+import React, {FC, useContext, useEffect, useRef, useState} from "react";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {
     appendMessageToConversation,
@@ -19,6 +19,7 @@ import {toast} from "react-toastify";
 import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
+import {populates} from "../../../pages/MessageHome";
 
 type Props = {
     context: any;
@@ -31,6 +32,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const {socketRef} = useContext(context);
 
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
+    const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
 
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
@@ -38,25 +40,40 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
     const paramsRefetchListMember = {conversationID: currentChat, populates: JSON.stringify({"path": "addedBy member", "select": "_id bizfullname image"})};
     const {refetchListMembers} = UseInformationMessage(paramsRefetchListMember, false, "members");
 
-    useEffect(() => {
-        if (socket) {
-            socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
-            socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
-            socket.on('CHATTING_SSC_SHARE_MESSAGE', onReceiveShareMessage);
-            socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
-            socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
-            socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
+    const audioRef = useRef<HTMLAudioElement>(null)
 
-            socket.on('CHATTING_SSC_GET_LIST_CONVERSATION', onReceiveConversation);
-            socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
-            socket.on('CHATTING_SSC_NEW_CONVERSATION', onCreateConversation);
-            socket.on('CHATTING_SSC_MEMBER_LEAVE_CONVERSATION', onUserLeaveConversation);
-            socket.on('CHATTING_SSC_ADD_MEMBER_CONVERSATION', onAddMemberConversation);
-            socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
-            socket.on('CHATTING_SSC_UPDATE_INFO_CONVERSATION', onUpdateInforConversation);
-            socket.on('CHATTING_SSC_UPDATE_ADMIN_CONVERSATION', onUpdateAdminConversation);
-        };
+    useEffect(() => {
+        if (!socket) return;
+        socket.on('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+        socket.on('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+        socket.on('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+        socket.on('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+        socket.on('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
+
+        socket.on('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+        socket.on('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
+        socket.on('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
+
+        return () => {
+            socket.off('CHATTING_SSC_RECEIVE_MESSAGE', onReceiveMessage);
+            socket.off('CHATTING_SSC_FIRE_MESSAGE', onFireMessage);
+            socket.off('CHATTING_SSC_REVOKE_MESSAGE', onReceiveRevokeMessage);
+            socket.off('CHATTING_SSC_REACTION_MESSAGE', onReceiveReactionMessage);
+            socket.off('CHATTING_SSC_UPDATE_SEEN_MESSAGE', onUpdateSeenMessage);
+
+            socket.off('CHATTING_SSC_REMOVE_CONVERSATION', onRemoveConversation);
+            socket.off('CHATTING_SSC_REMOVE_MEMBER_CONVERSATION', onRemoveMemberConversation);
+            socket.off('CHATTING_SSC_GET_INFO_CONVERSATION', onGetInfoConversation);
+        }
     },[socket]);
+
+    useEffect(() => {
+        if (amountMissMessage > 0) {
+            document.title = `(${amountMissMessage}) tin nhắn`
+        } else {
+            document.title = `${process.env.REACT_APP_WEBSITE_NAME}`
+        }
+    }, [amountMissMessage])
 
     const onReceiveMessage = (data: any) => {
         if (data?.infoMessage?.error) {
@@ -66,23 +83,34 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
         dispatch(setAmountMissMessage(data.amountMissMessage))
         // console.log(data)
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+            conversationID: data?.infoMessage?.conversation,
+            populates
+        });
         if (data?.infoMessage?.sender?._id === profileId) {
             dispatch(updateNewMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
                 newMessageId: data?.infoMessage?._id,
                 oldMessageId: data?.tmpid,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
         } else {
+            playSound();
             dispatch(appendMessageToConversation({
                 conversationId: data?.infoMessage?.conversation,
                 messageId: data?.infoMessage?._id,
-                messageData: data?.infoMessage
+                messageData: {
+                    ...data?.infoMessage,
+                    noAnimation: true
+                }
             }));
             if (currentChat === data?.infoMessage?.conversation) {
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
-            if (!inSearchMode){
+            if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
                 setTimeout(() => {
                     scrollToBottom();
                 }, 100)
@@ -90,41 +118,48 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         }
     };
 
-    const onReceiveConversation = (data: any) => {
-        // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
-        if (!data) return;
-        dispatch(setListConversation(data?.data));
-    }
+    // const onReceiveConversation = (data: any) => {
+    //     // console.log('CHATTING_SSC_GET_LIST_CONVERSATION', data.data.listRecords,  new Date())
+    //     if (!data) return;
+    //     dispatch(setListConversation(data?.data));
+    // }
 
     const onFireMessage = (data: any) => {
         if (!data) return;
         dispatch(appendMessageToConversation({
             conversationId: data?.data?.conversation,
             messageId: data?.data?._id,
-            messageData: data?.data
+            messageData: {
+                ...data?.data,
+                noAnimation: true
+            }
         }));
+        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
+            conversationID: data?.data?.conversation,
+            populates
+        });
         if ([108, 109].includes(data?.data?.type)) {
             getListPinMessage({conversationID: data?.data?.conversation})
         }
         if ([101, 102, 107].includes(data?.data?.type)) {
             refetchListMembers();
         }
-        if (!inSearchMode){
+        if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
             setTimeout(() => {
                 scrollToBottom();
             }, 100)
         }
     };
 
-    const onReceiveShareMessage = (data: any) => {
-        if (!data) return;
-        // dispatch(setShareMessage({
-        //     messagesShare: data.data.listMessagesShared
-        // }));
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onReceiveShareMessage = (data: any) => {
+    //     if (!data) return;
+    //     // dispatch(setShareMessage({
+    //     //     messagesShare: data.data.listMessagesShared
+    //     // }));
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
     const onReceiveRevokeMessage = (data: any) => {
         if (!data) return;
@@ -143,7 +178,11 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             conversationId: conversation?._id,
             newMessageId: messageID,
             oldMessageId: messageID,
-            messageData: {...data?.data, conversation: conversation?._id}
+            messageData: {
+                ...data?.data,
+                conversation: conversation?._id,
+                noAnimation: true
+            }
         }));
     }
 
@@ -169,36 +208,37 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         dispatch(deleteConversationAction({conversationId: data?.data?._id}))
     }
 
-    const onCreateConversation = (data: any) => {
-        if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onCreateConversation = (data: any) => {
+    //     if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onUserLeaveConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onUserLeaveConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onAddMemberConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
-        }))
-    }
+    // const onAddMemberConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
 
-    const onUpdateInforConversation = (data: any) => {
-       if (!data) return;
-        dispatch(updateSingleConversation({
-            conversationData: data?.data
-        }))
-    }
+    // const onUpdateInforConversation = (data: any) => {
+    //    if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data
+    //     }))
+    // }
 
     const onRemoveMemberConversation = (data: any) => {
        if (!data) return;
+       console.log(data.data)
        const youGotDeleted = data?.data?.removedMember.some((member: {_id: string, [key: string]: any}) => member._id === profileId);
        if (youGotDeleted) {
            dispatch(deleteConversationAction({conversationId: data?.data?.infoConversation?._id}))
@@ -210,12 +250,30 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     }
 
-    const onUpdateAdminConversation = (data: any) => {
+    // const onUpdateAdminConversation = (data: any) => {
+    //     if (!data) return;
+    //     dispatch(updateSingleConversation({
+    //         conversationData: data?.data?.infoConversation
+    //     }))
+    // }
+
+    const playSound = () => {
+        if (audioRef.current) {
+            if (!(audioRef.current.paused && audioRef.current.currentTime > 0 && !audioRef.current.ended)) {
+                audioRef.current.play();
+            }
+        }
+    }
+
+    const onGetInfoConversation = (data: any) => {
         if (!data) return;
+        if (data.error) return;
         dispatch(updateSingleConversation({
-            conversationData: data?.data?.infoConversation
+            conversationData: data?.data
         }))
     }
 
-    return null;
+    return <>
+        <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
+    </>;
 };

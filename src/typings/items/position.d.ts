@@ -1,5 +1,6 @@
 
 interface QueryParam {
+    companyID?: string;
     keyword?: string;
     select?: string;
     populates?: string;

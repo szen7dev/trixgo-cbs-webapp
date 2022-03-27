@@ -1,24 +1,29 @@
 import { FC, useEffect, useMemo, useState } from "react";
+import { useRowSelect, useTable } from "react-table";
+import Skeleton from "react-loading-skeleton";
 
 import { useHistory, useParams } from "react-router-dom";
 
-import { Paginate } from "shareComponents/common";
-
+// Component
 // import DropdownFilterButton froeComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
-import getColumnsInspection from "views/datahub/utils/getColumnsInspection";
+import { Paginate, ButtonCreate, ButtonMore } from "shareComponents/common";
 import ModalCreateInspectionDetail from "./components/ModalCreateInspectionDetail";
+import { ContextMenu, useContextMenu } from "shareComponents/common/ContextMenu";
+import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
+
+// Utils
+import getColumnsInspection from "views/datahub/utils/getColumnsInspection";
+
+// Hooks
+import { useQuery } from "react-query";
+import useQueryCustom from "services/hooks/useQueryCustom";
 
 // Custom talbe
-import useTableData, { TableWithoutContext } from 'shareComponents/common/Table';
-import useQueryDatahub from "services/hooks/datahub/useQueryDatahub";
+import { TableWithoutContext } from 'shareComponents/common/Table';
 import InspectionCheckListRepository from "apis/datahub/InspectionCheckListRepository";
-import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
-import { useQuery } from "react-query";
+
+// API
 import DatahubRepository from "apis/datahub";
-import Skeleton from "react-loading-skeleton";
-import { ContextMenu, useContextMenu } from "shareComponents/common/ContextMenu";
 
 const DatahubInspectionDetail: FC = () => {
 	const [show, setShow] = useState(false);
@@ -41,7 +46,7 @@ const DatahubInspectionDetail: FC = () => {
 		}
 	);
 
-	const { data, isLoading: isLoadingList } = useQueryDatahub(
+	const { data, isLoading: isLoadingList } = useQueryCustom(
 		["datahub_inspection_checklist", _d && '_id' in _d.data ? _d.data._id : '', keyword],
 		({ cursor }) =>
 			InspectionCheckListRepository.get({
@@ -62,15 +67,11 @@ const DatahubInspectionDetail: FC = () => {
 
 	const columns = useMemo(() => getColumnsInspection(), []);
 	const _data = useMemo(() => data?.data?.listRecords || [], [data?.data.listRecords]);
-	const instance = useTableData({
+	const instance = useTable({
 		columns,
 		data: _data,
-		tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
-		tableHeadSelectorInputProps: { className: 'cbs-checkbox' },
-		tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
-		tableCellSelectorInputProps: { className: 'cbs-checkbox' },
 		getRowId: (row) => row._id
-	})
+	}, useRowSelect)
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
@@ -112,18 +113,16 @@ const DatahubInspectionDetail: FC = () => {
 						className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
 						style: { borderSpacing: 0 }
 					}}
-					tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
-					tableRowProps={(props, data) => {
-						return {
-							onContextMenu(e) {
-								if (!data) return;
-								e.preventDefault();
-								e.stopPropagation();
-								setSlected(data.row.original)
-								open({ position: { x: e.clientX, y: e.clientY } });
-							}
+					getHeaderProps={() => ({ className: 'text-primary-gray whitespace-nowrap align-middle text-left' })}
+					getRowProps={(row) => ({
+						onContextMenu(e) {
+							if (!row) return;
+							e.preventDefault();
+							e.stopPropagation();
+							setSlected(row.original);
+							open({ position: { x: e.clientX, y: e.clientY } });
 						}
-					}}
+					})}
 				/>
 			</div>
 			<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />

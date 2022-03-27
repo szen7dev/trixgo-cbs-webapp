@@ -25,11 +25,10 @@ import { Dashboard } from "views/homepage/pages";
 import {
 	DocumentDetailPage,
 	DocumentFolderPage,
-	DocumentHistoryPage,
 	DocumentProjectPage,
 	DocumentProfilePage,
-	DocumentReportPage,
-	DocumentDashboardPage
+	DocumentDashboardPage,
+	DocumentOfPackagePage
 } from 'views/document/pages';
 
 import {
@@ -55,21 +54,14 @@ import {
 	ProjectInspectionTab3Page,
 	ProjectInspectionDetailPage,
 	ProjectDirectoryPage,
-	// ProjectDocumentPage,
-	// ProjectMomPage,
-	// ProjectOtherPage,
-	// ProjectProductionPage,
-	// ProjectPunchPage,
-	// ProjectReportPage,
-	// ProjectRfaPage,
-	// ProjectRfiPage,
 } from 'views/ppt/pages';
 
-import { 
-	PcmHome, 
+import {
+	PcmHome,
 	PcmDetailTaskPage,
 	PcmGroupPage,
-	PcmTaskGroupPage
+	PcmTaskGroupPage,
+	PcmReport
 } from 'views/pcm/pages';
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -77,6 +69,7 @@ import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAd
 import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
+import { PcmTasksReport } from "views/pcm/pages/PcmTasksReport";
 
 const PCMRouter: FC = () => {
 	return (
@@ -125,24 +118,27 @@ const PCMRouter: FC = () => {
 						<Route exact path='/pcm/project/:id/payment' component={ProjectPaymentPage} />
 						<Route exact path={['/pcm/project/:id/document', '/pcm/project/:id/document/(1|2|3|4)']}>
 							<LayoutSecondary pages={[
-								{ id: '1', title: 'Hồ sơ dự thầu', path: '/pcm/project/:id/document', navExact: true },
+								{ id: '1', title: 'Danh sách', path: '/pcm/project/:id/document', navExact: true },
 								{ id: '2', title: 'Phân loại', path: '/pcm/project/:id/document/1' },
 								{ id: '3', title: 'Thư mục', path: '/pcm/project/:id/document/2' },
-								{ id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
-								{ id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
+								// { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
+								// { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
 							]}>
 								<ModalProvider>
 									<Switch>
 										<Route exact path='/pcm/project/:id/document' component={DocumentProjectPage} />
 										<Route exact path='/pcm/project/:id/document/1' component={DocumentProfilePage} />
 										<Route exact path='/pcm/project/:id/document/2' component={DocumentFolderPage} />
-										<Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
-										<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} />
+										{/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
+										<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
 									</Switch>
 									<ModalCreateDocument />
+
 								</ModalProvider>
+
 							</LayoutSecondary>
 						</Route>
+						<Route exact path='/pcm/project/:id/package/:packageID' component={DocumentOfPackagePage} />
 						<Route exact path='/pcm/project/:id/group' component={PcmGroupPage} />
 						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
 						<Route exact path='/pcm/project/:id/document/:docID' component={DocumentDetailPage} />
@@ -212,6 +208,8 @@ const PCMRouter: FC = () => {
 						<Route exact path="/pcm/home" component={PcmHome} />
 						<Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
 						<Route exact path="/pcm/bookmark" component={() => <PcmHome type={3} />} />
+						<Route exact path="/pcm/report" component={PcmReport} />
+						<Route exact path="/pcm/report/:reportID" component={PcmTasksReport} />
 						<Route exact path="/pcm/projects" component={ProjectCategoryPage} />
 						<Route exact path="/pcm/market" component={ProjectMarketPage} />
 						<Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">

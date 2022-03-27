@@ -15,6 +15,7 @@ interface FileProp {
   nameOrg: string;
   size: number;
   type: string;
+  mimeType?: string;
   author: User;
   createAt: string;
   description: string;
@@ -28,6 +29,7 @@ export type FileProps = {
   nameOrg: string;
   size: number;
   type: string;
+  mimeType?: string;
   author: User;
   createAt: string;
   description: string;
@@ -41,6 +43,7 @@ export type ImageProps = {
   nameOrg: string;
   size: number;
   type: string;
+  mimeType?: string;
   author?: User;
   createAt?: string;
   description?: string;
@@ -88,7 +91,6 @@ export type ListCommentResponse = APIResponse & {
   };
   message: string;
 };
-
 
 /**
  * ============================ ********** ===============================

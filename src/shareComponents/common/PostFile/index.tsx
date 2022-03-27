@@ -1,10 +1,9 @@
 import { FC } from 'react';
-
 import cn from 'classnames';
 
-import pdfIcon from 'assets/images/icons8-pdf-48 1.png';
 import downloadIcon from 'assets/images/icons8-download-48.png';
 
+import { getFileIcon } from 'utils/file';
 import { humanFileSize } from 'utils/converter';
 import { FileProps, PostFileProps } from 'typings/common';
 
@@ -28,17 +27,19 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 	return (
 		<>
 			{
-				files.map((d) => {
+				files.map((d: any) => {
 					if(!d || Object.keys(d).length === 1) return;
 
-					const name = 'progress' in d ? d.file?.name : (d.file ? d.file?.nameOrg : d.nameOrg);
-					const size = 'progress' in d ? d.file?.size : (d.file ? d.file?.size : d.size);
-					const download = 'progress' in d ? d.file : (d.file ? d.file : d);
-					const key = 'progress' in d ? d.id : d._id;
+					const name 		= 'progress' in d ? d.file?.name : (d.file ? d.file?.nameOrg : d.nameOrg);
+					const size 		= 'progress' in d ? d.file?.size : (d.file ? d.file?.size : d.size);
+					const mimeType 	= 'progress' in d ? d.file?.mimeType : (d.file ? d.file?.mimeType : d.mimeType);
+					const download 	= 'progress' in d ? d.file : (d.file ? d.file : d);
+					const key 		= 'progress' in d ? d.id : d._id;
+					const iconFile = getFileIcon(mimeType);
 
 					return (
 						<div key={key}  {...props} className={cn("post__files-file flex pl-3.5 py-2.5 pr-6", props.className, { loading: 'progress' in d && d.progress < 100 })}>
-							<div className="mr-3.5"><img src={pdfIcon} alt="pdf icon" /></div>
+							<div className="mr-3.5"><img src={iconFile} className="w-[35px] h-[35px]" alt="pdf icon" /></div>
 							<div className="flex-1">
 								<p className="text-sm leading-4 mt-2.5">{name}</p>
 								<p className="text-secondary-gray mt-2.5" style={{ lineHeight: "13.8px" }}>{humanFileSize(size)}</p>

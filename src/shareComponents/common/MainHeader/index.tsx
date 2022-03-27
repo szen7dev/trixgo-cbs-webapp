@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { MainSearchDialog, NotificationsMenu, AppsMenu, UserMenu } from "shareComponents/common";
 import SearchIcon from "assets/icons/Search";
 import fakeThumbnail from "assets/images/thumbnail1.jpg";
-import iconFilter from "assets/images/icons8-filter-96.png";
+// import iconFilter from "assets/images/icons8-filter-96.png";
+import iconChat from "assets/images/chat.png";
 
 import { useModal } from "services/hooks/useModal";
 import { useSocket } from "services/hooks/useSocket";
@@ -14,21 +15,20 @@ import { useAuth } from "services/hooks/useAuth";
 export const MainHeader: FC = () => {
   const { user } = useAuth();
   const { openModal } = useModal();
+  const { current: socket }: any = useSocket();
   const { 
     listNotifications, 
-    totalRecord,
+    totalRecordSendSuccess,
     refetchListNotification, 
     hasNextPage, 
     nextPageListNotification 
   } = useNotification({}, true);
 
-  const socketRef: any = useSocket();
-
   useEffect(() => {
-		const socket = socketRef.current;
     if (!socket) return;
 
 		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
+      console.log('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION');
       refetchListNotification();
 		});
 	}, []);
@@ -57,23 +57,23 @@ export const MainHeader: FC = () => {
               </div>
             </div>
 
-            <div className="t-header-menu flex items-center flex-wrap">
-            <Link to={`/`} className="font-bold ml-3 mr-3 active">
-              Home
-			      </Link>
-            <Link to={`/messages`} className="ml-3 mr-3">
-              Nhắn tin
-			      </Link>
-            <Link to={`/media/home`} className="ml-3 mr-3">
-              Truyền thông
-			      </Link>
-            {/* <Link to={`/bidding/home`} className="ml-3 mr-3">
-              Đấu thầu
-			      </Link>
-            <Link to={`/cmcs/home`} className="ml-3 mr-3">
-              Hợp đồng
-			      </Link> */}
-            </div>
+            {/* <div className="t-header-menu flex items-center flex-wrap">
+              <Link to={`/`} className="font-bold ml-3 mr-3 active">
+                Home
+              </Link>
+              <Link to={`/messages`} className="ml-3 mr-3">
+                Nhắn tin
+              </Link>
+              <Link to={`/media/home`} className="ml-3 mr-3">
+                Truyền thông
+              </Link>
+              <Link to={`/bidding/home`} className="ml-3 mr-3">
+                Đấu thầu
+              </Link>
+              <Link to={`/cmcs/home`} className="ml-3 mr-3">
+                Hợp đồng
+              </Link>
+            </div> */}
           </div>
 
           {/* <button className="t-header-investment-category-btn whitespace-nowrap">Danh mục đầu tư</button> */}
@@ -95,18 +95,16 @@ export const MainHeader: FC = () => {
               <SearchIcon className="w-4 h-4" />
             </button>
 
-            <button className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
-              <img src={iconFilter} alt="Filter" className="w-6 h-6" />
-            </button>
-
-            {/* <MessagesMenu /> */}
+            <Link to={`/messages`} className="relative w-10 h-10 flex items-center justify-center bg-primary-light hover:bg-secondary-light transition duration-150 rounded-md focus:outline-none ml-6">
+              <img src={iconChat} alt="Filter" className="w-6 h-6" />
+            </Link>
 
             <AppsMenu />
             {/* <button className="relative w-10 h-10 flex items-center justify-center transition duration-150 focus:outline-none ml-6">
               <img src={iconGrid} alt="Grid" className="w-6 h-6" />
             </button> */}
 
-            <NotificationsMenu notifications={listNotifications} total={totalRecord} onScroll={handleScroll} />
+            <NotificationsMenu notifications={listNotifications} total={totalRecordSendSuccess} onScroll={handleScroll} />
             <UserMenu />
           </div>
         </div>

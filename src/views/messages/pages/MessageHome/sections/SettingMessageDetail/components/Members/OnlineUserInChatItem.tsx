@@ -9,7 +9,7 @@ import {useOnClickOutside} from "services/hooks/useOnclickOutside";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
 import {toast} from "react-toastify";
 import {useDeleteConfirm} from "services/hooks/useDeleteConfirm";
-import {MessageContext} from "../../../../index";
+import {MessageContext, populates} from "../../../../index";
 
 type Props = {
     user: ItemMemberMessage,
@@ -61,20 +61,12 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
                     if (error) {
                         toast.error(data.message)
                     } else {
-                        socket.emit('CHATTING_CSS_REMOVE_MEMBER_CONVERSATION', {conversationID: chat._id, memberID: user.member._id})
                         socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
-                        socket.emit('CHATTING_CSS_GET_LIST_CONVERSATION', {
+                        socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                             conversationID: chat._id,
-                            select: JSON.stringify({ sender:"bizfullname" }) ,
-                            filter: JSON.stringify({
-                                author: 0,
-                                taskID: 0,
-                                links: 0,
-                                createAt: 0,
-                                __v: 0,
-                                // config: 0
-                            })
+                            populates
                         });
+                        socket.emit('CHATTING_CSS_REMOVE_MEMBER_CONVERSATION', {conversationID: chat._id, memberID: user.member._id})
                     }
                 })
             }
@@ -91,10 +83,9 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
             if (error) {
                 toast.error(data.message)
             } else {
-                socket.emit('CHATTING_CSS_UPDATE_ADMIN_CONVERSATION', {
+                socket.emit('CHATTING_CSS_GET_INFO_CONVERSATION', {
                     conversationID: chat._id,
-                    memberID: user.member._id,
-                    isSetAdmin
+                    populates
                 });
                 socket.emit('CHATTING_CSS_FIRE_MESSAGE', data.infoMessage.data);
             }
@@ -106,12 +97,12 @@ export const OnlineUserInChatItem:FC<Props> = ({user,index, chat}) => {
             <div
                 className={"group flex px-[15px] p-[10px] hover:bg-gray-100 cursor-pointer rounded-md items-center online-user-in-message-item smooth-animation"}>
                 <img
-                    onClick={() => handleStartPrivateChat(user._id)}
-                    className={"w-[56px] h-[56px] rounded-full overflow-hidden"}
+                    onClick={() => handleStartPrivateChat(user?.member?._id)}
+                    className={"w-[56px] h-[56px] rounded-full overflow-hidden object-cover"}
                     src={`${process.env.REACT_APP_URL_S3_USER}/${user?.member?.image}`} alt={user?.member?.bizfullname}/>
                 <div className={"flex-1 flex flex-col justify-center ml-[10px]"}>
                     <span
-                        onClick={() => handleStartPrivateChat(user._id)}
+                        onClick={() => handleStartPrivateChat(user?.member?._id)}
                         className={"font-bold"}>
                         {user?.member?.bizfullname}
                     </span>

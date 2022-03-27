@@ -1,8 +1,8 @@
-import React, {FC, useCallback, useEffect, useRef, useState, Fragment} from "react";
+import React, {FC, useCallback, useEffect, useRef, useState, useContext} from "react";
 import {map as _map} from "lodash";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {ItemListConversation} from "typings/apis/messages/listConversation";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {MessageContext} from "../../../../index";
 import ArrowDown from "assets/images/icon-arrow-down.svg";
@@ -25,6 +25,9 @@ import {
     NotificationCenter,
     ChangeNameNoti, ChangeAvatarNoti
 } from "../ChatContent/RegularContent";
+import { Oval } from  'react-loader-spinner'
+import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 export const listEmoji = [
     {
@@ -65,17 +68,21 @@ type Props = {
 
 export const MainChatContent:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
+    const {markReadConversation} = UseListConversation();
+    const dispatch = useDispatch();
+
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
+    const {currentChat} = useContext(MessageContext);
 
     const conversationMessagesList = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [reachedTop, setReachTop] = useState(false);
-    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[chat._id]);
-    const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[chat._id]);
-    const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[chat._id]);
-    const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[chat._id]);
-    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[chat._id]);
+    const messagesData = useSelector((state: RootState) => state.listMessage.data.listMessage[currentChat]);
+    const fakeMessagesData = useSelector((state: RootState) => state.listMessage.data.listFakeMessage[currentChat]);
+    const hasMoreData = useSelector((state: RootState) => state.listMessage.data.hasMoreData[currentChat]);
+    const nextCursor = useSelector((state: RootState) => state.listMessage.data.nextCursor[currentChat]);
+    const isLoading = useSelector((state: RootState) => state.listMessage.data.isLoading[currentChat]);
 
     const memoizedValue = useCallback(() => {
         const value = parseMessageData(messagesData);
@@ -84,7 +91,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, value[index-1]))
+        }), (message, index) => renderMessage(message, null, false))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
@@ -98,8 +105,13 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     },[fakeMessagesData]);
 
     useEffect(() => {
-        getListMessage({conversationID: chat._id})
-    },[chat._id]);
+        if (userUnreadMessage()>0) {
+            markAsRead()
+        }
+        getListMessage({conversationID: currentChat}).then(() => {
+            scrollToBottom()
+        })
+    },[currentChat]);
 
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
@@ -107,10 +119,21 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     useEffect(() => {
         if (reachedTop && !isLoading && hasMoreData) {
-            getListMessage({lastestID: nextCursor, conversationID: chat._id});
+            getListMessage({lastestID: nextCursor, conversationID: currentChat});
             setReachTop(false);
         }
     }, [reachedTop, nextCursor])
+
+    const markAsRead = () => {
+        markReadConversation({
+            conversationID: chat._id
+        }).then(data => {
+            dispatch(updateUsersMissMessageToConversation({
+                conversationId: chat._id,
+                usersMissMessage: data.usersMissMessage
+            }))
+        })
+    }
 
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
@@ -136,8 +159,13 @@ export const MainChatContent:FC<Props> = ({chat}) => {
 
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
+        const isOut = message.sender._id === profileId;
+        let classOrigin = (isOut ? "is-out":"is-in");
+        if (![0,1,2,7].includes(message.type)) {
+            classOrigin = "is-middle"
+        }
         return (
-            <div key={message._id} id={`message-${message._id}`}>
+            <div key={message._id} id={`message-${message._id}`} className={(message.noAnimation?"":"bubble-animation") + " " + classOrigin}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -205,6 +233,14 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     }
     return (
         <>
+            {
+                isLoading&&
+                <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation transition-all"}>
+                    <div className={"bg-white rounded-full p-1"}>
+                        <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
+                    </div>
+                </div>
+            }
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-MessageList"}
@@ -219,7 +255,10 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             {
                 userUnreadMessage()>0 &&
                 <button
-                    onClick={() => scrollToBottom()}
+                    onClick={() => {
+                        scrollToBottom()
+                        markAsRead()
+                    }}
                     className={"animate-bounce w-[48px] h-[48px] rounded-full absolute bottom-100px bg-white flex items-center justify-center right-40px z-10"}>
                     <img  src={ArrowDown} alt={"arrow down"}/>
                     <span

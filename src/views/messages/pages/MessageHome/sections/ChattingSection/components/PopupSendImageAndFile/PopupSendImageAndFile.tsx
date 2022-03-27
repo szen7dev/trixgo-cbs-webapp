@@ -23,9 +23,13 @@ export const PopupSendImageAndFile: FC = () => {
 
     const [content, setContent] = useState("");
     const [useCompress, setUseCompress] = useState(true);
-
+    const inputDescription = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        isShowPopupSendFiles&&setContent("");
+        isShowPopupSendFiles&&setTimeout(() => {
+            if (inputDescription&&inputDescription.current) {
+                inputDescription.current.focus()
+            }
+        }, 500)
     },[isShowPopupSendFiles])
 
     const renderFileTypeImage = (file:any) => {
@@ -156,7 +160,7 @@ export const PopupSendImageAndFile: FC = () => {
         const message: any = {
             tmpid: uuidv4(),
             conversationID: popSendFilesContent.conversationID,
-            content: content,
+            content: inputDescription?.current?.value,
             sender: {
                 _id: profileId
             },
@@ -166,7 +170,8 @@ export const PopupSendImageAndFile: FC = () => {
             files: popSendFilesContent.files
         };
         dispatch(closePopupSendFiles());
-        popSendFilesContent.handleSendFile(message,useCompress)
+        popSendFilesContent.handleSendFile({...message},useCompress);
+        setContent("");
     }
 
     const handleSetUseCompress = (value: boolean) => {
@@ -272,7 +277,7 @@ export const PopupSendImageAndFile: FC = () => {
                                     </div>
                                 }
                                 <input
-                                    autoFocus={true}
+                                    ref={inputDescription}
                                     value={content}
                                     onChange={event => setContent(event.target.value)}
                                     className={"rounded-md h-[50px] border w-full border-gray-300 mt-4 px-[10px] focus:outline-none focus:border-primary"} placeholder={"Nội dung"}/>

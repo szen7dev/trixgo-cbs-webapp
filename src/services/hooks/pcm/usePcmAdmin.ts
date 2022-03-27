@@ -151,7 +151,7 @@ export const useGetListAppRoleMenuFromAdmin = (payload: {
                     return data?.nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: true,
+                enabled: payload.roleID ? true : false,
             }
         );
     const listAppRoleMenuFromAdmin = [].concat(...(dataGetListAppRoleMenuFromAdmin?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);

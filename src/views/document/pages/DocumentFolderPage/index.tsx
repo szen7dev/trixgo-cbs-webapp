@@ -1,9 +1,18 @@
 import React, { FC } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
+import debounce from "lodash/debounce";
 
 import { Paginate } from "shareComponents/common";
+import {
+  // DocumentDropdown,
+  DropdownFilterButton,
+  ButtonCreate,
+  ButtonMore,
+  GroupActions,
+  SearchInput,
+} from "views/document/sharedComponents/common";
 
 import { useQueryListPackage } from "services/hooks/document/usePackage";
 
@@ -32,12 +41,14 @@ export const DocumentFolderPage: FC = () => {
 
   const [pageParam, setPageParam] = React.useState<any>({});
   const [prevCursor, setPrevCursor] = React.useState<any>([null]);
+  const [keyword, setKeyword] = React.useState("")
+
   const {
     listPackage,
     totalPages,
     totalRecord,
 	  nextCursor
-  } = useQueryListPackage({ departmentID: params.id, ...pageParam });
+  } = useQueryListPackage({ keyword, departmentID: params.id, ...pageParam });
 
   const nextPageAction = React.useCallback(() => {
     setPageParam({ lastestID: nextCursor || "" });
@@ -71,7 +82,8 @@ export const DocumentFolderPage: FC = () => {
       {/* Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
-          <span className="">CHG.THT</span>
+        <span className="text-x-large mr-7">Danh sách</span>
+          {/* <span className="">CHG.THT</span>
           <IconArrowRight />
           <button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
             <svg
@@ -93,8 +105,14 @@ export const DocumentFolderPage: FC = () => {
           <span className="truncate max-w-[132px]">
             Thi công san lấp mặt bằng
           </span>
-          <IconArrowRight />
-          <span>Hợp đồng</span>
+          <IconArrowRight /> */}
+          {/* <span>Hợp đồng</span> */}
+          <SearchInput
+              classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
+              onChange={debounce((e) => {
+                setKeyword(e.target.value)
+              }, 500)}
+            />
         </div>
         <div className="flex-1 overflow-y-auto">
           <table
@@ -157,17 +175,19 @@ export const DocumentFolderPage: FC = () => {
                       />
                     </td>
                     <td className="px-2 py-2">
-                      <p className="align-top">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 inline text-cbs-subtext mr-3"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                        </svg>
-                        {elm.name}
-                      </p>
+                      <Link to={`/pcm/project/${params.id}/package/${elm._id}`}>
+                        <p className="align-top">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 inline text-cbs-subtext mr-3"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                          </svg>
+                          {elm.name}
+                        </p>
+                      </Link>
                     </td>
                     <td className="py-2 px-2">{elm?.author?.fullname}</td>
                     <td className="py-2 px-2">
@@ -181,7 +201,7 @@ export const DocumentFolderPage: FC = () => {
                         },
                       })}
                     </td>
-                    <td className="py-2 px-2">{elm.numberOfDocs}</td>
+                    <td className="py-2 px-2">{elm?.numberOfDocs || 0}</td>
                     <td className="py-2 px-2">
                       <div className="flex">
                         {Array.isArray(elm.members) &&

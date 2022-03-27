@@ -8,7 +8,6 @@ import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { object, string } from "yup";
 
 import { useQueryListDoctype } from "services/hooks/useHuman";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListGroup } from "services/hooks/usePlanGroup";
 import { useTask } from 'services/hooks/useTask';
 import { useQueryListDepartmentsIsMember } from 'services/hooks/items/useDepartment';
@@ -66,7 +65,6 @@ export const ModalAddNewTask: FC = () => {
           toast.error(error.message);
       }
     }
-
     closeModal();
   };
 
@@ -87,15 +85,6 @@ export const ModalAddNewTask: FC = () => {
     type: 2,
     keyword: otherFieldValue
   });
-
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName
-  });
-
-  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
-    projectID,
-    keyword: searchFriendName
-  }, true);
 
   const { 
     data: listGroup, 
@@ -130,6 +119,11 @@ export const ModalAddNewTask: FC = () => {
     subType: "",
   };
 
+  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
+    projectID,
+    keyword: searchFriendName
+  }, true);
+
   return (
     <>
       <div className={"flex flex-col"}>
@@ -160,15 +154,20 @@ export const ModalAddNewTask: FC = () => {
                             setProjectID(`${value?.id}`);
                             setSearchDepartmentValue("");
                             setFieldValue("groupID", "");
+                            setFieldValue("assigneeID", "");
+                            setFieldValue("relatedIDs", "");
                           }}
                           onClearData={() => {
                             setFieldValue("projectID", "");
                             setFieldValue("groupID", "");
+                            setFieldValue("assigneeID", "");
+                            setFieldValue("relatedIDs", "");
                           }}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchDepartmentValue(value),
-                            500
-                          )}
+                          onSearchInputChange={
+                            debounce(
+                              (value) => setSearchDepartmentValue(value),
+                            500)
+                          }
                           className={"w-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
@@ -381,7 +380,7 @@ export const ModalAddNewTask: FC = () => {
                               </p>
                             </div>
                           )}
-                          data={listFriend.map((item) => ({
+                          data={listUsersProject.map((item) => ({
                             label: item.bizfullname,
                             value: item._id,
                             imgUrl: item.imgUrl,
@@ -446,7 +445,7 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
-                        data={listFriend.map((item) => ({
+                        data={listUsersProject.map((item) => ({
                           label: item.bizfullname,
                           value: item._id,
                           imgUrl: item.imgUrl,
@@ -466,7 +465,7 @@ export const ModalAddNewTask: FC = () => {
                         <input
                           placeholder="Tiêu đề"
                           type="text"
-                          className="border-0 flex-grow outline-none px-3 mt-0.5"
+                          className="border-0 flex-grow outline-none px-3 mt-0.5 w-3/4"
                           onChange={(event) => setFieldValue("name", event.target.value)}
                         />
                         <ErrorMessage

@@ -1339,6 +1339,10 @@ input[type="text"] {
 .ipc-form-modal .DayPickerInput {
   width: 40%;
 }
+.message-input .DraftEditor-root .public-DraftEditorPlaceholder-root {
+  position: absolute;
+  @apply text-gray-400;
+}
 .message-input .DraftEditor-root {
   flex-grow: 1;
   max-width: 419px;
@@ -1513,7 +1517,7 @@ input[type="text"] {
 }
 .found-message {
   border-radius: 15px;
-  animation: change-background 2s ease-in-out;
+  animation: change-background 2s ease-in-out !important;
 }
 
 .cbs-clock {
@@ -1553,7 +1557,7 @@ input[type="text"] {
 
 @keyframes cbs-clock-t59zy9 {
 	0% {
-		 tranform: rotate(0deg);
+		 transform: rotate(0deg);
 	}
 
 	100% {
@@ -1597,4 +1601,67 @@ input[type="text"] {
   -webkit-animation: cbs-clock-t59zy9 12s linear infinite;
   animation: cbs-clock-t59zy9 12s linear infinite;
   margin-bottom: 1px;
+}
+
+.bubble-animation {
+  animation: cbs-bubbles .25s cubic-bezier(.4, .0, .2, 1);
+}
+.bubble-animation.is-in {
+  transform-origin: bottom left;
+}
+.bubble-animation.is-out {
+  transform-origin: bottom right;
+}
+.bubble-animation.is-middle {
+  transform-origin: bottom center;
+}
+@keyframes cbs-bubbles {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.4);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.spinner-animation {
+  top: 70px;
+  animation: cbs-spinner-enter 0.2s ease-in-out;
+}
+.spinner-animation.from-bottom {
+  bottom: 70px;
+  top: unset;
+  animation: cbs-spinner-enter-from-bottom 0.2s ease-in-out;
+}
+@keyframes cbs-spinner-enter {
+  0% {
+    top: -150px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 70px;
+    opacity: 1;
+  }
+}
+@keyframes cbs-spinner-enter-from-bottom {
+  0% {
+    bottom: -150px;
+    opacity: 0;
+  }
+
+  100% {
+    bottom: 70px;
+    opacity: 1;
+  }
+}
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }

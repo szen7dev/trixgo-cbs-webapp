@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "redux/reducer";
 import {UseConversation} from "services/hooks/messages/useConversation";
 import {map as _map} from "lodash";
@@ -19,12 +19,18 @@ import {
     OthersMessage,
     ChangeNameNoti, ChangeAvatarNoti
 } from "views/messages/pages/MessageHome/sections/ChattingSection";
+import {Oval} from "react-loader-spinner";
+import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
+import {UseListConversation} from "services/hooks/messages/useListConversation";
 
 type Props = {
     chat: ItemListConversation;
 }
 export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     const {getListMessage} = UseConversation();
+    const {markReadConversation} = UseListConversation();
+    const dispatch = useDispatch();
+
     const currentUser = localStorage.getItem("currentUser")??"{}";
     const profileId = JSON.parse(currentUser)?._id;
 
@@ -78,14 +84,38 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const userUnreadMessage = useCallback(() => {
+        const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
+        return userUnread?.amount??0
+    }, [chat, profileId])
+
     useEffect(() => {
+        if (userUnreadMessage()>0) {
+            markAsRead()
+        }
         getListMessage({conversationID: chat._id})
     },[chat._id]);
 
+    const markAsRead = () => {
+        markReadConversation({
+            conversationID: chat._id
+        }).then(data => {
+            dispatch(updateUsersMissMessageToConversation({
+                conversationId: chat._id,
+                usersMissMessage: data.usersMissMessage
+            }))
+        })
+    }
+
     const renderMessage = (message: ItemMessage, previousMessage: ItemMessage|null|undefined, shouldRenderDate = true) => {
         const messageCreatedAt = moment(message.createAt);
+        const isOut = message.sender._id === profileId;
+        let classOrigin = (isOut ? "is-out":"is-in");
+        if (![0,1,2,7].includes(message.type)) {
+            classOrigin = "is-middle"
+        }
         return (
-            <div key={message._id}>
+            <div key={message._id} id={`message-${message._id}`} className={(message.noAnimation?"":"bubble-animation") + " " + classOrigin}>
                 {
                     shouldRenderDate&&previousMessage&&!messageCreatedAt.isSame(moment(previousMessage.createAt), 'date')?
                         <NotificationCenter content={messageCreatedAt.format("DD/MM/YYYY")}/>:
@@ -151,15 +181,25 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     }
 
     return (
-        <div
-            ref={conversationMessagesList}
-            id={"conversation-messages-MessageList"}
-            className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
-            <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
-                {memoizedValue()}
-                {memoizedFakeValue()}
+        <>
+            {
+                isLoading&&
+                <div className={"absolute w-full flex items-center justify-center z-21 spinner-animation transition-all"}>
+                    <div className={"bg-white rounded-full p-1"}>
+                        <Oval color={"#0d6efd"} strokeWidth={3} secondaryColor={"#fff"} height={30} width={30}/>
+                    </div>
+                </div>
+            }
+            <div
+                ref={conversationMessagesList}
+                id={"conversation-messages-MessageList"}
+                className="t-mini-chat-content flex-1 h-[400px] items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4">
+                <div className={"w-full max-w-full pt-[20px] px-[20px]"}>
+                    {memoizedValue()}
+                    {memoizedFakeValue()}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

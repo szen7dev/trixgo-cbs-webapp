@@ -251,20 +251,20 @@ export const Dashboard: FC = () => {
             <div className="t-home-actions">
               {/* recent actions item */}
               {listNotifications.length ? listNotifications.map((notification: NotificationProps) => (
-                <div key={notification._id} className="flex mb-4">
+                <Link to={notification.path || '/'} key={notification._id} className="flex mb-4">
                   <img className="t-home-actions-img object-cover mr-4 rounded-full" src={`${process.env.REACT_APP_URL_S3_USER}/${notification.sender?.image}`} alt="Thumbnail" />
-                  <div className="t-home-actions-text text-secondary-gray">
-                    <div className="flex justify-between mb-1">
+                  <div className="t-home-actions-text flex justify-between text-secondary-gray">
+                    <div className="mb-1">
                       <span className="t-home-actions-title-content text-dark">
                         {notification.sender?.bizfullname}
                       </span>
-                      <span className="ml-2">{moment(notification.createAt).format('L')}</span>
+                      <div>
+                        {notification.content}
+                      </div>
                     </div>
-                  <div>
-                      {notification.content}
-                    </div>
+                    <span className="ml-2">{moment(notification.createAt).format('L')}</span>
                   </div>
-                </div>
+                </Link>
               )) : ''}
 
               {hasNextPageNotification && (

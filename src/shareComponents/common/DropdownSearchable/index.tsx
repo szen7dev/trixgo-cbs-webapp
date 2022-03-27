@@ -174,7 +174,7 @@ export const DropdownSearchable: FC<Props> = ({
       onClearData && onClearData();
     }
   };
-
+  
   const handleRemoveItemSingle = () => {
     setValue(undefined);
     onClearData && onClearData();
@@ -273,6 +273,9 @@ export const DropdownSearchable: FC<Props> = ({
             className={
               "relative border rounded-full py-0.5 pl-1 mr-1 pr-8 mb-1 bg-white"
             }
+            title={renderSelectedItem
+              ? modifyItem(option).text
+              : readDataValue(option, "text")}
           >
             {renderSelectedItem
               ? renderSelectedItem(modifyItem(option))
@@ -340,6 +343,9 @@ export const DropdownSearchable: FC<Props> = ({
             "rounded-full": bordered,
           }
         )}
+        title={renderSelectedItem
+          ? modifyItem(value).text
+          : readDataValue(value, "text")}
       >
         {renderSelectedItem
           ? renderSelectedItem(modifyItem(value))
@@ -373,7 +379,11 @@ export const DropdownSearchable: FC<Props> = ({
       )
     ) : (
       <div className={"flex-1 flex text-left "}>
-        <div>
+        <div
+          title={renderSelectedItem
+            ? modifyItem(value).text
+            : readDataValue(value, "text")}
+        >
           {readDataValue(value, "text")
             ? renderSelectedItem
               ? renderSelectedItem(modifyItem(value))
