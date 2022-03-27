@@ -6,7 +6,6 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import { DropdownSearchable, ModalContainer } from "shareComponents/common";
 import { ModalCreateOrUpdateAppCompany } from 'views/support/shareComponents/common';
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import { APP_INFO } from "shareComponents/common";
 
 import styles from "views/support/styles/support.module.css";
@@ -232,11 +231,11 @@ export const SupportGrantPage: FC = () => {
             <th className={cn("py-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
                   defaultChecked
                 />
-                <img src={PolygonIcon} alt="Polygon" />
+                {/* <img src={PolygonIcon} alt="Polygon" /> */}
               </div>
             </th>
             <th className="w-1/5 py-1">
@@ -273,7 +272,6 @@ export const SupportGrantPage: FC = () => {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      style={{ marginLeft: "-23px" }}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
                     />
                   </td>
@@ -296,9 +294,6 @@ export const SupportGrantPage: FC = () => {
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                    style={{ marginLeft: "-23px" }}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeCheckBox(appCompany, e)}
                   />
                 </td>

@@ -25,10 +25,8 @@ import { Dashboard } from "views/homepage/pages";
 import {
 	DocumentDetailPage,
 	DocumentFolderPage,
-	DocumentHistoryPage,
 	DocumentProjectPage,
 	DocumentProfilePage,
-	DocumentReportPage,
 	DocumentDashboardPage,
 	DocumentOfPackagePage
 } from 'views/document/pages';
@@ -56,21 +54,14 @@ import {
 	ProjectInspectionTab3Page,
 	ProjectInspectionDetailPage,
 	ProjectDirectoryPage,
-	// ProjectDocumentPage,
-	// ProjectMomPage,
-	// ProjectOtherPage,
-	// ProjectProductionPage,
-	// ProjectPunchPage,
-	// ProjectReportPage,
-	// ProjectRfaPage,
-	// ProjectRfiPage,
 } from 'views/ppt/pages';
 
-import { 
-	PcmHome, 
+import {
+	PcmHome,
 	PcmDetailTaskPage,
 	PcmGroupPage,
-	PcmTaskGroupPage
+	PcmTaskGroupPage,
+	PcmReport
 } from 'views/pcm/pages';
 
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
@@ -78,6 +69,7 @@ import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAd
 import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
+import { PcmTasksReport } from "views/pcm/pages/PcmTasksReport";
 
 const PCMRouter: FC = () => {
 	return (
@@ -216,6 +208,8 @@ const PCMRouter: FC = () => {
 						<Route exact path="/pcm/home" component={PcmHome} />
 						<Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
 						<Route exact path="/pcm/bookmark" component={() => <PcmHome type={3} />} />
+						<Route exact path="/pcm/report" component={PcmReport} />
+						<Route exact path="/pcm/report/:reportID" component={PcmTasksReport} />
 						<Route exact path="/pcm/projects" component={ProjectCategoryPage} />
 						<Route exact path="/pcm/market" component={ProjectMarketPage} />
 						<Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">

@@ -5,24 +5,53 @@ import { Link } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update, Delete } from "../../modal";
+// import { Create, Update, Delete } from "../modal";
 import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
 
-const FunctionalTab: FC = () => {
+const listReports = [
+    {
+        _id: 1,
+        name: 'Quản trị ứng dụng',
+        author: {
+            bizfullname: 'Nguyễn Đắc Toàn-TRX'
+        },
+        createAt: new Date(),
+        updateAt: new Date(),
+    },
+    {
+        _id: 2,
+        name: 'Quản trị ứng dụng',
+        author: {
+            bizfullname: 'Nguyễn Đắc Toàn-TRX'
+        },
+        createAt: new Date(),
+        updateAt: new Date(),
+    },
+    {
+        _id: 3,
+        name: 'Quản trị ứng dụng',
+        author: {
+            bizfullname: 'Nguyễn Đắc Toàn-TRX'
+        },
+        createAt: new Date(),
+        updateAt: new Date(),
+    },
+]
+
+export const PcmReport: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
 	const { openModal } = useModal();
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -54,7 +83,7 @@ const FunctionalTab: FC = () => {
 	};
 
 	return (
-		<main className="h-full">
+		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
 					<p className="text-lg">Danh sách</p>
@@ -82,7 +111,7 @@ const FunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												{/* <Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} /> */}
 											</div>
 										)
 									}
@@ -99,7 +128,7 @@ const FunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+											{/* <Delete idsChecked={idsChecked} setIdsChecked={setIdsChecked} /> */}
 										</div>
 									)
 								}
@@ -119,7 +148,7 @@ const FunctionalTab: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create />
+									{/* <Create /> */}
 								</div>
 							)
 						}
@@ -138,24 +167,16 @@ const FunctionalTab: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
 								Nội dung
-							</div>
-						</th>
-						<th className="w-1/4 pb-1 pt-1">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Loại
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1 font-normal">
@@ -164,27 +185,25 @@ const FunctionalTab: FC = () => {
 							</div>
 						</th>
 						<th className="w-1/4 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Cập nhật lần cuối</div>
+							<div className="font-normal pl-2">Ngày tạo</div>
 						</th>
 					</tr>
 				</thead>
 
-				{listPcmAdmin && listPcmAdmin.length ?
+				{listReports && listReports.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmAdmin.map((item, index) => (
-							<tr key={index} className="border-b border-primary-border h-10">
+						{listReports.map((item: any, index) => (
+							<tr key={item._id} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
 										className="form-check-input"
 										type="checkbox"
-										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/admin/${item._id}/detail`}>
+									<Link to={`/pcm/report/${item._id}`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
@@ -192,21 +211,18 @@ const FunctionalTab: FC = () => {
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item.type}
+									{item.author?.bizfullname}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item.userCreate?.bizfullname}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item.userUpdate?.bizfullname}
+									{moment(item.createAT).format("HH:mm DD/MM/YYYY")}
 								</td>
 							</tr>
 						))
 						}
 					</tbody> : <></>
 				}
-
 			</table>
+
 			{hasNextPagePcmAdmin && (
 				<div className="w-full flex justify-center my-5">
 					<button onClick={() => nextPagePcmAdmin()}>
@@ -218,5 +234,3 @@ const FunctionalTab: FC = () => {
 		</main>
 	);
 };
-
-export default FunctionalTab;

@@ -69,6 +69,7 @@ export type Task = {
     author: User,
     createAt: string
   };
+  actualFinishTime: string;
   amountResponse: number;
   amountMarkedResponse: number;
 };

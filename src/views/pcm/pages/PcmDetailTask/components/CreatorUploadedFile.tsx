@@ -45,7 +45,7 @@ const CreatorUploadedFile = ({ ...rest }: Props): JSX.Element => {
           <img src="/images/common/icon-upload-file.png" alt="Icon upload file" />
         </button>
       </div>
-      <div className="flex w-full my-2" key={file._id}>
+      {/* <div className="flex w-full my-2" key={file._id}>
         <div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
           <div>
             <div className="flex">
@@ -86,7 +86,7 @@ const CreatorUploadedFile = ({ ...rest }: Props): JSX.Element => {
             // onKeyUp={handleUpdateDescriptionFile}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

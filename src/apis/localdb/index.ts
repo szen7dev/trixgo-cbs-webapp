@@ -352,7 +352,7 @@ export const DOCUMENT_TYPES = [
     { value: 23, text: 'Quy trình', key: 'key' },
     { value: 24, text: 'Chỉ dẫn', key: 'key' },
     { value: 25, text: 'Nghiệm thu chất lượng', key: 'key' },
-    { value: 26, text: 'Dữ liệu', key: 'key' },
+    { value: 26, text: 'Hóa đơn', key: 'key' },
 ]
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC
@@ -585,24 +585,53 @@ export const APP_ID = {
         id: "5dfe4b9051dc622100bb9d89",
         menuApp: {
             projects: {
-                id: "621dd3a55fd4c85f7c36d0d2",
+                id: "623ef363e998e94feda0ccde",
                 name: "Dự án đang triển khai"
             },
             dashboard_portfolio: {
-                id: "621dd3b85fd4c85f7c36d0da",
+                id: "623efd30e998e94feda0cd1b",
                 name: "Báo cáo đầu tư"
             },
             dashboard_task: {
-                id: "621dd3ce5fd4c85f7c36d0e1",
+                id: "623efd51e998e94feda0cd1c",
                 name: "Báo cáo quản trị công việc",
             },
             dashboard_document: {
-                id: "621dd3d75fd4c85f7c36d0e4",
+                id: "623efd64e998e94feda0cd1d",
                 name: "Báo cáo quản trị hồ sơ",
             }
         },
         parentID: {
-            pcm: "621dd33d5fd4c85f7c36d008",
+            pcm: "623ef213e998e94feda0ccd8",
+        },
+        menuProject: {
+            dashboard: {
+                id: "623f05f9e998e94feda0cd33",
+                name: "Báo cáo quản trị"
+            },
+            folder: {
+                id: "623f061de998e94feda0cd34",
+                name: "Thư mục dữ liệu"
+            },
+            document: {
+                id: "623f062fe998e94feda0cd35",
+                name: "Hồ sơ văn bản",
+            },
+            budget: {
+                id: "623f063be998e94feda0cd36",
+                name: "Ngân sách và hợp đồng",
+            },
+            photo: {
+                id: "623f0657e998e94feda0cd37",
+                name: "Hình ảnh",
+            },
+            drawing: {
+                id: "623f066ae998e94feda0cd38",
+                name: "Bản vẽ",
+            }
+        },
+        projectParentID: {
+            pcm: "623f04cce998e94feda0cd32",
         }
     },
     HUMAN: {

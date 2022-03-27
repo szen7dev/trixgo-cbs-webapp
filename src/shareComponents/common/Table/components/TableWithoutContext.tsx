@@ -81,7 +81,6 @@ function TableWithoutContext<D extends object>({
 			</thead>
 			<tbody {...instance.getTableBodyProps(tableBodyProps)}>
 				{isLoading ? Array.from({ length: rowLoading }).map((_, idx) => {
-					// const { onClick, ...rest } = typeof tableRowProps[0] === 'function' ? tableRowProps[0]() : (tableRowProps[0] || {});
 					return <tr key={idx} >
 						{
 							instance.visibleColumns.map((col) => {
