@@ -14,9 +14,9 @@ import { DatahubContract } from "typings/datahub/contract";
 import { useContractorCompany } from "views/datahub/contexts/Company";
 import useInfinitePackage from "services/hooks/datahub/package/useInfinitePackage";
 
-import useTableData from "shareComponents/common/Table/useTableData";
 import getColumnsContractorContract from "views/datahub/utils/getColumnsContractorContract";
 import { TableWithoutContext } from "shareComponents/common/Table";
+import { useRowSelect, useTable } from "react-table";
 
 const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 	id: i as string | number,
@@ -41,15 +41,8 @@ const DatahubContractorContract: FC = () => {
 	// Table handling
 	const columns = useMemo(getColumnsContractorContract, []);
 	const _data = useMemo(() => data?.pages.flatMap(p => p.data.listRecords) || [], [data]);
-	const instance = useTableData({
-		columns,
-		data: _data,
-		tableHeadSelectorProps: { className: "px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border w-1" },
-		tableHeadSelectorInputProps: { className: 'cbs-checkbox' },
-		tableCellSelectorProps: { className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" },
-		tableCellSelectorInputProps: { className: 'cbs-checkbox' },
-		getRowId: (row) => row._id
-	})
+
+	const instance = useTable({ columns, data: _data, getRowId: (row) => row._id }, useRowSelect);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu";
@@ -87,7 +80,7 @@ const DatahubContractorContract: FC = () => {
 							className: "text-black text-medium border-separate space-x-0 space-y-0 w-full",
 							style: { borderSpacing: 0 }
 						}}
-						tableRowHeadProps={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
+						// ={{ className: 'text-primary-gray whitespace-nowrap align-middle text-left' }}
 					/>
 				</div>
 				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}

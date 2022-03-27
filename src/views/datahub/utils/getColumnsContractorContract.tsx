@@ -1,6 +1,6 @@
 import moment from "moment"
 import { FC } from "react"
-import { TableProperties } from "shareComponents/common/Table/Table"
+import { TableOptions } from "react-table"
 import { DatahubContractBase } from "typings/datahub/contract"
 import iconPageUp from 'assets/images/icons8-upload-document-100 1.png';
 
@@ -12,7 +12,7 @@ const headCellProps = { className: 'py-2.5 font-normal bg-cbs-table-header stick
 
 const DefaultSpan: FC = ({ children }) => <span className="pl-2 border-l border-cbs-border">{children}</span>
 
-function getColumnsContractorContract(): TableProperties<DatahubContractBase>['columns'] {
+function getColumnsContractorContract(): TableOptions<DatahubContractBase>['columns'] {
 	return ([
 		{
 			accessor: 'name',
