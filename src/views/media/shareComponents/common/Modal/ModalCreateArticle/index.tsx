@@ -58,7 +58,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 			removeUploadedImage,
 			removeUploadedFile,
 		}] = useUploadFile({ files, images });
-
+	
 	const { user } = useAuth();
 	const { refetchListMedias: refetchListMediasCompany } = useMedia({
 		key: `list_medias__company`,
