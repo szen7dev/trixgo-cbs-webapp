@@ -218,7 +218,7 @@ export const ContractProduce: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Còn lại phải thanh toán
+              Sản lượng phát sinh phần VAT
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>

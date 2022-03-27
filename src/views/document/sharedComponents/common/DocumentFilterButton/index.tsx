@@ -58,7 +58,7 @@ const FormFilter: FC<FormFilterProps> = ({
       searchValues["senderID"] && { keyword: searchValues["senderID"] }
     )
   );
-  const { listContracts } = useQueryItemContract(companyID, {
+  const { listContracts } = useQueryItemContract({companyID,
     keyword: searchValues["contractID"] || "",
   });
   const { listDoctypes: properties } = useQueryListDoctype({

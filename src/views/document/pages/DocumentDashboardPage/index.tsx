@@ -97,7 +97,7 @@ export const DocumentDashboardPage: FC = () => {
 	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
 		appID: APP_ID.PCM.id,
-		menuID: APP_ID.PCM.menuApp.dashboard_document.id,
+		menuID: APP_ID.PCM.menuPcmApp.dashboard_document.id,
 		type: "1"
 	});
 
