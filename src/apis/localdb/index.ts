@@ -601,9 +601,6 @@ export const APP_ID = {
                 name: "Báo cáo quản trị hồ sơ",
             }
         },
-        parentID: {
-            pcm: "623ef213e998e94feda0ccd8",
-        },
         menuProject: {
             dashboard: {
                 id: "623f05f9e998e94feda0cd33",
@@ -630,9 +627,8 @@ export const APP_ID = {
                 name: "Bản vẽ",
             }
         },
-        projectParentID: {
-            pcm: "623f04cce998e94feda0cd32",
-        }
+        pcmParentID: "623ef213e998e94feda0ccd8",
+        projectParentID: "623f04cce998e94feda0cd32"
     },
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
