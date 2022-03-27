@@ -352,7 +352,7 @@ export const DOCUMENT_TYPES = [
     { value: 23, text: 'Quy trình', key: 'key' },
     { value: 24, text: 'Chỉ dẫn', key: 'key' },
     { value: 25, text: 'Nghiệm thu chất lượng', key: 'key' },
-    { value: 26, text: 'Dữ liệu', key: 'key' },
+    { value: 26, text: 'Hóa đơn', key: 'key' },
 ]
 
 // TRẠNG THÁI TRIỂN KHAI CÔNG VIỆC
