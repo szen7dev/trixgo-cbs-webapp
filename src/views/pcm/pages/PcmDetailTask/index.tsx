@@ -30,7 +30,8 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 import TaskRepository from "apis/task";
 import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
 import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
-import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 

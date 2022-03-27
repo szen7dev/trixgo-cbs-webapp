@@ -5,7 +5,7 @@ import cn from "classnames";
 import PortfolioAnalysisContainer from "./components/PortfolioAnalysisContainer";
 import PortfolioTableContainer from "./components/PortfolioTableContainer";
 import { useHistory } from "react-router-dom";
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 

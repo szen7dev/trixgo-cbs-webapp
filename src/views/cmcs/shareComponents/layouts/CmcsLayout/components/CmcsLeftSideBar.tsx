@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { NavLink } from "react-router-dom";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";

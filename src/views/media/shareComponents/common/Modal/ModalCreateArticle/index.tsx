@@ -33,7 +33,7 @@ import iconDown from 'assets/images/Frame 1745.png';
  */
 import { ModalProps, MediaPayload } from 'typings/media';
 import { FileProps, FilePropsUpload } from 'typings/common';
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useMedia } from 'services/hooks/useMedia';
 import { useUpload } from 'services/hooks/useUpload';
 import { useSocket } from 'services/hooks/useSocket';

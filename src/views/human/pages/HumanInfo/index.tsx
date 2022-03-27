@@ -29,7 +29,8 @@ import { APP_ID } from "apis/localdb";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
-import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 

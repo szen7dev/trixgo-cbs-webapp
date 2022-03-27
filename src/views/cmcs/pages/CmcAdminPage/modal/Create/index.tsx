@@ -3,14 +3,14 @@ import { FC, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 const Create: FC = () => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
   const [type, setType] = useState<any>("");
-  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  const { createAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
 
   const onCreate = async () => {
     if (!name || !type) {
@@ -23,12 +23,12 @@ const Create: FC = () => {
     };
 
     const result = await createAppRolesMutateAsync({
-      appID: APP_ID.PCM.id,
+      appID: APP_ID.CMCS.id,
       type: parseInt(type),
       name
     });
     if (!result.error) {
-      refetchPcmAdmin();
+      refetchListAppRoles();
       setName("");
       closeModal();
       toast.success('Tạo mới dữ liệu thành công');

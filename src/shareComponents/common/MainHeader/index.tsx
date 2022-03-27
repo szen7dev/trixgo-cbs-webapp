@@ -10,7 +10,7 @@ import iconChat from "assets/images/chat.png";
 import { useModal } from "services/hooks/useModal";
 import { useSocket } from "services/hooks/useSocket";
 import { useNotification } from 'services/hooks/useNotification';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const MainHeader: FC = () => {
   const { user } = useAuth();

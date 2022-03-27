@@ -3,14 +3,14 @@ import { FC, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 
 const Update: FC<any> = ({ item, setIdsChecked }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
-  const { updateAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  const { updateAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
 
   const onUpdate = async () => {
     if (!name) return;
@@ -19,7 +19,7 @@ const Update: FC<any> = ({ item, setIdsChecked }) => {
       name
     });
     if (!result.error) {
-      refetchPcmAdmin();
+      refetchListAppRoles();
       setName("");
       closeModal();
       setIdsChecked([]);

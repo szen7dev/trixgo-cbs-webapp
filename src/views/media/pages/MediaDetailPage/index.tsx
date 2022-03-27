@@ -43,7 +43,7 @@ import { typePostSelected } from 'views/media/utils';
 import { nl2p } from 'utils';
 import { abbreviateNumber } from 'utils/converter';
 import { useModal } from "services/hooks/useModal";
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
 import { ModalZoomView } from "shareComponents/common/ZoomView";
 import { ContextModalPost } from "views/media/contexts/post";

@@ -21,7 +21,7 @@ import SliderOver from "./components/SliderOver";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { DATE_FORMAT, APP_ID } from "apis/localdb";
 import { useHistory } from "react-router-dom";
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 import { toast } from "react-toastify";
 // interface IData {
 // 	id: number;

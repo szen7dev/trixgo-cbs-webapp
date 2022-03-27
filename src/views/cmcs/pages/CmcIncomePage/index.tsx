@@ -16,7 +16,7 @@ import styles from 'views/cmcs/styles/styles.module.css';
 import PolygonIcon from "assets/images/icon-polygon.svg";
 
 import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
-import { useHistoryTraffics } from "services/hooks/useAuth";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 export const CmcIncomePage: FC = () => {

@@ -20,7 +20,7 @@ import { SearchInput } from "shareComponents/common";
 import { AddFriendPayLoad } from 'typings/personal/personal';
 /*=====6.HOOKS/APIS=====*/
 import { usePersonal } from 'services/hooks/personal/usePersonal';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 
 export const ListFriends: FC = () => {

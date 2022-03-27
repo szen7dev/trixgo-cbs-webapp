@@ -14,7 +14,7 @@ import {
 	ModalCreateArticle
 } from "views/media/shareComponents/common";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useMedia } from 'services/hooks/useMedia';
 
 export const MediaHomePage: FC = () => {
