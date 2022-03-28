@@ -114,7 +114,6 @@ export const ContractProduce: FC = () => {
   }, [contractProduce]);
 
   const handleOnFilter = useCallback((values) => {
-    console.log('🚀 ~ handleOnFilter ~ values', values)
 
     // setPageParam(() => ({ ...values }));
     return true;

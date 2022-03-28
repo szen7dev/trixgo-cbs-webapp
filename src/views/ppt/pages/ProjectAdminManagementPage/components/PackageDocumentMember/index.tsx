@@ -10,7 +10,6 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetListAppRoleMenu } from "services/hooks/useAuth";
 import { CreateMemberPackage, DeleteMembersPackage } from "../../modal";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 import { APP_ID } from "apis/localdb";

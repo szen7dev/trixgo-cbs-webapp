@@ -20,7 +20,7 @@ import { SearchInput } from "shareComponents/common";
 import { AddFriendPayLoad } from 'typings/personal/personal';
 /*=====6.HOOKS/APIS=====*/
 import { usePersonal } from 'services/hooks/personal/usePersonal';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 
 export const ListFriends: FC = () => {
@@ -32,7 +32,6 @@ export const ListFriends: FC = () => {
   const { listFriends, totalRecord, totalPage, nextCursor, refetchListFriends } = usePersonal(params, pageParam);
   const [friend, setFriend] = useState<any>(null)
   const [isFriend, setIsFriend] = useState(false)
-  console.log('herre')
   const { user } = useAuth();
   const { getCodeUser, checkCodeUser, requestAddFriend, requestUnFriend} = usePersonal();
   const getCode = async () => {

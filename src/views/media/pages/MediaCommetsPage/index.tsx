@@ -7,7 +7,7 @@ import { Loader, ModalContainer, ModalZoomView } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from "views/media/shareComponents/common";
 import { useCommentMedia } from 'services/hooks/useMedia';
 import { ContextModalPost } from "views/media/contexts/post";
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 import 'views/media/styles/index.css';
 

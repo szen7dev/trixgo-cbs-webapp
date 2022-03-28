@@ -2,14 +2,20 @@ import { FC } from "react";
 
 import { NavLink, useParams } from "react-router-dom";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 
 export const CmcsContractLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { id: contractID } = useParams<{ id: string }>();
+  const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CMCS.id, parentID: APP_ID.CMCS.menuCmcsContract.id });
+	const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CMCS.id, type: "3" });
+  console.log("listAppMenu", listAppMenu);
+  console.log("listAppRoleMenu", listAppRoleMenu);
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
@@ -32,7 +38,31 @@ export const CmcsContractLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
-          <NavLink
+          {listAppMenu && listAppMenu.length ?
+            <>
+              {listAppMenu.map((item: any, index: number) => {
+                const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                if (roleApp && roleApp.read >= 1) {
+                  return (
+                    <NavLink
+                      to={`/cmcs/contract/${contractID}/${item.slug}`}
+                      className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+                    >
+                      <img
+                        className="w-6 h-6 object-contain mr-3"
+                        src={iconFolder}
+                        alt="Menu item"
+                      />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  )
+                };
+                return <div key={index}></div>
+              })
+              }
+            </> : <></>
+          }
+          {/* <NavLink
             to={`/cmcs/contract/${contractID}/admin`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -64,7 +94,7 @@ export const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Báo cáo quản trị</span>
-          </NavLink>
+          </NavLink> */}
           {/* <NavLink
             to={`/cmcs/contract/${contractID}/editor`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
@@ -98,7 +128,7 @@ export const CmcsContractLeftSideBar: FC = () => {
             />
             <span className="truncate">Ngân sách</span>
           </NavLink> */}
-          <NavLink
+          {/* <NavLink
             to={`/cmcs/contract/${contractID}/produce`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
           >
@@ -119,7 +149,7 @@ export const CmcsContractLeftSideBar: FC = () => {
               alt="Menu item"
             />
             <span className="truncate">Nghiệm thu hoàn thành</span>
-          </NavLink>
+          </NavLink> */}
           {/* <NavLink
             to={`/cmcs/contract/${contractID}/product`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"

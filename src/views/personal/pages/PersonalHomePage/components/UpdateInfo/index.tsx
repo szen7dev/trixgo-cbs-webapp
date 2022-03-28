@@ -18,7 +18,7 @@ import SignatureLogo from "assets/images/signature-logo.svg";
 import { UpdateUser, UpdateAvatarUser } from 'typings/personal/user';
 /*=====6.HOOKS/APIS=====*/
 import { useUser } from 'services/hooks/personal/useUser';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 import { Form, Formik, Field } from "formik";
 import moment from 'moment'

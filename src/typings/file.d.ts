@@ -58,6 +58,7 @@ export type FileProps = {
   app: string;
   name: string,
   url: string,
+	path:	string,
   size: number,
   type: string,
   userCreate: string,

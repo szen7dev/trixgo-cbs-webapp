@@ -3,7 +3,7 @@ import { FC } from "react";
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
 import { Link } from "react-router-dom";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const LeftSideBar: FC = () => {
   const { user } = useAuth();

@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {useAuth} from "services/hooks/useAuth";
+import {useAuth} from "services/hooks/auth/useAuth";
 
 export const OneSignalController = () => {
     const { hasAuthenticated , updateDevice , user } = useAuth();

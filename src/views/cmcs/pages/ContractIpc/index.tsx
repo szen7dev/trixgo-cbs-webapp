@@ -115,7 +115,6 @@ export const ContractIpc: FC = () => {
   }, [contractIPC]);
 
   const handleOnFilter = useCallback((values) => {
-    console.log('🚀 ~ handleOnFilter ~ values', values)
 
     // setPageParam(() => ({ ...values }));
     return true;

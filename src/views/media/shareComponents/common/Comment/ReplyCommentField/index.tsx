@@ -15,7 +15,7 @@ import { FileProps, FilePropsUpload } from 'typings/common';
 import { CommentPayload } from 'typings/media';
 
 import { useCommentMedia } from 'services/hooks/useMedia';
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useSocket } from "services/hooks/useSocket";
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';

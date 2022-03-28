@@ -27,6 +27,10 @@ type NewType<T> = {
   hasNextPage?: boolean;
 };
 
+/**
+ * @deprecated use hook `useQueryCustom` or `useInfiniteQuery` instead.
+ * this hook will be removed in the future;
+ */
 export function useListDepartment<
   T extends DepartmentEnumType | undefined,
   S extends (keyof DataEnum<undefined, undefined>[T extends undefined

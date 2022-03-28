@@ -10,8 +10,6 @@ const DeleteMembersGroup: FC<any> = ({ idsChecked, groupID }) => {
 	const { updatePcmPlanGroupMutateAsync, refetchInfoGroup } = usePcmPlanGroup({ groupID }, false, false)
 
 	const onDelete = async () => {
-		console.log({  groupID , membersRemove: idsChecked})
-
 		const infoAfterUpdate = await updatePcmPlanGroupMutateAsync({ groupID, membersRemove: idsChecked });
 		if (!infoAfterUpdate.error) {
 			toast.success('Xoá dữ liệu thành công');

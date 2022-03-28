@@ -15,7 +15,7 @@ import StatusReport from "./components/StatusReport";
 
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const CmcDashboardPage: FC = () => {
   const { user } = useAuth();

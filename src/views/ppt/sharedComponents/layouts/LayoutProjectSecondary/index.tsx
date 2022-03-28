@@ -10,7 +10,7 @@ import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
 import ProjectLeftSideBar from "./components/ProjectLeftSideBar";
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useQueryDetailDepartment } from 'services/hooks/items/useDepartment';
 
 type Props = {

@@ -6,7 +6,7 @@ import { object, string } from "yup";
 import { map as _map } from "lodash";
 import { Link } from "react-router-dom";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { SignInPayload } from "typings/auth";
 
 import { Loader } from "shareComponents/common";
