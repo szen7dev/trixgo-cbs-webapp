@@ -3,7 +3,7 @@ import { FC } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useAuth } from "services/hooks/auth/useAuth";
-import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
@@ -12,6 +12,8 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 export const CmcsLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
+  const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CMCS.id, parentID: APP_ID.CMCS.menuCmcsApp.id });
+  const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CMCS.id, type: "1" });
 
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
@@ -35,61 +37,30 @@ export const CmcsLeftSideBar: FC = () => {
             />
             <span className="truncate">Trang chủ</span>
           </NavLink>
-          <NavLink
-            to={`/cmcs/dashboard`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Báo cáo quản trị</span>
-          </NavLink>
-          {/* <NavLink
-            to={`/cmcs/portfolio`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Quản trị dự án</span>
-          </NavLink> */}
-          <NavLink
-            to={`/cmcs/income`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Hợp đồng bán ra</span>
-          </NavLink>
-          {/* <NavLink
-            to={`/cmcs/expenses`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Hợp đồng mua vào</span>
-          </NavLink> */}
-          <NavLink
-            to={`/cmcs/guarantee`}
-            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-          >
-            <img
-              className="w-6 h-6 object-contain mr-3"
-              src={iconFolder}
-              alt="Menu item"
-            />
-            <span className="truncate">Theo dõi bảo lãnh</span>
-          </NavLink>
+          {listAppMenu && listAppMenu.length ?
+            <>
+              {listAppMenu.map((item: any, index: number) => {
+                const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                if (roleApp && roleApp.read >= 1) {
+                  return (
+                    <NavLink
+                      to={`/cmcs/${item.slug}`}
+                      className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+                    >
+                      <img
+                        className="w-6 h-6 object-contain mr-3"
+                        src={iconFolder}
+                        alt="Menu item"
+                      />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  )
+                };
+                return <div key={index}></div>
+              })
+              }
+            </> : <></>
+          }
           {hasPermission && dataUserAccess?.level == 0 ?
             <NavLink
               to={`/cmcs/admin`}

@@ -156,7 +156,7 @@ const CmcsRouter: FC = () => {
             />
             <ProtectedRoute
                 exact
-                path="/cmcs/expenses"
+                path="/cmcs/expense"
                 component={() => (
                     <CmcsLayout>
                         <CmcExpensePage />
