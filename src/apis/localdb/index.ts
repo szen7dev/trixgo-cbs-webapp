@@ -671,7 +671,18 @@ export const APP_ID = {
             },
         }
     },
+    DOCUMENT: {
+        id: "5e47867080019357cce04746",
+        menuDocumentApp: {
+            id: "623f23f1e998e94feda0cda4",
+            dashboard: {
+                id: "623f2404e998e94feda0cda6",
+                name: "Báo cáo quản trị"
+            }
+        },
+        menuDocumentProject: {}
+    },
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
-    }
+    },
 };

@@ -244,7 +244,7 @@ export const Education: FC<EducationProps> = (props) => {
       },
     [handleUploadFile, setUploadFile]
   );
-
+      
   return (
     <div className="border-b-8 border-accent-light px-4 py-6">
       <HumanInfoHeader
