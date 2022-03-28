@@ -1,9 +1,10 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import { DocumentFileRepository } from 'apis/document';
 
 import type { DocumentFileProps, DocumentFileQueryPayload } from 'typings/document/document-file';
 
 interface UseQueryListDocumentFile {
+    createDocumentFileMutateAsync: any,
     loading: boolean;
     totalRecord: number;
     totalPages: number;
@@ -16,7 +17,11 @@ interface UseQueryListDocumentFile {
 
 export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQueryListDocumentFile => {
     let nextCursor = null;
-
+    // Tạo document file
+    const { mutateAsync: createDocumentFileMutateAsync, isLoading: isLoadingCreateDocumentFile } =
+      useMutation((params: any) => DocumentFileRepository.insertDocumentFile(params)
+    );
+    
     const res = useInfiniteQuery(
         [`document-files`, { params }],
         async ({ pageParam }: any) =>
@@ -37,6 +42,7 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
+
     const {
         isLoading,
         data,
@@ -54,6 +60,7 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
     
     return {
+        createDocumentFileMutateAsync,
         loading: isLoading,
         nextCursor,
         documentFiles,

@@ -9,10 +9,12 @@ const DOCUMENT_URL = "/api/document";
 
 interface DocumentFileRepository {
     fetchList: (params: DocumentFileQueryPayload) => Promise<DocumentFileQueryResponse>
+    insertDocumentFile: (params: any) => Promise<any>
 }
 
 export const documentFileRepository: DocumentFileRepository = {
     fetchList: async (params) => fetchListDocumentFile(params),
+    insertDocumentFile: async (params) => insertDocumentFile(params),
 }
 
 async function fetchListDocumentFile(params: any) {
@@ -30,5 +32,10 @@ async function fetchListDocumentFile(params: any) {
             ...params,
         }
     })
+    return data;
+}
+
+async function insertDocumentFile(params: any) {
+    const { data } = await API.post(`${DOCUMENT_URL}/add-file-attachment`, params)
     return data;
 }

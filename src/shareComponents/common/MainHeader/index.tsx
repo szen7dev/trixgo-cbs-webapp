@@ -28,7 +28,6 @@ export const MainHeader: FC = () => {
     if (!socket) return;
 
 		socket.on('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION', () => {
-      console.log('NOTIFICATION_SSC_RECEIVE_NEW_NOTIFICATION');
       refetchListNotification();
 		});
 	}, []);

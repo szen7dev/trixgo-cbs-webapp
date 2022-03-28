@@ -32,7 +32,6 @@ export const ListFriends: FC = () => {
   const { listFriends, totalRecord, totalPage, nextCursor, refetchListFriends } = usePersonal(params, pageParam);
   const [friend, setFriend] = useState<any>(null)
   const [isFriend, setIsFriend] = useState(false)
-  console.log('herre')
   const { user } = useAuth();
   const { getCodeUser, checkCodeUser, requestAddFriend, requestUnFriend} = usePersonal();
   const getCode = async () => {

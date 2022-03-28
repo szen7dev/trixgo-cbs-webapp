@@ -13,7 +13,7 @@ export const AccountingReportFinancePage: FC = () => {
     setToggleTab(index);
   };
   const handleOnFilter = useCallback((values) => {
-    console.log('🚀 ~ handleOnFilter ~ values', values)
+    
 
     // setPageParam(() => ({ ...values }));
     return true;

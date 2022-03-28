@@ -68,9 +68,7 @@ const AdminMember: FC = () => {
 				break;
 		}
 
-		console.log({ body })
 		const response = await DepartmentRepositories.addOrRemoveMemberToDepartment(body);
-		console.log({ response })
 		if (response.error === false) {
 			// Thành công 
 			toast.success('Cập nhật thành công');

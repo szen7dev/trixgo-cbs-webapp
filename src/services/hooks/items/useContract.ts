@@ -19,7 +19,7 @@ interface UseQueryContract {
     hasNextPage?: boolean;
 }
 
-export const useQueryItemContract = (companyID: string, params?: ListContractsPayload): UseQueryContract => {
+export const useQueryItemContract = (params?: ListContractsPayload): UseQueryContract => {
     const {
         isLoading,
         data,
@@ -27,12 +27,12 @@ export const useQueryItemContract = (companyID: string, params?: ListContractsPa
         fetchNextPage: fetchNextPageContract,
         hasNextPage
     } = useInfiniteQuery(
-        [`list_contract`, { params, companyID }],
+        [`list_contract`, { params }],
         async ({ pageParam }: any) =>
             ContractRepository.getListContract({
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
-                companyID,
+                companyID: params?.companyID,
                 keyword: params?.keyword,
                 ...params,
             }),
