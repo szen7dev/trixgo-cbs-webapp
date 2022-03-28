@@ -10,7 +10,6 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 
 export const ReceivablesCustomersCode: FC = () => {
   const handleOnFilter = useCallback((values) => {
-    
 
     // setPageParam(() => ({ ...values }));
     return true;

@@ -10,7 +10,6 @@ import ThreeDotsVertical from "assets/images/icon-3dots-vertical-gray.svg";
 
 export const AccountingTBookPage: FC = () => {
   const handleOnFilter = useCallback((values) => {
-    
 
     // setPageParam(() => ({ ...values }));
     return true;

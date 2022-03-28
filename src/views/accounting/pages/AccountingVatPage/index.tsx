@@ -13,7 +13,6 @@ export const AccountingVatPage: FC = () => {
   };
 
   const handleOnFilter = useCallback((values) => {
-    
 
     // setPageParam(() => ({ ...values }));
     return true;

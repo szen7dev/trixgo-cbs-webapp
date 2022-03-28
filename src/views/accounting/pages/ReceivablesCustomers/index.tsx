@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 export const ReceivablesCustomers: FC = () => {
   const handleOnFilter = useCallback((values) => {
     
-
     // setPageParam(() => ({ ...values }));
     return true;
   }, []);
