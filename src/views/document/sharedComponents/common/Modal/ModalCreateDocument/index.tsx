@@ -196,7 +196,7 @@ export const ModalCreateDocument: React.FC = () => {
 			}else{
 				formatValues.completeStatus = 0
 			}
-			
+
 			if (state.onSubmit) {
 				try {
 					state.onSubmit({

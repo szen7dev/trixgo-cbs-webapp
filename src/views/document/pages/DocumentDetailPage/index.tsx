@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
+// import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { useUpload } from 'services/hooks/useUpload';
 
 import { IconFile } from 'views/media/shareComponents/common';
@@ -16,6 +16,7 @@ import {
   ButtonMore,
   ButtonIcon,
   GroupActions,
+  GroupActionsPageDetail
 } from "views/document/sharedComponents/common";
 
 import "views/document/styles/document.css";
@@ -32,9 +33,11 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
+
+import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
+import { useMutationDocumentChild } from "services/hooks/document/useDocumentChild";
+
 import { useAuth } from "services/hooks/auth/useAuth";
-import { File } from "source-map-explorer/lib/types";
-import { FileProps } from "typings/file";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
 interface Props {
@@ -46,10 +49,15 @@ export const DocumentDetailPage: FC<Props> = () => {
   const params = useParams<any>();
   const { user } = useAuth();
   const { t } = useTranslation(["document"]);
+  const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
+  const { toggleModal, updateModal } = useContext(ModalContext);
 
-  const { toggleModal } = useContext(ModalContext);
+  // const { toggleModal } = useContext(ModalContext);
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
+
+    const { inserDocumentChildAsync, updateDocumentChildAsync } =
+    useMutationDocumentChild();
 
   const docChildPayload = useQueryListDocumentChild({
     parentID: params.docID,
@@ -121,6 +129,37 @@ export const DocumentDetailPage: FC<Props> = () => {
     }
 	}
 
+  const handleCreate = React.useCallback(async () => {
+    const departmentID = detailDocument?.project?._id;
+    const result = await onFetchDetailDepartmentAsync(departmentID);
+    toggleModal();
+    updateModal({
+      departmentId: departmentID,
+      departmentInfo: result,
+      title: "Thêm mới",
+      onSubmit: async (values: any) => {
+        const result = await inserDocumentChildAsync({
+          ...values,
+          departmentID,
+        });
+        if (result.status === 200) {
+          refetch();
+          toggleModal();
+          updateModal({
+            departmentInfo: {},
+          });
+        }
+      },
+    });
+  }, [
+    // departmentID,
+    inserDocumentChildAsync,
+    onFetchDetailDepartmentAsync,
+    refetch,
+    toggleModal,
+    updateModal,
+  ]);
+
   return (
     <div className="flex flex-col overflow-hidden bg-cbs-gray h-full">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -145,7 +184,7 @@ export const DocumentDetailPage: FC<Props> = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActions className="flex items-center flex-1" />
+        <GroupActionsPageDetail className="flex items-center flex-1" />
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
       </div>
@@ -264,6 +303,7 @@ export const DocumentDetailPage: FC<Props> = () => {
             <ButtonMore className="mr-6" />
             <ButtonIcon
               title="Thêm"
+              onClick={handleCreate}
               icon={() => (
                 <img src={iconAdd} alt="" className="mr-2.5 h-6 w-6" />
               )}

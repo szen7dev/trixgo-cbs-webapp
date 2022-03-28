@@ -73,7 +73,7 @@ export const LeftSideBar: FC = () => {
             </> : <></>
           }
 
-          <p className="t-leftsidebar-menu-title mb-2">Công việc</p>
+          <p className="t-leftsidebar-menu-title mb-1 mt-2">Công việc</p>
           <NavLink to={`/pcm/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc của tôi</span>
