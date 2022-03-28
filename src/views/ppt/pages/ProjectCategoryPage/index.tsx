@@ -21,7 +21,7 @@ import { dateLoadedPercentage, formatDate } from "utils/ppt";
 import { toast } from "react-toastify";
 
 import 'views/document/styles/document.css'
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
 
 const ProjectCategoryPage: FC = () => {
 	const history = useHistory();

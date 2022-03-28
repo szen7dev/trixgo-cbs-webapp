@@ -10,7 +10,7 @@ import ThreeDotVerticalIcon from "assets/images/icon-3dots-vertical-gray.svg";
 
 export const AccountingInOutPage: FC = () => {
   const handleOnFilter = useCallback((values) => {
-    console.log('🚀 ~ handleOnFilter ~ values', values)
+    
 
     // setPageParam(() => ({ ...values }));
     return true;

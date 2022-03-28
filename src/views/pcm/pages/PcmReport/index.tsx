@@ -12,7 +12,7 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 // import { Create, Update, Delete } from "../modal";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
 
@@ -49,7 +49,8 @@ const listReports = [
 export const PcmReport: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
+	const { listAppRoles: listPcmAdmin, totalRecord, nextPageListAppRoles: nextPagePcmAdmin, hasNextPageListAppRoles: hasNextPagePcmAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
+	
 	const { openModal } = useModal();
 
 	const getStateChecked = useCallback((id: string) => {

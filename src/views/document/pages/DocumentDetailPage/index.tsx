@@ -32,7 +32,7 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { File } from "source-map-explorer/lib/types";
 import { FileProps } from "typings/file";
 

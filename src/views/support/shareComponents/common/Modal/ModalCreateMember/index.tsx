@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetUsersByCompany } from "services/hooks/pcm/usePcmAdminDetail";
+import { useGetUsersByCompany } from "services/hooks/auth/useAdmin";
 import { useAppUser } from 'services/hooks/apps/useAppUser';
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";

@@ -18,7 +18,7 @@ import { DropdownSearchable } from "shareComponents/common";
  */
 import { ModalProps } from 'typings/items/area';
 import { CompanyPayload } from 'typings/companies';
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useArea } from "services/hooks/items/useArea";
 import { useCompany } from 'services/hooks/useCompanies';
 

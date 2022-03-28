@@ -1,22 +1,22 @@
 import { FC, useState } from "react";
 import { APP_ID } from "apis/localdb";
-import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
-import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
-import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useGetListAppRoleMenuFromAdmin, useAdmin } from "services/hooks/auth/useAdmin";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { useLocation } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 
 const CmcsAdminAuthorTab: FC = () => {
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
-	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = usePcmAdminDetail({ appID: funcID, keyword: "" }); 
-	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: typeAppRoleDetail == "1" ? APP_ID.PCM.menuPcmApp.id : APP_ID.PCM.menuPcmProject.id });
-	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
-	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: typeAppRoleDetail });
+	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CMCS.id, parentID: typeAppRoleDetail == "1" ? APP_ID.CMCS.menuCmcsApp.id : APP_ID.CMCS.menuCmcsContract.id });
+	const { listAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
+	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CMCS.id, type: typeAppRoleDetail });
 
-	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: funcID });
+	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.CMCS.id, companyID: companyAppRoleDetail, roleID: funcID });
 
-	const data = listPcmAdmin.map(e => ({
+	const data = listAppRoles.map(e => ({
 		_id: e._id,
 		content: e.name
 	}));

@@ -1,18 +1,18 @@
 import { FC } from "react";
 import { APP_ID } from "apis/localdb";
-import { useGetListAppRoleMenuFromAdmin, usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
-import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
-import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useGetListAppRoleMenuFromAdmin, useAdmin } from "services/hooks/auth/useAdmin";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { useHistory, useParams } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
 
 const AuthorTab: FC = () => {
 	const history = useHistory();
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmApp.id });
-	const { listPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+	const { listAppRoles: listPcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { id } = useParams<{ id: string }>();
-	const { nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: "" });
+	const { nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: "" });
 
 	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.PCM.id, companyID: companyAppRoleDetail, roleID: id });
 

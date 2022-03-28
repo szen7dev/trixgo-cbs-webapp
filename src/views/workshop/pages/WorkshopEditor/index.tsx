@@ -11,7 +11,7 @@ import SubjectRepositories from "apis/training/SubjectRepositories";
 import type { Editor as EditorType, EditorEvent } from "tinymce";
 import { User } from "typings/user";
 import { toast } from "react-toastify";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 const WorkshopEditor: FC = () => {
   const { user } = useAuth();

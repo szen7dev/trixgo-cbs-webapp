@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { Link } from 'react-router-dom';
 
 export const LinkMenuLeftSideBar: FC = () => {

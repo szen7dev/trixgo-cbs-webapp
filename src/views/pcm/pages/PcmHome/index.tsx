@@ -3,7 +3,7 @@ import { FC, useState, useEffect } from "react";
 import { Header, ListTable, ClassifyTable } from "views/pcm/shareComponents/common";
 import { useTask } from "services/hooks/useTask";
 import { Loader } from "shareComponents/common/Loader";
-import { useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { RouteProps, Redirect, Route } from "react-router-dom";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const ProtectedRoute: FC<RouteProps> = ({ ...routeProps }) => {
     const { hasAuthenticated } = useAuth();

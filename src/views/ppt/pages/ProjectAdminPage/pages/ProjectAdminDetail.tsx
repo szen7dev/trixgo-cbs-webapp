@@ -11,16 +11,16 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { CreateNewAdminMember, DeleteMembers } from "../modal";
-import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 
 const ProjectAdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: keyword });
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {

@@ -16,7 +16,8 @@ import iconBigFolder from "assets/images/icons8-opened-folder-240.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useAuth, useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 
 /*=====7.OTHER=====*/

@@ -7,7 +7,7 @@ import { Loader } from "shareComponents/common/Loader";
 import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 
-import { useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";

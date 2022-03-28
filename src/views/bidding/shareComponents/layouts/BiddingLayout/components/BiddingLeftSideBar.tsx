@@ -14,7 +14,7 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 /*=====5.TYPINGS=====*/
 
 /*=====6.HOOKS/APIS=====*/
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 /*=====7.OTHER=====*/
 
