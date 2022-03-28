@@ -8,7 +8,7 @@ import { ModalProvider } from "views/document/contexts/modal";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 
 /*=====MODALS COMPONENT=====*/
-import { ModalCreateDocument } from 'views/document/sharedComponents/common';
+import { ModalCreateDocument, ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
 // import ErrorPage from 'views/authentication/Error'

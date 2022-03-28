@@ -216,7 +216,7 @@ export const useUpload = ({
         // Cast to a File() type
         return <File>theBlob;
     }
-
+    
     return {
         generateLinkS3,
         uploadFileToS3,

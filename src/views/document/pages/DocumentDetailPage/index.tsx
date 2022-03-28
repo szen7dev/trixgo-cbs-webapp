@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useUpload } from 'services/hooks/useUpload';
 
-import { ModalProvider } from "views/document/contexts/modal";
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 
@@ -14,7 +13,7 @@ import {
   // ButtonCreate,
   ButtonMore,
   ButtonIcon,
-  GroupActions,
+  GroupActionsPageDetail
 } from "views/document/sharedComponents/common";
 
 import "views/document/styles/document.css";
@@ -30,6 +29,7 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
+
 import { useAuth } from "services/hooks/auth/useAuth";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
@@ -139,7 +139,7 @@ export const DocumentDetailPage: FC = () => {
           </svg>
         </button>
         {/* <DropdownFilterButton /> */}
-        <GroupActions className="flex items-center flex-1" />
+        <GroupActionsPageDetail className="flex items-center flex-1" />
         {/* <ButtonCreate onClick={toggleModal} /> */}
         {/* <ButtonMore /> */}
       </div>

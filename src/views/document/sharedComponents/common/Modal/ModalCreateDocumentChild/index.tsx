@@ -77,17 +77,17 @@ const useInitialValues = (
 	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 
-	if (!companyID || !departmentID) {
-		return {
-			listPackage: [],
-			listContactSender: [],
-			listContactReceiver: [],
-			fields: [],
-			properties: [],
-			listStorages: [],
-			listContracts: [],
-		};
-	}
+	// if (!companyID || !departmentID) {
+	// 	return {
+	// 		listPackage: [],
+	// 		listContactSender: [],
+	// 		listContactReceiver: [],
+	// 		fields: [],
+	// 		properties: [],
+	// 		listStorages: [],
+	// 		listContracts: [],
+	// 	};
+	// }
 
 	return {
 		listPackage,
@@ -127,8 +127,8 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		listStorages,
 		properties,
 	} = useInitialValues(
-		state.departmentId,
-		state?.departmentInfo?.company?._id || "",
+		document.project?._id,
+		state?.departmentInfo?.company?._id || "", // companyID
 		keywordPackage,
 		keywordSender,
 		keywordReceiver,
@@ -139,13 +139,13 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 	);
 
 	const initialValues = {
-		field: state.initialValues?.field?._id,
-		package: state.initialValues?.package?._id,
-		project: state.initialValues?.project?._id,
-		receiver: state.initialValues?.receiver?._id,
-		sender: state.initialValues?.sender?._id,
-		storage: state.initialValues?.storage?._id,
-		property: state.initialValues?.property?._id,
+		field: document.field?._id,
+		package: document?.package?._id,
+		project: document?.project?._id,
+		receiver: document?.receiver?._id,
+		sender: document?.sender?._id,
+		storage: document?.storage?._id,
+		property: document?.property?._id,
 	}
 
 	const listFormFieldsDropdown = React.useMemo((): {
@@ -391,7 +391,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																	inputProps={{
 																		className: "w-full",
 																		placeholder: "Ngày tháng...",
-																		dateFormat: "dd/MM/yyyy",
+																		// dateFormat: "dd/MM/yyyy",
 																	}}
 																/>
 															</div>
