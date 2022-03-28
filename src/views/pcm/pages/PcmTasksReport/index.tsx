@@ -15,7 +15,7 @@ import { Loader } from "shareComponents/common/Loader";
  * Hooks, Utils
  */
 import { useTask } from "services/hooks/useTask";
-import { useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { SearchInput } from "shareComponents/common";
 import { debounce } from "lodash";

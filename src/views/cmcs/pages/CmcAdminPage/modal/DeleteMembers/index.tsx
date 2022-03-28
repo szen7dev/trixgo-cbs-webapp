@@ -2,21 +2,27 @@ import { FC } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
-import { DepartmentRepositories } from "apis/item/department";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
 
 const DeleteMembers: FC<any> = ({ appID, idsChecked, setIdsChecked, refetchGetListAppRoleMenu }) => {
 	const { closeModal } = useModal();
+	const { removeMembersMutateAsync, refetchAppRolesDetail } = useAdminDetail({ appID, keyword: "" });
 
 	const onDelete = async () => {
-		const response = await DepartmentRepositories.addOrRemoveMemberToDepartment({ departmentID: appID, membersRemove: idsChecked });
+		const result = await removeMembersMutateAsync({
+			appRoleID: appID,
+			membersRemoveID: idsChecked
+		});
 
-		if (!response.error) {
+		if (!result.error) {
+			refetchAppRolesDetail();
+			closeModal();
+			setIdsChecked([]);
 			toast.success('Xoá dữ liệu thành công');
 			refetchGetListAppRoleMenu();
 		} else {
-			toast.error('Xoá dữ liệu thất bại');
+			toast.error(result?.data?.message);
 		}
-		closeModal();
 	};
 
 	return (

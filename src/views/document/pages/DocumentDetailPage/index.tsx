@@ -32,7 +32,7 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { File } from "source-map-explorer/lib/types";
 import { FileProps } from "typings/file";
 
@@ -91,7 +91,7 @@ export const DocumentDetailPage: FC<Props> = () => {
     try {
         if (!event.target.files || !event.target.files.length) return;
         const arrFileID = []
-
+        
         // Upload files
         for (const [key, file] of Object.entries(event.target.files)) {
           const { _id } = await addFileToUpload({
@@ -144,10 +144,10 @@ export const DocumentDetailPage: FC<Props> = () => {
             />
           </svg>
         </button>
-        <DropdownFilterButton />
+        {/* <DropdownFilterButton /> */}
         <GroupActions className="flex items-center flex-1" />
-        <ButtonCreate onClick={toggleModal} />
-        <ButtonMore />
+        {/* <ButtonCreate onClick={toggleModal} /> */}
+        {/* <ButtonMore /> */}
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
@@ -220,10 +220,10 @@ export const DocumentDetailPage: FC<Props> = () => {
                 <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
               )}
             /> */}
-            	<label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
-                <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
-                <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
-              </label>
+            <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
+              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
+              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
+            </label>
           </div>
           <TableFileAttach fileAttachs={documentFiles}>
             {Number(totalDocumentFile) - documentFiles.length > 0 && (

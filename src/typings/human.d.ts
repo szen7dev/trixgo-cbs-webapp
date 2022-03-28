@@ -369,7 +369,7 @@ export type UpdateContactDocumentPayload = ContactDocument & {
 
 export type UpdateFileContactDocumentPayload = {
     contactDocumentID: string;
-    fileID: string;
+    filesID: array;
 }
 
 export type RemoveFileContactDocumentPayload = {

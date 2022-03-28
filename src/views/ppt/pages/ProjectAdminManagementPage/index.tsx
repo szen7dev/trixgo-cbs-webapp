@@ -3,7 +3,7 @@ import {  useParams, useHistory } from 'react-router-dom';
 import { DepartmentRepository } from 'apis/item';
 
 import AppAdminTab from "./tabs/AppAdminTab";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { toast } from "react-toastify";
 
 const ProjectAdminManagementPage: FC = (): any => {

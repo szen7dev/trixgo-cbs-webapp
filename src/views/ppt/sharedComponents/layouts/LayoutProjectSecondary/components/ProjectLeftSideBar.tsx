@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import fakeThumbnail from "assets/images/avatar.jpg";
 // import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink, useRouteMatch, generatePath, useParams } from 'react-router-dom';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 
 type RouteItem = {

@@ -6,7 +6,7 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import { SupportLayout } from "views/support/shareComponents/layouts";
 
 /*=====4.HOOK=====*/
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";

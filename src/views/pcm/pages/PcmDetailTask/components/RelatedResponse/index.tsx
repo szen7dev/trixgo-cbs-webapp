@@ -24,7 +24,7 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
  * Hooks, custom
  */
 import { useSocket } from "services/hooks/useSocket";
-import { useAuth } from 'services/hooks/useAuth';
+import { useAuth } from 'services/hooks/auth/useAuth';
 import { useTask } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";

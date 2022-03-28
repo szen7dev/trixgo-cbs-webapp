@@ -22,7 +22,7 @@ import imgBusiness2 from "assets/images/Business.png";
 
 import { abbreviateNumber } from 'utils/converter';
 import { useSocket } from "services/hooks/useSocket";
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useMedia } from 'services/hooks/useMedia';
 import { useNotification } from 'services/hooks/useNotification';
 import PcmRepository from 'apis/pcm';

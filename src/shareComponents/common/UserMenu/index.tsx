@@ -6,7 +6,7 @@ import CogIcon from "assets/icons/Cog";
 import QuestionMarkCircleIcon from "assets/icons/QuestionMarkCircle";
 import LogoutIcon from "assets/icons/Logout";
 
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 export const UserMenu: FC = () => {
   const { user, signOut } = useAuth();

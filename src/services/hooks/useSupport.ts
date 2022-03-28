@@ -179,11 +179,9 @@ interface UselistCompanyAccess {
     listCompany: Array<listCompany>
 }
 export const useListCompanyAccess = (params?: ListCompanyAccessPayload) : UselistCompanyAccess => {
-    console.log('params1',params)
     const infinityQuery = useInfiniteQuery(
         ["list_company_access", params],
         async ({ data }: any) => {
-            console.log('params2',params)
             return SupportRepository.listCompanyAccess(
                 params
             )
@@ -196,7 +194,6 @@ export const useListCompanyAccess = (params?: ListCompanyAccessPayload) : Uselis
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
-    console.log('infinityQuery',infinityQuery)
     const { data } = infinityQuery;
     const listCompany = [].concat(...(data?.pages || []).map((d: any) => d.data)).filter(Boolean);
     return {

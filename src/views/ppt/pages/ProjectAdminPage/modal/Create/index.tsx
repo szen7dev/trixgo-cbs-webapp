@@ -3,22 +3,22 @@ import { FC, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 const Create: FC = () => {
   const { closeModal } = useModal();
   const [name, setName] = useState("");
   const [type, setType] = useState<any>("");
-  const { createAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  const { createAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 
   const onCreate = async () => {
     if (!name || !type) {
       toast.error("Vui lòng nhập đầy đủ nội dung và phân loại.");
       return;
     }
-    if (!["1", "2", "3"].includes(type)) {
-      toast.error("Phân loại chỉ có giá trị 1,2 hoặc 3. Vui lòng nhập lại.");
+    if (!["1", "2"].includes(type)) {
+      toast.error("Phân loại chỉ có giá trị 1 hoặc 2. Vui lòng nhập lại.");
       return;
     };
 
@@ -28,7 +28,7 @@ const Create: FC = () => {
       name
     });
     if (!result.error) {
-      refetchPcmAdmin();
+      refetchListAppRoles();
       setName("");
       closeModal();
       toast.success('Tạo mới dữ liệu thành công');
@@ -62,7 +62,7 @@ const Create: FC = () => {
       <section className="px-10 mt-2">
         <input
           type="text"
-          placeholder="Phân loại (1,2,3)"
+          placeholder="Phân loại (1,2)"
           className="h-12 w-full border border-primary-border outline-none px-8"
           value={type}
           onChange={(e) => setType(e.target.value)}

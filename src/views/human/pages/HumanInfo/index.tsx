@@ -29,7 +29,8 @@ import { APP_ID } from "apis/localdb";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchDetailHuman, useUpdateContactMutation } from "services/hooks/useHuman";
 import { useModal } from "services/hooks/useModal";
-import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 /*=====7.OTHER=====*/
 
@@ -320,14 +321,15 @@ export const HumanInfo: FC = () => {
             documents: detailHuman.documents
           }}
         />
-        <WorkHistory humanId={id} />
+        <WorkHistory humanId={id} companyID={detailHuman?.company?._id}/>
         <WorkExperience
           humanId={id}
           humanInfo={detailHuman}
+          companyID={detailHuman?.company?._id}
         />
-        <ExperienceAppointment humanId={id} humanInfo={detailHuman} />
-        <Education humanId={id} />
-        <Certificate humanId={id} />
+        <ExperienceAppointment humanId={id} humanInfo={detailHuman} companyID={detailHuman?.company?._id}/>
+        <Education humanId={id} companyID={detailHuman?.company?._id} />
+        <Certificate humanId={id} companyID={detailHuman?.company?._id}/>
       </section>
     </main>
   );

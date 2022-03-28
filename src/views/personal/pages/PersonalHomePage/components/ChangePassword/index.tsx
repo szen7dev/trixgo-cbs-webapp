@@ -21,7 +21,7 @@ import EyeOpenIcon from "assets/images/icon-eye-open.svg";
 import { UpdatePasswordUser } from 'typings/personal/user';
 /*=====6.HOOKS/APIS=====*/
 import { useUser } from 'services/hooks/personal/useUser';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 /*=====7.OTHER=====*/
 
 SwiperCore.use([Pagination]);
