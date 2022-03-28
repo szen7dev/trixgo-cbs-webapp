@@ -16,6 +16,10 @@ interface StateTwo {
 
 type State = StateOne | StateTwo | string | number
 
+/**
+ * @deprecated Use the package `react-table` instead.
+ * this hook will be refactored in the future;
+ */
 function useCheckedList<S extends State>(initialData: Array<S>): {
 	assigned: StateObject,
 	checked: Array<S>,

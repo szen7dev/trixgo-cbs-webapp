@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -12,9 +12,22 @@ import type { Editor as EditorType, EditorEvent } from "tinymce";
 import { User } from "typings/user";
 import { toast } from "react-toastify";
 import { useAuth } from "services/hooks/useAuth";
+import { SerialQueue } from "utils/ppt";
+import { useUpload } from "services/hooks/useUpload";
 
+const serialQueue = new SerialQueue(1);
 const WorkshopEditor: FC = () => {
   const { user } = useAuth();
+  const isMounted = useRef(false);
+  const isSetted = useRef(false);
+  const timeout = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const editorRef = useRef<EditorType>();
   const { workshopID } = useParams<{ workshopID: string }>();
@@ -34,12 +47,13 @@ const WorkshopEditor: FC = () => {
       enabled: false,
       onSuccess: (data) => {
         try {
-          if (data && "content" in data.data) {
+          if (data && "content" in data.data && !isSetted.current) {
             editorRef.current?.setContent(data.data.content);
           }
         } catch (error) {
           console.log(error);
         }
+        isSetted.current = true;
       },
     }
   );
@@ -49,7 +63,7 @@ const WorkshopEditor: FC = () => {
     onSuccess(lesson) {
       try {
         toast.success("Cập nhật thành công");
-        if ("_id" in lesson.data) {
+        if ("_id" in lesson.data && isMounted.current) {
           lesson.data.userCreate = user as User;
           queryClient.setQueryData(["subjects_detail", workshopID], lesson);
         }
@@ -60,11 +74,38 @@ const WorkshopEditor: FC = () => {
     },
   });
 
-  async function handleSave(e: EditorEvent<any>) {
-    if (editorRef.current && data?.data._id) {
-      mutate({ subjectID: data.data._id, content: editorRef.current.getContent() });
+  const { uploadFileToS3, generateLinkS3 } = useUpload({ appID: "61e049e7fdebf77b072d1b15" });
+
+  function handleSave(e: EditorEvent<Record<string, any>>) {
+    if (data?.data._id) {
+      if (e.immediate) {
+        if (timeout.current) clearTimeout(timeout.current);
+        return mutate({ subjectID: data.data._id, content: editorRef.current?.getContent() });
+      }
+      serialQueue.addIfNotRunning(() => {
+        return new Promise((resolve) => {
+          timeout.current = setTimeout(() => {
+            mutate({ subjectID: data.data._id, content: editorRef.current?.getContent() });
+            resolve(true);
+          }, 5000);
+        });
+      });
     }
   }
+
+  const imagesUploadHandler: EditorType["settings"]["images_upload_handler"] = async (blobInfo, success, failure) => {
+    try {
+      const file = new File([blobInfo.blob()], blobInfo.filename(), { type: blobInfo.blob().type });
+      const { signedUrl, result } = await generateLinkS3({ file, fileType: 1 });
+      await uploadFileToS3({
+        file,
+        signedUrl,
+      });
+      success(process.env.REACT_APP_URL_S3 + result?.path);
+    } catch (error: any) {
+      failure(error.message);
+    }
+  };
 
   return (
     <>
@@ -119,13 +160,15 @@ const WorkshopEditor: FC = () => {
             },
             menubar: true,
             plugins: [
-              "advlist autolink lists link image charmap print preview anchor autosave",
+              "advlist autolink lists link image charmap print preview anchor",
               "searchreplace code",
               "insertdatetime media table paste code help wordcount",
             ],
-            images_upload_url: "/api/upload/image",
             fullpage_default_title: "My default page title",
+
+            // images_upload_url: "/api/upload/image",
             file_picker_types: "image",
+            images_upload_handler: imagesUploadHandler,
             toolbar:
               "undo redo | formatselect | " +
               "bold italic backcolor | alignleft aligncenter " +
@@ -133,20 +176,19 @@ const WorkshopEditor: FC = () => {
               "removeformat | help | image",
             content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             content_css: "document",
-            save_enablewhendirty: true,
+            // save_enablewhendirty: true,
             setup(editor) {
-              editor.on("StoreDraft", function (e) {
-                console.log(e);
+              editor.on("Paste input Undo Redo", () => {
+                editor.save();
               });
               editor.ui.registry.addMenuItem("basicitem", {
                 text: "Save",
-                onAction: function () {
-                  editor.save();
+                onAction: function (e) {
+                  editor.save({ immediate: true });
                 },
                 icon: "save",
               });
             },
-            autosave_interval: "5s",
           }}
         />
       </form>
