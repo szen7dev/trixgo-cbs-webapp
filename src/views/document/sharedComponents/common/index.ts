@@ -6,6 +6,7 @@ export * from './DocumentNav';
 export * from './EditButton';
 export * from './FileUploadRow';
 export * from './GroupActions';
+export * from './GroupActionsPageDetail';
 export * from './InputClearable';
 export * from './Modal';
 export * from './SearchInput';
