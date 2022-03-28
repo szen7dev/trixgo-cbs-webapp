@@ -1,5 +1,5 @@
 /*=====LIBRARY=====*/
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { ModalProvider } from "views/document/contexts/modal";
@@ -19,7 +19,6 @@ import {
 	DocumentProjectPage,
 	DocumentProfilePage,
 	DocumentReportPage,
-	DocumentOfPackagePage
 } from 'views/document/pages';
 import {
 	ProjectBiddingPage,
