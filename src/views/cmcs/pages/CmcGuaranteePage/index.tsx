@@ -42,7 +42,6 @@ export const CmcGuaranteePage: FC = () => {
   }
 
   const handleOnFilter = useCallback((values) => {
-    
 
     // setPageParam(() => ({ ...values }));
     return true;

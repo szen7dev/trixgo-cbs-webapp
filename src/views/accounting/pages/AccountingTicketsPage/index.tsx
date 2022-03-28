@@ -115,7 +115,6 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   }
 
   const handleOnFilter = useCallback((values) => {
-    
 
     // setPageParam(() => ({ ...values }));
     return true;
