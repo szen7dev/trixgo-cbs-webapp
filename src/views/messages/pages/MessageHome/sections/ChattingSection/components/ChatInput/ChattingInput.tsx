@@ -150,6 +150,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
                         fakeUrl: window.URL.createObjectURL(file.file),
                         url: window.URL.createObjectURL(file.file),
                         name: file.file.name,
+                        nameOrg: file.file.name,
                         size: file.file.size,
                         _id: uuidv4(),
                         type: file.file.type,

@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useEffect, useRef, useState} from "react";
+import React, {FC, Fragment, useCallback, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from "@headlessui/react";
 import Close from "assets/icons/Close";
 import {map as _map} from "lodash";
@@ -31,6 +31,13 @@ export const PopupSendImageAndFile: FC = () => {
             }
         }, 500)
     },[isShowPopupSendFiles])
+
+    const haveLargeFile = useCallback(() => {
+        if (isShowPopupSendFiles) {
+            return popSendFilesContent.files.some(file => file.file.size > 50000000);
+        }
+        return false
+    }, [isShowPopupSendFiles])
 
     const renderFileTypeImage = (file:any) => {
         const filename = file.name;
@@ -164,7 +171,7 @@ export const PopupSendImageAndFile: FC = () => {
             sender: {
                 _id: profileId
             },
-            type: popSendFilesContent.sendType==="image"?1:2,
+            type: (popSendFilesContent.sendType==="image")? ((!useCompress&&haveLargeFile()) ? 2 : 1) : 2,
             usersTag: [],
             createAt: new Date(),
             files: popSendFilesContent.files
@@ -176,11 +183,6 @@ export const PopupSendImageAndFile: FC = () => {
 
     const handleSetUseCompress = (value: boolean) => {
         setUseCompress(value);
-        // if (!value) {
-        //     dispatch(setSendType("file"));
-        // } else {
-        //     dispatch(setSendType("image"));
-        // }
     }
 
     useEffect(() => {
@@ -275,6 +277,14 @@ export const PopupSendImageAndFile: FC = () => {
                                             className="form-check-input" type="checkbox" value="" id="compress"/>
                                         <label className={"ml-2"} htmlFor="compress">Nén ảnh</label>
                                     </div>
+                                }
+                                {
+                                    popSendFilesContent.defaultSendType === "image" &&
+                                    haveLargeFile() &&
+                                    !useCompress &&
+                                    <small className={"text-negative"}>
+                                        Bạn sắp gửi có ảnh có kích thước lớn hơn <b>50MB</b> dưới dạng <b>HD</b>. Việc này có thể làm trải nghiệm ứng dụng của bạn kém đi.
+                                    </small>
                                 }
                                 <input
                                     ref={inputDescription}

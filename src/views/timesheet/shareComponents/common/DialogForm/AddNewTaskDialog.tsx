@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useModal } from "services/hooks/useModal";
 import DatePicker from "react-datepicker";
 
-import DropdownSearchable from "shareComponents/common/DropdownSearch";
+import {DropdownSearchable} from "shareComponents/common";
 
 import Close from "assets/icons/Close";
 import AttachIcon from "assets/images/icons8-attach-50.png";
