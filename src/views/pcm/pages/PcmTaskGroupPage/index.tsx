@@ -30,7 +30,12 @@ export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
     refetchListTask: refetchListTaskOutDate
-  } = useTask({ keyword, groupID, typeStatus: "1", statusNe: "3" });
+  } = useTask({
+    params: {
+      keyword, groupID, typeStatus: "1", statusNe: "3"
+    },
+    isFetch: true
+  });
   
   // Việc tuần tới
   const {
@@ -39,7 +44,12 @@ export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
     refetchListTask: refetchListTaskNextWeek
-  } = useTask({ keyword, groupID, typeStatus: "2", statusNe: "3" });
+  } = useTask({
+    params: {
+      keyword, groupID, typeStatus: "2", statusNe: "3"
+    },
+    isFetch: true
+  });
 
   // Việc 7 ngày tới
   const {
@@ -47,7 +57,12 @@ export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
     refetchListTask: refetchListTaskMore
-  } = useTask({ keyword, groupID, typeStatus: "3", statusNe: "3" });
+  } = useTask({
+    params: {
+      keyword, groupID, typeStatus: "3", statusNe: "3"
+    },
+    isFetch: true
+  });
 
   // Việc hoàn thành
   const {
@@ -55,7 +70,12 @@ export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
     totalRecord: completeRecord,
     nextPageListTask: nextPagetasksCompleted,
     refetchListTask: refetchListtasksCompleted
-  } = useTask({ keyword, groupID, status: "3" });
+  } = useTask({
+    params: {
+      keyword, groupID, status: "3"
+    },
+    isFetch: true
+  });
 
   // Nếu keword thay đổi thì call api
   useEffect(() => {

@@ -7,8 +7,8 @@ import { useMutation } from "react-query";
 
 import { nl2p } from 'utils';
 import HumanAvatar from "assets/images/human-avatar.svg";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import PDFIcon from "assets/images/icons8-pdf-48 1.png";
+// import DotsVerticalIcon from "assets/icons/DotsVertical";
+// import PDFIcon from "assets/images/icons8-pdf-48 1.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import IconDownload from "assets/images/icons8-download-48_3.svg";
 import TestImage from "assets/images/home-slide-img1.jpg";
