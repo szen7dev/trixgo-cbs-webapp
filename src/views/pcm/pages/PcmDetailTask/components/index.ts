@@ -7,3 +7,5 @@ export * from './RelatedResponseItem';
 export * from './SideBar';
 export * from './CommentContainer';
 export * from './Modal';
+export * from './CreatorUploadedFile';
+export * from './OwnerUploadedFile';

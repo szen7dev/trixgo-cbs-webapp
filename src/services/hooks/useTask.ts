@@ -49,7 +49,6 @@ type UseTaskProps = Partial<{
 }>
 
 export const useTask = ({
-  //  keyword = "", statusNe, groupID, typeStatus, type, status="",
   params = {},
   isFetch = false
 }: UseTaskProps): UseTask => {
@@ -81,13 +80,6 @@ export const useTask = ({
       return TaskRepository.listTask({
         lastestID: pageParam || "",
         ...params
-        // keyword,
-        // groupID: groupID || "",
-        // lastestID: pageParam || "",
-        // type: type || "",
-        // statusNe: statusNe || "",
-        // status,
-        // typeStatus: typeStatus || "",
       });
     },
     {
