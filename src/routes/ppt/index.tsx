@@ -1,5 +1,5 @@
 /*=====LIBRARY=====*/
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { ModalProvider } from "views/document/contexts/modal";
@@ -19,7 +19,6 @@ import {
 	DocumentProjectPage,
 	DocumentProfilePage,
 	DocumentReportPage,
-	DocumentOfPackagePage
 } from 'views/document/pages';
 import {
 	ProjectBiddingPage,
@@ -121,10 +120,7 @@ const PPTRoutes: FC = () => {
 									</ModalProvider>
 								</LayoutSecondary>
 							</Route>
-							<ModalProvider>
-								<Route exact path='/ppt/project/:id/document/:docID' component={DocumentDetailPage} />
-								<ModalCreateDocumentChild />
-							</ModalProvider>
+							<Route exact path='/ppt/project/:id/document/:docID' component={DocumentDetailPage} />
 							<Route exact path='/ppt/project/:id/photo' component={ProjectPhotoPage} />
 							<Route exact path='/ppt/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />
 							<Route path='/ppt/project/:id/drawing'>
