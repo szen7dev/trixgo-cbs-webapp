@@ -26,6 +26,7 @@ import {UnreadMessageController} from "./sections/UnreadMessages";
 import {FolderAddConversationPopup} from "./sections/MessageList/components/ListFolders/FolderAddConversationPopup";
 import {NotificationMutePopup} from "./sections/SettingMessageDetail/components/Notification/NotificationMutePopup";
 import {ConversationConfig} from "./sections/ChattingSection/components/HeaderConversation/ConversationConfig";
+import {setIsReviewOldMessages} from "../../../../redux/reducer/messages/ListMessage";
 
 export const MessageContext = createContext<{
     currentChat: string;
@@ -77,6 +78,7 @@ export const MessagesHome:FC = () => {
         currentChat&&setShowMenu(true)
         currentChat&&setShowSearch(false)
         currentChat&&dispatch(dismissSearchMode({conversationId: currentChat}));
+        currentChat&&dispatch(setIsReviewOldMessages({conversationId: currentChat, isReview: false}));
     }, [currentChat])
 
     return (

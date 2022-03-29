@@ -12,7 +12,7 @@ import {
 import { useQueryListFriend } from "services/hooks/users/useFriend";
 import { useQueryListCompany } from "services/hooks/useCompanies";
 
-import DropdownSearchable from "shareComponents/common/DropdownSearch";
+import {DropdownSearchable} from "shareComponents/common";
 
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";

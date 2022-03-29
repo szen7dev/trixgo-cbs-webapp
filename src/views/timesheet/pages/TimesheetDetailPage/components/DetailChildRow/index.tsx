@@ -3,7 +3,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import debounce from "lodash/debounce";
 import moment from "moment";
 
-import DropdownSearchable from "shareComponents/common/DropdownSearch";
+import {DropdownSearchable} from "shareComponents/common";
 
 import MenuChildRow from "./MenuChildRow";
 

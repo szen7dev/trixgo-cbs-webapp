@@ -51,6 +51,9 @@ const initialState : {
         },
         selectedState: {
             [key: string]: boolean
+        },
+        isReviewOldMessage: {
+            [key: string]: boolean
         }
     }
 } = {
@@ -68,7 +71,8 @@ const initialState : {
         replyMessage: {},
         listMessagePinned: {},
         listSelectedMessage: {},
-        selectedState: {}
+        selectedState: {},
+        isReviewOldMessage: {}
     }
 };
 
@@ -434,6 +438,17 @@ const listMessageSlice = createSlice({
                     [conversationId] : {}
                 }
             }
+        },
+
+        setIsReviewOldMessages (state, action) {
+            const {conversationId, isReview} = action.payload;
+            state.data = {
+                ...state.data,
+                isReviewOldMessage: {
+                    ...state.data.isReviewOldMessage,
+                    [conversationId]: isReview
+                }
+            }
         }
     },
     extraReducers: {}
@@ -460,6 +475,7 @@ export const {
     deleteMessageInConversations,
     revokeMessageInConversation,
     updateSeenMessage,
-    deleteAllMessagesInConversation
+    deleteAllMessagesInConversation,
+    setIsReviewOldMessages
 } = listMessageSlice.actions;
 export default listMessageSlice.reducer;
