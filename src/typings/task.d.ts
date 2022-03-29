@@ -94,8 +94,10 @@ export interface updateTaskPayload {
   name?: string;
   status?: number;
   priority?: number;
-  expiredTime?: string
-  isAddSignature?: boolean
+  expiredTime?: string;
+  isAddSignature?: boolean;
+  authorAttachs?: Array<string>;
+  assigneeAttachs?: Array<string>;
 }
 
 export interface addTaskResponse {
