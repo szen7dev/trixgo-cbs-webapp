@@ -18,6 +18,7 @@ import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useQueryListStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
+import { Document } from "typings/ppt";
 
 const fieldInputByRow = [
 	{ title: "Số lượng", name: "amount", type: "text" },
@@ -72,21 +73,21 @@ const useInitialValues = (
 		keyword: keywordProperty,
 		type: 2,
 		companyID,
-	}); // tính chất
+	});
 	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 
-	if (!companyID || !departmentID) {
-		return {
-			listPackage: [],
-			listContactSender: [],
-			listContactReceiver: [],
-			fields: [],
-			properties: [],
-			listStorages: [],
-			listContracts: [],
-		};
-	}
+	// if (!companyID || !departmentID) {
+	// 	return {
+	// 		listPackage: [],
+	// 		listContactSender: [],
+	// 		listContactReceiver: [],
+	// 		fields: [],
+	// 		properties: [],
+	// 		listStorages: [],
+	// 		listContracts: [],
+	// 	};
+	// }
 
 	return {
 		listPackage,
@@ -99,22 +100,15 @@ const useInitialValues = (
 	};
 };
 
-export const ModalCreateDocumentChild: React.FC = () => {
-	const { state, toggleModal, updateModal } = useContext(ModalContext);
+type Props = {
+	isShow: boolean;
+	toggle: () => void;
+	document: Document
+}
 
-	const initialValues = React.useMemo(() => {
-		const obj = { ...state.initialValues };
-		return {
-			...obj,
-			field: state.initialValues?.field?._id,
-			package: state.initialValues?.package?._id,
-			project: state.initialValues?.project?._id,
-			receiver: state.initialValues?.receiver?._id,
-			sender: state.initialValues?.sender?._id,
-			storage: state.initialValues?.storage?._id,
-			property: state.initialValues?.property?._id,
-		}
-	}, [state.initialValues]);
+export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, document }) => {
+	const { state } = useContext(ModalContext);
+	console.log({ document });
 
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
@@ -133,8 +127,8 @@ export const ModalCreateDocumentChild: React.FC = () => {
 		listStorages,
 		properties,
 	} = useInitialValues(
-		state.departmentId,
-		state?.departmentInfo?.company?._id || "",
+		document.project?._id,
+		state?.departmentInfo?.company?._id || "", // companyID
 		keywordPackage,
 		keywordSender,
 		keywordReceiver,
@@ -143,7 +137,17 @@ export const ModalCreateDocumentChild: React.FC = () => {
 		keywordStorage,
 		keywordFields
 	);
-	
+
+	const initialValues = {
+		field: document.field?._id,
+		package: document?.package?._id,
+		project: document?.project?._id,
+		receiver: document?.receiver?._id,
+		sender: document?.sender?._id,
+		storage: document?.storage?._id,
+		property: document?.property?._id,
+	}
+
 	const listFormFieldsDropdown = React.useMemo((): {
 		title: string;
 		name: string;
@@ -175,56 +179,48 @@ export const ModalCreateDocumentChild: React.FC = () => {
 		];
 	}, [listContactSender, listContactReceiver , listContracts, listPackage, listStorages, properties]);
 
-	const handleSubmit = React.useCallback(
-		(values) => {
-			const formatValues = {
-				...values,
-			};
-			if (moment(values.date).isValid()) {
-				formatValues.date = moment(values.date).toJSON();
-			}
-			if (moment(values.expiredResponse).isValid()) {
-				formatValues.expiredResponse = moment(values.expiredResponse).toJSON();
-			}
-			if (moment(values.receivedDate).isValid()) {
-				formatValues.receivedDate = moment(values.receivedDate).toJSON();
-			}
+	const handleSubmit = (values: any) => {
+		const formatValues = {
+			...values
+		};
 
-			if (values.completeStatus == true) {
-				formatValues.completeStatus = 1
-			}else{
-				formatValues.completeStatus = 0
-			}
+		if (moment(values.date).isValid()) {
+			formatValues.date = moment(values.date).toJSON();
+		}
+		if (moment(values.expiredResponse).isValid()) {
+			formatValues.expiredResponse = moment(values.expiredResponse).toJSON();
+		}
+		if (moment(values.receivedDate).isValid()) {
+			formatValues.receivedDate = moment(values.receivedDate).toJSON();
+		}
 
-			console.log({ formatValues });
-			
-			try {
-				// call api insert child
-			} catch (error: unknown) {
-				console.error(error);
-			}
-		},
-		[state]
-	);
+		if (values.completeStatus == true) {
+			formatValues.completeStatus = 1
+		} else{
+			formatValues.completeStatus = 0
+		}
+
+		// Xử lý api tạo hồ sơ
+		try {
+			console.log({ values, formatValues });
+		} catch (error: unknown) {
+			console.error(error);
+		}
+	};
 
 	return (
-		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
+		<ModalContainer isModalOpen={isShow} toggle={toggle}>
 			<div
 				className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white"
 				style={{ maxWidth: "1569px" }}
 			>
 				<div className="flex items-center px-6 py-2.5 justify-between border-b border-secondary-gray border-opacity-30">
 					<Dialog.Title as="h3" className="text-lg leading-6 font-bold">
-						{state.title}
+						Thêm hồ sơ văn bản con
 					</Dialog.Title>
 					<button
 						type="button"
-						onClick={() => {
-							toggleModal();
-							updateModal({
-								initialValues: {},
-							});
-						}}
+						onClick={toggle}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -395,7 +391,7 @@ export const ModalCreateDocumentChild: React.FC = () => {
 																	inputProps={{
 																		className: "w-full",
 																		placeholder: "Ngày tháng...",
-																		dateFormat: "dd/MM/yyyy",
+																		// dateFormat: "dd/MM/yyyy",
 																	}}
 																/>
 															</div>

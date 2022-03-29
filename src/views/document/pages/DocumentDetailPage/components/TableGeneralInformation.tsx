@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from "react";
+import React, { FC, Fragment, HTMLAttributes } from "react";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 
@@ -83,8 +83,8 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
   );
   return (
     <div className="document__detail-grid border-collapse mt-3 border-b border-cbs-border" {...props}>
-      {table.map((t, index, arr) => (
-        <>
+      {table.map((t, index) => (
+        <Fragment key={index}>
           <div
             style={{
               borderLeftWidth: index % 2 !== 0 ? 0 : 1,
@@ -103,7 +103,7 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
           >
             {t.value || ""}
           </div>
-        </>
+        </Fragment>
       ))}
     </div>
   );

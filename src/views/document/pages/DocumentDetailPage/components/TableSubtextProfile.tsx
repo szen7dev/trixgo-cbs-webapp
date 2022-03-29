@@ -28,7 +28,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
           })`}
         </button>
       ) : (
-        ""
+        <></>
       );
     },
     []
@@ -59,8 +59,8 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
           </tr>
         </thead>
         <tbody>
-          {docChildPayload.listDocumentChild.map((doc, i) => (
-            <tr key={i}>
+          {(docChildPayload?.listDocumentChild?.length) ? docChildPayload.listDocumentChild?.map((doc, i) => (
+            <tr key={doc._id}>
               <td className="py-3 px-3">
                 <a href={`/ppt/project/61c41cca87808f16744773ec/document/${doc._id}`} target="_blank" rel="noreferrer"> 
                   {doc.name || ''}
@@ -72,7 +72,7 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
               <td className="py-3 px-3">{doc.note || ''}</td>
               <td className="py-3 px-3">{doc.storage?.name || ''}</td>
             </tr>
-          ))}
+          )) : <></>}
           {renderSeeMoreButton(docChildPayload)}
         </tbody>
       </table>
