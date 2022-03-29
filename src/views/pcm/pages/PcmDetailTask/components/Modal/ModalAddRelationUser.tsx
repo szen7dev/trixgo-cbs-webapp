@@ -29,7 +29,7 @@ const ModalAddRelationUser: FC<Props> = ({ taskID, projectID, related, modalType
 		keyword
 	}, modalType === 'ADD_RELATION_USER');
 
-	const { addRelationUserAsync } = useTask({ taskID });
+	const { addRelationUserAsync } = useTask({});
 
 	const getStateChecked = useCallback((id: string) => {
 		if(!hasDefault && relatedsID?.includes(id)) {

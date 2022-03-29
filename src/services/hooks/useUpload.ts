@@ -161,7 +161,7 @@ export const useUpload = ({
                maxWidthOrHeight: 1920,
                useWebWorker: true
            },
-       }: UploadFileProps) => {
+       }: UploadFileProps) : Promise<AddFileUploadResponse> => {
 
         if (files.type === "") {
             const blob = new Blob([files], { type: MimeType.lookup(files.name) });
@@ -204,7 +204,14 @@ export const useUpload = ({
             await uploadFileToS3({ signedUrl, file, progress, _id: result?._id, source });
         }
 
-        return { _id: result?._id, name: fileName, nameOrg: result?.nameOrg };
+        return {
+            _id: result?._id, 
+            name: fileName, 
+            nameOrg: result?.nameOrg, 
+            path: result?.path, 
+            mimeType: result?.mimeType,
+            createAt: result?.createAt
+        };
     }
 
     const convertBlobToFile = (theBlob: Blob, fileName: string): File => {

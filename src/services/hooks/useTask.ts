@@ -23,11 +23,7 @@ import {
  */
 
 type UseTask = {
-  addResponseAsync: (payload: ResponsePayload) => Promise<any>;
   addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
-  listResponses: Array<ResponseProps>;
-  totalRecordResponse: number;
-  refetchListResponse: () => void;
   listTasks: Array<Task>;
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
@@ -40,20 +36,22 @@ type UseTask = {
   prevPageListTask: () => void;
 };
 
-type UseTaskProps = {
-  keyword?: string;
-  taskID?: string;
-  typeStatus?: string;
-  statusNe?: string;
-  groupID?: string;
-  type?: number;
-  status?: string;
-  official?: boolean;
-  isFetch?: boolean;
-  isFetchTask?: boolean;
-}
+type UseTaskProps = Partial<{
+  params: Partial<{
+    keyword?: string;
+    typeStatus?: string;
+    statusNe?: string;
+    groupID?: string;
+    type?: number;
+    status?: string;
+  }>
+  isFetch: boolean;
+}>
 
-export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typeStatus, type, status="", isFetch = false, isFetchTask = false }: UseTaskProps): UseTask => {
+export const useTask = ({
+  params = {},
+  isFetch = false
+}: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
       TaskRepository.addTask(payload)
@@ -64,38 +62,10 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
       TaskRepository.updateTask(payload)
     );
 
-  const { mutateAsync: addResponseAsync } =
-    useMutation((payload: ResponsePayload) =>
-      TaskRepository.addResponse(payload)
-    );
-
   const { mutateAsync: addRelationUserAsync } =
     useMutation((payload: AddRelationUserPayload) =>
       TaskRepository.addRelationUser(payload)
     );
-
-  const {
-    data: dataListResponse,
-    refetch: refetchListResponse,
-  } = useInfiniteQuery(
-    ["list_responses", taskID, official || false],
-    async ({ pageParam }: any) => {
-      return TaskRepository.listResponse({
-        taskID,
-        limit: 5,
-        lastestID: pageParam || "",
-        official: official || false,
-        ...pageParam
-      });
-    },
-    {
-      getNextPageParam: ({ data }: any) => {
-        return data?.nextCursor || undefined;
-      },
-      refetchOnWindowFocus: false,
-      enabled: isFetch,
-    }
-  );
 
   const {
     isLoading: isLoadingListTask,
@@ -105,25 +75,11 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
   } = useInfiniteQuery(
-    ["list_tasks", type, typeStatus, groupID],
+    ["list_tasks", params],
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
-        keyword,
-        groupID: groupID || "",
         lastestID: pageParam || "",
-        type: type || "",
-        statusNe: statusNe || "",
-        status,
-        typeStatus: typeStatus || "",
-        select: "assignee lastLog checklist description name expiredTime percentage project actualFinishTime",
-        populates: JSON.stringify({
-          path: "assignee lastLog project",
-          select: "name fullname bizfullname image author content createAt sign",
-          populate: {
-            path: "author",
-            select: "_id fullname bizfullname image",
-          }
-        }),
+        ...params
       });
     },
     {
@@ -131,7 +87,7 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
         return data?.nextCursor || undefined;
       },
       refetchOnWindowFocus: false,
-      enabled: isFetchTask ?? false,
+      enabled: isFetch ?? false,
     }
   );
 
@@ -140,21 +96,11 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
     .map((d: any) => d.data?.listRecords))
     .filter(Boolean);
 
-  const listResponses = []
-    .concat(...(dataListResponse?.pages || [])
-    .map((d: any) => d.data?.listRecords))
-    .filter(Boolean);
-
-  const totalRecordResponse = dataListResponse?.pages[0]?.data?.totalRecord || 0;
   const totalRecord = dataListTask?.pages[0]?.data?.totalRecord;
   const totalPages = dataListTask?.pages[0]?.data?.totalPage;
 
   return {
-    addResponseAsync,
     addRelationUserAsync,
-    listResponses,
-    totalRecordResponse,
-    refetchListResponse,
     updateTaskAsync,
     addTaskAsync,
     listTasks,
@@ -167,6 +113,74 @@ export const useTask = ({ keyword = "", taskID, official, statusNe, groupID, typ
     prevPageListTask,
   };
 };
+
+/**
+ * ============================ *********************** ===============================
+ * ============================ 	 PHẢN HỒI LIÊN QUAN   ===============================
+ * ============================ *********************** ===============================
+ */
+
+ type UseRelatedResponse = {
+  addResponseAsync: (payload: ResponsePayload) => Promise<any>;
+  listResponses: Array<ResponseProps>;
+  totalRecord: number;
+  refetchListResponses: () => void;
+  nextPageListResponses: () => void;
+  hasNextPageListResponses: boolean | undefined;
+};
+
+type UseRelatedResponseProps = {
+  params: Partial<{
+    taskID: string
+  }>,
+  isFetch?: boolean;
+}
+
+export const useRelatedResponse = ({ params = {}, isFetch = false } : UseRelatedResponseProps) : UseRelatedResponse => {
+  const { mutateAsync: addResponseAsync } =
+    useMutation((payload: ResponsePayload) =>
+      TaskRepository.addResponse(payload)
+    );
+
+  const {
+    data: dataListResponses,
+    fetchNextPage: nextPageListResponses,
+    hasNextPage: hasNextPageListResponses,
+    refetch: refetchListResponses,
+  } = useInfiniteQuery(
+    ["list_responses", params],
+    async ({ pageParam }: any) => {
+      return TaskRepository.listResponse({
+        limit: 5,
+        lastestID: pageParam || "",
+        ...params
+      });
+    },
+    {
+      getNextPageParam: ({ data }: any) => {
+        return data?.nextCursor || undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: isFetch,
+    }
+  );
+
+  const listResponses = []
+    .concat(...(dataListResponses?.pages || [])
+    .map((d: any) => d.data?.listRecords))
+    .filter(Boolean);
+
+  const totalRecord = dataListResponses?.pages[0]?.data?.totalRecord || 0;
+
+  return {
+    addResponseAsync,
+    listResponses,
+    totalRecord,
+    refetchListResponses,
+    nextPageListResponses,
+    hasNextPageListResponses
+  }
+}
 
 /**
  * ============================ ************** ===============================

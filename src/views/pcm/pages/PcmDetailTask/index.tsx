@@ -21,7 +21,7 @@ import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 
-import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
+import { SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
 import { Loader } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/common';
 import { ProviderModalPost } from "views/pcm/contexts/post";
@@ -41,8 +41,7 @@ import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Mo
 import { APP_ID } from "apis/localdb";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
-import OwnerUploadedFile from "./components/OwnerUploadedFile";
-import CreatorUploadedFile from "./components/CreatorUploadedFile";
+import { OwnerUploadedFile, CreatorUploadedFile } from "./components";
 
 const PcmDetailTask: FC = () => {
   const history = useHistory();
@@ -320,10 +319,17 @@ const PcmDetailTask: FC = () => {
                   </button>
                 )}
               </div>
-
-              <FileAttachment files={taskInfo?.authorAttachs} />
+              {/* <FileAttachment files={taskInfo?.authorAttachs} /> */}
             </div>
-						<CreatorUploadedFile className="p-5"/>
+						<CreatorUploadedFile 
+              className="p-5" 
+              authorAttachs={taskInfo?.authorAttachs}
+              author={user}
+              taskID={taskInfo._id}
+              companyID={taskInfo.company?._id}
+              projectID={taskInfo.project?._id}
+              groupID={taskInfo.group?._id}
+            />
             <div className="">
               <CheckList
                 componentType="CHECKLIST"
@@ -348,7 +354,15 @@ const PcmDetailTask: FC = () => {
                 valueApproved={taskInfo?.valueApproved}
               />
             </div>
-						<OwnerUploadedFile className="p-5"/>
+						<OwnerUploadedFile 
+              className="p-5"
+              assigneeAttachs={taskInfo?.assigneeAttachs}
+              author={user}
+              taskID={taskInfo._id}
+              companyID={taskInfo.company?._id}
+              projectID={taskInfo.project?._id}
+              groupID={taskInfo.group?._id}
+            />
             <div className="px-5 my-5">
               <RelatedResponse task={taskInfo} />
             </div>

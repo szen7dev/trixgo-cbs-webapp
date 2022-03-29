@@ -25,7 +25,7 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
  */
 import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from 'services/hooks/auth/useAuth';
-import { useTask } from 'services/hooks/useTask';
+import { useRelatedResponse } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { APP_KEY } from "utils/constants";
@@ -70,10 +70,16 @@ const Response: FC<Props> = ({ task }) => {
   const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
 
   const { user } = useAuth();
-  const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
-  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
-    taskID: task._id, official: true, isFetch: false
+  const { addResponseAsync, listResponses, refetchListResponses,  totalRecord: totalRecordResponse } = useRelatedResponse({
+    params: {
+      taskID: task._id
+    },
+    isFetch: true
   });
+
+  // const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
+  //   taskID: task._id, official: true, isFetch: false
+  // });
 
   const { state, dispatch } = useContext(CommentContext);
   const { addFileToUpload } = useUpload({
@@ -336,7 +342,7 @@ const Response: FC<Props> = ({ task }) => {
   const onClickTabAll = () => {
     setCurrentTab(RelatedResponseTab.ALL);
     dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
-    refetchListResponse();
+    refetchListResponses();
     setAmountComment(totalRecordResponse);
     setAmountCommentBack(0);
   }
@@ -406,7 +412,7 @@ const Response: FC<Props> = ({ task }) => {
               isHighlight={hashLocation?.split('_')[1] === response._id}
               divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
               setAmountMarkedResponse={setAmountMarkedResponse}
-              refetchListResponseMarked={refetchListResponseMarked}
+              // refetchListResponseMarked={refetchListResponseMarked}
               onClickImage={(images, index) => {
                 if (images.length) {
                   setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};

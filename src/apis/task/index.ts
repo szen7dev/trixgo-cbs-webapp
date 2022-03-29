@@ -27,8 +27,8 @@ import {
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group author assignee related parent project company field approver authorAttachs signatures",
-  select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
+  path: "group author assignee related parent project company field approver authorAttachs assigneeAttachs signatures",
+  select: "_id name fullname bizfullname image sign _id name nameOrg size path description mimeType type author createAt members",
   populate: {
     path: "author",
     select: "_id bizfullname image"
@@ -79,7 +79,18 @@ const TaskRepository = {
 
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
-      `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
+        select: "assignee lastLog checklist description name expiredTime percentage project actualFinishTime",
+        populates: JSON.stringify({
+          path: "assignee lastLog project",
+          select: "name fullname bizfullname image author content createAt sign",
+          populate: {
+            path: "author",
+            select: "_id fullname bizfullname image",
+          }
+        }),
+        ...payload
+      })}`
     );
     return data;
   },

@@ -2,30 +2,52 @@ import React, { FC, useState } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { toast } from "react-toastify";
+import { usePcmReport } from "services/hooks/pcm/usePcm";
 
-export const ModalCreateResultSearch: FC = () => {
+type Props = {
+  condition: any
+}
+
+export const ModalCreateResultSearch: FC<Props> = ({ condition }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState({
     name: '',
     description: ''
   });
+  const { addConditionTaskReportAsync, updateConditionTaskReportAsync } = usePcmReport();
 
   const onCreate = async () => {
     if (!formData.name) {
-      toast.error("Vui lòng nhập nội dung.");
-      return;
+      return toast.error("Vui lòng nhập nội dung.");
     }
 
-    // const result = await createAppRolesMutateAsync({
-    //   type: parseInt(type),
-    //   name
-    // });
-    // if (!result.error) {
-    //   closeModal();
-    //   toast.success('Tạo thành công');
-    // } else {
-    //   toast.error(result?.data?.message);
-    // }
+    try {
+      // Thêm subject
+      const result = await addConditionTaskReportAsync(formData);
+
+      if(result.error) {
+        return toast.warn(result?.data?.message);
+      }
+
+      // Cập nhật điều kiện cho subject
+      const { error, data } = await updateConditionTaskReportAsync({
+        subjectID: result.data._id,
+        conditionPin: condition
+      })
+
+      if(error) {
+        return toast.warn(data?.message);
+      }
+
+      toast.success('Lưu kết quả thành công');
+    } catch (error) {
+      console.error(error);
+      if(error instanceof Error) {
+        toast.error(error.message);
+      }
+    } finally {
+      closeModal();
+    }
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
