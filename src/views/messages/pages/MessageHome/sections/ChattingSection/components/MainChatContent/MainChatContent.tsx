@@ -92,7 +92,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, null, false))
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
@@ -104,6 +104,11 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             return -1
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
+
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
 
     useEffect(() => {
         if (userUnreadMessage()>0) {
@@ -274,9 +279,4 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             }
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }
