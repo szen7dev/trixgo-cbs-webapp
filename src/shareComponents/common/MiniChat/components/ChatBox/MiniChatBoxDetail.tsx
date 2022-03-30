@@ -89,6 +89,11 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
+
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
@@ -210,9 +215,4 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
             </div>
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }

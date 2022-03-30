@@ -105,6 +105,11 @@ export const MainChatContent:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
+
     useEffect(() => {
         if (userUnreadMessage()>0) {
             markAsRead()
@@ -274,9 +279,4 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             }
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }
