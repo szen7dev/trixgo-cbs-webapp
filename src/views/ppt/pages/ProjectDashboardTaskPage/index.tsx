@@ -7,15 +7,13 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 
 import StatisticalChart from "./components/StatisticalChart";
 
 import CaretDownIcon from "assets/images/icon-caret-down.png";
-import { useHistory } from "react-router-dom";
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
-import { toast } from "react-toastify";
 interface IData {
 	id: number,
 	name: string,
@@ -47,20 +45,13 @@ const getDate = (time: number): number => {
 }
 
 const ProjectDashboardTaskPage: FC = () => {
-	const history = useHistory();
-	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
+	// --------- Check phân quyền
+	useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.dashboard_task.id,
 		type: "1"
 	});
-	// Phân quyền theo nhóm chức năng
-	useEffect(() => {
-		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
-	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+	// ---------
 
 	const [type, setType] = useState<string>('all');
 	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });

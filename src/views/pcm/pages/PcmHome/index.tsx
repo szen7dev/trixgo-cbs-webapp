@@ -22,7 +22,12 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
     listTasks: tasksOutDate,
     totalRecord: outDateRecords,
     nextPageListTask: nextPageTaskOutDate,
-  } = useTask({ type, typeStatus: "1", statusNe: "3", isFetchTask: true });
+  } = useTask({
+    params: {
+      type, typeStatus: "1", statusNe: "3"
+    },
+    isFetch: true
+  });
 
   // Việc tuần tới
   const {
@@ -30,14 +35,24 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
     isLoadingListTask,
     totalRecord: nextWeekRecords,
     nextPageListTask: nextPageTaskNextWeek,
-  } = useTask({ type, typeStatus: "2",  statusNe: "3", isFetchTask: true });
+  } = useTask({
+    params: {
+      type, typeStatus: "2",  statusNe: "3"
+    },
+    isFetch: true
+  });
 
   // Việc 7 ngày tới
   const {
     listTasks: tasksMoreThanSevenDay,
     totalRecord: moreSevenDayRecord,
     nextPageListTask: nextPageTaskMore,
-  } = useTask({ type, typeStatus: "3",  statusNe: "3",  isFetchTask: true});
+  } = useTask({
+    params: {
+      type, typeStatus: "3",  statusNe: "3"
+    },
+    isFetch: true
+  });
 
   const handleSeeMore = (typeStatus: string) => {
     switch (typeStatus) {
@@ -63,7 +78,7 @@ export const PcmHome: FC<Props> = ({ type = 1 }) => {
 		};
 
     document.title = "Quản lý công việc";
-  }, [isSuccessApp]);  
+  }, [isSuccessApp]);
 
   if (isLoadingListTask) {
     return <Loader className="border-primary" />;

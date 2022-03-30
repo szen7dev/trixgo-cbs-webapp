@@ -47,7 +47,7 @@ export const ModalAddNewTask: FC = () => {
     assigneeID: string().required("Vui lòng nhập tên người nhận!"),
     name: string().required("Vui lòng nhập tiêu đề!"),
   });
-  
+
   const { addTaskAsync } = useTask({});
 
   const onSubmitFilterData = async (values: any) => {
@@ -79,16 +79,16 @@ export const ModalAddNewTask: FC = () => {
     isFetch: true
   })
   
-  const { listDoctypes } = useQueryListDoctype({ 
+  const { listDoctypes } = useQueryListDoctype({
     limit: 50,
     type: 2,
     keyword: otherFieldValue
   });
 
-  const { 
-    data: listGroup, 
-    hasNextPage: hasNextPageListGroup, 
-    fetchNextPage: fetchNextPageListGroup 
+  const {
+    data: listGroup,
+    hasNextPage: hasNextPageListGroup,
+    fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
     keyword: searchGroupName,
     projectID: projectID
@@ -102,7 +102,7 @@ export const ModalAddNewTask: FC = () => {
       fetchNextPageListGroup();
     }
   }
-  
+
   const initialValues: InitialValues = {
     projectID: "",
     groupID: "",
@@ -118,7 +118,7 @@ export const ModalAddNewTask: FC = () => {
     subType: "",
   };
 
-  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({ 
+  const { data: listUsersProject, hasNextPage, fetchNextPage, totalRecord } = useUserSystem({
     projectID,
     keyword: searchFriendName
   }, true);
@@ -550,7 +550,7 @@ export const ModalAddNewTask: FC = () => {
           }}
         </Formik>
       </div>
-      
+
     </>
   );
 };

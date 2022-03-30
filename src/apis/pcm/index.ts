@@ -1,18 +1,57 @@
 import API from "../repository";
 
-// Convert Object sang URL query => khi client truyền lên
 import { convertObToUrl } from "utils";
 
-// Khai báo chính xác kiểu trả về nếu biết
-import { ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload } from "typings/pcm";
+import { AddConditionTaskReportPayload, InfoReportPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
 
-// Đường dẫn Endpoint
 const pcmURL = "/api/subject_pcm";
 
 const PcmRepository = {
     async sendMailDetailTask(payload: SendMailTaskPayload): Promise<any> {
         const { data } = await API.post<any>(
             `${pcmURL}/pcm_plan_tasks/send-email-to-member-in-task`, payload
+        );
+        return data;
+    },
+
+    async addConditionTaskReport(payload: AddConditionTaskReportPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_reports`, payload
+        );
+        return data;
+    },
+
+    async updateConditionTaskReport(payload: UpdateConditionTaskReportPayload): Promise<any> {
+        const { data } = await API.put<any>(
+            `${pcmURL}/pcm_plan_reports`, payload
+        );
+        return data;
+    },
+
+    async getInfoReports(id: string): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_reports?${convertObToUrl({
+                select: "name company description conditionPin author type createAt",
+                populates: JSON.stringify({
+                    path: "company author",
+                    select: "_id name sign bizfullname image"
+                }),
+                subjectID: id
+            })}`
+        );
+        return data;
+    },
+
+    async listReports(payload: ListReportsPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_reports?${convertObToUrl({
+                select: "name company description conditionPin author type createAt",
+                populates: JSON.stringify({
+                    path: "company author",
+                    select: "_id name sign bizfullname image"
+                }),
+                ...payload
+            })}`
         );
         return data;
     },

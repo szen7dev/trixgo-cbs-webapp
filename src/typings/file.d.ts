@@ -1,5 +1,6 @@
 import { APIResponse } from "./apis/response";
 import { CancelTokenSource } from "axios";
+import { User } from "./user";
 
 export type GenerateLinkPayload = {
   appID?: string;
@@ -38,7 +39,11 @@ export type UploadPayload = {
 
 export type AddFileUploadResponse = {
   _id: string | undefined;
-  name: string;
+  name: string | undefined;
+  nameOrg: string | undefined;
+  path: string | undefined;
+  mimeType: string | undefined;
+  createAt: string | undefined;
 }
 
 export type FileResponse = APIResponse & {
@@ -61,6 +66,7 @@ export type FileProps = {
 	path:	string,
   size: number,
   type: string,
+  mimeType: string,
   userCreate: string,
   modifyAt: string,
   createAt: string,

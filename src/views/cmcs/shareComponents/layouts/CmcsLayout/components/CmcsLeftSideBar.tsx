@@ -44,6 +44,7 @@ export const CmcsLeftSideBar: FC = () => {
                 if (roleApp && roleApp.read >= 1) {
                   return (
                     <NavLink
+                      key={index}
                       to={`/cmcs/${item.slug}`}
                       className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
                     >

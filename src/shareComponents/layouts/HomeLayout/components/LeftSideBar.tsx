@@ -86,10 +86,10 @@ export const LeftSideBar: FC = () => {
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc quan tâm</span>
           </NavLink>
-          {/* <Link to={`/pcm/report`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+          <NavLink to={`/pcm/report`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo động</span>
-          </Link> */}
+          </NavLink>
 
           {/* <div className="t-leftsidebar-menu-showmore">
             <button className="t-leftsidebar-menu-showmore-btn flex items-center">

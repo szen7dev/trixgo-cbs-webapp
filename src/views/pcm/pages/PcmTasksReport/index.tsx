@@ -17,37 +17,32 @@ import { Loader } from "shareComponents/common/Loader";
 import { useTask } from "services/hooks/useTask";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
-import { SearchInput } from "shareComponents/common";
-import { debounce } from "lodash";
+// import { SearchInput } from "shareComponents/common";
+// import { debounce } from "lodash";
+import { usePcmReport } from "services/hooks/pcm/usePcm";
 
-type Props = {
-  type?: number
-}
-
-export const PcmTasksReport: FC<Props> = ({ type = 1 }) => {
-  const [keyword, setKeyword] = useState("");
+export const PcmTasksReport: FC = () => {
+  const [params, setParams] = useState({});
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
   const { reportID } = useParams<{ reportID: string }>();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
-  // Việc quá hạn
   const {
-    listTasks: tasksOutDate,
-    totalRecord: totalRecords,
+    listTasks,
+    totalRecord,
     isLoadingListTask,
-    nextPageListTask: nextPageTaskOutDate,
-  } = useTask({ type, typeStatus: "1", statusNe: "3", isFetchTask: true });
+    nextPageListTask,
+  } = useTask({
+    params,
+    isFetch: true
+  });
 
-  const handleSeeMore = (typeStatus: string) => {
-    switch (typeStatus) {
-      case "OUT_DATE":
-        nextPageTaskOutDate();
-        break;
-      default:
-        break;
-    }
-  };
+  const { infoReport } = usePcmReport({
+    subjectID: reportID
+  });
+
+  const handleSeeMore = () => nextPageListTask();
 
   useEffect(() => {
     if (!isSuccessApp) return;
@@ -59,7 +54,12 @@ export const PcmTasksReport: FC<Props> = ({ type = 1 }) => {
     document.title = "Quản lý công việc";
   }, [isSuccessApp]);
 
-  if (isLoadingListTask) {
+  useEffect(() => {
+    if(!infoReport || !Object.keys(infoReport).length) return;
+    setParams(infoReport.conditionPin);
+  }, [infoReport])
+
+  if (isLoadingListTask || !infoReport || !Object.keys(infoReport).length) {
     return <Loader className="border-primary" />;
   }
 
@@ -70,25 +70,25 @@ export const PcmTasksReport: FC<Props> = ({ type = 1 }) => {
           <button className="mr-3" onClick={history.goBack}>
             <img src={`${process.env.PUBLIC_URL}/images/common/button_back.png`} alt="Back" />
           </button>
-					<p className="text-lg">Chi tiết báo cáo</p>
-					<SearchInput
+					<p className="text-lg">Chi tiết báo cáo: {infoReport.name}</p>
+					{/* <SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
 						onChange={debounce(
 							(event: any) => setKeyword(event.target.value),
 							500
 						)}
-					/>
+					/> */}
 				</div>
 			</header>
 
       <div className="task-management-content overflow-auto">
         {/* Table */}
-        <div className={" flex flex-col w-full"}>
+        <div className={"flex flex-col w-full"}>
           {viewMode === "LIST" && (
             <ListTasksReport
-              tasks={tasksOutDate}
-              totalRecords={totalRecords}
+              tasks={listTasks}
+              totalRecord={totalRecord}
               onClickMore={handleSeeMore}
             />
           )}
