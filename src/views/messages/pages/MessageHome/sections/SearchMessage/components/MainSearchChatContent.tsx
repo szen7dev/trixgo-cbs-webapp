@@ -56,6 +56,11 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
+
     useEffect(() => {
         conversationMessagesList.current && conversationMessagesList.current.addEventListener("scroll", () => onScroll());
     },[conversationMessagesList]);
@@ -209,9 +214,4 @@ export const MainSearchChatContent:FC<Props> = ({chat}) => {
             }
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }
