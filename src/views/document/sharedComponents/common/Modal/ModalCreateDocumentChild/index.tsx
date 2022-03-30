@@ -76,19 +76,6 @@ const useInitialValues = (
 	});
 	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
-
-	// if (!companyID || !departmentID) {
-	// 	return {
-	// 		listPackage: [],
-	// 		listContactSender: [],
-	// 		listContactReceiver: [],
-	// 		fields: [],
-	// 		properties: [],
-	// 		listStorages: [],
-	// 		listContracts: [],
-	// 	};
-	// }
-
 	return {
 		listPackage,
 		listContactSender,
