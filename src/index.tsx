@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+// import * as Sentry from "@sentry/react";
+// import { BrowserTracing } from "@sentry/tracing";
 import { Provider } from "react-redux";
 
 import Store from "redux/store";
@@ -11,26 +11,26 @@ import App from "App";
 // import reportWebVitals from "reportWebVitals";
 // import * as serviceWorker from "./serviceWorker";
 
-if(['staging', 'production'].includes(process.env.REACT_APP_ENV)) {
-  Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    integrations: [new BrowserTracing()],
-    // integrations: [
-    //   new (Sentry.Integrations as any).BrowserTracing({
-    //       tracingOrigins: [
-    //         '::1',
-    //         process.env.REACT_APP_API_DOMAIN_STAGING,
-    //         process.env.REACT_APP_API_DOMAIN_LOCAL,
-    //       ],
-    //   }),
-    // ],
+// if(['staging', 'production'].includes(process.env.REACT_APP_ENV)) {
+//   Sentry.init({
+//     dsn: process.env.REACT_APP_SENTRY_DSN,
+//     integrations: [new BrowserTracing()],
+//     // integrations: [
+//     //   new (Sentry.Integrations as any).BrowserTracing({
+//     //       tracingOrigins: [
+//     //         '::1',
+//     //         process.env.REACT_APP_API_DOMAIN_STAGING,
+//     //         process.env.REACT_APP_API_DOMAIN_LOCAL,
+//     //       ],
+//     //   }),
+//     // ],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
-}
+//     // Set tracesSampleRate to 1.0 to capture 100%
+//     // of transactions for performance monitoring.
+//     // We recommend adjusting this value in production
+//     tracesSampleRate: 1.0,
+//   });
+// }
 
 ReactDOM.render(
   <React.StrictMode>

@@ -8,7 +8,6 @@ import cn from "classnames";
 import menuIcon from "assets/images/icon-mobile-menu-black.png";
 import chevronRightIcon from "assets/images/icon-chevron-right.png";
 import chevronUpIcon from "assets/images/icon-chevron-up.png";
-import iconChat from "assets/images/icons8-chat-96.png";
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { MainHeader } from "shareComponents/common";
@@ -29,8 +28,8 @@ export const SupportLayout: FC<Props> = ({ children }) => {
   const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
   const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
   const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-  const [isChatboxVisible, setIsChatboxVisible] = useState(false);
-  const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
+  // const [isChatboxVisible, setIsChatboxVisible] = useState(false);
+  // const [isNewChatboxVisible, setIsNewChatboxVisible] = useState(false);
 
   const handleHeaderEvent = () => {
     setIsHeaderCollapse(!isHeaderCollapse);
@@ -41,18 +40,18 @@ export const SupportLayout: FC<Props> = ({ children }) => {
   const handleRightSideBarEvent = () => {
     setIsRightSideBarCollapse(!isRightSideBarCollapse);
   };
-  const closeMiniChatbox = () => {
-    setIsChatboxVisible(false);
-  };
-  const openMiniChatbox = () => {
-    setIsChatboxVisible(true);
-  };
-  const handleOpenNewChatbox = () => {
-    setIsNewChatboxVisible(true);
-  };
-  const handleCloseNewChatbox = () => {
-    setIsNewChatboxVisible(false);
-  };
+  // const closeMiniChatbox = () => {
+  //   setIsChatboxVisible(false);
+  // };
+  // const openMiniChatbox = () => {
+  //   setIsChatboxVisible(true);
+  // };
+  // const handleOpenNewChatbox = () => {
+  //   setIsNewChatboxVisible(true);
+  // };
+  // const handleCloseNewChatbox = () => {
+  //   setIsNewChatboxVisible(false);
+  // };
 
   return (
     <section
