@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 namespace NodeJS {
   interface ProcessEnv {
-    NODE_ENV: "development" | "production";
+    NODE_ENV: "development" | "staging" | "production";
 
     HTTPS: string;
     PORT: string;
@@ -12,9 +12,6 @@ namespace NodeJS {
 
     REACT_APP_API_DOMAIN_LOCAL: string;
     REACT_APP_API_DOMAIN_STAGING: string;
-
-    REACT_APP_MOVIE_API_TOKEN: string;
-    REACT_APP_MOVIE_API_KEY: string;
 
     REACT_APP_URL_S3: string;
     REACT_APP_URL_S3_USER: string;

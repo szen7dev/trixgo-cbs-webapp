@@ -8,7 +8,6 @@ import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
 
 import { ModalContext } from "views/document/contexts/modal";
-import iconAttach from "assets/images/icons8-attach-96.png";
 import itemTag from "assets/images/icons8-price-tag.svg";
 import { DropdownSearchable } from "shareComponents/common";
 import { ModalContainer } from "shareComponents/common/ModalContainer";
