@@ -1,23 +1,23 @@
-import { FC, useCallback, useState } from "react";
-
-import { Link } from "react-router-dom";
-
+import { FC, useCallback, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { CreateProject } from "../modal";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import moment from "moment";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
 
 const ProjectAdminProjectTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listPcmProject, totalRecord, nextPagePcmProject, hasNextPagePcmProject, refetchPcmProject } = usePcmProject({ keyword: keyword });
@@ -48,6 +48,13 @@ const ProjectAdminProjectTab: FC = () => {
 
 	const [initialValues, setInitialValues] = useState(null);
 	const onConfirmCreateProject = () => refetchPcmProject();
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">

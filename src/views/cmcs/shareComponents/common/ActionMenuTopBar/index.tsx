@@ -9,9 +9,11 @@ import PrintIcon from "assets/images/icons8-print-96.svg";
 type Props = {
   deleteAction?: () => void;
   editAction?: () => void;
+  updatePermission: boolean,
+  deletePermission: boolean
 }
 
-export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ deleteAction, editAction }) => {
+export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ deleteAction, editAction, updatePermission, deletePermission }) => {
   const handleDelete = () => {
     if (deleteAction) deleteAction()
   }
@@ -33,12 +35,16 @@ export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ d
       <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon} />
       </button>
-      <button className={"flex items-center mr-3"} onClick={() => handleEdit()}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
-      </button>
-      <button className={"flex items-center mr-3"} onClick={() => handleDelete()}>
-        <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon} />
-      </button>
+      {updatePermission &&
+        <button className={"flex items-center mr-3"} onClick={() => handleEdit()}>
+          <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
+        </button>
+      }
+      {deletePermission &&
+        <button className={"flex items-center mr-3"} onClick={() => handleDelete()}>
+          <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon} />
+        </button>
+      }
       <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon} />
       </button>

@@ -142,7 +142,7 @@ export const ContractProduce: FC = () => {
           <div className="border-l-2 border-primary-border ml-5 pl-5">
             {itemChecked && (
               <div className="border-l-2 border-primary-border ml-5 pl-5">
-                <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} />
+                <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} updatePermission={true} deletePermission={true}/>
               </div>
             )}
           </div>

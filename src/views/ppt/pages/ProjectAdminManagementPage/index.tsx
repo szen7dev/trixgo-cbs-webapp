@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import {  useParams, useHistory } from 'react-router-dom';
 import { DepartmentRepository } from 'apis/item';
 
@@ -14,17 +14,17 @@ const ProjectAdminManagementPage: FC = (): any => {
   const history = useHistory();
 
   // Call trực tiếp api
-	React.useEffect(() => {
+	useEffect(() => {
 		if (projectID) {
         (async () =>  {
           const infoDepartment = await DepartmentRepository.fetchDetailDepartment({ departmentID: projectID });
           if(!infoDepartment?.data?.admins?.includes(user?._id || "")){
-            toast.error("Bạn không có quyền truy cập");
+            toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
             return history.push("/");
           }
         })();
 		}
-	}, [projectID]);
+	}, [projectID]); 
   
   return (
     <main className="h-full">

@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link, generatePath, useHistory } from "react-router-dom";
+import { Link, generatePath } from "react-router-dom";
 
 // Hooks use department
 import { useListDepartment } from "services/hooks/ppt/useListDepartment";
@@ -18,27 +18,17 @@ import { APP_ID, PROJECT_STAGE } from 'apis/localdb'
 
 // Utils
 import { dateLoadedPercentage, formatDate } from "utils/ppt";
-import { toast } from "react-toastify";
-
 import 'views/document/styles/document.css'
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/auth/usePermissions";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 
 const ProjectCategoryPage: FC = () => {
-	const history = useHistory();
-	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
+	// --------- Check phân quyền
+	const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.projects.id,
 		type: "1"
 	});
-
-	// Phân quyền theo nhóm chức năng
-	useEffect(() => {
-		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
-	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+	// ---------
 
 	useEffect(() => {
 		document.title = "PPT - Danh mục dự án";
@@ -62,8 +52,12 @@ const ProjectCategoryPage: FC = () => {
 					<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2" onChange={() => 1} />
 					{/* <DropdownFilterButton /> */}
 				</div>
-				<ButtonCreate />
-				<ButtonMore />
+				{createPermission &&
+					<ButtonCreate />
+				}
+				{(updatePermission || deletePermission) && 
+					<ButtonMore />
+				}
 			</div>
 
 			{/* Content */}
