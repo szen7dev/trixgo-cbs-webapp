@@ -1,18 +1,22 @@
 import { FC, useCallback, useEffect, useState } from "react";
-
 import cn from "classnames";
-
 import { SearchInput, Paginate, Popover } from "shareComponents/common";
 import { DropdownFilterButton } from "views/cmcs/shareComponents/common";
-import styles from 'views/cmcs/styles/styles.module.css';
-
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
-
 import { UseContractGuaranteeList } from "services/hooks/cmcs/useContractIncome";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
+import styles from 'views/cmcs/styles/styles.module.css';
 
 export const CmcGuaranteePage: FC = () => {
+  const { createPermission } = useCheckPerAccessScreen({
+    appID: APP_ID.CMCS.id,
+    menuID: APP_ID.CMCS.menuCmcsApp.guarantee.id,
+    type: "1"
+  });
+
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
   const contractGuarantee = UseContractGuaranteeList(pageParam);
@@ -24,7 +28,6 @@ export const CmcGuaranteePage: FC = () => {
       const prev = prevCursor.findIndex(item => item === contractGuarantee.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
-
   };
 
   useEffect(() => {
@@ -68,9 +71,11 @@ export const CmcGuaranteePage: FC = () => {
             initialValues={{}}
           /> */}
         </div>
-        <button className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold">
-          Tạo mới
-        </button>
+        {createPermission &&
+          <button className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold">
+            Tạo mới
+          </button>
+        }
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
