@@ -1,15 +1,18 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { APP_ID } from "apis/localdb";
 import { useGetListAppRoleMenuFromAdmin, useAdmin } from "services/hooks/auth/useAdmin";
 import { useAdminDetail } from "services/hooks/auth/useAdmin";
-import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
-import { useLocation } from "react-router-dom";
+import { useGetListAppMenu, useGetListAppRoleMenu, useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { DropdownSearchable } from "shareComponents/common";
+import { useLocation, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProjectAdminAuthorTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
-	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
+	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" });
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: typeAppRoleDetail == "1" ? APP_ID.PCM.menuPcmApp.id : APP_ID.PCM.menuPcmProject.id });
 	const { listAppRoles: listPcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: typeAppRoleDetail });
@@ -71,6 +74,13 @@ const ProjectAdminAuthorTab: FC = () => {
 		refetchGetListAppRoleMenu();
 		refetchGetListAppRoleMenuFromAdmin();
 	}
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">

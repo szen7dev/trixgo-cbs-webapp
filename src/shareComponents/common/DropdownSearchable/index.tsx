@@ -125,10 +125,21 @@ export const DropdownSearchable: FC<Props> = ({
   const handleSetValue = (item: Item) => {
     setSearchTerm("");
     if (isMultiple) {
-      setValues((oldValues) => [...(oldValues ?? []), item]);
+      const existThatItem = (values??[]).findIndex(i => readDataValue(i, "id") === readDataValue(item, "id"));
+      if (existThatItem > -1) {
+        const oldValues = (values??[]);
+        oldValues.splice(existThatItem, 1);
+        setValues(oldValues);
+      } else {
+        setValues((oldValues) => [...(oldValues ?? []), item]);
+      }
     } else {
       setShowOption(false);
-      setValue(item);
+      if (value&&readDataValue(value, "id") === readDataValue(item,"id")) {
+        setValue(undefined);
+      } else {
+        setValue(item);
+      }
     }
     if (onchangeValue) {
       onchangeValue(modifyItem(item));
@@ -430,6 +441,7 @@ export const DropdownSearchable: FC<Props> = ({
 
   const handleSearchingValue = (value: string) => {
     setSearchTerm(value);
+    setShowOption(true)
     onSearchInputChange && onSearchInputChange(value);
   };
 

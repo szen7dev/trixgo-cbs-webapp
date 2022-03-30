@@ -5,6 +5,9 @@ import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
 
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
+
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
 
@@ -24,6 +27,13 @@ import ReportMultipleChart from "./components/ReportMultipleChart";
 SwiperCore.use([Navigation]);
 
 const ProjectDashboardPortfolioPage: FC = () => {
+	// --------- Check phân quyền
+	// useCheckPerAccessScreen({
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmProject.dashboard.id,
+	// 	type: "2"
+	// });
+	// ---------
 	useEffect(() => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);

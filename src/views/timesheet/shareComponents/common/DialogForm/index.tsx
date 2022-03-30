@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import debounce from "lodash/debounce";
 
 import Close from "assets/icons/Close";
-import DropdownSearchable from "shareComponents/common/DropdownSearch";
+import {DropdownSearchable} from "shareComponents/common";
 
 import { useModal } from "services/hooks/useModal";
 import { useQueryListFriend } from "services/hooks/users/useFriend";

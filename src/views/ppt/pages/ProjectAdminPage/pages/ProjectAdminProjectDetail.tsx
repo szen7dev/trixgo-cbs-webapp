@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";
@@ -18,9 +18,14 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { DepartmentRepositories } from "apis/item/department";
 import { ResponseData } from "typings/apis/response";
 import { Department } from "typings/items";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminProjectDetail: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	// ID của dự án
 	const { id } = useParams<{ id: string }>();
 	// const [keyword, setKeyword] = useState("");
@@ -79,6 +84,13 @@ const ProjectAdminProjectDetail: FC = () => {
 			toast.error('Cập nhật thất bại');
 		}
 	}, [data?.data._id])
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">
