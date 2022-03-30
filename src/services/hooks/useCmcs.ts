@@ -58,10 +58,6 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
                 enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
             }
         );
-    
-    // console.log('==============>>>>>')
-    // console.log(dataListTasks)
-    console.log(ContractRepository)
 
     const listContracts = [].concat(...(dataReturnFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataReturnFromAPI?.pages[0]?.data?.totalRecord;

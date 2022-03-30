@@ -14,8 +14,8 @@ const ProjectLeftSideBar: FC = () => {
 	const { id: projectID } = useParams<{ id: string }>();
 
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmProject.id });
-	const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "2" });
-
+	const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "2", companyID: detailDepartment?.company?._id }, detailDepartment?.company?._id ? true : false); 
+	
 	React.useEffect(() => {
 		if (projectID) {
 			onFetchDetailDepartmentAsync(projectID);
@@ -69,4 +69,4 @@ const ProjectLeftSideBar: FC = () => {
 	)
 }
 
-export default ProjectLeftSideBar
+export default ProjectLeftSideBar;

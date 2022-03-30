@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import AuthenticationRepository from "apis/authentication";
 import { useInfiniteQuery, useQuery } from "react-query";
-
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { UseGetListAppOfUser, UseCheckPermission, UseCheckPermissionOneMenu, UseGetListAppMenu, UseGetListAppRoleMenu } from "typings/auth";
 
 // 1. Lấy danh sách ứng dụng của 1 user được truy cập
@@ -21,7 +23,7 @@ export const useGetListAppOfUser = (): UseGetListAppOfUser => {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
                 },
-                refetchOnWindowFocus: true,
+                refetchOnWindowFocus: false,
                 enabled: false
             }
         );
@@ -39,7 +41,7 @@ export const useGetListAppOfUser = (): UseGetListAppOfUser => {
 export const useCheckPerAccessApp = (payload: { appID: string }): UseCheckPermission => {
     const { isSuccess, data } =
         useQuery(`check-permissions-access-app?appID=${payload.appID}`, () => AuthenticationRepository.checkPermissionsAccessApp(payload.appID), {
-            refetchOnWindowFocus: true
+            refetchOnWindowFocus: false
         });
 
     let hasPermission = true;
@@ -75,7 +77,7 @@ export const useGetListAppMenu = (payload: { appID: string, parentID?: string })
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
                 },
-                refetchOnWindowFocus: true
+                refetchOnWindowFocus: false
             }
         );
     const listAppMenu = [].concat(...(dataReturnFromAPIGetListAppMenu?.pages || []).map((d: any) => d.data?.listRecords));
@@ -89,7 +91,7 @@ export const useGetListAppMenu = (payload: { appID: string, parentID?: string })
 };
 
 // 4. Lấy danh sách MENU được quyền truy cập của 1 user
-export const useGetListAppRoleMenu = (payload: { appID: string, type: "1" | "2" | "3" }): UseGetListAppRoleMenu => {
+export const useGetListAppRoleMenu = (payload: { appID: string, type: "1" | "2" | "3", companyID?: string }, enabled: true | false = true): UseGetListAppRoleMenu => {
     const currentUser = localStorage.getItem("currentUser") ?? "{}";
     const profile = JSON.parse(currentUser);
     const {
@@ -99,18 +101,19 @@ export const useGetListAppRoleMenu = (payload: { appID: string, type: "1" | "2" 
         fetchNextPage: nextPageGetListAppRoleMenu
     } =
         useInfiniteQuery(
-            `app_role_menus/permission?appID=${payload.appID}$type=${payload.type}`,
+            `app_role_menus/permission?appID=${payload.appID}&type=${payload.type}&companyID=${payload.companyID}`,
             async ({ pageParams }: any) =>
                 AuthenticationRepository.getListAppRoleMenu({
                     appID: payload.appID,
-                    companyID: profile?.company?._id,
+                    companyID: payload.companyID || profile?.company?._id,
                     type: payload.type
                 }),
             {
                 getNextPageParam: ({ nextCursor }: any) => {
                     return nextCursor || undefined;
                 },
-                refetchOnWindowFocus: true
+                refetchOnWindowFocus: false,
+                enabled: enabled
             }
         );
     const listAppRoleMenu = [].concat(...(dataReturnFromAPIGetListAppRoleMenu?.pages || []).map((d: any) => d.data));
@@ -124,19 +127,21 @@ export const useGetListAppRoleMenu = (payload: { appID: string, type: "1" | "2" 
 };
 
 // 5. Check quyền truy cập vào một menu trong app
-export const useCheckPerAccessOneMenu = (payload: { appID: string, menuID: string, type: "1" | "2" | "3" }): UseCheckPermissionOneMenu => {
+export const useCheckPerAccessOneMenu = (payload: { appID: string, menuID: string, type: "1" | "2" | "3", companyID?: string }): UseCheckPermissionOneMenu => {
     const currentUser = localStorage.getItem("currentUser") ?? "{}";
     const profile = JSON.parse(currentUser);
     const { isSuccess, data } =
-        useQuery(`permission-to-access-one-menu-of-app?appID=${payload.appID}&menuID={${payload.menuID}}`, () => AuthenticationRepository.checkPermissionsAccessOneMenu({
-            appID: payload.appID,
-            menuID: payload.menuID,
-            companyID: profile?.company?._id,
-            type: payload.type
-        }), {
-            refetchOnWindowFocus: true
+        useQuery(`permission-to-access-one-menu-of-app?appID=${payload.appID}&menuID=${payload.menuID}&companyID=${payload.companyID || profile?.company?._id}`,
+            () => AuthenticationRepository.checkPermissionsAccessOneMenu({
+                appID: payload.appID,
+                menuID: payload.menuID,
+                companyID: payload.companyID || profile?.company?._id,
+                type: payload.type
+            }), {
+            refetchOnWindowFocus: false,
+            cacheTime: 0
         });
-    // console.log("permission-to-access-one-menu-of-app", data);
+
     let hasPermission = true;
     if (isSuccess && data?.data?.keyError == 'permission_denied') {
         hasPermission = false;
@@ -151,5 +156,26 @@ export const useCheckPerAccessOneMenu = (payload: { appID: string, menuID: strin
             delete: 0,
             read: 0
         }
+    };
+};
+
+// 6. hook check quyền truy cập chi tiết màn hình cụ thể của 1 user, được triệu gọi trong view
+export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string, type: "1" | "2" | "3", companyID?: string }) => {
+    const history = useHistory();
+    const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: payload.appID });
+    const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(payload);
+
+    // Phân quyền theo nhóm chức năng
+    useEffect(() => {
+        if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
+            toast.error("Bạn không có quyền truy cập tính năng này!");
+            history.push("/");
+        };
+    }, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+
+    return {
+        createPermission: (permission?.create && permission.create > 0) ? true : false,
+        updatePermission: (permission?.update && permission.update > 0) ? true : false,
+        deletePermission: (permission?.delete && permission.delete > 0) ? true : false,
     };
 };

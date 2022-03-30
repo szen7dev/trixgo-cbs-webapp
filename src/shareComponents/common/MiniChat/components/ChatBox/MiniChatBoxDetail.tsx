@@ -22,6 +22,7 @@ import {
 import {Oval} from "react-loader-spinner";
 import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 
 type Props = {
     chat: ItemListConversation;
@@ -56,10 +57,14 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
+            dispatch(setIsReviewOldMessages({conversationId: chat._id, isReview: true}))
             if (scrollHeight + scrollTop - clientHeight < 200) {
                 setReachTop(true)
             } else {
                 setReachTop(false);
+            }
+            if (scrollTop >= 0) {
+                dispatch(setIsReviewOldMessages({conversationId: chat._id, isReview: false}))
             }
         }
     };
@@ -84,6 +89,11 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
+
     const userUnreadMessage = useCallback(() => {
         const userUnread = chat?.usersMissMessage?.find(unread => unread.userID === profileId)
         return userUnread?.amount??0
@@ -92,6 +102,10 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
     useEffect(() => {
         if (userUnreadMessage()>0) {
             markAsRead()
+        }
+        const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
+        if (conversationMessagesList) {
+            conversationMessagesList.scrollTop = 0;
         }
         getListMessage({conversationID: chat._id})
     },[chat._id]);
@@ -201,9 +215,4 @@ export const MiniChatBoxDetail:FC<Props> = ({chat}) => {
             </div>
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }

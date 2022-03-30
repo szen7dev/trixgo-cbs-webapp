@@ -1,12 +1,9 @@
-import { FC, useCallback, useState } from "react";
-
-import { Link } from "react-router-dom";
-
+import { FC, useCallback, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
@@ -16,8 +13,12 @@ import { Create, Update, Delete } from "../modal";
 import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
+import { toast } from "react-toastify";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminFunctionalTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listPcmAdmin, totalRecord, nextPageListAppRoles: nextPagePcmAdmin, hasNextPageListAppRoles: hasNextPagePcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
@@ -51,6 +52,13 @@ const ProjectAdminFunctionalTab: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">

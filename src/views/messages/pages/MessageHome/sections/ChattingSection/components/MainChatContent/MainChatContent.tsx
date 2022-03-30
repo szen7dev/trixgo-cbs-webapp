@@ -28,6 +28,7 @@ import {
 import { Oval } from  'react-loader-spinner'
 import {updateUsersMissMessageToConversation} from "redux/reducer/messages/ListConversation";
 import {UseListConversation} from "services/hooks/messages/useListConversation";
+import {setIsReviewOldMessages} from "redux/reducer/messages/ListMessage";
 
 export const listEmoji = [
     {
@@ -91,7 +92,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, null, false))
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
@@ -104,13 +105,20 @@ export const MainChatContent:FC<Props> = ({chat}) => {
         }), (message, index) => renderMessage(message, null, false))
     },[fakeMessagesData]);
 
+    const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
+        if (!messagesData) return [];
+        return _map(Object.values(messagesData), message => message)
+    }
+
     useEffect(() => {
         if (userUnreadMessage()>0) {
             markAsRead()
         }
-        getListMessage({conversationID: currentChat}).then(() => {
-            scrollToBottom()
-        })
+        const conversationMessagesList = document.getElementById("conversation-messages-MessageList");
+        if (conversationMessagesList) {
+            conversationMessagesList.scrollTop = 0;
+        }
+        getListMessage({conversationID: currentChat})
     },[currentChat]);
 
     useEffect(() => {
@@ -143,10 +151,14 @@ export const MainChatContent:FC<Props> = ({chat}) => {
     const onScroll = () => {
         if (conversationMessagesList.current) {
             const { scrollTop, scrollHeight, clientHeight } = conversationMessagesList.current;
+            dispatch(setIsReviewOldMessages({conversationId: currentChat, isReview: true}))
             if (scrollHeight + scrollTop - clientHeight < 300) {
                 setReachTop(true)
             } else {
                 setReachTop(false);
+            }
+            if (scrollTop >= 0) {
+                dispatch(setIsReviewOldMessages({conversationId: currentChat, isReview: false}))
             }
         }
     };
@@ -244,7 +256,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             <div
                 ref={conversationMessagesList}
                 id={"conversation-messages-MessageList"}
-                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto transition-all duration-150 pb-4"}
+                className={"flex-1 h-full items-center flex flex-col-reverse relative overflow-auto justify-start transition-all duration-150 pb-4"}
             >
                 <div className={"w-full max-w-[645px] pt-[20px] px-[20px]"}>
                     {memoizedValue()}
@@ -267,9 +279,4 @@ export const MainChatContent:FC<Props> = ({chat}) => {
             }
         </>
     )
-}
-
-const parseMessageData = (messagesData: {[key:string] : ItemMessage}) => {
-    if (!messagesData) return [];
-    return _map(Object.values(messagesData), message => message)
 }

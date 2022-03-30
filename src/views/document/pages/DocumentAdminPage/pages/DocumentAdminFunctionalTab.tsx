@@ -1,6 +1,6 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
@@ -14,10 +14,14 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { Create, Update, Delete } from "../modal";
 import { useAdmin } from "services/hooks/auth/useAdmin";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 const DocumentAdminFunctionalTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listDocumentAdmin, totalRecord, nextPageListAppRoles: nextPageDocumentAdmin, hasNextPageListAppRoles: hasNextPageDocumentAdmin } = useAdmin({ appID: APP_ID.DOCUMENT.id, keyword: keyword });
@@ -51,6 +55,13 @@ const DocumentAdminFunctionalTab: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">
