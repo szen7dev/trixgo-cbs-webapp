@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { ContractIncome } from "typings/contractIncome";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
