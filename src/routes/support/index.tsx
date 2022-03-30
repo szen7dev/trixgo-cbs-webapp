@@ -26,7 +26,11 @@ const SupportRouter: FC = () => {
 
     useEffect(() => {
         if(!user) return;
-        const emailAccept = ['contact@trixgo.com', 'vuhuynhminh9221@gmail.com'];
+        const emailAccept = [
+            'contact@trixgo.com',
+            'vuhuynhminh9221@gmail.com',
+            'hiepnh@pgipartner.com'
+        ];
 
         if(!emailAccept.includes(user.email)) {
             history.push('/');

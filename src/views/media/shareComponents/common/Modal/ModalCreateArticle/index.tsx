@@ -265,7 +265,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 									className="font-normal text-sm text-negative italic"
 								/>
 								{/* <Editor
-									apiKey={process.env.REACT_APP_TINY_MCE_KEY || 'mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt'}
+									apiKey={process.env.REACT_APP_TINYMCE_API_KEY || 'mnhe8mkhfadk24d7pbtvd880370fc3jyxr34fxx0csiks0gt'}
 									onInit={(_, editor) => editorRef.current = editor}
 									initialValue={initialValues.content}
 									onSaveContent={() => console.log('hello')}
