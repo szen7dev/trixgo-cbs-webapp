@@ -29,9 +29,11 @@ export type DoctypeQueryPayload = QueryParam & {
     // 16 - Hợp đồng phân loại công nợ
     // 17 - Hợp đồng nguyên nhân phát sinh
     // 18 - Chung - Nguyên nhân thất bại
-    // 20 - Chung các lỗi hay gặp
-    // 21 - Công việc, Đánh giá chất lượng
-    type?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
+    // 19 - Chung các lỗi hay gặp
+    // 20 - Công việc, Đánh giá chất lượng
+    // 21 - NPS-Điểm số
+    // 22 - NPS-Lý do
+    type?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22;
     [record: string]: any;
 }
 
