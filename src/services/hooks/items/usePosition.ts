@@ -1,9 +1,12 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 
 import { PositionRepository } from 'apis/item';
 import type { QueryParam } from 'typings/items/position';
 
 interface UsePosition {
+    addPositionAsync: (params: any) => Promise<any>;
+    updatePositionAsync: (params: any) => Promise<any>;
+    deletePositionAsync: (ids: Array<string>) => Promise<any>;
     loading: boolean;
     data: any[];
     hasNextPage?: boolean;
@@ -15,7 +18,29 @@ interface UsePosition {
 }
 
 export const usePosition = (params?: QueryParam, isFetch?: boolean): UsePosition => {
-    const result = useInfiniteQuery(
+    const { mutateAsync: addPositionAsync } =
+        useMutation((payload: any) =>
+            PositionRepository.addPosition(payload)
+        );
+
+    const { mutateAsync: updatePositionAsync } =
+        useMutation((payload: any) =>
+            PositionRepository.updatePosition(payload)
+        );
+
+    const { mutateAsync: deletePositionAsync } =
+        useMutation((ids: Array<string>) =>
+            PositionRepository.deletePosition(ids)
+        );
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage
+    } = useInfiniteQuery(
         ['list_positions', params],
         async ({ pageParam }: any) =>
         PositionRepository.listPosition({
@@ -30,15 +55,6 @@ export const usePosition = (params?: QueryParam, isFetch?: boolean): UsePosition
             enabled: isFetch ?? false,
         });
 
-    const {
-        isLoading,
-        data,
-        refetch,
-        fetchNextPage,
-        fetchPreviousPage,
-        hasNextPage
-    } = result;
-
     const listPositions = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
@@ -48,6 +64,9 @@ export const usePosition = (params?: QueryParam, isFetch?: boolean): UsePosition
     const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
+        addPositionAsync,
+        updatePositionAsync,
+        deletePositionAsync,
         loading: isLoading,
         data: listPositions,
         hasNextPage,

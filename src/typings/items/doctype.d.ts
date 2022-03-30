@@ -6,7 +6,7 @@ export type Doctype = {
     description: string;
     type: number;
     company?: Company
-    updateAt?: string;
+    modifyAt?: string;
     createAt?: string;
 }
 

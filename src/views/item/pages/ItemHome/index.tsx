@@ -113,9 +113,9 @@ export const ItemHomePage: FC = () => {
 
             toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
             closeModal();
-            setDoctypesChecked([]);
             clearData();
             refetchListDoctype();
+            setDoctypesChecked([]);
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -249,7 +249,7 @@ export const ItemHomePage: FC = () => {
                             <td className="py-1 px-2">{doctype.name}</td>
                             <td className="py-1 px-2">{doctype.description}</td>
                             <td className="py-1 px-2">
-                                {doctype.updateAt ? moment(doctype.updateAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
                             </td>
                         </tr>
                     )) : <></>}
