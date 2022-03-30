@@ -92,7 +92,7 @@ export const MainChatContent:FC<Props> = ({chat}) => {
                 return 1
             }
             return -1
-        }), (message, index) => renderMessage(message, null, false))
+        }), (message, index) => renderMessage(message, value[index-1]))
     },[messagesData]);
 
     const memoizedFakeValue = useCallback(() => {
