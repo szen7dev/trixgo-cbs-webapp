@@ -69,6 +69,7 @@ import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAd
 import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
+import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import { PcmTasksReport } from "views/pcm/pages/PcmTasksReport";
 
 const PCMRouter: FC = () => {
@@ -194,11 +195,13 @@ const PCMRouter: FC = () => {
 									// Push to state
 									return({ pathname:'/pcm/admin/2', state: match? match.params.id : null })} },
 								{ id: '3', title: 'Dự án', path: '/pcm/admin/3', },
+								{ id: '4', title: 'Chức năng', path: '/pcm/admin/4', },
 							]}>
 								<Route exact path="/pcm/admin" component={ProjectAdminFunctionalTab} />
 								<Route exact path="/pcm/admin/:id/detail" component={ProjectAdminDetail} />
 								<Route exact path="/pcm/admin/2" component={ProjectAdminAuthorTab} />
 								<Route exact path="/pcm/admin/3" component={ProjectAdminProjectTab} />
+								<Route exact path="/pcm/admin/4" component={ProjectAdminPositionTab} />
 								<Route exact path="/pcm/admin/:id/project" component={ProjectAdminProjectDetail} />
 							</LayoutSecondary>
 						</Route>

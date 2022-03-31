@@ -27,7 +27,7 @@ export const ItemLeftSideBar: FC = () => {
         {/* menu block */}
         <div className="t-link-menu-container">
           <NavLink
-            to="/item/home"
+            to="/item/home/1"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Lĩnh vực hồ sơ"
           >
