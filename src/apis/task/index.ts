@@ -22,7 +22,8 @@ import {
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
   ListReactionPayload,
-  updateTaskPayload
+  updateTaskPayload,
+  UpdateResponsePayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
@@ -264,7 +265,7 @@ const TaskRepository = {
     );
     return data;
   },
-  async updateComment(payload: CommentPayload): Promise<any> {
+  async updateComment(payload: CommentPayload | UpdateResponsePayload): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_comments`,
       {

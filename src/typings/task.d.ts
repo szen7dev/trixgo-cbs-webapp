@@ -272,6 +272,13 @@ export type ResponsePayload = {
   images?: Array<string>;
 };
 
+export type UpdateResponsePayload = {
+  taskID: string;
+  commentID: string;
+  files?: string[];
+  images?: string[];
+};
+
 export type ResponseResponse = APIResponse & {
   data: {
     result: ResponseProps,

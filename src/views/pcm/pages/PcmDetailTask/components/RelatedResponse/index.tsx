@@ -29,6 +29,7 @@ import { useRelatedResponse } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { APP_KEY } from "utils/constants";
+import { APP_ID } from "apis/localdb";
 
 /**
  * Typings, apis
@@ -83,7 +84,7 @@ const Response: FC<Props> = ({ task }) => {
 
   const { state, dispatch } = useContext(CommentContext);
   const { addFileToUpload } = useUpload({
-    appID: APP_KEY.PCM_PLAN_TASK,
+    appID: APP_ID.PCM.id,
     companyID: task?.company?._id,
     projectID: task?.project?._id,
     groupID: task?.group?._id
@@ -408,6 +409,10 @@ const Response: FC<Props> = ({ task }) => {
             <RelatedResponseItem
               key={response._id}
               response={response}
+              author={user}
+              companyID={task.company?._id}
+              projectID={task.project?._id}
+              groupID={task.group?._id}
               expanded={isExpand}
               isHighlight={hashLocation?.split('_')[1] === response._id}
               divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
