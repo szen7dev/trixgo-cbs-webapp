@@ -6,7 +6,7 @@ export type Doctype = {
     description: string;
     type: number;
     company?: Company
-    updateAt?: string;
+    modifyAt?: string;
     createAt?: string;
 }
 
@@ -33,7 +33,7 @@ export type DoctypeQueryPayload = QueryParam & {
     // 20 - Công việc, Đánh giá chất lượng
     // 21 - NPS-Điểm số
     // 22 - NPS-Lý do
-    type?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22;
+    type?: number;
     [record: string]: any;
 }
 
