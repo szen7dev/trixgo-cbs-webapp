@@ -24,7 +24,7 @@ import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
 
-export const ItemHomePage: FC = () => {
+export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
@@ -32,7 +32,7 @@ export const ItemHomePage: FC = () => {
         doctypeID: '',
         name: '',
         description: '',
-        type: 1
+        type
     });
 
     const {
@@ -42,7 +42,7 @@ export const ItemHomePage: FC = () => {
         refetchListDoctype,
         fetchNextPageDoctype,
         totalRecord
-    } = useDoctype({ type: 1, keyword: keywordDoctype }, true);
+    } = useDoctype({ type, keyword: keywordDoctype }, true);
 
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
@@ -56,7 +56,7 @@ export const ItemHomePage: FC = () => {
             doctypeID: '',
             name: '',
             description: '',
-            type: 1
+            type
         }))
     }
 
@@ -135,7 +135,7 @@ export const ItemHomePage: FC = () => {
                 doctypeID: '',
                 name: '',
                 description: '',
-                type: 1
+                type
             };
         }
 

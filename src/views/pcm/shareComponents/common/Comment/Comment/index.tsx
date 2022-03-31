@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useContext, useState } from 'react';
+import { FC, HTMLAttributes, useContext, useEffect, useState } from 'react';
 import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
@@ -35,6 +35,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	disableReply, comment, small, userID, onClickReply, onClickEdit, onClickImage, renderEndComment: EndComment, renderOptions: Options, ...props
 }) => {
 	const [isOpenModalReactions, setIsOpenModalReactions] = useState(false);
+	const [isExpiredInteractComment, setIsExpiredInteractComment] = useState(false);
 	const [isReaction, setIsReaction] = useState(!!comment.reaction);
 	const [amountReaction, setAmountReaction] = useState(comment.amountReaction);
 	const { deleteCommentAsync } = useCommentPcm({
@@ -53,6 +54,17 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 		nextPageListReactions,
 		totalRecordReactions
 	} = useCommentPcm(paramsReactions)
+
+	useEffect(() => {
+		if(comment.createAt) {
+			const expireTime = new Date(comment.createAt).addHours(1);
+			const now 		 = new Date(Date.now());
+
+			if(expireTime < now){
+				setIsExpiredInteractComment(true);
+			}
+		}
+	}, [comment])
 
 	const toggleModalReaction = () => {
 		setParamReactions(previousValue => ({
@@ -137,7 +149,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								}}>
 							</p>
 						</div>
-						{Options && <Options
+						{(Options && !isExpiredInteractComment) && <Options
 							className="opacity-0 group-hover:opacity-100"
 							onUpdate={handleEditComment}
 							onDelete={handleDeleteComment}
