@@ -24,7 +24,7 @@ import { useModal } from "services/hooks/useModal";
 import { useDoctype } from "services/hooks/items/useDoctype";
 import { Doctype } from "typings/items";
 
-export const ItemHomePage: FC = () => {
+export const ItemHomePage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
     const [keywordDoctype, setKeywordDoctype] = useState('');
     const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
@@ -32,7 +32,7 @@ export const ItemHomePage: FC = () => {
         doctypeID: '',
         name: '',
         description: '',
-        type: 1
+        type
     });
 
     const {
@@ -42,7 +42,7 @@ export const ItemHomePage: FC = () => {
         refetchListDoctype,
         fetchNextPageDoctype,
         totalRecord
-    } = useDoctype({ type: 1, keyword: keywordDoctype }, true);
+    } = useDoctype({ type, keyword: keywordDoctype }, true);
 
     const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
 
@@ -56,7 +56,7 @@ export const ItemHomePage: FC = () => {
             doctypeID: '',
             name: '',
             description: '',
-            type: 1
+            type
         }))
     }
 
@@ -113,9 +113,9 @@ export const ItemHomePage: FC = () => {
 
             toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
             closeModal();
-            setDoctypesChecked([]);
             clearData();
             refetchListDoctype();
+            setDoctypesChecked([]);
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -135,7 +135,7 @@ export const ItemHomePage: FC = () => {
                 doctypeID: '',
                 name: '',
                 description: '',
-                type: 1
+                type
             };
         }
 
@@ -249,7 +249,7 @@ export const ItemHomePage: FC = () => {
                             <td className="py-1 px-2">{doctype.name}</td>
                             <td className="py-1 px-2">{doctype.description}</td>
                             <td className="py-1 px-2">
-                                {doctype.updateAt ? moment(doctype.updateAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
                             </td>
                         </tr>
                     )) : <></>}

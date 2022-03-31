@@ -23,21 +23,28 @@ export interface PositionResponse {
     status: number;
 }
 
-// export type PositionProps = {
-//     _id: string,
-//     company: {
-//         _id: string,
-//         name: string,
-//         sign: string
-//     },
-//     app: {
-//         _id: string,
-//         name: string,
-//         slug: string
-//     },
-//     user: User,
-//     endTime: string,
-//     numLog: number,
-//     level: number,
-//     userCreate: User,
-// }
+export type Position = {
+    _id: string,
+    company: {
+        _id: string,
+        name: string,
+        sign: string
+    },
+    name: string,
+    description: string,
+    parent: Position,
+    level: number,
+    userCreate: User,
+    createAt: string,
+    modifyAt: string
+}
+
+interface ModalProps {
+    modalType: "create" | "update";
+    initialValues?: {
+        positionID: string,
+        name: string,
+        description: string
+    }
+    onConfirm?(): void
+}
