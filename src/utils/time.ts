@@ -1,5 +1,15 @@
 import moment from "moment";
 
+Date.prototype.addHours = function(h) {
+	this.setTime(this.getTime() + (h*60*60*1000));
+	return this;
+}
+
+Date.prototype.addMinutes = function(m) {
+	this.setTime(this.getTime() + (m * 60 * 1000));
+	return this;
+}
+
 export const sleep = (ms: number): Promise<unknown> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -7,7 +17,7 @@ export const sleep = (ms: number): Promise<unknown> => {
 export const getMessageTimeDuration = (modifyAt: string): string => {
   if (!modifyAt || !modifyAt.length) return "";
 
-  const now = moment(new Date()); //Todays date
+  const now = moment(new Date()); // Todays date
   const start = moment(modifyAt); // Start date
   const duration = moment.duration(now.diff(start));
 

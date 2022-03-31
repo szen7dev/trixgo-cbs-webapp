@@ -13,7 +13,8 @@ import {
   ListReactionPayload,
   ReactionCommentProps,
   updateTaskPayload,
-  CommentProps
+  CommentProps,
+  UpdateResponsePayload
 } from "typings/task";
 
 /**
@@ -120,8 +121,9 @@ export const useTask = ({
  * ============================ *********************** ===============================
  */
 
- type UseRelatedResponse = {
+type UseRelatedResponse = {
   addResponseAsync: (payload: ResponsePayload) => Promise<any>;
+  updateResponseAsync: (payload: UpdateResponsePayload) => Promise<any>,
   listResponses: Array<ResponseProps>;
   totalRecord: number;
   refetchListResponses: () => void;
@@ -130,7 +132,7 @@ export const useTask = ({
 };
 
 type UseRelatedResponseProps = {
-  params: Partial<{
+  params?: Partial<{
     taskID: string
   }>,
   isFetch?: boolean;
@@ -140,6 +142,11 @@ export const useRelatedResponse = ({ params = {}, isFetch = false } : UseRelated
   const { mutateAsync: addResponseAsync } =
     useMutation((payload: ResponsePayload) =>
       TaskRepository.addResponse(payload)
+    );
+
+  const { mutateAsync: updateResponseAsync } =
+    useMutation((payload: UpdateResponsePayload) =>
+        TaskRepository.updateComment(payload)
     );
 
   const {
@@ -174,6 +181,7 @@ export const useRelatedResponse = ({ params = {}, isFetch = false } : UseRelated
 
   return {
     addResponseAsync,
+    updateResponseAsync,
     listResponses,
     totalRecord,
     refetchListResponses,

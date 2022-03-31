@@ -20,8 +20,14 @@ const ProjectAdminProjectTab: FC = () => {
 	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmProject, totalRecord, nextPagePcmProject, hasNextPagePcmProject, refetchPcmProject } = usePcmProject({ keyword: keyword });
-	const { openModal } = useModal();
+	const {
+		listPcmProject,
+		totalRecord,
+		nextPagePcmProject,
+		hasNextPagePcmProject,
+		refetchPcmProject
+	} = usePcmProject({ keyword: keyword });
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -118,14 +124,11 @@ const ProjectAdminProjectTab: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="pb-1 pt-1 w-[250px]">
@@ -186,15 +189,13 @@ const ProjectAdminProjectTab: FC = () => {
 									<input
 										className="form-check-input"
 										type="checkbox"
-										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
 									<Link to={`/pcm/admin/${item._id}/project`}>
-										<div className="flex items-center">
+										<div className="flex items-start">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
