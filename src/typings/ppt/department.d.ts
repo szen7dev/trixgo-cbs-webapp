@@ -133,6 +133,14 @@ export type DataProjectPart<P, Sn> = {
   expiredTime: string;
   actualStartTime: string | null;
   actualFinishTime: string | null;
+  budget: number;
+  forecastBudget: number;
+  contractValue: number;
+  contractPlusValue: number;
+  contractVatValue: number;
+  contractAmountPaid: number;
+  milestones: number;
+  completedMilestones: number;
 };
 
 export type DataDepartmentPart<P, Sn> = {

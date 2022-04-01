@@ -20,7 +20,7 @@ const PortfolioAnalysisContainer: FC = () => {
 	});
 	return <div className="flex flex-wrap -mx-2 text-cbs-subtext">
 		<PortfolioAnalysisTotal className="px-2 mt-4 flex-auto" data={data?.dataBlock1} />
-		<PortfolioBudgetAndContract className="px-2 mt-4 flex-1" style={{ minWidth: "305px" }} />
+		<PortfolioBudgetAndContract className="px-2 mt-4 flex-1" data={data?.dataBlock2} style={{ minWidth: "305px" }} />
 		<PortfolioAnalysisChart className="px-2 mt-4 flex-1" data={data?.dataBlock3} ref={chartRef} />
 	</div>;
 };
