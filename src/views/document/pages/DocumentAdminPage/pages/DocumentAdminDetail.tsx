@@ -20,7 +20,7 @@ const DocumentAdminDetail: FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id })
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id })
 	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.DOCUMENT.id, type: "1" });
 	const { openModal } = useModal();
@@ -55,7 +55,7 @@ const DocumentAdminDetail: FC = () => {
 	};
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}

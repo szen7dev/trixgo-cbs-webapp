@@ -17,7 +17,6 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
-import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 
@@ -107,6 +106,10 @@ const PcmDetailTask: FC = () => {
         createAt: new Date()
       }
     ]))
+  }
+
+  const handleMarkInterest = async () => {
+    console.log('Hello World');
   }
 
   useEffect(() => {
@@ -222,13 +225,13 @@ const PcmDetailTask: FC = () => {
         >
           <span className="text-3x-large leading-8">
             {taskInfo?.name}
-            <span className="mx-2">
+            <button className="mx-2" onClick={handleMarkInterest}>
               <img
                 className="inline h-[24px] w-[24px]"
-                src={IconStar}
+                src={`/images/common/icons8-star-96.png`}
                 alt="Star"
               />
-            </span>
+            </button>
             <button
               className={cn('inline-block text-white text-xs rounded-xl px-2 py-1 mx-3', PCM_STATUS_TASK[taskData.status - 1].class)}
               onClick={toggleModalUpdateTaskStatus}

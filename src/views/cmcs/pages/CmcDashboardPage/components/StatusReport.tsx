@@ -1,11 +1,11 @@
 import { FC } from "react";
 
 import CommentIcon from "assets/images/icons8-comments.svg";
-import { ContractProps } from "typings/cmcs";
+import { Contract } from "typings/cmcs";
 import { Popover } from "shareComponents/common";
 
 type Props = {
-  listContracts: Array<ContractProps>
+  listContracts: Array<Contract>
 }
 
 const StatusReport: FC<Props> = ({ listContracts }) => {
@@ -32,7 +32,7 @@ const StatusReport: FC<Props> = ({ listContracts }) => {
 
       <div className="px-4 bg-primary-light">
 
-        {listContracts.length ? listContracts.map((contract: ContractProps) => (
+        {listContracts.length ? listContracts.map((contract: Contract) => (
           <div className="border-b -mt-1 py-3" key={contract._id}>
             <div className="flex justify-between">
               <div className="max-w-[240px]">

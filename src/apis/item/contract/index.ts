@@ -54,6 +54,12 @@ const ContractRepository = {
     );
     return data;
   },
+
+  // 8. THÊM THÀNH VIÊN VÀO DỰ ÁN
+  async addOrRemoveMemberToDepartment(body: { contractID: string, members?: string[], admins?: string[], adminsRemove?: string[], membersRemove?: string[] }) {
+    const { data } = await API.put<any>('/api/item/contracts', body);
+    return data;
+  },
 };
 
 export default ContractRepository;

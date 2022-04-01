@@ -25,6 +25,15 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     milestones: "",
     completedMilestones: "",
     budget: "",
+    vatBudget: "",
+    forecastBudget: "",
+    vatForecastBudget: "",
+    contractValue: "",
+    contractVatValue: "",
+    contractPlus: "",
+    contractVatPlus: "",
+    contractAdvancePaymentPaid: "",
+    contractAmountPaid: ""
 } }) => {
     const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
 
@@ -46,9 +55,18 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                 type: parseInt(values.type),
                 milestones: parseInt(values.milestones),
                 completedMilestones: parseInt(values.completedMilestones),
-                budget: parseInt(values.budget),
                 startTime: moment(values.startTime).format('YYYY-MM-DD'),
                 expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
+                budget: parseInt(values.budget),
+                vatBudget: parseInt(values.vatBudget),
+                forecastBudget: parseInt(values.forecastBudget),
+                vatForecastBudget: parseInt(values.vatForecastBudget),
+                contractValue: parseInt(values.contractValue),
+                contractVatValue: parseInt(values.contractVatValue),
+                contractPlus: parseInt(values.contractPlus),
+                contractVatPlus: parseInt(values.contractVatPlus),
+                contractAdvancePaymentPaid: parseInt(values.contractAdvancePaymentPaid),
+                contractAmountPaid: parseInt(values.contractAmountPaid),
             };
            
             const result = await createProjectMutateAsync(query);
@@ -68,9 +86,18 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                 departmentID: values._id,
                 milestones: parseInt(values.milestones),
                 completedMilestones: parseInt(values.completedMilestones),
-                budget: parseInt(values.budget),
                 startTime: moment(values.startTime).format('YYYY-MM-DD'),
                 expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
+                budget: parseInt(values.budget),
+                vatBudget: parseInt(values.vatBudget),
+                forecastBudget: parseInt(values.forecastBudget),
+                vatForecastBudget: parseInt(values.vatForecastBudget),
+                contractValue: parseInt(values.contractValue),
+                contractVatValue: parseInt(values.contractVatValue),
+                contractPlus: parseInt(values.contractPlus),
+                contractVatPlus: parseInt(values.contractVatPlus),
+                contractAdvancePaymentPaid: parseInt(values.contractAdvancePaymentPaid),
+                contractAmountPaid: parseInt(values.contractAmountPaid),
             };
             const result = await updateProjectMutateAsync(query);
             if (!result.error) {
@@ -198,11 +225,119 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
 
                                 <div className="mb-4">
                                     <label className="block text-gray-700 text-sm font-bold mb-2">
-                                        Ngân sách/tổng mức đầu tư
+                                        Ngân sách/tổng mức đầu tư trước VAT
                                     </label>
-                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ngân sách" {...getFieldProps('budget')} />
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('budget')} />
                                     <ErrorMessage
                                         name="budget"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Ngân sách/tổng mức đầu tư-VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('vatBudget')} />
+                                    <ErrorMessage
+                                        name="vatBudget"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                       Dự báo ngân sách trước VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('forecastBudget')} />
+                                    <ErrorMessage
+                                        name="forecastBudget"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Dự báo ngân sách-VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('vatForecastBudget')} />
+                                    <ErrorMessage
+                                        name="vatForecastBudget"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Giá trị ký hợp đồng trước VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractValue')} />
+                                    <ErrorMessage
+                                        name="contractValue"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Giá trị ký hợp đồng-VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractVatValue')} />
+                                    <ErrorMessage
+                                        name="contractVatValue"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Giá trị phát sinh trước VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractPlus')} />
+                                    <ErrorMessage
+                                        name="contractPlus"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Giá trị phát sinh-VAT
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractVatPlus')} />
+                                    <ErrorMessage
+                                        name="contractVatPlus"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Đã giải ngân tạm ứng
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractAdvancePaymentPaid')} />
+                                    <ErrorMessage
+                                        name="contractAdvancePaymentPaid"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Đã giải ngân thanh toán
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" {...getFieldProps('contractAmountPaid')} />
+                                    <ErrorMessage
+                                        name="contractAmountPaid"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
