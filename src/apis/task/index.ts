@@ -29,7 +29,7 @@ import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
   path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures",
-  select: "_id name fullname bizfullname image sign _id name nameOrg size path description mimeType type author createAt members",
+  select: "_id name fullname bizfullname image sign _id name nameOrg size path description mimeType type author createAt members company",
   populate: {
     path: "author",
     select: "_id bizfullname image"

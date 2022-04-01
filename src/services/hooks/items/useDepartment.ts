@@ -74,6 +74,7 @@ interface UseQueryListDepartmentIsMember {
 type ListDepartmentIsMemberProps = {
     keyword?: string;
     limit?: number;
+    type?: number;
     isFetch?: boolean;
 }
 

@@ -109,6 +109,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     fetchNextPage: fetchNextPageListContract,
   } = useContract({
     keyword: searchContract,
+    companyID: task.project.company,
     projectID
   }, !!projectID);
 

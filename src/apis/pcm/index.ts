@@ -2,7 +2,7 @@ import API from "../repository";
 
 import { convertObToUrl } from "utils";
 
-import { AddConditionTaskReportPayload, InfoReportPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
+import { AddConditionTaskReportPayload, InfoReportPayload, ListFilesPcmPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
 
 const pcmURL = "/api/subject_pcm";
 
@@ -50,6 +50,19 @@ const PcmRepository = {
                     path: "company author",
                     select: "_id name sign bizfullname image"
                 }),
+                ...payload
+            })}`
+        );
+        return data;
+    },
+
+    async listFilesPcm(payload: ListFilesPcmPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_files?${convertObToUrl({
+                // populates: JSON.stringify({
+                //     path: "project contract",
+                //     select: "_id name sign"
+                // }),
                 ...payload
             })}`
         );
