@@ -12,22 +12,23 @@ import type {
 } from 'typings/document/document-child';
 
 interface UseMutationDocumentChild {
-    inserDocumentChildAsync: (payload: DocumentChildInserPayload) => Promise<DocumentChildInserResponse>;
+    // inserDocumentChildAsync: (payload: DocumentChildInserPayload) => Promise<DocumentChildInserResponse>;
+    insertDocumentChildAsync: (payload: any) => Promise<any>;
     updateDocumentChildAsync: (payload: DocumentChildUpdatePayload) => Promise<DocumentChildUpdateResponse>;
 }
 
 export const useMutationDocumentChild = (): UseMutationDocumentChild => {
-    const { mutateAsync: inserDocumentChildAsync } = useMutation((payload: any) => DocumentChildRepository.insert(payload));
-
+    const { mutateAsync: insertDocumentChildAsync } = useMutation((payload: any) => DocumentChildRepository.insert(payload));
     const { mutateAsync: updateDocumentChildAsync } = useMutation((payload: any) => DocumentChildRepository.update(payload));
 
     return {
-        inserDocumentChildAsync,
+        insertDocumentChildAsync,
         updateDocumentChildAsync
     }
 }
 
 export interface UseQueryListDocumentChild {
+    createDocumentChildMutateAsync?: any,
     loading: boolean;
     totalRecord: number;
     totalPages: number;
@@ -39,6 +40,7 @@ export interface UseQueryListDocumentChild {
 }
 
 export const useQueryListDocumentChild = (params: DocumentChildQueryPayload): UseQueryListDocumentChild => {
+
     const res = useInfiniteQuery(
         [`document-childs`, { params }],
         async ({ pageParam }: any) =>
@@ -58,6 +60,7 @@ export const useQueryListDocumentChild = (params: DocumentChildQueryPayload): Us
             enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
         }
     );
+    
     const {
         isLoading,
         data,

@@ -47,7 +47,7 @@ export const DocumentOfPackagePage: FC = () => {
   const [recordSelected, setSelectRecord] = useState<any>({});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(departmentID, pageParam, packageID);
-  const { inserDocumentChildAsync, updateDocumentChildAsync }             = useMutationDocumentChild();
+  const { insertDocumentChildAsync, updateDocumentChildAsync }             = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync }                                  = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync }                                    = useQueryDetailDocument();
 
@@ -78,7 +78,7 @@ export const DocumentOfPackagePage: FC = () => {
       departmentInfo: result,
       title: "Thêm mới",
       onSubmit: async (values: any) => {
-        const result = await inserDocumentChildAsync({
+        const result = await insertDocumentChildAsync({
           ...values,
           departmentID,
         });
@@ -93,7 +93,7 @@ export const DocumentOfPackagePage: FC = () => {
     });
   }, [
     departmentID,
-    inserDocumentChildAsync,
+    insertDocumentChildAsync,
     onFetchDetailDepartmentAsync,
     refetch,
     toggleModal,
