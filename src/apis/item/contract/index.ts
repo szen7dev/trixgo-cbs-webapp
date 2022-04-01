@@ -26,7 +26,6 @@ const ContractRepository = {
   },
 
   // Data 2
-
   async getInfoContract(payload: GetInfoContractPayload): Promise<any> {
     const { contractID, populates, select } = payload;
 
@@ -52,6 +51,12 @@ const ContractRepository = {
     const { data } = await API.delete(
       `${cmcsURL}/contracts?contractID=${contractID}`
     );
+    return data;
+  },
+
+  // Thêm thành viên vào hợp đồng
+  async addOrRemoveMemberToDepartment(body: { contractID: string, members?: string[], admins?: string[], adminsRemove?: string[], membersRemove?: string[] }) {
+    const { data } = await API.put<any>('/api/item/contracts', body);
     return data;
   },
 };

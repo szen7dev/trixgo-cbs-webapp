@@ -7838,7 +7838,7 @@ fault@^1.0.0:
   dependencies:
     format "^0.2.0"
 
-"favico.js@github:ejci/favico.js#6a3f430":
+favico.js@ejci/favico.js#6a3f430:
   version "0.3.10"
   resolved "https://codeload.github.com/ejci/favico.js/tar.gz/6a3f430be559f93d96573e2a4a0116e154c11319"
 
