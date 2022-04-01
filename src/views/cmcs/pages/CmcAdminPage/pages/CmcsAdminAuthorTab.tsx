@@ -1,19 +1,22 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { APP_ID } from "apis/localdb";
 import { useGetListAppRoleMenuFromAdmin, useAdmin } from "services/hooks/auth/useAdmin";
 import { useAdminDetail } from "services/hooks/auth/useAdmin";
-import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { useGetListAppMenu, useGetListAppRoleMenu, useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { useLocation } from "react-router-dom";
 import { DropdownSearchable } from "shareComponents/common";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const CmcsAdminAuthorTab: FC = () => {
+	const history = useHistory();
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CMCS.id, parentID: typeAppRoleDetail == "1" ? APP_ID.CMCS.menuCmcsApp.id : APP_ID.CMCS.menuCmcsContract.id });
 	const { listAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CMCS.id, type: typeAppRoleDetail });
-
 	const { listAppRoleMenuFromAdmin, updatePermissionsAppRoleMenusMutateAsync, refetchGetListAppRoleMenuFromAdmin } = useGetListAppRoleMenuFromAdmin({ appID: APP_ID.CMCS.id, companyID: companyAppRoleDetail, roleID: funcID });
 
 	const data = listAppRoles.map(e => ({
@@ -71,6 +74,13 @@ const CmcsAdminAuthorTab: FC = () => {
 		refetchGetListAppRoleMenu();
 		refetchGetListAppRoleMenuFromAdmin();
 	}
+
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">

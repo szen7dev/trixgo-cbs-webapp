@@ -1,22 +1,22 @@
 // useInfiniteQuery-List mẩu tin
 // useMutation-Thêm sửa xóa mẩu tin
 // FetchNextPageOptions-Kiểu dữ liệu
-import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 // Khai báo đối tượng để hứng giá trị từ API
 import ContractRepository from "apis/item/contract";
 
 // Định nghĩa kiểu dữ liệu
-import { ContractProps, ListContractsPayload } from "typings/cmcs";
+import { Contract, ListContractsPayload } from "typings/cmcs";
 
 // Định nghĩa cấu trúc dữ liệu trả về
 type UseCmcs = {
-    listContracts: Array<ContractProps>,
+    listContracts: Array<Contract>,
     isLoadingListContracts: boolean, // Là 1 biến để kiểm soát trạng thái loading data
     refetchListContracts: () => void, // Làm mới lại danh sách dữ liệu
     nextPageListContracts: () => void, // Dữ liệu trang tiếp theo
     prevPageListContracts: () => void, // Dữ liệu trang trước
-    totalRecord: number | undefined, // Tổng số mẩu tin (theo phân trang con trỏ)
+    totalRecord: number, // Tổng số mẩu tin (theo phân trang con trỏ)
     totalPages: number | undefined, // Tổng số trang (sau không dùng)
     hasNextPage: boolean | undefined // Kiểm tra còn trang tiếp theo hay không
 };
@@ -33,8 +33,8 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
         fetchPreviousPage: prevPageListContracts,
         hasNextPage: hasNextPage
     } =
-        useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
-            "list_contacts", // Key để phân biệt vùng tác động bởi data thay đổi
+        useInfiniteQuery(
+            ["list_contacts", params?.keyword], 
             async ({ pageParams }: any) => 
             ContractRepository.getListContract({ 
                 lastestID: pageParams ? pageParams : "",
@@ -60,7 +60,7 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
         );
 
     const listContracts = [].concat(...(dataReturnFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = dataReturnFromAPI?.pages[0]?.data?.totalRecord;
+    const totalRecord = dataReturnFromAPI?.pages[0]?.data?.totalRecord || 0;
     const totalPages = dataReturnFromAPI?.pages[0]?.data?.totalPages;
 
     return {

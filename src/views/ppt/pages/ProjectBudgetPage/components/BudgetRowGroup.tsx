@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import MenuChildRow from './MenuChildRow';
@@ -29,6 +29,7 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 	useEffect(() => {
 		setState(show);
 	}, [show])
+
 	return (
 		<RightClickMenuWrapper
 			contextMenu={<MenuChildRow />}
