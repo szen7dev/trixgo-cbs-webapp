@@ -19,6 +19,7 @@ export interface Document {
     project: Project;
     name?: string;
     sign: string;
+    image: string;
     sender?: {
         _id: string;
         name: string;

@@ -2,11 +2,18 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from "apis/pcm";
 import {
     AddConditionTaskReportPayload,
+    ListFilesPcmPayload,
     PcmPlanTaskProps,
     PcmReport,
     SendMailTaskPayload,
     UpdateConditionTaskReportPayload
 } from "typings/pcm";
+
+/**
+ * ============================ ************ ===============================
+ * ============================ 	 PCM     ===============================
+ * ============================ ************ ===============================
+ */
 
 type UsePcm = {
     sendMailDetailTaskAsync: (payload: SendMailTaskPayload) => Promise<any>,
@@ -66,6 +73,12 @@ export const usePcm = (params?: any, isFetch?: boolean) : UsePcm => {
         hasNextPage
     };
 };
+
+/**
+ * ============================ ******************* ===============================
+ * ============================ 	 PCM REPORT     ===============================
+ * ============================ ******************* ===============================
+ */
 
 type UsePcmReport = {
     addConditionTaskReportAsync: (payload: AddConditionTaskReportPayload) => Promise<any>,
@@ -139,5 +152,57 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
         prevPageListReports,
         totalRecord,
         hasNextPage
+    }
+}
+
+/**
+ * ============================ ***************** ===============================
+ * ============================ 	 PCM FILE     ===============================
+ * ============================ ***************** ===============================
+ */
+
+ type UsePcmFile = {
+    listFilesPcm: Array<PcmReport>,
+    isLoading: boolean,
+    refetch: () => void,
+    fetchNextPage: () => void,
+    totalRecord: number,
+    hasNextPage: boolean | undefined
+};
+
+export const usePcmFile = (params?: ListFilesPcmPayload, isFetch?: boolean) : UsePcmFile => {
+    const {
+        isLoading,
+        refetch,
+        data,
+        fetchNextPage,
+        hasNextPage
+    } =
+        useInfiniteQuery(
+            ["list_files_pcm", params],
+            async ({ pageParams }: any) =>
+            PcmRepository.listFilesPcm({
+                lastestID: pageParams ? pageParams : "",
+                ...params
+            }),
+            {
+                getNextPageParam: ({ data }: any) => {
+                    return data?.nextCursor || undefined;
+                },
+                refetchOnWindowFocus: false,
+                enabled: isFetch ?? true
+            }
+        );
+
+    const listFilesPcm = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = data?.pages[0]?.data?.totalRecord;
+
+    return {
+        listFilesPcm,
+        isLoading,
+        refetch,
+        fetchNextPage,
+        hasNextPage,
+        totalRecord,
     }
 }

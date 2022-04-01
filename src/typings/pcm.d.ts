@@ -113,6 +113,25 @@ export type listTotalAnalysisResponse = APIResponse & {
 };
 
 /**
+ * ============================ ************* ===============================
+ * ============================ 	 PCM FILE   ===============================
+ * ============================ ************* ===============================
+ */
+
+export type ListFilesPcmPayload = {
+  companyID?: string,
+  projectID?: string,
+  groupID?: string,
+  taskID?: string,
+  type?: number,
+  keyword?: string,
+  limit?: string,
+  lastestID?: string,
+  select?: string,
+  populates?: string
+}
+
+/**
  * ============================ ********** ===============================
  * ============================ 	 OTHER   ===============================
  * ============================ ********** ===============================
