@@ -5,14 +5,16 @@ import { SearchInput, ModalContainer } from "shareComponents/common";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import { CreateProject } from "../modal";
+import styles from 'views/cmcs/styles/styles.module.css';
+import cn from "classnames";
 import moment from "moment";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { toast } from "react-toastify";
-import { APP_ID } from "apis/localdb";
+import { APP_ID, CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb";
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
+import { formatNumberMoney } from "utils/cmcs";
+
 const CmcsAdminContractTab: FC = () => {
 	const history = useHistory();
 	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
@@ -48,11 +50,9 @@ const CmcsAdminContractTab: FC = () => {
 		}
 	};
 
-	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
-	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
-
-	const [initialValues, setInitialValues] = useState(null);
-	const onConfirmCreateProject = () => refetchListContracts();
+	const getStatusValue = (value: number) => {
+		return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text;
+	}
 
 	useEffect(() => {
 		if (!(hasPermission && dataUserAccess?.level == 0)) {
@@ -80,29 +80,11 @@ const CmcsAdminContractTab: FC = () => {
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
 								<img src={DownloadIcon} alt="Download" />
 							</div>
-							{idsChecked.length == 1 ?
-								<>
-									<div
-										className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-										onClick={() => {
-											const item: any = listContracts.find((e: any) => e._id == idsChecked[0]);
-											setInitialValues({
-												...item,
-												startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
-												expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
-											});
-											toggleModalCreateProject();
-										}}
-									>
-										<img src={PencilIcon} alt="Pencil" />
-									</div>
-								</> : <></>
-							}
 						</div>
 					) : <></>}
 				</div>
 				<div className="flex items-center">
-					<button
+					{/* <button
 						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
 						onClick={() => {
 							setInitialValues(null);
@@ -110,7 +92,7 @@ const CmcsAdminContractTab: FC = () => {
 						}}
 					>
 						Tạo mới
-					</button>
+					</button> */}
 					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
 						<img src={Vertical3Dots} alt="3Dots" />
 					</button>
@@ -130,53 +112,49 @@ const CmcsAdminContractTab: FC = () => {
 								/>
 							</div>
 						</th>
-						<th className="pb-1 pt-1 w-[250px]">
+						<th className="w-1/5 pb-1 pt-1">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Tên
+								Hợp đồng
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-[150px]">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadSignDate)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Phân loại
+								Ngày ký
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal w-[150px]">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Mã hiệu
+								Giá trị ký + phát sinh (gồm cả VAT)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ngày bắt đầu
+								Giá trị nghiệm thu hoàn thành
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Ngày kết thúc
+								Giá trị xuất hóa đơn (VAT)
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Tổng số mốc
+								Giá trị đề nghị tạm ứng+thanh toán
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Số mốc hoàn thành
+								Giá trị đã tạm ứng, thanh toán
 							</div>
 						</th>
-
-						<th className="pb-1 pt-1 font-normal">
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Giai đoạn
+								Còn lại phải thanh toán
 							</div>
 						</th>
-						<th className="pb-1 pt-1 font-normal">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Thành viên
-							</div>
+						<th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
+							<div className="font-normal pl-2">Tình trạng</div>
 						</th>
-
 					</tr>
 				</thead>
 
@@ -194,36 +172,18 @@ const CmcsAdminContractTab: FC = () => {
 								</td>
 								<td className="py-1 px-2">
 									<Link to={`/cmcs/admin/${item._id}/contract`}>
-										<div className="flex items-start">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-											<p>{item.name}</p>
-										</div>
+										{item.name}
+										<p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>
 									</Link>
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.type}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.sign}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.startTime ? moment(item.startTime).format('DD/MM/YYYY') : ''}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.expiredTime ? moment(item.expiredTime).format('DD/MM/YYYY') : ''}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.milestones}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.completedMilestones}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									Đang triển khai
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item.members ? item.members.length : ""}
-								</td>
+								<td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+								<td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0))} </td>
+								<td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance || 0))}</td>
+								<td className="py-1 px-2 text-right">0</td>
+								<td className="py-1 px-2 text-right">{formatNumberMoney(item.recommendedPayment || 0)}</td>
+								<td className="py-1 px-2 text-right">{formatNumberMoney((item.advancePaymentPaid || 0) + (item.amountPaid || 0))}</td>
+								<td className="py-1 px-2 text-right">{formatNumberMoney(item.remainingPayment || 0)}</td>
+								<td className="py-1 px-2">{getStatusValue(item.status)}</td>
 							</tr>
 						))
 						}
@@ -239,19 +199,6 @@ const CmcsAdminContractTab: FC = () => {
 					</button>
 				</div>
 			)}
-
-			<ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
-				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-					<CreateProject
-						modalType={initialValues ? "update" : "create"}
-						show={modalCreateProject}
-						toggle={toggleModalCreateProject}
-						initialValues={initialValues ? initialValues : undefined}
-						onConfirm={onConfirmCreateProject}
-					/>
-				</div>
-			</ModalContainer>
-
 		</main>
 	);
 };
