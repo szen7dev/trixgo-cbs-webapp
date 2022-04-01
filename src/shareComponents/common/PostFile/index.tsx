@@ -32,6 +32,7 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 
 					const name 		= 'progress' in d ? d.file?.name : (d.file ? d.file?.nameOrg : d.nameOrg);
 					const size 		= 'progress' in d ? d.file?.size : (d.file ? d.file?.size : d.size);
+					const path 		= 'progress' in d ? d.file?.path : (d.file ? d.file?.path : d.path);
 					const mimeType 	= 'progress' in d ? d.file?.mimeType : (d.file ? d.file?.mimeType : d.mimeType);
 					const download 	= 'progress' in d ? d.file : (d.file ? d.file : d);
 					const key 		= 'progress' in d ? d.id : d._id;
@@ -41,7 +42,9 @@ export const PostFile: FC<PostFileProps & React.HTMLAttributes<HTMLDivElement>> 
 						<div key={key}  {...props} className={cn("post__files-file flex pl-3.5 py-2.5 pr-6", props.className, { loading: 'progress' in d && d.progress < 100 })}>
 							<div className="mr-3.5"><img src={iconFile} className="w-[35px] h-[35px]" alt="pdf icon" /></div>
 							<div className="flex-1">
-								<p className="text-sm leading-4 mt-2.5">{name}</p>
+								<a href={`${process.env.REACT_APP_URL_S3}${path}`} target="_blank" rel="noreferrer" className="text-sm leading-4 mt-2.5">
+									{name}
+								</a>
 								<p className="text-secondary-gray mt-2.5" style={{ lineHeight: "13.8px" }}>{humanFileSize(size)}</p>
 							</div>
 							<button type="button" className="btn-download text-primary" onClick={() => handleDownload(download)}>
