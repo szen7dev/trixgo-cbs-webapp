@@ -20,6 +20,7 @@ import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {populates} from "../../../pages/MessageHome";
+import Favico from "react-favico-js";
 
 type Props = {
     context: any;
@@ -276,5 +277,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     return <>
         <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
+        <Favico counter={amountMissMessage}/>
     </>;
 };
