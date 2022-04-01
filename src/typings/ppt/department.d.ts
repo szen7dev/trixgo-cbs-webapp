@@ -95,6 +95,7 @@ export type DataCommon<P, Sn> = {
   level: number;
   admins: string[];
   members: string[];
+  image: string;
   type: number;
   stage?: number;
   status: number;

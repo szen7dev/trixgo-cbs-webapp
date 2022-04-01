@@ -157,5 +157,6 @@ declare global {
   interface Date {
       addHours: (h: number) => this;
       addMinutes: (m: number) => this;
+      addDays: (d: number) => this;
   }
 }

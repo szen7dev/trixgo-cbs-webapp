@@ -28,7 +28,7 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 import TaskRepository from "apis/task";
 import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
-import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
+import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { User } from "typings/user";
@@ -48,17 +48,9 @@ const PcmDetailTask: FC = () => {
   const { openModal } = useModal();
   const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-  const [taskData, setTaskData] = useState({
-    percentComplete: "0%",
-    amountComment: 0,
-    status: 1,
-    priority: 1
-  });
 
-  const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
-  const [isTruncate, setIsTruncate] = useState(true);
-  const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
   const { user } = useAuth();
+  const { updateTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id),
@@ -79,6 +71,17 @@ const PcmDetailTask: FC = () => {
 			params: { taskID: id, type: 1 },
 			isFetchComment: true
 		});
+
+  const [taskData, setTaskData] = useState({
+    percentComplete: "0%",
+    amountComment: 0,
+    status: 1,
+    priority: 1
+  });
+  const [isMarkInterest, setIsMarkInterest] = useState(infoTask?.data?.flags?.includes(user?._id))
+  const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
+  const [isTruncate, setIsTruncate] = useState(true);
+  const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -109,7 +112,25 @@ const PcmDetailTask: FC = () => {
   }
 
   const handleMarkInterest = async () => {
-    console.log('Hello World');
+    try {
+      if(!user) return;
+
+      const { error, data } = await updateTaskAsync({
+        taskID: id,
+        ...isMarkInterest ? { flagsRemoves: [user._id] } : { flags: [user._id] }
+      })
+
+      if(error) return toast.warn(data?.message);
+
+      setIsMarkInterest(!isMarkInterest);
+    } catch (error) {
+      if(error instanceof Error) {
+        toast.error(error.message);
+      }
+      if(typeof error === 'string') {
+        toast.error(error);
+      }
+    }
   }
 
   useEffect(() => {
@@ -228,7 +249,7 @@ const PcmDetailTask: FC = () => {
             <button className="mx-2" onClick={handleMarkInterest}>
               <img
                 className="inline h-[24px] w-[24px]"
-                src={`/images/common/icons8-star-96.png`}
+                src={`/images/common/${isMarkInterest ? 'icons8-star-96.png' : 'icon-star-filled.png'}`}
                 alt="Star"
               />
             </button>

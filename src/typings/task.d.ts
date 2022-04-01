@@ -33,6 +33,8 @@ export type Project = {
   _id: string;
   name: string;
   sign: string;
+  company: string,
+  startTime: string
 };
 
 export type Group = {
@@ -99,6 +101,8 @@ export interface updateTaskPayload {
   priority?: number;
   expiredTime?: string;
   isAddSignature?: boolean;
+  flags?: Array<string>;
+  flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
 }
