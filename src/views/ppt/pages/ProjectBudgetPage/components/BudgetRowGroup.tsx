@@ -25,6 +25,7 @@ interface RowData {
 
 const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 	const [state, setState] = useState<boolean>(show);
+	console.log({ row })
 
 	useEffect(() => {
 		setState(show);
@@ -44,18 +45,19 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 					</button>
 				</th>
 				<th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-center'>A1</th>
-				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left">GÓI THẦU XÂY DỰNG VÀ THIẾT BỊ</th>
-				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.budget, 0).toLocaleString()}</th>
+				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left">{row.name}</th>
+				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">0</th>
+				{/* <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.budget, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.predict, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.signed, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.advance, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.volume, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.finish, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.pay, 0).toLocaleString()}</th>
-				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.rest, 0).toLocaleString()}</th>
+				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.rest, 0).toLocaleString()}</th> */}
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
 			</tr>
-			{row.data.map((_d, i) => (
+			{/* {row.data.map((_d, i) => (
 				<tr key={i} className={classNames("", { hidden: state })}>
 					<td className='bg-gray-300 px-1.5 py-2 relative'>
 						<div className={classNames('absolute left-1/2 bg-cbs-subtext top-0 w-[1px]', (i === row.data.length - 1) ? 'h-1/2' : 'h-full')} />
@@ -73,7 +75,7 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 					<td contentEditable suppressContentEditableWarning className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{Number(_d.rest).toLocaleString()}</td>
 					<td contentEditable suppressContentEditableWarning className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'>{_d.note}</td>
 				</tr>
-			))}
+			))} */}
 		</RightClickMenuWrapper>
 	)
 }

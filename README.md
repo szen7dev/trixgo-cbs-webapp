@@ -56,5 +56,6 @@ src/apis/item/contract/index.ts => Cho riêng phần hợp đồng
 4. Quay lại /src/services/hooks/useCmcs.ts để Import thông tin từ Bước 3
 và khai báo các dữ liệu trả về
 5. Trở lại file view để đưa data vào
+- Import Hooks
 - Khai báo Data vào file quản lý chung các view con
 - Truyền Data vào view con qua Props
