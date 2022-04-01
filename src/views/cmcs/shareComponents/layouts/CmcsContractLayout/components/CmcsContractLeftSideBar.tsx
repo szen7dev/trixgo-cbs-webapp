@@ -6,7 +6,7 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 import { useQueryDetailContract } from "services/hooks/items/useContract";
-
+import cmcsLogo from "assets/logos/cmcs.png";
 export const CmcsContractLeftSideBar: FC = () => {
   const { user } = useAuth();
   const { id: contractID } = useParams<{ id: string }>();
@@ -17,7 +17,7 @@ export const CmcsContractLeftSideBar: FC = () => {
     type: "3",
     companyID: detailContract?.company?._id
   },
-    detailContract?.company?._id ? true : false);
+  detailContract?.company?._id ? true : false);
 
   useEffect(() => {
     if (contractID) {
@@ -39,15 +39,12 @@ export const CmcsContractLeftSideBar: FC = () => {
         <NavLink to="/cmcs/home">
           <div className="t-leftsidebar-title flex items-center py-5 pl-8 pr-3 text-[14px] font-bold">
             <img
-              src={
-                user?.image
-                  ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}`
-                  : fakeThumbnail
-              }
+              src={cmcsLogo}
               alt="Thumbnail"
-              className="w-10 h-10 rounded-full mr-3"
+              className="w-10 h-10 mr-3"
+              // className="w-10 h-10 rounded-full mr-3"
             />
-            <span>Quản lý hợp đồng</span>
+            <span className="truncate" title={detailContract?.name}>{detailContract?.name}</span>
           </div>
         </NavLink>
 
