@@ -61,7 +61,7 @@ export const useCmcs = (params?: ListContractsPayload) : UseCmcs => {
 
     const listContracts = [].concat(...(dataReturnFromAPI?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = dataReturnFromAPI?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = dataReturnFromAPI?.pages[0]?.data?.totalPages;
+    const totalPages = dataReturnFromAPI?.pages[0]?.data?.totalPage;
 
     return {
         listContracts,

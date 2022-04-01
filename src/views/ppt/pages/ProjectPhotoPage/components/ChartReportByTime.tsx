@@ -11,6 +11,9 @@ import {
 	ChartData,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { getDates } from 'utils/time';
+import moment from 'moment';
+import _lodash from 'lodash';
 
 ChartJS.register(
 	CategoryScale,
@@ -57,22 +60,48 @@ export const options = {
 	}
 };
 
-const labels = Array.from({ length: 35 }).map((_, i) => 'T' + (i + 1));
+// const labels = Array.from({ length: 35 }).map((_, i) => 'T' + (i + 1));
 
-export const data: ChartData<"bar", number[], string> = {
-	labels,
-	datasets: [
-		{
-			label: 'Dataset 1',
-			data: labels.map(() => Math.round(Math.random() * 1000)),
-			backgroundColor: '#1A97F5',
-			barThickness: 12,
-			maxBarThickness: 12,
-		},
-	],
-};
+// export const data: ChartData<"bar", number[], string> = {
+// 	labels,
+// 	datasets: [
+// 		{
+// 			label: 'Dataset 1',
+// 			data: labels.map(() => Math.round(Math.random() * 1000)),
+// 			backgroundColor: '#1A97F5',
+// 			barThickness: 12,
+// 			maxBarThickness: 12,
+// 		},
+// 	],
+// };
 
-const ChartReportByTime: FC<React.HTMLAttributes<HTMLElement>> = ({ ...props }) => {
+type Props = {
+	project: any,
+	files: any
+} & React.HTMLAttributes<HTMLElement>
+
+const ChartReportByTime: FC<Props> = ({ project, files, ...props }) => {
+	const dates = getDates(new Date(project.startTime), new Date());
+	const datesFormat = dates.map(date => moment(date).format('MM/YY'));
+	const labels = _lodash.uniq(datesFormat);
+	const groupFilesByDate = labels.map(date => {
+		// files.map(file)
+		// const fileDate = moment()
+	})
+
+	const data: ChartData<"bar", number[], string> = {
+		labels,
+		datasets: [
+			{
+				label: 'Dataset 1',
+				data: labels.map(() => Math.round(Math.random() * 1000)),
+				backgroundColor: '#1A97F5',
+				barThickness: 5,
+				maxBarThickness: 5,
+			},
+		],
+	};
+
 	return (
 		<Bar
 			data={data}
