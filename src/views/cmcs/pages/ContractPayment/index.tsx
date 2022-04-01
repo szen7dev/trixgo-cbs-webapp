@@ -10,7 +10,7 @@ import { DATE_FORMAT } from "apis/localdb/index";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
 import { SearchInput, Paginate } from "shareComponents/common";
-import { ContractIpcModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { ContractPaymentModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
 
 import styles from 'views/cmcs/styles/styles.module.css';
@@ -20,11 +20,11 @@ import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import { useParams } from "react-router-dom";
 
 import {
-  UseContractIPCList,
-  useCreateContractIPCMutation,
-  useUpdateContractIPCMutation,
-  useDeleteContractIPCMutation,
-} from "services/hooks/cmcs/useContractIPC";
+  UseContractPaymentList,
+  useCreateContractPaymentMutation,
+  useUpdateContractPaymentMutation,
+  useDeleteContractPaymentMutation,
+} from "services/hooks/cmcs/useContractPayment";
 
 export const ContractPayment: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
@@ -35,34 +35,34 @@ export const ContractPayment: FC = () => {
   const { openModal } = useModal();
   const params: any = useParams();
 
-  const contractIPC = UseContractIPCList(pageParam, params.id);
+  const contractPayment = UseContractPaymentList(pageParam, params.id);
 
-  const { createContractIPCMutateAsync } = useCreateContractIPCMutation();
-  const { updateContractIPCMutateAsync } = useUpdateContractIPCMutation();
-  const { deleteContractIPCMutateAsync } = useDeleteContractIPCMutation();
+  const { createContractPaymentMutateAsync } = useCreateContractPaymentMutation();
+  const { updateContractPaymentMutateAsync } = useUpdateContractPaymentMutation();
+  const { deleteContractPaymentMutateAsync } = useDeleteContractPaymentMutation();
 
   useEffect(() => {
-    if (!contractIPC.nextCursor) {
+    if (!contractPayment.nextCursor) {
       return;
     }
-    const isExist = prevCursor.find(item => item === contractIPC.nextCursor)
+    const isExist = prevCursor.find(item => item === contractPayment.nextCursor)
     if (!isExist) {
-      setPrevCursor([...prevCursor, contractIPC.nextCursor])
+      setPrevCursor([...prevCursor, contractPayment.nextCursor])
     }
-  }, [contractIPC.nextCursor]);
+  }, [contractPayment.nextCursor]);
 
   const prevPageAction = () => {
-    if (!contractIPC.nextCursor) {
+    if (!contractPayment.nextCursor) {
       setPageParam(prevCursor[prevCursor.length - 2] || '')
     } else {
-      const prev = prevCursor.findIndex(item => item === contractIPC.nextCursor)
+      const prev = prevCursor.findIndex(item => item === contractPayment.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
 
   };
 
   const nextPageAction = () => {
-    setPageParam(contractIPC.nextCursor)
+    setPageParam(contractPayment.nextCursor)
   }
 
   const { openDeleteConfirm } = useDeleteConfirm();
@@ -73,13 +73,14 @@ export const ContractPayment: FC = () => {
     }
     openDeleteConfirm({
       deleteAction: async () => {
-        const res = await deleteContractIPCMutateAsync(itemChecked)
+        const res = await deleteContractPaymentMutateAsync(itemChecked)
         if (!res.error) {
-          contractIPC.refetch()
+          contractPayment.refetch()
         }
       },
     });
   }
+
   const handleEditAction = async () => {
     if (!itemChecked) {
       return
@@ -90,7 +91,7 @@ export const ContractPayment: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ContractIpcModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
+        <ContractPaymentModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
       </div>
     )
   }
@@ -98,9 +99,9 @@ export const ContractPayment: FC = () => {
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
     if (isEdit) {
-      res = await updateContractIPCMutateAsync(values);
+      res = await updateContractPaymentMutateAsync(values);
     } else {
-      res = await createContractIPCMutateAsync(values);
+      res = await createContractPaymentMutateAsync(values);
     }
 
     if (res.code && res.code !== 200) {
@@ -108,14 +109,13 @@ export const ContractPayment: FC = () => {
     }
 
     if (!res.error) {
-      contractIPC.refetch()
+      contractPayment.refetch()
       return true;
     }
     return false;
-  }, [contractIPC]);
+  }, [contractPayment]);
 
   const handleOnFilter = useCallback((values) => {
-
     // setPageParam(() => ({ ...values }));
     return true;
   }, []);
@@ -156,10 +156,9 @@ export const ContractPayment: FC = () => {
                     className={
                       // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                       "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
-
                     }
                   >
-                    <ContractIpcModal onFinish={handleFinishForm} contractID={params.id} title="Tạo mới" />
+                    <ContractPaymentModal onFinish={handleFinishForm} contractID={params.id} refetchList={contractPayment.refetch} title="Tạo mới" />
                   </div>
                 )
               }
@@ -204,32 +203,29 @@ export const ContractPayment: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Đề nghị tạm ứng/thanh toán (1)
+                Thuộc kỳ thanh toán
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Thời hạn thanh toán
+                Phân loại
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Đã thanh toán (2)
+               Giá trị giải ngân
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Còn lại chưa thanh toán (3=1-2)
+                Ghi chú
               </div>
-            </th>
-            <th className={cn("pb-1 pt-1 font-normal w-1/6")}>
-              <div className="font-normal pl-2">Ghi chú</div>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          {contractIPC?.listContractIPC?.map((item: any) => {
+          {contractPayment?.listContractPayment?.map((item: any) => {
             return (
               <tr key={item._id} className="border-b border-primary-border h-[50px]">
                 <td className="py-1 px-2 text-center">
@@ -244,14 +240,13 @@ export const ContractPayment: FC = () => {
                   />
                 </td>
                 <td className="py-1 px-2">
-                  {item.name}
+                  {item?.name}
                 </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2">{item.sign}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0))}</td>
-                <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.timeForPayment).format(DATE_FORMAT)}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.amountPaid || 0))}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) - (item.amountPaid || 0))}</td>
+                <td className="py-1 px-2 text-right">{item.ipc.name}</td>
+                <td className="py-1 px-2">{item.type}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0))}</td>
                 <td className="py-1 px-2">{item.description}</td>
               </tr>
             )
@@ -260,8 +255,8 @@ export const ContractPayment: FC = () => {
       </table>
 
       <Paginate
-        totalPages={contractIPC.totalPage}
-        totalRecord={contractIPC.totalRecord} hasNextPage
+        totalPages={contractPayment.totalPage}
+        totalRecord={contractPayment.totalRecord} hasNextPage
         prevPageAction={() => prevPageAction()}
         nextPageAction={() => nextPageAction()} />
     </main>

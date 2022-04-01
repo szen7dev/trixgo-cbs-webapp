@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import contractLogo from "assets/images/contract.png";
 
 import fakeThumbnail from "assets/images/avatar.jpg";
 import iconFolder from "assets/images/icons8-application-window-100.png";
@@ -20,7 +21,7 @@ export const CmcsLeftSideBar: FC = () => {
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* title */}
         <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 font-bold">
-          <img src={user?.image ? `${process.env.REACT_APP_URL_S3_USER}/${user?.image}` : fakeThumbnail} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+          <img src={contractLogo } alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <span>Quản lý hợp đồng</span>
         </div>
 
