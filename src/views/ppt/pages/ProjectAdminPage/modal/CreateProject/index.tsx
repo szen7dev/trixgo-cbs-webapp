@@ -14,6 +14,7 @@ import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import { CustomDatePickerFormik } from 'views/datahub/sharedComponents/common';
 import { usePcmProject } from 'services/hooks/pcm/usePcmProject';
+import { number } from 'yup';
 
 const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = {
     type: "",
@@ -22,32 +23,30 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
     startTime: "",
     expiredTime: "",
     milestones: "",
-    completedMilestones: ""
+    completedMilestones: "",
+    budget: "",
 } }) => {
     const { createProjectMutateAsync, refetchPcmProject, updateProjectMutateAsync } = usePcmProject({ keyword: "" });
 
     const companySchema = object().shape({
-        type: string().required("Bạn cần nhập loại cho dự án"),
+        type: number().required("Bạn cần nhập loại cho dự án"),
         name: string().required("Bạn cần nhập tên cho dự án"),
         sign: string().required("Bạn cần nhập mã hiệu cho dự án"),
         startTime: string().required("Bạn cần nhập ngày bắt đầu cho dự án"),
         expiredTime: string().required("Bạn cần nhập ngày kết thúc cho dự án"),
         milestones: string().required("Bạn cần nhập tổng số mốc cho dự án"),
         completedMilestones: string().required("Bạn cần nhập số mốc hoàn thành cho dự án"),
+        budget: string().required("Bạn cần nhập ngân sách dự án"),
     });
 
     const handleSubmit = async (values: any) => {
-        if (!["1", "2"].includes(values.type)) {
-            toast.error("Phân loại chỉ có giá trị 1 hoặc 2. Vui lòng nhập lại.");
-            return;
-        }
-        
         if (modalType == 'create') {
             const query = {
                 ...values,
                 type: parseInt(values.type),
                 milestones: parseInt(values.milestones),
                 completedMilestones: parseInt(values.completedMilestones),
+                budget: parseInt(values.budget),
                 startTime: moment(values.startTime).format('YYYY-MM-DD'),
                 expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
             };
@@ -69,6 +68,7 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                 departmentID: values._id,
                 milestones: parseInt(values.milestones),
                 completedMilestones: parseInt(values.completedMilestones),
+                budget: parseInt(values.budget),
                 startTime: moment(values.startTime).format('YYYY-MM-DD'),
                 expiredTime: moment(values.expiredTime).format('YYYY-MM-DD'),
             };
@@ -185,12 +185,24 @@ const CreateProject: FC<any> = ({ toggle, modalType, onConfirm, initialValues = 
                                 </div>
 
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="txtAddress">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
                                         Số mốc hoàn thành
                                     </label>
-                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="txtAddress" placeholder="Nhập số mốc hoàn thành" {...getFieldProps('completedMilestones')} />
+                                    <Field className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Nhập số mốc hoàn thành" {...getFieldProps('completedMilestones')} />
                                     <ErrorMessage
                                         name="completedMilestones"
+                                        component="span"
+                                        className="font-normal leading-7 text-sm text-negative"
+                                    />
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Ngân sách/tổng mức đầu tư
+                                    </label>
+                                    <Field type="number" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Ngân sách" {...getFieldProps('budget')} />
+                                    <ErrorMessage
+                                        name="budget"
                                         component="span"
                                         className="font-normal leading-7 text-sm text-negative"
                                     />
