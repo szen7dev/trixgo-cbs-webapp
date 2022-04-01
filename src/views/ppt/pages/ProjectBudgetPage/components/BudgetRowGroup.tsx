@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { formatNumberMoney } from "utils/cmcs";
 
 import MenuChildRow from './MenuChildRow';
 import { RightClickMenuWrapper } from "shareComponents/common";
@@ -7,6 +8,7 @@ import { RightClickMenuWrapper } from "shareComponents/common";
 interface RowItem {
 	_id: string | number,
 	budget: number,
+	value: number,
 	predict: number,
 	signed: number,
 	advance: number,
@@ -19,6 +21,7 @@ interface RowItem {
 interface RowData {
 	_id: string | number,
 	name: string,
+	value: number,
 	description: string,
 	data: Array<RowItem>
 }
@@ -46,7 +49,7 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 				</th>
 				<th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-center'>A1</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left">{row.name}</th>
-				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">0</th>
+				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{formatNumberMoney(row.value || 0)}</th>
 				{/* <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.budget, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.predict, 0).toLocaleString()}</th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">{row.data.reduce((prev, d) => prev + d.signed, 0).toLocaleString()}</th>

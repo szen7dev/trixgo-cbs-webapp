@@ -26,7 +26,8 @@ export type Contract = {
     _id: string,
     name: string,
     sign: string
-  }
+  },
+  value: number,
 };
 
 // Kiểu dữ liệu trả về

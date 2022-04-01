@@ -10,6 +10,8 @@ const ProjectBudgetPage: FC = () => {
 		projectID: id
 	});
 
+	console.log({listPcmProjectBudget, id})
+
 	const [show, setShow] = useState<boolean>(true)
 	// const data = useMemo(() => Array.from({ length: 3 }).map((_, index) => ({
 	// 	_id: index,

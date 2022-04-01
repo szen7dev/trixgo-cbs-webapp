@@ -25,7 +25,7 @@ export const usePcmProjectBudget = (params: any): any => {
     } = useInfiniteQuery([`project_budget`, params], async (pageParam: any) => {
             return ContractRepository.getListContract({
                 lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
-                select: "name sign startTime expiredTime milestones completedMilestones members type budget vatBudget forecastBudget vatForecastBudget contractValue contractVatValue contractPlus contractVatPlus contractAdvancePaymentPaid contractAmountPaid",
+                select: "name sign value",
                 limit: 20,
                 ...params
             })
