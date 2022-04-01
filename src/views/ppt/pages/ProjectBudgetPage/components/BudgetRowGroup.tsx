@@ -9,6 +9,7 @@ interface RowItem {
 	_id: string | number,
 	budget: number,
 	value: number,
+	acceptance: number,
 	predict: number,
 	signed: number,
 	advance: number,
@@ -22,6 +23,7 @@ interface RowData {
 	_id: string | number,
 	name: string,
 	value: number,
+	acceptance: number,
 	description: string,
 	data: Array<RowItem>
 }
@@ -64,7 +66,7 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.value || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.acceptance || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
 				<td className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'></td>

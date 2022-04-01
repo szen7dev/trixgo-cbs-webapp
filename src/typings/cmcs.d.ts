@@ -28,6 +28,7 @@ export type Contract = {
     sign: string
   },
   value: number,
+  acceptance: number,
 };
 
 // Kiểu dữ liệu trả về
