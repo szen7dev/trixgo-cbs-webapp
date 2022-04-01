@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 
 const DocumentAdminFunctionalTab: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listDocumentAdmin, totalRecord, nextPageListAppRoles: nextPageDocumentAdmin, hasNextPageListAppRoles: hasNextPageDocumentAdmin } = useAdmin({ appID: APP_ID.DOCUMENT.id, keyword: keyword });
@@ -57,7 +57,7 @@ const DocumentAdminFunctionalTab: FC = () => {
 	};
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}
