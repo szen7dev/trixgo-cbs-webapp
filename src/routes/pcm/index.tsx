@@ -195,7 +195,7 @@ const PCMRouter: FC = () => {
 									// Push to state
 									return({ pathname:'/pcm/admin/2', state: match? match.params.id : null })} },
 								{ id: '3', title: 'Dự án', path: '/pcm/admin/3', },
-								{ id: '4', title: 'Chức năng', path: '/pcm/admin/4', },
+								{ id: '4', title: 'Chức danh', path: '/pcm/admin/4', },
 							]}>
 								<Route exact path="/pcm/admin" component={ProjectAdminFunctionalTab} />
 								<Route exact path="/pcm/admin/:id/detail" component={ProjectAdminDetail} />
