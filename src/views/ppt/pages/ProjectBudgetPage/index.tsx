@@ -23,11 +23,6 @@ const ProjectBudgetPage: FC = () => {
 			note: 'Xây dựng mẫu BoQ cho công tác preliminaries'
 		}))
 	})), []);
-	// const data = useMemo(() => Array.from({length:10}), []);
-
-	useEffect(() => {
-		document.title = "PPT - Dự án đang phát triển"
-	}, []);
 
 	useEffect(() => {
 		document.title = "PPT - Ngân sách"

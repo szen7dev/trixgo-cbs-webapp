@@ -33,6 +33,8 @@ import CmcsAdminFunctionalTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdmi
 import CmcsAdminDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminDetail";
 import CmcsAdminAuthorTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminAuthorTab";
 import LayoutSecondary from "views/cmcs/shareComponents/layouts/LayoutSecondary";
+import CmcsAdminContractTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractTab";
+import CmcsAdminContractDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractDetail";
 
 const CmcsRouter: FC = () => {
     return (
@@ -52,11 +54,14 @@ const CmcsRouter: FC = () => {
                                             // Push to state
                                             return ({ pathname: '/cmcs/admin/2', state: match ? match.params.id : null })
                                         }
-                                    }
+                                    },
+                                    { id: '3', title: 'Hợp đồng', path: '/cmcs/admin/3', },
                                 ]}>
                                     <Route exact path="/cmcs/admin" component={CmcsAdminFunctionalTab} />
                                     <Route exact path="/cmcs/admin/:id/detail" component={CmcsAdminDetail} />
                                     <Route exact path="/cmcs/admin/2" component={CmcsAdminAuthorTab} />
+                                    <Route exact path="/cmcs/admin/3" component={CmcsAdminContractTab} />
+                                    <Route exact path="/cmcs/admin/:id/contract" component={CmcsAdminContractDetail} />
                                 </LayoutSecondary>
                             </Route>
                         </Switch>
