@@ -12,6 +12,7 @@ import styles from "views/support/styles/support.module.css";
 import { Link } from "react-router-dom";
 import { useQueryListCompany } from 'services/hooks/useCompanies';
 import { useAppCompany } from 'services/hooks/apps/useAppCompany';
+import { useApp } from 'services/hooks/apps/useApp';
 
 export const SupportGrantPage: FC = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ export const SupportGrantPage: FC = () => {
     endTime: ""
   });
 
+  const { data: listApps } = useApp();
   const { data: dataAppsCompany } = useAppCompany({
     limit: 100,
     companyID: companySelected
@@ -112,21 +114,22 @@ export const SupportGrantPage: FC = () => {
 
     const appsCompany: any[] = [];
 
-    Array.from(APP_INFO.entries()).map(app => {
-      const appCompany = dataAppsCompany.find(appCompany => appCompany?.app?._id === app[0]);
+    // Array.from(APP_INFO.entries()).map(app => {
+    listApps.map(app => {
+      const appCompany = dataAppsCompany.find(appCompany => appCompany?.app?._id === app._id);
 
       if(appCompany) {
         appsCompany[appsCompany.length] = appCompany;
       } else{
         appsCompany[appsCompany.length] = {
           app: {
-            _id: app[0],
-            name: app[1].name
+            _id: app._id,
+            name: app.name
           }
         }
       }
     })
-    
+
     setListAppsCompany(appsCompany);
   }, [dataAppsCompany.length, companySelected])
 
@@ -157,7 +160,7 @@ export const SupportGrantPage: FC = () => {
           startTime: "",
           endTime: ""
         })
-      } 
+      }
     }
   }, [listChecked.length])
 
@@ -167,7 +170,7 @@ export const SupportGrantPage: FC = () => {
     try {
       const companyID = location.hash.substring(1);
       const companyName = window.sessionStorage.getItem('companyName');
-      
+
       companyID && setCompanySelected(companyID);
       companyName && setCompanyName(companyName);
     } catch (error) {console.error(error)}

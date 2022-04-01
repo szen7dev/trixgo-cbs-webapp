@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import { APP_ID } from "apis/localdb";
 import { useCmcs } from 'services/hooks/useCmcs';
 import { useAuth } from "services/hooks/auth/useAuth";
-import { ContractProps } from "typings/cmcs";
 const CmcsAdminContractTab: FC = () => {
 	const history = useHistory();
 	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });

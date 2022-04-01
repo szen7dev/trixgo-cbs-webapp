@@ -1,17 +1,17 @@
 // useInfiniteQuery-List mẩu tin
 // useMutation-Thêm sửa xóa mẩu tin
 // FetchNextPageOptions-Kiểu dữ liệu
-import { FetchNextPageOptions, useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 // Khai báo đối tượng để hứng giá trị từ API
 import ContractRepository from "apis/item/contract";
 
 // Định nghĩa kiểu dữ liệu
-import { ContractProps, ListContractsPayload } from "typings/cmcs";
+import { Contract, ListContractsPayload } from "typings/cmcs";
 
 // Định nghĩa cấu trúc dữ liệu trả về
 type UseCmcs = {
-    listContracts: Array<ContractProps>,
+    listContracts: Array<Contract>,
     isLoadingListContracts: boolean, // Là 1 biến để kiểm soát trạng thái loading data
     refetchListContracts: () => void, // Làm mới lại danh sách dữ liệu
     nextPageListContracts: () => void, // Dữ liệu trang tiếp theo
