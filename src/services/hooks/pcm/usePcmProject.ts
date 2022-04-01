@@ -23,7 +23,7 @@ export const usePcmProject = (payload: any): any => {
     } = useInfiniteQuery([`app_admin_list_project`, payload.keyword], async (pageParam: any) => {
             return DepartmentRepository.fetchListDepartment({
                 lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
-                select: "name sign startTime expiredTime milestones completedMilestones members type",
+                select: "name sign startTime expiredTime milestones completedMilestones members type budget",
                 keyword: payload.keyword,
                 limit: 20
             })
