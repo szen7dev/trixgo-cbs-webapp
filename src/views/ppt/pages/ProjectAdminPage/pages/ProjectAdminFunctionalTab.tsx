@@ -18,7 +18,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminFunctionalTab: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listPcmAdmin, totalRecord, nextPageListAppRoles: nextPagePcmAdmin, hasNextPageListAppRoles: hasNextPagePcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
@@ -54,7 +54,7 @@ const ProjectAdminFunctionalTab: FC = () => {
 	};
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}

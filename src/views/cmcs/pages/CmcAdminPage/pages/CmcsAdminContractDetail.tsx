@@ -23,7 +23,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const CmcsAdminContractDetail: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	// ID của hợp đồng
 	const { id } = useParams<{ id: string }>();
 	// const [keyword, setKeyword] = useState("");
@@ -82,7 +82,7 @@ const CmcsAdminContractDetail: FC = () => {
 	}, [data?.data._id])
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}

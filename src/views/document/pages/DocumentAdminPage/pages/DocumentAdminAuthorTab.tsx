@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 const DocumentAdminAuthorTab: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.DOCUMENT.id });
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
 	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
@@ -76,7 +76,7 @@ const DocumentAdminAuthorTab: FC = () => {
 	}
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}

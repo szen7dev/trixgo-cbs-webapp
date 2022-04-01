@@ -12,7 +12,7 @@ const CmcsAdminAuthorTab: FC = () => {
 	const history = useHistory();
 	const location = useLocation<string | null>();
 	const [funcID, setFuncID] = useState<string>(location.state || "");
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const { nameAppRoleDetail, companyAppRoleDetail, typeAppRoleDetail } = useAdminDetail({ appID: funcID, keyword: "" }); 
 	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.CMCS.id, parentID: typeAppRoleDetail == "1" ? APP_ID.CMCS.menuCmcsApp.id : APP_ID.CMCS.menuCmcsContract.id });
 	const { listAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
@@ -76,7 +76,7 @@ const CmcsAdminAuthorTab: FC = () => {
 	}
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}
