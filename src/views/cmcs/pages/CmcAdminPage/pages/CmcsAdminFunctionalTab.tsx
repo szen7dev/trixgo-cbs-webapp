@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 
 const CmcsAdminFunctionalTab: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listCmcsAdmin, totalRecord, nextPageListAppRoles: nextPageCmcsAdmin, hasNextPageListAppRoles: hasNextPageCmcsAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
@@ -57,7 +57,7 @@ const CmcsAdminFunctionalTab: FC = () => {
 	};
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}

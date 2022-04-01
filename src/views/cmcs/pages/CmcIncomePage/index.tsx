@@ -14,6 +14,7 @@ import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import { debounce } from "lodash";
 
 export const CmcIncomePage: FC = () => {
   // --------- Check phân quyền
@@ -30,13 +31,13 @@ export const CmcIncomePage: FC = () => {
   }, []);
 
   const [itemChecked, setItemChecked] = useState('');
-
+  const [keyword, setKeyword] = useState("");
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
 
-  const contractIncome = UseContractIncomeList(pageParam);
+  const contractIncome = UseContractIncomeList(pageParam, keyword);
   const { createContractMutateAsync, loading } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
@@ -140,8 +141,10 @@ export const CmcIncomePage: FC = () => {
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            // eslint-disable-next-line no-console
-            onChange={(event) => console.log(event.target.value)}
+            onChange={debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}
           />
           {/* <DropdownFilterButton
             onSubmit={handleOnFilter}

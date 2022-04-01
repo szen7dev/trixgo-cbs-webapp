@@ -25,7 +25,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminProjectDetail: FC = () => {
 	const history = useHistory();
-	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	// ID của dự án
 	const { id } = useParams<{ id: string }>();
 	// const [keyword, setKeyword] = useState("");
@@ -86,7 +86,7 @@ const ProjectAdminProjectDetail: FC = () => {
 	}, [data?.data._id])
 
 	useEffect(() => {
-		if (!(hasPermission && dataUserAccess?.level == 0)) {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
 			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
 			history.push("/")
 		}
