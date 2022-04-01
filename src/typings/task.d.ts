@@ -1,6 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
 import type { Company, FileProps } from "typings/common";
+import { Contract } from "./cmcs";
 
 export type ListTaskPayload = {
   keyword?: string,
@@ -60,6 +61,7 @@ export type Task = {
   project: Project;
   company: Company,
   group: Group,
+  contract: Contract,
   field: Field,
   startTime: string,
   subType: number,
@@ -91,6 +93,7 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
+  contractID?: string;
   name?: string;
   status?: number;
   priority?: number;
