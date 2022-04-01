@@ -1,7 +1,7 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, useEffect } from "react";
 
 import { useModal } from "services/hooks/useModal";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { SearchInput } from "shareComponents/common";
 import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
@@ -11,15 +11,18 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { useGetListAppRoleMenu, useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { CreateNewAdminMember, DeleteMembers } from "../modal";
 import { useAdminDetail } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
+import { toast } from "react-toastify";
 
 const CmcsAdminDetail: FC = () => {
+	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.CMCS.id, type: "1" });
 	const { openModal } = useModal();
@@ -52,6 +55,14 @@ const CmcsAdminDetail: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">

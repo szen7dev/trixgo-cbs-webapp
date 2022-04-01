@@ -3,3 +3,6 @@ export { default as Delete } from "./Delete";
 export { default as Update } from "./Update";
 export { default as CreateNewAdminMember } from "./CreateNewAdminMember";
 export { default as DeleteMembers } from "./DeleteMembers";
+export { default as CreateNewContractAdminMember } from "./CreateNewContractAdminMember";
+export { default as DeleteContractMembers } from "./DeleteContractMembers";
+export { default as CreateProject } from "./CreateProject";

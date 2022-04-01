@@ -1,0 +1,260 @@
+import { FC, useCallback, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
+import debounce from "lodash/debounce";
+import { SearchInput, ModalContainer } from "shareComponents/common";
+import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+import FolderIcon from "assets/images/icons8-folder.svg";
+import DownloadIcon from "assets/images/icons8-download-96.svg";
+import PencilIcon from "assets/images/icons8-pencil-96.svg";
+import { CreateProject } from "../modal";
+import moment from "moment";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
+import { useCmcs } from 'services/hooks/useCmcs';
+import { useAuth } from "services/hooks/auth/useAuth";
+import { ContractProps } from "typings/cmcs";
+const CmcsAdminContractTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
+	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const [keyword, setKeyword] = useState("");
+	const { user } = useAuth();
+	const {
+		listContracts,
+		totalRecord,
+		nextPageListContracts,
+		hasNextPage,
+		refetchListContracts
+	} = useCmcs({ companyID: user?.company._id, keyword: keyword });
+
+	const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
+
+	const onClickCheckButton = (id: string) => {
+		setIdsChecked([id]);
+	};
+
+	const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listContracts.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listContracts.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listContracts.map((e: any) => e._id);
+			setIdsChecked(idsAll);
+		}
+	};
+
+	const [modalCreateProject, setModalCreateProject] = useState<boolean>(false);
+	const toggleModalCreateProject = () => setModalCreateProject(!modalCreateProject);
+
+	const [initialValues, setInitialValues] = useState(null);
+	const onConfirmCreateProject = () => refetchListContracts();
+
+	useEffect(() => {
+		if (!(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
+
+	return (
+		<main className="h-full overflow-auto">
+			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
+				<div className="flex items-center">
+					<p className="text-lg">Danh sách</p>
+					<SearchInput
+						classNameWrapper="ml-4"
+						classNameInput="outline-none w-[296px]"
+						onChange={debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}
+					/>
+					{/* <FinancialCashFlowFilterButton /> */}
+					{(idsChecked && idsChecked.length) ? (
+						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
+							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
+								<img src={DownloadIcon} alt="Download" />
+							</div>
+							{idsChecked.length == 1 ?
+								<>
+									<div
+										className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
+										onClick={() => {
+											const item: any = listContracts.find((e: any) => e._id == idsChecked[0]);
+											setInitialValues({
+												...item,
+												startTime: item.startTime ? moment(item.startTime).format('MM/DD/YYYY') : '',
+												expiredTime: item.expiredTime ? moment(item.expiredTime).format('MM/DD/YYYY') : '',
+											});
+											toggleModalCreateProject();
+										}}
+									>
+										<img src={PencilIcon} alt="Pencil" />
+									</div>
+								</> : <></>
+							}
+						</div>
+					) : <></>}
+				</div>
+				<div className="flex items-center">
+					<button
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+						onClick={() => {
+							setInitialValues(null);
+							toggleModalCreateProject();
+						}}
+					>
+						Tạo mới
+					</button>
+					<button className="w-10 h-10 rounded-full bg-cbs-gray flex items-center justify-center hover:bg-accent-light">
+						<img src={Vertical3Dots} alt="3Dots" />
+					</button>
+				</div>
+			</header>
+
+			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
+				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
+					<tr className="text-left text-sm text-primary-gray">
+						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
+							<div className="border-r-2 border-gray-300 flex items-center justify-center">
+								<input
+									className="form-check-input"
+									type="checkbox"
+									checked={getStateCheckedAll()}
+									onChange={() => onClickCheckAll()}
+								/>
+							</div>
+						</th>
+						<th className="pb-1 pt-1 w-[250px]">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Tên
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-[150px]">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Phân loại
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal w-[150px]">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Mã hiệu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Ngày bắt đầu
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Ngày kết thúc
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Tổng số mốc
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Số mốc hoàn thành
+							</div>
+						</th>
+
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Giai đoạn
+							</div>
+						</th>
+						<th className="pb-1 pt-1 font-normal">
+							<div className="border-r-2 border-gray-300 font-normal pl-2">
+								Thành viên
+							</div>
+						</th>
+
+					</tr>
+				</thead>
+
+				{listContracts && listContracts.length ?
+					<tbody className="bg-primary-light text-left">
+						{listContracts.map((item: any, index: number) => (
+							<tr key={index} className="border-b border-primary-border h-10">
+								<td className="py-1 px-2 text-center">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										checked={getStateChecked(item._id)}
+										onChange={() => onClickCheckButton(item._id)}
+									/>
+								</td>
+								<td className="py-1 px-2">
+									<Link to={`/cmcs/admin/${item._id}/contract`}>
+										<div className="flex items-start">
+											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+											<p>{item.name}</p>
+										</div>
+									</Link>
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.type}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.sign}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.startTime ? moment(item.startTime).format('DD/MM/YYYY') : ''}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.expiredTime ? moment(item.expiredTime).format('DD/MM/YYYY') : ''}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.milestones}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.completedMilestones}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									Đang triển khai
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.members ? item.members.length : ""}
+								</td>
+							</tr>
+						))
+						}
+					</tbody> : <></>
+				}
+
+			</table>
+			{hasNextPage && (
+				<div className="w-full flex justify-center my-5">
+					<button onClick={() => nextPageListContracts()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listContracts.length
+							})`}</span>
+					</button>
+				</div>
+			)}
+
+			<ModalContainer isModalOpen={modalCreateProject} toggle={toggleModalCreateProject}>
+				<div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+					<CreateProject
+						modalType={initialValues ? "update" : "create"}
+						show={modalCreateProject}
+						toggle={toggleModalCreateProject}
+						initialValues={initialValues ? initialValues : undefined}
+						onConfirm={onConfirmCreateProject}
+					/>
+				</div>
+			</ModalContainer>
+
+		</main>
+	);
+};
+
+export default CmcsAdminContractTab;
