@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import ContractPaymentRepository from 'apis/cmcs/contractPayment';
 
-export const UseContractPaymentList = (pageParam = '', contractID = '', limit = 10): any => {
+export const UseContractPaymentList = (pageParam = '', contractID = '', limit = 10, keyword=''): any => {
     const {
         status,
         data,
@@ -14,7 +14,8 @@ export const UseContractPaymentList = (pageParam = '', contractID = '', limit = 
             return ContractPaymentRepository.fetchListContractPaynent({
                 limit,
                 lastestID: pageParam || "",
-                contractID
+                contractID,
+                keyword
             })
         },
         { keepPreviousData: true }
@@ -89,7 +90,7 @@ export const useDeleteContractPaymentMutation = (): {
 export const useDetailContractPaymentMutation = (id: string): any => {
     const res = useQuery(`contract_payment_detail.${id}`, () =>
     ContractPaymentRepository.fetchDetailContractPayment({
-            contractPaymentID: id,
+            contractPaymentID: id
         })
     );
     if (Array.isArray(res.data?.data)) {

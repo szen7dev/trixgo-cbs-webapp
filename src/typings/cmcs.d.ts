@@ -23,11 +23,17 @@ export type Contract = {
   storeSign: string,
   description: string,
   company: string,
+  sellerInfo: {
+    _id: string,
+    name: string,
+  },
   project: {
     _id: string,
     name: string,
     sign: string
   },
+  budget: number,
+  budgetVAT: number,
   value: number,
   vatValue: number,
   plus: number,

@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useState } from "react";
-
+import debounce from "lodash/debounce";
 import cn from "classnames";
 
 import { useModal } from "services/hooks/useModal";
 
 import moment from "moment";
-import { DATE_FORMAT } from "apis/localdb/index";
+import { DATE_FORMAT, CONTRACT_IPC_TYPES } from "apis/localdb/index";
 
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 
@@ -25,18 +25,18 @@ import {
   useUpdateContractPaymentMutation,
   useDeleteContractPaymentMutation,
 } from "services/hooks/cmcs/useContractPayment";
+import { type } from "os";
 
 export const ContractPayment: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
-
+  const [keyword, setKeyword]         = useState('');
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
   const params: any = useParams();
 
-  const contractPayment = UseContractPaymentList(pageParam, params.id);
-
+  const contractPayment = UseContractPaymentList(pageParam, params.id, 20, keyword);
   const { createContractPaymentMutateAsync } = useCreateContractPaymentMutation();
   const { updateContractPaymentMutateAsync } = useUpdateContractPaymentMutation();
   const { deleteContractPaymentMutateAsync } = useDeleteContractPaymentMutation();
@@ -91,7 +91,7 @@ export const ContractPayment: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ContractPaymentModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" />
+        <ContractPaymentModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit={true} contractID={params.id} title="Cập nhật" refetchList={contractPayment.refetch}/>
       </div>
     )
   }
@@ -124,6 +124,10 @@ export const ContractPayment: FC = () => {
     // setPageParam({});
   }, []);
 
+  useEffect(()=> {
+    contractPayment.refetch()
+	}, [keyword])
+
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -133,7 +137,10 @@ export const ContractPayment: FC = () => {
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
             // eslint-disable-next-line no-console
-            onChange={(event) => console.log(event.target.value)}
+            onChange={debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}
           />
           {/* <DropdownFilterButton
             onSubmit={handleOnFilter}
@@ -242,10 +249,13 @@ export const ContractPayment: FC = () => {
                 <td className="py-1 px-2">
                   {item?.name}
                 </td>
-                <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
+                <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2">{item.sign}</td>
                 <td className="py-1 px-2">{item.ipc.name}</td>
-                <td className="py-1 px-2">{item.type}</td>
+                <td className="py-1 px-2">{
+                  item.type && CONTRACT_IPC_TYPES[item.type-1].text
+                }
+                </td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0))}</td>
                 <td className="py-1 px-2">{item.description}</td>
               </tr>
@@ -253,7 +263,6 @@ export const ContractPayment: FC = () => {
           })}
         </tbody>
       </table>
-
       <Paginate
         totalPages={contractPayment.totalPage}
         totalRecord={contractPayment.totalRecord} hasNextPage

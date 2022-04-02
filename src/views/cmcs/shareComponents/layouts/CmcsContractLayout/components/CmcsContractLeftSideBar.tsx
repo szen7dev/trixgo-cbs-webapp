@@ -41,7 +41,13 @@ export const CmcsContractLeftSideBar: FC = () => {
             <span title={detailContract?.name}>{detailContract?.name}</span>
           </div>
         </NavLink>
-
+        <NavLink
+						to={`/cmcs/contract/${contractID}/home`}
+						className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+					>
+						<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+						<span className="truncate">Trang chủ</span>
+					</NavLink>
         {/* menu block */}
         <div className="t-link-menu-container">
           {listAppMenu && listAppMenu.length ?

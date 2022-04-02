@@ -8,7 +8,7 @@ async function fetchListContractPaynent<T>(params: any): Promise<T> {
         `${APP_CMCS}/contract_payments`,
         {
             params: {
-                select: "name sign description date value userCreate",
+                select: "name sign description date value userCreate type",
                 populates: {
                     "path": "ipc userCreate",
                     "select": "name sign bizfullname"
@@ -22,7 +22,7 @@ async function fetchListContractPaynent<T>(params: any): Promise<T> {
 
 async function fetchDetailContractPayment<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contract_payments?contractPaymentID=${params.contractPaymentID}`
+        `${APP_CMCS}/contract_payments?contractPaymentID=${params.contractPaymentID}&populates=${JSON.stringify({ path: "ipc", select: "_id name"})}`
     )
     return data
 }

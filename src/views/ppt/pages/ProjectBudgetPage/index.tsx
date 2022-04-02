@@ -27,22 +27,22 @@ const ProjectBudgetPage: FC = () => {
 		<div className="flex-1 overflow-y-auto pb-8">
 			<table className='text-medium w-full border-separate border-spacing-0 text-center'>
 				<thead className="text-left">
-					<tr>
+					<tr className="font-semibold">
 						<th className="sticky top-0 bg-gray-300 px-1.5 z-10">
 							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
 						</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2">
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2">
 							TT
 						</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '240px' }}>Gói thầu/Hợp đồng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Tạm ứng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '123px' }}>Thanh toán</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '124px' }}>Còn lại</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '246px' }}>Ghi chú</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '240px' }}>Gói thầu/Hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Tạm ứng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '123px' }}>Thanh toán</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '124px' }}>Còn lại</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '246px' }}>Ghi chú</th>
 					</tr>
 				</thead>
 				{
