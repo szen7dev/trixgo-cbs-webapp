@@ -24,7 +24,7 @@ export enum DepartmentEnumType {
 
 export const DEPARTMENT_STATUS = {
   1: {
-    1: { message: "Đúng tiến độ, đúng ngân sách", className: "bg-red-400" },
+    1: { message: "Đúng tiến độ, đúng ngân sách", className: "bg-green-400" },
     2: { message: "Đúng tiến độ, vượt ngân sách", className: "bg-red-400" },
   },
   2: {

@@ -7,34 +7,34 @@ import { convertToInternationalCurrencySystem } from 'utils/ppt';
 interface Props {
 	data?: DataBlock2
 }
-
+const DEFAULT_VALUE_MAX_FOR_SHOW_UI_PERCENT = 104;
 const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ data, ...props }) => {
 	/**
 	 * Thông tin NGÂN_SÁCH
 	 */
-	const totalBudget 		= data?.[0].budget || 0; //TODO update: budget+vatBudget
+	const totalBudget 		= (data?.[0].budget || 0) + (data?.[0].vatBudget || 0); //TODO update: budget+vatBudget
 	const percentBudget		= totalBudget == 0 ? 0 : 100; // nếu không có ngân sách -> thanh % sẽ tính là 0đ (vì cột ngân sách làm chuẩn)
 	/**
 	 * Thông tin DỰ_BÁO
 	 */
-	const totalForecastBudget =  data?.[0].forecastBudget || 0; //TODO update: forecastBudget+vatForecastBudget
+	const totalForecastBudget =  (data?.[0].forecastBudget || 0) + (data?.[0].vatForecastBudget || 0); //TODO update: forecastBudget+vatForecastBudget
 	const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
 		if (_totalBudget == 0)
 			return 0;
 		else {
-			return (_totalForecastBudget / _totalBudget) * 100;
+			return Math.ceil((_totalForecastBudget / _totalBudget) * 100);
 		}
 	}
 	const percentForecastBudget = getPercentForecastBudget(totalBudget, totalForecastBudget);
 	/**
 	 * Thông tin ĐÃ_KÝ_HỢP_ĐỒNG
 	 */
-	const totalcontractValueContractPlusValueContractVatValue =  data?.[0].contractValueContractPlusValueContractVatValue || 0; //TODO update: contractValue+contractVatValue+contractPlus+contractVatPlus
+	const totalcontractValueContractPlusValueContractVatValue =  (data?.[0].contractValue || 0) + (data?.[0].contractVatValue || 0) + (data?.[0].contractPlus || 0) + (data?.[0].contractVatPlus || 0); //TODO update: contractValue+contractVatValue+contractPlus+contractVatPlus
 	const getContractValueContractPlusValueContractVatValue = (_totalBudget: number, _totalcontractValueContractPlusValueContractVatValue: number): number => {
 		if (_totalBudget == 0)
 			return 0;
 		else {
-			return (_totalcontractValueContractPlusValueContractVatValue / _totalBudget) * 100;
+			return Math.ceil((_totalcontractValueContractPlusValueContractVatValue / _totalBudget) * 100);
 		}
 	}
 	const percentContractValueContractPlusValueContractVatValue = getContractValueContractPlusValueContractVatValue(totalBudget, totalcontractValueContractPlusValueContractVatValue);
@@ -46,7 +46,7 @@ const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = (
 		if (_totalBudget == 0)
 			return 0;
 		else {
-			return (_totalcontractAmountPaid / _totalBudget) * 100;
+			return Math.ceil((_totalcontractAmountPaid / _totalBudget) * 100);
 		}
 	}
 	const percentcontractAmountPaid = getcontractAmountPaid(totalBudget, totalcontractAmountPaid);
@@ -65,21 +65,21 @@ const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = (
 				<Link to="/" className="col-span-2">
 					<p className='text-x-small mt-5'>Dự báo ({ percentForecastBudget }%)</p>
 				</Link>
-				<div className='bg-cbs-purple mt-2 h-3' style={{ width: (percentForecastBudget) + "%" }}></div>
+				<div className='bg-cbs-purple mt-2 h-3' style={{ width: (percentForecastBudget > 100 ? DEFAULT_VALUE_MAX_FOR_SHOW_UI_PERCENT : percentForecastBudget) + "%" }}></div>
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalForecastBudget)}</div>
 				
 				{/* >Đã ký hợp đồng */}
-				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractValueContractPlusValueContractVatValue)}</div>
 				<Link to="/" className="col-span-2">
 					<p className='text-x-small mt-5'>Đã ký hợp đồng ({ percentContractValueContractPlusValueContractVatValue }%)</p>
 				</Link>
-				<div className='bg-cbs-primary mt-2 h-3' style={{ width: ( percentContractValueContractPlusValueContractVatValue ) + "%" }}></div>
+				<div className='bg-cbs-primary mt-2 h-3' style={{ width: ( percentContractValueContractPlusValueContractVatValue > 100 ? DEFAULT_VALUE_MAX_FOR_SHOW_UI_PERCENT : percentContractValueContractPlusValueContractVatValue) + "%" }}></div>
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractValueContractPlusValueContractVatValue)}</div>
 				
 				{/* >Đã giải ngân */}
-				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractAmountPaid)}</div>
 				<Link to="/" className="col-span-2">
 					<p className='text-x-small mt-5'>Đã giải ngân ({ percentcontractAmountPaid }%)</p>
 				</Link>
-				<div className='bg-cbs-schedule-nextweek mt-2 h-3' style={{ width: ( percentcontractAmountPaid ) + "%" }}></div>
+				<div className='bg-cbs-schedule-nextweek mt-2 h-3' style={{ width: ( percentcontractAmountPaid > 100 ? DEFAULT_VALUE_MAX_FOR_SHOW_UI_PERCENT : percentcontractAmountPaid) + "%" }}></div>
 				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractAmountPaid)}</div>
 			</div>
 		</div>
