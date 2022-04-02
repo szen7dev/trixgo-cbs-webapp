@@ -83,7 +83,7 @@ const ProjectDashboardTaskPage: FC = () => {
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
-						<h3 className="text-x-large mt-2.5">Thống kê chủ đề (việc/hồ sơ) theo dự án/phòng ban</h3>
+						<h3 className="text-x-large mt-2.5">Thống kê công việc theo dự án/phòng ban</h3>
 						<div className="flex items-center mt-2.5">
 							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
@@ -189,6 +189,7 @@ const ProjectDashboardTaskPage: FC = () => {
 											style={{ width: `${30}%` }}
 										// onClick={() => onClickBar("OUT_DATE")}
 										>
+											{/* Quá Hạn */}
 											<span className="text-white">
 												8
 											</span>
@@ -199,7 +200,7 @@ const ProjectDashboardTaskPage: FC = () => {
 										// onClick={() => onClickBar("NEXT_WEEK")}
 										>
 											<span className="text-white">
-												12
+												{/* Tuần Tới */}
 											</span>
 										</button>
 										<button
@@ -208,13 +209,17 @@ const ProjectDashboardTaskPage: FC = () => {
 										// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
 										>
 											<span className="text-white">
+												{/* > 7 Ngày */}
 												30
 											</span>
 										</button>
 									</div>
 								</td>
 								<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" style={{ fontSize: '10px' }}>
-									<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >15</div>
+									<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >
+										{/* Hoàn thành */}
+										15
+									</div>
 								</td>
 							</tr>
 							)}
