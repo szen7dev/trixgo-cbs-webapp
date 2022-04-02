@@ -5,9 +5,16 @@ import { useParams } from 'react-router-dom';
 import BugetRowGroup from "./components/BudgetRowGroup";
 
 const ProjectBudgetPage: FC = () => {
-	const { id } = useParams<{ id: string }>();
-	const { listPcmProjectBudget, createContractMutateAsync, updateContracttMutateAsync } = usePcmProjectBudget({
-		projectID: id
+	const { id: projectID } = useParams<{ id: string }>();
+	const {
+		createContractMutateAsync,
+		updateContracttMutateAsync,
+		listPcmProjectBudget,
+		hasNextPage,
+		fetchNextPage,
+		totalRecord
+	} = usePcmProjectBudget({
+		projectID
 	});
 
 	const [show, setShow] = useState<boolean>(true)
@@ -58,7 +65,16 @@ const ProjectBudgetPage: FC = () => {
 					</tr>
 				</tfoot> */}
 			</table>
-		</div >
+			{hasNextPage && (
+                <div className="w-full flex justify-center my-5">
+                  <button onClick={fetchNextPage}>
+                    <span className="text-primary">
+                      Xem thêm ({totalRecord - listPcmProjectBudget.length})
+                    </span>
+                  </button>
+                </div>
+			)}
+		</div>
 	);
 };
 
