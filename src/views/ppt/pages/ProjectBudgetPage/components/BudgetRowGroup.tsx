@@ -42,8 +42,9 @@ const BugetRowGroup: FC<{ row: Contract, show: boolean }> = ({ row, show }) => {
 			<tr>
 				<td className='bg-gray-300 px-1.5 py-2 relative'></td>
 				<td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0"></td>
-				<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0 text-cbs-highlight-color">
-					<NavLink to={`/cmcs/contract/${row._id}/home`}>{row.name}</NavLink>
+				<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">
+					<NavLink className='text-cbs-highlight-color' to={`/cmcs/contract/${row._id}/home`}>{row.name}</NavLink>
+					<p className='text-primary-gray'><i>{row.sellerInfo.name}</i></p>
 				</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.budget || 0 + row.budgetVAT || 0)}</td>
 				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.value || 0 + row.vatValue || 0 + row.plus || 0 + row.vatPlus || 0)}</td>
