@@ -102,7 +102,7 @@ const PCMRouter: FC = () => {
 								{ id: '2', title: 'Kế hoạch', path: '/pcm/project/:id/budget/2' },
 							]}>
 								<Route exact path='/pcm/project/:id/budget' component={ProjectBudgetPage} />
-								<Route exact path='/pcm/project/:id/budget/2' component={() => <>Sample Data</>} />
+								<Route exact path='/pcm/project/:id/budget/2' component={() => <></>} />
 							</LayoutSecondary>
 						</Route>
 						<Route exact path={['/pcm/project/:id/bidding', '/pcm/project/:id/bidding/(2|3)']}>
