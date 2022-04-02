@@ -157,7 +157,7 @@ export type FilesPcmGroupByContract = {
   contract: {
     _id: string,
     name: string,
-    photos: Array<{ _id: string, nameOrg: string, path: string }>
+    photos: Array<{ _id: string, nameOrg: string, path: string, description: string }>
   },
   count: number
 }
