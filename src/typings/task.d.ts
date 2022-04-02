@@ -324,6 +324,7 @@ export type ListCommentsPayload = {
   limit?: number;
   taskID?: string;
   companyID?: string;
+  contractID?: string;
   parentID?: string;
   select?: string;
   populates?: string;

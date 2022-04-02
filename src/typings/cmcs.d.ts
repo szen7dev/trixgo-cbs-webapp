@@ -12,6 +12,7 @@ export type ListContractsPayload = {
   projectID?: string;
   companyID?: string;
   lastestID?: string;
+  contractID?: string;
 };
 
 // Kiểu dữ liệu của Danh sách/Info
@@ -65,8 +66,8 @@ export type ListContractsResponse = APIResponse & {
 // Kiểu dữ liệu Info
 export type GetInfoContractPayload = {
   contractID: string;
-  populates: string;
-  select: string;
+  populates?: string;
+  select?: string;
 };
 
 // Kiểu dữ liệu của Insert

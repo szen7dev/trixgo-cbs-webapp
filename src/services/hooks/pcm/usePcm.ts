@@ -2,6 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from "apis/pcm";
 import {
     AddConditionTaskReportPayload,
+    FilesPcmGroupByContract,
+    FilesPcmGroupByDate,
     ListFilesPcmPayload,
     PcmPlanTaskProps,
     PcmReport,
@@ -161,7 +163,9 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
  * ============================ ***************** ===============================
  */
 
- type UsePcmFile = {
+interface UsePcmFile{
+    filesGroupByDate: FilesPcmGroupByDate[],
+    filesGroupByContract: FilesPcmGroupByContract[],
     listFilesPcm: Array<PcmReport>,
     isLoading: boolean,
     refetch: () => void,
@@ -170,7 +174,32 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
     hasNextPage: boolean | undefined
 };
 
-export const usePcmFile = (params?: ListFilesPcmPayload, isFetch?: boolean) : UsePcmFile => {
+type UsePcmFileProps = {
+    params?: ListFilesPcmPayload,
+    isFetch?: boolean;
+    isFetchFilesGroupDate?: boolean;
+    isFetchFilesGroupContract?: boolean;
+}
+
+export const usePcmFile = ({
+    params = {},
+    isFetch = false,
+    isFetchFilesGroupDate = false,
+    isFetchFilesGroupContract = false
+}: UsePcmFileProps) : UsePcmFile => {
+
+    const { data: dataFilesGroupByDate } =
+        useQuery("pcm_files__group_by_date", () => PcmRepository.listFilesPcmGroupByDate(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchFilesGroupDate,
+        });
+
+    const { data: dataFilesGroupByContract } =
+        useQuery("pcm_files__group_by_contract", () => PcmRepository.listFilesPcmGroupByContract(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchFilesGroupContract,
+        });
+
     const {
         isLoading,
         refetch,
@@ -179,7 +208,7 @@ export const usePcmFile = (params?: ListFilesPcmPayload, isFetch?: boolean) : Us
         hasNextPage
     } =
         useInfiniteQuery(
-            ["list_files_pcm", params],
+            ["pcm_files", params],
             async ({ pageParams }: any) =>
             PcmRepository.listFilesPcm({
                 lastestID: pageParams ? pageParams : "",
@@ -197,7 +226,12 @@ export const usePcmFile = (params?: ListFilesPcmPayload, isFetch?: boolean) : Us
     const listFilesPcm = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
 
+    const filesGroupByDate = dataFilesGroupByDate?.data?.listRecords || [];
+    const filesGroupByContract = dataFilesGroupByContract?.data?.listRecords || [];
+
     return {
+        filesGroupByDate,
+        filesGroupByContract,
         listFilesPcm,
         isLoading,
         refetch,
