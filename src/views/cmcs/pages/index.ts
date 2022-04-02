@@ -3,6 +3,7 @@ export * from './CmcIncomePage';
 export * from './CmcGuaranteePage';
 export * from './ContractHome';
 export * from './ContractIpc';
+export * from './ContractPayment';
 export * from './ContractProduce';
 export * from './ContractAdminPage';
 export * from './CmcDashboardPage';

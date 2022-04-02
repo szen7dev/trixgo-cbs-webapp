@@ -64,3 +64,21 @@ export class SerialQueue {
     if (!this.running.length) this.add(fn);
   }
 }
+
+export function convertToInternationalCurrencySystem(value: number) {
+	const { format } = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 2 })
+	// Nine Zeroes for Billions
+	return Math.abs(Number(value)) >= 1.0e+9
+
+		? format(value / 1.0e+9) + "B"
+		// Six Zeroes for Millions 
+		: Math.abs(Number(value)) >= 1.0e+6
+
+			? format(Number(value) / 1.0e+6) + "M"
+			// Three Zeroes for Thousands
+			: Math.abs(Number(value)) >= 1.0e+3
+
+				? format(Number(value) / 1.0e+3) + "K"
+
+				: Math.abs(Number(value));
+}

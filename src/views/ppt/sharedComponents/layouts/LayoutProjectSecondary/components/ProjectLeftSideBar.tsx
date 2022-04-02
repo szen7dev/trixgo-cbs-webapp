@@ -33,6 +33,15 @@ const ProjectLeftSideBar: FC = () => {
 
 				{/* menu block */}
 				<div className="t-link-menu-container">
+					{!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
+						<NavLink
+							to={{ pathname: generatePath('/pcm/project/:id/admin', match.params) }}
+							className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+						>
+							<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
+							<span className="truncate">Quản trị viên</span>
+						</NavLink>
+					}
 					{listAppMenu && listAppMenu.length ?
 						<>
 							{listAppMenu.map((item: any, index: number) => {
@@ -53,15 +62,6 @@ const ProjectLeftSideBar: FC = () => {
 							})
 							}
 						</> : <></>
-					}
-					{!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
-						<NavLink
-							to={{ pathname: generatePath('/pcm/project/:id/admin', match.params) }}
-							className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
-						>
-							<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
-							<span className="truncate">Quản trị viên</span>
-						</NavLink>
 					}
 				</div>
 			</div>

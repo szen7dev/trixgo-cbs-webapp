@@ -23,7 +23,6 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 import { toast } from "react-toastify";
 
 import "react-day-picker/lib/style.css";
-
 interface InitialValues {
   projectID: string,
   subType: string,
@@ -79,7 +78,7 @@ export const ModalAddNewTask: FC = () => {
     keyword: searchDepartmentValue,
     isFetch: true
   })
-
+  
   const { listDoctypes } = useQueryListDoctype({
     limit: 50,
     type: 2,
@@ -123,7 +122,7 @@ export const ModalAddNewTask: FC = () => {
     projectID,
     keyword: searchFriendName
   }, true);
-
+  
   return (
     <>
       <div className={"flex flex-col"}>

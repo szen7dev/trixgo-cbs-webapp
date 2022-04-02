@@ -7,8 +7,9 @@ import { useListDepartment } from 'services/hooks/ppt/useListDepartment';
 import { DepartmentEnumType } from 'typings/ppt'
 
 // Utils
-import { dateLoadedPercentage, switchOnTimeBudget } from 'utils/ppt';
+import { dateLoadedPercentage, switchOnTimeBudget, convertToInternationalCurrencySystem } from 'utils/ppt';
 
+import { PROJECT_STAGE } from 'apis/localdb'
 // Assets
 import SearchIcon from "assets/images/icons8-search-120.png";
 import classNames from 'classnames';
@@ -17,7 +18,9 @@ import classNames from 'classnames';
 const PortfolioTableContainer: FC = () => {
 	const { data, loading } = useListDepartment({
 		type: DepartmentEnumType.PROJECT,
-		select: ["_id", "name", "projectCapital", "sign", "company", "startTime", "expiredTime", "stage", "createAt", 'onbudget', 'ontime'],
+		select: ["_id", "name", "projectCapital", "sign", "company", "startTime", "expiredTime", "stage", "createAt", 'onbudget', 
+		'ontime', 'budget', 'forecastBudget', 'contractValue', 'contractPlusValue', 'contractVatValue', 'contractAmountPaid',
+		'milestones', 'completedMilestones'],
 		populates: {
 			// path: ['sign'],
 			// select:['']
@@ -25,7 +28,7 @@ const PortfolioTableContainer: FC = () => {
 	});
 
 	return <div className="flex flex-wrap -mx-2 mt-4 text-cbs-subtext">
-		<div className="px-2 w-full">
+		<div className="px-2 w-full"> 
 			<div className='h-full bg-white shadow-md border-separate'>
 				<table className='text-x-small w-full'>
 					<thead>
@@ -53,7 +56,36 @@ const PortfolioTableContainer: FC = () => {
 								<Fragment key={group.data.nextCursor}>
 									{
 										group.data.listRecords.map((record) => {
-											const dif = Math.floor(dateLoadedPercentage(new Date(record.startTime), new Date(record.expiredTime), new Date()) * 100);
+											const { budget, forecastBudget, contractValue, contractPlusValue, contractVatValue, contractAmountPaid, stage, milestones, completedMilestones } = record;
+											// 'Ngân sách': getPercentForecastBudget
+											const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
+												if (_totalBudget == 0)
+													return 0;
+												else {
+													return (_totalForecastBudget / _totalBudget) * 100;
+												}
+											}
+											const percentForecastBudget = getPercentForecastBudget(budget, forecastBudget);
+
+											// 'Ký Hợp Đồng': percentSignedContract
+											const getPercentSignedContract = () => {
+												if (!budget)
+													return 0;
+												return ((contractValue + contractPlusValue + contractVatValue) / budget) * 100;
+											}
+											const percentSignedContract = getPercentSignedContract();
+
+											// 'Đã giải ngân': getPercentcontractAmountPaid
+											const getPercentcontractAmountPaid = (_totalBudget: number, _totalForecastBudget: number): number => {
+												if (_totalBudget == 0)
+													return 0;
+												else {
+													return (_totalForecastBudget / _totalBudget) * 100;
+												}
+											}
+											const percentcontractAmountPaid = getPercentcontractAmountPaid(budget, contractAmountPaid);
+
+											// const dif = Math.floor(dateLoadedPercentage(new Date(record.startTime), new Date(record.expiredTime), new Date()) * 100);
 											return (
 												<tr key={record._id}>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-3.5 pr-4 w-[275px]">
@@ -89,47 +121,57 @@ const PortfolioTableContainer: FC = () => {
 															<div className="flex absolute inset-0 items-center">
 																<div className="bg-cbs-border h-0.5 w-full" />
 															</div>
-															<div className="bg-black relative transform -translate-x-1/2 w-1 h-4" style={{ left: `${dif}%` }}></div>
+															<div className="bg-black relative transform -translate-x-1/2 w-1 h-4" style={{ left: `10%` }}></div>
 														</div>
 													</td>
 													<td className="px-3 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
-														<p>$150.000.000</p>
+														<p>{"đ " + convertToInternationalCurrencySystem(budget)}</p>
 														<div className="bg-cbs-schedule-after-7days h-1.5 mt-1" />
-														<p className="mt-2.5">$165.000.000</p>
-														<div className="h-1.5 mt-1" style={{ backgroundColor: '#666666' }} />
+
+														<p className="mt-2.5">{"đ " + convertToInternationalCurrencySystem(forecastBudget)}</p>
+														<div className="h-1.5 mt-1" style={{ backgroundColor: '#666666', width: `${percentForecastBudget > 100 ? 105 : percentForecastBudget}%` }} />
+														
 														<div className="flex justify-between mt-4 items-center">
-															<div>$15.000</div>
-															<i className='inline-block w-2 h-2 rounded-lg bg-cbs-down-text' />
+															<div>{"đ " + convertToInternationalCurrencySystem(Math.abs(forecastBudget - budget))}</div>
+															<i className='inline-block w-2 h-2 rounded-lg bg-cbs-down-text' 
+																style={{ backgroundColor: forecastBudget - budget >= 0 ? 'red' : 'green' }}
+															/>
 														</div>
 													</td>
 													<td className="px-5 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 														<div>
-															<div className="w-0 relative" style={{ left: `${10}%` }}>
-																<div className="w-min transform -translate-x-1/2">{10}%</div>
+															<div className="w-0 relative" style={{ left: `${percentSignedContract > 100 ? 105 : percentSignedContract }%` }}>
+																<div className="w-min transform -translate-x-1/2">{percentSignedContract }%</div>
 															</div>
 															<div className='w-full mt-0.5 h-1.5 border-0.5 border-cbs-border'>
-																<div className='bg-cbs-subtext h-full' style={{ width: `${10}%` }} />
+																<div className='bg-cbs-subtext h-full' style={{ width: `${percentSignedContract > 100 ? 105 : percentSignedContract}%` }} />
 															</div>
 															{/* <div className={cn(styles.progress, "w-full mt-0.5 h-1.5")} style={{ '--width': `${10}%` } as React.CSSProperties} /> */}
 														</div>
 													</td>
 													<td className="px-5 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 														<div>
-															<div className="w-0 relative" style={{ left: `${10}%` }}>
-																<div className="w-min transform -translate-x-1/2">{10}%</div>
+															<div className="w-0 relative" style={{ left: `${percentcontractAmountPaid > 100 ? 105 : percentcontractAmountPaid }%` }}>
+																<div className="w-min transform -translate-x-1/2">{percentcontractAmountPaid }%</div>
+															</div>
+															<div className='w-full mt-0.5 h-1.5 border-0.5 border-cbs-border'>
+																<div className='bg-cbs-subtext h-full' style={{ width: `${percentcontractAmountPaid > 100 ? 105 : percentcontractAmountPaid}%` }} />
 															</div>
 															{/* <div className={cn(styles.progress, "w-full mt-0.5 h-1.5")} style={{ '--width': `${10}%` } as React.CSSProperties} /> */}
 														</div>
+														
 													</td>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-4 w-min">
 														<p className="text-cbs-primary mt-2.5 uppercase">
-															Đấu thầu
+															{PROJECT_STAGE[stage ? stage - 1 : 0].text}
 														</p>
 													</td>
 													<td className="px-4 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">
 														<div>
 															<div className="w-0 relative" style={{ left: `${10}%` }}>
-																<div className="w-min transform -translate-x-1/2 font-bold">3/5</div>
+																<div className="w-min transform -translate-x-1/2 font-bold">
+																	{milestones || 0}/{completedMilestones || 0}
+																</div>
 															</div>
 															{/* <div className={cn(styles.progress, "w-full h-1.5")} style={{ '--width': `${10}%` } as React.CSSProperties} /> */}
 														</div>

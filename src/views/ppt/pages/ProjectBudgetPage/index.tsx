@@ -28,6 +28,7 @@ const ProjectBudgetPage: FC = () => {
 							TT
 						</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '240px' }}>Gói thầu/Hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '122px' }}>Tạm ứng</th>
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
@@ -66,4 +67,4 @@ const ProjectBudgetPage: FC = () => {
  * ? export default must be capital syntax
  * ? export const must be camel case syntax
  */
-export default ProjectBudgetPage;
+ export default ProjectBudgetPage;
