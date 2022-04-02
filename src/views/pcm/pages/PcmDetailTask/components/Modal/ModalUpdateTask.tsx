@@ -30,10 +30,12 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 import { PCM_PROPOSAL_TASK } from "apis/localdb";
 import { Task } from "typings/task";
 import "react-day-picker/lib/style.css";
+import { useContract } from "services/hooks/items/useContract";
 
 interface InitialValues {
   taskID: string,
   projectID: string,
+  contractID: string,
   fieldID: string,
   assigneeID: string,
   name: string,
@@ -55,6 +57,13 @@ type Props = {
 const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
   const { closeModal } = useModal();
 
+  const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
+  const [otherFieldValue, setOtherFieldValue]             = useState("");
+  const [searchFriend, setSearchFriend]                   = useState("");
+  const [searchGroup, setSearchGroup]                     = useState("");
+  const [searchContract, setSearchContract]               = useState("");
+  const [projectID, setProjectID]                         = useState(task.project?._id);
+
   const updateTaskSchema = object().shape({
     projectID: string().required("Vui lòng nhập tên dự án"),
     assigneeID: string().required("Vui lòng nhập tên người nhận"),
@@ -64,34 +73,11 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
 
   const { updateTaskAsync } = useTask({});
 
-  const onConfirmUpdate = async (values: InitialValues) => {
-    try {
-      const { error, message } = await updateTaskAsync({
-          taskID: values.taskID,
-          name: values.name,
-          expiredTime: values.expiredTime
-      });
-
-      if(error) return toast.warning(message);
-
-      closeModal();
-      onConfirm && onConfirm();
-    } catch (error) {
-      if (typeof error === "string") {
-          toast.error(error);
-      } else if (error instanceof Error) {
-          toast.error(error.message);
-      }
-    }
-  };
-
-  const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
-  const [otherFieldValue, setOtherFieldValue]             = useState("");
-  const [searchFriendName, setSearchFriendName]           = useState("");
-  const [searchGroupName, setSearchGroupName]             = useState("");
-  const [projectID, setProjectID]                         = useState("");
-
-  const { data: listDepartments } = useQueryListDepartmentsIsMember({
+  const {
+    data: listDepartments,
+    hasNextPage: hasNextPageListDepartment,
+    fetchNextPage: fetchNextPageListDepartment
+  } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
     isFetch: true
@@ -105,7 +91,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
 
   const { data: listUsersProject } = useUserSystem({
     projectID,
-    keyword: searchFriendName
+    keyword: searchFriend
   }, true);
 
   const {
@@ -113,23 +99,69 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     hasNextPage: hasNextPageListGroup,
     fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
-    keyword: searchGroupName,
+    keyword: searchGroup,
     projectID: projectID
   }, !!projectID);
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+  const {
+    listContracts,
+    hasNextPage: hasNextPageListContract,
+    fetchNextPage: fetchNextPageListContract,
+  } = useContract({
+    keyword: searchContract,
+    companyID: task.project.company,
+    projectID
+  }, !!projectID);
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListGroup) {
-      fetchNextPageListGroup();
+    if(!bottom) return;
+
+    switch (true) {
+      case (type === 'project' && hasNextPageListDepartment):
+        fetchNextPageListDepartment();
+        break;
+      case (type === 'group' && hasNextPageListGroup):
+        fetchNextPageListGroup();
+        break;
+      case (type === 'contract' && hasNextPageListContract):
+        fetchNextPageListContract();
+        break;
+      default:
+        break;
     }
   }
+
+  const onConfirmUpdate = async (values: InitialValues) => {
+    try {
+      const { error, message } = await updateTaskAsync({
+          taskID: values.taskID,
+          name: values.name,
+          contractID: values.contractID,
+          expiredTime: values.expiredTime
+      });
+
+      if(error) return toast.warning(message);
+
+      toast.success('Cập nhật thành công');
+      closeModal();
+      onConfirm && onConfirm();
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
+  };
 
   const initialValues: InitialValues = {
     taskID: task._id,
     projectID: task.project?._id,
     groupID: task.group?._id,
+    contractID: task.contract?._id,
     fieldID: task.field?._id,
     assigneeID: task.assignee?._id,
     name: task.name,
@@ -163,7 +195,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
@@ -186,6 +218,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                               (value) => setSearchDepartmentValue(value),
                             500)
                           }
+                          onScroll={(e) => handleScroll(e, 'project')}
                           disabled
                           className={"w-full flex-1"}
                           placeholder="Dự án"
@@ -234,20 +267,20 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm</div>
                       <DropdownSearchable
                         disabled
                         onchangeValue={(item: any) => {
                           setFieldValue("groupID", item.value);
-                          setSearchGroupName("");
+                          setSearchGroup("");
                         }}
                         onClearData={() => setFieldValue("groupID", "")}
                         onSearchInputChange={debounce(
-                          (value) => setSearchGroupName(value),
+                          (value) => setSearchGroup(value),
                           500
                         )}
-                        onScroll={handleScroll}
+                        onScroll={(e) => handleScroll(e, 'group')}
                         className={"w-full flex-1"}
                         placeholder="Nhóm"
                         isMultiple={false}
@@ -289,7 +322,127 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                         inlineSearch={true}
                       />
                     </div>
-                    <div className={"w-1/4 flex items-start pl-3"}>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Hợp đồng</div>
+                      <DropdownSearchable
+                        onchangeValue={(item: any) => {
+                          setFieldValue("contractID", item.value);
+                          setSearchContract("");
+                        }}
+                        onClearData={() => setFieldValue("contractID", "")}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchContract(value),
+                          500
+                        )}
+                        onScroll={(e) => handleScroll(e, 'contract')}
+                        className={"w-full flex-1"}
+                        placeholder="Hợp đồng"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item: any) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
+                          >
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        data={listContracts.map((contract) => ({
+                          label: `${contract.sign}.${contract.name}`,
+                          value: contract._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        initialValue={{
+                            ...task.contract?._id && { value: task.contract?._id },
+                            ...task.contract?.name && { label: task.contract?.name },
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                  </div>
+                  <div className={"flex pb-1 pt-2 border-b"}>
+                    <div className={"w-1/3 flex items-start"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới</div>
+                      <div className={"w-full flex-1"}>
+                        <DropdownSearchable
+                          onchangeValue={(value: any) => {
+                              setFieldValue("assigneeID", value?.id);
+                              setSearchFriend("");
+                            }
+                          }
+                          disabled
+                          onClearData={() => setFieldValue("assigneeID", "")}
+                          onSearchInputChange={debounce(
+                            (value) => setSearchFriend(value),
+                            500
+                          )}
+                          className={"w-full flex-1"}
+                          placeholder="Gửi tới"
+                          isMultiple={false}
+                          allowClearValueSingleInput={true}
+                          showTriangle={false}
+                          maxWidthInput="max-w-none"
+                          renderSelectedItem={(item: any) => (
+                            <div
+                              style={{ width: 100 }}
+                              className="flex items-center"
+                            >
+                              <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
+                              <p
+                                style={{
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  minWidth: 0,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  flex: "1 1 auto",
+                                }}
+                              >
+                                {item.text}
+                              </p>
+                            </div>
+                          )}
+                          data={listUsersProject.map((item) => ({
+                            label: item.bizfullname,
+                            value: item._id,
+                            imgUrl: item.imgUrl,
+                          }))}
+                          formatItem={{
+                            id: "value",
+                            text: "label",
+                          }}
+                          initialValue={{
+                            value: task.assignee?._id,
+                            label: task.assignee?.bizfullname,
+                            imgUrl: `${process.env.REACT_APP_URL_S3_USER}/${task.assignee?.image}`,
+                          }}
+                          inlineSearch={true}
+                        />
+                        <ErrorMessage
+                          name="assigneeID"
+                          component="div"
+                          className="font-normal text-xs text-negative pl-3"
+                        />
+                      </div>
+                    </div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) =>
@@ -323,7 +476,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                         inlineSearch={true}
                       />
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>
                       <DropdownSearchable
                         onchangeValue={(item: any) => {
@@ -382,77 +535,11 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-full flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới</div>
-                      <div className={"w-full flex-1"}>
-                        <DropdownSearchable
-                          onchangeValue={(value: any) => {
-                              setFieldValue("assigneeID", value?.id);
-                              setSearchFriendName("");
-                            }
-                          }
-                          disabled
-                          onClearData={() => setFieldValue("assigneeID", "")}
-                          onSearchInputChange={debounce(
-                            (value) => setSearchFriendName(value),
-                            500
-                          )}
-                          className={"w-full flex-1"}
-                          placeholder="Gửi tới"
-                          isMultiple={false}
-                          allowClearValueSingleInput={true}
-                          showTriangle={false}
-                          maxWidthInput="max-w-none"
-                          renderSelectedItem={(item: any) => (
-                            <div
-                              style={{ width: 100 }}
-                              className="flex items-center"
-                            >
-                              <img alt="Thumbnail" src={item.imageUrl || fakeThumbnail} className="mr-1 w-6 h-6 rounded-full" />
-                              <p
-                                style={{
-                                  textOverflow: "ellipsis",
-                                  maxWidth: "100%",
-                                  minWidth: 0,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  flex: "1 1 auto",
-                                }}
-                              >
-                                {item.text}
-                              </p>
-                            </div>
-                          )}
-                          data={listUsersProject.map((item) => ({
-                            label: item.bizfullname,
-                            value: item._id,
-                            imgUrl: item.imgUrl,
-                          }))}
-                          formatItem={{
-                            id: "value",
-                            text: "label",
-                          }}
-                          initialValue={{
-                            value: task.assignee?._id,
-                            label: task.assignee?.bizfullname,
-                            imgUrl: `${process.env.REACT_APP_URL_S3_USER}/${task.assignee?.image}`,
-                          }}
-                          inlineSearch={true}
-                        />
-                        <ErrorMessage
-                          name="assigneeID"
-                          component="div"
-                          className="font-normal text-xs text-negative pl-3"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-full flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Liên quan</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) => {
                             setFieldValue("relatedIDs", [...values.relatedIDs, value.id]);
-                            setSearchFriendName("");
+                            setSearchFriend("");
                           }
                         }
                         disabled
@@ -464,7 +551,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                         }}
                         onClearData={() => setFieldValue("relatedIDs", [])}
                         onSearchInputChange={debounce(
-                          (value) => setSearchFriendName(value),
+                          (value) => setSearchFriend(value),
                           500
                         )}
                         className={"w-full flex-1"}

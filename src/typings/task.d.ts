@@ -1,6 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
 import type { Company, FileProps } from "typings/common";
+import { Contract } from "./cmcs";
 
 export type ListTaskPayload = {
   keyword?: string,
@@ -32,6 +33,8 @@ export type Project = {
   _id: string;
   name: string;
   sign: string;
+  company: string,
+  startTime: string
 };
 
 export type Group = {
@@ -60,6 +63,7 @@ export type Task = {
   project: Project;
   company: Company,
   group: Group,
+  contract: Contract,
   field: Field,
   startTime: string,
   subType: number,
@@ -91,11 +95,14 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
+  contractID?: string;
   name?: string;
   status?: number;
   priority?: number;
   expiredTime?: string;
   isAddSignature?: boolean;
+  flags?: Array<string>;
+  flagsRemoves?: Array<string>;
   authorAttachs?: Array<string>;
   assigneeAttachs?: Array<string>;
 }

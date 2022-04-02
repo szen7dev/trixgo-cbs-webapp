@@ -4,33 +4,40 @@ import { APIResponse } from "./apis/response";
 // Kiểu dữ liệu từ client truyền lên server để lấy data API
 export type ListContractsPayload = {
   filter?: string; // Sau thay bằng Select (tương đương với kiểu Select)
+  select?: string;
   populates?: string;
   limit?: number; // Sau bỏ => Khống chế ở Backend
   outin?: number;
   keyword?: string;
-  departmentID?: string;
+  projectID?: string;
   companyID?: string;
   lastestID?: string;
 };
 
-// Thuộc tính 1 mẩu tin
-export type ContractProps = {
+// Kiểu dữ liệu của Danh sách/Info
+export type Contract = {
   _id: string;
   name: string,
+  sign: string,
+  storeSign: string,
+  description: string,
   company: string,
   project: {
     _id: string,
     name: string,
     sign: string
-  }
+  },
+  value: number,
+  acceptance: number,
 };
 
 // Kiểu dữ liệu trả về
 export type ListContractsResponse = APIResponse & {
   data: {
-    listRecords: Array<ContractProps>;
+    listRecords: Array<Contract>;
     totalRecord: number;
-    totalPages?: number;
+    totalPage?: number;
+    nextCursor: string;
   };
 };
 
@@ -41,6 +48,7 @@ export type GetInfoContractPayload = {
   select: string;
 };
 
+// Kiểu dữ liệu của Insert
 export type InsertContractPayload = {
   company: string;
   project: string;
@@ -105,6 +113,7 @@ export type InsertContractPayload = {
   expiredAg: Date;
 };
 
+// Kiểu dữ liệu của Update
 export type UpdateContractPayload = {
   contractID: string;
   company: string;

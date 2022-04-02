@@ -1,7 +1,6 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import cn from "classnames";
 import { SearchInput, Paginate, Popover } from "shareComponents/common";
-import { DropdownFilterButton } from "views/cmcs/shareComponents/common";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
@@ -40,19 +39,17 @@ export const CmcGuaranteePage: FC = () => {
     }
   }, [contractGuarantee.nextCursor]);
 
-  const nextPageAction = () => {
-    setPageParam(contractGuarantee.nextCursor)
-  }
+  const nextPageAction = () => setPageParam(contractGuarantee.nextCursor)
 
-  const handleOnFilter = useCallback((values) => {
+  // const handleOnFilter = useCallback((values) => {
 
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
+  //   // setPageParam(() => ({ ...values }));
+  //   return true;
+  // }, []);
 
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+  // const handleOnCancelFilter = useCallback(() => {
+  //   // setPageParam({});
+  // }, []);
 
   return (
     <main className="relative h-full">

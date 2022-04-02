@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 import { SearchInput, ButtonMore, ButtonCreate } from "shareComponents/common";
 // import DropdownFilterButton from "views/pages/document/components/DocumentFilterButton";
@@ -6,11 +7,24 @@ import ModalExample from "views/ppt/sharedComponents/common/ModalExample";
 
 import ChartReportByTime from "./components/ChartReportByTime";
 import CardImage from "./components/CardImage";
-import { Link, useLocation } from "react-router-dom";
+import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
+import { usePcmFile } from 'services/hooks/pcm/usePcm';
 
 const ProjectPhotoPage: FC = () => {
+	const { id: projectID } = useParams<{ id: string }>();
 	const [isShow, setIsShow] = useState(false);
 	const location = useLocation();
+
+	const { onFetchDetailDepartmentAsync, detailDepartment } = useQueryDetailDepartment();
+	const { listFilesPcm } = usePcmFile({
+		projectID
+	});
+
+	useEffect(() => {
+		if(projectID) {
+			onFetchDetailDepartmentAsync(projectID);
+		}
+	}, [projectID])
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hình ảnh"
@@ -34,7 +48,7 @@ const ProjectPhotoPage: FC = () => {
 							<h3 className="text-x-large mt-2.5 font-bold text-cbs-subtext">Báo cáo theo thời gian</h3>
 						</div>
 						<div className="h-[180px]">
-							<ChartReportByTime />
+							<ChartReportByTime project={detailDepartment} files={listFilesPcm} />
 						</div>
 					</div>
 
@@ -43,7 +57,7 @@ const ProjectPhotoPage: FC = () => {
 							<div className="lg:w-6/12 2xl:w-4/12 px-2" key={i}>
 								<div className="shadow-cbs-md">
 									<div className="grid grid-cols-3 gap-1 text-white px-1 pt-2.5">
-										{Array.from({ length: Math.ceil(Math.random() * 12) + 5 }).map((_, index) => index <= 5 && <CardImage pathname={location.pathname + '/package/' + i} index={index} />)}
+										{Array.from({ length: Math.ceil(Math.random() * 12) + 5 }).map((_, index) => index <= 5 && <CardImage pathname={location.pathname + '/package/' + i} index={index} key={index} />)}
 									</div>
 									<Link to={location.pathname + '/package/' + i}>
 										<div className="px-4 py-3 text-justify font-bold text-large">

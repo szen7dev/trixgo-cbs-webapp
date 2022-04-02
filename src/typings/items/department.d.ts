@@ -14,6 +14,9 @@ export type Department = {
     admins: string[];
     members: string[];
     pm: Human;
+    startTime: string;
+    expiredTime: string;
+    stage: number;
     assistant: Human;
 }
 

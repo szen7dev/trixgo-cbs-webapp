@@ -1,6 +1,6 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
@@ -16,8 +16,12 @@ import { Create, Update, Delete } from "../modal";
 import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { toast } from "react-toastify";
 
 const CmcsAdminFunctionalTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listCmcsAdmin, totalRecord, nextPageListAppRoles: nextPageCmcsAdmin, hasNextPageListAppRoles: hasNextPageCmcsAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
@@ -51,6 +55,13 @@ const CmcsAdminFunctionalTab: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">

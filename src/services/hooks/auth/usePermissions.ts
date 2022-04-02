@@ -162,7 +162,7 @@ export const useCheckPerAccessOneMenu = (payload: { appID: string, menuID: strin
 // 6. hook check quyền truy cập chi tiết màn hình cụ thể của 1 user, được triệu gọi trong view
 export const useCheckPerAccessScreen = (payload: { appID: string, menuID: string, type: "1" | "2" | "3", companyID?: string }) => {
     const history = useHistory();
-    const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: payload.appID });
+    const { hasPermission, isSuccess: isSuccessApp, dataUserAccess } = useCheckPerAccessApp({ appID: payload.appID });
     const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu(payload);
 
     // Phân quyền theo nhóm chức năng

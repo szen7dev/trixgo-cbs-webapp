@@ -5,14 +5,64 @@ import { ContractRepository } from 'apis/item';
 
 import type {
     ListContractsPayload,
-    ContractProps,
+    Contract,
     GetInfoContractPayload
 } from "typings/cmcs";
 
+interface UseContract {
+    loading: boolean;
+    totalRecord: number;
+    hasNextPage: boolean | undefined;
+    listContracts: Array<Contract>;
+    refetch: () => void;
+    fetchNextPage: () => void;
+}
+
+export const useContract = (params: ListContractsPayload, isFetch?: boolean): UseContract => {
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['contracts', params],
+        async ({ pageParam }: any) =>
+            ContractRepository.getListContract({
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch ?? true
+        }
+    );
+
+    const listContracts = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+
+    return {
+        loading: isLoading,
+        listContracts,
+        totalRecord,
+        hasNextPage,
+        refetch,
+        fetchNextPage
+    }
+}
+
+// Những Hook này cần refactor lại, không nên sử dụng
 interface UseQueryContract {
     fetchNextPageContract: () => void;
     refetchListContracts: () => void;
-    listContracts: ContractProps[];
+    listContracts: Contract[];
     totalRecord: number;
     totalPages: number;
     loading: boolean;
@@ -51,7 +101,7 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
         )
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = data?.pages[0]?.data?.totalPages || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         fetchNextPageContract,
@@ -65,9 +115,9 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
 }
 
 interface UseQueryDetailContract {
-    detailContract: ContractProps,
+    detailContract: Contract,
     loading: boolean,
-    onFetchDetailContractAsync: (params: GetInfoContractPayload) => Promise<ContractProps>
+    onFetchDetailContractAsync: (params: GetInfoContractPayload) => Promise<Contract>
 }
 export const useQueryDetailContract = (params?: GetInfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});

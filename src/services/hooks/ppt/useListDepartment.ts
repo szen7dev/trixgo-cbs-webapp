@@ -81,6 +81,5 @@ export function useListDepartment<
     refetch,
     hasNextPage,
     fetchNextPage,
-    // fetchPreviousPage,
   };
 }
