@@ -20,6 +20,8 @@ import { dateLoadedPercentage, formatDate } from "utils/ppt";
 import 'views/document/styles/document.css'
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 
+const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
+
 const ProjectCategoryPage: FC = () => {
 	const [keyword, setKeyword] = useState('');
 
@@ -30,6 +32,7 @@ const ProjectCategoryPage: FC = () => {
 	});
 
 	const { data: listDepartments, fetchNextPage, hasNextPage, totalRecord } = useQueryListDepartmentsIsMember({
+		limit: 20,
 		type: 2,
 		keyword,
 		isFetch: true
@@ -57,12 +60,11 @@ const ProjectCategoryPage: FC = () => {
 				{createPermission &&
 					<ButtonCreate />
 				}
-				{(updatePermission || deletePermission) && 
+				{(updatePermission || deletePermission) &&
 					<ButtonMore />
 				}
 			</div>
 
-			{/* Content */}
 			<div id="scrollable" className="flex-1 overflow-y-auto">
 				<InfiniteScroll
 					dataLength={totalRecord || listDepartments.length} //This is important field to render the next data
@@ -80,12 +82,19 @@ const ProjectCategoryPage: FC = () => {
 					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-4 text-primary-gray"
 				>
 					{
-						listDepartments.map((record, index: number) => {
+						listDepartments.map((record) => {
+							const percent = Math.floor(dateLoadedPercentage(new Date(record.startTime || 0), new Date(record.expiredTime || 0), new Date()) * 100);
+							const imgUrl = record.image
+								? (record.image.startsWith('files/db')
+									? `${REACT_APP_URL_S3}/${record.image}`
+									: `${REACT_APP_URL_S3_PROJECT}/${record.image}`)
+								: projectImage;
+
 							return (
 								<div key={record._id} className="document__card-container">
 									<div className="rounded-cbs-md border-cbs-border border pt-4 px-4 pb-7 h-full">
 										<div className="flex gap-x-3.5">
-											<img width="90" height="90" src={record.image ? `${process.env.REACT_APP_URL_S3_PROJECT}/${record.image}` : projectImage} alt="project" />
+											<img width="90" height="90" src={imgUrl} alt="project" />
 											<div className="flex-1">
 												<div className="flex justify-between text-xs">
 													<span>{formatDate(new Date(record.startTime || 0))}</span>
@@ -94,11 +103,14 @@ const ProjectCategoryPage: FC = () => {
 												<div className="w-full h-1.5 mt-1.5 border border-cbs-border box-content">
 													<div
 														className="h-full bg-cbs-subtext"
-														style={{ 'width': `${Math.floor(dateLoadedPercentage(new Date(record.startTime || 0), new Date(record.expiredTime || 0), new Date()) * 100)}%` } as React.CSSProperties}>
+														style={{ 'width': `${percent > 100 ? 100 : percent}%` } as React.CSSProperties}>
 													</div>
 												</div>
 												<ul className="mt-3 text-medium">
-													<li><span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Cột mốc: <b>3/12</b></li>
+													<li>
+														<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />
+														Cột mốc: <b>{record.completedMilestones || 0}/{record.milestones || 0}</b>
+													</li>
 													<li className="mt-2.5">
 														<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn:{" "}
 														<span className="text-cbs-primary">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
@@ -111,7 +123,6 @@ const ProjectCategoryPage: FC = () => {
 										</h3>
 										<p className="text-x-small mt-1.5 truncate">
 											{record.company.name}
-											{/* Công ty Cổ phần Đầu tư và Thương mại Thủ Đô */}
 										</p>
 									</div>
 								</div>
