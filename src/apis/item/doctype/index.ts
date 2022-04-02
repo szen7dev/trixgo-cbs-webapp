@@ -1,8 +1,11 @@
+/*=====DEFINE URL=====*/
 import API from "../../repository";
 import { ITEM_URL } from '../';
 
+/*=====TYPING=====*/
 import type { Doctype } from 'typings/items';
 
+/*=====INTERFACE DEFINE=====*/
 interface DoctypeRepository {
     addDoctype: (params: any) => Promise<any>;
     updateDoctype: (params: any) => Promise<any>;
@@ -19,6 +22,8 @@ export const doctypeRepository: DoctypeRepository = {
     fetchDetailDoctype: async (doctypeID, params) => fetchListDoctype({...params, doctypeID}),
 }
 
+/*=====APIS=====*/
+// Get List|Info
 async function fetchListDoctype(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/doctypes`, {
@@ -34,6 +39,7 @@ async function fetchListDoctype(params: any) {
     return data;
 }
 
+// Create
 async function addDoctype(params: any) {
     const { data } = await API.post(
         `${ITEM_URL}/doctypes`, params);
@@ -41,6 +47,7 @@ async function addDoctype(params: any) {
     return data;
 }
 
+// Update
 async function updateDoctype(params: any) {
     const { data } = await API.put(
         `${ITEM_URL}/doctypes`, params);
@@ -48,6 +55,7 @@ async function updateDoctype(params: any) {
     return data;
 }
 
+// Delete
 async function deleteDoctype(ids: Array<string>) {
     const { data } = await API.delete(
         `${ITEM_URL}/doctypes`, {

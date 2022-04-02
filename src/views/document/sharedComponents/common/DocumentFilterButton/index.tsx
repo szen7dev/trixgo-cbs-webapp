@@ -25,10 +25,7 @@ import {
   useQueryListDoctype,
   useQueryDetailDoctype,
 } from "services/hooks/items/useDoctype";
-import {
-  useQueryListStorage,
-  useQueryDetailStorage,
-} from "services/hooks/items/useStorage";
+import { useStorage } from "services/hooks/items/useStorage";
 
 interface FormFilterProps {
   onSubmit?: (values: any) => void;
@@ -66,9 +63,12 @@ const FormFilter: FC<FormFilterProps> = ({
     companyID,
     keyword: searchValues["property"] || "",
   }); // tính chất
-  const { listStorages } = useQueryListStorage({
-    companyID,
-    keyword: searchValues["storage"] || "",
+  const { list: listStorages } = useStorage({
+    params: {
+      companyID,
+      keyword: searchValues["storage"] || "",
+    },
+    isFetchList: true
   });
 
   const listFieldDropdown = React.useMemo(() => {
@@ -251,7 +251,12 @@ export const DropdownFilterButton: FC<
   const { onFetchDetailContactAsync } = useQueryDetailContact();
   const { onFetchDetailContractAsync } = useQueryDetailContract();
   const { onFetchDetailDoctypeAsync } = useQueryDetailDoctype();
-  const { onFetchDetailStorageAsync } = useQueryDetailStorage();
+  const { info: storageInfo } = useStorage({
+    params: {
+      storageID: initialValues?.storageID
+    },
+    isFetchInfo: true
+  });
 
   const { onFetchDetailDepartmentAsync, detailDepartment } =
     useQueryDetailDepartment();
@@ -299,10 +304,9 @@ export const DropdownFilterButton: FC<
         };
       }
       if (_initialValues?.storageID) {
-        const storage = await onFetchDetailStorageAsync(_initialValues?.storageID);
         data.storageID = {
-          _id: storage?._id,
-          name: storage?.name,
+          _id: storageInfo?._id,
+          name: storageInfo?.name,
         };
       }
       if (_initialValues?.receivedDate) {
@@ -316,7 +320,6 @@ export const DropdownFilterButton: FC<
       onFetchDetailContactAsync,
       onFetchDetailContractAsync,
       onFetchDetailDoctypeAsync,
-      onFetchDetailStorageAsync
     ]
   );
   const handleSubmit = React.useCallback(
