@@ -45,7 +45,7 @@ export const DocumentProjectPage: FC = () => {
   const [recordSelected, setSelectRecord] = useState<any>({});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
-  const { inserDocumentChildAsync, updateDocumentChildAsync } =
+  const { insertDocumentChildAsync, updateDocumentChildAsync } =
     useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
   const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
@@ -77,7 +77,7 @@ export const DocumentProjectPage: FC = () => {
       departmentInfo: result,
       title: "Thêm mới",
       onSubmit: async (values: any) => {
-        const result = await inserDocumentChildAsync({
+        const result = await insertDocumentChildAsync({
           ...values,
           departmentID,
         });
@@ -92,7 +92,7 @@ export const DocumentProjectPage: FC = () => {
     });
   }, [
     departmentID,
-    inserDocumentChildAsync,
+    insertDocumentChildAsync,
     onFetchDetailDepartmentAsync,
     refetch,
     toggleModal,
@@ -292,7 +292,7 @@ export const DocumentProjectPage: FC = () => {
                         <Link
                           to={`/ppt/project/${document.project._id}/document/${document._id}`}
                         >
-                          <p>{document?.name || ""}</p>
+                          <p className="text-cbs-highlight-color">{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
                             {`${document?.author?.fullname || ""}-${
                               moment(document.createAt).isValid() &&

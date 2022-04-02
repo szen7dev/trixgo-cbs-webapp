@@ -18,6 +18,8 @@ export type Department = {
     expiredTime: string;
     stage: number;
     assistant: Human;
+    completedMilestones: number;
+    milestones: number;
 }
 
 export type DepartmentPayload = QueryParam & {

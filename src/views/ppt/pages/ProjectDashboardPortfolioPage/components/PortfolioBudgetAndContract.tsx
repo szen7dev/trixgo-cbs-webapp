@@ -2,54 +2,85 @@ import React, { FC, HTMLAttributes, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import { DataBlock2 } from 'typings/ppt/department';
+import { convertToInternationalCurrencySystem } from 'utils/ppt';
 
 interface Props {
 	data?: DataBlock2
 }
-function convertToInternationalCurrencySystem(value: number) {
-	const { format } = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 2 })
-	// Nine Zeroes for Billions
-	return Math.abs(Number(value)) >= 1.0e+9
-
-		? format(value / 1.0e+9) + "B"
-		// Six Zeroes for Millions 
-		: Math.abs(Number(value)) >= 1.0e+6
-
-			? format(Number(value) / 1.0e+6) + "M"
-			// Three Zeroes for Thousands
-			: Math.abs(Number(value)) >= 1.0e+3
-
-				? format(Number(value) / 1.0e+3) + "K"
-
-				: Math.abs(Number(value));
-
-}
 
 const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ data, ...props }) => {
+	/**
+	 * Thông tin NGÂN_SÁCH
+	 */
+	const totalBudget 		= data?.[0].budget || 0; //TODO update: budget+vatBudget
+	const percentBudget		= totalBudget == 0 ? 0 : 100; // nếu không có ngân sách -> thanh % sẽ tính là 0đ (vì cột ngân sách làm chuẩn)
+	/**
+	 * Thông tin DỰ_BÁO
+	 */
+	const totalForecastBudget =  data?.[0].forecastBudget || 0; //TODO update: forecastBudget+vatForecastBudget
+	const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
+		if (_totalBudget == 0)
+			return 0;
+		else {
+			return (_totalForecastBudget / _totalBudget) * 100;
+		}
+	}
+	const percentForecastBudget = getPercentForecastBudget(totalBudget, totalForecastBudget);
+	/**
+	 * Thông tin ĐÃ_KÝ_HỢP_ĐỒNG
+	 */
+	const totalcontractValueContractPlusValueContractVatValue =  data?.[0].contractValueContractPlusValueContractVatValue || 0; //TODO update: contractValue+contractVatValue+contractPlus+contractVatPlus
+	const getContractValueContractPlusValueContractVatValue = (_totalBudget: number, _totalcontractValueContractPlusValueContractVatValue: number): number => {
+		if (_totalBudget == 0)
+			return 0;
+		else {
+			return (_totalcontractValueContractPlusValueContractVatValue / _totalBudget) * 100;
+		}
+	}
+	const percentContractValueContractPlusValueContractVatValue = getContractValueContractPlusValueContractVatValue(totalBudget, totalcontractValueContractPlusValueContractVatValue);
+	/**
+	 * Thông tin ĐÃ_GIẢI_NGÂN
+	 */
+	const totalcontractAmountPaid =  data?.[0].contractAmountPaid || 0; //TODO update: contractAdvancePaymentPaid+contractAmountPaid
+	const getcontractAmountPaid = (_totalBudget: number, _totalcontractAmountPaid: number): number => {
+		if (_totalBudget == 0)
+			return 0;
+		else {
+			return (_totalcontractAmountPaid / _totalBudget) * 100;
+		}
+	}
+	const percentcontractAmountPaid = getcontractAmountPaid(totalBudget, totalcontractAmountPaid);
 
 	return <div {...props}>
 		<div className='bg-white border-0.5 border-cbs-border h-full pb-4'>
 			<div className="grid grid-cols-odd-2 px-3.5 gap-x-2">
+				{/* Ngân sách */}
 				<Link to="/" className="col-span-2">
-					<p className='text-x-small mt-5'>Ngân sách (100%)</p>
+					<p className='text-x-small mt-5'>Ngân sách ({ percentBudget } %)</p>
 				</Link>
-				<div className='bg-cbs-green mt-2 mr-2 h-3 w-full'></div>
-				<div className="text-x-small w-max mt-2">{"$" + convertToInternationalCurrencySystem(data?.[0].budget || 0)}</div>
+				<div className='bg-cbs-green mt-2 mr-2 h-3 w-full' style={{ width:  percentBudget + "%" }}></div>
+
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalBudget)}</div>
+				{/* >Dự báo */}
 				<Link to="/" className="col-span-2">
-					<p className='text-x-small mt-5'>Dự báo ({data?.[0].budget ? data?.[0].forecastBudget / data?.[0].budget : 100}%)</p>
+					<p className='text-x-small mt-5'>Dự báo ({ percentForecastBudget }%)</p>
 				</Link>
-				<div className='bg-cbs-purple mt-2 h-3' style={{ width: (data?.[0].budget ? data?.[0].forecastBudget / data?.[0].budget : 100) + "%" }}></div>
-				<div className="text-x-small w-max mt-2">{"$" + convertToInternationalCurrencySystem(data?.[0].forecastBudget || 0)}</div>
+				<div className='bg-cbs-purple mt-2 h-3' style={{ width: (percentForecastBudget) + "%" }}></div>
+				
+				{/* >Đã ký hợp đồng */}
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractValueContractPlusValueContractVatValue)}</div>
 				<Link to="/" className="col-span-2">
-					<p className='text-x-small mt-5'>Đã ký hợp đồng ({data?.[0].budget ? data[0].contractValueContractPlusValueContractVatValue / data[0].budget : 100}%)</p>
+					<p className='text-x-small mt-5'>Đã ký hợp đồng ({ percentContractValueContractPlusValueContractVatValue }%)</p>
 				</Link>
-				<div className='bg-cbs-primary mt-2 h-3' style={{ width: (data?.[0].budget ? data[0].contractValueContractPlusValueContractVatValue / data[0].budget : 100) + "%" }}></div>
-				<div className="text-x-small w-max mt-2">{"$" + convertToInternationalCurrencySystem(data?.[0].contractValueContractPlusValueContractVatValue || 0)}</div>
+				<div className='bg-cbs-primary mt-2 h-3' style={{ width: ( percentContractValueContractPlusValueContractVatValue ) + "%" }}></div>
+				
+				{/* >Đã giải ngân */}
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractAmountPaid)}</div>
 				<Link to="/" className="col-span-2">
-					<p className='text-x-small mt-5'>Đã giải ngân ({data?.[0].budget ? data[0].contractAmountPaid / data[0].budget : 100}%)</p>
+					<p className='text-x-small mt-5'>Đã giải ngân ({ percentcontractAmountPaid }%)</p>
 				</Link>
-				<div className='bg-cbs-schedule-nextweek mt-2 h-3' style={{ width: (data?.[0].budget ? data[0].contractAmountPaid / data[0].budget : 100) + "%" }}></div>
-				<div className="text-x-small w-max mt-2">{"$" + convertToInternationalCurrencySystem(data?.[0].contractAmountPaid || 0)}</div>
+				<div className='bg-cbs-schedule-nextweek mt-2 h-3' style={{ width: ( percentcontractAmountPaid ) + "%" }}></div>
+				<div className="text-x-small w-max mt-2">{"đ " + convertToInternationalCurrencySystem(totalcontractAmountPaid)}</div>
 			</div>
 		</div>
 	</div>

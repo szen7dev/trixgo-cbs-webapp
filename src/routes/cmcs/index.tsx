@@ -17,6 +17,7 @@ import {
     CmcGuaranteePage,
     ContractHome,
     ContractIpc,
+    ContractPayment,
     ContractProduce,
     ContractAdminPage,
     CmcDashboardPage,
@@ -111,6 +112,16 @@ const CmcsRouter: FC = () => {
                 component={() => (
                     <CmcsContractLayout>
                         <ContractIpc />
+                    </CmcsContractLayout>
+                )}
+            />
+
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/payment"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractPayment />
                     </CmcsContractLayout>
                 )}
             />
