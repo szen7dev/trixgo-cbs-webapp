@@ -17,6 +17,7 @@ import {
     CmcGuaranteePage,
     ContractHome,
     ContractIpc,
+    ContractPayment,
     ContractProduce,
     ContractAdminPage,
     CmcDashboardPage,
@@ -87,6 +88,24 @@ const CmcsRouter: FC = () => {
                     </CmcsLayout>
                 )}
             />
+            {/* <ProtectedRoute
+                exact
+                path="/cmcs/portfolio"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcPortfolioPage />
+                    </CmcsLayout>
+                )}
+            /> */}
+            <ProtectedRoute
+                exact
+                path="/cmcs/expense"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcExpensePage />
+                    </CmcsLayout>
+                )}
+            />
             <ProtectedRoute
                 exact
                 path="/cmcs/guarantee"
@@ -111,6 +130,16 @@ const CmcsRouter: FC = () => {
                 component={() => (
                     <CmcsContractLayout>
                         <ContractIpc />
+                    </CmcsContractLayout>
+                )}
+            />
+
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/payment"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractPayment />
                     </CmcsContractLayout>
                 )}
             />
@@ -148,24 +177,6 @@ const CmcsRouter: FC = () => {
                     <CmcsContractLayout>
                         <ContractDashBoard />
                     </CmcsContractLayout>
-                )}
-            />
-            <ProtectedRoute
-                exact
-                path="/cmcs/portfolio"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcPortfolioPage />
-                    </CmcsLayout>
-                )}
-            />
-            <ProtectedRoute
-                exact
-                path="/cmcs/expense"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcExpensePage />
-                    </CmcsLayout>
                 )}
             />
             <ProtectedRoute

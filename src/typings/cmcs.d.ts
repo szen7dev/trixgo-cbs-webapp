@@ -12,6 +12,7 @@ export type ListContractsPayload = {
   projectID?: string;
   companyID?: string;
   lastestID?: string;
+  contractID?: string;
 };
 
 // Kiểu dữ liệu của Danh sách/Info
@@ -19,16 +20,37 @@ export type Contract = {
   _id: string;
   name: string,
   sign: string,
+  date: String,
   storeSign: string,
   description: string,
   company: string,
+  sellerInfo: {
+    _id: string,
+    name: string,
+  },
   project: {
     _id: string,
     name: string,
     sign: string
   },
+  budget: number,
+  budgetVAT: number,
   value: number,
+  vatValue: number,
+  plus: number,
+  vatPlus: number,
+  advancePayment: number,
+  produce: number,
+  vatProduce: number,
+  plusProduce: number,
+  vatPlusProduce: number,
   acceptance: number,
+  vatAcceptance: number,
+  plusAcceptance: number,
+  vatPlusAcceptance: number,
+  advancePaymentPaid: number,
+  amountPaid: number,
+  remainingPayment: number,
 };
 
 // Kiểu dữ liệu trả về
@@ -44,8 +66,8 @@ export type ListContractsResponse = APIResponse & {
 // Kiểu dữ liệu Info
 export type GetInfoContractPayload = {
   contractID: string;
-  populates: string;
-  select: string;
+  populates?: string;
+  select?: string;
 };
 
 // Kiểu dữ liệu của Insert

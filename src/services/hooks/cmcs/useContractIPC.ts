@@ -13,8 +13,7 @@ type UseContractIPCProp = {
     hasNextPage: boolean | undefined
 };
 
-export const UseContractIPCList = (pageParam = '', contractID = '', limit = 10): any => {
-
+export const UseContractIPCList = (pageParam = '', contractID = '', limit = 10, keyword = ""): any => {
     const {
         status,
         data,
@@ -27,7 +26,8 @@ export const UseContractIPCList = (pageParam = '', contractID = '', limit = 10):
             return ContractIPCRepository.fetchList({
                 limit,
                 lastestID: pageParam || "",
-                contractID
+                contractID,
+                keyword
             })
         },
         { keepPreviousData: true }

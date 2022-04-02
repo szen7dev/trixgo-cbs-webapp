@@ -44,7 +44,7 @@ import {
 	ProjectFolderPage,
 	ProjectHomePage,
 	ProjectPaymentPage,
-	ProjectPhotoPackagePage,
+	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectResourcePage,
 	ProjectSchedulePage,
@@ -102,7 +102,7 @@ const PCMRouter: FC = () => {
 								{ id: '2', title: 'Kế hoạch', path: '/pcm/project/:id/budget/2' },
 							]}>
 								<Route exact path='/pcm/project/:id/budget' component={ProjectBudgetPage} />
-								<Route exact path='/pcm/project/:id/budget/2' component={() => <>Sample Data</>} />
+								<Route exact path='/pcm/project/:id/budget/2' component={() => <></>} />
 							</LayoutSecondary>
 						</Route>
 						<Route exact path={['/pcm/project/:id/bidding', '/pcm/project/:id/bidding/(2|3)']}>
@@ -144,12 +144,12 @@ const PCMRouter: FC = () => {
 						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
 						<Route exact path='/pcm/project/:id/document/:docID' component={DocumentDetailPage} />
 						<Route exact path='/pcm/project/:id/photo' component={ProjectPhotoPage} />
-						<Route exact path='/pcm/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />
+						<Route exact path='/pcm/project/:id/photo/contract/:contractID' component={ProjectPhotoContractPage} />
 						<Route path='/pcm/project/:id/drawing'>
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Bản vẽ', path: '/pcm/project/:id/drawing', navExact: true },
-								{ id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/pcm/project/:id/drawing/1' },
-								{ id: '3', title: 'Quản lý phiên bản', path: '/pcm/project/:id/drawing/2' },
+								// { id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/pcm/project/:id/drawing/1' },
+								// { id: '3', title: 'Quản lý phiên bản', path: '/pcm/project/:id/drawing/2' },
 							]}>
 								<Route exact path='/pcm/project/:id/drawing' component={ProjectDrawingPage} />
 								<Route exact path='/pcm/project/:id/drawing/1' component={() => <>Sample Data</>} />

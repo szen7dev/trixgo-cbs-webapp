@@ -1,38 +1,44 @@
+/*=====1.LIBRARY=====*/
 import { useInfiniteQuery, useMutation } from "react-query";
 import React from "react";
 
+/*=====2.TYPING/APIS=====*/
 import { DoctypeRepository } from 'apis/item';
 import type { Doctype } from 'typings/items';
 
+/*=====3.INTERFACE DEFINE=====*/
 interface UseDoctype {
-    addDoctypeAsync: (params: any) => Promise<any>,
-    updateDoctypeAsync: (params: any) => Promise<any>,
-    deleteDoctypeAsync: (ids: Array<string>) => Promise<any>,
     loading: boolean;
     totalRecord: number;
-    totalPages: number;
     hasNextPage: boolean | undefined;
     listDoctypes: Array<Doctype.Doctype>;
     refetchListDoctype: () => void;
     fetchNextPageDoctype: () => void;
+    addDoctypeAsync: (params: any) => Promise<any>;
+    updateDoctypeAsync: (params: any) => Promise<any>;
+    deleteDoctypeAsync: (ids: Array<string>) => Promise<any>;
 }
 
 export const useDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolean): UseDoctype => {
+    // Create
     const { mutateAsync: addDoctypeAsync } =
         useMutation((payload: any) =>
             DoctypeRepository.addDoctype(payload)
         );
 
+    // Update
     const { mutateAsync: updateDoctypeAsync } =
         useMutation((payload: any) =>
             DoctypeRepository.updateDoctype(payload)
         );
 
+    // Delete
     const { mutateAsync: deleteDoctypeAsync } =
         useMutation((ids: Array<string>) =>
             DoctypeRepository.deleteDoctype(ids)
         );
 
+    // Get List|Info
     const {
         isLoading,
         data,
@@ -62,19 +68,18 @@ export const useDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolea
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
+    // Return data
     return {
-        addDoctypeAsync,
-        updateDoctypeAsync,
-        deleteDoctypeAsync,
         loading: isLoading,
         listDoctypes,
         totalRecord,
-        totalPages,
         hasNextPage,
         refetchListDoctype,
-        fetchNextPageDoctype
+        fetchNextPageDoctype,
+        addDoctypeAsync,
+        updateDoctypeAsync,
+        deleteDoctypeAsync,
     }
 }
 

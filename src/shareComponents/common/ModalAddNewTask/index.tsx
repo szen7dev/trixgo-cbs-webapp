@@ -23,7 +23,7 @@ import fakeThumbnail from "assets/images/avatar.jpg";
 import { toast } from "react-toastify";
 
 import "react-day-picker/lib/style.css";
-
+import { useContract } from "services/hooks/items/useContract";
 interface InitialValues {
   projectID: string,
   subType: string,
@@ -72,14 +72,19 @@ export const ModalAddNewTask: FC = () => {
   const [otherFieldValue, setOtherFieldValue]             = useState("");
   const [searchFriendName, setSearchFriendName]           = useState("");
   const [searchGroupName, setSearchGroupName]             = useState("");
+  const [searchContract, setSearchContract]               = useState("");
   const [projectID, setProjectID]                         = useState("");
 
-  const { data: listDepartments } = useQueryListDepartmentsIsMember({
+  const { 
+    data: listDepartments,
+    fetchNextPage: fetchNextPageListDepartment,
+    hasNextPage: hasNextPageListDepartment
+  } = useQueryListDepartmentsIsMember({
     limit: 50,
     keyword: searchDepartmentValue,
     isFetch: true
   })
-
+  
   const { listDoctypes } = useQueryListDoctype({
     limit: 50,
     type: 2,
@@ -95,12 +100,37 @@ export const ModalAddNewTask: FC = () => {
     projectID: projectID
   }, !!projectID);
 
-  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+  const {
+    listContracts,
+    hasNextPage: hasNextPageListContract,
+    fetchNextPage: fetchNextPageListContract,
+  } = useContract({
+    params: {
+      contractID: "",
+      keyword: searchContract,
+      projectID,
+    },
+    isFetch: !!projectID
+  });
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListGroup) {
-      fetchNextPageListGroup();
+    if(!bottom) return;
+
+    switch (true) {
+      case (type === 'project' && hasNextPageListDepartment):
+        fetchNextPageListDepartment();
+        break;
+      case (type === 'group' && hasNextPageListGroup):
+        fetchNextPageListGroup();
+        break;
+      case (type === 'contract' && hasNextPageListContract):
+        fetchNextPageListContract();
+        break;
+      default:
+        break;
     }
   }
 
@@ -123,7 +153,7 @@ export const ModalAddNewTask: FC = () => {
     projectID,
     keyword: searchFriendName
   }, true);
-
+  
   return (
     <>
       <div className={"flex flex-col"}>
@@ -145,7 +175,7 @@ export const ModalAddNewTask: FC = () => {
               <Form>
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
@@ -168,6 +198,7 @@ export const ModalAddNewTask: FC = () => {
                               (value) => setSearchDepartmentValue(value),
                             500)
                           }
+                          onScroll={(e) => handleScroll(e, 'project')}
                           className={"w-full flex-1"}
                           placeholder="Dự án"
                           isMultiple={false}
@@ -211,7 +242,7 @@ export const ModalAddNewTask: FC = () => {
                         />
                       </div>
                     </div>
-                    <div className={"w-1/4 flex items-start"}>
+                    <div className={"w-1/3 flex items-start pl-3"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm</div>
                       <DropdownSearchable
                         disabled={values.projectID.length <= 0}
@@ -224,7 +255,7 @@ export const ModalAddNewTask: FC = () => {
                           (value) => setSearchGroupName(value),
                           500
                         )}
-                        onScroll={handleScroll}
+                        onScroll={(e) => handleScroll(e, 'group')}
                         className={"w-full flex-1"}
                         placeholder="Nhóm"
                         isMultiple={false}
@@ -262,47 +293,21 @@ export const ModalAddNewTask: FC = () => {
                         inlineSearch={true}
                       />
                     </div>
-                    <div className={"w-1/4 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại</div>
-                      <DropdownSearchable
-                        onchangeValue={(value: any) =>
-                          setFieldValue("subType", value.id)
-                        }
-                        onClearData={() => setFieldValue("subType", "")}
-                        placeholder={"Phân loại"}
-                        className={"w-full flex-1"}
-                        focusedClass={"border-b border-primary"}
-                        maxWidthInput={"max-w-none"}
-                        allowClearValueSingleInput={true}
-                        showTriangle={false}
-                        renderSelectedItem={(item: any) => (
-                          <div className={"flex items-center"}>
-                            <img alt={"tag icon"} src={TagIcon}/>
-                            <span>{item.text}</span>
-                          </div>
-                        )}
-                        data={PCM_PROPOSAL_TASK}
-                        formatItem={{
-                            id: "value",
-                            text: "text",
-                        }}
-                        inlineSearch={true}
-                      />
-                    </div>
-                    <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Hợp đồng</div>
                       <DropdownSearchable
                         onchangeValue={(item: any) => {
-                          setFieldValue("fieldID", item.value);
-                          setOtherFieldValue("");
+                          setFieldValue("contractID", item.value);
+                          setSearchContract("");
                         }}
-                        onClearData={() => setFieldValue("fieldID", "")}
+                        onClearData={() => setFieldValue("contractID", "")}
                         onSearchInputChange={debounce(
-                          (value) => setOtherFieldValue(value),
+                          (value) => setSearchContract(value),
                           500
                         )}
+                        onScroll={(e) => handleScroll(e, 'contract')}
                         className={"w-full flex-1"}
-                        placeholder="Phân loại khác"
+                        placeholder="Hợp đồng"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
                         showTriangle={false}
@@ -327,9 +332,9 @@ export const ModalAddNewTask: FC = () => {
                             </p>
                           </div>
                         )}
-                        data={listDoctypes.map((doctypes) => ({
-                          label: doctypes.name,
-                          value: doctypes._id,
+                        data={listContracts.map((contract) => ({
+                          label: `${contract.sign}.${contract.name}`,
+                          value: contract._id,
                         }))}
                         formatItem={{
                           id: "value",
@@ -340,7 +345,7 @@ export const ModalAddNewTask: FC = () => {
                     </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
-                    <div className={"w-full flex items-start"}>
+                    <div className={"w-1/3 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
@@ -397,6 +402,82 @@ export const ModalAddNewTask: FC = () => {
                           className="font-normal text-xs text-negative pl-3"
                         />
                       </div>
+                    </div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại</div>
+                      <DropdownSearchable
+                        onchangeValue={(value: any) =>
+                          setFieldValue("subType", value.id)
+                        }
+                        onClearData={() => setFieldValue("subType", "")}
+                        placeholder={"Phân loại"}
+                        className={"w-full flex-1"}
+                        focusedClass={"border-b border-primary"}
+                        maxWidthInput={"max-w-none"}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        renderSelectedItem={(item: any) => (
+                          <div className={"flex items-center"}>
+                            <img alt={"tag icon"} src={TagIcon}/>
+                            <span>{item.text}</span>
+                          </div>
+                        )}
+                        data={PCM_PROPOSAL_TASK}
+                        formatItem={{
+                            id: "value",
+                            text: "text",
+                        }}
+                        inlineSearch={true}
+                      />
+                    </div>
+                    <div className={"w-1/3 flex items-start pl-3"}>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tính chất</div>
+                      <DropdownSearchable
+                        onchangeValue={(item: any) => {
+                          setFieldValue("fieldID", item.value);
+                          setOtherFieldValue("");
+                        }}
+                        onClearData={() => setFieldValue("fieldID", "")}
+                        onSearchInputChange={debounce(
+                          (value) => setOtherFieldValue(value),
+                          500
+                        )}
+                        className={"w-full flex-1"}
+                        placeholder="Phân loại khác"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        showTriangle={false}
+                        maxWidthInput="max-w-none"
+                        renderSelectedItem={(item: any) => (
+                          <div
+                            style={{ width: 100 }}
+                            className="flex items-center"
+                          >
+                            <img alt="Tag" src={TagIcon} className="mr-1" />
+                            <p
+                              style={{
+                                textOverflow: "ellipsis",
+                                maxWidth: "100%",
+                                minWidth: 0,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                flex: "1 1 auto",
+                              }}
+                            >
+                              {item.text}
+                            </p>
+                          </div>
+                        )}
+                        data={listDoctypes.map((doctypes) => ({
+                          label: doctypes.name,
+                          value: doctypes._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
                     </div>
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>

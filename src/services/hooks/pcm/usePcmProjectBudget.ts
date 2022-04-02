@@ -1,18 +1,31 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
 import { useInfiniteQuery, useMutation } from "react-query";
 import { ContractRepository } from 'apis/item';
+import { Contract } from "typings/cmcs";
 
-export const usePcmProjectBudget = (params: any): any => {
+interface UsePcmProjectBudget {
+    createContractMutateAsync: (payload: any) => Promise<any>;
+    updateContracttMutateAsync: (payload: any) => Promise<any>;
+    listPcmProjectBudget: Array<Contract>,
+    totalRecord: number,
+    totalPage: number,
+    isLoading: boolean;
+    hasNextPage: boolean | undefined;
+    refetch: () => void;
+    fetchNextPage: () => void;
+}
+
+export const usePcmProjectBudget = (params: any, isFetch?: boolean): UsePcmProjectBudget => {
     // Create
     const { mutateAsync: createContractMutateAsync } =
         useMutation((payload: any) =>
-        ContractRepository.insertContract(payload)
-    );
+            ContractRepository.insertContract(payload)
+        );
 
     // Update
     const { mutateAsync: updateContracttMutateAsync } =
         useMutation((payload: any) =>
-        ContractRepository.updateContract(payload)
+            ContractRepository.updateContract(payload)
         );
 
     // Get list
@@ -25,7 +38,11 @@ export const usePcmProjectBudget = (params: any): any => {
     } = useInfiniteQuery([`project_budget`, params], async (pageParam: any) => {
             return ContractRepository.getListContract({
                 lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
-                select: "name sign value acceptance",
+                select: "name sign sellerInfo date description budget budgetVAT value vatValue plus vatPlus advancePayment produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance advancePaymentPaid amountPaid remainingPayment",
+                populates: JSON.stringify({
+                    path: "sellerInfo",
+                    select: "_id name sign",
+                }),
                 limit: 20,
                 ...params
             })
@@ -35,13 +52,13 @@ export const usePcmProjectBudget = (params: any): any => {
                 return data?.nextCursor || undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: true,
+            enabled: isFetch ?? true,
         }
     );
-    
+
     const listPcmProjectBudget = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPage = data?.pages[0]?.data?.totalPage;
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 1;
 
     return {
         createContractMutateAsync,

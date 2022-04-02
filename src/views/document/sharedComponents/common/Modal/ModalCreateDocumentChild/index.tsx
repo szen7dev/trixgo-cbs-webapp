@@ -15,10 +15,11 @@ import { ModalContainer } from "shareComponents/common/ModalContainer";
 import { useQueryListPackage } from "services/hooks/document/usePackage";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
-import { useQueryListStorage } from "services/hooks/items/useStorage";
+import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
 import { Document } from "typings/ppt";
+import { useMutationDocumentChild }  from "services/hooks/document/useDocumentChild"
 
 const fieldInputByRow = [
 	{ title: "Số lượng", name: "amount", type: "text" },
@@ -72,23 +73,15 @@ const useInitialValues = (
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
-		companyID,
+		companyID
 	});
-	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
+	const { list: listStorages } = useStorage({
+		params: {
+			companyID, keyword: keywordStorage
+		},
+		isFetchList: true
+	});
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
-
-	// if (!companyID || !departmentID) {
-	// 	return {
-	// 		listPackage: [],
-	// 		listContactSender: [],
-	// 		listContactReceiver: [],
-	// 		fields: [],
-	// 		properties: [],
-	// 		listStorages: [],
-	// 		listContracts: [],
-	// 	};
-	// }
-
 	return {
 		listPackage,
 		listContactSender,
@@ -108,8 +101,8 @@ type Props = {
 
 export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, document }) => {
 	const { state } = useContext(ModalContext);
-	console.log({ document });
-
+	const { insertDocumentChildAsync } = useMutationDocumentChild();
+	
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
 	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
@@ -140,12 +133,13 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 
 	const initialValues = {
 		field: document.field?._id,
-		package: document?.package?._id,
-		project: document?.project?._id,
+		packageID: document?.package?._id,
+		projectID: document?.project?._id,
 		receiver: document?.receiver?._id,
 		sender: document?.sender?._id,
 		storage: document?.storage?._id,
 		property: document?.property?._id,
+		parentID: document?._id
 	}
 
 	const listFormFieldsDropdown = React.useMemo((): {
@@ -179,7 +173,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		];
 	}, [listContactSender, listContactReceiver , listContracts, listPackage, listStorages, properties]);
 
-	const handleSubmit = (values: any) => {
+	const handleSubmit = async(values: any) => {
 		const formatValues = {
 			...values
 		};
@@ -187,9 +181,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if (moment(values.date).isValid()) {
 			formatValues.date = moment(values.date).toJSON();
 		}
+
 		if (moment(values.expiredResponse).isValid()) {
 			formatValues.expiredResponse = moment(values.expiredResponse).toJSON();
 		}
+
 		if (moment(values.receivedDate).isValid()) {
 			formatValues.receivedDate = moment(values.receivedDate).toJSON();
 		}
@@ -200,9 +196,28 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.completeStatus = 0
 		}
 
+		if(values.amount){
+			formatValues.amount = +values.amount;
+		}
+
+		if(values.amountDelivery){
+			formatValues.amountDelivery = +values.amountDelivery;
+		}
+
+		if(values.amountDelivery){
+			formatValues.amountDelivery = +values.amountDelivery;
+		}
+
+		if(values.value){
+			formatValues.value = +values.value;
+		}
+
+		console.log({ formatValues })
+
 		// Xử lý api tạo hồ sơ
 		try {
-			console.log({ values, formatValues });
+			const infoAfterInsert = await insertDocumentChildAsync(formatValues)
+			console.log({ values, formatValues, infoAfterInsert });
 		} catch (error: unknown) {
 			console.error(error);
 		}

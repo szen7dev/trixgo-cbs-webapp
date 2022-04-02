@@ -1,5 +1,5 @@
-import React from 'react';
 import { useInfiniteQuery } from "react-query";
+import React from 'react';
 
 import { ContactRepository } from 'apis/item';
 import type { Contact } from 'typings/items';

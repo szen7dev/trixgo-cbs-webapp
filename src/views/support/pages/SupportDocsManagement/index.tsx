@@ -101,7 +101,6 @@ export const SupportDocsManagementPage: FC = () => {
     setIdsChecked([]);
     toast.success('Xoá dữ liệu thành công');
   }
-  console.log({ listUsersApp });
 
   return (
     <main className="relative h-full">
