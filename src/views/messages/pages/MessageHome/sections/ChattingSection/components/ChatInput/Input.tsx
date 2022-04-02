@@ -13,6 +13,7 @@ import {IconButton} from "./IconButton";
 import {IconAttach} from "./IconAttach";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 // import editorStyles from './editorStyles.module.css';
+import 'draft-js/dist/Draft.css';
 
 defaultTheme.emojiSelectPopover = defaultTheme.emojiSelectPopover + " bottom-60px left-0 shadow-md rounded-md border-0";
 defaultTheme.emojiSelectButton = defaultTheme.emojiSelectButton + " border-0 h-full";
