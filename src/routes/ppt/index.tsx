@@ -126,8 +126,8 @@ const PPTRoutes: FC = () => {
 							<Route path='/ppt/project/:id/drawing'>
 								<LayoutSecondary pages={[
 									{ id: '1', title: 'Bản vẽ', path: '/ppt/project/:id/drawing', navExact: true },
-									{ id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/ppt/project/:id/drawing/1' },
-									{ id: '3', title: 'Quản lý phiên bản', path: '/ppt/project/:id/drawing/2' },
+									// { id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/ppt/project/:id/drawing/1' },
+									// { id: '3', title: 'Quản lý phiên bản', path: '/ppt/project/:id/drawing/2' },
 								]}>
 									<Route exact path='/ppt/project/:id/drawing' component={ProjectDrawingPage} />
 									<Route exact path='/ppt/project/:id/drawing/1' component={() => <>hello</>} />
