@@ -119,7 +119,7 @@ const ProjectCategoryPage: FC = () => {
 											</div>
 										</div>
 										<h3 className="line-clamp-2 text-large text-black pt-2">
-											<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.name}</Link>
+											<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.company.sign}.{record.name}</Link>
 										</h3>
 										<p className="text-x-small mt-1.5 truncate">
 											{record.company.name}
