@@ -27,6 +27,15 @@ export const CmcsLeftSideBar: FC = () => {
 
         {/* menu block */}
         <div className="t-link-menu-container">
+        {hasPermission && dataUserAccess?.level == 0 ?
+            <NavLink
+              to={`/cmcs/admin`}
+              className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+            >
+              <img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
+              <span className="truncate">Quản trị viên</span>
+            </NavLink> : <></>
+          }
           <NavLink
             to={`/cmcs/home`}
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
@@ -38,6 +47,7 @@ export const CmcsLeftSideBar: FC = () => {
             />
             <span className="truncate">Trang chủ</span>
           </NavLink>
+          
           {listAppMenu && listAppMenu.length ?
             <>
               {listAppMenu.map((item: any, index: number) => {
@@ -62,19 +72,6 @@ export const CmcsLeftSideBar: FC = () => {
               })
               }
             </> : <></>
-          }
-          {hasPermission && dataUserAccess?.level == 0 ?
-            <NavLink
-              to={`/cmcs/admin`}
-              className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-            >
-              <img
-                className="w-6 h-6 object-contain mr-3"
-                src={iconFolder}
-                alt="Menu item"
-              />
-              <span className="truncate">Quản trị viên</span>
-            </NavLink> : <></>
           }
         </div>
       </div>

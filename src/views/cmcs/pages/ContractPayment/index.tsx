@@ -244,7 +244,7 @@ export const ContractPayment: FC = () => {
                 </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2">{item.sign}</td>
-                <td className="py-1 px-2 text-right">{item.ipc.name}</td>
+                <td className="py-1 px-2">{item.ipc.name}</td>
                 <td className="py-1 px-2">{item.type}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0))}</td>
                 <td className="py-1 px-2">{item.description}</td>
