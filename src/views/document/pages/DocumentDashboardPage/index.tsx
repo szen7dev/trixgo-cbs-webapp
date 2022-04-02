@@ -322,7 +322,7 @@ export const DocumentDashboardPage: FC = () => {
 											className="pl-5 border border-cbs-border relative"
 											style={{ minWidth: "420px" }}
 										>
-											<div className="flex">
+											{/* <div className="flex">
 												<div className="flex pb-2 pt-3 pr-2.5">
 													<div className="w-10 h-10 rounded-full overflow-hidden min-w-max mr-3">
 														<img
@@ -334,8 +334,8 @@ export const DocumentDashboardPage: FC = () => {
 														/>
 													</div>
 													<div>
-														{/* <p className="font-bold">{d.comment.user}</p> */}
-														{/* <p className="text-black mt-2">{d.comment.message}</p> */}
+														<p className="font-bold"></p>
+														<p className="text-black mt-2"></p>
 													</div>
 												</div>
 												<div
@@ -344,19 +344,19 @@ export const DocumentDashboardPage: FC = () => {
 												>
 													10:22 AM
 												</div>
-											</div>
+											</div> */}
 											<button
 												className="absolute bottom-0 right-0 whitespace-nowrap w-max bg-cbs-table-header rounded-tl-md px-3 py-1.5 text-x-small"
 											//   onClick={() =>
 											//     setOpen({ show: true, mediaId: d.mediaId })
 											//   }
 											>
-												<img
+												{/* <img
 													src={iconComment}
 													alt="Comment"
 													className="inline-block w-4 h-4 mr-1"
 												/>
-												<span className="align-middle">21.3k</span>
+												<span className="align-middle">21.3k</span> */}
 											</button>
 										</td>
 									</tr>
