@@ -28,6 +28,8 @@ export type Contract = {
     name: string,
     sign: string
   },
+  budget: number,
+  budgetVAT: number,
   value: number,
   vatValue: number,
   plus: number,
