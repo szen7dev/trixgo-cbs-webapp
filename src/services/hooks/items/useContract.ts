@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import React from "react";
 
 import { ContractRepository } from 'apis/item';
@@ -14,11 +14,28 @@ interface UseContract {
     totalRecord: number;
     hasNextPage: boolean | undefined;
     listContracts: Array<Contract>;
+    contractInfo: Contract;
     refetch: () => void;
     fetchNextPage: () => void;
 }
 
-export const useContract = (params: ListContractsPayload, isFetch?: boolean): UseContract => {
+type Props = {
+    params: ListContractsPayload & GetInfoContractPayload,
+    isFetch?: boolean,
+    isFetchInfo?: boolean
+}
+
+export const useContract = ({
+    params,
+    isFetch = false,
+    isFetchInfo = false
+}: Props): UseContract => {
+    const { data: infoContract } =
+        useQuery("contract_info", () => ContractRepository.getInfoContract(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+
     const {
         isLoading,
         data,
@@ -37,7 +54,7 @@ export const useContract = (params: ListContractsPayload, isFetch?: boolean): Us
                 return data?.nextCursor ?? undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: isFetch ?? true
+            enabled: isFetch
         }
     );
 
@@ -47,10 +64,12 @@ export const useContract = (params: ListContractsPayload, isFetch?: boolean): Us
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const contractInfo = infoContract?.data;
 
     return {
-        loading: isLoading,
+        contractInfo,
         listContracts,
+        loading: isLoading,
         totalRecord,
         hasNextPage,
         refetch,

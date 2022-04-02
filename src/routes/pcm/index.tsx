@@ -44,7 +44,7 @@ import {
 	ProjectFolderPage,
 	ProjectHomePage,
 	ProjectPaymentPage,
-	ProjectPhotoPackagePage,
+	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectResourcePage,
 	ProjectSchedulePage,
@@ -144,7 +144,7 @@ const PCMRouter: FC = () => {
 						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
 						<Route exact path='/pcm/project/:id/document/:docID' component={DocumentDetailPage} />
 						<Route exact path='/pcm/project/:id/photo' component={ProjectPhotoPage} />
-						<Route exact path='/pcm/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />
+						<Route exact path='/pcm/project/:id/photo/contract/:contractID' component={ProjectPhotoContractPage} />
 						<Route path='/pcm/project/:id/drawing'>
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Bản vẽ', path: '/pcm/project/:id/drawing', navExact: true },

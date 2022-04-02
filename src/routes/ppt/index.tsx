@@ -35,7 +35,7 @@ import {
 	ProjectMomPage,
 	ProjectOtherPage,
 	ProjectPaymentPage,
-	ProjectPhotoPackagePage,
+	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectProductionPage,
 	ProjectPunchPage,
@@ -122,7 +122,7 @@ const PPTRoutes: FC = () => {
 							</Route>
 							<Route exact path='/ppt/project/:id/document/:docID' component={DocumentDetailPage} />
 							<Route exact path='/ppt/project/:id/photo' component={ProjectPhotoPage} />
-							<Route exact path='/ppt/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />
+							<Route exact path='/ppt/project/:id/photo/contract/:contractID' component={ProjectPhotoContractPage} />
 							<Route path='/ppt/project/:id/drawing'>
 								<LayoutSecondary pages={[
 									{ id: '1', title: 'Bản vẽ', path: '/ppt/project/:id/drawing', navExact: true },

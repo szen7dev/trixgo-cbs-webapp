@@ -17,7 +17,6 @@ const cmcsURL = "/api/item";
 
 const ContractRepository = {
 
-  // Data 1
   async getListContract(payload: ListContractsPayload): Promise<ListContractsResponse> {
     const { data } = await API.get<ListContractsResponse>(
       `${cmcsURL}/contracts?${convertObToUrl(payload)}`
@@ -25,12 +24,9 @@ const ContractRepository = {
     return data;
   },
 
-  // Data 2
   async getInfoContract(payload: GetInfoContractPayload): Promise<any> {
-    const { contractID, populates, select } = payload;
-
     const { data } = await API.get(
-      `${cmcsURL}/contracts?contractID=${contractID}&populates=${populates}&select=${select}`
+      `${cmcsURL}/contracts?${convertObToUrl(payload)}`
     );
     return data;
   },
@@ -54,7 +50,7 @@ const ContractRepository = {
     return data;
   },
 
-  // Thêm thành viên vào hợp đồng
+  // Thêm/Xóa thành viên trong hợp đồng
   async addOrRemoveMemberToDepartment(body: { contractID: string, members?: string[], admins?: string[], adminsRemove?: string[], membersRemove?: string[] }) {
     const { data } = await API.put<any>('/api/item/contracts', body);
     return data;
