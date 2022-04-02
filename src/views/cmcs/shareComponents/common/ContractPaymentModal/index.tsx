@@ -198,7 +198,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="name"
-                        value={initialValues.name}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Nội dung..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -212,7 +211,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="sign"
-                        value={initialValues.sign}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Mã hiệu..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -226,7 +224,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="description"
-                        value={initialValues.description}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Mô tả..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -282,7 +279,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="number"
                         name="value"
-                        value={initialValues.value}
                         className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
                         placeholder="Giá trị nghiệm thu trước VAT..."
                         onKeyUp={async (e: FormEvent<HTMLInputElement>) => {
