@@ -7,6 +7,9 @@ export const CmcExpensePage: FC = () => {
     menuID: APP_ID.CMCS.menuCmcsApp.expense.id,
     type: "1"
   });
+
+  console.log(useCheckPerAccessScreen)
+  
   return (
     <main className="relative h-full">
       <h1>CmcExpensePage</h1>
