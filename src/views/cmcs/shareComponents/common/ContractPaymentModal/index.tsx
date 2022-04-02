@@ -2,7 +2,6 @@ import { FC, FormEvent, useCallback, useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 
 import { useModal } from "services/hooks/useModal";
-
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
@@ -29,11 +28,11 @@ import {
 
 import {
   useDetailContractPaymentMutation,
-  useCreateContractPaymentMutation
+  useCreateContractPaymentMutation,
+  useUpdateContractPaymentMutation
 } from "services/hooks/cmcs/useContractPayment";
 
 import { toast } from "react-toastify";
-
 interface NewContractIPCModalProps {
   defaultValues?: any;
   onFinish: (values: any, isEdit: boolean) => Promise<boolean>;
@@ -48,6 +47,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
   return {
     contractPaymentID: data?._id,
     ipc: data?.ipc,
+    ipcID: data?.ipc?._id,
     date: convertDateToString(data?.date),
     name: data?.name || '',
     sign: data?.sign || '',
@@ -65,28 +65,34 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
   const { detailContractPayment } = useDetailContractPaymentMutation(idEdit);
   const { listContractIPC } = UseContractIPCList('', contractID, 20);
   const  { createContractPaymentMutateAsync } = useCreateContractPaymentMutation();
+  const  { updateContractPaymentMutateAsync } = useUpdateContractPaymentMutation();
 
   useEffect(() => {
-    if(detailContractPayment && idEdit ){
-      setInitialValues(mappingData(detailContractPayment))
-    }
+    setInitialValues(mappingData(detailContractPayment))
   }, [idEdit, detailContractPayment]);
 
-  console.log({ initialValues })
-
   const handleSubmit = async (values: any) => {
-      console.log({ values })
-      const { ipc, name, sign, description, date, value } = values;
-      if(!ipc || !name || !date)
+      const { contractPaymentID,ipcID, ipc, name, sign, description, date, value } = values;
+      if(!ipcID || !name || !date)
         return toast.error("Vui lòng nhập những nội dung bắt buộc (*)");
-
-      const infoAfterInsert = await createContractPaymentMutateAsync({ contractID, ipc, name, sign, description, date, value: +value });
-      if(!infoAfterInsert.error){
-        closeModal();
-        refetchList();
-        return toast.success("Thêm thành công");
+      if(contractPaymentID){
+        const infoAfterUpdate = await updateContractPaymentMutateAsync({ contractPaymentID, ipc: ipcID, name, sign, description, date, value: +value });
+        if(!infoAfterUpdate.error){
+          closeModal();
+          refetchList();
+          return toast.success("Cập nhật thành công");
+        }else{
+          return toast.error(infoAfterUpdate.message);
+        }
       }else{
-        return toast.error(infoAfterInsert.message);
+        const infoAfterInsert = await createContractPaymentMutateAsync({ contractID, ipc: ipcID, name, sign, description, date, value: +value });
+        if(!infoAfterInsert.error){
+          closeModal();
+          refetchList();
+          return toast.success("Thêm thành công");
+        }else{
+          return toast.error(infoAfterInsert.message);
+        }
       }
   }
 
@@ -108,7 +114,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
         />
       </header>
 
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} enableReinitialize >
         {(formik) => {
           const { handleBlur, setFieldValue } = formik;
           return (
@@ -131,13 +137,13 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                 {openGeneralInfo && (
                   <div className="pb-4 h-full mx-7">
                     <div className="mb-4">
-                      <p className="text-primary-gray text-xs mb-2">Thuộc kỳ thanh toán</p>
+                      <p className="text-primary-gray text-xs mb-2">Thuộc kỳ thanh toán (*)</p>
                       <DropdownSearchable
                         onchangeValue={(value: any) => 
-                          setFieldValue("ipc", value?.value)
+                          setFieldValue("ipcID", value?.value)
                         }
                         onClearData={() => 
-                          setFieldValue("ipc", '')
+                          setFieldValue("ipcID", '')
                         }
                         placeholder="Thuộc kỳ thanh toán..."
                         className="w-2/5 pl-0 -mb-1 outline-none"
@@ -149,7 +155,10 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         renderSelectedItem={(item: any) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 whitespace-normal z-99" >
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
-                        initialValue={initialValues.ipc}
+                        initialValue={{
+                          value: initialValues?.ipc?._id,
+                          label: initialValues?.ipc?.name || "Chọn kỳ thanh toán"
+                        }}
                         data={listContractIPC.map((item: any) => ({
                           value: item._id,
                           label: item.name
@@ -198,7 +207,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="name"
-                        value={initialValues.name}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Nội dung..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -212,7 +220,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="sign"
-                        value={initialValues.sign}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Mã hiệu..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -226,7 +233,6 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                       <Field
                         type="text"
                         name="description"
-                        value={initialValues.description}
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
                         placeholder="Mô tả..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
@@ -276,15 +282,14 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                 <div className="mb-8 h-full mx-7 w-2/3">
                   <div className="mb-4">
                     <p className="text-primary-gray text-xs mb-2">
-                      1 - Giá trị nghiệm thu trước VAT
+                      1 - Giá trị giải ngân
                     </p>
                     <div className="flex gap-x-2">
                       <Field
                         type="number"
                         name="value"
-                        value={initialValues.value}
                         className="pl-3 border border-primary-border rounded w-3/5 h-[32px] outline-none"
-                        placeholder="Giá trị nghiệm thu trước VAT..."
+                        placeholder="Giá trị giải ngân..."
                         onKeyUp={async (e: FormEvent<HTMLInputElement>) => {
                           await setFieldValue("value", e.currentTarget.value);
                         }}
@@ -293,7 +298,7 @@ export const ContractPaymentModal: FC<NewContractIPCModalProps> = ({ defaultValu
                         type="number"
                         name="valueUsd"
                         className="pl-3 border border-primary-border rounded w-2/5 h-[32px] outline-none"
-                        placeholder="Giá trị nghiệm thu trước VAT..."
+                        placeholder="Giá trị giải ngân..."
                         onBlur={(e: FormEvent<HTMLInputElement>) =>
                           handleBlur(e)
                         }

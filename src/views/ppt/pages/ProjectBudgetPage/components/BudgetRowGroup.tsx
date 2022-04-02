@@ -6,30 +6,9 @@ import { formatNumberMoney } from "utils/cmcs";
 import MenuChildRow from './MenuChildRow';
 import { RightClickMenuWrapper } from "shareComponents/common";
 
-interface RowItem {
-	_id: string | number,
-	budget: number,
-	value: number,
-	acceptance: number,
-	predict: number,
-	signed: number,
-	advance: number,
-	volume: number,
-	finish: number,
-	pay: number,
-	rest: number,
-	note?: string
-}
-interface RowData {
-	_id: string | number,
-	name: string,
-	value: number,
-	acceptance: number,
-	description: string,
-	data: Array<RowItem>
-}
+import { Contract } from "typings/cmcs";
 
-const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
+const BugetRowGroup: FC<{ row: Contract, show: boolean }> = ({ row, show }) => {
 	const [state, setState] = useState<boolean>(show);
 
 	useEffect(() => {
@@ -63,18 +42,18 @@ const BugetRowGroup: FC<{ row: RowData, show: boolean }> = ({ row, show }) => {
 			<tr>
 				<td className='bg-gray-300 px-1.5 py-2 relative'></td>
 				<td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0"></td>
-				<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0 text-cbs-highlight-color">
-					<NavLink to="/cmcs/contract/{row._id}/home">{row.name}</NavLink>
+				<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">
+					<NavLink className='text-cbs-highlight-color' to={`/cmcs/contract/${row._id}/home`}>{row.name}</NavLink>
+					<p className='text-primary-gray text-[12px]'><i>{row.sellerInfo.name}</i></p>
 				</td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.value || 0)}</td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.acceptance || 0)}</td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' ></td>
-				<td className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'></td>
-				{/* <td contentEditable suppressContentEditableWarning className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'></td> */}
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.budget || 0 + row.budgetVAT || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.value || 0 + row.vatValue || 0 + row.plus || 0 + row.vatPlus || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.advancePaymentPaid || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.produce || 0 + row.vatProduce || 0 + row.plusProduce || 0 + row.vatPlusProduce || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.acceptance || 0 + row.vatAcceptance || 0 + row.plusAcceptance || 0 + row.vatPlusAcceptance || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.amountPaid || 0)}</td>
+				<td className='text-right py-2 px-2 border-0.5 border-cbs-border border-l-0' >{formatNumberMoney(row.remainingPayment || 0)}</td>
+				<td className='text-left py-2 px-2 border-0.5 border-cbs-border border-l-0'>{row.description}</td>
 			</tr>
 		</RightClickMenuWrapper>
 	)

@@ -56,13 +56,14 @@ const PortfolioTableContainer: FC = () => {
 								<Fragment key={group.data.nextCursor}>
 									{
 										group.data.listRecords.map((record) => {
+                                            console.log("🚀 ~ file: PortfolioTableContainer.tsx ~ line 59 ~ group.data.listRecords.map ~ record", record)
 											const { budget, forecastBudget, contractValue, contractPlusValue, contractVatValue, contractAmountPaid, stage, milestones, completedMilestones } = record;
 											// 'Ngân sách': getPercentForecastBudget
 											const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
 												if (_totalBudget == 0)
 													return 0;
 												else {
-													return (_totalForecastBudget / _totalBudget) * 100;
+													return Math.ceil((_totalForecastBudget / _totalBudget) * 100);
 												}
 											}
 											const percentForecastBudget = getPercentForecastBudget(budget, forecastBudget);
@@ -71,7 +72,7 @@ const PortfolioTableContainer: FC = () => {
 											const getPercentSignedContract = () => {
 												if (!budget)
 													return 0;
-												return ((contractValue + contractPlusValue + contractVatValue) / budget) * 100;
+												return Math.ceil(((contractValue + contractPlusValue + contractVatValue) / budget) * 100);
 											}
 											const percentSignedContract = getPercentSignedContract();
 
@@ -80,12 +81,19 @@ const PortfolioTableContainer: FC = () => {
 												if (_totalBudget == 0)
 													return 0;
 												else {
-													return (_totalForecastBudget / _totalBudget) * 100;
+													return Math.ceil((_totalForecastBudget / _totalBudget) * 100);
 												}
 											}
 											const percentcontractAmountPaid = getPercentcontractAmountPaid(budget, contractAmountPaid);
 
-											// const dif = Math.floor(dateLoadedPercentage(new Date(record.startTime), new Date(record.expiredTime), new Date()) * 100);
+											const dif = Math.floor(dateLoadedPercentage(new Date(record.startTime), new Date(record.expiredTime), new Date()) * 100);
+											const limitMinMaxDif = (_dif: number) => {
+												if (_dif < 0)
+													return 0;
+												else if (_dif > 100)
+													return 100;
+												return _dif;
+											}
 											return (
 												<tr key={record._id}>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-3.5 pr-4 w-[275px]">
@@ -105,7 +113,7 @@ const PortfolioTableContainer: FC = () => {
 																	Bắt đầu
 																</p>
 																<p>
-																	{moment(record.startTime).format('d/M/yyyy')}
+																	{moment(record.startTime).format("DD/MM/YYYY")}
 																</p>
 															</div>
 															<div>
@@ -113,7 +121,7 @@ const PortfolioTableContainer: FC = () => {
 																	Kết thúc
 																</p>
 																<p>
-																	{moment(record.expiredTime).format('d/M/yyyy')}
+																	{moment(record.expiredTime).format("DD/MM/YYYY")}
 																</p>
 															</div>
 														</div>
@@ -121,7 +129,9 @@ const PortfolioTableContainer: FC = () => {
 															<div className="flex absolute inset-0 items-center">
 																<div className="bg-cbs-border h-0.5 w-full" />
 															</div>
-															<div className="bg-black relative transform -translate-x-1/2 w-1 h-4" style={{ left: `10%` }}></div>
+															<div className="bg-black relative transform -translate-x-1/2 w-1 h-4" style={{ left: `${
+																limitMinMaxDif(dif)
+															}%` }}></div>
 														</div>
 													</td>
 													<td className="px-3 border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3">

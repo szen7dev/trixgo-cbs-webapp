@@ -42,6 +42,13 @@ const ProjectLeftSideBar: FC = () => {
 							<span className="truncate">Quản trị viên</span>
 						</NavLink>
 					}
+					<NavLink
+						to={{ pathname: generatePath('/pcm/project/:id/home', match.params) }}
+						className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+					>
+						<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+						<span className="truncate">Trang chủ</span>
+					</NavLink>
 					{listAppMenu && listAppMenu.length ?
 						<>
 							{listAppMenu.map((item: any, index: number) => {

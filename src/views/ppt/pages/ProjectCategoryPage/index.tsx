@@ -113,13 +113,13 @@ const ProjectCategoryPage: FC = () => {
 													</li>
 													<li className="mt-2.5">
 														<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn:{" "}
-														<span className="text-cbs-primary">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
+														<span className="text-cbs-primary text-[12px]">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
 													</li>
 												</ul>
 											</div>
 										</div>
 										<h3 className="line-clamp-2 text-large text-black pt-2">
-											<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.name}</Link>
+											<Link className="" to={generatePath("/pcm/project/:id/home", { id: record._id })}>{record.company.sign}.{record.name}</Link>
 										</h3>
 										<p className="text-x-small mt-1.5 truncate">
 											{record.company.name}
