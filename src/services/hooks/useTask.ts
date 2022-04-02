@@ -412,6 +412,7 @@ type UseCommentPcm = {
   refetchListComments: () => void,
   nextPageListComments: () => void,
   prevPageListComments: () => void,
+  hasNextPageComments: boolean | undefined,
 }
 
 type UseCommentPcmProps = {
@@ -454,17 +455,18 @@ export const useCommentPcm = ({
       data: dataListComments,
       fetchNextPage: nextPageListComments,
       fetchPreviousPage: prevPageListComments,
+      hasNextPage: hasNextPageComments
   } =
     useInfiniteQuery(
       [key || "list_comments", params],
-      async ({ pageParams }: any) =>
+      async ({ pageParam }: any) =>
       TaskRepository.listComments({
-        lastestID: pageParams ? pageParams : "",
+        lastestID: pageParam ?? "",
         ...params
       }),
       {
-        getNextPageParam: ({ nextCursor }: any) => {
-            return nextCursor || undefined;
+        getNextPageParam: ({ data }: any) => {
+          return data?.nextCursor ?? undefined;
         },
         refetchOnWindowFocus: false,
         enabled: isFetchComment
@@ -531,5 +533,6 @@ export const useCommentPcm = ({
     refetchListComments,
     nextPageListComments,
     prevPageListComments,
+    hasNextPageComments
   }
 }

@@ -2,7 +2,7 @@ import API from "../repository";
 
 import { convertObToUrl } from "utils";
 
-import { AddConditionTaskReportPayload, InfoReportPayload, ListFilesPcmPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
+import { AddConditionTaskReportPayload, FilesPcmGroupByContractResponse, FilesPcmGroupByDateResponse, ListFilesPcmGroupByContract, ListFilesPcmGroupByDate, ListFilesPcmPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
 
 const pcmURL = "/api/subject_pcm";
 
@@ -65,6 +65,20 @@ const PcmRepository = {
                 // }),
                 ...payload
             })}`
+        );
+        return data;
+    },
+
+    async listFilesPcmGroupByDate(payload: ListFilesPcmGroupByDate): Promise<FilesPcmGroupByDateResponse> {
+        const { data } = await API.get<FilesPcmGroupByDateResponse>(
+            `${pcmURL}/pcm_files/group-by-date?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+
+    async listFilesPcmGroupByContract(payload: ListFilesPcmGroupByContract): Promise<FilesPcmGroupByContractResponse> {
+        const { data } = await API.get<FilesPcmGroupByContractResponse>(
+            `${pcmURL}/pcm_files/group-by-contract?${convertObToUrl(payload)}`
         );
         return data;
     },

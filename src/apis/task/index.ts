@@ -214,8 +214,8 @@ const TaskRepository = {
     const { data } = await API.post<ResponseResponse>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesResponse,
         ...payload,
-        populates: populatesResponse
       }
     );
     return data;
@@ -259,8 +259,8 @@ const TaskRepository = {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesComment,
         ...payload,
-        populates: populatesComment
       }
     );
     return data;
@@ -269,8 +269,8 @@ const TaskRepository = {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesComment,
         ...payload,
-        populates: populatesComment
       }
     );
     return data;
@@ -284,8 +284,8 @@ const TaskRepository = {
   async listComments(payload: ListCommentsPayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
+        populates: populatesComment,
           ...payload,
-          populates: populatesComment
       })}`
     );
     return data;
@@ -301,11 +301,11 @@ const TaskRepository = {
   async listReactionsComment(payload: ListReactionPayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/reactions?${convertObToUrl({
-          ...payload,
           populates: JSON.stringify({
             path: 'author',
             select: "_id bizfullname image"
-          })
+          }),
+          ...payload,
       })}`
     );
     return data;
