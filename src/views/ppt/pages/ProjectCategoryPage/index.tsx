@@ -67,17 +67,17 @@ const ProjectCategoryPage: FC = () => {
 
 			<div id="scrollable" className="flex-1 overflow-y-auto">
 				<InfiniteScroll
-					dataLength={totalRecord || listDepartments.length} //This is important field to render the next data
+					dataLength={listDepartments.length} //This is important field to render the next data
 					next={fetchNextPage}
 					hasMore={Boolean(hasNextPage)}
 					loader={hasNextPage ? <div className="w-full pt-2 text-center">
 						Loading...
 					</div> : <></>}
-					endMessage={
-						<p style={{ textAlign: 'center' }}>
-							{/* <b>Yay! You have seen it all</b> */}
-						</p>
-					}
+					// endMessage={
+					// 	<p style={{ textAlign: 'center' }}>
+					// 		<b>Yay! You have seen it all</b>
+					// 	</p>
+					// }
 					scrollableTarget="scrollable"
 					className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-4 text-primary-gray"
 				>

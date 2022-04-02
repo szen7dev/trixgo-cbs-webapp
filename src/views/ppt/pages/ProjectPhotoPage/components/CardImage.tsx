@@ -8,7 +8,8 @@ interface Props {
 	total: number,
 	image: {
 		nameOrg: string,
-		path: string
+		path: string,
+		description: string,
 	}
 }
 
@@ -23,8 +24,8 @@ const CardImage: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ total, pathname
 					{index >= 5 && <div className="flex flex-1 items-center justify-center text-2x-large">
 						+{total - 5}
 					</div>}
-					<p className="line-clamp-1">
-						{image.nameOrg}
+					<p className="line-clamp-1" title={image.description}>
+						{image.description}
 					</p>
 				</div>
 			</div>
