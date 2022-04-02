@@ -108,10 +108,14 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     hasNextPage: hasNextPageListContract,
     fetchNextPage: fetchNextPageListContract,
   } = useContract({
-    keyword: searchContract,
-    companyID: task.project.company,
-    projectID
-  }, !!projectID);
+    params: {
+      contractID: "",
+      keyword: searchContract,
+      companyID: task.project.company,
+      projectID,
+    },
+    isFetch: !!projectID
+  });
 
   const handleScroll = (e: UIEvent<HTMLDivElement>, type: 'project' | 'group' | 'contract') => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;

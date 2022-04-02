@@ -119,6 +119,7 @@ export type listTotalAnalysisResponse = APIResponse & {
  */
 
 export type ListFilesPcmPayload = {
+  contractID?: string,
   companyID?: string,
   projectID?: string,
   groupID?: string,
@@ -129,6 +130,42 @@ export type ListFilesPcmPayload = {
   lastestID?: string,
   select?: string,
   populates?: string
+}
+
+export type ListFilesPcmGroupByDate = {
+  companyID?: string,
+  projectID?: string,
+}
+
+export type FilesPcmGroupByDate = {
+  _id: string,
+  dataFormat: string,
+  count: number
+}
+
+export type FilesPcmGroupByDateResponse = {
+  data: {
+    listRecords: FilesPcmGroupByDate[]
+  }
+}
+
+export type ListFilesPcmGroupByContract = {
+  contractID?: string,
+}
+
+export type FilesPcmGroupByContract = {
+  contract: {
+    _id: string,
+    name: string,
+    photos: Array<{ _id: string, nameOrg: string, path: string }>
+  },
+  count: number
+}
+
+export type FilesPcmGroupByContractResponse = {
+  data: {
+    listRecords: FilesPcmGroupByContract[]
+  }
 }
 
 /**
