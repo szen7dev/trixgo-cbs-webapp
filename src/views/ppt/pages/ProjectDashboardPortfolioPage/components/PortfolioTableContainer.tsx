@@ -32,14 +32,14 @@ const PortfolioTableContainer: FC = () => {
 			<div className='h-full bg-white shadow-md border-separate'>
 				<table className='text-x-small w-full'>
 					<thead>
-						<tr className="lowercase border-b-0.5 border-cbs-border">
-							<th className="first-letter:capitalize font-normal">DỰ ÁN</th>
-							<th className="first-letter:capitalize font-normal">NGÂN SÁCH</th>
-							<th className="first-letter:capitalize font-normal">KÝ HỢP ĐỒNG</th>
-							<th className="first-letter:capitalize font-normal">ĐÃ GIẢI NGÂN</th>
-							<th className="first-letter:capitalize font-normal">GIAI ĐOẠN</th>
-							<th className="first-letter:capitalize font-normal">CỘT MỐC</th>
-							<th className="first-letter:capitalize font-normal py-0.5 w-min text-right">
+						<tr className="border-b-0.5 border-cbs-border font-bold">
+							<th className="first-letter:capitalize">Dự án</th>
+							<th className="first-letter:capitalize">Ngân sách</th>
+							<th className="first-letter:capitalize">Ký hợp đồng</th>
+							<th className="first-letter:capitalize">Đã giải ngân</th>
+							<th className="first-letter:capitalize">Giai đoạn</th>
+							<th className="first-letter:capitalize">Cột mốc</th>
+							<th className="first-letter:capitalize py-0.5 w-min text-right">
 								<div className="rounded-full inline-flex bg-cbs-left-menu px-4 py-1.5 items-center h-10 w-min right-0">
 									<img src={SearchIcon} alt={"icon search"} className="w-5 h-5" />
 									<input placeholder="Tìm kiếm" className="bg-transparent focus:outline-none w-60" />
@@ -98,7 +98,7 @@ const PortfolioTableContainer: FC = () => {
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-3.5 pr-4 w-[275px]">
 														<div className="text-black text-medium">
 															<Link to={generatePath("/pcm/project/:id/home", { id: record._id })}>
-																{record.sign}{record.name}
+																{record.sign}.{record.name}
 																{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
 															</Link>
 														</div>
@@ -171,7 +171,7 @@ const PortfolioTableContainer: FC = () => {
 														
 													</td>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 pl-4 w-min">
-														<p className="text-cbs-primary mt-2.5 uppercase">
+														<p className="text-cbs-primary mt-2.5">
 															{PROJECT_STAGE[stage ? stage - 1 : 0].text}
 														</p>
 													</td>
@@ -186,11 +186,11 @@ const PortfolioTableContainer: FC = () => {
 														</div>
 													</td>
 													<td className="border-r-0.5 border-t-0.5 border-cbs-border pt-4 pb-3 px-4" style={{ color: "rgba(0, 96, 225, 1)", letterSpacing: "4%" }}>
-														<svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline mr-2">
+														{/* <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline mr-2">
 															<path d="M6.00005 0.998217C4.81078 0.998217 4.49197 0.999266 2.99978 0.998778C2.99978 0.998778 1.38869 1.00212 1.00037 1.00017C1.00032 1.09694 0.999756 0.887155 1.00012 1.50017C1.00031 1.84658 1.00037 2.1761 1.00037 2.50017C1.00037 3.27486 1.00061 4.23766 1.00047 5.00017C1.00007 6.50017 1.00007 7.50017 1.00031 9.00017C1.00007 9.50017 1.00031 10.5002 1.00031 11.0002C0.997731 11.0638 1.5 11 2 11C2.17969 11 2.46452 10.9959 2.5 11H4C4.30806 11.0116 4.19181 11 4.5 11C4.54846 11 4.93661 11.4632 5 11.5C5.02235 11.513 5.1212 11.6036 5.14739 11.6266C5.28066 11.7436 5.38498 11.8567 5.5 12C5.90165 12.5003 6.23297 12.9031 6.5 13.5C6.58223 13.6838 6.82589 13.6911 7 13.5C7.07711 13.3942 7.5 12.5 7.5 12.5L8 12C8.15687 11.7091 8.5 11 9 11H13V10.9989V10.4989V8.99895V5.99895V3.00017V0.999848H12H10C8.53817 0.999848 7.46523 0.998217 6.00005 0.998217Z" fill="currentColor" />
 															<path d="M7 13.5C7.07711 13.3942 7.5 12.5 7.5 12.5C7.5 12.5 7.5 12.5 8 12C8.15687 11.7091 8.5 11 9 11C10.5 11 11.4945 11 13 11C13 11 13 11.1924 13 10.9989C13 10.7134 13 10.7845 13 10.4989C13 9.94469 13 9.5 13 8.99895C13 8 13 6.92793 13 5.99895C13 4.98419 13 3.99895 13 3.00017C13 2.7489 13 0.500524 13 0.999848C12.4305 0.999848 12.5 0.999848 12 0.999848C11.5 0.999848 10.4985 0.999848 10 0.999848C8.53817 0.999848 7.46523 0.998217 6.00005 0.998217C4.81078 0.998217 4.49197 0.999266 2.99978 0.998778C2.99978 0.998778 1.38869 1.00212 1.00037 1.00017C1.00032 1.09694 0.999756 0.887155 1.00012 1.50017C1.00031 1.84658 1.00037 2.1761 1.00037 2.50017C1.00037 3.27486 1.00061 4.23766 1.00047 5.00017C1.00007 6.50017 1.00007 7.50017 1.00031 9.00017C1.00007 9.50017 1.00031 10.5002 1.00031 11.0002C0.997731 11.0638 1.5 11 2 11C2.17969 11 2.46452 10.9959 2.5 11C3 11 3.5 11 4 11C4.30806 11.0116 4.19181 11 4.5 11C4.54846 11 4.93661 11.4632 5 11.5C5.02235 11.513 5.1212 11.6036 5.14739 11.6266C5.28066 11.7436 5.38498 11.8567 5.5 12C5.90165 12.5003 6.23297 12.9031 6.5 13.5C6.58223 13.6838 6.82589 13.6911 7 13.5ZM7 13.5C6.87287 13.6744 7.14443 13.3415 7 13.5Z" stroke="currentColor" strokeLinecap="round" />
 														</svg>
-														ADD COMMENT
+														ADD COMMENT */}
 													</td>
 												</tr>
 											)
