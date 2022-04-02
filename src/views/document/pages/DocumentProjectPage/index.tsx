@@ -292,7 +292,7 @@ export const DocumentProjectPage: FC = () => {
                         <Link
                           to={`/ppt/project/${document.project._id}/document/${document._id}`}
                         >
-                          <p>{document?.name || ""}</p>
+                          <p className="text-cbs-highlight-color">{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
                             {`${document?.author?.fullname || ""}-${
                               moment(document.createAt).isValid() &&
