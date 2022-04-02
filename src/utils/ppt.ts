@@ -68,17 +68,20 @@ export class SerialQueue {
 export function convertToInternationalCurrencySystem(value: number) {
 	const { format } = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 2 })
 	// Nine Zeroes for Billions
-	return Math.abs(Number(value)) >= 1.0e+9
+	// return Math.abs(Number(value)) >= 1.0e+9
 
-		? format(value / 1.0e+9) + "B"
-		// Six Zeroes for Millions 
-		: Math.abs(Number(value)) >= 1.0e+6
+	// 	? format(value / 1.0e+9) + " Tỷ"
+	// 	// Six Zeroes for Millions 
+	// 	: Math.abs(Number(value)) >= 1.0e+6
 
-			? format(Number(value) / 1.0e+6) + "M"
-			// Three Zeroes for Thousands
-			: Math.abs(Number(value)) >= 1.0e+3
+	// 		? format(Number(value) / 1.0e+6) + "M"
+	// 		// Three Zeroes for Thousands
+	// 		: Math.abs(Number(value)) >= 1.0e+3
 
-				? format(Number(value) / 1.0e+3) + "K"
+	// 			? format(Number(value) / 1.0e+3) + "K"
 
-				: Math.abs(Number(value));
+	// 			: Math.abs(Number(value));
+  if (value == 0)
+    return 0;
+  return format(value / 1.0e+9) + " Tỷ"
 }

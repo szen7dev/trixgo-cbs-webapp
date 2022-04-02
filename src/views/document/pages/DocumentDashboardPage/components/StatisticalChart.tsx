@@ -1,4 +1,3 @@
-import React, { FC } from 'react'
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -56,34 +55,47 @@ export const options = {
 	}
 };
 
-const labels = Array.from({ length: 34 }).map((_, i) => 'MAR.HAR');
+// const labels = Array.from({ length: 34 }).map((_, i) => 'MAR.HAR');
 // ['MAR.HAR', 'ARM.CAL', 'CHG.THT', 'PTIT.NHB', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR', 'ARM.CAL', 'CHG.THT', 'MAR.HAR'];
 
-export const data: ChartData<"bar", number[], string> = {
-	labels,
-	datasets: [
-		{
-			label: 'Dataset 1',
-			data: labels.map(() => Math.round(Math.random() * 1000)),
-			backgroundColor: '#0060E1',
-			barThickness: 12,
-			maxBarThickness: 12,
-		},
-	],
+// export const data2: ChartData<"bar", number[], string> = {
+const getDataWithCharts = (_projects: any) => {
+	return {
+		labels: _projects.map((item: any) => `${item.sign}`),
+		datasets: [
+			{
+				label: 'Số lượng tài liệu',
+				data: _projects.map((item: any) => item.amount),
+				backgroundColor: '#0060E1',
+				barThickness: 12,
+				maxBarThickness: 12,
+			},
+		],
+	}
 };
 
-const StatisticalChart: FC<React.HTMLAttributes<HTMLElement>> = ({ ...props }) => {
+const StatisticalChart = ({ listProject = [], listAmountDocument = [], ...props }) => {
+	const listProjectWithAmountMerge = listProject.map((itemProject: any) => {
+		const itemExistAmountDocument: any = listAmountDocument.find((itemAmountDocument: any) => itemAmountDocument._id == itemProject._id);
+		if (itemExistAmountDocument)
+			return {
+				...itemProject,
+				...itemExistAmountDocument
+			}
+		return itemProject
+	})
+	
 	return (
 		<Bar
-			data={data}
+			data={getDataWithCharts(listProjectWithAmountMerge)}
 			options={{
 				...options, plugins: {
 					...options.plugins,
-					// datalabels: {
-					// 	align: "top",
-					// 	anchor: "end",
-					// 	clamp: true
-					// },
+					datalabels: {
+						align: "top",
+						anchor: "end",
+						clamp: true
+					},
 				}
 			}}
 			{...props}

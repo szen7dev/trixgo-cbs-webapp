@@ -72,10 +72,34 @@ export const data: ChartData<"bar", number[], string> = {
 	],
 };
 
-const StatisticalChart: FC<React.HTMLAttributes<HTMLElement>> = ({ ...props }) => {
+const getDataWithCharts = (_projects: any) => {
+	return {
+		labels: _projects.map((item: any) => `${item.sign}`),
+		datasets: [
+			{
+				label: 'Số lượng task',
+				data: _projects.map((item: any) => item.amount),
+				backgroundColor: '#0060E1',
+				barThickness: 12,
+				maxBarThickness: 12,
+			},
+		],
+	}
+};
+
+const StatisticalChart = ({ listProject = [], listAmountTask = [], ...props }) => {
+	const listProjectWithAmountTaskMerge = listProject.map((itemProject: any) => {
+		const itemExistAmountTask: any = listAmountTask.find((itemAmountTask: any) => itemAmountTask._id == itemProject._id);
+		if (itemExistAmountTask)
+			return {
+				...itemProject,
+				...itemExistAmountTask
+			}
+		return itemProject
+	})
 	return (
 		<Bar
-			data={data}
+			data={getDataWithCharts(listProjectWithAmountTaskMerge)}
 			options={{
 				...options, plugins: {
 					...options.plugins,

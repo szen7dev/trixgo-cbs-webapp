@@ -26,6 +26,7 @@ export interface Company {
 export interface Human {
     _id: string;
     fullname?: string;
+    bizfullname?: string;
     image?: string;
 }
 

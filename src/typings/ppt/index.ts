@@ -25,11 +25,11 @@ export enum DepartmentEnumType {
 export const DEPARTMENT_STATUS = {
   1: {
     1: { message: "Đúng tiến độ, đúng ngân sách", className: "bg-green-400" },
-    2: { message: "Đúng tiến độ, vượt ngân sách", className: "bg-red-400" },
+    2: { message: "Đúng tiến độ, vượt ngân sách", className: "bg-cbs-purple" },
   },
   2: {
-    1: { message: "Chậm tiến độ, đúng ngân", className: "bg-red-400" },
-    2: { message: "Chậm tiến độ, vượt ngân", className: "bg-red-400" },
+    1: { message: "Chậm tiến độ, đúng ngân sách", className: "bg-cbs-schedule-nextweek" },
+    2: { message: "Chậm tiến độ, vượt ngân sách", className: "bg-red-400" },
   },
 };
 

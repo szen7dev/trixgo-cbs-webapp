@@ -149,6 +149,15 @@ const PcmRepository = {
         );
         return data;
     },
+
+    async fetchListPCMWithAmountProjects(params?: any) {
+        const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-of-projects`, {
+            params: {
+                ...params
+            }
+        });
+        return data;
+    }
 };
 
 // console.log('==============>>>>>')
