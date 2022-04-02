@@ -113,7 +113,7 @@ const ProjectCategoryPage: FC = () => {
 													</li>
 													<li className="mt-2.5">
 														<span className="rounded-full bg-cbs-schedule-after-7days h-2 w-2 mr-2 inline-block" />Giai đoạn:{" "}
-														<span className="text-cbs-primary">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
+														<span className="text-cbs-primary text-[12px]">{PROJECT_STAGE[record.stage ? record.stage - 1 : 0].text}</span>
 													</li>
 												</ul>
 											</div>
