@@ -19,6 +19,7 @@ import { DATE_FORMAT, APP_ID } from "apis/localdb";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { dateLoadedPercentage, convertToInternationalCurrencySystem } from 'utils/ppt';
 import { formatNumberMoney } from "utils/cmcs"
+import { useQueryListProjectAndAmountDocument } from "services/hooks/document/useStatistical";
 
 // interface IData {
 // 	id: number;
@@ -111,6 +112,11 @@ export const DocumentDashboardPage: FC = () => {
 				select: "fullname image",
 			},
 		}, true);
+
+	const { listProject, listAmountDocument } = useQueryListProjectAndAmountDocument({
+		fromDate: '2021-04-15',
+		toDate: '2022-04-15'
+	});
 	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
 	// 	id: i,
 	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
@@ -172,7 +178,7 @@ export const DocumentDashboardPage: FC = () => {
 						</div>
 					</div>
 					<div className="flex-1">
-						<StatisticalChart />
+						<StatisticalChart listProject={listProject} listAmountDocument={listAmountDocument}/>
 					</div>
 				</div>
 

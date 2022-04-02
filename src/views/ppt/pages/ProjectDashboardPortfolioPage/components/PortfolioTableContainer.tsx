@@ -56,7 +56,6 @@ const PortfolioTableContainer: FC = () => {
 								<Fragment key={group.data.nextCursor}>
 									{
 										group.data.listRecords.map((record) => {
-                                            console.log("🚀 ~ file: PortfolioTableContainer.tsx ~ line 59 ~ group.data.listRecords.map ~ record", record)
 											const { budget, forecastBudget, contractValue, contractPlusValue, contractVatValue, contractAmountPaid, stage, milestones, completedMilestones } = record;
 											// 'Ngân sách': getPercentForecastBudget
 											const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
