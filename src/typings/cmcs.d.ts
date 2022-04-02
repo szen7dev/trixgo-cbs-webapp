@@ -19,6 +19,7 @@ export type Contract = {
   _id: string;
   name: string,
   sign: string,
+  date: String,
   storeSign: string,
   description: string,
   company: string,
@@ -28,7 +29,21 @@ export type Contract = {
     sign: string
   },
   value: number,
+  vatValue: number,
+  plus: number,
+  vatPlus: number,
+  advancePayment: number,
+  produce: number,
+  vatProduce: number,
+  plusProduce: number,
+  vatPlusProduce: number,
   acceptance: number,
+  vatAcceptance: number,
+  plusAcceptance: number,
+  vatPlusAcceptance: number,
+  advancePaymentPaid: number,
+  amountPaid: number,
+  remainingPayment: number,
 };
 
 // Kiểu dữ liệu trả về

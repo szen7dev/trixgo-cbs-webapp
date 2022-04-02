@@ -84,10 +84,6 @@ const ChartReportByTime: FC<Props> = ({ project, files, ...props }) => {
 	const dates = getDates(new Date(project.startTime), new Date());
 	const datesFormat = dates.map(date => moment(date).format('MM/YY'));
 	const labels = _lodash.uniq(datesFormat);
-	const groupFilesByDate = labels.map(date => {
-		// files.map(file)
-		// const fileDate = moment()
-	})
 
 	const data: ChartData<"bar", number[], string> = {
 		labels,
