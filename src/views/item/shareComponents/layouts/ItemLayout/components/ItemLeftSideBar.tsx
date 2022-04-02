@@ -27,6 +27,18 @@ export const ItemLeftSideBar: FC = () => {
         {/* menu block */}
         <div className="t-link-menu-container">
           <NavLink
+            to="/item/contact"
+            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
+            title="Danh bạ"
+          >
+            <img
+              className="w-6 h-6 object-contain mr-3"
+              src={`${process.env.PUBLIC_URL}/images/common/icons8-application-window-100.png`}
+              alt="Menu item"
+            />
+            <span className="truncate">Danh bạ công ty</span>
+          </NavLink>
+          <NavLink
             to="/item/home/1"
             className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]"
             title="Lĩnh vực hồ sơ"
