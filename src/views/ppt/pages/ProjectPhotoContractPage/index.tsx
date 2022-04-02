@@ -8,6 +8,7 @@ import { FileProps, ImageProps } from "typings/common";
 import { useCommentPcm } from 'services/hooks/useTask';
 import { useContract } from 'services/hooks/items/useContract';
 import moment from "moment";
+import { User } from "typings/user";
 
 type CardItemProps = {
 	image: FileProps,
@@ -25,7 +26,7 @@ const CardItem = memo(({ image, total, onClick }: CardItemProps) => {
 					+1
 				</div>} */}
 			</div>
-			<p className="line-clamp-2">{image.nameOrg}</p>
+			<p className="line-clamp-2" title={image.description}>{image.description}</p>
 		</div>
 	)
 })
@@ -39,7 +40,7 @@ const ProjectPhotoContractPage: FC = () => {
 		mediaID: contractID,
 		images: [] as ImageProps[],
 		index: 0,
-		author: undefined,
+		author: {} as User,
 		createAt: ""
 	});
 	const [isShow, setIsShow] = useState(false);
@@ -97,7 +98,8 @@ const ProjectPhotoContractPage: FC = () => {
 					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</button>
-					<span className="line-clamp-1 max-w-sm text-x-large mr-7">{contractInfo?.name}</span>
+					{/* line-clamp-1 */}
+					<span className="max-w-sm text-x-large mr-7">{contractInfo?.name}</span>
 					{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
 					{/* <DropdownFilterButton className="mr-auto" /> */}
 
@@ -106,7 +108,7 @@ const ProjectPhotoContractPage: FC = () => {
 				</div>
 				<div id="scrollable" className="overflow-auto">
 					<InfiniteScroll
-						dataLength={totalRecord || listComments.length} //This is important field to render the next data
+						dataLength={listComments.length} //This is important field to render the next data
 						next={nextPageListComments}
 						hasMore={Boolean(hasNextPageComments)}
 						loader={hasNextPageComments ? <div className="w-full pt-2 text-center">
@@ -121,9 +123,9 @@ const ProjectPhotoContractPage: FC = () => {
 									<div className="flex cursor-pointer">
 										<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author.image}`} alt="" className="w-10 h-10 mr-3.5 object-cover rounded-full" />
 										<div>
-											<p className="truncate">
+											<strong className="truncate text-base">
 												{comment.content}
-											</p>
+											</strong>
 											<p>{comment.author?.bizfullname} |
 												<span className="text-cbs-subtext mr-1 ml-1">
 													{moment(comment.createAt).format('hh:mm DD/MM/yy')}
@@ -144,7 +146,18 @@ const ProjectPhotoContractPage: FC = () => {
 													key={image._id}
 													image={image}
 													total={comment.images?.length || 0}
-													onClick={() => ''}
+													onClick={() => {
+														if (comment.images && comment.images?.length) {
+															setDefaultState({
+																mediaID: contractID,
+																images: comment.images,
+																index,
+																author: comment.author,
+																createAt: comment.createAt
+															});
+															setIsShow(true);
+														}
+													}}
 												/>)
 										}
 									</div>
