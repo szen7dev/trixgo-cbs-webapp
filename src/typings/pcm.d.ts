@@ -143,3 +143,22 @@ export type SendMailTaskPayload = {
   notice: string;
   members: string[];
 }
+
+
+// DANH SÁCH DỰ ÁN VÀ SỐ LƯỢNG VĂN BẢN
+export interface ListProjectWithListAmountTaskPayload {
+  fromDate?: string;
+  toDate?: string;
+}
+
+export interface ListProjectWithListAmountTaskResponse extends APIResponse {
+  data: {
+      listProject: any,
+      listAmountTask: any,
+      listAmountTaskOverdueWork: any,
+      listAmountTaskNextWeekWork: any,
+      listAmountTaskMoreThan7Days: any,
+      listAmountTaskFinish: any,
+  }
+}
+

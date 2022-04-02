@@ -20,6 +20,7 @@ import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { dateLoadedPercentage, convertToInternationalCurrencySystem } from 'utils/ppt';
 import { formatNumberMoney } from "utils/cmcs"
 import { useQueryListProjectAndAmountDocument } from "services/hooks/document/useStatistical";
+import { Link, generatePath } from "react-router-dom";
 
 // interface IData {
 // 	id: number;
@@ -114,8 +115,8 @@ export const DocumentDashboardPage: FC = () => {
 		}, true);
 
 	const { listProject, listAmountDocument } = useQueryListProjectAndAmountDocument({
-		fromDate: '2021-04-15',
-		toDate: '2022-04-15'
+		fromDate: '2021-01-01',
+		toDate: '2099-01-01'
 	});
 	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
 	// 	id: i,
@@ -238,7 +239,13 @@ export const DocumentDashboardPage: FC = () => {
 									<tr key={index}>
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
 											<div>
-												<p className="text-black">{department.sign}.{department.name}</p>
+											<Link 
+												className="text-black" 
+												to={generatePath("/pcm/project/:id/home", { id: department._id })}>	{department.sign}.{department.name}
+											</Link>
+												{/* <p className="text-black">
+													{department.sign}.{department.name}
+												</p> */}
 												<div className="flex justify-between mt-2.5">
 													<span>{moment(department.startTime).format("DD/MM/YYYY")}</span>
 													<span>{moment(department.expiredTime).format("DD/MM/YYYY")}</span>

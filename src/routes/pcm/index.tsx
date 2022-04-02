@@ -217,9 +217,9 @@ const PCMRouter: FC = () => {
 						<Route exact path="/pcm/market" component={ProjectMarketPage} />
 						<Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">
 							<LayoutSecondary pages={[
-								{ id: '1', title: 'Dashboard1', path: '/pcm/dashboard-portfolio', },
-								{ id: '2', title: 'Dashboard2', path: '/pcm/dashboard-task', },
-								{ id: '3', title: 'Dashboard3', path: '/pcm/dashboard-document', },
+								{ id: '1', title: 'Báo cáo đầu tư', path: '/pcm/dashboard-portfolio', },
+								{ id: '2', title: 'Báo cáo quản trị công việc', path: '/pcm/dashboard-task', },
+								{ id: '3', title: 'Báo cáo quản trị hồ sơ', path: '/pcm/dashboard-document', },
 							]}>
 								<Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage} />
 								<Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
