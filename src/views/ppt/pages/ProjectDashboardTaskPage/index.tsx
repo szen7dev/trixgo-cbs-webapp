@@ -220,12 +220,12 @@ const ProjectDashboardTaskPage: FC = () => {
 											<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
 												{/* { project.sign }{ project.name } */}
 												<Link to={generatePath("/pcm/project/:id/home", { id: project._id })}>
-													{project.sign}{project.name}
+													{project.sign}.{project.name}
 													{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
 												</Link>
 											</td>
 											<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
-												{ project?.company?.name || 'DEFAULT SIGN' }
+												{ project?.company?.name || '' }
 											</td>
 											<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
 												<div className="flex w-full h-3 mt-2">
