@@ -15,7 +15,7 @@ import { ModalContainer } from "shareComponents/common/ModalContainer";
 import { useQueryListPackage } from "services/hooks/document/usePackage";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
-import { useQueryListStorage } from "services/hooks/items/useStorage";
+import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
 import { Document } from "typings/ppt";
@@ -75,7 +75,12 @@ const useInitialValues = (
 		type: 2,
 		companyID
 	});
-	const { listStorages } 	= useQueryListStorage({ companyID, keyword: keywordStorage });
+	const { list: listStorages } = useStorage({
+		params: {
+			companyID, keyword: keywordStorage
+		},
+		isFetchList: true
+	});
 	const { listContracts } = useQueryItemContract({ companyID, keyword: keywordContract });
 	return {
 		listPackage,

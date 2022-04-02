@@ -1,93 +1,105 @@
-import { useInfiniteQuery } from "react-query";
-import React from "react";
+/*=====1.LIBRARY=====*/
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
+/*=====2.TYPING/APIS=====*/
 import { StorageRepository } from 'apis/item';
 import type { Storage } from 'typings/items';
 
-interface UseQueryListStorage {
-    loading: boolean;
-    totalRecord: number | undefined;
-    totalPages: number | undefined;
+/*=====3.INTERFACE DEFINE=====*/
+interface useStorage {
+    isLoading: boolean;
+    totalRecord: number;
     hasNextPage: boolean | undefined;
-    listStorages: Array<Storage.Storage>;
-    refetchListStorage: () => void;
-    fetchNextPageStorage: () => void;
+    list: Array<Storage.Storage>;
+    info: Storage.Storage | undefined;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    addAsync: (params: any) => Promise<any>;
+    updateAsync: (params: any) => Promise<any>;
+    deleteAsync: (ids: Array<string>) => Promise<any>;
 }
 
-export const useQueryListStorage = (params?: Storage.StorageQueryPayload): UseQueryListStorage => {
-    const res = useInfiniteQuery(
-        ['doctypes', { params }],
+// Khai báo params cho hook
+type UseStorageProps = {
+    params?: Storage.StorageQueryPayload,
+    isFetchList?: boolean,
+    isFetchInfo?: boolean,
+}
+
+// Khai báo hook
+export const useStorage = ({
+    params = {},
+    isFetchList = false, // nếu = true thì gọi api get info, ngược lại không gọi
+    isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
+}: UseStorageProps): useStorage => {
+    // Create
+    const { mutateAsync: addAsync } =
+        useMutation((payload: any) =>
+            StorageRepository.addStorage(payload)
+        );
+
+    // Update
+    const { mutateAsync: updateAsync } =
+        useMutation((payload: any) =>
+            StorageRepository.updateStorage(payload)
+        );
+
+    // Delete
+    const { mutateAsync: deleteAsync } =
+        useMutation((ids: Array<string>) =>
+            StorageRepository.deleteStorage(ids)
+        );
+
+    // Get info
+    const { data: infoStorage } =
+        useQuery("contract_info", () => StorageRepository.fetchDetailStorage(params.storageID || ''), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+
+    const info = infoStorage?.data;
+
+    // Get List
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['storages', params],
         async ({ pageParam }: any) =>
             StorageRepository.fetchListStorage({
-                limit: params?.limit || 10,
-                lastestID: pageParam || "",
+                lastestID: pageParam ?? "",
                 ...params,
             }),
         {
             getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor || undefined;
+                return data?.nextCursor ?? undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+            enabled: isFetchList
         }
     );
-    const {
-        isLoading,
-        data,
-        refetch: refetchListStorage,
-        fetchNextPage: fetchNextPageStorage,
-        hasNextPage
-    } = res;
 
-    const listStorages = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+    const list = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
 
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+
+    // Return data
     return {
-        loading: isLoading,
-        listStorages,
+        isLoading,
+        list,
+        info,
         totalRecord,
-        totalPages,
         hasNextPage,
-        refetchListStorage,
-        fetchNextPageStorage
-    }
-}
-
-interface UseQueryDetailStorage {
-    storage: Storage.Storage,
-    loading: boolean,
-    onFetchDetailStorageAsync: (storageID: string, params?: Storage.StorageQueryPayload) => Promise<Storage.Storage>,
-}
-
-export const useQueryDetailStorage = (): UseQueryDetailStorage => {
-    const [storage, setStorage] = React.useState<any>({});
-    const [loading, setLoading] = React.useState(false);
-
-    const onFetchDetailStorage = React.useCallback(async (storageID: string, params?: Storage.StorageQueryPayload): Promise<any> => {
-        try {
-            setLoading(true);
-            const result = await StorageRepository.fetchDetailStorage(storageID, params)
-            if (result.error) {
-                throw new Error('ERROR~');
-            }
-            setStorage(result.data);
-            return result.data;
-        } catch (err) {
-            setStorage({});
-            return {};
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    return {
-        storage,
-        loading,
-        onFetchDetailStorageAsync: onFetchDetailStorage,
+        refetch,
+        fetchNextPage,
+        addAsync,
+        updateAsync,
+        deleteAsync,
     }
 }
