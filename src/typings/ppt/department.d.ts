@@ -26,9 +26,15 @@ export type DataBlock1 = Array<{
 export type DataBlock2 = Array<{
   _id: null | string;
   budget: number;
-  forecastBudget: number;
-  contractValueContractPlusValueContractVatValue: number;
+  contractAdvancePaymentPaid: number;
   contractAmountPaid: number;
+  contractPlus: number;
+  contractValue: number;
+  contractVatPlus: number;
+  contractVatValue: number;
+  forecastBudget: number;
+  vatBudget: number;
+  vatForecastBudget: number;
 }>;
 
 export type DataBlock3 = Array<{

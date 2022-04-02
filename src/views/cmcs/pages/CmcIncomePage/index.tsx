@@ -49,7 +49,6 @@ export const CmcIncomePage: FC = () => {
       const prev = prevCursor.findIndex(item => item === contractIncome.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
-
   };
 
   useEffect(() => {
@@ -123,16 +122,6 @@ export const CmcIncomePage: FC = () => {
     )
   }
 
-  const handleOnFilter = useCallback((values) => {
-
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
-
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
-
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -146,11 +135,6 @@ export const CmcIncomePage: FC = () => {
 							500
 						)}
           />
-          {/* <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          /> */}
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
               <ActionMenuTopBar
@@ -272,9 +256,3 @@ export const CmcIncomePage: FC = () => {
     </main>
   );
 };
-
-// export const CmcIncomePage: FC = () => {
-//   return (
-//     <>kkkkk</>
-//   );
-// }
