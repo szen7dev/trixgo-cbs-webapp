@@ -37,10 +37,12 @@ interface ModalProps {
     modalType: "create" | "update";
     initialValues?: {
         contactID: string,
-        name: string,
-        description: string,
-        taxid: string,
         parent: string,
+        name: string,
+        address: string,
+        taxid: string,
+        phone: string,
+        description: string,
     }
     onConfirm?(): void
 }

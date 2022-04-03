@@ -13,21 +13,24 @@ import { ModalProps } from 'typings/items/customer';
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
+import { useCustomer } from "services/hooks/items/useCustomer";
 
 /*=====7.OTHER=====*/
 export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   modalType,
   onConfirm,
   initialValues = {
-    storageID: '',
+    contactID: '',
     name: '',
-    description: ''
+    address: '',
+    taxid: '',
+    phone: '',
+    description: '',
   }
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { addAsync, updateAsync } = useStorage({});
+  const { addAsync, updateAsync } = useCustomer({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -101,10 +104,43 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       <section className="px-10 py-2">
         <input
           type="text"
-          placeholder="Nhập nội dung"
+          placeholder="Nhập tên"
           name="name"
           className="h-12 w-full border border-primary-border outline-none px-8"
           defaultValue={formData.name}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <input
+          type="text"
+          placeholder="Nhập địa chỉ"
+          name="address"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.address}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <input
+          type="text"
+          placeholder="Nhập mã số thuế"
+          name="taxid"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.taxid}
+          onChange={onChange}
+        />
+      </section>
+
+      <section className="px-10 py-2">
+        <input
+          type="text"
+          placeholder="Nhập điện thoại"
+          name="phone"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.phone}
           onChange={onChange}
         />
       </section>

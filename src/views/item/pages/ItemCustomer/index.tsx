@@ -31,6 +31,9 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const [initialValues, setInitialValues] = useState({
         contactID: '',
         name: '',
+        address: '',
+        taxid: '',
+        phone: '',
         description: '',
     });
 
@@ -50,8 +53,11 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            storageID: '',
+            contactID: '',
             name: '',
+            address: '',
+            taxid: '',
+            phone: '',
             description: '',
         }))
     }
@@ -78,10 +84,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description } = newListIDChecked[0];
+            const { _id, name, address, taxid, phone, description } = newListIDChecked[0];
             setInitialValues({
                 contactID: _id,
                 name,
+                address: address || '',
+                taxid: taxid || '',
+                phone: phone || '',
                 description: description || '',
             });
         } else {
@@ -141,15 +150,18 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         if(modalType === 'create') {
             clearData();
             initValues = {
-                storageID: '',
+                contactID: '',
                 name: '',
+                address: '',
+                taxid: '',
+                phone: '',
                 description: '',
             };
         }
 
         openModal(
             <div
-                className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
                 <ModalCreateOrUpdateCustomer
                     modalType={modalType}
