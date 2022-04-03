@@ -6,3 +6,4 @@ export { doctypeRepository as DoctypeRepository } from './doctype';
 export { storageRepository as StorageRepository } from './storage';
 export { default as ContractRepository} from './contract';
 export { PositionRepository } from './position';
+export { customerRepository as CustomerRepository } from './customer';

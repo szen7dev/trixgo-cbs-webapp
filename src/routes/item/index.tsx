@@ -12,7 +12,7 @@ import { ProtectedRoute } from "routes/components";
 import ErrorPage from "views/authentication/Error";
 import {
     ItemHomePage,
-    ItemContactPage,
+    ItemCustomerPage,
     ItemStoragePage,
 } from "views/item/pages";
 
@@ -20,7 +20,7 @@ const ItemRouter: FC = () => {
     return (
         <ItemLayout>
             <Switch>
-                <ProtectedRoute exact path="/item/contact" component={ItemContactPage} />
+                <ProtectedRoute exact path="/item/contact" component={ItemCustomerPage} />
                 <ProtectedRoute exact path="/item/storage" component={ItemStoragePage} />
                 <ProtectedRoute
                     exact

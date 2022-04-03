@@ -1,3 +1,3 @@
 export * from './ItemHome';
-export * from './ItemContact';
+export * from './ItemCustomer';
 export * from './ItemStorage';
