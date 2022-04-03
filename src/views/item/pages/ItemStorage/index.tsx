@@ -194,7 +194,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                                 "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
                                             }
                                         >
-                                            {/* <ModalConfirm onConfirm={handleConfirmDelete} /> */}
+                                            <ModalConfirm onConfirm={handleConfirmDelete} />
                                         </div>
                                     )
                                 }>

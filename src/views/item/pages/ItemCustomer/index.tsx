@@ -14,99 +14,104 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateDoctype, ModalConfirm } from '../../shareComponents/common';
+import { ModalCreateOrUpdateCustomer, ModalConfirm } from '../../shareComponents/common';
  
 /*=====5.TYPINGS=====*/
-import { Doctype } from "typings/items";
+import { Customer } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useDoctype } from "services/hooks/items/useDoctype";
+import { useCustomer } from "services/hooks/items/useCustomer";
 
 /*=====7.OTHER=====*/
-
-export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
+export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
-    const [keywordDoctype, setKeywordDoctype] = useState('');
-    const [doctypesChecked, setDoctypesChecked] = useState<Array<Doctype.Doctype>>([]);
+    const [keyword, setKeyword] = useState('');
+    const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
     const [initialValues, setInitialValues] = useState({
-        doctypeID: '',
+        contactID: '',
         name: '',
         description: '',
-        type
     });
 
     const {
-        deleteDoctypeAsync,
-        listDoctypes,
-        hasNextPage: hasNextPageDoctype,
-        refetchListDoctype,
-        fetchNextPageDoctype,
+        deleteAsync,
+        list: listCustomers,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
         totalRecord
-    } = useDoctype({ type, keyword: keywordDoctype }, true);
+    } = useCustomer({
+        params: { keyword }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
+        isFetchList: true
+    });
 
-    const handleConfirmCreateOrUpdateDoctype = () => refetchListDoctype();
-
-    const onChangeSearchDoctype = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-        setKeywordDoctype(event.target.value);
-    }, 500);
-
+    // Reset form
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            doctypeID: '',
+            storageID: '',
             name: '',
             description: '',
-            type
         }))
     }
 
-    const onClickCheckButton = (doctype: Doctype.Doctype) => {
-        const check = doctypesChecked.find(item => item._id === doctype._id);
+    // Gọi lại API refetch lại danh sách sau khi tạo/update thành công
+    const handleConfirmCreateOrUpdate = () => refetch();
+
+    // Xử lý sự kiện tìm kiếm
+    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+        setKeyword(event.target.value);
+    }, 500);
+
+    // Làm việc với update mẩu tin
+    const onClickCheckButton = (doc: Customer.Customer) => {
+        const check = itemsChecked.find(item => item._id === doc._id);
         let newListIDChecked = [];
 
         if (check) {
-            newListIDChecked = doctypesChecked.filter(item => item._id !== doctype._id)
-            setDoctypesChecked(newListIDChecked);
+            newListIDChecked = itemsChecked.filter(item => item._id !== doc._id)
+            setItemsChecked(newListIDChecked);
         } else {
-            newListIDChecked = [...doctypesChecked, doctype];
-            setDoctypesChecked(newListIDChecked);
+            newListIDChecked = [...itemsChecked, doc];
+            setItemsChecked(newListIDChecked);
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, description, type } = newListIDChecked[0];
+            const { _id, name, description } = newListIDChecked[0];
             setInitialValues({
-                doctypeID: _id,
+                contactID: _id,
                 name,
-                description,
-                type
+                description: description || '',
             });
         } else {
             clearData();
         }
     };
 
+    // Check chọn 1 hoặc nhiều mẩu tin
     const getStateChecked = useCallback((id: string) => {
-        const user = doctypesChecked.find(item => item._id === id);
+        const user = itemsChecked.find(item => item._id === id);
         return user ? true : false;
-    }, [doctypesChecked]);
+    }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return doctypesChecked.length == listDoctypes.length;
-    }, [doctypesChecked]);
+        return itemsChecked.length == listCustomers.length;
+    }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (doctypesChecked.length == listDoctypes.length) {
-            setDoctypesChecked([]);
+        if (itemsChecked.length == listCustomers.length) {
+            setItemsChecked([]);
         } else {
-            setDoctypesChecked(listDoctypes);
+            setItemsChecked(listCustomers);
         }
     };
 
+    // Xóa 1 hoặc nhiều mẩu tin
     const handleConfirmDelete = async () => {
         try {
-            const ids = doctypesChecked.map(item => item._id);
-            const { error, data } = await deleteDoctypeAsync(ids);
+            const ids = itemsChecked.map(item => item._id);
+            const { error, data } = await deleteAsync(ids);
 
             if (error) {
                 return toast.warn(data?.message);
@@ -115,8 +120,8 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
             toast.success('Xoá dữ liệu thành công', { autoClose: 1500 });
             closeModal();
             clearData();
-            refetchListDoctype();
-            setDoctypesChecked([]);
+            refetch();
+            setItemsChecked([]);
         } catch (error) {
             if (typeof error === "string") {
                 toast.error(error);
@@ -127,16 +132,18 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
     }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
-        let initValues: any = {...initialValues};
-        setDoctypesChecked([]);
 
+        let initValues: any = {...initialValues};
+
+        setItemsChecked([]);
+
+        // Mở modal tạo mới
         if(modalType === 'create') {
             clearData();
             initValues = {
-                doctypeID: '',
+                storageID: '',
                 name: '',
                 description: '',
-                type
             };
         }
 
@@ -144,10 +151,10 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
             <div
                 className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
-                <ModalCreateOrUpdateDoctype
+                <ModalCreateOrUpdateCustomer
                     modalType={modalType}
                     initialValues={initValues}
-                    onConfirm={handleConfirmCreateOrUpdateDoctype}
+                    onConfirm={handleConfirmCreateOrUpdate}
                 />
             </div>
         )
@@ -159,13 +166,15 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
                         <p className="text-lg">Danh sách</p>
+
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
                             classNameInput="outline-none w-[296px]"
-                            onChange={onChangeSearchDoctype}
+                            onChange={onChangeSearch}
                         />
 
-                        {doctypesChecked.length === 1 ? (
+                        {/* Nếu chọn 1 phẩn tử => chỉ cho update */}
+                        {itemsChecked.length === 1 ? (
                             <button
                                 className="mr-3"
                                 onClick={() => handleOpenModalCreateOrUpdate('update')}
@@ -174,7 +183,8 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
                             </button>
                         ) : ''}
 
-                        {doctypesChecked.length ? (
+                        {/* Xóa 1 hoặc nhiều */}
+                        {itemsChecked.length ? (
                             <button
                                 onClick={() =>
                                     openModal(
@@ -220,7 +230,27 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="w-1/6 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nội dung
+                                Phần tử cha
+                            </div>
+                        </th>
+                        <th className="w-1/6 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Tên
+                            </div>
+                        </th>
+                        <th className="w-1/6 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Địa chỉ
+                            </div>
+                        </th>
+                        <th className="w-1/6 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Mã số thuế
+                            </div>
+                        </th>
+                        <th className="w-1/6 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Điện thoại
                             </div>
                         </th>
                         <th className={cn("py-1 font-normal", styles.theadTwelvePercent)}>
@@ -237,31 +267,35 @@ export const ItemContactPage: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listDoctypes.length ? listDoctypes.map(doctype => (
-                        <tr key={doctype._id} className="border-b border-primary-border h-10">
+                    {listCustomers.length ? listCustomers.map(item => (
+                        <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateChecked(doctype._id)}
-                                    onChange={() => onClickCheckButton(doctype)}
+                                    checked={getStateChecked(item._id)}
+                                    onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{doctype.name}</td>
-                            <td className="py-1 px-2">{doctype.description}</td>
+                            <td className="py-1 px-2">{item.parent?.name}</td>
+                            <td className="py-1 px-2">{item.name}</td>
+                            <td className="py-1 px-2">{item.address}</td>
+                            <td className="py-1 px-2">{item.taxid}</td>
+                            <td className="py-1 px-2">{item.phone}</td>
+                            <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
-                                {doctype.modifyAt ? moment(doctype.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
                             </td>
                         </tr>
                     )) : <></>}
                 </tbody>
             </table>
 
-            {hasNextPageDoctype && (
+            {hasNextPage && (
                 <div className="w-full flex justify-center my-5">
-                    <button onClick={fetchNextPageDoctype}>
+                    <button onClick={fetchNextPage}>
                         <span className="text-primary">
-                            {`Xem thêm (${totalRecord - listDoctypes.length})`}
+                            {`Xem thêm (${totalRecord - listCustomers.length})`}
                         </span>
                     </button>
                 </div>
