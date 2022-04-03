@@ -7,6 +7,7 @@ export interface Customer {
         _id: string,
         name: string,
     };
+    type: string;
     name: string;
     address: string;
     taxid: string | null;
@@ -38,6 +39,7 @@ interface ModalProps {
     initialValues?: {
         contactID: string,
         parent: string,
+        type: string,
         name: string,
         address: string,
         taxid: string,

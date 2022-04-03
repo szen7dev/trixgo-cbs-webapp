@@ -21,6 +21,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
   onConfirm,
   initialValues = {
     contactID: '',
+    type: '',
     name: '',
     address: '',
     taxid: '',
@@ -100,6 +101,17 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
           onClick={closeModal}
         />
       </header>
+
+      <section className="px-10 py-2">
+        <input
+          type="text"
+          placeholder="Phân loại (1-Nhân viên/2-Khách hàng/3-Nhà cung cấp)"
+          name="type"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          defaultValue={formData.type}
+          onChange={onChange}
+        />
+      </section>
 
       <section className="px-10 py-2">
         <input

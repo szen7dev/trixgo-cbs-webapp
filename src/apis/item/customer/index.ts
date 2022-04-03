@@ -28,7 +28,7 @@ async function fetchListCustomer(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/contacts`, {
         params: {
-            select: 'parent name address taxid phone description',
+            select: 'parent type name address taxid phone description',
             populates: {
                 path: 'parent',
                 select: 'name'

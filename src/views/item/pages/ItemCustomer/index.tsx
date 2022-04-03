@@ -30,6 +30,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
     const [initialValues, setInitialValues] = useState({
         contactID: '',
+        type: '',
         name: '',
         address: '',
         taxid: '',
@@ -54,6 +55,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         setInitialValues(previousValue => ({
             ...previousValue,
             contactID: '',
+            type: '',
             name: '',
             address: '',
             taxid: '',
@@ -84,9 +86,10 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         };
 
         if (newListIDChecked.length === 1) {
-            const { _id, name, address, taxid, phone, description } = newListIDChecked[0];
+            const { _id, type, name, address, taxid, phone, description } = newListIDChecked[0];
             setInitialValues({
                 contactID: _id,
+                type,
                 name,
                 address: address || '',
                 taxid: taxid || '',
@@ -151,6 +154,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             clearData();
             initValues = {
                 contactID: '',
+                type: '',
                 name: '',
                 address: '',
                 taxid: '',
@@ -240,12 +244,17 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
+                        <th className="w-1/12 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Phân loại
+                            </div>
+                        </th>
                         <th className="w-1/6 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phần tử cha
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="w-1/5 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Tên
                             </div>
@@ -255,12 +264,12 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 Địa chỉ
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mã số thuế
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Điện thoại
                             </div>
@@ -270,7 +279,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 Mô tả
                             </div>
                         </th>
-                        <th className="w-1/12 py-1 font-normal">
+                        <th className="py-1 font-normal">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Cập nhật lần cuối
                             </div>
@@ -289,6 +298,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
+                            <td className="py-1 px-2">{item.type}</td>
                             <td className="py-1 px-2">{item.parent?.name}</td>
                             <td className="py-1 px-2">{item.name}</td>
                             <td className="py-1 px-2">{item.address}</td>
