@@ -63,8 +63,12 @@ export type ListContractsResponse = APIResponse & {
   };
 };
 
+export type InfoContractResponse = APIResponse & {
+  data: Contract
+};
+
 // Kiểu dữ liệu Info
-export type GetInfoContractPayload = {
+export type InfoContractPayload = {
   contractID: string;
   populates?: string;
   select?: string;
@@ -203,4 +207,8 @@ export type UpdateContractPayload = {
 
 export type DeleteContractPayload = {
   contractID: string;
+};
+
+export type DeleteMultiContractPayload = {
+  contractsID: Array<string>;
 };

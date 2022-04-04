@@ -8,7 +8,6 @@ import { SearchInput, Paginate } from "shareComponents/common";
 import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import styles from 'views/cmcs/styles/styles.module.css';
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -162,12 +161,9 @@ export const CmcIncomePage: FC = () => {
             <th className={cn("pb-1 pt-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
                 />
-                <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
             <th className="w-1/5 pb-1 pt-1">
@@ -224,11 +220,8 @@ export const CmcIncomePage: FC = () => {
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
                     checked={itemChecked === item._id}
                     onChange={() => setItemChecked(item._id)}
-                    style={{ marginLeft: "-23px" }}
                   />
                 </td>
                 <td className="py-1 px-2">
