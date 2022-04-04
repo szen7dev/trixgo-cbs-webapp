@@ -83,7 +83,7 @@ type Props = {
 
 const ChartReportByTime: FC<Props> = ({ project, files, ...props }) => {
 	// Step 1: Get date range (startTimeProject -> now)
-	const dates = getDates(new Date(project.startTime), new Date());
+	const dates = getDates(new Date(project.startTime || Date.now()), new Date());
 
 	// Step 2: Format date range
 	const datesFormat = dates.map(date => ({ yyyy: moment(date).format('MM/YYYY'), yy: moment(date).format('MM/YY') }));
