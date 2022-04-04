@@ -145,14 +145,17 @@ const AuthenticationRepository = {
     return data;
   },
 
-  // DANH SÁCH THÀNH VIÊN TRONG CÔNG TY
-  async getListUsersByCompany(payload: any): Promise<any> {
+  // DANH SÁCH THÀNH VIÊN TRONG HỆ THỐNG
+  async getListUsersBySystem(payload: any): Promise<any> {
     const { data } = await API.get<any>(
-      `${authURL}/users`, {
+      `/api/auth/users`, {
       params: {
-        ...payload
+        select: "bizfullname email image",
+        limit: 20,
+        ...payload,
       }
-    });
+    }
+    );
     return data;
   },
 
@@ -176,8 +179,8 @@ const AuthenticationRepository = {
 
   async requestHistoryTraffics(parame: any): Promise<any> {
     const { data } = await API.post(
-        `${HISTORY_TRAFFICS}`,
-        parame
+      `${HISTORY_TRAFFICS}`,
+      parame
     )
     return data;
   }
