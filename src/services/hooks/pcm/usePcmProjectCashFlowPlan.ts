@@ -1,0 +1,105 @@
+/*=====1.LIBRARY=====*/
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+
+/*=====2.TYPING/APIS=====*/
+import { CashFlowPlanRepository } from 'apis/fin';
+import { CashFlowPlan } from 'typings/fin';
+
+/*=====3.INTERFACE DEFINE=====*/
+interface useCashFlowPlan {
+    isLoading: boolean;
+    totalRecord: number;
+    hasNextPage: boolean | undefined;
+    list: Array<CashFlowPlan.CashFlowPlan>;
+    info: CashFlowPlan.CashFlowPlan | undefined;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    addAsync: (params: any) => Promise<any>;
+    updateAsync: (params: any) => Promise<any>;
+    deleteAsync: (ids: Array<string>) => Promise<any>;
+}
+
+// Khai báo params cho hook
+type UseCashFlowPlanProps = {
+    params?: CashFlowPlan.CashFlowPlanQueryPayload,
+    isFetchList?: boolean,
+    isFetchInfo?: boolean,
+}
+
+// Khai báo hook
+export const useCashFlowPlan = ({
+    params = {},
+    isFetchList = false, // nếu = true thì gọi api get info, ngược lại không gọi
+    isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
+}: UseCashFlowPlanProps): useCashFlowPlan => {
+    // Create
+    const { mutateAsync: addAsync } =
+        useMutation((payload: any) =>
+            CashFlowPlanRepository.addCashFlowPlan(payload)
+        );
+
+    // Update
+    const { mutateAsync: updateAsync } =
+        useMutation((payload: any) =>
+            CashFlowPlanRepository.updateCashFlowPlan(payload)
+        );
+
+    // Delete
+    const { mutateAsync: deleteAsync } =
+        useMutation((ids: Array<string>) =>
+            CashFlowPlanRepository.deleteCashFlowPlan(ids)
+        );
+
+    // Get info
+    const { data: infoCashFlowPlan } =
+        useQuery("CashFlowPlan_info", () => CashFlowPlanRepository.fetchDetailCashFlowPlan(params.contactID || ''), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+
+    const info = infoCashFlowPlan?.data;
+
+    // Get List
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['CashFlowPlan', params],
+        async ({ pageParam }: any) =>
+            CashFlowPlanRepository.fetchListCashFlowPlan({
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList
+        }
+    );
+
+    const list = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+
+    // Return data
+    return {
+        isLoading,
+        list,
+        info,
+        totalRecord,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
+        addAsync,
+        updateAsync,
+        deleteAsync,
+    }
+}

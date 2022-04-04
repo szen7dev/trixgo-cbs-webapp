@@ -35,6 +35,7 @@ import {
 	ProjectAdminManagementPage,
 	ProjectBiddingPage,
 	ProjectBudgetPage,
+	ProjectCashFlowPlanPage,
 	ProjectCategoryPage,
 	ProjectDashboardPortfolioPage,
 	ProjectDashboardTaskPage,
@@ -102,7 +103,7 @@ const PCMRouter: FC = () => {
 								{ id: '2', title: 'Kế hoạch', path: '/pcm/project/:id/budget/2' },
 							]}>
 								<Route exact path='/pcm/project/:id/budget' component={ProjectBudgetPage} />
-								<Route exact path='/pcm/project/:id/budget/2' component={() => <></>} />
+								<Route exact path='/pcm/project/:id/budget/2' component={ProjectCashFlowPlanPage} />
 							</LayoutSecondary>
 						</Route>
 						<Route exact path={['/pcm/project/:id/bidding', '/pcm/project/:id/bidding/(2|3)']}>
