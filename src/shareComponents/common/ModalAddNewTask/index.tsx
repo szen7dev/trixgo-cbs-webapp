@@ -97,7 +97,8 @@ export const ModalAddNewTask: FC = () => {
     fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
     keyword: searchGroupName,
-    projectID: projectID
+    projectID: projectID,
+    isShowParentAndChild: true
   }, !!projectID);
 
   const {

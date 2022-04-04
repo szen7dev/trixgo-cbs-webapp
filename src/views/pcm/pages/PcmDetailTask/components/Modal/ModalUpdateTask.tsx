@@ -100,7 +100,8 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     fetchNextPage: fetchNextPageListGroup
   } = useQueryListGroup({
     keyword: searchGroup,
-    projectID: projectID
+    projectID: projectID,
+    isShowParentAndChild: true
   }, !!projectID);
 
   const {
