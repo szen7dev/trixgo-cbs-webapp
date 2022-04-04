@@ -31,7 +31,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { addAsync, updateAsync } = useCustomer({});
+  const { insertAsync, updateAsync } = useCustomer({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -43,7 +43,7 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          const { error, message } = await addAsync(formData);
+          const { error, message } = await insertAsync(formData);
 
           if (error) {
             return toast.warning(message);
