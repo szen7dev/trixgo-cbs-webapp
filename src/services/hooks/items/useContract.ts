@@ -6,7 +6,7 @@ import { ContractRepository } from 'apis/item';
 import type {
     ListContractsPayload,
     Contract,
-    GetInfoContractPayload
+    InfoContractPayload
 } from "typings/cmcs";
 
 interface UseContract {
@@ -20,7 +20,7 @@ interface UseContract {
 }
 
 type Props = {
-    params: ListContractsPayload & GetInfoContractPayload,
+    params: ListContractsPayload & InfoContractPayload,
     isFetch?: boolean,
     isFetchInfo?: boolean
 }
@@ -136,13 +136,13 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
 interface UseQueryDetailContract {
     detailContract: Contract,
     loading: boolean,
-    onFetchDetailContractAsync: (params: GetInfoContractPayload) => Promise<Contract>
+    onFetchDetailContractAsync: (params: InfoContractPayload) => Promise<Contract>
 }
-export const useQueryDetailContract = (params?: GetInfoContractPayload): UseQueryDetailContract => {
+export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
     
-    const onFetchDetailContract = React.useCallback(async (_params: GetInfoContractPayload): Promise<any> => {
+    const onFetchDetailContract = React.useCallback(async (_params: InfoContractPayload): Promise<any> => {
         try {
             setLoading(true)
             const result = await ContractRepository.getInfoContract({..._params});

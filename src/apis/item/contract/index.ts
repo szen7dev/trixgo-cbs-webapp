@@ -6,7 +6,7 @@ import { convertObToUrl } from "utils";
 import {
   ListContractsPayload,
   ListContractsResponse,
-  GetInfoContractPayload,
+  InfoContractPayload,
   InsertContractPayload,
   UpdateContractPayload,
   DeleteContractPayload,
@@ -24,7 +24,7 @@ const ContractRepository = {
     return data;
   },
 
-  async getInfoContract(payload: GetInfoContractPayload): Promise<any> {
+  async getInfoContract(payload: InfoContractPayload): Promise<any> {
     const { data } = await API.get(
       `${cmcsURL}/contracts?${convertObToUrl(payload)}`
     );
