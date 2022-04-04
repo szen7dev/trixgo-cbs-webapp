@@ -5,7 +5,6 @@ import { formatNumberMoney } from "utils/cmcs";
 
 import MenuChildRow from './MenuChildRow';
 import { RightClickMenuWrapper } from "shareComponents/common";
-
 import { Contract } from "typings/cmcs";
 
 const BugetRowGroup: FC<{ row: Contract, show: boolean }> = ({ row, show }) => {
@@ -37,9 +36,9 @@ const BugetRowGroup: FC<{ row: Contract, show: boolean }> = ({ row, show }) => {
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
 				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
+				<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
 			</tr> */}
-			{/* <tr  className={classNames("", { hidden: state })}> */}
-			<tr>
+			<tr  className={classNames("", { hidden: state })}>
 				<td className='bg-gray-300 px-1.5 py-2 relative'></td>
 				<td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0"></td>
 				<td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">

@@ -16,7 +16,7 @@ export const ModalCreateOrUpdateStorage: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { addAsync, updateAsync } = useStorage({});
+  const { insertAsync, updateAsync } = useStorage({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -28,7 +28,7 @@ export const ModalCreateOrUpdateStorage: FC<ModalProps> = ({
       switch (modalType) {
         // Tạo mẩu tin
         case 'create': {
-          const { error, message } = await addAsync(formData);
+          const { error, message } = await insertAsync(formData);
 
           if (error) {
             return toast.warning(message);
