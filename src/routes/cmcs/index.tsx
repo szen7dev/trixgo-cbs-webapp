@@ -88,15 +88,6 @@ const CmcsRouter: FC = () => {
                     </CmcsLayout>
                 )}
             />
-            {/* <ProtectedRoute
-                exact
-                path="/cmcs/portfolio"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcPortfolioPage />
-                    </CmcsLayout>
-                )}
-            /> */}
             <ProtectedRoute
                 exact
                 path="/cmcs/expense"
@@ -106,6 +97,15 @@ const CmcsRouter: FC = () => {
                     </CmcsLayout>
                 )}
             />
+            {/* <ProtectedRoute
+                exact
+                path="/cmcs/portfolio"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcPortfolioPage />
+                    </CmcsLayout>
+                )}
+            /> */}
             <ProtectedRoute
                 exact
                 path="/cmcs/guarantee"

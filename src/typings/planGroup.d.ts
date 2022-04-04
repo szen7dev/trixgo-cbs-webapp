@@ -6,6 +6,7 @@ interface QueryParam {
     filter?: string;
     populates?: string;
     projectID?: string;
+    isShowParentAndChild?: boolean
 }
 
 export interface GroupResponse {
