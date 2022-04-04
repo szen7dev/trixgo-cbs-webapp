@@ -32,7 +32,7 @@ export type DepartmentResponse = APIResponse & {
         listRecords: Department[];
         limit: number;
         totalRecord: number;
-        totalPages: number;
+        totalPage: number;
         nextCursor: string | null;
     }
 }

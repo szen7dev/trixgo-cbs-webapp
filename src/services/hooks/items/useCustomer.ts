@@ -14,7 +14,7 @@ interface useCustomer {
     info: Customer.Customer | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
-    addAsync: (params: any) => Promise<any>;
+    insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteAsync: (ids: Array<string>) => Promise<any>;
 }
@@ -33,7 +33,7 @@ export const useCustomer = ({
     isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
 }: UseCustomerProps): useCustomer => {
     // Create
-    const { mutateAsync: addAsync } =
+    const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             CustomerRepository.addCustomer(payload)
         );
@@ -98,7 +98,7 @@ export const useCustomer = ({
         hasNextPage,
         refetch,
         fetchNextPage,
-        addAsync,
+        insertAsync,
         updateAsync,
         deleteAsync,
     }

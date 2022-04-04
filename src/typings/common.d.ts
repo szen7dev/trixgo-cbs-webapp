@@ -98,6 +98,14 @@ export type ListCommentResponse = APIResponse & {
  * ============================ ********** ===============================
  */
 
+export type QueryParams = {
+  limit?: number;
+  lastestID?: string;
+  keyword?: string;
+  select?: string;
+  populates?: Populate;
+}
+
 export type Company = {
   _id: string;
   name: string;

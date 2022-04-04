@@ -14,7 +14,7 @@ interface useStorage {
     info: Storage.Storage | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
-    addAsync: (params: any) => Promise<any>;
+    insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
     deleteAsync: (ids: Array<string>) => Promise<any>;
 }
@@ -33,7 +33,7 @@ export const useStorage = ({
     isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
 }: UseStorageProps): useStorage => {
     // Create
-    const { mutateAsync: addAsync } =
+    const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             StorageRepository.addStorage(payload)
         );
@@ -52,7 +52,7 @@ export const useStorage = ({
 
     // Get info
     const { data: infoStorage } =
-        useQuery("contract_info", () => StorageRepository.fetchDetailStorage(params.storageID || ''), {
+        useQuery("storage__info", () => StorageRepository.fetchDetailStorage(params.storageID || ''), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -67,7 +67,7 @@ export const useStorage = ({
         fetchNextPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['storages', params],
+        ['storage__list', params],
         async ({ pageParam }: any) =>
             StorageRepository.fetchListStorage({
                 lastestID: pageParam ?? "",
@@ -98,7 +98,7 @@ export const useStorage = ({
         hasNextPage,
         refetch,
         fetchNextPage,
-        addAsync,
+        insertAsync,
         updateAsync,
         deleteAsync,
     }

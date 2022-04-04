@@ -28,7 +28,7 @@ export const convertDisplayDate = (date: string, format = DATE_FORMAT): string =
 }
 
 export const formatNumberMoney = (number: number | string): string => {
-  return (Number(number).toLocaleString('de-DE')) || ""
+  return (Number(number || 0).toLocaleString('de-DE')) || ""
 }
 
 export const convertInitialValueDropdown = (item: any, value = '_id', label = 'name', separation = '-', label_2 = ''): Item | '' => {
