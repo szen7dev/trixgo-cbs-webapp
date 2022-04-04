@@ -12,40 +12,49 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 
 import { useInfiniteQuery } from "react-query";
 import { ContractRepository, DepartmentRepositories } from "apis/item";
+import { useGetUsersBySystem } from "services/hooks/auth/useAdmin";
 import { LinkUser } from "typings/auth";
 
 const CreateNewContractAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListAppRoleMenu }) => {
 	const { closeModal } = useModal();
 	const [keyword, setKeyword] = useState("");
-	const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
-		['users_in_company_contract', keyword],
-		({ pageParam }) =>
-			DepartmentRepositories.getListUserInCompanyContract({
-				companyID,
-				keyword,
-				isLinkUser: 1,
-				lastestID: pageParam,
-				select: 'name',
-				populates: JSON.stringify({ "path": " linkUser", "select": "fullname image" })
-			}),
-		{
-			refetchOnMount: false,
-			refetchOnWindowFocus: false,
-			enabled: Boolean(companyID),
-			keepPreviousData: true,
-			getNextPageParam(data) {
-				if (!data.data.nextCursor) return undefined;
-				return data.data.nextCursor;
-			},
+	const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(companyID, keyword);
+
+	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
+
+	const onClickCheckButton = (id: string) => {
+		const check = idsChecked.includes(id);
+		if (check) {
+			const newList = [...idsChecked];
+			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			setIdsChecked(newList);
+		} else {
+			const newList = [...idsChecked];
+			newList.push(id);
+			setIdsChecked(newList);
+		};
+	};
+
+	const getStateCheckedAll = useCallback(() => {
+		return idsChecked.length == listMembers.length;
+	}, [idsChecked]);
+
+	const onClickCheckAll = () => {
+		if (idsChecked.length == listMembers.length) {
+			setIdsChecked([]);
+		} else {
+			const idsAll = listMembers.map((e: any) => e._id);
+			setIdsChecked(idsAll);
 		}
-	);
+	};
 
-	const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(data?.pages.flatMap(page => page.data.listRecords) || []);
+	const onAdd = async () => {
+		if (!idsChecked || !idsChecked.length) return;
 
-	const handleAddUser = async () => {
-		if (!checked.length) return;
-		const listUserID = checked.map(item => (item.linkUser as LinkUser)._id);
-		const response = await ContractRepository.addOrRemoveMemberToDepartment({ contractID: appRoleID, members: listUserID })
+		const response = await ContractRepository.addOrRemoveMemberToDepartment({ contractID: appRoleID, members: idsChecked })
 		if (response.error === false) {
 			toast.success('Thêm thành công');
 			refetchGetListAppRoleMenu();
@@ -53,7 +62,7 @@ const CreateNewContractAdminMember: FC<any> = ({ appRoleID, companyID, refetchGe
 			toast.error('Thêm thất bại');
 		}
 		closeModal();
-	}
+	};
 
 	return (
 		<main className="py-[18px]">
@@ -91,39 +100,39 @@ const CreateNewContractAdminMember: FC<any> = ({ appRoleID, companyID, refetchGe
 						type="checkbox"
 						value=""
 						id="flexCheckDefault"
-						ref={checkboxRef}
-						onClick={handleCheckAll}
+						checked={getStateCheckedAll()}
+						onChange={() => onClickCheckAll()}
 					/>
 					<img src={PolygonIcon} alt="Polygon" />
 				</div>
 				<div className="flex flex-col gap-2 mt-4 h-[420px] overflow-auto px-7">
-					{data?.pages.map((page) => (
-						page.data.listRecords.map((item, index) => (
-							<div key={index} className="flex items-center">
-								<input
-									className="cbs-checkbox mr-9"
-									type="checkbox"
-									value=""
-									id={item._id}
-									checked={Boolean(assigned[item._id])}
-									onChange={(e) => handleChangeCheckbox(e, item)}
-								/>
+					{listMembers.map((item: any, index: number) => (
+						<div key={index} className="flex items-center">
+							<input
+								className="form-check-input mr-9"
+								type="checkbox"
+								value=""
+								id="flexCheckDefault"
+								checked={getStateChecked(item._id)}
+								onChange={() => onClickCheckButton(item._id)}
+							/>
 
-								<div className="flex items-center">
-									<img
-										src={typeof item.linkUser !== 'string' ? `${process.env.REACT_APP_URL_S3_USER}/${item.linkUser.image}` : MemberIcon}
-										alt="Member"
-										className="w-10 h-10 rounded-full"
-									/>
-									<p className="px-4">{item.name}</p>
-								</div>
+							<div className="flex items-center">
+								<img
+									src={item.image ? `${process.env.REACT_APP_URL_S3_USER}/${item.image}` : MemberIcon}
+									alt="Member"
+									className="w-10 h-10 rounded-full"
+								/>
+								<p className="px-4">{item.bizfullname}</p>
 							</div>
-						))))
+						</div>
+					))
 					}
-					{hasNextPage && (
+					{hasnextPageGetUsersBySystem && (
 						<div className="w-full flex justify-center my-5">
-							<button onClick={() => fetchNextPage()}>
-								<span className="text-primary">{`Xem thêm`}</span>
+							<button onClick={() => nextPageGetUsersBySystem()}>
+								<span className="text-primary">{`Xem thêm (${totalRecord - listMembers.length
+									})`}</span>
 							</button>
 						</div>
 					)}
@@ -132,8 +141,7 @@ const CreateNewContractAdminMember: FC<any> = ({ appRoleID, companyID, refetchGe
 
 			<footer className="pb-6 w-full text-right px-[30px]">
 				<button className="w-[95px] h-8 bg-primary text-primary-light rounded font-bold hover:opacity-90"
-					onClick={handleAddUser}
-				>
+					onClick={() => onAdd()}>
 					Xác nhận
 				</button>
 			</footer>
