@@ -6,14 +6,14 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetUsersByCompany, useAdminDetail } from "services/hooks/auth/useAdmin";
+import { useGetUsersBySystem, useAdminDetail } from "services/hooks/auth/useAdmin";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 
 const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListAppRoleMenu }) => {
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
-  const { listMembers, nextPageGetUsersByCompany, hasNextPageGetUsersByCompany, totalRecord } = useGetUsersByCompany(companyID, keyword);
+  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(companyID, keyword);
   const { addMembersMutateAsync, refetchAppRolesDetail } = useAdminDetail({ appID: appRoleID, keyword: "" }); 
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
@@ -129,9 +129,9 @@ const CreateNewAdminMember: FC<any> = ({ appRoleID, companyID, refetchGetListApp
             </div>
           ))
           }
-          {hasNextPageGetUsersByCompany && (
+          {hasnextPageGetUsersBySystem && (
             <div className="w-full flex justify-center my-5">
-              <button onClick={() => nextPageGetUsersByCompany()}>
+              <button onClick={() => nextPageGetUsersBySystem()}>
                 <span className="text-primary">{`Xem thêm (${totalRecord - listMembers.length
                   })`}</span>
               </button>

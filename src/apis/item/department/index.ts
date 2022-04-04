@@ -105,7 +105,7 @@ export const DepartmentRepositories = {
 		return data;
 	},
 
-    // DANH SÁCH THÀNH VIÊN TRONG DỰ ÁN
+    // DANH SÁCH THÀNH VIÊN CỦA CẢ HỆ THỐNG
     async getListUserInProject(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `/api/auth/users?${convertObToUrl({
