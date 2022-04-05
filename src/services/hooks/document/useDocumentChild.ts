@@ -77,7 +77,7 @@ export const useQueryListDocumentChild = (params: DocumentChildQueryPayload): Us
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPages = data?.pages[0]?.data?.totalPages || 0;
-
+            
     return {
         loading: isLoading,
         listDocumentChild,

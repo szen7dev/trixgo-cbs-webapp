@@ -12,7 +12,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
     const { mutateAsync: updatePcmPlanGroupMutateAsync, isLoading: isLoadingUpdatePcmPlanGroup } =
         useMutation((payload: any) =>PcmRepository.updatePcmPlanGroup(payload)
     );
-
+    
     // Xoá group
     const { mutateAsync: removeManyPcmPlanGroupMutateAsync, isLoading: isManyAppRole } =
         useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)

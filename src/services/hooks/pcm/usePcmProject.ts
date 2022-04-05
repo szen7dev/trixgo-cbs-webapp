@@ -1,5 +1,5 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { DepartmentRepository } from 'apis/item';
 
 export const usePcmProject = (payload: any): any => {
@@ -12,6 +12,12 @@ export const usePcmProject = (payload: any): any => {
         useMutation((payload: any) =>
             DepartmentRepository.updateDepartments(payload)
         );
+
+    const { data: infoDepartment } = 
+    useQuery("department_info", () => DepartmentRepository.fetchDetailDepartment(payload), {
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
 
     // Get danh sách
     const {
@@ -44,12 +50,11 @@ export const usePcmProject = (payload: any): any => {
     return {
         createProjectMutateAsync,
         isLoadingCreateProject,
-
         updateProjectMutateAsync,
         isLoadingUpdateProject,
-
         isLoadingPcmProject,
         listPcmProject,
+        infoDepartment: infoDepartment,
         totalRecord,
         totalPage,
         nextPagePcmProject,

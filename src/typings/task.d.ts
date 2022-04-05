@@ -53,6 +53,7 @@ export type Field = {
 export type Task = {
   _id: string;
   name: string;
+  status: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;
@@ -76,6 +77,9 @@ export type Task = {
   actualFinishTime: string;
   amountResponse: number;
   amountMarkedResponse: number;
+  amountChecklist: number;
+  amountFinishedChecklist: number;
+  createAt: string
 };
 
 export interface addTaskPayload {
