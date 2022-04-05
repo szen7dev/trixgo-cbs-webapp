@@ -77,6 +77,7 @@ export interface Document {
         name: string;
         sign: string;
     },
+    amountDocumentChild?:number 
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {
