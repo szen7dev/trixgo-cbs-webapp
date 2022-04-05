@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import {
 	Chart as ChartJS,
@@ -12,8 +11,12 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { getDates } from 'utils/time';
+import moment from 'moment';
+import _lodash from 'lodash';
 
 import planTable from '../../../chart/ProjectLineChart';
+import { Project } from 'typings/items/project';
 
 ChartJS.register(
 	CategoryScale,
@@ -26,26 +29,58 @@ ChartJS.register(
 	ChartDataLabels
 );
 
-const ReportChart: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+type Props = {
+	projectInfo: Project | undefined,
+	contractValues: Array<any>
+} & React.HTMLAttributes<HTMLDivElement>
+
+const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props }) => {
+	if(!projectInfo) return <></>
+
+	// Step 1: Get date range (startTimeProject -> now)
+	const dates = getDates(new Date(projectInfo.startTime || Date.now()), new Date());
+
+	// Step 2: Format date range
+	const datesFormat = dates.map(date => ({ yyyy: moment(date).format('MM/YYYY'), yy: moment(date).format('MM/YY') }));
+
+	// Step 3: Unique date label
+	const labels = _lodash.unionBy(datesFormat, 'yyyy');
+
+	// Step 4: Set data total files by date label
+	const dataSets = labels.map(date => {
+		let totalContractValues = 0;
+
+		const infoContractValueByDate = contractValues?.find(contractValue => contractValue.dataFormat === date.yyyy);
+		if(infoContractValueByDate) {
+			totalContractValues = infoContractValueByDate.count;
+		}
+
+		return totalContractValues;
+	})
+
 	return (
 		<div {...props}>
 			<Line
 				options={{
 					...planTable.options,
 					scales: {
-						x: {
-							type: 'time',
-							time: {
-								unit: "month",
-								displayFormats: {
-									month: 'M/YYYY'
-								},
-							},
-							ticks: {
-								autoSkip: false,
+						// x: {
+							// type: 'time',
+							// time: {
+								// displayFormats: {
+								// 	quarter: 'MM/YYYY'
+								// }
+								// unit: "month",
+								// displayFormats: {
+								// 	month: 'MM',
+								// 	year: "YY"
+								// },
+							// },
+						// 	ticks: {
+						// 		autoSkip: false,
 
-							}
-						},
+						// 	},
+						// },
 						y: {
 							ticks: {
 								callback: function (value) {
@@ -59,9 +94,9 @@ const ReportChart: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props 
 					},
 					plugins: {
 						datalabels: {
-							formatter: function (value: { x: string; y: number }): number {
-								return Math.round(value.y / 1e7) / 100;
-							},
+							// formatter: function (value: { x: string; y: number }): number {
+							// 	return Math.round(value.y / 1e7) / 100;
+							// },
 							align: "top",
 							anchor: "start",
 						},
@@ -102,11 +137,22 @@ const ReportChart: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props 
 							}
 						},
 						tooltip: {
-							enabled: false,
+							enabled: true,
 						},
 					}
 				}}
-				data={planTable.data}
+				data={{
+					labels: labels.map(label => label.yy),
+					datasets: [
+						{
+							label: "Hợp đồng",
+							data: dataSets,
+							borderWidth: 2,
+							backgroundColor: "transparent",
+							borderColor: "#85B2ED",
+						},
+					]
+				}}
 				height={"415px"}
 			/>
 		</div>

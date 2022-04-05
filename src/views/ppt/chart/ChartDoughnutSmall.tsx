@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -15,7 +15,6 @@ import getPlugins from './ProjectDoughnutChart';
 
 interface Props {
 	_data: {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		datasets: Array<any>
 	}
 	title?: string

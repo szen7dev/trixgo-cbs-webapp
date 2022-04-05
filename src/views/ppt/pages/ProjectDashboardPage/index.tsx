@@ -1,16 +1,25 @@
 import { FC, useEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
+import { useParams } from 'react-router-dom';
 
 import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
 
+/**
+ * Hooks, Typings
+ */
+import { useProject } from 'services/hooks/items/useProject';
+import { useContractPayment } from 'services/hooks/cmcs/useContractPayment';
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
 
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
 
+/**
+ * Components
+ */
 import ReportTimeLine from "./components/ReportTimeLine";
 import ReportTotal from "./components/ReportTotal";
 import ReportActivity from "./components/RreportActivity";
@@ -34,6 +43,21 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	// 	type: "2"
 	// });
 	// ---------
+	const { id: projectID } = useParams<{ id: string }>();
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID
+		},
+		isFetchInfo: true
+	})
+
+	const { listAmountContractValueByDate } = useContractPayment({
+		params: {
+			projectID
+		},
+		isFetchListAmountContractValue: true
+	})
+
 	useEffect(() => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
@@ -59,20 +83,20 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							</div>
 
 							{/* Chartjs */}
-							<ReportChart className='bg-white mx-2 w-full mt-4' />
+							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} contractValues={listAmountContractValueByDate} />
 
 							{/* Images */}
-							<ReportImage className="w-full px-2" />
+							<ReportImage className="w-full px-2" projectInfo={projectInfo} />
 
 							<div className="flex flex-wrap w-full">
 								{/* Budget and Cost */}
-								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} />
+								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} projectInfo={projectInfo} />
 								<div className="flex flex-1">
 									{/* Contractor */}
-									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} />
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectInfo={projectInfo} />
 
 									{/* Profile */}
-									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} />
+									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} projectInfo={projectInfo} />
 								</div>
 							</div>
 						</div>

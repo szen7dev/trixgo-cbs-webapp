@@ -103,7 +103,7 @@ MENU ỨNG DỤNG PCM/menu-pcm-app (type=1): 623ef213e998e94feda0ccd8
 +++Báo cáo đầu tư/dashboard-portfolio: 623efd30e998e94feda0cd1b
 +++Báo cáo quản trị công việc/dashboard-task: 623efd51e998e94feda0cd1c
 +++Báo cáo quản trị hồ sơ/dashboard-document: 623efd64e998e94feda0cd1d
-
+    
 MENU DỰ ÁN PCM/menu-pcm-project (type=2): 623f04cce998e94feda0cd32
 +++Báo cáo quản trị/dashboard: 623f05f9e998e94feda0cd33
 +++Thư mục dữ liệu/folder: 623f061de998e94feda0cd34

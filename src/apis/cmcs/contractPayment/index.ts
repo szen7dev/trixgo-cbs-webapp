@@ -1,7 +1,27 @@
 import API from "../../repository";
+import { convertObToUrl } from "utils";
 
 const APP_CMCS = "/api/cmcs";
 const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
+
+const ContractIPCRepository = {
+    fetchAmountContractValueGroupByDate: async (params: any): Promise<any> => fetchAmountContractValueGroupByDate<any>(params),
+    fetchListContractPaynent: async (params: any): Promise<any> => fetchListContractPaynent<any>(params),
+    fetchDetailContractPayment: async (params: {
+        contractPaymentID: string;
+    }): Promise<any> => fetchDetailContractPayment(params),
+    requestCreateContractPayment,
+    requestUpdateContractPayment,
+    requestDeleteContractPayment,
+    requestHistoryTraffics
+};
+
+async function fetchAmountContractValueGroupByDate<T>(params: any): Promise<T> {
+    const { data } = await API.get(
+        `${APP_CMCS}/contract_payments/get-amount-contract-value-group-by-date?${convertObToUrl(params)}`,
+    )
+    return data
+}
 
 async function fetchListContractPaynent<T>(params: any): Promise<T> {
     const { data } = await API.get(
@@ -62,17 +82,5 @@ async function requestDeleteContractPayment(contractPaymentID: string): Promise<
         `${APP_CMCS}/contract_payments?contractPaymentID=${contractPaymentID}`)
     return data;
 }
-
-const ContractIPCRepository = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fetchListContractPaynent: async (params: any): Promise<any> => fetchListContractPaynent<any>(params),
-    fetchDetailContractPayment: async (params: {
-        contractPaymentID: string;
-    }): Promise<any> => fetchDetailContractPayment(params),
-    requestCreateContractPayment,
-    requestUpdateContractPayment,
-    requestDeleteContractPayment,
-    requestHistoryTraffics
-};
 
 export default ContractIPCRepository

@@ -64,7 +64,6 @@ import {
 	PcmTaskGroupPage,
 	PcmReport
 } from 'views/pcm/pages';
-
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
 import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
@@ -96,6 +95,7 @@ const PCMRouter: FC = () => {
 						<Route exact path="/pcm/project/:id/home" component={ProjectHomePage} />
 						<Route exact path="/pcm/project/:id/dashboard" component={ProjectDashboardPage} />
 						<Route exact path='/pcm/project/:id/folder' component={ProjectFolderPage} />
+						<Route exact path='/pcm/project/:id/folder/:groupID' component={ProjectFolderPage} />
 						<Route exact path='/pcm/project/:id/schedule' component={ProjectSchedulePage} />
 						<Route path="/pcm/project/:id/budget">
 							<LayoutSecondary pages={[
@@ -153,6 +153,7 @@ const PCMRouter: FC = () => {
 								// { id: '3', title: 'Quản lý phiên bản', path: '/pcm/project/:id/drawing/2' },
 							]}>
 								<Route exact path='/pcm/project/:id/drawing' component={ProjectDrawingPage} />
+								<Route exact path='/pcm/project/:id/drawing/:documentID' component={ProjectDrawingPage} />
 								<Route exact path='/pcm/project/:id/drawing/1' component={() => <>Sample Data</>} />
 								<Route exact path='/pcm/project/:id/drawing/2' component={ProjectDrawing2Page} />
 							</LayoutSecondary>
