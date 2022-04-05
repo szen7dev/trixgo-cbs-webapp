@@ -54,7 +54,7 @@ const ProjectPhotoContractPage: FC = () => {
 				select: "_id"
 			})
 		},
-		isFetchInfo: true
+		isFetchInfo: !!contractID
 	});
 
 	const {
@@ -71,7 +71,7 @@ const ProjectPhotoContractPage: FC = () => {
 				select: "_id nameOrg path bizfullname image"
 			})
 		},
-		isFetchComment: true
+		isFetchComment: !!contractID
 	});
 
 	useEffect(() => {
@@ -90,6 +90,8 @@ const ProjectPhotoContractPage: FC = () => {
 	// 	setIsShow(true)
 	// }
 	const toggle = () => setIsShow(!isShow)
+
+	if(!contractInfo) return <>Nothing...</>;
 
 	return (
 		<>

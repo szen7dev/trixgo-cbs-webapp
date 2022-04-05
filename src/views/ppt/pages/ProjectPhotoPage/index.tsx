@@ -65,7 +65,8 @@ const ProjectPhotoPage: FC = () => {
 						{(filesGroupByContract && filesGroupByContract.length) ? filesGroupByContract.map((file, i) => (
 							<div className="lg:w-6/12 2xl:w-4/12 px-2" key={file.contract?._id}>
 								<div className="shadow-cbs-md">
-									<div className="grid grid-cols-3 gap-1 text-white px-1 pt-2.5">
+									{/* grid grid-cols-3 gap-1 */}
+									<div className="flex flex-wrap text-white px-1 pt-2.5">
 										{file.contract?.photos?.slice(0, 6)?.map((photo, index) =>
 											<CardImage
 												image={photo}
