@@ -35,15 +35,14 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
         data,
         refetch,
     } = result;
-
     // const listDocument = []
     //     .concat(
     //         ...(data?.pages || []).map((d: any) => d.data?.listRecords)
     //     )
     //     .filter(Boolean);
     const totalRecord = data?.data?.totalRecord || 0;
-    const totalPages = data?.data?.totalPage || 0;
-    const nextCursor = data?.data?.nextCursor || null
+    const totalPages  = data?.data?.totalPage || 0;
+    const nextCursor  = data?.data?.nextCursor || null
 
     return {
         loading: isLoading,
@@ -57,12 +56,12 @@ export const useQueryListDocument = (departmentID: string, pageParam: any,  pack
         // fetchPreviousPage,
     }
 }
-
 interface UseQueryDetailDocument {
     loading: boolean;
     detailDocument: Document,
     onFetchDetailDocumentAsync: (documentId: string) => Promise<Document>;
 }
+    
 export const useQueryDetailDocument = (): UseQueryDetailDocument => {
     const [detailDocument, setDetailDocument] = React.useState<| any>({});
     const [loading, setLoading] = React.useState(false);

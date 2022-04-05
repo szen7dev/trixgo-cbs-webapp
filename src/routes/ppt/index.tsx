@@ -77,7 +77,7 @@ const PPTRoutes: FC = () => {
 						<Switch>
 							<Route exact path="/ppt/project/:id/home" component={ProjectHomePage} />
 							<Route exact path="/ppt/project/:id/dashboard" component={ProjectDashboardPage} />
-							<Route exact path='/ppt/project/:id/folder' component={ProjectFolderPage} />
+							<Route exact path='/ppt/project/:id/group' component={ProjectFolderPage} />
 							<Route exact path='/ppt/project/:id/schedule' component={ProjectSchedulePage} />
 							<Route path="/ppt/project/:id/budget">
 								<LayoutSecondary pages={[
