@@ -1,4 +1,4 @@
-import type { QueryParam, Company } from 'typings/common';
+import type { QueryParam, Company, FileProps } from 'typings/common';
 import { User } from 'typings/user';
 
 export type Project = {
@@ -7,7 +7,6 @@ export type Project = {
     sign: string;
     description?: string;
     image?: string;
-    numberOfDocs?: number;
     company: Company;
     actualStartTime: string;
     actualFinishTime: string;
@@ -21,6 +20,7 @@ export type Project = {
     assistant: User;
     completedMilestones: number;
     milestones: number;
+    photos: Array<FileProps>,
     // Pre-calculate
     budget: number;
     vatBudget: number;
@@ -39,10 +39,17 @@ export type Project = {
     contractVatPlusAcceptance: number;
     contractAmountPaid: number;
     contractRemainingPayment: number;
+    numberOfContact: number;
+    numberOfMoms: number;
+    numberOfDocs: number;
+    numberOfDrawings: number;
+    numberOfReports: number;
+    numberOfIpcs: number;
+    numberOfPackage: number;
 }
 
 export type ProjectListPayload = QueryParam & {
-    type: 1 | 2; //  1: "Phòng Ban", 2: "Dự án"
+    type: 1 | 2; // 1: "Phòng Ban", 2: "Dự án"
     companyID?: string;
 }
 

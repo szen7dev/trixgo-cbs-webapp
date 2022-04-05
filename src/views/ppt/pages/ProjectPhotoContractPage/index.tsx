@@ -98,7 +98,6 @@ const ProjectPhotoContractPage: FC = () => {
 					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</button>
-					{/* line-clamp-1 */}
 					<span className="max-w-sm text-x-large mr-7">{contractInfo?.name}</span>
 					{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
 					{/* <DropdownFilterButton className="mr-auto" /> */}

@@ -1,5 +1,91 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useInfiniteQuery } from "react-query";
 import ContractPaymentRepository from 'apis/cmcs/contractPayment';
+
+interface UseContractPayment {
+    listAmountContractValueByDate: Array<any>;
+    // isLoading: boolean;
+    // totalRecord: number;
+    // totalPage: number;
+    // hasNextPage: boolean | undefined;
+    // list: Array<any>;
+    // info: any;
+    // refetch: () => void;
+    // fetchNextPage: () => void;
+    // fetchPreviousPage: () => void;
+}
+
+// Khai báo params cho hook
+type UseContractPaymentProps = {
+    params?: any,
+    isFetchListAmountContractValue?: boolean,
+    isFetchList?: boolean,
+    isFetchInfo?: boolean,
+}
+
+// Khai báo hook
+export const useContractPayment = ({
+    params = {},
+    isFetchListAmountContractValue = false,
+    // isFetchList = false,
+    // isFetchInfo = false
+}: UseContractPaymentProps): UseContractPayment => {
+    // Get info
+    const { data: detailData } =
+        useQuery("amount_contract_value_by_date__info", () => ContractPaymentRepository.fetchAmountContractValueGroupByDate(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchListAmountContractValue,
+        });
+
+    const listAmountContractValueByDate = detailData?.data?.listRecords || [];
+
+    // // Get List
+    // const {
+    //     isLoading,
+    //     data,
+    //     refetch,
+    //     fetchNextPage,
+    //     fetchPreviousPage,
+    //     hasNextPage
+    // } = useInfiniteQuery(
+    //     ['contract_payment__list', params],
+    //     async ({ pageParam }: any) =>
+    //         ContractPaymentRepository.fetchAmountContractValueGroupByDate({
+    //             lastestID: pageParam ?? "",
+    //             ...params,
+    //         }),
+    //     {
+    //         getNextPageParam: ({ data }: any) => {
+    //             return data?.nextCursor ?? undefined;
+    //         },
+    //         refetchOnWindowFocus: false,
+    //         enabled: isFetchList
+    //     }
+    // );
+
+    // const list = []
+    //     .concat(...(data?.pages || [])
+    //     .map((d: any) => d.data?.listRecords))
+    //     .filter(Boolean);
+
+    // const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    // const totalPage = data?.pages[0]?.data?.totalPage || 0;
+
+    // Return data
+    return {
+        listAmountContractValueByDate,
+        // isLoading,
+        // list,
+        // info,
+        // totalRecord,
+        // totalPage,
+        // hasNextPage,
+        // refetch,
+        // fetchNextPage,
+        // fetchPreviousPage,
+    }
+}
+
+// Đoạn hook này sẽ refactor lại sau, sử dụng hook phía trên
 
 export const UseContractPaymentList = (pageParam = '', contractID = '', limit = 10, keyword=''): any => {
     const {

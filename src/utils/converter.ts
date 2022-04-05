@@ -62,3 +62,15 @@ export const blobToFile = (theBlob: Blob, fileName: string): File => {
   // Cast to a File() type
   return <File>theBlob;
 }
+
+export const formatNumberMoney = (number: number | string): string => {
+  return (Number(number || 0).toLocaleString('de-DE')) || ""
+}
+
+export const formatNaNToZero = (number: number): number => {
+  if(!number || isNaN(number)) {
+    return 0;
+  }
+
+  return number;
+}
