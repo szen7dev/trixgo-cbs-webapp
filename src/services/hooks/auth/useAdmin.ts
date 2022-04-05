@@ -255,22 +255,21 @@ export const useAdminDetail = (payload: { appID: string, keyword?: string }): Us
     };
 };
 
-export const useGetUsersByCompany = (companyID: string, keyword: string): any => {
+export const useGetUsersBySystem = (companyID: string, keyword: string): any => {
     const {
-        isLoading: isLoadingGetUsersByCompany,
-        refetch: refetchGetUsersByCompany,
-        data: dataGetUsersByCompany,
-        fetchNextPage: nextPageGetUsersByCompany,
-        hasNextPage: hasNextPageGetUsersByCompany,
-        isFetching: isFetchingGetUsersByCompany
+        isLoading: isLoadingGetUsersBySystem,
+        refetch: refetchGetUsersBySystem,
+        data: dataGetUsersBySystem,
+        fetchNextPage: nextPageGetUsersBySystem,
+        hasNextPage: hasnextPageGetUsersBySystem,
+        isFetching: isFetchingGetUsersBySystem
     } =
         useInfiniteQuery(
             [`users?companyID=${companyID}`, keyword],
             async (pageParam: any) => {
-                return AuthenticationRepository.getListUsersByCompany({
+                return AuthenticationRepository.getListUsersBySystem({
                     lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
                     select: "bizfullname image",
-                    companyID: companyID,
                     keyword: keyword
                 })
             },
@@ -282,17 +281,17 @@ export const useGetUsersByCompany = (companyID: string, keyword: string): any =>
                 enabled: true,
             }
         );
-    const listMembers = [].concat(...(dataGetUsersByCompany?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = dataGetUsersByCompany?.pages[0]?.data?.totalRecord;
-    const totalPage = dataGetUsersByCompany?.pages[0]?.data?.totalPage;
+    const listMembers = [].concat(...(dataGetUsersBySystem?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+    const totalRecord = dataGetUsersBySystem?.pages[0]?.data?.totalRecord;
+    const totalPage = dataGetUsersBySystem?.pages[0]?.data?.totalPage;
 
     return {
         listMembers,
-        isLoadingGetUsersByCompany,
-        refetchGetUsersByCompany,
-        nextPageGetUsersByCompany,
-        hasNextPageGetUsersByCompany,
-        isFetchingGetUsersByCompany,
+        isLoadingGetUsersBySystem,
+        refetchGetUsersBySystem,
+        nextPageGetUsersBySystem,
+        hasnextPageGetUsersBySystem,
+        isFetchingGetUsersBySystem,
         totalRecord,
         totalPage,
     };
