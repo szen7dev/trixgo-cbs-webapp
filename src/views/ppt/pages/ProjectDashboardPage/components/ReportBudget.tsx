@@ -16,28 +16,28 @@ const ReportBudget: React.FC<Props> = ({ projectInfo, ...props }) => {
 	const totalBudget = formatNaNToZero(projectInfo.budget + projectInfo.vatBudget) || 1;
 
 	const totalContractFormat = formatNumberMoney(projectInfo.contractValue + projectInfo.contractVatValue);
-	const percentContract = (formatNaNToZero(projectInfo.contractValue + projectInfo.contractVatValue) / totalBudget) * 100;
+	const percentContract = Math.ceil((formatNaNToZero(projectInfo.contractValue + projectInfo.contractVatValue) / totalBudget) * 100);
 
 	const totalAdvanceFormat = formatNumberMoney(projectInfo.contractAdvancePaymentPaid);
-	const percentAdvance = (formatNaNToZero(projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100;
+	const percentAdvance = Math.ceil((formatNaNToZero(projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100);
 
 	const totalQuantityFormat = formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce);
-	const percentQuantity = (formatNaNToZero(projectInfo.contractProduce + projectInfo.contractVatProduce) / totalBudget) * 100;
+	const percentQuantity = Math.ceil((formatNaNToZero(projectInfo.contractProduce + projectInfo.contractVatProduce) / totalBudget) * 100);
 
 	const totalAcceptanceFormat = formatNumberMoney(
 		projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 		projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
 	);
-	const percentAcceptance = (formatNaNToZero(
+	const percentAcceptance = Math.ceil((formatNaNToZero(
 		projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 		projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
-	) / totalBudget) * 100;
+	) / totalBudget) * 100);
 
 	const totalPaymentFormat = formatNumberMoney(projectInfo.contractAmountPaid);
-	const percentPayment = (formatNaNToZero(projectInfo.contractAmountPaid) / totalBudget) * 100;
+	const percentPayment = Math.ceil((formatNaNToZero(projectInfo.contractAmountPaid) / totalBudget) * 100);
 
 	const totalDisbursementFormat = formatNumberMoney(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid);
-	const percentDisbursement = (formatNaNToZero(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100;
+	const percentDisbursement = Math.ceil((formatNaNToZero(projectInfo.contractAmountPaid + projectInfo.contractAdvancePaymentPaid) / totalBudget) * 100);
 
 	return (
 		<div {...props}>
