@@ -3,9 +3,10 @@ import moment from "moment";
 import React, { Fragment, useContext, useState } from "react";
 import cn from "classnames";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
+import { object, string } from "yup";
 
 import { ModalContext } from "views/document/contexts/modal";
 import itemTag from "assets/images/icons8-price-tag.svg";
@@ -20,6 +21,7 @@ import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
 import { Document } from "typings/ppt";
 import { useMutationDocumentChild }  from "services/hooks/document/useDocumentChild"
+import { toast } from "react-toastify";
 
 const fieldInputByRow = [
 	{ title: "Số lượng", name: "amount", type: "text" },
@@ -212,12 +214,29 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.value = +values.value;
 		}
 
-		console.log({ formatValues })
+		if(values.projectID){
+			formatValues.departmentID = values.projectID;
+		}
+
+		if(values.sender){
+			formatValues.senderID = values.sender;
+		}
+
+		if(values.receiver){
+			formatValues.receiverID = values.receiver;
+		}
+
+		if(values.property){
+			formatValues.propertyID = values.property;
+		}
+
+		if(!formatValues.name)
+			return toast.warning("Vui lòng nhập tiêu đề")
 
 		// Xử lý api tạo hồ sơ
 		try {
 			const infoAfterInsert = await insertDocumentChildAsync(formatValues)
-			console.log({ values, formatValues, infoAfterInsert });
+			console.log({ infoAfterInsert })
 		} catch (error: unknown) {
 			console.error(error);
 		}
@@ -444,8 +463,9 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 											htmlFor="title"
 											className="py-1.5 h-[30px] box-content"
 										>
-											<p className="py-1.5">Tiêu đề</p>
+											<p className="py-1.5">Tiêu đề (*)</p>
 										</label>
+									
 										<Field
 											onBlur={(e: React.FormEvent<HTMLInputElement>) => {
 												handleBlur(e);
@@ -455,6 +475,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 											placeholder="Tiêu đề"
 											className="col-span-3 focus:outline-none py-1.5 h-[30px] box-content px-2"
 										/>
+									
 										<label
 											htmlFor="status"
 											className="py-1.5 h-[30px] box-content"
