@@ -1,5 +1,5 @@
 import { FC, memo, MouseEventHandler, useEffect, useState } from "react";
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
 
 // import { SearchInput } from "shareComponents/common";
@@ -61,13 +61,12 @@ const ProjectPhotoContractPage: FC = () => {
 		listComments,
 		nextPageListComments,
 		hasNextPageComments,
-		totalRecord
 	} = useCommentPcm({
 		params: {
 			contractID,
-			select: "_id content author images createAt",
+			select: "_id content author images task createAt",
 			populates: JSON.stringify({
-				path: "images author",
+				path: "images author task",
 				select: "_id nameOrg path bizfullname image"
 			})
 		},
@@ -100,7 +99,8 @@ const ProjectPhotoContractPage: FC = () => {
 					<button onClick={history.goBack}>
 						<img src="/images/common/button_back.png" alt="Button Back" />
 					</button>
-					<span className="max-w-sm text-x-large mr-7">{contractInfo?.name}</span>
+					{/* max-w-sm */}
+					<span className="text-x-large mr-7">{contractInfo?.name}</span>
 					{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
 					{/* <DropdownFilterButton className="mr-auto" /> */}
 
@@ -124,9 +124,11 @@ const ProjectPhotoContractPage: FC = () => {
 									<div className="flex cursor-pointer">
 										<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author.image}`} alt="" className="w-10 h-10 mr-3.5 object-cover rounded-full" />
 										<div>
-											<strong className="truncate text-base">
-												{comment.content}
-											</strong>
+											<Link to={`/pcm/detail/${comment.task?._id}`} target="_blank">
+												<strong className="line-clamp-1 text-base" title={comment.content}>
+													{comment.content}
+												</strong>
+											</Link>
 											<p>{comment.author?.bizfullname} |
 												<span className="text-cbs-subtext mr-1 ml-1">
 													{moment(comment.createAt).format('hh:mm DD/MM/yy')}

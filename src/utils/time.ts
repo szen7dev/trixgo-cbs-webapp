@@ -27,6 +27,22 @@ export const getDates = (startDate: any, stopDate: any) => {
   return dateArray;
 }
 
+/**
+ * @param {date|moment} start The start date
+ * @param {date|moment} end The end date
+ * @param {string} type The range type. eg: 'days', 'hours' etc
+ */
+export const getRangeDate = (startDate: any, endDate: any, type: any) => {
+  const fromDate = moment(startDate || Date.now())
+  const toDate = moment(endDate || Date.now())
+  const diff = toDate.diff(fromDate, type)
+  // const range = []
+  // for (let i = 0; i < diff; i++) {
+  //   range.push(moment(startDate).add(i, type))
+  // }
+  return diff
+}
+
 export const sleep = (ms: number): Promise<unknown> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
