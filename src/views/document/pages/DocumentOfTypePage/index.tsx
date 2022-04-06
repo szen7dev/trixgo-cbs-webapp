@@ -358,7 +358,6 @@ export const DocumentOfTypePage: FC = () => {
           )}
         </div>
       </div>
-      <div style={{ height: 39 }} />
       {/* Footer */}
       <Paginate
         totalPages={totalPages}
