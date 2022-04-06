@@ -257,7 +257,7 @@ export const ContractPayment: FC = () => {
                 }
                 </td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0))}</td>
-                <td className="py-1 px-2">{item.description}</td>
+                <td className="py-1 px-2">{item.note}</td>
               </tr>
             )
           })}
