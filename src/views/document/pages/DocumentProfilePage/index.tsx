@@ -31,13 +31,14 @@ export const DocumentProfilePage: FC = () => {
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
 
 	const { data } = useQueryStatistical({ departmentID: params.id });
+	console.log({ data })
 	return (
 		<>
 			{/* Content */}
 			<div className="flex flex-1 flex-col overflow-hidden bg-cbs-gray">
-				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-					<span className="text-x-large mr-7">Hồ sơ: Tất cả</span>
-					<SearchInput
+				{/* <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1"> */}
+					{/* <span className="text-x-large mr-7">Hồ sơ: Tất cả</span> */}
+					{/* <SearchInput
 						classNameWrapper="rounded-sm flex bg-cbs-left-menu mr-2"
 						onChange={() => 1}
 					/>
@@ -45,13 +46,13 @@ export const DocumentProfilePage: FC = () => {
 						data={pkgs}
 						value={pkg.title}
 						onSelectValue={setPkg}
-					/>
+					/> */}
 					{/* <DropdownFilterButton /> */}
-					<GroupActions className="flex items-center flex-1" />
+					{/* <GroupActions className="flex items-center flex-1" />
 
 					<ButtonCreate onClick={toggleModal} />
-					<ButtonMore />
-				</div>
+					<ButtonMore /> */}
+				{/* </div> */}
 				<div className="flex flex-wrap gap-y-3.5 flex-1 overflow-y-auto px-5 py-2.5">
 					{data.map((elm, i) => {
 						const formatData = {
