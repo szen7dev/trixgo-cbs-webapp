@@ -337,7 +337,6 @@ export const DocumentProjectPage: FC = () => {
           )}
         </div>
       </div>
-      <div style={{ height: 39 }} />
       {/* Footer */}
       <Paginate
         totalPages={totalPages}
