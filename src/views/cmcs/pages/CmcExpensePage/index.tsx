@@ -1,20 +1,28 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 import cn from "classnames";
 import moment from "moment";
-import { useModal } from "services/hooks/useModal";
+
+/**
+ * Components, Utils
+ */
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 import { SearchInput, Paginate } from "shareComponents/common";
-import { IncomeFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { ExpenseFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
+import { APP_ID } from "apis/localdb";
+
 import styles from 'views/cmcs/styles/styles.module.css';
-import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
+
+/**
+ * Hooks
+ */
+import { useModal } from "services/hooks/useModal";
 import { useContractExpense } from 'services/hooks/cmcs/useContractExpense';
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-import { APP_ID } from "apis/localdb";
-import { debounce } from "lodash";
 
 export const CmcExpensePage: FC = () => {
   // --------- Check phân quyền
@@ -31,9 +39,7 @@ export const CmcExpensePage: FC = () => {
   }, []);
 
   const [itemChecked, setItemChecked] = useState('');
-  const [keyword, setKeyword] = useState("");
-  const [pageParam] = useState('');
-
+  const [keyword, setKeyword] = useState('');
   const { openModal } = useModal();
 
   const {
@@ -45,18 +51,15 @@ export const CmcExpensePage: FC = () => {
     totalPage,
     hasNextPage,
     fetchNextPage,
-    fetchPreviousPage
+    fetchPreviousPage,
+    refetch: refetchContractsExpense
   } = useContractExpense({
     params: {
-      outin: 2
+      outin: 2,
+      keyword
     },
     isFetchList: true
   });
-
-  const contractIncome = UseContractIncomeList(pageParam, keyword);
-  const { createContractMutateAsync } = useCreateContractMutation();
-  const { updateContractMutateAsync } = useUpdateContractMutation();
-  const { deleteContractMutateAsync } = useDeleteContractMutation();
 
   const getStatusValue = (value: number) => {
     return CONTRACT_COME_IN_STATUS.find(item => item.value === value)?.text;
@@ -64,9 +67,9 @@ export const CmcExpensePage: FC = () => {
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
     if (isEdit) {
-      res = await updateContractMutateAsync(values);
+      res = await updateContractExpenseAsync(values);
     } else {
-      res = await createContractMutateAsync(values);
+      res = await insertContractExpenseAsync(values);
     }
 
     if (res.code && res.code !== 200) {
@@ -74,32 +77,34 @@ export const CmcExpensePage: FC = () => {
     }
 
     if (!res.error) {
-      contractIncome.refetch()
+      refetchContractsExpense()
       return true;
     }
     return false;
-  }, [contractIncome]);
+  }, []);
 
   const { openDeleteConfirm } = useDeleteConfirm();
 
-  const handleDeleteAction = async () => {
+  const handleDeleteAction = () => {
     openDeleteConfirm({
       deleteAction: async () => {
-        const res = await deleteContractMutateAsync(itemChecked)
+        const res = await deleteContractExpenseAsync({
+          contractsID: [itemChecked]
+        })
         if (!res.error) {
-          contractIncome.refetch()
+          refetchContractsExpense()
         }
       },
     });
   }
-  const handleEditAction = async () => {
+  const handleEditAction = () => {
     openModal(
       <div
         className={
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+        <ExpenseFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
       </div>
     )
   }
@@ -110,7 +115,7 @@ export const CmcExpensePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" />
+        <ExpenseFormModal onFinish={handleFinishForm} title="Tạo mới" />
       </div>
     )
   }
