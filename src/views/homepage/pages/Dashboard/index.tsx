@@ -12,7 +12,6 @@ import newsImg1 from "assets/images/home-slide-img1.jpg";
 import iconThumbsUp from "assets/images/icons8-thumbs-up-48.png";
 import iconComments from "assets/images/icons8-comments-48.png";
 import iconEye from "assets/images/icons8-eye-48.png";
-import imgMedia from "assets/images/home-img-media.jpg";
 // import iconArrowRight from "assets/images/icon-arrow-right.svg";
 import imgSolution from "assets/images/home-img-solution.png";
 import imgBidding from "assets/images/icons8-database-96.png";
@@ -204,7 +203,7 @@ export const Dashboard: FC = () => {
             {listMediasCompany.length ? (
               <div className="flex items-center">
                 <Link to={`/media/post/${listMediasCompany[0]._id}`} className="flex t-home-media-img pr-7 max-h-[225px]">
-                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images?.length) ? `${process.env.REACT_APP_URL_S3}${listMediasCompany[0].images[0]?.path}` : imgMedia} alt="Media" />
+                  <img className="w-full object-cover" src={(listMediasCompany[0].images && listMediasCompany[0].images?.length) ? `${process.env.REACT_APP_URL_S3}${listMediasCompany[0].images[0]?.path}` : `/images/common/default_media.png`} alt="Media" />
                 </Link>
                 <div className="t-home-media-text text-dark">
                   <Link to={`/media/post/${listMediasCompany[0]._id}`}>
