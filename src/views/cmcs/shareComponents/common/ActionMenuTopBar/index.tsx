@@ -23,7 +23,7 @@ export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ d
 
   return (
     <div className={"flex items-center"}>
-      <button className={"flex items-center mr-3"}>
+      {/* <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={DownloadIcon} />
       </button>
       <button className={"flex items-center mr-3"}>
@@ -34,7 +34,7 @@ export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ d
       </button>
       <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={SendEmailIcon} />
-      </button>
+      </button> */}
       {updatePermission &&
         <button className={"flex items-center mr-3"} onClick={() => handleEdit()}>
           <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PencilIcon} />
@@ -45,9 +45,9 @@ export const ActionMenuTopBar: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ d
           <img className={"w-[24px] h-[24px]"} alt={"icon"} src={TrashIcon} />
         </button>
       }
-      <button className={"flex items-center mr-3"}>
+      {/* <button className={"flex items-center mr-3"}>
         <img className={"w-[24px] h-[24px]"} alt={"icon"} src={PrintIcon} />
-      </button>
+      </button> */}
     </div>
   )
 }

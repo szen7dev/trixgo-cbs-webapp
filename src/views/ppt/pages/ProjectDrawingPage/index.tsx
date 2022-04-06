@@ -23,31 +23,33 @@ const ProjectDrawingPage: FC = () => {
 		document.title = `${infoDepartment?.data?.sign}.${infoDepartment?.data?.name}`
 	}, []);
 
-	const { data: listDocumentParent, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(projectID, { type:" 9", parentID: documentID, keyword }, "");
+	const { data: listDocumentParent, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(projectID, { type:"9" }, "");
+	const { data: listDocumentChild, totalRecord: totalRecordChild, totalPages: totalPagesChild, loading: loadingChild, nextCursor: nextCursorChild, refetch: refetchChild }   = useQueryListDocument(projectID, { type:" 9", parentID: documentID, keyword }, "");
 	useEffect(() => {
-		refetch();
+		refetchChild();
+		refetch()
 	}, [keyword]);
-
+	
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			{/* Content */}
 			<div className="flex overflow-auto flex-1">
 				<div className="w-[330px] border-r border-cbs-border h-full">
 					{
-						!documentID && listDocumentParent?.map((document, index) => (
-							<div key={index} className="flex gap-x-2.5 px-4 pt-3 pb-2 hover:bg-cbs-active-comment">
-								<div>
-									<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-									</svg>
-								</div>
-								<div>
-									<Link to={`/pcm/project/${projectID}/drawing/${document._id}`} className="align-top">
+						listDocumentParent?.map((document, index) => (
+							<Link key={index} to={`/pcm/project/${projectID}/drawing/${document._id}`} className="align-top">
+								<div className={`flex gap-x-2.5 px-4 pt-3 pb-2 hover:bg-cbs-active-comment ${document._id == documentID && "bg-cbs-active-comment" } `}>
+									<div>
+										<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+										</svg>
+									</div>
+									<div>
 										<h3 className="font-bold">{document?.name}</h3>
 										<p>{document?.amountDocumentChild} bản vẽ</p>
-									</Link>
+									</div>
 								</div>
-							</div>
+							</Link>
 						))
 					}
 				</div>
@@ -57,7 +59,7 @@ const ProjectDrawingPage: FC = () => {
 							500
 						)} />
 					<div className="grid grid-cols-6 gap-4 mt-2">
-						{ documentID &&listDocumentParent?.map((document, index) => 
+						{ documentID &&listDocumentChild?.map((document, index) => 
 							<Link  key={index} to={`/ppt/project/${projectID}/document/${document._id}`} className="align-top">
 								<div className="border-0.5 border-cbs-border">
 									<div className="flex p-2 min-h-[90px]">

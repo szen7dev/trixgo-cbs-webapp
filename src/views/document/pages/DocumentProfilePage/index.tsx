@@ -1,5 +1,6 @@
 import { FC, useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { DOCUMENT_TYPES } from "apis/localdb";
 
 // ========== Context ==========
 import { ModalContext } from "views/document/contexts/modal";
@@ -29,8 +30,7 @@ export const DocumentProfilePage: FC = () => {
 	const { toggleModal } = useContext(ModalContext);
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
 
-	const { data } = useQueryStatistical(params.id);
-
+	const { data } = useQueryStatistical({ departmentID: params.id });
 	return (
 		<>
 			{/* Content */}
@@ -56,16 +56,16 @@ export const DocumentProfilePage: FC = () => {
 					{data.map((elm, i) => {
 						const formatData = {
 							...elm,
-							name: elm.type === 2 ? "Quyết định" : "Hợp đồng kinh tế",
+							name: DOCUMENT_TYPES[elm.type - 1].text,
 						};
 						return (
-							<div key={i} className="document__card-container">
+							<Link className="document__card-container" key={i} to={`/pcm/project/${ params.id}/document/1/type/${formatData.type}`}>
 								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>
 										<div>
 											<div className="bg-cbs-secondary rounded-md px-2.5 py-0.5 text-x-small text-white">
-												weekly
+												Monthly
 											</div>
 										</div>
 									</div>
@@ -74,10 +74,10 @@ export const DocumentProfilePage: FC = () => {
 										<span className="bg-cbs-up text-cbs-up-text py-0.5 px-1 rounded-sm mr-2.5 text-small">
 											{`${formatData.totalDocumentNew}+`}
 										</span>
-										<span className="text-medium">Tuần này</span>
+										<span className="text-medium">Tháng này</span>
 									</div>
 								</div>
-							</div>
+							</Link>
 						);
 					})}
 				</div>

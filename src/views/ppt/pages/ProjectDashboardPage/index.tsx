@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useLayoutEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 
@@ -35,6 +35,17 @@ import ReportMultipleChart from "./components/ReportMultipleChart";
 
 SwiperCore.use([Navigation]);
 
+// const obj: { readonly [key: string]: number } = { 2: 10, b: 20 }
+// console.log({ obj, l: obj['2'] });
+
+// const f = ({ a, b = 0 } = { a: "" }): Record<string, unknown> => {
+// 	return { a, b }
+// }
+
+// type Props = {
+// 	a?: keyof typeof obj
+// }
+
 const ProjectDashboardPortfolioPage: FC = () => {
 	// --------- Check phân quyền
 	// useCheckPerAccessScreen({
@@ -62,6 +73,17 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
 
+	// useLayoutEffect(() => {
+	// 	(async () => {
+	// 		await new Promise(resolve => setTimeout(() => {
+	// 			resolve('done');
+	// 			console.log('done async task');
+	// 		}, 10000));
+	// 	})();
+	// 	console.log('useLayoutEffect');
+	// })
+	// console.log('Rendering...');
+
 	return (
 		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>
 			<div className={cn(styles['content-container'], styles.scroll, "overflow-y-auto p-4 pt-0 flex-1 h-full")}>
@@ -71,7 +93,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="flex flex-wrap w-full">
 							<div className="flex flex-wrap w-full">
 								{/* Timeline */}
-								<ReportTimeLine className="bg-white mx-2 py-3 px-6 flex items-end mt-4 flex-auto" />
+								<ReportTimeLine className="bg-white mx-2 py-3 px-6 flex items-end mt-4 flex-auto" projectInfo={projectInfo} />
 
 								<div className="flex flex-1">
 									{/* Total Invest */}
@@ -121,4 +143,5 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		</div >
 	);
 };
+
 export default ProjectDashboardPortfolioPage;

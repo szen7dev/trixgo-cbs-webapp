@@ -28,7 +28,8 @@ import {
 	DocumentProjectPage,
 	DocumentProfilePage,
 	DocumentDashboardPage,
-	DocumentOfPackagePage
+	DocumentOfPackagePage,
+	DocumentOfTypePage
 } from 'views/document/pages';
 
 import {
@@ -122,7 +123,7 @@ const PCMRouter: FC = () => {
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Danh sách', path: '/pcm/project/:id/document', navExact: true },
 								{ id: '2', title: 'Phân loại', path: '/pcm/project/:id/document/1' },
-								{ id: '3', title: 'Thư mục', path: '/pcm/project/:id/document/2' },
+								{ id: '3', title: 'Gói thầu', path: '/pcm/project/:id/document/2' },
 								// { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
 								// { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
 							]}>
@@ -140,6 +141,7 @@ const PCMRouter: FC = () => {
 
 							</LayoutSecondary>
 						</Route>
+						<Route exact path='/pcm/project/:id/document/1/type/:type' component={DocumentOfTypePage} />
 						<Route exact path='/pcm/project/:id/package/:packageID' component={DocumentOfPackagePage} />
 						<Route exact path='/pcm/project/:id/group' component={PcmGroupPage} />
 						<Route exact path='/pcm/project/:id/group/:groupID' component={PcmTaskGroupPage} />
