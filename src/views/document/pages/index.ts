@@ -7,3 +7,4 @@ export * from './DocumentProfilePage';
 export * from './DocumentProjectPage';
 export * from './DocumentReportPage';
 export * from './DocumentOfPackagePage';
+export * from './DocumentOfTypePage';

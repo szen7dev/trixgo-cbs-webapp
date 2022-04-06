@@ -72,7 +72,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
         hasNextPage,
         totalRecord,
         totalPage,
-        refetchInfoGroup
+        // refetchInfoGroup
 	} = usePcmPlanGroup({ 
 		projectID, 
 		parentID: groupID,
@@ -81,6 +81,21 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 			select: "image"
 		})
 	}, true);
+
+	const {  
+		infoGroup,
+		refetchInfoGroup
+	} = usePcmPlanGroup({ 
+		groupID, 
+		populates: JSON.stringify({ 
+			path: "parent", 
+			select: "parent sign",
+			populate: {
+				path: "parent", 
+				select: "parent sign"
+			}
+		})
+	}, false, true);
 
 	const { listTasks } = useTask({
 		params: {
@@ -93,22 +108,36 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
 	}, [location?.pathname]);
 
+	useEffect(() => {
+		refetchInfoGroup()
+	}, [groupID]);
+
 	return (
 		<>
 			{/* Content */}
 			<div className="flex flex-col h-full overflow-hidden">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
 					<span className="">{infoDepartment?.data?.sign}</span>
-					<IconArrowRight />
-					<button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
+					{/* <button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
 						</svg>
-					</button>
-					<IconArrowRight />
-						<span className="truncate max-w-[132px]">{infoDepartment?.data?.name}</span>
-					<IconArrowRight />
-					<span>Nhóm dữ liệu</span>
+					</button> */}
+					{/* <IconArrowRight /> */}
+					{ infoGroup?.data?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
+					</Link>
+
+					{ infoGroup?.data?.parent?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
+					</Link>
+
+					{ infoGroup?.data?.parent?.parent?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+					</Link>
 				</div>
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
@@ -188,7 +217,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 												<input className="cbs-checkbox" type="checkbox" />
 											</td>
 											<td className="px-2 py-2">
-												<Link to={`/pcm/detail/${props._id}`} target="_blank" className="align-top">
+												<Link to={`/pcm/detail/${props._id}`}  className="align-top">
 													<FolderIcon type="file" />
 													{props.name}
 												</Link>
