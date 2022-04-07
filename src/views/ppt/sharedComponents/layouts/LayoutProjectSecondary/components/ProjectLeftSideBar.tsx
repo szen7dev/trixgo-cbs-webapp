@@ -35,7 +35,7 @@ const ProjectLeftSideBar: FC = () => {
 				<div className="t-link-menu-container">
 					{!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
 						<NavLink
-							to={{ pathname: generatePath('/pcm/project/:id/admin', match.params) }}
+							to={{ pathname: generatePath('/pcm/project/:id/admin/members', match.params) }}
 							className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
 						>
 							<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
