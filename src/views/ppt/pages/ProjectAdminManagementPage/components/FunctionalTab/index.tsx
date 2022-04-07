@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from "react";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
@@ -8,8 +8,8 @@ import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import iconArrowRight from "assets/images/icon-arrow-right.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
@@ -17,28 +17,40 @@ import { Create, Update, DeleteGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
 
+// const IconArrowRight = () => (
+// 	<div className="">
+// 		<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+// 			<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+// 		</svg>
+// 	</div>
+// )
+
 const FunctionalTab: FC = () => {
-	// Cơ chế của userParams
-	const { id: projectID } = useParams<{ id: string }>();
+	const { id: projectID, itemID: groupID } = useParams<{ id: string, itemID: string }>();
+	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
+	const [breadcrumb, setBreadcrumb] = useState<{ _id: string, name: string }[]>([]);
 
-	const {   
-		isLoading,
-        refetch,
+	const {
         data: listPcmPlanGroup,
         fetchNextPage: fetchNextPagePcmPlanGroup,
         hasNextPage: hasNextPagePcmPlanGroup,
         totalRecord,
-		totalPage
-        } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword }, true, false);
+		refetch: refetchPcmPlanGroup
+    } = usePcmPlanGroup({
+		parentID: groupID,
+		projectID,
+		isShowAll: "1",
+		keyword
+	}, true, false);
 
 	const { openModal } = useModal();
-	
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
-	
+
 	const onClickCheckButton = (id: string) => {
 		const check = idsChecked.includes(id);
 		if (check) {
@@ -65,11 +77,25 @@ const FunctionalTab: FC = () => {
 		}
 	};
 
+	const onClickGroup = (_id: string, name: string) => {
+		setBreadcrumb(previous => ([
+			...previous,
+			{ _id, name }
+		]))
+		history.push(`/pcm/project/${projectID}/admin/groups/${_id}`);
+	}
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Danh sách</p>
+					<p className="text-sm">Danh sách</p>
+					{/* {breadcrumb.length ? breadcrumb.map(group => (
+						<>
+							{group?.name}
+							{(breadcrumb.length > 1 && groupID !== group._id) && <IconArrowRight />}
+						</>
+					)) : 'Danh sách'} */}
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -78,7 +104,6 @@ const FunctionalTab: FC = () => {
 							500
 						)}
 					/>
-					{/* <FinancialCashFlowFilterButton /> */}
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
 							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
@@ -94,7 +119,10 @@ const FunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword}/>
+												<Update 
+													item={listPcmPlanGroup.find((e: any)=> e._id == idsChecked[0])} 
+													onConfirm={refetchPcmPlanGroup}
+												/>
 											</div>
 										)
 									}
@@ -111,7 +139,10 @@ const FunctionalTab: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteGroup idsChecked={idsChecked} setIdsChecked={setIdsChecked} projectID={projectID} keyword={keyword} />
+											<DeleteGroup 
+												idsChecked={idsChecked}
+												onConfirm={refetchPcmPlanGroup}
+											/>
 										</div>
 									)
 								}
@@ -131,7 +162,11 @@ const FunctionalTab: FC = () => {
 										"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create projectID={projectID} keyword={keyword} />
+									<Create 
+										projectID={projectID} 
+										parentID={groupID}
+										onConfirm={refetchPcmPlanGroup}
+									/>
 								</div>
 							)
 						}
@@ -143,19 +178,18 @@ const FunctionalTab: FC = () => {
 					</button>
 				</div>
 			</header>
-			
+
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1">
@@ -176,9 +210,12 @@ const FunctionalTab: FC = () => {
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
+						<th className="w-1/3 pb-1 pt-1 font-normal">
+							<div className="font-normal pl-2">#</div>
+						</th>
 					</tr>
 				</thead>
-				
+
 				{listPcmPlanGroup && listPcmPlanGroup.length ?
 					<tbody className="bg-primary-light text-left">
 						{listPcmPlanGroup.map((item: any, index: number) => (
@@ -187,28 +224,33 @@ const FunctionalTab: FC = () => {
 									<input
 										className="form-check-input"
 										type="checkbox"
-										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/project/${projectID}/admin#${item._id}`}>
-										<div className="flex items-center">
+									<button onClick={() => onClickGroup(item._id, item.name)}>
+										<div className="flex text-left">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
-									</Link>
+									</button>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item?.members.length}
+									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`}>
+										{item?.members.length}
+									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`} className="underline text-sky-600">
+										Xem thành viên
+									</Link>
 								</td>
 							</tr>
 						))
@@ -216,7 +258,7 @@ const FunctionalTab: FC = () => {
 					</tbody> : <></>
 				}
 			</table>
-			
+
 			{hasNextPagePcmPlanGroup && (
 				<div className="w-full flex justify-center my-5">
 					<button onClick={() => fetchNextPagePcmPlanGroup()}>

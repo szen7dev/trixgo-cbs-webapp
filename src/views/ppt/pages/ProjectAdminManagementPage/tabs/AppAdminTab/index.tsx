@@ -1,28 +1,24 @@
 import { FC } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import { AdminMember, GroupMember, FunctionalTab, PackageDocumentMember, PackageDocument  } from "../../components";
 
-type Props = {
-  toggleTab: number;
-};
-
-const AppAdminTab: FC<Props> = (props) => {
-  const { toggleTab } = props;
-  const { hash: hashParam } = useLocation();
+const AppAdminTab: FC = () => {
+  const { pathname } = useLocation();
+  const { tab, itemID } = useParams<{ tab: string, itemID: string }>()
 
   return (
     <section>
-      <div className={toggleTab === 1 ? "block" : "hidden"}>
+      <div className={tab === 'members' ? "block" : "hidden"}>
         <AdminMember />
       </div>
 
-      <div className={toggleTab === 2 ? "block" : "hidden"}>
-        {hashParam ? <GroupMember groupID={hashParam.substring(1)} /> : <FunctionalTab />}
+      <div className={tab === "groups" ? "block" : "hidden"}>
+        {(itemID && pathname.endsWith('members')) ? <GroupMember groupID={itemID} /> : <FunctionalTab />}
       </div>
 
-      <div className={toggleTab === 3 ? "block" : "hidden"}>
-        {hashParam ? <PackageDocumentMember packageID={hashParam.substring(1)} /> : <PackageDocument />}
+      <div className={tab === "packages" ? "block" : "hidden"}>
+        {itemID ? <PackageDocumentMember packageID={itemID} /> : <PackageDocument />}
       </div>
     </section>
   );

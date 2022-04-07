@@ -1,42 +1,53 @@
-import { FC, useState } from "react";
-
-import { useModal } from "services/hooks/useModal";
+import React, { FC, useState } from "react";
+import { toast } from "react-toastify";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { toast } from "react-toastify";
+
+import { useModal } from "services/hooks/useModal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 
-const Create: FC<any> = ({ projectID, keyword }) => {
+type Props = {
+  projectID?: string;
+  parentID?: string;
+  onConfirm: () => void;
+}
+
+const Create: FC<Props> = ({ parentID, projectID, onConfirm }) => {
   const { closeModal } = useModal();
+  const [formData, setFormData] = useState({
+    name: '',
+    sign: ''
+  })
 
-  const [name, setName] = useState("");
-  const [sign, setSign] = useState("");
-
-  const {   
-    createPcmPlanGroupMutateAsync,
-    refetch
-  } = usePcmPlanGroup({ projectID,  isShowAll: "1", keyword }, false, false);
+  const { createPcmPlanGroupMutateAsync } = usePcmPlanGroup({});
 
   const onCreate = async () => {
-    if (!name || !sign) {
+    if (!formData.name || !formData.sign) {
       return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
     }
 
     const result = await createPcmPlanGroupMutateAsync({
         projectID,
-        name,
-        sign
+        parentID,
+        ...formData
     });
 
     if (!result.error) {
-      setName("");
       closeModal();
+      onConfirm();
       toast.success('Tạo nhóm dữ liệu thành công');
-      refetch()
     } else {
       toast.error(result?.data?.message);
     }
   };
+
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(previous => ({
+      ...previous,
+      [name]: value
+    }))
+  }
 
   return (
     <main className="relative h-full">
@@ -46,18 +57,18 @@ const Create: FC<any> = ({ projectID, keyword }) => {
           src={CloseIcon}
           alt="Close"
           className="cursor-pointer"
-          onClick={() => closeModal()}
+          onClick={closeModal}
         />
       </header>
 
       <section className="px-10 py-2">
         <input
           type="text"
-          id="inputGroupName"
           placeholder="Nhập tên nhóm dữ liệu"
           className="h-12 w-full border border-primary-border outline-none px-8"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          name="name"
+          onChange={onChangeInput}
         />
       </section>
 
@@ -66,8 +77,9 @@ const Create: FC<any> = ({ projectID, keyword }) => {
           type="text"
           placeholder="Nhập mã hiệu"
           className="h-12 w-full border border-primary-border outline-none px-8"
-          value={sign}
-          onChange={(e) => setSign(e.target.value)}
+          value={formData.sign}
+          name="sign"
+          onChange={onChangeInput}
         />
       </section>
 
