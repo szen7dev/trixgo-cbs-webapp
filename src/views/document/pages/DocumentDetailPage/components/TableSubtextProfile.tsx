@@ -1,6 +1,6 @@
 import React, { FC, HTMLAttributes } from "react";
 import moment from "moment";
-
+import { Link } from 'react-router-dom';
 import type { UseQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 
 interface TableSubtextProfileProps extends HTMLAttributes<HTMLTableElement> {
@@ -62,9 +62,9 @@ export const TableSubtextProfile: FC<TableSubtextProfileProps> = ({
           {(docChildPayload?.listDocumentChild?.length) ? docChildPayload.listDocumentChild?.map((doc, i) => (
             <tr key={doc._id}>
               <td className="py-3 px-3">
-                <a href={`/ppt/project/61c41cca87808f16744773ec/document/${doc._id}`} target="_blank" rel="noreferrer"> 
-                  {doc.name || ''}
-                 </a>
+                  <Link to={`/ppt/project/${doc?.project}/document/${doc._id}`} className="ml-3 mr-3">
+                    {doc.name || ''}
+                  </Link>
                 </td>
               <td className="py-3 px-3">{doc.sign || ''}</td>
               <td className="py-3 px-3">{moment(doc.date).isValid() && moment(doc.date).format('DD/MM/YYYY') || ''}</td>
