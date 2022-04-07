@@ -1,5 +1,5 @@
 // MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { DepartmentRepository } from 'apis/item';
 
 export const usePcmProject = (payload: any): any => {
@@ -13,6 +13,12 @@ export const usePcmProject = (payload: any): any => {
             DepartmentRepository.updateDepartments(payload)
         );
 
+    const { data: infoDepartment } = 
+    useQuery("department_info", () => DepartmentRepository.fetchDetailDepartment(payload), {
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
+
     // Get danh sách
     const {
         isLoading: isLoadingPcmProject,
@@ -23,7 +29,7 @@ export const usePcmProject = (payload: any): any => {
     } = useInfiniteQuery([`app_admin_list_project`, payload.keyword], async (pageParam: any) => {
             return DepartmentRepository.fetchListDepartment({
                 lastestID: pageParam?.pageParam ? pageParam?.pageParam : "",
-                select: "name sign startTime expiredTime milestones completedMilestones members type",
+                select: "name sign startTime expiredTime milestones completedMilestones members type budget vatBudget forecastBudget vatForecastBudget contractValue contractVatValue contractPlus contractVatPlus contractAdvancePaymentPaid contractAmountPaid",
                 keyword: payload.keyword,
                 limit: 20
             })
@@ -44,12 +50,11 @@ export const usePcmProject = (payload: any): any => {
     return {
         createProjectMutateAsync,
         isLoadingCreateProject,
-
         updateProjectMutateAsync,
         isLoadingUpdateProject,
-
         isLoadingPcmProject,
         listPcmProject,
+        infoDepartment: infoDepartment,
         totalRecord,
         totalPage,
         nextPagePcmProject,

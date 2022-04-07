@@ -3,7 +3,7 @@ import { SocialArticles } from "views/media/shareComponents/common";
 import { PostType } from 'typings/media';
 
 import { useMedia } from 'services/hooks/useMedia';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 
 import { ListMediasPayload } from 'typings/media';
 import { Loader } from 'shareComponents/common';

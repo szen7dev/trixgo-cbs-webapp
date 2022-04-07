@@ -303,9 +303,9 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Phân loại</p>
                   <DropdownSearchable
                     onchangeValue={(value) =>
-                      setFieldValue("subType", value.id)
+                      setFieldValue("subtype", value.id)
                     }
-                    onClearData={() => setFieldValue("subType", "")}
+                    onClearData={() => setFieldValue("subtype", "")}
                     placeholder={"Phân loại"}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
                     focusedClass={"border-b border-primary"}
@@ -450,7 +450,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                               "inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
                             }
                           >
-                            <ModalCreateResultSearch />
+                            <ModalCreateResultSearch condition={values} />
                           </div>
                         )
                       }}

@@ -1,9 +1,8 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { ContractIncome } from "typings/contractIncome";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
-export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
+export const UseContractIncomeList = (pageParam = '', keyword = '', limit = 10): any => {
 
     const {
         status,
@@ -11,12 +10,13 @@ export const UseContractIncomeList = (pageParam = '', limit = 10): any => {
         error,
         refetch
     } = useQuery(
-        ["contractIncomeList", { pageParam }],
+        ["contractIncomeList", { pageParam, keyword }],
         async (pageParams: any) => {
             const [, { pageParam }] = pageParams.queryKey;
             return ContractIncomeRepository.fetchList({
                 limit,
                 lastestID: pageParam || "",
+                keyword: keyword
             })
         },
         { keepPreviousData: true }

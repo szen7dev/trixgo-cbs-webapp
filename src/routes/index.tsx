@@ -36,6 +36,7 @@ const QrcodeRouter = lazy(() => import("./qrcode"));
 const ReeRouter = lazy(() => import("./ree"));
 const SupportRouter = lazy(() => import("./support"));
 const TimesheetRouter = lazy(() => import("./timesheet"));
+const ItemRouter = lazy(() => import("./item"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
@@ -169,6 +170,11 @@ const Routes: FC = () => {
                                 {/* =====SUPPORT===== */}
                                 <Route path="/support">
                                     <SupportRouter />
+                                </Route>
+
+                                {/* =====ITEM===== */}
+                                <Route path="/item">
+                                    <ItemRouter />
                                 </Route>
 
                                 {/* =====WORKSHOP===== */}

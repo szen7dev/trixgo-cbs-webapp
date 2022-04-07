@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";
@@ -13,14 +13,19 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 
-import { CreateNewAdminMember, DeleteMembers } from "../modal";
+import { CreateNewProjectAdminMember, DeleteProjectMembers } from "../modal";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { DepartmentRepositories } from "apis/item/department";
 import { ResponseData } from "typings/apis/response";
 import { Department } from "typings/items";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
 const ProjectAdminProjectDetail: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	// ID của dự án
 	const { id } = useParams<{ id: string }>();
 	// const [keyword, setKeyword] = useState("");
@@ -80,6 +85,13 @@ const ProjectAdminProjectDetail: FC = () => {
 		}
 	}, [data?.data._id])
 
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
+
 	return (
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
@@ -109,7 +121,7 @@ const ProjectAdminProjectDetail: FC = () => {
 												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 											}
 										>
-											<DeleteMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+											<DeleteProjectMembers appID={data?.data._id} idsChecked={checked.map(d => d._id)} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
 										</div>
 									)
 								}>
@@ -128,7 +140,7 @@ const ProjectAdminProjectDetail: FC = () => {
 										"inline-block w-[600px] h-[630px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded-lg"
 									}
 								>
-									<CreateNewAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetch} />
+									<CreateNewProjectAdminMember appRoleID={id} companyID={data?.data.company} refetchGetListAppRoleMenu={refetch} />
 								</div>
 							)
 						}
@@ -234,7 +246,7 @@ const ProjectAdminProjectDetail: FC = () => {
 													"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
 												}
 											>
-												<DeleteMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
+												<DeleteProjectMembers appID={data?.data._id} idsChecked={[member._id]} setIdsChecked={() => null} refetchGetListAppRoleMenu={refetch} />
 											</div>
 										)
 									}>

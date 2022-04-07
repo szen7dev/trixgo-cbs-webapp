@@ -21,7 +21,7 @@ export const useQueryListDocumentFile = (params: DocumentFileQueryPayload): UseQ
     const { mutateAsync: createDocumentFileMutateAsync, isLoading: isLoadingCreateDocumentFile } =
       useMutation((params: any) => DocumentFileRepository.insertDocumentFile(params)
     );
-
+    
     const res = useInfiniteQuery(
         [`document-files`, { params }],
         async ({ pageParam }: any) =>

@@ -1,98 +1,10 @@
 import React, { FC } from "react";
-
-import fakeThumbnail from "assets/images/avatar.jpg";
 // import iconFolder from "assets/images/icons8-application-window-100.png";
 import { NavLink, useRouteMatch, generatePath, useParams } from 'react-router-dom';
-import { useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
-
-type RouteItem = {
-	path: string,
-	name: string,
-	image: string,
-	exact?: boolean,
-	strict?: boolean,
-	isActive?(match: any, location: any): boolean
-}
-
-export const routes: Array<RouteItem> = [
-	{
-		path: '/pcm/project/:id/admin',
-		name: 'Quản trị viên',
-		image: '/images/pcm/admin.png',
-	},
-	// {
-	// 	path: '/pcm/project/:id/home',
-	// 	name: 'Trang chủ',
-	// 	image: '/images/pcm/application.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/dashboard',
-	// 	name: 'Báo cáo quản trị',
-	// 	image: '/images/pcm/graph-report.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/folder',
-	// 	name: 'Thư mục dữ liệu',
-	// 	image: '/images/pcm/shared-folder.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/schedule',
-	// 	name: 'Tiến độ',
-	// 	image: '/images/pcm/gantt-chart.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/budget',
-	// 	name: 'Ngân sách và kế hoạch',
-	// 	image: '/images/pcm/budget-plan.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/bidding',
-	// 	name: 'Lựa chọn nhà thầu',
-	// 	image: '/images/pcm/bidding.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/payment',
-	// 	name: 'Báo cáo',
-	// 	image: '/images/pcm/statistic-document.png',
-	// },
-	{
-		path: '/pcm/project/:id/document',
-		name: 'Hồ sơ văn bản',
-		image: '/images/pcm/paid-bill.png',
-	},
-
-	{
-		path: '/pcm/project/:id/group',
-		name: 'Thư mục dữ liệu',
-		image: '/images/pcm/folder.png',
-	},
-	// {
-	// 	path: '/pcm/project/:id/photo',
-	// 	name: 'Hình ảnh',
-	// 	image: '/images/pcm/photo-gallery.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/drawing',
-	// 	name: 'Bản vẽ và chỉ dẫn',
-	// 	image: '/images/pcm/drawing-compass.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/resource',
-	// 	name: 'Quản lý vật tư',
-	// 	image: '/images/pcm/material.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/inspection',
-	// 	name: 'Nghiệm thu chất lượng',
-	// 	image: '/images/pcm/paid-bill.png',
-	// },
-	// {
-	// 	path: '/pcm/project/:id/directory',
-	// 	name: 'Danh bạ dự án',
-	// 	image: '/images/pcm/contact.png',
-	// },
-]
+import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 
 const ProjectLeftSideBar: FC = () => {
 	const { user } = useAuth();
@@ -100,6 +12,9 @@ const ProjectLeftSideBar: FC = () => {
 	// Gọi lại hook department
 	const { onFetchDetailDepartmentAsync, detailDepartment } = useQueryDetailDepartment();
 	const { id: projectID } = useParams<{ id: string }>();
+
+	const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.PCM.id, parentID: APP_ID.PCM.menuPcmProject.id });
+	const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "2", companyID: detailDepartment?.company?._id }, detailDepartment?.company?._id ? true : false); 
 	
 	React.useEffect(() => {
 		if (projectID) {
@@ -112,38 +27,60 @@ const ProjectLeftSideBar: FC = () => {
 			<div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
 				{/* title */}
 				<div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-					<img src={detailDepartment?.image ? `${process.env.REACT_APP_URL_S3}/${detailDepartment?.image}` : "/static/media/project.8fd16481.jpg"} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+					<img src={detailDepartment?.image ? `${process.env.REACT_APP_URL_S3}/${detailDepartment?.image}` : "/static/media/project.8fd16481.jpg"} alt="Thumbnail" className="w-10 h-10 mr-3" />
 					<span className="truncate" title={detailDepartment?.sign + "." + detailDepartment?.name}>{detailDepartment?.sign}.{detailDepartment?.name}</span>
 				</div>
 
 				{/* menu block */}
 				<div className="t-link-menu-container">
-					{	
-						routes.map((route, index) => {
-							// Nếu không phải admin thì không hiển thị tab quản trị viên
-							if(!detailDepartment?.admins?.includes(user?._id || "") && index == 0){
-								return;
+					{!detailDepartment?.admins?.includes(user?._id || "") ? <></> :
+						<NavLink
+							to={{ pathname: generatePath('/pcm/project/:id/admin', match.params) }}
+							className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+						>
+							<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
+							<span className="truncate">Quản trị viên</span>
+						</NavLink>
+					}
+					<NavLink
+						to={{ pathname: generatePath('/pcm/project/:id/home', match.params) }}
+						className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+					>
+						<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+						<span className="truncate">Trang chủ</span>
+					</NavLink>
+					<NavLink
+						to={{ pathname: generatePath('/pcm/project/:id/subject', match.params) }}
+						className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+					>
+						<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+						<span className="truncate">Quản lý công việc</span>
+					</NavLink>
+					{listAppMenu && listAppMenu.length ?
+						<>
+							{listAppMenu.map((item: any, index: number) => {
+								const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+								if (roleApp && roleApp.read >= 1) {
+									return (
+										<NavLink
+											key={index}
+											to={{ pathname: generatePath(`/pcm/project/:id/${item.slug}`, match.params) }}
+											className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
+										>
+											<img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/folder.png'} alt="Menu item" />
+											<span className="truncate">{item.name}</span>
+										</NavLink>
+									)
+								};
+								return <div key={index}></div>
+							})
 							}
-							return (
-								<NavLink
-									key={index}
-									to={{ pathname: generatePath(route.path, match.params), }}
-									exact={route.exact}
-									strict={route.strict}
-									isActive={route.isActive}
-									className="t-link-menu-item flex items-center text-primary-gray py-2 pl-8 pr-3 text-medium"
-								>
-									<img className="w-6 h-6 object-contain mr-3" src={route.image} alt="Menu item" />
-									<span className="truncate">{route.name}</span>
-								</NavLink>
-							)
-						})
+						</> : <></>
 					}
 				</div>
-
 			</div>
 		</div>
 	)
 }
 
-export default ProjectLeftSideBar
+export default ProjectLeftSideBar;

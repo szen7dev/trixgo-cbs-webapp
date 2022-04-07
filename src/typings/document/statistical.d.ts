@@ -15,3 +15,16 @@ export interface StatisticQueryDocumentResponse extends APIResponse {
         listRecords: StatisticProps[];
     }
 }
+
+// DANH SÁCH DỰ ÁN VÀ SỐ LƯỢNG VĂN BẢN
+export interface ListProjectWithAmountDocumentPayload {
+    fromDate?: string;
+    toDate?: string;
+}
+
+export interface ListProjectWithAmountDocumentResponse extends APIResponse {
+    data: {
+        listProject: any,
+        listAmountDocument: any,
+    }
+}

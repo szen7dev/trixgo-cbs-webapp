@@ -27,10 +27,10 @@ async function fetchListDepartmentIsMember(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/list-department-is-members`, {
         params: {
-            select: "name description sign company startTime expiredTime milestones numberOfDocs completedMilestones stage createAt members",
+            select: "name description sign company image startTime expiredTime milestones numberOfDocs completedMilestones stage createAt members",
             populates: {
-                "path": "members",
-                "select": "fullname bizfullname name sign image"
+                "path": "members company",
+                "select": "_id fullname bizfullname name sign image"
             },
             ...params
         }
@@ -42,15 +42,15 @@ async function fetchListDepartmentIsMember(params: any) {
 async function fetchDetailDepartment(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/departments`, {
-        params: {
-            select: 'name sign description contracts company admins members image',
-            populates: {
-                path: 'company',
-                select: '_id name sign',
-            },
-            ...params,
+            params: {
+                select: 'name sign description contracts company admins members image startTime',
+                populates: {
+                    path: 'company',
+                    select: '_id name sign',
+                },
+                ...params,
+            }
         }
-    }
     )
     return data;
 }
@@ -105,7 +105,7 @@ export const DepartmentRepositories = {
 		return data;
 	},
 
-    // DANH SÁCH THÀNH VIÊN TRONG DỰ ÁN
+    // DANH SÁCH THÀNH VIÊN CỦA CẢ HỆ THỐNG
     async getListUserInProject(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `/api/auth/users?${convertObToUrl({

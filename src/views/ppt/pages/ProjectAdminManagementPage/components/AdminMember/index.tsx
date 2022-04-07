@@ -8,7 +8,6 @@ import debounce from "lodash/debounce";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
@@ -68,9 +67,7 @@ const AdminMember: FC = () => {
 				break;
 		}
 
-		console.log({ body })
 		const response = await DepartmentRepositories.addOrRemoveMemberToDepartment(body);
-		console.log({ response })
 		if (response.error === false) {
 			// Thành công 
 			toast.success('Cập nhật thành công');
@@ -148,14 +145,11 @@ const AdminMember: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="cbs-checkbox mr-2"
+									className="cbs-checkbox"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									ref={checkboxRef}
 									onClick={handleCheckAll}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/5 pb-1 pt-1">
@@ -191,9 +185,7 @@ const AdminMember: FC = () => {
 								<input
 									className="cbs-checkbox"
 									type="checkbox"
-									value=""
 									id={member._id}
-									style={{ marginLeft: "-23px" }}
 									checked={Boolean(assigned[member._id])}
 									onChange={e => handleChangeCheckbox(e, member)}
 								/>

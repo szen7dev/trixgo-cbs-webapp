@@ -1,6 +1,7 @@
 export { default as ProjectAdminManagementPage } from "./ProjectAdminManagementPage";
 export { default as ProjectBiddingPage } from "./ProjectBiddingPage";
 export { default as ProjectBudgetPage } from "./ProjectBudgetPage";
+export { default as ProjectCashFlowPlanPage } from "./ProjectCashFlowPlanPage";
 export { default as ProjectCategoryPage } from "./ProjectCategoryPage";
 export { default as ProjectDashboardPage } from "./ProjectDashboardPage";
 export { default as ProjectDashboardPortfolioPage } from "./ProjectDashboardPortfolioPage";
@@ -15,7 +16,8 @@ export { default as ProjectHomePage } from "./ProjectHomePage";
 export { default as ProjectMomPage } from "./ProjectMomPage";
 export { default as ProjectOtherPage } from "./ProjectOtherPage";
 export { default as ProjectPaymentPage } from "./ProjectPaymentPage";
-export { default as ProjectPhotoPackagePage } from "./ProjectPhotoPackagePage";
+export { default as ProjectSubjectPage } from "./ProjectSubjectPage";
+export { default as ProjectPhotoContractPage } from "./ProjectPhotoContractPage";
 export { default as ProjectPhotoPage } from "./ProjectPhotoPage";
 export { default as ProjectProductionPage } from "./ProjectProductionPage";
 export { default as ProjectPunchPage } from "./ProjectPunchPage";

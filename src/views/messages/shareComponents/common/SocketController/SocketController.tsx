@@ -20,6 +20,7 @@ import {RootState} from "redux/reducer";
 import {pushMoreUnreadMessage} from "redux/reducer/messages/UnreadMessages";
 import {UseInformationMessage} from "services/hooks/messages/useInformationMessage";
 import {populates} from "../../../pages/MessageHome";
+import Favico from "react-favico-js";
 
 type Props = {
     context: any;
@@ -33,6 +34,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     const inSearchMode = useSelector((state: RootState) => state.searchMessage.data.inSearchMode[currentChat]);
     const amountMissMessage = useSelector((state: RootState) => state.listConversation.data.amountMissMessage);
+    const isReviewOldMessage = useSelector((state: RootState) => state.listMessage.data.isReviewOldMessage[currentChat]);
 
     const socket = socketRef.current;
     const {getListConversation} = UseListConversation();
@@ -110,7 +112,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
             if (currentChat === data?.infoMessage?.conversation) {
                 dispatch(pushMoreUnreadMessage({conversationId: data?.infoMessage?.conversation, messagesId: [data?.infoMessage?._id]}));
             }
-            if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
+            if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage){
                 setTimeout(() => {
                     scrollToBottom();
                 }, 100)
@@ -144,7 +146,7 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
         if ([101, 102, 107].includes(data?.data?.type)) {
             refetchListMembers();
         }
-        if (!inSearchMode && currentChat === data?.infoMessage?.conversation){
+        if (!inSearchMode && currentChat === data?.infoMessage?.conversation && !isReviewOldMessage){
             setTimeout(() => {
                 scrollToBottom();
             }, 100)
@@ -275,5 +277,6 @@ export const SocketController:FC<Props> = ({context, currentChat}) => {
 
     return <>
         <audio src={"/sounds/messages/teaser.mp3"} ref={audioRef}/>
+        <Favico counter={amountMissMessage}/>
     </>;
 };

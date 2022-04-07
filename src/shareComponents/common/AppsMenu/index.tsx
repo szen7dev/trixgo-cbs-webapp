@@ -8,7 +8,8 @@ import supportLogo from "assets/logos/support.png";
 
 import API from "apis/repository";
 import { APP_INFO as AppInfo } from "./components";
-import { useGetListAppOfUser, useAuth } from "services/hooks/useAuth";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useGetListAppOfUser } from "services/hooks/auth/usePermissions";
 
 export const APP_INFO = AppInfo;
 

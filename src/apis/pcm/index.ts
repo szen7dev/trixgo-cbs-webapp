@@ -1,12 +1,9 @@
 import API from "../repository";
 
-// Convert Object sang URL query => khi client truyền lên
 import { convertObToUrl } from "utils";
 
-// Khai báo chính xác kiểu trả về nếu biết
-import { ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload } from "typings/pcm";
+import { AddConditionTaskReportPayload, FilesPcmGroupByContractResponse, FilesPcmGroupByDateResponse, ListFilesPcmGroupByContract, ListFilesPcmGroupByDate, ListFilesPcmPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
 
-// Đường dẫn Endpoint
 const pcmURL = "/api/subject_pcm";
 
 const PcmRepository = {
@@ -17,6 +14,75 @@ const PcmRepository = {
         return data;
     },
 
+    async addConditionTaskReport(payload: AddConditionTaskReportPayload): Promise<any> {
+        const { data } = await API.post<any>(
+            `${pcmURL}/pcm_plan_reports`, payload
+        );
+        return data;
+    },
+
+    async updateConditionTaskReport(payload: UpdateConditionTaskReportPayload): Promise<any> {
+        const { data } = await API.put<any>(
+            `${pcmURL}/pcm_plan_reports`, payload
+        );
+        return data;
+    },
+
+    async getInfoReports(id: string): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_reports?${convertObToUrl({
+                select: "name company description conditionPin author type createAt",
+                populates: JSON.stringify({
+                    path: "company author",
+                    select: "_id name sign bizfullname image"
+                }),
+                subjectID: id
+            })}`
+        );
+        return data;
+    },
+
+    async listReports(payload: ListReportsPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_plan_reports?${convertObToUrl({
+                select: "name company description conditionPin author type createAt",
+                populates: JSON.stringify({
+                    path: "company author",
+                    select: "_id name sign bizfullname image"
+                }),
+                ...payload
+            })}`
+        );
+        return data;
+    },
+
+    async listFilesPcm(payload: ListFilesPcmPayload): Promise<any> {
+        const { data } = await API.get<any>(
+            `${pcmURL}/pcm_files?${convertObToUrl({
+                // populates: JSON.stringify({
+                //     path: "project contract",
+                //     select: "_id name sign"
+                // }),
+                ...payload
+            })}`
+        );
+        return data;
+    },
+
+    async listFilesPcmGroupByDate(payload: ListFilesPcmGroupByDate): Promise<FilesPcmGroupByDateResponse> {
+        const { data } = await API.get<FilesPcmGroupByDateResponse>(
+            `${pcmURL}/pcm_files/group-by-date?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+
+    async listFilesPcmGroupByContract(payload: ListFilesPcmGroupByContract): Promise<FilesPcmGroupByContractResponse> {
+        const { data } = await API.get<FilesPcmGroupByContractResponse>(
+            `${pcmURL}/pcm_files/group-by-contract?${convertObToUrl(payload)}`
+        );
+        return data;
+    },
+    
     // Data 1
     async listTasks(payload: ListTasksPayload): Promise<ListTasksResponse> {
         const { data } = await API.get<ListTasksResponse>(
@@ -83,6 +149,15 @@ const PcmRepository = {
         );
         return data;
     },
+
+    async fetchListPCMWithAmountProjects(params?: any) {
+        const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-of-projects`, {
+            params: {
+                ...params
+            }
+        });
+        return data;
+    }
 };
 
 // console.log('==============>>>>>')

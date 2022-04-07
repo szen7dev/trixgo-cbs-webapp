@@ -1,13 +1,25 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useLayoutEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
+import { useParams } from 'react-router-dom';
 
 import cn from "classnames";
 import 'chartjs-adapter-moment';
 import 'moment/locale/vi';
 
+/**
+ * Hooks, Typings
+ */
+import { useProject } from 'services/hooks/items/useProject';
+import { useContractPayment } from 'services/hooks/cmcs/useContractPayment';
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
+
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
 
+/**
+ * Components
+ */
 import ReportTimeLine from "./components/ReportTimeLine";
 import ReportTotal from "./components/ReportTotal";
 import ReportActivity from "./components/RreportActivity";
@@ -23,10 +35,54 @@ import ReportMultipleChart from "./components/ReportMultipleChart";
 
 SwiperCore.use([Navigation]);
 
+// const obj: { readonly [key: string]: number } = { 2: 10, b: 20 }
+// console.log({ obj, l: obj['2'] });
+
+// const f = ({ a, b = 0 } = { a: "" }): Record<string, unknown> => {
+// 	return { a, b }
+// }
+
+// type Props = {
+// 	a?: keyof typeof obj
+// }
+
 const ProjectDashboardPortfolioPage: FC = () => {
+	// --------- Check phân quyền
+	// useCheckPerAccessScreen({
+	// 	appID: APP_ID.PCM.id,
+	// 	menuID: APP_ID.PCM.menuPcmProject.dashboard.id,
+	// 	type: "2"
+	// });
+	// ---------
+	const { id: projectID } = useParams<{ id: string }>();
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID
+		},
+		isFetchInfo: true
+	})
+
+	const { listAmountContractValueByDate } = useContractPayment({
+		params: {
+			projectID
+		},
+		isFetchListAmountContractValue: true
+	})
+
 	useEffect(() => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
+
+	// useLayoutEffect(() => {
+	// 	(async () => {
+	// 		await new Promise(resolve => setTimeout(() => {
+	// 			resolve('done');
+	// 			console.log('done async task');
+	// 		}, 10000));
+	// 	})();
+	// 	console.log('useLayoutEffect');
+	// })
+	// console.log('Rendering...');
 
 	return (
 		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>
@@ -37,7 +93,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 						<div className="flex flex-wrap w-full">
 							<div className="flex flex-wrap w-full">
 								{/* Timeline */}
-								<ReportTimeLine className="bg-white mx-2 py-3 px-6 flex items-end mt-4 flex-auto" />
+								<ReportTimeLine className="bg-white mx-2 py-3 px-6 flex items-end mt-4 flex-auto" projectInfo={projectInfo} />
 
 								<div className="flex flex-1">
 									{/* Total Invest */}
@@ -49,20 +105,20 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							</div>
 
 							{/* Chartjs */}
-							<ReportChart className='bg-white mx-2 w-full mt-4' />
+							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} contractValues={listAmountContractValueByDate} />
 
 							{/* Images */}
-							<ReportImage className="w-full px-2" />
+							<ReportImage className="w-full px-2" projectInfo={projectInfo} />
 
 							<div className="flex flex-wrap w-full">
 								{/* Budget and Cost */}
-								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} />
+								<ReportBudget className={cn(styles['budget-wrapper'], "bg-white flex-auto mx-2 mt-4")} projectInfo={projectInfo} />
 								<div className="flex flex-1">
 									{/* Contractor */}
-									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} />
+									<ReportContractor className={cn(styles['contractor-wrapper'], "bg-white mx-2 flex-1 mt-4")} projectInfo={projectInfo} />
 
 									{/* Profile */}
-									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} />
+									<ReportProfile className={cn(styles['profile-wrapper'], "bg-white mx-2 flex-1 mt-4 whitespace-nowrap")} projectInfo={projectInfo} />
 								</div>
 							</div>
 						</div>
@@ -87,4 +143,5 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		</div >
 	);
 };
+
 export default ProjectDashboardPortfolioPage;

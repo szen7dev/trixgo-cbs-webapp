@@ -1,5 +1,6 @@
 import { FC } from "react";
-
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 import { ReceivableReport } from "./components/";
 import RevenueBySectorReport from "./components/RevenueBySectorReport";
 import RevenueOverTimeReport from "./components/RevenueOverTimeReport";
@@ -15,14 +16,19 @@ import StatusReport from "./components/StatusReport";
 
 // Import data từ API
 import { useCmcs } from 'services/hooks/useCmcs';
-import { useAuth } from "services/hooks/useAuth";
-
+import { useAuth } from "services/hooks/auth/useAuth";
 export const CmcDashboardPage: FC = () => {
+
+  // --------- Check phân quyền
+  useCheckPerAccessScreen({
+    appID: APP_ID.CMCS.id,
+    menuID: APP_ID.CMCS.menuCmcsApp.dashboard.id,
+    type: "1"
+  });
+  // ---------
+
   const { user } = useAuth();
   const { listContracts } = useCmcs({ companyID: user?.company._id });
-  // console.log('============>>>>>>>>>>>>>>')
-  // console.log(user)
-  // console.log(listContracts)
 
   return (
     <main className="flex w-full bg-cbs-gray h-max p-3">

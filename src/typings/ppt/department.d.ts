@@ -26,9 +26,15 @@ export type DataBlock1 = Array<{
 export type DataBlock2 = Array<{
   _id: null | string;
   budget: number;
-  forecastBudget: number;
-  contractValueContractPlusValueContractVatValue: number;
+  contractAdvancePaymentPaid: number;
   contractAmountPaid: number;
+  contractPlus: number;
+  contractValue: number;
+  contractVatPlus: number;
+  contractVatValue: number;
+  forecastBudget: number;
+  vatBudget: number;
+  vatForecastBudget: number;
 }>;
 
 export type DataBlock3 = Array<{
@@ -95,6 +101,7 @@ export type DataCommon<P, Sn> = {
   level: number;
   admins: string[];
   members: string[];
+  image: string;
   type: number;
   stage?: number;
   status: number;
@@ -133,6 +140,14 @@ export type DataProjectPart<P, Sn> = {
   expiredTime: string;
   actualStartTime: string | null;
   actualFinishTime: string | null;
+  budget: number;
+  forecastBudget: number;
+  contractValue: number;
+  contractPlusValue: number;
+  contractVatValue: number;
+  contractAmountPaid: number;
+  milestones: number;
+  completedMilestones: number;
 };
 
 export type DataDepartmentPart<P, Sn> = {

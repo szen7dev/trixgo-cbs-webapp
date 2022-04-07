@@ -22,13 +22,14 @@ import {
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
   ListReactionPayload,
-  updateTaskPayload
+  updateTaskPayload,
+  UpdateResponsePayload
 } from "typings/task";
 import { convertObToUrl } from "utils";
 
 const populatesTask = JSON.stringify({
-  path: "group author assignee related parent project company field approver authorAttachs signatures",
-  select: "_id name fullname bizfullname image sign _id name nameOrg size path mimeType type author createAt members",
+  path: "group contract author assignee related parent project company field approver authorAttachs assigneeAttachs signatures",
+  select: "_id name fullname bizfullname image sign _id name nameOrg size path description mimeType type author createAt members company",
   populate: {
     path: "author",
     select: "_id bizfullname image"
@@ -79,7 +80,18 @@ const TaskRepository = {
 
   async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
-      `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
+      `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
+        select: "assignee lastLog checklist description name expiredTime status percentage project actualFinishTime amountChecklist amountFinishedChecklist",
+        populates: JSON.stringify({
+          path: "assignee lastLog project",
+          select: "name fullname bizfullname image author content createAt sign",
+          populate: {
+            path: "author",
+            select: "_id fullname bizfullname image",
+          }
+        }),
+        ...payload
+      })}`
     );
     return data;
   },
@@ -88,7 +100,7 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus status priority project parent checklist createAt field group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType",
+        select: "name description type typeStatus status priority project contract parent checklist createAt field group author assignee related expiredTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags",
         populates: populatesTask,
       })}`
     );
@@ -202,8 +214,8 @@ const TaskRepository = {
     const { data } = await API.post<ResponseResponse>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesResponse,
         ...payload,
-        populates: populatesResponse
       }
     );
     return data;
@@ -247,18 +259,18 @@ const TaskRepository = {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesComment,
         ...payload,
-        populates: populatesComment
       }
     );
     return data;
   },
-  async updateComment(payload: CommentPayload): Promise<any> {
+  async updateComment(payload: CommentPayload | UpdateResponsePayload): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_comments`,
       {
+        populates: populatesComment,
         ...payload,
-        populates: populatesComment
       }
     );
     return data;
@@ -272,8 +284,8 @@ const TaskRepository = {
   async listComments(payload: ListCommentsPayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments?${convertObToUrl({
+        populates: populatesComment,
           ...payload,
-          populates: populatesComment
       })}`
     );
     return data;
@@ -289,11 +301,11 @@ const TaskRepository = {
   async listReactionsComment(payload: ListReactionPayload): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_comments/reactions?${convertObToUrl({
-          ...payload,
           populates: JSON.stringify({
             path: 'author',
             select: "_id bizfullname image"
-          })
+          }),
+          ...payload,
       })}`
     );
     return data;

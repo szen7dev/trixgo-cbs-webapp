@@ -1,6 +1,6 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
@@ -13,14 +13,18 @@ import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { Create, Update, Delete } from "../modal";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import moment from "moment";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { toast } from "react-toastify";
 
 const CmcsAdminFunctionalTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.CMCS.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmAdmin, totalRecord, nextPagePcmAdmin, hasNextPagePcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
+	const { listAppRoles: listCmcsAdmin, totalRecord, nextPageListAppRoles: nextPageCmcsAdmin, hasNextPageListAppRoles: hasNextPageCmcsAdmin } = useAdmin({ appID: APP_ID.CMCS.id, keyword: keyword });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
@@ -40,17 +44,24 @@ const CmcsAdminFunctionalTab: FC = () => {
 	};
 
 	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listPcmAdmin.length;
+		return idsChecked.length == listCmcsAdmin.length;
 	}, [idsChecked]);
 
 	const onClickCheckAll = () => {
-		if (idsChecked.length == listPcmAdmin.length) {
+		if (idsChecked.length == listCmcsAdmin.length) {
 			setIdsChecked([]);
 		} else {
-			const idsAll = listPcmAdmin.map(e => e._id);
+			const idsAll = listCmcsAdmin.map(e => e._id);
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">
@@ -81,7 +92,7 @@ const CmcsAdminFunctionalTab: FC = () => {
 													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
 												}
 											>
-												<Update item={listPcmAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
+												<Update item={listCmcsAdmin.find(e => e._id == idsChecked[0])} setIdsChecked={setIdsChecked} />
 											</div>
 										)
 									}
@@ -165,9 +176,9 @@ const CmcsAdminFunctionalTab: FC = () => {
 					</tr>
 				</thead>
 
-				{listPcmAdmin && listPcmAdmin.length ?
+				{listCmcsAdmin && listCmcsAdmin.length ?
 					<tbody className="bg-primary-light text-left">
-						{listPcmAdmin.map((item, index) => (
+						{listCmcsAdmin.map((item, index) => (
 							<tr key={index} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
@@ -179,7 +190,7 @@ const CmcsAdminFunctionalTab: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/admin/${item._id}/detail`}>
+									<Link to={`/cmcs/admin/${item._id}/detail`}>
 										<div className="flex items-center">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
@@ -202,10 +213,10 @@ const CmcsAdminFunctionalTab: FC = () => {
 				}
 
 			</table>
-			{hasNextPagePcmAdmin && (
+			{hasNextPageCmcsAdmin && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => nextPagePcmAdmin()}>
-						<span className="text-primary">{`Xem thêm (${totalRecord - listPcmAdmin.length
+					<button onClick={() => nextPageCmcsAdmin()}>
+						<span className="text-primary">{`Xem thêm (${totalRecord - listCmcsAdmin.length
 							})`}</span>
 					</button>
 				</div>

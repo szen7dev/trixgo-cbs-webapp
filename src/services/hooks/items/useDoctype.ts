@@ -1,53 +1,130 @@
-import { useInfiniteQuery } from "react-query";
+/*=====1.LIBRARY=====*/
+import { useInfiniteQuery, useMutation } from "react-query";
 import React from "react";
 
+/*=====2.TYPING/APIS=====*/
 import { DoctypeRepository } from 'apis/item';
 import type { Doctype } from 'typings/items';
 
-interface UseQueryListDoctype {
+/*=====3.INTERFACE DEFINE=====*/
+interface UseDoctype {
     loading: boolean;
-    totalRecord: number | undefined;
-    totalPages: number | undefined;
+    totalRecord: number;
     hasNextPage: boolean | undefined;
     listDoctypes: Array<Doctype.Doctype>;
     refetchListDoctype: () => void;
     fetchNextPageDoctype: () => void;
+    addDoctypeAsync: (params: any) => Promise<any>;
+    updateDoctypeAsync: (params: any) => Promise<any>;
+    deleteDoctypeAsync: (ids: Array<string>) => Promise<any>;
 }
 
-export const useQueryListDoctype = (params: Doctype.DoctypeQueryPayload): UseQueryListDoctype => {
-    const res = useInfiniteQuery(
-        ['doctypes', { params }],
-        async ({ pageParam }: any) =>
-            // mai request BE check lại api này
-            DoctypeRepository.fetchListDoctype({
-                limit: params?.limit || 10,
-                lastestID: pageParam || "",
-                keyword: params?.keyword || '',
-                ...params,
-            }),
-        {
-            getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor || undefined;
-            },
-            refetchOnWindowFocus: false,
-            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
-        }
-    );
+export const useDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolean): UseDoctype => {
+    // Create
+    const { mutateAsync: addDoctypeAsync } =
+        useMutation((payload: any) =>
+            DoctypeRepository.addDoctype(payload)
+        );
+
+    // Update
+    const { mutateAsync: updateDoctypeAsync } =
+        useMutation((payload: any) =>
+            DoctypeRepository.updateDoctype(payload)
+        );
+
+    // Delete
+    const { mutateAsync: deleteDoctypeAsync } =
+        useMutation((ids: Array<string>) =>
+            DoctypeRepository.deleteDoctype(ids)
+        );
+
+    // Get List|Info
     const {
         isLoading,
         data,
         refetch: refetchListDoctype,
         fetchNextPage: fetchNextPageDoctype,
         hasNextPage
-    } = res;
+    } = useInfiniteQuery(
+        ['doctypes', params],
+        async ({ pageParam }: any) =>
+            DoctypeRepository.fetchListDoctype({
+                limit: params?.limit ?? 10,
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch ?? true
+        }
+    );
 
     const listDoctypes = []
-        .concat(
-            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
-        )
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+
+    // Return data
+    return {
+        loading: isLoading,
+        listDoctypes,
+        totalRecord,
+        hasNextPage,
+        refetchListDoctype,
+        fetchNextPageDoctype,
+        addDoctypeAsync,
+        updateDoctypeAsync,
+        deleteDoctypeAsync,
+    }
+}
+
+// Những Hook này cần refactor lại, không nên sử dụng
+interface UseQueryListDoctype {
+    loading: boolean;
+    totalRecord: number;
+    totalPages: number;
+    hasNextPage: boolean | undefined;
+    listDoctypes: Array<Doctype.Doctype>;
+    refetchListDoctype: () => void;
+    fetchNextPageDoctype: () => void;
+}
+
+export const useQueryListDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolean): UseQueryListDoctype => {
+    const {
+        isLoading,
+        data,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['doctypes', params],
+        async ({ pageParam }: any) =>
+            DoctypeRepository.fetchListDoctype({
+                limit: params?.limit ?? 10,
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch ?? true
+        }
+    );
+
+    const listDoctypes = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         loading: isLoading,

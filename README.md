@@ -44,3 +44,18 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+CÁC BƯỚC LÀM VIỆC VỚI API
+1. Tạo file useCMCS trong thư mục 
+/src/services/hooks/useCmcs.ts
+2. Tạo file để định nghĩa kiểu giá trị (Typing)
+/src/typings/cmcs.d.ts
+3. Tạo file khai báo/quản lý việc lấy dữ liệu/làm việc với API
+src/apis/cmcs/index.ts
+src/apis/item/contract/index.ts => Cho riêng phần hợp đồng
+4. Quay lại /src/services/hooks/useCmcs.ts để Import thông tin từ Bước 3
+và khai báo các dữ liệu trả về
+5. Trở lại file view để đưa data vào
+- Import Hooks
+- Khai báo Data vào file quản lý chung các view con
+- Truyền Data vào view con qua Props

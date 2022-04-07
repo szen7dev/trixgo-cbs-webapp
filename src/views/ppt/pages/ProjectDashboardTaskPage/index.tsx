@@ -7,15 +7,16 @@
  * ? 5. helpers, util importation
  * ? 6. typings importation
  */
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 
 import StatisticalChart from "./components/StatisticalChart";
 
 import CaretDownIcon from "assets/images/icon-caret-down.png";
-import { useHistory } from "react-router-dom";
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
-import { toast } from "react-toastify";
+import { useQueryListProjectWithListAmountTask } from "services/hooks/pcm/useStatistical";
+import { Link, generatePath } from 'react-router-dom';
+
 interface IData {
 	id: number,
 	name: string,
@@ -46,21 +47,19 @@ const getDate = (time: number): number => {
 	return (new Date()).setDate((new Date()).getDate() - 1 * time);
 }
 
+export type ItemTaskAmount = {
+	_id: string;
+	count: number,
+}
+
 const ProjectDashboardTaskPage: FC = () => {
-	const history = useHistory();
-	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
+	// --------- Check phân quyền
+	useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.dashboard_task.id,
 		type: "1"
 	});
-	// Phân quyền theo nhóm chức năng
-	useEffect(() => {
-		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
-	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
+	// ---------
 
 	const [type, setType] = useState<string>('all');
 	const [open, setOpen] = useState<{ show: boolean, mediaId: string }>({ show: false, mediaId: '' });
@@ -86,13 +85,30 @@ const ProjectDashboardTaskPage: FC = () => {
 	const handleChange = (e: any) => { setType(e.target.value) };
 	const handleClose = () => setOpen({ ...open, show: false });
 
+	const { listProject,
+		listAmountTask,
+		listAmountTaskOverdueWork,
+		listAmountTaskNextWeekWork,
+		listAmountTaskMoreThan7Days,
+		listAmountTaskFinish, 
+	} = useQueryListProjectWithListAmountTask({
+		fromDate: '2021-01-01',
+		toDate: '2099-01-01'
+	});
+
+	const getPercentTypeTask 		= (_task: number, _totalTask: number) => {
+		if (_totalTask == 0) 
+			return 0;
+		return Math.ceil((_task / _totalTask) * 100);
+	}
+
 	return (
 		<div className="overflow-auto">
 			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
 				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
-						<h3 className="text-x-large mt-2.5">Thống kê chủ đề (việc/hồ sơ) theo dự án/phòng ban</h3>
+						<h3 className="text-x-large mt-2.5">Thống kê công việc theo dự án/phòng ban</h3>
 						<div className="flex items-center mt-2.5">
 							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
@@ -124,7 +140,7 @@ const ProjectDashboardTaskPage: FC = () => {
 						</div>
 					</div>
 					<div className="flex-1">
-						<StatisticalChart />
+						<StatisticalChart listProject={listProject} listAmountTask={listAmountTask}/>
 					</div>
 				</div>
 
@@ -181,51 +197,94 @@ const ProjectDashboardTaskPage: FC = () => {
 							</tr>
 						</thead>
 						<tbody className="">
-							{data.map((d, index) => <tr key={index}>
-								<td className="p-2 border border-r-0 border-cbs-border">
-									<input type="checkbox" className="cbs-checkbox" />
-								</td>
-								<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
-									MAR.HAR.Court Yard By Marriott Ha Long Bay
-								</td>
-								<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
-									Công ty TNHH đầu tư xây dựng ABC
-								</td>
-								<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
-									<div className="flex w-full h-3 mt-2">
-										<button
-											className="flex items-center justify-center bg-red-500"
-											style={{ width: `${30}%` }}
-										// onClick={() => onClickBar("OUT_DATE")}
-										>
-											<span className="text-white">
-												8
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-yellow-500"
-											style={{ width: `${50}%` }}
-										// onClick={() => onClickBar("NEXT_WEEK")}
-										>
-											<span className="text-white">
-												12
-											</span>
-										</button>
-										<button
-											className="flex items-center justify-center bg-green-500"
-											style={{ width: `${20}%` }}
-										// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
-										>
-											<span className="text-white">
-												30
-											</span>
-										</button>
-									</div>
-								</td>
-								<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" style={{ fontSize: '10px' }}>
-									<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >15</div>
-								</td>
-							</tr>
+							{listProject && listProject.map((project: any, index) => {
+								const itemTaskFinish			= listAmountTaskFinish.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id);
+								const itemTaskOverdueWork 		= listAmountTaskOverdueWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
+								const itemTaskNextWeekWork 	= listAmountTaskNextWeekWork.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
+								const itemTaskMoreThan7Days 	= listAmountTaskMoreThan7Days.find((itemFinish: ItemTaskAmount) => itemFinish?._id == project?._id)
+
+								const totalTaskFinish = (itemTaskFinish && itemTaskFinish['count']) || 0
+								const totalTaskOverdueWork = (itemTaskOverdueWork && itemTaskOverdueWork['count']) || 0
+								const totalTaskNextWeekWork = (itemTaskNextWeekWork && itemTaskNextWeekWork['count']) || 0
+								const totalTaskMoreThan7Days = (itemTaskMoreThan7Days && itemTaskMoreThan7Days['count']) || 0
+
+								const totalTask 				= 
+												totalTaskOverdueWork
+												+ totalTaskNextWeekWork
+												+ totalTaskMoreThan7Days;
+
+								return (<tr key={index}>
+											<td className="p-2 border border-r-0 border-cbs-border">
+												<input type="checkbox" className="cbs-checkbox" />
+											</td>
+											<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
+												{/* { project.sign }{ project.name } */}
+												<Link to={generatePath("/pcm/project/:id/home", { id: project._id })}>
+													{project.sign}.{project.name}
+													{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
+												</Link>
+											</td>
+											<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+												{ project?.company?.name || '' }
+											</td>
+											<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
+												<div className="flex w-full h-3 mt-2">
+													<button
+														className="flex items-center justify-center bg-red-500"
+														style={{ width: `${getPercentTypeTask(totalTaskOverdueWork, totalTask)}%` }}
+													// onClick={() => onClickBar("OUT_DATE")}
+													>
+														{/* Quá Hạn */}
+														<span className="text-white">
+															{ totalTaskOverdueWork != 0 && totalTaskOverdueWork }
+														</span>
+													</button>
+													<button
+														className="flex items-center justify-center bg-yellow-500"
+														style={{ width: `${getPercentTypeTask(totalTaskNextWeekWork, totalTask)}%` }}
+													// onClick={() => onClickBar("NEXT_WEEK")}
+													>
+														<span className="text-white">
+															{/* Tuần Tới */}
+															{ totalTaskNextWeekWork != 0 && totalTaskNextWeekWork }
+														</span>
+													</button>
+													<button
+														className="flex items-center justify-center bg-green-500"
+														style={{ width: `${getPercentTypeTask(totalTaskMoreThan7Days, totalTask)}%` }}
+													// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
+													>
+														<span className="text-white">
+															{/* > 7 Ngày */}
+															{ totalTaskMoreThan7Days != 0 && totalTaskMoreThan7Days }
+														</span>
+													</button>
+												</div>
+											</td>
+											<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" 
+												style={{ 
+													fontSize: '10px',
+												}}>
+												{
+													totalTaskFinish != 0 ? 
+														<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >
+															{/* Hoàn thành */}
+															{
+																totalTaskFinish != 0 && totalTaskFinish
+															}
+														</div> :
+														<div className="h-3 w-full text-center min-w-[164px] mt-2" >
+															{/* Hoàn thành */}
+															{
+																totalTaskFinish != 0 && totalTaskFinish
+															}
+														</div>
+												}
+												
+											</td>
+										</tr>)
+							}
+								
 							)}
 						</tbody>
 					</table>

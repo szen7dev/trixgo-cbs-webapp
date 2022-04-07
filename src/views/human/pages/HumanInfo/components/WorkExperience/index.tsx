@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
+import { APP_KEY } from 'utils/constants';
 
 import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
@@ -27,6 +28,7 @@ import type { ContactDocument, Human, FileProps, FilePropsUpload } from "typings
 interface WorkExperienceProps {
   humanId: string;
   humanInfo: Human;
+  companyID: any;
 }
 
 const DATE_FORMAT = "DD/MM/YYYY";
@@ -37,10 +39,9 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { addFileToUpload } = useUpload({ appID: "61e049c9fdebf77b072d1b13" });
 
-  const { humanId, humanInfo } = props;
-
+  const { humanId, humanInfo, companyID } = props;
+  const { addFileToUpload } = useUpload({ appID: APP_KEY.HUMAN, companyID });
   const [
     uploads,
     {
@@ -223,7 +224,7 @@ export const WorkExperience: FC<WorkExperienceProps> = (props) => {
           listFileContractDocumentAsync.push(
             updateFileContractDocumentAsync({
               contactDocumentID,
-              fileID: _id,
+              filesID: [_id],
             })
           );
           setIDFileUploaded(key, _id, contactDocumentID);

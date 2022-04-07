@@ -22,7 +22,7 @@ import type { Human } from "typings/human";
 
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
-import { useHistoryTraffics } from "services/hooks/useAuth";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"

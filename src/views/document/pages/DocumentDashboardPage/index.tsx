@@ -8,21 +8,20 @@
  * ? 6. typings importation
  */
 import { FC, forwardRef, useState, useEffect } from "react";
-
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import cn from "classnames";
-
 import StatisticalChart from "./components/StatisticalChart";
-
 import iconComment from "assets/images/icon-chat-project.png";
 import SliderOver from "./components/SliderOver";
-
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 import { DATE_FORMAT, APP_ID } from "apis/localdb";
-import { useHistory } from "react-router-dom";
-import { useCheckPerAccessApp, useCheckPerAccessOneMenu } from "services/hooks/useAuth";
-import { toast } from "react-toastify";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { dateLoadedPercentage, convertToInternationalCurrencySystem } from 'utils/ppt';
+import { formatNumberMoney } from "utils/cmcs"
+import { useQueryListProjectAndAmountDocument } from "services/hooks/document/useStatistical";
+import { Link, generatePath } from "react-router-dom";
+
 // interface IData {
 // 	id: number;
 // 	name: string;
@@ -92,23 +91,13 @@ const ButtonDatePicker = forwardRef<HTMLButtonElement, any>(
 ButtonDatePicker.displayName = "ButtonDatePicker";
 
 export const DocumentDashboardPage: FC = () => {
-
-	const history = useHistory();
-	const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-	const { hasPermission: hasPermissionMenu, isSuccess: isSuccessMenu, permission } = useCheckPerAccessOneMenu({
+	// --------- Check phân quyền
+	useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.dashboard_document.id,
 		type: "1"
 	});
-
-	// Phân quyền theo nhóm chức năng
-	useEffect(() => {
-		if (isSuccessApp && isSuccessMenu && (!hasPermission || !hasPermissionMenu || permission?.read < 1)) {
-			toast.error("Bạn không có quyền truy cập tính năng này!");
-			history.push("/");
-		};
-	}, [isSuccessApp, isSuccessMenu, hasPermission, hasPermissionMenu, permission]);
-
+	// ---------
 	const [type, setType] = useState<string>("all");
 	const [open, setOpen] = useState<{ show: boolean; mediaId: string }>({
 		show: false,
@@ -118,12 +107,17 @@ export const DocumentDashboardPage: FC = () => {
 	const { listDepartments } =
 		useQueryListDepartments({
 			select:
-				"lastChange assistant pm numberOfDocs name numberFinishOfDocs actualStartTime actualFinishTime",
+				"lastChange assistant pm numberOfDocs name numberFinishOfDocs actualStartTime actualFinishTime sign startTime expiredTime",
 			populates: {
 				path: "pm assistant",
 				select: "fullname image",
 			},
 		}, true);
+
+	const { listProject, listAmountDocument } = useQueryListProjectAndAmountDocument({
+		fromDate: '2021-01-01',
+		toDate: '2099-01-01'
+	});
 	// const data: Array<IData> = Array.from(Array(30).keys()).map((_, i) => ({
 	// 	id: i,
 	// 	name: 'MAR.HAR.Court Yard By Marriott Ha Long Bay',
@@ -151,85 +145,41 @@ export const DocumentDashboardPage: FC = () => {
 		<>
 			<div className="flex flex-col text-sm text-black overflow-x-hidden bg-gray-100 px-3.5">
 				{/* Statistical  */}
-				<div
-					className="flex flex-col bg-white text-cbs-subtext mt-4"
-					style={{ height: "250px" }}
-				>
+				<div className="flex flex-col bg-white text-cbs-subtext mt-4" style={{ height: "250px" }}>
 					<div className="flex justify-between flex-wrap items-center pl-6 pr-2.5">
-						<h3 className="text-x-large mt-2.5">
-							Thống kê chủ đề (việc/hồ sơ) theo dự án/phòng ban
-						</h3>
+						<h3 className="text-x-large mt-2.5">Thống kê hồ sơ theo dự án/phòng ban</h3>
 						<div className="flex items-center mt-2.5">
-							<ul
-								className="flex text-x-small"
-								onChange={handleChange.bind(this)}
-							>
+							<ul className="flex text-x-small" onChange={handleChange.bind(this)}>
 								<li className="pr-3 pl-1">
 									<label>
-										<input
-											type="radio"
-											name="type"
-											id=""
-											value="all"
-											defaultChecked={type === "all"}
-											className="mr-2.5"
-										/>
+										<input type="radio" name="type" id="" value="all" defaultChecked={type === 'all'} className="mr-2.5" />
 										Tất cả
 									</label>
 								</li>
 								<li className="pr-3 pl-1">
 									<label>
-										<input
-											type="radio"
-											name="type"
-											id=""
-											value="week"
-											defaultChecked={type === "week"}
-											className="mr-2.5"
-										/>
+										<input type="radio" name="type" id="" value="week" defaultChecked={type === 'week'} className="mr-2.5" />
 										Tuần này
 									</label>
 								</li>
 								<li className="pr-3 pl-1">
 									<label>
-										<input
-											type="radio"
-											name="type"
-											id=""
-											value="month"
-											defaultChecked={type === "month"}
-											className="mr-2.5"
-										/>
+										<input type="radio" name="type" id="" value="month" defaultChecked={type === 'month'} className="mr-2.5" />
 										Tháng này
 									</label>
 								</li>
 								<li className="pr-3 pl-1">
 									<label>
-										<input
-											type="radio"
-											name="type"
-											id=""
-											value="quater"
-											defaultChecked={type === "quater"}
-											className="mr-2.5"
-										/>
+										<input type="radio" name="type" id="" value="quater" defaultChecked={type === 'quater'} className="mr-2.5" />
 										Quý này
 									</label>
 								</li>
 							</ul>
-							<DatePicker
-								selected={new Date()}
-								dateFormat="MM.yyyy"
-								customInput={<ButtonDatePicker />}
-								showMonthYearPicker
-								wrapperClassName="w-auto"
-								clearButtonClassName="hello"
-								onChange={(date: Date | null) => console.log(date)}
-							/>
+							<button className="rounded-md border border-cbs-border p-2">Chọn thời gian</button>
 						</div>
 					</div>
 					<div className="flex-1">
-						<StatisticalChart />
+						<StatisticalChart listProject={listProject} listAmountDocument={listAmountDocument}/>
 					</div>
 				</div>
 
@@ -272,42 +222,38 @@ export const DocumentDashboardPage: FC = () => {
 						</thead>
 						<tbody>
 							{listDepartments.map((department, index) => {
-								const actualStartTime =
-									department.actualStartTime &&
-									moment(department.actualStartTime).isValid() &&
-									moment(department.actualStartTime).format(DATE_FORMAT);
-								const actualFinishTime =
-									department.actualFinishTime &&
-									moment(department.actualFinishTime).isValid() &&
-									moment(department.actualFinishTime).format(DATE_FORMAT);
-								let percent = 0;
-								if (actualStartTime && actualFinishTime) {
-									const currentActualTime = moment();
-									const start = moment(department.actualStartTime);
-									const finish = moment(department.actualFinishTime);
-									percent = Math.round(
-										((currentActualTime.unix() - start.unix()) /
-											(finish.unix() - start.unix())) *
-										100
-									);
+								const dif = Math.floor(dateLoadedPercentage(new Date(department.startTime), new Date(department.expiredTime), new Date()) * 100);
+								const limitMinMaxDif = (_dif: number) => {
+									if (_dif < 0)
+										return 0;
+									else if (_dif > 100)
+										return 100;
+									return _dif;
 								}
-								let numberFinishOfDocs = 0;
+
+								let percentNumberFinishOfDocs = 0;
 								if (department.numberFinishOfDocs && department.numberOfDocs) {
-									numberFinishOfDocs = (department.numberFinishOfDocs / department?.numberOfDocs) * 100;
+									percentNumberFinishOfDocs = (department.numberFinishOfDocs / department?.numberOfDocs) * 100;
 								}
 								return (
 									<tr key={index}>
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border min-w-[360px]">
 											<div>
-												<p className="text-black">{department.name}</p>
+											<Link 
+												className="text-black" 
+												to={generatePath("/pcm/project/:id/home", { id: department._id })}>	{department.sign}.{department.name}
+											</Link>
+												{/* <p className="text-black">
+													{department.sign}.{department.name}
+												</p> */}
 												<div className="flex justify-between mt-2.5">
-													<span>{actualStartTime || ""}</span>
-													<span>{actualFinishTime || ""}</span>
+													<span>{moment(department.startTime).format("DD/MM/YYYY")}</span>
+													<span>{moment(department.expiredTime).format("DD/MM/YYYY")}</span>
 												</div>
 												<div className="border border-cbs-border h-1.5 box-border mt-2">
 													<div
 														className="bg-cbs-subtext h-full"
-														style={{ width: percent + "%" }}
+														style={{ width: `${limitMinMaxDif(dif)}%` }}
 													></div>
 												</div>
 											</div>
@@ -315,15 +261,15 @@ export const DocumentDashboardPage: FC = () => {
 										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
 											<div className="flex justify-between items-end mt-2.5">
 												<span className="text-2x-large text-black mr-auto">
-													{department.numberFinishOfDocs || 0}
+													{formatNumberMoney(department.numberOfDocs || 0)}
 												</span>
-												<span>{numberFinishOfDocs}%</span>
+												<span>{Math.ceil(percentNumberFinishOfDocs)}%</span>
 											</div>
 											<div className="border border-cbs-border h-1.5 box-border mt-2">
 												<div
 													className="bg-cbs-schedule-after-7days h-full"
 													style={{
-														width: numberFinishOfDocs + "%",
+														width: `${percentNumberFinishOfDocs}%`
 													}}
 												></div>
 											</div>
@@ -337,7 +283,7 @@ export const DocumentDashboardPage: FC = () => {
 														className="inline-block w-6 h-6 rounded-3xl mr-2.5"
 													/>
 												)}
-												{department?.pm?.fullname}
+												{department?.pm?.bizfullname || department?.pm?.fullname}
 											</div>
 											<div className="whitespace-nowrap pl-9 w-max pt-1.5">
 												{department?.assistant?.image && (
@@ -347,7 +293,7 @@ export const DocumentDashboardPage: FC = () => {
 														className="inline-block w-6 h-6 rounded-3xl mr-2.5"
 													/>
 												)}
-												{department?.assistant?.fullname}
+												{department?.assistant?.bizfullname || department?.assistant?.fullname}
 											</div>
 										</td>
 										<td
@@ -376,7 +322,7 @@ export const DocumentDashboardPage: FC = () => {
 											className="pl-5 border border-cbs-border relative"
 											style={{ minWidth: "420px" }}
 										>
-											<div className="flex">
+											{/* <div className="flex">
 												<div className="flex pb-2 pt-3 pr-2.5">
 													<div className="w-10 h-10 rounded-full overflow-hidden min-w-max mr-3">
 														<img
@@ -388,8 +334,8 @@ export const DocumentDashboardPage: FC = () => {
 														/>
 													</div>
 													<div>
-														{/* <p className="font-bold">{d.comment.user}</p> */}
-														{/* <p className="text-black mt-2">{d.comment.message}</p> */}
+														<p className="font-bold"></p>
+														<p className="text-black mt-2"></p>
 													</div>
 												</div>
 												<div
@@ -398,19 +344,19 @@ export const DocumentDashboardPage: FC = () => {
 												>
 													10:22 AM
 												</div>
-											</div>
+											</div> */}
 											<button
 												className="absolute bottom-0 right-0 whitespace-nowrap w-max bg-cbs-table-header rounded-tl-md px-3 py-1.5 text-x-small"
 											//   onClick={() =>
 											//     setOpen({ show: true, mediaId: d.mediaId })
 											//   }
 											>
-												<img
+												{/* <img
 													src={iconComment}
 													alt="Comment"
 													className="inline-block w-4 h-4 mr-1"
 												/>
-												<span className="align-middle">21.3k</span>
+												<span className="align-middle">21.3k</span> */}
 											</button>
 										</td>
 									</tr>

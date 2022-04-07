@@ -1,4 +1,4 @@
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, useEffect } from "react";
 
 import { useModal } from "services/hooks/useModal";
 import { useParams } from "react-router-dom";
@@ -11,16 +11,20 @@ import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetListAppRoleMenu } from "services/hooks/useAuth";
+import { useGetListAppRoleMenu, useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { CreateNewAdminMember, DeleteMembers } from "../modal";
-import { usePcmAdminDetail } from "services/hooks/pcm/usePcmAdminDetail";
+import { useAdminDetail } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProjectAdminDetail: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const { id } = useParams<{ id: string }>();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = usePcmAdminDetail({ appID: id, keyword: keyword });
+	const { listMembers, nameAppRoleDetail, companyAppRoleDetail } = useAdminDetail({ appID: id, keyword: keyword });
 	const { refetchGetListAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.PCM.id, type: "1" });
 	const { openModal } = useModal();
 	const getStateChecked = useCallback((id: string) => {
@@ -52,6 +56,14 @@ const ProjectAdminDetail: FC = () => {
 			setIdsChecked(idsAll);
 		}
 	};
+
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
+	
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">

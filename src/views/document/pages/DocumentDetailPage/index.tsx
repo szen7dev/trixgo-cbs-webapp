@@ -1,26 +1,23 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 import { useUpload } from 'services/hooks/useUpload';
 
-import { IconFile } from 'views/media/shareComponents/common';
-import { ModalContext } from "views/document/contexts/modal";
 import { APP_KEY } from 'utils/constants';
+import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 
 import {
-  DropdownFilterButton,
-  ButtonCreate,
+  // DropdownFilterButton,
+  // ButtonCreate,
   ButtonMore,
   ButtonIcon,
-  GroupActions,
+  GroupActionsPageDetail
 } from "views/document/sharedComponents/common";
 
 import "views/document/styles/document.css";
 import { TableGeneralInformation } from "./components/TableGeneralInformation";
-import { TableJobs } from "./components/TableJobs";
 import { TableFileAttach } from "./components/TableFileAttach";
 import { TableSubtextProfile } from "./components/TableSubtextProfile";
 
@@ -32,22 +29,18 @@ import iconAdd from "assets/images/icon-add.svg";
 import { useQueryDetailDocument } from "services/hooks/ppt/useDocument";
 import { useQueryListDocumentChild } from "services/hooks/document/useDocumentChild";
 import { useQueryListDocumentFile } from "services/hooks/document/useDocumentFile";
-import { useAuth } from "services/hooks/useAuth";
-import { File } from "source-map-explorer/lib/types";
-import { FileProps } from "typings/file";
+
+import { useAuth } from "services/hooks/auth/useAuth";
 
 const DATE_FORMAT = "DD/MM/YYYY HH:mm";
-interface Props {
-  test?: unknown;
-}
 
-export const DocumentDetailPage: FC<Props> = () => {
+export const DocumentDetailPage: FC = () => {
   const history = useHistory();
   const params = useParams<any>();
   const { user } = useAuth();
   const { t } = useTranslation(["document"]);
 
-  const { toggleModal } = useContext(ModalContext);
+  const [isShow, setIsShow] = useState(false);
   const { onFetchDetailDocumentAsync, detailDocument } =
     useQueryDetailDocument();
 
@@ -68,8 +61,8 @@ export const DocumentDetailPage: FC<Props> = () => {
   const { addFileToUpload } = useUpload({
     appID: APP_KEY.DOCUMENT,
     companyID: user?.company._id,
-    projectID:  detailDocument?.project?._id,
-    packageID:  detailDocument?.package?._id,
+    projectID: detailDocument?.project?._id,
+    packageID: detailDocument?.package?._id,
   });
 
   React.useEffect(() => {
@@ -82,42 +75,43 @@ export const DocumentDetailPage: FC<Props> = () => {
   }, [detailDocument])
 
   React.useEffect(() => {
-    if (params.docID) {
-      onFetchDetailDocumentAsync(params.docID);
-    }
+    if(!params.docID) return;
+    onFetchDetailDocumentAsync(params.docID);
   }, [onFetchDetailDocumentAsync, params.docID]);
+
+  const toggleModalCreateDocumentChild = () => setIsShow(!isShow);
 
   const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
         if (!event.target.files || !event.target.files.length) return;
-        const arrFileID = []
+        const arrFileID: Array<string | undefined> = []
 
         // Upload files
-        for (const [key, file] of Object.entries(event.target.files)) {
+        for (const [, file] of Object.entries(event.target.files)) {
           const { _id } = await addFileToUpload({
             files: file as any,
             fileType: 2,
-            useCompress: true,
-            // progress: percentCompleted => {
-            // }
+            useCompress: true
           })
           arrFileID.push(_id)
         }
 
-        // Update db
-        const result = await createDocumentFileMutateAsync({
+        const { error, data } = await createDocumentFileMutateAsync({
             documentID: params.docID,
             filesID: arrFileID,
         });
-    
-        if (!result.error) {
-          toast.success('Thêm file thành công');
-          refetch()
-        } else {
-          toast.error(result?.data?.message);
+
+        if(error) {
+          return toast.warning(data?.message);
         }
+
+        toast.success('Thêm file thành công');
+        refetch();
     } catch (error) {
       console.log({ error })
+      if(error instanceof Error) {
+        toast.error(error.message);
+      }
     }
 	}
 
@@ -144,10 +138,10 @@ export const DocumentDetailPage: FC<Props> = () => {
             />
           </svg>
         </button>
-        <DropdownFilterButton />
-        <GroupActions className="flex items-center flex-1" />
+        {/* <DropdownFilterButton /> */}
+        <GroupActionsPageDetail className="flex items-center flex-1" />
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <ButtonMore />
+        {/* <ButtonMore /> */}
       </div>
       <div className="text-cbs-subtext flex-1 overflow-y-auto pb-2">
         <div className="bg-white">
@@ -220,9 +214,9 @@ export const DocumentDetailPage: FC<Props> = () => {
                 <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
               )}
             /> */}
-            <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
-              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" />
-              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} /> 
+            <label className="px-[10px] py-[5px] h-10 rounded-md bg-gray-100 flex justify-center items-center text-primary text-[13px] cursor-pointer">
+              <img src={iconUpload} alt="" className="mr-2.5 h-6 w-6" /> Thêm file
+              <input type="file" name="files" id="file" className="hidden" accept="*" multiple onChange={handleSetFiles} />
             </label>
           </div>
           <TableFileAttach fileAttachs={documentFiles}>
@@ -264,6 +258,7 @@ export const DocumentDetailPage: FC<Props> = () => {
             <ButtonMore className="mr-6" />
             <ButtonIcon
               title="Thêm"
+              onClick={toggleModalCreateDocumentChild}
               icon={() => (
                 <img src={iconAdd} alt="" className="mr-2.5 h-6 w-6" />
               )}
@@ -281,6 +276,7 @@ export const DocumentDetailPage: FC<Props> = () => {
           <div className="py-4"></div>
         </div> */}
       </div>
+      <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} refetchListChild = {docChildPayload.refetchListDocumentChild} />
     </div>
   );
 };

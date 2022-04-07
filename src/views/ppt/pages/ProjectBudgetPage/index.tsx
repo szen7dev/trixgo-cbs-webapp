@@ -1,84 +1,146 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { usePcmProjectBudget } from "services/hooks/pcm/usePcmProjectBudget";
+import { useParams } from 'react-router-dom';
+import classNames from 'classnames';
 
-import BugetRowGroup from "./components/BudgetRowGroup";
+import { RightClickMenuWrapper } from "shareComponents/common";
+import MenuChildRow from './components/MenuChildRow';
+// import BugetRowGroup from "./components/BudgetRowGroup";
+import BugetRowGroupTemp from "./components/BudgetRowGroupTemp";
+import { useProject } from 'services/hooks/items/useProject';
+import { formatNumberMoney } from "utils/cmcs";
 
 const ProjectBudgetPage: FC = () => {
-	const [show, setShow] = useState<boolean>(true)
-	const data = useMemo(() => Array.from({ length: 3 }).map((_, index) => ({
-		_id: index,
-		project: { sign: 'test' },
-		name: 'San lấp mặt bằng toàn bộ công trình',
-		expiredTime: Date.now(),
-		description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi, rem?",
-		data: Array.from({ length: Math.ceil(Math.random() * 10) }).map((_d, i) => ({
-			_id: i,
-			budget: 10000000 * Math.ceil(Math.random() * 3),
-			predict: 100000000 * Math.ceil(Math.random() * 3),
-			signed: 100000000 * Math.ceil(Math.random() * 3),
-			advance: 100000000 * Math.ceil(Math.random() * 3),
-			volume: 100000000 * Math.ceil(Math.random() * 3),
-			finish: 100000000 * Math.ceil(Math.random() * 3),
-			pay: 100000000 * Math.ceil(Math.random() * 3),
-			rest: 100000000 * Math.ceil(Math.random() * 3),
-			note: 'Xây dựng mẫu BoQ cho công tác preliminaries'
-		}))
-	})), []);
-	// const data = useMemo(() => Array.from({length:10}), []);
+	const { id: projectID } = useParams<{ id: string }>();
+	const {
+		listPcmProjectBudget,
+		hasNextPage,
+		fetchNextPage,
+		totalRecord
+	} = usePcmProjectBudget({
+		projectID
+	});
+
+	const [show, setShow] = useState<boolean>(false);
+
+	const { info: projectInfo } = useProject({
+		params: {
+			departmentID: projectID,
+			select: "budget vatBudget forecastBudget vatForecastBudget contractValue contractVatValue contractPlus contractVatPlus contractAdvancePaymentPaid contractProduce contractVatProduce contractAcceptance contractVatAcceptance contractPlusAcceptance contractVatPlusAcceptance contractAmountPaid contractRemainingPayment",
+			populates: ""
+		},
+		isFetchInfo: true
+	})
 
 	useEffect(() => {
-		document.title = "PPT - Dự án đang phát triển"
+		document.title = "Dự án-Ngân sách"
 	}, []);
 
-	useEffect(() => {
-		document.title = "PPT - Ngân sách"
-	}, []);
+	if(!projectInfo) {
+		return <></>;
+	}
 
 	return (
 		<div className="flex-1 overflow-y-auto pb-8">
 			<table className='text-medium w-full border-separate border-spacing-0 text-center'>
 				<thead className="text-left">
-					<tr>
+					<tr className="font-semibold">
 						<th className="sticky top-0 bg-gray-300 px-1.5 z-10">
 							<button className="inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>{show ? '+' : '-'}</button>
 						</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2">
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2">
 							TT
 						</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '240px' }}>Nội dung (không gồm VAT)</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Ngân sách</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Dự báo (phát sinh)</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Ký hợp đồng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Tạm ứng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '125px' }}>Sản lượng</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '132px' }}>Nghiệm thu hoàn thành</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '123px' }}>Thanh toán</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '124px' }}>Còn lại</th>
-						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '246px' }}>Ghi chú</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '240px' }}>Gói thầu/Hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ngân sách</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Dự báo</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Ký hợp đồng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '122px' }}>Tạm ứng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '125px' }}>Sản lượng</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '132px' }}>Nghiệm thu</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '123px' }}>Thanh toán</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '124px' }}>Còn lại</th>
+						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 px-2" style={{ maxWidth: '246px' }}>Ghi chú</th>
 					</tr>
 				</thead>
-				{
-					data.map((_item, index) => <BugetRowGroup row={_item} key={index} show={show} />)
-				}
-				<tfoot>
+				<RightClickMenuWrapper
+					contextMenu={<MenuChildRow />}
+					customRenderTag={"tbody"}
+					className="text-black"
+				>
+					<tr className="text-right">
+						<th className='bg-gray-300 px-1.5 relative'>
+							<div className={classNames('absolute left-1/2 bg-cbs-subtext top-1/2 w-[1px] h-1/2', { hidden: show })} />
+							<button className="relative inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={() => setShow(!show)}>
+								{show ? '+' : '-'}
+							</button>
+						</th>
+						<th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-center'>A1</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left"></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(
+								projectInfo.contractValue + projectInfo.contractVatValue +
+								projectInfo.contractPlus + projectInfo.contractVatPlus
+							)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.contractAdvancePaymentPaid)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(
+								projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
+								projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
+							)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.contractAmountPaid)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+							{formatNumberMoney(projectInfo.contractRemainingPayment)}
+						</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
+					</tr>
+					{
+						listPcmProjectBudget.map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
+					}
+				</RightClickMenuWrapper>
+				{/* <tfoot>
 					<tr className="text-right">
 						<th className="bg-gray-300 px-1.5 z-10">
 						</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">
 						</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2 text-left">Tổng</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.budget, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.predict, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.signed, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.advance, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.volume, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.finish, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.pay, 0), 0).toLocaleString()}</th>
-						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">{data.reduce((prev, grow) => prev + grow.data.reduce((prev, d) => prev + d.rest, 0), 0).toLocaleString()}</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
+						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2">0</th>
 						<th className="bg-cbs-summary border-0.5 border-cbs-border border-l-0 p-2"></th>
 					</tr>
-				</tfoot>
+				</tfoot> */}
 			</table>
-		</div >
+			{hasNextPage && (
+                <div className="w-full flex justify-center my-5">
+                  <button onClick={fetchNextPage}>
+                    <span className="text-primary">
+                      Xem thêm ({totalRecord - listPcmProjectBudget.length})
+                    </span>
+                  </button>
+                </div>
+			)}
+		</div>
 	);
 };
 
@@ -87,4 +149,4 @@ const ProjectBudgetPage: FC = () => {
  * ? export default must be capital syntax
  * ? export const must be camel case syntax
  */
-export default ProjectBudgetPage;
+ export default ProjectBudgetPage;

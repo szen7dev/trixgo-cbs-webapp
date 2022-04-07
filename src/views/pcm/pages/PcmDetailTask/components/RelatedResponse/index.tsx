@@ -24,11 +24,12 @@ import { IconPaperClip, IconImage } from "shareComponents/common/Icon";
  * Hooks, custom
  */
 import { useSocket } from "services/hooks/useSocket";
-import { useAuth } from 'services/hooks/useAuth';
-import { useTask } from 'services/hooks/useTask';
+import { useAuth } from 'services/hooks/auth/useAuth';
+import { useRelatedResponse } from 'services/hooks/useTask';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2, QueueUpload } from "services/hooks/useUploadFile";
 import { APP_KEY } from "utils/constants";
+import { APP_ID } from "apis/localdb";
 
 /**
  * Typings, apis
@@ -70,14 +71,20 @@ const Response: FC<Props> = ({ task }) => {
   const [amountMarkedResponse, setAmountMarkedResponse] = useState(task.amountMarkedResponse ?? 0);
 
   const { user } = useAuth();
-  const { addResponseAsync, listResponses, refetchListResponse, totalRecordResponse } = useTask({ taskID: task._id, isFetch: true });
-  const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
-    taskID: task._id, official: true, isFetch: false
+  const { addResponseAsync, listResponses, refetchListResponses,  totalRecord: totalRecordResponse } = useRelatedResponse({
+    params: {
+      taskID: task._id
+    },
+    isFetch: true
   });
+
+  // const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
+  //   taskID: task._id, official: true, isFetch: false
+  // });
 
   const { state, dispatch } = useContext(CommentContext);
   const { addFileToUpload } = useUpload({
-    appID: APP_KEY.PCM_PLAN_TASK,
+    appID: APP_ID.PCM.id,
     companyID: task?.company?._id,
     projectID: task?.project?._id,
     groupID: task?.group?._id
@@ -336,7 +343,7 @@ const Response: FC<Props> = ({ task }) => {
   const onClickTabAll = () => {
     setCurrentTab(RelatedResponseTab.ALL);
     dispatch({ type: 'SET_COMMENTS', payload: listResponses.reverse() });
-    refetchListResponse();
+    refetchListResponses();
     setAmountComment(totalRecordResponse);
     setAmountCommentBack(0);
   }
@@ -402,11 +409,15 @@ const Response: FC<Props> = ({ task }) => {
             <RelatedResponseItem
               key={response._id}
               response={response}
+              author={user}
+              companyID={task.company?._id}
+              projectID={task.project?._id}
+              groupID={task.group?._id}
               expanded={isExpand}
               isHighlight={hashLocation?.split('_')[1] === response._id}
               divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
               setAmountMarkedResponse={setAmountMarkedResponse}
-              refetchListResponseMarked={refetchListResponseMarked}
+              // refetchListResponseMarked={refetchListResponseMarked}
               onClickImage={(images, index) => {
                 if (images.length) {
                   setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};

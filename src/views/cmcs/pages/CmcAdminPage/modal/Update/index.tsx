@@ -3,23 +3,34 @@ import { FC, useState } from "react";
 import { useModal } from "services/hooks/useModal";
 
 import CloseIcon from "assets/images/icon-small-bold-close.svg";
-import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 
 const Update: FC<any> = ({ item, setIdsChecked }) => {
   const { closeModal } = useModal();
   const [name, setName] = useState(item.name);
-  const { updateAppRolesMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  const [type, setType] = useState<any>(item.type ? item.type.toString() : "");
+  const { updateAppRolesMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.CMCS.id, keyword: "" });
 
   const onUpdate = async () => {
-    if (!name) return;
+    if (!name || !type) {
+      toast.error("Vui lòng nhập đầy đủ nội dung và phân loại.");
+      return;
+    }
+    
+    if (!["1", "3"].includes(type)) {
+      toast.error("Phân loại chỉ có giá trị 1 hoặc 3. Vui lòng nhập lại.");
+      return;
+    };
+
     const result = await updateAppRolesMutateAsync({
       appRoleID: item._id,
+      type: parseInt(type),
       name
     });
     if (!result.error) {
-      refetchPcmAdmin();
+      refetchListAppRoles();
       setName("");
       closeModal();
       setIdsChecked([]);
@@ -31,7 +42,7 @@ const Update: FC<any> = ({ item, setIdsChecked }) => {
 
   return (
     <main className="relative h-full">
-      <header className="px-10 py-9 flex items-center justify-between">
+      <header className="px-10 py-5 flex items-center justify-between">
         <p className="font-bold text-xl">Cập nhật</p>
         <img
           src={CloseIcon}
@@ -41,7 +52,7 @@ const Update: FC<any> = ({ item, setIdsChecked }) => {
         />
       </header>
 
-      <section className="px-10 mt-2">
+      <section className="px-10 py-2">
         <input
           type="text"
           placeholder="Nhập nội dung"
@@ -51,7 +62,17 @@ const Update: FC<any> = ({ item, setIdsChecked }) => {
         />
       </section>
 
-      <footer className="absolute right-0 bottom-0 px-10 py-9">
+      <section className="px-10 mt-2">
+        <input
+          type="text"
+          placeholder="Phân loại (1,3)"
+          className="h-12 w-full border border-primary-border outline-none px-8"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+      </section>
+
+      <footer className="absolute right-0 bottom-0 px-10 py-5">
         <button className="bg-primary text-primary-light text-base w-24 h-8 rounded"
           onClick={() => onUpdate()}>
           Xác nhận

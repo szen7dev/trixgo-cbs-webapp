@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { useHistory, useParams, Redirect } from "react-router-dom";
+import { useHistory, useParams, Redirect, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -17,11 +17,10 @@ import DotsVerticalIcon from "assets/icons/DotsVertical";
 import IconPencil from "assets/images/icons8-pencil.svg";
 import SharedFolderIcon from "assets/images/icons8-shared-folder-100_1.svg";
 import StackedOrganizationIcon from "assets/images/icons8-stacked-organizational-chart.svg";
-import IconStar from "assets/images/icons8-star-96.png";
 import MoveStockIcon from "assets/images/icons8-move-stock-96.svg";
 import IconAddUser from "assets/images/icons8-add-user-male-96 1.png";
 
-import { FileAttachment, SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
+import { SideBar, CheckList, PriceApprovalInfo, RelatedResponse, ModalUpdateTask, ModalUpdateTaskStatus } from "./components";
 import { Loader } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from 'views/pcm/shareComponents/common';
 import { ProviderModalPost } from "views/pcm/contexts/post";
@@ -29,8 +28,9 @@ import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 import TaskRepository from "apis/task";
 import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
-import { useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
-import { useAuth, useCheckPerAccessApp } from "services/hooks/useAuth";
+import { useTask, useCheckList, useChildTask, useCommentPcm } from "services/hooks/useTask";
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { User } from "typings/user";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 
@@ -40,8 +40,7 @@ import { ModalAddNotificationEmail, ModalAddRelationUser } from "./components/Mo
 import { APP_ID } from "apis/localdb";
 
 import styles from "views/pcm/styles/pcm_task.module.css";
-import OwnerUploadedFile from "./components/OwnerUploadedFile";
-import CreatorUploadedFile from "./components/CreatorUploadedFile";
+import { OwnerUploadedFile, CreatorUploadedFile } from "./components";
 
 const PcmDetailTask: FC = () => {
   const history = useHistory();
@@ -49,17 +48,9 @@ const PcmDetailTask: FC = () => {
   const { openModal } = useModal();
   const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
-  const [taskData, setTaskData] = useState({
-    percentComplete: "0%",
-    amountComment: 0,
-    status: 1,
-    priority: 1
-  });
 
-  const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
-  const [isTruncate, setIsTruncate] = useState(true);
-  const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
   const { user } = useAuth();
+  const { updateTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
     TaskRepository.taskInfo(id),
@@ -80,6 +71,17 @@ const PcmDetailTask: FC = () => {
 			params: { taskID: id, type: 1 },
 			isFetchComment: true
 		});
+
+  const [taskData, setTaskData] = useState({
+    percentComplete: "0%",
+    amountComment: 0,
+    status: 1,
+    priority: 1
+  });
+  const [isMarkInterest, setIsMarkInterest] = useState(infoTask?.data?.flags?.includes(user?._id))
+  const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
+  const [isTruncate, setIsTruncate] = useState(true);
+  const [confirmUsers, setConfirmUsers] = useState<Array<{ author: User, createAt: string | Date }>>([]);
 
   const getGroupTitle = (group: any) => {
     let title = "";
@@ -107,6 +109,28 @@ const PcmDetailTask: FC = () => {
         createAt: new Date()
       }
     ]))
+  }
+
+  const handleMarkInterest = async () => {
+    try {
+      if(!user) return;
+
+      const { error, data } = await updateTaskAsync({
+        taskID: id,
+        ...isMarkInterest ? { flagsRemoves: [user._id] } : { flags: [user._id] }
+      })
+
+      if(error) return toast.warn(data?.message);
+
+      setIsMarkInterest(!isMarkInterest);
+    } catch (error) {
+      if(error instanceof Error) {
+        toast.error(error.message);
+      }
+      if(typeof error === 'string') {
+        toast.error(error);
+      }
+    }
   }
 
   useEffect(() => {
@@ -222,13 +246,13 @@ const PcmDetailTask: FC = () => {
         >
           <span className="text-3x-large leading-8">
             {taskInfo?.name}
-            <span className="mx-2">
+            <button className="mx-2" onClick={handleMarkInterest}>
               <img
                 className="inline h-[24px] w-[24px]"
-                src={IconStar}
+                src={`/images/common/${isMarkInterest ? 'icons8-star-96.png' : 'icon-star-filled.png'}`}
                 alt="Star"
               />
-            </span>
+            </button>
             <button
               className={cn('inline-block text-white text-xs rounded-xl px-2 py-1 mx-3', PCM_STATUS_TASK[taskData.status - 1].class)}
               onClick={toggleModalUpdateTaskStatus}
@@ -246,7 +270,9 @@ const PcmDetailTask: FC = () => {
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
                   {taskInfo?.project?.sign} {">"}{" "}
-                  {getGroupTitle(taskInfo?.group)}
+                  <Link to={`/pcm/project/${taskInfo?.project?._id}/folder/${taskInfo?.group?._id}`}>
+                    {getGroupTitle(taskInfo?.group)}
+                  </Link>
                 </span>
                 <div>
                   <img
@@ -319,10 +345,17 @@ const PcmDetailTask: FC = () => {
                   </button>
                 )}
               </div>
-
-              <FileAttachment files={taskInfo?.authorAttachs} />
+              {/* <FileAttachment files={taskInfo?.authorAttachs} /> */}
             </div>
-						<CreatorUploadedFile className="p-5"/>
+						<CreatorUploadedFile 
+              className="p-5" 
+              authorAttachs={taskInfo?.authorAttachs}
+              author={user}
+              taskID={taskInfo._id}
+              companyID={taskInfo.company?._id}
+              projectID={taskInfo.project?._id}
+              groupID={taskInfo.group?._id}
+            />
             <div className="">
               <CheckList
                 componentType="CHECKLIST"
@@ -347,7 +380,15 @@ const PcmDetailTask: FC = () => {
                 valueApproved={taskInfo?.valueApproved}
               />
             </div>
-						<OwnerUploadedFile className="p-5"/>
+						<OwnerUploadedFile 
+              className="p-5"
+              assigneeAttachs={taskInfo?.assigneeAttachs}
+              author={user}
+              taskID={taskInfo._id}
+              companyID={taskInfo.company?._id}
+              projectID={taskInfo.project?._id}
+              groupID={taskInfo.group?._id}
+            />
             <div className="px-5 my-5">
               <RelatedResponse task={taskInfo} />
             </div>

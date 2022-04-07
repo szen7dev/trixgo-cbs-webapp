@@ -1,27 +1,33 @@
-import { FC, useCallback, useState } from "react";
-
-import { Link } from "react-router-dom";
-
+import { FC, useCallback, useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput, ModalContainer } from "shareComponents/common";
-// import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
-
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { CreateProject } from "../modal";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import moment from "moment";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
+import { toast } from "react-toastify";
+import { APP_ID } from "apis/localdb";
 
 const ProjectAdminProjectTab: FC = () => {
+	const history = useHistory();
+	const { hasPermission, dataUserAccess, isSuccess } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
-	const { listPcmProject, totalRecord, nextPagePcmProject, hasNextPagePcmProject, refetchPcmProject } = usePcmProject({ keyword: keyword });
-	const { openModal } = useModal();
+	const {
+		listPcmProject,
+		totalRecord,
+		nextPagePcmProject,
+		hasNextPagePcmProject,
+		refetchPcmProject
+	} = usePcmProject({ keyword: keyword });
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
@@ -48,6 +54,13 @@ const ProjectAdminProjectTab: FC = () => {
 
 	const [initialValues, setInitialValues] = useState(null);
 	const onConfirmCreateProject = () => refetchPcmProject();
+
+	useEffect(() => {
+		if (isSuccess && !(hasPermission && dataUserAccess?.level == 0)) {
+			toast.error("Không có quyền truy cập. Bạn không phải là quản trị viên!");
+			history.push("/")
+		}
+	}, [hasPermission, dataUserAccess]);
 
 	return (
 		<main className="h-full overflow-auto">
@@ -111,14 +124,11 @@ const ProjectAdminProjectTab: FC = () => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="pb-1 pt-1 w-[250px]">
@@ -179,15 +189,13 @@ const ProjectAdminProjectTab: FC = () => {
 									<input
 										className="form-check-input"
 										type="checkbox"
-										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
 									<Link to={`/pcm/admin/${item._id}/project`}>
-										<div className="flex items-center">
+										<div className="flex items-start">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>

@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from "react";
-import { RouteComponentProps, useHistory, useLocation } from "react-router-dom";
-import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
 
 import { Paginate } from "shareComponents/common";
+import { PCM_STATUS_TASK } from 'apis/localdb';
 
 import iconFile from 'assets/images/icons8-audit-96.png';
 import '../../style.css';
-
-// import 'swiper/swiper-bundle.min.css';
-
+// HOOK
+import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
+import { usePcmProject } from "services/hooks/pcm/usePcmProject";
+import { useTask } from "services/hooks/useTask";
+import moment from "moment";
+ 
 interface IData {
 	id: number,
 	type: string,
@@ -52,42 +56,88 @@ function getStatusLabel(status: number) {
 }
 
 const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
-	const history = useHistory();
-	const location = useLocation();
+	const history 	= useHistory();
+	const location 	= useLocation();
 	const [data, setData] = useState<IData[]>([]);
+	// ID của dự án
+	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
+	// Call hook lấy thông tin project
+	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
+	const {  
+		isLoading,
+        refetch,
+        data: listPcmPlanGroup,
+        fetchNextPage,
+        hasNextPage,
+        totalRecord,
+        totalPage,
+        // refetchInfoGroup
+	} = usePcmPlanGroup({ 
+		projectID, 
+		parentID: groupID,
+		populates: JSON.stringify({ 
+			path: "members", 
+			select: "image"
+		})
+	}, true);
+
+	const {  
+		infoGroup,
+		refetchInfoGroup
+	} = usePcmPlanGroup({ 
+		groupID, 
+		populates: JSON.stringify({ 
+			path: "parent", 
+			select: "parent sign",
+			populate: {
+				path: "parent", 
+				select: "parent sign"
+			}
+		})
+	}, false, true);
+
+	const { listTasks } = useTask({
+		params: {
+			groupID
+		},
+		isFetch: !!groupID
+	})
 
 	useEffect(() => {
-		document.title = "CHG.THT-Thư mục dữ liệu";
-		setData(Array.from({ length: Math.ceil(Math.random() * 4 + 3) }).map((_, i) => ({
-			id: i,
-			type: i < 3 ? 'folder' : 'file',
-			content: "Thi công san lấp mặt bằng công trình",
-			created_by: "Nguyễn Thị Ngân-CPMI",
-			created_at: "14/11/21",
-			code: "ARM.CAL-PGI.PMI\\HDCG\\210515",
-			status: 1,
-			count: 12,
-			path: '/123'
-		})))
+		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
 	}, [location?.pathname]);
+
+	useEffect(() => {
+		refetchInfoGroup()
+	}, [groupID]);
 
 	return (
 		<>
 			{/* Content */}
 			<div className="flex flex-col h-full overflow-hidden">
 				<div className="flex flex-wrap items-center w-full px-4 gap-x-2 text-black text-small py-1">
-					<span className="">CHG.THT</span>
-					<IconArrowRight />
-					<button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
+					<span className="">{infoDepartment?.data?.sign}</span>
+					{/* <button className="bg-cbs-active-comment text-cbs-primary h-10 w-10 text-center rounded-full">
 						<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
 						</svg>
-					</button>
-					<IconArrowRight />
-					<span className="truncate max-w-[132px]">Thi công san lấp mặt bằng</span>
-					<IconArrowRight />
-					<span>Hợp đồng</span>
+					</button> */}
+					{/* <IconArrowRight /> */}
+					{ infoGroup?.data?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.sign}</span>
+					</Link>
+
+					{ infoGroup?.data?.parent?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.sign}</span>
+					</Link>
+
+					{ infoGroup?.data?.parent?.parent?.sign && <IconArrowRight /> }
+					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}  className="align-top">
+						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
+					</Link>
 				</div>
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
@@ -125,47 +175,68 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</thead>
 						<tbody className="text-small">
 							{
-								data.map((props, index) => {
-									const { id, type, content, created_by, created_at, status, path } = props
+								listPcmPlanGroup.map((props: any, index: any) => {
 									return (
-										<tr key={index} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push(match.path + path)}>
+										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 											<td className="px-4 py-2 w-[1px]">
-												<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, props)} />
+												<input className="cbs-checkbox" type="checkbox" value={props._id} checked={Boolean(assigned[props._id])} onChange={e => handleChangeCheckbox(e, props)} />
 											</td>
 											<td className="px-2 py-2">
-												<p className="align-top">
-													<FolderIcon type={type} />
-													{content}
-												</p>
+												<Link to={`/pcm/project/${projectID}/folder/${props._id}`} className="align-top">
+													<FolderIcon type="folder" />
+													{props.name}
+												</Link>
 											</td>
-											<td className="py-2 px-2">{type !== 'folder' ? created_at : null}</td>
+											<td className="py-2 px-2"></td>
+											<td className="py-2 px-2"></td>
+											<td className="py-2 px-2 text-cbs-primary"></td>
 											<td className="py-2 px-2">
-												{
-													type !== 'folder' ?
-														<div>
-															<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="w-6 h-6 rounded-full inline-block mr-3" />
-															{created_by}
-														</div>
-														: null
-												}
+												<div className="flex">
+													{props.members.map((member: any, index1: any) => {
+														if(index1 < 5){
+															return <img src={`${process.env.REACT_APP_URL_S3_USER}/${member?.image}`} key={index1} alt="" className="w-6 h-6 rounded-full" />
+														}
+														if(index1 == 5){
+															return <div key={index1} className="h-6 w-6 rounded-full -ml-1.5 bg-cbs-border text-white flex justify-center items-center" style={{ fontSize: "10px" }}>+{props.members.length - 5}</div>
+														}
+													})}
+												</div>
 											</td>
-											<td className="py-2 px-2 text-cbs-primary">{type !== 'folder' ? getStatusLabel(status) : null}</td>
+										</tr>
+									)
+								})
+							}
+							{/* Danh sách task */}
+							{
+								listTasks.map(props => {
+									const percent =  ((props.amountFinishedChecklist / props.amountChecklist) || 0) * 100;
+
+									return (
+										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+											<td className="px-4 py-2 w-[1px]">
+												<input className="cbs-checkbox" type="checkbox" />
+											</td>
+											<td className="px-2 py-2">
+												<Link to={`/pcm/detail/${props._id}`}  className="align-top">
+													<FolderIcon type="file" />
+													{props.name}
+												</Link>
+											</td>
+											<td className="py-2 px-2">{moment(props.actualFinishTime).format('L')}</td>
 											<td className="py-2 px-2">
-												{
-													type === 'folder'
-														? <div className="flex">
-															<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="w-6 h-6 rounded-full" />
-															<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="w-6 h-6 rounded-full -ml-1.5" />
-															<img src="https://gamek.mediacdn.vn/133514250583805952/2021/9/17/photo-1-1631856680040545802895.jpg" alt="" className="w-6 h-6 rounded-full -ml-1.5" />
-															<div className="h-6 w-6 rounded-full -ml-1.5 bg-cbs-border text-white flex justify-center items-center" style={{ fontSize: "10px" }}>+15</div>
-														</div>
-														: <div className="pr-4">
-															<p className="text-right">3/10</p>
-															<div className="rounded border-0.5 border-cbs-border h-1 box-content mt-1">
-																<div className="h-full bg-cbs-schedule-after-7days" style={{ width: '30%' }}></div>
-															</div>
-														</div>
-												}
+												<div>
+													<img src={`${process.env.REACT_APP_URL_S3_USER}/${props.assignee?.image}`} alt="" className="w-6 h-6 rounded-full inline-block mr-3" />
+													{props.assignee?.bizfullname}
+												</div>
+											</td>
+											<td className="py-2 px-2 text-cbs-primary">{props.status && PCM_STATUS_TASK[props.status - 1].text}</td>
+											<td className="py-2 px-2">
+												<div className="pr-4">
+													<p className="text-right">{props.amountChecklist}/{props.amountFinishedChecklist}</p>
+													<div className="rounded border-0.5 border-cbs-border h-1 box-content mt-1">
+														<div className="h-full bg-cbs-schedule-after-7days" style={{ width: `${percent}%` }}></div>
+													</div>
+												</div>
 											</td>
 										</tr>
 									)
@@ -174,7 +245,18 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						</tbody>
 					</table>
 				</div>
-				<Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+
+				{hasNextPage && (
+					<button
+						className="text-primary text-[13px]"
+						onClick={fetchNextPage}
+					>
+						{`Xem thêm (${
+							Number(totalRecord) - listPcmPlanGroup.length
+						})`}
+					</button>
+				)}
+				{/* <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" /> */}
 			</div>
 		</>
 	);

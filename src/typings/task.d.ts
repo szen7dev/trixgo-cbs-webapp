@@ -1,6 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { User } from "typings/user";
 import type { Company, FileProps } from "typings/common";
+import { Contract } from "./cmcs";
 
 export type ListTaskPayload = {
   keyword?: string,
@@ -32,6 +33,8 @@ export type Project = {
   _id: string;
   name: string;
   sign: string;
+  company: string,
+  startTime: string
 };
 
 export type Group = {
@@ -50,6 +53,7 @@ export type Field = {
 export type Task = {
   _id: string;
   name: string;
+  status: number;
   expiredTime: string;
   typeStatus: number;
   checklist: string;
@@ -60,6 +64,7 @@ export type Task = {
   project: Project;
   company: Company,
   group: Group,
+  contract: Contract,
   field: Field,
   startTime: string,
   subType: number,
@@ -72,6 +77,9 @@ export type Task = {
   actualFinishTime: string;
   amountResponse: number;
   amountMarkedResponse: number;
+  amountChecklist: number;
+  amountFinishedChecklist: number;
+  createAt: string
 };
 
 export interface addTaskPayload {
@@ -91,11 +99,16 @@ export interface addTaskPayload {
 
 export interface updateTaskPayload {
   taskID: string;
+  contractID?: string;
   name?: string;
   status?: number;
   priority?: number;
-  expiredTime?: string
-  isAddSignature?: boolean
+  expiredTime?: string;
+  isAddSignature?: boolean;
+  flags?: Array<string>;
+  flagsRemoves?: Array<string>;
+  authorAttachs?: Array<string>;
+  assigneeAttachs?: Array<string>;
 }
 
 export interface addTaskResponse {
@@ -270,6 +283,13 @@ export type ResponsePayload = {
   images?: Array<string>;
 };
 
+export type UpdateResponsePayload = {
+  taskID: string;
+  commentID: string;
+  files?: string[];
+  images?: string[];
+};
+
 export type ResponseResponse = APIResponse & {
   data: {
     result: ResponseProps,
@@ -308,6 +328,7 @@ export type ListCommentsPayload = {
   limit?: number;
   taskID?: string;
   companyID?: string;
+  contractID?: string;
   parentID?: string;
   select?: string;
   populates?: string;

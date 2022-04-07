@@ -17,6 +17,7 @@ export type User = {
   email: string;
   phone: string;
   fullname: string;
+  bizfullname: string;
   company: {
     _id: string;
     name: string;
@@ -24,6 +25,11 @@ export type User = {
     image: string;
   };
   department: {
+    _id: string;
+    name: string;
+    sign: string;
+  };
+  position: {
     _id: string;
     name: string;
     sign: string;

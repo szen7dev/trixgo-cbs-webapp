@@ -1,48 +1,45 @@
 import { FC, useCallback, useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
 import cn from "classnames";
 import moment from "moment";
 import { useModal } from "services/hooks/useModal";
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
-
 import { SearchInput, Paginate } from "shareComponents/common";
 import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
-import { formatNumberMoney } from "utils/cmcs"
-import { APP_ID } from "apis/localdb"
-
+import { formatNumberMoney } from "utils/cmcs";
 import styles from 'views/cmcs/styles/styles.module.css';
-
-import PolygonIcon from "assets/images/icon-polygon.svg";
-
 import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
-import { useHistoryTraffics } from "services/hooks/useAuth";
+import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
+import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
+import { debounce } from "lodash";
 
 export const CmcIncomePage: FC = () => {
-  const [itemChecked, setItemChecked] = useState('');
+  // --------- Check phân quyền
+  const payload: any = {
+    appID: APP_ID.CMCS.id,
+    menuID: APP_ID.CMCS.menuCmcsApp.income.id,
+    type: "1"
+  };
+  const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
+  // ---------
+  const { createHistoryTraffics } = useHistoryTraffics();
+  useEffect(() => {
+    createHistoryTraffics({...payload, type: 1});
+  }, []);
 
+  const [itemChecked, setItemChecked] = useState('');
+  const [keyword, setKeyword] = useState("");
   const [pageParam, setPageParam] = useState('');
   const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
 
-  const contractIncome = UseContractIncomeList(pageParam);
+  const contractIncome = UseContractIncomeList(pageParam, keyword);
   const { createContractMutateAsync, loading } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
-
-  const { createHistoryTraffics } = useHistoryTraffics();
-
-  useEffect(() => {
-    createHistoryTraffics(
-      {
-        "appID": APP_ID.CMCS.id,
-        "menuID": APP_ID.CMCS.menuCmcsApp.income.id,
-        "type": 1
-      }
-    )
-  }, [])
 
   const prevPageAction = () => {
     if (!contractIncome.nextCursor) {
@@ -51,7 +48,6 @@ export const CmcIncomePage: FC = () => {
       const prev = prevCursor.findIndex(item => item === contractIncome.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
-
   };
 
   useEffect(() => {
@@ -125,17 +121,6 @@ export const CmcIncomePage: FC = () => {
     )
   }
 
-  const handleOnFilter = useCallback((values) => {
-    console.log('🚀 ~ handleOnFilter ~ values', values)
-
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
-
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
-
   return (
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
@@ -144,26 +129,30 @@ export const CmcIncomePage: FC = () => {
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            // eslint-disable-next-line no-console
-            onChange={(event) => console.log(event.target.value)}
+            onChange={debounce(
+							(event: any) => setKeyword(event.target.value),
+							500
+						)}
           />
-          {/* <DropdownFilterButton
-            onSubmit={handleOnFilter}
-            onCancel={handleOnCancelFilter}
-            initialValues={{}}
-          /> */}
           {itemChecked && (
             <div className="border-l-2 border-primary-border ml-5 pl-5">
-              <ActionMenuTopBar deleteAction={handleDeleteAction} editAction={handleEditAction} />
+              <ActionMenuTopBar
+                deleteAction={handleDeleteAction} 
+                editAction={handleEditAction}
+                updatePermission={updatePermission}
+                deletePermission={deletePermission}
+              />
             </div>
           )}
         </div>
-        <button
-          className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-          onClick={handleAddAction}
-        >
-          Tạo mới
-        </button>
+        {createPermission && 
+           <button
+           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+           onClick={handleAddAction}
+         >
+           Tạo mới
+         </button>
+        }
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -172,12 +161,9 @@ export const CmcIncomePage: FC = () => {
             <th className={cn("pb-1 pt-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
                 />
-                <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
             <th className="w-1/5 pb-1 pt-1">
@@ -234,19 +220,16 @@ export const CmcIncomePage: FC = () => {
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
                     checked={itemChecked === item._id}
                     onChange={() => setItemChecked(item._id)}
-                    style={{ marginLeft: "-23px" }}
                   />
                 </td>
-                <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
-                  <td className="py-1 px-2">
+                <td className="py-1 px-2">
+                  <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
                     {item.name}
                     <p className="text-primary-gray">{item?.project?.sign} | {item.sign}</p>
-                  </td>
-                </Link>
+                  </Link>
+                </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0))} </td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance || 0))}</td>
@@ -266,9 +249,3 @@ export const CmcIncomePage: FC = () => {
     </main>
   );
 };
-
-// export const CmcIncomePage: FC = () => {
-//   return (
-//     <>kkkkk</>
-//   );
-// }

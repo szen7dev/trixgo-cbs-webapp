@@ -11,6 +11,7 @@ interface Project {
     _id: string;
     name: string;
     sign: string;
+    company: string;
 }
 
 export interface Document {
@@ -19,6 +20,7 @@ export interface Document {
     project: Project;
     name?: string;
     sign: string;
+    image: string;
     sender?: {
         _id: string;
         name: string;
@@ -76,6 +78,7 @@ export interface Document {
         name: string;
         sign: string;
     },
+    amountDocumentChild?:number 
 }
 
 export interface ListDocumentQueryPayload extends QueryParam {

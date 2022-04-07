@@ -1,13 +1,13 @@
 import { FC } from "react";
 
 import { useModal } from "services/hooks/useModal";
-// import { usePcmAdmin } from "services/hooks/pcm/usePcmAdmin";
+// import { useAdmin } from "services/hooks/pcm/useAdmin";
 // import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 
 const Delete: FC<any> = ({ idsChecked, setIdsChecked }) => {
   const { closeModal } = useModal();
-  // const { removeManyAppRoleMutateAsync, refetchPcmAdmin } = usePcmAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  // const { removeManyAppRoleMutateAsync, refetchPcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: "" });
 
   const onDelete = async () => {
     toast.info('Tính năng đang đợi cấp API');

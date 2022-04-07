@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import SearchIcon from "assets/images/icons8-search.svg";
 import PolygonIcon from "assets/images/icon-polygon.svg";
 import MemberIcon from "assets/images/member-icon.svg";
-import { useGetUsersByCompany } from "services/hooks/pcm/usePcmAdminDetail";
+import { useGetUsersBySystem } from "services/hooks/auth/useAdmin";
 import { useAppUser } from 'services/hooks/apps/useAppUser';
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
   const LIMIT_PER_USER_APP = 20;
   const { closeModal } = useModal();
   const [keyword, setKeyword] = useState("");
-  const { listMembers, nextPageGetUsersByCompany, hasNextPageGetUsersByCompany, totalRecord } = useGetUsersByCompany(companyID, keyword);
+  const { listMembers, nextPageGetUsersBySystem, hasnextPageGetUsersBySystem, totalRecord } = useGetUsersBySystem(companyID, keyword);
   const { addMemberToAppUserAsync, refetch } = useAppUser({ appID, companyID, limit: LIMIT_PER_USER_APP });
 
   const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
@@ -132,9 +132,9 @@ export const ModalCreateMember: FC<Props> = ({ appID, companyID }) => {
             </div>
           ))
           }
-          {hasNextPageGetUsersByCompany && (
+          {hasnextPageGetUsersBySystem && (
             <div className="w-full flex justify-center my-5">
-              <button onClick={nextPageGetUsersByCompany}>
+              <button onClick={nextPageGetUsersBySystem}>
                 <span className="text-primary">{`Xem thêm (${totalRecord - listMembers.length
                   })`}</span>
               </button>

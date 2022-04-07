@@ -26,6 +26,7 @@ export interface Company {
 export interface Human {
     _id: string;
     fullname?: string;
+    bizfullname?: string;
     image?: string;
 }
 
@@ -38,6 +39,7 @@ export interface CertificateType {
     name: string;
     _id: string;
 }
+
 export interface CertificateName {
     name: string;
     _id: string;
@@ -63,6 +65,7 @@ export interface ContractType {
         buildingGrade: number;
     };
 }
+
 export interface File {
     name: string;
     nameOrg: string;

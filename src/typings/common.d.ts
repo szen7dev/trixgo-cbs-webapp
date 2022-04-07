@@ -98,6 +98,32 @@ export type ListCommentResponse = APIResponse & {
  * ============================ ********** ===============================
  */
 
+export type QueryParams = {
+  limit?: number;
+  lastestID?: string;
+  keyword?: string;
+  select?: string;
+  populates?: Populate;
+}
+
+export type Company = {
+  _id: string;
+  name: string;
+  sign: string;
+}
+
+export type Department = {
+  _id: string;
+  name: string;
+  sign: string;
+}
+
+export type Position = {
+  _id: string;
+  name: string;
+  sign: string;
+}
+
 export type Locale = {
   id: string;
   code: string;
@@ -112,12 +138,6 @@ export type NavLink = {
   url: string;
   pathname: string;
   icon: ReactNode;
-};
-
-export type Company = {
-  _id: string;
-  name: string;
-  sign: string;
 };
 
 export type TaskManagementNavLink = {
@@ -139,4 +159,12 @@ export type NavLinkTaskDashboard = {
   url: string;
   pathname: string;
   icon?: ReactNode;
+}
+
+declare global {
+  interface Date {
+      addHours: (h: number) => this;
+      addMinutes: (m: number) => this;
+      addDays: (d: number) => this;
+  }
 }

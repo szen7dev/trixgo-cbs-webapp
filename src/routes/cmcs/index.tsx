@@ -17,6 +17,7 @@ import {
     CmcGuaranteePage,
     ContractHome,
     ContractIpc,
+    ContractPayment,
     ContractProduce,
     ContractAdminPage,
     CmcDashboardPage,
@@ -33,12 +34,13 @@ import CmcsAdminFunctionalTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdmi
 import CmcsAdminDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminDetail";
 import CmcsAdminAuthorTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminAuthorTab";
 import LayoutSecondary from "views/cmcs/shareComponents/layouts/LayoutSecondary";
+import CmcsAdminContractTab from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractTab";
+import CmcsAdminContractDetail from "views/cmcs/pages/CmcAdminPage/pages/CmcsAdminContractDetail";
 
 const CmcsRouter: FC = () => {
     return (
         <Switch>
             <ProtectedRoute
-                exact
                 path="/cmcs/admin"
                 component={() => (
                     <CmcsLayout>
@@ -53,11 +55,14 @@ const CmcsRouter: FC = () => {
                                             // Push to state
                                             return ({ pathname: '/cmcs/admin/2', state: match ? match.params.id : null })
                                         }
-                                    }
+                                    },
+                                    { id: '3', title: 'Hợp đồng', path: '/cmcs/admin/3', },
                                 ]}>
                                     <Route exact path="/cmcs/admin" component={CmcsAdminFunctionalTab} />
                                     <Route exact path="/cmcs/admin/:id/detail" component={CmcsAdminDetail} />
                                     <Route exact path="/cmcs/admin/2" component={CmcsAdminAuthorTab} />
+                                    <Route exact path="/cmcs/admin/3" component={CmcsAdminContractTab} />
+                                    <Route exact path="/cmcs/admin/:id/contract" component={CmcsAdminContractDetail} />
                                 </LayoutSecondary>
                             </Route>
                         </Switch>
@@ -85,6 +90,24 @@ const CmcsRouter: FC = () => {
             />
             <ProtectedRoute
                 exact
+                path="/cmcs/expense"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcExpensePage />
+                    </CmcsLayout>
+                )}
+            />
+            {/* <ProtectedRoute
+                exact
+                path="/cmcs/portfolio"
+                component={() => (
+                    <CmcsLayout>
+                        <CmcPortfolioPage />
+                    </CmcsLayout>
+                )}
+            /> */}
+            <ProtectedRoute
+                exact
                 path="/cmcs/guarantee"
                 component={() => (
                     <CmcsLayout>
@@ -107,6 +130,16 @@ const CmcsRouter: FC = () => {
                 component={() => (
                     <CmcsContractLayout>
                         <ContractIpc />
+                    </CmcsContractLayout>
+                )}
+            />
+
+            <ProtectedRoute
+                exact
+                path="/cmcs/contract/:id/payment"
+                component={() => (
+                    <CmcsContractLayout>
+                        <ContractPayment />
                     </CmcsContractLayout>
                 )}
             />
@@ -144,24 +177,6 @@ const CmcsRouter: FC = () => {
                     <CmcsContractLayout>
                         <ContractDashBoard />
                     </CmcsContractLayout>
-                )}
-            />
-            <ProtectedRoute
-                exact
-                path="/cmcs/portfolio"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcPortfolioPage />
-                    </CmcsLayout>
-                )}
-            />
-            <ProtectedRoute
-                exact
-                path="/cmcs/expenses"
-                component={() => (
-                    <CmcsLayout>
-                        <CmcExpensePage />
-                    </CmcsLayout>
                 )}
             />
             <ProtectedRoute

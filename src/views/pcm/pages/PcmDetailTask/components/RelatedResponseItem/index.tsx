@@ -1,23 +1,32 @@
-import React, { FC, LegacyRef } from "react";
+import React, { FC, LegacyRef, useCallback, useState } from "react";
 import moment from "moment";
 import classNames from "classnames";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
-import { nl2p } from 'utils';
+/**
+ * Assets
+ */
 import HumanAvatar from "assets/images/human-avatar.svg";
-import DotsVerticalIcon from "assets/icons/DotsVertical";
-import PDFIcon from "assets/images/icons8-pdf-48 1.png";
 import CopyIcon from "assets/images/icons8-copy-96.svg";
 import IconDownload from "assets/images/icons8-download-48_3.svg";
 import TestImage from "assets/images/home-slide-img1.jpg";
+
+/**
+ * Apis, hooks
+ */
 import { ResponseProps } from "typings/task";
-import { FileUpdatePayload } from "typings/file";
+import { FileProps, FileUpdatePayload } from "typings/file";
 import TaskRepository from "apis/task";
 import FileRepository from "apis/upload";
 import { ImageProps } from "typings/common";
 import { getFileIcon } from 'utils/file';
+import { nl2p } from 'utils';
+import { User } from "typings/user";
+import { useUpload } from "services/hooks/useUpload";
+import { APP_ID } from "apis/localdb";
+import { useRelatedResponse } from "services/hooks/useTask";
 
 type Props = {
 	expanded?: boolean;
@@ -27,10 +36,40 @@ type Props = {
 	divRef?: LegacyRef<HTMLDivElement> | undefined;
 	refetchListResponseMarked?: () => void;
 	setAmountMarkedResponse?: React.Dispatch<React.SetStateAction<number>>;
+	author: User | null,
+	companyID: string,
+	projectID: string,
+	groupID: string,
 };
 
-export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response, divRef, onClickImage, refetchListResponseMarked, setAmountMarkedResponse }) => {
+export const RelatedResponseItem: FC<Props> = ({
+	expanded,
+	isHighlight,
+	response,
+	divRef,
+	author,
+	companyID,
+	projectID,
+	groupID,
+	onClickImage,
+	refetchListResponseMarked,
+	setAmountMarkedResponse
+}) => {
 	const inputRef = React.useRef<HTMLInputElement>(null);
+	const [responseFiles, setResponseFiles] = useState({
+		files: response.files || [],
+		images: response.images || []
+	})
+
+	const { addFileToUpload } = useUpload({
+		appID: APP_ID.PCM.id,
+		companyID,
+		projectID,
+		groupID
+	});
+
+	const { updateResponseAsync } = useRelatedResponse({ isFetch: false });
+
 	const { mutateAsync: updateMarkResponseAsync } =
 		useMutation((payload: { commentID: string, taskID: string, official: boolean }) =>
 			TaskRepository.updateMarkResponse(payload)
@@ -63,21 +102,85 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 			description: e.target.value
 		});
 
-		toast.success('Cập nhật ghi chú thành công', { autoClose: 2000 });
+		toast.success('Cập nhật ghi chú thành công', { autoClose: 1500 });
 	}, 1000)
+
+	const handleChangeUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+		try {
+			const files = e.target.files;
+
+			const filesID: string[] | undefined = [];
+			const imagesID: string[] | undefined = [];
+
+			const newFiles: any[] = [];
+			const newImages: any[] = [];
+
+			if(!files || !files.length) return;
+
+			for (const [, file] of Object.entries(files)) {
+				const { _id, nameOrg, path, mimeType, createAt } = await addFileToUpload({
+					files: file as any,
+					fileType: 2
+				});
+				if(!_id) continue;
+
+				const infoFile = {
+					_id,
+					nameOrg,
+					mimeType,
+					path,
+					createAt,
+					author
+				}
+
+				if(mimeType && mimeType.search('image') >= 0) {
+					imagesID[imagesID.length] = _id;
+					newImages[newImages.length] = infoFile;
+				} else{
+					filesID[filesID.length] = _id;
+					newFiles[newFiles.length] = infoFile;
+				}
+			}
+
+			const { error, data } = await updateResponseAsync({
+				taskID: response.task?._id,
+				commentID: response._id,
+				files: filesID,
+				images: imagesID
+			})
+
+			if(error) {
+				return toast.warn(data?.message || 'Thêm file thất bại')
+			}
+
+			if(newFiles.length || newImages.length) {
+				setResponseFiles(previous => ({
+					...previous,
+					...newFiles.length && { files: [...previous.files, ...newFiles] },
+					...newImages.length && { images: [...previous.images, ...newImages] }
+				}))
+			}
+
+			toast.success('Thêm file thành công');
+		} catch (error) {
+			console.error(error);
+			if(error instanceof Error) {
+				toast.error(error.message)
+			}
+		}
+	}, [])
 
 	return (
 		<>
-			<input
-				type='file'
-				ref={inputRef}
-				className="hidden"
-				accept="image/*"
-				onChange={e=>{
-					alert('upload file')
-				}}
-			/>
-			<div className={
+			{author?._id === response.author._id ? (
+				<input
+					type='file'
+					ref={inputRef}
+					className="hidden"
+					onChange={handleChangeUpload}
+				/>
+			) : ''}
+				<div className={
 				classNames("flex",
 					isHighlight
 						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300'
@@ -100,14 +203,15 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
 							<input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
-							<button
-								className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
-									} text-[13px] w-10 flex justify-center items-center rounded-full`}
-								onClick={e=>inputRef.current?.click()}
-							>
-								{/* <DotsVerticalIcon /> */}
-								<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
-							</button>
+							{author?._id === response.author._id ? (
+								<button
+									className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
+										} text-[13px] w-10 flex justify-center items-center rounded-full`}
+									onClick={e=>inputRef.current?.click()}
+								>
+									<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
+								</button>
+							) : ''}
 						</div>
 					</div>
 
@@ -124,7 +228,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 					{/* File */}
 					{expanded && (
 						<div>
-							{(response.files && response.files.length) ? response.files.map(file => (
+							{(responseFiles.files && responseFiles.files.length) ? responseFiles.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
 									<div className="w-full bg-gray-100 p-2 rounded-sm border border-slate-400">
 										<div>
@@ -190,10 +294,10 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 							)) : ''}
 
 							<div className="flex w-full space-x-2 mt-5 mb-2">
-								{(response.images && response.images.length) ? response.images.map((file, index) => {
+								{(responseFiles.images && responseFiles.images.length) ? responseFiles.images.map((file, index) => {
 									if (index < 2) {
 										return (
-											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(response.images || [], index)}>
+											<button className="w-1/3 relative" key={file._id} onClick={() => onClickImage && onClickImage(responseFiles.images || [], index)}>
 												<div className="pb-[100%]">
 													<div className="absolute inset-0">
 														<img src={file.path ? `${process.env.REACT_APP_URL_S3}${file.path}` : TestImage} className="w-full h-full object-cover" alt="test" />
@@ -212,7 +316,7 @@ export const RelatedResponseItem: FC<Props> = ({ expanded, isHighlight, response
 													alt="test"
 												/>
 												<div className="relative z-6">
-													<p className="text-4x-large text-white">+{response.images && response.images.length - 2}</p>
+													<p className="text-4x-large text-white">+{responseFiles.images && responseFiles.images.length - 2}</p>
 												</div>
 											</div>
 										)

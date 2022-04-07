@@ -1,18 +1,87 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import React from "react";
 
 import { ContractRepository } from 'apis/item';
 
 import type {
     ListContractsPayload,
-    ContractProps,
-    GetInfoContractPayload
+    Contract,
+    InfoContractPayload
 } from "typings/cmcs";
 
+interface UseContract {
+    loading: boolean;
+    totalRecord: number;
+    hasNextPage: boolean | undefined;
+    listContracts: Array<Contract>;
+    contractInfo: Contract;
+    refetch: () => void;
+    fetchNextPage: () => void;
+}
+
+type Props = {
+    params: ListContractsPayload & InfoContractPayload,
+    isFetch?: boolean,
+    isFetchInfo?: boolean
+}
+
+export const useContract = ({
+    params,
+    isFetch = false,
+    isFetchInfo = false
+}: Props): UseContract => {
+    const { data: infoContract } =
+        useQuery("contract_info", () => ContractRepository.getInfoContract(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['contracts', params],
+        async ({ pageParam }: any) =>
+            ContractRepository.getListContract({
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch
+        }
+    );
+
+    const listContracts = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const contractInfo = infoContract?.data;
+
+    return {
+        contractInfo,
+        listContracts,
+        loading: isLoading,
+        totalRecord,
+        hasNextPage,
+        refetch,
+        fetchNextPage
+    }
+}
+
+// Những Hook này cần refactor lại, không nên sử dụng
 interface UseQueryContract {
     fetchNextPageContract: () => void;
     refetchListContracts: () => void;
-    listContracts: ContractProps[];
+    listContracts: Contract[];
     totalRecord: number;
     totalPages: number;
     loading: boolean;
@@ -51,7 +120,7 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
         )
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
-    const totalPages = data?.pages[0]?.data?.totalPages || 0;
+    const totalPages = data?.pages[0]?.data?.totalPage || 0;
 
     return {
         fetchNextPageContract,
@@ -65,15 +134,15 @@ export const useQueryItemContract = (params?: ListContractsPayload): UseQueryCon
 }
 
 interface UseQueryDetailContract {
-    detailContract: ContractProps,
+    detailContract: Contract,
     loading: boolean,
-    onFetchDetailContractAsync: (params: GetInfoContractPayload) => Promise<ContractProps>
+    onFetchDetailContractAsync: (params: InfoContractPayload) => Promise<Contract>
 }
-export const useQueryDetailContract = (params?: GetInfoContractPayload): UseQueryDetailContract => {
+export const useQueryDetailContract = (params?: InfoContractPayload): UseQueryDetailContract => {
     const [detailContract, setDetailContract] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
     
-    const onFetchDetailContract = React.useCallback(async (_params: GetInfoContractPayload): Promise<any> => {
+    const onFetchDetailContract = React.useCallback(async (_params: InfoContractPayload): Promise<any> => {
         try {
             setLoading(true)
             const result = await ContractRepository.getInfoContract({..._params});

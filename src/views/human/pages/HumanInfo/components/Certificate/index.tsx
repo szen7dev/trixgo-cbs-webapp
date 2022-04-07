@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import toArray from "lodash/toArray";
 import className from "classnames";
-
+import { APP_KEY } from 'utils/constants';
 import { HumanInfoHeader } from "views/human/shareComponents/common";
 import ThreeDotIcon from "assets/images/icon-3dots.png";
 import UploadFileIcon from "assets/images/icons8-upload-document.svg";
@@ -44,6 +44,7 @@ export enum CONTACT_DOCUMENT_GRADES {
 }
 interface CertificateProps {
   humanId: string;
+  companyID: any;
 }
 
 export const Certificate: FC<CertificateProps> = (props) => {
@@ -52,11 +53,12 @@ export const Certificate: FC<CertificateProps> = (props) => {
   const { openModal, closeModal } = useModal();
   const { openDeleteConfirm } = useDeleteConfirm();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { addFileToUpload } = useUpload({
-    appID: "61e049c9fdebf77b072d1b13"
-  });
+  const { humanId, companyID } = props;
 
-  const { humanId } = props;
+  const { addFileToUpload } = useUpload({
+    appID: APP_KEY.HUMAN,
+    companyID
+  });
 
   const [
     uploads,
@@ -235,7 +237,7 @@ export const Certificate: FC<CertificateProps> = (props) => {
           listFileContractDocumentAsync.push(
             updateFileContractDocumentAsync({
               contactDocumentID,
-              fileID: _id,
+              filesID: [_id],
             })
           );
           setIDFileUploaded(key, _id, contactDocumentID);
@@ -243,6 +245,7 @@ export const Certificate: FC<CertificateProps> = (props) => {
       }
       Promise.all(listFileContractDocumentAsync)
         .then(() => {
+          
           removeAllFiles();
           refetchListContactDocument();
         })

@@ -1,5 +1,5 @@
 /*=====LIBRARY=====*/
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { ModalProvider } from "views/document/contexts/modal";
@@ -8,7 +8,7 @@ import { ModalProvider } from "views/document/contexts/modal";
 import LayoutSecondary from 'views/ppt/sharedComponents/layouts/LayoutSecondary'
 
 /*=====MODALS COMPONENT=====*/
-import { ModalCreateDocument } from 'views/document/sharedComponents/common';
+import { ModalCreateDocument, ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 
 /*=====PAGES=====*/
 // import ErrorPage from 'views/authentication/Error'
@@ -19,7 +19,6 @@ import {
 	DocumentProjectPage,
 	DocumentProfilePage,
 	DocumentReportPage,
-	DocumentOfPackagePage
 } from 'views/document/pages';
 import {
 	ProjectBiddingPage,
@@ -36,7 +35,7 @@ import {
 	ProjectMomPage,
 	ProjectOtherPage,
 	ProjectPaymentPage,
-	ProjectPhotoPackagePage,
+	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectProductionPage,
 	ProjectPunchPage,
@@ -78,7 +77,7 @@ const PPTRoutes: FC = () => {
 						<Switch>
 							<Route exact path="/ppt/project/:id/home" component={ProjectHomePage} />
 							<Route exact path="/ppt/project/:id/dashboard" component={ProjectDashboardPage} />
-							<Route exact path='/ppt/project/:id/folder' component={ProjectFolderPage} />
+							<Route exact path='/ppt/project/:id/group' component={ProjectFolderPage} />
 							<Route exact path='/ppt/project/:id/schedule' component={ProjectSchedulePage} />
 							<Route path="/ppt/project/:id/budget">
 								<LayoutSecondary pages={[
@@ -123,12 +122,12 @@ const PPTRoutes: FC = () => {
 							</Route>
 							<Route exact path='/ppt/project/:id/document/:docID' component={DocumentDetailPage} />
 							<Route exact path='/ppt/project/:id/photo' component={ProjectPhotoPage} />
-							<Route exact path='/ppt/project/:id/photo/package/:packageId' component={ProjectPhotoPackagePage} />
+							<Route exact path='/ppt/project/:id/photo/contract/:contractID' component={ProjectPhotoContractPage} />
 							<Route path='/ppt/project/:id/drawing'>
 								<LayoutSecondary pages={[
 									{ id: '1', title: 'Bản vẽ', path: '/ppt/project/:id/drawing', navExact: true },
-									{ id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/ppt/project/:id/drawing/1' },
-									{ id: '3', title: 'Quản lý phiên bản', path: '/ppt/project/:id/drawing/2' },
+									// { id: '2', title: 'Chỉ dẫn kỹ thuật', path: '/ppt/project/:id/drawing/1' },
+									// { id: '3', title: 'Quản lý phiên bản', path: '/ppt/project/:id/drawing/2' },
 								]}>
 									<Route exact path='/ppt/project/:id/drawing' component={ProjectDrawingPage} />
 									<Route exact path='/ppt/project/:id/drawing/1' component={() => <>hello</>} />
