@@ -59,7 +59,7 @@ export const ListTable: FC<Props> = ({
         : removeHtmlTag;
     return result;
   };
-
+  
   return (
     <table className="relative">
       <thead className="bg-gray-50 sticky top-0 z-10">

@@ -43,6 +43,9 @@ type UseTaskProps = Partial<{
     typeStatus?: string;
     statusNe?: string;
     groupID?: string;
+    companyOfAssignee?: string;
+    isPassPermision?: string;
+    projectID?: string;
     type?: number;
     status?: string;
   }>

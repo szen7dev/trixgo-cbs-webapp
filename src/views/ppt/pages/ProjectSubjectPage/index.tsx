@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from "react";
+import { useParams, Link } from 'react-router-dom';
 
 // Hook
 import useCheckedList from 'services/hooks/ppt/useCheckedList';
+import { useQueryListCompanyOfAssigneeAndAmountTask } from "services/hooks/pcm/useStatistical";
 
 import { SearchInput, GroupActions, ButtonMore } from "shareComponents/common";
 
@@ -13,19 +15,69 @@ import CaretDownIcon from "assets/images/icon-caret-down.png";
 const ProjectSubjectPage: FC = () => {
 	const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
+	const [dataCompany, setDataCompany] = useState([]);
+	const [totalTaskOverdueWork, setTotalTaskOverdueWork] = useState();
+	const [totalTaskNextWeekWork, setTotalTaskNextWeekWork] = useState();
+	const [totalTaskMoreThan7Days, setTotalTaskMoreThan7Days] = useState();
+	const [totalTaskFinish, setRotalTaskFinish] = useState();
+
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
+	const { id: projectID } = useParams<{ id: string }>();
+
+	const { 
+		listCompany,
+        listCompanyAndTaskOverdueWork,
+        listCompanyAndTaskNextWeekWork,
+        listCompanyAndTaskMoreThan7Days,
+		listCompanyAndTaskFinish,
+        isLoading,
+	} = useQueryListCompanyOfAssigneeAndAmountTask({
+		projectID,
+	});
+	
+	useEffect(() => {
+		if(listCompany?.length && listCompanyAndTaskOverdueWork?.length && listCompanyAndTaskNextWeekWork?.length && listCompanyAndTaskMoreThan7Days?.length){
+			let totalOverdueWorkAll: any = 0
+			let totalNextWeekWorkAll: any = 0
+			let totalMoreThan7DaysAll: any = 0
+			let totalFinishAll: any = 0
+			const data: any = listCompany.map((item: any)=> {
+				const totalOverdueWork: any = listCompanyAndTaskOverdueWork.find((item1: any) => item1._id == item._id)
+				const totalNextWeekWork: any = listCompanyAndTaskNextWeekWork.find((item1: any) => item1._id == item._id)
+				const totalMoreThan7Days: any = listCompanyAndTaskMoreThan7Days.find((item1: any) => item1._id == item._id)
+				const totalFinish: any = listCompanyAndTaskFinish.find((item1: any) => item1._id == item._id)
+				// Tính tổng số lượng task
+				totalOverdueWorkAll +=totalOverdueWork?.count || 0;
+				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
+				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
+				totalFinishAll+=totalFinish?.count || 0;
+				return {
+					...item,
+					totalOverdueWork: totalOverdueWork?.count || 0,
+					totalNextWeekWork: totalNextWeekWork?.count || 0,
+					totalMoreThan7Days: totalMoreThan7Days?.count || 0,
+					totalFinish: totalFinish?.count || 0
+				}
+			})
+			setDataCompany(data);
+			setTotalTaskOverdueWork(totalOverdueWorkAll)
+			setTotalTaskNextWeekWork(totalNextWeekWorkAll)
+			setTotalTaskMoreThan7Days(totalMoreThan7DaysAll)
+			setRotalTaskFinish(totalFinishAll)
+		}
+	}, [listCompany, listCompanyAndTaskOverdueWork, listCompanyAndTaskNextWeekWork, listCompanyAndTaskMoreThan7Days]);
 
 	useEffect(() => {
 		document.title = "CHG.THT-Hồ sơ thanh toán"
-		setData(() => Array.from({ length: 30 }).map((_, index) => ({
-			id: index,
-			project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
-			joined: 8,
-			worked: 15,
-			created_at: "15:30 22/12/2021",
-			updated_at: "15:30 22/12/2021",
-			status: index,
-		})));
+		// setData(() => listCompany.map((company, index) => ({
+		// 	id: index,
+		// 	project: index % 2 ? "Thi công rà phá bom mìn, vật nổ" : 'Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà',
+		// 	joined: 8,
+		// 	worked: 15,
+		// 	created_at: "15:30 22/12/2021",
+		// 	updated_at: "15:30 22/12/2021",
+		// 	status: index,
+		// })));
 	}, []);
 
 	const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
@@ -34,28 +86,28 @@ const ProjectSubjectPage: FC = () => {
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Báo cáo tổng hợp công việc</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
+				{/* <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} /> */}
 				{/* <DropdownFilterButton /> */}
-				<GroupActions className="flex items-center flex-1" />
+				{/* <GroupActions className="flex items-center flex-1" /> */}
 
 				<div className="text-x-large flex items-center gap-x-4">
 					<span>
 						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-expired"></i>
-						125
+						{totalTaskOverdueWork}
 					</span>
 					<span>
 						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-nextweek"></i>
-						226
+						{totalTaskNextWeekWork}
 					</span>
 					<span>
 						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-schedule-after-7days"></i>
-						182
+						{totalTaskMoreThan7Days}
 					</span>
 					<span>
 						<i className="inline-block align-middle mr-1 w-2 h-2 rounded-lg bg-cbs-primary"></i>
-						277
+						{totalTaskFinish}
 					</span>
-					<ButtonMore />
+					{/* <ButtonMore /> */}
 				</div>
 			</div>
 			<div className="flex-1 overflow-y-auto">
@@ -78,7 +130,7 @@ const ProjectSubjectPage: FC = () => {
 								</span>
 							</th>
 							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
-								Đơn vị thực hiện
+								Mã hiệu
 							</th>
 							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
 								<div className="flex justify-between">
@@ -115,25 +167,26 @@ const ProjectSubjectPage: FC = () => {
 					</thead>
 					<tbody className="text-small">
 						{
-							data.map(({
-								id,
-							}) => {
+							dataCompany?.map((company: any) => {
 								return (
-									<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+									<tr key={company._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
-											<input className="cbs-checkbox" type="checkbox" value={id} checked={Boolean(assigned[id])} onChange={e => handleChangeCheckbox(e, { id })} />
+											<input className="cbs-checkbox" type="checkbox" value={company._id} checked={Boolean(assigned[company._id])} onChange={e => handleChangeCheckbox(e, { id: company._id })} />
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">Thi công ép cọc thí nghiệm, thí nghiệm cọc thí nghiệm và thi công ép cọc đại trà</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">Cục rà phá bom mìn-Vabomin</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">
+											<Link to={`/pcm/project/${projectID}/subject/company/${company._id}`}>
+												{company.name}
+											</Link>
+										</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">{company.sign}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											<div className="flex w-full h-3 mt-2">
 												<button
 													className="flex items-center justify-center bg-red-500"
 													style={{ width: `${30}%` }}
-													onClick={toggleVisible}
-												>
+													onClick={toggleVisible}>
 													<span className="text-white">
-														8
+														{company?.totalOverdueWork}
 													</span>
 												</button>
 												<button
@@ -142,7 +195,7 @@ const ProjectSubjectPage: FC = () => {
 													onClick={toggleVisible}
 												>
 													<span className="text-white">
-														12
+														{company?.totalNextWeekWork}
 													</span>
 												</button>
 												<button
@@ -151,13 +204,13 @@ const ProjectSubjectPage: FC = () => {
 													onClick={toggleVisible}
 												>
 													<span className="text-white">
-														30
+														{company?.totalMoreThan7Days}
 													</span>
 												</button>
 											</div>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-											<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >15</div>
+											<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div>
 										</td>
 									</tr>
 								)
