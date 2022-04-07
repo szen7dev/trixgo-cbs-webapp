@@ -209,7 +209,7 @@ const PCMRouter: FC = () => {
 								<Route exact path="/pcm/admin/:id/project" component={ProjectAdminProjectDetail} />
 							</LayoutSecondary>
 						</Route>
-
+							
 						<Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
 
 						<Route exact path="/pcm/home" component={PcmHome} />
