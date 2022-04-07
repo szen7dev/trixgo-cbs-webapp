@@ -122,62 +122,62 @@ export const SupportCompanyPage: FC = () => {
 		<main className="relative h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
 				<div className="flex items-center">
-				<p className="text-lg">Danh sách</p>
-				<SearchInput
-					classNameWrapper="ml-4"
-					classNameInput="outline-none w-[296px]"
-					onChange={onSearch}
-				/>
-				
-				{companiesChecked.length === 1 ? (
-				<button 
-					className="mr-3" 
-					onClick={() => {
-					setCompaniesChecked([]);
-					toggleModalCreateOrUpdateCompany();
-					}}
-				>
-					<img src={iconPencil} alt="icon pencil" />
-				</button>
-				) : ''}
+					<p className="text-lg">Danh sách</p>
+					<SearchInput
+						classNameWrapper="ml-4"
+						classNameInput="outline-none w-[296px]"
+						onChange={onSearch}
+					/>
 
-				{companiesChecked.length ? (
-				<button
-					onClick={() =>
-					openModal(
-						<div
-						className={
-							"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
-						}
+					{companiesChecked.length === 1 ? (
+						<button
+							className="mr-3"
+							onClick={() => {
+							setCompaniesChecked([]);
+							toggleModalCreateOrUpdateCompany();
+							}}
 						>
-						<ModalConfirm onConfirm={handleConfirmDelete} />
+							<img src={iconPencil} alt="icon pencil" />
+						</button>
+					) : ''}
+
+					{companiesChecked.length ? (
+					<button
+						onClick={() =>
+						openModal(
+							<div
+							className={
+								"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+							}
+							>
+								<ModalConfirm onConfirm={handleConfirmDelete} />
+							</div>
+						)
+						}>
+						<img src={DeleteIcon} alt="Delete" />
+					</button>
+					) : ''}
+					{/* <FinancialCashFlowFilterButton />
+					{ && (
+						<div className="border-l-2 border-primary-border ml-5 pl-5">
+						<ActionGroupFinancial />
 						</div>
-					)
-					}>
-					<img src={DeleteIcon} alt="Delete" />
-				</button>
-				) : ''}
-				{/* <FinancialCashFlowFilterButton />
-				{ && (
-					<div className="border-l-2 border-primary-border ml-5 pl-5">
-					<ActionGroupFinancial />
-					</div>
-				)} */}
+					)} */}
 				</div>
 				<div className="flex items-center">
-				<button
-					className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-					onClick={() => {
-						setCompaniesChecked([]);
-						clearData();
-						toggleModalCreateOrUpdateCompany();
-					}}
-				>
-					Tạo mới
-				</button>
-				<div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
-					<img src={ThreeDotVerticalIcon} alt="Three Dot" />
-				</div>
+					<button
+						className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
+						onClick={() => {
+							setCompaniesChecked([]);
+							clearData();
+							toggleModalCreateOrUpdateCompany();
+						}}
+					>
+						Tạo mới
+					</button>
+					<div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
+						<img src={ThreeDotVerticalIcon} alt="Three Dot" />
+					</div>
 				</div>
 			</header>
 			<div className="overflow-auto" style={{height:'calc(100% - 87px)'}}>

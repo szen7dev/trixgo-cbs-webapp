@@ -1,26 +1,22 @@
 import { FC, useState, useCallback } from "react";
 
 import { useModal } from "services/hooks/useModal";
-import { useParams, useHistory, useLocation } from "react-router-dom";
-import { SearchInput } from "shareComponents/common";
-import debounce from "lodash/debounce";
+import { useHistory } from "react-router-dom";
+// import { SearchInput } from "shareComponents/common";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { CreateMemberPackage, DeleteMembersPackage } from "../../modal";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
-import { APP_ID } from "apis/localdb";
+// import { APP_ID } from "apis/localdb";
 
-import CreateMemberGroup from "../../modal/CreateMemberGroup";
+// import CreateMemberGroup from "../../modal/CreateMemberGroup";
 
 const PackageDocumentMember: FC<any>  = ({ packageID }) => {
-
 	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<string[]>([]);
-	const [keyword, setKeyword] = useState("");
 	const { openModal } = useModal();
 
 	// Call api 
@@ -126,14 +122,11 @@ const PackageDocumentMember: FC<any>  = ({ packageID }) => {
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
-									value=""
-									id="flexCheckDefault"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/5 pb-1 pt-1">
@@ -160,7 +153,6 @@ const PackageDocumentMember: FC<any>  = ({ packageID }) => {
 									<input
 										className="form-check-input"
 										type="checkbox"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>

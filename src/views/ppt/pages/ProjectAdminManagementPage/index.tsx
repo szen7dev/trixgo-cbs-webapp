@@ -7,9 +7,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { toast } from "react-toastify";
 
 const ProjectAdminManagementPage: FC = (): any => {
-  const [toggleTab, setToggleTab] = useState(1);
-  const handleToggleTab = (index: number) => setToggleTab(index);
-	const { id: projectID } = useParams<{ id: string }>();
+	const { id: projectID, tab } = useParams<{ id: string, tab: string }>();
   const { user } = useAuth();
   const history = useHistory();
 
@@ -24,46 +22,48 @@ const ProjectAdminManagementPage: FC = (): any => {
           }
         })();
 		}
-	}, [projectID]); 
-  
+	}, [projectID]);
+
+  const onClickTab = (tab?: string) => history.push(`/pcm/project/${projectID}/admin/${tab}`)
+
   return (
     <main className="h-full">
       <header className="sticky flex justify-between items-center top-0 bg-primary-light z-10 h-10 px-6 border-b border-gray-300">
         <div className="h-full">
           <button
             className={
-              toggleTab === 1
+              tab === 'members'
                 ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
-            onClick={() => handleToggleTab(1)}
+            onClick={() => onClickTab('members')}
           >
             Thành viên
           </button>
           <button
             className={
-              toggleTab === 2
+              tab === "groups"
                 ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
-            onClick={() => handleToggleTab(2)}
+            onClick={() => onClickTab('groups')}
           >
             Nhóm dữ liệu
           </button>
           <button
             className={
-              toggleTab === 3
+              tab === "packages"
                 ? "w-auto h-full p-2 font-bold text-sm border-b-2 border-primary"
                 : "w-auto h-full p-2 text-sm text-primary-gray"
             }
-            onClick={() => handleToggleTab(3)}
+            onClick={() => onClickTab('packages')}
           >
             Gói thầu
           </button>
         </div>
       </header>
 
-      <AppAdminTab toggleTab={toggleTab} />
+      <AppAdminTab />
     </main>
   );
 };

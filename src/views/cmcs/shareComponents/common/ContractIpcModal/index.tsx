@@ -128,6 +128,7 @@ export const ContractIpcModal: FC<NewContractIPCModalProps> = ({ defaultValues, 
             setFieldValue('recommendedPayment', value)
             computeRemainingPayment()
           }
+
           return (
             <Form className="max-h-[690px] py-5 overflow-y-auto">
               <div>

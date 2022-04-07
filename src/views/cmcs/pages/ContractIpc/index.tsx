@@ -15,7 +15,6 @@ import { formatNumberMoney } from "utils/cmcs"
 
 import styles from 'views/cmcs/styles/styles.module.css';
 
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import { useParams } from "react-router-dom";
 
@@ -61,9 +60,7 @@ export const ContractIpc: FC = () => {
 
   };
 
-  const nextPageAction = () => {
-    setPageParam(contractIPC.nextCursor)
-  }
+  const nextPageAction = () => setPageParam(contractIPC.nextCursor);
 
   const { openDeleteConfirm } = useDeleteConfirm();
 
@@ -80,6 +77,7 @@ export const ContractIpc: FC = () => {
       },
     });
   }
+
   const handleEditAction = async () => {
     if (!itemChecked) {
       return
@@ -96,6 +94,8 @@ export const ContractIpc: FC = () => {
   }
 
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
+    console.log({ values });
+
     let res: any
     if (isEdit) {
       res = await updateContractIPCMutateAsync(values);
@@ -114,15 +114,14 @@ export const ContractIpc: FC = () => {
     return false;
   }, [contractIPC]);
 
-  const handleOnFilter = useCallback((values) => {
+  // const handleOnFilter = useCallback((values) => {
+  //   // setPageParam(() => ({ ...values }));
+  //   return true;
+  // }, []);
 
-    // setPageParam(() => ({ ...values }));
-    return true;
-  }, []);
-
-  const handleOnCancelFilter = useCallback(() => {
-    // setPageParam({});
-  }, []);
+  // const handleOnCancelFilter = useCallback(() => {
+  //   // setPageParam({});
+  // }, []);
 
   return (
     <main className="relative min-h-full">
@@ -132,7 +131,6 @@ export const ContractIpc: FC = () => {
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
-            // eslint-disable-next-line no-console
             onChange={(event) => console.log(event.target.value)}
           />
           {/* <DropdownFilterButton
@@ -147,29 +145,29 @@ export const ContractIpc: FC = () => {
               </div>
             )}
           </div>
-          <div className="flex items-center">
-            <button
-              className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
-              onClick={() =>
-                openModal(
-                  <div
-                    className={
-                      // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-                      "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
+        </div>
+        <div className="flex items-center">
+          <button
+            className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold mr-6"
+            onClick={() =>
+              openModal(
+                <div
+                  className={
+                    // "inline-block w-[900px] h-[800px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
 
-                    }
-                  >
-                    <ContractIpcModal onFinish={handleFinishForm} contractID={params.id} title="Tạo mới" />
-                  </div>
-                )
-              }
-            >
-              Tạo mới
-            </button>
-            <button className="w-10 h-10 rounded-full bg-cbs-left-menu flex items-center justify-center">
-              <img src={Vertical3Dots} alt="3Dots" />
-            </button>
-          </div>
+                  }
+                >
+                  <ContractIpcModal onFinish={handleFinishForm} contractID={params.id} title="Tạo mới" />
+                </div>
+              )
+            }
+          >
+            Tạo mới
+          </button>
+          <button className="w-10 h-10 rounded-full bg-cbs-left-menu flex items-center justify-center">
+            <img src={Vertical3Dots} alt="3Dots" />
+          </button>
         </div>
       </header>
 
@@ -179,12 +177,9 @@ export const ContractIpc: FC = () => {
             <th className={cn("pb-1 pt-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
                 <input
-                  className="form-check-input mr-2"
+                  className="form-check-input"
                   type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
                 />
-                <img src={PolygonIcon} alt="Polygon" />
               </div>
             </th>
             <th className="w-1/5 pb-1 pt-1">
@@ -241,11 +236,8 @@ export const ContractIpc: FC = () => {
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
                     checked={itemChecked === item._id}
                     onChange={() => setItemChecked(item._id)}
-                    style={{ marginLeft: "-23px" }}
                   />
                 </td>
                 <td className="py-1 px-2">
