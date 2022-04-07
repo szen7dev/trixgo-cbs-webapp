@@ -19,7 +19,7 @@ type CardItemProps = {
 const CardItem = memo(({ image, total, onClick }: CardItemProps) => {
 	const imgUrl = image.path ? `${process.env.REACT_APP_URL_S3}${image.path}` : ``;
 	return (
-		<div className="w-32 cursor-pointer" onClick={onClick}>
+		<div className="w-32 cursor-pointer mb-3" onClick={onClick}>
 			<div className="relative w-32 h-32">
 				<img src={imgUrl} alt="test" width={130} height={130} className="w-full h-full object-cover" />
 				{/* {<div className="absolute inset-0 flex flex-1 items-center justify-center text-white text-2x-large bg-white bg-opacity-60">
@@ -77,17 +77,6 @@ const ProjectPhotoContractPage: FC = () => {
 		document.title = "CHG.THT-Hình ảnh"
 	}, []);
 
-	// const mediaID = '620b09c36a97815180b079b5';
-	// const handleOpenPost = (i = 0) => {
-	// 	setDefaultState({
-	// 		mediaID,
-	// 		images: [],
-	// 		index: i,
-	// 		author: undefined,
-	// 		createAt: ""
-	// 	});
-	// 	setIsShow(true)
-	// }
 	const toggle = () => setIsShow(!isShow)
 
 	if(!contractInfo) return <>Nothing...</>;
