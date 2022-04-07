@@ -16,6 +16,7 @@ const ReportTimeLine: React.FC<Props> = ({ projectInfo, ...props }) => {
 	const rangeDateFromStartToEnd = getRangeDate(projectInfo.startTime, projectInfo.expiredTime, 'days')
 	const rangeDateFromStartToNow = getRangeDate(projectInfo.startTime, Date.now(), 'days')
 	const percentComplete = Math.ceil((rangeDateFromStartToNow / rangeDateFromStartToEnd) * 100);
+	const isProcessing = rangeDateFromStartToNow < 1;
 
 	return (
 		<div {...props}>
@@ -27,18 +28,18 @@ const ReportTimeLine: React.FC<Props> = ({ projectInfo, ...props }) => {
 					<div>
 						Kết thúc: 
 						<b className="text-black">
-							{!projectInfo.expiredTime ? ' Chưa xác định' : moment(projectInfo.expiredTime || Date.now()).format('D/M/YY')}
+							{!projectInfo.expiredTime ? ' Chưa xác định' : ` ${moment(projectInfo.expiredTime || Date.now()).format('D/M/YY')}`}
 						</b>
 					</div>
 				</div>
 				<div className="mt-3">
 					<div className={cn(styles.progress, "w-full h-2")} style={{
-						'--width': `${percentComplete > 100 ? 100 : percentComplete}%`,
+						'--width': `${isProcessing ? 0 : (percentComplete > 100 ? 100 : percentComplete)}%`,
 						color: '#0060E1'
 					} as React.CSSProperties} />
 				</div>
 			</div>
-			<div className="text-x-large text-cbs-primary font-bold">{percentComplete}%</div>
+			<div className="text-x-large text-cbs-primary font-bold">{isProcessing ? 0 : percentComplete}%</div>
 		</div>
 	)
 }

@@ -157,6 +157,15 @@ const PcmRepository = {
             }
         });
         return data;
+    },
+
+    async fetchListCompanyOfAssigneeAndAmountTask(params?: any) {
+        const { data } = await API.get(`${pcmURL}/pcm_plan_tasks/amount-task-of-company_of_assignee`, {
+            params: {
+                ...params
+            }
+        });
+        return data;
     }
 };
 
