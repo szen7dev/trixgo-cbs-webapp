@@ -17,7 +17,6 @@ import thumbnail from "assets/images/thumbnail2.png";
 
 export const MainSearchDialog: FC = () => {
   const { closeModal } = useModal();
-
   const [currentID, setCurrentID] = useState("");
   const [isResultNavigation, setIsResultNavigation] = useState(false);
   const [isVisibleSearchFilter, setIsVisibleSearchFilter] = useState(false);

@@ -106,8 +106,6 @@ type Props = {
 export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, document, refetchListChild }) => {
 	const { state } = useContext(ModalContext);
 	const { insertDocumentChildAsync } = useMutationDocumentChild();
-	const { closeModal } = useModal();
-	
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
 	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
@@ -126,7 +124,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		properties,
 	} = useInitialValues(
 		document.project?._id,
-		state?.departmentInfo?.company?._id || "", // companyID
+		document.project?.company, // companyID
 		keywordPackage,
 		keywordSender,
 		keywordReceiver,
@@ -221,6 +219,10 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.departmentID = values.projectID;
 		}
 
+		if(values.storage){
+			formatValues.storageID = values.storage;
+		}
+
 		if(values.package){
 			formatValues.packageID = values.package;
 		}
@@ -236,9 +238,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(values.property){
 			formatValues.propertyID = values.property;
 		}
-		// console.log({ formatValues })
 		if(!formatValues.package)
 			return toast.warning("Vui lòng chọn gói thầu")
+
+		if(!formatValues.direction)
+			return toast.warning("Vui lòng chọn hướng hồ sơ")
 
 		if(!formatValues.sender)
 			return toast.warning("Vui lòng chọn ban hành")
@@ -246,23 +250,21 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(!formatValues.property)
 			return toast.warning("Vui lòng chọn tính chất")
 
-		if(!formatValues.name)
-			return toast.warning("Vui lòng nhập tiêu đề")
-
-		if(!formatValues.direction)
-			return toast.warning("Vui lòng chọn hướng hồ sơ")
-
 		if(!formatValues.type)
 			return toast.warning("Vui lòng chọn phân loại")
 
 		if(!formatValues.sign)
 			return toast.warning("Vui lòng nhập mã hiệu")
-		// Xử lý api tạo hồ sơ
+
+		if(!formatValues.name)
+			return toast.warning("Vui lòng nhập tiêu đề");
+
 		try {
 			const infoAfterInsert = await insertDocumentChildAsync(formatValues)
 			if(!infoAfterInsert.error){
-				closeModal();
+				toast.success("Thêm văn bản con thành công");
 				refetchListChild();
+				toggle()
 			}
 		} catch (error: unknown) {
 			console.error(error);
@@ -522,7 +524,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Lĩnh vực (*)</p>
+											<p className="py-1.5">Lĩnh vực</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable

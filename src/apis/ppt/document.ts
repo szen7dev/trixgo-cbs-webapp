@@ -25,7 +25,7 @@ async function fetchDocumentInfo(params: DocumentInfoQueryPayload): Promise<Docu
             params: {
                 populates: {
                     "path": "userUpdate files property package project sender receiver author storage field parent",
-                    "select": "_id path name sign type fullname members"
+                    "select": "_id path name sign type fullname members company"
                 },
                 select: 'userUpdate name sign type description project package approver requestResponse date storage createAt updatedAt receivedDate expiredResponse modifyAt value amount amountDelivery direction storeSign style status receiver property field note parent',
                 ...params,

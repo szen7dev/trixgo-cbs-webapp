@@ -24,7 +24,8 @@ const ProjectDrawingPage: FC = () => {
 	}, []);
 
 	const { data: listDocumentParent, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(projectID, { type:"9" }, "");
-	const { data: listDocumentChild, totalRecord: totalRecordChild, totalPages: totalPagesChild, loading: loadingChild, nextCursor: nextCursorChild, refetch: refetchChild }   = useQueryListDocument(projectID, { type:" 9", parentID: documentID, keyword }, "");
+	const { data: listDocumentChild, totalRecord: totalRecordChild, totalPages: totalPagesChild, 
+		loading: loadingChild, nextCursor: nextCursorChild, refetch: refetchChild }   = useQueryListDocument(projectID, { type:"9", parentID: documentID, keyword }, "");
 	useEffect(() => {
 		refetchChild();
 		refetch()
