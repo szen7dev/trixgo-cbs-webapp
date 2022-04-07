@@ -64,9 +64,9 @@ const ProjectPhotoPage: FC = () => {
 					<div className="flex flex-wrap py-5 gap-y-4">
 						{(filesGroupByContract && filesGroupByContract.length) ? filesGroupByContract.map((file, i) => (
 							<div className="lg:w-6/12 2xl:w-4/12 px-2" key={file.contract?._id}>
-								<div className="shadow-cbs-md">
+								<div className="grid shadow-cbs-md h-full" style={{gridTemplateRows:'1fr max-content'}}>
 									{/* grid grid-cols-3 gap-1 */}
-									<div className="flex flex-wrap text-white px-1 pt-2.5">
+									<div className="flex flex-wrap text-white px-1">
 										{file.contract?.photos?.slice(0, 6)?.map((photo, index) =>
 											<CardImage
 												image={photo}

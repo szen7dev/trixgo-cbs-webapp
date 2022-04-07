@@ -76,7 +76,7 @@ function getPlugins(
             0
           ),
           width / 2,
-          height / 2 - 10
+          height / 2 
         );
 
         const theCenterText = subtitle;
@@ -85,7 +85,7 @@ function getPlugins(
         ctx.font = (options?.subtitleSize || 15) + "px Arial";
         ctx.fillStyle = "rgba(121, 130, 149, 1)";
 
-        ctx.fillText(theCenterText, width / 2, height / 2 + 10);
+        ctx.fillText(theCenterText, width / 2, height / 2 + 20);
         ctx.save();
       },
     },
