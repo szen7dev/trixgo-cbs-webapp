@@ -1,4 +1,4 @@
-import { FC, useEffect, useLayoutEffect } from "react";
+import { FC, useContext, useEffect, useLayoutEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 
@@ -33,6 +33,9 @@ import ReportQuickReport from "./components/ReportQuickReport";
 import ReportContractStatus from "./components/ReportContractStatus";
 import ReportMultipleChart from "./components/ReportMultipleChart";
 
+import { ModalZoomView } from "shareComponents/common";
+import { ContextModalPost } from "views/media/contexts/post";
+
 SwiperCore.use([Navigation]);
 
 // const obj: { readonly [key: string]: number } = { 2: 10, b: 20 }
@@ -47,6 +50,8 @@ SwiperCore.use([Navigation]);
 // }
 
 const ProjectDashboardPortfolioPage: FC = () => {
+	const { state, toggleModal } = useContext(ContextModalPost);
+
 	// --------- Check phân quyền
 	// useCheckPerAccessScreen({
 	// 	appID: APP_ID.PCM.id,
@@ -140,6 +145,13 @@ const ProjectDashboardPortfolioPage: FC = () => {
 					</div>
 				</div>
 			</div>
+			<ModalZoomView isShow={state.isShow} toggle={toggleModal} initialData={{
+				createAt: state.createAt,
+				images: state.images,
+				index: state.index,
+				mediaID: state.mediaID,
+				author: state.author
+			}} />
 		</div >
 	);
 };

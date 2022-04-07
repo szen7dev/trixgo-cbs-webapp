@@ -5,7 +5,7 @@ import { EditButton } from 'shareComponents/common';
 import { FileProps } from 'typings/common';
 import TaskRepository from "apis/task";
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
-import { ContextModalPost } from 'views/pcm/contexts/post';
+// import { ContextModalPost } from 'views/pcm/contexts/post';
 import { Comment as CommentType, CommentProps } from 'typings/task';
 
 interface Props {
@@ -29,7 +29,7 @@ type UpdateCommentProps = {
 
 export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comment, limit, renderNestedComment: NestedComment }) => {
 	const { state, dispatch } = useContext(CommentContext);
-	const { openComment } = useContext(ContextModalPost);
+	// const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0);

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ContextModalPost } from "views/media/contexts/post";
 
 // import image1 from 'assets/images/ppt/image 161.jpg';
 // import image2 from 'assets/images/ppt/image 162.jpg';
@@ -12,6 +13,7 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const ReportImage: React.FC<Props> = ({ projectInfo, ...props }) => {
+	const {openPost } = useContext(ContextModalPost);
 	if(!projectInfo || !projectInfo?.photos?.length) return <></>;
 
 	return (
@@ -29,14 +31,18 @@ const ReportImage: React.FC<Props> = ({ projectInfo, ...props }) => {
 					observeParents
 					parallax
 					slidesPerView={5}
+					spaceBetween={10}
 					navigation={{
 						nextEl: '#next',
 						prevEl: '#prev'
 					}}
 				>
-					{projectInfo?.photos?.map(photo => (
+					{projectInfo?.photos?.map((photo,i) => (
 						<SwiperSlide key={photo._id}>
-							<img src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt="Report Photo" className="mx-auto object-cover" height="130px" />
+							<div className='w-full pb-[100%]' onClick={()=> openPost({ author: photo.author, images:projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}>
+								<p className='opacity-0 invisible'>{photo.name}</p>
+								<img src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`} className="absolute inset-0 mx-auto object-cover h-full w-full" height="130px" />
+							</div>
 						</SwiperSlide>
 					))}
 					{/* <SwiperSlide><img src={image4} alt="image4" className="mx-auto object-cover" height="130px" /></SwiperSlide> */}
