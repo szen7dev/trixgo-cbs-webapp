@@ -276,7 +276,7 @@ export const DocumentDetailPage: FC = () => {
           <div className="py-4"></div>
         </div> */}
       </div>
-      <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} />
+      <ModalCreateDocumentChild isShow={isShow} toggle={toggleModalCreateDocumentChild} document={detailDocument} refetchListChild = {docChildPayload.refetchListDocumentChild} />
     </div>
   );
 };
