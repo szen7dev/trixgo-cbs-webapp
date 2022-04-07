@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { useHistory, useParams, Redirect } from "react-router-dom";
+import { useHistory, useParams, Redirect, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -270,7 +270,9 @@ const PcmDetailTask: FC = () => {
                 <img className="w-6" src={SharedFolderIcon} alt="Folder icon" />
                 <span className="text-[13px] text-primary-gray mx-2">
                   {taskInfo?.project?.sign} {">"}{" "}
-                  {getGroupTitle(taskInfo?.group)}
+                  <Link to={`/pcm/project/${taskInfo?.project?._id}/folder/${taskInfo?.group?._id}`}>
+                    {getGroupTitle(taskInfo?.group)}
+                  </Link>
                 </span>
                 <div>
                   <img

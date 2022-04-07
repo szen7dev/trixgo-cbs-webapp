@@ -46,6 +46,7 @@ import {
 	ProjectFolderPage,
 	ProjectHomePage,
 	ProjectPaymentPage,
+	ProjectSubjectPage,
 	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectResourcePage,
@@ -91,8 +92,9 @@ const PCMRouter: FC = () => {
 			<ProtectedRoute path="/pcm/project/:id">
 				<LayoutProjectSecondary>
 					<Switch>
-						<Route exact path="/pcm/project/:id/admin" component={ProjectAdminManagementPage} />
-						<Route exact path="/pcm/project/:id/admin/group/:groupID" component={ProjectAdminManagementPage} />
+						<Route exact path="/pcm/project/:id/admin/:tab" component={ProjectAdminManagementPage} />
+						<Route exact path="/pcm/project/:id/admin/:tab/:itemID" component={ProjectAdminManagementPage} />
+						<Route exact path="/pcm/project/:id/admin/:tab/:itemID/members" component={ProjectAdminManagementPage} />
 						<Route exact path="/pcm/project/:id/home" component={ProjectHomePage} />
 						<Route exact path="/pcm/project/:id/dashboard" component={ProjectDashboardPage} />
 						<Route exact path='/pcm/project/:id/folder' component={ProjectFolderPage} />
@@ -119,6 +121,7 @@ const PCMRouter: FC = () => {
 							</LayoutSecondary>
 						</Route>
 						<Route exact path='/pcm/project/:id/payment' component={ProjectPaymentPage} />
+						<Route exact path='/pcm/project/:id/subject' component={ProjectSubjectPage} />
 						<Route exact path={['/pcm/project/:id/document', '/pcm/project/:id/document/(1|2|3|4)']}>
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Danh sách', path: '/pcm/project/:id/document', navExact: true },
@@ -136,9 +139,7 @@ const PCMRouter: FC = () => {
 										<Route exact path='/pcm/project/:id/document/4' component={DocumentHistoryPage} /> */}
 									</Switch>
 									<ModalCreateDocument />
-
 								</ModalProvider>
-
 							</LayoutSecondary>
 						</Route>
 						<Route exact path='/pcm/project/:id/document/1/type/:type' component={DocumentOfTypePage} />
@@ -209,7 +210,7 @@ const PCMRouter: FC = () => {
 								<Route exact path="/pcm/admin/:id/project" component={ProjectAdminProjectDetail} />
 							</LayoutSecondary>
 						</Route>
-
+							
 						<Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
 
 						<Route exact path="/pcm/home" component={PcmHome} />

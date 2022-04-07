@@ -6,39 +6,46 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { toast } from "react-toastify";
 
-const Update: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => {
-  const { closeModal } = useModal();
-  const [name, setName] = useState(item.name);
-  const [sign, setSign] = useState(item.sign);
+type Props = {
+  item: any;
+  onConfirm: () => void
+}
 
-  const {   
-    updatePcmPlanGroupMutateAsync,
-    refetch
-  } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword }, false, false);
+const Update: FC<Props> = ({ item, onConfirm }) => {
+  const { closeModal } = useModal();
+  const [formData, setFormData] = useState({
+    name: item.name,
+    sign: item.sign
+  })
+
+  const { updatePcmPlanGroupMutateAsync } = usePcmPlanGroup({});
 
   const onUpdate = async () => {
-    closeModal();
-
-    if (!name || !sign) {
+    if (!formData.name || !formData.sign) {
       return toast.warning("Vui lòng nhập đầy đủ tên nhóm và mã hiệu.");
     }
 
     const result = await updatePcmPlanGroupMutateAsync({
         groupID: item._id,
-        name,
-        sign
+        ...formData
     });
-   
+
     if (!result.error) {
-      refetch();
-      setName("");
       closeModal();
-      setIdsChecked([]);
+      onConfirm();
       toast.success('Cập nhật dữ liệu thành công');
     } else {
       toast.error(result?.data?.message);
     }
   };
+
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(previous => ({
+      ...previous,
+      [name]: value
+    }))
+  }
 
   return (
     <main className="relative h-full">
@@ -57,8 +64,9 @@ const Update: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => {
           type="text"
           placeholder="Nhập tên nhóm dữ liệu"
           className="h-12 w-full border border-primary-border outline-none px-8"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          name="name"
+          onChange={onChangeInput}
         />
       </section>
 
@@ -67,8 +75,9 @@ const Update: FC<any> = ({ item, setIdsChecked, projectID, keyword }) => {
           type="text"
           placeholder="Nhập mã hiệu"
           className="h-12 w-full border border-primary-border outline-none px-8"
-          value={sign}
-          onChange={(e) => setSign(e.target.value)}
+          value={formData.sign}
+          name="sign"
+          onChange={onChangeInput}
         />
       </section>
 

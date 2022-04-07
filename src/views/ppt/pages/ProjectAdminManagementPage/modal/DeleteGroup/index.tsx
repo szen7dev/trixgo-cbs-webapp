@@ -5,13 +5,22 @@ import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 // import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
 
-const DeleteGroup: FC<any> = ({ idsChecked, setIdsChecked, projectID, keyword }) => {
+type Props = {
+  idsChecked: string[],
+  onConfirm: () => void
+}
+
+const DeleteGroup: FC<Props> = ({ idsChecked, onConfirm }) => {
   const { closeModal } = useModal();
-  const { removeManyPcmPlanGroupMutateAsync, refetch } = usePcmPlanGroup({ projectID, isShowAll: "1", keyword }, false, false);
+  const { removeManyPcmPlanGroupMutateAsync, refetch } = usePcmPlanGroup({});
 
   const onDelete = async () => {
-    const infoAfterRemove = await removeManyPcmPlanGroupMutateAsync({ groupsID: idsChecked });
-    refetch()
+    const { error } = await removeManyPcmPlanGroupMutateAsync({ groupsID: idsChecked });
+    if(!error) {
+      toast.success('Xóa thành công');
+    }
+
+    onConfirm();
     closeModal();
   };
   
