@@ -46,6 +46,7 @@ import {
 	ProjectFolderPage,
 	ProjectHomePage,
 	ProjectPaymentPage,
+	ProjectSubjectPage,
 	ProjectPhotoContractPage,
 	ProjectPhotoPage,
 	ProjectResourcePage,
@@ -120,6 +121,7 @@ const PCMRouter: FC = () => {
 							</LayoutSecondary>
 						</Route>
 						<Route exact path='/pcm/project/:id/payment' component={ProjectPaymentPage} />
+						<Route exact path='/pcm/project/:id/subject' component={ProjectSubjectPage} />
 						<Route exact path={['/pcm/project/:id/document', '/pcm/project/:id/document/(1|2|3|4)']}>
 							<LayoutSecondary pages={[
 								{ id: '1', title: 'Danh sách', path: '/pcm/project/:id/document', navExact: true },
