@@ -74,7 +74,7 @@ const ProjectSubjectPage: FC = () => {
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
 								<span className="border-l border-cbs-border pl-2">
-									Gói thầu
+									Đơn vị thực hiện
 								</span>
 							</th>
 							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
