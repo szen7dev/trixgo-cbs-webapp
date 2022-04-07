@@ -67,16 +67,16 @@ const ProjectDrawingPage: FC = () => {
 										<img src={iconPdf} alt="" className="self-start w-6 mr-2" />
 										<div>
 											<h3 className="text-small" style={{ wordBreak: 'break-all' }}>{document?.name}</h3>
-											<p className="text-x-small mt-1.5 text-cbs-subtext">Rev 1 - 159 KB</p>
+											<p className="text-x-small mt-1.5 text-cbs-subtext">Rev 1-KB</p>
 										</div>
 									</div>
 									<div className="flex justify-evenly w-full bg-cbs-table-header px-3.5 py-1">
-										<button type="button">
+										{/* <button type="button">
 											<img src={iconDownload} alt="download icon" className="w-6 h-6" />
 										</button>
 										<button type="button">
 											<img src={iconDownload} alt="download icon" className="w-6 h-6" />
-										</button>
+										</button> */}
 										<button type="button">
 											<img src={iconDownload} alt="download icon" className="w-6 h-6" />
 										</button>

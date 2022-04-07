@@ -56,7 +56,7 @@ const fieldInputByRow = [
 	{ title: "Giá trị", name: "value", type: "text" },
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
-	{ title: "Ngày văn bản", name: "date", type: "datepicker" },
+	{ title: "Ngày văn bản (*)", name: "date", type: "datepicker" },
 	{
 		title: "Ngày nhận",
 		name: "receivedDate",
@@ -413,7 +413,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																	name={item.name}
 																	type="text"
 																	className="w-full"
-																	placeholder="Nội dung"
+																	placeholder="Nhập thông tin"
 																	onBlur={(
 																		e: React.FormEvent<HTMLInputElement>
 																	) => {
