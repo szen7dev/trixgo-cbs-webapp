@@ -11,6 +11,7 @@ interface Project {
     _id: string;
     name: string;
     sign: string;
+    company: string;
 }
 
 export interface Document {

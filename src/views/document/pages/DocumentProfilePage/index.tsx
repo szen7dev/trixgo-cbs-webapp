@@ -53,7 +53,7 @@ export const DocumentProfilePage: FC = () => {
 					<ButtonCreate onClick={toggleModal} />
 					<ButtonMore /> */}
 				{/* </div> */}
-				<div className="flex flex-wrap gap-y-3.5 flex-1 overflow-y-auto px-5 py-2.5">
+				<div className="flex flex-wrap gap-y-3.5 overflow-y-auto px-5 py-2.5">
 					{data.map((elm, i) => {
 						const formatData = {
 							...elm,

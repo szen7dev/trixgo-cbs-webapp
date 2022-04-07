@@ -25,7 +25,10 @@ const ReportTimeLine: React.FC<Props> = ({ projectInfo, ...props }) => {
 						Bắt đầu: <b className="text-black">{moment(projectInfo.startTime).format('D/M/YY')}</b>
 					</div>
 					<div>
-						Kết thúc: <b className="text-black">{moment(projectInfo.expiredTime || Date.now()).format('D/M/YY')}</b>
+						Kết thúc: 
+						<b className="text-black">
+							{!projectInfo.expiredTime ? ' Chưa xác định' : moment(projectInfo.expiredTime || Date.now()).format('D/M/YY')}
+						</b>
 					</div>
 				</div>
 				<div className="mt-3">

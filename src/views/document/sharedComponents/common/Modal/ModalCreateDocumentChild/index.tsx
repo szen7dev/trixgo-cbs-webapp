@@ -7,6 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import uniqBy from "lodash/uniqBy";
 import debounce from "lodash/debounce";
 import { object, string } from "yup";
+import { useModal } from "services/hooks/useModal";
 
 import { ModalContext } from "views/document/contexts/modal";
 import itemTag from "assets/images/icons8-price-tag.svg";
@@ -38,7 +39,7 @@ const fieldInputByRow = [
 		type: "datepicker",
 	},
 	{
-		title: "Mã hiệu",
+		title: "Mã hiệu (*)",
 		name: "sign",
 		type: "text",
 	},
@@ -55,7 +56,7 @@ const fieldInputByRow = [
 	{ title: "Giá trị", name: "value", type: "text" },
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
-	{ title: "Ngày văn bản", name: "date", type: "datepicker" },
+	{ title: "Ngày văn bản (*)", name: "date", type: "datepicker" },
 	{
 		title: "Ngày nhận",
 		name: "receivedDate",
@@ -98,13 +99,13 @@ const useInitialValues = (
 type Props = {
 	isShow: boolean;
 	toggle: () => void;
-	document: Document
+	document: Document,
+	refetchListChild: any
 }
 
-export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, document }) => {
+export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, document, refetchListChild }) => {
 	const { state } = useContext(ModalContext);
 	const { insertDocumentChildAsync } = useMutationDocumentChild();
-	
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
 	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
@@ -123,7 +124,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		properties,
 	} = useInitialValues(
 		document.project?._id,
-		state?.departmentInfo?.company?._id || "", // companyID
+		document.project?.company, // companyID
 		keywordPackage,
 		keywordSender,
 		keywordReceiver,
@@ -134,13 +135,13 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 	);
 
 	const initialValues = {
-		field: document.field?._id,
-		packageID: document?.package?._id,
-		projectID: document?.project?._id,
-		receiver: document?.receiver?._id,
-		sender: document?.sender?._id,
-		storage: document?.storage?._id,
-		property: document?.property?._id,
+		// field: document.field?._id,
+		// packageID: document?.package?._id,
+		departmentID: document?.project?._id,
+		// receiver: document?.receiver?._id,
+		// sender: document?.sender?._id,
+		// storage: document?.storage?._id,
+		// property: document?.property?._id,
 		parentID: document?._id
 	}
 
@@ -150,20 +151,20 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		data: any[];
 	}[] => {
 		return [
-			{ title: "Gói thầu", data: listPackage, name: "package" },
+			{ title: "Gói thầu (*)", data: listPackage, name: "package" },
 			{
-				title: "Hướng",
+				title: "Hướng (*)",
 				data: DIRECTION_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
 				})),
 				name: "direction",
 			},
-			{ title: "Ban hành", data: listContactSender, name: "sender" },
+			{ title: "Ban hành (*)", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
-			{ title: "Tính chất", data: properties, name: "property" },
+			{ title: "Tính chất (*)", data: properties, name: "property" },
 			{
-				title: "Phân loại",
+				title: "Phân loại (*)",
 				data: DOCUMENT_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
@@ -218,6 +219,14 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 			formatValues.departmentID = values.projectID;
 		}
 
+		if(values.storage){
+			formatValues.storageID = values.storage;
+		}
+
+		if(values.package){
+			formatValues.packageID = values.package;
+		}
+
 		if(values.sender){
 			formatValues.senderID = values.sender;
 		}
@@ -229,14 +238,34 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		if(values.property){
 			formatValues.propertyID = values.property;
 		}
+		if(!formatValues.package)
+			return toast.warning("Vui lòng chọn gói thầu")
+
+		if(!formatValues.direction)
+			return toast.warning("Vui lòng chọn hướng hồ sơ")
+
+		if(!formatValues.sender)
+			return toast.warning("Vui lòng chọn ban hành")
+
+		if(!formatValues.property)
+			return toast.warning("Vui lòng chọn tính chất")
+
+		if(!formatValues.type)
+			return toast.warning("Vui lòng chọn phân loại")
+
+		if(!formatValues.sign)
+			return toast.warning("Vui lòng nhập mã hiệu")
 
 		if(!formatValues.name)
-			return toast.warning("Vui lòng nhập tiêu đề")
+			return toast.warning("Vui lòng nhập tiêu đề");
 
-		// Xử lý api tạo hồ sơ
 		try {
 			const infoAfterInsert = await insertDocumentChildAsync(formatValues)
-			console.log({ infoAfterInsert })
+			if(!infoAfterInsert.error){
+				toast.success("Thêm văn bản con thành công");
+				refetchListChild();
+				toggle()
+			}
 		} catch (error: unknown) {
 			console.error(error);
 		}
@@ -384,7 +413,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 																	name={item.name}
 																	type="text"
 																	className="w-full"
-																	placeholder="Nội dung"
+																	placeholder="Nhập thông tin"
 																	onBlur={(
 																		e: React.FormEvent<HTMLInputElement>
 																	) => {
@@ -521,9 +550,9 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 														),
 													500
 												)}
-												initialValue={
-													state?.initialValues['field']
-												}
+												// initialValue={{
+												// 	value: state?.initialValues['field'],
+												// }}
 												data={uniqBy([...fields, state?.initialValues['field'] || {}].filter(elm => {
 													if (elm._id) {
 														return elm;

@@ -31,7 +31,7 @@ export const Dashboard: FC = () => {
   const { user } = useAuth();
   const { current: socket }: any = useSocket();
 
-  const { listMedias: listMediasDigitalConversion, nextPageListMedias } = useMedia({
+  const { listMedias: listMediasDigitalConversion, nextPageListMedias, refetchListMedias } = useMedia({
     key: 'list_medias__digital-conversion',
     params: { 
       limit: 6, 
@@ -53,7 +53,7 @@ export const Dashboard: FC = () => {
   const { 
     listNotifications, 
     totalRecord,
-    // refetchListNotification, 
+    refetchListNotification, 
     hasNextPage: hasNextPageNotification, 
     nextPageListNotification 
   } = useNotification({ limit: 5 }, true);
@@ -65,8 +65,8 @@ export const Dashboard: FC = () => {
 
 		socket.on('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION', () => {
       console.log('NOTIFICATION_CSS_RECEIVE_NEW_NOTIFICATION');
-      //refetchListMedias();
-      //refetchListNotification();
+      // refetchListMedias();
+      refetchListNotification();
 		});
   }, [socket])
 

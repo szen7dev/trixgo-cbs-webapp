@@ -42,8 +42,8 @@ async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
         `${ITEM_URL}/departments?${convertObToUrl({
             populates: JSON.stringify({
-                path: "members",
-                select: "fullname bizfullname name sign image"
+                path: "members photos",
+                select: "fullname bizfullname name sign image nameOrg path size"
             }),
             ...params
         })}`

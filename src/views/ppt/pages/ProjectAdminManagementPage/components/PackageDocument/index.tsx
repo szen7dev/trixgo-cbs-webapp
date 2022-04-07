@@ -9,7 +9,6 @@ import { SearchInput } from "shareComponents/common";
 
 import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
 import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
@@ -24,21 +23,18 @@ const PackageDocument: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 
-	const {   
-		isLoading,
-		refetch,
+	const {
 		data: listDocumentPackage,
 		fetchNextPage: fetchNextPageDocumentPackage,
 		hasNextPage: hasNextPageDocumentPackage,
 		totalRecord,
-		totalPage
 	} = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword },true, false);
 	const { openModal } = useModal();
-	
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
-	
+
 	const onClickCheckButton = (id: string) => {
 		const check = idsChecked.includes(id);
 		if (check) {
@@ -143,19 +139,18 @@ const PackageDocument: FC = () => {
 					</button>
 				</div>
 			</header>
-			
+
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
 						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
 							<div className="border-r-2 border-gray-300 flex items-center justify-center">
 								<input
-									className="form-check-input mr-2"
+									className="form-check-input"
 									type="checkbox"
 									checked={getStateCheckedAll()}
 									onChange={() => onClickCheckAll()}
 								/>
-								<img src={PolygonIcon} alt="Polygon" />
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1">
@@ -178,7 +173,7 @@ const PackageDocument: FC = () => {
 						</th>
 					</tr>
 				</thead>
-				
+
 				{listDocumentPackage && listDocumentPackage.length ?
 					<tbody className="bg-primary-light text-left">
 						{listDocumentPackage.map((item: any, index: number) => (
@@ -187,15 +182,13 @@ const PackageDocument: FC = () => {
 									<input
 										className="form-check-input"
 										type="checkbox"
-										id="flexCheckDefault"
-										style={{ marginLeft: "-23px" }}
 										checked={getStateChecked(item._id)}
 										onChange={() => onClickCheckButton(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/project/${projectID}/admin#${item._id}`}>
-										<div className="flex items-center">
+									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}`}>
+										<div className="flex">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
@@ -216,7 +209,7 @@ const PackageDocument: FC = () => {
 					</tbody> : <></>
 				}
 			</table>
-			
+
 			{hasNextPageDocumentPackage && (
 				<div className="w-full flex justify-center my-5">
 					<button onClick={() => fetchNextPageDocumentPackage()}>
