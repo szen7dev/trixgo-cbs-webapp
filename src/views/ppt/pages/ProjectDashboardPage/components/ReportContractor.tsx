@@ -15,17 +15,9 @@ const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
 	if(!projectInfo) return <></>;
 
 	const _data: ChartData<"doughnut", number[], unknown> = {
-		labels: [
-		  "Chưa bắt đầu",
-		  "Lập kế hoạch",
-		  "Thiết kế",
-		  "Đấu thầu",
-		  "Xây dựng",
-		  "Khác",
-		],
 		datasets: [
 		  {
-			data: [0, 0, 0, 0, 0, 0],
+			data: [1, 0, 0, 0, 0, 0],
 			backgroundColor: [
 			  "rgba(44, 134, 237, 1)",
 			  "rgba(255, 165, 0, 1)",
