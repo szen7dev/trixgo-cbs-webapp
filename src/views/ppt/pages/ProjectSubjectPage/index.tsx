@@ -33,7 +33,7 @@ const ProjectSubjectPage: FC = () => {
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-				<span className="text-x-large mr-7">Hồ sơ dự thầu</span>
+				<span className="text-x-large mr-7">Báo cáo tổng hợp công việc</span>
 				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
 				{/* <DropdownFilterButton /> */}
 				<GroupActions className="flex items-center flex-1" />
@@ -74,7 +74,7 @@ const ProjectSubjectPage: FC = () => {
 							</th>
 							<th className="py-2.5 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
 								<span className="border-l border-cbs-border pl-2">
-									Gói thầu
+									Đơn vị thực hiện
 								</span>
 							</th>
 							<th className="py-2.5 px-3 font-normal bg-cbs-active-comment sticky top-0 border border-l-0 border-cbs-border">
