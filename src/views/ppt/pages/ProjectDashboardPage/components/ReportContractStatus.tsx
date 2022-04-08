@@ -17,31 +17,31 @@ const ReportContractStatus: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
 					<div className={styles.warn}>7</div>
 				</Link>
 				<Link to="/">
-					<div className={styles.purple}>3</div>
+					<div className={styles.purple}>2</div>
 				</Link>
 				<Link to="/">
-					<div className={styles.danger}>8</div>
+					<div className={styles.danger}>1</div>
 				</Link>
 			</div>
 			<div className={cn(styles['text-tiny'], "grid grid-cols-2 gap-y-2 gap-x-1 mt-4")}>
 				<div style={{ minWidth: '204px' }}>
 					<Link to="/" className="flex items-center whitespace-nowrap" >
-						<div className={cn(styles.success, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+						<div className={cn(styles.success, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>Đúng tiến độ, đúng ngân sách
 					</Link>
 				</div>
 				<div style={{ minWidth: '204px' }}>
 					<Link to="/" className="flex items-center whitespace-nowrap" >
-						<div className={cn(styles.purple, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, ĐÚNG NGÂN SÁCH
+						<div className={cn(styles.purple, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>Chậm tiến độ, đúng ngân sách
 					</Link>
 				</div>
 				<div style={{ minWidth: '204px' }}>
 					<Link to="/" className="flex items-center whitespace-nowrap" >
-						<div className={cn(styles.warn, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>ĐÚNG TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+						<div className={cn(styles.warn, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>Đúng tiến độ, vượt ngân sách
 					</Link>
 				</div>
 				<div style={{ minWidth: '204px' }}>
 					<Link to="/" className="flex items-center whitespace-nowrap" >
-						<div className={cn(styles.danger, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>CHẬM TIẾN ĐỘ, VƯỢT NGÂN SÁCH
+						<div className={cn(styles.danger, styles.circle, 'w-3 h-3 rounded-lg mr-2')}></div>Chậm tiến độ, vượt ngân sách
 					</Link>
 				</div>
 			</div>

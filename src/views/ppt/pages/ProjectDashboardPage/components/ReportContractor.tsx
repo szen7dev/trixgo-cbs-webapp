@@ -19,12 +19,13 @@ const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
 		  {
 			data: [20, 6, 2, 0, 0, 0],
 			backgroundColor: [
+			  "rgba(0, 202, 153, 1)",
 			  "rgba(44, 134, 237, 1)",
 			  "rgba(255, 165, 0, 1)",
 			  "rgba(155, 89, 182, 1)",
 			  "rgba(224, 59, 86, 1)",
 			  "rgba(0, 202, 153, 1)",
-			  "rgba(219, 231, 242, 1)",
+			//   "rgba(219, 231, 242, 1)",
 			],
 			borderWidth: 0,
 		  },

@@ -134,7 +134,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							<ReportMainWork className={cn(styles['work-wrapper'], 'bg-white h-full pl-6 pr-5 pt-5 pb-7 w-full mt-4')} />
 
 							{/* Multiple Chart */}
-							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' />
+							<ReportMultipleChart className='bg-white h-full pl-5 pr-12 pb-3 w-full mt-4' projectInfo={projectInfo}/>
 
 							{/* Quick report */}
 							<ReportQuickReport className={cn(styles['quick-report'], 'bg-white h-full pt-4 px-6 pb-6 w-full mt-4')} />
