@@ -165,7 +165,7 @@ const ProjectSubjectPage: FC = () => {
 							</th>
 						</tr>
 					</thead>
-					<tbody className="text-small">
+					<tbody className="">
 						{
 							dataCompany?.map((company: any) => {
 								return (
@@ -178,7 +178,7 @@ const ProjectSubjectPage: FC = () => {
 												{company.name}
 											</Link>
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right">{company.sign}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border">{company.sign}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right cursor-auto" style={{ minWidth: "155px", fontSize: '10px' }} onClick={e => e.stopPropagation()}>
 											<div className="flex w-full h-3 mt-2">
 												<button

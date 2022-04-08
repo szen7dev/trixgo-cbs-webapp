@@ -287,7 +287,7 @@ export const DocumentOfPackagePage: FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-small">
+              <tbody className="">
                 {data.map((document, index) => {
                   return (
                     <tr

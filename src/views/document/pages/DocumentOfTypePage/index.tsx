@@ -286,7 +286,7 @@ export const DocumentOfTypePage: FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-small">
+              <tbody className="">
                 {data.map((document, index) => {
                   return (
                     <tr

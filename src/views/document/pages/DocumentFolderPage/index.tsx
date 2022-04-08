@@ -159,7 +159,7 @@ export const DocumentFolderPage: FC = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="text-small">
+            <tbody className="">
               {listPackage.map((elm, index) => {
                 return (
                   <tr
