@@ -219,7 +219,10 @@ const ProjectSubjectPage: FC = () => {
 											</div>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-											<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div>
+											{company?.totalFinish ? 
+												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> : 
+												<></>
+											}
 										</td>
 									</tr>
 								)
