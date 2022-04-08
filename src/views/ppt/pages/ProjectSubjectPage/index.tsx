@@ -51,12 +51,21 @@ const ProjectSubjectPage: FC = () => {
 				totalNextWeekWorkAll+=totalNextWeekWork?.count || 0;
 				totalMoreThan7DaysAll+=totalMoreThan7Days?.count || 0;
 				totalFinishAll+=totalFinish?.count || 0;
+
+				// Tính số phần trăm các việc của công ty
+				const percent = totalOverdueWork?.count || 0 + totalNextWeekWork?.count || 0 + totalMoreThan7Days?.count || 0;
+				const overdueWorkPercent = (totalOverdueWork?.count || 0/percent)*100 || 0;
+				const nextWeekWorkPercent = (totalNextWeekWork?.count || 0/percent)*100 || 0;
+				const moreThan7DaysPercent = (totalMoreThan7Days?.count || 0/percent)*100 || 0;
 				return {
 					...item,
 					totalOverdueWork: totalOverdueWork?.count || 0,
 					totalNextWeekWork: totalNextWeekWork?.count || 0,
 					totalMoreThan7Days: totalMoreThan7Days?.count || 0,
-					totalFinish: totalFinish?.count || 0
+					totalFinish: totalFinish?.count || 0,
+					overdueWorkPercent,
+					nextWeekWorkPercent,
+					moreThan7DaysPercent
 				}
 			})
 			setDataCompany(data);
@@ -183,34 +192,37 @@ const ProjectSubjectPage: FC = () => {
 											<div className="flex w-full h-3 mt-2">
 												<button
 													className="flex items-center justify-center bg-red-500"
-													style={{ width: `${30}%` }}
+													style={{ width: `${company?.overdueWorkPercent}%` }}
 													onClick={toggleVisible}>
 													<span className="text-white">
-														{company?.totalOverdueWork}
+														{company?.totalOverdueWork ||""}
 													</span>
 												</button>
 												<button
 													className="flex items-center justify-center bg-yellow-500"
-													style={{ width: `${50}%` }}
+													style={{ width: `${company?.nextWeekWorkPercent}%` }}
 													onClick={toggleVisible}
 												>
 													<span className="text-white">
-														{company?.totalNextWeekWork}
+														{company?.totalNextWeekWork ||""}
 													</span>
 												</button>
 												<button
 													className="flex items-center justify-center bg-green-500"
-													style={{ width: `${20}%` }}
+													style={{ width: `${company?.moreThan7DaysPercent}%` }}
 													onClick={toggleVisible}
 												>
 													<span className="text-white">
-														{company?.totalMoreThan7Days}
+														{company?.totalMoreThan7Days ||""}
 													</span>
 												</button>
 											</div>
 										</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-r border-cbs-border text-right text-white cursor-auto" style={{ fontSize: '10px' }} onClick={e => e.stopPropagation()}>
-											<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div>
+											{company?.totalFinish ? 
+												<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >{company?.totalFinish}</div> : 
+												<></>
+											}
 										</td>
 									</tr>
 								)
