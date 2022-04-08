@@ -153,7 +153,7 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 					labels: labels.map(label => label.yy),
 					datasets: [
 						{
-							label: "Hợp đồng",
+							label: "Giải ngân",
 							data: dataSets,
 							borderWidth: 2,
 							backgroundColor: "transparent",
