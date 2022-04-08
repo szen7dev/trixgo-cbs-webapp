@@ -22,7 +22,7 @@ const ReportMultipleChart: React.FC<Props> = ({ projectInfo, ...props }) => {
 			  {
 				label: "# of Votes",
 				data: [total],
-				backgroundColor: ["#00CA99", "#FF9900", "#F55F5F"],
+				backgroundColor: ["#FF9900", "#00CA99", "#F55F5F"],
 				borderWidth: 0,
 			  },
 			],
