@@ -102,7 +102,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 
 								<div className="flex flex-1">
 									{/* Total Invest */}
-									<ReportTotal className="bg-white mx-2 flex-1 py-2 pl-4 pr-5 mt-4" style={{ minWidth: "116px" }} />
+									<ReportTotal className="bg-white mx-2 flex-1 py-2 pl-4 pr-5 mt-4" style={{ minWidth: "116px" }}  projectInfo={projectInfo}/>
 
 									{/* Activity */}
 									<ReportActivity className="bg-white mx-2 flex-1 py-2 pl-4 pr-5 mt-4" />

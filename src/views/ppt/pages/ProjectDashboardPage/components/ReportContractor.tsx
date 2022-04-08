@@ -17,7 +17,7 @@ const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
 	const _data: ChartData<"doughnut", number[], unknown> = {
 		datasets: [
 		  {
-			data: [1, 0, 0, 0, 0, 0],
+			data: [20, 6, 2, 0, 0, 0],
 			backgroundColor: [
 			  "rgba(44, 134, 237, 1)",
 			  "rgba(255, 165, 0, 1)",
@@ -39,13 +39,13 @@ const ReportContractor: React.FC<Props> = ({ projectInfo, ...props }) => {
 			</div>
 			<div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="/"><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện (14-155 tỷ)</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.plum, "inline-block h-2 w-2 rounded-md mr-3")}></span>Chưa thực hiện (2-14 tỷ)</Link>
 				</div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="/"><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai (8-288 tỷ)</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.info, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đang triển khai (6-50 tỷ)</Link>
 				</div>
 				<div className="mt-6 whitespace-nowrap">
-					<Link to="/"><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành (4-600 tỷ)</Link>
+					<Link to="#"><span className={cn(styles.circle, styles.lime, "inline-block h-2 w-2 rounded-md mr-3")}></span>Đã hoàn thành (20-350 tỷ)</Link>
 				</div>
 			</div>
 		</div>
