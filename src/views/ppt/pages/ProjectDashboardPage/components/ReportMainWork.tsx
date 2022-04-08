@@ -44,9 +44,9 @@ const ReportMainWork: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...pro
 						</td>
 						<td className="whitespace-nowrap px-1.5 pt-3">
 							<div className={cn(styles.circle, styles.success, "h-2 w-2 rounded-md inline-block mr-1 align-middle")} />
-							0
+							4
 						</td>
-						<td className="pt-3"><span className={styles.success}>5</span>/5</td>
+						<td className="pt-3"><span className={styles.success}>4</span>/15</td>
 						<td className="pt-3 px-2 box-content" style={{ width: "24px", paddingBottom: "12px" }}>
 							<img src={iconChat} alt="Chat icon" className="inline-block" />
 						</td>
@@ -78,7 +78,7 @@ const ReportMainWork: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...pro
 							<img src={iconChat} alt="Chat icon" className="inline-block" />
 						</td>
 						<td className="pr-3 pt-3">
-							64
+							
 						</td>
 					</tr>
 					<tr>
@@ -105,7 +105,7 @@ const ReportMainWork: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...pro
 							<img src={iconChat} alt="Chat icon" className="inline-block" />
 						</td>
 						<td className="pr-3 pt-3">
-							64
+							
 						</td>
 					</tr>
 					<tr>
@@ -132,7 +132,7 @@ const ReportMainWork: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...pro
 							<img src={iconChat} alt="Chat icon" className="inline-block" />
 						</td>
 						<td className="pr-3 pt-3">
-							64
+							
 						</td>
 					</tr>
 					<tr>
@@ -159,7 +159,7 @@ const ReportMainWork: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...pro
 							<img src={iconChat} alt="Chat icon" className="inline-block" />
 						</td>
 						<td className="pr-3 pt-3">
-							1,2k
+							
 						</td>
 					</tr>
 				</tbody>
