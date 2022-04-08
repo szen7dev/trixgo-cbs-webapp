@@ -46,6 +46,11 @@ export type Project = {
     numberOfReports: number;
     numberOfIpcs: number;
     numberOfPackage: number;
+    numberOfRfis: number;
+    numberOfSubmitals: number;
+    numberOfPunchLists: number;
+    numberOfPhotos: number;
+    numberOfInspections: number;
 }
 
 export type ProjectListPayload = QueryParam & {

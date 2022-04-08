@@ -207,7 +207,7 @@ export const DocumentProjectPage: FC = () => {
             >
               <thead className="">
                 <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-                  <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="px-4 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '30px' }}>
                     <input
                       className="form-check-input"
                       type="checkbox"
@@ -215,37 +215,37 @@ export const DocumentProjectPage: FC = () => {
                       id="flexCheckDefault"
                     />
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '25%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Nội dung
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '15%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Chủ thể ban hành
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Mã hiệu
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Ngày văn bản
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Mã hiệu lưu
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '5%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Số lượng
                     </span>
                   </th>
-                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
+                  <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border" style={{ width: '10%' }}>
                     <span className="pl-2 border-l border-cbs-border">
                       Tình trạng
                     </span>
@@ -257,7 +257,7 @@ export const DocumentProjectPage: FC = () => {
                   </th>
                   <th
                     className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border"
-                    style={{ minWidth: "150px" }}
+                    style={{ width: '10%' }}
                   >
                     <span className="pl-2 border-l border-cbs-border">
                       Địa chỉ lưu trữ
@@ -265,7 +265,7 @@ export const DocumentProjectPage: FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-small">
+              <tbody className="">
                 {data.map((document, index) => {
                   return (
                     <tr
@@ -301,10 +301,10 @@ export const DocumentProjectPage: FC = () => {
                           </p>
                         </Link>
                       </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 w-[150px]">
+                      <td className="py-2.5 border-b border-cbs-border px-2">
                         {document?.sender?.name}
                       </td>
-                      <td className="py-2.5 border-b border-cbs-border px-2 w-[166px]">
+                      <td className="py-2.5 border-b border-cbs-border px-2">
                         {document.sign}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
@@ -315,8 +315,7 @@ export const DocumentProjectPage: FC = () => {
                         {document?.storeSign?.name}
                       </td>
                       <td
-                        className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right min-w-[85px]"
-                        style={{ width: "1%" }}
+                        className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right"
                       >
                         {document.amount}
                       </td>
