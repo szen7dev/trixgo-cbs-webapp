@@ -213,79 +213,79 @@ const ProjectDashboardTaskPage: FC = () => {
 												+ totalTaskNextWeekWork
 												+ totalTaskMoreThan7Days;
 
-								return (<tr key={index}>
-											<td className="p-2 border border-r-0 border-cbs-border">
-												<input type="checkbox" className="cbs-checkbox" />
-											</td>
-											<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
-												{/* { project.sign }{ project.name } */}
-												<Link to={generatePath("/pcm/project/:id/home", { id: project._id })}>
-													{project.sign}.{project.name}
-													{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
-												</Link>
-											</td>
-											<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
-												{ project?.company?.name || '' }
-											</td>
-											<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
-												<div className="flex w-full h-3 mt-2">
-													<button
-														className="flex items-center justify-center bg-red-500"
-														style={{ width: `${getPercentTypeTask(totalTaskOverdueWork, totalTask)}%` }}
-													// onClick={() => onClickBar("OUT_DATE")}
-													>
-														{/* Quá Hạn */}
-														<span className="text-white">
-															{ totalTaskOverdueWork != 0 && totalTaskOverdueWork }
-														</span>
-													</button>
-													<button
-														className="flex items-center justify-center bg-yellow-500"
-														style={{ width: `${getPercentTypeTask(totalTaskNextWeekWork, totalTask)}%` }}
-													// onClick={() => onClickBar("NEXT_WEEK")}
-													>
-														<span className="text-white">
-															{/* Tuần Tới */}
-															{ totalTaskNextWeekWork != 0 && totalTaskNextWeekWork }
-														</span>
-													</button>
-													<button
-														className="flex items-center justify-center bg-green-500"
-														style={{ width: `${getPercentTypeTask(totalTaskMoreThan7Days, totalTask)}%` }}
-													// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
-													>
-														<span className="text-white">
-															{/* > 7 Ngày */}
-															{ totalTaskMoreThan7Days != 0 && totalTaskMoreThan7Days }
-														</span>
-													</button>
-												</div>
-											</td>
-											<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" 
-												style={{ 
-													fontSize: '10px',
-												}}>
-												{
-													totalTaskFinish != 0 ? 
-														<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >
-															{/* Hoàn thành */}
-															{
-																totalTaskFinish != 0 && totalTaskFinish
-															}
-														</div> :
-														<div className="h-3 w-full text-center min-w-[164px] mt-2" >
-															{/* Hoàn thành */}
-															{
-																totalTaskFinish != 0 && totalTaskFinish
-															}
-														</div>
-												}
-												
-											</td>
-										</tr>)
-							}
-								
-							)}
+								return (
+									<tr key={index}>
+										<td className="p-2 border border-r-0 border-cbs-border">
+											<input type="checkbox" className="cbs-checkbox" />
+										</td>
+										<td className="pb-2 pl-2.5 pr-4 pt-2.5 border border-l-0 border-cbs-border min-w-[360px]">
+											{/* { project.sign }{ project.name } */}
+											<Link to={generatePath("/pcm/project/:id/subject", { id: project._id })}>
+												{project.sign}.{project.name}
+												{/* CHG.THT.Xây dựng cụm trường Tiểu học và THCS Tây Hồ Tây */}
+											</Link>
+										</td>
+										<td className="pb-2 pl-5 pr-4 pt-2.5 border border-cbs-border">
+											{ project?.company?.name || '' }
+										</td>
+										<td className="pb-2 px-3 pt-2 border border-r-0 border-cbs-border align-middle" style={{ minWidth: "155px", fontSize: '10px' }}>
+											<div className="flex w-full h-3 mt-2">
+												<button
+													className="flex items-center justify-center bg-red-500"
+													style={{ width: `${getPercentTypeTask(totalTaskOverdueWork, totalTask)}%` }}
+												// onClick={() => onClickBar("OUT_DATE")}
+												>
+													{/* Quá Hạn */}
+													<span className="text-white">
+														{ totalTaskOverdueWork != 0 && totalTaskOverdueWork }
+													</span>
+												</button>
+												<button
+													className="flex items-center justify-center bg-yellow-500"
+													style={{ width: `${getPercentTypeTask(totalTaskNextWeekWork, totalTask)}%` }}
+												// onClick={() => onClickBar("NEXT_WEEK")}
+												>
+													<span className="text-white">
+														{/* Tuần Tới */}
+														{ totalTaskNextWeekWork != 0 && totalTaskNextWeekWork }
+													</span>
+												</button>
+												<button
+													className="flex items-center justify-center bg-green-500"
+													style={{ width: `${getPercentTypeTask(totalTaskMoreThan7Days, totalTask)}%` }}
+												// onClick={() => onClickBar("MORE_THAN_SEVEN_DAYS")}
+												>
+													<span className="text-white">
+														{/* > 7 Ngày */}
+														{ totalTaskMoreThan7Days != 0 && totalTaskMoreThan7Days }
+													</span>
+												</button>
+											</div>
+										</td>
+										<td className="pb-2 pl-5 pr-4 pt-2 border border-cbs-border text-white" 
+											style={{ 
+												fontSize: '10px',
+											}}>
+											{
+												totalTaskFinish != 0 ? 
+													<div className="h-3 w-full bg-cbs-primary text-center min-w-[164px] mt-2" >
+														{/* Hoàn thành */}
+														{
+															totalTaskFinish != 0 && totalTaskFinish
+														}
+													</div> :
+													<div className="h-3 w-full text-center min-w-[164px] mt-2" >
+														{/* Hoàn thành */}
+														{
+															totalTaskFinish != 0 && totalTaskFinish
+														}
+													</div>
+											}
+											
+										</td>
+									</tr>
+								)
+							})}
 						</tbody>
 					</table>
 				</div>
