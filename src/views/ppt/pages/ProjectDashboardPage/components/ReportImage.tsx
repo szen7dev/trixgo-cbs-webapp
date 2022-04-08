@@ -39,9 +39,11 @@ const ReportImage: React.FC<Props> = ({ projectInfo, ...props }) => {
 				>
 					{projectInfo?.photos?.map((photo,i) => (
 						<SwiperSlide key={photo._id}>
-							<div className='w-full pb-[100%]' onClick={()=> openPost({ author: photo.author, images:projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}>
-								<p className='opacity-0 invisible'>{photo.name}</p>
-								<img src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`} className="absolute inset-0 mx-auto object-cover h-full w-full" height="130px" />
+							<div className='w-full pb-[100%] relative' onClick={()=> openPost({ author: photo.author, images:projectInfo.photos, index: i, createAt: photo.createAt, mediaId: photo._id.toString() })}>
+								<p className='opacity-0 invisible h-0'>{photo.name}</p>
+								<div className='absolute inset-0 overflow-hidden'>
+									<img src={`${process.env.REACT_APP_URL_S3}${photo.path}`} alt={`Report ${photo.path}`} className="object-cover h-full w-full" />
+								</div>
 							</div>
 						</SwiperSlide>
 					))}
