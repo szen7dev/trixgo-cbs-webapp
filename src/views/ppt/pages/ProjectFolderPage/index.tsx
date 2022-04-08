@@ -173,7 +173,7 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 								</th>
 							</tr>
 						</thead>
-						<tbody className="text-small">
+						<tbody className="">
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
 									return (

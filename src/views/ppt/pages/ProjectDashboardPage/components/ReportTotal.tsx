@@ -1,12 +1,23 @@
 import React from 'react'
+import cn from "classnames";
+import { formatNumberMoney, formatNaNToZero } from 'utils/converter';
 
-const ReportTotal: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ ...props }) => {
+import { Project } from 'typings/items/project';
+
+type Props = {
+	projectInfo: Project | undefined
+} & React.HTMLAttributes<HTMLDivElement>
+
+const ReportTotal: React.FC<Props> = ({ projectInfo, ...props }) => {
+	if(!projectInfo) return <></>
+	const totalBudgetFormat = formatNumberMoney(projectInfo.budget + projectInfo.vatBudget);
+
 	return (
 		<div {...props}>
 			<div>Tổng mức</div>
 			<div className="flex justify-between items-center mt-2">
 				<div className="text-large text-black font-bold">
-					13.128
+					{totalBudgetFormat}
 				</div>
 			</div>
 		</div>
