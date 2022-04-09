@@ -350,17 +350,20 @@ export type CommentProps = {
     _id: string;
     name: string;
     author: User;
-    createAt: string
+    createAt: string;
+    company: string;
+    project: string;
+    group: string;
   };
   type: number;
-  content: string,
+  content: string;
   files: FileProps[] | undefined;
   images: FileProps[] | undefined;
-  author: User,
-  amountCommentReply: number,
-  amountReaction: number,
+  author: User;
+  amountCommentReply: number;
+  amountReaction: number;
   parent: string;
-  createAt: string,
+  createAt: string;
   lastestReplyID: CommentProps;
   reaction?: {
     type: number
