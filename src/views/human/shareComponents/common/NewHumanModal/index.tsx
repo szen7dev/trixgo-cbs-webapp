@@ -25,6 +25,10 @@ import {
   useQueryListDoctype,
   useFetchListArea,
 } from "services/hooks/useHuman";
+import {
+  usePosition
+} from "services/hooks/items/usePosition";
+
 import type { MutationContactPayload } from "typings/human";
 
 enum CLASSIFY {
@@ -97,11 +101,20 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
     keyword: searchDepartmentValue,
   });
 
-  const { listDoctypes: listPositions } = useQueryListDoctype({
-    limit: 50,
-    type: 13,
-    keyword: searchPositionValue,
-  });
+  // const { listDoctypes: listPositions } = useQueryListDoctype({
+  //   limit: 50,
+  //   type: 13,
+  //   keyword: searchPositionValue,
+  // });
+
+  const {
+    deletePositionAsync,
+    data: listPositions,
+    hasNextPage: hasNextPagePosition,
+    refetch: refetchListPosition,
+    fetchNextPage: fetchNextPagePosition,
+    totalRecord
+  } = usePosition({ keyword: searchPositionValue }, true);
 
   const { listDoctypes: listWorkingStatus } = useQueryListDoctype({
     limit: 50,
@@ -404,7 +417,7 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                         initialValue={defaultValues?.position}
                         data={listPositions.map((position) => {
                           return ({
-                            label: `${position.name}.${position.company?.sign}.${position.company?.name}`,
+                            label: `${position.name}`,
                             value: position._id,
                           })
                         })}
@@ -803,12 +816,12 @@ export const NewHumanModal: FC<NewHumanModalProps> = ({
                     </div>
                     <div className="w-1/5 flex items-center">
                       <span className="w-4/12 text-primary-gray">
-                        Số định danh
+                        Số căn cước/CMT
                       </span>
                       <Field
                         type="text"
                         name="identity"
-                        placeholder="Số định danh..."
+                        placeholder="Số căn cước/CMT..."
                         className="w-full h-6 outline-none pl-3"
                         onBlur={(e: FormEvent<HTMLInputElement>) => {
                           handleBlur(e);
