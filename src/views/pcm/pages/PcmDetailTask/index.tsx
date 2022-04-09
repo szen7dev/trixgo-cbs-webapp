@@ -78,6 +78,16 @@ const PcmDetailTask: FC = () => {
     status: 1,
     priority: 1
   });
+  const [permissions, setPermissions] = useState({
+    hasPermissionUpdateTask: false,
+    hasPermissionAddRelatedUser: false,
+    hasPermissionCreateUpdateCheckListAndChildTask: false,
+    hasPermissionCreateRelatedResponse: false,
+    hasPermissionComment: false,
+    hasPermissionCreatorAddFile: false,
+    hasPermissionAssigneeAddFile: false,
+  });
+
   const [isMarkInterest, setIsMarkInterest] = useState(infoTask?.data?.flags?.includes(user?._id))
   const [isShowModalUpdateTaskStatus, setIsShowModalUpdateTaskStatus] = useState(false);
   const [isTruncate, setIsTruncate] = useState(true);
@@ -140,14 +150,42 @@ const PcmDetailTask: FC = () => {
 			return history.push("/");
 		};
 
-    if(infoTask?.error && infoTask?.data?.keyError === "permission_denied") {
+    if(infoTask.error && infoTask.data?.keyError === "permission_denied") {
       toast.error("Bạn không có quyền truy cập công việc này!");
       return history.push('/pcm/home');
     }
 
     if (infoTask?.data) {
-      const { percentage, amountComment, status, priority, signatures } = infoTask.data;
-      const confirmUsers = signatures?.map((signature: any) => ({ author: signature.author, createAt: signature.createAt })) ?? [];
+      const taskInfo = infoTask.data;
+      const { percentage, amountComment, status, priority, signatures } = taskInfo;
+      const confirmUsers = signatures?.map((signature: any) => ({
+        author: signature.author,
+        createAt: signature.createAt
+      })) ?? [];
+
+      const relatedsID                    = taskInfo.related?.map((user: any) => user._id) ?? [];
+      const groupMembersID                = taskInfo.group?.members?.map((user: any) => user._id) ?? [];
+      const authorAndAssigneeID           = [taskInfo.author?._id, taskInfo.assignee?._id].filter(Boolean);
+      const authorAndAssigneeAndRelatedID = [...authorAndAssigneeID, ...relatedsID].filter(Boolean);
+
+      const hasPermissionUpdateTask       = taskInfo.author?._id === user?._id;
+      const hasPermissionAddRelatedUser   = authorAndAssigneeID.includes(user?._id);
+      const hasPermissionCreatorAddFile   = taskInfo.author?._id === user?._id;
+      const hasPermissionAssigneeAddFile  = taskInfo.assignee?._id === user?._id;
+
+      const hasPermissionCreateUpdateCheckListAndChildTask = authorAndAssigneeID.includes(user?._id);
+      const hasPermissionCreateRelatedResponse = authorAndAssigneeAndRelatedID.includes(user?._id);
+      const hasPermissionComment = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(user?._id);
+
+      setPermissions({
+        hasPermissionUpdateTask,
+        hasPermissionAddRelatedUser,
+        hasPermissionCreateUpdateCheckListAndChildTask,
+        hasPermissionCreateRelatedResponse,
+        hasPermissionComment,
+        hasPermissionCreatorAddFile,
+        hasPermissionAssigneeAddFile
+      })
 
       setTaskData({
         percentComplete: `${percentage}%`,
@@ -167,7 +205,7 @@ const PcmDetailTask: FC = () => {
     return <Redirect to="/pcm/home" />
   }
 
-  const taskInfo = infoTask?.data;
+  const taskInfo = infoTask.data;
 
   return (
     <>
@@ -207,27 +245,31 @@ const PcmDetailTask: FC = () => {
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>
-          <button 
-            className="mx-3"
-            onClick={() => {
-              openModal(
-                <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
-                  <ModalUpdateTask task={taskInfo} onConfirm={handleConfirmUpdateTask} />
-                </div>
-              )
-            }}
-          >
-            <img className="w-6" src={IconPencil} alt="Pencil icon" />
-          </button>
+          {permissions.hasPermissionUpdateTask && (
+            <button
+              className="mx-3"
+              onClick={() => {
+                openModal(
+                  <div className="t-add-new-task-dialog text-left transition-all transform bg-primary-light shadow-xl rounded my-16 align-top inline-block">
+                    <ModalUpdateTask task={taskInfo} onConfirm={handleConfirmUpdateTask} />
+                  </div>
+                )
+              }}
+            >
+              <img className="w-6" src={IconPencil} alt="Pencil icon" />
+            </button>
+          )}
           {/* <button className="mx-3">
             <img className="w-6" src={RemoveIcon} alt="Remove icon" />
           </button>
           <button className="mx-3">
             <img className="w-6 opacity-80" src={IconPrint} alt="Print icon" />
           </button> */}
-          <button className="mx-3" onClick={openAddUserRelation}>
-            <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
-          </button>
+          {permissions.hasPermissionAddRelatedUser && (
+            <button className="mx-3" onClick={openAddUserRelation}>
+              <img className="w-6 opacity-80" src={IconAddUser} alt="User add icon" />
+            </button>
+          )}
         </div>
 
         <div className="task-management-header-right-block flex items-center">
@@ -347,14 +389,15 @@ const PcmDetailTask: FC = () => {
               </div>
               {/* <FileAttachment files={taskInfo?.authorAttachs} /> */}
             </div>
-						<CreatorUploadedFile 
-              className="p-5" 
+						<CreatorUploadedFile
+              className="p-5"
               authorAttachs={taskInfo?.authorAttachs}
               author={user}
               taskID={taskInfo._id}
               companyID={taskInfo.company?._id}
               projectID={taskInfo.project?._id}
               groupID={taskInfo.group?._id}
+              hasPermission={permissions.hasPermissionCreatorAddFile}
             />
             <div className="">
               <CheckList
@@ -363,6 +406,7 @@ const PcmDetailTask: FC = () => {
                 data={listCheckList}
                 totalRecord={totalRecordCheckList}
                 onSeeMore={nextPageListCheckList}
+                hasPermission={permissions.hasPermissionCreateUpdateCheckListAndChildTask}
               />
             </div>
             <div className="mt-8 pr-3">
@@ -372,6 +416,7 @@ const PcmDetailTask: FC = () => {
                 data={listChildTask}
                 totalRecord={totalRecordChildTask}
                 onSeeMore={nextPageListChildTask}
+                hasPermission={permissions.hasPermissionCreateUpdateCheckListAndChildTask}
               />
             </div>
             <div className="px-5 mt-5">
@@ -380,7 +425,7 @@ const PcmDetailTask: FC = () => {
                 valueApproved={taskInfo?.valueApproved}
               />
             </div>
-						<OwnerUploadedFile 
+						<OwnerUploadedFile
               className="p-5"
               assigneeAttachs={taskInfo?.assigneeAttachs}
               author={user}
@@ -388,6 +433,7 @@ const PcmDetailTask: FC = () => {
               companyID={taskInfo.company?._id}
               projectID={taskInfo.project?._id}
               groupID={taskInfo.group?._id}
+              hasPermission={permissions.hasPermissionAssigneeAddFile}
             />
             <div className="px-5 my-5">
               <RelatedResponse task={taskInfo} />
@@ -424,19 +470,21 @@ const PcmDetailTask: FC = () => {
               taskID={id}
             />
             <div className='flex flex-col w-full max-h-full overflow-y-auto'>
-              <ReplyCommentField
-                attachFile
-                inputContainerClassName="flex w-full p-2"
-                fileContainerClassName="border-t"
-                projectID={taskInfo?.project?._id}
-                groupID={taskInfo?.group?._id}
-                taskID={id}
-                onConfirm={(method?: string) => {
-                  if(method && method === 'INSERT') {
-                    setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
-                  }
-                }}
-              />
+              {permissions.hasPermissionComment && (
+                <ReplyCommentField
+                  attachFile
+                  inputContainerClassName="flex w-full p-2"
+                  fileContainerClassName="border-t"
+                  projectID={taskInfo?.project?._id}
+                  groupID={taskInfo?.group?._id}
+                  taskID={id}
+                  onConfirm={(method?: string) => {
+                    if(method && method === 'INSERT') {
+                      setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                    }
+                  }}
+                />
+              )}
             </div>
           </div>
           <ModalLarge

@@ -27,9 +27,10 @@ type Props = {
   companyID: string,
   projectID: string,
   groupID: string,
+  hasPermission: boolean,
 } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assigneeAttachs, author, ...rest }: Props): JSX.Element => {
+export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assigneeAttachs, author, hasPermission, ...rest }: Props): JSX.Element => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileProps[]>(assigneeAttachs);
 
@@ -47,6 +48,8 @@ export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assig
   const { updateTaskAsync } = useTask({});
 
   const handleUpdateDescriptionFile = debounce(async (e: any) => {
+    if(!hasPermission) return;
+
 		await updateFileAsync({
 			fileID: e.target.dataset.fileid,
 			description: e.target.value
@@ -56,6 +59,7 @@ export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assig
 	}, 1000)
 
   const handleChangeInputFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if(!hasPermission) return;
     try {
       const files = event.target.files;
       const filesID: string[] = [];
@@ -116,10 +120,11 @@ export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assig
       />
       <div className="flex justify-between">
         <header className="text-x-large">File người thực hiện</header>
-        <button className="h-10 w-10 flex justify-center items-center rounded-full" onClick={(e) => inputRef.current?.click()}>
-          {/* <DotsVerticalIcon /> */}
-          <img src="/images/common/icon-upload-file.png" alt="Icon upload file" />
-        </button>
+        {hasPermission && (
+          <button className="h-10 w-10 flex justify-center items-center rounded-full" onClick={(e) => inputRef.current?.click()}>
+            <img src="/images/common/icon-upload-file.png" alt="Icon upload file" />
+          </button>
+        )}
       </div>
       {(files && files.length) ? files.map(file => (
         <div className="flex w-full my-2" key={file._id}>
@@ -161,6 +166,7 @@ export const OwnerUploadedFile = ({ taskID, companyID, projectID, groupID, assig
               defaultValue={file.description}
               data-fileid={file._id}
               onKeyUp={handleUpdateDescriptionFile}
+              disabled={!hasPermission}
             />
           </div>
         </div>
