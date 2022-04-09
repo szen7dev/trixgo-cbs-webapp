@@ -4,6 +4,7 @@ import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
 import { toast } from "react-toastify";
 import moment from "moment";
+import classnames from "classnames";
 
 import IconPlus from "assets/images/icons8-plus-math-100.png";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
@@ -29,6 +30,7 @@ type Props = {
   data: Array<CheckListType | ChildTaskType>;
   totalRecord?: number;
   onSeeMore: () => void;
+  hasPermission: boolean;
 };
 
 enum CheckListTab {
@@ -40,7 +42,7 @@ enum CheckListTab {
   MORE_SEVEN_DAYS = "MORE_SEVEN_DAYS",
 }
 
-export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore }) => {
+export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, onSeeMore, hasPermission }) => {
   const [keywordAssignee, setKeywordAssignee] = useState('');
   const [visibleForm, setVisibleForm] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
@@ -49,7 +51,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const [currentTab, setCurrentTab] = useState(CheckListTab.ALL);
   const { addChecklistAsync, updateStatusChecklistAsync } = useCheckList({ parentID: task?._id });
   const { addChildTaskAsync } = useChildTask({ parentID: task?._id });
-  const { data: listUsersProject, fetchNextPage } = useUsersProject({ 
+  const { data: listUsersProject, fetchNextPage } = useUsersProject({
     projectID: task?.project?._id,
     keyword: keywordAssignee
   }, true);
@@ -100,7 +102,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
       if (error) {
         return toast.warning(message);
       }
-      
+
       socket?.emit('SUBJECT_PCM_CSS_ADD_CHECKLIST', {
         taskID: data.parent,
         checklistID: data._id
@@ -199,7 +201,9 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   }, [socket]);
 
   return (
-    <div className="border-b-0.5 border-cbs-border">
+    <div className={classnames('border-cbs-border', {
+      "border-b-0.5": hasPermission
+    })}>
       {/* Check messageList header */}
       <div
         className={`${
@@ -207,12 +211,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         } flex px-5 items-center justify-between`}
       >
         <div className={`${selectAll ? "" : "w-1/6"} `}>
-          <input
+          {/* <input
             type="checkbox"
 						className="cbs-checkbox"
             checked={selectAll}
             onChange={handleSelectAll}
-          />
+          /> */}
           {!selectAll && <span className="ml-2 text-x-large">{componentType === 'CHECKLIST' ? 'Checklist' : 'Việc con'}</span>}
         </div>
 
@@ -296,7 +300,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         <div className="">
           <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
             {(listData || []).map((item) => (
-              <CheckListItem key={item._id} data={item} onUpdateStatusCheckList={handleUpdateStatusCheckList} />
+              <CheckListItem 
+                key={item._id} 
+                data={item} 
+                hasPermission={hasPermission}
+                onUpdateStatusCheckList={handleUpdateStatusCheckList}
+              />
             ))}
           </div>
         </div>
@@ -311,6 +320,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
               </button>
             </div>
           ) : <></>}
+
           <div className="w-full h-px bg-gray-200 " />
 
           {visibleForm && (
@@ -450,12 +460,14 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
           )}
 
           <div className="shadow-lg mt-5 pb-5 px-5">
-            <button onClick={() => setVisibleForm(true)}>
-              <div className="flex items-center text-green-success font-bold">
-                <img src={IconPlus} alt="icon" className="w-4 h-4" />
-                <span className="ml-1">Tạo mới</span>
-              </div>
-            </button>
+            {hasPermission && (
+              <button onClick={() => setVisibleForm(true)}>
+                <div className="flex items-center text-green-success font-bold">
+                  <img src={IconPlus} alt="icon" className="w-4 h-4" />
+                  <span className="ml-1">Tạo mới</span>
+                </div>
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -6,6 +6,8 @@ import { Comment, RootComment } from '..';
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
 import { ContextModalPost } from 'views/pcm/contexts/post';
 import { Comment as CommentType, CommentProps } from 'typings/task';
+import { ModalZoomView } from "shareComponents/common";
+import { ImageProps } from 'typings/common';
 
 type Props = {
 	comments?: CommentProps[],
@@ -23,6 +25,14 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	const { state, dispatch } = useContext(CommentContext);
 	const { state: statePost } = useContext(ContextModalPost);
 	const [amountComment, setAmountComment] = useState<number>(0);
+
+	const [isShow, setIsShow] = useState(false);
+	const [defaultState, setDefaultState] = useState({
+		mediaID: '',
+		images: [] as ImageProps[],
+		index: 0,
+		createAt: ""
+	  });
 
 	useEffect(() => {
 		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
@@ -75,10 +85,22 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 								smallImage={smallImage}
 								renderNestedComment={Comment}
 								disableReply={statePost.isShow && statePost.isReply}
+								onClickImage={(comment: CommentProps, images: any, index: number) => {
+									if(images.length) {
+										setDefaultState({
+											mediaID: comment._id,
+											images,
+											index,
+											createAt: comment.createAt
+										});
+										setIsShow(true);
+									}
+								}}
 							/>
 						</li>
 					))}
 			</ul>
+			<ModalZoomView isShow={isShow} toggle={()=> setIsShow(!isShow)} initialData={defaultState} />
 		</>
 	)
 }

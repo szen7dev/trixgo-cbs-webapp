@@ -11,7 +11,8 @@ type Props = {
 const DATE_FORMAT = 'DD/MM/YYYY';
 
 export enum CONTACT_POLICY {
-  'Bộ đội phục viên' = 1,
+  'Không' = 1,
+  'Bộ đội phục viên' = 2,
   'Con thương bệnh binh' = 3,
   'Gia đình chính sách' = 4,
 };
@@ -182,10 +183,10 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("insuranceDate")}
               </td>
               <td className="border w-2/6 pl-4">
-                {moment(info?.insuranceDate).isValid() && moment(info?.insuranceDate).format(DATE_FORMAT)}
+                {info?.insuranceDate && moment(info?.insuranceDate).isValid() && moment(info?.insuranceDate).format(DATE_FORMAT)}
               </td>
             </tr>
-
+            
             <tr className="border h-7 leading-7">
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("insuranceStatus")}
@@ -296,7 +297,7 @@ export const GeneralInfo: FC<Props> = (props) => {
                 {i18n("familyPolicy")}
               </td>
               <td className="border w-2/6 pl-4">
-                {CONTACT_POLICY[info?.familyPolicy || 1]}
+                {info?.familyPolicy && CONTACT_POLICY[info?.familyPolicy || 0]}
               </td>
               <td className="border text-primary-gray w-1/6 pl-4">
                 {i18n("family")}

@@ -50,8 +50,6 @@ export const HumanInfo: FC = () => {
 
   const { detailHuman, loading, refetch: refreshDetailHuman } = useFetchDetailHuman(id);
 
-  console.log({ detailHuman })
-
   const handleFinishForm = useCallback(
     async (values) => {
       const res = await updateContactMutateAsync({
@@ -67,7 +65,7 @@ export const HumanInfo: FC = () => {
     },
     [detailHuman._id, updateContactMutateAsync, refreshDetailHuman]
   );
-
+  
   const handleClickUpdateButton = useCallback(
     (defaultValues: Human) => () => {
       openModal(
@@ -297,7 +295,7 @@ export const HumanInfo: FC = () => {
             taxid: detailHuman.taxid,
             major: detailHuman.major || [],
             educationalBackground: detailHuman.educationalBackground || [],
-            insuranceDate: detailHuman.insuanceDate,
+            insuranceDate: detailHuman.insuranceDate,
             insuranceNumber: detailHuman.insuranceNumber,
             insuranceStatus: detailHuman.insuranceStatus,
             sallarySubFactor: detailHuman.sallarySubFactor,
