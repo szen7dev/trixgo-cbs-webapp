@@ -27,7 +27,7 @@ export const ReeHomePage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Test Ree HomePage</h2>
+			<h2>Ree HomePage</h2>
 		</div>
 	);
 };

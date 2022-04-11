@@ -37,6 +37,7 @@ const ReeRouter = lazy(() => import("./ree"));
 const SupportRouter = lazy(() => import("./support"));
 const TimesheetRouter = lazy(() => import("./timesheet"));
 const ItemRouter = lazy(() => import("./item"));
+const BudgetRouter = lazy(() => import("./budget"));
 
 /*=====5.PAGES=====*/
 const ErrorPage = lazy(() => import("views/authentication/Error"));
@@ -78,6 +79,11 @@ const Routes: FC = () => {
                                     <AccountingLayout>
                                         <AccountingRouter />
                                     </AccountingLayout>
+                                </Route>
+
+                                 {/* =====BUDGET===== */}
+                                <Route path="/budget">
+                                    <BudgetRouter />
                                 </Route>
 
                                 {/* =====BIDDING===== */}

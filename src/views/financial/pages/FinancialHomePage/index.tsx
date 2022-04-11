@@ -27,7 +27,7 @@ export const FinancialHomePage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Test Financial HomePage</h2>
+			<h2>Financial HomePage</h2>
 		</div>
 	);
 };
