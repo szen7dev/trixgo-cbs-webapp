@@ -10,16 +10,12 @@ import TrashIcon from "assets/images/icons8-remove-96.svg";
 import MemberIcon from "assets/images/member-icon.svg";
 import { CreateMemberPackage, DeleteMembersPackage } from "../../modal";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
-// import { APP_ID } from "apis/localdb";
 
-// import CreateMemberGroup from "../../modal/CreateMemberGroup";
-
-const PackageDocumentMember: FC<any>  = ({ packageID }) => {
+const PackageDocumentMember: FC<any> = ({ packageID }) => {
 	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<string[]>([]);
 	const { openModal } = useModal();
 
-	// Call api 
 	const { infoPackage } = useDocumentPackage({ packageID }, false, true);
 	const listMembers = infoPackage?.data?.members || [];
 	const projectID = infoPackage?.data?.project;

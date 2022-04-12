@@ -35,6 +35,7 @@ const AdminMember: FC = () => {
 			})
 		}),
 		{ refetchOnMount: false, refetchOnWindowFocus: false });
+
 	const queryClient = useQueryClient();
 	const { assigned, checked, checkboxRef, handleChangeCheckbox, handleCheckAll } = useCheckedList((data?.data.members || []) as any[]);
 	const { openModal } = useModal();
@@ -82,7 +83,7 @@ const AdminMember: FC = () => {
 		<main className="h-full overflow-auto">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg truncate max-w-xs">{data?.data.name}</p>
+					<p className="text-lg truncate max-w-xs" title={data?.data.name}>{data?.data.name}</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
