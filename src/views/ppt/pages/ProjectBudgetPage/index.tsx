@@ -75,42 +75,42 @@ const ProjectBudgetPage: FC = () => {
 								{show ? '+' : '-'}
 							</button>
 						</th>
-						<th className='py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-center'>A1</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left"></th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className='py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center'>A1</th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left"></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.budget + projectInfo.vatBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.forecastBudget + projectInfo.vatForecastBudget)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(
 								projectInfo.contractValue + projectInfo.contractVatValue +
 								projectInfo.contractPlus + projectInfo.contractVatPlus
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.contractAdvancePaymentPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.contractProduce + projectInfo.contractVatProduce)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(
 								projectInfo.contractAcceptance + projectInfo.contractVatAcceptance +
 								projectInfo.contractPlusAcceptance + projectInfo.contractVatPlusAcceptance
 							)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.contractAmountPaid)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5">
 							{formatNumberMoney(projectInfo.contractRemainingPayment)}
 						</th>
-						<th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0"></th>
+						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5"></th>
 					</tr>
 					{
-						listPcmProjectBudget.map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
+						Array(20).fill(listPcmProjectBudget[0]).map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
 					}
 				</RightClickMenuWrapper>
 				{/* <tfoot>
