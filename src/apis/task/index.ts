@@ -47,10 +47,10 @@ const populatesResponse = JSON.stringify({
 
 const populatesComment = JSON.stringify({
   path: "author lastestReplyID files images task",
-  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task",
+  select: "_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group",
   populate: {
       path: 'author lastestReplyID files images task',
-      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task'
+      select: '_id bizfullname image name nameOrg path mimeType size author type parent content files images amountCommentReply amountReaction createAt task company project group'
   }
 });
 

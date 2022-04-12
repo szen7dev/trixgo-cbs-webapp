@@ -27,7 +27,7 @@ export const OperationHomePage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Test Operation HomePage</h2>
+			<h2>Operation HomePage</h2>
 		</div>
 	);
 };

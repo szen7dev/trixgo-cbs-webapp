@@ -5,13 +5,12 @@ import { EditButton } from 'shareComponents/common';
 import { FileProps } from 'typings/common';
 import TaskRepository from "apis/task";
 import CommentContext from 'views/pcm/contexts/comment/comment.context';
-// import { ContextModalPost } from 'views/pcm/contexts/post';
 import { Comment as CommentType, CommentProps } from 'typings/task';
 
 interface Props {
 	renderNestedComment?: React.ElementType
 	onClickReply?: () => unknown,
-	onClickImage?: (comment: CommentType, index: number) => void,
+	onClickImage?: (comment: CommentType, images: any, index: number) => void,
 	userID: string | undefined,
 	comment: CommentProps,
 	limit: number,
@@ -27,9 +26,16 @@ type UpdateCommentProps = {
 	images: FileProps[] | undefined,
 }
 
-export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comment, limit, renderNestedComment: NestedComment }) => {
+export const RootComment: FC<Props> = ({
+	disableReply,
+	smallImage,
+	userID,
+	comment,
+	limit,
+	onClickImage,
+	renderNestedComment: NestedComment
+}) => {
 	const { state, dispatch } = useContext(CommentContext);
-	// const { openComment } = useContext(ContextModalPost);
 	const [isReply, setIsReply] = useState<boolean>(false);
 	const [isReplyParent, setIsReplyParent] = useState<boolean>(false);
 	const [amountReply, setAmountReply] = useState<number>(comment?.amountCommentReply > 0 ? comment?.amountCommentReply - 1 : 0);
@@ -107,10 +113,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comme
 				userID={userID}
 				onClickReply={() => setIsReply(true)}
 				onClickEdit={handleClickUpdateParent}
-				onClickImage={(index: number, images: any, commentId: string) => {
-					console.log({ index, images, commentId })
-					// openComment({ taskId: commentId, images, index, author: comment.author, createAt: comment.createAt })
-				}}
+				onClickImage={onClickImage}
 				renderOptions={EditButton}
 			/>
 			<div>
@@ -131,10 +134,7 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comme
 								small={smallImage}
 								comment={commentReply}
 								onClickReply={() => setIsReply(true)}
-								onClickImage={(index: number, images: any, commentId: string) => {
-									console.log({ index, images, commentId })
-									// openComment({ taskId: commentId, images, index, author: commentReply.author, createAt: commentReply.createAt })
-								}}
+								onClickImage={onClickImage}
 								// Callback onClickupdate
 								onClickEdit={handleClickUpdateChild}
 								renderOptions={EditButton}
@@ -155,6 +155,9 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comme
 							images={infoComment.images}
 							commentID={infoComment.commentID}
 							parentID={infoComment.parentID || comment._id}
+							companyID={comment.task?.company}
+							projectID={comment.task?.project}
+							groupID={comment.task?.group}
 							taskID={comment.task._id}
 							onSubmit={() => {
 								setIsReply(false);
@@ -179,6 +182,9 @@ export const RootComment: FC<Props> = ({ disableReply, smallImage, userID, comme
 						images={infoCommentParent.images}
 						commentID={infoCommentParent.commentID}
 						parentID={infoCommentParent.parentID}
+						companyID={comment.task?.company}
+						projectID={comment.task?.project}
+						groupID={comment.task?.group}
 						taskID={comment.task._id}
 						onSubmit={() => {
 							setIsReplyParent(false);

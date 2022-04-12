@@ -27,7 +27,7 @@ export const OwnerHomePage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Test Owner HomePage</h2>
+			<h2>Owner HomePage</h2>
 		</div>
 	);
 };

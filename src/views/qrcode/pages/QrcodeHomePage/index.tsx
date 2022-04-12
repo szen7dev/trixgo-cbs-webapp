@@ -27,7 +27,7 @@ export const QrcodeHomePage: FC = () => {
 
 	return (
 		<div className={cn(styles.content)}>
-			<h2>Test Qrcode HomePage</h2>
+			<h2>Qrcode HomePage</h2>
 		</div>
 	);
 };

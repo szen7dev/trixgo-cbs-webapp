@@ -30,6 +30,7 @@ interface Props {
 	commentID?: string,
 	parentID?: string,
 	taskID: string,
+	companyID?: string,
 	projectID?: string,
 	groupID?: string,
 	files?: FileProps[],
@@ -46,6 +47,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	commentID,
 	parentID,
 	taskID,
+	companyID,
 	projectID,
 	groupID,
 	files,
@@ -71,12 +73,14 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const [text, setText] = useState<string>(defaultValue || '');
 	const { user } = useAuth();
 	const { current: socket }: any = useSocket();
+
 	const { addFileToUpload } = useUpload({
 		appID: APP_KEY.PCM_PLAN_TASK,
-		companyID: user?.company?._id,
+		companyID: companyID || user?.company?._id,
 		projectID,
 		groupID
 	});
+
 	const { createCommentAsync, updateCommentAsync } = useCommentPcm({
 		key: `list_comments.${taskID}`,
 		params: { taskID }

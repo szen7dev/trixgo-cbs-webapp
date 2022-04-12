@@ -41,18 +41,26 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 	const dates = getDates(new Date(projectInfo.startTime || Date.now()), new Date());
 
 	// Step 2: Format date range
-	const datesFormat = dates.map(date => ({ yyyy: moment(date).format('MM/YYYY'), yy: moment(date).format('MM/YY') }));
+	const datesFormat = dates.map(date => ({ 
+		month: moment(date).get('months'), 
+		year: moment(date).get('years'), 
+		yy: moment(date).format('MM/YY')
+	}));
 
 	// Step 3: Unique date label
-	const labels = _lodash.unionBy(datesFormat, 'yyyy');
+	const labels = _lodash.unionBy(datesFormat, 'yy');
 
 	// Step 4: Set data total files by date label
 	const dataSets = labels.map(date => {
 		let totalContractValues = 0;
 
-		const infoContractValueByDate = contractValues?.find(contractValue => contractValue.dataFormat === date.yyyy);
+		const infoContractValueByDate = contractValues?.find(contractValue => 
+			contractValue?._id?.month == date.month &&
+			contractValue?._id?.year == date.year
+		);
+
 		if(infoContractValueByDate) {
-			totalContractValues = infoContractValueByDate.count;
+			totalContractValues = infoContractValueByDate.amount;
 		}
 
 		return totalContractValues;
@@ -145,7 +153,7 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 					labels: labels.map(label => label.yy),
 					datasets: [
 						{
-							label: "Hợp đồng",
+							label: "Giải ngân",
 							data: dataSets,
 							borderWidth: 2,
 							backgroundColor: "transparent",

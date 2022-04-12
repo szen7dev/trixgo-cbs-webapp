@@ -284,11 +284,10 @@ export const CONTRACT_DEBT_TYPES = [
     { value: 4, text: 'Nợ khác' },
 ]
 
-// PHÂN Contract IPC
+// PHÂN LOẠI IPC
 export const CONTRACT_IPC_TYPES = [
     { value: 1, text: 'Tạm ứng' },
     { value: 2, text: 'Thanh toán' },
-    { value: 3, text: 'Quyết toán' },
 ]
 
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU

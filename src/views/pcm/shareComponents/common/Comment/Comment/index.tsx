@@ -21,7 +21,7 @@ type OptionsProps = {
 interface Props {
 	onClickLike?: () => unknown;
 	onClickReply?: () => unknown;
-	onClickImage?: (index: number, images: any, commentId: string) => unknown;
+	onClickImage?: (comment: CommentProps, images: any, index: number) => unknown;
 	onClickEdit?: (comment: CommentProps) => unknown;
 	renderOptions?: React.ComponentType<HTMLAttributes<HTMLElement> & OptionsProps>;
 	renderEndComment?: React.ComponentType;
@@ -119,7 +119,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 	}
 
 	const handleClickImage = (index: number) => {
-		onClickImage?.(index, images, comment._id)
+		onClickImage?.(comment, images, index)
 	}
 
 	const images = comment.images || [];

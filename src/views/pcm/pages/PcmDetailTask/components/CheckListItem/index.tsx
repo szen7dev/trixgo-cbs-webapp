@@ -13,16 +13,17 @@ import { CheckList, ChildTask, UpdateStatusCheckListPayload } from "typings/task
 type Props = {
   data: CheckList | ChildTask;
   onUpdateStatusCheckList?: (payload: UpdateStatusCheckListPayload) => void;
+  hasPermission: boolean;
 };
 
-export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList }) => {
+export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList, hasPermission }) => {
   const history = useHistory();
   const [isHover, setIsHover] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(data.status === 3);
+  const [isDisabled, setIsDisabled] = useState(data.status === 3 || !hasPermission);
 
   const handleUpdateStatusChecklist = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if(event.target.checked && data.status !== 3 && onUpdateStatusCheckList) {
-      onUpdateStatusCheckList({
+    if(event.target.checked && data.status !== 3 && hasPermission) {
+      onUpdateStatusCheckList && onUpdateStatusCheckList({
         checklistID: data._id,
         status: 3
       });
