@@ -18,7 +18,7 @@ const AppAdminTab: FC = () => {
       </div>
 
       <div className={tab === "packages" ? "block" : "hidden"}>
-        {itemID ? <PackageDocumentMember packageID={itemID} /> : <PackageDocument />}
+        {(itemID && pathname.endsWith('members')) ? <PackageDocumentMember packageID={itemID} /> : <PackageDocument />}
       </div>
     </section>
   );

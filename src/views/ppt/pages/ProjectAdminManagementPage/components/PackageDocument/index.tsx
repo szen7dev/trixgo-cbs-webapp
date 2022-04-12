@@ -1,9 +1,9 @@
 import { FC, useCallback, useState } from "react";
-
-import { Link, useParams } from "react-router-dom";
+import moment from "moment";
+import debounce from "lodash/debounce";
+import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
-import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 // import FinancialCashFlowFilterButton from "views/pages/financial/planning/components/FinancialCashFlow/FinancialCashFlowFilterButton";
 
@@ -14,12 +14,13 @@ import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 import {  UpdatePackage, DeletePackage } from "../../modal";
 import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
-import moment from "moment";
 import CreatePackage from "../../modal/CreatePackage";
 
 const PackageDocument: FC = () => {
-	// Cơ chế của userParams
-	const { id: projectID } = useParams<{ id: string }>();
+	const { pathname } = useLocation();
+	const history = useHistory();
+	const { id: projectID, itemID: packageID } = useParams<{ id: string, itemID: string }>();
+	const [breadcrumb, setBreadcrumb] = useState<{ _id: string, name: string }[]>([]);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 
@@ -28,7 +29,13 @@ const PackageDocument: FC = () => {
 		fetchNextPage: fetchNextPageDocumentPackage,
 		hasNextPage: hasNextPageDocumentPackage,
 		totalRecord,
-	} = useDocumentPackage({ departmentID: projectID, isShowAll: "1", keyword },true, false);
+	} = useDocumentPackage({
+		parentID: packageID,
+		departmentID: projectID,
+		isShowAll: "1",
+		keyword
+	}, true, false);
+
 	const { openModal } = useModal();
 
 	const getStateChecked = useCallback((id: string) => {
@@ -61,11 +68,24 @@ const PackageDocument: FC = () => {
 		}
 	};
 
+	const onClickPackage = (_id: string, name: string) => {
+		setBreadcrumb(previous => ([
+			...previous,
+			{ _id, name }
+		]))
+		history.push(`/pcm/project/${projectID}/admin/packages/${_id}`);
+	}
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-lg">Danh sách</p>
+					{!pathname.endsWith('packages') && (
+						<button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+					)}
+					<p className="text-lg ml-2">Danh sách</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -143,8 +163,8 @@ const PackageDocument: FC = () => {
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
+						<th className="pl-2 pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
+							<div className="flex items-center justify-center">
 								<input
 									className="form-check-input"
 									type="checkbox"
@@ -171,6 +191,7 @@ const PackageDocument: FC = () => {
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="font-normal pl-2">Cập nhật lần cuối</div>
 						</th>
+						<th className="w-1/3 pb-1 pt-1 font-normal">#</th>
 					</tr>
 				</thead>
 
@@ -187,21 +208,34 @@ const PackageDocument: FC = () => {
 									/>
 								</td>
 								<td className="py-1 px-2">
-									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}`}>
+									{/* <Link to={`/pcm/project/${projectID}/admin/packages/${item._id}`}>
 										<div className="flex">
 											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
 											<p>{item.name}</p>
 										</div>
-									</Link>
+									</Link> */}
+									<button onClick={() => onClickPackage(item._id, item.name)}>
+										<div className="flex text-left">
+											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
+											<p>{item.name}</p>
+										</div>
+									</button>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{item?.sign}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{item?.members.length}
+									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}/members`}>
+										{item?.members.length}
+									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
 									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									<Link to={`/pcm/project/${projectID}/admin/packages/${item._id}/members`} className="underline text-sky-600">
+										Xem thành viên
+									</Link>
 								</td>
 							</tr>
 						))
