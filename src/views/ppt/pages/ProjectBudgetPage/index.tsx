@@ -110,7 +110,7 @@ const ProjectBudgetPage: FC = () => {
 						<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5"></th>
 					</tr>
 					{
-						Array(20).fill(listPcmProjectBudget[0]).map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
+						listPcmProjectBudget.map((_item: any) => <BugetRowGroupTemp row={_item} key={_item._id} show={show} />)
 					}
 				</RightClickMenuWrapper>
 				{/* <tfoot>
