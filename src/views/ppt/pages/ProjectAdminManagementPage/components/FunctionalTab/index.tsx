@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from "react";
 
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory, useLocation } from "react-router-dom";
 
 import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
@@ -27,6 +27,7 @@ import moment from "moment";
 
 const FunctionalTab: FC = () => {
 	const { id: projectID, itemID: groupID } = useParams<{ id: string, itemID: string }>();
+	const { pathname } = useLocation();
 	const history = useHistory();
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
@@ -89,7 +90,12 @@ const FunctionalTab: FC = () => {
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					<p className="text-sm">Danh sách</p>
+					{!pathname.endsWith('groups') && (
+						<button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+					)}
+					<p className="text-lg ml-2">Danh sách</p>
 					{/* {breadcrumb.length ? breadcrumb.map(group => (
 						<>
 							{group?.name}
@@ -182,8 +188,9 @@ const FunctionalTab: FC = () => {
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
-						<th className="pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
-							<div className="border-r-2 border-gray-300 flex items-center justify-center">
+						<th className="pl-2 pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
+							{/* border-r-2 border-gray-300 */}
+							<div className="flex items-center justify-center">
 								<input
 									className="form-check-input"
 									type="checkbox"
