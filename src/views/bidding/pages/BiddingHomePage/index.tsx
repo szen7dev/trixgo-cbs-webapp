@@ -1,7 +1,7 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import cn from "classnames";
@@ -49,6 +49,8 @@ export const BiddingHomePage: FC = () => {
 	const [pageActive, setPageActive] = useState('bids');
 	const [data, setData] = useState<{ id: number, [key: string]: any }[]>([])
 	const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data)
+
+	const history = useHistory();
 
 	useEffect(() => {
 		document.title = "Trixgo | Note"
@@ -205,7 +207,7 @@ export const BiddingHomePage: FC = () => {
 									status,
 								}) => {
 									return (
-										<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+										<tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer" onClick={() => history.push({ pathname: '/bidding/' + id })}>
 											<td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
 												<input className="cbs-checkbox" type="checkbox" value="" checked={assigned[id]} onChange={e => handleChangeCheckbox(e, { id })} />
 											</td>
