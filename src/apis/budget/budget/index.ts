@@ -27,7 +27,9 @@ async function update(payload: any): Promise<any> {
 
 async function deleteMany(params: any): Promise<any> {
     const { data } = await API.delete(
-        BUDGET_URL, params
+        BUDGET_URL, {
+            params
+        }
     )
     return data
 }

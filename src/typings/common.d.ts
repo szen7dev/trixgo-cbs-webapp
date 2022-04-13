@@ -161,6 +161,15 @@ export type NavLinkTaskDashboard = {
   icon?: ReactNode;
 }
 
+export type ValidateEntityResponse = {
+  action: string;
+  actual: any;
+  field: string;
+  message: string;
+  nodeID: string;
+  type: string;
+}
+
 declare global {
   interface Date {
       addHours: (h: number) => this;

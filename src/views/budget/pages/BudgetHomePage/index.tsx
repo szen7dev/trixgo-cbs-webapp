@@ -1,9 +1,10 @@
-import { FC, useCallback, useState } from "react";
-
-import { Link, useParams, useHistory, useLocation } from "react-router-dom";
+import { ChangeEvent, FC, useCallback, useState } from "react";
+import debounce from "lodash/debounce";
+import moment from "moment";
+import { Link, useParams, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { useModal } from "services/hooks/useModal";
-import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
@@ -14,17 +15,16 @@ import TrashIcon from "assets/images/icons8-remove-96.svg";
 import { Create, Update } from "./components";
 import { ModalConfirm } from 'shareComponents/common';
 import { useBudget } from "services/hooks/budget/useBudget";
-import moment from "moment";
 
 export const BudgetHomePage: FC = () => {
-	const { pathname } = useLocation();
 	const history = useHistory();
-	const { id: projectID, itemID: groupID } = useParams<{ id: string, itemID: string }>();
+	const { id: projectID } = useParams<{ id: string, itemID: string }>();
 
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 
 	const {
+		deleteManyAsync,
 		list: listBudgets,
 		fetchNextPage,
 		hasNextPage,
@@ -40,42 +40,66 @@ export const BudgetHomePage: FC = () => {
 
 	const { openModal, closeModal } = useModal();
 
+	// Handle for checkbox each table row
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);
 
-	const onClickCheckButton = (id: string) => {
-		const check = idsChecked.includes(id);
-		if (check) {
-			const newList = [...idsChecked];
-			newList.splice(newList.findIndex((e: any) => e == id), 1);
+	const handleChangeCheckbox = (id: string) => {
+		const isChecked = idsChecked.includes(id);
+
+		if(isChecked) {
+			const newList = idsChecked.filter(item => item !== id);
 			setIdsChecked(newList);
 		} else {
-			const newList = [...idsChecked];
-			newList.push(id);
+			const newList = [...idsChecked, id];
 			setIdsChecked(newList);
 		};
 	};
 
-	const getStateCheckedAll = useCallback(() => {
-		return idsChecked.length == listBudgets.length;
-	}, [idsChecked]);
+	// Handle for checkbox all
+	const getStateCheckboxAll = useCallback(() => {
+		return idsChecked.length === listBudgets.length;
+	}, [idsChecked, listBudgets]);
 
-	const onClickCheckAll = () => {
-		if (idsChecked.length == listBudgets.length) {
+	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
+		const isChecked = event.target.checked;
+
+		if(isChecked) {
+			const ids = listBudgets.map(item => item._id);
+			setIdsChecked(ids);
+		} else{
 			setIdsChecked([]);
-		} else {
-			const idsAll = listBudgets.map((e: any) => e._id);
-			setIdsChecked(idsAll);
 		}
-	};
+	}
 
 	const onClickBudget = (_id: string, name: string) => {
 		history.push(`/pcm/project/${projectID}/admin/groups/${_id}`);
 	}
 
 	const handleDelete = async () => {
-		console.log({ idsChecked });
+		try {
+			const { error, data } = await deleteManyAsync({
+				budgetsID: idsChecked
+			});
+
+			if(error) {
+			  return toast.warn(data?.message);
+			}
+
+			if(data.length) {
+				return data.map((item: any) => toast.warn(item.message));
+			}
+
+			refetch();
+			closeModal();
+			toast.success('Xóa thành công');
+		} catch (error) {
+			if(error instanceof Error)
+				toast.error(error.message);
+			if(typeof error === 'string')
+				toast.error(error);
+		}
 	}
 
 	return (
@@ -98,25 +122,22 @@ export const BudgetHomePage: FC = () => {
 					/>
 					{(idsChecked && idsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							<div className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray">
-								<img src={DownloadIcon} alt="Download" />
-							</div>
 							{idsChecked.length == 1 ?
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() =>
-										openModal(
-											<div
-												className={
-													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-												}
-											>
-												<Update
-													item={listBudgets.find((e: any)=> e._id == idsChecked[0])}
-													onConfirm={refetch}
-												/>
-											</div>
-										)
+									onClick={() => toast.info('Tính năng đang phát triển')
+										// openModal(
+										// 	<div
+										// 		className={
+										// 			"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+										// 		}
+										// 	>
+										// 		<Update
+										// 			item={listBudgets.find((e: any)=> e._id == idsChecked[0])}
+										// 			onConfirm={refetch}
+										// 		/>
+										// 	</div>
+										// )
 									}
 								>
 									<img src={PencilIcon} alt="Pencil" />
@@ -173,8 +194,8 @@ export const BudgetHomePage: FC = () => {
 								<input
 									className="form-check-input"
 									type="checkbox"
-									checked={getStateCheckedAll()}
-									onChange={() => onClickCheckAll()}
+									onChange={handleChangeCheckboxAll}
+									checked={getStateCheckboxAll()}
 								/>
 							</div>
 						</th>
@@ -211,7 +232,7 @@ export const BudgetHomePage: FC = () => {
 										className="form-check-input"
 										type="checkbox"
 										checked={getStateChecked(item._id)}
-										onChange={() => onClickCheckButton(item._id)}
+										onChange={() => handleChangeCheckbox(item._id)}
 									/>
 								</td>
 								<td className="py-1 px-2">
