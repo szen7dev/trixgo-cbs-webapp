@@ -6,7 +6,7 @@ export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInf
     const { mutateAsync: createDatahubContactMutateAsync, isLoading: isLoadingCreateDatahubContact } =
         useMutation((payload: any) => DatahubContactRepository.insert(payload)
     );
-        
+
     // Sửa
     const { mutateAsync: updateDatahubContactMutateAsync, isLoading: isLoadingUpdateDatahubContact } =
         useMutation((payload: any) =>DatahubContactRepository.update(payload)
@@ -58,7 +58,7 @@ export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInf
         // get List
         isLoading,
         refetchList,
-        data: listDatahubContact,
+        data,
         fetchNextPage,
         hasNextPage,
         totalRecord,

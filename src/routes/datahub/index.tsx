@@ -99,7 +99,7 @@ const DatahubRoutes: FC = () => {
 								<Route exact path='/datahub/contact' component={DatahubContact} />
 							</Switch>
 						</LayoutSecondary>
-					</Route>
+					</Route> 
 				</Switch>
 			</DatahubLayout>
 		</>

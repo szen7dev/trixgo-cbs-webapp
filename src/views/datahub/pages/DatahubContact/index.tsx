@@ -6,8 +6,9 @@ import { useQueryClient } from 'react-query'
 import { debounce } from 'lodash'
 
 import { useDatahubTypes } from "services/hooks/datahub";
-import useCheckedList from "services/hooks/ppt/useCheckedList";
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 
+import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
 
@@ -30,16 +31,33 @@ const DatahubContact: FC = () => {
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
+	const [listData, setListData] = useState([]);
+	// const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
+	const {  
+		isLoading,
+        refetchList,
+        data,
+        fetchNextPage,
+        hasNextPage,
+        totalRecord,
+        totalPage,
+        // create update remove
+        createDatahubContactMutateAsync,
+        updateDatahubContactMutateAsync,
+        removeManyDatahubContactMutateAsync,
+        // get Info
+        infoDatahubContact,
+        refetchInfo } = useDatahubContact({}, true, false );
 
-	const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
-	const queryClient = useQueryClient();
-
-	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(data?.data.listRecords || []);
-
+	const queryClient = useQueryClient(); 
 	useEffect(() => {
 		document.title = "CHG.THT-Lựa chọn nhà thầu"
-	}, []);
-
+		if(data){
+			const listDatahubContact = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
+			setListData(listDatahubContact || [])
+		}
+	}, [data]);
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listData|| []);
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -53,13 +71,13 @@ const DatahubContact: FC = () => {
 				{/* <DropdownFilterButton /> */}
 				<GroupActions
 					className="flex items-center flex-1"
-					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					// onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
 					disabled={{
 						pencil: checked.length !== 1,
 					}}
 				/>
 
-				<ButtonCreate onClick={() => { setShow(true); setSelected(null) }} />
+				{/* <ButtonCreate onClick={() => { setShow(true); setSelected(null) }} /> */}
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto" id="scroller">
@@ -114,13 +132,14 @@ const DatahubContact: FC = () => {
 					</thead>
 					<ContextMenuWrapper tag="tbody" className="text-small">
 						{	
-							data?.data.listRecords.map((props) => {
+							listData?.map((props: any) => {
 								const {
 									_id,
 									name,
 									description,
 									popular,
 								} = props
+								console.log({ props })
 								return (
 									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" onContextMenu={() => setSelected(props)}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
@@ -141,11 +160,11 @@ const DatahubContact: FC = () => {
 				</table>
 			</div>
 			<Paginate
-				limit={data?.data.limit || 10}
-				totalRecord={data?.data.totalRecord}
-				totalPages={data?.data.totalPage}
-				hasNextPage={Boolean(data?.data.nextCursor)}
-				prevPageAction={fetchPrevPage}
+				limit={data?.data?.limit || 10}
+				totalRecord={data?.data?.totalRecord}
+				totalPages={data?.data?.totalPage}
+				hasNextPage={Boolean(data?.data?.nextCursor)}
+				// prevPageAction={fetchPrevPage}
 				nextPageAction={fetchNextPage}
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
@@ -158,7 +177,7 @@ const DatahubContact: FC = () => {
 					onSuccessCreate={data => {
 						queryClient.removeQueries(["datahub_types"], { inactive: true });
 						queryClient.refetchQueries(["datahub_types", ""]);
-						resetPage();
+						// resetPage();
 					}}
 				/>
 			</ModalExtraLarge>
