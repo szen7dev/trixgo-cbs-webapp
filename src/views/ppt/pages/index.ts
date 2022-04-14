@@ -2,6 +2,7 @@ export { default as ProjectAdminManagementPage } from "./ProjectAdminManagementP
 export { default as ProjectBiddingPage } from "./ProjectBiddingPage";
 export { default as ProjectBudgetPage } from "./ProjectBudgetPage";
 export { default as ProjectCashFlowPlanPage } from "./ProjectCashFlowPlanPage";
+export { default as ProjectCashFlowPlanChildPage } from "./ProjectCashFlowPlanChildPage";
 export { default as ProjectCategoryPage } from "./ProjectCategoryPage";
 export { default as ProjectDashboardPage } from "./ProjectDashboardPage";
 export { default as ProjectDashboardPortfolioPage } from "./ProjectDashboardPortfolioPage";

@@ -27,7 +27,16 @@ const BudgetRouter: FC = () => {
                     </BudgetLayout>
                 }
             />
-            <Route path="/media/*" component={ErrorPage} />
+            <Route
+                exact
+                path="/budget/:tab/:itemID"
+                component={() =>
+                    <BudgetLayout>
+                        <BudgetHomePage />
+                    </BudgetLayout>
+                }
+            />
+            <Route path="/budget/*" component={ErrorPage} />
         </Switch>
     )
 };

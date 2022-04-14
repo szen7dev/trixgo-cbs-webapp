@@ -74,3 +74,16 @@ export const formatNaNToZero = (number: number): number => {
 
   return number;
 }
+
+export const convertCurrency = (number: string) : string => {
+  if(number.search(',')) {
+    number = number.replaceAll(',', '')
+  }
+
+  const formatter = new Intl.NumberFormat('en-US');
+  return formatter.format(+number);
+}
+
+export const convertCurrencyToNumber = (currency: string) : number => {
+  return +currency.replaceAll(',', '');
+}

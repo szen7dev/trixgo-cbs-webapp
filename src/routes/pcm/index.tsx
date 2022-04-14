@@ -38,6 +38,7 @@ import {
   ProjectBiddingPage,
   ProjectBudgetPage,
   ProjectCashFlowPlanPage,
+  ProjectCashFlowPlanChildPage,
   ProjectCategoryPage,
   ProjectDashboardPortfolioPage,
   ProjectDashboardTaskPage,
@@ -115,7 +116,7 @@ const PCMRouter: FC = () => {
               <Route exact path="/pcm/project/:id/folder" component={ProjectFolderPage} />
               <Route exact path="/pcm/project/:id/folder/:groupID" component={ProjectFolderPage} />
               <Route exact path="/pcm/project/:id/schedule" component={ProjectSchedulePage} />
-              <Route path="/pcm/project/:id/budget">
+              <Route path="/pcm/project/:id/(budget|cash-flow)">
                 <LayoutSecondary
                   pages={[
                     {
@@ -124,15 +125,16 @@ const PCMRouter: FC = () => {
                       path: "/pcm/project/:id/budget",
                       navExact: true,
                     },
-                    { id: "2", title: "Kế hoạch", path: "/pcm/project/:id/budget/2" },
+                    {
+                      id: "2",
+                      title: "Kế hoạch",
+                      path: "/pcm/project/:id/cash-flow"
+                    },
                   ]}
                 >
                   <Route exact path="/pcm/project/:id/budget" component={ProjectBudgetPage} />
-                  <Route
-                    exact
-                    path="/pcm/project/:id/budget/2"
-                    component={ProjectCashFlowPlanPage}
-                  />
+                  <Route exact path="/pcm/project/:id/cash-flow" component={ProjectCashFlowPlanPage} />
+                  <Route exact path="/pcm/project/:id/cash-flow/:cashFlowID" component={ProjectCashFlowPlanChildPage} />
                 </LayoutSecondary>
               </Route>
               <Route exact path={["/pcm/project/:id/bidding", "/pcm/project/:id/bidding/(2|3)"]}>
