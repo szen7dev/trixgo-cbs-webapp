@@ -1,8 +1,10 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
+import classnames from "classnames";
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { formatNumberMoney } from "utils/cmcs";
 
@@ -15,8 +17,8 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-// import { ModalCreateOrUpdateCustomer, ModalConfirm } from '../../shareComponents/common';
- 
+import { ModalCreateOrUpdateCashFlow, ModalConfirm } from "../../sharedComponents/common";
+
 /*=====5.TYPINGS=====*/
 import { CashFlowPlan } from "typings/fin";
 
@@ -24,33 +26,31 @@ import { CashFlowPlan } from "typings/fin";
 import { useModal } from "services/hooks/useModal";
 import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
 
-/*=====7.OTHER=====*/
 const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
+	const { id: projectID } = useParams<{ id: string }>();
+    const { pathname } = useLocation();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<Array<CashFlowPlan.CashFlowPlan>>([]);
     const [initialValues, setInitialValues] = useState({
-        contactID: '',
-        type: '',
+        projectID,
         name: '',
-        planValue: '',
-        realValue: '',
+        sign: '',
+        type: 5,
+        property: 3,
         date: '',
-        realDate: '',
-        note: '',
-        priority: '',
-        outin: '',
+        priority: null,
     });
 
     const {
-        deleteAsync,
+        deleteManyAsync,
         list: listCashFlowPlans,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { keyword }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
+        params: { keyword, projectID },
         isFetchList: true
     });
 
@@ -58,16 +58,12 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            contactID: '',
-            type: '',
             name: '',
-            planValue: '',
-            realValue: '',
+            sign: '',
             date: '',
-            realDate: '',
-            note: '',
-            priority: '',
-            outin: '',
+            type: 5,
+            property: 3,
+            priority: null,
         }))
     }
 
@@ -79,62 +75,54 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
         setKeyword(event.target.value);
     }, 500);
 
-    // Làm việc với update mẩu tin
-    const onClickCheckButton = (doc: CashFlowPlan.CashFlowPlan) => {
-        const check = itemsChecked.find(item => item._id === doc._id);
-        let newListIDChecked = [];
+    // Handle for checkbox each table row
+	const getStateCheckbox = useCallback((id: string) => {
+		const isChecked = itemsChecked.find(_item => _item._id === id)
+		return !!isChecked;
+	}, [itemsChecked]);
 
-        if (check) {
-            newListIDChecked = itemsChecked.filter(item => item._id !== doc._id)
-            setItemsChecked(newListIDChecked);
-        } else {
-            newListIDChecked = [...itemsChecked, doc];
-            setItemsChecked(newListIDChecked);
-        };
+	const handleChangeCheckbox = (item: any) => {
+		const isChecked = itemsChecked.find(_item => _item._id === item._id)
+        let newList: any[] = [];
 
-        // if (newListIDChecked.length === 1) {
-        //     const { _id, outin, type, name, planValue, date, realValue, note, priority,   } = newListIDChecked[0];
-        //     setInitialValues({
-        //         contactID: _id,
-        //         outin,
-        //         type,
-        //         name,
-        //         planValue,
-        //         date,
-        //         realValue: realValue || '',
-        //         note: note || '',
-        //         priority: priority || '',
-        //     });
-        // } else {
-        //     clearData();
-        // }
-    };
+		if(isChecked) {
+		    newList = itemsChecked.filter(_item => _item._id !== item._id);
+		} else {
+			newList = [...itemsChecked, item];
+		};
+        setItemsChecked(newList);
 
-    // Check chọn 1 hoặc nhiều mẩu tin
-    const getStateChecked = useCallback((id: string) => {
-        const user = itemsChecked.find(item => item._id === id);
-        return user ? true : false;
-    }, [itemsChecked]);
-
-    const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listCashFlowPlans.length;
-    }, [itemsChecked]);
-
-    const onClickCheckAll = () => {
-        if (itemsChecked.length == listCashFlowPlans.length) {
-            setItemsChecked([]);
-        } else {
-            setItemsChecked(listCashFlowPlans);
+        if(newList.length === 1) {
+            setInitialValues(previousValue => ({
+                ...previousValue,
+                ...newList[0],
+                cashFlowID: newList[0]._id
+            }))
         }
-    };
+	};
+
+	// Handle for checkbox all
+	const getStateCheckboxAll = useCallback(() => {
+		return itemsChecked.length === listCashFlowPlans.length;
+	}, [itemsChecked, listCashFlowPlans]);
+
+	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
+		const isChecked = event.target.checked;
+
+		if(isChecked) {
+			setItemsChecked(listCashFlowPlans);
+		} else{
+			setItemsChecked([]);
+		}
+	}
 
     // Xóa 1 hoặc nhiều mẩu tin
     const handleConfirmDelete = async () => {
         try {
             const ids = itemsChecked.map(item => item._id);
-            const { error, data } = await deleteAsync(ids);
+            const { error, data } = await deleteManyAsync(ids);
 
-            if (error) {
+            if(error) {
                 return toast.warn(data?.message);
             }
 
@@ -153,37 +141,32 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
     }
 
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
-
         let initValues: any = {...initialValues};
-
         setItemsChecked([]);
 
         // Mở modal tạo mới
         if(modalType === 'create') {
             clearData();
             initValues = {
-                contactID: '',
-                type: '',
+                projectID,
                 name: '',
-                planValue: '',
+                sign: '',
                 date: '',
-                realValue: '',
-                realDate: '',
-                note: '',
-                priority: '',
-                outin: '',
+                type: 5,
+                property: 3,
+                priority: null,
             };
         }
 
         openModal(
             <div
-                className={"inline-block w-[521px] h-[620px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[320px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
-                {/* <ModalCreateOrUpdateCustomer
+                <ModalCreateOrUpdateCashFlow
                     modalType={modalType}
                     initialValues={initValues}
                     onConfirm={handleConfirmCreateOrUpdate}
-                /> */}
+                />
             </div>
         )
     }
@@ -221,7 +204,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                                                 "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
                                             }
                                         >
-                                            {/* <ModalConfirm onConfirm={handleConfirmDelete} /> */}
+                                            <ModalConfirm onConfirm={handleConfirmDelete} />
                                         </div>
                                     )
                                 }>
@@ -236,9 +219,9 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                             >
                             Tạo mới
                         </button>
-                        <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
+                        {/* <div className="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center ml-5 cursor-pointer">
                             <img src={`${process.env.PUBLIC_URL}/images/common/icon-3dots-vertical-gray.svg`} alt="Three Dot" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </header>
@@ -251,49 +234,19 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    defaultChecked={getStateCheckedAll()}
-                                    onClick={onClickCheckAll}
+                                    checked={getStateCheckboxAll()}
+                                    onChange={handleChangeCheckboxAll}
                                 />
                             </div>
                         </th>
-                        <th className="w-1/12 py-1">
+                        <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Nội dung
                             </div>
                         </th>
-                        <th className="w-1/6 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Gói thầu/Hợp đồng
-                            </div>
-                        </th>
-                        <th className="w-1/5 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Nhà thầu
-                            </div>
-                        </th>
-                        <th className="w-1/6 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Giá trị kế hoạch
-                            </div>
-                        </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Ngày kế hoạch
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Giá trị thực tế
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                               Ngày thực tế
-                            </div>
-                        </th>
-                        <th className="py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Ghi chú
+                                Mã hiệu
                             </div>
                         </th>
                         <th className="py-1">
@@ -306,24 +259,25 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
 
                 <tbody>
                     {listCashFlowPlans.length ? listCashFlowPlans.map(item => (
-                        <tr key={item._id} className="border-b border-primary-border h-10">
-                            <td className="py-1 px-2 text-center">
+                        <tr
+                            key={item._id}
+                            className={classnames('border-b border-primary-border h-10 bg-gray-400')}
+                        >
+                            <td className="px-2 text-center align-middle">
                                 <input
                                     className="form-check-input"
                                     type="checkbox"
-                                    checked={getStateChecked(item._id)}
-                                    onChange={() => onClickCheckButton(item)}
+                                    checked={getStateCheckbox(item._id)}
+                                    onChange={() => handleChangeCheckbox(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{item.type}</td>
-                            <td className="py-1 px-2">{item.name}</td>
-                            <td className="py-1 px-2"></td>
-                            <td className="text-right py-1 px-2">{formatNumberMoney(item.planValue || 0)}</td>
-                            <td className="text-right py-1 px-2">{item.date ? moment(item.date).format('DD/MM/YYYY') : ''}</td>
-                            <td className="text-right py-1 px-2">{formatNumberMoney(item.realValue || 0)}</td>
-                            <td className="text-right py-1 px-2">{item.realDate ? moment(item.realDate).format('DD/MM/YYYY') : ''}</td>
-                            <td className="py-1 px-2">{item.note}</td>
-                            <td className="py-1 px-2"></td>
+                            <td className="px-2 align-middle">
+                                <Link to={`/pcm/project/${projectID}/cash-flow/${item._id}`}>
+                                    {item.name}
+                                </Link>
+                            </td>
+                            <td className="px-2 align-middle">{item.sign}</td>
+                            <td className="px-2 align-middle">{item.priority === 1 ? 'Bình thường' : 'Ưu tiên'}</td>
                         </tr>
                     )) : <></>}
                 </tbody>

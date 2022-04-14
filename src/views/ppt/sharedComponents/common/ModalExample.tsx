@@ -5,7 +5,6 @@ import { ModalContainer } from "shareComponents/common";
 type Props = {
 	isShow: boolean;
 	toggle: () => void;
-
 	buttonOnly?: boolean;
 }
 
