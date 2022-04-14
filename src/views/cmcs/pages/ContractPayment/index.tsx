@@ -25,7 +25,6 @@ import {
   useUpdateContractPaymentMutation,
   useDeleteContractPaymentMutation,
 } from "services/hooks/cmcs/useContractPayment";
-import { type } from "os";
 
 export const ContractPayment: FC = () => {
   const [itemChecked, setItemChecked] = useState('');

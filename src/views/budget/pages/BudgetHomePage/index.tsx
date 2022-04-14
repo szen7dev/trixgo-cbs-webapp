@@ -1,26 +1,30 @@
 import { ChangeEvent, FC, useCallback, useState } from "react";
 import debounce from "lodash/debounce";
-import moment from "moment";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { useModal } from "services/hooks/useModal";
 import { SearchInput } from "shareComponents/common";
+import { convertCurrency } from 'utils/converter';
 
 // import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
-import FolderIcon from "assets/images/icons8-folder.svg";
+// import FolderIcon from "assets/images/icons8-folder.svg";
 // import DownloadIcon from "assets/images/icons8-download-96.svg";
 import PencilIcon from "assets/images/icons8-pencil-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
-import { Create, Update } from "./components";
+import { CreateOrUpdateBudget } from "./components";
 import { ModalConfirm } from 'shareComponents/common';
 import { useBudget } from "services/hooks/budget/useBudget";
+import { Budget } from "typings/budget/budget";
+
+type ItemProps = {
+	_id: string;
+	name: string;
+	note: string
+}
 
 export const BudgetHomePage: FC = () => {
-	const history = useHistory();
-	const { id: projectID } = useParams<{ id: string, itemID: string }>();
-
-	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const [itemsChecked, setItemsChecked] = useState<ItemProps[]>([]);
 	const [keyword, setKeyword] = useState("");
 
 	const {
@@ -42,45 +46,47 @@ export const BudgetHomePage: FC = () => {
 
 	// Handle for checkbox each table row
 	const getStateChecked = useCallback((id: string) => {
-		return idsChecked.includes(id) ? true : false;
-	}, [idsChecked]);
+		const isChecked = itemsChecked.find(_item => _item._id === id);
+		return isChecked ? true : false;
+	}, [itemsChecked]);
 
-	const handleChangeCheckbox = (id: string) => {
-		const isChecked = idsChecked.includes(id);
+	const handleChangeCheckbox = (item: ItemProps) => {
+		const isChecked = itemsChecked.find(_item => _item._id === item._id);
 
 		if(isChecked) {
-			const newList = idsChecked.filter(item => item !== id);
-			setIdsChecked(newList);
+			const newList = itemsChecked.filter(_item => _item._id !== item._id);
+			setItemsChecked(newList);
 		} else {
-			const newList = [...idsChecked, id];
-			setIdsChecked(newList);
+			const newList = [...itemsChecked, item];
+			setItemsChecked(newList);
 		};
 	};
 
 	// Handle for checkbox all
 	const getStateCheckboxAll = useCallback(() => {
-		return idsChecked.length === listBudgets.length;
-	}, [idsChecked, listBudgets]);
+		return itemsChecked.length === listBudgets.length;
+	}, [itemsChecked, listBudgets]);
 
 	const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
 		const isChecked = event.target.checked;
 
 		if(isChecked) {
-			const ids = listBudgets.map(item => item._id);
-			setIdsChecked(ids);
+			const items = listBudgets.map(item => ({
+				_id: item._id,
+				name: item.name,
+				note: item.note
+			}));
+			setItemsChecked(items);
 		} else{
-			setIdsChecked([]);
+			setItemsChecked([]);
 		}
-	}
-
-	const onClickBudget = (_id: string, name: string) => {
-		history.push(`/pcm/project/${projectID}/admin/groups/${_id}`);
 	}
 
 	const handleDelete = async () => {
 		try {
+			const ids = itemsChecked.map(item => item._id);
 			const { error, data } = await deleteManyAsync({
-				budgetsID: idsChecked
+				budgetsID: ids
 			});
 
 			if(error) {
@@ -102,16 +108,16 @@ export const BudgetHomePage: FC = () => {
 		}
 	}
 
+	const handleConfirmCreateOrUpdate = () => {
+		setItemsChecked([]);
+		refetch();
+	}
+
 	return (
 		<main className="h-full">
 			<header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-[50px] px-6 border border-primary-border">
 				<div className="flex items-center">
-					{/* {!pathname.endsWith('groups') && (
-						<button onClick={history.goBack}>
-							<img src="/images/common/button_back.png" alt="Button Back" />
-						</button>
-					)} */}
-					<p className="text-lg ml-2">Danh sách</p>
+					<p className="text-lg ml-2">Danh mục ngân sách</p>
 					<SearchInput
 						classNameWrapper="ml-4"
 						classNameInput="outline-none w-[296px]"
@@ -120,24 +126,24 @@ export const BudgetHomePage: FC = () => {
 							500
 						)}
 					/>
-					{(idsChecked && idsChecked.length) ? (
+					{(itemsChecked && itemsChecked.length) ? (
 						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
-							{idsChecked.length == 1 ?
+							{itemsChecked.length == 1 ?
 								<div
 									className="w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-cbs-gray"
-									onClick={() => toast.info('Tính năng đang phát triển')
-										// openModal(
-										// 	<div
-										// 		className={
-										// 			"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
-										// 		}
-										// 	>
-										// 		<Update
-										// 			item={listBudgets.find((e: any)=> e._id == idsChecked[0])}
-										// 			onConfirm={refetch}
-										// 		/>
-										// 	</div>
-										// )
+									onClick={() =>
+										openModal(
+											<div
+												className={
+													"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"
+												}
+											>
+												<CreateOrUpdateBudget
+													initValues={itemsChecked[0]}
+													onConfirm={handleConfirmCreateOrUpdate}
+												/>
+											</div>
+										)
 									}
 								>
 									<img src={PencilIcon} alt="Pencil" />
@@ -172,10 +178,10 @@ export const BudgetHomePage: FC = () => {
 							openModal(
 								<div
 									className={
-										"inline-block w-[521px] max-h-[650px] my-8 overflow-y-auto text-left align-middle transition-all transform bg-primary-light shadow-xl"
+										"inline-block w-[521px] h-[270px] my-8 overflow-y-auto text-left align-middle transition-all transform bg-primary-light shadow-xl"
 									}
 								>
-									<Create onConfirm={refetch} />
+									<CreateOrUpdateBudget onConfirm={handleConfirmCreateOrUpdate} />
 								</div>
 							)
 						}
@@ -188,7 +194,7 @@ export const BudgetHomePage: FC = () => {
 			<table className="table-fixed border-collapse w-full overflow-auto border-l border-r px-2 border-primary-border">
 				<thead className="bg-cbs-table-header h-10 border-b border-primary-border">
 					<tr className="text-left text-sm text-primary-gray">
-						<th className="pl-2 pb-1 pt-1 text-center" style={{ width: "3.5%" }}>
+						<th className="pl-2 pb-1 pt-1 text-center" style={{ width: "4%" }}>
 							{/* border-r-2 border-gray-300 */}
 							<div className="flex items-center justify-center">
 								<input
@@ -200,64 +206,61 @@ export const BudgetHomePage: FC = () => {
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1">
-							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Nội dung
+							<div className="border-r-2 border-gray-300 font-normal pl-3">
+								Ngân sách
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Mã hiệu
+								Giá trị ngân sách
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
 							<div className="border-r-2 border-gray-300 font-normal pl-2">
-								Thành viên
+								Giá trị đã thực hiện
 							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">Cập nhật lần cuối</div>
+							<div className="font-normal pl-2">
+								Giá trị dự kiến khi hoàn tất
+							</div>
 						</th>
 						<th className="w-1/3 pb-1 pt-1 font-normal">
-							<div className="font-normal pl-2">#</div>
+							<div className="font-normal pl-2">
+								Ghi chú
+							</div>
 						</th>
 					</tr>
 				</thead>
 
 				{listBudgets && listBudgets.length ?
 					<tbody className="bg-primary-light text-left">
-						{listBudgets.map((item: any, index: number) => (
-							<tr key={index} className="border-b border-primary-border h-10">
+						{listBudgets.map((item: Budget) => (
+							<tr key={item._id} className="border-b border-primary-border h-10">
 								<td className="py-1 px-2 text-center">
 									<input
 										className="form-check-input"
 										type="checkbox"
 										checked={getStateChecked(item._id)}
-										onChange={() => handleChangeCheckbox(item._id)}
+										onChange={() => handleChangeCheckbox(item)}
 									/>
 								</td>
-								<td className="py-1 px-2">
-									<button onClick={() => onClickBudget(item._id, item.name)}>
-										<div className="flex text-left">
-											<img src={FolderIcon} alt="Folder" className="w-6 h-6 mr-2" />
-											<p>{item.name}</p>
-										</div>
-									</button>
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{item?.sign}
-								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`}>
-										{item?.members.length}
+								<td className="py-1 px-3">
+									<Link to={`/budget/home/${item._id}`}>
+										{item.name}
 									</Link>
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									{moment(item.modifyAt).format("HH:mm DD/MM/YYYY")} {item?.userUpdate?.bizfullname}
+									{convertCurrency(item.amount?.toString())}
 								</td>
 								<td className="py-1 px-2 text-primary-gray">
-									<Link to={`/pcm/project/${projectID}/admin/groups/${item._id}/members`} className="underline text-sky-600">
-										Xem thành viên
-									</Link>
+									{convertCurrency(item.impleAmount?.toString())}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{convertCurrency(item.forecastAmount?.toString())}
+								</td>
+								<td className="py-1 px-2 text-primary-gray">
+									{item.note}
 								</td>
 							</tr>
 						))
@@ -268,7 +271,7 @@ export const BudgetHomePage: FC = () => {
 
 			{hasNextPage && (
 				<div className="w-full flex justify-center my-5">
-					<button onClick={() => fetchNextPage()}>
+					<button onClick={fetchNextPage}>
 						<span className="text-primary">
 							{`Xem thêm (${totalRecord - listBudgets.length})`}
 						</span>

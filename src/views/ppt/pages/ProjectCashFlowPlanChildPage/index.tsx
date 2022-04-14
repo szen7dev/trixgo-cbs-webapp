@@ -2,8 +2,8 @@
 import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
-import { useParams, useLocation, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { useParams, Link } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -24,7 +24,6 @@ import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
 import { CashFlowPlan } from "typings/fin";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
-    const { pathname } = useLocation();
 	const { id: projectID, cashFlowID } = useParams<{ id: string, cashFlowID: string }>();
     const { closeModal, openModal } = useModal();
 
@@ -182,7 +181,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
     }
 
     return (
-        <main className="relative h-full">
+        <main className="relative h-full overflow-auto">
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
