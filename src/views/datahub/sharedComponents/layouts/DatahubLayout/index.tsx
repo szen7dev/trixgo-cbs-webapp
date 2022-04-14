@@ -18,7 +18,7 @@ const DatahubLayout: FC<Props> = ({ children }) => {
 	const [isHeaderCollapse, setIsHeaderCollapse] = useState(false);
 	const [isLeftMenuCollapse, setIsLeftMenuCollapse] = useState(false);
 	const [isRightSideBarCollapse, setIsRightSideBarCollapse] = useState(false);
-
+	
 	const handleHeaderEvent = () => {
 		setIsHeaderCollapse(!isHeaderCollapse);
 	};
@@ -46,7 +46,7 @@ const DatahubLayout: FC<Props> = ({ children }) => {
 
 			{/* Left navigation */}
 			<DatahubLeftSideBar />
-
+			
 			{/* Content area */}
 			<main className="home-main-content transition-all duration-500 ease-out overflow-auto relative">
 				{children}

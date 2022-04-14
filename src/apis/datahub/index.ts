@@ -3,7 +3,6 @@ import API from "../repository";
 
 // Convert Object sang URL query => khi client truyền lên
 // import { convertObToUrl } from "utils";
-
 // Khai báo chính xác kiểu trả về nếu biết
 import { ResponseCreate, ResponseList } from "typings/apis/response";
 import { DatahubPrams } from "typings/datahub/api";
@@ -217,7 +216,7 @@ const DatahubRepository = {
       body
     );
     return data;
-  },
+  },  
 
   // ==== DatahubCompanies ====
   async companiesList(params?: DatahubPrams) {

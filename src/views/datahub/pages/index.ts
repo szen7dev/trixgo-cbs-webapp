@@ -15,3 +15,4 @@ export { default as DatahubInspection } from "views/datahub/pages/DatahubInspect
 export { default as DatahubInspectionDetail } from "views/datahub/pages/DatahubInspectionDetail";
 export { default as DatahubPrice } from "views/datahub/pages/DatahubPrice";
 export { default as DatahubProjectMap } from "views/datahub/pages/DatahubProjectMap";
+export { default as DatahubContact } from "views/datahub/pages/DatahubContact";
