@@ -251,6 +251,16 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                         </th>
                         <th className="py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Kế hoạch giải ngân
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Thực tế giải ngân
+                            </div>
+                        </th>
+                        <th className="py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Mức độ ưu tiên
                             </div>
                         </th>
@@ -261,7 +271,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                     {listCashFlowPlans.length ? listCashFlowPlans.map(item => (
                         <tr
                             key={item._id}
-                            className={classnames('border-b border-primary-border h-10 bg-gray-400')}
+                            className={classnames('border-b border-primary-border h-10 font-bold')}
                         >
                             <td className="px-2 text-center align-middle">
                                 <input
@@ -277,6 +287,8 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                                 </Link>
                             </td>
                             <td className="px-2 align-middle">{item.sign}</td>
+                            <td className="px-2 align-middle">{formatNumberMoney(item?.value)}</td>
+                            <td className="px-2 align-middle">{formatNumberMoney(item?.realValue)}</td>
                             <td className="px-2 align-middle">{item.priority === 1 ? 'Bình thường' : 'Ưu tiên'}</td>
                         </tr>
                     )) : <></>}
