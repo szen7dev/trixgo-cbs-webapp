@@ -14,9 +14,9 @@ interface useCashFlowPlan {
     info: CashFlowPlan.CashFlowPlan | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
-    addAsync: (params: any) => Promise<any>;
+    insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
-    deleteAsync: (ids: Array<string>) => Promise<any>;
+    deleteManyAsync: (params: any) => Promise<any>;
 }
 
 // Khai báo params cho hook
@@ -32,32 +32,29 @@ export const useCashFlowPlan = ({
     isFetchList = false, // nếu = true thì gọi api get info, ngược lại không gọi
     isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
 }: UseCashFlowPlanProps): useCashFlowPlan => {
-    // Create
-    const { mutateAsync: addAsync } =
+    const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             CashFlowPlanRepository.addCashFlowPlan(payload)
         );
 
-    // Update
     const { mutateAsync: updateAsync } =
         useMutation((payload: any) =>
             CashFlowPlanRepository.updateCashFlowPlan(payload)
         );
 
-    // Delete
-    const { mutateAsync: deleteAsync } =
-        useMutation((ids: Array<string>) =>
-            CashFlowPlanRepository.deleteCashFlowPlan(ids)
+    const { mutateAsync: deleteManyAsync } =
+        useMutation((payload: any) =>
+            CashFlowPlanRepository.deleteCashFlowPlan(payload)
         );
 
     // Get info
-    const { data: infoCashFlowPlan } =
+    const { data: detailData } =
         useQuery("CashFlowPlan_info", () => CashFlowPlanRepository.fetchDetailCashFlowPlan(params.contactID || ''), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
 
-    const info = infoCashFlowPlan?.data;
+    const info = detailData?.data;
 
     // Get List
     const {
@@ -89,7 +86,6 @@ export const useCashFlowPlan = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
 
-    // Return data
     return {
         isLoading,
         list,
@@ -98,8 +94,8 @@ export const useCashFlowPlan = ({
         hasNextPage,
         refetch,
         fetchNextPage,
-        addAsync,
+        insertAsync,
         updateAsync,
-        deleteAsync,
+        deleteManyAsync,
     }
 }

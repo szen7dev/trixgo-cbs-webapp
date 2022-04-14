@@ -1,20 +1,27 @@
+import { Contract } from 'typings/cmcs';
 import type { QueryParam, APIResponse } from './commons';
 
 export interface CashFlowPlan {
     _id: string;
     modifyAt: string;
+    projectID: string;
+    contactID: string;
     parent: {
         _id: string,
         name: string,
     };
-    type: string;
+    contract: Contract,
+    sign: string;
+    type: number;
     name: string;
-    planValue: string;
+    value: number;
+    planValue: number;
+    property: number;
     date: string;
-    realValue: string | null;
-    realDate: string | null;
-    note: string | null;
-    priority: string | null;
+    realValue: number;
+    realDate: string;
+    note: string;
+    priority: number;
     outin: string | null;
 }
 
@@ -40,17 +47,19 @@ export type CashFlowPlanQueryDetailResponse = APIResponse & {
 interface ModalProps {
     modalType: "create" | "update";
     initialValues?: {
-        cashFlowPlanID: string,
-        parent: string,
-        type: string;
-        name: string;
-        planValue: string;
-        date: string;
-        realValue: string | null;
-        realDate: string | null;
-        note: string | null;
-        priority: string | null;
-        outin: string | null;
+        cashFlowPlanID?: string,
+        parent?: string,
+        type?: number;
+        name?: string;
+        sign?: string;
+        property?: number;
+        planValue?: string;
+        date?: string;
+        realValue?: number | null;
+        realDate?: string | null;
+        note?: string | null;
+        priority?: number | null;
+        outin?: number | null;
     }
     onConfirm?(): void
 }

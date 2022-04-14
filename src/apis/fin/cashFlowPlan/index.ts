@@ -19,7 +19,7 @@ export const cashFlowPlanRepository: CashFlowPlanRepository = {
     updateCashFlowPlan: (params: any) => updateCashFlowPlan(params),
     deleteCashFlowPlan: (ids: Array<string>) => deleteCashFlowPlan(ids),
     fetchListCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
-    fetchDetailCashFlowPlan: async (storageID, params) => fetchListCashFlowPlan(params),
+    fetchDetailCashFlowPlan: async (params) => fetchListCashFlowPlan(params),
 }
 
 /*=====APIS=====*/
@@ -28,10 +28,14 @@ async function fetchListCashFlowPlan(params: any) {
     const { data } = await API.get(
         `${FIN_URL}/cash_flow_plans`, {
         params: {
-            select: 'parent type name date planValue realDate realValue note priority outin',
+            select: 'contract parent type name sign date value planValue realDate realValue note priority outin',
             populates: {
-                path: 'parent',
-                select: 'name'
+                path: 'parent contract',
+                select: '_id name sign date priority sellerInfo',
+                populate: {
+                    path: 'sellerInfo',
+                    select: '_id name'
+                }
             },
             limit: 20,
             ...params
@@ -58,13 +62,10 @@ async function updateCashFlowPlan(params: any) {
 }
 
 // Delete
-async function deleteCashFlowPlan(ids: Array<string>) {
+async function deleteCashFlowPlan(params: any) {
     const { data } = await API.delete(
-        `${FIN_URL}/cash_flow_plans`, {
-            params: {
-                cashFlowPlanID: ids
-            }
-        });
+        `${FIN_URL}/cash_flow_plans`, { params }
+    );
 
     return data;
 }
