@@ -4,8 +4,12 @@ export type Budget = {
     _id: string;
     name: string;
     sign: string;
+    note: string;
     description: string;
     type: number;
+    amount: number;
+    impleAmount: number;
+    forecastAmount: number;
     company: Company,
     date: string,
     modifyAt?: string;

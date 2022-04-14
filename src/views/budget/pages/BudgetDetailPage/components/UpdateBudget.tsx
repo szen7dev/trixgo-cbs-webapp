@@ -11,7 +11,7 @@ type Props = {
   onConfirm: () => void
 }
 
-export const Update: FC<Props> = ({ item, onConfirm }) => {
+export const UpdateBudget: FC<Props> = ({ item, onConfirm }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState({
     name: item.name,
