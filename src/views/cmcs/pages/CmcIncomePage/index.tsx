@@ -188,11 +188,6 @@ export const CmcIncomePage: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Giá trị xuất hóa đơn (VAT)
-              </div>
-            </th>
-            <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
-              <div className="border-r-2 border-gray-300 font-normal pl-2">
                 Giá trị đề nghị tạm ứng+thanh toán
               </div>
             </th>
@@ -203,7 +198,7 @@ export const CmcIncomePage: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Còn lại phải thanh toán
+                Còn lại phải tạm ứng, thanh toán
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
@@ -233,7 +228,6 @@ export const CmcIncomePage: FC = () => {
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.value || 0) + (item.vatValue || 0) + (item.plus || 0) + (item.vatPlus || 0))} </td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0) + (item.vatAcceptance || 0) + (item.plusAcceptance || 0) + (item.vatPlusAcceptance || 0))}</td>
-                <td className="py-1 px-2 text-right">0</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney(item.recommendedPayment || 0)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.advancePaymentPaid || 0) + (item.amountPaid || 0))}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney(item.remainingPayment || 0)}</td>

@@ -62,6 +62,10 @@ export interface Document {
         _id: string;
         name: string;
     };
+    datahubContact?: {
+        _id: string;
+        name: string;
+    };
     property: {
         _id: string;
         name: string;

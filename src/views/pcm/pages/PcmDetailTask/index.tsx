@@ -81,7 +81,7 @@ const PcmDetailTask: FC = () => {
   const [permissions, setPermissions] = useState({
     hasPermissionUpdateTask: false,
     hasPermissionAddRelatedUser: false,
-    hasPermissionCreateUpdateCheckListAndChildTask: false,
+    hasPermissionCreateCheckListAndChildTask: false,
     hasPermissionCreateRelatedResponse: false,
     hasPermissionComment: false,
     hasPermissionCreatorAddFile: false,
@@ -173,14 +173,14 @@ const PcmDetailTask: FC = () => {
       const hasPermissionCreatorAddFile   = taskInfo.author?._id === user?._id;
       const hasPermissionAssigneeAddFile  = taskInfo.assignee?._id === user?._id;
 
-      const hasPermissionCreateUpdateCheckListAndChildTask = authorAndAssigneeID.includes(user?._id);
+      const hasPermissionCreateCheckListAndChildTask = authorAndAssigneeID.includes(user?._id);
       const hasPermissionCreateRelatedResponse = authorAndAssigneeAndRelatedID.includes(user?._id);
       const hasPermissionComment = [...authorAndAssigneeAndRelatedID, ...groupMembersID].includes(user?._id);
 
       setPermissions({
         hasPermissionUpdateTask,
         hasPermissionAddRelatedUser,
-        hasPermissionCreateUpdateCheckListAndChildTask,
+        hasPermissionCreateCheckListAndChildTask,
         hasPermissionCreateRelatedResponse,
         hasPermissionComment,
         hasPermissionCreatorAddFile,
@@ -406,7 +406,7 @@ const PcmDetailTask: FC = () => {
                 data={listCheckList}
                 totalRecord={totalRecordCheckList}
                 onSeeMore={nextPageListCheckList}
-                hasPermission={permissions.hasPermissionCreateUpdateCheckListAndChildTask}
+                hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
               />
             </div>
             <div className="mt-8 pr-3">
@@ -416,7 +416,7 @@ const PcmDetailTask: FC = () => {
                 data={listChildTask}
                 totalRecord={totalRecordChildTask}
                 onSeeMore={nextPageListChildTask}
-                hasPermission={permissions.hasPermissionCreateUpdateCheckListAndChildTask}
+                hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
               />
             </div>
             <div className="px-5 mt-5">

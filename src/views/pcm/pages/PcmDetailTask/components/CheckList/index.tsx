@@ -1,8 +1,9 @@
-import React, { FC, UIEvent, useEffect, useState } from "react";
+import { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
 import { toast } from "react-toastify";
+import { debounce } from "lodash";
 import moment from "moment";
 import classnames from "classnames";
 
@@ -22,7 +23,6 @@ import { useSocket } from "services/hooks/useSocket";
 import { useAuth } from "services/hooks/auth/useAuth";
 import { CheckList as CheckListType, ChildTask as ChildTaskType, Task, UpdateStatusCheckListPayload } from "typings/task";
 import "react-datepicker/dist/react-datepicker.css";
-import { debounce } from "lodash";
 
 type Props = {
   componentType: 'CHECKLIST' | 'CHILD_TASK',
@@ -69,7 +69,7 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
     setKeywordAssignee(keyword);
   }, 600);
 
-  const handleSelectAll = () => setSelectAll(!selectAll);
+  // const handleSelectAll = () => setSelectAll(!selectAll);
 
   const getClassTab = (tab: CheckListTab) => {
     return currentTab === tab
@@ -97,10 +97,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
   const handleAddChecklist = async (values: any) => {
     try {
-      const { error, data, message } = await addChecklistAsync(values);
+      const { error, data } = await addChecklistAsync(values);
 
       if (error) {
-        return toast.warning(message);
+        return toast.warning(data?.message);
       }
 
       socket?.emit('SUBJECT_PCM_CSS_ADD_CHECKLIST', {
@@ -124,10 +124,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
   const handleAddChildTask = async (values: any) => {
     try {
       values.type = 1; // VIỆC CON (type = 1)
-      const { error, data, message } = await addChildTaskAsync(values);
+      const { error, data } = await addChildTaskAsync(values);
 
       if (error) {
-        return toast.warning(message);
+        return toast.warning(data?.message);
       }
 
       socket?.emit('SUBJECT_PCM_CSS_ADD_CHILD_TASK', {
@@ -300,10 +300,10 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
         <div className="">
           <div className="w-full divide-y divide-cbs-border pl-5 pr-4">
             {(listData || []).map((item) => (
-              <CheckListItem 
-                key={item._id} 
-                data={item} 
-                hasPermission={hasPermission}
+              <CheckListItem
+                key={item._id}
+                data={item}
+                userID={user?._id}
                 onUpdateStatusCheckList={handleUpdateStatusCheckList}
               />
             ))}
