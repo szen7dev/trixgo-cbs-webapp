@@ -199,7 +199,7 @@ export const ContractIpc: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Giá trị nghiệm thu
+                Giá trị nghiệm thu hoàn thành
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
@@ -214,7 +214,7 @@ export const ContractIpc: FC = () => {
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
               <div className="border-r-2 border-gray-300 font-normal pl-2">
-                Đã giải ngân
+                Đã thanh toán
               </div>
             </th>
             <th className={cn("pb-1 pt-1 font-normal", styles.theadTenPercent)}>
@@ -245,7 +245,7 @@ export const ContractIpc: FC = () => {
                 </td>
                 <td className="py-1 px-2"> {moment(item.date).isValid() && moment(item.date).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2">{item.sign}</td>
-                <td className="py-1 px-2 text-right">{formatNumberMoney((item.acceptance || 0 + item.vatAcceptance || 0 + item.plusAcceptance || 0 + item.vatPlusAcceptance || 0))}</td>
+                <td className="py-1 px-2 text-right">{formatNumberMoney(item.acceptance + item.vatAcceptance + item.plusAcceptance + item.vatPlusAcceptance)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.recommendedPayment || 0))}</td>
                 <td className="py-1 px-2">{moment(item.date).isValid() && moment(item.timeForPayment).format(DATE_FORMAT)}</td>
                 <td className="py-1 px-2 text-right">{formatNumberMoney((item.amountPaid || 0))}</td>
