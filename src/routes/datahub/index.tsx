@@ -100,6 +100,7 @@ const DatahubRoutes: FC = () => {
 							</Switch>
 						</LayoutSecondary>
 					</Route> 
+					<Route exact path="/datahub/price" component={DatahubPrice} />
 				</Switch>
 			</DatahubLayout>
 		</>

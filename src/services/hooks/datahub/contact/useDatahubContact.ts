@@ -1,6 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import DatahubContactRepository from 'apis/datahub/contact';
-
 export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInfo?: boolean ): any => {
     // Tạo
     const { mutateAsync: createDatahubContactMutateAsync, isLoading: isLoadingCreateDatahubContact } =
@@ -19,12 +18,14 @@ export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInf
     
     // info 
     const {
-        data: infoDatahubContact, 
+        data: detailData, 
         refetch: refetchInfo 
     } = useQuery(`datahub_contact_info.${params}`, () => DatahubContactRepository.getInfoAndGetList(params), {
         enabled: isFetchInfo ?? false,
         refetchOnWindowFocus: false,
     });
+
+    const infoDatahubContact = detailData?.data;
     
     // Danh sách 
     const {
@@ -47,6 +48,7 @@ export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInf
             },
             refetchOnWindowFocus: false,
             enabled: isFetchList ?? false,
+            keepPreviousData: true,
         }
     );
 
@@ -58,13 +60,14 @@ export const useDatahubContact = (params: any, isFetchList?: boolean, isFetchInf
         // get List
         isLoading,
         refetchList,
-        data,
+        data: listDatahubContact,
         fetchNextPage,
         hasNextPage,
         totalRecord,
         totalPage,
         // create update remove
         createDatahubContactMutateAsync,
+        isLoadingCreateDatahubContact,
         updateDatahubContactMutateAsync,
         removeManyDatahubContactMutateAsync,
         // get Info

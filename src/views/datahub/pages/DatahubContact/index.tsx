@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useQueryClient } from 'react-query'
 import { debounce } from 'lodash'
 
-import { useDatahubTypes } from "services/hooks/datahub";
 import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 
 import useCheckedList from "services/hooks/ppt/useCheckedList";
@@ -16,7 +15,7 @@ import { GroupActions } from "shareComponents/common";
 import { ButtonCreate } from "shareComponents/common";
 import { ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
-import ModalCreateType from "./components/ModalCreateType";
+import ModalCreateDatahubContact from "./components/ModalCreateDatahubContact";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import { ContextMenuWrapper, ContextMenu } from "shareComponents/common/ContextMenu";
 import { DatahubTypes, DatahubTypesBase } from "typings/datahub/datahubtypes";
@@ -27,42 +26,29 @@ const pkgs = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 const DatahubContact: FC = () => {
-	const [query, setQuery] = useState('');
+	document.title = "Danh Bạ Hệ Thống"
+	const queryClient = useQueryClient(); 
 	const [pkg, setPkg] = useState(pkgs[0]);
 	const [show, setShow] = useState(false);
 	const [selected, setSelected] = useState<DatahubTypes<keyof DatahubTypesBase> | null>(null);
-	const [listData, setListData] = useState([]);
+	const [keyword, setKeyword] = useState("");
 	// const { data, fetchNextPage, fetchPrevPage, resetPage } = useDatahubTypes({ level: 1, select: '_id name description popular', keyword: query, limit: 10, type: 1 });
-	const {  
+	const {
 		isLoading,
         refetchList,
-        data,
+        data: listDatahubContact,
         fetchNextPage,
+		fetchPrevPage, resetPage,
         hasNextPage,
         totalRecord,
         totalPage,
-        // create update remove
-        createDatahubContactMutateAsync,
-        updateDatahubContactMutateAsync,
-        removeManyDatahubContactMutateAsync,
-        // get Info
-        infoDatahubContact,
-        refetchInfo } = useDatahubContact({}, true, false );
-
-	const queryClient = useQueryClient(); 
-	useEffect(() => {
-		document.title = "CHG.THT-Lựa chọn nhà thầu"
-		if(data){
-			const listDatahubContact = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-			setListData(listDatahubContact || [])
-		}
-	}, [data]);
-	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listData|| []);
+	} = useDatahubContact({ keyword, limit: 20 }, true, false );
+	const { assigned, checked, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList((listDatahubContact as never[]) || []);
 	return (
 		<div className="flex flex-col h-full overflow-hidden">
 			<div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
 				<span className="text-x-large mr-7">Danh sách</span>
-				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce((v: any) => setQuery(v.target.value), 300)} />
+				<SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={debounce((v: any) => setKeyword(v.target.value), 300)} />
 				<DocumentDropdown
 					data={pkgs}
 					value={pkg.title}
@@ -71,13 +57,13 @@ const DatahubContact: FC = () => {
 				{/* <DropdownFilterButton /> */}
 				<GroupActions
 					className="flex items-center flex-1"
-					// onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
+					onClickPencil={() => { setShow(true); setSelected(checked[0]) }}
 					disabled={{
 						pencil: checked.length !== 1,
 					}}
 				/>
 
-				{/* <ButtonCreate onClick={() => { setShow(true); setSelected(null) }} /> */}
+				<ButtonCreate onClick={() => { setShow(true); setSelected(null) }} />
 				<ButtonMore />
 			</div>
 			<div className="flex-1 overflow-y-auto" id="scroller">
@@ -132,26 +118,21 @@ const DatahubContact: FC = () => {
 					</thead>
 					<ContextMenuWrapper tag="tbody" className="text-small">
 						{	
-							listData?.map((props: any) => {
-								const {
-									_id,
-									name,
-									description,
-									popular,
-								} = props
-								console.log({ props })
+							listDatahubContact?.map((props: any, index: number) => {
+								const { _id, name, sign, address, taxid, note } = props
 								return (
 									<tr key={_id} className="text-left group hover:bg-cbs-active-comment cursor-pointer" onContextMenu={() => setSelected(props)}>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-center" onClick={e => e.stopPropagation()}>
 											<input className="cbs-checkbox" type="checkbox" value="" checked={Boolean(assigned[_id])} onChange={e => handleChangeCheckbox(e, props)} />
 										</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{index + 1}</td>
 										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border group-hover:text-cbs-primary">
-											<Link to={{ pathname: '/datahub/type/' + _id, state: { type: 1 } }} >
-												{name}
-											</Link>
+											{name}
 										</td>
-										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{description}</td>
-										<td className="pt-2.5 pb-3 pl-2 pr-4 border-b border-cbs-border text-right">{popular ? "Thông thường" : "Phổ biến"}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{sign}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{address}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{taxid}</td>
+										<td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-right">{note}</td>
 									</tr>
 								)
 							})
@@ -160,24 +141,25 @@ const DatahubContact: FC = () => {
 				</table>
 			</div>
 			<Paginate
-				limit={data?.data?.limit || 10}
-				totalRecord={data?.data?.totalRecord}
-				totalPages={data?.data?.totalPage}
-				hasNextPage={Boolean(data?.data?.nextCursor)}
-				// prevPageAction={fetchPrevPage}
+				limit={20}
+				totalRecord={totalRecord}
+				totalPages={totalPage}
+				hasNextPage={Boolean(hasNextPage)}
+				prevPageAction={fetchPrevPage}
 				nextPageAction={fetchNextPage}
 				className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
 			/>
 			<ModalExtraLarge show={show} buttonOnly>
-				<ModalCreateType
-					datahubID={selected?._id}
+				<ModalCreateDatahubContact
+					datahubContactID={selected?._id}
 					datahubType={1}
 					type={selected?._id ? 'edit' : 'create'}
 					toggle={() => setShow(false)}
+					refetchList= { refetchList }
 					onSuccessCreate={data => {
 						queryClient.removeQueries(["datahub_types"], { inactive: true });
 						queryClient.refetchQueries(["datahub_types", ""]);
-						// resetPage();
+						resetPage();
 					}}
 				/>
 			</ModalExtraLarge>

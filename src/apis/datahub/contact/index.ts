@@ -12,13 +12,12 @@ type payloadGetInfoAndGetList = {
   populates?: string;
   parentID?: string;
 };
-
 // Api danh bạ hệ thống
 const DatahubContractRepository = {
     async getInfoAndGetList(payload: payloadGetInfoAndGetList): Promise<any> {
         const { data } = await API.get<any>(
             `${URL}/datahub_contacts?${convertObToUrl({
-                select: "name createAt",
+                select: "name taxid address sign note createAt",
                 limit: 20,
                 ...payload,
             })}`
