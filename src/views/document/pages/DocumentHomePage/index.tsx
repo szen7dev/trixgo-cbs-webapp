@@ -37,7 +37,7 @@ export const DocumentHomePage: FC = () => {
           />
           <DropdownFilterButton />
         </div>
-        <ButtonCreate onClick={toggleModal} />
+        {/* <ButtonCreate onClick={toggleModal} /> */}
         <ButtonMore />
       </div>
 
