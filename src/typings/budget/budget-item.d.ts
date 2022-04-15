@@ -6,13 +6,22 @@ export type BudgetItem = {
     sign: string;
     note: string;
     unit: string;
-    unitPrice: number;
-    forecastQuantity: number;
-    forecastAmount: number;
-    quantity: number;
     description: string;
     modifyAt: string;
     createAt: string;
+    quantity: number;
+    unitPrice: number;
+    amount: number;
+    vatAmount: number;
+    vatUnitPrice: number;
+    impleQuantity: number;
+    impleUnitPrice: number;
+    impleAmount: number;
+    forecastQuantity: number;
+    forecastUnitPrice: number;
+    forecastVatUnitPrice: number;
+    forecastAmount: number;
+    forecastVatAmount: number;
 }
 
 export type BudgetItemListParams = QueryParam & {

@@ -314,31 +314,31 @@ export const BudgetDetailPage: FC = () => {
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
 									{budgetItem.unit}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.quantity)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.unitPrice)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
-									{formatNumberMoney(budgetItem.quantity * budgetItem.unitPrice)}
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
+									{formatNumberMoney(budgetItem.amount)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
-									{formatNumberMoney(0)}
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
+									{formatNumberMoney(budgetItem.impleQuantity)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
-									{formatNumberMoney(0)}
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
+									{formatNumberMoney(budgetItem.impleUnitPrice)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
-									{formatNumberMoney(0)}
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
+									{formatNumberMoney(budgetItem.impleAmount)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.forecastQuantity)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.forecastAmount)}
 								</th>
-								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-center">
+								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-right">
 									{formatNumberMoney(budgetItem.forecastQuantity * budgetItem.forecastAmount)}
 								</th>
 								<th className="py-2 px-2 bg-cbs-active-comment border-t-0.5 border-cbs-border border-r-0.5 text-left">
