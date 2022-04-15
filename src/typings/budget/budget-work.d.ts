@@ -9,7 +9,11 @@ export type BudgetWork = {
     type: number;
     amount: number;
     impleAmount: number;
+    unit: string;
+    unitPrice: number;
+    forecastQuantity: number;
     forecastAmount: number;
+    quantity: number;
     company: Company,
     date: string,
     modifyAt?: string;

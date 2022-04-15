@@ -1,4 +1,4 @@
-import { FC, Fragment } from "react";
+import { FC, Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 interface Props {
@@ -12,14 +12,17 @@ interface Props {
 }
 
 export const ModalContainer: FC<Props> = ({ isModalOpen, toggle, children, ...rest }) => {
+    const focusElementRef = useRef<HTMLDivElement>(null);
+
 	return (
 		<Transition appear show={isModalOpen} as={Fragment} {...rest}>
 			<Dialog
 				as="div"
 				className="fixed inset-0 z-50 overflow-y-auto"
 				onClose={toggle}
+                initialFocus={focusElementRef}
 			>
-				<div className="min-h-screen px-4 text-center">
+				<div ref={focusElementRef} className="min-h-screen px-4 text-center">
 					<Transition.Child
 						as={Fragment}
 						enter="ease-out duration-300"
