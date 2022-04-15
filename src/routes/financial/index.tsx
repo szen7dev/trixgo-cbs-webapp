@@ -20,7 +20,7 @@ const FinancialRouter: FC = () => {
         <Switch>
           <Route exact path={"/financial/home"} component={FinHomePage} />
           <Route exact path={"/financial/dashboard"} component={FinDashboardPage} />
-          <Route exact path={"/financial/cashbook"} component={FinCashbookPage} />
+          <Route path={"/financial/cashbook"} component={FinCashbookPage} />
           <Route exact path={"/financial/cashflow"} component={FinancialCashFlowPage} />
           <Route exact path={"/financial/cashflow/:id"} component={FinancialPlanningDetailPage} />
         </Switch>

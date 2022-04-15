@@ -138,7 +138,7 @@ const PageTwo: FC = () => {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Link
-                        to={{ pathname: "/fin/cashbook/cashbookId", state: 2 }}
+                        to={{ pathname: "/financial/cashbook/cashbookId", state: 2 }}
                         className="hover:text-cbs-primary"
                       >
                         {content}
