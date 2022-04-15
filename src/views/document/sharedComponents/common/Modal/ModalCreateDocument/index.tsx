@@ -479,11 +479,11 @@ export const ModalCreateDocument: React.FC = () => {
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Lĩnh vực</p>
+											<p className="py-1.5">Danh bạ hệ thống</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Dự án"}
+												placeholder={"Danh bạ"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}
