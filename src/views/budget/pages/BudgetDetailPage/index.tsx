@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -14,9 +14,8 @@ import { formatNumberMoney } from "utils/converter";
  */
 import { useBudget } from 'services/hooks/budget/useBudget';
 import { useBudgetItem } from 'services/hooks/budget/useBudgetItem';
-import { useBudgetWork } from 'services/hooks/budget/useBudgetWork';
 
-import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
+import { BudgetGroupRepository } from "apis/budget";
 
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
@@ -29,23 +28,46 @@ const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) =>
 	  ['create-budget-work', 'update-budget-work'],
 	];
 	const index = keys.findIndex(k => k.includes(key));
-	let newData: any[] = [];
-	console.log({ key, payload, newData, index });
 
-	if(key.includes('item')) { // Item
+	// Item
+	if(key.includes('item')) {
+		let newData: any[] = [];
+
 		if(key.startsWith('create')) {
 			newData = [payload, ...funcs[index][0]];
 		} else{
 			newData = funcs[index][0].map((item: any) => item._id === payload._id ? payload : item);
 		}
 
-		return funcs[index][1](newData);
-	} else{ // Group, Work
+		funcs[index][1](newData);
+	} else{
+		// Group, Work
 		if(key.startsWith('create')) {
-			funcs[index][2]();
-		} else{
-			// newData = funcs[index][0].map((item: any) => item._id === payload._id ? payload : item);
+			// Excute fetch data budget group or work
+			return funcs[index][2]();
 		}
+
+		let stateKey = '';
+
+		// Group
+		if(funcs[index][0][payload.item]){
+			stateKey = payload.item;
+		}
+
+		// Work
+		if(funcs[index][0][payload.group]){
+			stateKey = payload.group;
+		}
+
+		// Step 1: Find payload in listRecords and update item
+		const newListRecords = funcs[index][0][stateKey]
+			.listRecords?.map((item: any) => item._id === payload._id ? payload : item);
+		// Step 2: Clone state data
+		const newData = { ...funcs[index][0] }
+		// Step 3: Assign new listRecords for group/work budget by itemID/groupID (stateKey)
+		newData[stateKey]['listRecords'] = newListRecords;
+		// Step 4: Set state group/work budget
+		return funcs[index][1](newData);
 	}
 }
 
@@ -67,12 +89,12 @@ export const BudgetDetailPage: FC = () => {
 		totalRecord: number,
 	}>>();
 
-	const [listBudgetWork, setListBudgetWork] = useState<Record<string, {
-		listRecords: BudgetWork[],
-		limit: number,
-		nextCursor: string | null,
-		totalRecord: number,
-	}>>();
+	// const [listBudgetWork, setListBudgetWork] = useState<Record<string, {
+	// 	listRecords: BudgetWork[],
+	// 	limit: number,
+	// 	nextCursor: string | null,
+	// 	totalRecord: number,
+	// }>>();
 
 	const {
 		list: dataBudgetItem,
@@ -104,18 +126,6 @@ export const BudgetDetailPage: FC = () => {
 		}))
 	}
 
-	const fetchDataBudgetWork = async () => {
-		const { error, data } = await BudgetWorkRepository.fetchList({
-			itemID, budgetID
-		})
-		if(error) return;
-
-		setListBudgetWork(previous => ({
-			...previous,
-			[itemID]: data
-		}))
-	}
-
 	useEffect(() => {
 		document.title = "Chi tiết ngân sách"
 	}, []);
@@ -135,7 +145,7 @@ export const BudgetDetailPage: FC = () => {
 		executeSetState(modalType, [
 			[listBudgetItem, setListBudgetItem],
 			[listBudgetGroup, setListBudgetGroup, fetchDataBudgetGroup],
-			[listBudgetWork, setListBudgetWork, fetchDataBudgetWork],
+			// [listBudgetWork, setListBudgetWork, fetchDataBudgetWork],
 		], payload);
 	}
 
@@ -154,7 +164,7 @@ export const BudgetDetailPage: FC = () => {
 		setItemID(itemID);
 	}
 
-	const handleMenuOpenModal = (
+	const handleMenuOpenModal = useCallback((
 		modalType:
 			'create-budget-item' | 'create-budget-group' | 'create-budget-work' |
 			'update-budget-item' | 'update-budget-group' | 'update-budget-work',
@@ -188,7 +198,7 @@ export const BudgetDetailPage: FC = () => {
 		}
 
 		toggleModal();
-	}
+	}, [])
 
 	return (
 		<main className="h-full">
@@ -279,8 +289,8 @@ export const BudgetDetailPage: FC = () => {
 							<RightClickMenuWrapper
 								contextMenu={
 									<MenuChildRow
-										onAdd={() => handleMenuOpenModal('create-budget-group', budgetItem)}
-										onUpdate={() => handleMenuOpenModal('update-budget-item', budgetItem)}
+										onAdd={handleMenuOpenModal.bind(this, 'create-budget-group', budgetItem)}
+										onUpdate={handleMenuOpenModal.bind(this, 'update-budget-item', budgetItem)}
 									/>
 								}
 								key={budgetItem._id}
@@ -293,7 +303,7 @@ export const BudgetDetailPage: FC = () => {
 											hidden: !itemsIDToggle.includes(budgetItem._id)
 										})}
 									/>
-									<button className="relative inline-block text-white rounded bg-gray-600 w-5 h-5" onClick={toggleItems.bind(this, budgetItem._id)}>
+									<button className="relative inline-block text-white rounded bg-gray-700 w-5 h-5" onClick={toggleItems.bind(this, budgetItem._id)}>
 										{!itemsIDToggle.includes(budgetItem._id) ? '+' : '-'}
 									</button>
 								</th>
@@ -343,6 +353,9 @@ export const BudgetDetailPage: FC = () => {
 										row={budgetGroup}
 										key={budgetGroup._id}
 										show={itemsIDToggle.includes(budgetItem._id)}
+										onAdd={handleMenuOpenModal.bind(this, 'create-budget-work', budgetGroup)}
+										onUpdate={handleMenuOpenModal.bind(this, 'update-budget-group', budgetGroup)}
+										onUpdateWork={budgetWork => handleMenuOpenModal('update-budget-work', budgetWork)}
 									/>
 								))
 							: <></>}
