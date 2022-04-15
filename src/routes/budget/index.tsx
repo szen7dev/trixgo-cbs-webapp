@@ -13,6 +13,7 @@ import { BudgetLayout } from "views/budget/shareComponents/layouts";
 import ErrorPage from "views/authentication/Error";
 import {
     BudgetHomePage,
+    BudgetDetailPage
 } from "views/budget/pages";
 
 const BudgetRouter: FC = () => {
@@ -27,7 +28,16 @@ const BudgetRouter: FC = () => {
                     </BudgetLayout>
                 }
             />
-            <Route path="/media/*" component={ErrorPage} />
+            <Route
+                exact
+                path="/budget/home/:budgetID"
+                component={() =>
+                    <BudgetLayout>
+                        <BudgetDetailPage />
+                    </BudgetLayout>
+                }
+            />
+            <Route path="/budget/*" component={ErrorPage} />
         </Switch>
     )
 };

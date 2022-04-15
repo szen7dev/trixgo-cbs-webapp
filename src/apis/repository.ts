@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
 
-const BASE_URL = process.env.REACT_APP_ENV === 'development' 
+const BASE_URL = process.env.REACT_APP_ENV === 'development'
   ? process.env.REACT_APP_API_DOMAIN_LOCAL
   : process.env.REACT_APP_API_DOMAIN_STAGING;
 

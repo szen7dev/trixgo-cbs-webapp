@@ -1,4 +1,5 @@
 import moment from "moment";
+import { toast } from "react-toastify";
 import { DATE_FORMAT } from "apis/localdb";
 
 export type Item = {
@@ -52,9 +53,23 @@ export const nl2p = function (text: string){
     const arr = text?.split("\n") ?? [];
     let paragraphs = '';
 
-    for (const item of arr) { 
-        paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1">$1</a>') + '</p>'; 
+    for (const item of arr) {
+        paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1">$1</a>') + '</p>';
     }
 
     return paragraphs;
+}
+
+export async function handleException (callback: any, callbackError?: any){
+    try {
+        await callback();
+    } catch (error) {
+        if(callbackError) return callbackError(error);
+
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    }
 }

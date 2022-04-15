@@ -20,7 +20,7 @@ interface UseContract {
 }
 
 type Props = {
-    params: ListContractsPayload & InfoContractPayload,
+    params: any,
     isFetch?: boolean,
     isFetchInfo?: boolean
 }
