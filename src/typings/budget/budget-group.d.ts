@@ -14,8 +14,10 @@ export type BudgetGroup = {
     forecastQuantity: number;
     forecastAmount: number;
     quantity: number;
-    company: Company,
-    date: string,
+    company: Company;
+    date: string;
+    item: string;
+    budget: string;
     modifyAt?: string;
     createAt?: string;
 }
