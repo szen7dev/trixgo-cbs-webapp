@@ -46,7 +46,7 @@ export const TableGeneralInformation: FC<TableGeneralInformationProps> = ({
       { title: "Nhận dạng", value: docInfo.style },
       { title: "Chủ thể nhận", value: docInfo.receiver?.name },
       { title: "Tình trạng", value: docInfo.status },
-      { title: "Loại lĩnh vực", value: docInfo.field?.name },
+      { title: "Danh bạ hệ thống", value: docInfo.datahubContact?.name },
       { title: "Số lượng", value: docInfo.amount },
       { title: "Tính chất văn bản", value: docInfo.property?.name },
       { title: "Số lượng giao", value: docInfo.amountDelivery || 0 },

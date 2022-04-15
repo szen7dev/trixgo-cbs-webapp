@@ -15,6 +15,7 @@ import { DropdownSearchable } from "shareComponents/common";
 import { ModalContainer } from "shareComponents/common/ModalContainer";
 
 import { useQueryListPackage } from "services/hooks/document/usePackage";
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
 import { useStorage } from "services/hooks/items/useStorage";
@@ -67,12 +68,14 @@ const fieldInputByRow = [
 const useInitialValues = (
 	departmentID: string, companyID: string, keywordPackage?: string,
 	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
-	keywordContract?: string, keywordStorage?: string, keywordFields?: string ) => {
+	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string ) => {
 
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
-	const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
+	// const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
+	const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
+
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
@@ -89,7 +92,7 @@ const useInitialValues = (
 		listPackage,
 		listContactSender,
 		listContactReceiver,
-		fields,
+		fields: listDatahubContact,
 		properties,
 		listStorages,
 		listContracts,
@@ -112,7 +115,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 	const  [ keywordProperty,  setKeywordProperty ]   = useState("");
 	const  [ keywordContract,  setKeywordContract ]   = useState("");
 	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
-	const  [ keywordFields,  setKeywordFields ]       = useState("");
+	const  [ keywordDatahubContact,  setKeywordDatahubContact ]       = useState("");
 
 	const {
 		fields,
@@ -131,7 +134,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 		keywordProperty,
 		keywordContract,
 		keywordStorage,
-		keywordFields
+		keywordDatahubContact
 	);
 
 	const initialValues = {
@@ -177,6 +180,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 	}, [listContactSender, listContactReceiver , listContracts, listPackage, listStorages, properties]);
 
 	const handleSubmit = async(values: any) => {
+		console.log({ values })
 		const formatValues = {
 			...values
 		};
@@ -237,6 +241,10 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 
 		if(values.property){
 			formatValues.propertyID = values.property;
+		}
+
+		if(values.field){
+			formatValues.datahubContactID = values.field;
 		}
 		if(!formatValues.package)
 			return toast.warning("Vui lòng chọn gói thầu")
@@ -524,11 +532,11 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Lĩnh vực</p>
+											<p className="py-1.5">Danh bạ hệ thống</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Dự án"}
+												placeholder={"Danh bạ"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}
@@ -546,7 +554,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 												onSearchInputChange={
 													debounce(
 														(value) => (
-															setKeywordFields(value)
+															setKeywordDatahubContact(value)               
 														),
 													500
 												)}
