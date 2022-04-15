@@ -121,14 +121,14 @@ export const ModalCreateDocument: React.FC = () => {
 			property: state.initialValues?.property?._id,
 		}
 	}, [state.initialValues]);
-
+		
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
 	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
 	const  [ keywordProperty,  setKeywordProperty ]   = useState("");
 	const  [ keywordContract,  setKeywordContract ]   = useState("");
 	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
-	const  [ keywordDatahubContact,  setKeywordDatahubContact ]       = useState("");
+	const  [ keywordDatahubContact,  setKeywordDatahubContact ] = useState("");
 
 	const {
 		fields,
@@ -223,7 +223,7 @@ export const ModalCreateDocument: React.FC = () => {
 		},
 		[state]
 	);
-
+	
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div
@@ -480,11 +480,11 @@ export const ModalCreateDocument: React.FC = () => {
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Danh bạ hệ thống</p>
+											<p className="py-1.5">Cơ quan, tổ chức (*)</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Danh bạ"}
+												placeholder={"Cơ quan, tổ chức"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}
