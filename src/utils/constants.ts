@@ -5,6 +5,8 @@ import surprise from "assets/images/emoji/surprise.png";
 import sad from "assets/images/emoji/sad.png";
 import angered from "assets/images/emoji/angered.png";
 
+export const TOAST_DEFAULT_OPTIONS = { autoClose: 1000 };
+
 export const APP_KEY = {
     MEDIA: "5df4ce16506d9b3c587948ca",
     CHATTING: "5dfe4c1b51dc622100bb9d8f",

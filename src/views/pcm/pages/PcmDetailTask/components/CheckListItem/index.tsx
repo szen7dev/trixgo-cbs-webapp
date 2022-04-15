@@ -11,18 +11,18 @@ import { TypeStatusLabel } from "./components/TypeStatusLabel";
 import { CheckList, ChildTask, UpdateStatusCheckListPayload } from "typings/task";
 
 type Props = {
+  userID: string | undefined;
   data: CheckList | ChildTask;
   onUpdateStatusCheckList?: (payload: UpdateStatusCheckListPayload) => void;
-  hasPermission: boolean;
 };
 
-export const CheckListItem: FC<Props> = ({ data, onUpdateStatusCheckList, hasPermission }) => {
+export const CheckListItem: FC<Props> = ({ userID, data, onUpdateStatusCheckList }) => {
   const history = useHistory();
   const [isHover, setIsHover] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(data.status === 3 || !hasPermission);
+  const [isDisabled, setIsDisabled] = useState(data.status === 3 || data.assignee._id !== userID);
 
   const handleUpdateStatusChecklist = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if(event.target.checked && data.status !== 3 && hasPermission) {
+    if(event.target.checked && data.status !== 3 && !isDisabled) {
       onUpdateStatusCheckList && onUpdateStatusCheckList({
         checklistID: data._id,
         status: 3

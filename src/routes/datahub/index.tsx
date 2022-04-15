@@ -25,9 +25,10 @@ import {
 	DatahubInspection,
 	DatahubInspectionDetail,
 	DatahubPrice,
-	DatahubProjectMap
+	DatahubProjectMap,
+	DatahubContact
 } from 'views/datahub/pages'
-
+	
 const DatahubRoutes: FC = () => {
 	return (
 		<>
@@ -89,6 +90,16 @@ const DatahubRoutes: FC = () => {
 							</Switch>
 						</LayoutSecondary>
 					</Route>
+					<Route exact path="/datahub/price" component={DatahubPrice} />
+					<Route path="/datahub/contact">
+						<LayoutSecondary pages={[
+							{ id: '1', path: '/datahub/contact', navExact: true, title: 'Danh bạ hệ thống' },
+						]}>
+							<Switch>
+								<Route exact path='/datahub/contact' component={DatahubContact} />
+							</Switch>
+						</LayoutSecondary>
+					</Route> 
 					<Route exact path="/datahub/price" component={DatahubPrice} />
 				</Switch>
 			</DatahubLayout>

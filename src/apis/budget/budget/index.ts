@@ -36,26 +36,14 @@ async function deleteMany(params: any): Promise<any> {
 
 async function fetchList(params: any): Promise<any> {
     const { data } = await API.get(
-        `${BUDGET_URL}?${convertObToUrl({
-            ...params
-        })}`
+        `${BUDGET_URL}?${convertObToUrl(params)}`
     )
     return data
 }
 
 async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
-        `${BUDGET_URL}?${convertObToUrl({
-            // populates: JSON.stringify({
-            //     path: "members photos",
-            //     select: "fullname bizfullname name sign image nameOrg path size author",
-            //     populate: {
-            //         path: "author",
-            //         select: "_id bizfullname image"
-            //     }
-            // }),
-            ...params
-        })}`
+        `${BUDGET_URL}?${convertObToUrl(params)}`
     )
     return data
 }
