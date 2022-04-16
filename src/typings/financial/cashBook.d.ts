@@ -12,6 +12,7 @@ export type CashBook = {
     arising: number;
     closingBalance: number;
     members: User[];
+    userCreate: User;
     modifyAt: string;
     createAt: string;
     message?: string

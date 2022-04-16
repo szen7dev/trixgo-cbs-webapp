@@ -46,7 +46,13 @@ async function deleteMany(params: CashBookDeleteManyPayload): Promise<any> {
 
 async function fetchList(params: CashBookListParams): Promise<CashBookListResponse> {
     const { data } = await API.get(
-        `${CASH_BOOK_URL}?${convertObToUrl(params)}`
+        `${CASH_BOOK_URL}?${convertObToUrl({
+            populates: JSON.stringify({
+                path: 'userCreate members',
+                select: '_id bizfullname image'
+            }),
+            ...params
+        })}`
     )
     return data
 }

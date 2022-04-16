@@ -157,11 +157,13 @@ export const CmcGuaranteePage: FC = () => {
         </tbody>
       </table>
 
-      <Paginate totalPages={contractGuarantee.totalPage}
+      <Paginate 
+        totalPages={contractGuarantee.totalPage}
         totalRecord={contractGuarantee.totalRecord}
         hasNextPage
         prevPageAction={() => prevPageAction()}
-        nextPageAction={() => nextPageAction()} />
+        nextPageAction={() => nextPageAction()}
+      />
 
     </main>
   );

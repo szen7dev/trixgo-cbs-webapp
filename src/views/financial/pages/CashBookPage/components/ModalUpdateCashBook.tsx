@@ -12,7 +12,7 @@ interface ModalProps {
 	edit?: boolean
 }
 
-export const ModalCreateAndUpdateCashBook: FC<ModalProps> = ({ toggle, edit = false }) => {
+export const ModalUpdateCashBook: FC<ModalProps> = ({ toggle, edit = false }) => {
 	const financialSchema = object().shape({
 		title: string().required("Bạn cần nhập tiêu đề cho bài viết"),
 		content: string().required("Bạn cần nhập nội dung cho bài viết"),
