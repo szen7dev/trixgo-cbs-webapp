@@ -5,6 +5,7 @@ import { useAuth } from "services/hooks/auth/useAuth";
 import { useQueryDetailDepartment } from "services/hooks/items/useDepartment";
 import { useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
 import { APP_ID } from "apis/localdb";
+import projectImage from "assets/images/project.jpg";
 
 const ProjectLeftSideBar: FC = () => {
 	const { user } = useAuth();
@@ -27,7 +28,7 @@ const ProjectLeftSideBar: FC = () => {
 			<div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
 				{/* title */}
 				<div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-					<img src={detailDepartment?.image ? `${process.env.REACT_APP_URL_S3}/${detailDepartment?.image}` : "/static/media/project.8fd16481.jpg"} alt="Thumbnail" className="w-10 h-10 mr-3" />
+					<img src={detailDepartment.image ? `${process.env.REACT_APP_URL_S3_PROJECT}/${detailDepartment?.image}` : projectImage} alt="Thumbnail" className="w-10 h-10 mr-3" />
 					<span className="truncate" title={detailDepartment?.sign + "." + detailDepartment?.name}>{detailDepartment?.sign}.{detailDepartment?.name}</span>
 				</div>
 
