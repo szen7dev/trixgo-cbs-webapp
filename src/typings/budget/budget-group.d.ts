@@ -7,19 +7,26 @@ export type BudgetGroup = {
     note: string;
     description: string;
     type: number;
-    amount: number;
-    impleAmount: number;
     unit: string;
-    unitPrice: number;
-    forecastQuantity: number;
-    forecastAmount: number;
-    quantity: number;
     company: Company;
     date: string;
     item: string;
     budget: string;
     modifyAt?: string;
     createAt?: string;
+    quantity: number;
+    unitPrice: number;
+    amount: number;
+    vatAmount: number;
+    vatUnitPrice: number;
+    impleQuantity: number;
+    impleUnitPrice: number;
+    impleAmount: number;
+    forecastQuantity: number;
+    forecastUnitPrice: number;
+    forecastVatUnitPrice: number;
+    forecastAmount: number;
+    forecastVatAmount: number;
 }
 
 export type BudgetGroupListParams = QueryParam & {

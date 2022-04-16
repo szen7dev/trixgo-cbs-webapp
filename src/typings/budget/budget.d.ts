@@ -7,9 +7,18 @@ export type Budget = {
     note: string;
     description: string;
     type: number;
-    amount: number;
-    impleAmount: number;
-    forecastAmount: number;
+    revenue: number;
+    vatRevenue: number;
+    forecastRevenue: number;
+    forecastVatRevenue: number;
+    finalRevenue: number;
+    finalVatRevenue: number;
+    budget: number;
+    vatBudget: number;
+    finalBudget: number;
+    finalVatBudget: number;
+    forecastBudget: number;
+    forecastVatBudget: number;
     company: Company,
     date: string,
     modifyAt?: string;

@@ -49,32 +49,32 @@ export const RowBudgetWork: FC<Props> = ({ row, index, indexGroup, show, onUpdat
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
 				{row.unit}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 				{formatNumberMoney(row.quantity)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 				{formatNumberMoney(row.unitPrice)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(row.quantity * row.unitPrice)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.amount)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(0)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.impleQuantity)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(0)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.impleUnitPrice)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(0)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.impleAmount)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
 				{formatNumberMoney(row.forecastQuantity)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(row.forecastAmount)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.forecastUnitPrice)}
 			</td>
-			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-center">
-				{formatNumberMoney(row.forecastQuantity * row.forecastAmount)}
+			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-right">
+				{formatNumberMoney(row.forecastAmount)}
 			</td>
 			<td className="py-2 px-2 border-t-0.5 border-cbs-border border-r-0.5 text-left">
 				{row.note}

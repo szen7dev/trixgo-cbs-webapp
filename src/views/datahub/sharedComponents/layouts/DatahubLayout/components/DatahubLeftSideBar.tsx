@@ -41,6 +41,10 @@ export const routes: Array<RouteItem> = [
 		name: 'Biểu mẫu nghiệm thu',
 	},
 	{
+		path: '/datahub/contact',
+		name: 'Danh bạ hệ thống'
+	},
+	{
 		path: '/datahub/price',
 		name: 'Datahub giá'
 	},
