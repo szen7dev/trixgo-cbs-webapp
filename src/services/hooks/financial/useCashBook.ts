@@ -14,7 +14,7 @@ import type {
 } from 'typings/financial/cashBook';
 
 /*=====3.INTERFACE DEFINE=====*/
-interface UseBudget {
+interface UseCashBook {
     isLoading: boolean;
     totalRecord: number;
     totalPage: number;
@@ -29,17 +29,17 @@ interface UseBudget {
     fetchPreviousPage: () => void;
 }
 
-type UseBudgetProps = {
+type UseCashBookProps = {
     params?: CashBookInfoParams | CashBookListParams,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
 }
 
-export const useBudget = ({
+export const useCashBook = ({
     params = {},
     isFetchList = false,
     isFetchInfo = false
-}: UseBudgetProps): UseBudget => {
+}: UseCashBookProps): UseCashBook => {
 
     const { mutateAsync: insertAsync } =
         useMutation((payload: CashBookInsertPayload) => CashbookRepository.insert(payload)
@@ -80,7 +80,9 @@ export const useBudget = ({
                 return data?.nextCursor ?? undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: isFetchList
+            enabled: isFetchList,
+            // keepPreviousData: true,
+            // refetchOnMount: false,
         }
     );
 

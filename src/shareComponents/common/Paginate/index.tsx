@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 
 type Props = {
     prevPageAction?: () => void;
@@ -10,7 +10,9 @@ type Props = {
     hasNextPage?: boolean;
 }
 
-export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props }) => {
+export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ 
+    prevPageAction, nextPageAction, limit = 10, totalRecord = 0, totalPages, isFetching, hasNextPage, ...props
+}) => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const totalPagesNumber = totalPages || 0
 
@@ -19,6 +21,7 @@ export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageA
             //TODO
         }
     }, [isFetching])
+
     const handlePrevPage = () => {
         setCurrentIndex(currentIndex => currentIndex - 1);
         if (prevPageAction) prevPageAction()
@@ -37,7 +40,7 @@ export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageA
                 <div className={'inline-flex'}>
                     <button
                         disabled={currentIndex === 1 || isFetching}
-                        onClick={() => handlePrevPage()}
+                        onClick={handlePrevPage}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tl-md rounded-bl-md"}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 hover:text-cbs-primary" fill="none" viewBox="0 0 24 24" stroke={"currentColor"}>
@@ -51,7 +54,7 @@ export const Paginate: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ prevPageA
                     </div>
                     <button
                         disabled={!hasNextPage || isFetching || currentIndex >= totalPagesNumber}
-                        onClick={() => handleNextPage()}
+                        onClick={handleNextPage}
                         className={"relative border text-sm font-medium text-gray-700 w-px-24 h-px-24 flex items-center justify-center border-gray-300 rounded-tr-md rounded-br-md"}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 hover:text-cbs-primary" fill="none" viewBox="0 0 24 24" stroke={"currentColor"}>

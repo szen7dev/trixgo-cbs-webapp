@@ -9,23 +9,21 @@ import { FinancialLayout } from "views/financial/sharedComponents/layouts/Financ
 
 /*=====PAGES=====*/
 import {
+  DashboardPage,
+  HomePage,
+  CashFlowPage,
+  CashBookDetailPage,
   CashBookPage,
   CashBookReportPage
 } from 'views/financial/pages';
-
-import FinHomePage from "views/financial/pages/FinHomePage";
-import FinDashboardPage from "views/financial/pages/FinDashboardPage";
-import FinCashbookPage from "views/financial/pages/FinCashbookPage";
-import FinancialCashFlowPage from "views/financial/planning/FinancialCashFlowPage";
-import FinancialPlanningDetailPage from "views/financial/planning/FinancialPlanningDetailPage";
 
 const FinancialRouter: FC = () => {
   return (
     <ProtectedRoute path="/financial/:path?">
       <FinancialLayout>
         <Switch>
-          <Route exact path={"/financial/home"} component={FinHomePage} />
-          <Route exact path={"/financial/dashboard"} component={FinDashboardPage} />
+          <Route exact path={"/financial/home"} component={HomePage} />
+          <Route exact path={"/financial/dashboard"} component={DashboardPage} />
 
           <Route path="/financial/cashbook">
             <LayoutPrimary
@@ -37,13 +35,13 @@ const FinancialRouter: FC = () => {
             >
               <Route exact path={`/financial/cashbook-report`} component={CashBookReportPage} />
               <Route exact path={`/financial/cashbook`} component={CashBookPage} />
-              <Route exact path={`/financial/cashbook/:cashbookId`} component={CashBookPage} />
+              <Route exact path={`/financial/cashbook/:cashbookId`} component={CashBookDetailPage} />
               <Route exact path={`/financial/cashbook-other`} component={CashBookPage} />
             </LayoutPrimary>
           </Route>
 
-          <Route exact path={"/financial/cashflow"} component={FinancialCashFlowPage} />
-          <Route exact path={"/financial/cashflow/:id"} component={FinancialPlanningDetailPage} />
+          <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
+          {/* <Route exact path={"/financial/cashflow/:id"} component={CashFlowDetailPage} /> */}
         </Switch>
       </FinancialLayout>
     </ProtectedRoute>

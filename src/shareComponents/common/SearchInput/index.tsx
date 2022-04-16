@@ -17,7 +17,7 @@ export const SearchInput: FC<Props> = ({ classNameWrapper, classNameInput, onCha
     return (
         <div className={"relative flex items-center " + classNameWrapper}>
             <img src={SearchIcon} alt={"icon search"} className={"absolute w-[14px] h-[14px] left-2"} />
-            <input onChange={(event) => onChange(event)} className={"h-[30px] w-full bg-gray-50 pl-10 rounded " + classNameInput} type={"text"} placeholder={placeholder ?? "Nhập từ khóa tìm kiếm"} />
+            <input onChange={onChange} className={"h-[30px] w-full bg-gray-50 pl-10 rounded " + classNameInput} type={"text"} placeholder={placeholder ?? "Nhập từ khóa tìm kiếm"} />
         </div>
     )
 };
