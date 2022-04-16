@@ -131,7 +131,7 @@ export const ContractProduceModal: FC<NewContractProduceModalProps> = ({ default
                         onDayChange={(day: any) => setFieldValue("date", day)}
                         inputProps={{
                           className: "pl-3 border border-primary-border w-full rounded w-full h-[32px] outline-none",
-                          placeholder: "Thời hạn bảo lãnh tạm ứng",
+                          placeholder: "Ngày tháng sản lượng",
                         }}
                       />
                       <ErrorMessage
