@@ -20,7 +20,7 @@ import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateCashFlow, ModalConfirm } from "../../sharedComponents/common";
 
 /*=====5.TYPINGS=====*/
-import { CashFlowPlan } from "typings/fin";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";

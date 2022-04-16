@@ -5,7 +5,7 @@ import { convertCurrency, convertCurrencyToNumber } from "utils/converter";
 
 import { DropdownSearchable } from "shareComponents/common";
 import { Contract } from "typings/cmcs";
-import { CashFlowPlan } from "typings/fin";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 type Props = {
   cashFlow: CashFlowPlan.CashFlowPlan,

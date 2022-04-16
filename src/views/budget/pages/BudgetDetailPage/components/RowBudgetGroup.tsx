@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, memo } from 'react';
 import classNames from 'classnames';
 import { formatNumberMoney } from "utils/converter";
 import { RightClickMenuWrapper } from "shareComponents/common";
@@ -7,7 +7,6 @@ import { RowBudgetWork } from './RowBudgetWork';
 
 import { BudgetGroup } from 'typings/budget/budget-group';
 import { BudgetWork } from 'typings/budget/budget-work';
-import { BudgetWorkRepository } from "apis/budget";
 
 type Props = {
 	row: BudgetGroup;
@@ -16,18 +15,19 @@ type Props = {
 	onAdd: () => void;
 	onUpdate: () => void;
 	onUpdateWork: (budgetWork: BudgetWork) => void;
-}
-
-export const RowBudgetGroup: FC<Props> = ({ row, index, show, onAdd, onUpdate, onUpdateWork }) => {
-	const [groupsIDToggle, setGroupsIDToggle] = useState<string[]>([]);
-	const [groupID, setGroupID] = useState('');
-
-	const [listBudgetWork, setListBudgetWork] = useState<Record<string, {
+	fetchDataBudgetWork: (groupID: string, itemID: string, budgetID: string) => Promise<any>;
+	listBudgetWork: Record<string, {
 		listRecords: BudgetWork[],
 		limit: number,
 		nextCursor: string | null,
 		totalRecord: number,
-	}>>();
+	}> | undefined
+}
+
+export const RowBudgetGroup: FC<Props> = memo(({ row, index, show, onAdd, onUpdate, onUpdateWork, fetchDataBudgetWork, listBudgetWork }) => {
+	const [groupsIDToggle, setGroupsIDToggle] = useState<string[]>([]);
+	const [groupID, setGroupID] = useState('');
+	console.log({ listBudgetWork });
 
 	const toggleGroups = (groupID: string) => {
 		const isShow = groupsIDToggle.includes(groupID);
@@ -42,25 +42,11 @@ export const RowBudgetGroup: FC<Props> = ({ row, index, show, onAdd, onUpdate, o
 		setGroupID(groupID);
 	}
 
-	const fetchDataBudgetWork = async () => {
-		const { error, data } = await BudgetWorkRepository.fetchList({
-			groupID,
-			itemID: row.item,
-			budgetID: row.budget
-		})
-		if(error) return;
-
-		setListBudgetWork(previous => ({
-			...previous,
-			[groupID]: data
-		}))
-	}
-
 	useEffect(() => {
 		if(!groupID) return;
 		if(listBudgetWork && listBudgetWork[groupID]) return;
 
-		fetchDataBudgetWork();
+		fetchDataBudgetWork(groupID, row.item, row.budget);
 	}, [groupID])
 
 	if(!row) return <></>;
@@ -137,4 +123,6 @@ export const RowBudgetGroup: FC<Props> = ({ row, index, show, onAdd, onUpdate, o
 			: <></>}
 		</>
 	)
-}
+})
+
+RowBudgetGroup.displayName = 'RowBudgetGroup'
