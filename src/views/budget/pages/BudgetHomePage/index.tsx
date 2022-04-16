@@ -234,9 +234,9 @@ export const BudgetHomePage: FC = () => {
 				</thead>
 
 				{listBudgets && listBudgets.length ?
-					<tbody className="bg-primary-light text-left">
+					<tbody className="bg-primary-light">
 						{listBudgets.map((item: Budget) => (
-							<tr key={item._id} className="border-b border-primary-border h-10">
+							<tr key={item._id} className="border-b border-primary-border h-10 font-bold">
 								<td className="py-1 px-2 text-center">
 									<input
 										className="form-check-input"
@@ -245,21 +245,21 @@ export const BudgetHomePage: FC = () => {
 										onChange={() => handleChangeCheckbox(item)}
 									/>
 								</td>
-								<td className="py-1 px-3">
+								<td className="py-1 px-3 text-left">
 									<Link to={`/budget/home/${item._id}`}>
 										{item.name}
 									</Link>
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{convertCurrency(item.amount?.toString())}
+								<td className="py-1 px-2 text-right">
+									{convertCurrency(item.budget?.toString())}
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{convertCurrency(item.impleAmount?.toString())}
+								<td className="py-1 px-2 text-right">
+									{convertCurrency(item.finalBudget?.toString())}
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
-									{convertCurrency(item.forecastAmount?.toString())}
+								<td className="py-1 px-2 text-right">
+									{convertCurrency(item.forecastBudget?.toString())}
 								</td>
-								<td className="py-1 px-2 text-primary-gray">
+								<td className="py-1 px-2 text-left">
 									{item.note}
 								</td>
 							</tr>
