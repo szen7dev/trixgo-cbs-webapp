@@ -74,6 +74,7 @@ const useInitialValues = (
 		type: 2,
 		companyID,
 	}); // tính chất
+
 	const { list: listStorages } = useStorage({
 		params: {
 			companyID, keyword: keywordStorage
@@ -112,7 +113,7 @@ export const ModalCreateDocument: React.FC = () => {
 		const obj = { ...state.initialValues };
 		return {
 			...obj,
-			field: state.initialValues?.field?._id,
+			field: state.initialValues?.datahubContact?._id,
 			package: state.initialValues?.package?._id,
 			project: state.initialValues?.project?._id,
 			receiver: state.initialValues?.receiver?._id,
@@ -186,6 +187,7 @@ export const ModalCreateDocument: React.FC = () => {
 			const formatValues = {
 				...values,
 			};
+
 			if (moment(values.date).isValid()) {
 				formatValues.date = moment(values.date).toJSON();
 			}
@@ -201,7 +203,7 @@ export const ModalCreateDocument: React.FC = () => {
 			}else{
 				formatValues.completeStatus = 0
 			}
-
+			
 			if (state.onSubmit) {
 				try {
 					state.onSubmit({
@@ -507,13 +509,17 @@ export const ModalCreateDocument: React.FC = () => {
 													500
 												)}
 												initialValue={
-													state?.initialValues['field']
+													state.initialValues?.datahubContact && {
+														_id: state.initialValues?.datahubContact?._id,
+														name: state.initialValues?.datahubContact?.name
+													}
 												}
 												data={uniqBy([...fields, state?.initialValues['field'] || {}].filter(elm => {
 													if (elm._id) {
 														return elm;
 													}
 												}), '_id')}
+
 												formatItem={{
 													id: "_id",
 													text: "name",
