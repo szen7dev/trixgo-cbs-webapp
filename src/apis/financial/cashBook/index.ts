@@ -48,8 +48,8 @@ async function fetchList(params: CashBookListParams): Promise<CashBookListRespon
     const { data } = await API.get(
         `${CASH_BOOK_URL}?${convertObToUrl({
             populates: JSON.stringify({
-                path: 'userCreate members',
-                select: '_id bizfullname image'
+                path: 'userCreate members account customer contract',
+                select: '_id bizfullname image name'
             }),
             ...params
         })}`

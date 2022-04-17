@@ -52,10 +52,10 @@ const PortfolioTableContainer: FC = () => {
 							<tr>
 								<td className='text-center' colSpan={7}>Loading...</td>
 							</tr>
-							: data && data.pages.map((group) => (
-								<Fragment key={group.data.nextCursor}>
+							: data && data.pages?.map((group) => (
+								<Fragment key={group.data?.nextCursor}>
 									{
-										group.data.listRecords.map((record) => {
+										group.data?.listRecords?.map((record) => {
 											const { budget, forecastBudget, contractValue, contractPlusValue, contractVatValue, contractAmountPaid, stage, milestones, completedMilestones } = record;
 											// 'Ngân sách': getPercentForecastBudget
 											const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {

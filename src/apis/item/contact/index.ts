@@ -3,17 +3,12 @@ import { ITEM_URL } from '../';
 
 import { Contact } from 'typings/items';
 
-interface ContactRepository {
-    fetchListContact: (params: Contact.ContactQueryPayload) => Promise<Contact.ContactQueryResponse>;
-    fetchDetailContact: (contactID: string, params: Contact.ContactQueryPayload) => Promise<Contact.ContactQueryDetailResponse>;
+export const contactRepository = {
+    fetchList: (params: Contact.ContactListParams): Promise<Contact.ContactListResponse> => fetchListAndInfo(params),
+    fetchInfo: (params: Contact.ContactInfoParams) => fetchListAndInfo(params)
 }
 
-export const contactRepository: ContactRepository = {
-    fetchListContact: async (params) => fetchListContact(params),
-    fetchDetailContact: async (contactID, params) => fetchListContact({ contactID, ...params })
-}
-
-async function fetchListContact(params: any) {
+async function fetchListAndInfo(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/contacts`, {
         params: {

@@ -20,13 +20,13 @@ interface UseContract {
 }
 
 type Props = {
-    params: any,
+    params?: any,
     isFetch?: boolean,
     isFetchInfo?: boolean
 }
 
 export const useContract = ({
-    params,
+    params = {},
     isFetch = false,
     isFetchInfo = false
 }: Props): UseContract => {

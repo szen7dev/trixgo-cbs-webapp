@@ -1,4 +1,4 @@
-import type { 
+import type {
     QueryParam,
     APIResponse,
     Company,
@@ -10,7 +10,11 @@ import type {
     Position,
     ContractType
 } from './commons';
+import { User } from 'typings/user';
 
+/**
+ * SCHEMA
+ */
 export interface Contact {
     _id: string;
     type: 1 | 2 | 3 | 4 | 5 | 6; // mô tả ở: ContactDocumentPayload
@@ -43,7 +47,10 @@ export interface Contact {
     factor?: number;
 }
 
-export type ContactQueryPayload = QueryParam & {
+/**
+ * PARAMS LIST
+ */
+ export type ContactListParams = QueryParam & {
     // * Hồ sơ chi tiết nhân sự (phân các loại)
     // * 1. Lịch sử làm việc ở các đơn vị
     // * 2. Kinh nghiệm thực tế tham gia tại các Dự án
@@ -55,16 +62,31 @@ export type ContactQueryPayload = QueryParam & {
     [record: string]: any;
 }
 
-export type ContactQueryResponse = APIResponse & {
+/**
+ * RESPONSE LIST
+ */
+export type ContactListResponse = APIResponse & {
     data: {
         listRecords: Contact[];
         limit: number;
         totalRecord: number;
-        totalPages: number;
+        totalPage: number;
         nextCursor: string | null;
     }
 }
 
-export type ContactQueryDetailResponse = APIResponse & {
-    data: Contact
+/**
+ * PARAMS INFO
+ */
+export type ContactInfoParams = Partial<{
+    contactID: string;
+    select?: string;
+    populates?: string;
+}>
+
+/**
+ * RESPONSE INFO
+ */
+export type ContactInfoResponse = APIResponse & {
+    data: Contact;
 }

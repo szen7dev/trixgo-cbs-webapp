@@ -41,9 +41,9 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 	const dates = getDates(new Date(projectInfo.startTime || Date.now()), new Date());
 
 	// Step 2: Format date range
-	const datesFormat = dates.map(date => ({ 
-		month: moment(date).get('months'), 
-		year: moment(date).get('years'), 
+	const datesFormat = dates.map(date => ({
+		month: moment(date).get('month') + 1,
+		year: moment(date).get('year'),
 		yy: moment(date).format('MM/YY')
 	}));
 
@@ -54,7 +54,7 @@ const ReportChart: React.FC<Props> = ({ projectInfo, contractValues, ...props })
 	const dataSets = labels.map(date => {
 		let totalContractValues = 0;
 
-		const infoContractValueByDate = contractValues?.find(contractValue => 
+		const infoContractValueByDate = contractValues?.find(contractValue =>
 			contractValue?._id?.month == date.month &&
 			contractValue?._id?.year == date.year
 		);

@@ -271,7 +271,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                     {listCashFlowPlans.length ? listCashFlowPlans.map(item => (
                         <tr
                             key={item._id}
-                            className={classnames('border-b border-primary-border h-10 font-bold')}
+                            className="border-b border-primary-border h-10"
                         >
                             <td className="px-2 text-center align-middle">
                                 <input

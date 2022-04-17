@@ -1,3 +1,6 @@
+import { Contract } from 'typings/cmcs';
+import { Account } from 'typings/items/account';
+import { Contact } from 'typings/items/contact';
 import { User } from 'typings/user';
 import type { QueryParam, APIResponse } from '../common';
 
@@ -8,9 +11,16 @@ export type CashBook = {
     _id: string;
     name: string;
     sign: string;
+    note: string;
+    date: string;
+    income: number;
+    expense: number;
     openingBalance: number;
     arising: number;
     closingBalance: number;
+    contract: Contract;
+    customer: Contact;
+    account: Account;
     members: User[];
     userCreate: User;
     modifyAt: string;

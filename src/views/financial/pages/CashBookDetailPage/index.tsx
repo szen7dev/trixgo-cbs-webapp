@@ -1,54 +1,271 @@
-import { FC, useEffect, useState } from "react";
+import { UIEvent, FC, useEffect, useState, useCallback, ChangeEvent } from "react";
+import { useParams, Link } from 'react-router-dom';
+import { toast } from "react-toastify";
+import debounce from "lodash/debounce";
 
-// Hook
-import { DropdownFilterButton } from "views/document/sharedComponents/common";
+/**
+ * Components
+ */
+// import { DropdownFilterButton } from "views/document/sharedComponents/common";
 import {
   Paginate,
   SearchInput,
   GroupActions,
   ButtonMore,
-  DropdownSearchable,
 } from "shareComponents/common";
 import ModalReport from "./components/ModalReport";
+import RowTableInsertInline from "./components/RowTableInsertInline";
+import RowTableUpdateInline from "./components/RowTableUpdateInline";
 import { ModalContainer } from "shareComponents/common";
-
-// assets
+import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import iconGraphReport from "assets/images/icons8-stop-graph-report-96.png";
 
+/**
+ * Hooks, Typings
+ */
+import { useCashBook } from 'services/hooks/financial/useCashBook';
+import { useContract } from "services/hooks/items/useContract";
+import { useContact } from "services/hooks/items/useContact";
+import { useAccount } from "services/hooks/items/useAccount";
+import { CashBook } from "typings/financial/cashBook";
+
 export const CashBookDetailPage: FC = () => {
+  const { cashbookId } = useParams<{ cashbookId: string }>();
+
+  const [keyword, setKeyword] = useState('');
+  const [keywordContract, setKeywordContract] = useState('');
+  const [keywordContact, setKeywordContact] = useState('');
+  const [keywordAccount, setKeywordAccount] = useState('');
+
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
-  const [data, setData] = useState<{ id: number; [key: string]: any }[]>([]);
+  const [showRowInsert, setShowRowInsert] = useState(true);
+  const [itemsChecked, setItemsChecked] = useState<string[]>([]);
+  const [dataCashBook, setDataCashBook] = useState<CashBook[]>([]);
+
+  const { info: cashBookInfo } = useCashBook({
+    params: { cashBookID: cashbookId },
+    isFetchInfo: true
+  })
+
+  const {
+    deleteManyAsync: deleteManyCashBookAsync,
+    insertAsync: insertCashBookAsync,
+    updateAsync: updateCashBookAsync,
+    list: listCashBook,
+    refetch,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    totalPage,
+    totalRecord
+  } = useCashBook({
+    params: {
+      parentID: cashbookId,
+      keyword
+    },
+    isFetchList: !!cashbookId
+  })
+
+  // Danh sách hợp đồng
+  const {
+    listContracts: listContract,
+    hasNextPage: hasNextPageListContract,
+    fetchNextPage: fetchNextPageListContract
+  } = useContract({
+    params: { keyword: keywordContract },
+    isFetch: true
+  })
+
+  // Danh sách contact (mã khách)
+  const {
+    list: listContact,
+    hasNextPage: hasNextPageListContact,
+    fetchNextPage: fetchNextPageListContact
+  } = useContact({
+    params: { keyword: keywordContact },
+    isFetchList: true
+  })
+
+  // Danh sách tài khoản
+  const {
+    list: listAccount,
+    hasNextPage: hasNextPageListAccount,
+    fetchNextPage: fetchNextPageListAccount
+  } = useAccount({
+    params: { keyword: keywordAccount },
+    isFetchList: true
+  })
 
   useEffect(() => {
-    document.title = "CHG.THT-Lựa chọn nhà thầu";
-    setData(
-      Array.from({ length: 5 }).map((_, index) => ({
-        id: index,
-        content: "Thu tiền về của dự án CHG đợt 5, phí Quản lý dự án",
-        opening_balance: 250000000000,
-        increased_balance: 1250000000000,
-        closing_balance: 1250000000000,
-        created_by: "Nguyễn Thị Ngân-CPMI",
-        updated_by: "Hương-CPMI",
-        created_at: "25/12/2021",
-        updated_at: "17:20 14/11/21",
-      }))
-    );
+    document.title = "Chi tiết sổ quỹ";
   }, []);
 
-  const toggleVisible = () => {
-    setVisibleDrawer(!visibleDrawer);
-  };
+  useEffect(() => {
+    setDataCashBook(listCashBook);
+}, [listCashBook.length])
+
+  const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
+
+  const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  }, 500);
+
+  const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
+  const onChangeSearchContact = (keyword: string) => setKeywordContact(keyword);
+  const onChangeSearchAccount = (keyword: string) => setKeywordAccount(keyword);
+
+  // Handle for checkbox each table row
+	const handleChangeCheckbox = (ids: string[]) => setItemsChecked(ids);
+
+  // Handle for checkbox all
+  const getStateCheckboxAll = useCallback(() => {
+    return itemsChecked.length === dataCashBook.length;
+  }, [itemsChecked, dataCashBook]);
+
+  const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+
+    if(isChecked) {
+      const ids = dataCashBook.map(item => item._id);
+      setItemsChecked(ids);
+    } else{
+      setItemsChecked([]);
+    }
+  }
+
+  const handleScrollContract = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListContract) {
+      fetchNextPageListContract();
+    }
+  }
+
+  const handleScrollContact = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListContact) {
+      fetchNextPageListContact();
+    }
+  }
+
+  const handleScrollAccount = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListAccount) {
+      fetchNextPageListAccount();
+    }
+  }
+
+  const handleInsert = async (values: any) => {
+    try {
+        setShowRowInsert(false);
+
+        const dataInsert = {
+          parentID: cashbookId,
+          date: new Date(),
+          ...values
+        };
+        const { error, data } = await insertCashBookAsync(dataInsert);
+
+        if(error) {
+            return toast.warn(data?.message);
+        }
+
+        if(data.length) {
+            return data.map((item: any) => toast.warn(item.message));
+        }
+
+        setDataCashBook(previous => ([
+          data,
+          ...previous,
+        ]))
+        toast.success('Tạo thành công');
+    } catch (error) {
+        if (typeof error === "string") {
+            toast.error(error);
+        } else if (error instanceof Error) {
+            toast.error(error.message);
+        }
+    } finally {
+        setShowRowInsert(true);
+    }
+  }
+
+  const handleUpdate = async (values: any, callback?: (response: any) => void) => {
+    try {
+      const { error, data } = await updateCashBookAsync(values);
+
+      if(error) {
+          return toast.warn(data?.message);
+      }
+
+      if(data.length) {
+          return data.map((item: any) => toast.warn(item.message));
+      }
+
+      callback && callback(data);
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      const { error, data } = await deleteManyCashBookAsync({
+          cashBooksID: itemsChecked
+      });
+
+      if(error) {
+          return toast.warn(data?.message);
+      }
+
+      if(data.length) {
+          return data.map((item: any) => toast.warn(item.message));
+      }
+
+      toast.success('Xoá dữ liệu thành công', TOAST_DEFAULT_OPTIONS);
+      refetch();
+      setItemsChecked([]);
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error, TOAST_DEFAULT_OPTIONS);
+      } else if (error instanceof Error) {
+          toast.error(error.message, TOAST_DEFAULT_OPTIONS);
+      }
+    } finally {
+      toggleDeleteModal();
+    }
+}
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
-        <span className="text-x-large mr-7">Sổ quỹ công ty tháng 1-12/2021</span>
-        <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={() => 1} />
-        <DropdownFilterButton />
-        <GroupActions className="flex items-center flex-1" onClickTrash={toggleDeleteModal} />
+        <Link to={`/financial/cashbook`}>
+          <img src="/images/common/button_back.png" alt="Button Back" />
+        </Link>
+        <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
+        <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
+        {/* <DropdownFilterButton /> */}
+        <GroupActions 
+          className="flex items-center flex-1" 
+          onClickTrash={toggleDeleteModal}
+          disabled={{
+            trash: !itemsChecked.length
+          }}
+          types={[
+            'trash',
+          ]}
+        />
 
         {/* <ButtonCreate onClick={toggleModal} /> */}
         <button
@@ -66,6 +283,16 @@ export const CashBookDetailPage: FC = () => {
         >
           <thead className="z-10 relative">
             <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
+              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+                <div className="flex items-center justify-center">
+                  <input
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={getStateCheckboxAll()}
+                      onChange={handleChangeCheckboxAll}
+                  />
+                </div>
+              </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 Ngày tháng
               </th>
@@ -91,133 +318,148 @@ export const CashBookDetailPage: FC = () => {
                 Tồn
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-                {/* <span className="pl-2 border-l border-cbs-border"> */}
                 Mô tả/ghi chú
-                {/* </span> */}
               </th>
             </tr>
           </thead>
           <tbody className="text-small">
-            {data.map(
-              ({
-                id,
-                content,
-                opening_balance,
-                increased_balance,
-                closing_balance,
-                created_by,
-                updated_by,
-                created_at,
-                updated_at,
-              }) => {
-                return (
-                  <tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-center">
-                      {created_at}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                      {content}
-                    </td>
-                    <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                      <DropdownSearchable
-                        id="ticket-creator"
-                        placeholder="Hợp đồng"
-                        initialValue={{
-                          id: "quangtt",
-                          text: "1111-Tiền mặt tại quỹ công ty",
-                        }}
-                        data={[
-                          {
-                            id: "quangtt",
-                            text: "1111-Tiền mặt tại quỹ công ty",
-                          },
-                          {
-                            id: 2,
-                            text: "1111-Tiền mặt tại quỹ công ty",
-                          },
-                        ]}
-                      />
-                    </td>
-                    <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                      <DropdownSearchable
-                        id="ticket-creator"
-                        placeholder="Công ty"
-                        initialValue={{
-                          id: "quangtt",
-                          text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                        }}
-                        data={[
-                          {
-                            id: "quangtt",
-                            text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                          },
-                          {
-                            id: 2,
-                            text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                          },
-                        ]}
-                      />
-                    </td>
-                    <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                      <DropdownSearchable
-                        id="ticket-creator"
-                        placeholder="Công ty"
-                        initialValue={{
-                          id: "quangtt",
-                          text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                        }}
-                        data={[
-                          {
-                            id: "quangtt",
-                            text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                          },
-                          {
-                            id: 2,
-                            text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                          },
-                        ]}
-                      />
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                      {parseInt(opening_balance).toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
-                      })}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                      {parseInt(increased_balance).toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
-                      })}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                      {parseInt(closing_balance).toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
-                      })}
-                    </td>
-                    <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                      Xây dựng mẫu BoQ cho công tác preliminaries
-                    </td>
-                  </tr>
-                );
-              }
-            )}
+            {(dataCashBook && dataCashBook.length) ? dataCashBook.map(item => (
+              <RowTableUpdateInline
+                key={item._id}
+                contracts={listContract}
+                contacts={listContact}
+                accounts={listAccount}
+                cashBook={item}
+                itemsChecked={itemsChecked}
+                onChangeCheckbox={handleChangeCheckbox}
+                onUpdate={handleUpdate}
+                onScrollContract={handleScrollContract}
+                onScrollContact={handleScrollContact}
+                onScrollAccount={handleScrollAccount}
+                onSearchContract={onChangeSearchContract}
+                onSearchContact={onChangeSearchContact}
+                onSearchAccount={onChangeSearchAccount}
+              />
+            )) : <></>}
+
+            {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
+
+            {/* <tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-center">
+                {created_at}
+              </td>
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
+                {content}
+              </td>
+              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
+                <DropdownSearchable
+                  id="ticket-creator"
+                  placeholder="Hợp đồng"
+                  initialValue={{
+                    id: "quangtt",
+                    text: "1111-Tiền mặt tại quỹ công ty",
+                  }}
+                  data={[
+                    {
+                      id: "quangtt",
+                      text: "1111-Tiền mặt tại quỹ công ty",
+                    },
+                    {
+                      id: 2,
+                      text: "1111-Tiền mặt tại quỹ công ty",
+                    },
+                  ]}
+                />
+              </td>
+              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
+                <DropdownSearchable
+                  id="ticket-creator"
+                  placeholder="Công ty"
+                  initialValue={{
+                    id: "quangtt",
+                    text: "Công ty TNHH Hoàng Mai Xanh và Tím",
+                  }}
+                  data={[
+                    {
+                      id: "quangtt",
+                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
+                    },
+                    {
+                      id: 2,
+                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
+                    },
+                  ]}
+                />
+              </td>
+              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
+                <DropdownSearchable
+                  id="ticket-creator"
+                  placeholder="Công ty"
+                  initialValue={{
+                    id: "quangtt",
+                    text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
+                  }}
+                  data={[
+                    {
+                      id: "quangtt",
+                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
+                    },
+                    {
+                      id: 2,
+                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
+                    },
+                  ]}
+                />
+              </td>
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
+                {parseInt(opening_balance).toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
+              </td>
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
+                {parseInt(increased_balance).toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
+              </td>
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
+                {parseInt(closing_balance).toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
+              </td>
+              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
+                Xây dựng mẫu BoQ cho công tác preliminaries
+              </td>
+            </tr> */}
           </tbody>
         </table>
       </div>
-      <Paginate className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white" />
+
+      <Paginate
+        className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
+        totalPages={totalPage}
+        totalRecord={totalRecord}
+        hasNextPage={hasNextPage}
+        prevPageAction={fetchPreviousPage}
+        nextPageAction={fetchNextPage}
+      />
+
       <ModalReport open={visibleDrawer} onClose={setVisibleDrawer} />
-      <ModalContainer isModalOpen={isShowDeleteModal} toggle={toggleVisible}>
+      {/* Modal confirm delete */}
+      <ModalContainer isModalOpen={isShowDeleteModal} toggle={toggleDeleteModal}>
         <div className="inline-flex flex-col text-black w-full max-w-lg my-8 overflow-hidden text-left transition-all transform bg-white">
-          <div className="px-5 pt-5 pb-3.5 text-xl leading-6 font-bold">Bạn có muốn xóa không?</div>
-          <p className="px-5 mb-7">
-            Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
-          </p>
-          <div className="text-right pt-6 pb-5 px-8 text-base leading-5">
+          <div className="p-5 mb-4">
+            <span className="text-xl leading-6 font-bold"> Bạn có muốn xóa không? </span>
+            <p className="mt-2 text-primary-gray">
+                Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
+            </p>
+          </div>
+          <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
             <button className="py-1.5 px-5 mr-2 uppercase" onClick={toggleDeleteModal}>
               Hủy
             </button>
             <button
               className="py-1.5 px-3 border border-primary bg-primary hover:bg-opacity-90 text-white rounded-md"
-              onClick={toggleDeleteModal}
+              onClick={handleDelete}
             >
               Xác nhận
             </button>
