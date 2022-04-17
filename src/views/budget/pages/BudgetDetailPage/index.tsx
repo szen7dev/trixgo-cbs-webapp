@@ -1,11 +1,11 @@
-import { FC, Fragment, useCallback, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useParams, Link } from 'react-router-dom';
 import classNames from 'classnames';
 
 /**
  * Components, Utils
  */
-import { RightClickMenuWrapper } from "shareComponents/common";
+import { RightClickMenuWrapper, Paginate } from "shareComponents/common";
 import { MenuChildRow, ModalBudget, RowBudgetGroup } from './components';
 import { formatNumberMoney } from "utils/converter";
 
@@ -15,7 +15,7 @@ import { formatNumberMoney } from "utils/converter";
 import { useBudget } from 'services/hooks/budget/useBudget';
 import { useBudgetItem } from 'services/hooks/budget/useBudgetItem';
 
-import { BudgetGroupRepository } from "apis/budget";
+import { BudgetGroupRepository, BudgetWorkRepository } from "apis/budget";
 
 import { BudgetItem } from 'typings/budget/budget-item';
 import { BudgetGroup } from 'typings/budget/budget-group';
@@ -44,7 +44,11 @@ const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) =>
 		// Group, Work
 		if(key.startsWith('create')) {
 			// Excute fetch data budget group or work
-			return funcs[index][2]();
+			if(key.includes('work')) {
+				return funcs[index][2](payload.group, payload.item, payload.budget);
+			} else{
+				return funcs[index][2]();
+			}
 		}
 
 		let stateKey = '';
@@ -62,10 +66,13 @@ const executeSetState = (key: string, funcs: Array<Array<any>>, payload: any) =>
 		// Step 1: Find payload in listRecords and update item
 		const newListRecords = funcs[index][0][stateKey]
 			.listRecords?.map((item: any) => item._id === payload._id ? payload : item);
+
 		// Step 2: Clone state data
 		const newData = { ...funcs[index][0] }
+
 		// Step 3: Assign new listRecords for group/work budget by itemID/groupID (stateKey)
 		newData[stateKey]['listRecords'] = newListRecords;
+
 		// Step 4: Set state group/work budget
 		return funcs[index][1](newData);
 	}
@@ -89,18 +96,20 @@ export const BudgetDetailPage: FC = () => {
 		totalRecord: number,
 	}>>();
 
-	// const [listBudgetWork, setListBudgetWork] = useState<Record<string, {
-	// 	listRecords: BudgetWork[],
-	// 	limit: number,
-	// 	nextCursor: string | null,
-	// 	totalRecord: number,
-	// }>>();
+	const [listBudgetWork, setListBudgetWork] = useState<Record<string, {
+		listRecords: BudgetWork[],
+		limit: number,
+		nextCursor: string | null,
+		totalRecord: number,
+	}>>();
 
 	const {
 		list: dataBudgetItem,
 		fetchNextPage,
+		// fetchPreviousPage,
 		hasNextPage,
-		totalRecord
+		totalRecord,
+		// totalPage
 	} = useBudgetItem({
 		params: { budgetID },
 		isFetchList: true
@@ -126,6 +135,20 @@ export const BudgetDetailPage: FC = () => {
 		}))
 	}
 
+	const fetchDataBudgetWork = async (groupID: string, itemID: string, budgetID: string) => {
+		const { error, data } = await BudgetWorkRepository.fetchList({
+			groupID,
+			itemID,
+			budgetID
+		})
+		if(error) return;
+
+		setListBudgetWork(previous => ({
+			...previous,
+			[groupID]: data
+		}))
+	}
+
 	useEffect(() => {
 		document.title = "Chi tiết ngân sách"
 	}, []);
@@ -145,7 +168,7 @@ export const BudgetDetailPage: FC = () => {
 		executeSetState(modalType, [
 			[listBudgetItem, setListBudgetItem],
 			[listBudgetGroup, setListBudgetGroup, fetchDataBudgetGroup],
-			// [listBudgetWork, setListBudgetWork, fetchDataBudgetWork],
+			[listBudgetWork, setListBudgetWork, fetchDataBudgetWork],
 		], payload);
 	}
 
@@ -160,11 +183,12 @@ export const BudgetDetailPage: FC = () => {
 		} else{
 			newList = [...itemsIDToggle, itemID];
 		}
+
 		setItemsIDToggle(newList);
 		setItemID(itemID);
 	}
 
-	const handleMenuOpenModal = useCallback((
+	const handleMenuOpenModal = async (
 		modalType:
 			'create-budget-item' | 'create-budget-group' | 'create-budget-work' |
 			'update-budget-item' | 'update-budget-group' | 'update-budget-work',
@@ -198,7 +222,7 @@ export const BudgetDetailPage: FC = () => {
 		}
 
 		toggleModal();
-	}, [])
+	}
 
 	return (
 		<main className="h-full">
@@ -289,8 +313,8 @@ export const BudgetDetailPage: FC = () => {
 							<RightClickMenuWrapper
 								contextMenu={
 									<MenuChildRow
-										onAdd={handleMenuOpenModal.bind(this, 'create-budget-group', budgetItem)}
-										onUpdate={handleMenuOpenModal.bind(this, 'update-budget-item', budgetItem)}
+										onAdd={handleMenuOpenModal.bind(null, 'create-budget-group', budgetItem)}
+										onUpdate={handleMenuOpenModal.bind(null, 'update-budget-item', budgetItem)}
 									/>
 								}
 								key={budgetItem._id}
@@ -356,6 +380,8 @@ export const BudgetDetailPage: FC = () => {
 										onAdd={handleMenuOpenModal.bind(this, 'create-budget-work', budgetGroup)}
 										onUpdate={handleMenuOpenModal.bind(this, 'update-budget-group', budgetGroup)}
 										onUpdateWork={budgetWork => handleMenuOpenModal('update-budget-work', budgetWork)}
+										fetchDataBudgetWork={fetchDataBudgetWork}
+										listBudgetWork={listBudgetWork}
 									/>
 								))
 							: <></>}
@@ -381,6 +407,14 @@ export const BudgetDetailPage: FC = () => {
 					</tr>
 				</tfoot> */}
 			</table>
+
+			{/* <Paginate
+				totalPages={totalPage}
+				totalRecord={totalRecord}
+				hasNextPage
+				prevPageAction={fetchPreviousPage}
+				nextPageAction={fetchNextPage}
+			/> */}
 
 			{hasNextPage && (
                 <div className="w-full flex justify-center my-5">

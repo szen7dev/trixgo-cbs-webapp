@@ -24,7 +24,7 @@ type Props = {
 const DatahubTypesSchema = object().shape({
 	name: string()
 		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
+		.max(200, 'Too Long!')
 		.required('Required'),
 	sign: string()
 		.min(2, 'Too Short!')
@@ -36,7 +36,7 @@ const DatahubTypesSchema = object().shape({
 		.required('Required'),
 	address: string()
 		.min(2, 'Too Short!')
-		.max(50, 'Too Long!')
+		.max(300, 'Too Long!')
 		.required('Required'),
 	// popular: number().min(1).required('Required'),
 });

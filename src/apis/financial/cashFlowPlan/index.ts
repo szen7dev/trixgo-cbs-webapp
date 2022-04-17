@@ -3,7 +3,7 @@ import API from "../../repository";
 import { FIN_URL } from '..';
 
 /*=====TYPING=====*/
-import { CashFlowPlan } from 'typings/fin';
+import CashFlowPlan from 'typings/financial/cashFlowPlan';
 
 /*=====INTERFACE DEFINE=====*/
 interface CashFlowPlanRepository {

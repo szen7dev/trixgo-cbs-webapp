@@ -2,16 +2,19 @@
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 /*=====2.TYPING/APIS=====*/
-import { CashFlowPlanRepository } from 'apis/fin';
-import { CashFlowPlan } from 'typings/fin';
+import { CashFlowPlanRepository } from 'apis/financial';
+import {
+    CashFlowPlan,
+    CashFlowPlanQueryPayload
+} from 'typings/financial/cashFlowPlan';
 
 /*=====3.INTERFACE DEFINE=====*/
 interface useCashFlowPlan {
     isLoading: boolean;
     totalRecord: number;
     hasNextPage: boolean | undefined;
-    list: Array<CashFlowPlan.CashFlowPlan>;
-    info: CashFlowPlan.CashFlowPlan | undefined;
+    list: Array<CashFlowPlan>;
+    info: CashFlowPlan | undefined;
     refetch: () => void;
     fetchNextPage: () => void;
     insertAsync: (params: any) => Promise<any>;
@@ -21,7 +24,7 @@ interface useCashFlowPlan {
 
 // Khai báo params cho hook
 type UseCashFlowPlanProps = {
-    params?: CashFlowPlan.CashFlowPlanQueryPayload,
+    params?: CashFlowPlanQueryPayload,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
 }

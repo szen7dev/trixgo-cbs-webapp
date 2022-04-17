@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { DropdownSearchable } from "shareComponents/common";
 import { useModal } from "services/hooks/useModal";
 import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
-import { ModalProps } from 'typings/fin/cashFlowPlan';
+import { ModalProps } from 'typings/financial/cashFlowPlan';
 
 export const ModalCreateOrUpdateCashFlow: FC<ModalProps> = ({
   modalType,

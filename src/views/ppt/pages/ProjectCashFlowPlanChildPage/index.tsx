@@ -21,7 +21,7 @@ import { ModalConfirm, RowTableInsertInline, RowTableUpdateInline } from "../../
 import { useModal } from "services/hooks/useModal";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
-import { CashFlowPlan } from "typings/fin";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
 	const { id: projectID, cashFlowID } = useParams<{ id: string, cashFlowID: string }>();

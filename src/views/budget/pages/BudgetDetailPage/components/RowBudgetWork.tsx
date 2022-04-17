@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, memo } from 'react';
 import classNames from 'classnames';
 import { formatNumberMoney } from "utils/converter";
 import { RightClickMenuWrapper } from "shareComponents/common";
@@ -14,23 +14,7 @@ type Props = {
 	onUpdate: () => void;
 }
 
-export const RowBudgetWork: FC<Props> = ({ row, index, indexGroup, show, onUpdate }) => {
-	const [groupsIDToggle, setGroupsIDToggle] = useState<string[]>([]);
-	const [groupID, setGroupID] = useState('');
-
-	const toggleGroups = (groupID: string) => {
-		const isShow = groupsIDToggle.includes(groupID);
-		let newList: any[] = [];
-
-		if(isShow) {
-			newList = groupsIDToggle.filter(_groupID => _groupID !== groupID);
-		} else{
-			newList = [...groupsIDToggle, groupID];
-		}
-		setGroupsIDToggle(newList);
-		setGroupID(groupID);
-	}
-
+export const RowBudgetWork: FC<Props> = memo(({ row, index, indexGroup, show, onUpdate }) => {
 	if(!row) return <></>;
 
 	return (
@@ -81,4 +65,6 @@ export const RowBudgetWork: FC<Props> = ({ row, index, indexGroup, show, onUpdat
 			</td>
 		</RightClickMenuWrapper>
 	)
-}
+})
+
+RowBudgetWork.displayName = 'RowBudgetWork';
