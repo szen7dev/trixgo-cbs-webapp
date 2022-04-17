@@ -11,8 +11,8 @@ import 'moment/locale/vi';
  */
 import { useProject } from 'services/hooks/items/useProject';
 import { useContractPayment } from 'services/hooks/cmcs/useContractPayment';
-import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
-import { APP_ID } from "apis/localdb";
+// import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
+// import { APP_ID } from "apis/localdb";
 
 import styles from "../../style.module.css";
 import 'swiper/swiper.min.css';
@@ -67,7 +67,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 		isFetchInfo: true
 	})
 
-	const { listAmountContractValueByDate } = useContractPayment({
+	const { listAmountContractPaymentByMonth } = useContractPayment({
 		params: {
 			projectID
 		},
@@ -110,7 +110,7 @@ const ProjectDashboardPortfolioPage: FC = () => {
 							</div>
 
 							{/* Chartjs */}
-							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} contractValues={listAmountContractValueByDate} />
+							<ReportChart className='bg-white mx-2 w-full mt-4' projectInfo={projectInfo} contractValues={listAmountContractPaymentByMonth} />
 
 							{/* Images */}
 							<ReportImage className="w-full px-2" projectInfo={projectInfo} />

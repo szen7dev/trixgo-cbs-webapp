@@ -13,10 +13,10 @@ import {
   SearchInput,
   GroupActions,
   ButtonCreate,
-  ButtonMore,
+  // ButtonMore,
 } from "shareComponents/common";
 import { ModalContainer } from "shareComponents/common";
-import { ModalCreateCashBook } from "./components";
+import { ModalCreateCashBook, ModalUpdateCashBook } from "./components";
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 
 /**
@@ -28,8 +28,10 @@ import { CashBook } from "typings/financial/cashBook";
 
 export const CashBookPage: FC = () => {
 	const [keyword, setKeyword] = useState('');
+  const [cashBookIdSelected, setCashBookIdSelected] = useState('');
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
   const [visibleCreateModal, setVisibleCreateModal] = useState<boolean>(false);
+  const [visibleUpdateModal, setVisibleUpdateModal] = useState<boolean>(false);
 
   const {
     deleteManyAsync,
@@ -54,11 +56,21 @@ export const CashBookPage: FC = () => {
     document.title = "Sổ quỹ công ty";
   }, []);
 
+  useEffect(() => {
+    const assignedEntries = Object.entries(assigned);
+    if(!assignedEntries.length) return;
+
+    const cashBookSelected = assignedEntries.filter(([_, value]) => value);
+
+    if(cashBookSelected.length === 1) {
+      setCashBookIdSelected(cashBookSelected[0][0]);
+    }
+  }, [assigned])
+
   const handleClickRow = (item: CashBook) => handleChangeCheckbox(undefined, item);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
   const toggleCreateModal = () => setVisibleCreateModal(!visibleCreateModal);
-
-  const handleConfirmCreate = () => refetch();
+  const toggleUpdateModal = () => setVisibleUpdateModal(!visibleUpdateModal);
 
   const handleConfirmDelete = async () => {
     try {
@@ -90,18 +102,18 @@ export const CashBookPage: FC = () => {
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
         <span className="text-x-large mr-7">Sổ quỹ công ty</span>
-        <SearchInput 
-          classNameWrapper="rounded-sm flex bg-cbs-left-menu" 
+        <SearchInput
+          classNameWrapper="rounded-sm flex bg-cbs-left-menu"
           onChange={debounce(
             (e: ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value),
             500
           )}
         />
         {/* <DropdownFilterButton /> */}
-        <GroupActions 
-          className="flex items-center flex-1" 
+        <GroupActions
+          className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
-          onClickPencil={() => ''}
+          onClickPencil={toggleUpdateModal}
           types={['trash', 'edit']}
           disabled={{
             pencil: Object.values(assigned).filter(Boolean).length !== 1,
@@ -110,7 +122,7 @@ export const CashBookPage: FC = () => {
         />
 
         <ButtonCreate onClick={toggleCreateModal} />
-        <ButtonMore />
+        {/* <ButtonMore /> */}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -251,7 +263,17 @@ export const CashBookPage: FC = () => {
       {/* Modal Create Cashbook */}
       <ModalContainer isModalOpen={visibleCreateModal} toggle={toggleCreateModal}>
         <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
-          <ModalCreateCashBook toggle={toggleCreateModal} onConfirm={handleConfirmCreate} />
+          <ModalCreateCashBook toggle={toggleCreateModal} onConfirm={refetch} />
+        </div>
+      </ModalContainer>
+      {/* Modal Update Cashbook */}
+      <ModalContainer isModalOpen={visibleUpdateModal} toggle={toggleUpdateModal}>
+        <div className="inline-flex flex-col text-black w-full max-w-3xl my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light rounded-xl">
+          <ModalUpdateCashBook
+            toggle={toggleUpdateModal}
+            onConfirm={refetch}
+            cashBookID={cashBookIdSelected}
+          />
         </div>
       </ModalContainer>
       {/* Modal confirm delete */}

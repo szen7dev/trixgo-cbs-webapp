@@ -18,7 +18,7 @@ const ContractIPCRepository = {
 
 async function fetchAmountContractValueGroupByDate<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_CMCS}/contract_payments/get-amount-contract-value-group-by-date?${convertObToUrl(params)}`,
+        `${APP_CMCS}/contract_payments/get-amount-by-month?${convertObToUrl(params)}`,
     )
     return data
 }
