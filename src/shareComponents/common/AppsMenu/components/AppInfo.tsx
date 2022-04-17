@@ -134,10 +134,10 @@ export const APP_INFO = new Map([
         icon: financialLogo,
         route: '/financial/home'
     }],
-    /* Ứng dụng Quản lý công việc, dự án */
+    /* Ứng dụng Quản lý dự án */
     ['5dfe4b9051dc622100bb9d89', {
         key: "5dfe4b9051dc622100bb9d89",
-        name: "Quản lý công việc, dự án",
+        name: "Quản lý dự án",
         icon: pcmLogo,
         route: '/pcm/home'
     }],
