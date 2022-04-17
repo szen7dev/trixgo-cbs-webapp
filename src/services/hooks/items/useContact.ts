@@ -1,9 +1,87 @@
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import React from 'react';
 
 import { ContactRepository } from 'apis/item';
 import type { Contact } from 'typings/items';
 
+interface UseContact {
+    isLoading: boolean;
+    totalRecord: number;
+    totalPage: number;
+    hasNextPage: boolean | undefined;
+    list: Array<Contact.Contact>;
+    info: Contact.Contact | undefined;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    fetchPreviousPage: () => void;
+}
+
+type UseContactProps = {
+    params?: Contact.ContactListParams,
+    paramsInfo?: Contact.ContactInfoParams,
+    isFetchList?: boolean,
+    isFetchInfo?: boolean,
+}
+
+export const useContact = ({
+    params = {},
+    paramsInfo = {},
+    isFetchList = false,
+    isFetchInfo = false
+}: UseContactProps): UseContact => {
+    const { data: detailData } =
+        useQuery("contact__info", () => ContactRepository.fetchInfo(paramsInfo), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+
+    const info = detailData?.data;
+
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['contact__list', params],
+        async ({ pageParam }: any) =>
+            ContactRepository.fetchList({
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetchList
+        }
+    );
+
+    const list = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+
+    return {
+        isLoading,
+        list,
+        info,
+        totalRecord,
+        totalPage,
+        hasNextPage,
+        refetch,
+        fetchNextPage,
+        fetchPreviousPage,
+    }
+}
+
+// Những Hook này cần refactor lại, không nên sử dụng
 interface UseQueryContact {
     listContact: Array<Contact.Contact>;
     loading: boolean;
@@ -13,7 +91,7 @@ interface UseQueryContact {
     refetchListContact: () => void;
     fetchNextPageContact: () => void;
 }
-export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryContact => {
+export const useQueryContact = (params?: Contact.ContactListParams): UseQueryContact => {
     const {
         isLoading,
         data,
@@ -23,7 +101,7 @@ export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryC
     } = useInfiniteQuery(
         ['contact', { params }],
         async ({ pageParam }: any) =>
-            ContactRepository.fetchListContact({
+            ContactRepository.fetchList({
                 limit: params?.limit || 10,
                 lastestID: pageParam || "",
                 type: params?.type,
@@ -44,7 +122,7 @@ export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryC
         )
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
-    const totalPages = data?.pages[0]?.data?.totalPages;
+    const totalPages = data?.pages[0]?.data?.totalPage;
 
     return {
         refetchListContact: refetch,
@@ -60,16 +138,19 @@ export const useQueryContact = (params?: Contact.ContactQueryPayload): UseQueryC
 interface UseQueryDetailContact {
     detailContact: Contact.Contact,
     loading: boolean,
-    onFetchDetailContactAsync: (contactId: string, params?: Contact.ContactQueryPayload) => Promise<Contact.Contact>
+    onFetchDetailContactAsync: (contactId: string, params?: Contact.ContactListParams) => Promise<Contact.Contact>
 }
-export const useQueryDetailContact = (contactID?: string, params?: Contact.ContactQueryPayload): UseQueryDetailContact => {
+export const useQueryDetailContact = (contactID?: string, params?: Contact.ContactListParams): UseQueryDetailContact => {
     const [detailContact, setDetailContact] = React.useState<any>({});
     const [loading, setLoading] = React.useState(false);
     
     const onFetchDetailContact = React.useCallback(async (contactId: string, _params: any): Promise<any> => {
         try {
             setLoading(true)
-            const result = await ContactRepository.fetchDetailContact(contactId, _params);
+            const result = await ContactRepository.fetchInfo({
+                contactID: contactId,
+                ..._params
+            });
             if (result.error) {
                 throw new Error('ERROR~');
             }

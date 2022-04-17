@@ -368,10 +368,7 @@ const PCMRouter: FC = () => {
                     { id: "3", title: "Báo cáo quản trị hồ sơ", path: "/pcm/dashboard-document" },
                   ]}
                 >
-                  <Route
-                    exact
-                    path="/pcm/dashboard-portfolio"
-                    component={ProjectDashboardPortfolioPage}
+                  <Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage}
                   />
                   <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
                   <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />

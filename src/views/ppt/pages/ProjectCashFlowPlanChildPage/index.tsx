@@ -61,7 +61,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         setDataCashFlow(listCashFlowPlans);
     }, [listCashFlowPlans.length])
 
-    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value);
     }, 500);
 
@@ -93,7 +93,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         if(bottom && hasNextPageListContract) {
             fetchNextPageListContract();
         }
-      }
+    }
 
     const handleDelete = async () => {
         try {

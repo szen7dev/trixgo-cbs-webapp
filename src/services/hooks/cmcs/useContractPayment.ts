@@ -2,7 +2,7 @@ import { useMutation, useQuery, useInfiniteQuery } from "react-query";
 import ContractPaymentRepository from 'apis/cmcs/contractPayment';
 
 interface UseContractPayment {
-    listAmountContractValueByDate: Array<any>;
+    listAmountContractPaymentByMonth: Array<any>;
     // isLoading: boolean;
     // totalRecord: number;
     // totalPage: number;
@@ -36,7 +36,7 @@ export const useContractPayment = ({
             enabled: isFetchListAmountContractValue,
         });
 
-    const listAmountContractValueByDate = detailData?.data?.listRecords || [];
+    const listAmountContractPaymentByMonth = detailData?.data || [];
 
     // // Get List
     // const {
@@ -72,7 +72,7 @@ export const useContractPayment = ({
 
     // Return data
     return {
-        listAmountContractValueByDate,
+        listAmountContractPaymentByMonth,
         // isLoading,
         // list,
         // info,
