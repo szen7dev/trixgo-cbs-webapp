@@ -24,7 +24,7 @@ const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
 
 const ProjectCategoryPage: FC = () => {
 	const [keyword, setKeyword] = useState('');
-
+	
 	const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen({
 		appID: APP_ID.PCM.id,
 		menuID: APP_ID.PCM.menuPcmApp.projects.id,
