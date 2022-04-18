@@ -687,6 +687,24 @@ export const APP_ID = {
             },
         }
     },
+    FINANCIAL: {
+        id: "5dfe4bc751dc622100bb9d8a",
+        menuFinancialApp: {
+            id: "623f2448e998e94feda0cda9",                   // type = 1
+            dashboard: {
+                id: "623f2465e998e94feda0cdaa",
+                name: "Báo cáo quản trị"
+            },
+            cashbook: {
+                id: "623f2472e998e94feda0cdab",
+                name: "Theo dõi sổ quỹ"
+            },
+            expense: {
+                id: "623f247fe998e94feda0cdac",
+                name: "Kế hoạch tài chính"
+            },
+        },
+    },
     DOCUMENT: {
         id: "5e47867080019357cce04746",
         menuDocumentApp: {

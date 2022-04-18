@@ -95,7 +95,7 @@ MENU ỨNG DỤNG MESSAGES/menu-messages-app (type=1): 623f2430e998e94feda0cda8
 MENU ỨNG DỤNG FINANCIAL/menu-financial-app (type=1): 623f2448e998e94feda0cda9
 +++Báo cáo quản trị/dashboard: 623f2465e998e94feda0cdaa
 +++Theo dõi sổ quỹ/cashbook: 623f2472e998e94feda0cdab
-+++Kế hoạch dòng tiền/cashflow: 623f247fe998e94feda0cdac
++++Kế hoạch tài chính/cashflow: 623f247fe998e94feda0cdac
 
 ============PCM: 5dfe4b9051dc622100bb9d89
 MENU ỨNG DỤNG PCM/menu-pcm-app (type=1): 623ef213e998e94feda0ccd8
