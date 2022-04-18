@@ -15,6 +15,7 @@ export type CashBook = {
     date: string;
     income: number;
     expense: number;
+    previousInventory?: number;
     openingBalance: number;
     arising: number;
     closingBalance: number;

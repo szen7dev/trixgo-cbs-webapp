@@ -14,7 +14,12 @@ type Props = {
   contracts: Contract[];
   contacts: Contact[];
   accounts: Account[];
-  onUpdate: (values: any, callback?: (response: any) => void) => Promise<any>;
+  previousInventory: number;
+  onUpdate: (
+    values: any,
+    previousInventory?: number,
+    callback?: (response: CashBook, previousInventory?: number) => void
+  ) => Promise<any>;
   onScrollContract?: (e: UIEvent<HTMLDivElement>) => void;
   onScrollContact?: (e: UIEvent<HTMLDivElement>) => void;
   onScrollAccount?: (e: UIEvent<HTMLDivElement>) => void;
@@ -26,42 +31,42 @@ type Props = {
 };
 
 const RowTableUpdateInline: FC<Props> = ({
-  contracts, contacts, accounts, cashBook, itemsChecked, onUpdate, onChangeCheckbox,
+  contracts, contacts, accounts, cashBook, previousInventory, itemsChecked, onUpdate, onChangeCheckbox,
   onScrollContact, onScrollAccount, onScrollContract,
   onSearchContact, onSearchAccount, onSearchContract
 }) => {
   const [values, setValues] = useState({
-    inventory: `${cashBook.income - cashBook.expense}`,
+    inventory: (previousInventory + cashBook.income) - cashBook.expense,
     expense: `${cashBook.expense}`,
     income: `${cashBook.income}`
   })
 
-  const callbackUpdate = (response: CashBook) => {
-    if(response.income || response.expense) {
+  const callbackUpdate = (response: CashBook, previousInventory?: number) => {
+    if (response.income || response.expense) {
       setValues(previous => ({
         ...previous,
-        inventory: convertCurrency(`${response.income - response.expense}`)
+        inventory: ((previousInventory || 0) + response.income) - response.expense
       }))
     }
   }
 
   const getStateCheckbox = useCallback((id: string) => {
-		return itemsChecked.includes(id);
-	}, [itemsChecked]);
+    return itemsChecked.includes(id);
+  }, [itemsChecked]);
 
   const handleChangeCheckbox = () => {
     const cashBookID = cashBook._id;
-		const isChecked = itemsChecked.includes(cashBookID);
+    const isChecked = itemsChecked.includes(cashBookID);
     let idsListNew: string[] = [];
 
-		if(isChecked) {
+    if (isChecked) {
       idsListNew = itemsChecked.filter(item => item !== cashBookID);
     } else {
-			idsListNew = [...itemsChecked, cashBookID];
-		};
+      idsListNew = [...itemsChecked, cashBookID];
+    };
 
     onChangeCheckbox(idsListNew)
-	};
+  };
 
   return (
     <tr className="text-left cursor-pointer">
@@ -82,7 +87,7 @@ const RowTableUpdateInline: FC<Props> = ({
           className="border w-full border-primary-border rounded h-[32px] outline-none pl-1"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const date = e.target.value;
-            if(!date) return;
+            if (!date) return;
 
             onUpdate({ cashBookID: cashBook._id, date })
           }, 700)}
@@ -95,7 +100,7 @@ const RowTableUpdateInline: FC<Props> = ({
           defaultValue={cashBook.name}
           onBlur={debounce((e: React.FocusEvent<HTMLInputElement>) => {
             const value = e.target.value;
-            if(!value) return;
+            if (!value) return;
 
             onUpdate({ cashBookID: cashBook._id, name: value })
           }, 700)}
@@ -106,16 +111,18 @@ const RowTableUpdateInline: FC<Props> = ({
         <DropdownSearchable
           placeholder="Tài khoản"
           onchangeValue={debounce((value: any) => {
-            if(!value) return;
+            if (!value) return;
             onUpdate({ cashBookID: cashBook._id, accountID: value?.id })
           }, 700)}
           initialValue={{
-            value: cashBook.account?._id,
-            label: cashBook.account?.name
+            ...cashBook.account && {
+              value: cashBook.account?._id,
+              label: `${cashBook.account?.name}-${cashBook.account?.description}`
+            }
           }}
           data={accounts?.map(item => ({
             value: item._id,
-            label: item.name
+            label: `${item.name}-${item.description}`
           }))}
           formatItem={{
             id: "value",
@@ -130,12 +137,14 @@ const RowTableUpdateInline: FC<Props> = ({
         <DropdownSearchable
           placeholder="Mã khách"
           onchangeValue={debounce((value: any) => {
-            if(!value) return;
+            if (!value) return;
             onUpdate({ cashBookID: cashBook._id, customerID: value?.id })
           }, 700)}
           initialValue={{
-            value: cashBook.customer?._id,
-            label: cashBook.customer?.name
+            ...cashBook.customer && {
+              value: cashBook.customer?._id,
+              label: cashBook.customer?.name
+            }
           }}
           data={contacts.map(item => ({
             value: item._id,
@@ -154,12 +163,14 @@ const RowTableUpdateInline: FC<Props> = ({
         <DropdownSearchable
           placeholder="Hợp đồng"
           onchangeValue={debounce((value: any) => {
-            if(!value) return;
+            if (!value) return;
             onUpdate({ cashBookID: cashBook._id, contractID: value?.id })
           }, 700)}
           initialValue={{
-            value: cashBook.contract?._id,
-            label: cashBook.contract?.name
+            ...cashBook.contract && {
+              value: cashBook.contract?._id,
+              label: cashBook.contract?.name
+            }
           }}
           data={contracts.map(contract => ({
             value: contract._id,
@@ -185,9 +196,9 @@ const RowTableUpdateInline: FC<Props> = ({
           }}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
             const income = convertCurrencyToNumber(e.target.value);
-            if(!income) return;
+            if (!income) return;
 
-            onUpdate({ cashBookID: cashBook._id, income }, callbackUpdate)
+            onUpdate({ cashBookID: cashBook._id, income }, previousInventory, callbackUpdate)
           }, 700)}
         />
       </td>
@@ -203,9 +214,9 @@ const RowTableUpdateInline: FC<Props> = ({
           }}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
             const expense = convertCurrencyToNumber(e.target.value);
-            if(!expense) return;
+            if (!expense) return;
 
-            onUpdate({ cashBookID: cashBook._id, expense }, callbackUpdate)
+            onUpdate({ cashBookID: cashBook._id, expense }, previousInventory, callbackUpdate)
           }, 700)}
         />
       </td>
@@ -220,7 +231,7 @@ const RowTableUpdateInline: FC<Props> = ({
           defaultValue={cashBook.note}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
             const note = e.target.value;
-            if(!note) return;
+            if (!note) return;
 
             onUpdate({ cashBookID: cashBook._id, note })
           }, 700)}
