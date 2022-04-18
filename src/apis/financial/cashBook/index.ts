@@ -38,8 +38,8 @@ async function update(payload: CashBookUpdatePayload): Promise<CashBookInfoRespo
 async function deleteMany(params: CashBookDeleteManyPayload): Promise<any> {
     const { data } = await API.delete(
         CASH_BOOK_URL, {
-            params
-        }
+        params
+    }
     )
     return data
 }
@@ -49,7 +49,7 @@ async function fetchList(params: CashBookListParams): Promise<CashBookListRespon
         `${CASH_BOOK_URL}?${convertObToUrl({
             populates: JSON.stringify({
                 path: 'userCreate members account customer contract',
-                select: '_id bizfullname image name'
+                select: '_id bizfullname image name description'
             }),
             ...params
         })}`
