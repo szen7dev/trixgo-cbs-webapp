@@ -55,14 +55,13 @@ export const CashBookDetailPage: FC = () => {
     list: listCashBook,
     refetch,
     fetchNextPage,
-    fetchPreviousPage,
     hasNextPage,
-    totalPage,
     totalRecord
   } = useCashBook({
     params: {
       parentID: cashbookId,
-      keyword
+      keyword,
+      limit: 2
     },
     isFetchList: !!cashbookId
   })
@@ -102,8 +101,26 @@ export const CashBookDetailPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    setDataCashBook(listCashBook);
-}, [listCashBook.length])
+    const inventories: number[] = [];
+    const newListCashBook = listCashBook.map((cashBook, index) => {
+      let previousInventory = 0;
+
+      if (index === 0) {
+        previousInventory = cashBook.income - cashBook.expense;
+      } else {
+        previousInventory = (inventories[index - 1] + cashBook.income) - cashBook.expense;
+      }
+
+      inventories[inventories.length] = previousInventory;
+
+      return {
+        ...cashBook,
+        previousInventory
+      }
+    })
+
+    setDataCashBook(newListCashBook);
+  }, [listCashBook.length])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
@@ -117,7 +134,7 @@ export const CashBookDetailPage: FC = () => {
   const onChangeSearchAccount = (keyword: string) => setKeywordAccount(keyword);
 
   // Handle for checkbox each table row
-	const handleChangeCheckbox = (ids: string[]) => setItemsChecked(ids);
+  const handleChangeCheckbox = (ids: string[]) => setItemsChecked(ids);
 
   // Handle for checkbox all
   const getStateCheckboxAll = useCallback(() => {
@@ -127,10 +144,10 @@ export const CashBookDetailPage: FC = () => {
   const handleChangeCheckboxAll = (event: ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
 
-    if(isChecked) {
+    if (isChecked) {
       const ids = dataCashBook.map(item => item._id);
       setItemsChecked(ids);
-    } else{
+    } else {
       setItemsChecked([]);
     }
   }
@@ -139,7 +156,7 @@ export const CashBookDetailPage: FC = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListContract) {
+    if (bottom && hasNextPageListContract) {
       fetchNextPageListContract();
     }
   }
@@ -148,7 +165,7 @@ export const CashBookDetailPage: FC = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListContact) {
+    if (bottom && hasNextPageListContact) {
       fetchNextPageListContact();
     }
   }
@@ -157,64 +174,69 @@ export const CashBookDetailPage: FC = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListAccount) {
+    if (bottom && hasNextPageListAccount) {
       fetchNextPageListAccount();
     }
   }
 
   const handleInsert = async (values: any) => {
     try {
-        setShowRowInsert(false);
+      setShowRowInsert(false);
 
-        const dataInsert = {
-          parentID: cashbookId,
-          date: new Date(),
-          ...values
-        };
-        const { error, data } = await insertCashBookAsync(dataInsert);
+      const dataInsert = {
+        parentID: cashbookId,
+        date: new Date(),
+        ...values
+      };
+      const { error, data } = await insertCashBookAsync(dataInsert);
 
-        if(error) {
-            return toast.warn(data?.message);
-        }
+      if (error) {
+        return toast.warn(data?.message);
+      }
 
-        if(data.length) {
-            return data.map((item: any) => toast.warn(item.message));
-        }
+      if (data.length) {
+        return data.map((item: any) => toast.warn(item.message));
+      }
 
-        setDataCashBook(previous => ([
-          data,
-          ...previous,
-        ]))
-        toast.success('Tạo thành công');
+      setDataCashBook(previous => ([
+        ...previous,
+        data,
+      ]))
+      toast.success('Tạo thành công');
     } catch (error) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
     } finally {
-        setShowRowInsert(true);
+      setShowRowInsert(true);
     }
   }
 
-  const handleUpdate = async (values: any, callback?: (response: any) => void) => {
+  const handleUpdate = async (
+    values: any,
+    previousInventory?: number,
+    callback?: (response: CashBook, previousInventory?: number) => void
+  ) => {
     try {
       const { error, data } = await updateCashBookAsync(values);
 
-      if(error) {
-          return toast.warn(data?.message);
+      if (error) {
+        return toast.warn(data?.message);
       }
 
-      if(data.length) {
-          return data.map((item: any) => toast.warn(item.message));
+      if (data.length) {
+        return data.map((item: any) => toast.warn(item.message));
       }
 
-      callback && callback(data);
+      callback && callback(data, previousInventory);
     } catch (error) {
       if (typeof error === "string") {
-          toast.error(error);
+        toast.error(error);
       } else if (error instanceof Error) {
-          toast.error(error.message);
+        toast.error(error.message);
+
       }
     }
   }
@@ -222,15 +244,15 @@ export const CashBookDetailPage: FC = () => {
   const handleDelete = async () => {
     try {
       const { error, data } = await deleteManyCashBookAsync({
-          cashBooksID: itemsChecked
+        cashBooksID: itemsChecked
       });
 
-      if(error) {
-          return toast.warn(data?.message);
+      if (error) {
+        return toast.warn(data?.message);
       }
 
-      if(data.length) {
-          return data.map((item: any) => toast.warn(item.message));
+      if (data.length) {
+        return data.map((item: any) => toast.warn(item.message));
       }
 
       toast.success('Xoá dữ liệu thành công', TOAST_DEFAULT_OPTIONS);
@@ -238,14 +260,14 @@ export const CashBookDetailPage: FC = () => {
       setItemsChecked([]);
     } catch (error) {
       if (typeof error === "string") {
-          toast.error(error, TOAST_DEFAULT_OPTIONS);
+        toast.error(error, TOAST_DEFAULT_OPTIONS);
       } else if (error instanceof Error) {
-          toast.error(error.message, TOAST_DEFAULT_OPTIONS);
+        toast.error(error.message, TOAST_DEFAULT_OPTIONS);
       }
     } finally {
       toggleDeleteModal();
     }
-}
+  }
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -256,8 +278,8 @@ export const CashBookDetailPage: FC = () => {
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
         {/* <DropdownFilterButton /> */}
-        <GroupActions 
-          className="flex items-center flex-1" 
+        <GroupActions
+          className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
           disabled={{
             trash: !itemsChecked.length
@@ -286,10 +308,10 @@ export const CashBookDetailPage: FC = () => {
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 <div className="flex items-center justify-center">
                   <input
-                      className="form-check-input"
-                      type="checkbox"
-                      checked={getStateCheckboxAll()}
-                      onChange={handleChangeCheckboxAll}
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={getStateCheckboxAll()}
+                    onChange={handleChangeCheckboxAll}
                   />
                 </div>
               </th>
@@ -323,13 +345,14 @@ export const CashBookDetailPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {(dataCashBook && dataCashBook.length) ? dataCashBook.map(item => (
+            {(dataCashBook && dataCashBook.length) ? dataCashBook.map((item, index) => (
               <RowTableUpdateInline
                 key={item._id}
                 contracts={listContract}
                 contacts={listContact}
                 accounts={listAccount}
                 cashBook={item}
+                previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
                 itemsChecked={itemsChecked}
                 onChangeCheckbox={handleChangeCheckbox}
                 onUpdate={handleUpdate}
@@ -434,14 +457,24 @@ export const CashBookDetailPage: FC = () => {
         </table>
       </div>
 
-      <Paginate
+      {hasNextPage && (
+        <div className="w-full flex justify-center my-5">
+          <button onClick={fetchNextPage}>
+            <span className="text-primary">
+              {`Xem thêm (${totalRecord - listCashBook.length})`}
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* <Paginate
         className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
         totalPages={totalPage}
         totalRecord={totalRecord}
         hasNextPage={hasNextPage}
         prevPageAction={fetchPreviousPage}
         nextPageAction={fetchNextPage}
-      />
+      /> */}
 
       <ModalReport open={visibleDrawer} onClose={setVisibleDrawer} />
       {/* Modal confirm delete */}
@@ -450,7 +483,7 @@ export const CashBookDetailPage: FC = () => {
           <div className="p-5 mb-4">
             <span className="text-xl leading-6 font-bold"> Bạn có muốn xóa không? </span>
             <p className="mt-2 text-primary-gray">
-                Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
+              Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
             </p>
           </div>
           <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">
