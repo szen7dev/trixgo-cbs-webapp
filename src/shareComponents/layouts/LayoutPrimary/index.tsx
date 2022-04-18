@@ -41,8 +41,8 @@ export const LayoutPrimary: FC<HTMLAttributes<HTMLDivElement> & Props> = ({ valu
 									style={{ minWidth: "110px" }}
 									to={{ pathname: page.path || '/', state: page.state }}
 									exact
-									// exact={page.navExact}
-									// strict={page.navStrict}
+								// exact={page.navExact}
+								// strict={page.navStrict}
 								>
 									{page.title}
 								</NavLink>

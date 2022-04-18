@@ -27,7 +27,7 @@ import { useCashBook } from 'services/hooks/financial/useCashBook';
 import { CashBook } from "typings/financial/cashBook";
 
 export const CashBookPage: FC = () => {
-	const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState('');
   const [cashBookIdSelected, setCashBookIdSelected] = useState('');
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
   const [visibleCreateModal, setVisibleCreateModal] = useState<boolean>(false);
@@ -35,11 +35,9 @@ export const CashBookPage: FC = () => {
 
   const {
     deleteManyAsync,
-    list: listCashBooks,
+    list: listCashBook,
     refetch,
     fetchNextPage,
-    fetchPreviousPage,
-    totalPage,
     totalRecord,
     hasNextPage
   } = useCashBook({
@@ -50,7 +48,7 @@ export const CashBookPage: FC = () => {
     isFetchList: true
   })
 
-  const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listCashBooks);
+  const { assigned, handleChangeCheckbox, handleCheckAll, checkboxRef } = useCheckedList(listCashBook);
 
   useEffect(() => {
     document.title = "Sổ quỹ công ty";
@@ -58,11 +56,11 @@ export const CashBookPage: FC = () => {
 
   useEffect(() => {
     const assignedEntries = Object.entries(assigned);
-    if(!assignedEntries.length) return;
+    if (!assignedEntries.length) return;
 
     const cashBookSelected = assignedEntries.filter(([_, value]) => value);
 
-    if(cashBookSelected.length === 1) {
+    if (cashBookSelected.length === 1) {
       setCashBookIdSelected(cashBookSelected[0][0]);
     }
   }, [assigned])
@@ -77,11 +75,11 @@ export const CashBookPage: FC = () => {
       const ids = Object.entries(assigned).filter(([_, value]) => value).map(item => item[0]);
       const { error, data } = await deleteManyAsync({ cashBooksID: ids });
 
-      if(error) {
+      if (error) {
         return toast.warn(data?.message);
       }
 
-      if(data.length) {
+      if (data.length) {
         return data.map((item: any) => toast.warn(item.message));
       }
 
@@ -93,7 +91,7 @@ export const CashBookPage: FC = () => {
       } else if (error instanceof Error) {
         toast.error(error.message, TOAST_DEFAULT_OPTIONS);
       }
-    } finally{
+    } finally {
       toggleDeleteModal();
     }
   }
@@ -174,8 +172,8 @@ export const CashBookPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {(listCashBooks && listCashBooks.length) ?
-              listCashBooks.map(item => (
+            {(listCashBook && listCashBook.length) ?
+              listCashBook.map(item => (
                 <tr
                   key={item._id}
                   className="text-left hover:bg-cbs-active-comment cursor-pointer"
@@ -251,14 +249,24 @@ export const CashBookPage: FC = () => {
         </table>
       </div>
 
-      <Paginate
+      {hasNextPage && (
+        <div className="w-full flex justify-center my-5">
+          <button onClick={fetchNextPage}>
+            <span className="text-primary">
+              {`Xem thêm (${totalRecord - listCashBook.length})`}
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* <Paginate
         className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
         totalPages={totalPage}
         totalRecord={totalRecord}
         hasNextPage={hasNextPage}
         prevPageAction={fetchPreviousPage}
         nextPageAction={fetchNextPage}
-      />
+      /> */}
 
       {/* Modal Create Cashbook */}
       <ModalContainer isModalOpen={visibleCreateModal} toggle={toggleCreateModal}>
@@ -282,7 +290,7 @@ export const CashBookPage: FC = () => {
           <div className="p-5 mb-4">
             <span className="text-xl leading-6 font-bold"> Bạn có muốn xóa không? </span>
             <p className="mt-2 text-primary-gray">
-                Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
+              Dữ liệu của bạn sẽ bị xóa vĩnh viễn và bạn không thể khôi phục lại dữ liệu này
             </p>
           </div>
           <div className="text-right pt-6 pb-5 px-8 text-base leading-5 border-t border-gray-100">

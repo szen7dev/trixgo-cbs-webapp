@@ -25,7 +25,7 @@ const FinancialRouter: FC = () => {
           <Route exact path={"/financial/home"} component={HomePage} />
           <Route exact path={"/financial/dashboard"} component={DashboardPage} />
 
-          <Route path="/financial/cashbook">
+          <Route path="/financial/(cashbook|cashbook-report|cashbook-other)">
             <LayoutPrimary
               pages={[
                 { id: "1", title: "Tổng hợp quỹ", path: "/financial/cashbook-report" },
