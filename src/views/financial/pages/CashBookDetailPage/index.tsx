@@ -105,17 +105,15 @@ export const CashBookDetailPage: FC = () => {
   }, []);
 
   useEffect(() => {
+    if(!amountIncomeExpenseByParent) return;
+
+    const currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
+
     listCashBook.reverse();
-    let currentInventory = 0;
-
-    if(amountIncomeExpenseByParent) {
-      currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
-    }
-
     const currentPageInventory = listCashBook.reduce((prevValue, currValue) => (
       prevValue += (currValue.income - currValue.expense)
     ), 0);
-    const previousPageInventory = currentInventory - currentPageInventory;
+    const previousPageInventory = (currentInventory - currentPageInventory) || 0;
 
     const inventories: number[] = [];
     const newListCashBook = listCashBook.map((cashBook, index) => {
@@ -135,7 +133,7 @@ export const CashBookDetailPage: FC = () => {
     })
 
     setDataCashBook(newListCashBook);
-  }, [listCashBook.length, amountIncomeExpenseByParent])
+  }, [cashbookId, listCashBook.length, amountIncomeExpenseByParent])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
