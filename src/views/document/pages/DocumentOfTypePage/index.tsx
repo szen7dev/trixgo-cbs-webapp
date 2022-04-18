@@ -39,12 +39,14 @@ export const DocumentOfTypePage: FC = () => {
   const history = useHistory();
   // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
-  const { id: departmentID, type } = useParams<{ id: string, type: string }>();
+  const { id: departmentID, type, datahubContactID } = useParams<{ id: string, type: string, datahubContactID: string }>();
   const [pageParam, setPageParam] = useState<any>({});
   const [cursorPage, setCursorPage] = useState<string[]>([]);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [recordSelected, setSelectRecord] = useState<any>({});
+  
   pageParam.type = type;
+  pageParam.datahubContactID = datahubContactID;
   const { data, totalRecord, totalPages, loading, nextCursor, refetch }   = useQueryListDocument(departmentID, pageParam);
   const { insertDocumentChildAsync, updateDocumentChildAsync }             = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync }                                  = useQueryDetailDepartment();

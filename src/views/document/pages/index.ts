@@ -5,6 +5,7 @@ export * from './DocumentHistoryPage';
 export * from './DocumentHomePage';
 export * from './DocumentProfilePage';
 export * from './DocumentProjectPage';
+export * from './DocumenDatahubContactPage';
 export * from './DocumentReportPage';
 export * from './DocumentOfPackagePage';
 export * from './DocumentOfTypePage';

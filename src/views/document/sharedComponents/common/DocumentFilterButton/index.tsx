@@ -5,9 +5,10 @@ import cn from "classnames";
 import { Formik, Form } from "formik";
 import { useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
-
 import { InputClearable } from "../InputClearable";
 import { DropdownSearchable } from "shareComponents/common";
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
+import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb/index";
 
 import SortingIcon from "assets/images/icons8-sorting-100.svg";
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
@@ -55,14 +56,23 @@ const FormFilter: FC<FormFilterProps> = ({
       searchValues["senderID"] && { keyword: searchValues["senderID"] }
     )
   );
+
   const { listContracts } = useQueryItemContract({companyID,
     keyword: searchValues["contractID"] || "",
   });
+
   const { listDoctypes: properties } = useQueryListDoctype({
     type: 2,
     companyID,
     keyword: searchValues["property"] || "",
   }); // tính chất
+
+  const { listDoctypes: fields } = useQueryListDoctype({
+    type: 1,
+    companyID,
+    keyword: searchValues["property"] || "",
+  }); // tính chất
+
   const { list: listStorages } = useStorage({
     params: {
       companyID,
@@ -70,6 +80,13 @@ const FormFilter: FC<FormFilterProps> = ({
     },
     isFetchList: true
   });
+
+  const DIRECTION_TYPES_FORMAT = DIRECTION_TYPES.map(item => ({_id: item.value, name: item.text }));
+  const DOCUMENT_TYPES_FORMAT = DOCUMENT_TYPES.map(item => ({_id: item.value, name: item.text }));
+
+  const {
+    data: listDatahubContact,
+	} = useDatahubContact({ keyword: searchValues["datahubContactID"] || "", limit: 20 }, true, false );
 
   const listFieldDropdown = React.useMemo(() => {
     return [
@@ -85,8 +102,11 @@ const FormFilter: FC<FormFilterProps> = ({
         name: "requestResponse",
       },
       { title: "Địa chỉ lưu trữ", data: listStorages, name: "storageID" },
+      { title: "Hướng văn bản", data: DIRECTION_TYPES_FORMAT, name: "direction" },
+      { title: "Phân loại văn bản", data: DOCUMENT_TYPES_FORMAT, name: "type" },
+      { title: "Danh bạ hệ thống", data: listDatahubContact, name: "datahubContactID" },
     ];
-  }, [listContact, listContracts, listStorages, properties]);
+  }, [listContact, listContracts, listStorages, properties, listDatahubContact]);
 
   const handleSubmit = React.useCallback(
     (values) => {
@@ -104,6 +124,17 @@ const FormFilter: FC<FormFilterProps> = ({
       }
       if (typeof values.storageID === "object") {
         formatData.contractID = values.contractID._id;
+      }
+      if (values.direction) {
+        formatData.direction = values.direction;
+      }
+
+      if (values.type) {
+        formatData.type = values.type;
+      }
+
+      if (values.datahubContactID) {
+        formatData.datahubContactID = values.datahubContactID;
       }
       onSubmit && onSubmit(formatData);
     },
