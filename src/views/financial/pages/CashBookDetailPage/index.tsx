@@ -341,7 +341,7 @@ export const CashBookDetailPage: FC = () => {
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 Ngày tháng
               </th>
-              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border" style={{ width: "20%" }}>
                 Nội dung
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
@@ -391,92 +391,6 @@ export const CashBookDetailPage: FC = () => {
 
             {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
 
-            {/* <tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-center">
-                {created_at}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                {content}
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Hợp đồng"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "1111-Tiền mặt tại quỹ công ty",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "1111-Tiền mặt tại quỹ công ty",
-                    },
-                    {
-                      id: 2,
-                      text: "1111-Tiền mặt tại quỹ công ty",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Công ty"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                    },
-                    {
-                      id: 2,
-                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Công ty"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                    },
-                    {
-                      id: 2,
-                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(opening_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(increased_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(closing_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                Xây dựng mẫu BoQ cho công tác preliminaries
-              </td>
-            </tr> */}
           </tbody>
         </table>
       </div>
