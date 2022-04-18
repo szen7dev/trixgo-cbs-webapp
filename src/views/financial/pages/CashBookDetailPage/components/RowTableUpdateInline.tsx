@@ -14,6 +14,7 @@ type Props = {
   contracts: Contract[];
   contacts: Contact[];
   accounts: Account[];
+  inventory: number;
   previousInventory: number;
   onUpdate: (
     values: any,
@@ -31,12 +32,12 @@ type Props = {
 };
 
 const RowTableUpdateInline: FC<Props> = ({
-  contracts, contacts, accounts, cashBook, previousInventory, itemsChecked, onUpdate, onChangeCheckbox,
+  contracts, contacts, accounts, cashBook, inventory, previousInventory, itemsChecked, onUpdate, onChangeCheckbox,
   onScrollContact, onScrollAccount, onScrollContract,
   onSearchContact, onSearchAccount, onSearchContract
 }) => {
   const [values, setValues] = useState({
-    inventory: (previousInventory + cashBook.income) - cashBook.expense,
+    inventory,
     expense: `${cashBook.expense}`,
     income: `${cashBook.income}`
   })
@@ -50,9 +51,9 @@ const RowTableUpdateInline: FC<Props> = ({
     }
   }
 
-  const getStateCheckbox = useCallback((id: string) => {
-    return itemsChecked.includes(id);
-  }, [itemsChecked]);
+  const getStateCheckbox = useCallback((id: string) => (
+    itemsChecked.includes(id)
+  ), [itemsChecked]);
 
   const handleChangeCheckbox = () => {
     const cashBookID = cashBook._id;
@@ -196,7 +197,7 @@ const RowTableUpdateInline: FC<Props> = ({
           }}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
             const income = convertCurrencyToNumber(e.target.value);
-            if (!income) return;
+            if (income < 0) return;
 
             onUpdate({ cashBookID: cashBook._id, income }, previousInventory, callbackUpdate)
           }, 700)}
@@ -214,7 +215,7 @@ const RowTableUpdateInline: FC<Props> = ({
           }}
           onBlur={debounce((e: FocusEvent<HTMLInputElement>) => {
             const expense = convertCurrencyToNumber(e.target.value);
-            if (!expense) return;
+            if (expense < 0) return;
 
             onUpdate({ cashBookID: cashBook._id, expense }, previousInventory, callbackUpdate)
           }, 700)}
