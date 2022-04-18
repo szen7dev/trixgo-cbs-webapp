@@ -8,6 +8,7 @@ export interface StatisticProps {
 
 export interface StatisticQueryDocumentPayload {
     departmentID: string;
+    isDatahubContact?: string;
 }
 
 export interface StatisticQueryDocumentResponse extends APIResponse {

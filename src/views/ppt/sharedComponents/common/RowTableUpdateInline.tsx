@@ -79,7 +79,6 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             if(!value) return;
             onUpdate({ cashFlowID: cashFlow._id, contractID: value?.id }, callbackUpdate)
           }, 700)}
-          className={"w-full flex-1 border border-primary-border rounded"}
           placeholder="Hợp đồng"
           isMultiple={false}
           allowClearValueSingleInput={false}
@@ -101,7 +100,6 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             id: "value",
             text: "label",
           }}
-          inlineSearch={true}
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
@@ -133,7 +131,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
           type="date"
           autoComplete="off"
           defaultValue={moment(cashFlow.date).format('YYYY-MM-DD')}
-          className="border w-full border-primary-border rounded h-[32px] outline-none"
+          className="w-full h-[32px] outline-none"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const date = e.target.value;
             if(!date) return;
@@ -146,9 +144,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
         {/* Giá trị thực tế */}
         <input
           type="text"
-          className={
-            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
-          }
+          className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
           value={convertCurrency(values.realValue)}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const realValue = convertCurrency(e.target.value);
@@ -168,7 +164,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
           type="date"
           autoComplete="off"
           defaultValue={moment(cashFlow.realDate).format('YYYY-MM-DD')}
-          className="border w-full border-primary-border rounded h-[32px] outline-none"
+          className="w-full h-[32px] outline-none"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const realDate = e.target.value;
             if(!realDate) return;
@@ -198,11 +194,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             if(!value) return;
             onUpdate({ cashFlowID: cashFlow._id, priority: +value?.id }, callbackUpdate)
           }, 700)}
-          className={"w-full h-32 flex-1 border border-primary-border rounded"}
           placeholder="Độ ưu tiên"
-          isMultiple={false}
-          allowClearValueSingleInput={true}
-          showTriangle={true}
           maxWidthInput="max-w-none"
           data={[
             { value: 1, label: 'Bình thường' },
