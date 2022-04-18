@@ -18,10 +18,10 @@ import { useAuth } from "services/hooks/auth/useAuth";
 
 /*=====7.OTHER=====*/
 const routes = [
-  { pathname: "/financial/home", label: "Home", icon: iconFolder },
-  { pathname: "/financial/dashboard", label: "Dashboard", icon: iconFolder },
-  { pathname: "/financial/cashbook", label: "Cashbook", icon: iconFolder },
-  { pathname: "/financial/cashflow", label: "Cashflow", icon: iconFolder },
+  { pathname: "/financial/home", label: "Trang chủ", icon: iconFolder },
+  { pathname: "/financial/dashboard", label: "Báo cáo quản trị", icon: iconFolder },
+  { pathname: "/financial/cashbook", label: "Sổ quỹ", icon: iconFolder },
+  { pathname: "/financial/cashflow", label: "Kế hoạch tài chính", icon: iconFolder },
 ];
 
 export const FinancialLeftSideBar: FC = () => {
