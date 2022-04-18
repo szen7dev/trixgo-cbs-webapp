@@ -12,7 +12,7 @@ export const CmcHomePage: FC = () => {
 
       <p className="text-center text-base mb-14" style={{ maxWidth: 525 }}>
         Toàn bộ thông tin về giá trị ký hợp đồng, sản lượng thực hiện, doanh thu
-        và tiền về được quản lý tập trung. Dễ dàng lập kế hoạch tài chính
+        và tiền về được quản lý tập trung/đồng bộ, qua đó dễ dàng lập kế hoạch tài chính/kiểm soát dòng tiền
       </p>
 
       <div>
