@@ -49,6 +49,7 @@ export const CashBookDetailPage: FC = () => {
   })
 
   const {
+    amountIncomeExpenseByParent,
     deleteManyAsync: deleteManyCashBookAsync,
     insertAsync: insertCashBookAsync,
     updateAsync: updateCashBookAsync,
@@ -61,9 +62,12 @@ export const CashBookDetailPage: FC = () => {
     params: {
       parentID: cashbookId,
       keyword,
-      limit: 2
+      sortKey: JSON.stringify(['date__-1', 'createAt__-1']),
+      limit: 3
     },
-    isFetchList: !!cashbookId
+    paramsAmountIncomeExpense: { parentID: cashbookId },
+    isFetchList: !!cashbookId,
+    isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
 
   // Danh sách hợp đồng
@@ -101,16 +105,27 @@ export const CashBookDetailPage: FC = () => {
   }, []);
 
   useEffect(() => {
+    listCashBook.reverse();
+    let currentInventory = 0;
+
+    if(amountIncomeExpenseByParent) {
+      currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
+    }
+
+    const currentPageInventory = listCashBook.reduce((prevValue, currValue) => (
+      prevValue += (currValue.income - currValue.expense)
+    ), 0);
+    const previousPageInventory = currentInventory - currentPageInventory;
+
     const inventories: number[] = [];
     const newListCashBook = listCashBook.map((cashBook, index) => {
       let previousInventory = 0;
 
       if (index === 0) {
-        previousInventory = cashBook.income - cashBook.expense;
+        previousInventory = (previousPageInventory + cashBook.income) - cashBook.expense;
       } else {
         previousInventory = (inventories[index - 1] + cashBook.income) - cashBook.expense;
       }
-
       inventories[inventories.length] = previousInventory;
 
       return {
@@ -120,7 +135,7 @@ export const CashBookDetailPage: FC = () => {
     })
 
     setDataCashBook(newListCashBook);
-  }, [listCashBook.length])
+  }, [listCashBook.length, amountIncomeExpenseByParent])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
@@ -220,6 +235,7 @@ export const CashBookDetailPage: FC = () => {
     callback?: (response: CashBook, previousInventory?: number) => void
   ) => {
     try {
+      console.log({ values });
       const { error, data } = await updateCashBookAsync(values);
 
       if (error) {
@@ -278,6 +294,12 @@ export const CashBookDetailPage: FC = () => {
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
         {/* <DropdownFilterButton /> */}
+        <button
+          className="w-10 h-10 rounded-full flex justify-center items-center"
+          onClick={toggleVisible}
+        >
+          <img src={iconGraphReport} alt="" />
+        </button>
         <GroupActions
           className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
@@ -290,13 +312,16 @@ export const CashBookDetailPage: FC = () => {
         />
 
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <button
-          className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center"
-          onClick={toggleVisible}
-        >
-          <img src={iconGraphReport} alt="" />
-        </button>
-        <ButtonMore />
+        {/* <ButtonMore /> */}
+        {hasNextPage && (
+          <div className="flex justify-center">
+            <button onClick={fetchNextPage}>
+              <span className="text-primary">
+                {`Xem thêm (${totalRecord - listCashBook.length})`}
+              </span>
+            </button>
+          </div>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -352,6 +377,7 @@ export const CashBookDetailPage: FC = () => {
                 contacts={listContact}
                 accounts={listAccount}
                 cashBook={item}
+                inventory={dataCashBook[index] && dataCashBook[index].previousInventory || 0}
                 previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
                 itemsChecked={itemsChecked}
                 onChangeCheckbox={handleChangeCheckbox}
@@ -456,16 +482,6 @@ export const CashBookDetailPage: FC = () => {
           </tbody>
         </table>
       </div>
-
-      {hasNextPage && (
-        <div className="w-full flex justify-center my-5">
-          <button onClick={fetchNextPage}>
-            <span className="text-primary">
-              {`Xem thêm (${totalRecord - listCashBook.length})`}
-            </span>
-          </button>
-        </div>
-      )}
 
       {/* <Paginate
         className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"
