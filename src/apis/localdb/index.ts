@@ -240,8 +240,8 @@ export const CONTRACT_TYPES = [
 
 // HỢP ĐỒNG MUA VÀO BÁN RA
 export const CONTRACT_OUTIN = [
-    { value: 1, text: 'Hợp đồng bán ra' },
-    { value: 2, text: 'Hợp đồng mua vào' },
+    { value: 1, text: 'Bán ra' },
+    { value: 2, text: 'Mua vào' },
 ]
 
 // TRẠNG THÁI HỢP ĐỒNG BÁN RA
@@ -454,7 +454,9 @@ export const FINANCIAL_PLANNING_TYPES = [
     { value: 1, text: 'Kế hoạch Năm' },
     { value: 2, text: 'Kế hoạch Bán hàng' },
     { value: 3, text: 'Kế hoạch Nhập hàng' },
-    { value: 4, text: 'Kế hoạch theo thực tế triển khai' },
+    { value: 4, text: 'Kế hoạch theo vòng đời dự án' },
+    { value: 5, text: 'Kế hoạch theo hợp đồng/hàng tháng' },
+    { value: 6, text: 'Kế hoạch khác' },
 ]
 
 // LOẠI PHIẾU KẾ TOÁN
@@ -538,6 +540,21 @@ export const PCM_MEMBER_POSITION_TYPE = [
     { value: 3, text: 'Tư vấn giám sát' },
     { value: 4, text: 'Tư vấn thiết kế' },
     { value: 5, text: 'Nhà thầu thi công' },
+]
+
+/**
+ * Phân loại
+ * 0-Trợ lý viên
+ * 1-Chủ đầu tư
+ * 2-Tư vấn QLDA
+ * 3-Tư vấn giám sát
+ * 4-Tư vấn thiết kế
+ * 5-Nhà thầu thi công 
+ */
+ export const FINANCIAL_PLANNING_PROPERTY = [
+    { value: 1, text: 'Sản lượng' },
+    { value: 2, text: 'Doanh thu' },
+    { value: 3, text: 'Dòng tiền' },
 ]
 
 /**
