@@ -49,6 +49,7 @@ export const CashBookDetailPage: FC = () => {
   })
 
   const {
+    amountIncomeExpenseByParent,
     deleteManyAsync: deleteManyCashBookAsync,
     insertAsync: insertCashBookAsync,
     updateAsync: updateCashBookAsync,
@@ -61,9 +62,12 @@ export const CashBookDetailPage: FC = () => {
     params: {
       parentID: cashbookId,
       keyword,
-      limit: 2
+      sortKey: JSON.stringify(['date__-1', 'createAt__-1']),
+      limit: 3
     },
-    isFetchList: !!cashbookId
+    paramsAmountIncomeExpense: { parentID: cashbookId },
+    isFetchList: !!cashbookId,
+    isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
 
   // Danh sách hợp đồng
@@ -101,16 +105,25 @@ export const CashBookDetailPage: FC = () => {
   }, []);
 
   useEffect(() => {
+    if(!amountIncomeExpenseByParent) return;
+
+    const currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
+
+    listCashBook.reverse();
+    const currentPageInventory = listCashBook.reduce((prevValue, currValue) => (
+      prevValue += (currValue.income - currValue.expense)
+    ), 0);
+    const previousPageInventory = (currentInventory - currentPageInventory) || 0;
+
     const inventories: number[] = [];
     const newListCashBook = listCashBook.map((cashBook, index) => {
       let previousInventory = 0;
 
       if (index === 0) {
-        previousInventory = cashBook.income - cashBook.expense;
+        previousInventory = (previousPageInventory + cashBook.income) - cashBook.expense;
       } else {
         previousInventory = (inventories[index - 1] + cashBook.income) - cashBook.expense;
       }
-
       inventories[inventories.length] = previousInventory;
 
       return {
@@ -120,7 +133,7 @@ export const CashBookDetailPage: FC = () => {
     })
 
     setDataCashBook(newListCashBook);
-  }, [listCashBook.length])
+  }, [cashbookId, listCashBook.length, amountIncomeExpenseByParent])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
@@ -220,6 +233,7 @@ export const CashBookDetailPage: FC = () => {
     callback?: (response: CashBook, previousInventory?: number) => void
   ) => {
     try {
+      console.log({ values });
       const { error, data } = await updateCashBookAsync(values);
 
       if (error) {
@@ -278,6 +292,12 @@ export const CashBookDetailPage: FC = () => {
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
         {/* <DropdownFilterButton /> */}
+        <button
+          className="w-10 h-10 rounded-full flex justify-center items-center"
+          onClick={toggleVisible}
+        >
+          <img src={iconGraphReport} alt="" />
+        </button>
         <GroupActions
           className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
@@ -290,13 +310,16 @@ export const CashBookDetailPage: FC = () => {
         />
 
         {/* <ButtonCreate onClick={toggleModal} /> */}
-        <button
-          className="w-10 h-10 rounded-full bg-gray-100 flex justify-center items-center"
-          onClick={toggleVisible}
-        >
-          <img src={iconGraphReport} alt="" />
-        </button>
-        <ButtonMore />
+        {/* <ButtonMore /> */}
+        {hasNextPage && (
+          <div className="flex justify-center">
+            <button onClick={fetchNextPage}>
+              <span className="text-primary">
+                {`Xem thêm (${totalRecord - listCashBook.length})`}
+              </span>
+            </button>
+          </div>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -318,7 +341,7 @@ export const CashBookDetailPage: FC = () => {
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 Ngày tháng
               </th>
-              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border" style={{ width: "20%" }}>
                 Nội dung
               </th>
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
@@ -352,6 +375,7 @@ export const CashBookDetailPage: FC = () => {
                 contacts={listContact}
                 accounts={listAccount}
                 cashBook={item}
+                inventory={dataCashBook[index] && dataCashBook[index].previousInventory || 0}
                 previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
                 itemsChecked={itemsChecked}
                 onChangeCheckbox={handleChangeCheckbox}
@@ -367,105 +391,9 @@ export const CashBookDetailPage: FC = () => {
 
             {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
 
-            {/* <tr key={id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-center">
-                {created_at}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                {content}
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Hợp đồng"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "1111-Tiền mặt tại quỹ công ty",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "1111-Tiền mặt tại quỹ công ty",
-                    },
-                    {
-                      id: 2,
-                      text: "1111-Tiền mặt tại quỹ công ty",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Công ty"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                    },
-                    {
-                      id: 2,
-                      text: "Công ty TNHH Hoàng Mai Xanh và Tím",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                <DropdownSearchable
-                  id="ticket-creator"
-                  placeholder="Công ty"
-                  initialValue={{
-                    id: "quangtt",
-                    text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                  }}
-                  data={[
-                    {
-                      id: "quangtt",
-                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                    },
-                    {
-                      id: 2,
-                      text: "Cung cấp dịch vụ tư vấn chất lượng nhân sự",
-                    },
-                  ]}
-                />
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(opening_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(increased_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-right">
-                {parseInt(closing_balance).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-              </td>
-              <td className="pt-2.5 pb-3 px-2 border-0.5 border-t-0 border-cbs-border text-left">
-                Xây dựng mẫu BoQ cho công tác preliminaries
-              </td>
-            </tr> */}
           </tbody>
         </table>
       </div>
-
-      {hasNextPage && (
-        <div className="w-full flex justify-center my-5">
-          <button onClick={fetchNextPage}>
-            <span className="text-primary">
-              {`Xem thêm (${totalRecord - listCashBook.length})`}
-            </span>
-          </button>
-        </div>
-      )}
 
       {/* <Paginate
         className="min-h-24 w-full border-t z-10 flex items-center justify-center py-2 bg-white"

@@ -8,7 +8,8 @@ import {
     CashBookInfoParams,
     CashBookListParams,
     CashBookListResponse,
-    CashBookInfoResponse
+    CashBookInfoResponse,
+    CashBookAmountIncomeExpenseResponse
 } from 'typings/financial/cashBook';
 
 const CASH_BOOK_URL = "/api/fin/cash_books";
@@ -19,6 +20,7 @@ export const CashbookRepository = {
     deleteMany: (params: CashBookDeleteManyPayload): Promise<any> => deleteMany(params),
     fetchList: (params: CashBookListParams): Promise<CashBookListResponse> => fetchList(params),
     fetchInfo: (params: CashBookInfoParams): Promise<CashBookInfoResponse> => fetchInfo(params),
+    fetchAmountIncomeExpenseByParent: (parentID: string): Promise<CashBookAmountIncomeExpenseResponse> => fetchAmountIncomeExpenseByParent(parentID),
 };
 
 async function insert(payload: CashBookInsertPayload): Promise<CashBookInfoResponse> {
@@ -60,6 +62,13 @@ async function fetchList(params: CashBookListParams): Promise<CashBookListRespon
 async function fetchInfo(params: CashBookInfoParams): Promise<CashBookInfoResponse> {
     const { data } = await API.get(
         `${CASH_BOOK_URL}?${convertObToUrl(params)}`
+    )
+    return data
+}
+
+async function fetchAmountIncomeExpenseByParent(parentID: string): Promise<CashBookAmountIncomeExpenseResponse> {
+    const { data } = await API.get(
+        `${CASH_BOOK_URL}/get-amount-income-expense-by-parent?parentID=${parentID}`
     )
     return data
 }

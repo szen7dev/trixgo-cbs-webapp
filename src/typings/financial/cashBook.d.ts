@@ -96,3 +96,13 @@ export type CashBookInfoParams = {
 export type CashBookInfoResponse = APIResponse & {
     data: CashBook;
 }
+
+/**
+ * RESPONSE AMOUNT INCOME EXPENSE BY PARENT
+ */
+export type CashBookAmountIncomeExpenseResponse = APIResponse & {
+    data: {
+        income: number;
+        expense: number;
+    };
+}
