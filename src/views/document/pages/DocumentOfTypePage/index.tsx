@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useContext, useState } from "react";
-import { useHistory, Link, useParams } from "react-router-dom";
+import { useHistory, Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -37,6 +37,7 @@ import { useDocumentPackage } from "services/hooks/document/useDocumentPackage";
 
 export const DocumentOfTypePage: FC = () => {
   const history = useHistory();
+	const location = useLocation();
   // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID, type, datahubContactID } = useParams<{ id: string, type: string, datahubContactID: string }>();
@@ -290,6 +291,12 @@ export const DocumentOfTypePage: FC = () => {
               </thead>
               <tbody className="">
                 {data.map((document, index) => {
+                  let linkRef;
+                  if(location.pathname.includes("/document/project/")){
+                    linkRef = `/document/project/${document.project._id}/detail/${document._id}`
+                  }else{
+                    linkRef = `/pcm/project/${document.project._id}/document/${document._id}`
+                  }
                   return (
                     <tr
                       key={index}
@@ -312,9 +319,7 @@ export const DocumentOfTypePage: FC = () => {
                         />
                       </td>
                       <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
-                        <Link
-                          to={`/ppt/project/${document.project._id}/document/${document._id}`}
-                        >
+                        <Link to={linkRef} >
                           <p>{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
                             {`${document?.author?.fullname || ""}-${

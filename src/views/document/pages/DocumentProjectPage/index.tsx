@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useContext, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { Transition } from "@headlessui/react";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -36,6 +36,7 @@ import { useMutationDocumentChild } from "services/hooks/document/useDocumentChi
 // }));
 
 export const DocumentProjectPage: FC = () => {
+  const location = useLocation()
   // const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
   const { toggleModal, updateModal } = useContext(ModalContext);
   const { id: departmentID } = useParams<{ id: string }>();
@@ -45,10 +46,9 @@ export const DocumentProjectPage: FC = () => {
   const [recordSelected, setSelectRecord] = useState<any>({});
 
   const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument(departmentID, pageParam, "");
-  const { insertDocumentChildAsync, updateDocumentChildAsync } =
-    useMutationDocumentChild();
+  const { insertDocumentChildAsync, updateDocumentChildAsync } = useMutationDocumentChild();
   const { onFetchDetailDepartmentAsync } = useQueryDetailDepartment();
-  const { onFetchDetailDocumentAsync } = useQueryDetailDocument();
+  const { onFetchDetailDocumentAsync }   = useQueryDetailDocument();
 
   const toggleModalConfirm = () => {
     setIsShow(!isShow);
@@ -158,6 +158,7 @@ export const DocumentProjectPage: FC = () => {
     }
   }, [cursorPage, nextCursor, pageParam?.lastestID]);
 
+  console.log({ location });
   return (
     <>
       {/* Content */}
@@ -267,6 +268,12 @@ export const DocumentProjectPage: FC = () => {
               </thead>
               <tbody className="">
                 {data.map((document, index) => {
+                  let linkRef;
+                  if(location.pathname.includes("/document/project/")){
+                    linkRef = `/document/project/${document.project._id}/detail/${document._id}`
+                  }else{
+                    linkRef = `/pcm/project/${document.project._id}/document/${document._id}`
+                  }
                   return (
                     <tr
                       key={index}
@@ -289,9 +296,7 @@ export const DocumentProjectPage: FC = () => {
                         />
                       </td>
                       <td className="px-2 w-[271px] py-2.5 border-b border-cbs-border">
-                        <Link
-                          to={`/ppt/project/${document.project._id}/document/${document._id}`}
-                        >
+                        <Link to={linkRef}>
                           <p className="text-cbs-highlight-color">{document?.name || ""}</p>
                           <p className="mt-1.5 text-primary-gray">
                             {`${document?.author?.fullname || ""}-${
@@ -305,18 +310,15 @@ export const DocumentProjectPage: FC = () => {
                         {document?.sender?.name}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2">
-                        {document.sign}
+                        {document?.sign}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 w-24 text-right">
-                        {moment(document.date).isValid() &&
-                          moment(document.date).format("DD/MM/YYYY")}
+                        {moment(document.date).isValid() && moment(document.date).format("DD/MM/YYYY")}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2">
                         {document?.storeSign?.name}
                       </td>
-                      <td
-                        className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right"
-                      >
+                      <td className="py-2.5 border-b border-cbs-border px-2 whitespace-nowrap text-right">
                         {document.amount}
                       </td>
                       <td className="py-2.5 border-b border-cbs-border px-2 box-border">
