@@ -134,7 +134,6 @@ export const CashBookPage: FC = () => {
                   className="cbs-checkbox"
                   type="checkbox"
                   value="all"
-                  id="flexCheckDefault"
                   onClick={handleCheckAll}
                   ref={checkboxRef}
                 />

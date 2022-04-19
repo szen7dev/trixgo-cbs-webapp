@@ -20,7 +20,7 @@ import { ModalConfirm, RowTableInsertInline, RowTableUpdateInline } from "../../
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
 import { useContract } from "services/hooks/items/useContract";
-import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
+import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
@@ -42,7 +42,12 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { keyword, projectID, parentID: cashFlowID },
+        params: { 
+            projectID, 
+            parentID: cashFlowID,
+            keyword, 
+            sortKey: JSON.stringify(['createAt__1', '_id__1'])
+        },
         isFetchList: true
     });
 
