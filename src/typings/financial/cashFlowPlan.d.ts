@@ -1,4 +1,6 @@
 import { Contract } from 'typings/cmcs';
+import { Project } from 'typings/items/project';
+import { User } from 'typings/user';
 import type { QueryParam, APIResponse } from './commons';
 
 export interface CashFlowPlan {
@@ -10,10 +12,12 @@ export interface CashFlowPlan {
         _id: string,
         name: string,
     };
-    contract: Contract,
+    contract: Contract;
+    project: Project;
     sign: string;
     type: number;
     name: string;
+    status: number;
     value: number;
     planValue: number;
     property: number;
@@ -23,11 +27,16 @@ export interface CashFlowPlan {
     note: string;
     priority: number;
     outin: string | null;
+    createAt: string;
+    modifyAt: string;
+    timeApproved: string;
+    approver: User;
+    userCreate: User;
 }
 
 export type CashFlowPlanQueryPayload = QueryParam & {
     companyID?: string;
-    cashFlowPlanID?: string;
+    cashFlowID?: string;
 };
 
 export type CashFlowPlanQueryResponse = APIResponse & {
@@ -35,7 +44,7 @@ export type CashFlowPlanQueryResponse = APIResponse & {
         listRecords: cashFlowPlan[];
         limit: number;
         totalRecord: number;
-        totalPages: number;
+        totalPage: number;
         nextCursor: string | null;
     }
 }
@@ -47,7 +56,7 @@ export type CashFlowPlanQueryDetailResponse = APIResponse & {
 interface ModalProps {
     modalType: "create" | "update";
     initialValues?: {
-        cashFlowPlanID?: string,
+        cashFlowID?: string,
         parent?: string,
         type?: number;
         name?: string;

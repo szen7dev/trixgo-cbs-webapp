@@ -1,5 +1,5 @@
 import { FC, useContext, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { DOCUMENT_TYPES } from "apis/localdb";
 
 // ========== Context ==========
@@ -26,12 +26,11 @@ const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 }));
 
 export const DocumenDatahubContactPage: FC = () => {
+	const location = useLocation()
 	const params = useParams<any>();
-
 	const { toggleModal } = useContext(ModalContext);
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
 	const { data } = useQueryStatistical({ departmentID: params.id, isDatahubContact: "1" });
-	console.log({ data })
 	return (
 		<>
 			{/* Content */}
@@ -42,8 +41,14 @@ export const DocumenDatahubContactPage: FC = () => {
 							...elm,
 							name: elm.datahubContact.name,
 						};
+						let linkRef;
+						if(location.pathname.includes("/document/project/")){
+							linkRef = `/document/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
+						}else{
+							linkRef = `/pcm/project/${params.id}/document/1/datahubContact/${formatData.datahubContact._id}`
+						}
 						return (
-							<Link className="document__card-container" key={i} to={`/pcm/project/${ params.id}/document/1/datahubContact/${formatData.datahubContact._id}`}>
+							<Link className="document__card-container" key={i} to={linkRef}>
 								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>

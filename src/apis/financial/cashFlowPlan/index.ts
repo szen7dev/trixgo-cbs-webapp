@@ -11,7 +11,7 @@ interface CashFlowPlanRepository {
     updateCashFlowPlan: (params: any) => Promise<any>;
     deleteCashFlowPlan: (ids: Array<string>) => Promise<any>;
     fetchListCashFlowPlan: (params: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryResponse>;
-    fetchDetailCashFlowPlan: (storageID: string, params?: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryDetailResponse>;
+    fetchDetailCashFlowPlan: (params?: CashFlowPlan.CashFlowPlanQueryPayload) => Promise<CashFlowPlan.CashFlowPlanQueryDetailResponse>;
 }
 
 export const cashFlowPlanRepository: CashFlowPlanRepository = {
@@ -28,10 +28,10 @@ async function fetchListCashFlowPlan(params: any) {
     const { data } = await API.get(
         `${FIN_URL}/cash_flow_plans`, {
         params: {
-            select: 'contract parent type name sign date value planValue realDate realValue note priority outin',
+            select: '_id contract project parent type name sign date value planValue realDate realValue note priority outin status property approver timeApproved',
             populates: {
-                path: 'parent contract',
-                select: '_id name sign date priority sellerInfo',
+                path: 'parent contract project approver',
+                select: '_id name sign date priority sellerInfo bizfullname',
                 populate: {
                     path: 'sellerInfo',
                     select: '_id name'

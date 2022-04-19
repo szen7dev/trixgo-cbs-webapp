@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type Props = {
     onConfirm: () => void,
-    onCancel: () => void,
+    onCancel?: () => void,
 }
 
 export const ModalConfirm: FC<Props> = ({ onConfirm, onCancel }) => {

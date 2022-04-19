@@ -1,5 +1,5 @@
 import { FC, useContext, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { DOCUMENT_TYPES } from "apis/localdb";
 
 // ========== Context ==========
@@ -26,6 +26,7 @@ const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
 
 export const DocumentProfilePage: FC = () => {
 	const params = useParams<any>();
+	const location = useLocation()
 
 	const { toggleModal } = useContext(ModalContext);
 	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
@@ -59,8 +60,16 @@ export const DocumentProfilePage: FC = () => {
 							...elm,
 							name: DOCUMENT_TYPES[elm.type - 1].text,
 						};
+
+						let linkRef;
+						if(location.pathname.includes("/document/project/")){
+							linkRef = `/document/project/${params.id}/document/1/type/${formatData.type}`
+						}else{
+							linkRef = `/pcm/project/${params.id}/document/1/type/${formatData.type}`
+						}
+
 						return (
-							<Link className="document__card-container" key={i} to={`/pcm/project/${ params.id}/document/1/type/${formatData.type}`}>
+							<Link className="document__card-container" key={i} to={linkRef}>
 								<div className="bg-white rounded-lg h-[150px] px-3.5 py-4 flex flex-col justify-between">
 									<div className="flex justify-between">
 										<h4 className="text-x-large">{formatData.name}</h4>

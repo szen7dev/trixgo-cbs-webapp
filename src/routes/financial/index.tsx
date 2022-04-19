@@ -12,8 +12,9 @@ import {
   DashboardPage,
   HomePage,
   CashFlowPage,
-  CashBookDetailPage,
+  CashFlowDetailPage,
   CashBookPage,
+  CashBookDetailPage,
   CashBookReportPage
 } from 'views/financial/pages';
 
@@ -41,7 +42,7 @@ const FinancialRouter: FC = () => {
           </Route>
 
           <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
-          {/* <Route exact path={"/financial/cashflow/:id"} component={CashFlowDetailPage} /> */}
+          <Route exact path={"/financial/cashflow/:cashFlowId"} component={CashFlowDetailPage} />
         </Switch>
       </FinancialLayout>
     </ProtectedRoute>

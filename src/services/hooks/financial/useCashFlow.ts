@@ -22,18 +22,16 @@ interface useCashFlowPlan {
     deleteManyAsync: (params: any) => Promise<any>;
 }
 
-// Khai báo params cho hook
 type UseCashFlowPlanProps = {
     params?: CashFlowPlanQueryPayload,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
 }
 
-// Khai báo hook
 export const useCashFlowPlan = ({
     params = {},
-    isFetchList = false, // nếu = true thì gọi api get info, ngược lại không gọi
-    isFetchInfo = false //  nếu = true thì gọi api get info, ngược lại không gọi
+    isFetchList = false,
+    isFetchInfo = false
 }: UseCashFlowPlanProps): useCashFlowPlan => {
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
@@ -52,7 +50,7 @@ export const useCashFlowPlan = ({
 
     // Get info
     const { data: detailData } =
-        useQuery("CashFlowPlan_info", () => CashFlowPlanRepository.fetchDetailCashFlowPlan(params.contactID || ''), {
+        useQuery("cash_flow_plan__info", () => CashFlowPlanRepository.fetchDetailCashFlowPlan(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -67,7 +65,7 @@ export const useCashFlowPlan = ({
         fetchNextPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['CashFlowPlan', params],
+        ['cash_flow_plan__list', params],
         async ({ pageParam }: any) =>
             CashFlowPlanRepository.fetchListCashFlowPlan({
                 lastestID: pageParam ?? "",
