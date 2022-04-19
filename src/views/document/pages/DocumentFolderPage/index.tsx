@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import debounce from "lodash/debounce";
@@ -37,8 +37,8 @@ const IconArrowRight = () => (
 
 export const DocumentFolderPage: FC = () => {
   const params = useParams<any>();
+	const location = useLocation();
   const { t } = useTranslation(["document"]);
-
   const [pageParam, setPageParam] = React.useState<any>({});
   const [prevCursor, setPrevCursor] = React.useState<any>([null]);
   const [keyword, setKeyword] = React.useState("")
@@ -161,6 +161,12 @@ export const DocumentFolderPage: FC = () => {
             </thead>
             <tbody className="">
               {listPackage.map((elm, index) => {
+                let linkRef;
+                if(location.pathname.includes("/document/project/")){
+                  linkRef = `/document/project/${params.id}/package/${elm._id}`
+                }else{
+                  linkRef = `/pcm/project/${params.id}/package/${elm._id}`
+                }
                 return (
                   <tr
                     key={index}
@@ -175,7 +181,7 @@ export const DocumentFolderPage: FC = () => {
                       />
                     </td>
                     <td className="px-2 py-2">
-                      <Link to={`/pcm/project/${params.id}/package/${elm._id}`}>
+                      <Link to={linkRef}>
                         <p className="align-top">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
