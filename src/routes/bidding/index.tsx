@@ -44,7 +44,7 @@ const BiddingRouter: FC = () => {
 					</LayoutSecondary>
 				</Route>
 				<Route exact path="/bidding/:id/3/item/:itemId" component={FinancialBiddingDocuments} />
-				<Route path="/media/*" component={ErrorPage} />
+				<Route path="/bidding/*" component={ErrorPage} />
 			</Switch>
 		</BiddingLayout>
 	)
