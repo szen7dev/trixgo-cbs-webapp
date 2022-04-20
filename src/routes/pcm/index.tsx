@@ -28,6 +28,7 @@ import {
   DocumentFolderPage,
   DocumentProjectPage,
   DocumentProfilePage,
+  DocumenDatahubContactPage,
   DocumentDashboardPage,
   DocumentOfPackagePage,
   DocumentOfTypePage,
@@ -179,7 +180,8 @@ const PCMRouter: FC = () => {
                       navExact: true,
                     },
                     { id: "2", title: "Phân loại", path: "/pcm/project/:id/document/1" },
-                    { id: "3", title: "Gói thầu", path: "/pcm/project/:id/document/2" },
+                    { id: "3", title: "Danh bạ hệ thống", path: "/pcm/project/:id/document/2" },
+                    { id: "4", title: "Gói thầu", path: "/pcm/project/:id/document/3" },
                     // { id: '4', title: 'Báo cáo', path: '/pcm/project/:id/document/3' },
                     // { id: '5', title: 'Lịch sử upload file', path: '/pcm/project/:id/document/4' },
                   ]}
@@ -196,9 +198,14 @@ const PCMRouter: FC = () => {
                         path="/pcm/project/:id/document/1"
                         component={DocumentProfilePage}
                       />
-                      <Route
+                       <Route
                         exact
                         path="/pcm/project/:id/document/2"
+                        component={DocumenDatahubContactPage}
+                      />
+                      <Route
+                        exact
+                        path="/pcm/project/:id/document/3"
                         component={DocumentFolderPage}
                       />
                       {/* <Route exact path='/pcm/project/:id/document/3' component={DocumentReportPage} />
@@ -211,6 +218,11 @@ const PCMRouter: FC = () => {
               <Route
                 exact
                 path="/pcm/project/:id/document/1/type/:type"
+                component={DocumentOfTypePage}
+              />
+               <Route
+                exact
+                path="/pcm/project/:id/document/1/datahubContact/:datahubContactID"
                 component={DocumentOfTypePage}
               />
               <Route
@@ -368,10 +380,7 @@ const PCMRouter: FC = () => {
                     { id: "3", title: "Báo cáo quản trị hồ sơ", path: "/pcm/dashboard-document" },
                   ]}
                 >
-                  <Route
-                    exact
-                    path="/pcm/dashboard-portfolio"
-                    component={ProjectDashboardPortfolioPage}
+                  <Route exact path="/pcm/dashboard-portfolio" component={ProjectDashboardPortfolioPage}
                   />
                   <Route exact path="/pcm/dashboard-task" component={ProjectDashboardTaskPage} />
                   <Route exact path="/pcm/dashboard-document" component={DocumentDashboardPage} />

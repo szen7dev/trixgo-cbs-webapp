@@ -5,18 +5,21 @@ import { convertCurrency, convertCurrencyToNumber } from "utils/converter";
 
 import { DropdownSearchable } from "shareComponents/common";
 import { Contract } from "typings/cmcs";
-import { CashFlowPlan } from "typings/fin";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 type Props = {
   cashFlow: CashFlowPlan.CashFlowPlan,
   contracts: Contract[],
   onUpdate: (values: any, callback: (response: any) => void) => Promise<any>;
-  onScroll: (e: UIEvent<HTMLDivElement>) => void;
+  onScrollContract: (e: UIEvent<HTMLDivElement>) => void;
+  onSearchContract?: (keyword: string) => void;
   onChangeCheckbox: (ids: string[]) => void;
   itemsChecked: string[]
 };
 
-export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, onUpdate, onScroll, onChangeCheckbox }) => {
+export const RowTableUpdateInline: FC<Props> = ({
+  contracts, cashFlow, itemsChecked, onUpdate, onScrollContract, onSearchContract, onChangeCheckbox
+}) => {
   const [sellerName, setSellerName] = useState(cashFlow.contract?.sellerInfo?.name);
   const [values, setValues] = useState({
     value: `${cashFlow.value}`,
@@ -79,13 +82,12 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             if(!value) return;
             onUpdate({ cashFlowID: cashFlow._id, contractID: value?.id }, callbackUpdate)
           }, 700)}
-          className={"w-full flex-1 border border-primary-border rounded"}
           placeholder="Hợp đồng"
           isMultiple={false}
           allowClearValueSingleInput={false}
           showTriangle={true}
           maxWidthInput="max-w-none"
-          onScroll={onScroll}
+          onScroll={onScrollContract}
           data={contracts.map(contract => ({
             value: contract._id,
             label: contract.name
@@ -94,14 +96,11 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             value: cashFlow.contract?._id,
             label: cashFlow.contract?.name
           }}
-          onSearchInputChange={(keyword) => {
-            console.log({ keyword });
-          }}
+          onSearchInputChange={onSearchContract}
           formatItem={{
             id: "value",
             text: "label",
           }}
-          inlineSearch={true}
         />
       </td>
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
@@ -133,7 +132,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
           type="date"
           autoComplete="off"
           defaultValue={moment(cashFlow.date).format('YYYY-MM-DD')}
-          className="border w-full border-primary-border rounded h-[32px] outline-none"
+          className="w-full h-[32px] outline-none"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const date = e.target.value;
             if(!date) return;
@@ -146,9 +145,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
         {/* Giá trị thực tế */}
         <input
           type="text"
-          className={
-            "w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
-          }
+          className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
           value={convertCurrency(values.realValue)}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             const realValue = convertCurrency(e.target.value);
@@ -168,7 +165,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
           type="date"
           autoComplete="off"
           defaultValue={moment(cashFlow.realDate).format('YYYY-MM-DD')}
-          className="border w-full border-primary-border rounded h-[32px] outline-none"
+          className="w-full h-[32px] outline-none"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const realDate = e.target.value;
             if(!realDate) return;
@@ -198,11 +195,7 @@ export const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChec
             if(!value) return;
             onUpdate({ cashFlowID: cashFlow._id, priority: +value?.id }, callbackUpdate)
           }, 700)}
-          className={"w-full h-32 flex-1 border border-primary-border rounded"}
           placeholder="Độ ưu tiên"
-          isMultiple={false}
-          allowClearValueSingleInput={true}
-          showTriangle={true}
           maxWidthInput="max-w-none"
           data={[
             { value: 1, label: 'Bình thường' },

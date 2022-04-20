@@ -75,7 +75,7 @@ export const useBudgetItem = ({
                 return data?.nextCursor ?? undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: isFetchList
+            enabled: isFetchList,
         }
     );
 

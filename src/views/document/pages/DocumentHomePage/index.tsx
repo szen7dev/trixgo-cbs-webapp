@@ -37,7 +37,7 @@ export const DocumentHomePage: FC = () => {
           />
           <DropdownFilterButton />
         </div>
-        <ButtonCreate onClick={toggleModal} />
+        {/* <ButtonCreate onClick={toggleModal} /> */}
         <ButtonMore />
       </div>
 
@@ -57,12 +57,17 @@ export const DocumentHomePage: FC = () => {
           className="flex flex-wrap w-full px-2 pt-2 pb-20 gap-y-2.5 text-primary-gray"
         >
           {listDepartments.map((item, index) => {
+            const imgUrl = item?.image
+              ? (item?.image?.startsWith('files/db')
+              ? `${process.env.REACT_APP_URL_S3}/${item?.image}`
+              : `${process.env.REACT_APP_URL_S3_PROJECT}/${item?.image}`)
+              : projectImage;
             return (
               <div key={index} className="document__card-container">
                 <div className="document__home-card relative mt-2 border-cbs-border box-border border">
                   <div className="flex mb-5">
                     <img
-                      src={item.image ? `${process.env.REACT_APP_URL_S3_PROJECT}/${item.image}` : projectImage}
+                      src={imgUrl}
                       alt="Avatar"
                       className="h-[90px] w-[90px] object-cover"
                     />
@@ -77,7 +82,7 @@ export const DocumentHomePage: FC = () => {
                   </div>
                   <Link
                     className="document__line text-large text-black"
-                    to={`/ppt/project/${item._id}/document`}
+                    to={`/document/project/${item._id}/home`}
                   >
                     {`${item.sign}.${item.name}`}
                   </Link>

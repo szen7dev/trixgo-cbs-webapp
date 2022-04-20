@@ -20,14 +20,15 @@ import { ModalConfirm, RowTableInsertInline, RowTableUpdateInline } from "../../
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
 import { useContract } from "services/hooks/items/useContract";
-import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
-import { CashFlowPlan } from "typings/fin";
+import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 const ProjectCashFlowPlanChildPage: FC = () => {
 	const { id: projectID, cashFlowID } = useParams<{ id: string, cashFlowID: string }>();
     const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
+    const [keywordContract, setKeywordContract] = useState('');
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
@@ -42,7 +43,12 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { keyword, projectID, parentID: cashFlowID },
+        params: { 
+            projectID, 
+            parentID: cashFlowID,
+            keyword, 
+            sortKey: JSON.stringify(['createAt__1', '_id__1'])
+        },
         isFetchList: true
     });
 
@@ -51,7 +57,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         hasNextPage: hasNextPageListContract,
         fetchNextPage: fetchNextPageListContract
     } = useContract({
-        params: { projectID },
+        params: { projectID, keyword: keywordContract },
         isFetch: true
     })
 
@@ -61,7 +67,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         setDataCashFlow(listCashFlowPlans);
     }, [listCashFlowPlans.length])
 
-    const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
         setKeyword(event.target.value);
     }, 500);
 
@@ -93,7 +99,9 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         if(bottom && hasNextPageListContract) {
             fetchNextPageListContract();
         }
-      }
+    }
+
+    const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
 
     const handleDelete = async () => {
         try {
@@ -286,7 +294,8 @@ const ProjectCashFlowPlanChildPage: FC = () => {
                             cashFlow={item}
                             itemsChecked={itemsChecked}
                             onUpdate={handleUpdate}
-                            onScroll={handleScroll}
+                            onScrollContract={handleScroll}
+                            onSearchContract={onChangeSearchContract}
                             onChangeCheckbox={handleChangeCheckbox}
                         />
                     )) : <></>}

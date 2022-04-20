@@ -1,21 +1,21 @@
 const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
 
 export const abbreviateNumber = (number = 0): string => {
-    // what tier? (determines SI symbol)
-    const tier = Math.log10(Math.abs(number)) / 3 | 0;
+  // what tier? (determines SI symbol)
+  const tier = Math.log10(Math.abs(number)) / 3 | 0;
 
-    // if zero, we don't need a suffix
-    if (+tier === 0) return `${number}`;
+  // if zero, we don't need a suffix
+  if (+tier === 0) return `${number}`;
 
-    // get suffix and determine scale
-    const suffix = SI_SYMBOL[tier];
-    const scale = Math.pow(10, tier * 3);
+  // get suffix and determine scale
+  const suffix = SI_SYMBOL[tier];
+  const scale = Math.pow(10, tier * 3);
 
-    // scale the number
-    const scaled = number / scale;
+  // scale the number
+  const scaled = number / scale;
 
-    // format number and add suffix
-    return scaled.toFixed(1) + suffix;
+  // format number and add suffix
+  return scaled.toFixed(1) + suffix;
 };
 
 /**
@@ -29,24 +29,24 @@ export const abbreviateNumber = (number = 0): string => {
  * @return Formatted string.
  */
 export const humanFileSize = (bytes = 0, si = true, dp = 1) => {
-    const thresh = si ? 1000 : 1024;
+  const thresh = si ? 1000 : 1024;
 
-    if (Math.abs(bytes) < thresh) {
-      return bytes + ' B';
-    }
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B';
+  }
 
-    const units = si
-      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-    let u = -1;
-    const r = 10**dp;
+  const units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  let u = -1;
+  const r = 10 ** dp;
 
-    do {
-      bytes /= thresh;
-      ++u;
-    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+  do {
+    bytes /= thresh;
+    ++u;
+  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
-    return bytes.toFixed(dp) + ' ' + units[u];
+  return bytes.toFixed(dp) + ' ' + units[u];
 }
 
 /**
@@ -68,15 +68,15 @@ export const formatNumberMoney = (number: number): string => {
 }
 
 export const formatNaNToZero = (number: number): number => {
-  if(!number || isNaN(number)) {
+  if (!number || isNaN(number)) {
     return 0;
   }
 
   return number;
 }
 
-export const convertCurrency = (number = '0') : string => {
-  if(number.search(',')) {
+export const convertCurrency = (number: string | number = 0): string => {
+  if (typeof number === 'string' && number.search(',')) {
     number = number.replaceAll(',', '')
   }
 
@@ -84,6 +84,6 @@ export const convertCurrency = (number = '0') : string => {
   return formatter.format(+number);
 }
 
-export const convertCurrencyToNumber = (currency: string) : number => {
+export const convertCurrencyToNumber = (currency: string): number => {
   return +currency.replaceAll(',', '');
 }

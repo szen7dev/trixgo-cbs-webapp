@@ -2,9 +2,7 @@
 import { FC, useState, useCallback, ChangeEvent } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
-import moment from "moment";
-import classnames from "classnames";
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { formatNumberMoney } from "utils/cmcs";
 
@@ -20,15 +18,14 @@ import { SearchInput } from "shareComponents/common";
 import { ModalCreateOrUpdateCashFlow, ModalConfirm } from "../../sharedComponents/common";
 
 /*=====5.TYPINGS=====*/
-import { CashFlowPlan } from "typings/fin";
+import CashFlowPlan from "typings/financial/cashFlowPlan";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useCashFlowPlan } from "services/hooks/pcm/usePcmProjectCashFlowPlan";
+import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 
 const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
 	const { id: projectID } = useParams<{ id: string }>();
-    const { pathname } = useLocation();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<Array<CashFlowPlan.CashFlowPlan>>([]);
@@ -271,7 +268,7 @@ const ProjectCashFlowPlanPage: FC<{ type: number }> = ({ type }) => {
                     {listCashFlowPlans.length ? listCashFlowPlans.map(item => (
                         <tr
                             key={item._id}
-                            className={classnames('border-b border-primary-border h-10 font-bold')}
+                            className="border-b border-primary-border h-10"
                         >
                             <td className="px-2 text-center align-middle">
                                 <input

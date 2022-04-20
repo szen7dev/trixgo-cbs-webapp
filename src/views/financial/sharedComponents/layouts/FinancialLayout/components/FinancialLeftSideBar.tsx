@@ -15,59 +15,99 @@ import iconFolder from "assets/images/icons8-application-window-100.png";
 
 /*=====6.HOOKS/APIS=====*/
 import { useAuth } from "services/hooks/auth/useAuth";
+import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "services/hooks/auth/usePermissions";
+import { APP_ID } from "apis/localdb";
 
 /*=====7.OTHER=====*/
 const routes = [
-  { pathname: "/financial/home", label: "Home", icon: iconFolder },
-  { pathname: "/financial/dashboard", label: "Dashboard", icon: iconFolder },
-  { pathname: "/financial/cashbook", label: "Cashbook", icon: iconFolder },
-  { pathname: "/financial/cashflow", label: "Cashflow", icon: iconFolder },
+  // { pathname: "/dashboard", label: "Báo cáo quản trị", icon: iconFolder },
+  { pathname: "cashbook", label: "Sổ quỹ", icon: iconFolder },
+  { pathname: "cashflow", label: "Kế hoạch tài chính", icon: iconFolder },
 ];
 
 export const FinancialLeftSideBar: FC = () => {
+
+  const { user } = useAuth();
+  const { hasPermission, dataUserAccess } = useCheckPerAccessApp({ appID: APP_ID.FINANCIAL.id });
+  const { listAppMenu } = useGetListAppMenu({ appID: APP_ID.FINANCIAL.id, parentID: APP_ID.FINANCIAL.menuFinancialApp.id });
+  const { listAppRoleMenu } = useGetListAppRoleMenu({ appID: APP_ID.FINANCIAL.id, type: "1" });
+
   return (
     <div className="t-leftsidebar-navigation t-leftsidebar-navigation-type2 fixed left-0 top-14 bottom-0 transition-all duration-500 ease-out border-r border-secondary-light z-10 bg-primary-light">
       <div className="t-leftsidebar-navigation-container overflow-auto transition-all duration-500 ease-out">
         {/* title */}
-        <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 text-[14px] font-bold">
-          <img src={financialLogo} alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
+        <div className="t-leftsidebar-title flex items-center py-2 pl-3 pr-3 font-bold">
+          <img src={financialLogo } alt="Thumbnail" className="w-10 h-10 rounded-full mr-3" />
           <span>Quản trị tài chính</span>
         </div>
 
         {/* menu block */}
         <div className="t-link-menu-container">
-          <ul>
-            {routes.map((route, index) => (
-              <li key={index} className="w-full">
+        {hasPermission && dataUserAccess?.level == 0 ?
+            <NavLink
+              to={`/financial/admin`}
+              className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+            >
+              <img className="w-6 h-6 object-contain mr-3" src={'/images/pcm/admin.png'} alt="Menu item" />
+              <span className="truncate">Quản trị viên</span>
+            </NavLink> : <></>
+          }
+          <NavLink
+            to={`/financial/home`}
+            className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+          >
+            <img
+              className="w-6 h-6 object-contain mr-3"
+              src={iconFolder}
+              alt="Menu item"
+            />
+            <span className="truncate">Trang chủ</span>
+          </NavLink>
+          
+          {listAppMenu && listAppMenu.length ?
+            <>
+              {listAppMenu.map((item: any, index: number) => {
+                const roleApp = listAppRoleMenu.find((e: any) => e?._id?.menu == item?._id);
+                if (roleApp && roleApp.read >= 1) {
+                  return (
+                    <NavLink
+                      key={index}
+                      to={`/financial/${item.slug}`}
+                      className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
+                    >
+                      <img
+                        className="w-6 h-6 object-contain mr-3"
+                        src={iconFolder}
+                        alt="Menu item"
+                      />
+                      <span className="truncate">{item.name}</span>
+                    </NavLink>
+                  )
+                };
+                return <div key={index}></div>
+              })
+              }
+
+              {routes.map((route, index) => (
                 <NavLink
-                  to={route.pathname}
-                  className="hover:bg-cbs-active-comment w-full block py-2 px-3"
-                  activeClassName="w-full"
+                  key={index}
+                  to={`/financial/${route.pathname}`}
+                  className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
                 >
                   <img
-                    className="w-6 h-6 object-contain mr-3 inline-block"
+                    className="w-6 h-6 object-contain mr-3"
                     src={iconFolder}
                     alt="Menu item"
                   />
                   <span className="truncate">{route.label}</span>
                 </NavLink>
-              </li>
-            ))}
-            {/* <li>
-              <NavLink
-                to={`/financial/home`}
-                className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px] active"
-              >
-                <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
-                <span className="truncate">Trang chủ</span>
-              </NavLink>
-            </li>
-            <li></li>
-            <li></li>
-            <li></li> */}
-          </ul>
+              ))}
+              
+            </> : <></>
+          }
         </div>
       </div>
     </div>
   );
+
 };

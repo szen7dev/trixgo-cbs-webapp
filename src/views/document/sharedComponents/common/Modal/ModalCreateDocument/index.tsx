@@ -15,6 +15,7 @@ import { ModalContainer } from "shareComponents/common/ModalContainer";
 import { useQueryListPackage } from "services/hooks/document/usePackage";
 import { useQueryContact } from "services/hooks/items/useContact";
 import { useQueryListDoctype } from "services/hooks/items/useDoctype";
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
 import { useStorage } from "services/hooks/items/useStorage";
 import { useQueryItemContract } from "services/hooks/items/useContract";
 import { DIRECTION_TYPES, DOCUMENT_TYPES } from "apis/localdb";
@@ -34,7 +35,7 @@ const fieldInputByRow = [
 		type: "datepicker",
 	},
 	{
-		title: "Mã hiệu",
+		title: "Mã hiệu (*)",
 		name: "sign",
 		type: "text",
 	},
@@ -51,7 +52,7 @@ const fieldInputByRow = [
 	{ title: "Giá trị", name: "value", type: "text" },
 	{ title: "Nhận dạng", name: "style", type: "text" },
 	{ title: "Tình trạng", name: "status", type: "text" },
-	{ title: "Ngày văn bản", name: "date", type: "datepicker" },
+	{ title: "Ngày văn bản (*)", name: "date", type: "datepicker" },
 	{
 		title: "Ngày nhận",
 		name: "receivedDate",
@@ -62,17 +63,18 @@ const fieldInputByRow = [
 const useInitialValues = (
 	departmentID: string, companyID: string, keywordPackage?: string,
 	keywordSender?: string, keywordReceiver?: string, keywordProperty?: string,
-	keywordContract?: string, keywordStorage?: string, keywordFields?: string ) => {
+	keywordContract?: string, keywordStorage?: string, keywordDatahubContact?: string ) => {
 
 	const { listPackage } = useQueryListPackage({ keyword: keywordPackage, departmentID });
 	const { listContact: listContactSender } = useQueryContact({ companyID, keyword: keywordSender });
 	const { listContact: listContactReceiver } = useQueryContact({ companyID, keyword: keywordReceiver });
-	const { listDoctypes: fields } = useQueryListDoctype({ type: 1, companyID, keyword: keywordFields }); // lĩnh vực
+	const { data: listDatahubContact } = useDatahubContact({ keyword: keywordDatahubContact }, true, false); // Danh bạ hệ thống
 	const { listDoctypes: properties } = useQueryListDoctype({
 		keyword: keywordProperty,
 		type: 2,
 		companyID,
 	}); // tính chất
+
 	const { list: listStorages } = useStorage({
 		params: {
 			companyID, keyword: keywordStorage
@@ -97,7 +99,7 @@ const useInitialValues = (
 		listPackage,
 		listContactSender,
 		listContactReceiver,
-		fields,
+		fields: listDatahubContact,
 		properties,
 		listStorages,
 		listContracts,
@@ -111,7 +113,7 @@ export const ModalCreateDocument: React.FC = () => {
 		const obj = { ...state.initialValues };
 		return {
 			...obj,
-			field: state.initialValues?.field?._id,
+			field: state.initialValues?.datahubContact?._id,
 			package: state.initialValues?.package?._id,
 			project: state.initialValues?.project?._id,
 			receiver: state.initialValues?.receiver?._id,
@@ -120,14 +122,14 @@ export const ModalCreateDocument: React.FC = () => {
 			property: state.initialValues?.property?._id,
 		}
 	}, [state.initialValues]);
-
+		
 	const  [ keywordPackage, setKeywordPackage	    ] = useState("");
 	const  [ keywordSender,  setKeywordSender 		] = useState("");
 	const  [ keywordReceiver,  setKeywordReceiver   ] = useState("");
 	const  [ keywordProperty,  setKeywordProperty ]   = useState("");
 	const  [ keywordContract,  setKeywordContract ]   = useState("");
 	const  [ keywordStorage,  setKeywordStorage ]     = useState("");
-	const  [ keywordFields,  setKeywordFields ]       = useState("");
+	const  [ keywordDatahubContact,  setKeywordDatahubContact ] = useState("");
 
 	const {
 		fields,
@@ -146,7 +148,7 @@ export const ModalCreateDocument: React.FC = () => {
 		keywordProperty,
 		keywordContract,
 		keywordStorage,
-		keywordFields
+		keywordDatahubContact
 	);
 	
 	const listFormFieldsDropdown = React.useMemo((): {
@@ -155,20 +157,20 @@ export const ModalCreateDocument: React.FC = () => {
 		data: any[];
 	}[] => {
 		return [
-			{ title: "Gói thầu", data: listPackage, name: "package" },
+			{ title: "Gói thầu (*)", data: listPackage, name: "package" },
 			{
-				title: "Hướng",
+				title: "Hướng (*)",
 				data: DIRECTION_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
 				})),
 				name: "direction",
 			},
-			{ title: "Ban hành", data: listContactSender, name: "sender" },
+			{ title: "Ban hành (*)", data: listContactSender, name: "sender" },
 			{ title: "Nhận", data: listContactReceiver, name: "receiver" },
-			{ title: "Tính chất", data: properties, name: "property" },
+			{ title: "Tính chất (*)", data: properties, name: "property" },
 			{
-				title: "Phân loại",
+				title: "Phân loại (*)",
 				data: DOCUMENT_TYPES.map((elm) => ({
 					_id: elm.value,
 					name: elm.text,
@@ -185,6 +187,7 @@ export const ModalCreateDocument: React.FC = () => {
 			const formatValues = {
 				...values,
 			};
+
 			if (moment(values.date).isValid()) {
 				formatValues.date = moment(values.date).toJSON();
 			}
@@ -200,7 +203,7 @@ export const ModalCreateDocument: React.FC = () => {
 			}else{
 				formatValues.completeStatus = 0
 			}
-
+			
 			if (state.onSubmit) {
 				try {
 					state.onSubmit({
@@ -213,7 +216,7 @@ export const ModalCreateDocument: React.FC = () => {
 						propertyID: values.property,
 						senderID: values.sender,
 						receiverID: values.receiver,
-						fieldID: values.field,
+						datahubContactID: values.field,
 					});
 				} catch (error: unknown) {
 					console.error(error);
@@ -222,7 +225,7 @@ export const ModalCreateDocument: React.FC = () => {
 		},
 		[state]
 	);
-
+	
 	return (
 		<ModalContainer isModalOpen={state.isShow} toggle={() => false}>
 			<div
@@ -449,7 +452,7 @@ export const ModalCreateDocument: React.FC = () => {
 											htmlFor="title"
 											className="py-1.5 h-[30px] box-content"
 										>
-											<p className="py-1.5">Tiêu đề</p>
+											<p className="py-1.5">Tiêu đề (*)</p>
 										</label>
 										<Field
 											onBlur={(e: React.FormEvent<HTMLInputElement>) => {
@@ -479,11 +482,11 @@ export const ModalCreateDocument: React.FC = () => {
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Lĩnh vực</p>
+											<p className="py-1.5">Cơ quan, tổ chức (*)</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
-												placeholder={"Dự án"}
+												placeholder={"Cơ quan, tổ chức"}
 												className={"w-full flex-1"}
 												showTriangle={false}
 												maxWidthInput={"max-w-none"}
@@ -501,18 +504,22 @@ export const ModalCreateDocument: React.FC = () => {
 												onSearchInputChange={
 													debounce(
 														(value) => (
-															setKeywordFields(value)
+															setKeywordDatahubContact(value)
 														),
 													500
 												)}
 												initialValue={
-													state?.initialValues['field']
+													state.initialValues?.datahubContact && {
+														_id: state.initialValues?.datahubContact?._id,
+														name: state.initialValues?.datahubContact?.name
+													}
 												}
 												data={uniqBy([...fields, state?.initialValues['field'] || {}].filter(elm => {
 													if (elm._id) {
 														return elm;
 													}
 												}), '_id')}
+
 												formatItem={{
 													id: "_id",
 													text: "name",
