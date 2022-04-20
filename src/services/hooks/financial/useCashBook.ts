@@ -11,7 +11,11 @@ import type {
     CashBookInfoParams,
     CashBookListParams,
     CashBookInfoResponse,
-    CashBookAmountIncomeExpenseResponse
+    CashBookAmountIncomeExpenseParams,
+    CashBookAmountIncomeExpenseResponse,
+    CashBookAmountByProperty,
+    CashBookAmountByPropertyParams,
+    CashBookAmountByPropertyResponse
 } from 'typings/financial/cashBook';
 
 /*=====3.INTERFACE DEFINE=====*/
@@ -23,7 +27,6 @@ interface UseCashBook {
     insertAsync: (payload: CashBookInsertPayload) => Promise<CashBookInfoResponse>;
     updateAsync: (payload: CashBookUpdatePayload) => Promise<CashBookInfoResponse>;
     deleteManyAsync: (params: CashBookDeleteManyPayload) => Promise<any>;
-    amountIncomeExpenseByParent: CashBookAmountIncomeExpenseResponse;
     list: Array<CashBook>;
     info: CashBook | undefined;
     refetch: () => void;
@@ -33,18 +36,14 @@ interface UseCashBook {
 
 type UseCashBookProps = {
     params?: CashBookInfoParams | CashBookListParams,
-    paramsAmountIncomeExpense?: Partial<{ parentID: string }>,
     isFetchList?: boolean,
     isFetchInfo?: boolean,
-    isFetchAmountIncomeExpenseByParent?: boolean,
 }
 
 export const useCashBook = ({
     params = {},
-    paramsAmountIncomeExpense = {},
     isFetchList = false,
     isFetchInfo = false,
-    isFetchAmountIncomeExpenseByParent = false
 }: UseCashBookProps): UseCashBook => {
 
     const { mutateAsync: insertAsync } =
@@ -100,21 +99,11 @@ export const useCashBook = ({
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
 
-    const { data: dataAmountIncomeExpenseByParent } =
-        useQuery("cashbook__amount-income-expense", 
-            () => CashbookRepository.fetchAmountIncomeExpenseByParent(paramsAmountIncomeExpense.parentID || ''), {
-            refetchOnWindowFocus: false,
-            enabled: isFetchAmountIncomeExpenseByParent,
-        });
-
-    const amountIncomeExpenseByParent = dataAmountIncomeExpenseByParent?.data;
-
     return {
         isLoading,
         insertAsync,
         updateAsync,
         deleteManyAsync,
-        amountIncomeExpenseByParent,
         list,
         info,
         totalRecord,
@@ -123,5 +112,58 @@ export const useCashBook = ({
         refetch,
         fetchNextPage,
         fetchPreviousPage,
+    }
+}
+
+/**
+ * Hook cashbook Custom
+ */
+
+interface UseCashBookCustom {
+    amountIncomeExpenseByParent: CashBookAmountIncomeExpenseResponse;
+    isLoadingAmountIncomeExpense: boolean;
+    amountByProperty: CashBookAmountByProperty[];
+    isLoadingAmountByProperty: boolean;
+    refetchAmountByProperty: () => void;
+}
+
+type UseCashBookCustomProps = {
+    paramsAmountIncomeExpense?: CashBookAmountIncomeExpenseParams,
+    paramsAmountByProperty?: CashBookAmountByPropertyParams,
+    isFetchAmountIncomeExpenseByParent?: boolean,
+    isFetchAmountByProperty?: boolean,
+}
+
+export const useCashBookCustom = ({
+    paramsAmountIncomeExpense = {},
+    paramsAmountByProperty = {},
+    isFetchAmountIncomeExpenseByParent = false,
+    isFetchAmountByProperty = false
+}: UseCashBookCustomProps) : UseCashBookCustom => {
+
+    const { data: dataAmountIncomeExpenseByParent, isLoading: isLoadingAmountIncomeExpense } =
+        useQuery("cashbook__amount-income-expense",
+            () => CashbookRepository.fetchAmountIncomeExpenseByParent(paramsAmountIncomeExpense), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchAmountIncomeExpenseByParent,
+        });
+
+    const amountIncomeExpenseByParent = dataAmountIncomeExpenseByParent?.data;
+
+    const { data: dataAmountByProperty, isLoading: isLoadingAmountByProperty, refetch: refetchAmountByProperty } =
+        useQuery("cashbook__amount-by-property",
+            () => CashbookRepository.fetchAmountByProperty(paramsAmountByProperty), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchAmountByProperty,
+        });
+
+    const amountByProperty = dataAmountByProperty?.data;
+
+    return {
+        amountIncomeExpenseByParent,
+        isLoadingAmountIncomeExpense,
+        amountByProperty,
+        isLoadingAmountByProperty,
+        refetchAmountByProperty
     }
 }

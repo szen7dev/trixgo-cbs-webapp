@@ -8,7 +8,6 @@ import debounce from "lodash/debounce";
  */
 // import { DropdownFilterButton } from "views/document/sharedComponents/common";
 import {
-  Paginate,
   SearchInput,
   GroupActions,
   ButtonMore,
@@ -23,7 +22,7 @@ import iconGraphReport from "assets/images/icons8-stop-graph-report-96.png";
 /**
  * Hooks, Typings
  */
-import { useCashBook } from 'services/hooks/financial/useCashBook';
+import { useCashBook, useCashBookCustom } from 'services/hooks/financial/useCashBook';
 import { useContract } from "services/hooks/items/useContract";
 import { useContact } from "services/hooks/items/useContact";
 import { useAccount } from "services/hooks/items/useAccount";
@@ -49,7 +48,6 @@ export const CashBookDetailPage: FC = () => {
   })
 
   const {
-    amountIncomeExpenseByParent,
     deleteManyAsync: deleteManyCashBookAsync,
     insertAsync: insertCashBookAsync,
     updateAsync: updateCashBookAsync,
@@ -65,8 +63,11 @@ export const CashBookDetailPage: FC = () => {
       sortKey: JSON.stringify(['date__-1', 'createAt__-1']),
       limit: 3
     },
-    paramsAmountIncomeExpense: { parentID: cashbookId },
     isFetchList: !!cashbookId,
+  })
+
+  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense } = useCashBookCustom({
+    paramsAmountIncomeExpense: { parentID: cashbookId },
     isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
 
@@ -105,7 +106,7 @@ export const CashBookDetailPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    if(!amountIncomeExpenseByParent) return;
+    if(!amountIncomeExpenseByParent || isLoadingAmountIncomeExpense) return;
 
     const currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
 
@@ -292,12 +293,6 @@ export const CashBookDetailPage: FC = () => {
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
         {/* <DropdownFilterButton /> */}
-        <button
-          className="w-10 h-10 rounded-full flex justify-center items-center"
-          onClick={toggleVisible}
-        >
-          <img src={iconGraphReport} alt="" />
-        </button>
         <GroupActions
           className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
@@ -320,6 +315,12 @@ export const CashBookDetailPage: FC = () => {
             </button>
           </div>
         )}
+        <button
+          className="w-10 h-10 rounded-full flex justify-center items-center"
+          onClick={toggleVisible}
+        >
+          <img src={iconGraphReport} alt="" />
+        </button>
       </div>
       <div className="flex-1 overflow-y-auto">
         <table

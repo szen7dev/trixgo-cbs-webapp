@@ -1,5 +1,6 @@
 import { FC, Fragment, useState } from 'react'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
+import { useParams } from 'react-router-dom';
 
 import ChartExpenseSumary from './ChartExpenseSumary';
 
@@ -7,20 +8,41 @@ import XIcon from 'assets/icons/X';
 import iconCash from 'assets/images/icons8-cash-app-144.png';
 import classNames from 'classnames';
 
+import { useCashBookCustom } from "services/hooks/financial/useCashBook";
+import { convertCurrency } from 'utils/converter';
+
 interface Props {
 	open: boolean,
 	onClose: (open: boolean) => unknown,
 }
 const years = [
+	{ id: 0, name: 'Chọn năm', unavailable: false },
 	{ id: 1, name: '2019', unavailable: false },
 	{ id: 2, name: '2020', unavailable: false },
 	{ id: 3, name: '2021', unavailable: false },
-	{ id: 4, name: '2022', unavailable: true },
+	{ id: 4, name: '2022', unavailable: false },
 	{ id: 5, name: '2023', unavailable: false },
 ]
 
 const ModalReport: FC<Props> = ({ open, onClose }) => {
-	const [selectedYear, setSelectedYear] = useState(years[0])
+	const { cashbookId } = useParams<{ cashbookId: string }>();
+	const [selectedYear, setSelectedYear] = useState(years[0]);
+
+	const { amountByProperty, isLoadingAmountByProperty } = useCashBookCustom({
+		paramsAmountByProperty: {
+			option: "3",
+			parentID: cashbookId,
+			year: selectedYear?.name,
+		},
+		isFetchAmountByProperty: true
+	})
+
+	if(isLoadingAmountByProperty) return <></>;
+
+	const totalFund = amountByProperty?.reduce((prevVal: number, currValue: any) =>
+		prevVal += currValue.income - currValue.expense
+	, 0) ?? 0;
+
 	return (
 		<Transition.Root show={open} as={Fragment}>
 			<Dialog as="div" className="fixed inset-y-0 right-0 overflow-hidden z-50" onClose={onClose}>
@@ -70,7 +92,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 															</svg>
 														</span>
 														<span>
-															Năm {selectedYear.name}
+															{selectedYear.id !== 0 ? `Năm ${selectedYear.name}` : selectedYear.name}
 														</span>
 													</Listbox.Button>
 													<Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-center bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
@@ -81,7 +103,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 																className={({ active }) => classNames({ "bg-cbs-active-comment": active }, "py-2 px-2.5 hover:bg-cbs-active-comment cursor-pointer")}
 																disabled={year.unavailable}
 															>
-																Năm {year.name}
+																{year.id !== 0 ? `Năm ${year.name}` : year.name}
 															</Listbox.Option>
 														))}
 													</Listbox.Options>
@@ -89,7 +111,10 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 											</div>
 										</div>
 										<div>
-											<ChartExpenseSumary />
+											<ChartExpenseSumary
+												parentID={cashbookId}
+												year={selectedYear?.name}
+											/>
 										</div>
 										<div className='text-small pb-10'>
 											<div className='flex mt-8'>
@@ -100,16 +125,31 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 													<div className='text-x-large mb-1'>
 														Tổng hợp quỹ
 													</div>
-													<div className='text-cbs-completed text-x-large text-right'>4.500.000.000</div>
-													<div>1111-Tiền Việt Nam</div>
+													<div className='text-cbs-completed text-x-large text-right'>
+														{convertCurrency(totalFund)}
+													</div>
+													{(amountByProperty && amountByProperty.length) ?
+														amountByProperty.map((item: any) => (
+															<>
+																<div>
+																	{item._id?.account?.name}-
+																	{item._id?.account?.description}
+																</div>
+																<div className='text-right'>
+																	{convertCurrency(item.income - item.expense)}
+																</div>
+															</>
+														))
+													: <></>}
+													{/* <div>1111-Tiền Việt Nam</div>
 													<div className=' text-right'>1.500.000.000</div>
 													<div>1111-Tiền Việt Nam</div>
 													<div className='text-right'>1.500.000.000</div>
 													<div>1111-Tiền Việt Nam</div>
-													<div className='text-right'>1.500.000.000</div>
+													<div className='text-right'>1.500.000.000</div> */}
 												</div>
 											</div>
-											<div className='flex mt-8'>
+											{/* <div className='flex mt-8'>
 												<div className='mr-2'>
 													<img src={iconCash} alt="" />
 												</div>
@@ -125,7 +165,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 													<div>11219-Ngân hàng TMCP Ngoại Thương Việt Nam-Chi nhánh Hà Thành</div>
 													<div className='text-right'>1.500.000.000</div>
 												</div>
-											</div>
+											</div> */}
 										</div>
 										{/* /End replace */}
 									</div>

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import "chartjs-adapter-moment";
+import { useCashBookCustom } from "services/hooks/financial/useCashBook";
+import moment from "moment";
 
 ChartJS.register(
   TimeScale,
@@ -58,23 +60,72 @@ export const data: ChartData<"bar", { x: number; y: number }[], string> = {
   ],
 };
 
-const ChartExpenseSumary: FC<React.HTMLAttributes<HTMLElement>> = ({ ...props }) => {
+type Props = {
+  year: string;
+  parentID: string
+} & React.HTMLAttributes<HTMLElement>
+
+const ChartExpenseSumary: FC<Props> = ({ parentID, year, ...props }) => {
+  const { amountByProperty, isLoadingAmountByProperty, refetchAmountByProperty } = useCashBookCustom({
+		paramsAmountByProperty: {
+			option: "3",
+			parentID,
+			year,
+		},
+		isFetchAmountByProperty: true
+	})
+
+  useEffect(() => {
+    refetchAmountByProperty();
+  }, [year])
+
+  const labels = Array.from({ length: 12 }).map((_, i) => new Date().setMonth(i));
+  const dataSetsIncome: { x: number, y: number }[] = [];
+  const dataSetsExpense: { x: number, y: number }[] = [];
+
+  labels.map(label => {
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    amountByProperty.map(item => {
+      const monthOfDate = moment(item.date).get('month');
+      const month = moment(label).get('month');
+
+      if(monthOfDate === month) {
+        totalIncome += item.income;
+        totalExpense += item.expense;
+      }
+    });
+
+    dataSetsIncome[dataSetsIncome.length] = {
+      x: label,
+      y: totalIncome
+    }
+
+    dataSetsExpense[dataSetsExpense.length] = {
+      x: label,
+      y: totalExpense
+    }
+  })
+
+  if(isLoadingAmountByProperty) return <></>
+
   return (
     <Bar
       data={{
+        labels,
         datasets: [
           {
-            label: "Dataset 1",
-            data: datasets(1000),
+            label: "Thu",
+            data: dataSetsIncome,
             // data: labels.map(() => Math.round(Math.random() * 1000)),
             backgroundColor: "#1A97F5",
             barThickness: 8,
             maxBarThickness: 8,
           },
           {
-            label: "Dataset 2",
-            data: datasets(2000),
-            // data: labels.map(() => Math.round(Math.random() * 1000)),
+            label: "Chi",
+            data: dataSetsExpense,
             backgroundColor: "#1E4DB7",
             barThickness: 8,
             maxBarThickness: 8,
