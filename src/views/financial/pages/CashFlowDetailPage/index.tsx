@@ -29,6 +29,7 @@ export const CashFlowDetailPage: FC = () => {
     const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
+    const [keywordContract, setKeywordContract] = useState('');
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
@@ -56,6 +57,7 @@ export const CashFlowDetailPage: FC = () => {
         hasNextPage: hasNextPageListContract,
         fetchNextPage: fetchNextPageListContract
     } = useContract({
+        params: { keyword: keywordContract },
         isFetch: true
     })
 
@@ -98,6 +100,8 @@ export const CashFlowDetailPage: FC = () => {
             fetchNextPageListContract();
         }
     }
+
+    const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
 
     const handleDelete = async () => {
         try {
@@ -289,8 +293,9 @@ export const CashFlowDetailPage: FC = () => {
                             cashFlow={item}
                             itemsChecked={itemsChecked}
                             onUpdate={handleUpdate}
-                            onScroll={handleScroll}
+                            onScrollContract={handleScroll}
                             onChangeCheckbox={handleChangeCheckbox}
+                            onSearchContract={onChangeSearchContract}
                         />
                     )) : <></>}
                     {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
