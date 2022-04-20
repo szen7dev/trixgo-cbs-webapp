@@ -11,12 +11,13 @@ type Props = {
   cashFlow: CashFlowPlan.CashFlowPlan,
   contracts: Contract[],
   onUpdate: (values: any, callback: (response: any) => void) => Promise<any>;
-  onScroll: (e: UIEvent<HTMLDivElement>) => void;
+  onScrollContract: (e: UIEvent<HTMLDivElement>) => void;
+  onSearchContract?: (keyword: string) => void;
   onChangeCheckbox: (ids: string[]) => void;
   itemsChecked: string[]
 };
 
-const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, onUpdate, onScroll, onChangeCheckbox }) => {
+const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, onUpdate, onScrollContract, onSearchContract, onChangeCheckbox }) => {
   const [sellerName, setSellerName] = useState(cashFlow.contract?.sellerInfo?.name);
   const [values, setValues] = useState({
     value: `${cashFlow.value}`,
@@ -84,7 +85,8 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
           allowClearValueSingleInput={false}
           showTriangle={true}
           maxWidthInput="max-w-none"
-          onScroll={onScroll}
+          onScroll={onScrollContract}
+          onSearchInputChange={onSearchContract}
           data={contracts.map(contract => ({
             value: contract._id,
             label: contract.name
@@ -92,9 +94,6 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
           initialValue={{
             value: cashFlow.contract?._id,
             label: cashFlow.contract?.name
-          }}
-          onSearchInputChange={(keyword) => {
-            console.log({ keyword });
           }}
           formatItem={{
             id: "value",
