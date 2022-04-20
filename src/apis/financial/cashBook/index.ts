@@ -9,7 +9,10 @@ import {
     CashBookListParams,
     CashBookListResponse,
     CashBookInfoResponse,
-    CashBookAmountIncomeExpenseResponse
+    CashBookAmountIncomeExpenseParams,
+    CashBookAmountIncomeExpenseResponse,
+    CashBookAmountByPropertyParams,
+    CashBookAmountByPropertyResponse
 } from 'typings/financial/cashBook';
 
 const CASH_BOOK_URL = "/api/fin/cash_books";
@@ -20,7 +23,10 @@ export const CashbookRepository = {
     deleteMany: (params: CashBookDeleteManyPayload): Promise<any> => deleteMany(params),
     fetchList: (params: CashBookListParams): Promise<CashBookListResponse> => fetchList(params),
     fetchInfo: (params: CashBookInfoParams): Promise<CashBookInfoResponse> => fetchInfo(params),
-    fetchAmountIncomeExpenseByParent: (parentID: string): Promise<CashBookAmountIncomeExpenseResponse> => fetchAmountIncomeExpenseByParent(parentID),
+    fetchAmountIncomeExpenseByParent:
+        (params: CashBookAmountIncomeExpenseParams): Promise<CashBookAmountIncomeExpenseResponse> => fetchAmountIncomeExpenseByParent(params),
+    fetchAmountByProperty:
+        (params: CashBookAmountByPropertyParams): Promise<CashBookAmountByPropertyResponse> => fetchAmountByProperty(params),
 };
 
 async function insert(payload: CashBookInsertPayload): Promise<CashBookInfoResponse> {
@@ -66,9 +72,16 @@ async function fetchInfo(params: CashBookInfoParams): Promise<CashBookInfoRespon
     return data
 }
 
-async function fetchAmountIncomeExpenseByParent(parentID: string): Promise<CashBookAmountIncomeExpenseResponse> {
+async function fetchAmountIncomeExpenseByParent(params: CashBookAmountIncomeExpenseParams): Promise<CashBookAmountIncomeExpenseResponse> {
     const { data } = await API.get(
-        `${CASH_BOOK_URL}/get-amount-income-expense-by-parent?parentID=${parentID}`
+        `${CASH_BOOK_URL}/get-amount-income-expense-by-parent?${convertObToUrl(params)}`
+    )
+    return data
+}
+
+async function fetchAmountByProperty(params: CashBookAmountByPropertyParams): Promise<CashBookAmountByPropertyResponse> {
+    const { data } = await API.get(
+        `${CASH_BOOK_URL}/get-amount-by-property?${convertObToUrl(params)}`
     )
     return data
 }

@@ -98,6 +98,13 @@ export type CashBookInfoResponse = APIResponse & {
 }
 
 /**
+ * PARAMS AMOUNT INCOME EXPENSE BY PARENT
+ */
+export type CashBookAmountIncomeExpenseParams = APIResponse & {
+    parentID: string;
+}
+
+/**
  * RESPONSE AMOUNT INCOME EXPENSE BY PARENT
  */
 export type CashBookAmountIncomeExpenseResponse = APIResponse & {
@@ -105,4 +112,36 @@ export type CashBookAmountIncomeExpenseResponse = APIResponse & {
         income: number;
         expense: number;
     };
+}
+
+/**
+ * SCHEMA AMOUNT BY PROPERTY
+ */
+export interface CashBookAmountByProperty {
+    _id: {
+        account?: {
+            _id: string;
+            name: string;
+            description: string;
+        }
+    },
+    income: number;
+    expense: number;
+    date: string
+}
+
+/**
+ * PARAMS AMOUNT BY PROPERTY
+ */
+export type CashBookAmountByPropertyParams = {
+    option?: string;
+    parentID?: string;
+    year?: string
+}
+
+/**
+ * RESPONSE AMOUNT BY PROPERTY
+ */
+export type CashBookAmountByPropertyResponse = APIResponse & {
+    data: CashBookAmountByProperty[];
 }

@@ -28,6 +28,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
     const { closeModal, openModal } = useModal();
 
     const [showRowInsert, setShowRowInsert] = useState(true);
+    const [keywordContract, setKeywordContract] = useState('');
     const [keyword, setKeyword] = useState('');
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
@@ -56,7 +57,7 @@ const ProjectCashFlowPlanChildPage: FC = () => {
         hasNextPage: hasNextPageListContract,
         fetchNextPage: fetchNextPageListContract
     } = useContract({
-        params: { projectID },
+        params: { projectID, keyword: keywordContract },
         isFetch: true
     })
 
@@ -99,6 +100,8 @@ const ProjectCashFlowPlanChildPage: FC = () => {
             fetchNextPageListContract();
         }
     }
+
+    const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
 
     const handleDelete = async () => {
         try {
@@ -291,7 +294,8 @@ const ProjectCashFlowPlanChildPage: FC = () => {
                             cashFlow={item}
                             itemsChecked={itemsChecked}
                             onUpdate={handleUpdate}
-                            onScroll={handleScroll}
+                            onScrollContract={handleScroll}
+                            onSearchContract={onChangeSearchContract}
                             onChangeCheckbox={handleChangeCheckbox}
                         />
                     )) : <></>}
