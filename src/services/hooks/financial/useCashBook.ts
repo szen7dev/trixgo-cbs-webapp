@@ -15,7 +15,6 @@ import type {
     CashBookAmountIncomeExpenseResponse,
     CashBookAmountByProperty,
     CashBookAmountByPropertyParams,
-    CashBookAmountByPropertyResponse
 } from 'typings/financial/cashBook';
 
 /*=====3.INTERFACE DEFINE=====*/
@@ -118,7 +117,6 @@ export const useCashBook = ({
 /**
  * Hook cashbook Custom
  */
-
 interface UseCashBookCustom {
     amountIncomeExpenseByParent: CashBookAmountIncomeExpenseResponse;
     isLoadingAmountIncomeExpense: boolean;
@@ -142,7 +140,7 @@ export const useCashBookCustom = ({
 }: UseCashBookCustomProps) : UseCashBookCustom => {
 
     const { data: dataAmountIncomeExpenseByParent, isLoading: isLoadingAmountIncomeExpense } =
-        useQuery("cashbook__amount-income-expense",
+        useQuery("cashbook--amount_income_expense",
             () => CashbookRepository.fetchAmountIncomeExpenseByParent(paramsAmountIncomeExpense), {
             refetchOnWindowFocus: false,
             enabled: isFetchAmountIncomeExpenseByParent,
@@ -151,7 +149,7 @@ export const useCashBookCustom = ({
     const amountIncomeExpenseByParent = dataAmountIncomeExpenseByParent?.data;
 
     const { data: dataAmountByProperty, isLoading: isLoadingAmountByProperty, refetch: refetchAmountByProperty } =
-        useQuery("cashbook__amount-by-property",
+        useQuery("cashbook--amount_by_property",
             () => CashbookRepository.fetchAmountByProperty(paramsAmountByProperty), {
             refetchOnWindowFocus: false,
             enabled: isFetchAmountByProperty,
