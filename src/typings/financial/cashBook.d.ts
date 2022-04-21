@@ -123,7 +123,8 @@ export interface CashBookAmountByProperty {
             _id: string;
             name: string;
             description: string;
-        }
+        },
+        company?: string;
     },
     income: number;
     expense: number;
