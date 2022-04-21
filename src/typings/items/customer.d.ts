@@ -18,6 +18,8 @@ export interface Customer {
 export type CustomerQueryPayload = QueryParam & {
     companyID?: string;
     contactID?: string;
+    isListParentOrListChilds?: string;
+    parentID?: string;
 };
 
 export type CustomerQueryResponse = APIResponse & {

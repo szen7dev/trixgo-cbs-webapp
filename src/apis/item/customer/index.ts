@@ -11,7 +11,7 @@ interface CustomerRepository {
     updateCustomer: (params: any) => Promise<any>;
     deleteCustomer: (ids: Array<string>) => Promise<any>;
     fetchListCustomer: (params: Customer.CustomerQueryPayload) => Promise<Customer.CustomerQueryResponse>;
-    fetchDetailCustomer: (storageID: string, params?: Customer.CustomerQueryPayload) => Promise<Customer.CustomerQueryDetailResponse>;
+    fetchDetailCustomer: (params: Customer.CustomerQueryPayload) => Promise<Customer.CustomerQueryDetailResponse>;
 }
 
 export const customerRepository: CustomerRepository = {
@@ -19,7 +19,7 @@ export const customerRepository: CustomerRepository = {
     updateCustomer: (params: any) => updateCustomer(params),
     deleteCustomer: (ids: Array<string>) => deleteCustomer(ids),
     fetchListCustomer: async (params) => fetchListCustomer(params),
-    fetchDetailCustomer: async (storageID, params) => fetchListCustomer(params),
+    fetchDetailCustomer: async (params) => fetchListCustomer(params),
 }
 
 /*=====APIS=====*/
@@ -28,10 +28,10 @@ async function fetchListCustomer(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/contacts`, {
         params: {
-            select: 'parent type name address taxid phone description',
+            select: 'parent type name address taxid phone description modifyAt',
             populates: {
-                path: 'parent',
-                select: 'name'
+                path: 'parent userUpdate',
+                select: 'name bizfullname'
             },
             limit: 20,
             ...params

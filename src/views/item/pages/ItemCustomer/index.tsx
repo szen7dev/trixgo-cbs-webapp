@@ -1,9 +1,10 @@
 /*=====1.LIBRARY=====*/
-import { FC, useState, useCallback } from "react";
+import { FC, useState, useCallback, useEffect } from "react";
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { Link, useParams } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -26,7 +27,9 @@ import { useCustomer } from "services/hooks/items/useCustomer";
 /*=====7.OTHER=====*/
 export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
     const { closeModal, openModal } = useModal();
+	const { parentID } = useParams<{ parentID: string }>();
     const [keyword, setKeyword] = useState('');
+    const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
     const [initialValues, setInitialValues] = useState({
         contactID: '',
@@ -46,9 +49,24 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useCustomer({
-        params: { keyword }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
+        params: { keyword, isListParentOrListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
         isFetchList: true
     });
+
+    const {
+        info
+    } = useCustomer({
+        params: { contactID: parentID }, 
+        isFetchInfo : true
+    });
+
+    useEffect(() => {
+        if(!parentID || !info?.name)
+            setTitle(`Danh sách`)
+        setTitle(`${info?.name}`)
+    }, [parentID, info]);
+
+    console.log({ info, parentID })
 
     // Reset form
     const clearData = () => {
@@ -106,7 +124,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         const user = itemsChecked.find(item => item._id === id);
         return user ? true : false;
     }, [itemsChecked]);
-
+    
     const getStateCheckedAll = useCallback(() => {
         return itemsChecked.length == listCustomers.length;
     }, [itemsChecked]);
@@ -175,13 +193,13 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             </div>
         )
     }
-
+  
     return (
         <main className="relative h-full">
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <p className="text-lg">Danh sách</p>
+                        <p className="text-lg">{title}</p>
 
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
@@ -244,19 +262,14 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </div>
                         </th>
-                        <th className="w-1/12 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Phân loại
-                            </div>
-                        </th>
-                        <th className="w-1/6 py-1">
-                            <div className="border-r-2 border-gray-300 font-normal pl-2">
-                                Phần tử cha
-                            </div>
-                        </th>
                         <th className="w-1/5 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Tên
+                            </div>
+                        </th>
+                        <th className="w-1/12 py-1">
+                            <div className="border-r-2 border-gray-300 font-normal pl-2">
+                                Phân loại
                             </div>
                         </th>
                         <th className="w-1/6 py-1">
@@ -288,7 +301,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listCustomers.length ? listCustomers.map(item => (
+                    {listCustomers.length ? listCustomers.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -298,15 +311,18 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
+                            <td className="py-1 px-2">
+                                <Link to={`/item/contact/${item._id}`}>
+                                    {item.name}
+                                </Link>
+                            </td>
                             <td className="py-1 px-2">{item.type}</td>
-                            <td className="py-1 px-2">{item.parent?.name}</td>
-                            <td className="py-1 px-2">{item.name}</td>
                             <td className="py-1 px-2">{item.address}</td>
                             <td className="py-1 px-2">{item.taxid}</td>
                             <td className="py-1 px-2">{item.phone}</td>
                             <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
-                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
+                                {item.modifyAt ? moment(item.modifyAt).format('HH:mm - DD/MM/YYYY') : ''} <br /> {item?.userUpdate?.bizfullname || ''}
                             </td>
                         </tr>
                     )) : <></>}

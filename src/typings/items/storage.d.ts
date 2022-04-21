@@ -9,6 +9,8 @@ export interface Storage {
 
 export type StorageQueryPayload = QueryParam & {
     companyID?: string;
+    parentID?: string;
+    isListParentOfListChilds?: string;
     storageID?: string;
 };
 
