@@ -85,10 +85,10 @@ const FinancialRowGroup: FC<Props> = ({ index, company, cashBooks, forceUpdateVa
               {account?.description}
             </td>
             <td className="text-right py-2 px-2 border-0.5 border-cbs-border border-l-0">
-              {account?.name === '111' && convertCurrency(income - expense)}
+              {account?.name?.includes('111') && convertCurrency(income - expense)}
             </td>
             <td className="text-right py-2 px-2 border-0.5 border-cbs-border border-l-0">
-              {account?.name === '112' && convertCurrency(income - expense)}
+              {account?.name.includes('112') && convertCurrency(income - expense)}
             </td>
           </tr>
         ))}
