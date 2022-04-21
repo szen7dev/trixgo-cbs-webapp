@@ -1,0 +1,101 @@
+/* Display table for tree view */
+.treeView,
+.treeView ul {
+  @apply table;
+}
+
+.treeView code,
+.treeView span {
+  font-family: Arial, sans-serif;
+}
+
+/* Center parent node */
+.treeView {
+  margin: 0 0 1em;
+  text-align: center;
+}
+
+/* Add relative to container node */
+.treeView,
+.treeView ul,
+.treeView li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.treeView>li::before,
+.treeView>li::after,
+.treeView>li>code::before,
+.treeView>li>span::before {
+  outline: none;
+}
+
+/* Container node is tablecell */
+.treeView li {
+  display: table-cell;
+  padding: 2em 0;
+  vertical-align: top;
+}
+
+/* Vertical line position right */
+.treeView li:last-child::before {
+  right: 50%;
+}
+
+/* Vertical line position left */
+.treeView li:first-child::before {
+  left: 50%;
+}
+
+/* Vertical line */
+.treeView li::before {
+  outline: solid 1px #666;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Line down */
+.treeView ul:before,
+.treeView code:before,
+.treeView span:before {
+  outline: solid 1px #666;
+  content: "";
+  height: 2em;
+  left: 50%;
+  position: absolute;
+}
+
+/* Line up container node */
+.treeView ul:before {
+  top: -1.7rem;
+}
+
+/* Line up container node */
+.treeView code:before,
+.treeView span:before {
+  top: -1.7rem;
+}
+
+/* Node style */
+.treeView code,
+.treeView span {
+  @apply border inline-block mx-4 mb-7 px-10 py-2 transition-colors cursor-pointer;
+  border: solid .1em #666;
+  border-radius: .2em;
+  display: inline-block;
+  /* margin: 0 .2em .5em; */
+  /* padding: .2em .5em; */
+  position: relative;
+}
+
+/* hover */
+.treeView code:hover,
+.treeView code:hover~ul code,
+.treeView span:hover {
+  @apply bg-cbs-active-comment;
+}
