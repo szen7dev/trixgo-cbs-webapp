@@ -1,4 +1,4 @@
-export { AppCompanyRepository } from './appCompany';
-export { AppUserRepository } from './appUser';
+export { AppCompanyRepository } from './AppCompany';
+export { AppUserRepository } from './AppUser';
 export { AppMenuRepository } from './appMenu';
-export { AppRepository } from './app';
+export { AppRepository } from './App';
