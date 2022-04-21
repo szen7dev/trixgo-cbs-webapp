@@ -17,6 +17,7 @@ import Policy from "views/authentication/Policy";
 /*=====4.CONFIG ROUTE=====*/
 const AccountingRouter = lazy(() => import("./accounting"));
 const AuthenticationRouter = lazy(() => import("./authentication"));
+const SampleRouter = lazy(() => import("./sample"));
 const BiddingRouter = lazy(() => import("./bidding"));
 const CmcsRouter = lazy(() => import("./cmcs"));
 const DatahubRouter = lazy(() => import("./datahub"));
@@ -64,14 +65,19 @@ const Routes: FC = () => {
                         <ModalProvider>
                             <Switch>
 
-                                {/* =====HOME===== */}
-                                <Route exact path="/">
-                                    <PcmRouter />
-                                </Route>
-
                                 {/* =====AUTHENTICATION===== */}
                                 <Route path="/(authentication|login)/:path?">
                                     <AuthenticationRouter />
+                                </Route>
+
+                                {/* =====SAMPLE UI===== */}  
+                                <Route path="/sample">
+                                    <SampleRouter />
+                                </Route>                            
+
+                                {/* =====HOME===== */}
+                                <Route exact path="/">
+                                    <PcmRouter />
                                 </Route>
 
                                 {/* =====ACCOUNTING===== */}
