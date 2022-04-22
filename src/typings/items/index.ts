@@ -3,4 +3,7 @@ export * as Doctype from './doctype';
 export * as Contact from './contact';
 export * as Storage from './storage';
 export * as Account from './account';
+export * as Warehouse from './warehouse';
+export * as Funda from './funda';
 export * as Customer from './customer';
+export * as Goods from './goods';

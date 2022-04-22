@@ -6,12 +6,12 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 /*=====3.LAYOUTS=====*/
 import { ProtectedRoute } from "routes/components";
+import { LayoutPrimary } from "shareComponents/layouts";
 
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
-
 import {
   AccountingHomePage,
   AccountingTicketsPage,
@@ -27,8 +27,9 @@ import {
   AccountingVatPage,
   AccountingReportFinancePage,
   AccountingSupportToolsPage,
-  AccountingAdminPage
 } from "views/accounting/pages";
+
+import { ItemAccountPage, ItemFundaPage, ItemWarehousePage, ItemGoodsPage } from "views/accounting/pages/AccountingAdminPage";
 
 const AccountingRouter: FC = () => {
   return (
@@ -172,20 +173,31 @@ const AccountingRouter: FC = () => {
         path="/accounting/support-tools"
         component={AccountingSupportToolsPage}
       />
-      <ProtectedRoute
-        exact
-        path="/accounting/admin"
-        component={AccountingAdminPage}
-      />
-      <ProtectedRoute
-        exact
-        path="/accounting/admin/1"
-        component={AccountingAdminPage}
-      />
-
+     
+      <Route path="/accounting/admin">
+        <LayoutPrimary
+          pages={[
+            { id: "1", title: "Nhóm chức năng", path: "/accounting/admin" },
+            { id: "2", title: "Phân quyền nhóm chức năng", path: "/accounting/admin/1" },
+            { id: "3", title: "Cấu hình khác", path: "/accounting/admin/2" },
+            { id: "4", title: "Account", path: "/accounting/admin/account" },
+            { id: "5", title: "Funda", path: "/accounting/admin/funda" },
+            { id: "6", title: "Warehouse", path: "/accounting/admin/warehouse" },
+            { id: "7", title: "Goods", path: "/accounting/admin/goods" },
+          ]}
+        >
+          <Route exact path={`/accounting/admin/account`} component={ItemAccountPage} />
+          <Route exact path={`/accounting/admin/account/:parentID`} component={ItemAccountPage} />
+          <Route exact path={`/accounting/admin/funda`} component={ItemFundaPage} />
+          <Route exact path={`/accounting/admin/funda/:parentID`} component={ItemFundaPage} />
+          <Route exact path={`/accounting/admin/warehouse`} component={ItemWarehousePage} />
+          <Route exact path={`/accounting/admin/warehouse/:parentID`} component={ItemWarehousePage} />
+          <Route exact path={`/accounting/admin/goods`} component={ItemGoodsPage} />
+          <Route exact path={`/accounting/admin/goods/:parentID`} component={ItemGoodsPage} />
+        </LayoutPrimary>
+      </Route>
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>
-
   )
 }
 export default AccountingRouter

@@ -3,30 +3,30 @@ import API from "../../repository";
 import { ITEM_URL } from '../';
 
 /*=====TYPING=====*/
-import { Storage } from 'typings/items';
+import { Account } from 'typings/items';
 
 /*=====INTERFACE DEFINE=====*/
-interface StorageRepository {
-    addStorage: (params: any) => Promise<any>;
-    updateStorage: (params: any) => Promise<any>;
-    deleteStorage: (ids: Array<string>) => Promise<any>;
-    fetchListStorage: (params: Storage.StorageQueryPayload) => Promise<Storage.StorageQueryResponse>;
-    fetchDetailStorage: (storageID: string, params?: Storage.StorageQueryPayload) => Promise<Storage.StorageQueryDetailResponse>;
+interface AccountRepository {
+    addAccount: (params: any) => Promise<any>;
+    updateAccount: (params: any) => Promise<any>;
+    deleteAccount: (ids: Array<string>) => Promise<any>;
+    fetchListAccount: (params: Account.AccountQueryPayload) => Promise<Account.AccountQueryResponse>;
+    fetchDetailAccount: (AccountID: string, params?: Account.AccountQueryPayload) => Promise<Account.AccountQueryDetailResponse>;
 }
 
-export const storageRepository: StorageRepository = {
-    addStorage: (params: any) => addStorage(params),
-    updateStorage: (params: any) => updateStorage(params),
-    deleteStorage: (ids: Array<string>) => deleteStorage(ids),
-    fetchListStorage: async (params) => fetchListStorage(params),
-    fetchDetailStorage: async (storageID, params) => fetchListStorage(params),
+export const AccountRepository: AccountRepository = {
+    addAccount: (params: any) => addAccount(params),
+    updateAccount: (params: any) => updateAccount(params),
+    deleteAccount: (ids: Array<string>) => deleteAccount(ids),
+    fetchListAccount: async (params) => fetchListAccount(params),
+    fetchDetailAccount: async (AccountID, params) => fetchListAccount(params),
 }
 
 /*=====APIS=====*/
 // Get List|Info
-async function fetchListStorage(params: any) {
+async function fetchListAccount(params: any) {
     const { data } = await API.get(
-        `${ITEM_URL}/storages`, {
+        `${ITEM_URL}/accounts`, {
         params: {
             select: 'name description modifyAt userUpdate amountChilds',
             populates: {
@@ -41,27 +41,27 @@ async function fetchListStorage(params: any) {
 }
 
 // Create
-async function addStorage(params: any) {
+async function addAccount(params: any) {
     const { data } = await API.post(
-        `${ITEM_URL}/storages`, params);
+        `${ITEM_URL}/accounts`, params);
 
     return data;
 }
 
 // Update
-async function updateStorage(params: any) {
+async function updateAccount(params: any) {
     const { data } = await API.put(
-        `${ITEM_URL}/storages`, params);
+        `${ITEM_URL}/accounts`, params);
 
     return data;
 }
 
 // Delete
-async function deleteStorage(ids: Array<string>) {
+async function deleteAccount(ids: Array<string>) {
     const { data } = await API.delete(
-        `${ITEM_URL}/storages`, {
+        `${ITEM_URL}/accounts`, {
             params: {
-                doctypesID: ids
+                accountID: ids
             }
         });
 

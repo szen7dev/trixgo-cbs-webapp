@@ -15,36 +15,36 @@ import iconPencil from 'assets/images/icons8-pencil-96 1.png';
 
 /*=====4.PAGES/COMPONENTS=====*/
 import { SearchInput } from "shareComponents/common";
-import { ModalCreateOrUpdateStorage, ModalConfirm } from '../../../../shareComponents/common';
+import { ModalCreateOrUpdateAccount, ModalConfirm } from '../../../../shareComponents/common';
 
 /*=====5.TYPINGS=====*/
-import { Storage } from "typings/items";
+import { Account } from "typings/items";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
-import { useStorage } from "services/hooks/items/useStorage";
+import { useAccount } from "services/hooks/items/useAccount";
 
-const ItemAccountPage: FC = () => {
-  const history = useHistory();
+export const ItemAccountPage: FC = () => {
+    const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 	const { parentID } = useParams<{ parentID: string }>();
 
-    const [itemsChecked, setItemsChecked] = useState<Array<Storage.Storage>>([]);
+    const [itemsChecked, setItemsChecked] = useState<Array<Account.Account>>([]);
     const [initialValues, setInitialValues] = useState({
-        storageID: '',
+        accountID: '',
         name: '',
         description: '',
     });
 
     const {
         deleteAsync,
-        list: listStorages,
+        list: listAccounts,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
-    } = useStorage({
+    } = useAccount({
         params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
         isFetchList: true
     });
@@ -53,7 +53,7 @@ const ItemAccountPage: FC = () => {
     const clearData = () => {
         setInitialValues(previousValue => ({
             ...previousValue,
-            storageID: '',
+            accountID: '',
             name: '',
             description: '',
         }))
@@ -68,7 +68,7 @@ const ItemAccountPage: FC = () => {
     }, 500);
 
     // Làm việc với update mẩu tin  
-    const onClickCheckButton = (doc: Storage.Storage) => {
+    const onClickCheckButton = (doc: Account.Account) => {
         const check = itemsChecked.find(item => item._id === doc._id);
         let newListIDChecked = [];
 
@@ -83,7 +83,7 @@ const ItemAccountPage: FC = () => {
         if (newListIDChecked.length === 1) {
             const { _id, name, description } = newListIDChecked[0];
             setInitialValues({
-                storageID: _id,
+                accountID: _id,
                 name,
                 description: description || '',
             });
@@ -99,14 +99,14 @@ const ItemAccountPage: FC = () => {
     }, [itemsChecked]);
 
     const getStateCheckedAll = useCallback(() => {
-        return itemsChecked.length == listStorages.length;
+        return itemsChecked.length == listAccounts.length;
     }, [itemsChecked]);
 
     const onClickCheckAll = () => {
-        if (itemsChecked.length == listStorages.length) {
+        if (itemsChecked.length == listAccounts.length) {
             setItemsChecked([]);
         } else {
-            setItemsChecked(listStorages);
+            setItemsChecked(listAccounts);
         }
     };
 
@@ -143,17 +143,17 @@ const ItemAccountPage: FC = () => {
             clearData();
             initValues = {
                 parentID,
-                storageID: '',
+                accountID: '',
                 name: '',
                 description: '',
             };
         }
-
+        
         openModal(
             <div
-                className={"inline-block w-[521px] h-[280px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl"}
+                className={"inline-block w-[521px] h-[280px] my-8  text-left align-middle transition-all transform bg-primary-light shadow-xl"}
             >
-                <ModalCreateOrUpdateStorage
+                <ModalCreateOrUpdateAccount
                     modalType={modalType}
                     initialValues={initValues}
                     onConfirm={handleConfirmCreateOrUpdate}
@@ -171,7 +171,7 @@ const ItemAccountPage: FC = () => {
                         <img src="/images/common/button_back.png" alt="Button Back" />
                     </button>
                     <p className="text-lg ml-2">Danh sách</p>
-
+                    
                     <SearchInput
                         classNameWrapper="ml-4 mr-2"
                         classNameInput="outline-none w-[296px]"
@@ -197,7 +197,7 @@ const ItemAccountPage: FC = () => {
                                             "inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
                                         }
                                     >
-                                        {/* <ModalConfirm onConfirm={handleConfirmDelete} /> */}
+                                        <ModalConfirm onConfirm={handleConfirmDelete} />
                                     </div>
                                 )
                             }>
@@ -251,7 +251,7 @@ const ItemAccountPage: FC = () => {
             </thead>
 
             <tbody>
-                {listStorages.length ? listStorages.map((item: any) => (
+                {listAccounts.length ? listAccounts.map((item: any) => (
                     <tr key={item._id} className="border-b border-primary-border h-10">
                         <td className="py-1 px-2 text-center">
                             <input
@@ -262,7 +262,7 @@ const ItemAccountPage: FC = () => {
                             />
                         </td>
                         <td className="py-1 px-2">
-                            <Link to={`/item/storage/${item._id}`}>
+                            <Link to={`/accounting/admin/account/${item._id}`}>
                                 {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
                             </Link>
                         </td>
@@ -279,7 +279,7 @@ const ItemAccountPage: FC = () => {
             <div className="w-full flex justify-center my-5">
                 <button onClick={fetchNextPage}>
                     <span className="text-primary">
-                        {`Xem thêm (${totalRecord - listStorages.length})`}
+                        {`Xem thêm (${totalRecord - listAccounts.length})`}
                     </span>
                 </button>
             </div>
@@ -288,4 +288,4 @@ const ItemAccountPage: FC = () => {
   );
 };
 
-export default ItemAccountPage;
+// export default ItemAccountPage;
