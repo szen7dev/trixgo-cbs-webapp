@@ -1,5 +1,6 @@
 import React, { FC, Fragment, useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import { captureException } from "@sentry/react";
 
 /**
  * Components
@@ -39,6 +40,7 @@ const ModalUpdateTaskStatus:FC<Props> = ({ taskID, status, isShow, onClose, onCo
 
             toast.success('Cập nhật trạng thái thành công', { autoClose: 1500 })
         } catch (error) {
+			captureException(error);
             if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {

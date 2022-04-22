@@ -2,6 +2,7 @@
  * Libraries
  */
 import { FC, useState, useContext, useEffect, useRef } from "react";
+import { captureException } from "@sentry/react";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { toast } from "react-toastify";
@@ -226,6 +227,7 @@ const Response: FC<Props> = ({ task }) => {
           receivers: data.receivers
       });
     } catch (error: unknown) {
+			captureException(error);
       if (typeof error === "string") {
           toast.error(error);
       } else if (error instanceof Error) {

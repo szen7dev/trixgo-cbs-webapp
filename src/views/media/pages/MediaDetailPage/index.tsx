@@ -2,6 +2,7 @@
  * Libraries
  */
 import React, { FC, Fragment, useContext, useEffect, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { useQuery } from "react-query";
@@ -202,6 +203,7 @@ export const MediaDetailPage: FC = () => {
 			toast.success('Xóa bài viết thành công', { autoClose: 900 });
 			setTimeout(() => history.push('/media/home'), 1000);
 		} catch (error) {
+			Sentry.captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {
@@ -220,6 +222,7 @@ export const MediaDetailPage: FC = () => {
 			refetch();
 			refetchListReactions();
 		} catch (error: unknown) {
+			Sentry.captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {
