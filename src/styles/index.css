@@ -1155,9 +1155,9 @@ input::placeholder {
   font-size: 13px;
   color: #d2d6db;
 }
-input[type="text"] {
+/* input[type="text"] {
   min-height: 24px;
-}
+} */
 .column-table-cell {
   display: table-row;
 }

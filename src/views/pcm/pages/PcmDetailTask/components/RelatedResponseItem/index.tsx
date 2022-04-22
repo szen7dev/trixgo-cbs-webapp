@@ -2,6 +2,7 @@ import React, { FC, LegacyRef, useCallback, useState } from "react";
 import moment from "moment";
 import classNames from "classnames";
 import _ from "lodash";
+import { captureException } from "@sentry/react";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 
@@ -163,7 +164,7 @@ export const RelatedResponseItem: FC<Props> = ({
 
 			toast.success('Thêm file thành công');
 		} catch (error) {
-			console.error(error);
+			captureException(error);
 			if(error instanceof Error) {
 				toast.error(error.message)
 			}

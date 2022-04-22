@@ -1,4 +1,5 @@
 import { FC, useCallback } from "react";
+import { captureException } from "@sentry/react";
 import moment from "moment";
 
 import HumanAvatar from "assets/images/human-avatar.svg";
@@ -53,6 +54,7 @@ export const SideBar: FC<Props> = ({
 
       onConfirmSign && onConfirmSign();
     } catch (error) {
+			captureException(error);
       if (typeof error === "string") {
           toast.error(error);
       } else if (error instanceof Error) {

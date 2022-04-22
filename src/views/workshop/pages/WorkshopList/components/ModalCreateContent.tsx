@@ -2,7 +2,7 @@ import React, { FC, Fragment } from "react";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Dialog } from "@headlessui/react";
 
-import { CustomFieldFormik } from "views/datahub/sharedComponents/common";
+import { CustomFieldFormik } from "shareComponents/common/Form/CustomForm";
 import { CreateSubjectBody, Lesson, SubjectQueryParams, Subject } from "typings/workshop";
 
 type Props = {

@@ -3,8 +3,7 @@ import { Form, Formik } from 'formik'
 import { Dialog } from '@headlessui/react'
 
 import { ModalContainer } from 'shareComponents/common'
-import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
-import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik'
+import { CustomAutoCompleteFormik, CustomFieldFormik, CustomDatePickerFormik } from 'shareComponents/common/Form/CustomForm'
 
 type Props = {
 	show: boolean

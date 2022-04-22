@@ -4,6 +4,7 @@ import Axios from 'axios';
 import classNames from 'classnames';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import { captureException } from "@sentry/react";
 
 import iconFace from 'assets/images/icons8-grinning-face-64.png';
 import iconAttach from 'assets/images/icons8-attach-50.png';
@@ -252,6 +253,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				receivers: dataAfterInsertOrUpdate.receivers
 			});
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {

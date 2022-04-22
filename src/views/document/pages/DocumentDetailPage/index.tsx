@@ -8,11 +8,11 @@ import { useUpload } from 'services/hooks/useUpload';
 import { APP_KEY } from 'utils/constants';
 import { ModalCreateDocumentChild } from 'views/document/sharedComponents/common';
 
+import { ButtonIcon, ButtonMore } from 'shareComponents/common/Button'
+
 import {
   // DropdownFilterButton,
   // ButtonCreate,
-  ButtonMore,
-  ButtonIcon,
   GroupActionsPageDetail
 } from "views/document/sharedComponents/common";
 
