@@ -28,10 +28,10 @@ async function fetchListStorage(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/storages`, {
         params: {
-            select: 'name description',
+            select: 'name description modifyAt userUpdate amountChilds',
             populates: {
-                path: 'parent',
-                select: 'name description'
+                path: 'parent userUpdate',
+                select: 'name description bizfullname'
             },
             ...params
         }
