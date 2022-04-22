@@ -28,7 +28,7 @@ const FinancialCashFlowPage: FC = () => {
       </div>
       <div className={"financial-cashflow-table"}>
         <div className={"relative table border-collapse w-full"}>
-          <div className={"header flex table-row sticky z-10"}>
+          <div className={"header table-row sticky z-10"}>
             <div className={"px-6 py-4 table-cell box-border border-b align-middle w-3"}>
               <div className={"flex items-center"}>
                 <input

@@ -3,34 +3,35 @@ import classNames from "classnames";
 
 import MenuChildRow from "views/financial/planning/components/FinancialCashFlowDetail/MenuChildRow";
 import { RightClickMenuWrapper } from "shareComponents/common";
+import { convertCurrency } from "utils/converter";
+import { CashBookAmountByProperty } from "typings/financial/cashBook";
 
-interface RowItem {
-  _id: string | number;
-  budget: number;
-  predict: number;
-  signed: number;
-  advance: number;
-  volume: number;
-  finish: number;
-  pay: number;
-  rest: number;
-  note?: string;
-}
-interface RowData {
-  _id: string | number;
-  name: string;
-  description: string;
-  data: Array<RowItem>;
+interface Report {
+	company: {
+		_id: string;
+		name: string;
+		sign: string;
+		image: string;
+		amountCashCompany: number;
+		amountBankDepositsCompany: number;
+	};
+	cashBooks: CashBookAmountByProperty[];
 }
 
-export const FinancialRowGroup: FC<{ row: RowData; show: boolean; forceUpdateValue?: string | number }> =
-  ({ forceUpdateValue, row, show }) => {
+interface Props extends Report {
+  index: number;
+  show: boolean;
+  forceUpdateValue?: string | number;
+}
+
+const FinancialRowGroup: FC<Props> = ({ index, company, cashBooks, forceUpdateValue, show }) => {
     const [state, setState] = useState<boolean>(show);
     const wrapperRef = useRef<HTMLTableSectionElement>(null);
 
     useEffect(() => {
       setState(show);
     }, [show, forceUpdateValue]);
+
     return (
       <RightClickMenuWrapper
         contextMenu={<MenuChildRow />}
@@ -52,45 +53,47 @@ export const FinancialRowGroup: FC<{ row: RowData; show: boolean; forceUpdateVal
             </button>
           </th>
           <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-center">
-            A1
+            A{index + 1}
           </th>
           <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0 text-left">
-            CÔNG TY A1
+            {company.name}
           </th>
           <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
-            {row.data.reduce((prev, d) => prev + d.budget, 0).toLocaleString()}
+            {convertCurrency(company.amountCashCompany)}
           </th>
           <th className="py-2 px-2 bg-cbs-active-comment border-0.5 border-cbs-border border-l-0">
-            {row.data.reduce((prev, d) => prev + d.predict, 0).toLocaleString()}
+            {convertCurrency(company.amountBankDepositsCompany)}
           </th>
         </tr>
-        {row.data.map((_d, i) => (
-          <tr key={i} className={classNames("", { hidden: state })}>
+        {cashBooks.map(({ _id: { account }, income, expense }: any, index: number) => (
+          <tr key={index} className={classNames("", { hidden: state })}>
             <td className="bg-gray-300 px-1.5 py-2 relative">
               <div
                 className={classNames(
                   "absolute left-1/2 bg-cbs-subtext top-0 w-[1px]",
-                  i === row.data.length - 1 ? "h-1/2" : "h-full"
+                  index === cashBooks.length - 1 ? "h-1/2" : "h-full"
                 )}
               />
-              {i === row.data.length - 1 && (
+              {index === cashBooks.length - 1 && (
                 <div className="absolute left-1/2 bg-cbs-subtext w-1/2 top-1/2 h-[1px]" />
               )}
             </td>
             <td className="px-2.5 py-2 bg-cbs-table-header border-0.5 border-cbs-border border-l-0">
-              {i}
+              {index + 1}
             </td>
             <td className="text-left py-2 px-3 border-0.5 border-cbs-border border-l-0">
-              Tiền mặt
+              {account?.description}
             </td>
             <td className="text-right py-2 px-2 border-0.5 border-cbs-border border-l-0">
-              {Number(_d.budget).toLocaleString()}
+              {account?.name?.includes('111') && convertCurrency(income - expense)}
             </td>
             <td className="text-right py-2 px-2 border-0.5 border-cbs-border border-l-0">
-              {Number(_d.predict).toLocaleString()}
+              {account?.name.includes('112') && convertCurrency(income - expense)}
             </td>
           </tr>
         ))}
       </RightClickMenuWrapper>
     );
 };
+
+export default FinancialRowGroup;
