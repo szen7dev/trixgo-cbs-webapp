@@ -8,14 +8,12 @@ import debounce from "lodash/debounce";
 import { ModalContext } from "views/document/contexts/modal";
 
 // ========= Global Components =========
-import { Paginate, Loader } from "shareComponents/common";
+import { Paginate, Loader, ButtonMore, ButtonCreate } from "shareComponents/common";
 
 // ========== App common Components ==========
 import {
   // DocumentDropdown,
   DropdownFilterButton,
-  ButtonCreate,
-  ButtonMore,
   GroupActions,
   SearchInput,
 } from "views/document/sharedComponents/common";

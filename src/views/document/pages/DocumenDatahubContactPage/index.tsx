@@ -9,27 +9,12 @@ import { ModalContext } from "views/document/contexts/modal";
 import { useQueryStatistical } from "services/hooks/document/useStatistical";
 
 // ========== App common Components ==========
-import {
-	DocumentDropdown,
-	ButtonCreate,
-	ButtonMore,
-	GroupActions,
-	SearchInput
-} from 'views/document/sharedComponents/common';
 
 import { IPackage } from "typings/document";
-import { DatahubContact } from "views/datahub/pages";
-
-const pkgs: Array<IPackage> = Array.from(Array(2).keys()).map((_, i) => ({
-	id: i,
-	title: "Đơn vị ban hành",
-}));
 
 export const DocumenDatahubContactPage: FC = () => {
 	const location = useLocation()
 	const params = useParams<any>();
-	const { toggleModal } = useContext(ModalContext);
-	const [pkg, setPkg] = useState<IPackage>(pkgs[0]);
 	const { data } = useQueryStatistical({ departmentID: params.id, isDatahubContact: "1" });
 	return (
 		<>

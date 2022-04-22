@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import { Dialog } from '@headlessui/react'
 
 import { ModalContainer } from 'shareComponents/common'
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm'
 
 type Props = {
 	show: boolean

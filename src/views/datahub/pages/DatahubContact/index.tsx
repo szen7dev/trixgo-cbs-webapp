@@ -11,9 +11,7 @@ import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { Paginate } from "shareComponents/common";
 import { SearchInput } from "shareComponents/common";
 
-import { GroupActions } from "shareComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
+import { GroupActions, ButtonCreate, ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalCreateDatahubContact from "./components/ModalCreateDatahubContact";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";

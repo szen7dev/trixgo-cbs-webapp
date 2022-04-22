@@ -12,7 +12,7 @@ import moment from 'moment';
  */
 
 import "react-datepicker/dist/react-datepicker.css";
-import { CustomDatePickerFormik } from 'views/datahub/sharedComponents/common';
+import { CustomDatePickerFormik } from 'shareComponents/common/Form/CustomForm';
 import { usePcmProject } from 'services/hooks/pcm/usePcmProject';
 import { number } from 'yup';
 

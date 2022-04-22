@@ -9,13 +9,6 @@ import { ModalContext } from "views/document/contexts/modal";
 import { useQueryStatistical } from "services/hooks/document/useStatistical";
 
 // ========== App common Components ==========
-import {
-	DocumentDropdown,
-	ButtonCreate,
-	ButtonMore,
-	GroupActions,
-	SearchInput
-} from 'views/document/sharedComponents/common';
 
 import { IPackage } from "typings/document";
 

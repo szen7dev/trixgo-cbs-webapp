@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useQuery, useQueryClient } from 'react-query'
 
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm'
 import InspectionCheckListRepository from 'apis/datahub/InspectionCheckListRepository'
 
 type Props = {
