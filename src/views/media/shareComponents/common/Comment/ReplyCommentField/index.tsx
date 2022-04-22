@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState, useContext } from 'react';
+import { captureException } from "@sentry/react";
 
 import cn from 'classnames';
 import { toArray } from 'lodash';
@@ -230,6 +231,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 				receivers: dataAfterInsertOrUpdate.receivers
 			});
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {

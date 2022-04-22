@@ -1,6 +1,9 @@
+/* eslint-disable */
+const { join } = require("path");
+
 module.exports = {
   plugins: {
-    tailwindcss: { config: "./tailwindcss-config.js" },
+    tailwindcss: { config: join(__dirname, "tailwindcss-config.js") },
     autoprefixer: {},
   },
 };

@@ -1,4 +1,5 @@
 import { FC, HTMLAttributes, useContext, useState } from 'react';
+import { captureException } from "@sentry/react";
 import { toast } from "react-toastify";
 import cn from "classnames";
 import moment from "moment";
@@ -68,6 +69,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				payload: { _id: comment?._id, parent: comment?.parent }
 			});
 		} catch (error: unknown) {
+			captureException(error);
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {
@@ -90,6 +92,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 				typeReaction: 1
 			})
 		} catch (error) {
+			captureException(error);
 			if (typeof error === "string") {
                 toast.error(error);
             } else if (error instanceof Error) {

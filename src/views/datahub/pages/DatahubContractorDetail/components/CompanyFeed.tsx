@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes, useContext } from 'react'
 import AuthContext from 'services/contexts/Auth'
 import ContactInfo from '../../../sharedComponents/common/ContactInfo'
 
-import TButtonMore from 'views/datahub/sharedComponents/common/TForm/TButtonMore'
+import { ButtonMore } from 'shareComponents/common'
 import TTextInput from 'views/datahub/sharedComponents/common/TForm/TTextInput'
 
 type Props = {
@@ -50,7 +50,7 @@ const CompanyFeed: FC<Props & HTMLAttributes<HTMLDivElement>> = ({ ...props }) =
 									<p className='mt3'>16 phút trước</p>
 								</div>
 								<div>
-									<TButtonMore icon='vertical' className='text-cbs-subtext' />
+									<ButtonMore icon='vertical' className='text-cbs-subtext' />
 								</div>
 							</div>
 						</div>

@@ -1,5 +1,6 @@
 import { FC, UIEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import { captureException } from "@sentry/react";
 import { Formik, getIn } from "formik";
 import { object, string, date } from "yup";
 import { toast } from "react-toastify";
@@ -113,11 +114,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Tạo checklist thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+      captureException(error);
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
     }
   }
 
@@ -140,11 +142,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Tạo việc con thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+			captureException(error);
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
     }
   }
 
@@ -158,11 +161,12 @@ export const CheckList: FC<Props> = ({ componentType, task, data, totalRecord, o
 
       toast.success('Cập nhật checklist thành công');
     } catch (error: unknown) {
-        if (typeof error === "string") {
-            toast.error(error);
-        } else if (error instanceof Error) {
-            toast.error(error.message);
-        }
+			captureException(error);
+      if (typeof error === "string") {
+        toast.error(error);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   }
 

@@ -1,4 +1,3 @@
-export * from './Button';
 export * from './Comments';
 export * from './DocumentDropdown';
 export * from './DocumentFilterButton';

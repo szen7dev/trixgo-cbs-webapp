@@ -1,4 +1,5 @@
 import { FC, useState, useEffect } from "react";
+import { captureException } from "@sentry/react";
 import { useHistory, useParams, Redirect, Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import moment from "moment";
@@ -134,6 +135,7 @@ const PcmDetailTask: FC = () => {
 
       setIsMarkInterest(!isMarkInterest);
     } catch (error) {
+			captureException(error);
       if(error instanceof Error) {
         toast.error(error.message);
       }

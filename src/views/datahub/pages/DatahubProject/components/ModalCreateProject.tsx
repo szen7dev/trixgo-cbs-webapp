@@ -2,7 +2,7 @@ import React, { FC, Fragment, useRef, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 
 import { Form, Formik } from 'formik'
-import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import { CustomAutoCompleteFormik, CustomFieldFormik } from 'shareComponents/common/Form/CustomForm'
 import { string, object } from 'yup';
 
 import { PROJECT_TYPES, BUILDING_TYPES, BUILDING_GRADES, DEPARTMENT_STATUS } from 'apis/localdb'
