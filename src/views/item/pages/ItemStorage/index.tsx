@@ -4,6 +4,7 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -24,10 +25,12 @@ import { useModal } from "services/hooks/useModal";
 import { useStorage } from "services/hooks/items/useStorage";
 
 /*=====7.OTHER=====*/
-
 export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
+	const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
+	const { parentID } = useParams<{ parentID: string }>();
+
     const [itemsChecked, setItemsChecked] = useState<Array<Storage.Storage>>([]);
     const [initialValues, setInitialValues] = useState({
         storageID: '',
@@ -43,7 +46,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
         fetchNextPage,
         totalRecord
     } = useStorage({
-        params: { keyword }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
+        params: { keyword, isListParentOfListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API thay đổi data => refretch kết quả
         isFetchList: true
     });
 
@@ -135,13 +138,13 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
     const handleOpenModalCreateOrUpdate = (modalType: 'create' | 'update') => {
 
         let initValues: any = {...initialValues};
-
         setItemsChecked([]);
 
         // Mở modal tạo mới
         if(modalType === 'create') {
             clearData();
             initValues = {
+                parentID,
                 storageID: '',
                 name: '',
                 description: '',
@@ -166,7 +169,10 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <p className="text-lg">Danh sách</p>
+                        <button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+                        <p className="text-lg ml-2">Danh sách</p>
 
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
@@ -248,7 +254,7 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                 </thead>
 
                 <tbody>
-                    {listStorages.length ? listStorages.map(item => (
+                    {listStorages.length ? listStorages.map((item: any) => (
                         <tr key={item._id} className="border-b border-primary-border h-10">
                             <td className="py-1 px-2 text-center">
                                 <input
@@ -258,10 +264,14 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                     onChange={() => onClickCheckButton(item)}
                                 />
                             </td>
-                            <td className="py-1 px-2">{item.name}</td>
+                            <td className="py-1 px-2">
+                                <Link to={`/item/storage/${item._id}`}>
+                                    {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
+                                </Link>
+                               </td>
                             <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
-                                {item.modifyAt ? moment(item.modifyAt).format('DD/MM/YYYY - HH:mm') : ''}
+                               {item.modifyAt ? moment(item.modifyAt).format(' HH:mm - DD/MM/YYYY') : ''} - {item?.userUpdate?.bizfullname || "Anonymous"}
                             </td>
                         </tr>
                     )) : <></>}

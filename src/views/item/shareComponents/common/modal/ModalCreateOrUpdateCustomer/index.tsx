@@ -55,7 +55,8 @@ export const ModalCreateOrUpdateCustomer: FC<ModalProps> = ({
 
         // Cập nhật mẩu tin
         case 'update': {
-          const { error, message } = await updateAsync(formData);
+
+          const { error, message } = await updateAsync({ ...formData, type: `${formData.type}` });
 
           if (error) {
             return toast.warning(message);

@@ -5,7 +5,6 @@ import '../../styles/style.css'
 export const BiddingFinancialProposals: FC = () => {
 	const history = useHistory();
 	const params = useParams<{ id: string }>();
-
 	const length = 10;
 	return (
 		<div className='flex h-full w-full pb-11 ' style={{ zIndex: 0 }}>
