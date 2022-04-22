@@ -4,8 +4,7 @@ import { Dialog } from '@headlessui/react';
 import { debounce } from 'lodash';
 import { object, number, string } from 'yup'
 
-import { CustomAutoCompleteFormik, CustomFieldFormik } from 'views/datahub/sharedComponents/common'
-import CustomDatePickerFormik from 'views/datahub/sharedComponents/common/CustomForm/CustomDatePickerFormik'
+import { CustomAutoCompleteFormik, CustomFieldFormik, CustomDatePickerFormik } from 'shareComponents/common/Form/CustomForm'
 import useInfiniteProjects from 'services/hooks/datahub/projects/useInfiniteProjects'
 import useInfiniteDatahubTypes from 'services/hooks/datahub/types/useInfiniteDatahubTypes';
 import { DEPARTMENT_STATUS } from 'apis/localdb';

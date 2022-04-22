@@ -5,9 +5,7 @@ import { SearchInput } from "shareComponents/common";
 import ModalCreateContract from "./components/ModalCreateContract";
 
 // import DropdownFilterButton from "views/document/components/DocumentFilterButton";
-import { GroupActions } from "shareComponents/common";
-import { ButtonCreate } from "shareComponents/common";
-import { ButtonMore } from "shareComponents/common";
+import { GroupActions,ButtonCreate, ButtonMore } from "shareComponents/common";
 import { DocumentDropdown } from "views/document/sharedComponents/common";
 import ModalExtraLarge from "shareComponents/common/ModalContainer/components/ModalExtraLarge";
 import { DatahubContract } from "typings/datahub/contract";

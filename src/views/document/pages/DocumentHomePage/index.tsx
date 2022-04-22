@@ -6,9 +6,9 @@ import debounce from "lodash/debounce";
 
 import { ModalContext } from "views/document/contexts/modal";
 
+import { ButtonMore } from "shareComponents/common";
+
 import {
-  ButtonMore,
-  ButtonCreate,
   SearchInput,
   DropdownFilterButton
 } from 'views/document/sharedComponents/common';

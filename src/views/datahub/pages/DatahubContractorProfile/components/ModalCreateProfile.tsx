@@ -5,7 +5,7 @@ import { object, string } from 'yup';
 
 import useProfileDetail from 'services/hooks/datahub/profile/useProfileDetail';
 
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common';
+import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 

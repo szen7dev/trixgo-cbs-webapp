@@ -2,7 +2,7 @@ import React, { FC, Fragment, useEffect, useState } from 'react'
 import { Form, Formik } from 'formik'
 import { Dialog } from '@headlessui/react'
 
-import { CustomFieldFormik, CustomAutoCompleteFormik } from 'views/datahub/sharedComponents/common';
+import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm'
 import { string, object, number } from 'yup';
 import { useQueryClient } from 'react-query';
 

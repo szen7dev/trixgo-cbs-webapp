@@ -5,7 +5,7 @@ import { Form, Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useQuery, useQueryClient } from 'react-query'
 
-import { CustomFieldFormik } from 'views/datahub/sharedComponents/common'
+import { CustomFieldFormik } from 'shareComponents/common/Form/CustomForm'
 import DatahubRepository from 'apis/datahub'
 
 type Props = {
