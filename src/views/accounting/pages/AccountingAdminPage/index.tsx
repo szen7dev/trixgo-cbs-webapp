@@ -43,6 +43,49 @@ export const AccountingAdminPage: FC = () => {
           >
             Cấu hình khác
           </button>
+          <button
+            className={
+              toggleTab === 4
+                ? "w-auto h-full px-3 py-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full px-3 py-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(4)}
+          >
+            Account
+          </button>
+
+          <button
+            className={
+              toggleTab === 5
+                ? "w-auto h-full px-3 py-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full px-3 py-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(5)}
+          >
+            Funda
+          </button>
+
+          <button
+            className={
+              toggleTab === 6
+                ? "w-auto h-full px-3 py-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full px-3 py-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(6)}
+          >
+            Warehouse
+          </button>
+
+          <button
+            className={
+              toggleTab === 7
+                ? "w-auto h-full px-3 py-2 font-bold text-sm border-b-2 border-primary"
+                : "w-auto h-full px-3 py-2 text-sm text-primary-gray"
+            }
+            onClick={() => handleToggleTab(7)}
+          >
+            Good
+          </button>
         </div>
       </div>
 

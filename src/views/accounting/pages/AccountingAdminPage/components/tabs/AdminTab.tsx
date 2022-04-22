@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import OtherConfig from "../OtherConfig";
+import ItemAccountPage from "../ItemAccountPage";
 
 type Props = {
   toggleTab: number;
@@ -21,6 +22,22 @@ export const AdminTab: FC<Props> = (props) => {
 
       <div className={toggleTab === 3 ? "block" : "hidden"}>
         <OtherConfig />
+      </div>
+
+      <div className={toggleTab === 4 ? "block" : "hidden"}>
+        <ItemAccountPage />
+      </div>
+
+      <div className={toggleTab === 5 ? "block" : "hidden"}>
+        <p>Funda</p>
+      </div>
+
+      <div className={toggleTab === 6 ? "block" : "hidden"}>
+        <p>Warehouse</p>
+      </div>
+
+      <div className={toggleTab === 7 ? "block" : "hidden"}>
+        <p>Good</p>
       </div>
     </section>
   );

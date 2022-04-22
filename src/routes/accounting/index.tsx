@@ -177,6 +177,11 @@ const AccountingRouter: FC = () => {
         path="/accounting/admin"
         component={AccountingAdminPage}
       />
+      <ProtectedRoute
+        exact
+        path="/accounting/admin/1"
+        component={AccountingAdminPage}
+      />
 
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>

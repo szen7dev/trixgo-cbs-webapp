@@ -4,7 +4,7 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -26,12 +26,14 @@ import { useCustomer } from "services/hooks/items/useCustomer";
 
 /*=====7.OTHER=====*/
 export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
+	const history = useHistory();
     const { closeModal, openModal } = useModal();
 	const { parentID } = useParams<{ parentID: string }>();
     const [keyword, setKeyword] = useState('');
     const [title, setTitle] = useState("Danh sách");
     const [itemsChecked, setItemsChecked] = useState<Array<Customer.Customer>>([]);
     const [initialValues, setInitialValues] = useState({
+        parent: parentID,
         contactID: '',
         type: '',
         name: '',
@@ -50,23 +52,8 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         totalRecord
     } = useCustomer({
         params: { keyword, isListParentOrListChilds: "1", parentID }, // Khi keyword thay đổi giá trị => API tự động cập nhật lại Data => cập nhật lại view
-        isFetchList: true
+        isFetchList: true,
     });
-
-    const {
-        info
-    } = useCustomer({
-        params: { contactID: parentID }, 
-        isFetchInfo : true
-    });
-
-    useEffect(() => {
-        if(!parentID || !info?.name)
-            setTitle(`Danh sách`)
-        setTitle(`${info?.name}`)
-    }, [parentID, info]);
-
-    console.log({ info, parentID })
 
     // Reset form
     const clearData = () => {
@@ -106,6 +93,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         if (newListIDChecked.length === 1) {
             const { _id, type, name, address, taxid, phone, description } = newListIDChecked[0];
             setInitialValues({
+                parent: parentID,
                 contactID: _id,
                 type,
                 name,
@@ -171,6 +159,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
         if(modalType === 'create') {
             clearData();
             initValues = {
+                parent: parentID,
                 contactID: '',
                 type: '',
                 name: '',
@@ -199,7 +188,10 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <p className="text-lg">{title}</p>
+                        <button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+                        <p className="text-lg ml-2">{title}</p>
 
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
@@ -266,7 +258,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Tên
                             </div>
-                        </th>
+                        </th> 
                         <th className="w-1/12 py-1">
                             <div className="border-r-2 border-gray-300 font-normal pl-2">
                                 Phân loại
@@ -313,7 +305,7 @@ export const ItemCustomerPage: FC<{ type: number }> = ({ type }) => {
                             </td>
                             <td className="py-1 px-2">
                                 <Link to={`/item/contact/${item._id}`}>
-                                    {item.name}
+                                    {item.amountChilds>0? <b>{item.name}({item.amountChilds})</b>: item.name }
                                 </Link>
                             </td>
                             <td className="py-1 px-2">{item.type}</td>

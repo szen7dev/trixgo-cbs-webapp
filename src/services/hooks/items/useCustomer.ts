@@ -49,7 +49,7 @@ export const useCustomer = ({
         useMutation((ids: Array<string>) =>
             CustomerRepository.deleteCustomer(ids)
         );
-
+    
     // Get info
     const { data: infoCustomer } =
         useQuery("customer_info", () => CustomerRepository.fetchDetailCustomer(params), {

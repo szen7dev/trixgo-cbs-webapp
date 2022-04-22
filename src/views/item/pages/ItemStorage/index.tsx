@@ -4,7 +4,7 @@ import cn from "classnames";
 import debounce from "lodash/debounce";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -26,6 +26,7 @@ import { useStorage } from "services/hooks/items/useStorage";
 
 /*=====7.OTHER=====*/
 export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
+	const history = useHistory();
     const { closeModal, openModal } = useModal();
     const [keyword, setKeyword] = useState('');
 	const { parentID } = useParams<{ parentID: string }>();
@@ -168,7 +169,10 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
             <header className="sticky top-0 bg-primary-light z-10">
                 <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                     <div className="flex items-center">
-                        <p className="text-lg">Danh sách</p>
+                        <button onClick={history.goBack}>
+							<img src="/images/common/button_back.png" alt="Button Back" />
+						</button>
+                        <p className="text-lg ml-2">Danh sách</p>
 
                         <SearchInput
                             classNameWrapper="ml-4 mr-2"
@@ -261,7 +265,9 @@ export const ItemStoragePage: FC<{ type: number }> = ({ type }) => {
                                 />
                             </td>
                             <td className="py-1 px-2">
-                                <Link to={`/item/storage/${item._id}`}>{item.name}({item?.amountChilds || 0})</Link>
+                                <Link to={`/item/storage/${item._id}`}>
+                                    {item.amountChilds>0? <b>{item?.name}({item.amountChilds})</b>: item.name }
+                                </Link>
                                </td>
                             <td className="py-1 px-2">{item.description}</td>
                             <td className="py-1 px-2">
