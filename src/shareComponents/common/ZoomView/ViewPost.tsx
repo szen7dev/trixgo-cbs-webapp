@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 
 import cn from 'classnames';
@@ -29,13 +29,17 @@ interface Props {
 
 const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 	const [state, actions] = useCustomReducer(postReducer, postActions, { ...postState as PostState, ...initialData });
-	const data = useComments({ mediaID: state.mediaID, fileID: String(state.images[state.index]._id) });
+	const data = useComments({ mediaID: state.mediaID, fileID: String(state.images[state.index]?._id) });
 
 	const [collapsed, setCollapsed] = useState<boolean>(false);
 	const [isMove, setIsMove] = useState(false);
 	const [zoom, setZoom] = useState(0);
 
 	const imageRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		imageRef.current?.parentElement?.focus();
+	}, [])
 
 	const settings = {
 		min: 0,
@@ -48,8 +52,27 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 	const handleNextImage = () => actions.setIndex(state.index + 1);
 	const handlePreviousImage = () => actions.setIndex(state.index - 1);
 
+	const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+		switch (e.key) {
+			case "ArrowLeft":
+			case "ArrowDown":
+				if(state.index > 0) {
+					handlePreviousImage();
+				}
+				break;
+			case "ArrowRight":
+			case "ArrowUp":
+				if(state.index < state.images.length - 1) {
+					handleNextImage();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
 	const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		e.preventDefault();
+		// e.preventDefault();
 		setIsMove(true);
 	};
 
@@ -139,7 +162,9 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 				<div className="relative row-start-1 row-end-[-1] col-start-1 col-end-[-1] flex flex-1 justify-center">
 					<div className='w-full h-full'>
 						<div
+							tabIndex={0}
 							className='w-full h-full'
+							onKeyDown={handleKeyPress}
 							onMouseDown={handleMouseDown}
 							onMouseUp={handleMouseUp}
 							onMouseMove={handleMouseMove}
@@ -156,7 +181,7 @@ const ViewPost: FC<Props> = ({ initialData, toggle }) => {
 									<img
 										className="object-contain max-w-screen max-h-[calc(100vh-8.25rem)]"
 										alt="..."
-										src={`${process.env.REACT_APP_URL_S3}${state.images[state.index].path}`}
+										src={`${process.env.REACT_APP_URL_S3}${state.images[state.index]?.path}`}
 									/>
 								</div>
 							</div>
