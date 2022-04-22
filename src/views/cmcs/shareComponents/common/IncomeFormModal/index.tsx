@@ -552,11 +552,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo người phụ trách (*)
+                        Phân loại theo đơn vị/phụ trách (*)
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("personInCharge", value)}
-                        placeholder="Phân loại theo người phụ trách..."
+                        placeholder="Phân loại theo đơn vị/phụ trách..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
