@@ -11,19 +11,18 @@ import { SampleLayout } from "views/sample/shareComponents/layouts";
 
 /*=====5.PAGES/COMPONENTS=====*/
 import ErrorPage from "views/authentication/Error";
-import {
-	SampleHomePage,
-} from "views/sample/pages";
+import { SampleHomePage, PCMPrintTask } from "views/sample/pages";
 
 const SampleRouter: FC = () => {
-	return (
-		<SampleLayout>
-			<Switch>
-				<Route exact path="/sample/home" component={SampleHomePage} />
-				<Route path="/sample/*" component={ErrorPage} />
-			</Switch>
-		</SampleLayout>
-	)
+  return (
+    <SampleLayout>
+      <Switch>
+        <Route exact path="/sample/home" component={SampleHomePage} />
+        <Route exact path="/sample/pcmprintask" component={PCMPrintTask} />
+        <Route path="/sample/*" component={ErrorPage} />
+      </Switch>
+    </SampleLayout>
+  );
 };
 
 export default SampleRouter;

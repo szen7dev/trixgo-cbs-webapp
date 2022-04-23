@@ -1,22 +1,19 @@
-.navigator {
-    border-bottom: solid 2px transparent;
-    padding: 0 8px;
-    margin: 0 12px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 110px;
-    line-height: 16.1px;
-    font-size: 14px;
-  }
-  
-  .navigator.active {
-    border-bottom-color: #0165BE;
-    color: black;
-    font-weight: bold;
-  }
-  
-  .navigator.active>* {
-    font-weight: bold;
-  }
+.headerTitle {}
+
+.headerInfo {
+  /* @apply border-cbs-border; */
+  font-weight: bold;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  border-color: rgba(204, 204, 204);
+  border-top-width: 0.5px;
+  border-left-width: 0.5px;
+}
+
+.headerInfo>div {
+  /* @apply border-cbs-border; */
+  border-right-width: 0.5px;
+  border-bottom-width: 0.5px;
+  padding: 0.625rem 0.625rem;
+  border-color: rgba(204, 204, 204);
+}

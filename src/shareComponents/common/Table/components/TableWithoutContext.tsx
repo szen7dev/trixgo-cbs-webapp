@@ -3,7 +3,7 @@ import React, { PropsWithChildren, ReactElement } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { Cell, HeaderGroup, Row, TableInstance } from 'react-table'
 
-type Props<D extends object = {}> = {
+type Props<D extends object = {},P extends object = {}> = {
 	instance: TableInstance<D>,
 
 	isLoading?: boolean,
@@ -21,6 +21,7 @@ type Props<D extends object = {}> = {
 	tableBodyProps?: React.HTMLAttributes<HTMLTableSectionElement>,
 
 	colSpan?: boolean;
+	props?: P;
 }
 type ColSpan = Record<string, number>
 
@@ -43,6 +44,7 @@ function TableWithoutContext<D extends object>({
 	tableBodyProps,
 
 	colSpan,
+	props,
 }: PropsWithChildren<Props<D>>): ReactElement {
 	const colSpanRef = React.useRef<ColSpan>();
 	if (colSpan && colSpanRef.current === undefined) {
@@ -71,7 +73,7 @@ function TableWithoutContext<D extends object>({
 							{headerGroup.headers.map((column, i) => {
 								const { key: headerKey, ...getHeaderProps } = column.getHeaderProps([column.headCellProps || {}, getColumnProps(column)])
 								return <th key={headerKey} {...getHeaderProps}>
-									{column.render('Header')}
+									{column.render('Header', props)}
 								</th>
 							})}
 						</tr>
