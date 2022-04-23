@@ -19,9 +19,9 @@ export const MainSearchDialog: FC = () => {
     { id: "6", name: "Dự án" },
     { id: "7", name: "Workshop" },
     { id: "8", name: "Chấm công" },
-    { id: "10", name: "Chấm công" },
-    { id: "11", name: "Chấm công" },
-    { id: "12", name: "Chấm công" },
+    // { id: "10", name: "Chấm công" },
+    // { id: "11", name: "Chấm công" },
+    // { id: "12", name: "Chấm công" },
   ];
 
   const [show, setShow] = useState<"left" | "right" | "both">("right");
