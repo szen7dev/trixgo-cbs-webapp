@@ -60,6 +60,9 @@ const Routes: FC = () => {
             <Router>
                 <AuthProvider>
                     <RightClickMenuProvider>
+                        <Route path="/sample">
+                            <SampleRouter />
+                        </Route>
                         {/*<DeleteConfirmProvider>*/}
                         {/*    <ChatProvider>*/}
                         <ModalProvider>
