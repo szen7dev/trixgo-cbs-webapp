@@ -73,3 +73,7 @@ export async function handleException (callback: any, callbackError?: any){
         }
     }
 }
+
+export function generateIamgePath(path: string): string {
+  return `${process.env.REACT_APP_URL_S3}${path}`;
+}
