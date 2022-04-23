@@ -41,7 +41,7 @@ interface InitialValues {
   assigneeID: string,
   name: string,
   startTime: string,
-  expiredTime: string,
+  actualFinishTime: string,
   description: string,
   authorAttachs: string[],
   type: number,
@@ -69,7 +69,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     projectID: string().required("Vui lòng nhập tên dự án"),
     assigneeID: string().required("Vui lòng nhập tên người nhận"),
     name: string().required("Vui lòng nhập tiêu đề"),
-    expiredTime: string().required("Vui lòng nhập ngày hết hạn"),
+    actualFinishTime: string().required("Vui lòng nhập ngày hết hạn"),
   });
 
   const { updateTaskAsync } = useTask({});
@@ -146,7 +146,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
           taskID: values.taskID,
           name: values.name,
           contractID: values.contractID,
-          expiredTime: values.expiredTime
+          actualFinishTime: values.actualFinishTime
       });
 
       if(error) return toast.warning(message);
@@ -173,7 +173,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
     assigneeID: task.assignee?._id,
     name: task.name,
     startTime: moment(task.startTime).format('MM/DD/YYYY'),
-    expiredTime: moment(task.expiredTime).format('MM/DD/YYYY'),
+    actualFinishTime: moment(task.actualFinishTime).format('MM/DD/YYYY'),
     description: task.description,
     authorAttachs: [],
     type: task.type,
@@ -626,9 +626,9 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
                     <div className={"w-1/4 flex items-start"}>
                       <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn</div>
                       <DayPickerInput
-                        {...formik.getFieldProps('expiredTime')}
-                        value={values.expiredTime && moment(values.expiredTime).format("MM/DD/YYYY")}
-                        onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}
+                        {...formik.getFieldProps('actualFinishTime')}
+                        value={values.actualFinishTime && moment(values.actualFinishTime).format("MM/DD/YYYY")}
+                        onDayChange={(day) => setFieldValue("actualFinishTime", moment(day).format("MM/DD/YYYY"))}
                         inputProps={{
                           className: "w-full h-6 outline-none pl-3",
                           placeholder: "Thời hạn",

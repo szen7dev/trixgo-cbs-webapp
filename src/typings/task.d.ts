@@ -103,7 +103,7 @@ export interface updateTaskPayload {
   name?: string;
   status?: number;
   priority?: number;
-  expiredTime?: string;
+  actualFinishTime?: string;
   isAddSignature?: boolean;
   flags?: Array<string>;
   flagsRemoves?: Array<string>;
