@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { CheckListItem } from "views/pcm/pages/PcmDetailTask/components";
 
 import styles from "../styles/style.module.css";
 
@@ -30,7 +31,7 @@ const PCMPrintTask: FC<Props> = (props) => {
                   <span>Khởi tạo: </span>
                   <span className="font-normal">
                     <div className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle">
-                      <img src="" className="h-full w-full" />
+                      <img src="" className="h-full w-full" alt="" />
                     </div>
                     Nguyễn Phan Thanh Hương-CPMI
                   </span>
@@ -49,13 +50,13 @@ const PCMPrintTask: FC<Props> = (props) => {
                 <p className="space-x-1">
                   Liên quan:
                   <span className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle">
-                    <img src="" className="h-full w-full" />
+                    <img src="" className="h-full w-full" alt="" />
                   </span>
                   <span className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle">
-                    <img src="" className="h-full w-full" />
+                    <img src="" className="h-full w-full" alt="" />
                   </span>
                   <span className="inline-block w-8 h-8 rounded-full overflow-hidden align-middle">
-                    <img src="" className="h-full w-full" />
+                    <img src="" className="h-full w-full" alt="" />
                   </span>
                 </p>
               </div>
@@ -75,6 +76,20 @@ const PCMPrintTask: FC<Props> = (props) => {
             <section>
               <div>
                 <span>VIỆC XỬ LÝ</span>
+              </div>
+              <div>
+                <CheckListItem
+                  userID=""
+                  data={
+                    {
+                      _id: "123",
+                      actualFinishTime: "20/12/2022",
+                      assignee: { _id: "123", fullname: "test" },
+                      expiredTime: "20/12/2022",
+                      type: "1",
+                    } as any
+                  }
+                />
               </div>
             </section>
             {/* Xác nhận */}

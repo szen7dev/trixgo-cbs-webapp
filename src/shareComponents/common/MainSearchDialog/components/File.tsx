@@ -118,20 +118,20 @@ const File: FC<FileProps> = (props) => {
         <CustomAutoComplete
           data={[{ name: "123" }]}
           wrapperClassName="w-4/12"
-          containerClassName="rounded-md overflow-hidden"
+          className="w-full h-full py-2.5 px-3 focus:outline-none"
           placeholder="Nội dung"
         />
         <CustomAutoComplete
           data={[{ name: "123" }]}
           wrapperClassName="w-4/12"
-          containerClassName="rounded-md overflow-hidden"
+          className="w-full h-full py-2.5 px-3 focus:outline-none"
           placeholder="Nội dung"
         />
         <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
           <ReactDatePicker
             onChange={(date: Date) => setStartDate(date)}
             selected={startDate}
-            className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+            className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
           />
           <div className="w-6 h-6">
             <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
@@ -142,7 +142,7 @@ const File: FC<FileProps> = (props) => {
           <ReactDatePicker
             onChange={(date: Date) => setEndDate(date)}
             selected={endDate}
-            className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+            className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
           />
           <div className="w-6 h-6">
             <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />

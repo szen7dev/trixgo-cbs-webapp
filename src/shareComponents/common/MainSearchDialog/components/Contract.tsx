@@ -8,6 +8,7 @@ import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import CustomField from "shareComponents/common/Form/CustomForm/CustomField";
 import iconSlider from "assets/images/icons8-slider-32.png";
+import Dot from "./Dot";
 
 type ContractProps = {
   //
@@ -83,7 +84,13 @@ function getColumnsContract(): TableOptions<IContract>["columns"] {
               2022.04.18-AHU.VPTM.CPMI.ToanND-HoSoThanhToanL1-V1.rar (135KB)
             </p>
             <p className="text-cbs-subtext">
-              CHG.THT.Báo cáo đánh giá sản phẩm hàng tháng của nhà thầu
+              <span>CHG.THT </span>
+              <Dot />
+              <span> 1904/2022/HĐCC-LĐ/CNX-TSKQ </span>
+              <Dot />
+              <span> 20/04/2022 </span>
+              <Dot />
+              <span> Giá A1, T1, F1 </span>
             </p>
             <p className="text-cbs-subtext">
               <span>Nguyễn Phan Thanh Hương-CPMI</span>
@@ -98,7 +105,8 @@ function getColumnsContract(): TableOptions<IContract>["columns"] {
       id: "he",
       headCellProps: { className: "hidden" },
       cellProps: {
-        className: "pt-2.5 pb-3 px-2 border-b border-cbs-border text-right pr-6 font-bold align-middle",
+        className:
+          "pt-2.5 pb-3 px-2 border-b border-cbs-border text-right pr-6 font-bold align-middle",
       },
       Cell({ row, value }) {
         return <div>{value.toLocaleString("en")}</div>;
@@ -122,11 +130,12 @@ const Contract: FC<ContractProps> = (props) => {
             name="report"
             placeholder="Báo cáo"
             wrapperClassName="w-4/12"
+            className="py-2.5 px-3 focus:outline-none w-full pr-10"
             containerClassName="relative"
             icon={() => {
               return (
-                <div className="absolute right-2 top-1">
-                  <img src={iconSlider} alt="Filter" className="w-6 h-6" />;
+                <div className="absolute right-2 inset-y-0 flex items-center">
+                  <img src={iconSlider} alt="Filter" className="w-6 h-6" />
                 </div>
               );
             }}
@@ -134,14 +143,14 @@ const Contract: FC<ContractProps> = (props) => {
           <CustomAutoComplete
             data={[{ name: "123" }]}
             wrapperClassName="w-4/12"
-            containerClassName="rounded-md overflow-hidden"
+            className="w-full h-full py-2.5 px-3 focus:outline"
             placeholder="Thuộc hợp đồng"
           />
           <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
             <ReactDatePicker
               onChange={(date: Date) => setStartDate(date)}
               selected={startDate}
-              className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+              className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
             />
             <div className="w-6 h-6">
               <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
@@ -152,7 +161,7 @@ const Contract: FC<ContractProps> = (props) => {
             <ReactDatePicker
               onChange={(date: Date) => setEndDate(date)}
               selected={endDate}
-              className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+              className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
             />
             <div className="w-6 h-6">
               <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
