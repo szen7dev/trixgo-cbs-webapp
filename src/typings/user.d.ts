@@ -1,9 +1,10 @@
 export type UpdateUser = {
-    email: string,
-    phone: string,
-    birthDay: string,
-    gender: string,
-    lang: string,
+    email?: string,
+    phone?: string,
+    birthDay?: string,
+    gender?: string,
+    lang?: string,
+    image?: string
 };
 
 export type UpdatePasswordUser = {
