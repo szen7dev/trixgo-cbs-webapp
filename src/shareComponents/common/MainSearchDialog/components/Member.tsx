@@ -10,6 +10,7 @@ import { useModal } from "services/hooks/useModal";
 import { UseMainSearch } from "services/hooks/useMainSearch";
 import { debounce } from "lodash";
 import { MainSearchFilter } from "shareComponents/common/MainSearchFilter";
+import Dot from "./Dot";
 
 type MemberProps = {
   //
@@ -83,8 +84,13 @@ function getColumnsMember(): TableOptions<IMember>["columns"] {
           <div>
             <p className="text-cbs-highlight-color">Trương Việt Anh (Phó Tổng giám đốc)</p>
             <p className="text-cbs-subtext">
-              Điện thoại: 0922556773 Email: vietanht@gmail.com Ngày sinh: 15/3/1988 Cập nhật gần
-              đây: 21/4/2022 (8 ngày)
+              <span>Điện thoại: 0922556773 </span>
+              <Dot />
+              <span> Email: vietanht@gmail.com </span>
+              <Dot />
+              <span> Ngày sinh: 15/3/1988 </span>
+              <Dot />
+              <span> Cập nhật gần đây: 21/4/2022 (8 ngày)</span>
             </p>
           </div>
         );

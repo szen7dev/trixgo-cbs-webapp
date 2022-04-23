@@ -8,6 +8,7 @@ import File from "./components/File";
 import Profile from "./components/Profile";
 import Contract from "./components/Contract";
 import Member from "./components/Member";
+import Project from "./components/Project";
 
 export const MainSearchDialog: FC = () => {
   const categories = [
@@ -46,8 +47,13 @@ export const MainSearchDialog: FC = () => {
 
   return (
     <div className="t-main-search-wrapper rounded pb-4">
-      <header className="flex pt-3 pl-6 pr-8">
-        <span className="mr-5">Vitas</span>
+      <header className="flex pt-3 pl-6 pr-8 items-center">
+        <span className="mr-5 font-bold text-3x-large">
+          <span className="text-cbs-primary">V</span>
+          <span className="text-cbs-schedule-expired">i</span>
+          <span className="text-cbs-schedule-nextweek">a</span>
+          <span className="text-cbs-schedule-after-7days">s</span>
+        </span>
         <div className="flex-grow overflow-hidden relative">
           <div className="flex w-full overflow-auto whitespace-nowrap space-x-2 scrollbar-hide">
             {categories.map((cat, index) => {
@@ -91,11 +97,12 @@ export const MainSearchDialog: FC = () => {
         </div>
       </header>
       {/* Search form */}
-      {["1", "6", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
+      {["1", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
       {activeCategory === "2" && <File />}
       {activeCategory === "3" && <Profile />}
       {activeCategory === "4" && <Contract />}
       {activeCategory === "5" && <Member />}
+      {activeCategory === "6" && <Project />}
     </div>
   );
 };
