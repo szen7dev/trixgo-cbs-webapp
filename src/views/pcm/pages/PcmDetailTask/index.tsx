@@ -79,6 +79,7 @@ const PcmDetailTask: FC = () => {
     status: 1,
     priority: 1
   });
+  
   const [permissions, setPermissions] = useState({
     hasPermissionUpdateTask: false,
     hasPermissionAddRelatedUser: false,
@@ -206,9 +207,8 @@ const PcmDetailTask: FC = () => {
   if(!infoTask || !infoTask.data) {
     return <Redirect to="/pcm/home" />
   }
-
+  
   const taskInfo = infoTask.data;
-
   return (
     <>
       {/*_____________header______________*/}
@@ -344,10 +344,10 @@ const PcmDetailTask: FC = () => {
               <div className="flex justify-between">
                 <div>
                   <span className="text-lg leading-5">
-                    {moment(infoTask?.data?.expiredTime).format("DD/MM/YYYY")}
+                    {moment(infoTask?.data?.actualFinishTime).format("DD/MM/YYYY")}
                   </span>
                   <span className="ml-2 text-[13px] text-primary-gray">
-                    {moment(infoTask?.data?.expiredTime).format("HH:mm")}
+                    {moment(infoTask?.data?.actualFinishTime).format("HH:mm")}
                   </span>
                 </div>
                 <div>

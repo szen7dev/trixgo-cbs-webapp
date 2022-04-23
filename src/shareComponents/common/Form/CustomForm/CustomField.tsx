@@ -42,12 +42,12 @@ function CustomField<A extends ElementType = "input">(props: Props<A>): JSX.Elem
       </div> */}
       <div
         className={cn(
-          "text-black w-full border-0.5 border-cbs-border bg-white focus-within:bg-white focus-within:border-cbs-primary resize-none rounded-md overflow-hidden",
+          "text-black w-full border-0.5 border-cbs-border bg-white focus-within:bg-white focus-within:border-cbs-primary resize-none overflow-hidden",
           containerClassName
         )}
       >
         <Tag
-          className="w-full h-full py-1.5 px-3 focus:outline-none placeholder-shown:bg-cbs-gray"
+          className="w-full h-full py-1.5 px-3 focus:outline-none"
           placeholder={title}
           {...field}
           {...rest}

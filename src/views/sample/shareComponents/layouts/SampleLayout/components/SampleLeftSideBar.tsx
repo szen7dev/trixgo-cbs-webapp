@@ -36,6 +36,10 @@ export const SampleLeftSideBar: FC = () => {
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Trang chủ</span>
                   </NavLink>
+                  <NavLink to={`/sample/pcmprintask`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
+                      <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+                      <span className="truncate">Print task</span>
+                  </NavLink>
                   <NavLink to={`/sample/searchfile`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3 text-[14px]">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">Tìm kiếm file</span>
