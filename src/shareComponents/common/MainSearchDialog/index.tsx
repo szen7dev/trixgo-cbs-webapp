@@ -50,8 +50,13 @@ export const MainSearchDialog: FC = () => {
 
   return (
     <div className="t-main-search-wrapper rounded pb-4">
-      <header className="flex pt-3 pl-6 pr-8">
-        <span className="mr-5">Vitas</span>
+      <header className="flex pt-3 pl-6 pr-8 items-center">
+        <span className="mr-5 font-bold text-3x-large">
+          <span className="text-cbs-primary">V</span>
+          <span className="text-cbs-schedule-expired">i</span>
+          <span className="text-cbs-schedule-nextweek">a</span>
+          <span className="text-cbs-schedule-after-7days">s</span>
+        </span>
         <div className="flex-grow overflow-hidden relative">
           <div className="flex w-full overflow-auto whitespace-nowrap space-x-2 scrollbar-hide">
             {categories.map((cat, index) => {
