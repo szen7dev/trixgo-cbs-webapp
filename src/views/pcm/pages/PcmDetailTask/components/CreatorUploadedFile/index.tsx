@@ -1,6 +1,7 @@
 // Library
 import React, { useState } from "react";
 import moment from "moment";
+import { captureException } from "@sentry/react";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
@@ -102,7 +103,7 @@ export const CreatorUploadedFile = ({ taskID, companyID, projectID, groupID, aut
 
       toast.success('Thêm file thành công');
     } catch (error) {
-      console.error(error);
+			captureException(error);
       if(error instanceof Error) {
         toast.error(error.message)
       }

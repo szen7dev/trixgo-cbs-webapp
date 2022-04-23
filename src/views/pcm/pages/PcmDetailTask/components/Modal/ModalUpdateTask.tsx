@@ -3,6 +3,7 @@
  */
 import { FC, UIEvent, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
+import { captureException } from "@sentry/react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -154,6 +155,7 @@ const ModalUpdateTask: FC<Props> = ({ task, onConfirm }) => {
       closeModal();
       onConfirm && onConfirm();
     } catch (error) {
+			captureException(error);
       if (typeof error === "string") {
           toast.error(error);
       } else if (error instanceof Error) {

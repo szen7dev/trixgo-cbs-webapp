@@ -7,6 +7,7 @@ import { Form, Formik, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 import { toArray } from 'lodash';
 import { toast } from "react-toastify";
+import { captureException } from "@sentry/react";
 // import { Editor } from '@tinymce/tinymce-react';
 import cn from "classnames";
 
@@ -193,6 +194,7 @@ export const ModalCreateArticle: FC<ModalProps> = ({ toggle, modalType, files, i
 					break;
 			}
 		} catch (error: unknown) {
+			captureException(error);
 			if (typeof error === "string") {
 				toast.error(error);
 			} else if (error instanceof Error) {

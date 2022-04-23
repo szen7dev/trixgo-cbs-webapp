@@ -3,7 +3,7 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import packageRepository  from 'apis/document/Package';
 
 export const useDocumentPackage = (params: any, isFetchList?: boolean, isFetchInfo?: boolean ): any => {
-   
+    
     // Tạo package
     const { mutateAsync: createDocumentPackageMutateAsync, isLoading: isLoadingCreateDocumentPackage } =
         useMutation((payload: any) => packageRepository.insertPackage(payload)
