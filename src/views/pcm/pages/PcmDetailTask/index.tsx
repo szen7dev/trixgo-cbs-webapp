@@ -476,7 +476,7 @@ const PcmDetailTask: FC = () => {
                 <ReplyCommentField
                   attachFile
                   inputContainerClassName="flex w-full p-2"
-                  fileContainerClassName="border-t"
+									fileContainerClassName="border-t-0.5 border-cbs-border mr-7 divide-y-0.5 divide-cbs-border"
                   projectID={taskInfo?.project?._id}
                   groupID={taskInfo?.group?._id}
                   taskID={id}

@@ -1,5 +1,5 @@
 /*=====1.LIBRARY=====*/
-import { FC } from "react";
+import { FC, lazy } from "react";
 import { Route, Switch, Redirect, matchPath } from "react-router-dom";
 import { ProtectedRoute } from "routes/components";
 
@@ -77,6 +77,9 @@ import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/Pr
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
 import { PcmTasksReport } from "views/pcm/pages/PcmTasksReport";
+const PCMPrintTask = lazy(() => import("views/sample/pages/PCMPrintTask"));
+const PCMPrintTaskSecond = lazy(() => import("views/sample/pages/PCMPrintTaskSecond"));
+const PCMPrintTaskThird = lazy(() => import("views/sample/pages/PCMPrintTaskThird"));
 
 const PCMRouter: FC = () => {
   return (
@@ -364,6 +367,9 @@ const PCMRouter: FC = () => {
               </Route>
 
               <Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
+              <Route exact path="/pcm/detail/:id/print/1" component={PCMPrintTask} />
+              <Route exact path="/pcm/detail/:id/print/2" component={PCMPrintTaskSecond} />
+              <Route exact path="/pcm/detail/:id/print/3" component={PCMPrintTaskThird} />
 
               <Route exact path="/pcm/home" component={PcmHome} />
               <Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />

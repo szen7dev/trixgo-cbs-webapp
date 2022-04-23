@@ -13,7 +13,12 @@ import { FileProps, FilePropsUpload } from 'typings/common';
 import { useUpload } from 'services/hooks/useUpload';
 import useUploadFile, { modifyUploadedFilesV2 } from 'services/hooks/useUploadFile';
 
-export interface SubmitComment { images: string[], files: string[], text: string }
+export interface SubmitComment {
+  images: string[];
+  files: string[];
+  text: string;
+  level?: number;
+}
 
 interface Props {
 	onTextChange?: (input: React.FormEvent<HTMLSpanElement>) => unknown;
@@ -25,6 +30,7 @@ interface Props {
 	images?: FileProps[],
 	content?: string,
 	appID?: string,
+	level?: number;
 }
 
 const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
@@ -37,6 +43,7 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 	images,
 	content,
 	appID,
+	level,
 	...props
 }) => {
 	const [uploads, {
@@ -111,7 +118,8 @@ const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 		onSubmitChat && await onSubmitChat({
 			images: Object.values(uploads.images).map(({ _id }) => _id as string),
 			files: Object.values(uploads.files).map(({ _id }) => _id as string),
-			text
+			text,
+			level
 		});
 	}
 

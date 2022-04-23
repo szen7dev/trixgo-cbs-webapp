@@ -302,22 +302,26 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		<div {...props}>
 			<div
 				className={
-					classNames("flex flex-wrap custom-scroll overflow-x-hidden overflow-y-auto pl-3.5",
+					classNames("flex flex-wrap",
 						fileContainerClassName,
-						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "post__files pt-2 pb-6")
+						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "")
 				}
 				ref={refDivFile}
 			>
-				<PostImage
-					images={toArray(uploads.images)}
-					onRemove={handleRemoveUpload}
-					className="post__files-row pt-5 text-black gap-5 flex-wrap"
-				/>
-				<PostFile
-					files={toArray(uploads.files)}
-					onRemove={handleRemoveUpload}
-					className="text-black w-full mr-4"
-				/>
+				<div className={classNames(Object.keys(uploads.files).length ? "max-h-44 w-full pr-4 pl-3.5 py-2":'hidden','custom-scroll overflow-x-hidden overflow-y-auto')}>
+					<PostFile
+						files={toArray(uploads.files)}
+						onRemove={handleRemoveUpload}
+						className="text-black w-full"
+					/>
+				</div>
+				<div className={classNames(Object.keys(uploads.images).length ? 'max-h-44 w-full pl-3.5':'hidden','custom-scroll overflow-x-hidden overflow-y-auto pb-2.5')}>
+					<PostImage
+						images={toArray(uploads.images)}
+						onRemove={handleRemoveUpload}
+						className="post__files-row pt-5 text-black gap-5 flex-wrap"
+					/>
+				</div>
 			</div>
 			<div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">
