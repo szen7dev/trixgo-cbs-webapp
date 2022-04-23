@@ -22,15 +22,17 @@ type Props<T extends Record<string, any>> = {
   onChange?: (value: string) => void;
   onChangeValue?: (value: T) => void;
   onScroll?: (e: any) => void;
-};
+} & React.ComponentProps<"input">;
 
 const DefaultIcon = () => {
   return (
-    <span className="absolute right-2 top-1.5">
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 320 512">
-        <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
-      </svg>
-    </span>
+    <div className="absolute inset-y-0 right-2 flex items-center">
+      <span className="">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 320 512">
+          <path d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z" />
+        </svg>
+      </span>
+    </div>
   );
 };
 
@@ -101,16 +103,17 @@ function CustomAutoComplete<T extends Record<string, any>>({
           {/* <div onClick={() => setIsOpen(true)} className=""> */}
           <div
             className={classNames(
-              "relative focus-within:border-cbs-primary border-cbs-border",
+              "relative focus-within:border-cbs-primary border-cbs-border border-0.5",
               containerClassName
             )}
             ref={ref}
           >
             <input
               type="text"
-              className="focus:outline-none placeholder-shown:bg-cbs-gray bg-white resize-none w-full py-1.5 px-3 border-0.5 text-black"
+              className="focus:outline-none bg-white resize-none w-full py-1.5 px-3 text-black"
               placeholder={placeholder}
               value={search}
+              {...rest}
               onClick={() => setIsOpen(!isOpen)}
               onChange={(e) => {
                 if (selected) {

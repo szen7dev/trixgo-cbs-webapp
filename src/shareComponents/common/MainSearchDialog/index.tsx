@@ -8,6 +8,7 @@ import File from "./components/File";
 import Profile from "./components/Profile";
 import Contract from "./components/Contract";
 import Member from "./components/Member";
+import Project from "./components/Project";
 
 export const MainSearchDialog: FC = () => {
   const categories = [
@@ -94,11 +95,12 @@ export const MainSearchDialog: FC = () => {
         </div>
       </header>
       {/* Search form */}
-      {["1", "6", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
+      {["1", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
       {activeCategory === "2" && <File />}
       {activeCategory === "3" && <Profile />}
       {activeCategory === "4" && <Contract />}
       {activeCategory === "5" && <Member />}
+      {activeCategory === "6" && <Project />}
     </div>
   );
 };

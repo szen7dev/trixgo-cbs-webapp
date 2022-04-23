@@ -6,6 +6,7 @@ import CustomAutoComplete from "../../Form/CustomForm/CustomAutoComplete";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
+import iconSlider from "assets/images/icons8-slider-32.png";
 import CustomField from "shareComponents/common/Form/CustomForm/CustomField";
 
 type ProfileProps = {
@@ -117,27 +118,41 @@ const Profile: FC<ProfileProps> = (props) => {
     <div>
       <div className="pt-4 pl-8 pr-8 pb-3">
         <div className="flex space-x-3 pb-3">
-          <CustomField name="report" placeholder="Báo cáo" wrapperClassName="w-1/2" />
-          <CustomField name="contact" placeholder="Danh bạ hệ thống" wrapperClassName="w-1/2" />
+          <CustomField
+            name="report"
+            placeholder="Báo cáo"
+            wrapperClassName="w-1/2"
+						className="w-full h-full py-2.5 px-3 focus:outline-none"
+						containerClassName="flex items-center"
+            icon={() => <img src={iconSlider} alt="Filter" className="w-6 h-6 mr-2" />}
+          />
+          <CustomAutoComplete
+            data={[{ name: "123" }]}
+            wrapperClassName="w-1/2"
+            placeholder="Danh bạ hệ thống"
+						className="w-full h-full py-2.5 px-3 focus:outline-none"
+            onChange={(e) => console.log("text change", e)}
+            onChangeValue={(e) => console.log("value change", e)}
+          />
         </div>
         <div className="flex space-x-3">
           <CustomAutoComplete
             data={[{ name: "123" }]}
             wrapperClassName="w-4/12"
-            containerClassName="rounded-md overflow-hidden"
+						className="w-full h-full py-2.5 px-3 focus:outline-none"
             placeholder="Phân loại"
           />
           <CustomAutoComplete
             data={[{ name: "123" }]}
             wrapperClassName="w-4/12"
-            containerClassName="rounded-md overflow-hidden"
+						className="w-full h-full py-2.5 px-3 focus:outline-none"
             placeholder="Thuộc hợp đồng"
           />
           <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
             <ReactDatePicker
               onChange={(date: Date) => setStartDate(date)}
               selected={startDate}
-              className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+              className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
             />
             <div className="w-6 h-6">
               <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
@@ -148,7 +163,7 @@ const Profile: FC<ProfileProps> = (props) => {
             <ReactDatePicker
               onChange={(date: Date) => setEndDate(date)}
               selected={endDate}
-              className="text-small leading-[19.5px] py-1.5 w-full focus:outline-none"
+              className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
             />
             <div className="w-6 h-6">
               <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />

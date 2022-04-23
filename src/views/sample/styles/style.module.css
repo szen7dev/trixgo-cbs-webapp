@@ -1,17 +1,19 @@
 .headerTitle {}
 
 .headerInfo {
-  @apply border-cbs-border;
+  /* @apply border-cbs-border; */
   font-weight: bold;
   display: grid;
   grid-template-columns: 1fr auto auto;
+  border-color: rgba(204, 204, 204);
   border-top-width: 0.5px;
   border-left-width: 0.5px;
 }
 
 .headerInfo>div {
-  @apply border-cbs-border;
+  /* @apply border-cbs-border; */
   border-right-width: 0.5px;
   border-bottom-width: 0.5px;
-	padding: 0.625rem 0.625rem;
+  padding: 0.625rem 0.625rem;
+  border-color: rgba(204, 204, 204);
 }
