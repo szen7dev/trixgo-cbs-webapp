@@ -1,7 +1,8 @@
-import React, { FC, useState, useCallback } from "react";
+import React, { FC, UIEvent, ChangeEvent, useState, useCallback } from "react";
 
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import classNames from "classnames";
+import debounce from "lodash/debounce";
 
 import Work from "./components/Work";
 import File from "./components/File";
@@ -10,7 +11,13 @@ import Contract from "./components/Contract";
 import Member from "./components/Member";
 import Project from "./components/Project";
 
+import { useUser } from "services/hooks/useUser";
+import { useProject } from "services/hooks/items/useProject";
+
 export const MainSearchDialog: FC = () => {
+  const [userKeyword, setUserKeyword] = useState('');
+  const [projectKeyword, setProjectKeyword] = useState('');
+
   const categories = [
     { id: "1", name: "Công việc" },
     { id: "2", name: "File công việc" },
@@ -21,6 +28,21 @@ export const MainSearchDialog: FC = () => {
     { id: "7", name: "Workshop" },
     { id: "8", name: "Chấm công" }
   ];
+
+  const {
+    listFriends,
+    nextPageListFriends,
+    hasNextPageListFriends
+  } = useUser({ keyword: userKeyword });
+
+  const {
+    list: listProjects,
+    fetchNextPage: fetchNextPageProjects,
+    hasNextPage: hasNextPageProjects
+  } = useProject({
+    params: { keyword: projectKeyword },
+    isFetchList: true
+  });
 
   const [show, setShow] = useState<"left" | "right" | "both">("right");
   const [activeCategory, setActiveCategory] = useState<string | number>(categories[0].id);
@@ -35,6 +57,7 @@ export const MainSearchDialog: FC = () => {
     },
     []
   );
+
   const handleClickScrollLeft = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const scrollElement = e.currentTarget.parentNode as HTMLElement;
@@ -44,6 +67,32 @@ export const MainSearchDialog: FC = () => {
     },
     []
   );
+
+  const handleScrollUser = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageListFriends) {
+      nextPageListFriends();
+    }
+  }
+
+  const handleScrollProject = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageProjects) {
+      fetchNextPageProjects();
+    }
+  }
+
+  const handleSearchUser = debounce((keyword: string | ChangeEvent<HTMLInputElement>) => {
+    typeof keyword === 'string' && setUserKeyword(keyword);
+  }, 700)
+
+  const handleSearchProject = debounce((keyword: string | ChangeEvent<HTMLInputElement>) => {
+    typeof keyword === 'string' && setProjectKeyword(keyword);
+  }, 700)
 
   return (
     <div className="t-main-search-wrapper rounded pb-4">
@@ -98,7 +147,16 @@ export const MainSearchDialog: FC = () => {
       </header>
       {/* Search form */}
       {["1", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
-      {activeCategory === "2" && <File />}
+      {activeCategory === "2" &&
+        <File
+          users={listFriends}
+          projects={listProjects}
+          onScrollUser={handleScrollUser}
+          onScrollProject={handleScrollProject}
+          onSearchUser={handleSearchUser}
+          onSearchProject={handleSearchProject}
+        />
+      }
       {activeCategory === "3" && <Profile />}
       {activeCategory === "4" && <Contract />}
       {activeCategory === "5" && <Member />}

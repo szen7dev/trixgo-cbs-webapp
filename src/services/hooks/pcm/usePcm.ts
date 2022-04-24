@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { FetchNextPageOptions, FetchPreviousPageOptions, useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from "apis/pcm";
 import {
     AddConditionTaskReportPayload,
@@ -7,6 +7,7 @@ import {
     ListFilesPcmPayload,
     PcmPlanTaskProps,
     PcmReport,
+    PcmFile,
     SendMailTaskPayload,
     UpdateConditionTaskReportPayload
 } from "typings/pcm";
@@ -166,12 +167,15 @@ export const usePcmReport = (params?: any, isFetch?: boolean) : UsePcmReport => 
 interface UsePcmFile{
     filesGroupByDate: FilesPcmGroupByDate[],
     filesGroupByContract: FilesPcmGroupByContract[],
-    listFilesPcm: Array<PcmReport>,
+    listFilesPcm: Array<PcmFile>,
     isLoading: boolean,
     refetch: () => void,
-    fetchNextPage: () => void,
+    fetchNextPage: (options?: FetchNextPageOptions) => void,
+    fetchPreviousPage: (options?: FetchPreviousPageOptions) => void,
     totalRecord: number,
-    hasNextPage: boolean | undefined
+    totalPage: number,
+    nextCursor: string,
+    hasNextPage: boolean | undefined,
 };
 
 type UsePcmFileProps = {
@@ -205,29 +209,48 @@ export const usePcmFile = ({
         refetch,
         data,
         fetchNextPage,
+        fetchPreviousPage,
         hasNextPage
     } =
         useInfiniteQuery(
             ["pcm_files", params],
-            async ({ pageParams }: any) =>
+            async ({ pageParam }: any) =>
             PcmRepository.listFilesPcm({
-                lastestID: pageParams ? pageParams : "",
+                lastestID: pageParam ? pageParam : "",
                 ...params
             }),
             {
                 getNextPageParam: ({ data }: any) => {
                     return data?.nextCursor || undefined;
                 },
+                getPreviousPageParam: (firstPage, allPages) => {
+                    // console.log({ firstPage, allPages });
+                    return firstPage?.data?.nextCursor;
+                },
                 refetchOnWindowFocus: false,
-                enabled: isFetch ?? true
+                enabled: isFetch ?? true,
+                keepPreviousData: true,
             }
         );
 
-    const listFilesPcm = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
-    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const listFilesPcm = (data?.pages || []).flatMap((d: any) => d?.data?.listRecords);
+    // console.log({ pageParams: data?.pageParams, pages: data?.pages });
+
+    const totalRecord = data?.pages && data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages && data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
 
     const filesGroupByDate = dataFilesGroupByDate?.data?.listRecords || [];
     const filesGroupByContract = dataFilesGroupByContract?.data?.listRecords || [];
+
+    // const {
+    //     data: dataFilesPcm,
+    // } = useQuery(
+    //     ["pcm_files__query", params],
+    //     () => PcmRepository.listFilesPcm(params),
+    //     { keepPreviousData: true }
+    // );
+    // console.log({ dataFilesPcm });
 
     return {
         filesGroupByDate,
@@ -236,7 +259,10 @@ export const usePcmFile = ({
         isLoading,
         refetch,
         fetchNextPage,
+        fetchPreviousPage,
         hasNextPage,
         totalRecord,
+        totalPage,
+        nextCursor
     }
 }

@@ -1,23 +1,39 @@
-import React, { FC, useMemo, useState } from "react";
+import { UIEvent, FC, useEffect, useMemo, useState, ChangeEvent } from "react";
+import { useTable, useRowSelect, TableOptions, usePagination } from "react-table";
 import ReactDatePicker from "react-datepicker";
-import { useTable, useRowSelect, TableOptions } from "react-table";
+import classnames from "classnames";
 
+/**
+ * Components, Assets
+ */
 import CustomAutoComplete from "../../Form/CustomForm/CustomAutoComplete";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 
+/**
+ * Hooks, Typings
+ */
+import { usePcmFile } from "services/hooks/pcm/usePcm";
+import { User } from "typings/user";
+import { Project } from "typings/items/project";
+import moment from "moment";
+import { PcmFile } from "typings/pcm";
+import { humanFileSize } from 'utils/converter';
+
 type FileProps = {
-  //
+  users: User[];
+  projects: Project[];
+  onScrollUser: (e: UIEvent<HTMLDivElement>) => void;
+  onScrollProject: (e: UIEvent<HTMLDivElement>) => void;
+  onSearchUser: (keyword: string | ChangeEvent<HTMLInputElement>) => void;
+  onSearchProject: (keyword: string | ChangeEvent<HTMLInputElement>) => void;
 };
 
-interface IFile {
-  _id: string;
-}
+// interface IFile extends PcmFile {}
+// const data = Array.from({ length: 15 }).map((e, i) => ({ _id: "123" + i }));
 
-const data = Array.from({ length: 15 }).map((e, i) => ({ _id: "123" + i }));
-
-function getColumnsFile(): TableOptions<IFile>["columns"] {
+function getColumnsFile(): TableOptions<PcmFile>["columns"] {
   return [
     SelectionColumn({
       tableHeadSelectorProps: {
@@ -31,7 +47,7 @@ function getColumnsFile(): TableOptions<IFile>["columns"] {
     }),
     {
       accessor: "_id",
-      Header({ length, selectedFlatRows }) {
+      Header({ length, fetchNextPage, fetchPreviousPage }) {
         return (
           <div className="flex justify-between pb-1">
             <span className="bg-[#F6F7F8] bg-opacity-60 rounded-full p-2">
@@ -51,37 +67,43 @@ function getColumnsFile(): TableOptions<IFile>["columns"] {
               </svg>
             </span>
             <div className="flex items-center">
-              <span className="mr-4">1-50 trong số rất nhiều</span>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              <span className="mr-4">10-{length} trong số rất nhiều</span>
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage}>
                 <img
-                  alt="Next"
+                  alt="Previous"
                   src={iconChevronRight}
                   className="w-4 filter-primary-gray rotate-180"
                 />
               </button>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchNextPage}>
                 <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
               </button>
             </div>
           </div>
         );
       },
-      headCellProps: { colSpan: 2, className: "border-b border-cbs-border pl-2 pr-8" },
+      headCellProps: {
+        colSpan: 2,
+        className: "border-b border-cbs-border pl-2 pr-8"
+      },
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row, value }) {
+      Cell({ row }) {
+        const { nameOrg, size, project, task, author, createAt } = row.original;
         return (
           <div>
             <p className="text-cbs-highlight-color">
-              2022.04.18-AHU.VPTM.CPMI.ToanND-HoSoThanhToanL1-V1.rar (135KB)
+              {nameOrg} ({humanFileSize(size)})
             </p>
             <p className="text-cbs-subtext">
-              CHG.THT.Báo cáo đánh giá sản phẩm hàng tháng của nhà thầu
+              {project.sign}.{task.name}
             </p>
             <p className="text-cbs-subtext">
-              <span>Nguyễn Phan Thanh Hương-CPMI</span>
-              <span className="text-cbs-primary">15/8/2021 14:12 (cách đây 8 ngày)</span>
+              <span>{author.bizfullname}</span>
+              <span className="text-cbs-primary ml-1">
+                {moment(createAt).format('DD/MM/YYYY HH:mm')} ({moment(createAt).fromNow()})
+              </span>
             </p>
           </div>
         );
@@ -94,10 +116,10 @@ function getColumnsFile(): TableOptions<IFile>["columns"] {
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row, value }) {
+      Cell({ row }) {
         return (
-          <div>
-            <img src="" className="h-[60px] w-[60px]" alt="hellu" />
+          <div className={classnames({ hidden: row.original?.type !== 1 })}>
+            <img src={`${process.env.REACT_APP_URL_S3}/${row.original?.path}`} className="h-[60px] w-[60px]" alt="hellu" />
           </div>
         );
       },
@@ -105,27 +127,76 @@ function getColumnsFile(): TableOptions<IFile>["columns"] {
   ];
 }
 
-const File: FC<FileProps> = (props) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date(new Date().setDate(-30)));
+const File: FC<FileProps> = ({
+  users, projects, onScrollUser, onScrollProject, onSearchUser, onSearchProject
+}) => {
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [userSelected, setUserSelected] = useState('');
+  const [projectSelected, setProjectSelected] = useState('');
+  const [dataFilesPcm, setDataFilesPcm] = useState<PcmFile[]>([]);
+
+  const [paramsSearch, setParamsSearch] = useState({
+    projectID: '',
+    authorID: '',
+    fromDate: '',
+    toDate: '',
+    lastestID: ''
+  });
+
+  const { listFilesPcm, isLoading, totalRecord, fetchNextPage, fetchPreviousPage, nextCursor } = usePcmFile({
+    params: paramsSearch,
+    isFetch: !!paramsSearch.projectID
+  })
+  // console.log({ paramsSearch });
 
   const columns = useMemo(getColumnsFile, []);
-  const instance = useTable({ columns, data, getRowId: (row) => row._id }, useRowSelect);
+  const instance = useTable({ columns, data: dataFilesPcm, getRowId: (row) => row._id }, usePagination, useRowSelect);
+
+  useEffect(() => {
+    if(!listFilesPcm.length) return;
+
+    setDataFilesPcm(listFilesPcm);
+  }, [listFilesPcm.length])
+
+  const handleNextPageButton = () => {
+    setParamsSearch(preValue => ({
+      ...preValue,
+      lastestID: nextCursor
+    }));
+  };
+
+  const handleSearch = () => {
+    setParamsSearch(preValue => ({
+      ...preValue,
+      projectID: projectSelected,
+      authorID: userSelected,
+      fromDate: startDate ? moment(startDate).format('YYYY-MM-DD') : '',
+      toDate: endDate ? moment(endDate).format('YYYY-MM-DD') : '',
+    }))
+  }
 
   return (
     <div>
       <div className="pt-4 pl-8 pr-8 pb-3 relative flex space-x-3">
         <CustomAutoComplete
-          data={[{ name: "123" }]}
+          data={users}
+          onScroll={onScrollUser}
+          onChange={onSearchUser}
+          onChangeValue={value => setUserSelected(value._id)}
+          attribute="bizfullname"
           wrapperClassName="w-4/12"
           className="w-full h-full py-2.5 px-3 focus:outline-none"
-          placeholder="Nội dung"
+          placeholder="Người tạo"
         />
         <CustomAutoComplete
-          data={[{ name: "123" }]}
+          data={projects}
+          onScroll={onScrollProject}
+          onChange={onSearchProject}
+          onChangeValue={value => setProjectSelected(value._id)}
           wrapperClassName="w-4/12"
           className="w-full h-full py-2.5 px-3 focus:outline-none"
-          placeholder="Nội dung"
+          placeholder="Dự án (bắt buộc)"
         />
         <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
           <ReactDatePicker
@@ -155,12 +226,13 @@ const File: FC<FileProps> = (props) => {
         <TableWithoutContext
           instance={instance}
           tableProps={{ className: "w-full" }}
-          props={{ length: 123 }}
+          props={{ length: totalRecord, fetchNextPage: handleNextPageButton, fetchPreviousPage }}
+          isLoading={isLoading}
         />
       </div>
       <div className="flex justify-end pt-3 px-10">
         <button className="text-cbs-subtext px-7 py-3.5 font-bold rounded-cbs-sm">Bỏ qua</button>
-        <button className="bg-cbs-primary text-white px-7 py-3.5 font-bold rounded-cbs-sm">
+        <button className="bg-cbs-primary text-white px-7 py-3.5 font-bold rounded-cbs-sm" onClick={handleSearch}>
           Tìm kiếm
         </button>
       </div>

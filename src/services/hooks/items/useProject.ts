@@ -57,7 +57,7 @@ export const useProject = ({
             }),
         {
             getNextPageParam: ({ data }: any) => {
-                return data?.nextCursor ?? undefined;
+                return data?.nextCursor;
             },
             refetchOnWindowFocus: false,
             enabled: isFetchList
