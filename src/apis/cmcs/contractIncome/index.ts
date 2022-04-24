@@ -7,7 +7,7 @@ async function fetchList<T>(params: any): Promise<T> {
         `${ITEM_URL}/contracts`,
         {
             params: {
-                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+                select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt dependentUnit",
                 populates: {
                     "path": "project company personInCharge",
                     "select": "name sign"
@@ -25,7 +25,7 @@ async function fetchDetailContract<T>(params: any): Promise<T> {
         `${ITEM_URL}/contracts?contractID=${params.contactID}`, {
         params: {
             populates: {
-                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo",
+                "path": "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo dependentUnit",
                 "select": "name sign description"
             },
         },
