@@ -50,11 +50,7 @@ export const ChattingInput:FC<Props> = ({chat, context}) => {
 
     const onChangeCallback = useCallback((editorState) => {
         setEditorState(editorState);
-        // console.log(convertToRaw(editorState.getCurrentContent()).blocks)
-        setRealValue(convertToRaw(editorState.getCurrentContent()).blocks.map((block:any) => {
-            if (block.text==='') return '\n';
-            return block.text;
-        }).join(''))
+        setRealValue(convertToRaw(editorState.getCurrentContent()).blocks.map(block => (!block.text.trim() && '\n\n') || block.text).join(''))
     }, [editorState]);
 
     const value = useMemo(
