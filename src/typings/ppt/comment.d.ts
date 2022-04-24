@@ -1,5 +1,5 @@
 import { APIResponse } from "typings/apis/response";
-import type { CommentProps, FileProps } from "typings/common";
+import type { CommentProps, FileProps } from "typings/media";
 import type { User } from "typings/user";
 
 export type CommentDetail = {
@@ -16,8 +16,10 @@ export type CommentDetail = {
 
 export type Comment = CommentProps;
 
-export type CommentWithReply = Comment & {
-  listReply: { data: Comment[]; nextCursor?: string | null };
+export type CommentWithReply = Comment & CommentWithReplyExtra<Comment>;
+
+export type CommentWithReplyExtra<T> = {
+  listReply: { data: T[]; nextCursor?: string | null };
 };
 
 export type CommentBody = {

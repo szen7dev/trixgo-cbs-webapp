@@ -25,8 +25,8 @@ export const MainSearchDialog: FC = () => {
     { id: "4", name: "Hợp đồng" },
     { id: "5", name: "Nhân sự" },
     { id: "6", name: "Dự án" },
-    { id: "7", name: "Workshop" },
-    { id: "8", name: "Chấm công" }
+    // { id: "7", name: "Workshop" },
+    // { id: "8", name: "Chấm công" }
   ];
 
   const {
@@ -97,7 +97,7 @@ export const MainSearchDialog: FC = () => {
   return (
     <div className="t-main-search-wrapper rounded pb-4">
       <header className="flex pt-3 pl-6 pr-8 items-center">
-        <span className="mr-5 font-bold text-3x-large">
+        <span className="mr-5 font-bold text-3x-large" title="Trợ lý ảo của Trixgo">
           <span className="text-cbs-primary">V</span>
           <span className="text-cbs-schedule-expired">i</span>
           <span className="text-cbs-schedule-nextweek">a</span>
