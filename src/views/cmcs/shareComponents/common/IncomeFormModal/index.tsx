@@ -114,6 +114,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     agValue: Number(data.agValue) || 0,
     expiredCg: convertDateToString(data.expiredCg),
     expiredAg: convertDateToString(data.expiredAg),
+    dependentUnit: isDataPayLoad ? data?.dependentUnit?.value : convertInitialValueDropdown(data?.dependentUnit || ''),
   }
 }
 
@@ -127,7 +128,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
   useEffect(() => {
 
-    setInitialValues(mappingData(detailContract))
+  setInitialValues(mappingData(detailContract))
 
   }, [idEdit, detailContract]);
 
@@ -173,6 +174,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
   const [searchPersonInChargeValue, setSearchPersonInChargeValue] = useState(
     defaultValues?.department?.name || ""
   );
+
   const { listContact: listPersonInCharge } = useQueryListContact({
     limit: LIMIT_DROPDOWN,
     keyword: searchPersonInChargeValue,
@@ -202,12 +204,20 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
     keyword: searchSellerInfoValue,
   });
 
+  const [searchDependentUnit, setSearchDependentUnit] = useState(
+    defaultValues?.department?.name || ""
+  );
+  
+  const { listContact: listDependentUnit } = useQueryListContact({
+    limit: LIMIT_DROPDOWN,
+    keyword: searchDependentUnit,
+  });
+
   const handleSubmit = useCallback(
     async (values: any) => {
       let formatData = {
         ...values,
       }
-
       if (isEdit) {
         formatData = {
           ...values,
@@ -238,7 +248,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
     name: string().required(MESSAGE_ERROR.required),
     sign: string().required(MESSAGE_ERROR.required),
   });
-
+  console.log({ initialValues })
   return (
     <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
@@ -748,6 +758,49 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       />
                       <ErrorMessage
                         name="warehouse"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-primary-gray mb-2">
+                      Phân loại theo đơn vị (*)
+                      </p>
+                      <DropdownSearchable
+                        onchangeValue={(value) => setFieldValue("dependentUnit", value)}
+                        placeholder="Phân loại theo đơn vị..."
+                        className="w-full pl-0 -mb-1 outline-none"
+                        classNameInput="border border-primary-border rounded h-[32px]"
+                        isMultiple={false}
+                        allowClearValueSingleInput={true}
+                        onClearData={() => setFieldValue("dependentUnit", '')}
+                        showTriangle={true}
+                        maxWidthInput="max-w-none"
+                        disableClass={cn(
+                          "cursor-not-allowed rounded",
+                          styles.disabledBg
+                        )}
+                        renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
+                          <p className="text-1-line-clamp">{`${item.text}`}</p>
+                        </Popover>}
+                        onSearchInputChange={debounce(
+                          (value) => setSearchDependentUnit(value),
+                          500
+                        )}
+                        initialValue={initialValues?.dependentUnit}
+                        data={listDependentUnit.map((item: any) => ({
+                          label: item.name,
+                          value: item._id,
+                        }))}
+                        formatItem={{
+                          id: "value",
+                          text: "label",
+                        }}
+                        inlineSearch={true}
+                      />
+                      <ErrorMessage
+                        name="dependentUnit"
                         component="span"
                         className="font-normal leading-7 text-sm text-negative"
                       />
