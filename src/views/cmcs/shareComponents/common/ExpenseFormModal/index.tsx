@@ -550,11 +550,11 @@ export const ExpenseFormModal: FC<ContractExpenseModalProps> = ({ defaultValues,
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo đơn vị/phụ trách (*)
+                        Phân loại theo phụ trách (*)
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("personInCharge", value)}
-                        placeholder="Phân loại theo đơn vị/phụ trách..."
+                        placeholder="Phân loại theo phụ trách..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
