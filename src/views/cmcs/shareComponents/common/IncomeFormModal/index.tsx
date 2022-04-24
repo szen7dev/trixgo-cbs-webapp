@@ -484,16 +484,16 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo chủ trì (*)
+                      Phân loại theo đơn vị (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) => setFieldValue("chair", value)}
-                        placeholder="Phân loại theo chủ trì..."
+                        onchangeValue={(value) => setFieldValue("dependentUnit", value)}
+                        placeholder="Phân loại theo đơn vị..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        onClearData={() => setFieldValue("chair", '')}
+                        onClearData={() => setFieldValue("dependentUnit", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -504,11 +504,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
                         onSearchInputChange={debounce(
-                          (value) => setSearchChairValue(value),
+                          (value) => setSearchDependentUnit(value),
                           500
                         )}
-                        initialValue={initialValues?.chair}
-                        data={listChair.map((item: any) => ({
+                        initialValue={initialValues?.dependentUnit}
+                        data={listDependentUnit.map((item: any) => ({
                           label: item.name,
                           value: item._id,
                         }))}
@@ -519,7 +519,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         inlineSearch={true}
                       />
                       <ErrorMessage
-                        name="chair"
+                        name="dependentUnit"
                         component="span"
                         className="font-normal leading-7 text-sm text-negative"
                       />
@@ -562,11 +562,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo đơn vị/phụ trách (*)
+                        Phân loại theo phụ trách (*)
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("personInCharge", value)}
-                        placeholder="Phân loại theo đơn vị/phụ trách..."
+                        placeholder="Phân loại theo phụ trách..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
@@ -640,16 +640,16 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                        Phân loại theo trạng thái công nợ
+                        Phân loại theo chủ trì (*)
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) => setFieldValue("debtStatus", value)}
-                        placeholder="Phân loại theo trạng thái công nợ..."
+                        onchangeValue={(value) => setFieldValue("chair", value)}
+                        placeholder="Phân loại theo chủ trì..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        onClearData={() => setFieldValue("debtStatus", '')}
+                        onClearData={() => setFieldValue("chair", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -660,11 +660,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
                         onSearchInputChange={debounce(
-                          (value) => setSearchDebtStatusValue(value),
+                          (value) => setSearchChairValue(value),
                           500
                         )}
-                        initialValue={initialValues?.debtStatus}
-                        data={listDebtStatus.map((item) => ({
+                        initialValue={initialValues?.chair}
+                        data={listChair.map((item: any) => ({
                           label: item.name,
                           value: item._id,
                         }))}
@@ -675,7 +675,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         inlineSearch={true}
                       />
                       <ErrorMessage
-                        name="debtStatus"
+                        name="chair"
                         component="span"
                         className="font-normal leading-7 text-sm text-negative"
                       />
@@ -762,19 +762,19 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         className="font-normal leading-7 text-sm text-negative"
                       />
                     </div>
-
+                    
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                      Phân loại theo đơn vị (*)
+                        Phân loại theo trạng thái công nợ
                       </p>
                       <DropdownSearchable
-                        onchangeValue={(value) => setFieldValue("dependentUnit", value)}
-                        placeholder="Phân loại theo đơn vị..."
+                        onchangeValue={(value) => setFieldValue("debtStatus", value)}
+                        placeholder="Phân loại theo trạng thái công nợ..."
                         className="w-full pl-0 -mb-1 outline-none"
                         classNameInput="border border-primary-border rounded h-[32px]"
                         isMultiple={false}
                         allowClearValueSingleInput={true}
-                        onClearData={() => setFieldValue("dependentUnit", '')}
+                        onClearData={() => setFieldValue("debtStatus", '')}
                         showTriangle={true}
                         maxWidthInput="max-w-none"
                         disableClass={cn(
@@ -785,11 +785,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
                         onSearchInputChange={debounce(
-                          (value) => setSearchDependentUnit(value),
+                          (value) => setSearchDebtStatusValue(value),
                           500
                         )}
-                        initialValue={initialValues?.dependentUnit}
-                        data={listDependentUnit.map((item: any) => ({
+                        initialValue={initialValues?.debtStatus}
+                        data={listDebtStatus.map((item) => ({
                           label: item.name,
                           value: item._id,
                         }))}
@@ -800,11 +800,12 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         inlineSearch={true}
                       />
                       <ErrorMessage
-                        name="dependentUnit"
+                        name="debtStatus"
                         component="span"
                         className="font-normal leading-7 text-sm text-negative"
                       />
                     </div>
+                   
                   </div>
                 )}
               </div>
