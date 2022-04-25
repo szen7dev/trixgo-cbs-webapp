@@ -50,7 +50,8 @@ export type FileResponse = APIResponse & {
   data: {
     infoGenerateLink: {
       error: boolean;
-      data: string,
+      data: string;
+      fileName: string;
     },
     infoFileAfterInsert: FileProps
   }

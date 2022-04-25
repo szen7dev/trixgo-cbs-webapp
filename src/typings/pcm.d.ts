@@ -1,5 +1,7 @@
 import { APIResponse } from "./apis/response";
 import { Company } from "./common";
+import { Project } from "./items/project";
+import { Task } from "./task";
 import { User } from "./user";
 
 /**
@@ -118,12 +120,33 @@ export type listTotalAnalysisResponse = APIResponse & {
  * ============================ ************* ===============================
  */
 
+export type PcmFile = {
+  _id: string,
+  name: string,
+  nameOrg: string,
+  path: string,
+  size: number,
+  description: string,
+  conditionPin: any,
+  company: Company,
+  project: Project,
+  task: Task,
+  author: User,
+  type: number,
+  createAt: string
+}
+
 export type ListFilesPcmPayload = {
+  isFileOfProject?: boolean,
+  isSearchFile?: boolean,
   contractID?: string,
   companyID?: string,
   projectID?: string,
   groupID?: string,
   taskID?: string,
+  authorID?: string,
+  fromDate?: string,
+  toDate?: string,
   type?: number,
   keyword?: string,
   limit?: string,

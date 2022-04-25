@@ -1,9 +1,10 @@
 export type UpdateUser = {
-    email: string,
-    phone: string,
-    birthDay: string,
-    gender: string,
-    lang: string,
+    email?: string,
+    phone?: string,
+    birthDay?: string,
+    gender?: string,
+    lang?: string,
+    image?: string
 };
 
 export type UpdatePasswordUser = {
@@ -81,7 +82,9 @@ export type User = {
     image: string
     gender: number,
     lang: string,
-    birthDay: string
+    birthDay: string,
+    lastLog?: string,
+    imgUrl?: string;
 };
 
 export type ListFriendsPayload = {
