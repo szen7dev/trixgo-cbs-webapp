@@ -15,14 +15,14 @@ import iconChevronRight from "assets/images/icon-chevron-right.png";
  * Hooks, Typings
  */
 import { usePcmFile } from "services/hooks/pcm/usePcm";
-import { User } from "typings/user";
 import { Project } from "typings/items/project";
 import moment from "moment";
 import { PcmFile } from "typings/pcm";
 import { humanFileSize } from 'utils/converter';
+import { UserSystemProps } from "typings/users/userSystem";
 
 type FileProps = {
-  users: User[];
+  users: UserSystemProps[];
   projects: Project[];
   onScrollUser: (e: UIEvent<HTMLDivElement>) => void;
   onScrollProject: (e: UIEvent<HTMLDivElement>) => void;
@@ -91,12 +91,13 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
       Cell({ row }) {
-        const { nameOrg, size, project, task, author, createAt } = row.original;
+        const { nameOrg, size, path, project, task, author, createAt } = row.original;
+
         return (
           <div>
-            <p className="text-cbs-highlight-color">
+            <a href={`${process.env.REACT_APP_URL_S3}/${path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">
               {nameOrg} ({humanFileSize(size)})
-            </p>
+            </a>
             <p className="text-cbs-subtext">
               {project.sign}.{task.name}
             </p>
@@ -120,7 +121,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
       Cell({ row }) {
         return (
           <div className={classnames({ hidden: row.original?.type !== 1 })}>
-            <img src={`${process.env.REACT_APP_URL_S3}/${row.original?.path}`} className="h-[60px] w-[60px]" alt="hellu" />
+            <img src={`${process.env.REACT_APP_URL_S3}/${row.original?.path}`} className="h-[60px] w-[60px]" alt="Preview" />
           </div>
         );
       },
@@ -129,6 +130,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
 }
 
 interface SearchParams{
+  isSearchFile: boolean,
   projectID: string,
   authorID: string,
   fromDate: string,
@@ -149,6 +151,7 @@ const File: FC<FileProps> = ({
   const [dataFilesPcm, setDataFilesPcm] = useState<PcmFile[]>([]);
 
   const [paramsSearch, setParamsSearch] = useState<SearchParams>({
+    isSearchFile: true,
     projectID: '',
     authorID: '',
     fromDate: '',
@@ -158,7 +161,7 @@ const File: FC<FileProps> = ({
 
   const { listFilesPcm, isLoading, totalRecord, totalPage, nextCursor } = usePcmFile({
     params: paramsSearch,
-    isFetch: !!paramsSearch.projectID
+    isFetch: true
   })
 
   const columns = useMemo(getColumnsFile, []);
@@ -210,6 +213,7 @@ const File: FC<FileProps> = ({
   };
 
   const handleSearch = () => {
+    setCount(1);
     setPagesCursor([undefined]);
     setParamsSearch(preValue => ({
       ...preValue,
@@ -217,6 +221,7 @@ const File: FC<FileProps> = ({
       authorID: userSelected,
       fromDate: startDate ? moment(startDate).format('YYYY-MM-DD') : '',
       toDate: endDate ? moment(endDate).format('YYYY-MM-DD') : '',
+      lastestID: ''
     }))
   }
 
@@ -226,7 +231,13 @@ const File: FC<FileProps> = ({
         <CustomAutoComplete
           data={users}
           onScroll={onScrollUser}
-          onChange={onSearchUser}
+          onChange={(keyword: string | ChangeEvent<HTMLInputElement>) => {
+            if(!keyword) {
+              setUserSelected('');
+            }
+
+            onSearchUser(keyword)
+          }}
           onChangeValue={value => setUserSelected(value._id)}
           attribute="bizfullname"
           wrapperClassName="w-4/12"
@@ -237,11 +248,17 @@ const File: FC<FileProps> = ({
           data={projects}
           renderValue={project => `${project.sign}.${project.name}`}
           onScroll={onScrollProject}
-          onChange={onSearchProject}
+          onChange={(keyword: string | ChangeEvent<HTMLInputElement>) => {
+            if(!keyword) {
+              setProjectSelected('');
+            }
+
+            onSearchProject(keyword);
+          }}
           onChangeValue={value => setProjectSelected(value._id)}
           wrapperClassName="w-4/12"
           className="w-full h-full py-2.5 px-3 focus:outline-none"
-          placeholder="Dự án (bắt buộc)"
+          placeholder="Dự án"
         />
         <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
           <ReactDatePicker

@@ -137,6 +137,8 @@ export type PcmFile = {
 }
 
 export type ListFilesPcmPayload = {
+  isFileOfProject?: boolean,
+  isSearchFile?: boolean,
   contractID?: string,
   companyID?: string,
   projectID?: string,

@@ -6,7 +6,7 @@ import { User } from "typings/user";
 
 interface UseUserSystem {
     loading: boolean;
-    data: User[];
+    data: UserSystemProps[];
     hasNextPage?: boolean;
     totalPages: number;
     totalRecord: number;

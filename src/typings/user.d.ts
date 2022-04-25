@@ -83,7 +83,7 @@ export type User = {
     gender: number,
     lang: string,
     birthDay: string,
-    lastLog: string,
+    lastLog?: string,
     imgUrl?: string;
 };
 
