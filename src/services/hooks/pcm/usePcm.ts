@@ -172,10 +172,10 @@ interface UsePcmFile{
     refetch: () => void,
     fetchNextPage: (options?: FetchNextPageOptions) => void,
     fetchPreviousPage: (options?: FetchPreviousPageOptions) => void,
+    hasNextPage: boolean | undefined,
     totalRecord: number,
     totalPage: number,
     nextCursor: string,
-    hasNextPage: boolean | undefined,
 };
 
 type UsePcmFileProps = {
@@ -206,16 +206,15 @@ export const usePcmFile = ({
 
     const {
         isLoading,
-        refetch,
         data,
+        refetch,
         fetchNextPage,
         fetchPreviousPage,
         hasNextPage
     } =
         useInfiniteQuery(
             ["pcm_files", params],
-            async ({ pageParam }: any) =>
-            PcmRepository.listFilesPcm(params),
+            ({ pageParam }) => PcmRepository.listFilesPcm({ lastestID: pageParam, ...params }),
             {
                 getNextPageParam: ({ data }: any) => {
                     return data?.nextCursor || undefined;
@@ -234,15 +233,6 @@ export const usePcmFile = ({
 
     const filesGroupByDate = dataFilesGroupByDate?.data?.listRecords || [];
     const filesGroupByContract = dataFilesGroupByContract?.data?.listRecords || [];
-
-    // const {
-    //     data: dataFilesPcm,
-    // } = useQuery(
-    //     ["pcm_files__query", params],
-    //     () => PcmRepository.listFilesPcm(params),
-    //     { keepPreviousData: true }
-    // );
-    // console.log({ dataFilesPcm });
 
     return {
         filesGroupByDate,

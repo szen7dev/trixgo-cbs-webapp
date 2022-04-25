@@ -30,9 +30,6 @@ type FileProps = {
   onSearchProject: (keyword: string | ChangeEvent<HTMLInputElement>) => void;
 };
 
-// interface IFile extends PcmFile {}
-// const data = Array.from({ length: 15 }).map((e, i) => ({ _id: "123" + i }));
-
 function getColumnsFile(): TableOptions<PcmFile>["columns"] {
   return [
     SelectionColumn({
@@ -47,10 +44,9 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
     }),
     {
       accessor: "_id",
-      Header({ length, currentPage, totalPage, fetchNextPage, fetchPreviousPage }) {
-        const isDisablePrevButton = currentPage === 1;
-        const isDisableNextButton = currentPage + 1 === totalPage;
-        console.log({ totalPage, currentPage });
+      Header({ currentPage, currentTotalPage, totalPage, fetchNextPage, fetchPreviousPage }) {
+        const isDisablePrevButton = (currentTotalPage === 2 && currentPage === 1) || totalPage === 0;
+        const isDisableNextButton = (currentPage === totalPage) || totalPage === 0;
 
         return (
           <div className="flex justify-between pb-1">
@@ -71,7 +67,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
               </svg>
             </span>
             <div className="flex items-center">
-              {/* trong số rất nhiều */}
+              {/* <span className="mr-4">10-{length} trong số rất nhiều</span> */}
               <span className="mr-4">Trang {currentPage} trong {totalPage}</span>
               <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage} disabled={isDisablePrevButton}>
                 <img
@@ -147,8 +143,9 @@ const File: FC<FileProps> = ({
   const [endDate, setEndDate] = useState<Date>();
   const [userSelected, setUserSelected] = useState('');
   const [projectSelected, setProjectSelected] = useState('');
+  const [count, setCount] = useState(1);
 
-  const [pagesCursor, setPagesCursor] = useState<(string | undefined)[]>([]);
+  const [pagesCursor, setPagesCursor] = useState<(string | undefined)[]>([undefined]);
   const [dataFilesPcm, setDataFilesPcm] = useState<PcmFile[]>([]);
 
   const [paramsSearch, setParamsSearch] = useState<SearchParams>({
@@ -168,20 +165,23 @@ const File: FC<FileProps> = ({
   const instance = useTable({ columns, data: dataFilesPcm, getRowId: (row) => row._id }, usePagination, useRowSelect);
 
   useEffect(() => {
-    if(!listFilesPcm.length) return;
+    if(!listFilesPcm) return;
 
     setDataFilesPcm(listFilesPcm);
   }, [JSON.stringify(listFilesPcm)])
 
   useEffect(() => {
     const checkExistsPage = pagesCursor.find(page => page === nextCursor);
-    if(checkExistsPage || !nextCursor) return;
+
+    if(checkExistsPage || !totalPage) return;
+    if(!nextCursor && count > 1) return;
 
     const cursors = [...pagesCursor, nextCursor];
     setPagesCursor(cursors);
-  }, [nextCursor])
+  }, [nextCursor, count, totalPage])
 
   const handleNextPageButton = () => {
+    setCount(count + 1);
     setParamsSearch(preValue => ({
       ...preValue,
       lastestID: pagesCursor[pagesCursor.length - 1]
@@ -189,19 +189,20 @@ const File: FC<FileProps> = ({
   };
 
   const handlePrevPageButton = () => {
-    if(pagesCursor.length === 1) return;
+    if(pagesCursor.length === 2) return;
 
     let prevCursor: string | undefined = '';
 
-    if(pagesCursor.length >= 3) {
+    if(count === totalPage) {
+      prevCursor = pagesCursor[pagesCursor.length - 2];
+    } else{
       prevCursor = pagesCursor[pagesCursor.length - 3];
     }
 
-    if(pagesCursor.length > 1) {
-      pagesCursor.pop();
-      setPagesCursor(pagesCursor);
-    }
+    pagesCursor.splice(-1, 1);
 
+    setPagesCursor(pagesCursor);
+    setCount(count - 1);
     setParamsSearch(preValue => ({
       ...preValue,
       lastestID: prevCursor
@@ -209,6 +210,7 @@ const File: FC<FileProps> = ({
   };
 
   const handleSearch = () => {
+    setPagesCursor([undefined]);
     setParamsSearch(preValue => ({
       ...preValue,
       projectID: projectSelected,
@@ -270,7 +272,8 @@ const File: FC<FileProps> = ({
           tableProps={{ className: "w-full" }}
           props={{
             length: totalRecord,
-            currentPage: pagesCursor.length,
+            currentPage: count,
+            currentTotalPage: pagesCursor.length,
             totalPage: totalPage,
             fetchNextPage: handleNextPageButton,
             fetchPreviousPage: handlePrevPageButton
