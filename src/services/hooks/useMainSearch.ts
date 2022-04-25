@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import MainSearchRepository from "apis/main-search";
 import { SearchListRecord, SearchPayload } from "typings/main-search";
 
@@ -21,7 +21,7 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
         fetchNextPage: nextPageSearchResultList,
         fetchPreviousPage: prevPageSearchResultList,
         hasNextPage: hasNextPage
-    } = useInfiniteQuery( // https://react-query.tanstack.com/reference/useInfiniteQuery
+    } = useInfiniteQuery(
             key || "search_results",
             async ({ pageParams }: any) => 
             MainSearchRepository.mainSearch({ 
@@ -35,7 +35,7 @@ export const UseMainSearch = (key?: string, params?: SearchPayload): UseMainSear
                     return nextCursor || undefined;
                 },
                 refetchOnWindowFocus: false,
-                enabled: false, // https://react-query.tanstack.com/guides/disabling-queries
+                enabled: false
             }
         );
 

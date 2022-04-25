@@ -59,10 +59,10 @@ const PcmRepository = {
     async listFilesPcm(payload: ListFilesPcmPayload): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_files?${convertObToUrl({
-                // populates: JSON.stringify({
-                //     path: "project contract",
-                //     select: "_id name sign"
-                // }),
+                populates: JSON.stringify({
+                    path: "project task author",
+                    select: "_id name sign bizfullname"
+                }),
                 ...payload
             })}`
         );
