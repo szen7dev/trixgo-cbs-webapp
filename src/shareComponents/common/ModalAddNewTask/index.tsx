@@ -177,7 +177,7 @@ export const ModalAddNewTask: FC = () => {
                 <div className={"t-add-new-task-dialog-select px-6"}>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-1/3 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Dự án (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -244,7 +244,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Nhóm (*)</div>
                       <DropdownSearchable
                         disabled={values.projectID.length <= 0}
                         onchangeValue={(item: any) => {
@@ -347,7 +347,7 @@ export const ModalAddNewTask: FC = () => {
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-1/3 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Gửi tới (*)</div>
                       <div className={"w-full flex-1"}>
                         <DropdownSearchable
                           onchangeValue={(value: any) => {
@@ -405,7 +405,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/3 flex items-start pl-3"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Phân loại (*)</div>
                       <DropdownSearchable
                         onchangeValue={(value: any) =>
                           setFieldValue("subType", value.id)
@@ -542,7 +542,7 @@ export const ModalAddNewTask: FC = () => {
                   </div>
                   <div className={"flex pb-1 pt-2 border-b"}>
                     <div className={"w-3/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Tiêu đề (*)</div>
                       <div className={"w-full flex-1"}>
                         <input
                           placeholder="Tiêu đề"
@@ -558,7 +558,7 @@ export const ModalAddNewTask: FC = () => {
                       </div>
                     </div>
                     <div className={"w-1/4 flex items-start"}>
-                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn</div>
+                      <div className={"text-left text-gray-500 flex items-center mr-2 mt-1"}>Thời hạn (*)</div>
                       <DayPickerInput
                         value={values.expiredTime && moment(values.expiredTime).format("MM/DD/YYYY")}
                         onDayChange={(day) => setFieldValue("expiredTime", moment(day).format("MM/DD/YYYY"))}

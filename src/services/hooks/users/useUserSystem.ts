@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation } from "react-query";
 
 import { UserSystemRepository } from 'apis/users';
 import type { QueryParam, UserSystemProps, UserSystemPayload, ListUserInProjectPayload } from 'typings/users/userSystem';
+import { User } from "typings/user";
 
 interface UseUserSystem {
     loading: boolean;

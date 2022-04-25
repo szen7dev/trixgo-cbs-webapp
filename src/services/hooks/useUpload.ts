@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import MimeType from "mimetype";
 // import imageCompression from 'browser-image-compression';
 import Compressor from "compressorjs";
+
 /**
  * Types, APIs
  */
@@ -96,14 +97,14 @@ export const useUpload = ({
 
     const generateLinkS3 = async ({ file, fileType }: FileGenerateLink) => {
         try {
-            console.log({ generateLinkS3: file, fileType })
+            // console.log({ generateLinkS3: file, fileType })
             const { data } = await generateLinkS3Async({ file, fileType });
             const { infoGenerateLink, infoFileAfterInsert } = data;
 
             return {
                 signedUrl: infoGenerateLink.data,
                 file,
-                fileName: infoFileAfterInsert.name,
+                fileName: infoFileAfterInsert?.name ?? infoGenerateLink.fileName,
                 result: infoFileAfterInsert
             }
         } catch (error: unknown) {
@@ -206,15 +207,15 @@ export const useUpload = ({
         }
 
         return {
-            _id: result?._id, 
-            name: fileName, 
-            nameOrg: result?.nameOrg, 
-            path: result?.path, 
+            _id: result?._id,
+            name: fileName,
+            nameOrg: result?.nameOrg,
+            path: result?.path,
             mimeType: result?.mimeType,
             createAt: result?.createAt
         };
     }
-    
+
     return {
         generateLinkS3,
         uploadFileToS3,

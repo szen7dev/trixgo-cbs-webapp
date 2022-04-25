@@ -17,7 +17,6 @@ async function fetchListIsMember(params: any): Promise<any> {
                 path: "members company",
                 select: "fullname bizfullname name sign image"
             }),
-            outin: 2,
             ...params
         })}`
     )
@@ -31,7 +30,6 @@ async function fetchList(params: any): Promise<any> {
                 path: "members",
                 select: "fullname bizfullname name sign image"
             }),
-            outin: 2,
             ...params
         })}`
     )
