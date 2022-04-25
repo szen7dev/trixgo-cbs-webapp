@@ -47,7 +47,11 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
     }),
     {
       accessor: "_id",
-      Header({ length, fetchNextPage, fetchPreviousPage }) {
+      Header({ length, currentPage, totalPage, fetchNextPage, fetchPreviousPage }) {
+        const isDisablePrevButton = currentPage === 1;
+        const isDisableNextButton = currentPage + 1 === totalPage;
+        console.log({ totalPage, currentPage });
+
         return (
           <div className="flex justify-between pb-1">
             <span className="bg-[#F6F7F8] bg-opacity-60 rounded-full p-2">
@@ -67,15 +71,16 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
               </svg>
             </span>
             <div className="flex items-center">
-              <span className="mr-4">10-{length} trong số rất nhiều</span>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage}>
+              {/* trong số rất nhiều */}
+              <span className="mr-4">Trang {currentPage} trong {totalPage}</span>
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage} disabled={isDisablePrevButton}>
                 <img
                   alt="Previous"
                   src={iconChevronRight}
                   className="w-4 filter-primary-gray rotate-180"
                 />
               </button>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchNextPage}>
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchNextPage} disabled={isDisableNextButton}>
                 <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
               </button>
             </div>
@@ -127,6 +132,14 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
   ];
 }
 
+interface SearchParams{
+  projectID: string,
+  authorID: string,
+  fromDate: string,
+  toDate: string,
+  lastestID: string | undefined
+}
+
 const File: FC<FileProps> = ({
   users, projects, onScrollUser, onScrollProject, onSearchUser, onSearchProject
 }) => {
@@ -134,9 +147,11 @@ const File: FC<FileProps> = ({
   const [endDate, setEndDate] = useState<Date>();
   const [userSelected, setUserSelected] = useState('');
   const [projectSelected, setProjectSelected] = useState('');
+
+  const [pagesCursor, setPagesCursor] = useState<(string | undefined)[]>([]);
   const [dataFilesPcm, setDataFilesPcm] = useState<PcmFile[]>([]);
 
-  const [paramsSearch, setParamsSearch] = useState({
+  const [paramsSearch, setParamsSearch] = useState<SearchParams>({
     projectID: '',
     authorID: '',
     fromDate: '',
@@ -144,11 +159,10 @@ const File: FC<FileProps> = ({
     lastestID: ''
   });
 
-  const { listFilesPcm, isLoading, totalRecord, fetchNextPage, fetchPreviousPage, nextCursor } = usePcmFile({
+  const { listFilesPcm, isLoading, totalRecord, totalPage, nextCursor } = usePcmFile({
     params: paramsSearch,
     isFetch: !!paramsSearch.projectID
   })
-  // console.log({ paramsSearch });
 
   const columns = useMemo(getColumnsFile, []);
   const instance = useTable({ columns, data: dataFilesPcm, getRowId: (row) => row._id }, usePagination, useRowSelect);
@@ -157,12 +171,40 @@ const File: FC<FileProps> = ({
     if(!listFilesPcm.length) return;
 
     setDataFilesPcm(listFilesPcm);
-  }, [listFilesPcm.length])
+  }, [JSON.stringify(listFilesPcm)])
+
+  useEffect(() => {
+    const checkExistsPage = pagesCursor.find(page => page === nextCursor);
+    if(checkExistsPage || !nextCursor) return;
+
+    const cursors = [...pagesCursor, nextCursor];
+    setPagesCursor(cursors);
+  }, [nextCursor])
 
   const handleNextPageButton = () => {
     setParamsSearch(preValue => ({
       ...preValue,
-      lastestID: nextCursor
+      lastestID: pagesCursor[pagesCursor.length - 1]
+    }));
+  };
+
+  const handlePrevPageButton = () => {
+    if(pagesCursor.length === 1) return;
+
+    let prevCursor: string | undefined = '';
+
+    if(pagesCursor.length >= 3) {
+      prevCursor = pagesCursor[pagesCursor.length - 3];
+    }
+
+    if(pagesCursor.length > 1) {
+      pagesCursor.pop();
+      setPagesCursor(pagesCursor);
+    }
+
+    setParamsSearch(preValue => ({
+      ...preValue,
+      lastestID: prevCursor
     }));
   };
 
@@ -226,7 +268,13 @@ const File: FC<FileProps> = ({
         <TableWithoutContext
           instance={instance}
           tableProps={{ className: "w-full" }}
-          props={{ length: totalRecord, fetchNextPage: handleNextPageButton, fetchPreviousPage }}
+          props={{
+            length: totalRecord,
+            currentPage: pagesCursor.length,
+            totalPage: totalPage,
+            fetchNextPage: handleNextPageButton,
+            fetchPreviousPage: handlePrevPageButton
+          }}
           isLoading={isLoading}
         />
       </div>

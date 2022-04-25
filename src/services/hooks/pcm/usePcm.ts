@@ -215,21 +215,13 @@ export const usePcmFile = ({
         useInfiniteQuery(
             ["pcm_files", params],
             async ({ pageParam }: any) =>
-            PcmRepository.listFilesPcm({
-                lastestID: pageParam ? pageParam : "",
-                ...params
-            }),
+            PcmRepository.listFilesPcm(params),
             {
                 getNextPageParam: ({ data }: any) => {
                     return data?.nextCursor || undefined;
                 },
-                getPreviousPageParam: (firstPage, allPages) => {
-                    // console.log({ firstPage, allPages });
-                    return firstPage?.data?.nextCursor;
-                },
                 refetchOnWindowFocus: false,
-                enabled: isFetch ?? true,
-                keepPreviousData: true,
+                enabled: isFetch ?? true
             }
         );
 
