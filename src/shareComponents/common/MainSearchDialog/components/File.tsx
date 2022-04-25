@@ -235,6 +235,7 @@ const File: FC<FileProps> = ({
         />
         <CustomAutoComplete
           data={projects}
+          renderValue={project => `${project.sign}.${project.name}`}
           onScroll={onScrollProject}
           onChange={onSearchProject}
           onChangeValue={value => setProjectSelected(value._id)}

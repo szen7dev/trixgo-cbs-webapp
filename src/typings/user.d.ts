@@ -82,7 +82,9 @@ export type User = {
     image: string
     gender: number,
     lang: string,
-    birthDay: string
+    birthDay: string,
+    lastLog: string,
+    imgUrl?: string;
 };
 
 export type ListFriendsPayload = {

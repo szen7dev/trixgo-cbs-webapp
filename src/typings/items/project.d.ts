@@ -1,6 +1,9 @@
 import type { QueryParam, Company, FileProps } from 'typings/common';
 import { User } from 'typings/user';
 
+/**
+ * SCHEMA PROJECT
+ */
 export type Project = {
     _id: string;
     name: string;
@@ -76,4 +79,19 @@ export type ProjectInfoPayload = QueryParam & {
 
 export type ProjectInfoResponse = APIResponse & {
     data: Project;
+}
+
+/**
+ * PARAMS LIST PROJECT IS MEMBER
+ */
+ export type ProjectUserIsMemberParams = {
+    type?: string;
+    companyID?: string;
+    isBudget?: string;
+    limit?: string;
+    lastestID?: string;
+    keyword?: string;
+    limit?: string;
+    select?: string;
+    populates?: string;
 }

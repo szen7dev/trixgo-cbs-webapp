@@ -11,8 +11,8 @@ import Contract from "./components/Contract";
 import Member from "./components/Member";
 import Project from "./components/Project";
 
-import { useUser } from "services/hooks/useUser";
-import { useProject } from "services/hooks/items/useProject";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useProjectCustom } from "services/hooks/items/useProject";
 
 export const MainSearchDialog: FC = () => {
   const [userKeyword, setUserKeyword] = useState('');
@@ -30,18 +30,20 @@ export const MainSearchDialog: FC = () => {
   ];
 
   const {
-    listFriends,
-    nextPageListFriends,
-    hasNextPageListFriends
-  } = useUser({ keyword: userKeyword });
+    data: listUsersSystem,
+    hasNextPage: hasNextPageUsersSystem,
+    fetchNextPage: fetchNextPageUsersSystem
+  } = useUserSystem({
+    keyword: userKeyword
+  }, true);
 
   const {
-    list: listProjects,
-    fetchNextPage: fetchNextPageProjects,
-    hasNextPage: hasNextPageProjects
-  } = useProject({
-    params: { keyword: projectKeyword },
-    isFetchList: true
+    listProjectsUserIsMember,
+    fetchNextPageProjectsUserIsMember,
+    hasNextPageProjectsUserIsMember,
+  } = useProjectCustom({
+    paramsProjectsUserIsMember: { keyword: projectKeyword },
+    isFetchProjectsUserIsMember: true
   });
 
   const [show, setShow] = useState<"left" | "right" | "both">("right");
@@ -72,8 +74,8 @@ export const MainSearchDialog: FC = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageListFriends) {
-      nextPageListFriends();
+    if(bottom && hasNextPageUsersSystem) {
+      fetchNextPageUsersSystem();
     }
   }
 
@@ -81,8 +83,8 @@ export const MainSearchDialog: FC = () => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
     const bottom = scrollHeight - scrollTop === clientHeight;
 
-    if(bottom && hasNextPageProjects) {
-      fetchNextPageProjects();
+    if(bottom && hasNextPageProjectsUserIsMember) {
+      fetchNextPageProjectsUserIsMember();
     }
   }
 
@@ -149,8 +151,8 @@ export const MainSearchDialog: FC = () => {
       {["1", "7", "8", "10", "11", "12"].includes(String(activeCategory)) && <Work />}
       {activeCategory === "2" &&
         <File
-          users={listFriends}
-          projects={listProjects}
+          users={listUsersSystem}
+          projects={listProjectsUserIsMember}
           onScrollUser={handleScrollUser}
           onScrollProject={handleScrollProject}
           onSearchUser={handleSearchUser}
