@@ -95,7 +95,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
 
         return (
           <div>
-            <a href={`${process.env.REACT_APP_URL_S3}/${path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">
+            <a href={`${process.env.REACT_APP_URL_S3}${path}`} target="_blank" rel="noopener noreferrer" className="text-cbs-highlight-color">
               {nameOrg} ({humanFileSize(size)})
             </a>
             <p className="text-cbs-subtext">
@@ -121,7 +121,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
       Cell({ row }) {
         return (
           <div className={classnames({ hidden: row.original?.type !== 1 })}>
-            <img src={`${process.env.REACT_APP_URL_S3}/${row.original?.path}`} className="h-[60px] w-[60px]" alt="Preview" />
+            <img src={`${process.env.REACT_APP_URL_S3}${row.original?.path}`} className="h-[60px] w-[60px]" alt="Preview" />
           </div>
         );
       },
