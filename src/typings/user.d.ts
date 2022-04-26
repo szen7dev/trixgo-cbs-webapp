@@ -4,7 +4,8 @@ export type UpdateUser = {
     birthDay?: string,
     gender?: string,
     lang?: string,
-    image?: string
+    image?: string,
+    groupDefault?: string
 };
 
 export type UpdatePasswordUser = {

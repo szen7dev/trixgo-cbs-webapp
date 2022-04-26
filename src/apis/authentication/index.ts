@@ -22,7 +22,7 @@ const AuthenticationRepository = {
     );
     return data;
   },
-
+  
   async usersInfo(): Promise<UserInfoResponse> {
     const { data } = await API.get<UserInfoResponse>(
       `${authURL}/users/me`

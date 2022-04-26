@@ -4,7 +4,7 @@ import { PCM_STATUS_TASK } from 'apis/localdb';
 import { useModal } from "services/hooks/useModal";
 
 import iconFile from 'assets/images/icons8-audit-96.png';
-import GroupDefaultIcon from "assets/images/icons8-double-tick-48.png";
+import GroupDefaultIcon from "assets/images/icons8-star-96.png";
 import '../../style.css';
 import { SetGroupDefault } from "./modal";
 
@@ -14,7 +14,7 @@ import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
- 
+import { useAuth } from "services/hooks/auth/useAuth";
 interface IData {
 	id: number,
 	type: string,
@@ -53,11 +53,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 	const [data, setData] = useState<IData[]>([]);
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const { openModal } = useModal();
-
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
-
+	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const {  
 		isLoading,
         refetch,
@@ -123,6 +122,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		refetchInfoGroup()
 	}, [groupID]);
 
+	useEffect(() => {
+		refetchDataUserInfo()
+	}, []);
+	console.log({dataUserInfo})
 	return (
 		<>
 			{/* Content */}
@@ -209,6 +212,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						<tbody className="">
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
+									let isGroupDefault = false;
+									if(dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()){
+										isGroupDefault = true;
+									}
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 											<td className="px-4 py-2 w-[1px]">
@@ -222,8 +229,8 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 											<td className="px-2 py-2">
 												<Link to={`/pcm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
-													{props.name}
-												</Link>
+													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
+												</Link> 
 											</td>
 											<td className="py-2 px-2"></td>
 											<td className="py-2 px-2"></td>

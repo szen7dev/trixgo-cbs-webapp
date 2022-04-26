@@ -4,25 +4,19 @@ import { useModal } from "services/hooks/useModal";
 import { useAdmin } from "services/hooks/auth/useAdmin";
 import { APP_ID } from "apis/localdb";
 import { toast } from "react-toastify";
+//HOOK
+import { useUser } from 'services/hooks/personal/useUser';
+import { useAuth } from "services/hooks/auth/useAuth";
 
 const SetGroupDefault: FC<any> = ({ idsChecked, setIdsChecked }) => {
   const { closeModal } = useModal();
-
   const { removeManyAppRoleMutateAsync, refetchListAppRoles } = useAdmin({ appID: APP_ID.PCM.id, keyword: "" });
+  const { updateUser } = useUser();
+	const { refetchDataUserInfo } = useAuth();
   const onChangeSetGroupDefault = async () => {
-    console.log({ idsChecked })
-    // const result = await removeManyAppRoleMutateAsync({
-    //   appRoleIDs: idsChecked
-    // });
-    
-    // if (!result.error) {
-    //   refetchListAppRoles();
-    //   closeModal();
-    //   setIdsChecked([]);
-    //   toast.success('Xoá dữ liệu thành công');
-    // } else {
-    //   toast.error(result?.data?.message);
-    // }
+    closeModal();
+		const result = await updateUser({ groupDefault: idsChecked[0] });
+    refetchDataUserInfo();
   };
 
   return (
