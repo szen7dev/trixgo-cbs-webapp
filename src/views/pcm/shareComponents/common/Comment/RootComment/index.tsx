@@ -133,6 +133,7 @@ export const RootComment: FC<Props> = ({
 							<div className="pl-11">{NestedComment ? <NestedComment
 								small={smallImage}
 								comment={commentReply}
+								userID={userID}
 								onClickReply={() => setIsReply(true)}
 								onClickImage={onClickImage}
 								// Callback onClickupdate
@@ -159,7 +160,7 @@ export const RootComment: FC<Props> = ({
 							projectID={comment.task?.project}
 							groupID={comment.task?.group}
 							taskID={comment.task._id}
-							onSubmit={() => {
+							onConfirm={() => {
 								setIsReply(false);
 								setInfoComment({
 									parentID: '',
@@ -186,7 +187,7 @@ export const RootComment: FC<Props> = ({
 						projectID={comment.task?.project}
 						groupID={comment.task?.group}
 						taskID={comment.task._id}
-						onSubmit={() => {
+						onConfirm={() => {
 							setIsReplyParent(false);
 							setInfoCommentParent({
 								parentID: '',
