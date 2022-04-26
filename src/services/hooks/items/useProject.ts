@@ -88,7 +88,6 @@ export const useProject = ({
     }
 }
 
-
 interface UseProjectCustom {
     isLoadingProjectsUserIsMember: boolean;
     totalRecordProjectsUserIsMember: number;
