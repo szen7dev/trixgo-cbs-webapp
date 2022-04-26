@@ -719,4 +719,10 @@ export const APP_ID = {
     HUMAN: {
         id: "61e049c9fdebf77b072d1b13",
     },
+    BUDGET: {
+        id: "5fe58c9b95db3c6e1534ec78",
+    },
+    ACCOUNTING: {
+        id: "61e049aefdebf77b072d1b12"
+    }
 };
