@@ -1,18 +1,20 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useState, useEffect } from "react";
 import { RouteComponentProps, useHistory, useLocation, useParams, Link } from "react-router-dom";
-
-import { Paginate } from "shareComponents/common";
 import { PCM_STATUS_TASK } from 'apis/localdb';
+import { useModal } from "services/hooks/useModal";
 
 import iconFile from 'assets/images/icons8-audit-96.png';
+import GroupDefaultIcon from "assets/images/icons8-star-96.png";
 import '../../style.css';
+import { SetGroupDefault } from "./modal";
+
 // HOOK
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 import { useTask } from "services/hooks/useTask";
 import moment from "moment";
- 
+import { useAuth } from "services/hooks/auth/useAuth";
 interface IData {
 	id: number,
 	type: string,
@@ -46,24 +48,15 @@ const FolderIcon: FC<{ type: string }> = ({ type }) => {
 	}
 }
 
-function getStatusLabel(status: number) {
-	switch (status) {
-		case 1:
-			return 'Đang thực hiện'
-		default:
-			return 'Lỗi';
-	}
-}
-
 const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
-	const history 	= useHistory();
 	const location 	= useLocation();
 	const [data, setData] = useState<IData[]>([]);
-	// ID của dự án
+	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
+	const { openModal } = useModal();
 	const { id: projectID, groupID } = useParams<{ id: string, groupID: string }>();
-	// Call hook lấy thông tin project
 	const { infoDepartment } = usePcmProject({ departmentID: projectID });
 	const { assigned, checkboxRef, handleCheckAll, handleChangeCheckbox } = useCheckedList(data);
+	const { dataUserInfo, refetchDataUserInfo, user } = useAuth();
 	const {  
 		isLoading,
         refetch,
@@ -103,7 +96,24 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		},
 		isFetch: !!groupID
 	})
+	// xử lý checked
+	const getStateChecked = useCallback((id: string) => {
+		return idsChecked.includes(id) ? true : false;
+	}, [idsChecked]);
 
+	const onClickCheckButton = (id: string) => {
+		const check = idsChecked.includes(id);
+		if (check) {
+			const newList = [...idsChecked];
+			newList.splice(newList.findIndex((e: any) => e == id), 1);
+			setIdsChecked(newList);
+		} else {
+			const newList = [...idsChecked];
+			newList.push(id);
+			setIdsChecked(newList);
+		};
+	};
+	
 	useEffect(() => {
 		document.title = `${infoDepartment?.data?.sign}-Thư mục dữ liệu`;
 	}, [location?.pathname]);
@@ -112,6 +122,10 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 		refetchInfoGroup()
 	}, [groupID]);
 
+	useEffect(() => {
+		refetchDataUserInfo()
+	}, []);
+	console.log({dataUserInfo})
 	return (
 		<>
 			{/* Content */}
@@ -138,6 +152,28 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 					<Link to={`/pcm/project/${projectID}/folder/${ infoGroup?.data?.parent?.parent?._id}`}  className="align-top">
 						<span className="truncate max-w-[132px]">{infoGroup?.data?.parent?.parent?.sign}</span>
 					</Link>
+					{(idsChecked && idsChecked.length) ? (
+						<div className="flex items-center gap-2 border-l-2 border-primary-border px-4 ml-4">
+							{idsChecked.length == 1 ?
+								<button 
+								className="bg-primary pt-3 pb-3 pl-4 pr-4 text-primary-light rounded"
+								onClick={() =>
+									openModal(
+										<div
+											className={
+												"inline-block w-[521px] h-[185px] my-8 overflow-hidden text-left align-middle transition-all transform bg-primary-light shadow-xl rounded"
+											}
+										>
+											<SetGroupDefault idsChecked={idsChecked} setIdsChecked={setIdsChecked} />
+										</div>
+									)
+								}
+								>
+									Set Group Default
+								</button> : <></>
+							}
+						</div>
+					) : <></>}
 				</div>
 				<div className="flex-1 overflow-y-auto">
 					<table className="text-black text-medium border-separate space-x-0 space-y-0 w-full" style={{ borderSpacing: 0 }}>
@@ -176,16 +212,25 @@ const ProjectFolderPage: FC<RouteComponentProps> = ({ match }) => {
 						<tbody className="">
 							{
 								listPcmPlanGroup.map((props: any, index: any) => {
+									let isGroupDefault = false;
+									if(dataUserInfo?.data?.groupDefault?.toString() == props._id?.toString()){
+										isGroupDefault = true;
+									}
 									return (
 										<tr key={props._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
 											<td className="px-4 py-2 w-[1px]">
-												<input className="cbs-checkbox" type="checkbox" value={props._id} checked={Boolean(assigned[props._id])} onChange={e => handleChangeCheckbox(e, props)} />
+												<input 
+												className="cbs-checkbox" 
+												type="checkbox" 
+												value={props._id}
+												checked={getStateChecked(props._id)}
+												onChange={() => onClickCheckButton(props._id)} />
 											</td>
 											<td className="px-2 py-2">
 												<Link to={`/pcm/project/${projectID}/folder/${props._id}`} className="align-top">
 													<FolderIcon type="folder" />
-													{props.name}
-												</Link>
+													{props.name} {isGroupDefault && <img src={GroupDefaultIcon} alt="file" className="inline-block mr-3" title="Group default" />}
+												</Link> 
 											</td>
 											<td className="py-2 px-2"></td>
 											<td className="py-2 px-2"></td>

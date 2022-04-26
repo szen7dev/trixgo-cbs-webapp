@@ -41,6 +41,7 @@ export type User = {
   gender: number;
   lang: string;
   birthDay: string;
+  groupDefault: string;
 };
 
 export type AuthState = {
