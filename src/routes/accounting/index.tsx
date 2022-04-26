@@ -1,13 +1,12 @@
 /*=====1.LIBRARY=====*/
 import { FC } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, matchPath } from "react-router-dom";
 
 /*=====2.PROVIDERS=====*/
 
 /*=====3.LAYOUTS=====*/
 import { ProtectedRoute } from "routes/components";
-import { LayoutPrimary } from "shareComponents/layouts";
-
+import LayoutSecondary from "views/ppt/sharedComponents/layouts/LayoutSecondary";
 /*=====4.CONFIG ROUTE=====*/
 
 /*=====5.PAGES/COMPONENTS=====*/
@@ -29,7 +28,15 @@ import {
   AccountingSupportToolsPage,
 } from "views/accounting/pages";
 
-import { ItemAccountPage, ItemFundaPage, ItemWarehousePage, ItemGoodsPage } from "views/accounting/pages/AccountingAdminPage";
+import {
+  ItemAccountPage,
+  ItemFundaPage,
+  ItemWarehousePage,
+  ItemGoodsPage,
+  AccountingAdminAuthorTab,
+  AccountingAdminDetail,
+  AccountingAdminFunctionalTab
+} from "views/accounting/pages/AccountingAdminPage";
 
 const AccountingRouter: FC = () => {
   return (
@@ -173,19 +180,29 @@ const AccountingRouter: FC = () => {
         path="/accounting/support-tools"
         component={AccountingSupportToolsPage}
       />
-     
+
       <Route path="/accounting/admin">
-        <LayoutPrimary
+        <LayoutSecondary
           pages={[
-            { id: "1", title: "Nhóm chức năng", path: "/accounting/admin" },
-            { id: "2", title: "Phân quyền nhóm chức năng", path: "/accounting/admin/1" },
-            { id: "3", title: "Cấu hình khác", path: "/accounting/admin/2" },
+            { id: "1", title: "Nhóm chức năng", path: "/accounting/admin", navExact: true },
+            {
+              id: "2", title: 'Phân quyền nhóm chức năng', path: '/accounting/admin/2', location: (location) => {
+                // Get match params
+                const match = matchPath<{ id: string }>(location.pathname, { path: '/accounting/admin/:id/detail' })
+                // Push to state
+                return ({ pathname: '/accounting/admin/2', state: match ? match.params.id : null })
+              }
+            },
+            { id: "3", title: "Cấu hình khác", path: "/accounting/admin/3" },
             { id: "4", title: "Account", path: "/accounting/admin/account" },
             { id: "5", title: "Funda", path: "/accounting/admin/funda" },
             { id: "6", title: "Warehouse", path: "/accounting/admin/warehouse" },
             { id: "7", title: "Goods", path: "/accounting/admin/goods" },
           ]}
         >
+          <Route exact path="/accounting/admin" component={AccountingAdminFunctionalTab} />
+          <Route exact path="/accounting/admin/:id/detail" component={AccountingAdminDetail} />
+          <Route exact path="/accounting/admin/2" component={AccountingAdminAuthorTab} />
           <Route exact path={`/accounting/admin/account`} component={ItemAccountPage} />
           <Route exact path={`/accounting/admin/account/:parentID`} component={ItemAccountPage} />
           <Route exact path={`/accounting/admin/funda`} component={ItemFundaPage} />
@@ -194,7 +211,7 @@ const AccountingRouter: FC = () => {
           <Route exact path={`/accounting/admin/warehouse/:parentID`} component={ItemWarehousePage} />
           <Route exact path={`/accounting/admin/goods`} component={ItemGoodsPage} />
           <Route exact path={`/accounting/admin/goods/:parentID`} component={ItemGoodsPage} />
-        </LayoutPrimary>
+        </LayoutSecondary>
       </Route>
       <Route path="/accounting/*" component={ErrorPage} />
     </Switch>

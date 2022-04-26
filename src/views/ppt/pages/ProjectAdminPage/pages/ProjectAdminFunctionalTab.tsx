@@ -23,6 +23,7 @@ const ProjectAdminFunctionalTab: FC = () => {
 	const [keyword, setKeyword] = useState("");
 	const { listAppRoles: listPcmAdmin, totalRecord, nextPageListAppRoles: nextPagePcmAdmin, hasNextPageListAppRoles: hasNextPagePcmAdmin } = useAdmin({ appID: APP_ID.PCM.id, keyword: keyword });
 	const { openModal } = useModal();
+
 	const getStateChecked = useCallback((id: string) => {
 		return idsChecked.includes(id) ? true : false;
 	}, [idsChecked]);

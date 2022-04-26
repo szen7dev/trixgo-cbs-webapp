@@ -84,7 +84,7 @@ export const UpdateInfo: FC = () => {
 		  )}
 		>
 		  <p className="text-lg p-5">Thông tin tài khoản</p>
-  
+			
 		  <Formik
 			enableReinitialize
 			initialValues={ infoUser }
