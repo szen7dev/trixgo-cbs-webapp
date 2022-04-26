@@ -82,7 +82,7 @@ const PcmRepository = {
         );
         return data;
     },
-    
+
     // Data 1
     async listTasks(payload: ListTasksPayload): Promise<ListTasksResponse> {
         const { data } = await API.get<ListTasksResponse>(
@@ -126,7 +126,7 @@ const PcmRepository = {
         );
         return data;
     },
-    
+
     // remove many pcm_plan_group
     async removeManyPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.delete<any>(
