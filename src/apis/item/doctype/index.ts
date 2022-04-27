@@ -10,8 +10,8 @@ interface DoctypeRepository {
     addDoctype: (params: any) => Promise<any>;
     updateDoctype: (params: any) => Promise<any>;
     deleteDoctype: (ids: Array<string>) => Promise<any>;
-    fetchListDoctype: (params: Doctype.DoctypeQueryPayload) => Promise<Doctype.DoctypeQueryResponse>;
-    fetchDetailDoctype: (docTypeID: string, params?: Doctype.DoctypeQueryPayload) => Promise<Doctype.DoctypeQueryDetailResponse>;
+    fetchListDoctype: (params: Doctype.DoctypeListParams) => Promise<Doctype.DoctypeQueryResponse>;
+    fetchDetailDoctype: (docTypeID: string, params?: Doctype.DoctypeListParams) => Promise<Doctype.DoctypeQueryDetailResponse>;
 }
 
 export const doctypeRepository: DoctypeRepository = {
