@@ -190,7 +190,7 @@ const LoginPage: FC = () => {
                             className="flex items-center cursor-pointer select-none hover:opacity-80"
                             onClick={() => {
                               setSelectedLocale(locale.id);
-                              i18n.changeLanguage(locale.code);
+                              // i18n.changeLanguage(locale.code);
                             }}
                           >
                             {selectedLocale !== locale.id && locale.flag}
