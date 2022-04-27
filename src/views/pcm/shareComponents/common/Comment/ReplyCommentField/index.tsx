@@ -152,7 +152,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 
 		if(hasSepecialCharacter) {
-			return toast.warn('Tên file có chứa ký tự đặc biệt');
+			return toast.warn('Tên file có chứa ký tự đặc biệt #$%^~{}+|');
 		}
 
 		const [files, images] = modifyUploadedFilesV2({
