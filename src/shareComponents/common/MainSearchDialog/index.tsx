@@ -22,7 +22,7 @@ export const MainSearchDialog: FC = () => {
     { id: "1", name: "Công việc" },
     { id: "2", name: "File công việc" },
     { id: "3", name: "Hồ sơ" },
-    { id: "4", name: "Hợp đồng" },
+    // { id: "4", name: "Hợp đồng" },
     { id: "5", name: "Nhân sự" },
     { id: "6", name: "Dự án" },
     // { id: "7", name: "Workshop" },

@@ -168,7 +168,7 @@ const File: FC<FileProps> = ({
 
   useEffect(() => {
     if(!listFilesPcm) return;
-
+    
     setDataFilesPcm(listFilesPcm);
   }, [JSON.stringify(listFilesPcm)])
 
