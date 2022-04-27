@@ -26,7 +26,7 @@ export const SettingMessageDetail:FC = () => {
                 <div className={"h-3 w-full bg-gray-100"}></div>
                 <SettingMessageDetailTab chat={chat}/>
             </div>
-            {!chat.isPrivate&&isAuthor(chat, profileId)&&
+            {!chat?.isPrivate&&isAuthor(chat, profileId)&&
                 <button
                     onClick={() => dispatch(openAddUserToConversation({conversationId: currentChat}))}
                     className={"w-[56px] h-[56px] group-hover:opacity-100 opacity-0 rounded-full absolute bottom-20px right-20px z-5 bg-primary flex items-center justify-center "}>
