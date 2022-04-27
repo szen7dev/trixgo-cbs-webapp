@@ -133,7 +133,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 
 	return (
 		<>
-			<div {...props} className={cn("flex pb-1.5", props.className)}>
+			<div {...props} className={cn("flex pb-1.5 break-all", props.className)}>
 				{/* Avatar */}
 				<div className="rounded-full overflow-hidden self-start mr-2 min-w-min">
 					<div className="h-9 w-9">

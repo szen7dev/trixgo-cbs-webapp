@@ -50,11 +50,16 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
 
 export const nl2p = function (text: string){
     const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urlHasHrefRegex = /(href="https?:\/\/[^\s]+)/g;
     const arr = text?.split("\n") ?? [];
     let paragraphs = '';
 
     for (const item of arr) {
-        paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1">$1</a>') + '</p>';
+        if(urlHasHrefRegex.test(item)) {
+            paragraphs = paragraphs + '<p>' + item + '</p>';
+        } else{
+            paragraphs = paragraphs + '<p>' + item.replace(urlRegex, '<a style="font-weight: normal;" href="$1" target="_blank" rel="noopener noreferrer">$1</a>') + '</p>';
+        }
     }
 
     return paragraphs;

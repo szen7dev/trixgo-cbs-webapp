@@ -43,7 +43,7 @@ export const UseMessageHelper = () : UseMessageHelperType => {
     };
 
     const getAvatarMembers = (chat: ItemListConversation, profileId: string) => {
-        if (chat.isPrivate) {
+        if (chat?.isPrivate) {
             if (chat.members.length === 1) {
                 return [SavedMessage];
             } else {
@@ -81,7 +81,8 @@ export const UseMessageHelper = () : UseMessageHelperType => {
     }
 
     const hasPermission = (chat: ItemListConversation, profileId: string, permission: string) : boolean => {
-        if (chat.isPrivate) return true;
+        if(!chat) return false;
+        if (chat?.isPrivate) return true;
         const value = chat.config?chat.config[permission]:1;
         return (value===1||isAuthor(chat, profileId))
     }

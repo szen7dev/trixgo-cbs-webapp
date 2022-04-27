@@ -18,13 +18,13 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
     const profileId = JSON.parse(currentUser)?._id;
 
     useEffect(() => {
-        setActiveTab(chat.isPrivate?"media":"members");
+        setActiveTab(chat?.isPrivate?"media":"members");
     },[currentChat])
     const listTab = [
         {
             text: "Members",
             tabId: "members",
-            isShow: !chat.isPrivate
+            isShow: !chat?.isPrivate
         },
         {
             text: "Media",
@@ -44,7 +44,7 @@ export const SettingMessageDetailTab:FC<Props> = ({chat}) => {
         {
             text: "Groups",
             tabId: "groups",
-            isShow: chat.isPrivate&&chat?.members.find((item: any) => item._id !== profileId)?._id
+            isShow: chat?.isPrivate&&chat?.members.find((item: any) => item._id !== profileId)?._id
         },
     ]
 

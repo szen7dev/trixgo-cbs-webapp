@@ -141,6 +141,20 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files) return;
 
+		const regexSpecialCharacter = /[#$%^~{}+|\]\\[]|\\.\\.|^\\.|\\.$/g;
+		let hasSepecialCharacter = false;
+
+		for (const [, file] of Object.entries(event.target.files)) {
+			if(regexSpecialCharacter.test(file.name)) {
+				hasSepecialCharacter = true;
+				break;
+			}
+		}
+
+		if(hasSepecialCharacter) {
+			return toast.warn('Tên file có chứa ký tự đặc biệt');
+		}
+
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,
 			fileLastKey: Object.keys(uploads.files).length || null,
@@ -152,6 +166,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
+
 			const source = getCancelTokenRequest(key, file);
 			const { _id } = await addFileToUpload({
 				files: file,
