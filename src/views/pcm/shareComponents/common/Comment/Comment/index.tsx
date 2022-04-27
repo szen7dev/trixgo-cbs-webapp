@@ -208,7 +208,7 @@ export const Comment: FC<Props & HTMLAttributes<HTMLDivElement>> = ({
 								<div>
 									<span className='align-middle text-secondary-gray mr-0.5'>{amountReaction}</span>
 									<button className='relative z-10 -mr-3' onClick={toggleModalReaction}>
-										<img src={iconLike} alt="Emoji" className="inline w-[20px]" />
+										<img src={iconLike} alt="Like" className="inline w-[20px]" />
 									</button>
 									{/* <span><img src={iconFaceSweet} alt="" className='inline' /></span> */}
 								</div>

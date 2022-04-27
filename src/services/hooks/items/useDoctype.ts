@@ -8,48 +8,52 @@ import type { Doctype } from 'typings/items';
 
 /*=====3.INTERFACE DEFINE=====*/
 interface UseDoctype {
-    loading: boolean;
+    isLoading: boolean;
     totalRecord: number;
     hasNextPage: boolean | undefined;
-    listDoctypes: Array<Doctype.Doctype>;
-    refetchListDoctype: () => void;
-    fetchNextPageDoctype: () => void;
-    addDoctypeAsync: (params: any) => Promise<any>;
-    updateDoctypeAsync: (params: any) => Promise<any>;
-    deleteDoctypeAsync: (ids: Array<string>) => Promise<any>;
+    list: Array<Doctype.Doctype>;
+    refetch: () => void;
+    fetchNextPage: () => void;
+    insertAsync: (params: any) => Promise<any>;
+    updateAsync: (params: any) => Promise<any>;
+    deleteManyAsync: (ids: Array<string>) => Promise<any>;
 }
 
-export const useDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolean): UseDoctype => {
-    // Create
-    const { mutateAsync: addDoctypeAsync } =
+type UseDocTypeParams = {
+    params?: Doctype.DoctypeListParams,
+    isFetchList?: boolean
+}
+
+export const useDoctype = ({
+    params = {},
+    isFetchList = false
+}: UseDocTypeParams): UseDoctype => {
+
+    const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             DoctypeRepository.addDoctype(payload)
         );
 
-    // Update
-    const { mutateAsync: updateDoctypeAsync } =
+    const { mutateAsync: updateAsync } =
         useMutation((payload: any) =>
             DoctypeRepository.updateDoctype(payload)
         );
 
-    // Delete
-    const { mutateAsync: deleteDoctypeAsync } =
+    const { mutateAsync: deleteManyAsync } =
         useMutation((ids: Array<string>) =>
             DoctypeRepository.deleteDoctype(ids)
         );
 
-    // Get List|Info
     const {
         isLoading,
         data,
-        refetch: refetchListDoctype,
-        fetchNextPage: fetchNextPageDoctype,
+        refetch,
+        fetchNextPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['doctypes', params],
+        ['doctype--list', params],
         async ({ pageParam }: any) =>
             DoctypeRepository.fetchListDoctype({
-                limit: params?.limit ?? 10,
                 lastestID: pageParam ?? "",
                 ...params,
             }),
@@ -58,28 +62,27 @@ export const useDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolea
                 return data?.nextCursor ?? undefined;
             },
             refetchOnWindowFocus: false,
-            enabled: isFetch ?? true
+            enabled: isFetchList
         }
     );
 
-    const listDoctypes = []
+    const list = []
         .concat(...(data?.pages || [])
         .map((d: any) => d.data?.listRecords))
         .filter(Boolean);
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
 
-    // Return data
     return {
-        loading: isLoading,
-        listDoctypes,
+        isLoading,
+        list,
         totalRecord,
         hasNextPage,
-        refetchListDoctype,
-        fetchNextPageDoctype,
-        addDoctypeAsync,
-        updateDoctypeAsync,
-        deleteDoctypeAsync,
+        refetch,
+        fetchNextPage,
+        insertAsync,
+        updateAsync,
+        deleteManyAsync,
     }
 }
 
@@ -94,7 +97,7 @@ interface UseQueryListDoctype {
     fetchNextPageDoctype: () => void;
 }
 
-export const useQueryListDoctype = (params: Doctype.DoctypeQueryPayload, isFetch?: boolean): UseQueryListDoctype => {
+export const useQueryListDoctype = (params: Doctype.DoctypeListParams, isFetch?: boolean): UseQueryListDoctype => {
     const {
         isLoading,
         data,

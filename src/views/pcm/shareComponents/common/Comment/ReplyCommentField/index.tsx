@@ -210,10 +210,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		try {
 			if (defaultValue) {
-				const { error, data, message } = await updateCommentAsync(dataInsertOrUpdate);
+				const { error, data } = await updateCommentAsync(dataInsertOrUpdate);
 
-				if (error) {
-					return toast.warning(message);
+				if(error) {
+					return toast.warn(data?.message || 'Cập nhật bình luận thất bại')
 				}
 
 				method = 'UPDATE';
@@ -227,10 +227,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					}
 				});
 			} else {
-				const { error, data, message } = await createCommentAsync(dataInsertOrUpdate);
+				const { error, data } = await createCommentAsync(dataInsertOrUpdate);
 
-				if (error) {
-					return toast.warning(message);
+				if(error) {
+					return toast.warn(data?.message || 'Thêm bình luận thất bại')
 				}
 
 				method = 'INSERT';
