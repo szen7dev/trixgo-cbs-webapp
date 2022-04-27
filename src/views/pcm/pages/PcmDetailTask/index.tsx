@@ -421,12 +421,12 @@ const PcmDetailTask: FC = () => {
                 hasPermission={permissions.hasPermissionCreateCheckListAndChildTask}
               />
             </div>
-            <div className="px-5 mt-5">
+            {/* <div className="px-5 mt-5">
               <PriceApprovalInfo
                 timeApproved={taskInfo?.timeApproved}
                 valueApproved={taskInfo?.valueApproved}
               />
-            </div>
+            </div> */}
 						<OwnerUploadedFile
               className="p-5"
               assigneeAttachs={taskInfo?.assigneeAttachs}

@@ -17,7 +17,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
 }) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = useState(initialValues);
-  const { addDoctypeAsync, updateDoctypeAsync } = useDoctype({}, false);
+  const { insertAsync, updateAsync } = useDoctype({});
 
   const handleSubmit = async () => {
     if(!formData.name) {
@@ -28,7 +28,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
       // Handle api here!
       switch (modalType) {
         case 'create': {
-          const { error, message } = await addDoctypeAsync(formData);
+          const { error, message } = await insertAsync(formData);
 
           if (error) {
             return toast.warning(message);
@@ -38,7 +38,7 @@ export const ModalCreateOrUpdateDoctype: FC<ModalProps> = ({
           break;
         }
         case 'update': {
-          const { error, message } = await updateDoctypeAsync(formData);
+          const { error, message } = await updateAsync(formData);
 
           if (error) {
             return toast.warning(message);

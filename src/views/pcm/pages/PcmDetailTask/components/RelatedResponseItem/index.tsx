@@ -61,6 +61,7 @@ export const RelatedResponseItem: FC<Props> = ({
 		files: response.files || [],
 		images: response.images || []
 	})
+	const [isExpand, setIsExpand] = useState(false);
 
 	const { addFileToUpload } = useUpload({
 		appID: APP_ID.PCM.id,
@@ -81,21 +82,21 @@ export const RelatedResponseItem: FC<Props> = ({
 			FileRepository.updateFile(payload)
 		);
 
-	const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		await updateMarkResponseAsync({
-			commentID: response._id,
-			taskID: response.task._id,
-			official: e.target.checked
-		})
+	// const handleMarkChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	// 	await updateMarkResponseAsync({
+	// 		commentID: response._id,
+	// 		taskID: response.task._id,
+	// 		official: e.target.checked
+	// 	})
 
-		if(e.target.checked) {
-			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
-		} else{
-			setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
-		}
+	// 	if(e.target.checked) {
+	// 		setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue + 1);
+	// 	} else{
+	// 		setAmountMarkedResponse && setAmountMarkedResponse((previousValue: any) => previousValue - 1);
+	// 	}
 
-		refetchListResponseMarked && refetchListResponseMarked();
-	}
+	// 	refetchListResponseMarked && refetchListResponseMarked();
+	// }
 
 	const handleUpdateDescriptionFile = _.debounce(async (e: any) => {
 		await updateFileAsync({
@@ -171,6 +172,8 @@ export const RelatedResponseItem: FC<Props> = ({
 		}
 	}, [])
 
+	const toggleExpand = () => setIsExpand(!isExpand);
+
 	return (
 		<>
 			{author?._id === response.author._id ? (
@@ -188,12 +191,12 @@ export const RelatedResponseItem: FC<Props> = ({
 						: 'animate-[wiggle_1s_ease-in-out_infinite]'
 				)
 			} ref={divRef}>
-				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px]" />
+				<img src={response.author?.image ? `${process.env.REACT_APP_URL_S3_USER}/${response.author?.image}` : HumanAvatar} alt="Avatar" className="w-[44px] h-[44px] cursor-pointer" onClick={toggleExpand} />
 				<div className="w-full ml-5">
 					<div className="flex justify-between">
-						<div>
+						<div onClick={toggleExpand} className="cursor-pointer">
 							<p className="text-[14px] font-bold">{response.author?.bizfullname}</p>
-							{expanded && (
+							{(expanded || isExpand) && (
 								<p className="text-[13px] text-primary-gray pb-5">
 									{response.author?.position?.name}
 								</p>
@@ -203,12 +206,12 @@ export const RelatedResponseItem: FC<Props> = ({
 							<span className="text-[13px] text-primary-gray">
 								{moment(response.createAt).format('HH:mm DD/MM/YYYY')} ({moment(response.createAt).fromNow()})
 							</span>
-							<input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} />
+							{/* <input type="checkbox" className="cbs-checkbox" defaultChecked={response.official} onChange={handleMarkChange} /> */}
 							{author?._id === response.author._id ? (
 								<button
-									className={`${expanded ? "h-10 hover:bg-lighter-gray" : "pl-3"
+									className={`${(expanded || isExpand) ? "h-10 hover:bg-lighter-gray" : "pl-3"
 										} text-[13px] w-10 flex justify-center items-center rounded-full`}
-									onClick={e=>inputRef.current?.click()}
+									onClick={inputRef.current?.click}
 								>
 									<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
 								</button>
@@ -217,7 +220,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					</div>
 
 					{/* Content */}
-					<div className={`${expanded ? "" : "max-w-[632px] truncate"}`}>
+					<div className={`${(expanded || isExpand) ? "" : "max-w-[632px] truncate"}`}>
 						<span
 							className="text-[13px] whitespace-normal break-words"
                             dangerouslySetInnerHTML={{
@@ -227,7 +230,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					</div>
 
 					{/* File */}
-					{expanded && (
+					{(expanded || isExpand) && (
 						<div>
 							{(responseFiles.files && responseFiles.files.length) ? responseFiles.files.map(file => (
 								<div className="flex w-full my-2" key={file._id}>
