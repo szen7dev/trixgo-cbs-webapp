@@ -1,6 +1,8 @@
 import React, { FC, useMemo, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useTable, useRowSelect, TableOptions } from "react-table";
+import debounce from "lodash/debounce";
+import { DOCUMENT_TYPES } from "apis/localdb";
 
 import CustomAutoComplete from "../../Form/CustomForm/CustomAutoComplete";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
@@ -9,6 +11,10 @@ import iconChevronRight from "assets/images/icon-chevron-right.png";
 import iconSlider from "assets/images/icons8-slider-32.png";
 import CustomField from "shareComponents/common/Form/CustomForm/CustomField";
 
+// HOOK
+import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubContact";
+import { useContract } from "services/hooks/items/useContract";
+import { useQueryListDocument } from "services/hooks/ppt/useDocument";
 type ProfileProps = {
   //
 };
@@ -106,13 +112,53 @@ function getColumnsProfile(): TableOptions<IProfile>["columns"] {
     // },
   ];
 }
+interface SearchParams{
+  keyword: string,
+  datahubContact: string,
+  type: string,
+  contract: string,
+  from: string,
+  to: string,
+  lastestID: string | undefined
+}
 
 const Profile: FC<ProfileProps> = (props) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date(new Date().setDate(-30)));
-
+  const [startDate, setStartDate]                             = useState<Date>(new Date(new Date().setDate(-30)));
+  const [endDate, setEndDate]                                 = useState<Date>(new Date());
+  const [keywordDatahubContact,  setKeywordDatahubContact ]   = useState("");
+  const [keywordContract,  setKeywordContract ]               = useState("");
+  const [keyword,  setKeyword ]                               = useState("");
+  const [datahubContactSelected, setDatahubContactSelected]   = useState("");
+  const [typeSelected, setTypeSelected]                       = useState("");
+  const [contractSelected, setContractSelected]               = useState("");
+  const [paramsSearch, setParamsSearch] = useState<SearchParams>({
+    keyword: "",
+    datahubContact: "",
+    type: "",
+    contract: "",
+    from: "",
+    to: "",
+    lastestID: ""
+  });
+  // const { data, totalRecord, totalPages, loading, nextCursor, refetch } = useQueryListDocument("", paramsSearch);
+  // console.log({ data, paramsSearch })
   const columns = useMemo(getColumnsProfile, []);
   const instance = useTable({ columns, data, getRowId: (row) => row._id }, useRowSelect);
+  const {
+    data: listDatahubContact,
+	} = useDatahubContact({ keyword: keywordDatahubContact || "", limit: 20 }, true, false );
+
+  // Danh sách hợp đồng
+  const {
+    listContracts,
+  } = useContract({
+    params: { keyword: keywordContract },
+    isFetch: true
+  })
+
+  const handleSearch = () => {
+    console.log("Click được rồi nhé");
+  }
 
   return (
     <div>
@@ -120,33 +166,37 @@ const Profile: FC<ProfileProps> = (props) => {
         <div className="flex space-x-3 pb-3">
           <CustomField
             name="report"
-            placeholder="Báo cáo"
+            placeholder="Nhập tên hoặc mã hồ sơ"
             wrapperClassName="w-1/2"
 						className="w-full h-full py-2.5 px-3 focus:outline-none"
 						containerClassName="flex items-center"
             icon={() => <img src={iconSlider} alt="Filter" className="w-6 h-6 mr-2" />}
+            onChange={debounce((e) => setKeyword(e.target.value), 500)}
           />
           <CustomAutoComplete
-            data={[{ name: "123" }]}
+            data={listDatahubContact}
             wrapperClassName="w-1/2"
             placeholder="Danh bạ hệ thống"
 						className="w-full h-full py-2.5 px-3 focus:outline-none"
-            onChange={(e) => console.log("text change", e)}
-            onChangeValue={(e) => console.log("value change", e)}
+            onChange={debounce((e) => setKeywordDatahubContact(e), 500)}
+            onChangeValue={value => setDatahubContactSelected(value._id)}
           />
         </div>
         <div className="flex space-x-3">
           <CustomAutoComplete
-            data={[{ name: "123" }]}
+            data={DOCUMENT_TYPES.map(item => ({ name:item.text, _id: item.value }))}
             wrapperClassName="w-4/12"
 						className="w-full h-full py-2.5 px-3 focus:outline-none"
             placeholder="Phân loại"
+            onChangeValue={value => setTypeSelected(`${value._id}`)}
           />
           <CustomAutoComplete
-            data={[{ name: "123" }]}
+            data={listContracts}
             wrapperClassName="w-4/12"
 						className="w-full h-full py-2.5 px-3 focus:outline-none"
             placeholder="Thuộc hợp đồng"
+            onChange={debounce((e) => setKeywordContract(e), 500)}
+            onChangeValue={value => setContractSelected(value._id)}
           />
           <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
             <ReactDatePicker
@@ -181,7 +231,7 @@ const Profile: FC<ProfileProps> = (props) => {
         />
       </div>
       <div className="flex justify-end pt-3 px-10">
-        <button className="text-cbs-subtext px-7 py-3.5 font-bold rounded-cbs-sm">Bỏ qua</button>
+        <button className="text-cbs-subtext px-7 py-3.5 font-bold rounded-cbs-sm" onClick={handleSearch}>Bỏ qua</button>
         <button className="bg-cbs-primary text-white px-7 py-3.5 font-bold rounded-cbs-sm">
           Tìm kiếm
         </button>
