@@ -9,6 +9,7 @@ interface UseContact {
     totalRecord: number;
     totalPage: number;
     hasNextPage: boolean | undefined;
+    nextCursor: any,
     list: Array<Contact.Contact>;
     info: Contact.Contact | undefined;
     refetch: () => void;
@@ -67,6 +68,7 @@ export const useContact = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
 
     return {
         isLoading,
@@ -75,6 +77,7 @@ export const useContact = ({
         totalRecord,
         totalPage,
         hasNextPage,
+        nextCursor,
         refetch,
         fetchNextPage,
         fetchPreviousPage,

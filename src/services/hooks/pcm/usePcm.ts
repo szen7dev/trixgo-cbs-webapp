@@ -203,7 +203,7 @@ export const usePcmFile = ({
             refetchOnWindowFocus: false,
             enabled: isFetchFilesGroupContract,
         });
-
+    
     const {
         isLoading,
         data,
@@ -226,7 +226,6 @@ export const usePcmFile = ({
 
     const listFilesPcm = (data?.pages || []).flatMap((d: any) => d?.data?.listRecords);
     // console.log({ pageParams: data?.pageParams, pages: data?.pages });
-
     const totalRecord = data?.pages && data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages && data?.pages[0]?.data?.totalPage || 0;
     const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;

@@ -128,7 +128,6 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
     },
   ];
 }
-
 interface SearchParams{
   isSearchFile: boolean,
   projectID: string,
@@ -158,7 +157,7 @@ const File: FC<FileProps> = ({
     toDate: '',
     lastestID: ''
   });
-
+  
   const { listFilesPcm, isLoading, totalRecord, totalPage, nextCursor } = usePcmFile({
     params: paramsSearch,
     isFetch: true
@@ -169,7 +168,7 @@ const File: FC<FileProps> = ({
 
   useEffect(() => {
     if(!listFilesPcm) return;
-
+    
     setDataFilesPcm(listFilesPcm);
   }, [JSON.stringify(listFilesPcm)])
 
