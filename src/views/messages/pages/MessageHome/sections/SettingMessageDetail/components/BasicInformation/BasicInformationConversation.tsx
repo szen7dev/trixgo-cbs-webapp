@@ -82,7 +82,7 @@ export const BasicInformationConversation:FC<Props> = ({chat}) => {
                     <Close/>
                 </button>
                 {
-                    !chat.isPrivate&&
+                    !chat?.isPrivate&&
                     hasPermission(chat, profileId, "configEditInfo") &&
                     <button
                         onClick={() => {

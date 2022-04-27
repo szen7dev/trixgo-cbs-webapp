@@ -1,7 +1,7 @@
 /**
  * Libraries
  */
-import { FC, useState, useContext, useEffect, useRef } from "react";
+import { FC, ClipboardEvent, useState, useContext, useEffect, useRef, useLayoutEffect } from "react";
 import { captureException } from "@sentry/react";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
@@ -78,10 +78,6 @@ const Response: FC<Props> = ({ task }) => {
     },
     isFetch: true
   });
-
-  // const { listResponses: listResponsesMarked, refetchListResponse: refetchListResponseMarked, totalRecordResponse: totalRecordResponseMarked } = useTask({
-  //   taskID: task._id, official: true, isFetch: false
-  // });
 
   const { state, dispatch } = useContext(CommentContext);
   const { addFileToUpload } = useUpload({
@@ -178,12 +174,16 @@ const Response: FC<Props> = ({ task }) => {
       : "text-primary-gray";
   };
 
+  const handleSkip = () => {
+    queue.abord();
+    removeAllFiles();
+    setVisibleForm(false);
+  }
+
   const handleAddResponse = async () => {
     if(!content) {
       return toast.warning('Bạn chưa nhập nội dung cho phản hồi');
     }
-
-    setVisibleForm(false);
 
     let images: string[] = [];
     let files: string[] = [];
@@ -233,6 +233,8 @@ const Response: FC<Props> = ({ task }) => {
       } else if (error instanceof Error) {
           toast.error(error.message);
       }
+    } finally {
+      handleSkip();
     }
   }
 
@@ -244,7 +246,7 @@ const Response: FC<Props> = ({ task }) => {
       official: currentTab === 'MARKED' ? true : false,
     });
 
-    if (error || !data.listRecords.length) return;
+    if (error || !data.listRecords?.length) return;
 
     setAmountComment(amountComment - LIMIT_PER_PAGE_RESPONSE);
     dispatch({ type: 'VIEW_PREVIOUS_COMMENTS', payload: data.listRecords.reverse() });
@@ -267,14 +269,14 @@ const Response: FC<Props> = ({ task }) => {
     dispatch({ type: 'VIEW_MORE_COMMENTS', payload: data.listRecords.reverse() });
   }
 
-  const handleSetFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || !event.target.files.length) return;
+  const handleSetFiles = async (filesSelected: FileList | null) => {
+    if (!filesSelected || !filesSelected.length) return;
 
     // Modify file to with key with each file;
     const [files, images] = modifyUploadedFilesV2({
       imgLastKey: Object.keys(uploads.images).length ? Object.keys(uploads.images)[Object.keys(uploads.images).length - 1] : null,
       fileLastKey: Object.keys(uploads.files).length ? Object.keys(uploads.files)[Object.keys(uploads.files).length - 1] : null,
-    }, event.target.files);
+    }, filesSelected);
 
     setUploadImage(images);
     setUploadFile(files);
@@ -336,10 +338,11 @@ const Response: FC<Props> = ({ task }) => {
     }
   }
 
-  const handleSkip = () => {
-    queue.abord();
-    removeAllFiles();
-    setVisibleForm(false);
+  const handlePasteFile = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+    if(event.clipboardData?.files?.length) {
+      handleSetFiles(event.clipboardData.files)
+    }
+    // event.preventDefault();
   }
 
   const onClickTabAll = () => {
@@ -357,6 +360,28 @@ const Response: FC<Props> = ({ task }) => {
   //   setAmountComment(totalRecordResponseMarked);
   //   setAmountCommentBack(0);
   // }
+
+  useEffect(() => {
+    if(!visibleForm) return;
+
+    const dropZone = document.getElementById("response-form");
+
+    if (dropZone) {
+      dropZone.addEventListener('dragover', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+
+      // Get file data on drop
+      dropZone.addEventListener('drop', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.dataTransfer) {
+            handleSetFiles(e.dataTransfer.files);
+        }
+      });
+    }
+  }, [visibleForm])
 
   const hashLocation = location.hash.substring(1);
 
@@ -419,7 +444,6 @@ const Response: FC<Props> = ({ task }) => {
               isHighlight={hashLocation?.split('_')[1] === response._id}
               divRef={hashLocation?.split('_')[1] === response._id ? divRef : null}
               setAmountMarkedResponse={setAmountMarkedResponse}
-              // refetchListResponseMarked={refetchListResponseMarked}
               onClickImage={(images, index) => {
                 if (images.length) {
                   setDefaultState({ mediaID: task._id, images, index, createAt: response.createAt })};
@@ -435,12 +459,13 @@ const Response: FC<Props> = ({ task }) => {
           </p>
         ) : ''}
         {visibleForm ? (
-          <div className="ml-16">
+          <div className="ml-16" id="response-form">
             <div className="w-full border-2 rounded my-2">
               <textarea
                 className="w-full focus: outline-none p-3"
                 placeholder="Biên soạn nội dung"
                 rows={10}
+                onPaste={handlePasteFile}
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
@@ -467,11 +492,11 @@ const Response: FC<Props> = ({ task }) => {
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer mr-4">
                     <IconPaperClip className="-rotate-45" />
                     {/* accept="application/*" */}
-                    <input type="file" name="files" className="hidden" multiple onChange={handleSetFiles} />
+                    <input type="file" name="files" className="hidden" multiple onChange={e => handleSetFiles(e.target.files)} />
                   </label>
                   <label className="w-10 h-10 rounded-md bg-gray-100 hover:bg-gray-300 flex justify-center items-center cursor-pointer">
                     <IconImage />
-                    <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={handleSetFiles} />
+                    <input type="file" name="images" className="hidden" accept="image/*" multiple onChange={e => handleSetFiles(e.target.files)} />
                   </label>
                 </div>
                 <div>

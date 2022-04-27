@@ -10,7 +10,7 @@ export type Doctype = {
     createAt?: string;
 }
 
-export type DoctypeQueryPayload = QueryParam & {
+export type DoctypeListParams = QueryParam & {
     // 1 - Văn Bản Lĩnh vực hồ sơ
     // 2 - Văn Bản Tính chất hồ sơ
     // 3 - Lĩnh vực kinh doanh
@@ -34,6 +34,8 @@ export type DoctypeQueryPayload = QueryParam & {
     // 21 - NPS-Điểm số
     // 22 - NPS-Lý do
     type?: number;
+    companyID?: string;
+    projectID?: string;
     [record: string]: any;
 }
 
