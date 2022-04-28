@@ -78,7 +78,7 @@ function getColumnsProject(): TableOptions<any>["columns"] {
       Cell({ row, value }: { row: any, value: any}) {
         const infoDepartment = row.original ;
         return (
-          <Link to={`/pcm/project/${infoDepartment._id}/home`} target="_blank">
+          <Link to={`/pcm/project/${infoDepartment._id}/home`}>
             <p className="text-cbs-highlight-color">
               {infoDepartment?.sign}.{infoDepartment?.name}
             </p>
