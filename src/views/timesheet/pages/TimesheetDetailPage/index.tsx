@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { map as _map } from "lodash";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import moment from "moment";
 
 /**
@@ -28,6 +28,7 @@ import {
   useQueryListTimeSheetChild,
   useMutationTimeSheetChild,
 } from "services/hooks/useTimeSheet";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { setMainRowCollapsed } from "redux/reducer/Timesheet";
 import { User } from "typings/user";
 import { Loader } from "shareComponents/common";
@@ -40,6 +41,8 @@ const TimeSheetDetailPage: FC = () => {
     users: [],
     modalType: 'members'
   });
+
+  const { user } = useAuth();
 
   const { data: timeSheetInfo, refetch, loading } = useQueryDetailTimeSheetParent(timeSheetParentID);
   const {
@@ -110,9 +113,19 @@ const TimeSheetDetailPage: FC = () => {
 
   const dispatch = useDispatch();
 
-  if(!timeSheetInfo || loading) return <Loader className="border-primary" />
+  if(!timeSheetInfo || loading || !user) return <Loader className="border-primary" />
 
   const usersShared = [...timeSheetInfo.admins, ...timeSheetInfo.members];
+
+  const usersIDShared = [
+    ...timeSheetInfo.admins.map(item => item._id),
+    ...timeSheetInfo.members.map(item => item._id),
+    timeSheetInfo.userCreate?._id
+  ];
+
+  if(!usersIDShared.includes(user._id)) {
+    return <Redirect to='/timesheet/home' />
+  }
 
   return (
     <div className={"financial-planning-detail"}>
