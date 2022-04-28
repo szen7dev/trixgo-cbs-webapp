@@ -3,7 +3,7 @@ import { UIEvent, FC, useState, useCallback, ChangeEvent, useEffect } from "reac
 import cn from "classnames";
 import debounce from "lodash/debounce";
 import { toast } from "react-toastify";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Redirect } from 'react-router-dom';
 
 /*=====2.CSS=====*/
 import styles from "views/support/styles/support.module.css";
@@ -23,6 +23,7 @@ import ModalShare from "./components/ModalShare";
 
 /*=====6.HOOKS/APIS=====*/
 import { useModal } from "services/hooks/useModal";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
@@ -44,11 +45,13 @@ export const CashFlowDetailPage: FC = () => {
         modalType: 'members'
     });
 
+    const { user } = useAuth();
+
     const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
         params: {
             cashFlowID: cashFlowId,
             populates: JSON.stringify({
-                path: 'admins members',
+                path: 'admins members userCreate',
                 select: '_id bizfullname image'
             })
         },
@@ -212,9 +215,18 @@ export const CashFlowDetailPage: FC = () => {
     const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
         setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
-    if(isLoading || isLoadingInfo || !cashFlowInfo) return <Loader className="border-primary" />
+    if(isLoading || isLoadingInfo || !cashFlowInfo || !user) return <Loader className="border-primary" />
 
     const usersShared = [...cashFlowInfo.admins, ...cashFlowInfo.members];
+    const usersIDShared = [
+        ...cashFlowInfo.admins.map(item => item._id),
+        ...cashFlowInfo.members.map(item => item._id),
+        cashFlowInfo.userCreate?._id
+    ];
+
+    if(!usersIDShared.includes(user._id)) {
+        return <Redirect to='/financial/cashflow' />
+    }
 
     return (
         <main className="relative h-full overflow-auto">
