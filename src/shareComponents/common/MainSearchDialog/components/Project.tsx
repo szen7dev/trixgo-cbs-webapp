@@ -1,23 +1,25 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useMemo, useState, useEffect } from "react";
 import ReactDatePicker from "react-datepicker";
 import { useTable, useRowSelect, TableOptions } from "react-table";
-
+import moment from "moment";
+import projectImage from "assets/images/project.jpg";
 import CustomAutoComplete from "../../Form/CustomForm/CustomAutoComplete";
 import { SelectionColumn } from "shareComponents/common/Table/components/SelectionColumn";
 import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { debounce } from "lodash";
+import { Link } from "react-router-dom";
 
 type ProjectProps = {
   //
 };
-
 interface IProject {
   _id: string;
 }
-
-const data = Array.from({ length: 15 }).map((e, i) => ({ _id: "123" + i }));
-
-function getColumnsProject(): TableOptions<IProject>["columns"] {
+const { REACT_APP_URL_S3, REACT_APP_URL_S3_PROJECT } = process.env;
+// const data = Array.from({ length: 15 }).map((e, i) => ({ _id: "123" + i }));
+function getColumnsProject(): TableOptions<any>["columns"] {
   return [
     SelectionColumn({
       tableHeadSelectorProps: {
@@ -31,7 +33,9 @@ function getColumnsProject(): TableOptions<IProject>["columns"] {
     }),
     {
       accessor: "_id",
-      Header({ length, selectedFlatRows }) {
+      Header({ currentPage, currentTotalPage, totalPage, fetchNextPage, fetchPreviousPage }) {
+        const isDisablePrevButton = (currentTotalPage === 2 && currentPage === 1) || totalPage === 0;
+        const isDisableNextButton = (currentPage === totalPage) || totalPage === 0;
         return (
           <div className="flex justify-between pb-1">
             <span className="bg-[#F6F7F8] bg-opacity-60 rounded-full p-2">
@@ -51,15 +55,16 @@ function getColumnsProject(): TableOptions<IProject>["columns"] {
               </svg>
             </span>
             <div className="flex items-center">
-              <span className="mr-4">1-50 trong số rất nhiều</span>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              {/* <span className="mr-4">10-{length} trong số rất nhiều</span> */}
+              <span className="mr-4">Trang {currentPage} trong {totalPage}</span>
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage} disabled={isDisablePrevButton}>
                 <img
-                  alt="Next"
+                  alt="Previous"
                   src={iconChevronRight}
                   className="w-4 filter-primary-gray rotate-180"
                 />
               </button>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchNextPage} disabled={isDisableNextButton}>
                 <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
               </button>
             </div>
@@ -70,20 +75,21 @@ function getColumnsProject(): TableOptions<IProject>["columns"] {
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row, value }) {
+      Cell({ row, value }: { row: any, value: any}) {
+        const infoDepartment = row.original ;
         return (
-          <div>
+          <Link to={`/pcm/project/${infoDepartment._id}/home`} target="_blank">
             <p className="text-cbs-highlight-color">
-              2022.04.18-AHU.VPTM.CPMI.ToanND-HoSoThanhToanL1-V1.rar (135KB)
+              {infoDepartment?.sign}.{infoDepartment?.name}
             </p>
             <p className="text-cbs-subtext">
-              CHG.THT.Báo cáo đánh giá sản phẩm hàng tháng của nhà thầu
+            {infoDepartment?.owner}
             </p>
             <p className="text-cbs-subtext">
-              Bắt đầu: 8/6/2021 <span className="inline-block w-1 h-1 rounded-full bg-current" /> Dự kiến kết
-              thúc: 30/6/2022
+              Bắt đầu: {moment(infoDepartment?.startTime).format("L")} <span className="inline-block w-1 h-1 rounded-full bg-current" /> Dự kiến kết
+              thúc: {moment(infoDepartment?.expiredTime).format("L")}
             </p>
-          </div>
+          </Link>
         );
       },
     },
@@ -94,10 +100,17 @@ function getColumnsProject(): TableOptions<IProject>["columns"] {
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row, value }) {
+      Cell({ row, value }: { row: any, value: any}) {
+        const infoDepartment = row.original;
+        const imgUrl = infoDepartment.image
+        ? (infoDepartment.image.startsWith('files/db')
+          ? `${REACT_APP_URL_S3}/${infoDepartment.image}`
+          : `${REACT_APP_URL_S3_PROJECT}/${infoDepartment.image}`)
+        : projectImage;
+
         return (
           <div>
-            <img src="" className="h-[60px] w-[60px]" alt="hellu" />
+            <img src={imgUrl} className="h-[60px] w-[60px]" alt="hellu" />
           </div>
         );
       },
@@ -106,64 +119,98 @@ function getColumnsProject(): TableOptions<IProject>["columns"] {
 }
 
 const Project: FC<ProjectProps> = (props) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date(new Date().setDate(-30)));
+  const [startDate, setStartDate] = useState<Date>(new Date(new Date().setDate(-30)));
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
+  const [dataDepartment, setDataDepartment]               = useState<any[]>([]);
+  const [count, setCount] = useState(1);
+  const [pagesCursor, setPagesCursor]                         = useState<(any)[]>([undefined]);
+  const [lastestID, setLastestID] = useState<string>("");
+
+  const { data: listDepartments, loading: isLoading, totalRecord, totalPages: totalPage, nextCursor } = useQueryListDepartmentsIsMember({
+    limit: 50,
+    keyword: searchDepartmentValue,
+    lastestID,
+    isFetch: true
+  });
+
+  const handleSearchInput = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchDepartmentValue(event.target.value);
+    // setIsResultNavigation(false);
+  }, 700);
+
+  useEffect(() => {
+    if(!listDepartments) return;
+    setDataDepartment(listDepartments);
+  }, [JSON.stringify(listDepartments)])
+
+  useEffect(() => {
+    const checkExistsPage = pagesCursor.find(page => page === nextCursor);
+
+    if(checkExistsPage || !totalPage) return;
+    if(!nextCursor && count > 1) return;
+
+    const cursors = [...pagesCursor, nextCursor].filter(Boolean);
+    setPagesCursor(cursors);
+  }, [nextCursor, count, totalPage])
+
+  const handleNextPageButton = () => {
+    setCount(count + 1);
+    setLastestID(pagesCursor[pagesCursor.length - 1]);
+  };
+
+  const handlePrevPageButton = () => {
+    if(pagesCursor.length === 2) return;
+
+    let prevCursor: string | undefined = '';
+
+    if(count === totalPage) {
+      prevCursor = pagesCursor[pagesCursor.length - 2];
+    } else{
+      prevCursor = pagesCursor[pagesCursor.length - 3];
+    }
+
+    pagesCursor.splice(-1, 1);
+
+    setPagesCursor(pagesCursor);
+    setCount(count - 1);
+    setLastestID(`${prevCursor}`);
+  };
 
   const columns = useMemo(getColumnsProject, []);
-  const instance = useTable({ columns, data, getRowId: (row) => row._id }, useRowSelect);
-
+  const instance = useTable({ columns, data: dataDepartment, getRowId: (row: any) => row._id }, useRowSelect);
   return (
     <div>
       <div className="pt-4 pl-8 pr-8 pb-3 relative flex space-x-3">
-        <CustomAutoComplete
-          data={[{ name: "123" }]}
-          wrapperClassName="w-4/12"
-          className="w-full h-full py-2.5 px-3 focus:outline-none"
-          placeholder="Nội dung"
-        />
-        <CustomAutoComplete
-          data={[{ name: "123" }]}
-          wrapperClassName="w-4/12"
-          className="w-full h-full py-2.5 px-3 focus:outline-none"
-          placeholder="Nội dung"
-        />
-        <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
-          <ReactDatePicker
-            onChange={(date: Date) => setStartDate(date)}
-            selected={startDate}
-            className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
+        <input
+            onChange={handleSearchInput}
+            type="search"
+            placeholder="Tìm kiếm"
+            className="w-full focus:outline-none h-11 border border-solid border-primary-border pl-3 pr-16 rounded-md"
           />
-          <div className="w-6 h-6">
-            <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
-          </div>
-          <label className="absolute top-0 left-2 -translate-y-1/2 bg-white py-0">Từ ngày</label>
-        </div>
-        <div className="w-2/12 border-cbs-border pl-4 pr-1.5 border-0.5 relative flex items-center focus-within:text-cbs-primary">
-          <ReactDatePicker
-            onChange={(date: Date) => setEndDate(date)}
-            selected={endDate}
-            className="text-small leading-[19.5px] py-2.5 w-full focus:outline-none"
-          />
-          <div className="w-6 h-6">
-            <img src="/images/common/icons8-calendar-100.svg" alt="icon calendar" />
-          </div>
-          <label className="absolute top-0 left-2 -translate-y-1/2 bg-white py-0">Đến ngày</label>
-        </div>
       </div>
       {/* Content */}
       <div className="h-[480px] overflow-auto">
         <TableWithoutContext
           instance={instance}
           tableProps={{ className: "w-full" }}
-          props={{ length: 123 }}
+          props={{
+            length: totalRecord,
+            currentPage: count,
+            currentTotalPage: pagesCursor.length,
+            totalPage: totalPage,
+            fetchNextPage: handleNextPageButton,
+            fetchPreviousPage: handlePrevPageButton
+          }}
+          isLoading={isLoading}
         />
       </div>
-      <div className="flex justify-end pt-3 px-10">
+      {/* <div className="flex justify-end pt-3 px-10">
         <button className="text-cbs-subtext px-7 py-3.5 font-bold rounded-cbs-sm">Bỏ qua</button>
         <button className="bg-cbs-primary text-white px-7 py-3.5 font-bold rounded-cbs-sm">
           Tìm kiếm
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

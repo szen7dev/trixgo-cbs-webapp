@@ -1,6 +1,7 @@
 export type APIResponse = {
   error: boolean;
   message: string;
+  status: number;
 };
 
 export type ParamsApi = {

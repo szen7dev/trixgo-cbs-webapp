@@ -10,9 +10,9 @@ import { toast } from "react-toastify";
 
 // import DownloadIcon from "assets/images/icons8-download-48_2.png";
 // import ShareIcon from "assets/images/icons8-share-rounded-96.svg";
-// import CopyIcon from "assets/images/icons8-copy-96.svg";
 // import RemoveIcon from "assets/images/icons8-remove.svg";
 // import IconPrint from "assets/images/icons8-print-32.png";
+import CopyIcon from "assets/images/icons8-copy-96.svg";
 import SendEmailIcon from "assets/images/icons8-send-email-96.svg";
 import DotsVerticalIcon from "assets/icons/DotsVertical";
 import IconPencil from "assets/images/icons8-pencil.svg";
@@ -79,7 +79,7 @@ const PcmDetailTask: FC = () => {
     status: 1,
     priority: 1
   });
-  
+
   const [permissions, setPermissions] = useState({
     hasPermissionUpdateTask: false,
     hasPermissionAddRelatedUser: false,
@@ -107,9 +107,7 @@ const PcmDetailTask: FC = () => {
 
   const toggleModalUpdateTaskStatus = () => setIsShowModalUpdateTaskStatus(!isShowModalUpdateTaskStatus);
 
-  const handleConfirmUpdateTaskStatus = (status: number) => {
-    setTaskData(previous => ({ ...previous, status }));
-  }
+  const handleConfirmUpdateTaskStatus = (status: number) => setTaskData(previous => ({ ...previous, status }));
 
   const handleConfirmUpdateTask = () => refetchInfoTask();
 
@@ -137,12 +135,10 @@ const PcmDetailTask: FC = () => {
       setIsMarkInterest(!isMarkInterest);
     } catch (error) {
 			captureException(error);
-      if(error instanceof Error) {
+      if(error instanceof Error)
         toast.error(error.message);
-      }
-      if(typeof error === 'string') {
+      if(typeof error === 'string')
         toast.error(error);
-      }
     }
   }
 
@@ -207,14 +203,15 @@ const PcmDetailTask: FC = () => {
   if(!infoTask || !infoTask.data) {
     return <Redirect to="/pcm/home" />
   }
-  
+
   const taskInfo = infoTask.data;
+
   return (
     <>
       {/*_____________header______________*/}
       <div className="task-management-header flex items-center justify-between pt-2 pb-2 pl-5 pr-5 border-b border-secondary-light shadow-lg">
         <div className="task-management-header-left-block flex items-center">
-          <button onClick={() => history.goBack()}>
+          <button onClick={history.goBack}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -237,13 +234,13 @@ const PcmDetailTask: FC = () => {
               src={DownloadIcon}
               alt="Download icon"
             />
-          </button>
-          <button className="mx-3">
-            <img className="w-6" src={ShareIcon} alt="Share icon" />
-          </button>
-          <button className="mx-3">
-            <img className="w-6" src={CopyIcon} alt="Copy icon" />
           </button> */}
+          {/* <button className="mx-3">
+            <img className="w-6" src={ShareIcon} alt="Share icon" />
+          </button> */}
+          <button className="mx-3" onClick={() => ''}>
+            <img className="w-6" src={CopyIcon} alt="Copy icon" />
+          </button>
           <button className="mx-3" onClick={openAddNotificationEmail}>
             <img className="w-6" src={SendEmailIcon} alt="Send email icon" />
           </button>

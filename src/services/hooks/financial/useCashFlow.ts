@@ -5,17 +5,20 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { CashFlowPlanRepository } from 'apis/financial';
 import {
     CashFlowPlan,
+    CashFlowPlanInfoPayload,
     CashFlowPlanQueryPayload
 } from 'typings/financial/cashFlowPlan';
 
 /*=====3.INTERFACE DEFINE=====*/
 interface useCashFlowPlan {
     isLoading: boolean;
+    isLoadingInfo: boolean;
     totalRecord: number;
     hasNextPage: boolean | undefined;
     list: Array<CashFlowPlan>;
     info: CashFlowPlan | undefined;
     refetch: () => void;
+    refetchInfo: () => void;
     fetchNextPage: () => void;
     insertAsync: (params: any) => Promise<any>;
     updateAsync: (params: any) => Promise<any>;
@@ -33,6 +36,7 @@ export const useCashFlowPlan = ({
     isFetchList = false,
     isFetchInfo = false
 }: UseCashFlowPlanProps): useCashFlowPlan => {
+
     const { mutateAsync: insertAsync } =
         useMutation((payload: any) =>
             CashFlowPlanRepository.addCashFlowPlan(payload)
@@ -48,8 +52,7 @@ export const useCashFlowPlan = ({
             CashFlowPlanRepository.deleteCashFlowPlan(payload)
         );
 
-    // Get info
-    const { data: detailData } =
+    const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
         useQuery("cash_flow_plan__info", () => CashFlowPlanRepository.fetchDetailCashFlowPlan(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
@@ -57,7 +60,6 @@ export const useCashFlowPlan = ({
 
     const info = detailData?.data;
 
-    // Get List
     const {
         isLoading,
         data,
@@ -89,11 +91,13 @@ export const useCashFlowPlan = ({
 
     return {
         isLoading,
+        isLoadingInfo,
         list,
         info,
         totalRecord,
         hasNextPage,
         refetch,
+        refetchInfo,
         fetchNextPage,
         insertAsync,
         updateAsync,

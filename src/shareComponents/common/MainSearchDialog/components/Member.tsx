@@ -6,11 +6,16 @@ import { SelectionColumn } from "shareComponents/common/Table/components/Selecti
 import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import iconSlider from "assets/images/icons8-slider-32.png";
-import { useModal } from "services/hooks/useModal";
-import { UseMainSearch } from "services/hooks/useMainSearch";
 import { debounce } from "lodash";
 import { MainSearchFilter } from "shareComponents/common/MainSearchFilter";
 import Dot from "./Dot";
+import { Link } from "react-router-dom";
+
+// Hook
+import { useContact } from "services/hooks/items/useContact";
+import { useModal } from "services/hooks/useModal";
+import { UseMainSearch } from "services/hooks/useMainSearch";
+import moment from "moment";
 
 type MemberProps = {
   //
@@ -26,7 +31,8 @@ const data = Array.from({ length: 15 }).map((e, i) => ({
   value: Math.floor(Math.random() * 1_000_000_000),
 }));
 
-function getColumnsMember(): TableOptions<IMember>["columns"] {
+// function getColumnsMember(): TableOptions<IMember>["columns"] {
+function getColumnsMember(): TableOptions<any>["columns"] {
   return [
     SelectionColumn({
       tableHeadSelectorProps: {
@@ -40,7 +46,9 @@ function getColumnsMember(): TableOptions<IMember>["columns"] {
     }),
     {
       accessor: "_id",
-      Header({ length, selectedFlatRows }) {
+      Header({ currentPage, currentTotalPage, totalPage, fetchNextPage, fetchPreviousPage }) {
+        const isDisablePrevButton = (currentTotalPage === 2 && currentPage === 1) || totalPage === 0;
+        const isDisableNextButton = (currentPage === totalPage) || totalPage === 0;
         return (
           <div className="flex justify-between pb-1">
             <span className="bg-[#F6F7F8] bg-opacity-60 rounded-full p-2">
@@ -60,15 +68,16 @@ function getColumnsMember(): TableOptions<IMember>["columns"] {
               </svg>
             </span>
             <div className="flex items-center">
-              <span className="mr-4">1-50 trong số rất nhiều</span>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              {/* <span className="mr-4">10-{length} trong số rất nhiều</span> */}
+              <span className="mr-4">Trang {currentPage} trong {totalPage}</span>
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchPreviousPage} disabled={isDisablePrevButton}>
                 <img
-                  alt="Next"
+                  alt="Previous"
                   src={iconChevronRight}
                   className="w-4 filter-primary-gray rotate-180"
                 />
               </button>
-              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border">
+              <button className="rounded-full h-10 w-10 flex items-center justify-center hover:bg-gray-100 border border-transparent hover:border-cbs-border" onClick={fetchNextPage} disabled={isDisableNextButton}>
                 <img alt="Next" src={iconChevronRight} className="w-4 filter-primary-gray" />
               </button>
             </div>
@@ -80,19 +89,20 @@ function getColumnsMember(): TableOptions<IMember>["columns"] {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
       Cell({ row, value }) {
+        const infoContact = row.original ;
         return (
-          <div>
-            <p className="text-cbs-highlight-color">Trương Việt Anh (Phó Tổng giám đốc)</p>
+          <Link to={`/human/home/hid=${infoContact._id}`} target="_blank">
+            <p className="text-cbs-highlight-color">{infoContact?.name} {infoContact?.position && `(${infoContact?.position?.name})`}</p>
             <p className="text-cbs-subtext">
-              <span>Điện thoại: 0922556773 </span>
+              <span>Điện thoại: {infoContact?.phone} </span>
               <Dot />
-              <span> Email: vietanht@gmail.com </span>
+              <span> Email: {infoContact?.email} </span>
               <Dot />
-              <span> Ngày sinh: 15/3/1988 </span>
+              <span> Ngày sinh: {infoContact?.birthday && moment(infoContact?.birthday).format("L") || "Chưa cập nhật" } </span>
               <Dot />
-              <span> Cập nhật gần đây: 21/4/2022 (8 ngày)</span>
+              <span> Cập nhật gần đây: {moment(infoContact?.modifyAt).format("L")} ({moment(infoContact?.modifyAt).fromNow()})</span>
             </p>
-          </div>
+          </Link>
         );
       },
     },
@@ -106,7 +116,11 @@ const Member: FC<MemberProps> = (props) => {
   const [searchText, setSearchText] = useState<string>("");
   const [isResultNavigation, setIsResultNavigation] = useState(false);
   const [isVisibleSearchFilter, setIsVisibleSearchFilter] = useState(false);
-
+  const [dataContact, setDataContact]     = useState<any[]>([]);
+  const [count, setCount] = useState(1);
+  const [pagesCursor, setPagesCursor]                         = useState<(any)[]>([undefined]);
+  const [lastestID, setLastestID] = useState<string>("");
+  
   const {
     searchResultList,
     fetchSearchResultList,
@@ -130,16 +144,61 @@ const Member: FC<MemberProps> = (props) => {
   }, [searchText, currentID, isResultNavigation, filterParam]);
 
   const handleNextPageButton = () => {
-    setCurrentID(nextCursor || "");
-    setIsResultNavigation(true);
+    setCount(count + 1);
+    setLastestID(pagesCursor[pagesCursor.length - 1]);
+  };
+
+  const handlePrevPageButton = () => {
+    if(pagesCursor.length === 2) return;
+
+    let prevCursor: string | undefined = '';
+
+    if(count === totalPage) {
+      prevCursor = pagesCursor[pagesCursor.length - 2];
+    } else{
+      prevCursor = pagesCursor[pagesCursor.length - 3];
+    }
+
+    pagesCursor.splice(-1, 1);
+
+    setPagesCursor(pagesCursor);
+    setCount(count - 1);
+    setLastestID(`${prevCursor}`);
+    // setParamsSearch(preValue => ({
+    //   ...preValue,
+    //   lastestID: prevCursor
+    // }));
   };
 
   // handle data from filter tab
   const onHandleFilterData = (filterData: any) => {
     setFilterParam(filterData);
   };
+
+  const {
+    list: listContact,
+    isLoading, totalRecord: totalRecordContact, totalPage, nextCursor: nextCursorContact
+  } = useContact({
+    params: { keyword: searchText, limit: 20, lastestID },
+    isFetchList: true
+  })
+
   const columns = useMemo(getColumnsMember, []);
-  const instance = useTable({ columns, data, getRowId: (row) => row._id }, useRowSelect);
+  const instance = useTable({ columns, data: dataContact, getRowId: (row: any) => row._id }, useRowSelect);
+  useEffect(() => {
+    if(!listContact) return;
+    setDataContact(listContact);
+  }, [JSON.stringify(listContact)])
+
+  useEffect(() => {
+    const checkExistsPage = pagesCursor.find(page => page === nextCursorContact);
+
+    if(checkExistsPage || !totalPage) return;
+    if(!nextCursorContact && count > 1) return;
+
+    const cursors = [...pagesCursor, nextCursorContact].filter(Boolean);
+    setPagesCursor(cursors);
+  }, [nextCursor, count, totalPage])
 
   return (
     <div>
@@ -150,12 +209,12 @@ const Member: FC<MemberProps> = (props) => {
           placeholder="Tìm kiếm"
           className="w-full focus:outline-none h-11 border border-solid border-primary-border pl-3 pr-16 rounded-md"
         />
-        <button
+        {/* <button
           onClick={toggleSearchFilter}
           className="absolute top-5 right-12 w-9 h-9 flex items-center justify-center bg-lighter-gray hover:bg-primary-border transition duration-150 rounded-full focus:outline-none ml-6"
         >
           <img src={iconSlider} alt="Filter" className="w-6 h-6" />
-        </button>
+        </button> */}
       </div>
 
       {/* Content */}
@@ -164,7 +223,15 @@ const Member: FC<MemberProps> = (props) => {
           <TableWithoutContext
             instance={instance}
             tableProps={{ className: "w-full" }}
-            props={{ length: 123 }}
+            props={{
+              length: totalRecordContact,
+              currentPage: count,
+              currentTotalPage: pagesCursor.length,
+              totalPage: totalPage,
+              fetchNextPage: handleNextPageButton,
+              fetchPreviousPage: handlePrevPageButton
+            }}
+            isLoading={isLoading}
           />
         </div>
       )}
