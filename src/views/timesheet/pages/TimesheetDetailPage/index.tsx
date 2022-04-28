@@ -116,6 +116,7 @@ const TimeSheetDetailPage: FC = () => {
           </p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
+        <p className={"text-gray-400 mr-2"}>Admin (5)</p> | 
           <p className={"text-gray-400 mr-2"}>Thành viên</p>
           <AccessingUsers
             users={[
