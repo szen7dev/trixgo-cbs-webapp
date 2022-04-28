@@ -290,6 +290,12 @@ export const CONTRACT_IPC_TYPES = [
     { value: 2, text: 'Thanh toán' },
 ]
 
+// PHÂN LOẠI CHI PHÍ
+export const CONTRACT_EXPENSE_SUB_TYPES = [
+    { value: 1, text: 'Chi phí trực tiếp' },
+    { value: 2, text: 'Chi phí quản lý' },
+]
+
 // LOẠI HÀNG HÓA, NGUYÊN VẬT LIỆU
 export const GOODS_TYPES = [
     { value: 1, text: 'Nguyên liệu, vật liệu' },

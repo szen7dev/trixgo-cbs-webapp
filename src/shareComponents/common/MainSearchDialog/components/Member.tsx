@@ -91,7 +91,7 @@ function getColumnsMember(): TableOptions<any>["columns"] {
       Cell({ row, value }) {
         const infoContact = row.original ;
         return (
-          <Link to={`/human/home/hid=${infoContact._id}`} target="_blank">
+          <Link to={`/human/home/hid=${infoContact._id}`}>
             <p className="text-cbs-highlight-color">{infoContact?.name} {infoContact?.position && `(${infoContact?.position?.name})`}</p>
             <p className="text-cbs-subtext">
               <span>Điện thoại: {infoContact?.phone} </span>

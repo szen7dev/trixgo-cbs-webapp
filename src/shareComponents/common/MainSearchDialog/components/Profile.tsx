@@ -17,6 +17,7 @@ import { useDatahubContact } from "services/hooks/datahub/contact/useDatahubCont
 import { useContract } from "services/hooks/items/useContract";
 import { useListDocument } from "services/hooks/document/useDocument";
 import { Link } from "react-router-dom";
+import { useModal } from "services/hooks/useModal";
 
 type ProfileProps = {
   //
@@ -27,7 +28,7 @@ interface IProfile {
 }
 
 // function getColumnsProfile(): TableOptions<IProfile>["columns"] {
-  function getColumnsProfile(): TableOptions<any>["columns"] {
+function getColumnsProfile(): TableOptions<any>["columns"] {
   return [
     SelectionColumn({
       tableHeadSelectorProps: {
@@ -87,7 +88,7 @@ interface IProfile {
         // const { name, size, path, project, task, author, createAt } = row.original;
         const infoDocument = row.original ;
         return (
-          <Link to={`/pcm/project/${infoDocument?.project._id}/document/${infoDocument._id}`} target="_blank">
+          <Link to={`/pcm/project/${infoDocument?.project._id}/document/${infoDocument._id}`}>
             <p className="text-cbs-highlight-color">
               {infoDocument?.name}
             </p>
@@ -132,6 +133,7 @@ interface SearchParams{
 }
 
 const Profile: FC<ProfileProps> = (props) => {
+  const { closeModal } = useModal();
   const [startDate, setStartDate]                             = useState<Date>(new Date(new Date().setDate(-30)));
   const [endDate, setEndDate]                                 = useState<Date>(new Date());
   const [keywordDatahubContact,  setKeywordDatahubContact ]   = useState("");
@@ -233,7 +235,6 @@ const Profile: FC<ProfileProps> = (props) => {
       lastestID: ''
     }))
   }
-
   return (    
     <div>
       <div className="pt-4 pl-8 pr-8 pb-3">

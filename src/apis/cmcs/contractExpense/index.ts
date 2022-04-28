@@ -1,46 +1,44 @@
 import API from "../../repository";
 import { convertObToUrl } from "utils";
 
-import {
-    DeleteMultiContractPayload,
-    InfoContractPayload,
-    InfoContractResponse,
-    InsertContractPayload,
-    ListContractsPayload,
-    ListContractsResponse,
-    UpdateContractPayload
-} from "typings/cmcs";
+// import {
+//     DeleteMultiContractPayload,
+//     InfoContractPayload,
+//     InfoContractResponse,
+//     InsertContractPayload,
+//     ListContractsPayload,
+//     ListContractsResponse,
+//     UpdateContractPayload
+// } from "typings/cmcs";
 
-const ITEM_URL = "/api/item";
-
+const ITEM_URL = "/api/cmcs";
 const ContractExpenseRepository = {
-    fetchList: (params: ListContractsPayload): Promise<ListContractsResponse> => fetchList(params),
-    fetchInfo: (params: InfoContractPayload): Promise<InfoContractResponse> => fetchInfo(params),
+    fetchList: (params: any): Promise<any> => fetchList(params),
+    fetchInfo: (params: any): Promise<any> => fetchInfo(params),
     insert,
     update,
     remove,
 };
 
-async function fetchList(params: ListContractsPayload): Promise<ListContractsResponse> {
+async function fetchList(params: any): Promise<any> {
     const { data } = await API.get(
-        `${ITEM_URL}/contracts?${convertObToUrl({
-            select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+        `${ITEM_URL}/contract_expenses?${convertObToUrl({
+            select: "name date subtype value note createAt",
             populates: JSON.stringify({
-                path: "project company personInCharge",
-                select: "name sign"
+                path: "userCreate",
+                select: "bizfullname"
             }),
-            outin: 2,
             ...params
         })}`
     )
     return data
 }
 
-async function fetchInfo(params: InfoContractPayload): Promise<InfoContractResponse> {
+async function fetchInfo(params: any): Promise<any> {
     const { data } = await API.get(
-        `${ITEM_URL}/contracts?${convertObToUrl({
+        `${ITEM_URL}/contract_expenses?${convertObToUrl({
             populates: JSON.stringify({
-                path: "project field chair personInCharge debtStatus warehouse buyerInfo sellerInfo",
+                path: "project",
                 select: "name sign description"
             }),
             ...params
@@ -49,18 +47,18 @@ async function fetchInfo(params: InfoContractPayload): Promise<InfoContractRespo
     return data
 }
 
-async function insert(params: InsertContractPayload): Promise<any> {
-    const { data } = await API.post(`${ITEM_URL}/contracts`, params)
+async function insert(params: any): Promise<any> {
+    const { data } = await API.post(`${ITEM_URL}/contract_expenses`, params)
     return data;
 }
 
-async function update(params: UpdateContractPayload): Promise<any> {
-    const { data } = await API.put(`${ITEM_URL}/contracts`, params)
+async function update(params: any): Promise<any> {
+    const { data } = await API.put(`${ITEM_URL}/contract_expenses`, params)
     return data;
 }
 
-async function remove(params: DeleteMultiContractPayload): Promise<any> {
-    const { data } = await API.delete(`${ITEM_URL}/contracts`, {
+async function remove(params: any): Promise<any> {
+    const { data } = await API.delete(`${ITEM_URL}/contract_expenses`, {
         params
     })
     return data;
