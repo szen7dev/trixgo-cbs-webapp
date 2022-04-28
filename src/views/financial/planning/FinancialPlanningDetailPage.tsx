@@ -31,10 +31,10 @@ const FinancialPlanningDetailPage: FC = () => {
             />
             <img alt={"star-icon"} src={StarIcon} />
           </div>
-          <p className={"text-gray-400"}>Chỉnh sửa lần cuối cách đây 2 giờ bởi Nguyễn Hữu Hiệp</p>
+          <p className={"text-gray-400"}>Chỉnh sửa lần cuối cách đây 2 giờ bởi (Bizfullname)</p>
         </div>
         <div className={"flex-1 flex items-center justify-end"}>
-          <p className={"text-gray-400 mr-2"}>Đang truy cập</p>
+          <p className={"text-gray-400 mr-2"}>Thành viên</p>
           <AccessingUsers
             users={[
               {
