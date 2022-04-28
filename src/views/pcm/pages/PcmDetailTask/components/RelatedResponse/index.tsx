@@ -342,7 +342,6 @@ const Response: FC<Props> = ({ task }) => {
     if(event.clipboardData?.files?.length) {
       handleSetFiles(event.clipboardData.files)
     }
-    // event.preventDefault();
   }
 
   const onClickTabAll = () => {

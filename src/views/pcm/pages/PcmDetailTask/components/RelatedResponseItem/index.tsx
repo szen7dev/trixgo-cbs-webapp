@@ -184,7 +184,7 @@ export const RelatedResponseItem: FC<Props> = ({
 					onChange={handleChangeUpload}
 				/>
 			) : ''}
-				<div className={
+			<div className={
 				classNames("flex",
 					isHighlight
 						? 'bg-blue-500 shadow-lg bg-opacity-50 scale-110 p-3 transition ease-in-out delay-150 duration-300'
@@ -211,7 +211,7 @@ export const RelatedResponseItem: FC<Props> = ({
 								<button
 									className={`${(expanded || isExpand) ? "h-10 hover:bg-lighter-gray" : "pl-3"
 										} text-[13px] w-10 flex justify-center items-center rounded-full`}
-									onClick={inputRef.current?.click}
+									onClick={() => inputRef.current?.click()}
 								>
 									<img src='/images/common/icon-upload-file.png' alt='Icon upload file' />
 								</button>

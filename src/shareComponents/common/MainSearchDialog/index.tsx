@@ -159,8 +159,8 @@ export const MainSearchDialog: FC = () => {
           onSearchProject={handleSearchProject}
         />
       }
-      {activeCategory === "3" && 
-        <Profile 
+      {activeCategory === "3" &&
+        <Profile
         />
       }
       {activeCategory === "4" && <Contract />}

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState, useContext } from 'react';
+import React, { FC, ClipboardEvent, useEffect, useRef, useState, useContext } from 'react';
 
 import Axios from 'axios';
 import classNames from 'classnames';
@@ -138,13 +138,13 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		return source;
 	}
 
-	const handleAttachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (!event.target.files) return;
+	const handleSetFiles = async (filesSelected: FileList | null) => {
+		if (!filesSelected) return;
 
 		const regexSpecialCharacter = /[#$%^~{}+|\]\\[]|\\.\\.|^\\.|\\.$/g;
 		let hasSepecialCharacter = false;
 
-		for (const [, file] of Object.entries(event.target.files)) {
+		for (const [, file] of Object.entries(filesSelected)) {
 			if(regexSpecialCharacter.test(file.name)) {
 				hasSepecialCharacter = true;
 				break;
@@ -158,7 +158,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		const [files, images] = modifyUploadedFilesV2({
 			imgLastKey: Object.keys(uploads.images).length || null,
 			fileLastKey: Object.keys(uploads.files).length || null,
-		}, event.target.files);
+		}, filesSelected);
 
 		setUploadImage(images);
 		setUploadFile(files);
@@ -194,6 +194,17 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			})
 			setIDFileUploaded(key, _id);
 		}
+	}
+
+	const handlePasteFile = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+		event.preventDefault();
+
+		if(event.clipboardData?.files?.length) {
+		  return handleSetFiles(event.clipboardData.files)
+		}
+
+		const text = event.clipboardData.getData('text/plain');
+		text && window.document.execCommand('insertText', false, text);
 	}
 
 	const handleSubmit = async () => {
@@ -313,6 +324,26 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		}
 	}
 
+	useEffect(() => {
+		const dropZone = document.getElementById("input-comment");
+
+		if (dropZone) {
+			dropZone.addEventListener('dragover', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+			});
+
+		  	// Get file data on drop
+			dropZone.addEventListener('drop', function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				if (e.dataTransfer) {
+					handleSetFiles(e.dataTransfer.files);
+				}
+			});
+		}
+	}, [])
+
 	return (
 		<div {...props}>
 			<div
@@ -345,19 +376,15 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 					</button>
 				</div>
 				<div className="react__replay overflow-hidden flex-1 bg-gray-100 border border-gray-300 rounded-2xl mx-2">
-					<div className="flex px-5 py-1.5 h-full overflow-y-auto">
+					<div className="flex px-5 py-1.5 h-full overflow-y-auto" id='input-comment'>
 						<span
 							contentEditable
 							placeholder='Trả lời...'
 							className="custom-scroll relative block outline-none break-words text-[15px] leading-4 cursor-text flex-grow overflow-x-hidden py-1"
-							onPaste={e => {
-								e.preventDefault();
-								const text = e.clipboardData.getData('text/plain');
-								window.document.execCommand('insertText', false, text);
-							}}
 							ref={refInputComment}
 							style={{ color: 'black' }}
 							suppressContentEditableWarning={true}
+							onPaste={handlePasteFile}
 							onKeyUp={handleKeyUpInput}
 							onInput={e =>
 								onTextChange
@@ -374,11 +401,10 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 								type="file"
 								name="files"
 								id="file"
-								// Validate input file
 								accept="*"
 								multiple
 								className="hidden"
-								onChange={handleAttachFiles} />
+								onChange={e => handleSetFiles(e.target.files)} />
 						</label>
 					</div>
 				</div>
