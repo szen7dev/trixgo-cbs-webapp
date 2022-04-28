@@ -177,8 +177,7 @@ export const CashFlowPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {listCashFlowPlan &&
-              listCashFlowPlan.length &&
+            {(listCashFlowPlan && listCashFlowPlan.length) ?
               listCashFlowPlan.map((item) => (
                 <tr key={item._id} className="text-left hover:bg-cbs-active-comment cursor-pointer">
                   <td
@@ -237,7 +236,7 @@ export const CashFlowPage: FC = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+              )) : <></>}
           </tbody>
         </table>
       </div>

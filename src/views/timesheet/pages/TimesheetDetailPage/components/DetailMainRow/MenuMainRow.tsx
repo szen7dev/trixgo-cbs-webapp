@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import AddCircle from "assets/images/icons8-add-96.svg";
 import TrashIcon from "assets/images/icons8-remove-96.svg";
 

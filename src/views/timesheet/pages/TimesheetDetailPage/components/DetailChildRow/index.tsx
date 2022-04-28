@@ -5,7 +5,7 @@ import moment from "moment";
 
 import {DropdownSearchable} from "shareComponents/common";
 
-import MenuChildRow from "./MenuChildRow";
+// import MenuChildRow from "./MenuChildRow";
 
 // import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 import { useQueryListFriend } from "services/hooks/users/useFriend";
@@ -23,7 +23,7 @@ type Props = {
   onUpdatedTimeSheetChild: (values: UpdateTimeSheetChildPayload) => void;
 };
 
-const DetailChildRow: FC<Props> = ({
+export const DetailChildRow: FC<Props> = ({
   rowData,
   collapsed,
   isLastRow,
@@ -301,5 +301,3 @@ const DetailChildRow: FC<Props> = ({
     </div>
   );
 };
-
-export default DetailChildRow;

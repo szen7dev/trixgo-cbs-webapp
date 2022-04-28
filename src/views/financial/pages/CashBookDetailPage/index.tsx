@@ -10,12 +10,17 @@ import debounce from "lodash/debounce";
 import {
   SearchInput,
   GroupActions,
+  ModalContainer,
   ButtonMore,
+  Loader,
 } from "shareComponents/common";
 import ModalReport from "./components/ModalReport";
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import { ModalContainer } from "shareComponents/common";
+import { AccessingUsers } from "../../sharedComponents/common";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import ModalShare from "./components/ModalShare";
+
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import iconGraphReport from "assets/images/icons8-stop-graph-report-96.png";
 
@@ -27,6 +32,7 @@ import { useContract } from "services/hooks/items/useContract";
 import { useContact } from "services/hooks/items/useContact";
 import { useAccount } from "services/hooks/items/useAccount";
 import { CashBook } from "typings/financial/cashBook";
+import { User } from "typings/user";
 
 export const CashBookDetailPage: FC = () => {
   const { cashbookId } = useParams<{ cashbookId: string }>();
@@ -42,8 +48,20 @@ export const CashBookDetailPage: FC = () => {
   const [itemsChecked, setItemsChecked] = useState<string[]>([]);
   const [dataCashBook, setDataCashBook] = useState<CashBook[]>([]);
 
-  const { info: cashBookInfo } = useCashBook({
-    params: { cashBookID: cashbookId },
+  const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
+    isShow: false,
+    users: [],
+    modalType: 'members'
+});
+
+  const { info: cashBookInfo, isLoadingInfo, refetchInfo } = useCashBook({
+    params: {
+      cashBookID: cashbookId,
+      populates: JSON.stringify({
+        path: 'admins members',
+        select: '_id bizfullname image'
+      })
+    },
     isFetchInfo: true
   })
 
@@ -52,6 +70,7 @@ export const CashBookDetailPage: FC = () => {
     insertAsync: insertCashBookAsync,
     updateAsync: updateCashBookAsync,
     list: listCashBook,
+    isLoading,
     refetch,
     fetchNextPage,
     hasNextPage,
@@ -284,6 +303,13 @@ export const CashBookDetailPage: FC = () => {
     }
   }
 
+  const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
+    setModalShare({ isShow: !modalShare.isShow, users, modalType });
+
+  if(isLoadingInfo || isLoading || !cashBookInfo) return <Loader className="border-primary" />
+
+  const usersShared = [...cashBookInfo.admins, ...cashBookInfo.members];
+
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <div className="flex flex-wrap items-center w-full px-4 gap-x-2 bg-white text-black border-b border-cbs-gray py-1">
@@ -321,6 +347,15 @@ export const CashBookDetailPage: FC = () => {
         >
           <img src={iconGraphReport} alt="" />
         </button>
+        <button
+          className="text-gray-400"
+          onClick={() => toggleModalShare('admins', cashBookInfo.admins)}
+        >Admin ({cashBookInfo.admins?.length})</button> |
+        <button
+          className="text-gray-400 mr-2"
+          onClick={() => toggleModalShare('members', cashBookInfo.members)}
+        >Thành viên ({cashBookInfo.members?.length})</button>
+        <AccessingUsers users={usersShared} />
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -428,6 +463,20 @@ export const CashBookDetailPage: FC = () => {
           </div>
         </div>
       </ModalContainer>
+
+      <ModalLarge
+        show={modalShare.isShow}
+        toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+        className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+      >
+        <ModalShare
+            toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+            refetch={refetchInfo}
+            cashbookId={cashbookId}
+            users={modalShare.users}
+            modalType={modalShare.modalType}
+        />
+      </ModalLarge>
     </div>
   );
 };

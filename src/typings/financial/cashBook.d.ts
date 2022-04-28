@@ -22,6 +22,7 @@ export type CashBook = {
     contract: Contract;
     customer: Contact;
     account: Account;
+    admins: User[];
     members: User[];
     userCreate: User;
     modifyAt: string;
