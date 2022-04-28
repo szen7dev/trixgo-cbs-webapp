@@ -5,3 +5,4 @@ export * from './ExpenseFormModal';
 export * from './ContractIpcModal';
 export * from './ContractPaymentModal';
 export * from './ContractProduceModal';
+export * from './ContractExpenseModal';

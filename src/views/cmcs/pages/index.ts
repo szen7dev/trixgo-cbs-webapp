@@ -5,6 +5,7 @@ export * from './ContractHome';
 export * from './ContractIpc';
 export * from './ContractPayment';
 export * from './ContractProduce';
+export * from './ContractExpense';
 export * from './ContractAdminPage';
 export * from './CmcDashboardPage';
 export * from './ContractDashBoard';
