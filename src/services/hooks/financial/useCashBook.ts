@@ -20,6 +20,7 @@ import type {
 /*=====3.INTERFACE DEFINE=====*/
 interface UseCashBook {
     isLoading: boolean;
+    isLoadingInfo: boolean;
     totalRecord: number;
     totalPage: number;
     hasNextPage: boolean | undefined;
@@ -29,6 +30,7 @@ interface UseCashBook {
     list: Array<CashBook>;
     info: CashBook | undefined;
     refetch: () => void;
+    refetchInfo: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
 }
@@ -57,7 +59,7 @@ export const useCashBook = ({
         useMutation((payload: CashBookDeleteManyPayload) => CashbookRepository.deleteMany(payload)
     );
 
-    const { data: detailData } =
+    const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
         useQuery("cashbook__info", () => CashbookRepository.fetchInfo(params), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
@@ -85,8 +87,6 @@ export const useCashBook = ({
             },
             refetchOnWindowFocus: false,
             enabled: isFetchList,
-            // keepPreviousData: true,
-            // refetchOnMount: false,
         }
     );
 
@@ -100,6 +100,7 @@ export const useCashBook = ({
 
     return {
         isLoading,
+        isLoadingInfo,
         insertAsync,
         updateAsync,
         deleteManyAsync,
@@ -109,6 +110,7 @@ export const useCashBook = ({
         totalPage,
         hasNextPage,
         refetch,
+        refetchInfo,
         fetchNextPage,
         fetchPreviousPage,
     }

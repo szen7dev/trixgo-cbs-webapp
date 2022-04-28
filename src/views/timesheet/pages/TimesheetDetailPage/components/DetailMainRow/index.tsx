@@ -1,13 +1,13 @@
-import React, { FC, useRef } from "react";
+import { FC } from "react";
 import { map as _map } from "lodash";
 
 import { Loader } from "shareComponents/common/Loader";
 
 // import { useRightClickMenu } from "services/hooks/useRightClickMenu";
 
-import MenuMainRow from "./MenuMainRow";
+// import MenuMainRow from "./MenuMainRow";
 import { CollapseButton } from "views/timesheet/shareComponents/common";
-import DetailChildRow from "../DetailChildRow";
+import { DetailChildRow } from "../DetailChildRow";
 
 import type { TimeSheetChild, TimeSheetParent } from "typings/time-sheet";
 
@@ -18,7 +18,7 @@ type Props = {
   isFetchTimeSheetChild: boolean;
 };
 
-const DetailMainRow: FC<Props> = ({
+export const DetailMainRow: FC<Props> = ({
   timeSheetParentInfo,
   listTimeSheetChild,
   onUpdatedTimeSheetChild,
@@ -137,5 +137,3 @@ const DetailMainRow: FC<Props> = ({
     </>
   );
 };
-
-export default DetailMainRow;

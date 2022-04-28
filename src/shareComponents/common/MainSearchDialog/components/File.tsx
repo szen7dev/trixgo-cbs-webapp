@@ -128,6 +128,7 @@ function getColumnsFile(): TableOptions<PcmFile>["columns"] {
     },
   ];
 }
+
 interface SearchParams{
   isSearchFile: boolean,
   projectID: string,

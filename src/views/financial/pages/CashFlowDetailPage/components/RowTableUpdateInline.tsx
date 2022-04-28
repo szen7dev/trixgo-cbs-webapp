@@ -162,7 +162,7 @@ const RowTableUpdateInline: FC<Props> = ({ contracts, cashFlow, itemsChecked, on
         <input
           type="date"
           autoComplete="off"
-          defaultValue={moment(cashFlow.realDate).format('YYYY-MM-DD')}
+          defaultValue={cashFlow.realDate ? moment(cashFlow.realDate).format('YYYY-MM-DD') : ''}
           className="w-full h-[32px] outline-none"
           onChange={debounce((e: ChangeEvent<HTMLInputElement>) => {
             const realDate = e.target.value;

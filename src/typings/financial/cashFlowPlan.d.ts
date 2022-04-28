@@ -31,8 +31,16 @@ export interface CashFlowPlan {
     modifyAt: string;
     timeApproved: string;
     approver: User;
+    admins: User[];
+    members: User[];
     userCreate: User;
 }
+
+export type CashFlowPlanInfoPayload = {
+    cashFlowID?: string;
+    select?: string;
+    populates?: string;
+};
 
 export type CashFlowPlanQueryPayload = QueryParam & {
     companyID?: string;

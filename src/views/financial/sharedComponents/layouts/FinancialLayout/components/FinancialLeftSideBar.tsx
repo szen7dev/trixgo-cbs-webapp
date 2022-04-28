@@ -19,12 +19,6 @@ import { useCheckPerAccessApp, useGetListAppMenu, useGetListAppRoleMenu } from "
 import { APP_ID } from "apis/localdb";
 
 /*=====7.OTHER=====*/
-const routes = [
-  // { pathname: "/dashboard", label: "Báo cáo quản trị", icon: iconFolder },
-  { pathname: "cashbook", label: "Sổ quỹ", icon: iconFolder },
-  { pathname: "cashflow", label: "Kế hoạch tài chính", icon: iconFolder },
-];
-
 export const FinancialLeftSideBar: FC = () => {
 
   const { user } = useAuth();
@@ -86,23 +80,7 @@ export const FinancialLeftSideBar: FC = () => {
                 };
                 return <div key={index}></div>
               })
-              }
-
-              {routes.map((route, index) => (
-                <NavLink
-                  key={index}
-                  to={`/financial/${route.pathname}`}
-                  className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3"
-                >
-                  <img
-                    className="w-6 h-6 object-contain mr-3"
-                    src={iconFolder}
-                    alt="Menu item"
-                  />
-                  <span className="truncate">{route.label}</span>
-                </NavLink>
-              ))}
-              
+              }              
             </> : <></>
           }
         </div>

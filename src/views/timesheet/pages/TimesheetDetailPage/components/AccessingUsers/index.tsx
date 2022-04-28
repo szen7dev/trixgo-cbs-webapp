@@ -1,24 +1,22 @@
 import { FC } from "react";
-
-type User = {
-  _id: string | number;
-  name: string;
-  avatar: string;
-};
+import uniqBy from "lodash/uniqBy";
+import { User } from "typings/user";
 
 type Props = {
   users: Array<User>;
 };
 
-const AccessingUsers: FC<Props> = ({ users }) => {
-  const usersOnTop4 = users.slice(0, 4);
+export const AccessingUsers: FC<Props> = ({ users }) => {
+  const userSlice = uniqBy(users.slice(0, 4), '_id');
   const userLeft = users.length - 4;
+
   return (
-    <div className={"flex items-center"}>
-      {usersOnTop4.map((user) => (
+    <div className="flex items-center">
+      {userSlice.map((user, index) => (
         <img
-          key={user._id}
-          src={user.avatar}
+          key={`${index}-${user._id}`}
+          title={user.bizfullname}
+          src={user.image ? `${process.env.REACT_APP_URL_S3_USER}/${user.image}` : '/images/common/thumbnail.png'}
           alt="Thumbnail"
           className="w-8 h-8 rounded-full border-2 border-pink-600 mr-1"
         />
@@ -35,5 +33,3 @@ const AccessingUsers: FC<Props> = ({ users }) => {
     </div>
   );
 };
-
-export default AccessingUsers;

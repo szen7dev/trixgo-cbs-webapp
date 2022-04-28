@@ -247,8 +247,8 @@ const TimeSheetHomePage: FC = () => {
                 </NavLink>
                 <p className={"mt-1 text-gray-500"}>
                   {timeSheetParent?.userCreate?.fullname}
-                  {moment(timeSheetParent.createdAt).isValid() &&
-                    moment(timeSheetParent.createdAt).format(DATE_FORMAT)}
+                  {moment(timeSheetParent.createAt).isValid() &&
+                    moment(timeSheetParent.createAt).format(DATE_FORMAT)}
                 </p>
               </div>
               <div className={"px-2 py-4 table-cell box-border border-b"}>

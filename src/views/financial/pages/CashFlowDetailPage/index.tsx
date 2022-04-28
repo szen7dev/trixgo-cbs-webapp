@@ -12,9 +12,12 @@ import styles from "views/support/styles/support.module.css";
 import DeleteIcon from "assets/images/icons8-remove.svg";
 
 /*=====4.PAGES/COMPONENTS=====*/
-import { SearchInput, ModalConfirm } from "shareComponents/common";
+import { SearchInput, ModalConfirm, Loader } from "shareComponents/common";
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
+import { AccessingUsers } from "../../sharedComponents/common";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import ModalShare from "./components/ModalShare";
 
 /*=====5.TYPINGS=====*/
 
@@ -23,6 +26,7 @@ import { useModal } from "services/hooks/useModal";
 import { useContract } from "services/hooks/items/useContract";
 import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import CashFlowPlan from "typings/financial/cashFlowPlan";
+import { User } from "typings/user";
 
 export const CashFlowDetailPage: FC = () => {
 	const { cashFlowId } = useParams<{ cashFlowId: string }>();
@@ -34,19 +38,37 @@ export const CashFlowDetailPage: FC = () => {
     const [itemsChecked, setItemsChecked] = useState<string[]>([]);
     const [dataCashFlow, setDataCashFlow] = useState<CashFlowPlan.CashFlowPlan[]>([]);
 
+    const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
+        isShow: false,
+        users: [],
+        modalType: 'members'
+    });
+
+    const { info: cashFlowInfo, isLoadingInfo, refetchInfo } = useCashFlowPlan({
+        params: {
+            cashFlowID: cashFlowId,
+            populates: JSON.stringify({
+                path: 'admins members',
+                select: '_id bizfullname image'
+            })
+        },
+        isFetchInfo: true
+    })
+
     const {
         insertAsync,
         updateAsync,
         deleteManyAsync,
         list: listCashFlowPlans,
+        isLoading,
         hasNextPage,
         refetch,
         fetchNextPage,
         totalRecord
     } = useCashFlowPlan({
-        params: { 
+        params: {
             parentID: cashFlowId,
-            keyword, 
+            keyword,
             sortKey: JSON.stringify(['createAt__1', '_id__1'])
         },
         isFetchList: true
@@ -187,6 +209,13 @@ export const CashFlowDetailPage: FC = () => {
         }
     }
 
+    const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
+        setModalShare({ isShow: !modalShare.isShow, users, modalType });
+
+    if(isLoading || isLoadingInfo || !cashFlowInfo) return <Loader className="border-primary" />
+
+    const usersShared = [...cashFlowInfo.admins, ...cashFlowInfo.members];
+
     return (
         <main className="relative h-full overflow-auto">
             <header className="sticky top-0 bg-primary-light z-10">
@@ -220,6 +249,17 @@ export const CashFlowDetailPage: FC = () => {
                                 <img src={DeleteIcon} alt="Delete" />
                             </button>
                         ) : ''}
+                    </div>
+                    <div className={"flex-1 flex items-center justify-end"}>
+                        <button
+                            className="text-gray-400 mr-2"
+                            onClick={() => toggleModalShare('admins', cashFlowInfo.admins)}
+                        >Admin ({cashFlowInfo.admins?.length})</button> |
+                        <button
+                            className="text-gray-400 mr-2 ml-2"
+                            onClick={() => toggleModalShare('members', cashFlowInfo.members)}
+                        >Thành viên ({cashFlowInfo.members?.length})</button>
+                        <AccessingUsers users={usersShared} />
                     </div>
                 </div>
             </header>
@@ -311,6 +351,20 @@ export const CashFlowDetailPage: FC = () => {
                     </button>
                 </div>
             )}
+
+            <ModalLarge
+                show={modalShare.isShow}
+                toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
+            >
+                <ModalShare
+                    toggle={() => setModalShare(prev => ({ ...prev, isShow: !modalShare.isShow }))}
+                    refetch={refetchInfo}
+                    cashFlowID={cashFlowId}
+                    users={modalShare.users}
+                    modalType={modalShare.modalType}
+                />
+            </ModalLarge>
         </main>
     );
 };
