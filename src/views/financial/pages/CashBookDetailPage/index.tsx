@@ -1,5 +1,5 @@
 import { UIEvent, FC, useEffect, useState, useCallback, ChangeEvent } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Redirect } from 'react-router-dom';
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 
@@ -31,6 +31,7 @@ import { useCashBook, useCashBookCustom } from 'services/hooks/financial/useCash
 import { useContract } from "services/hooks/items/useContract";
 import { useContact } from "services/hooks/items/useContact";
 import { useAccount } from "services/hooks/items/useAccount";
+import { useAuth } from "services/hooks/auth/useAuth";
 import { CashBook } from "typings/financial/cashBook";
 import { User } from "typings/user";
 
@@ -52,13 +53,15 @@ export const CashBookDetailPage: FC = () => {
     isShow: false,
     users: [],
     modalType: 'members'
-});
+  });
+
+  const { user } = useAuth();
 
   const { info: cashBookInfo, isLoadingInfo, refetchInfo } = useCashBook({
     params: {
       cashBookID: cashbookId,
       populates: JSON.stringify({
-        path: 'admins members',
+        path: 'admins members userCreate',
         select: '_id bizfullname image'
       })
     },
@@ -306,9 +309,18 @@ export const CashBookDetailPage: FC = () => {
   const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
     setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
-  if(isLoadingInfo || isLoading || !cashBookInfo) return <Loader className="border-primary" />
+  if(isLoadingInfo || isLoading || !cashBookInfo || !user) return <Loader className="border-primary" />
 
-  const usersShared = [...cashBookInfo.admins, ...cashBookInfo.members];
+  const usersShared = [...cashBookInfo?.admins, ...cashBookInfo?.members];
+  const usersIDShared = [
+    ...cashBookInfo.admins.map(item => item._id),
+    ...cashBookInfo.members.map(item => item._id),
+    cashBookInfo.userCreate?._id
+  ];
+
+  if(!usersIDShared.includes(user?._id)) {
+    return <Redirect to='/financial/cashbook' />
+  }
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
