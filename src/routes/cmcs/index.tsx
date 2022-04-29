@@ -147,7 +147,8 @@ const CmcsRouter: FC = () => {
 
             <ProtectedRoute
                 exact
-                path="/cmcs/contract/:id/spending"
+                path="/cmcs/contract/:id/expense"
+                // path="/cmcs/contract/:id/spending"
                 component={() => (
                     <CmcsContractLayout>
                         <ContractExpense />
