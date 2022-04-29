@@ -44,9 +44,11 @@ interface NewContractIncomeModalProps {
   title?: string;
   idEdit?: string;
   isEdit?: boolean;
+  outin?: number;
 }
 
 const mappingData = (data: any, isDataPayLoad = false) => {
+  console.log({ data })
   return {
     contractID: data.contractID,
     projectID: isDataPayLoad ? data?.projectID?.value : convertInitialValueDropdown(data?.project, '_id', 'sign', '.', 'name'),
@@ -77,7 +79,6 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     startTime: convertDateToString(data.date),
     lock: isDataPayLoad ? data?.lock?.value : convertInitialValueDropdownForLocalDB(CONTRACT_LOCK, data?.lock),
     endTime: convertDateToString(data.endTime),
-
     value: Number(data.value) || 0,
     vatValue: Number(data.vatValue) || 0,
     plus: Number(data.plus) || 0,
@@ -118,7 +119,7 @@ const mappingData = (data: any, isDataPayLoad = false) => {
   }
 }
 
-export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false }) => {
+export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues, onFinish, title, idEdit = '', isEdit = false, outin = 1 }) => {
   const [openManagementInfo, setOpenManagementInfo] = useState(false);
   const [openGeneralInfo, setOpenGeneralInfo] = useState(false);
   const [openAcceptancePayment, setOpenAcceptancePayment] = useState(false);
@@ -305,7 +306,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           (value) => setSearchProjectValue(value),
                           500
                         )}
-                        initialValue={initialValues?.projectID}
+                        initialValue={initialValues?.projectID }
                         renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
@@ -461,10 +462,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
+                        disabled={true}
                         renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
-                        initialValue={initialValues?.outin}
+                        initialValue={initialValues?.outin || {value: outin, label: outin == 1?"Bán ra": "Mua vào"}}
                         data={CONTRACT_OUTIN.map(item => ({
                           value: item.value,
                           label: item.text
