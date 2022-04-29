@@ -245,11 +245,13 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
     personInCharge: object().required(MESSAGE_ERROR.required),
     real: object().required(MESSAGE_ERROR.required),
     type: object().required(MESSAGE_ERROR.required),
-
+    date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
     sign: string().required(MESSAGE_ERROR.required),
-  });
-  console.log({ initialValues })
+    buyerInfo: string().required(MESSAGE_ERROR.required),
+    sellerInfo: string().required(MESSAGE_ERROR.required),
+  })
+  // console.log({ initialValues })
   return (
     <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
@@ -845,7 +847,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                   </div>
 
                   <div>
-                    <p className="text-primary-gray text-xs mb-2">Bên mua</p>
+                    <p className="text-primary-gray text-xs mb-2">Bên mua (*)</p>
                     <DropdownSearchable
                       onchangeValue={(value: any) => setFieldValue("buyerInfo", value)}
                       placeholder="Bên mua..."
@@ -874,6 +876,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       }}
                       inlineSearch={true}
                     />
+                    <ErrorMessage
+                        name="projectID"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                   </div>
 
                   <div>
@@ -921,7 +928,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                   </div>
 
                   <div>
-                    <p className="text-primary-gray text-xs mb-2">Bên bán</p>
+                    <p className="text-primary-gray text-xs mb-2">Bên bán (*)</p>
                     <DropdownSearchable
                       onchangeValue={(value: any) => setFieldValue("sellerInfo", value)}
                       placeholder="Bên bán..."
@@ -954,6 +961,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                       }}
                       inlineSearch={true}
                     />
+                    <ErrorMessage
+                        name="projectID"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                   </div>
 
                   <div>
@@ -1020,6 +1032,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                         placeholder: "Ngày ký",
                       }}
                     />
+                    <ErrorMessage
+                        name="projectID"
+                        component="span"
+                        className="font-normal leading-7 text-sm text-negative"
+                      />
                   </div>
 
                   <div>
