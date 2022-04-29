@@ -22,7 +22,6 @@ interface UseContractExpense {
     refetch: () => void;
     fetchNextPage: () => void;
     fetchPreviousPage: () => void;
-    nextCursor: string,
     insertAsync: (params: InsertContractPayload) => Promise<any>;
     updateAsync: (params: UpdateContractPayload) => Promise<any>;
     deleteAsync: (params: DeleteMultiContractPayload) => Promise<any>;
@@ -61,7 +60,7 @@ export const useContractExpense = ({
 
     // Get info
     const { data: detailData } =
-        useQuery("contract_expense__info", () => ContractExpenseRepository.fetchInfo({ expenseID: params.expenseID || '' }), {
+        useQuery("contract_expense__info", () => ContractExpenseRepository.fetchInfo({ contractID: params.contractID || '' }), {
             refetchOnWindowFocus: false,
             enabled: isFetchInfo,
         });
@@ -99,7 +98,6 @@ export const useContractExpense = ({
 
     const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
     const totalPage = data?.pages[0]?.data?.totalPage || 0;
-    const nextCursor = data?.pages[0]?.data?.nextCursor
 
     // Return data
     return {
@@ -110,7 +108,6 @@ export const useContractExpense = ({
         totalPage,
         hasNextPage,
         refetch,
-        nextCursor,
         fetchNextPage,
         fetchPreviousPage,
         insertAsync,
