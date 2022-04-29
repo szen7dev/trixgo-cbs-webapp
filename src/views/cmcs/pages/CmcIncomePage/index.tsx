@@ -105,7 +105,7 @@ export const CmcIncomePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" outin={1}/>
       </div>
     )
   }
@@ -116,7 +116,7 @@ export const CmcIncomePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" />
+        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" outin={1}/>
       </div>
     )
   }
