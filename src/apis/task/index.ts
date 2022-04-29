@@ -15,6 +15,7 @@ import {
   ListResponsePayload,
   SearchResponsePayload,
   AddRelationUserPayload,
+  CopyTaskPayload,
   addTaskPayload,
   addTaskResponse,
   CommentPayload,
@@ -100,7 +101,7 @@ const TaskRepository = {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         taskID,
-        select: "name description type typeStatus status priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags",
+        select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags",
         populates: populatesTask,
       })}`
     );
@@ -111,6 +112,14 @@ const TaskRepository = {
   async addRelationUser(payload: AddRelationUserPayload): Promise<any> {
     const { data } = await API.put<any>(
       `${pcmURL}/pcm_plan_tasks`,
+      payload
+    );
+    return data;
+  },
+
+  async copyTask(payload: CopyTaskPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/copy-task`,
       payload
     );
     return data;

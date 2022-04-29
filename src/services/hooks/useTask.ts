@@ -8,6 +8,7 @@ import {
   ResponseProps, ResponsePayload,
   CommentPayload, ListCommentsPayload,
   AddRelationUserPayload,
+  CopyTaskPayload,
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
   ListReactionPayload,
@@ -25,6 +26,7 @@ import {
 
 type UseTask = {
   addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
+  copyTaskAsync: (payload: CopyTaskPayload) => Promise<any>;
   listTasks: Array<Task>;
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
@@ -71,6 +73,11 @@ export const useTask = ({
       TaskRepository.addRelationUser(payload)
     );
 
+  const { mutateAsync: copyTaskAsync } =
+    useMutation((payload: CopyTaskPayload) =>
+      TaskRepository.copyTask(payload)
+    );
+
   const {
     isLoading: isLoadingListTask,
     data: dataListTask,
@@ -105,6 +112,7 @@ export const useTask = ({
 
   return {
     addRelationUserAsync,
+    copyTaskAsync,
     updateTaskAsync,
     addTaskAsync,
     listTasks,

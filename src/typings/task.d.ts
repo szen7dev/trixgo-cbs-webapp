@@ -103,6 +103,7 @@ export interface updateTaskPayload {
   name?: string;
   status?: number;
   priority?: number;
+  draft?: number;
   actualFinishTime?: string;
   isAddSignature?: boolean;
   flags?: Array<string>;
@@ -131,6 +132,10 @@ export type ListTaskResponse = APIResponse & {
 export type AddRelationUserPayload = {
   taskID: string,
   related?: Array<string>;
+};
+
+export type CopyTaskPayload = {
+  taskID: string,
 };
 
 /**
