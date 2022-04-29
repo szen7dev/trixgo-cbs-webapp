@@ -52,7 +52,6 @@ export const ContractExpenseModal: FC<NewContractProduceModalProps> = ({ default
   const [openRealizedOutput, setOpenRealizedOutput] = useState(false);
   const { closeModal } = useModal();
   const [initialValues, setInitialValues] = useState(mappingData({}));
-  // const { detailContract } = useDetailContractProduceMutation(idEdit);
   const { info } = useContractSpending({ params: { expenseID: idEdit }, isFetchList: false, isFetchInfo: true })
 
   useEffect(() => {

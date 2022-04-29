@@ -462,11 +462,11 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
                           "cursor-not-allowed rounded",
                           styles.disabledBg
                         )}
-                        disabled={true}
+                        // disabled={true}
                         renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-fit whitespace-normal" >
                           <p className="text-1-line-clamp">{`${item.text}`}</p>
                         </Popover>}
-                        initialValue={initialValues?.outin || {value: outin, label: outin == 1?"Bán ra": "Mua vào"}}
+                        initialValue={initialValues?.outin}
                         data={CONTRACT_OUTIN.map(item => ({
                           value: item.value,
                           label: item.text
