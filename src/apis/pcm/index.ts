@@ -99,7 +99,6 @@ const PcmRepository = {
         return data;
     },
 
-    // Danh sách pcm_plan_group
     async listPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_groups?${convertObToUrl({

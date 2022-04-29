@@ -8,13 +8,16 @@ import {
   ResponseProps, ResponsePayload,
   CommentPayload, ListCommentsPayload,
   AddRelationUserPayload,
+  CopyTaskPayload,
   UpdateStatusCheckListPayload,
   ReactionCommentPayload,
   ListReactionPayload,
   ReactionCommentProps,
   updateTaskPayload,
   CommentProps,
-  UpdateResponsePayload
+  UpdateResponsePayload,
+  MoveTaskToParentPayload,
+  MoveTaskToGroupPayload
 } from "typings/task";
 
 /**
@@ -25,6 +28,9 @@ import {
 
 type UseTask = {
   addRelationUserAsync: (payload: AddRelationUserPayload) => Promise<any>;
+  copyTaskAsync: (payload: CopyTaskPayload) => Promise<any>;
+  moveTaskToParentAsync: (payload: MoveTaskToParentPayload) => Promise<any>;
+  moveTaskToGroupAsync: (payload: MoveTaskToGroupPayload) => Promise<any>;
   listTasks: Array<Task>;
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
@@ -71,6 +77,21 @@ export const useTask = ({
       TaskRepository.addRelationUser(payload)
     );
 
+  const { mutateAsync: copyTaskAsync } =
+    useMutation((payload: CopyTaskPayload) =>
+      TaskRepository.copyTask(payload)
+    );
+
+  const { mutateAsync: moveTaskToParentAsync } =
+    useMutation((payload: MoveTaskToParentPayload) =>
+      TaskRepository.moveTaskToParent(payload)
+    );
+
+  const { mutateAsync: moveTaskToGroupAsync } =
+    useMutation((payload: MoveTaskToGroupPayload) =>
+      TaskRepository.moveTaskToGroup(payload)
+    );
+
   const {
     isLoading: isLoadingListTask,
     data: dataListTask,
@@ -105,6 +126,9 @@ export const useTask = ({
 
   return {
     addRelationUserAsync,
+    copyTaskAsync,
+    moveTaskToParentAsync,
+    moveTaskToGroupAsync,
     updateTaskAsync,
     addTaskAsync,
     listTasks,
