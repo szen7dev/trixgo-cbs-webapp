@@ -38,7 +38,7 @@ const fieldInputByRow = [
 		type: "datepicker",
 	},
 	{
-		title: "Mã hiệu (*)",
+		title: "Mã hiệu",
 		name: "sign",
 		type: "text",
 	},
@@ -530,7 +530,7 @@ export const ModalCreateDocumentChild: React.FC<Props> = ({ isShow, toggle, docu
 										</div>
 
 										<div className="py-1.5 h-[30px] box-content">
-											<p className="py-1.5">Cơ quan, tổ chức (*)</p>
+											<p className="py-1.5">Cơ quan, tổ chức</p>
 										</div>
 										<div className="py-0.5 h-[30px] box-content px-2">
 											<DropdownSearchable
