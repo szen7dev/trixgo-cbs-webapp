@@ -130,12 +130,22 @@ export type ListTaskResponse = APIResponse & {
 };
 
 export type AddRelationUserPayload = {
-  taskID: string,
+  taskID: string;
   related?: Array<string>;
 };
 
 export type CopyTaskPayload = {
-  taskID: string,
+  taskID: string;
+};
+
+export type MoveTaskToParentPayload = {
+  parentID: string;
+  taskID: string;
+};
+
+export type MoveTaskToGroupPayload = {
+  groupID: string;
+  taskID: string;
 };
 
 /**

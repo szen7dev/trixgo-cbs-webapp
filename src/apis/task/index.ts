@@ -16,6 +16,8 @@ import {
   SearchResponsePayload,
   AddRelationUserPayload,
   CopyTaskPayload,
+  MoveTaskToParentPayload,
+  MoveTaskToGroupPayload,
   addTaskPayload,
   addTaskResponse,
   CommentPayload,
@@ -120,6 +122,22 @@ const TaskRepository = {
   async copyTask(payload: CopyTaskPayload): Promise<any> {
     const { data } = await API.post<any>(
       `${pcmURL}/pcm_plan_tasks/copy-task`,
+      payload
+    );
+    return data;
+  },
+
+  async moveTaskToParent(payload: MoveTaskToParentPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/move-task-to-parent`,
+      payload
+    );
+    return data;
+  },
+
+  async moveTaskToGroup(payload: MoveTaskToGroupPayload): Promise<any> {
+    const { data } = await API.post<any>(
+      `${pcmURL}/pcm_plan_tasks/move-task-to-group`,
       payload
     );
     return data;

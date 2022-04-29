@@ -5,6 +5,6 @@ const modalState = {
 };
 
 export type StateProps = Omit<typeof modalState, "type"> & {
-  type: "relation" | "email";
+  type: "relation" | "email" | 'move-task-to-parent' | 'move-task-to-group';
 };
 export default modalState;
