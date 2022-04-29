@@ -9,7 +9,7 @@ import moment from "moment";
  */
 import { CONTRACT_COME_IN_STATUS, DATE_FORMAT } from "apis/localdb/index";
 import { SearchInput, Paginate } from "shareComponents/common";
-import { ExpenseFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
+import { IncomeFormModal, ExpenseFormModal, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import { APP_ID } from "apis/localdb";
 import styles from 'views/cmcs/styles/styles.module.css';
@@ -30,6 +30,7 @@ export const CmcExpensePage: FC = () => {
     menuID: APP_ID.CMCS.menuCmcsApp.expense.id,
     type: "1"
   };
+
   const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
   // ---------
   const { createHistoryTraffics } = useHistoryTraffics();
@@ -40,7 +41,6 @@ export const CmcExpensePage: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
   const [keyword, setKeyword] = useState('');
   const { openModal } = useModal();
-
   const {
     insertAsync: insertContractExpenseAsync,
     updateAsync: updateContractExpenseAsync,
@@ -66,9 +66,9 @@ export const CmcExpensePage: FC = () => {
   const handleFinishForm = useCallback(async (values, isEdit = false) => {
     let res: any
     if (isEdit) {
-      res = await updateContractExpenseAsync(values);
+      res = await updateContractExpenseAsync({ ...values, outin: 2 });
     } else {
-      res = await insertContractExpenseAsync(values);
+      res = await insertContractExpenseAsync({ ...values, outin: 2 });
     }
 
     if (res.code && res.code !== 200) {
@@ -103,7 +103,7 @@ export const CmcExpensePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ExpenseFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" />
+        <IncomeFormModal onFinish={handleFinishForm} idEdit={itemChecked} isEdit title="Cập nhật" outin={2} />
       </div>
     )
   }
@@ -114,7 +114,7 @@ export const CmcExpensePage: FC = () => {
           "inline-block w-screen h-screen overflow-hidden transition-all transform flex justify-center bg-transparent shadow-xl rounded absolute left-0 right-0 top-10"
         }
       >
-        <ExpenseFormModal onFinish={handleFinishForm} title="Tạo mới" />
+        <IncomeFormModal onFinish={handleFinishForm} title="Tạo mới" outin={2}/>
       </div>
     )
   }
