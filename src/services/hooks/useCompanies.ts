@@ -17,7 +17,7 @@ interface UseQueryListCompany {
 
 export const useQueryListCompany = (params?: QueryParam): UseQueryListCompany => {
     const result = useInfiniteQuery(
-        `list_company.${params?.keyword}`, 
+        ['list_company', params],
         async ({ pageParam }: any) =>
         CompanyRepository.companyList({
             lastestID: pageParam,

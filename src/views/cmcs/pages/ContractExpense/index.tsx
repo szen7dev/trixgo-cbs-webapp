@@ -23,6 +23,7 @@ import {
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useContractExpense } from "services/hooks/cmcs/useContractExpense";
 import { useParams } from "react-router-dom";
+import { useContractSpending } from "services/hooks/cmcs/useContractSpending";
 
 export const ContractExpense: FC = () => {
   const [itemChecked, setItemChecked] = useState('');
@@ -31,8 +32,7 @@ export const ContractExpense: FC = () => {
   const [prevCursor, setPrevCursor] = useState<any>([null]);
   const { openModal } = useModal();
 	const { id: contractID } = useParams<{ id: string }>();
-  // const contractProduce = UseContractProduceList(pageParam, params.id);
-  const {  
+  const { 
     isLoading,
     list: listContractExpense,
     info,
@@ -45,11 +45,7 @@ export const ContractExpense: FC = () => {
     nextCursor,
     insertAsync,
     updateAsync,
-    deleteAsync } = useContractExpense({ params: { keyword, lastestID: pageParam, contractID, limit: 20  }, isFetchList: true })
-
-  const { createContractProduceMutateAsync } = useCreateContractProduceMutation();
-  const { updateContractProduceMutateAsync } = useUpdateContractProduceMutation();
-  const { deleteContractProduceMutateAsync } = useDeleteContractProduceMutation();
+    deleteAsync } = useContractSpending({ params: { keyword, lastestID: pageParam, contractID, limit: 20  }, isFetchList: true })
 
   useEffect(() => {
     if (!nextCursor) {
@@ -68,25 +64,22 @@ export const ContractExpense: FC = () => {
       const prev = prevCursor.findIndex((item: any) => item === nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
-
   };
 
   const nextPageAction = () => {
     setPageParam(nextCursor)
   }
-
   const { openDeleteConfirm } = useDeleteConfirm();
-
   const handleDeleteAction = async () => {
     if (!itemChecked) {
       return
     }
     openDeleteConfirm({
       deleteAction: async () => {
-        const res = await deleteContractProduceMutateAsync(itemChecked)
-        if (!res.error) {
-          refetch()
-        }
+        // const res = await deleteContractProduceMutateAsync(itemChecked)
+        // if (!res.error) {
+        //   refetch()
+        // }
       },
     });
   }
@@ -125,7 +118,6 @@ export const ContractExpense: FC = () => {
   }, [listContractExpense]);
 
   const handleOnFilter = useCallback((values) => {
-
     // setPageParam(() => ({ ...values }));
     return true;
   }, []);
@@ -255,7 +247,8 @@ export const ContractExpense: FC = () => {
 
       <Paginate
         totalPages={totalPage}
-        totalRecord={totalRecord}
+        totalRecord={totalRecord} hasNextPage
+        limit={20}
         prevPageAction={() => prevPageAction()}
         nextPageAction={() => nextPageAction()} />
     </main>

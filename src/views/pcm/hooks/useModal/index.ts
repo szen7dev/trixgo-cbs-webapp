@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import useCustomReducer from "services/hooks/useCustomReducer";
 import modalActions from "./modal.actions";
 import modalReducers from "./modal.reducer";

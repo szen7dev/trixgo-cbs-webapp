@@ -1,8 +1,7 @@
-// MỤC ĐÍCH: TƯƠNG TÁC VỚI DB
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import PcmRepository from 'apis/pcm';
 
-export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: boolean ): any => {
+export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: boolean): any => {
     // Tạo group
     const { mutateAsync: createPcmPlanGroupMutateAsync, isLoading: isLoadingCreatePcmPlanGroup } =
         useMutation((payload: any) => PcmRepository.insertPcmPlanGroup(payload)
@@ -12,21 +11,21 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
     const { mutateAsync: updatePcmPlanGroupMutateAsync, isLoading: isLoadingUpdatePcmPlanGroup } =
         useMutation((payload: any) =>PcmRepository.updatePcmPlanGroup(payload)
     );
-    
+
     // Xoá group
     const { mutateAsync: removeManyPcmPlanGroupMutateAsync, isLoading: isManyAppRole } =
         useMutation((payload: any) => PcmRepository.removeManyPcmPlanGroup(payload)
     );
-    
-    // info group 
+
+    // info group
     const {
-        data: infoGroup, 
-        refetch: refetchInfoGroup 
+        data: infoGroup,
+        refetch: refetchInfoGroup
     } = useQuery(`pcm_group_info.${params}`, () => PcmRepository.infoPcmPlanGroup(params), {
         enabled: isFetchInfo ?? false,
         refetchOnWindowFocus: false,
     });
-    
+
     // Danh sách group
     const {
         isLoading,
@@ -55,7 +54,7 @@ export const usePcmPlanGroup = (params: any, isFetch?: boolean, isFetchInfo?: bo
     const listPcmPlanGroup = [].concat(...(data?.pages || []).map((d: any) => d.data?.listRecords)).filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPage = data?.pages[0]?.data?.totalPage;
-    
+
     return {
         // get List
         isLoading,
