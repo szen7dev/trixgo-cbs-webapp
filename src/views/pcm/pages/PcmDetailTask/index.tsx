@@ -39,6 +39,8 @@ import {
   RelatedResponse,
   ModalUpdateTask,
   ModalUpdateTaskStatus,
+  ModalMoveTaskToParent,
+  ModalMoveTaskToGroup
 } from "./components";
 import { ReplyCommentField, RootCommentsList } from "../../shareComponents/common";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
@@ -72,7 +74,13 @@ const PcmDetailTask: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { openModal, closeModal } = useModal();
-  const [{ isShow, type }, { toggleModal, openAddUserRelation, openAddNotificationEmail }] = useModalPcm();
+  const [{ isShow, type }, {
+    toggleModal,
+    openAddUserRelation,
+    openAddNotificationEmail,
+    openMoveTaskToParent,
+    openMoveTaskToGroup
+  }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
   const { user } = useAuth();
@@ -373,12 +381,12 @@ const PcmDetailTask: FC = () => {
 
         <div className="task-management-header-right-block flex items-center">
           <DropdownOption>
-            <Menu.Item onClick={() => ''}>
+            <Menu.Item onClick={openMoveTaskToParent}>
               <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Di chuyển tới việc cha</div>
               </div>
             </Menu.Item>
-            <Menu.Item onClick={() => ''}>
+            <Menu.Item onClick={openMoveTaskToGroup}>
               <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
                   <div className={"flex-1 text-left ml-4"}>Di chuyển tới nhóm dữ liệu</div>
               </div>
@@ -602,21 +610,49 @@ const PcmDetailTask: FC = () => {
               )}
             </div>
           </div>
+          {/*
+            Modal
+            + Add relation user
+            + Send mail
+            + Move task to parent
+            + Move task to group
+          */}
           <ModalLarge
             show={isShow}
             toggle={toggleModal}
             className="inline-flex flex-col text-black w-full my-8 overflow-hidden text-left align-middle transition-all transform bg-white max-w-[600px] rounded-cbs-md"
           >
-            {type === 'relation' && <ModalAddRelationUser
-              toggle={toggleModal}
-              taskID={id}
-              projectID={taskInfo?.project?._id || ''}
-              refetch={refetchInfoTask}
-              related={taskInfo?.related}
-              modalType={'ADD_RELATION_USER'}
-            />}
-            {type === 'email' && <ModalAddNotificationEmail toggle={toggleModal} task={taskInfo} />}
+            {type === 'relation' &&
+              <ModalAddRelationUser
+                toggle={toggleModal}
+                taskID={id}
+                projectID={taskInfo?.project?._id || ''}
+                refetch={refetchInfoTask}
+                related={taskInfo?.related}
+                modalType={'ADD_RELATION_USER'}
+              />}
+
+            {type === 'email' &&
+              <ModalAddNotificationEmail
+                toggle={toggleModal}
+                task={taskInfo}
+              />}
+
+            {type === 'move-task-to-parent' &&
+              <ModalMoveTaskToParent
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
+
+            {type === 'move-task-to-group' &&
+              <ModalMoveTaskToGroup
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
           </ModalLarge>
+          {/* Modal update status task */}
           <ModalUpdateTaskStatus
             taskID={taskInfo._id}
             status={taskInfo.status}
