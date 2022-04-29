@@ -1,21 +1,26 @@
-import { FC, useState } from "react";
+import { FC, UIEvent, useState } from "react";
 import { Formik, Form } from "formik";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import debounce from "lodash/debounce";
-import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
 
-import { useQueryListDoctype } from "services/hooks/useHuman";
-import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
-import { useQueryListFriend } from "services/hooks/users/useFriend";
-import { useQueryListCompany } from "services/hooks/useCompanies";
-
-import { DropdownSearchable } from "shareComponents/common";
-import { ModalCreateResultSearch } from "./components";
-
+/**
+ * Components, Assets
+ */
 import TagIcon from "assets/images/icons8-price-tag-96.svg";
 import fakeThumbnail from "assets/images/avatar.jpg";
+import { DropdownSearchable } from "shareComponents/common";
+import { ModalCreateResultSearch } from "./components";
+import { PCM_PROPOSAL_TASK, PCM_STATUS_TASK } from "apis/localdb/index";
+
+/**
+ * Hooks, Typings
+ */
 import { useModal } from "services/hooks/useModal";
+import { useUserSystem } from "services/hooks/users/useUserSystem";
+import { useQueryListDoctype } from "services/hooks/useHuman";
+import { useQueryListDepartmentsIsMember } from "services/hooks/items/useDepartment";
+import { useQueryListCompany } from "services/hooks/useCompanies";
 
 type Props = {
   handleFilterData: (filterData: any) => void,
@@ -31,7 +36,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
 
   const [searchDepartmentValue, setSearchDepartmentValue] = useState("");
   const [otherFieldValue, setOtherFieldValue] = useState("");
-  const [searchFriendName, setSearchFriendName] = useState("");
+  const [searchUserSystem, setSearchUserSystem] = useState("");
   const [searchCompanyName, setSearchCompanyName] = useState("");
 
   const { data: listDepartments } = useQueryListDepartmentsIsMember({
@@ -39,17 +44,42 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
     keyword: searchDepartmentValue,
     isFetch: true
   });
+
   const { listDoctypes } = useQueryListDoctype({ 
     limit: 50,
     type: 2,
     keyword: otherFieldValue
   });
-  const { data: listFriend } = useQueryListFriend({
-    keyword: searchFriendName
-  });
-  const { data: listCompany } = useQueryListCompany({
-    keyword: searchCompanyName
-  });
+
+  const {
+    data: listUsersSystem,
+    hasNextPage: hasNextPageUserSystem,
+    fetchNextPage: fetchNextPageUserSystem,
+  } = useUserSystem({ keyword: searchUserSystem }, true);
+
+  const {
+    data: listCompany,
+    hasNextPage: hasNextPageCompany,
+    fetchNextPage: fetchNextPageCompany
+  } = useQueryListCompany({ keyword: searchCompanyName });
+
+  const handleScrollUserSystem = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageUserSystem) {
+      fetchNextPageUserSystem();
+    }
+  }
+
+  const handleScrollCompany = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if(bottom && hasNextPageCompany) {
+      fetchNextPageCompany();
+    }
+  }
 
   return (
     <>
@@ -66,12 +96,12 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <DropdownSearchable
                     onchangeValue={(value) => {
                         setFieldValue("assigneeID", value?.id);
-                        setSearchFriendName("");
+                        setSearchUserSystem("");
                       }
                     }
                     onClearData={() => setFieldValue("assigneeID", "")}
                     onSearchInputChange={debounce(
-                      (value) => setSearchFriendName(value),
+                      (value) => setSearchUserSystem(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
@@ -80,6 +110,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
+                    onScroll={handleScrollUserSystem}
                     renderSelectedItem={(item) => (
                       <div
                         style={{ width: 100 }}
@@ -100,7 +131,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                         </p>
                       </div>
                     )}
-                    data={listFriend.map((item) => ({
+                    data={listUsersSystem.map((item) => ({
                       label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,
@@ -131,6 +162,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
+                    onScroll={handleScrollCompany}
                     renderSelectedItem={(item) => (
                       <div
                         style={{ width: 100 }}
@@ -201,13 +233,12 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                   <p className={"t-main-search-filter-item-title text-gray-500 mr-2 text-[14px]"}>Người tạo</p>
                   <DropdownSearchable
                     onchangeValue={(value) => {
-                        setFieldValue("authorID", value?.id);
-                        setSearchFriendName("");
-                      }
-                    }
+                      setFieldValue("authorID", value?.id);
+                      setSearchUserSystem("");
+                    }}
                     onClearData={() => setFieldValue("authorID", "")}
                     onSearchInputChange={debounce(
-                      (value) => setSearchFriendName(value),
+                      (value) => setSearchUserSystem(value),
                       500
                     )}
                     className={"t-main-search-filter-item-dropdown w-full flex-1 border-b border-gray-200"}
@@ -216,6 +247,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                     allowClearValueSingleInput={true}
                     showTriangle={false}
                     maxWidthInput="max-w-none"
+                    onScroll={handleScrollUserSystem}
                     renderSelectedItem={(item) => (
                       <div
                         style={{ width: 100 }}
@@ -236,7 +268,7 @@ export const MainSearchFilter: FC<Props> = ({ handleFilterData, toggleSearchFilt
                         </p>
                       </div>
                     )}
-                    data={listFriend.map((item) => ({
+                    data={listUsersSystem.map((item) => ({
                       label: item.bizfullname || item.fullname,
                       value: item._id,
                       imgUrl: item.imgUrl,

@@ -6,7 +6,7 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import CollapseHoriIcon from "assets/images/icon-collapse-hori.svg";
 import CollapseVertiIcon from "assets/images/icon-collapse-verti.svg";
 import { DropdownSearchable, Popover } from "shareComponents/common";
-import { useContractExpense } from "services/hooks/cmcs/useContractExpense";
+import { useContractSpending } from "services/hooks/cmcs/useContractSpending";
 
 import moment from "moment";
 import { DATE_FORMAT } from "apis/localdb/index";
@@ -53,7 +53,8 @@ export const ContractExpenseModal: FC<NewContractProduceModalProps> = ({ default
   const { closeModal } = useModal();
   const [initialValues, setInitialValues] = useState(mappingData({}));
   // const { detailContract } = useDetailContractProduceMutation(idEdit);
-  const { info } = useContractExpense({ params: { expenseID: idEdit }, isFetchList: false, isFetchInfo: true })
+  const { info } = useContractSpending({ params: { expenseID: idEdit }, isFetchList: false, isFetchInfo: true })
+
   useEffect(() => {
     if(!idEdit || !info)
       return;
