@@ -32,7 +32,7 @@ export const UseAccountingVoucherList = (pageParam = '', type: number, limit = 1
         },
         { keepPreviousData: true }
     );
-    const listAccountingVoucher = data?.data?.listVoucher
+    const listAccountingVoucher = data?.data?.listRecords
     const totalRecord = data?.data?.totalRecord
     const totalPage = data?.data?.totalPage
     const nextCursor = data?.data?.nextCursor

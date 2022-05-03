@@ -1,12 +1,12 @@
 import API from "../repository";
 
-const APP_ACCOUNTING = "/api/accounting/voucher";
-const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
+const APP_ACCOUNTING = "/api/accounting/vouchers";
+const APP_ACCOUNTING_JOURNAL = "/api/accounting/journals";
 const HISTORY_TRAFFICS = "/api/analysis/history_traffics";
 
 async function fetchList<T>(params: any): Promise<T> {
     const { data } = await API.get(
-        `${APP_ACCOUNTING}/list-voucher`,
+        `${APP_ACCOUNTING}`,
         {
             params: {
                 select: "name date type createAt sign amount note",
@@ -46,7 +46,7 @@ async function fetchDetailAccountingVoucher<T>(params: any): Promise<T> {
 
 async function requestCreateAccountingVoucher(formData: any): Promise<any> {
     const { data } = await API.post(
-        `${APP_ACCOUNTING}/insertFull`,
+        `${APP_ACCOUNTING}`,
         {
             ...formData
         }
@@ -65,8 +65,8 @@ async function requestHistoryTraffics(parame: any): Promise<any> {
 }
 
 async function requestUpdateAccountingVoucher(formData: any): Promise<any> {
-    const { data } = await API.post(
-        `${APP_ACCOUNTING}/update`,
+    const { data } = await API.put(
+        `${APP_ACCOUNTING}`,
         {
             ...formData
         }
