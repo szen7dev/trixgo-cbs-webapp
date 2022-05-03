@@ -74,7 +74,6 @@ export const CmcIncomePage: FC = () => {
     } else {
       res = await createContractMutateAsync(values);
     }
-
     if (res.code && res.code !== 200) {
       return false;
     }
