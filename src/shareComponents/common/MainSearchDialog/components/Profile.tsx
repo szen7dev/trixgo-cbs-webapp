@@ -134,7 +134,7 @@ interface SearchParams{
 
 const Profile: FC<ProfileProps> = (props) => {
   const { closeModal } = useModal();
-  const [startDate, setStartDate]                             = useState<Date>(new Date(new Date().setDate(-30)));
+  const [startDate, setStartDate]                             = useState<Date>();
   const [endDate, setEndDate]                                 = useState<Date>(new Date());
   const [keywordDatahubContact,  setKeywordDatahubContact ]   = useState("");
   const [keywordContract,  setKeywordContract ]               = useState("");
