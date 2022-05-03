@@ -48,7 +48,6 @@ interface NewContractIncomeModalProps {
 }
 
 const mappingData = (data: any, isDataPayLoad = false) => {
-  console.log({ data })
   return {
     contractID: data.contractID,
     projectID: isDataPayLoad ? data?.projectID?.value : convertInitialValueDropdown(data?.project, '_id', 'sign', '.', 'name'),
@@ -225,7 +224,6 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
           contractID: detailContract._id
         }
       }
-
       const isSuccess = await onFinish(mappingData(formatData, true), isEdit);
       if (isSuccess) {
         closeModal();
@@ -243,15 +241,15 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
     chair: object().required(MESSAGE_ERROR.required),
     status: object().required(MESSAGE_ERROR.required),
     personInCharge: object().required(MESSAGE_ERROR.required),
+    dependentUnit: object().required(MESSAGE_ERROR.required),
     real: object().required(MESSAGE_ERROR.required),
     type: object().required(MESSAGE_ERROR.required),
     date: string().required(MESSAGE_ERROR.required),
     name: string().required(MESSAGE_ERROR.required),
     sign: string().required(MESSAGE_ERROR.required),
-    buyerInfo: string().required(MESSAGE_ERROR.required),
-    sellerInfo: string().required(MESSAGE_ERROR.required),
+    buyerInfo: object().required(MESSAGE_ERROR.required),
+    sellerInfo: object().required(MESSAGE_ERROR.required),
   })
-  // console.log({ initialValues })
   return (
     <main className="relative  w-[900px] h-[800px] bg-primary-light income-form-modal">
       <header className="flex items-center justify-between px-3 h-[50px] bg-cbs-table-header">
@@ -263,8 +261,8 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
           onClick={() => closeModal()}
         />
       </header>
-
-      <Formik initialValues={initialValues} validationSchema={formValidation} enableReinitialize={true} onSubmit={handleSubmit}>
+      
+      <Formik initialValues={initialValues}  enableReinitialize={true} validationSchema={formValidation} onSubmit={handleSubmit}>
         {(formik) => {
           const { handleBlur, setFieldValue } = formik;
           return (
@@ -488,7 +486,7 @@ export const IncomeFormModal: FC<NewContractIncomeModalProps> = ({ defaultValues
 
                     <div>
                       <p className="text-xs text-primary-gray mb-2">
-                      Phân loại theo đơn vị (*)
+                        Phân loại theo đơn vị (*)
                       </p>
                       <DropdownSearchable
                         onchangeValue={(value) => setFieldValue("dependentUnit", value)}
