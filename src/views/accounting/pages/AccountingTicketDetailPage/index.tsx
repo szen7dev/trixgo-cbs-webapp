@@ -15,7 +15,7 @@ import {
 import { formatNumberMoney, convertDisplayDate } from "utils/cmcs"
 
 import API from "apis/repository";
-const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
+const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
 
 export const AccountingTicketDetailPage: FC = () => {
 
@@ -26,7 +26,7 @@ export const AccountingTicketDetailPage: FC = () => {
   useEffect(() => {
     const fetchDetailAccountingVoucher = async (id: any) => {
       const { data } = await API.get(
-        `${APP_ACCOUNTING_VOUCHER}/${id}`, {
+        `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
             "path": "customer contract ipc subtype userCreate userUpdate company",

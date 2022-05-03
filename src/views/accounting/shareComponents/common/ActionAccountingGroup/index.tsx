@@ -23,7 +23,7 @@ export const ActionAccountingGroup: FC<Props> = ({ data, handleAction, icon }) =
       <button className={"flex justify-center items-center"} onClick={() => setShowOptions(!showOptions)}>
         {icon ?? <img alt={"Icon"} src={ThreeDotsHorizontal} />}
       </button>
-      {showOptions ? <div className={"absolute acc-action-row border rounded-md overflow-hidden bg-white z-10"}>
+      {showOptions ? <div className={"absolute acc-action-row border rounded-md overflow-hidden bg-white z-100"}>
         <button className={"flex w-full p-3 hover:bg-gray-100"}>
           <div className={"w-2/12 ml-3"}>
             <img alt={"Icon"} src={Printer} />
@@ -36,13 +36,13 @@ export const ActionAccountingGroup: FC<Props> = ({ data, handleAction, icon }) =
           </div>
           <div className={"w-10/12 text-left"}>Copy</div>
         </button>
-        <button onClick={() => { handleAction && handleAction(data, 3) }} className={"flex w-full p-3 hover:bg-gray-100"}>
+        <button onClick={() => { setShowOptions(false); handleAction && handleAction(data, 3) }} className={"flex w-full p-3 hover:bg-gray-100"}>
           <div className={"w-2/12 ml-3"}>
             <img alt={"Icon"} src={Pen} />
           </div>
           <div className={"w-10/12 text-left"}>Cập nhật</div>
         </button>
-        <button onClick={() => { handleAction && handleAction(data, 4) }} className={"flex w-full p-3 hover:bg-gray-100"}>
+        <button onClick={() => { setShowOptions(false); handleAction && handleAction(data, 4) }} className={"flex w-full p-3 hover:bg-gray-100"}>
           <div className={"w-2/12 ml-3"}>
             <img alt={"Icon"} src={Trash} />
           </div>
