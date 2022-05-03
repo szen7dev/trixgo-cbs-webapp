@@ -132,8 +132,8 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onClearData={() => setFieldValue(`selectedJournals.${index}.debit`, '')}
 												showTriangle={false}
 												renderSelectedItem={(item) =>
-													<Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0  whitespace-normal" >
-														<p className="text-2-line-clamp">{`${item.text}`}</p>
+													<Popover onMouseEnterTooltip={false} tooltip={`${item.text} - ${item.description}`} classTooltip="left-0  whitespace-normal" >
+														<p className="text-2-line-clamp">{`${item.text} - ${item.description}`}</p>
 													</Popover>
 												}
 												onSearchInputChange={debounce(
@@ -166,8 +166,8 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.credit`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.credit`, '')}
 												showTriangle={false}
-												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
-													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text} - ${item.description}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text} - ${item.description}`}</p>
 												</Popover>}
 												onSearchInputChange={debounce(
 													(value) => setSearchCreditValue(value),
