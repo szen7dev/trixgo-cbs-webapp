@@ -107,7 +107,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 									Hợp đồng
 								</div>
 								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-									Khoản mục phí
+									Ngân sách
 								</div>
 								<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 									Ghi chú
