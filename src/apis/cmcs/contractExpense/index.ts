@@ -24,7 +24,7 @@ const ContractExpenseRepository = {
 async function fetchList(params: ListContractsPayload): Promise<ListContractsResponse> {
     const { data } = await API.get(
         `${ITEM_URL}/contracts?${convertObToUrl({
-            select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
+            select: "name date sign expiredAg agValue note personInCharge value vatValue plus vatPlus produce vatProduce plusProduce vatPlusProduce acceptance vatAcceptance plusAcceptance vatPlusAcceptance recommendedPayment advancePaymentPaid amountPaid remainingPayment status createAt",
             populates: JSON.stringify({
                 path: "project company personInCharge",
                 select: "name sign"
