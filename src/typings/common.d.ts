@@ -110,7 +110,7 @@ export type QueryParams = {
   lastestID?: string;
   keyword?: string;
   select?: string;
-  populates?: Populate;
+  populates?: Populate | string;
 }
 
 export type Company = {

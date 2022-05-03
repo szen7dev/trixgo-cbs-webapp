@@ -21,7 +21,7 @@ import { APP_ID } from "apis/localdb";
 // import { debounce } from "lodash";
 import { usePcmReport } from "services/hooks/pcm/usePcm";
 
-export const PcmTasksReport: FC = () => {
+const PcmTasksReportPage: FC = () => {
   const [params, setParams] = useState({});
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
@@ -102,3 +102,5 @@ export const PcmTasksReport: FC = () => {
     </>
   );
 };
+
+export default PcmTasksReportPage

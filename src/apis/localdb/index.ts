@@ -564,6 +564,36 @@ export const PCM_MEMBER_POSITION_TYPE = [
 ]
 
 /**
+ * Phân loại tính chất công việc
+ * 0-Việc thông thường
+ * 1-Yêu cầu thông tin
+ * 2-Yêu cầu phê duyệt
+ * 3-Thanh toán/Chi phí
+ * 4-Đấu thầu
+ * 5-Nghiệm thu chất lượng
+ * 6-Yêu cầu sửa chữa
+ * 7-Yêu cầu thay đổi
+ * 8-Yêu cầu thực hiện
+ * 9-Báo cáo
+ * 10-Tiến độ
+ * 11-Biên bản họp
+ */
+export const PCM_SUBTYPE = [
+    { value: 0, text: 'Việc thông thường' },
+    { value: 1, text: 'Yêu cầu thông tin' },
+    { value: 2, text: 'Yều cầu phê duyệt' },
+    { value: 3, text: 'Thanh toán/Chi phí' },
+    { value: 4, text: 'Đấu thầu' },
+    { value: 5, text: 'Nghiệm thu chất lượng' },
+    { value: 6, text: 'Yều cầu sửa chữa' },
+    { value: 7, text: 'Yều cầu thay đổi' },
+    { value: 8, text: 'Yều cầu thực hiện' },
+    { value: 9, text: 'Báo cáo' },
+    { value: 10, text: 'Tiến độ' },
+    { value: 11, text: 'Biên bản họp' },
+]
+
+/**
  * 1. Hình ảnh
  * 2. Video
  * 3. Zip
