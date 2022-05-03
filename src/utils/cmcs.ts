@@ -41,6 +41,7 @@ export const convertInitialValueDropdown = (item: any, value = '_id', label = 'n
   }
 
   return {
+    ...item,
     value: item[value],
     label: label_2 ? item[label] + separation + item[label_2] : item[label],
     isInitialValue: true

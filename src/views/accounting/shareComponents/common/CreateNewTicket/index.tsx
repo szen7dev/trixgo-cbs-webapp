@@ -116,7 +116,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
         `${APP_ACCOUNTING_JOURNAL}?voucherID=${id}`, {
         params: {
           populates: {
-            "path": "debit credit customerCredit customerDebit warehouse goods contract",
+            "path": "debit credit customerCredit customerDebit warehouse goods contract budgetWork",
             "select": "name description",
           }
         }
@@ -144,7 +144,7 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
       params: {
         lastestID: lastestIDJournals,
         populates: {
-          "path": "debit credit customerCredit customerDebit warehouse contract",
+          "path": "debit credit customerCredit customerDebit warehouse contract budgetWork",
           "select": "name description",
         }
       }

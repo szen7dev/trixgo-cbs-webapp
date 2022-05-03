@@ -147,7 +147,7 @@ export const AccountingTicketDetailPage: FC = () => {
               Hợp đồng
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
-              Ngân hàng
+              Ngân sách
             </div>
             <div className={"px-2 py-4 table-cell box-border border-b border-t text-gray-500 border-gray-300 align-middle"}>
               Ghi chú
@@ -191,7 +191,7 @@ export const AccountingTicketDetailPage: FC = () => {
                   {item?.contract?.name}
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
-
+                  {item?.budgetWork?.name}
                 </div>
                 <div className={"px-2 py-4 table-cell box-border border-b border-t border-gray-300 align-middle"}>
                   {item?.note}
