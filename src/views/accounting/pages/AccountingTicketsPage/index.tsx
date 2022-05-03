@@ -175,7 +175,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
               <span className="pl-2 border-l border-cbs-border">
-                Ngày chứng từ
+                Ngày hạch toán
               </span>
             </th>
             <th className="py-2.5 font-normal bg-cbs-table-header sticky top-0 border-t border-b border-cbs-border">
@@ -220,7 +220,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border text-left">
                     <input className="cbs-checkbox" type="checkbox" checked={Boolean(assigned[item._id])} onChange={e => handleChangeCheckbox(e, item)} />
                   </td>
-                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border" style={{ maxWidth: '250px' }}>
+                  <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border text-cbs-highlight-color text-medium" style={{ maxWidth: '250px' }}>
                     <NavLink to={`/accounting/${VOUCHER_TYPES.find(item => item.value === type)?.slug}/${item._id}`}>
                       <Popover onMouseEnterTooltip={false} tooltip={`${item.name}`} classTooltip="w-[336px] whitespace-normal left-0" >
                         <p className="text-2-line-clamp">{`${item.name}`}</p>
