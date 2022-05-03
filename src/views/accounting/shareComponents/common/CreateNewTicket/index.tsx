@@ -28,8 +28,9 @@ const mappingData = (data: any, isDataPayLoad = false) => {
     cancel: data.cancel ? true : false,
 
     customer: isDataPayLoad ? data?.customer?.value : convertInitialValueDropdown(data?.customer || ''),
+    customerID: data?.customer?.value,
     contract: isDataPayLoad ? data?.contract?.value : convertInitialValueDropdown(data?.contract || ''),
-    contractId: data.contractId,
+    contractId: data?.contract?.value,
     ipc: isDataPayLoad ? data?.ipc?.value : convertInitialValueDropdown(data?.ipc || ''),
     subtype: isDataPayLoad ? data?.subtype?.value : convertInitialValueDropdown(data?.subtype || ''),
 
@@ -96,13 +97,13 @@ export const CreateNewTicket: FC<any> = ({ defaultValues, onFinish, title, idEdi
 
   const [initialValues, setInitialValues] = useState(mappingData({ contractId, type }));
 
-  const APP_ACCOUNTING_VOUCHER = "/api/accounting/voucher";
-  const APP_ACCOUNTING_JOURNAL = "/api/accounting/journal";
+  const APP_ACCOUNTING_VOUCHER = "/api/accounting/vouchers";
+  const APP_ACCOUNTING_JOURNAL = "/api/accounting/journals";
 
   useEffect(() => {
     const fetchDetailAccountingVoucher = async (id: any) => {
       const { data } = await API.get(
-        `${APP_ACCOUNTING_VOUCHER}/${id}`, {
+        `${APP_ACCOUNTING_VOUCHER}?voucherID=${id}`, {
         params: {
           populates: {
             "path": "customer contract ipc subtype",
