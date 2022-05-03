@@ -17,7 +17,7 @@ type Props = {
   type?: number
 }
 
-export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
+const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
 	const { groupID } = useParams<{ groupID: string }>();
   const [viewMode, setViewMode] = useState("LIST");
   const history = useHistory();
@@ -166,3 +166,5 @@ export const PcmTaskGroupPage: FC<Props> = ({ type = 1 }) => {
     </>
   );
 };
+
+export default PcmTaskGroupPage

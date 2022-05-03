@@ -1,22 +1,22 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 
 import { Link, useParams } from "react-router-dom";
 
-import { useModal } from "services/hooks/useModal";
+// import { useModal } from "services/hooks/useModal";
 import debounce from "lodash/debounce";
 import { SearchInput } from "shareComponents/common";
 
-import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
+// import Vertical3Dots from "assets/images/icon-3dots-vertical-gray.svg";
 import FolderIcon from "assets/images/icons8-folder.svg";
-import PolygonIcon from "assets/images/icon-polygon.svg";
-import DownloadIcon from "assets/images/icons8-download-96.svg";
-import PencilIcon from "assets/images/icons8-pencil-96.svg";
-import TrashIcon from "assets/images/icons8-remove-96.svg";
+// import PolygonIcon from "assets/images/icon-polygon.svg";
+// import DownloadIcon from "assets/images/icons8-download-96.svg";
+// import PencilIcon from "assets/images/icons8-pencil-96.svg";
+// import TrashIcon from "assets/images/icons8-remove-96.svg";
 // import { Create, Update, DeleteGroup } from "../../modal";
 import { usePcmPlanGroup } from "services/hooks/pcm/usePcmGroup";
 import moment from "moment";
 
-export const PcmGroupPage: FC = () => {
+const PcmGroupPage: FC = () => {
 	const { id: projectID } = useParams<{ id: string }>();
 	const [keyword, setKeyword] = useState("");
 
@@ -103,3 +103,5 @@ export const PcmGroupPage: FC = () => {
 		</main>
 	);
 };
+
+export default PcmGroupPage

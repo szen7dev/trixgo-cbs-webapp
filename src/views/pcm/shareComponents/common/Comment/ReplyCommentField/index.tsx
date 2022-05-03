@@ -166,7 +166,6 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 
 		// Upload images
 		for (const [key, { file }] of Object.entries(images)) {
-
 			const source = getCancelTokenRequest(key, file);
 			const { _id } = await addFileToUpload({
 				files: file,
@@ -220,7 +219,7 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 			_id && (files = [...files, _id]);
 		}
 
-		if(!files.length && !images.length && !text || isUploading) return;
+		if((!files.length && !images.length && !text) || isUploading) return;
 
 		const dataInsertOrUpdate: CommentPayload = {
 			taskID,
@@ -348,26 +347,46 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 		<div {...props}>
 			<div
 				className={
-					classNames("flex flex-wrap",
+					classNames("flex flex-wrap max-h-44 w-full pr-4 pl-3.5 py-2 custom-scroll overflow-x-hidden overflow-y-auto",
 						fileContainerClassName,
 						(!Object.keys(uploads.images).length && !Object.keys(uploads.files).length) ? "h-0" : "")
 				}
 				ref={refDivFile}
 			>
-				<div className={classNames(Object.keys(uploads.files).length ? "max-h-44 w-full pr-4 pl-3.5 py-2":'hidden','custom-scroll overflow-x-hidden overflow-y-auto')}>
+				<PostFile
+					files={toArray(uploads.files)}
+					onRemove={handleRemoveUpload}
+					className="text-black w-full"
+				/>
+				<PostImage
+					images={toArray(uploads.images)}
+					onRemove={handleRemoveUpload}
+					className="post__files-row pt-5 text-black gap-5 flex-wrap"
+				/>
+				{/* <div className={
+					classNames('custom-scroll overflow-x-hidden overflow-y-auto',
+						Object.keys(uploads.files).length
+						? "max-h-44 w-full pr-4 pl-3.5 py-2"
+						: "hidden",
+				)}>
 					<PostFile
 						files={toArray(uploads.files)}
 						onRemove={handleRemoveUpload}
 						className="text-black w-full"
 					/>
 				</div>
-				<div className={classNames(Object.keys(uploads.images).length ? 'max-h-44 w-full pl-3.5':'hidden','custom-scroll overflow-x-hidden overflow-y-auto pb-2.5')}>
+				<div className={
+					classNames('custom-scroll overflow-x-hidden overflow-y-auto pb-2.5',
+						Object.keys(uploads.images).length
+						? 'max-h-44 w-full pl-3.5'
+						: 'hidden'
+				)}>
 					<PostImage
 						images={toArray(uploads.images)}
 						onRemove={handleRemoveUpload}
 						className="post__files-row pt-5 text-black gap-5 flex-wrap"
 					/>
-				</div>
+				</div> */}
 			</div>
 			<div className={inputContainerClassName}>
 				<div className="flex self-end h-9 w-9">
@@ -404,12 +423,13 @@ export const ReplyCommentField: FC<Props & React.HTMLAttributes<HTMLDivElement>>
 								accept="*"
 								multiple
 								className="hidden"
-								onChange={e => handleSetFiles(e.target.files)} />
+								onChange={e => handleSetFiles(e.target.files)}
+							/>
 						</label>
 					</div>
 				</div>
 				<div className="flex self-end">
-					<button 
+					<button
 						className={classNames('flex items-center justify-center h-9 w-9', {
 							'disabled:opacity-60': isUploading
 						})}

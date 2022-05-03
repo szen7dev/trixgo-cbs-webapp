@@ -48,10 +48,10 @@ export const CheckListItem: FC<Props> = ({ userID, data, onUpdateStatusCheckList
             defaultChecked={data.status === 3}
             onChange={handleUpdateStatusChecklist}
           />
-          <div className="ml-2 truncate">
+          <div className="ml-2">
             <span className="text-[13px]">{data.name}</span>
 
-            <div className="flex">
+            <div className="flex mt-1">
               <img
                 src={`${process.env.REACT_APP_URL_S3_USER}/${data.assignee.image}`}
                 alt="Avatar"
@@ -87,7 +87,7 @@ export const CheckListItem: FC<Props> = ({ userID, data, onUpdateStatusCheckList
           <div className="flex justify-end w-1/4">
             {!isDisabled && (<TypeStatusLabel expiredTime={data.expiredTime} />)}
             <span
-              className={cn('ml-2 text-[13px]', {
+              className={cn('ml-1 text-[13px]', {
                 'text-green-300': isDisabled
               })}>
               {moment(data.expiredTime).format("DD/MM/YYYY")}

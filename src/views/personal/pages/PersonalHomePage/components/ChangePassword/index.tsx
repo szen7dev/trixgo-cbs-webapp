@@ -74,7 +74,7 @@ export const ChangePassword: FC = () => {
 	}, [dataUserInfo])
 
     const Image = memo(function Image() {
-        return <img src={`${process.env.REACT_APP_URL_S3_AWS_USER}/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
+        return <img src={`${process.env.REACT_APP_URL_S3_USER}/${avatar}`} alt="Personal" className="w-[110px] h-[110px] rounded-full object-cover" />
 	});
 
 	return (

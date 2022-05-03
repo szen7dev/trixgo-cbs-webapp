@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useState, useContext, useEffect } from 'react';
+import { FC, HTMLAttributes, useState, useContext, useEffect, memo } from 'react';
 
 import TaskRepository from "apis/task";
 
@@ -19,7 +19,7 @@ type Props = {
 	onClickImage?: (comment: CommentType, index: number) => void,
 }
 
-export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
+export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = memo(({
 	onClickImage, userID, smallImage, comments, taskID, totalRecord = 0, limit = 5, ...props
 }) => {
 	const { state, dispatch } = useContext(CommentContext);
@@ -35,10 +35,12 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 	  });
 
 	useEffect(() => {
-		comments && dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
+		if(!comments || !comments.length) return;
+		dispatch({ type: 'SET_COMMENTS', payload: comments.reverse() });
 	}, [comments?.length])
 
 	useEffect(() => {
+		if(totalRecord < limit) return;
 		setAmountComment(totalRecord - limit);
 	}, [totalRecord])
 
@@ -61,6 +63,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 		_comments = (state.commentsReply[statePost.taskID] || []).filter(Boolean);
 	}
 
+	// console.log({ totalRecord, _comments })
 	if(!totalRecord && !_comments?.length) return null;
 
 	return (
@@ -103,4 +106,6 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = ({
 			<ModalZoomView isShow={isShow} toggle={()=> setIsShow(!isShow)} initialData={defaultState} />
 		</>
 	)
-}
+})
+
+RootCommentsList.displayName = 'RootCommentsList';
