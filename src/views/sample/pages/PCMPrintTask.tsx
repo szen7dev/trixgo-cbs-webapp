@@ -42,7 +42,7 @@ const PCMPrintTask: FC<Props> = (props) => {
     refetch: refetchInfoTask,
     isLoading,
     isSuccess,
-  } = useQuery(`task_info.${id}`, () => TaskRepository.taskInfo(id), {
+  } = useQuery(`task_info.${id}`, () => TaskRepository.taskInfo({ taskID: id }), {
     refetchOnWindowFocus: false,
   });
 

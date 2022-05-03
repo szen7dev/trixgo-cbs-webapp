@@ -1,7 +1,8 @@
 import API from "../repository";
 
 import {
-  ListTaskPayload,
+  TaskListParams,
+  TaskInfoParams,
   ListTaskResponse,
   ListCheckListPayload,
   ListCheckListResponse,
@@ -81,7 +82,7 @@ const TaskRepository = {
     return data;
   },
 
-  async listTask(payload: ListTaskPayload): Promise<ListTaskResponse> {
+  async listTask(payload: TaskListParams): Promise<ListTaskResponse> {
     const { data } = await API.get<ListTaskResponse>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
         select: "assignee lastLog checklist description name expiredTime status percentage project actualFinishTime amountChecklist amountFinishedChecklist",
@@ -99,12 +100,12 @@ const TaskRepository = {
     return data;
   },
 
-  async taskInfo(taskID: string): Promise<any> {
+  async taskInfo(payload: TaskInfoParams): Promise<any> {
     const { data } = await API.get<any>(
       `${pcmURL}/pcm_plan_tasks?${convertObToUrl({
-        taskID,
         select: "name description type typeStatus status draft priority project contract parent checklist createAt field group author assignee related expiredTime actualFinishTime responses assigneeAttachs authorAttachs timeApproved valueApproved approver percentage signatures comments amountComment amountResponse amountMarkedResponse startTime subType flags",
         populates: populatesTask,
+        ...payload
       })}`
     );
 

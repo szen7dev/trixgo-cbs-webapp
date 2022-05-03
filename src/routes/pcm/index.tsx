@@ -17,9 +17,8 @@ import LayoutProjectSecondary from "views/ppt/sharedComponents/layouts/LayoutPro
 import { ModalCreateDocument } from "views/document/sharedComponents/common";
 
 /*=====CONTEXTS=====*/
-import { ProviderModalPost } from "views/media/contexts/post";
-// import { ProviderModalPost } from "views/pcm/contexts/post";
-// import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
+// import { ProviderModalPost } from "views/media/contexts/post";
+import { ProviderModalPost } from "views/pcm/contexts/post";
 
 /*=====PAGES=====*/
 import { Dashboard } from "views/homepage/pages";
@@ -63,23 +62,23 @@ import {
   ProjectDirectoryPage,
 } from "views/ppt/pages";
 
-import {
-  PcmHome,
-  PcmDetailTaskPage,
-  PcmGroupPage,
-  PcmTaskGroupPage,
-  PcmReport,
-} from "views/pcm/pages";
 import ProjectAdminFunctionalTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminFunctionalTab";
 import ProjectAdminDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminDetail";
 import ProjectAdminAuthorTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminAuthorTab";
 import ProjectAdminProjectDetail from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectDetail";
 import ProjectAdminProjectTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminProjectTab";
 import ProjectAdminPositionTab from "views/ppt/pages/ProjectAdminPage/pages/ProjectAdminPositionTab";
-import { PcmTasksReport } from "views/pcm/pages/PcmTasksReport";
-const PCMPrintTask = lazy(() => import("views/sample/pages/PCMPrintTask"));
-const PCMPrintTaskSecond = lazy(() => import("views/sample/pages/PCMPrintTaskSecond"));
-const PCMPrintTaskThird = lazy(() => import("views/sample/pages/PCMPrintTaskThird"));
+
+const PcmHomePage                 = lazy(() => import('views/pcm/pages/PcmHome'));
+const PcmDetailTaskPage           = lazy(() => import('views/pcm/pages/PcmDetailTask'));
+const PcmGroupPage                = lazy(() => import('views/pcm/pages/PcmGroup'));
+const PcmTaskGroupPage            = lazy(() => import('views/pcm/pages/PcmTaskGroup'));
+const PcmReportPage               = lazy(() => import('views/pcm/pages/PcmReport'));
+const PcmTasksReportPage          = lazy(() => import('views/pcm/pages/PcmTasksReport'));
+
+const PcmPrintTaskTypeOnePage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeOne'));
+const PcmPrintTaskTypeTwoPage     = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeTwo'));
+const PcmPrintTaskTypeThreePage   = lazy(() => import('views/pcm/pages/PcmPrintTaskTypeThree'));
 
 const PCMRouter: FC = () => {
   return (
@@ -367,15 +366,15 @@ const PCMRouter: FC = () => {
               </Route>
 
               <Route exact path="/pcm/detail/:id" component={PcmDetailTaskPage} />
-              <Route exact path="/pcm/detail/:id/print/1" component={PCMPrintTask} />
-              <Route exact path="/pcm/detail/:id/print/2" component={PCMPrintTaskSecond} />
-              <Route exact path="/pcm/detail/:id/print/3" component={PCMPrintTaskThird} />
+              <Route exact path="/pcm/detail/:id/print/1" component={PcmPrintTaskTypeOnePage} />
+              <Route exact path="/pcm/detail/:id/print/2" component={PcmPrintTaskTypeTwoPage} />
+              <Route exact path="/pcm/detail/:id/print/3" component={PcmPrintTaskTypeThreePage} />
 
-              <Route exact path="/pcm/home" component={PcmHome} />
-              <Route exact path="/pcm/assign" component={() => <PcmHome type={2} />} />
-              <Route exact path="/pcm/bookmark" component={() => <PcmHome type={3} />} />
-              <Route exact path="/pcm/report" component={PcmReport} />
-              <Route exact path="/pcm/report/:reportID" component={PcmTasksReport} />
+              <Route exact path="/pcm/home" component={PcmHomePage} />
+              <Route exact path="/pcm/assign" component={() => <PcmHomePage type={2} />} />
+              <Route exact path="/pcm/bookmark" component={() => <PcmHomePage type={3} />} />
+              <Route exact path="/pcm/report" component={PcmReportPage} />
+              <Route exact path="/pcm/report/:reportID" component={PcmTasksReportPage} />
               <Route exact path="/pcm/projects" component={ProjectCategoryPage} />
               <Route exact path="/pcm/market" component={ProjectMarketPage} />
               <Route exact path="/pcm/(dashboard-portfolio|dashboard-task|dashboard-document)">

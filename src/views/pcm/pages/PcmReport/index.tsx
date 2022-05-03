@@ -15,7 +15,7 @@ import FolderIcon from "assets/images/icons8-folder.svg";
 // import { Create, Update, Delete } from "../modal";
 import { usePcmReport } from "services/hooks/pcm/usePcm";
 
-export const PcmReport: FC = () => {
+const PcmReportPage: FC = () => {
 	const [idsChecked, setIdsChecked] = useState<Array<string>>([]);
 	const [keyword, setKeyword] = useState("");
 	const { listReports, nextPageListReports, hasNextPage, totalRecord } = usePcmReport({
@@ -206,3 +206,5 @@ export const PcmReport: FC = () => {
 		</main>
 	);
 };
+
+export default PcmReportPage

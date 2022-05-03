@@ -42,8 +42,8 @@ import {
   ModalMoveTaskToParent,
   ModalMoveTaskToGroup
 } from "./components";
-import { ReplyCommentField, RootCommentsList } from "../../shareComponents/common";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import { CommentFull } from "../../shareComponents/common";
 import { Loader, ModalConfirm, DropdownOption } from "shareComponents/common";
 
 /**
@@ -51,12 +51,6 @@ import { Loader, ModalConfirm, DropdownOption } from "shareComponents/common";
  */
 import { APP_ID } from "apis/localdb";
 import { PCM_STATUS_TASK, PCM_PRIORITY_TASK } from 'apis/localdb';
-
-/**
- * Context
- */
-import { ProviderModalPost } from "views/pcm/contexts/post";
-import CommentProvider from 'views/pcm/contexts/comment/comment.provider';
 
 /**
  * Hooks, Typings
@@ -70,7 +64,7 @@ import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 import { User } from "typings/user";
 import { TOAST_DEFAULT_OPTIONS } from "utils/constants";
 
-const PcmDetailTask: FC = () => {
+const PcmDetailTaskPage: FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const { openModal, closeModal } = useModal();
@@ -87,7 +81,7 @@ const PcmDetailTask: FC = () => {
   const { updateTaskAsync, copyTaskAsync } = useTask({});
 
   const { data: infoTask, refetch: refetchInfoTask, isLoading } = useQuery(`task_info.${id}`, () =>
-    TaskRepository.taskInfo(id),
+    TaskRepository.taskInfo({ taskID: id }),
     { refetchOnWindowFocus: false }
   );
 
@@ -522,7 +516,7 @@ const PcmDetailTask: FC = () => {
               groupID={taskInfo.group?._id}
               hasPermission={permissions.hasPermissionCreatorAddFile}
             />
-            <div className="">
+            <div>
               <CheckList
                 componentType="CHECKLIST"
                 task={taskInfo}
@@ -581,7 +575,21 @@ const PcmDetailTask: FC = () => {
         <div className="flex bg-white mt-2" style={{ width: 1100 }}>
           {/* <CommentContainer className="w-[791px]" /> */}
           <div className="w-[791px]">
-            <div className="text-x-large py-3 px-6 font-bold">
+            <CommentFull
+              userId={user?._id}
+              taskInfo={taskInfo}
+              comments={listComments}
+              amountComment={taskData.amountComment}
+              totalRecord={totalRecord}
+              limit={limit}
+              hasPermission={permissions.hasPermissionComment}
+              onConfirm={(method?: string) => {
+                if(method && method === 'INSERT') {
+                  setTaskData(previous => ({ ...previous, amountComment: taskData.amountComment + 1 }))
+                }
+              }}
+            />
+            {/* <div className="text-x-large py-3 px-6 font-bold">
               Bình luận {taskData.amountComment > 0 ? `(${taskData.amountComment})` : ''}
             </div>
             <RootCommentsList
@@ -608,7 +616,7 @@ const PcmDetailTask: FC = () => {
                   }}
                 />
               )}
-            </div>
+            </div> */}
           </div>
           {/*
             Modal
@@ -666,12 +674,4 @@ const PcmDetailTask: FC = () => {
   );
 };
 
-export const PcmDetailTaskPage: FC = () => {
-  return (
-    <ProviderModalPost>
-      <CommentProvider>
-        <PcmDetailTask />
-      </CommentProvider>
-    </ProviderModalPost>
-  )
-}
+export default PcmDetailTaskPage

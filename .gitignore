@@ -30,3 +30,4 @@ yarn-error.log*
 /.idea/modules.xml
 /.idea/vcs.xml
 /src/styles/output.css
+todo.txt

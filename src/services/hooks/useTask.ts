@@ -1,7 +1,8 @@
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import TaskRepository from "apis/task";
 import {
-  Task,  addTaskPayload,
+  Task, addTaskPayload,
+  TaskListParams, TaskInfoParams,
   CheckList, CheckListPayload,
   UpdateCheckListPayload,
   ChildTask, ChildTaskPayload,
@@ -32,35 +33,30 @@ type UseTask = {
   moveTaskToParentAsync: (payload: MoveTaskToParentPayload) => Promise<any>;
   moveTaskToGroupAsync: (payload: MoveTaskToGroupPayload) => Promise<any>;
   listTasks: Array<Task>;
+  info: Task,
   addTaskAsync: (payload: addTaskPayload) => Promise<any>;
   updateTaskAsync: (payload: updateTaskPayload) => Promise<any>;
   isLoadingListTask: boolean;
+  isLoadingInfo: boolean;
   totalRecord: number | undefined;
   totalPages: number | undefined;
   hasNextPage: boolean | undefined;
+  refetchInfo: () => void;
   refetchListTask: () => void;
   nextPageListTask: () => void;
   prevPageListTask: () => void;
 };
 
 type UseTaskProps = Partial<{
-  params: Partial<{
-    keyword?: string;
-    typeStatus?: string;
-    statusNe?: string;
-    groupID?: string;
-    companyOfAssignee?: string;
-    isPassPermision?: string;
-    projectID?: string;
-    type?: number;
-    status?: string;
-  }>
-  isFetch: boolean;
+  params: TaskListParams | TaskInfoParams,
+  isFetch?: boolean;
+  isFetchInfo?: boolean;
 }>
 
 export const useTask = ({
   params = {},
-  isFetch = false
+  isFetch = false,
+  isFetchInfo = false
 }: UseTaskProps): UseTask => {
   const { mutateAsync: addTaskAsync } =
     useMutation((payload: addTaskPayload) =>
@@ -92,6 +88,14 @@ export const useTask = ({
       TaskRepository.moveTaskToGroup(payload)
     );
 
+  const { data: detailData, isLoading: isLoadingInfo, refetch: refetchInfo } =
+      useQuery(["task--info", params], () => TaskRepository.taskInfo(params), {
+          refetchOnWindowFocus: false,
+          enabled: isFetchInfo,
+      });
+
+  const info = detailData?.data;
+
   const {
     isLoading: isLoadingListTask,
     data: dataListTask,
@@ -100,7 +104,7 @@ export const useTask = ({
     fetchPreviousPage: prevPageListTask,
     hasNextPage,
   } = useInfiniteQuery(
-    ["list_tasks", params],
+    ["task--list", params],
     async ({ pageParam }: any) => {
       return TaskRepository.listTask({
         lastestID: pageParam || "",
@@ -132,10 +136,13 @@ export const useTask = ({
     updateTaskAsync,
     addTaskAsync,
     listTasks,
+    info,
     isLoadingListTask,
+    isLoadingInfo,
     totalRecord,
     hasNextPage,
     totalPages,
+    refetchInfo,
     refetchListTask,
     nextPageListTask,
     prevPageListTask,
