@@ -8,13 +8,12 @@ import { SelectionColumn } from "shareComponents/common/Table/components/Selecti
 import { TableWithoutContext } from "shareComponents/common/Table";
 import iconChevronRight from "assets/images/icon-chevron-right.png";
 import CustomField from "shareComponents/common/Form/CustomForm/CustomField";
-import iconSlider from "assets/images/icons8-slider-32.png";
 import Dot from "./Dot";
 import { Link } from "react-router-dom";
 import { useQueryListDepartments } from "services/hooks/items/useDepartment";
 
 // HOOK
-import { useContract } from "services/hooks/items/useContract";
+import { useContractIsMembers } from "services/hooks/items/useContract";
 import moment from "moment";
 
 type ContractProps = {
@@ -151,7 +150,7 @@ const Contract: FC<ContractProps> = (props) => {
   // Danh sách hợp đồng
   const {
     listContracts, loading: isLoading, totalRecord, totalPage, nextCursor
-  } = useContract({ params: paramsSearch, isFetch: true });
+  } = useContractIsMembers({ params: paramsSearch, isFetch: true });
 
   const { listDepartments } = useQueryListDepartments({ select:  "name", limit: 20 }, true);
   useEffect(() => {
@@ -170,10 +169,10 @@ const Contract: FC<ContractProps> = (props) => {
 
   const handleNextPageButton = () => {
     setCount(count + 1);
-    // setParamsSearch(preValue => ({
-    //   ...preValue,
-    //   lastestID: pagesCursor[pagesCursor.length - 1]
-    // }));
+    setParamsSearch((preValue: any) => ({
+      ...preValue,
+      lastestID: pagesCursor[pagesCursor.length - 1]
+    }));
   };
 
   const handlePrevPageButton = () => {
@@ -191,10 +190,10 @@ const Contract: FC<ContractProps> = (props) => {
 
     setPagesCursor(pagesCursor);
     setCount(count - 1);
-    // setParamsSearch(preValue => ({
-    //   ...preValue,
-    //   lastestID: prevCursor
-    // }));
+    setParamsSearch((preValue: any) => ({
+      ...preValue,
+      lastestID: prevCursor
+    }));
   };
 
   const handleSearch = () => {

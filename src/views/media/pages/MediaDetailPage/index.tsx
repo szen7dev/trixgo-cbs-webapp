@@ -1,9 +1,6 @@
-/**
- * Libraries
- */
 import React, { FC, Fragment, useContext, useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useHistory, Redirect } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -13,12 +10,10 @@ import cn from 'classnames';
 /**
  * Components
  */
-// import ModalFullContainer from "../components/ModalFullContainer";
-// import ViewPost from "../components/post/ViewPost";
-import { ModalContainer, Loader, ModalConfirm } from "shareComponents/common";
-import { PostFile } from 'shareComponents/common';
+import { ModalContainer, Loader, ModalConfirm, PostFile } from "shareComponents/common";
 import { ReplyCommentField, RootCommentsList } from 'views/media/shareComponents/common/Comment';
 import { ModalCreateArticle, ModalListUser } from 'views/media/shareComponents/common/Modal';
+import { ModalZoomView } from "shareComponents/common/ZoomView";
 
 /**
  * Assets
@@ -30,24 +25,34 @@ import iconTrash from 'assets/images/icons8-remove.svg';
 import iconPencil from 'assets/images/icons8-pencil.svg';
 import iconEye from 'assets/images/icons8-eye-96 1.png';
 import iconCopy from 'assets/images/icons8-copy-96.png';
-// import iconPrint from 'assets/images/icons8-print-96.png';
 import iconComment from 'assets/images/icon-chat-project.png';
+// import iconPrint from 'assets/images/icons8-print-96.png';
 import 'views/media/styles/index.css';
 
 /**
- * Types, Services, Utils
+ * Contexts
+ */
+import { ContextModalPost } from "views/media/contexts/post";
+
+/**
+ * Utils
+ */
+import { nl2p } from 'utils';
+import { KEY_ERRORS } from 'apis/localdb';
+import { abbreviateNumber } from 'utils/converter';
+import { typePostSelected } from 'views/media/utils';
+
+/**
+ * Hooks, Typings
  */
 import { FileProps} from "typings/common";
 import { ListMediasPayload, MediaProps } from "typings/media";
-import MediaRepository from "apis/media";
-import { typePostSelected } from 'views/media/utils';
-import { nl2p } from 'utils';
-import { abbreviateNumber } from 'utils/converter';
+
 import { useModal } from "services/hooks/useModal";
 import { useAuth } from 'services/hooks/auth/useAuth';
 import { useMedia, useCommentMedia } from 'services/hooks/useMedia';
-import { ModalZoomView } from "shareComponents/common/ZoomView";
-import { ContextModalPost } from "views/media/contexts/post";
+
+import MediaRepository from "apis/media";
 
 export const MediaDetailPage: FC = () => {
 	const history = useHistory();
@@ -57,7 +62,7 @@ export const MediaDetailPage: FC = () => {
 	const { mediaID } = useParams<{ mediaID: string }>();
 	const { user } = useAuth();
 
-	const { data, refetch } = useQuery(`media_info.${mediaID}`,
+	const { data, refetch, isLoading } = useQuery(`media_info.${mediaID}`,
 		() => MediaRepository.mediaInfo(mediaID),
 		{
 			enabled: true,
@@ -146,6 +151,13 @@ export const MediaDetailPage: FC = () => {
 
 	useEffect(() => {
 		if(!media || !user) return;
+
+		if(media.keyError === KEY_ERRORS.PERMISSION_DENIED) {
+			history.push('/media/home');
+			toast.error("Bạn không có quyền truy cập bài viết này!");
+			return;
+		}
+
 		let hasPermission = true;
 
 		switch (media.type) {
@@ -173,10 +185,6 @@ export const MediaDetailPage: FC = () => {
 			toast.error("Bạn không có quyền truy cập bài viết này!");
 		}
 	}, [media])
-
-	if (!media) {
-		return <Loader className="border-primary" />;
-	}
 
 	const toggleModalEditMediaEdit = () => setModalEditMedia(!modalEditMedia);
 
@@ -238,6 +246,14 @@ export const MediaDetailPage: FC = () => {
 		const time = Math.ceil(words / wpm);
 		const ms = time * 60000;
 		setMsUpdateView(ms);
+	}
+
+	if (isLoading) {
+		return <Loader className="border-primary" />;
+	}
+
+	if(!media) {
+		return <Redirect to="/media/home" />
 	}
 
 	const initialState = {

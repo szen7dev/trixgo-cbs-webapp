@@ -2,10 +2,21 @@
   grid-template-columns: min-content minmax(340px, auto) min-content;
 }
 
-.reportTitle img,
-.headerTitle img {
+.reportTitle .headerImageContainer,
+.headerTitle .headerImageContainer {
   width: 74px;
   height: 74px;
+}
+
+.reportTitle .headerImageContainer img,
+.headerTitle .headerImageContainer img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.reportTitle img,
+.headerTitle img {
   object-fit: cover;
 }
 

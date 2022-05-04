@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 /**
  * Components, Utils
  */
+// import IconPlus from "assets/images/icons8-plus-math-100.png";
 import styles from "../../styles/pcm_print.module.css";
-import IconPlus from "assets/images/icons8-plus-math-100.png";
 import { CommentFull } from "views/pcm/shareComponents/common";
 import { CheckList } from "views/pcm/pages/PcmDetailTask/components";
 import { PCM_SUBTYPE, APP_ID } from "apis/localdb";
@@ -104,23 +104,26 @@ const PcmPrintTaskTypeOne: FC = () => {
             <div className={styles.headerTitle}>
               <div className="row-span-2 flex space-x-2.5">
                 {assigneeAndRelated.slice(0, 3).map(item => (
-                  <img
-                    key={item._id}
-                    src={`${process.env.REACT_APP_URL_S3_COMPANY}/${item.company?.image}`}
-                    alt={item.company?.name}
-                    className="border-cbs-border border-0.5"
-                  />
+                  <div key={item._id} className={styles.headerImageContainer}>
+                    <img
+                      src={`${process.env.REACT_APP_URL_S3_COMPANY}/${item.company?.image}`}
+                      alt={item.company?.name}
+                      className="border-cbs-border border-0.5"
+                    />
+                  </div>
                 ))}
               </div>
               <div className="text-x-small">
                 {taskInfo.project?.name}
               </div>
               <div className="row-span-2">
-                <img
-                  src={`${process.env.REACT_APP_URL_S3_COMPANY}/${taskInfo.author?.company?.image}`}
-                  alt={`${taskInfo.author?.company?.name}`}
-                  className="border-cbs-border border-0.5"
-                />
+                <div className={styles.headerImageContainer}>
+                  <img
+                    src={`${process.env.REACT_APP_URL_S3_COMPANY}/${taskInfo.author?.company?.image}`}
+                    alt={`${taskInfo.author?.company?.name}`}
+                    className="border-cbs-border border-0.5"
+                  />
+                </div>
               </div>
               <div className="text-large align-middle text-cbs-secondary">
                 {taskInfo.subType >= 0 && PCM_SUBTYPE[taskInfo.subType].text}

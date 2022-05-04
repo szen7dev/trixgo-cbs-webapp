@@ -24,6 +24,13 @@ const ContractRepository = {
     return data;
   },
 
+  async getListContractIsMembers(payload: ListContractsPayload): Promise<ListContractsResponse> {
+    const { data } = await API.get<ListContractsResponse>(
+      `${cmcsURL}/list-contract-is-members?${convertObToUrl(payload)}`
+    );
+    return data;
+  },
+
   async getInfoContract(payload: InfoContractPayload): Promise<any> {
     const { data } = await API.get(
       `${cmcsURL}/contracts?${convertObToUrl(payload)}`

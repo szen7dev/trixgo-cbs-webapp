@@ -84,16 +84,15 @@ function getColumnsProfile(): TableOptions<any>["columns"] {
       cellProps: {
         className: "pt-2.5 pb-3 px-2 border-b border-cbs-border",
       },
-      Cell({ row, value }: { row: any, value: any}) {
-        // const { name, size, path, project, task, author, createAt } = row.original;
-        const infoDocument = row.original ;
+      Cell({ row, value }: { row: any, value: any }) {
+        const infoDocument = row.original;
         return (
           <Link to={`/pcm/project/${infoDocument?.project._id}/document/${infoDocument._id}`}>
             <p className="text-cbs-highlight-color">
               {infoDocument?.name}
             </p>
             <p className="text-cbs-subtext">
-            {infoDocument?.project?.sign}.{infoDocument?.sign}.{moment(infoDocument?.date).format("L")}.{infoDocument?.storage?.name}
+              {infoDocument?.project?.sign}.{infoDocument?.sign}.{moment(infoDocument?.date).format("L")}.{infoDocument?.storage?.name}
             </p>
             <p className="text-cbs-subtext">
               <span>{infoDocument?.author?.bizfullname}</span>
@@ -133,7 +132,6 @@ interface SearchParams{
 }
 
 const Profile: FC<ProfileProps> = (props) => {
-  const { closeModal } = useModal();
   const [startDate, setStartDate]                             = useState<Date>();
   const [endDate, setEndDate]                                 = useState<Date>(new Date());
   const [keywordDatahubContact,  setKeywordDatahubContact ]   = useState("");
@@ -143,9 +141,8 @@ const Profile: FC<ProfileProps> = (props) => {
   const [typeSelected, setTypeSelected]                       = useState("");
   const [contractSelected, setContractSelected]               = useState("");
   const [dataDocument, setDataDocument]                       = useState<any[]>([]);
-  const [count, setCount] = useState(1);
+  const [count, setCount]                                     = useState(1);
   const [pagesCursor, setPagesCursor]                         = useState<(any)[]>([undefined]);
-
   const [paramsSearch, setParamsSearch]                       = useState<SearchParams>({
     keyword: "",
     datahubContactID: "",
@@ -308,7 +305,7 @@ const Profile: FC<ProfileProps> = (props) => {
             currentTotalPage: pagesCursor.length,
             totalPage: totalPage,
             fetchNextPage: handleNextPageButton,
-            fetchPreviousPage: handlePrevPageButton
+            fetchPreviousPage: handlePrevPageButton,
           }}
           isLoading={isLoading}
         />

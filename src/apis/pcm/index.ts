@@ -2,7 +2,22 @@ import API from "../repository";
 
 import { convertObToUrl } from "utils";
 
-import { AddConditionTaskReportPayload, FilesPcmGroupByContractResponse, FilesPcmGroupByDateResponse, ListFilesPcmGroupByContract, ListFilesPcmGroupByDate, ListFilesPcmPayload, ListReportsPayload, ListTasksPayload, ListTasksResponse, listTotalAnalysisResponse, SendMailTaskPayload, UpdateConditionTaskReportPayload } from "typings/pcm";
+import {
+    AddConditionTaskReportPayload,
+    FilesPcmGroupByContractResponse,
+    FilesPcmGroupByDateResponse,
+    ListFilesPcmGroupByContract,
+    ListFilesPcmGroupByDate,
+    ListFilesPcmPayload,
+    ListReportsPayload,
+    ListTasksPayload,
+    ListTasksResponse,
+    listTotalAnalysisResponse,
+    SendMailTaskPayload,
+    UpdateConditionTaskReportPayload,
+    PcmCommentListParams,
+    PcmCommentListResponse,
+} from "typings/pcm";
 
 const pcmURL = "/api/subject_pcm";
 
@@ -83,7 +98,6 @@ const PcmRepository = {
         return data;
     },
 
-    // Data 1
     async listTasks(payload: ListTasksPayload): Promise<ListTasksResponse> {
         const { data } = await API.get<ListTasksResponse>(
             `${pcmURL}/pcm_plan_tasks?${convertObToUrl(payload)}`
@@ -91,7 +105,6 @@ const PcmRepository = {
         return data;
     },
 
-    // Data 2
     async listTotalAnalysis(): Promise<listTotalAnalysisResponse> {
         const { data } = await API.get<listTotalAnalysisResponse>(
             `${pcmURL}/pcm_plan_tasks/badge`
@@ -110,7 +123,6 @@ const PcmRepository = {
         return data;
     },
 
-    // insert pcm_plan_group
     async insertPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.post<any>(
             `${pcmURL}/pcm_plan_groups`, payload
@@ -118,7 +130,6 @@ const PcmRepository = {
         return data;
     },
 
-    // update pcm_plan_group
     async updatePcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.put<any>(
             `${pcmURL}/pcm_plan_groups`, payload
@@ -126,7 +137,6 @@ const PcmRepository = {
         return data;
     },
 
-    // remove many pcm_plan_group
     async removeManyPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.delete<any>(
             `${pcmURL}/pcm_plan_groups/remove-many`, { params: payload }
@@ -134,7 +144,6 @@ const PcmRepository = {
         return data;
     },
 
-    // info pcm_group
     async infoPcmPlanGroup(payload: any): Promise<any> {
         const { data } = await API.get<any>(
             `${pcmURL}/pcm_plan_groups?${convertObToUrl({
@@ -165,10 +174,17 @@ const PcmRepository = {
             }
         });
         return data;
-    }
-};
+    },
 
-// console.log('==============>>>>>')
-// console.log(PcmRepository)
+    /**
+     * PCM COMMENT
+     */
+    async fetchListPcmComments(params: PcmCommentListParams): Promise<PcmCommentListResponse> {
+        const { data } = await API.get(
+          `${pcmURL}/pcm_comments?${convertObToUrl(params)}`
+        );
+        return data;
+    },
+};
 
 export default PcmRepository;
