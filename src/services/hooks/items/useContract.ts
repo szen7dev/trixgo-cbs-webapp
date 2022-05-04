@@ -83,6 +83,62 @@ export const useContract = ({
     }
 }
 
+export const useContractIsMembers = ({
+    params = {},
+    isFetch = false,
+    isFetchInfo = false
+}: Props): UseContract => {
+    const { data: infoContract } =
+        useQuery("contract_info", () => ContractRepository.getInfoContract(params), {
+            refetchOnWindowFocus: false,
+            enabled: isFetchInfo,
+        });
+    
+    const {
+        isLoading,
+        data,
+        refetch,
+        fetchNextPage,
+        hasNextPage
+    } = useInfiniteQuery(
+        ['contracts', params],
+        async ({ pageParam }: any) =>
+            ContractRepository.getListContractIsMembers({
+                lastestID: pageParam ?? "",
+                ...params,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor ?? undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: isFetch
+        }
+    );
+    
+    const listContracts = []
+        .concat(...(data?.pages || [])
+        .map((d: any) => d.data?.listRecords))
+        .filter(Boolean);
+
+    const totalRecord = data?.pages[0]?.data?.totalRecord || 0;
+    const totalPage = data?.pages[0]?.data?.totalPage || 0;
+    const nextCursor = data?.pages && data?.pages[0]?.data?.nextCursor;
+
+    const contractInfo = infoContract?.data;
+    return {
+        contractInfo,
+        listContracts,
+        loading: isLoading,
+        totalRecord,
+        nextCursor,
+        totalPage,
+        hasNextPage,
+        refetch,
+        fetchNextPage
+    }
+}
+
 // Những Hook này cần refactor lại, không nên sử dụng
 interface UseQueryContract {
     fetchNextPageContract: () => void;
