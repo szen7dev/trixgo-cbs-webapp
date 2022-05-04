@@ -235,7 +235,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.contract?.name}</td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{formatNumberMoney(item.amount)}</td>
                   <td className="pt-2.5 pb-3 px-2 border-b border-cbs-border">{item.note}</td>
-                  <td className="pt-2.5 pb-3 px-4 border-b border-cbs-border">
+                  <td className="pt-2.5 pb-3 pr-2 border-b border-cbs-border">
                     <ActionAccountingGroup data={item} handleAction={handleAction} />
                   </td>
                 </tr>

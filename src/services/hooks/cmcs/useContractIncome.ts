@@ -152,6 +152,49 @@ export const useQueryListContract = ({ limit, keyword }: any): any => {
         fetchNextPageDoctype
     }
 }
+export const useQueryListBudgetWork = ({ limit, keyword }: any): any => {
+    const res = useInfiniteQuery(
+        [`list_budgetWork,${keyword}`, keyword],
+        async ({ pageParam }: any) =>
+            HumanRepository.fetchListBudgetWork({
+                limit: limit || 10,
+                lastestID: pageParam || "",
+                keyword,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const {
+        isLoading,
+        data,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        hasNextPage
+    } = res;
+
+    const listBudgetWork = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
+    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const totalPages = data?.pages[0]?.data?.totalPages;
+
+    return {
+        loading: isLoading,
+        listBudgetWork,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+        refetchListDoctype,
+        fetchNextPageDoctype
+    }
+}
 
 export const useQueryListAccount = ({ limit, keyword }: any): any => {
     const res = useInfiniteQuery(
