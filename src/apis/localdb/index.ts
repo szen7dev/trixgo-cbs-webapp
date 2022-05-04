@@ -671,6 +671,10 @@ export const APP_ID = {
                 id: "623f05f9e998e94feda0cd33",
                 name: "Báo cáo quản trị"
             },
+            subject: {
+                id: "6272ec513cf2ab30141bff14",
+                name: "Công việc"
+            },
             folder: {
                 id: "623f061de998e94feda0cd34",
                 name: "Thư mục dữ liệu"
@@ -708,6 +712,10 @@ export const APP_ID = {
             expense: {
                 id: "623f22dee998e94feda0cd92",
                 name: "Hợp đồng mua vào"
+            },
+            partner: {
+                id: "6272eb0f3cf2ab30141bff10",
+                name: "Hợp đồng đối tác"
             },
             guarantee: {
                 id: "623f22eae998e94feda0cd93",
