@@ -8,8 +8,7 @@ import { SearchInput, Paginate } from "shareComponents/common";
 import { IncomeFormModal, DropdownFilterButton, ActionMenuTopBar } from "views/cmcs/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs";
 import styles from 'views/cmcs/styles/styles.module.css';
-import { UseContractIncomeList, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
-import { useContractIsMembers } from "services/hooks/items/useContract";
+import { UseContractListIsMember, useCreateContractMutation, useUpdateContractMutation, useDeleteContractMutation } from "services/hooks/cmcs/useContractIncome";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
 import { useCheckPerAccessScreen } from "services/hooks/auth/usePermissions";
@@ -23,7 +22,6 @@ export const CmcPartnerPage: FC = () => {
     menuID: APP_ID.CMCS.menuCmcsApp.income.id,
     type: "1"
   };
-
   const { createPermission, updatePermission, deletePermission } = useCheckPerAccessScreen(payload);
   // ---------
   const { createHistoryTraffics } = useHistoryTraffics();
@@ -37,36 +35,33 @@ export const CmcPartnerPage: FC = () => {
   const [prevCursor, setPrevCursor] = useState([null]);
 
   const { openModal } = useModal();
-  // const contractIncome = UseContractIncomeList(pageParam, keyword);
-  const {
-    listContracts, loading: isLoading, totalRecord, totalPage, nextCursor, refetch
-  } = useContractIsMembers({ params: { keyword, lastestID: pageParam }, isFetch: true });
-  
+
+  const contractIncome = UseContractListIsMember(pageParam, keyword);
   const { createContractMutateAsync, loading } = useCreateContractMutation();
   const { updateContractMutateAsync } = useUpdateContractMutation();
   const { deleteContractMutateAsync } = useDeleteContractMutation();
 
   const prevPageAction = () => {
-    if (!nextCursor) {
+    if (!contractIncome.nextCursor) {
       setPageParam(prevCursor[prevCursor.length - 2] || '')
     } else {
-      const prev = prevCursor.findIndex(item => item === nextCursor)
+      const prev = prevCursor.findIndex(item => item === contractIncome.nextCursor)
       setPageParam(prevCursor[prev - 2] || '')
     }
   };
 
   useEffect(() => {
-    if (!nextCursor) {
+    if (!contractIncome.nextCursor) {
       return;
     }
-    const isExist = prevCursor.find(item => item === nextCursor)
+    const isExist = prevCursor.find(item => item === contractIncome.nextCursor)
     if (!isExist) {
-      // setPrevCursor([...prevCursor, nextCursor])
+      setPrevCursor([...prevCursor, contractIncome.nextCursor])
     }
-  }, [nextCursor]);
+  }, [contractIncome.nextCursor]);
 
   const nextPageAction = () => {
-    setPageParam(nextCursor || "")
+    setPageParam(contractIncome.nextCursor)
   }
 
   const getStatusValue = (value: number) => {
@@ -84,11 +79,11 @@ export const CmcPartnerPage: FC = () => {
     }
 
     if (!res.error) {
-      refetch()
+      contractIncome.refetch()
       return true;
     }
     return false;
-  }, [listContracts]);
+  }, [contractIncome]);
 
   const { openDeleteConfirm } = useDeleteConfirm();
 
@@ -97,7 +92,7 @@ export const CmcPartnerPage: FC = () => {
       deleteAction: async () => {
         const res = await deleteContractMutateAsync(itemChecked)
         if (!res.error) {
-          refetch()
+          contractIncome.refetch()
         }
       },
     });
@@ -129,7 +124,7 @@ export const CmcPartnerPage: FC = () => {
     <main className="relative min-h-full">
       <header className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-primary-border">
         <div className="flex items-center">
-          <p className="text-lg">Hợp đồng của đối tác</p>
+          <p className="text-lg">Hợp đồng đối tác</p>
           <SearchInput
             classNameWrapper="ml-4"
             classNameInput="outline-none w-[296px]"
@@ -149,14 +144,6 @@ export const CmcPartnerPage: FC = () => {
             </div>
           )}
         </div>
-        {/* {createPermission && 
-           <button
-           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
-           onClick={handleAddAction}
-         >
-           Tạo mới
-         </button>
-        } */}
       </header>
 
       <table className="table-fixed border-collapse w-full overflow-auto border-l border-r border-primary-border">
@@ -164,10 +151,7 @@ export const CmcPartnerPage: FC = () => {
           <tr className="text-left text-sm text-primary-gray">
             <th className={cn("pb-1 pt-1 text-center", styles.theadInput)}>
               <div className="border-r-2 border-gray-300 flex items-center justify-center">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                />
+                
               </div>
             </th>
             <th className="w-1/5 pb-1 pt-1">
@@ -217,16 +201,11 @@ export const CmcPartnerPage: FC = () => {
         </thead>
 
         <tbody>
-          {listContracts.map((item: any) => {
+          {contractIncome?.listContractIsMember?.map((item: any) => {
             return (
               <tr key={item._id} className="border-b border-primary-border ">
                 <td className="py-1 px-2 text-center">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={itemChecked === item._id}
-                    onChange={() => setItemChecked(item._id)}
-                  />
+                  
                 </td>
                 <td className="py-1 px-2">
                   <Link to={"/cmcs/contract/" + (item._id) + "/home"}>
@@ -249,11 +228,7 @@ export const CmcPartnerPage: FC = () => {
         </tbody>
       </table>
 
-      <Paginate 
-        totalPages={totalPage} 
-        totalRecord={totalRecord} hasNextPage 
-        prevPageAction={() => prevPageAction()} 
-        nextPageAction={() => nextPageAction()} />
+      <Paginate totalPages={contractIncome.totalPage} totalRecord={contractIncome.totalRecord} hasNextPage prevPageAction={() => prevPageAction()} nextPageAction={() => nextPageAction()} />
     </main>
   );
 };
