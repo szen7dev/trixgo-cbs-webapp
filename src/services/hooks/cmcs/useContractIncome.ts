@@ -2,6 +2,40 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
+export const UseContractListIsMember = (pageParam = '', keyword = '', limit = 10): any => {
+
+    const {
+        status,
+        data,
+        error,
+        refetch
+    } = useQuery(
+        ["contractListIsMember", { pageParam, keyword }],
+        async (pageParams: any) => {
+            const [, { pageParam }] = pageParams.queryKey;
+            return ContractIncomeRepository.fetchListIsMember({
+                limit,
+                lastestID: pageParam || "",
+                keyword: keyword
+            })
+        },
+        { keepPreviousData: true }
+    );
+
+    const listContractIsMember = data?.data?.listRecords
+    const totalRecord = data?.data?.totalRecord
+    const totalPage = data?.data?.totalPage
+    const nextCursor = data?.data?.nextCursor
+
+    return {
+        listContractIsMember,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch
+    }
+};
+
 export const UseContractIncomeList = (pageParam = '', keyword = '', limit = 10): any => {
 
     const {
@@ -35,6 +69,7 @@ export const UseContractIncomeList = (pageParam = '', keyword = '', limit = 10):
         refetch
     }
 };
+
 export const UseContractGuaranteeList = (pageParam = '', limit = 10): any => {
 
     const {
