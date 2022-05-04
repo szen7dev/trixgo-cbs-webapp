@@ -12,12 +12,12 @@ const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = (
 	/**
 	 * Thông tin NGÂN_SÁCH
 	 */
-	const totalBudget 		= (data?.[0].budget || 0) + (data?.[0].vatBudget || 0); //TODO update: budget+vatBudget
+	const totalBudget 		= data?.length && (data?.[0].budget || 0) + (data?.[0].vatBudget || 0) || 0; //TODO update: budget+vatBudget
 	const percentBudget		= totalBudget == 0 ? 0 : 100; // nếu không có ngân sách -> thanh % sẽ tính là 0đ (vì cột ngân sách làm chuẩn)
 	/**
 	 * Thông tin DỰ_BÁO
 	 */
-	const totalForecastBudget =  (data?.[0].forecastBudget || 0) + (data?.[0].vatForecastBudget || 0); //TODO update: forecastBudget+vatForecastBudget
+	const totalForecastBudget =  data?.length && (data?.[0].forecastBudget || 0) + (data?.[0].vatForecastBudget || 0) || 0; //TODO update: forecastBudget+vatForecastBudget
 	const getPercentForecastBudget = (_totalBudget: number, _totalForecastBudget: number): number => {
 		if (_totalBudget == 0)
 			return 0;
@@ -29,7 +29,7 @@ const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = (
 	/**
 	 * Thông tin ĐÃ_KÝ_HỢP_ĐỒNG
 	 */
-	const totalcontractValueContractPlusValueContractVatValue =  (data?.[0].contractValue || 0) + (data?.[0].contractVatValue || 0) + (data?.[0].contractPlus || 0) + (data?.[0].contractVatPlus || 0); //TODO update: contractValue+contractVatValue+contractPlus+contractVatPlus
+	const totalcontractValueContractPlusValueContractVatValue =  data?.length && (data?.[0].contractValue || 0) + (data?.[0].contractVatValue || 0) + (data?.[0].contractPlus || 0) + (data?.[0].contractVatPlus || 0) || 0; //TODO update: contractValue+contractVatValue+contractPlus+contractVatPlus
 	const getContractValueContractPlusValueContractVatValue = (_totalBudget: number, _totalcontractValueContractPlusValueContractVatValue: number): number => {
 		if (_totalBudget == 0)
 			return 0;
@@ -41,7 +41,7 @@ const PortfolioBudgetAndContract: FC<HTMLAttributes<HTMLDivElement> & Props> = (
 	/**
 	 * Thông tin ĐÃ_GIẢI_NGÂN
 	 */
-	const totalcontractAmountPaid =  data?.[0].contractAmountPaid || 0; //TODO update: contractAdvancePaymentPaid+contractAmountPaid
+	const totalcontractAmountPaid =  data?.length && data?.[0].contractAmountPaid || 0; //TODO update: contractAdvancePaymentPaid+contractAmountPaid
 	const getcontractAmountPaid = (_totalBudget: number, _totalcontractAmountPaid: number): number => {
 		if (_totalBudget == 0)
 			return 0;
