@@ -84,6 +84,7 @@ const mappingSelectedJournals = (data = [], isDataPayLoad = false) => {
       unitprice: item.unitprice || 0,
       amount: item.quantity * item.unitprice,
       contract: isDataPayLoad ? item?.contract?.value : convertInitialValueDropdown(item?.contract || ''),
+      budgetWork: isDataPayLoad ? item?.budgetWork?.value : convertInitialValueDropdown(item?.budgetWork || ''),
       job: item.job || '',
       note: item.note || '',
       updown: item.updown || 1,
