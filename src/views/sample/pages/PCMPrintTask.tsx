@@ -53,13 +53,33 @@ const PCMPrintTask: FC<Props> = (props) => {
           <header>
             <div className={styles.headerTitle}>
               <div className="row-span-2 flex space-x-2.5">
-                <img src="" alt="logo1" className="border-cbs-border border-0.5" />
-                <img src="" alt="logo2" className="border-cbs-border border-0.5" />
-                <img src="" alt="logo3" className="border-cbs-border border-0.5" />
+                <div className={styles.headerImageContainer}>
+                  <img
+                    src="https://dntdurzwr12tp.cloudfront.net/root/storage/5df4ce16506d9b3c587948ca/6046add8b55525368b108ce2/3652CE1F-50BA-44EB-8EBF-7C3F7E45A6B4.jpg___3e94ebed-338b-4c64-98b7-ed3f5c9860c9___MEDIA.jpg"
+                    alt="logo1"
+                    className="border-cbs-border border-0.5"
+                  />
+                </div>
+                <div className={styles.headerImageContainer}>
+                  <img
+                    src="https://dntdurzwr12tp.cloudfront.net/root/storage/5df4ce16506d9b3c587948ca/6046add8b55525368b108ce2/3652CE1F-50BA-44EB-8EBF-7C3F7E45A6B4.jpg___3e94ebed-338b-4c64-98b7-ed3f5c9860c9___MEDIA.jpg"
+                    alt="logo2"
+                    className="border-cbs-border border-0.5"
+                  />
+                </div>
+                <div className={styles.headerImageContainer}>
+                  <img
+                    src="https://dntdurzwr12tp.cloudfront.net/root/storage/5df4ce16506d9b3c587948ca/6046add8b55525368b108ce2/3652CE1F-50BA-44EB-8EBF-7C3F7E45A6B4.jpg___3e94ebed-338b-4c64-98b7-ed3f5c9860c9___MEDIA.jpg"
+                    alt="logo3"
+                    className="border-cbs-border border-0.5"
+                  />
+                </div>
               </div>
               <div className="text-x-small">XÂY DỰNG CỤM TRƯỜNG TIỂU HỌC VÀ THCS TÂY HỒ TÂY</div>
               <div className="row-span-2">
-                <img src="" alt="logo1" className="border-cbs-border border-0.5" />
+                <div className={styles.headerImageContainer}>
+                	<img src="https://dntdurzwr12tp.cloudfront.net/root/storage/5df4ce16506d9b3c587948ca/6046add8b55525368b108ce2/3652CE1F-50BA-44EB-8EBF-7C3F7E45A6B4.jpg___3e94ebed-338b-4c64-98b7-ed3f5c9860c9___MEDIA.jpg" alt="logo1" className="border-cbs-border border-0.5" />
+								</div>
               </div>
               <div className="text-large align-middle text-cbs-secondary">BIÊN BẢN HỌP</div>
             </div>
