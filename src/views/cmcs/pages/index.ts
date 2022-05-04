@@ -15,3 +15,4 @@ export * from './ContractEditor';
 export * from './ContractBill';
 export * from './ContractBudget';
 export * from './ContractProduct';
+export * from './CmcPartnerPage';

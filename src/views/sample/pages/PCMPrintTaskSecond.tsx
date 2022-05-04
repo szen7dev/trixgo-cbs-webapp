@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
 import styles from "../styles/style.module.css";
-import { zoomview } from "shareComponents/common/ZoomView/ZoomViewV2";
 
 type Props = {
   //
@@ -17,7 +16,9 @@ const PCMPrintTaskSecond: FC<Props> = (props) => {
           <header>
             <div className={styles.reportTitle}>
               <div className="flex space-x-2.5">
-                <img src="" alt="logo1" className="border-cbs-border border-0.5" />
+                <div className={styles.headerImageContainer}>
+                  <img src="" alt="logo1" className="border-cbs-border border-0.5" />
+                </div>
               </div>
               <div className="text-smalll text-center font-normal">
                 <p className="text-medium text-cbs-primary font-bold">BÁO CÁO TUẦN CÔNG TÁC QLDA</p>

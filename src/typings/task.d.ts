@@ -20,7 +20,8 @@ export type Project = {
   _id: string;
   name: string;
   sign: string;
-  company: string,
+  address: string;
+  company: string | Company,
   startTime: string
 };
 
@@ -356,6 +357,7 @@ export type ListCommentsPayload = {
   companyID?: string;
   contractID?: string;
   parentID?: string;
+  isHaveImage?: boolean;
   select?: string;
   populates?: string;
 };

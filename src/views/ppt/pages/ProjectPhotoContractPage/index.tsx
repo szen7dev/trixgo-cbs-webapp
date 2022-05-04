@@ -64,6 +64,7 @@ const ProjectPhotoContractPage: FC = () => {
 	} = useCommentPcm({
 		params: {
 			contractID,
+			isHaveImage: true,
 			select: "_id content author images task createAt",
 			populates: JSON.stringify({
 				path: "images author task",
@@ -114,8 +115,15 @@ const ProjectPhotoContractPage: FC = () => {
 										<img src={`${process.env.REACT_APP_URL_S3_USER}/${comment.author.image}`} alt="" className="w-10 h-10 mr-3.5 object-cover rounded-full" />
 										<div>
 											<Link to={`/pcm/detail/${comment.task?._id}`} target="_blank">
-												<strong className="line-clamp-1 text-base" title={comment.content}>
-													{comment.content}
+												{/* line-clamp-1  */}
+												<strong
+													className="text-base"
+													title={comment.content}
+													dangerouslySetInnerHTML={{
+														__html: comment.content
+													}}
+												>
+													{/* {comment.content} */}
 												</strong>
 											</Link>
 											<p>{comment.author?.bizfullname} |

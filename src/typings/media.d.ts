@@ -85,12 +85,13 @@ export type MediaProps = {
   createdAt: string;
   updatedAt: string;
   receivers?: string[],
-  amountReaction?: number,
-  amountComment?: number,
-  amountView?: number,
+  amountReaction?: number;
+  amountComment?: number;
+  amountView?: number;
   reaction?: {
-    type: number
+    type: number;
   },
+  keyError?: string;
 };
 
 export type MediaInfoResponse = APIResponse & {
