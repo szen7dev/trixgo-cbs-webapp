@@ -11,6 +11,7 @@ import {
 	useQueryListWarehouse,
 	useQueryListContact,
 	useQueryListContract,
+	useQueryListBudgetWork,
 	useQueryListAccount,
 	useQueryListGood
 } from "services/hooks/cmcs/useContractIncome";
@@ -37,6 +38,13 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 	const { listContract } = useQueryListContract({
 		limit: LIMIT_DROPDOWN,
 		keyword: searchContractValue,
+	});
+	const [searchBudgetWorkValue, setSearchBudgetWorkValue] = useState(
+		initialValues?.budgetWork || ""
+	);
+	const { listBudgetWork } = useQueryListBudgetWork({
+		limit: LIMIT_DROPDOWN,
+		keyword: searchBudgetWorkValue,
 	});
 	const [searchDebitValue, setSearchDebitValue] = useState(
 		initialValues?.debit || ""
@@ -287,7 +295,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[130px]"}
 												id="ticket-type" placeholder="Kho bãi"
 												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.warehouse`, value)}
 												onClearData={() => setFieldValue(`selectedJournals.${index}.warehouse`, '')}
@@ -345,7 +353,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<DropdownSearchable
 												classNameInput={"border-b border-gray-300 rounded-none"}
-												className={"w-[150px]"}
+												className={"w-[130px]"}
 												id="ticket-type" placeholder="Hợp đồng"
 												showTriangle={false}
 												allowClearValueSingleInput={true}
@@ -371,22 +379,38 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 											/>
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-											{/* <DropdownSearchable
-                                                classNameInput={"border-b border-gray-300 rounded-none"}
-                                                className={"flex-1"}
-                                                id="ticket-type" placeholder="Khoản mục phí"
-                                                showTriangle={false}
-                                                allowClearValueSingleInput={true}
-                                            // searchUrl={"/user/get-list"}
-                                            // searchParam={"search"}
-                                            /> */}
-
+											<DropdownSearchable
+												classNameInput={"border-b border-gray-300 rounded-none"}
+												className={"w-[130px]"}
+												id="ticket-type" placeholder="Khoản mục phí"
+												showTriangle={false}
+												allowClearValueSingleInput={true}
+												onchangeValue={(value: any) => setFieldValue(`selectedJournals.${index}.budgetWork`, value)}
+												onClearData={() => setFieldValue(`selectedJournals.${index}.budgetWork`, '')}
+												renderSelectedItem={(item) => <Popover onMouseEnterTooltip={false} tooltip={`${item.text}`} classTooltip="left-0 w-[330px] whitespace-normal" >
+													<p className="text-2-line-clamp">{`${item.text}`}</p>
+												</Popover>}
+												onSearchInputChange={debounce(
+													(value) => setSearchBudgetWorkValue(value),
+													500
+												)}
+												initialValue={item.budgetWork}
+												data={listBudgetWork.map((item: any) => ({
+													label: item.name,
+													value: item._id,
+												}))}
+												formatItem={{
+													id: "value",
+													text: "label",
+												}}
+												inlineSearch={true}
+											/>
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
 											<Field name={`selectedJournals.${index}.note`} rows={1} className={"focus:outline-none border-b border-gray-300"} placeholder={"Ghi chú"} />
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle"}>
-											<Field name={`selectedJournals.${index}.updown`} className={"focus:outline-none w-100 border-b w-[80px] border-gray-300"} placeholder={"1, -1"} />
+											<Field name={`selectedJournals.${index}.updown`} className={"focus:outline-none w-100 border-b w-[40px] border-gray-300"} placeholder={"1, -1"} />
 											<Field name={`selectedJournals.${index}.journalID`} hidden className={"focus:outline-none w-100 border-b w-[80px] border-gray-300"} placeholder={"#"} />
 										</div>
 										<div className={"px-2 py-4 table-cell box-border border border-gray-300 align-middle flex items-center"}>
@@ -429,6 +453,7 @@ const CreateNewTicketTableAccount: FC<any> = ({ formik, initialValues }) => {
 								unitprice: '',
 								amount: '',
 								contract: '',
+								budgetWork: '',
 								job: '',
 								note: '',
 								updown: '',
