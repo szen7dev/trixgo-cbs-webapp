@@ -37,6 +37,12 @@ const modalReducers = (
         isShow: true,
         type: "move-task-to-group",
       };
+    case modalTypes.OPEN_UPDATE_MILESTONE:
+      return {
+        ...state,
+        isShow: true,
+        type: "update-milestone",
+      };
     default:
       return state;
   }

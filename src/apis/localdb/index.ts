@@ -430,6 +430,18 @@ export const PCM_PROPOSAL_TASK = [
     { value: 11, text: 'Họp', sign: 'MOM', key: 'mom' },
 ]
 
+// MỐC TIẾN ĐỘ
+export const PCM_MILESTONE = [
+    { value: 0, text: 'Việc thông thường', sign: 'Tasks', key: 'task' },
+    { value: 1, text: 'Pháp lý', sign: '', key: '' },
+    { value: 2, text: 'Thiết kế', sign: '', key: '' },
+    { value: 3, text: 'Dự toán, ngân sách', sign: '', key: '' },
+    { value: 4, text: 'Lựa chọn nhà thầu', sign: '', key: '' },
+    { value: 5, text: 'Thi công', sign: '', key: '' },
+    { value: 6, text: 'Bàn giao', sign: '', key: '' },
+    { value: 7, text: 'Quyết toán', sign: '', key: '' },
+]
+
 // LOẠI TÀI LIỆU TẠO DỰNG
 export const DOCRE_TYPES = [
     { value: 1, text: 'Yêu cầu phê duyệt (RFA)', sign: 'rfa' },

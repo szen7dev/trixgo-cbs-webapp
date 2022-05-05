@@ -40,7 +40,8 @@ import {
   ModalUpdateTask,
   ModalUpdateTaskStatus,
   ModalMoveTaskToParent,
-  ModalMoveTaskToGroup
+  ModalMoveTaskToGroup,
+  ModalUpdateMilestone
 } from "./components";
 import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
 import { CommentFull } from "../../shareComponents/common";
@@ -73,7 +74,8 @@ const PcmDetailTaskPage: FC = () => {
     openAddUserRelation,
     openAddNotificationEmail,
     openMoveTaskToParent,
-    openMoveTaskToGroup
+    openMoveTaskToGroup,
+    openUpdateMilestone
   }] = useModalPcm();
   const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
 
@@ -392,6 +394,11 @@ const PcmDetailTaskPage: FC = () => {
                 </div>
               </Menu.Item>
             ) : ''}
+             <Menu.Item onClick={openUpdateMilestone}>
+              <div className={"w-full hover:bg-gray-100 flex items-center px-4 py-2"}>
+                  <div className={"flex-1 text-left ml-4"}>Gán phân loại cột mốc</div>
+              </div>
+            </Menu.Item>
           </DropdownOption>
         </div>
       </div>
@@ -655,6 +662,13 @@ const PcmDetailTaskPage: FC = () => {
 
             {type === 'move-task-to-group' &&
               <ModalMoveTaskToGroup
+                taskID={taskInfo._id}
+                projectID={taskInfo.project?._id}
+                toggle={toggleModal}
+              />}
+
+            {type === 'update-milestone' &&
+              <ModalUpdateMilestone
                 taskID={taskInfo._id}
                 projectID={taskInfo.project?._id}
                 toggle={toggleModal}

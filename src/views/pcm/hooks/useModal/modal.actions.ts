@@ -18,6 +18,9 @@ const modalActions = (dispatch: DispatchAction) => ({
   openMoveTaskToGroup() {
     return dispatch({ type: modalTypes.OPEN_MOVE_TASK_TO_GROUP });
   },
+  openUpdateMilestone() {
+    return dispatch({ type: modalTypes.OPEN_UPDATE_MILESTONE });
+  },
 });
 
 export default modalActions;
