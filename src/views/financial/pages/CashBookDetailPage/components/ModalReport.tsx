@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, Fragment, useState, memo } from 'react'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { useParams } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 
 	if(isLoadingAmountByProperty) return <></>;
 
-	const totalFund = amountByProperty?.reduce((prevVal: number, currValue: any) =>
+	const totalFund = amountByProperty?.reduce?.((prevVal: number, currValue: any) =>
 		prevVal += currValue.income - currValue.expense
 	, 0) ?? 0;
 
@@ -129,7 +129,7 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 														{convertCurrency(totalFund)}
 													</div>
 													{(amountByProperty && amountByProperty.length) ?
-														amountByProperty.map((item: any) => (
+														amountByProperty?.map?.((item: any) => (
 															<React.Fragment key={item._id}>
 																<div>
 																	{item._id?.account?.name}-
@@ -180,4 +180,4 @@ const ModalReport: FC<Props> = ({ open, onClose }) => {
 	)
 }
 
-export default ModalReport
+export default memo(ModalReport);

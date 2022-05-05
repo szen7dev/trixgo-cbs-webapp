@@ -186,7 +186,7 @@ const RowTableUpdateInline: FC<Props> = ({
         />
       </td>
       {/* Thu */}
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+      <td className="px-2 min-w-[120px] table-cell box-border border border-gray-300 align-middle">
         <input
           type="text"
           className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
@@ -204,7 +204,7 @@ const RowTableUpdateInline: FC<Props> = ({
         />
       </td>
       {/* Chi */}
-      <td className="px-2 table-cell box-border border border-gray-300 align-middle">
+      <td className="px-2 min-w-[120px] table-cell box-border border border-gray-300 align-middle">
         <input
           type="text"
           className="w-full h-full focus-visible:outline-blue-600 px-[16px] py-[9px]"
@@ -223,7 +223,7 @@ const RowTableUpdateInline: FC<Props> = ({
       </td>
       {/* Tồn */}
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
-        {convertCurrency(values.inventory)}
+        {convertCurrency(inventory)}
       </td>
       {/* Mô tả/Ghi chú */}
       <td className="px-2 table-cell box-border border border-gray-300 align-middle">
