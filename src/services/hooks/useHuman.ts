@@ -36,7 +36,7 @@ export const useFetchListHuman = (params: any): UseListHuman => {
         ['list_human', { params }],
         async ({ pageParam }: any) => {
             return HumanRepository.fetchListHuman({
-                limit: params.limit || 10,
+                limit: params.limit || 20,
                 lastestID: pageParam || "",
                 ...params,
             })

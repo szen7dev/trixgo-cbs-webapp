@@ -64,13 +64,22 @@ export const HumanHomePage: FC = () => {
     return false;
   }, [createContactMutateAsync, humans]);
 
+  // const handleOnFilter = useCallback((values) => {
+  //   setPageParam(() => ({ ...values, departmentID }));
+  //   return true;
+  // }, []);
+
   const handleOnFilter = useCallback((values) => {
-    setPageParam(() => ({ ...values, departmentID }));
+    setPageParam(() => ({ ...values }));
     return true;
   }, []);
 
+  // const handleOnCancelFilter = useCallback(() => {
+  //   setPageParam({departmentID});
+  // }, []);
+
   const handleOnCancelFilter = useCallback(() => {
-    setPageParam({departmentID});
+    setPageParam({});
   }, []);
 
 	const { infoDepartment } = usePcmProject({ departmentID });
@@ -78,13 +87,14 @@ export const HumanHomePage: FC = () => {
     <section className="w-full">
       <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
         <div className="flex items-center">
-        <img
+          <p className="text-lg">Danh sách</p>
+        {/* <img
           src={BackIcon}
           alt="Back"
           onClick={() => history.goBack()}
           className="cursor-pointer"  />
           &ensp;
-          <p className="text-lg truncate">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</p>
+          <p className="text-lg truncate">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</p> */}
           <div className="relative pl-4">
             <span>
               <img
@@ -115,7 +125,12 @@ export const HumanHomePage: FC = () => {
           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
           onClick={() =>
             openModal(
-              <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
+              // <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
+                <div
+                  className={
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+                  }
+                >
                 <NewHumanModal onFinish={handleFinishForm} />
               </div>
             )
@@ -144,7 +159,7 @@ export const HumanHomePage: FC = () => {
                   <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
                 </div>
                 <span className="text-xl font-normal">{`${item.name}`}</span>
-                <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>
+                <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
               </div>
               <Link
                 to={`/human/home/hid=${item._id}`}

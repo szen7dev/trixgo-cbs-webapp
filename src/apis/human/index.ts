@@ -42,6 +42,7 @@ async function fetchListHuman<T>(params: HumanPayload): Promise<T> {
                     "select": "_id name sign members"
                 },
                 type: 1,
+                isMember: 1,
                 ...params,
             },
         }
