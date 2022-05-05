@@ -163,7 +163,7 @@ export const ItemFundaPage: FC = () => {
     }
 
   return (
-    <main className="relative h-full">
+    <main className="overflow-auto relative h-full">
         <header className="sticky top-0 bg-primary-light z-10">
             <div className="h-[50px] border border-primary-border flex items-center justify-between px-5">
                 <div className="flex items-center">
