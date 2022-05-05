@@ -17,9 +17,9 @@ import { HumanCetificateFilterPage, HumanOtherFilterPage, HumanExpiredPage, Huma
 const HumanRouter: FC = () => {
     return (
         <Switch>
-            {/* <ProtectedRoute exact path="/human/home" component={HumanHomePage} /> */}
-            <ProtectedRoute exact path="/human/home" component={HumanDepartment} />
-            <ProtectedRoute exact path="/human/project/:id/contacts" component={HumanHomePage} />
+            <ProtectedRoute exact path="/human/home" component={HumanHomePage} />
+            {/* <ProtectedRoute exact path="/human/home" component={HumanDepartment} /> */}
+            {/* <ProtectedRoute exact path="/human/project/:id/contacts" component={HumanHomePage} /> */}
             <ProtectedRoute exact path="/human/cetificate" component={HumanCetificateFilterPage} />
             <ProtectedRoute exact path="/human/other" component={HumanOtherFilterPage} />
             <ProtectedRoute exact path="/human/expired" component={HumanExpiredPage} />
