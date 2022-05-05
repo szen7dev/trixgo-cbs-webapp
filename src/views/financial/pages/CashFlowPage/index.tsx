@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import moment from "moment";
 import debounce from "lodash/debounce";
@@ -31,6 +31,8 @@ import { useCashFlowPlan } from "services/hooks/financial/useCashFlow";
 import { convertCurrency } from "utils/converter";
 
 export const CashFlowPage: FC = () => {
+  const location = useLocation();
+
   const { closeModal, openModal } = useModal();
   const [cashFlowIdSelected, setCashFlowIdSelected] = useState("");
   const [modalShow, setModalShow] = useState({
@@ -46,7 +48,10 @@ export const CashFlowPage: FC = () => {
     fetchNextPage,
     totalRecord,
   } = useCashFlowPlan({
-    params: { keyword },
+    params: {
+      keyword,
+      isCompanyOther: location.pathname === '/financial/cashflow-other'
+    },
     isFetchList: true,
   });
 

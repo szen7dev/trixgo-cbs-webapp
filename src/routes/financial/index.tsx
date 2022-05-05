@@ -45,8 +45,18 @@ const FinancialRouter: FC = () => {
             </LayoutPrimary>
           </Route>
 
-          <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
-          <Route exact path={"/financial/cashflow/:cashFlowId"} component={CashFlowDetailPage} />
+          <Route path="/financial/(cashflow|cashflow-other)">
+            <LayoutPrimary
+              pages={[
+                { id: "1", title: "Kế hoạch tài chính", path: "/financial/cashflow" },
+                { id: "2", title: "Kế hoạch tài chính khác", path: "/financial/cashflow-other" },
+              ]}
+            >
+              <Route exact path={"/financial/cashflow"} component={CashFlowPage} />
+              <Route exact path={"/financial/cashflow/:cashFlowId"} component={CashFlowDetailPage} />
+              <Route exact path={"/financial/cashflow-other"} component={CashFlowPage} />
+            </LayoutPrimary>
+          </Route>
 
           <Route path="/financial/admin">
             <LayoutSecondary pages={[

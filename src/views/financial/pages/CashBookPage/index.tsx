@@ -1,5 +1,5 @@
 import { FC, ChangeEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 import moment from "moment";
@@ -9,7 +9,7 @@ import moment from "moment";
  */
 // import { DropdownFilterButton } from "views/document/sharedComponents/common";
 import {
-  Paginate,
+  // Paginate,
   SearchInput,
   GroupActions,
   ButtonCreate,
@@ -33,6 +33,8 @@ export const CashBookPage: FC = () => {
   const [visibleCreateModal, setVisibleCreateModal] = useState<boolean>(false);
   const [visibleUpdateModal, setVisibleUpdateModal] = useState<boolean>(false);
 
+  const location = useLocation();
+
   const {
     deleteManyAsync,
     list: listCashBook,
@@ -43,7 +45,7 @@ export const CashBookPage: FC = () => {
   } = useCashBook({
     params: {
       keyword,
-      limit: 5,
+      isCompanyOther: location.pathname === '/financial/cashbook-other'
     },
     isFetchList: true
   })
