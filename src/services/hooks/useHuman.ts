@@ -30,6 +30,7 @@ interface UseListHuman {
     refetchListHuman: () => void;
     fetchNextPageHuman: () => void;
 };
+
 export const useFetchListHuman = (params: any): UseListHuman => {
     const infinityQuery = useInfiniteQuery(
         ['list_human', { params }],
@@ -65,7 +66,7 @@ export const useFetchListHuman = (params: any): UseListHuman => {
         .filter(Boolean);
     const totalRecord = data?.pages[0]?.data?.totalRecord;
     const totalPages = data?.pages[0]?.data?.totalPages;
-
+            
     return {
         isLoading,
         listHuman,
