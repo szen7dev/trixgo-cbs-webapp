@@ -98,6 +98,7 @@ export interface updateTaskPayload {
   status?: number;
   priority?: number;
   draft?: number;
+  milestone?: number;
   actualFinishTime?: string;
   isAddSignature?: boolean;
   flags?: Array<string>;
