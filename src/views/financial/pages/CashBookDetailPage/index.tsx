@@ -111,7 +111,11 @@ export const CashBookDetailPage: FC = () => {
     isFetchList: !!cashbookId,
   })
 
-  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense, refetchAmountIncomeExpense } = useCashBookCustom({
+  const {
+    amountIncomeExpenseByParent,
+    isLoadingAmountIncomeExpense,
+    refetchAmountIncomeExpense
+  } = useCashBookCustom({
     paramsAmountIncomeExpense: { parentID: cashbookId },
     isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
@@ -195,7 +199,6 @@ export const CashBookDetailPage: FC = () => {
   useEffect(() => {
     if(!amountIncomeExpenseByParent ||
         isLoadingAmountIncomeExpense ||
-        isLoadingListCashBook ||
         !listCashBook
       ) return;
 
@@ -442,7 +445,7 @@ export const CashBookDetailPage: FC = () => {
           data={listAccountSearch}
           onScroll={handleScrollAccountSearch}
           onChange={onChangeAccountSearch}
-          attribute="description"
+          server={true}
           onChangeValue={value => setAccountSearchSelected(value._id)}
           renderValue={item => `${item.name}-${item.description}`}
           wrapperClassName="w-[170px] z-40"
