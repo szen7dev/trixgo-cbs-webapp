@@ -1,5 +1,5 @@
 import { APIResponse } from "./apis/response";
-import { Company } from "./common";
+import { Company, Group, Contract, FileProps, QueryParams } from "./common";
 import { Project } from "./items/project";
 import { Task } from "./task";
 import { User } from "./user";
@@ -192,9 +192,68 @@ export type FilesPcmGroupByContractResponse = {
 }
 
 /**
- * ============================ ********** ===============================
- * ============================ 	 OTHER   ===============================
- * ============================ ********** ===============================
+ * ============================ **************** ===============================
+ * ============================ 	 PCM COMMENT   ===============================
+ * ============================ **************** ===============================
+ */
+
+/**
+ * SCHEMA
+ */
+export interface PcmComment {
+  _id: string;
+  content: string;
+  type: number;
+  subType: number;
+  official: boolean;
+  files: FileProps;
+  images: FileProps;
+  project: Project | string;
+  group: Group | string;
+  contract: Contract | string;
+  task: Task | string;
+  parent: PcmComment | string;
+  lastestReplyID: PcmComment | string;
+  author: User | string;
+  userUpdate: User | string;
+  amountCommentReply: number;
+  amountReaction: number;
+  modifyAt: string;
+  createAt: string;
+}
+
+/**
+ * PARAMS LIST
+ */
+export type PcmCommentListParams = QueryParams & {
+  taskID?: string;
+  type?: number;
+  official?: string;
+  parentID?: string;
+  commentID?: string;
+  contractID?: string;
+  projectID?: string;
+  isHaveImage?: boolean;
+  sortKey?: string;
+}
+
+/**
+* RESPONSE LIST
+*/
+export type PcmCommentListResponse = APIResponse & {
+  data: {
+      listRecords: PcmComment[];
+      limit: number;
+      totalRecord: number;
+      totalPage: number;
+      nextCursor: string | null;
+  }
+}
+
+/**
+ * ============================ *********** ===============================
+ * ============================ 	 CUSTOM   ===============================
+ * ============================ *********** ===============================
  */
 
 export type SendMailTaskPayload = {

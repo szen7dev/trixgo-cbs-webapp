@@ -2,6 +2,40 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import ContractIncomeRepository from 'apis/cmcs/contractIncome';
 import HumanRepository from 'apis/human';
 
+export const UseContractListIsMember = (pageParam = '', keyword = '', limit = 10): any => {
+
+    const {
+        status,
+        data,
+        error,
+        refetch
+    } = useQuery(
+        ["contractListIsMember", { pageParam, keyword }],
+        async (pageParams: any) => {
+            const [, { pageParam }] = pageParams.queryKey;
+            return ContractIncomeRepository.fetchListIsMember({
+                limit,
+                lastestID: pageParam || "",
+                keyword: keyword
+            })
+        },
+        { keepPreviousData: true }
+    );
+
+    const listContractIsMember = data?.data?.listRecords
+    const totalRecord = data?.data?.totalRecord
+    const totalPage = data?.data?.totalPage
+    const nextCursor = data?.data?.nextCursor
+
+    return {
+        listContractIsMember,
+        totalRecord,
+        totalPage,
+        nextCursor,
+        refetch
+    }
+};
+
 export const UseContractIncomeList = (pageParam = '', keyword = '', limit = 10): any => {
 
     const {
@@ -35,6 +69,7 @@ export const UseContractIncomeList = (pageParam = '', keyword = '', limit = 10):
         refetch
     }
 };
+
 export const UseContractGuaranteeList = (pageParam = '', limit = 10): any => {
 
     const {
@@ -145,6 +180,49 @@ export const useQueryListContract = ({ limit, keyword }: any): any => {
     return {
         loading: isLoading,
         listContract,
+        totalRecord,
+        totalPages,
+        hasNextPage,
+        refetchListDoctype,
+        fetchNextPageDoctype
+    }
+}
+export const useQueryListBudgetWork = ({ limit, keyword }: any): any => {
+    const res = useInfiniteQuery(
+        [`list_budgetWork,${keyword}`, keyword],
+        async ({ pageParam }: any) =>
+            HumanRepository.fetchListBudgetWork({
+                limit: limit || 10,
+                lastestID: pageParam || "",
+                keyword,
+            }),
+        {
+            getNextPageParam: ({ data }: any) => {
+                return data?.nextCursor || undefined;
+            },
+            refetchOnWindowFocus: false,
+            enabled: true, // https://react-query.tanstack.com/guides/disabling-queries
+        }
+    );
+    const {
+        isLoading,
+        data,
+        refetch: refetchListDoctype,
+        fetchNextPage: fetchNextPageDoctype,
+        hasNextPage
+    } = res;
+
+    const listBudgetWork = []
+        .concat(
+            ...(data?.pages || []).map((d: any) => d.data?.listRecords)
+        )
+        .filter(Boolean);
+    const totalRecord = data?.pages[0]?.data?.totalRecord;
+    const totalPages = data?.pages[0]?.data?.totalPages;
+
+    return {
+        loading: isLoading,
+        listBudgetWork,
         totalRecord,
         totalPages,
         hasNextPage,

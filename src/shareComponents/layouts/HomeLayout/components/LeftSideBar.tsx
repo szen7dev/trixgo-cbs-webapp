@@ -48,7 +48,7 @@ export const LeftSideBar: FC = () => {
         <div className="t-leftsidebar-menu-block mb-6">
           {/* <p className="t-leftsidebar-menu-title mb-5">Quản lý dự án</p> */}
           {hasPermission && dataUserAccess?.level == 0 ?
-            <NavLink to={`/pcm/admin`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+            <NavLink to={`/pcm/admin`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
               <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
               <span className="truncate">Quản trị viên</span>
             </NavLink> : <></>
@@ -61,7 +61,7 @@ export const LeftSideBar: FC = () => {
                 if (roleApp && roleApp.read >= 1) {
                   return (
                     <NavLink key={index} to={`/pcm/${item.slug}`} 
-                    className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+                    className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
                       <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
                       <span className="truncate">{item.name}</span>
                     </NavLink>
@@ -74,45 +74,27 @@ export const LeftSideBar: FC = () => {
           }
 
           <p className="t-leftsidebar-menu-title mb-1 mt-2">Công việc</p>
-          <NavLink to={`/pcm/home`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+          <NavLink to={`/pcm/home`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc của tôi</span>
           </NavLink>
-          <NavLink to={`/pcm/assign`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+          <NavLink to={`/pcm/assign`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc giao người khác</span>
           </NavLink>
-          <NavLink to={`/pcm/bookmark`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+          <NavLink to={`/pcm/bookmark`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Việc quan tâm</span>
           </NavLink>
-          <NavLink to={`/pcm/report`} className="t-link-menu-item flex items-center text-primary-gray py-3 pl-8 pr-3">
+          <NavLink to={`/pcm/dashboard`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
+            <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
+            <span className="truncate">Báo cáo quản trị</span>
+          </NavLink>
+          <NavLink to={`/pcm/report`} className="t-link-menu-item flex items-center text-primary-gray py-2 pl-4 pr-2 text-medium">
             <img className="w-6 h-6 object-contain mr-3" src={iconFolder} alt="Menu item" />
             <span className="truncate">Báo cáo động</span>
           </NavLink>
-
-          {/* <div className="t-leftsidebar-menu-showmore">
-            <button className="t-leftsidebar-menu-showmore-btn flex items-center">
-              <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm
-            </button>
-          </div> */}
         </div>
-
-        {/* menu block */}
-        {/* <div className="t-leftsidebar-menu-block mb-6">
-          <p className="t-leftsidebar-menu-title mb-5">Danh sách dự án</p>
-          <div className="t-leftsidebar-menu-container">
-            <a className="t-leftsidebar-menu-item flex items-center mb-6 text-primary-gray" href="/">
-              <img className="w-6 h-6 object-contain mr-3" src={iconMissile} alt="Menu item" />
-              <span className="truncate">CHG.THT.Xây dựng cụmm thông tin truyền thông và thiết bị</span>
-            </a>
-          </div>
-          <div className="t-leftsidebar-menu-showmore">
-            <button className="t-leftsidebar-menu-showmore-btn flex items-center">
-              <img className="h-1 mr-3" src={icon3dots} alt="Show more" /> Xem thêm
-            </button>
-          </div>
-        </div> */}
 
         {/* customize data block */}
         <div className="t-leftsidebar-customize-data text-center">

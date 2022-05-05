@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useLayoutEffect } from "react";
+import { FC, useContext, useEffect } from "react";
 import SwiperCore, { Navigation } from 'swiper';
 import { useParams } from 'react-router-dom';
 
@@ -38,17 +38,6 @@ import { ContextModalPost } from "views/media/contexts/post";
 
 SwiperCore.use([Navigation]);
 
-// const obj: { readonly [key: string]: number } = { 2: 10, b: 20 }
-// console.log({ obj, l: obj['2'] });
-
-// const f = ({ a, b = 0 } = { a: "" }): Record<string, unknown> => {
-// 	return { a, b }
-// }
-
-// type Props = {
-// 	a?: keyof typeof obj
-// }
-
 const ProjectDashboardPortfolioPage: FC = () => {
 	const { state, toggleModal } = useContext(ContextModalPost);
 
@@ -77,17 +66,6 @@ const ProjectDashboardPortfolioPage: FC = () => {
 	useEffect(() => {
 		document.title = "CHG.THT-Báo cáo quản trị";
 	}, []);
-
-	// useLayoutEffect(() => {
-	// 	(async () => {
-	// 		await new Promise(resolve => setTimeout(() => {
-	// 			resolve('done');
-	// 			console.log('done async task');
-	// 		}, 10000));
-	// 	})();
-	// 	console.log('useLayoutEffect');
-	// })
-	// console.log('Rendering...');
 
 	return (
 		<div className={cn(styles.content, styles.report, styles['bg-gray'], styles['text-normal'])}>

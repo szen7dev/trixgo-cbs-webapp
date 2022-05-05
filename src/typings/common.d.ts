@@ -117,15 +117,29 @@ export type Company = {
   _id: string;
   name: string;
   sign: string;
+  image: string;
 }
 
 export type Department = {
   _id: string;
   name: string;
   sign: string;
+  image: string;
+}
+
+export type Group = {
+  _id: string;
+  name: string;
+  sign: string;
 }
 
 export type Position = {
+  _id: string;
+  name: string;
+  sign: string;
+}
+
+export type Contract = {
   _id: string;
   name: string;
   sign: string;

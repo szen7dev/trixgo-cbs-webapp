@@ -1,25 +1,67 @@
-import classNames from "classnames";
-import React, { FC } from "react";
-import { Link, useParams } from "react-router-dom";
+import { FC, useEffect } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
+/**
+ * Components, Assets
+ */
 import styles from "../../styles/pcm_print.module.css";
 import ZoomViewV2, { zoomview } from "shareComponents/common/ZoomView/ZoomViewV2";
+import { Loader } from "shareComponents/common";
+
+/**
+ * Utils
+ */
 import { generateIamgePath } from "utils";
+import { APP_ID } from "apis/localdb";
 
-type Props = {
-  //
-};
+/**
+ * Hooks, Types
+ */
+import { useAuth } from "services/hooks/auth/useAuth";
+import { useTask } from "services/hooks/useTask";
+import { usePcmComment } from "services/hooks/pcm/usePcm";
+import { useCheckPerAccessApp } from "services/hooks/auth/usePermissions";
 
-const PcmPrintTaskTypeThree: FC<Props> = (props) => {
-  const { id } = useParams<{ id: string }>();
-  // const {
-  //   data: { data: taskInfo } = {},
-  //   refetch: refetchInfoTask,
-  //   isLoading,
-  //   isSuccess,
-  // } = useQuery(`task_info.${id}`, () => TaskRepository.taskInfo(id), {
-  //   refetchOnWindowFocus: false,
-  // });
+const PcmPrintTaskTypeThree: FC = () => {
+  const history = useHistory();
+  const { id: taskId } = useParams<{ id: string }>();
+
+  const { user } = useAuth();
+
+  const { hasPermission, isSuccess: isSuccessApp } = useCheckPerAccessApp({ appID: APP_ID.PCM.id });
+
+  const { info: taskInfo, isLoadingInfo } = useTask({
+    params: {
+      taskID: taskId,
+      select: "_id name sign"
+    },
+    isFetchInfo: true
+  })
+
+  const { list: listPcmComments } = usePcmComment({
+    params: {
+      taskID: taskId,
+      isHaveImage: true,
+      populates: JSON.stringify({
+        path: 'images',
+        select: '_id nameOrg path description'
+      })
+    },
+    isFetchList: true
+  })
+  console.log({ listPcmComments });
+
+  useEffect(() => {
+    if (!isSuccessApp || !taskInfo || !user || isLoadingInfo) return;
+
+    if (isSuccessApp && !hasPermission) {
+			toast.error("Bạn không có quyền truy cập tính năng này!");
+			return history.push("/");
+		};
+  }, [taskInfo, isSuccessApp]);
+
+  if(isLoadingInfo) return <Loader className="border-primary" />
 
   return (
     <div className="bg-cbs-gray h-full overflow-hidden">
@@ -28,7 +70,7 @@ const PcmPrintTaskTypeThree: FC<Props> = (props) => {
           <header className="mt-3">
             <p className="font-bold">PHỤ LỤC ẢNH</p>
             <p>
-              <i>(Đính kèm Đóng góp về hệ thống TRIXGO-PCM, số hiệu: )</i>
+              <i>(Đính kèm {taskInfo.name}, số hiệu: {taskInfo.sign})</i>
             </p>
           </header>
           <main className="space-y-5">

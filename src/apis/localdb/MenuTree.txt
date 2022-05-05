@@ -60,7 +60,7 @@ MENU ỨNG DỤNG CMCS/menu-cmcs-app (type=1): 623f22b1e998e94feda0cd8b
 +++Hợp đồng bán ra/income: 623f22d1e998e94feda0cd91
 +++Hợp đồng mua vào/expense: 623f22dee998e94feda0cd92
 +++Theo dõi bảo lãnh/guarantee: 623f22eae998e94feda0cd93
-
++++Hợp đồng đối tác/partner: 6272eb0f3cf2ab30141bff10
 
 MENU HỢP ĐỒNG ĐỒNG CMCS/menu-cmcs-contract (type=3): 623f22ffe998e94feda0cd94
 +++Báo cáo quản trị/dashboard: 623f2311e998e94feda0cd95
@@ -106,6 +106,7 @@ MENU ỨNG DỤNG PCM/menu-pcm-app (type=1): 623ef213e998e94feda0ccd8
     
 MENU DỰ ÁN PCM/menu-pcm-project (type=2): 623f04cce998e94feda0cd32
 +++Báo cáo quản trị/dashboard: 623f05f9e998e94feda0cd33
++++Quản lý công việc/subject: 6272ec513cf2ab30141bff14
 +++Thư mục dữ liệu/folder: 623f061de998e94feda0cd34
 +++Hồ sơ văn bản/document: 623f062fe998e94feda0cd35
 +++Ngân sách và hợp đồng/budget: 623f063be998e94feda0cd36

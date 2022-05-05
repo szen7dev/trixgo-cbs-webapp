@@ -32,7 +32,7 @@ export const RootCommentsList: FC<Props & HTMLAttributes<HTMLUListElement>> = me
 		images: [] as ImageProps[],
 		index: 0,
 		createAt: ""
-	  });
+	});
 
 	useEffect(() => {
 		if(!comments || !comments.length) return;
