@@ -114,21 +114,19 @@ export const ModalAddNewTask: FC = () => {
   }, true);
 
   const onSubmitFilterData = async (values: any) => {
-    console.log({ values });
+    try {
+      const { error, data } = await addTaskAsync(values);
 
-    // try {
-    //   const { error, message, data } = await addTaskAsync(values);
+      if(error) return toast.warning(data.message);
 
-    //   if(error) return toast.warning(message);
-
-    //   history.push(`/pcm/detail/${data._id}`);
-    // } catch (error) {
-    //   if (typeof error === "string") {
-    //       toast.error(error);
-    //   } else if (error instanceof Error) {
-    //       toast.error(error.message);
-    //   }
-    // }
+      history.push(`/pcm/detail/${data._id}`);
+    } catch (error) {
+      if (typeof error === "string") {
+          toast.error(error);
+      } else if (error instanceof Error) {
+          toast.error(error.message);
+      }
+    }
     closeModal();
   };
 

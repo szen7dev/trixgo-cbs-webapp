@@ -154,6 +154,7 @@ function CustomAutoComplete<T extends Record<string, any>>({
                     <>
                       <span
                         className={`block truncate ${selected ? "font-medium" : "font-normal"}`}
+                        title={renderValue ? renderValue(item) : item[attribute]}
                       >
                         {renderValue ? renderValue(item) : item[attribute]}
                       </span>

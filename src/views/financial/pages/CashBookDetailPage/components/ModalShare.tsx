@@ -23,9 +23,10 @@ type Props = {
 	toggle: () => void,
 	refetch?: () => void,
 	users: User[] | undefined,
+    hasPermission: boolean
 }
 
-const ModalShare: FC<Props> = ({ cashbookId, users, modalType, refetch, toggle }) => {
+const ModalShare: FC<Props> = ({ cashbookId, users, modalType, refetch, toggle, hasPermission }) => {
 	const usersID = users?.map(user => user._id) ?? [];
 	const [hasDefault, setHasDefault] = useState(false);
 	const [isShow, setIsShow] = useState(true);
@@ -75,6 +76,11 @@ const ModalShare: FC<Props> = ({ cashbookId, users, modalType, refetch, toggle }
 	};
 
 	const handleConfirmShare = async () => {
+        if(!hasPermission) {
+            toggle();
+			return toast.warning('Bạn không có quyền chia sẻ nội dung này');
+        }
+
 		if (!idsChecked || !idsChecked.length) {
 			return toast.warning('Vui lòng chọn user để chia sẻ');
 		}

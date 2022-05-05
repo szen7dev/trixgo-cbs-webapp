@@ -1,5 +1,5 @@
 import { UIEvent, FC, useEffect, useState, useCallback, ChangeEvent } from "react";
-import { useParams, Link, Redirect } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 import debounce from "lodash/debounce";
 
@@ -11,18 +11,24 @@ import {
   SearchInput,
   GroupActions,
   ModalContainer,
-  ButtonMore,
   Loader,
 } from "shareComponents/common";
+import { CustomAutoComplete } from "shareComponents/common/Form/CustomForm";
+import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+
+import { AccessingUsers } from "../../sharedComponents/common";
 import ModalReport from "./components/ModalReport";
 import RowTableInsertInline from "./components/RowTableInsertInline";
 import RowTableUpdateInline from "./components/RowTableUpdateInline";
-import { AccessingUsers } from "../../sharedComponents/common";
-import ModalLarge from "shareComponents/common/ModalContainer/components/ModalLarge";
+import RowTableView from "./components/RowTableView";
 import ModalShare from "./components/ModalShare";
 
+/**
+ * Utils
+ */
 import { TOAST_DEFAULT_OPTIONS } from 'utils/constants';
 import iconGraphReport from "assets/images/icons8-stop-graph-report-96.png";
+// import SortingIcon from "assets/images/icons8-sorting-100.svg";
 
 /**
  * Hooks, Typings
@@ -37,17 +43,34 @@ import { User } from "typings/user";
 
 export const CashBookDetailPage: FC = () => {
   const { cashbookId } = useParams<{ cashbookId: string }>();
+  const history = useHistory();
 
   const [keyword, setKeyword] = useState('');
   const [keywordContract, setKeywordContract] = useState('');
   const [keywordContact, setKeywordContact] = useState('');
   const [keywordAccount, setKeywordAccount] = useState('');
+  const [keywordAccountSearch, setKeywordAccountSearch] = useState('');
+
+  const [accountSearchSelected, setAccountSearchSelected] = useState('');
 
   const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
   const [showRowInsert, setShowRowInsert] = useState(true);
   const [itemsChecked, setItemsChecked] = useState<string[]>([]);
   const [dataCashBook, setDataCashBook] = useState<CashBook[]>([]);
+  const [permissions, setPermissions] = useState<{
+    usersShared: User[];
+    onlyView: boolean;
+    hasPermissionCreateUpdate: boolean;
+    hasPermissionDelete: boolean;
+    hasPermissionShare: boolean;
+  }>({
+    usersShared: [],
+    onlyView: true,
+    hasPermissionCreateUpdate: false,
+    hasPermissionDelete: false,
+    hasPermissionShare: false,
+  });
 
   const [modalShare, setModalShare] = useState<{ isShow: boolean, users: User[] | undefined, modalType: 'members' | 'admins' }>({
     isShow: false,
@@ -73,7 +96,7 @@ export const CashBookDetailPage: FC = () => {
     insertAsync: insertCashBookAsync,
     updateAsync: updateCashBookAsync,
     list: listCashBook,
-    isLoading,
+    isLoading: isLoadingListCashBook,
     refetch,
     fetchNextPage,
     hasNextPage,
@@ -81,14 +104,14 @@ export const CashBookDetailPage: FC = () => {
   } = useCashBook({
     params: {
       parentID: cashbookId,
+      accountID: accountSearchSelected,
       keyword,
       sortKey: JSON.stringify(['date__-1', 'createAt__-1']),
-      limit: 3
     },
     isFetchList: !!cashbookId,
   })
 
-  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense } = useCashBookCustom({
+  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense, refetchAmountIncomeExpense } = useCashBookCustom({
     paramsAmountIncomeExpense: { parentID: cashbookId },
     isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
@@ -123,13 +146,20 @@ export const CashBookDetailPage: FC = () => {
     isFetchList: true
   })
 
-  useEffect(() => {
-    document.title = "Chi tiết sổ quỹ";
-  }, []);
+  // Danh sách tài khoản (searching)
+  const {
+    list: listAccountSearch,
+    hasNextPage: hasNextPageListAccountSearch,
+    fetchNextPage: fetchNextPageListAccountSearch
+  } = useAccount({
+    params: {
+      companyID: cashBookInfo?.company as string,
+      keyword: keywordAccountSearch
+    },
+    isFetchList: !!cashBookInfo?.company
+  })
 
-  useEffect(() => {
-    if(!amountIncomeExpenseByParent || isLoadingAmountIncomeExpense) return;
-
+  const calculate = () => {
     const currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
 
     listCashBook.reverse();
@@ -155,14 +185,79 @@ export const CashBookDetailPage: FC = () => {
       }
     })
 
+    return newListCashBook;
+  }
+
+  useEffect(() => {
+    document.title = "Chi tiết sổ quỹ";
+  }, []);
+
+  useEffect(() => {
+    if(!amountIncomeExpenseByParent ||
+        isLoadingAmountIncomeExpense ||
+        isLoadingListCashBook ||
+        !listCashBook
+      ) return;
+
+    const newListCashBook = calculate();
     setDataCashBook(newListCashBook);
-  }, [cashbookId, listCashBook.length, amountIncomeExpenseByParent])
+  }, [cashbookId, JSON.stringify(amountIncomeExpenseByParent), JSON.stringify(listCashBook)])
+
+  useEffect(() => {
+    if(!cashBookInfo || !user || isLoadingInfo) return;
+
+    const usersShared = [...cashBookInfo?.admins, ...cashBookInfo?.members];
+    const adminsID    = cashBookInfo.admins.map(item => item._id);
+    const membersID   = cashBookInfo.members.map(item => item._id);
+
+    const usersIDShared = [
+      ...adminsID,
+      ...membersID,
+    ];
+    let authorID = '';
+
+    if(typeof cashBookInfo.userCreate === 'string') {
+      authorID = cashBookInfo.userCreate;
+    } else{
+      authorID = cashBookInfo.userCreate?._id;
+    }
+
+    usersIDShared.push(authorID);
+
+    if(!usersIDShared.includes(user._id)) {
+      toast.warn('Bạn đang không có quyền truy cập');
+      history.push('/financial/cashbook');
+    }
+
+    const hasPermissionCreateUpdate = adminsID.includes(user._id) || authorID === user._id;
+    const hasPermissionShare = authorID === user._id;
+    const hasPermissionDelete = authorID === user._id;
+    const onlyView = membersID.includes(user._id) && !adminsID.includes(user._id) && authorID !== user._id;
+
+    setPermissions({
+      usersShared,
+      onlyView,
+      hasPermissionCreateUpdate,
+      hasPermissionDelete,
+      hasPermissionShare
+    })
+  }, [JSON.stringify(user), JSON.stringify(cashBookInfo)])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
 
   const onChangeSearch = debounce((event: ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
+  }, 500);
+
+  const onChangeAccountSearch = debounce((keyword: string | ChangeEvent<HTMLInputElement>) => {
+    if(!keyword) {
+      setAccountSearchSelected('');
+    }
+
+    setTimeout(() => {
+      setKeywordAccountSearch(keyword as string);
+    }, 300);
   }, 500);
 
   const onChangeSearchContract = (keyword: string) => setKeywordContract(keyword);
@@ -215,7 +310,20 @@ export const CashBookDetailPage: FC = () => {
     }
   }
 
+  const handleScrollAccountSearch = (e: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+    const bottom = scrollHeight - scrollTop === clientHeight;
+
+    if (bottom && hasNextPageListAccountSearch) {
+      fetchNextPageListAccountSearch();
+    }
+  }
+
   const handleInsert = async (values: any) => {
+    if(!permissions.hasPermissionCreateUpdate) {
+      return toast.warn('Bạn không có quyền tạo nội dung này');
+    }
+
     try {
       setShowRowInsert(false);
 
@@ -255,8 +363,11 @@ export const CashBookDetailPage: FC = () => {
     previousInventory?: number,
     callback?: (response: CashBook, previousInventory?: number) => void
   ) => {
+    if(!permissions.hasPermissionCreateUpdate) {
+      return toast.warn('Bạn không có quyền cập nhật nội dung này');
+    }
+
     try {
-      console.log({ values });
       const { error, data } = await updateCashBookAsync(values);
 
       if (error) {
@@ -267,18 +378,24 @@ export const CashBookDetailPage: FC = () => {
         return data.map((item: any) => toast.warn(item.message));
       }
 
-      callback && callback(data, previousInventory);
+      refetch();
+      refetchAmountIncomeExpense();
+      // callback && callback(data, previousInventory);
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
         toast.error(error.message);
-
       }
     }
   }
 
   const handleDelete = async () => {
+    if(!permissions.hasPermissionDelete) {
+      toggleDeleteModal();
+      return toast.warn('Bạn không có quyền xóa nội dung này');
+    }
+
     try {
       const { error, data } = await deleteManyCashBookAsync({
         cashBooksID: itemsChecked
@@ -309,18 +426,7 @@ export const CashBookDetailPage: FC = () => {
   const toggleModalShare = (modalType: 'admins' | 'members', users: User[] | undefined) =>
     setModalShare({ isShow: !modalShare.isShow, users, modalType });
 
-  if(isLoadingInfo || isLoading || !cashBookInfo || !user) return <Loader className="border-primary" />
-
-  const usersShared = [...cashBookInfo?.admins, ...cashBookInfo?.members];
-  const usersIDShared = [
-    ...cashBookInfo.admins.map(item => item._id),
-    ...cashBookInfo.members.map(item => item._id),
-    cashBookInfo.userCreate?._id
-  ];
-
-  if(!usersIDShared.includes(user?._id)) {
-    return <Redirect to='/financial/cashbook' />
-  }
+  if(isLoadingInfo || isLoadingListCashBook || !cashBookInfo || !user) return <Loader className="border-primary" />
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -331,15 +437,31 @@ export const CashBookDetailPage: FC = () => {
         <span className="text-x-large mr-2 ml-2">{cashBookInfo?.name}</span>
         <SearchInput classNameWrapper="rounded-sm flex bg-cbs-left-menu" onChange={onChangeSearch} />
         {/* <DropdownFilterButton /> */}
+
+        <CustomAutoComplete
+          data={listAccountSearch}
+          onScroll={handleScrollAccountSearch}
+          onChange={onChangeAccountSearch}
+          attribute="description"
+          onChangeValue={value => setAccountSearchSelected(value._id)}
+          renderValue={item => `${item.name}-${item.description}`}
+          wrapperClassName="w-[170px] z-40"
+          className="w-full h-full py-2.5 px-3 focus:outline-none"
+          placeholder="Tài khoản"
+        />
+
+        {/* <button className={"bg-gray-50 flex items-center justify-center ml-3 px-3 h-[30px] rounded hover:bg-blue-100"}>
+          <img src={SortingIcon} alt={"icon sorting icon"}/>
+          <span className={"ml-2 text-gray-500"}>Filter</span>
+        </button> */}
+
         <GroupActions
           className="flex items-center flex-1"
           onClickTrash={toggleDeleteModal}
           disabled={{
-            trash: !itemsChecked.length
+            trash: !itemsChecked.length || !permissions.hasPermissionDelete
           }}
-          types={[
-            'trash',
-          ]}
+          types={permissions.hasPermissionDelete ? ['trash'] : []}
         />
 
         {/* <ButtonCreate onClick={toggleModal} /> */}
@@ -367,7 +489,7 @@ export const CashBookDetailPage: FC = () => {
           className="text-gray-400 mr-2"
           onClick={() => toggleModalShare('members', cashBookInfo.members)}
         >Thành viên ({cashBookInfo.members?.length})</button>
-        <AccessingUsers users={usersShared} />
+        <AccessingUsers users={permissions.usersShared} />
       </div>
       <div className="flex-1 overflow-y-auto">
         <table
@@ -376,16 +498,18 @@ export const CashBookDetailPage: FC = () => {
         >
           <thead className="z-10 relative">
             <tr className="text-primary-gray whitespace-nowrap align-middle text-left">
-              <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
-                <div className="flex items-center justify-center">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    checked={getStateCheckboxAll()}
-                    onChange={handleChangeCheckboxAll}
-                  />
-                </div>
-              </th>
+              {!permissions.onlyView ? (
+                <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
+                  <div className="flex items-center justify-center">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={getStateCheckboxAll()}
+                      onChange={handleChangeCheckboxAll}
+                    />
+                  </div>
+                </th>
+              ) : <></>}
               <th className="px-2 py-2.5 font-normal bg-cbs-table-header sticky top-0 border-0.5 border-cbs-border">
                 Ngày tháng
               </th>
@@ -416,29 +540,36 @@ export const CashBookDetailPage: FC = () => {
             </tr>
           </thead>
           <tbody className="text-small">
-            {(dataCashBook && dataCashBook.length) ? dataCashBook.map((item, index) => (
-              <RowTableUpdateInline
-                key={item._id}
-                contracts={listContract}
-                contacts={listContact}
-                accounts={listAccount}
-                cashBook={item}
-                inventory={dataCashBook[index] && dataCashBook[index].previousInventory || 0}
-                previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
-                itemsChecked={itemsChecked}
-                onChangeCheckbox={handleChangeCheckbox}
-                onUpdate={handleUpdate}
-                onScrollContract={handleScrollContract}
-                onScrollContact={handleScrollContact}
-                onScrollAccount={handleScrollAccount}
-                onSearchContract={onChangeSearchContract}
-                onSearchContact={onChangeSearchContact}
-                onSearchAccount={onChangeSearchAccount}
-              />
-            )) : <></>}
+            {(dataCashBook && dataCashBook.length) ? dataCashBook.map((item, index) => {
+              if(permissions.onlyView) {
+                return (
+                  <RowTableView key={item._id} cashBook={item} />
+                )
+              }
 
-            {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
+              return (
+                <RowTableUpdateInline
+                  key={item._id}
+                  contracts={listContract}
+                  contacts={listContact}
+                  accounts={listAccount}
+                  cashBook={item}
+                  inventory={item.previousInventory ?? 0}
+                  previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
+                  itemsChecked={itemsChecked}
+                  onChangeCheckbox={handleChangeCheckbox}
+                  onUpdate={handleUpdate}
+                  onScrollContract={handleScrollContract}
+                  onScrollContact={handleScrollContact}
+                  onScrollAccount={handleScrollAccount}
+                  onSearchContract={onChangeSearchContract}
+                  onSearchContact={onChangeSearchContact}
+                  onSearchAccount={onChangeSearchAccount}
+                />
+              )
+            }) : <></>}
 
+            {(showRowInsert && permissions.hasPermissionCreateUpdate) && <RowTableInsertInline onInsert={handleInsert} />}
           </tbody>
         </table>
       </div>
@@ -487,6 +618,7 @@ export const CashBookDetailPage: FC = () => {
             cashbookId={cashbookId}
             users={modalShare.users}
             modalType={modalShare.modalType}
+            hasPermission={permissions.hasPermissionShare}
         />
       </ModalLarge>
     </div>
