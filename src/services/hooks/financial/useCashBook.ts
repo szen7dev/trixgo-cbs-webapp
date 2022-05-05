@@ -75,7 +75,7 @@ export const useCashBook = ({
         fetchPreviousPage,
         hasNextPage
     } = useInfiniteQuery(
-        ['cashbook__list', params],
+        ['cashbook--list', params],
         async ({ pageParam }: any) =>
             CashbookRepository.fetchList({
                 lastestID: pageParam ?? "",
