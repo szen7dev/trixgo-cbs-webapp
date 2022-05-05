@@ -1,8 +1,9 @@
 /*=====1.LIBRARY=====*/
 import { FC, useEffect, useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import debounce from 'lodash/debounce';
+import BackIcon from "assets/images/icon-back.svg";
 
 /*=====2.CSS=====*/
 import "views/human/styles/style.module.css";
@@ -23,6 +24,7 @@ import type { Human } from "typings/human";
 /*=====6.HOOKS/APIS=====*/
 import { useFetchListHuman, useCreateContactMutation } from "services/hooks/useHuman";
 import { useHistoryTraffics } from "services/hooks/auth/useAuth";
+import { usePcmProject } from "services/hooks/pcm/usePcmProject";
 
 /*=====7.OTHER=====*/
 import { APP_ID } from "apis/localdb"
@@ -30,18 +32,17 @@ const ImageStorageUrl = process.env.REACT_APP_URL_S3_CONTACT;
 
 export const HumanHomePage: FC = () => {
   const { t } = useTranslation(["human"]);
-
-  const [pageParam, setPageParam] = useState<any>({});
+	const { id: departmentID } = useParams<{ id: string }>();
+  const [pageParam, setPageParam] = useState<any>({departmentID});
+  const history = useHistory();
 
   // Lấy ra data/messageList data ngay lúc đầu vào màn hình
   const humans = useFetchListHuman(pageParam);
-
   const { openModal } = useModal();
 
   // Tạo mẩu tin mới, khởi tạo sẵn hàm createContactMutateAsync để khi user
   // bấm vào nút tạo thì gọi luôn đến api tạo mẩu tin
   const { createContactMutateAsync } = useCreateContactMutation();
-
   const { createHistoryTraffics } = useHistoryTraffics();
 
   useEffect(() => {
@@ -63,20 +64,37 @@ export const HumanHomePage: FC = () => {
     return false;
   }, [createContactMutateAsync, humans]);
 
+  // const handleOnFilter = useCallback((values) => {
+  //   setPageParam(() => ({ ...values, departmentID }));
+  //   return true;
+  // }, []);
+
   const handleOnFilter = useCallback((values) => {
     setPageParam(() => ({ ...values }));
     return true;
   }, []);
 
+  // const handleOnCancelFilter = useCallback(() => {
+  //   setPageParam({departmentID});
+  // }, []);
+
   const handleOnCancelFilter = useCallback(() => {
     setPageParam({});
   }, []);
-  
+
+	const { infoDepartment } = usePcmProject({ departmentID });
   return (
     <section className="w-full">
       <div className="sticky top-0 bg-primary-light z-10 flex items-center justify-between h-12 px-6 border border-gray-200">
         <div className="flex items-center">
           <p className="text-lg">Danh sách</p>
+        {/* <img
+          src={BackIcon}
+          alt="Back"
+          onClick={() => history.goBack()}
+          className="cursor-pointer"  />
+          &ensp;
+          <p className="text-lg truncate">{infoDepartment?.data?.sign}.{infoDepartment?.data?.name}</p> */}
           <div className="relative pl-4">
             <span>
               <img
@@ -102,23 +120,18 @@ export const HumanHomePage: FC = () => {
             onCancel={handleOnCancelFilter}
             initialValues={pageParam}
           />
-          {/* <button className="w-[78px] h-[30px] flex items-center justify-around bg-cbs-table-header rounded text-primary-gray">
-            <img src={SortIcon} alt="Sort" />
-            <span>Filter</span>
-          </button> */}
         </div>
         <button
           className="flex items-center justify-center text-primary-light bg-cbs-green w-[85px] h-8 rounded font-bold"
           onClick={() =>
             openModal(
-              <div
-                className={
-                  "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
-                }
-              >
-                <NewHumanModal
-                  onFinish={handleFinishForm}
-                />
+              // <div className={ "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0" } >
+                <div
+                  className={
+                    "inline-block w-screen h-screen overflow-hidden transition-all transform bg-primary-light shadow-xl rounded absolute left-0 right-0 top-0"
+                  }
+                >
+                <NewHumanModal onFinish={handleFinishForm} />
               </div>
             )
           }
@@ -143,10 +156,10 @@ export const HumanHomePage: FC = () => {
               </div>
               <div className="text-center ml-2 mr-2 pt-[20px] pb-[17px] h-[220px]">
                 <div className="flex justify-center mb-6">
-                  <img src={`${ImageStorageUrl}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
+                  <img src={`${process.env.REACT_APP_URL_S3_CONTACT}/${item.image}`} alt="Avatar" className="w-20 h-20 rounded-full" />
                 </div>
                 <span className="text-xl font-normal">{`${item.name}`}</span>
-                <p className="text-sm pt-2 text-secondary-gray">{item?.position?.name}</p>
+                <p className="text-sm pt-2 text-secondary-gray">{item?.company?.sign}.{item?.position?.name}</p>
               </div>
               <Link
                 to={`/human/home/hid=${item._id}`}
@@ -163,8 +176,7 @@ export const HumanHomePage: FC = () => {
       {humans.totalRecord && humans.totalRecord - humans.listHuman.length > 0 && (
         <div className="w-full flex justify-center my-5">
           <button onClick={() => humans.fetchNextPageHuman()}>
-            <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length
-              })`}</span>
+            <span className="text-primary">{`Xem thêm (${humans.totalRecord - humans.listHuman.length })`}</span>
           </button>
         </div>
       )}

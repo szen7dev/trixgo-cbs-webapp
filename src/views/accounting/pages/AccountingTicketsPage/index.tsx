@@ -1,8 +1,14 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ThreeDotsVertical from "assets/images/icon-3dots-vertical.svg";
 import { SearchInput, Paginate } from "shareComponents/common";
-import { CreateNewTicket, DropdownFilterButton, ActionAccountingGroup } from "views/accounting/shareComponents/common";
+import {
+  CreateNewTicket,
+  DropdownFilterButton,
+  ActionAccountingGroup,
+  FilterDateGroup
+} from "views/accounting/shareComponents/common";
 import { formatNumberMoney } from "utils/cmcs"
 import { useModal } from "services/hooks/useModal";
 import { useDeleteConfirm } from "services/hooks/useDeleteConfirm";
@@ -15,12 +21,15 @@ import {
   useUpdateAccountingVoucherMutation,
   useDeleteAccountingVoucherMutation,
 } from "services/hooks/accounting/useAccountingVoucher";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import TriangleDown from "assets/icons/TriangleDown";
 
 import { Popover } from "shareComponents/common";
 import useCheckedList from "services/hooks/ppt/useCheckedList";
 import debounce from "lodash/debounce";
+
+import cn from "classnames";
+import styles from 'views/accounting/styles/styles.module.css';
 
 interface AccountingTicketsPageProps {
   type?: number
@@ -28,10 +37,13 @@ interface AccountingTicketsPageProps {
 
 export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1 }) => {
   const { openModal } = useModal();
+  const { fundaID } = useParams<any>();
   const [pageParam, setPageParam] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '' });
   const [prevCursor, setPrevCursor] = useState([null]);
-  const accountingVoucher = UseAccountingVoucherList(pageParam, keyword, type);
+
+  //  keyword, fundaID, fromDate, endDate
+  const accountingVoucher = UseAccountingVoucherList(pageParam, type, inputFilter);
   const { assigned, checkboxRef, checked, handleChangeCheckbox, handleCheckAll } = useCheckedList(accountingVoucher?.listAccountingVoucher || []);
 
   const { createAccountingVoucherMutateAsync } = useCreateAccountingVoucherMutation();
@@ -128,8 +140,11 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
 
   // Xử lý sự kiện tìm kiếm
   const onChangeSearch = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(event.target.value)
+    setInputFilter(() => ({ ...inputFilter, keyword: event.target.value }))
   }, 500);
+
+  const [fromDate, setFromDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   return (
     <div className={"relative min-h-full"}>
@@ -143,6 +158,46 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             onCancel={handleOnCancelFilter}
             initialValues={{}}
           /> */}
+
+          <FilterDateGroup fromDate={fromDate} setFromDate={setFromDate} endDate={endDate} setEndDate={setEndDate} />
+
+          {/* <div className="relative">
+            <span className={cn(
+              "text-sm mb-2",
+              styles.bgWhiteLight, styles.labelDateSearch
+            )} >Từ ngày</span>
+            <DatePicker
+              selected={fromDate}
+              onChange={(date: Date | null) => setFromDate(date)}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <input
+                  type="text"
+                  placeholder="Từ ngày"
+                  className="h-[38px] px-2 border border-primary-border rounded"
+                />
+              }
+            />
+          </div>
+
+          <div className="relative">
+            <span className={cn(
+              "text-sm mb-2",
+              styles.bgWhiteLight, styles.labelDateSearch
+            )} >Đến ngày</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date | null) => setEndDate(date)}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <input
+                  type="text"
+                  placeholder="Đến ngày"
+                  className="h-[38px] px-2 border border-primary-border rounded"
+                />
+              }
+            />
+          </div> */}
         </div>
         <button
           onClick={() =>

@@ -52,42 +52,42 @@ const AccountingRouter: FC = () => {
       />
       <ProtectedRoute
         exact
-        path="/accounting/accbill"
+        path="/accounting/:fundaID/accbill"
         component={() => <AccountingTicketsPage type={1} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/receipt"
+        path="/accounting/:fundaID/receipt"
         component={() => <AccountingTicketsPage type={2} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/payment"
+        path="/accounting/:fundaID/payment"
         component={() => <AccountingTicketsPage type={3} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/goods-import"
+        path="/accounting/:fundaID/goods-import"
         component={() => <AccountingTicketsPage type={4} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/goods-export"
+        path="/accounting/:fundaID/goods-export"
         component={() => <AccountingTicketsPage type={5} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/invoices"
+        path="/accounting/:fundaID/invoices"
         component={() => <AccountingTicketsPage type={6} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/debit-note"
+        path="/accounting/:fundaID/debit-note"
         component={() => <AccountingTicketsPage type={7} />}
       />
       <ProtectedRoute
         exact
-        path="/accounting/credit-note"
+        path="/accounting/:fundaID/credit-note"
         component={() => <AccountingTicketsPage type={8} />}
       />
       <ProtectedRoute
