@@ -125,6 +125,7 @@ interface UseCashBookCustom {
     amountByProperty: CashBookAmountByProperty[];
     isLoadingAmountByProperty: boolean;
     refetchAmountByProperty: () => void;
+    refetchAmountIncomeExpense: () => void;
 }
 
 type UseCashBookCustomProps = {
@@ -141,7 +142,11 @@ export const useCashBookCustom = ({
     isFetchAmountByProperty = false
 }: UseCashBookCustomProps) : UseCashBookCustom => {
 
-    const { data: dataAmountIncomeExpenseByParent, isLoading: isLoadingAmountIncomeExpense } =
+    const {
+        data: dataAmountIncomeExpenseByParent,
+        isLoading: isLoadingAmountIncomeExpense,
+        refetch: refetchAmountIncomeExpense
+    } =
         useQuery("cashbook--amount_income_expense",
             () => CashbookRepository.fetchAmountIncomeExpenseByParent(paramsAmountIncomeExpense), {
             refetchOnWindowFocus: false,
@@ -150,7 +155,11 @@ export const useCashBookCustom = ({
 
     const amountIncomeExpenseByParent = dataAmountIncomeExpenseByParent?.data;
 
-    const { data: dataAmountByProperty, isLoading: isLoadingAmountByProperty, refetch: refetchAmountByProperty } =
+    const {
+        data: dataAmountByProperty,
+        isLoading: isLoadingAmountByProperty,
+        refetch: refetchAmountByProperty
+    } =
         useQuery("cashbook--amount_by_property",
             () => CashbookRepository.fetchAmountByProperty(paramsAmountByProperty), {
             refetchOnWindowFocus: false,
@@ -164,6 +173,7 @@ export const useCashBookCustom = ({
         isLoadingAmountIncomeExpense,
         amountByProperty,
         isLoadingAmountByProperty,
-        refetchAmountByProperty
+        refetchAmountByProperty,
+        refetchAmountIncomeExpense
     }
 }

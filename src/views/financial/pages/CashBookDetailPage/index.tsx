@@ -11,7 +11,7 @@ import {
   SearchInput,
   GroupActions,
   ModalContainer,
-  ButtonMore,
+  // ButtonMore,
   Loader,
 } from "shareComponents/common";
 import ModalReport from "./components/ModalReport";
@@ -88,7 +88,7 @@ export const CashBookDetailPage: FC = () => {
     isFetchList: !!cashbookId,
   })
 
-  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense } = useCashBookCustom({
+  const { amountIncomeExpenseByParent, isLoadingAmountIncomeExpense, refetchAmountIncomeExpense } = useCashBookCustom({
     paramsAmountIncomeExpense: { parentID: cashbookId },
     isFetchAmountIncomeExpenseByParent: !!cashbookId
   })
@@ -123,13 +123,7 @@ export const CashBookDetailPage: FC = () => {
     isFetchList: true
   })
 
-  useEffect(() => {
-    document.title = "Chi tiết sổ quỹ";
-  }, []);
-
-  useEffect(() => {
-    if(!amountIncomeExpenseByParent || isLoadingAmountIncomeExpense) return;
-
+  const calculate = () => {
     const currentInventory = amountIncomeExpenseByParent.income - amountIncomeExpenseByParent.expense;
 
     listCashBook.reverse();
@@ -155,8 +149,20 @@ export const CashBookDetailPage: FC = () => {
       }
     })
 
+    return newListCashBook;
+  }
+
+  useEffect(() => {
+    document.title = "Chi tiết sổ quỹ";
+  }, []);
+
+  useEffect(() => {
+    if(!amountIncomeExpenseByParent || isLoadingAmountIncomeExpense) return;
+    if(!listCashBook || !listCashBook.length) return;
+
+    const newListCashBook = calculate();
     setDataCashBook(newListCashBook);
-  }, [cashbookId, listCashBook.length, amountIncomeExpenseByParent])
+  }, [cashbookId, amountIncomeExpenseByParent, JSON.stringify(listCashBook)])
 
   const toggleVisible = () => setVisibleDrawer(!visibleDrawer);
   const toggleDeleteModal = () => setIsShowDeleteModal(!isShowDeleteModal);
@@ -256,7 +262,6 @@ export const CashBookDetailPage: FC = () => {
     callback?: (response: CashBook, previousInventory?: number) => void
   ) => {
     try {
-      console.log({ values });
       const { error, data } = await updateCashBookAsync(values);
 
       if (error) {
@@ -267,13 +272,14 @@ export const CashBookDetailPage: FC = () => {
         return data.map((item: any) => toast.warn(item.message));
       }
 
-      callback && callback(data, previousInventory);
+      refetch();
+      refetchAmountIncomeExpense();
+      // callback && callback(data, previousInventory);
     } catch (error) {
       if (typeof error === "string") {
         toast.error(error);
       } else if (error instanceof Error) {
         toast.error(error.message);
-
       }
     }
   }
@@ -318,7 +324,7 @@ export const CashBookDetailPage: FC = () => {
     cashBookInfo.userCreate?._id
   ];
 
-  if(!usersIDShared.includes(user?._id)) {
+  if(!usersIDShared.includes(user._id)) {
     return <Redirect to='/financial/cashbook' />
   }
 
@@ -423,7 +429,7 @@ export const CashBookDetailPage: FC = () => {
                 contacts={listContact}
                 accounts={listAccount}
                 cashBook={item}
-                inventory={dataCashBook[index] && dataCashBook[index].previousInventory || 0}
+                inventory={item.previousInventory ?? 0}
                 previousInventory={dataCashBook[index - 1] && dataCashBook[index - 1].previousInventory || 0}
                 itemsChecked={itemsChecked}
                 onChangeCheckbox={handleChangeCheckbox}
@@ -438,7 +444,6 @@ export const CashBookDetailPage: FC = () => {
             )) : <></>}
 
             {showRowInsert && <RowTableInsertInline onInsert={handleInsert} />}
-
           </tbody>
         </table>
       </div>
