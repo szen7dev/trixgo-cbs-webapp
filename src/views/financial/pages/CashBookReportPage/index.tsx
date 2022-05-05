@@ -122,7 +122,7 @@ export const CashBookReportPage: FC = () => {
 						<th className="sticky top-0 bg-cbs-table-header border-0.5 border-cbs-border border-l-0 font-normal px-2" style={{ minWidth: '122px' }}>Tiền gửi ngân hàng</th>
 					</tr>
 				</thead>
-				{dataReport.length &&
+				{(dataReport && dataReport.length) ?
 					dataReport.map((_item, index) =>
 						<FinancialRowGroup
 							key={index}
@@ -132,7 +132,7 @@ export const CashBookReportPage: FC = () => {
 							company={_item.company}
 							cashBooks={_item.cashBooks}
 						/>
-					)
+					) : <></>
 				}
 				<tfoot>
 					<tr className="text-right">
