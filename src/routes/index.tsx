@@ -73,10 +73,10 @@ const Routes: FC = () => {
                                     <AuthenticationRouter />
                                 </Route>
 
-                                {/* =====SAMPLE UI===== */}  
+                                {/* =====SAMPLE UI===== */}
                                 <Route path="/sample">
                                     <SampleRouter />
-                                </Route>                            
+                                </Route>
 
                                 {/* =====HOME===== */}
                                 <Route exact path="/">
@@ -84,13 +84,13 @@ const Routes: FC = () => {
                                 </Route>
 
                                 {/* =====ACCOUNTING===== */}
-                                <Route path="/accounting">
+                                <Route path="/accounting/:fundaID">
                                     <AccountingLayout>
                                         <AccountingRouter />
                                     </AccountingLayout>
                                 </Route>
 
-                                 {/* =====BUDGET===== */}
+                                {/* =====BUDGET===== */}
                                 <Route path="/budget">
                                     <BudgetRouter />
                                 </Route>

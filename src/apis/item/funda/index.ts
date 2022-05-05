@@ -28,7 +28,7 @@ async function fetchListFunda(params: any) {
     const { data } = await API.get(
         `${ITEM_URL}/fundas`, {
         params: {
-            select: 'name description modifyAt userUpdate amountChilds',
+            select: 'name description modifyAt userUpdate amountChilds sign',
             populates: {
                 path: 'parent userUpdate',
                 select: 'name description bizfullname'
@@ -44,7 +44,7 @@ async function fetchListFunda(params: any) {
 async function addFunda(params: any) {
     const { data } = await API.post(
         `${ITEM_URL}/fundas`, params);
-        
+
     return data;
 }
 
@@ -60,10 +60,10 @@ async function updateFunda(params: any) {
 async function deleteFunda(ids: Array<string>) {
     const { data } = await API.delete(
         `${ITEM_URL}/fundas`, {
-            params: {
-                FundaID: ids
-            }
-        });
+        params: {
+            FundaID: ids
+        }
+    });
 
     return data;
 }
