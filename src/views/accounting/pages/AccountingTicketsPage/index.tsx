@@ -39,7 +39,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
   const { openModal } = useModal();
   const { fundaID } = useParams<any>();
   const [pageParam, setPageParam] = useState('');
-  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '' });
+  const [inputFilter, setInputFilter] = useState({ fundaID, keyword: '', fromDate: new Date(new Date().getFullYear() - 1, 0, 1), toDate: new Date(new Date().getFullYear(), 11, 31) });
   const [prevCursor, setPrevCursor] = useState([null]);
 
   //  keyword, fundaID, fromDate, endDate
@@ -143,8 +143,14 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
     setInputFilter(() => ({ ...inputFilter, keyword: event.target.value }))
   }, 500);
 
-  const [fromDate, setFromDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const handleOnChangeDate = useCallback((date, input) => { // 0: fromDate , 1: toDate
+    if (input) {
+      setInputFilter(() => ({ ...inputFilter, toDate: date }))
+    } else {
+      setInputFilter(() => ({ ...inputFilter, fromDate: date }))
+    }
+
+  }, []);
 
   return (
     <div className={"relative min-h-full"}>
@@ -159,7 +165,7 @@ export const AccountingTicketsPage: FC<AccountingTicketsPageProps> = ({ type = 1
             initialValues={{}}
           /> */}
 
-          <FilterDateGroup fromDate={fromDate} setFromDate={setFromDate} endDate={endDate} setEndDate={setEndDate} />
+          <FilterDateGroup fromDate={inputFilter.fromDate} endDate={inputFilter.toDate} onChangeDate={handleOnChangeDate} />
 
           {/* <div className="relative">
             <span className={cn(
