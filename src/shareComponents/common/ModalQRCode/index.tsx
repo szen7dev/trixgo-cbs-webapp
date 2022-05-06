@@ -11,7 +11,6 @@ import CloseIcon from "assets/images/icon-small-bold-close.svg";
 import { ModalContainer } from "shareComponents/common";
 
 type Props = {
-  initValues?: any;
   isToggle: boolean;
   toggle: () => void;
   value: string;
